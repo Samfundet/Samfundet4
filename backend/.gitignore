@@ -1,0 +1,12 @@
+### env ###
+.docker.env
+.env
+
+### Django ###
+staticroot/
+mediaroot/
+__pycache__
+.pytest_cache
+*.pyc
+*.pyo
+.log

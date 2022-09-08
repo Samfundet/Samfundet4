@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  # docker syntax
+
+  # Custom name for our service (container to build)
+  backend:
+    build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    volumes:
+      - ./backend/arrangementer:/app/arrangementer # Share project code between host machine and container to enable reload on changes.
+      - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
+    env_file:
+      - ./backend/.docker.env
+    ports:
+      - "8000:8000" # Quotes are required.
+
+  # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
+    ports:
+      - "3000:3000"

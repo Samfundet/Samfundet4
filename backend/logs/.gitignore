@@ -1,0 +1,4 @@
+# Ignore everything unless explicitly added ('!' prefixed)
+**/*
+!README.md
+!.gitignore

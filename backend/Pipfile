@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+yapf = "*"
+pylint = "*"
+pylint-django = "*"
+pylint-quotes = "*"
+pytest = "*"
+pytest-django = "*"
+django-extensions = "*"
+django-environ = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10.5" # from .python-version
