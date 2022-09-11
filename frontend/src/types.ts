@@ -1,8 +1,7 @@
-import { ReactNode } from "react"
+import { ReactNode } from 'react';
 /** Module for global generic types. */
 
-export type ButtonType = 'submit' | 'reset' | 'button'
+export type ButtonType = 'submit' | 'reset' | 'button';
 
 /** Synonym for ReactNode, but easier to remember. */
-export type Children = ReactNode
-
+export type Children = ReactNode;
