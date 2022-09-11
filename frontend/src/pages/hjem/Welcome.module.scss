@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #222;
+  color: #222222;
 }
 
 .logo {
@@ -25,10 +25,10 @@
 }
 
 .content {
-  box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.5);
-  background-color: #eee;
+  box-shadow: 2px 2px 10px 5px rgb(0 0 0 / 50%);
+  background-color: #eeeeee;
   padding: 3em;
-  border-radius: .5em;
+  border-radius: 0.5em;
 }
 
 p {
@@ -44,15 +44,13 @@ a {
   display: block;
   margin-top: 1em;
   padding: 1em;
-  background-color: rgb(160, 48, 51);
+  background-color: rgb(160 48 51);
   color: white;
-  border-radius: .2em;
-
+  border-radius: 0.2em;
 
   &:hover {
     filter: brightness(110%);
     transform: scale(1.01);
-    transition: .2s;
+    transition: 0.2s;
   }
 }
-
