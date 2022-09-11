@@ -1,3 +1,4 @@
 # Docs
 
--   [Work methodology](/docs/work-methodology.md)
+-   [Work Methodology](/docs/work-methodology.md)
+-   [React Component Conventions](/docs/components.md)
