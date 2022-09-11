@@ -3,6 +3,8 @@ from django.core import management
 from django.core.management.base import BaseCommand
 # End: imports -----------------------------------------------------------------
 
+# pylint: disable=positional-arguments
+
 
 class Command(BaseCommand):
 
