@@ -83,6 +83,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "chromatic": "^6.9.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.4",
@@ -92,5 +93,14 @@
   },
   "main": "src/index.tsx",
   "license": "MIT",
-  "repository": "https://github.com/Samfundet/Samfundet4/"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samfundet/Samfundet4.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Samfundet/Samfundet4/issues"
+  },
+  "readme": "ERROR: No README data found!",
+  "homepage": "https://github.com/Samfundet/Samfundet4#readme",
+  "_id": "frontend@0.1.0"
 }

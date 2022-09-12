@@ -6,6 +6,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     // 'plugin:storybook/recommended',
     'plugin:@typescript-eslint/recommended', // Use recommended rules from the @typescript-eslint/eslint-plugin
