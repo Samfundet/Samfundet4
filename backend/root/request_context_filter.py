@@ -4,7 +4,7 @@ import logging
 
 from django.http import HttpRequest
 
-from backend.root.middlewares import request_contextvar
+from root.middlewares import request_contextvar
 
 LOG = logging.getLogger(__name__)
 

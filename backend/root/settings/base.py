@@ -157,8 +157,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # pylint: disable=wrong-import-position,wrong-import-order
 import logging.config
 
-from json_formatter import JsonFormatter
-from request_context_filter import RequestContextFilter
+from root.json_formatter import JsonFormatter
+from root.request_context_filter import RequestContextFilter
 
 # pylint: enable=wrong-import-position,wrong-import-order
 
