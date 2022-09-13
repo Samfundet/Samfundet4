@@ -10,9 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 import environ
+
+from root.constants import Environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -78,6 +81,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'root.middlewares.RequestLogMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -150,26 +154,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ################## LOGGING ##################
 
-import logging.config  # pylint: disable=wrong-import-position,wrong-import-order
+# pylint: disable=wrong-import-position,wrong-import-order
+import logging.config
+
+from root.json_formatter import JsonFormatter
+from root.request_context_filter import RequestContextFilter
+
+# pylint: enable=wrong-import-position,wrong-import-order
+
+LOGFILENAME = BASE_DIR / 'logs' / '.log'
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'file': {
-            'format': '=== {levelname} ({asctime}) [{name}] {message}',
-            'datefmt': '%d-%m-%Y %H:%M:%S',
-            'style': '{',
+    'formatters':
+        {
+            'json': {
+                # Need to be a callable in order to use init parameters.
+                '()': lambda: JsonFormatter(indent=4 if ENV == Environment.DEV else None),
+            },
+            'file': {
+                'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+            },
         },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
+    'filters':
+        {
+            'request_context_filter': {
+                '()': RequestContextFilter,
+            },
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse',
+            },
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue',
+            },
         },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
     'handlers':
         {
             'null': {
@@ -183,36 +202,45 @@ LOGGING = {
             'file': {
                 'level': 'INFO',
                 'class': 'logging.FileHandler',
-                'formatter': 'file',
-                'filename': BASE_DIR / 'logs' / '.log',
+                'formatter': 'json',
+                'filename': LOGFILENAME,
+                'filters': ['request_context_filter'],
             },
-            'sql_file': {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': BASE_DIR / 'logs' / 'sql.log',  # Added to '.gitignore'.
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler',
+                'filters': ['require_debug_false'],
             },
+            'humio':
+                {
+                    'level': 'DEBUG' if ENV == Environment.DEV else 'INFO',
+                    'formatter': 'json',
+                    'class': 'logging.StreamHandler',
+                    'stream': sys.stdout,
+                    'filters': ['request_context_filter'],
+                },
         },
     'loggers':
         {
             # Default logger.
             '': {
-                'handlers': ['console', 'file'],
+                'handlers': ['humio', 'file'],
                 'propagate': True,
                 'level': 'INFO',
             },
             # Catch all from django unless explicitly prevented propagation.
             'django': {
-                'handlers': ['console', 'file'],
+                'handlers': ['console', 'mail_admins'],
                 'propagate': True,
                 'level': 'DEBUG',
             },
             'django.db.backends': {
-                'handlers': ['console', 'sql_file'],
-                # 'propagate': False,  # Don't pass up to 'django'.
+                'handlers': ['console'],
+                'propagate': False,  # Don't pass up to 'django'.
                 'level': 'INFO',
             },
             'django.server': {
-                'handlers': ['console', 'file'],
+                'handlers': ['console'],
                 'propagate': False,  # Don't pass up to 'django'.
                 'level': 'INFO',
             },
