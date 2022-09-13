@@ -127,7 +127,7 @@ class FieldTrackerMixin(Model):
             if is_creation:  # Log creation.
                 LOG.info(f'{self} was created:\n\nfields: {dirty_fields_new}')
                 LOG.info(f'{self} was created:\n\nfields: {self.ftm_log_parse(fields=dirty_fields_new)}')
-            elif dirty_fields_new == {}:  # Log save, notify no detection of new fields.
+            elif not dirty_fields_new:  # Log save, notify no detection of new fields.
                 LOG.info(f"{self} was saved.\nFieldTrackerMixin couldn't detect any changes to tracked fields.")
             else:  # Log changes.
                 LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
