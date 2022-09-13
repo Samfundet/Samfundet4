@@ -1,3 +1,5 @@
+[👈 back](/docs/README.md)
+
 # Work methodology
 
 1. Always create issue first, preferably in English.
