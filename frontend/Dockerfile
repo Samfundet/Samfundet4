@@ -2,7 +2,7 @@ FROM node:18.8.0-buster-slim
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json yarn.lock ./
 
 RUN yarn install
 
