@@ -27,7 +27,15 @@ class Url:
     decorators: str
 
 
-def parse_url(url: str):
+def parse_name(name: str) -> str:
+    """
+    Parse django url name to frontend route format.
+    'scope:some-name' -> 'scope__some_name'
+    """
+    return name.replace(':', '__').replace('-', '_')
+
+
+def parse_url(url: str) -> str:
     """Parse django url to frontend route format."""
 
     # from: '/some/path/<int:org_id>/'
@@ -47,15 +55,9 @@ def parse_url(url: str):
         except ValueError:
             # ':' was not found.
             # sub_path = '<org_id>' or 'path'
-            try:
-                _chevron_left_index = sub_path.index('<')
+            if sub_path.startswith('<'):
                 # Found param, sub_path = '<org_id>'
                 new_sub_path = ':' + to_camel_case(sub_path[1:-1])  # ':orgId'
-            except ValueError:
-                # '<' was not found.
-                # sub_path = 'path'
-                # Do nothing with normal sub_path.
-                pass
 
         # Replace old sub_path with new_sub_path.
         sub_paths[i] = new_sub_path
@@ -87,7 +89,7 @@ class Command(BaseCommand):
         for url in urls:
 
             # Parse url to frontend route.
-            url.name = url.name.replace(':', '__')  # 'feide:new_tjeneste' -> 'feide__new_tjeneste'
+            url.name = parse_name(url.name)  # 'feide:new_tjeneste' -> 'feide__new_tjeneste'
             url.url = parse_url(url.url)
 
             # Print in javascript mode for easy copy.
