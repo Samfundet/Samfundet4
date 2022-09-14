@@ -15,6 +15,7 @@ django-extensions = "*"
 django-environ = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+dataclasses-json = "*"
 
 [dev-packages]
 
