@@ -1,11 +1,10 @@
-import React from 'react';
 import logo from '../../assets/logo_black.png';
 import splash from '../../assets/splash.jpeg';
-import styles from './Welcome.module.scss';
+import styles from './HomePage.module.scss';
 
 import { Link } from 'react-router-dom';
 
-export function Welcome() {
+export function HomePage() {
   const txt = [
     `
             Gratulerer! Du har nå fått tutorial-prosjektet opp å kjøre, og alt ser ut til å fungere som det skal! 

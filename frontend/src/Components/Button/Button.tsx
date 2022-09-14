@@ -1,4 +1,3 @@
-import React from 'react';
 import classnames from 'classnames';
 import { ButtonType, Children } from '../../types';
 import styles from './Button.module.scss';
