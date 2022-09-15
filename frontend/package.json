@@ -85,6 +85,7 @@
     "@typescript-eslint/parser": "^5.36.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.9.0",
+    "cypress": "^10.8.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.4",
