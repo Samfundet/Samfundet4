@@ -18,6 +18,20 @@ def to_camel_case(snake_str: str):
     return components[0] + ''.join(x.title() for x in components[1:])
 
 
+class Colorize:
+    # pylint: disable=all
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    _ENDC = '\033[0m'
+
+    @staticmethod
+    def __call__(string, *modifiers) -> str:
+        return ''.join(modifiers) + string + colorize._ENDC
+
+
+colorize = Colorize()
+
+
 @dataclass_json
 @dataclass
 class Url:
@@ -32,7 +46,8 @@ def parse_name(name: str) -> str:
     Parse django url name to frontend route format.
     'scope:some-name' -> 'scope__some_name'
     """
-    return name.replace(':', '__').replace('-', '_')
+    scoped_snake_name = name.replace(':', '__').replace('-', '_')
+    return scoped_snake_name
 
 
 def parse_url(url: str) -> str:
@@ -93,4 +108,6 @@ class Command(BaseCommand):
             url.url = parse_url(url.url)
 
             # Print in javascript mode for easy copy.
-            print(f"{url.name or 'unknown'}: '{url.url}',")
+            red_name = colorize(url.name or 'unknown', Colorize.RED)
+            green_url = colorize(f"'{url.url}'", Colorize.GREEN)
+            print(f"{red_name}: {green_url},")
