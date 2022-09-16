@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install
+# Require up to date package.json and yarn.lock, fail otherwise.
+RUN yarn install --frozen-lockfile
 
 COPY . .
 

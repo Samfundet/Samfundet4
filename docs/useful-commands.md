@@ -36,6 +36,8 @@
   - [🧶 Yarn: Uninstall package](#-yarn-uninstall-package)
   - [🧶 Yarn: Start server](#-yarn-start-server)
   - [🧶 Yarn: Start Storybook](#-yarn-start-storybook)
+  - [🧶 Yarn: Open Cypress GUI](#-yarn-open-cypress-gui)
+  - [🧶 Yarn: Run Cypress (no GUI)](#-yarn-run-cypress-no-gui)
 
 <br>
 <hr>
@@ -299,42 +301,67 @@ docker compose up backend
 <br>
 
 ## 🧶 Yarn
+> Must run in same directory as [package.json](/frontend/package.json).
 
 <br>
 
 ### 🧶 Npm: Install yarn
-> Must run in same directory as [package.json](/frontend/package.json).
 ```bash
 npm install --global yarn
 ```
 
+<br>
+<br>
+
 ### 🧶 Yarn: Install dependencies
-> Must run in same directory as [package.json](/frontend/package.json).
 ```bash
 yarn install
 ```
 
+<br>
+<br>
+
 ### 🧶 Yarn: Install package
-> Must run in same directory as [package.json](/frontend/package.json).
 ```bash
 yarn add <package>
 ```
 
+<br>
+<br>
+
 ### 🧶 Yarn: Uninstall package
-> Must run in same directory as [package.json](/frontend/package.json).
 ```bash
 yarn remove <package>
 ```
 
+<br>
+<br>
+
 ### 🧶 Yarn: Start server
-> Must run in same directory as [package.json](/frontend/package.json).
 ```bash
 yarn start
 ```
 
+<br>
+<br>
 
 ### 🧶 Yarn: Start Storybook
-> Must run in same directory as [package.json](/frontend/package.json).
 ```bash
 yarn storybook
+```
+
+<br>
+<br>
+
+### 🧶 Yarn: Open Cypress GUI
+```bash
+yarn cypress open
+```
+
+<br>
+<br>
+
+### 🧶 Yarn: Run Cypress (no GUI)
+```bash
+yarn cypress run
 ```
