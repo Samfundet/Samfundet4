@@ -1,32 +1,30 @@
 name: Verify
 
-on:
-  push:
-    branches:
-      - '**' # Match all branches.
+on: [push, workflow_dispatch]
 
 # Prevent multiple workflows with same branch/pull_request.
 concurrency: 
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 
-env:
-  PIPENV_VENV_IN_PROJECT: 1
-  ENV: development
-  SECRET_KEY: NOT SET
-  DJANGO_SETTINGS_MODULE: root.settings
-  DJANGO_SUPERUSER_USERNAME: admin
-  DJANGO_SUPERUSER_PASSWORD: Django123
-  DJANGO_SUPERUSER_EMAIL: admin@example.com
 
 jobs:
-
+  
   job_verify_tests:
     name: Verify tests
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
+    env:
+      PIPENV_VENV_IN_PROJECT: 1
+      ENV: development
+      SECRET_KEY: NOT SET
+      DJANGO_SETTINGS_MODULE: root.settings
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: Django123
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -87,3 +85,19 @@ jobs:
       
       - name: Stop containers
         run: docker compose down
+
+  job_verify_cypress:
+    # https://github.com/marketplace/actions/cypress-io
+    name: Verify Cypress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run cypress
+        uses: cypress-io/github-action@v4.2.0
+        with:
+          working-directory: ./frontend
+          browser: chrome
+          build: yarn run build
+          start: yarn start
