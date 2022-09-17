@@ -7,23 +7,24 @@ concurrency:
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 
-env:
-  PIPENV_VENV_IN_PROJECT: 1
-  ENV: development
-  SECRET_KEY: NOT SET
-  DJANGO_SETTINGS_MODULE: root.settings
-  DJANGO_SUPERUSER_USERNAME: admin
-  DJANGO_SUPERUSER_PASSWORD: Django123
-  DJANGO_SUPERUSER_EMAIL: admin@example.com
 
 jobs:
-
+  
   job_verify_tests:
     name: Verify tests
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
+    env:
+      PIPENV_VENV_IN_PROJECT: 1
+      ENV: development
+      SECRET_KEY: NOT SET
+      DJANGO_SETTINGS_MODULE: root.settings
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: Django123
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
