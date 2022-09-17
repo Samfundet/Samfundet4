@@ -4,6 +4,7 @@ on: push
 
 jobs:
   chromatic-deployment:
+    # https://www.chromatic.com/docs/github-actions
     runs-on: ubuntu-latest
     defaults:
       run:
