@@ -1,0 +1,90 @@
+.navbar_nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  // padding: 0.2rem calc((100vw - 1000px) / 2);
+  z-index: 12;
+  min-width: 350px;
+  @media screen and (max-width: 950px) {
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.navbar_logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: auto;
+  width: 240px;
+  cursor: pointer;
+}
+
+.navbar_link {
+  color: white;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  @media screen and (max-width: 950px) {
+    display: none;
+  }
+}
+
+.navbar_signup {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-right: 24px;
+  @media screen and (max-width: 950px) {
+    display: none;
+  }
+}
+
+.navbar_member_button {
+  display: flex;
+  align-items: center;
+  margin-right: 24px;
+  padding: 0 1rem;
+
+}
+
+.navbar_internal_button {
+  background-color: white;
+}
+
+.navbar_member_link {
+  color: white;
+}
+
+.navbar_internal_link {
+  color: black;
+}
+
+.navbar_hamburger {
+  display: none;
+  @media screen and (max-width: 950px) {
+    height: 69%;
+    width: 80px;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+}
+
+.navbar_hamburger_lines {
+  background-color: white;
+  width: 35px;
+  height: 4px;
+  border-radius: 10px;
+}
