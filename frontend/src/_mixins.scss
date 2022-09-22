@@ -1,0 +1,135 @@
+@import './constants';
+
+/* Screen size media queries */
+// https://www.freecodecamp.org/news/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862/
+
+/*
+Usage:
+.example {
+  padding: 10px;
+
+  @include for-desktop-up {
+    padding: 20px;
+  }
+}
+*/
+
+// Only:
+@mixin for-mobile-only {
+  @media (max-width: $mobile-bp-upper) {
+    @content;
+  }
+}
+
+@mixin for-tablet-only {
+  @media (min-width: $tablet-bp-lower) and (max-width: $tablet-bp-upper) {
+    @content;
+  }
+}
+
+@mixin for-desktop-only {
+  @media (min-width: $desktop-bp-lower) and (max-width: $desktop-bp-upper) {
+    @content;
+  }
+}
+
+@mixin for-large-desktop-only {
+  @media (min-width: $large-desktop-bp-lower) {
+    @content;
+  }
+}
+
+// Up:
+
+@mixin for-mobile-up {
+  @media (min-width: $mobile-bp-lower) {
+    @content;
+  }
+}
+
+@mixin for-tablet-up {
+  @media (min-width: $tablet-bp-lower) {
+    @content;
+  }
+}
+
+@mixin for-desktop-up {
+  @media (min-width: $desktop-bp-lower) {
+    @content;
+  }
+}
+
+@mixin for-large-desktop-up {
+  @media (min-width: $large-desktop-bp-lower) {
+    @content;
+  }
+}
+
+// Down:
+
+@mixin for-mobile-down {
+  @media (max-width: $mobile-bp-upper) {
+    @content;
+  }
+}
+
+@mixin for-tablet-down {
+  @media (max-width: $tablet-bp-upper) {
+    @content;
+  }
+}
+
+@mixin for-desktop-down {
+  @media (max-width: $desktop-bp-upper) {
+    @content;
+  }
+}
+
+@mixin for-large-desktop-down {
+  @media (max-width: $large-desktop-bp-upper) {
+    @content;
+  }
+}
+
+/* End: Screen size media queries */
+
+/* Color classes */
+
+@mixin color-loop($colorMap, $classNamePrefix, $styleName) {
+  /*
+  Usage:
+  $colorMap: (red: #f00, blue: #00f);
+  @include color-loop(colorMap, '.text-', 'color');
+
+  Output:
+  .text-red {color: #f00 !important;}
+  .text-blue {color: #00f !important;}
+  */
+  @each $key, $value in $colorMap {
+    #{$classNamePrefix + $key} {
+      #{$styleName}: $value !important;
+    }
+  }
+}
+
+/* End: Color classes */
+
+/* Spacing classes */
+
+@mixin list-loop($className, $styleName, $max, $offset, $unit) {
+  /*
+  Defined margins (use when you need special spacing between elements)
+  Example: '.mt-16' will add margin-top: 16px;
+  */
+  $i: 0;
+
+  @while $i <= $max {
+    #{$className + $i} {
+      #{$styleName}: #{$i + $unit};
+    }
+
+    $i: $i + $offset;
+  }
+}
+
+/* End: Spacing classes */
