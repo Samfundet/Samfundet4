@@ -1,13 +1,44 @@
 {
   "editor.formatOnSave": true,
-
   // Hide import regions automatically, e.g. (.js)
   "editor.foldingImportsByDefault": true,
-
   // Automatically set filetype when opening a new file.
   // This setting determines new filetype based on the current focused file.
   "files.defaultLanguage": "${activeEditorLanguage}",
-
   // Change layout of the upper title
-  "window.title": "🦐 ${activeEditorShort}${separator}${rootName}"
+  "window.title": "🦐 ${activeEditorShort}${separator}${rootName}",
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true
+    }
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true
+    }
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true
+    }
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true
+    }
+  },
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  }
 }
