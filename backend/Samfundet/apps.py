@@ -5,14 +5,14 @@ from django.apps import AppConfig
 
 from root.constants import Environment
 
-LOG = logging.getLogger('arrangementer')
+LOG = logging.getLogger('samfundet')
 
 # pylint: disable=import-outside-toplevel
 
 
-class ArrangementerConfig(AppConfig):
+class SamfundetConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'arrangementer'
+    name = 'samfundet'
 
     def ready(self):
         from django.core import management

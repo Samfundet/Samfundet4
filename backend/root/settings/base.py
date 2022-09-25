@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'root',  # Register to enable management.commands.
-    'arrangementer',
+    'samfundet',
 ]
 
 MIDDLEWARE = [

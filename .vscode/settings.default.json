@@ -1,4 +1,5 @@
 {
+  "editor.formatOnSave": true,
   "html.format.enable": false,
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,

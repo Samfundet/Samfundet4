@@ -7,7 +7,7 @@ services:
   backend:
     build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     volumes:
-      - ./backend/arrangementer:/app/arrangementer # Share project code between host machine and container to enable reload on changes.
+      - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
       - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
     env_file:
       - ./backend/.docker.env
