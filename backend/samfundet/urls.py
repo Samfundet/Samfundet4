@@ -7,8 +7,8 @@ from . import views
 # End: imports -----------------------------------------------------------------
 
 router = routers.DefaultRouter()
+router.register('events', views.EventView, 'events')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api2/test', views.Test.as_view()),
 ]

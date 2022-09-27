@@ -1,11 +1,9 @@
-from django.http import JsonResponse
-from django.views import View
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+from .models import Event
+from .serializers import EventSerializer
 
 
-class Test(View):
-
-    def get(self, request):
-        data = {'boss': 'Sigve'}
-        return JsonResponse(data=data)
+class EventView(ModelViewSet):
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()
