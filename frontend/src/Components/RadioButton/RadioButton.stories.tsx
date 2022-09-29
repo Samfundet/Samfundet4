@@ -11,7 +11,7 @@ export default {
 } as ComponentMeta<typeof RadioButton>;
 
 const Template: ComponentStory<typeof RadioButton> = function (args) {
-  return <RadioButton {...args}>Submit</RadioButton>;
+  return <RadioButton {...args}>Option</RadioButton>;
 };
 
 export const Basic = Template.bind({});
