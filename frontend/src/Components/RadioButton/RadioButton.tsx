@@ -16,8 +16,8 @@ type RadioButtonProps = {
 };
 
 const mapThemeToStyle: { [theme in RadioButtonTheme]: string } = {
-  samf: styles.button_samf,
-  secondary: styles.button_secondary,
+  samf: styles.radio_button_samf,
+  secondary: styles.radio_button_secondary,
 };
 
 export function RadioButton({
