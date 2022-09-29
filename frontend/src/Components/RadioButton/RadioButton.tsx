@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { Children } from '../../types';
 import styles from './RadioButton.module.scss';
 
-type RadioButtonTheme = 'samf' | 'secondary';
+type RadioButtonTheme = 'samf';
 
 type RadioButtonProps = {
   name?: string;
@@ -17,7 +17,6 @@ type RadioButtonProps = {
 
 const mapThemeToStyle: { [theme in RadioButtonTheme]: string } = {
   samf: styles.radio_button_samf,
-  secondary: styles.radio_button_secondary,
 };
 
 export function RadioButton({
