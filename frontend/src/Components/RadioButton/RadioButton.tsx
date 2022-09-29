@@ -6,6 +6,7 @@ type RadioButtonTheme = 'samf' | 'secondary';
 
 type RadioButtonProps = {
   name?: string;
+  value?: any;
   theme?: RadioButtonTheme;
   checked?: boolean;
   className?: string;
@@ -19,11 +20,28 @@ const mapThemeToStyle: { [theme in RadioButtonTheme]: string } = {
   secondary: styles.button_secondary,
 };
 
-export function RadioButton({ name, checked, theme = 'samf', onChange, disabled, className, children }: RadioButtonProps) {
+export function RadioButton({
+  name,
+  value,
+  checked,
+  theme = 'samf',
+  onChange,
+  disabled,
+  className,
+  children,
+}: RadioButtonProps) {
   const classNames = classnames(mapThemeToStyle[theme], className);
   return (
     <label>
-    <input type = 'radio' name={name} onChange={onChange} checked={checked} disabled={disabled} className={classNames} />
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        onChange={onChange}
+        checked={checked}
+        disabled={disabled}
+        className={classNames}
+      />
       {children}
     </label>
   );
