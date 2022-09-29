@@ -13,6 +13,7 @@ class Event(models.Model):
     host = models.CharField(max_length=140)
     location = models.CharField(max_length=140)
 
+
 class Venue(models.Model):
     name = models.CharField(max_length=140)
     description = models.TextField()
