@@ -3,7 +3,7 @@ import { RadioButton } from './RadioButton';
 
 // Local component config.
 export default {
-  title: 'Components/Button',
+  title: 'Components/RadioButton',
   component: RadioButton,
   args: {
     name: 'name',
