@@ -6,7 +6,7 @@ type RadioButtonTheme = 'samf' | 'secondary';
 
 type RadioButtonProps = {
   name?: string;
-  value?: any;
+  value?: string;
   theme?: RadioButtonTheme;
   checked?: boolean;
   className?: string;

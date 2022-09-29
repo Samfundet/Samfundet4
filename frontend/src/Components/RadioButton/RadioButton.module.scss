@@ -1,14 +1,14 @@
 @import 'src/constants';
 
 .radio_button_samf {
-  border: none;
   padding: 10px 25px;
   background-color: $red-samf;
   color: white;
+  border-color: $red-samf;
 }
 
 .radio_button_secondary {
-  border: none;
   padding: 10px 25px;
   background-color: $grey-3;
+  border-color: $grey-3;
 }
