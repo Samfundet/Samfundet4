@@ -27,4 +27,4 @@ export const Disabled = Template.bind({});
 Disabled.args = { disabled: true };
 
 export const Checked = Template.bind({});
-Disabled.args = { checked: true };
+Checked.args = { checked: true };
