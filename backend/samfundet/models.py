@@ -12,3 +12,11 @@ class Event(models.Model):
     publish_dt = models.DateTimeField()
     host = models.CharField(max_length=140)
     location = models.CharField(max_length=140)
+
+class Lokale(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    floor = models.IntegerField()
+    last_renovated = models.IntegerField()
+    designed_for_handicapped = models.BooleanField()
+    responsible_gjeng = models.CharField()
