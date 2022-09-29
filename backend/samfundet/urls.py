@@ -8,6 +8,8 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
+router.register('venues', views.VenueView, 'venues')
+
 
 urlpatterns = [
     path('api/', include(router.urls)),

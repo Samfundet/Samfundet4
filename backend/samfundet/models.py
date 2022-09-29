@@ -13,10 +13,10 @@ class Event(models.Model):
     host = models.CharField(max_length=140)
     location = models.CharField(max_length=140)
 
-class Lokale(models.Model):
-    name = models.CharField(max_length=100)
+class Venue(models.Model):
+    name = models.CharField(max_length=140)
     description = models.TextField()
     floor = models.IntegerField()
     last_renovated = models.IntegerField()
     designed_for_handicapped = models.BooleanField()
-    responsible_gjeng = models.CharField()
+    responsible_crew = models.CharField(max_length=140)
