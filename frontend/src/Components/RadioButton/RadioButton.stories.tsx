@@ -17,9 +17,6 @@ const Template: ComponentStory<typeof RadioButton> = function (args) {
 export const Basic = Template.bind({});
 Basic.args = {};
 
-export const Samf = Template.bind({});
-Samf.args = { theme: 'samf' };
-
 export const Disabled = Template.bind({});
 Disabled.args = { disabled: true };
 
