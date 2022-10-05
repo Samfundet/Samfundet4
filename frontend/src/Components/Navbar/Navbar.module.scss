@@ -51,6 +51,7 @@
     display: flex;
     align-items: center;
     margin-right: 16px;
+    text-decoration: none;
     .navbar_member_link {
       color: white;
     }
@@ -58,6 +59,7 @@
   
   .navbar_internal_button {
     background-color: white;
+    text-decoration: none;
     .navbar_internal_link {
       color: black;
     }
@@ -133,4 +135,37 @@
       text-decoration: none;
     }
   }
+}
+
+.navbar_profile_button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1em;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 1px;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: inherit;
+}
+
+.navbar_profile_icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+.navbar_profile_text {
+  text-decoration: none;
+  color: #777;
+}
+
+.navbar_language_flag {
+  width: 28px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.1);
 }

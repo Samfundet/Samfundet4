@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo_white.png';
-import { NavLink as Link } from 'react-router-dom';
+import profileIcon from '../../assets/user.png';
+import englishFlag from '../../assets/english.png';
+import norwegianFlag from '../../assets/norwegian.png';
+import { NavLink as Link, Routes } from 'react-router-dom';
 import styles from './Navbar.module.scss';
 import { ROUTES } from '../../routes';
 import { Button } from '../Button';
@@ -11,8 +14,31 @@ function changeLanguage() {
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(0);
+  const [loggedIn, setLoggedIn] = useState(1);
+  const [language, setLanguage] = useState(0);
 
-  function hamburgerFunction() {
+  function languageImage() {
+    if (language) {
+      return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(0)} />;
+    }
+    return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(1)} />;
+  }
+
+  function profileButton() {
+    if (loggedIn) {
+      return (
+        <div className={styles.navbar_profile_button}>
+          <img src={profileIcon} className={styles.navbar_profile_icon}></img>
+          <Link to={ROUTES.frontend.home} className={styles.navbar_profile_text}>
+            Username
+          </Link>
+        </div>
+      );
+    }
+    return <></>;
+  }
+
+  function hamburgerFunction(): JSX.Element {
     return (
       <div
         className={styles.navbar_hamburger}
@@ -100,6 +126,8 @@ export function Navbar() {
           Opptak
         </Link>
         <div className={styles.navbar_signup}>
+          {profileButton()}
+          {languageImage()}
           <Button className={styles.navbar_member_button}>
             <Link to={ROUTES.frontend.health} className={styles.navbar_member_link}>
               Medlem
