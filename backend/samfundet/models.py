@@ -19,5 +19,5 @@ class Venue(models.Model):
     description = models.TextField()
     floor = models.IntegerField()
     last_renovated = models.IntegerField()
-    designed_for_handicapped = models.BooleanField()
+    handicapped_approved = models.BooleanField()
     responsible_crew = models.CharField(max_length=140)
