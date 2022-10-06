@@ -108,3 +108,10 @@ jobs:
           browser: chrome
           build: yarn run build
           start: yarn start
+
+  job_eslint:
+   eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: stefanoeb/eslint-action@1.0.2
