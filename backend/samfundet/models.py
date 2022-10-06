@@ -20,3 +20,12 @@ class Event(models.Model):
     host = models.CharField(max_length=140)
     location = models.CharField(max_length=140)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT)
+
+
+class Venue(models.Model):
+    name = models.CharField(max_length=140)
+    description = models.TextField()
+    floor = models.IntegerField()
+    last_renovated = models.IntegerField()
+    handicapped_approved = models.BooleanField()
+    responsible_crew = models.CharField(max_length=140)
