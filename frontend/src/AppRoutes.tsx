@@ -12,6 +12,7 @@ import {
   LoginPage,
   LychePage,
   AdminPage,
+  EventPage,
 } from '~/Pages';
 import { GroupsAdminPage } from '~/PagesAdmin';
 import { ROUTES } from './routes';
@@ -34,6 +35,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
       <Route path={ROUTES.frontend.admin} element={<AdminPage />} />
       <Route path={ROUTES.frontend.admin_groups} element={<GroupsAdminPage />} />
+      <Route path={ROUTES.frontend.events} element={<EventPage />} />
     </Routes>
   );
 }
