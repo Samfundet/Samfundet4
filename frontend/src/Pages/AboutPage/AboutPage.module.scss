@@ -1,41 +1,78 @@
 .container{
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > * {
+    padding: 1em;
+    border-radius: 0.5em;
+  }
 }
 .about{
-  position: absolute;
-  box-sizing: border-box;
-  top: 10px;
-  bottom: 50%;
-  padding: 20px;
+  display: flex;
+  flex-direction: row;
 }
 
 .aboutText{
-  float: right;
-  box-shadow: 5px 5px 5px 5px black;
-  border-radius: 10px;
-  padding: 10px;
-  width: 50%;
+  padding: 1em;
+  border-radius: 0.2em;
 }
 
 .runderode{
-  float: left;
-  box-shadow: 5px 5px 5px 5px black;
-  width: 500px;
-  height: 300px;
-  border-radius: 10px;
+  background-color: bisque;
+  width: 40em;
+  height: 26em;
+  border-radius: 1em;
 }
 
 .samfundsmote{
-  position: relative;
-  padding: 10px;
-  box-sizing: border-box;
-  box-shadow: 5px 5px 5px 5px black;
-  border-radius: 10px;
-  padding: 10px;
-  top: 60%;
-  width: 90%;
-  float: bottom;
+  width: 75%;
+  box-shadow: 0.25em 0.25em 0.25em 0.25em lightgray;
+}
+
+
+.moreInfo{
+  display: flex;
+  flex-direction: row;
+}
+
+.volunteer{
+  background-color: green;
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.moreInfoRight{
+  display: flex;
+  flex-direction: column;
+  > * {
+    border-radius: 1em;
+  }
+}
+
+.festival{
+  padding: 1em;
+  height: 50%;
+  border-style: solid;
+}
+
+.otherInfo{
+  background-color: firebrick;
+  display: flex;
+  flex-wrap: wrap;
+  height: 50%;
+  padding: 1em;
+  > *:first-child{
+    width: 100%;
+  }
+  > * {
+    width: 50%;
+  }
+}
+
+.splash{
+  background-color: red;
+  width: 46em;
+  height: 11em;
 }
