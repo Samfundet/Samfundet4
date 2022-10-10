@@ -1,3 +1,6 @@
+@import '../../mixins';
+$navbar-bg: #000000;
+
 .navbar_nav {
   position: fixed;
   top: 0;
@@ -9,67 +12,67 @@
   justify-content: space-evenly;
   z-index: 12;
   min-width: 350px;
-  @media screen and (max-width: 950px) {
+  @include for-desktop-down {
     justify-content: space-between;
     padding-left: 20px;
     padding-right: 20px;
   }
-  .navbar_logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    padding: 0 1rem;
-    height: auto;
-    width: 240px;
-    cursor: pointer;
-  }
-  
-  .navbar_link {
-    color: white;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    padding: 0 1rem;
-    height: 100%;
-    cursor: pointer;
-    @media screen and (max-width: 950px) {
-      display: none;
-    }
-  }
-  
-  .navbar_signup {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    margin-right: 24px;
-    @media screen and (max-width: 950px) {
-      display: none;
-    }
-  }
-  
-  .navbar_member_button {
-    display: flex;
-    align-items: center;
-    margin-right: 16px;
-    text-decoration: none;
-    .navbar_member_link {
-      color: white;
-    }
-  }
-  
-  .navbar_internal_button {
-    background-color: white;
-    text-decoration: none;
-    .navbar_internal_link {
-      color: black;
-    }
+}
+
+.navbar_logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: auto;
+  width: 240px;
+  cursor: pointer;
+}
+
+.navbar_link {
+  color: white;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  @include for-desktop-down {
+    display: none;
   }
 }
 
+.navbar_signup {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-right: 24px;
+  @include for-desktop-down {
+    display: none;
+  }
+}
 
-.navbar_hamburger {
+.navbar_member_button {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  .navbar_member_link {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+.navbar_internal_button {
+  background-color: white;
+  .navbar_internal_link {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+#navbar_hamburger {
   display: none;
-  @media screen and (max-width: 950px) {
+  @include for-desktop-down {
     height: 69%;
     width: 80px;
     display: flex;
@@ -84,6 +87,21 @@
   width: 35px;
   height: 4px;
   border-radius: 10px;
+  transition: transform 400ms;
+}
+
+#navbar_hamburger.open {
+  .navbar_hamburger_line.top {
+    transform: translateY(12px) rotate(-45deg);
+  }
+
+  .navbar_hamburger_line.middle {
+    opacity: 0;
+  }
+
+  .navbar_hamburger_line.bottom {
+    transform: translateY(-11px) rotate(45deg);
+  }
 }
 
 .navbar_popup_mobile {
@@ -97,43 +115,44 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  // padding: 0.2rem calc((100vw - 1000px) / 2);
-  @media screen and (min-width: 950px) {
+  @include for-desktop-up {
     display: none;
   }
-  .navbar_link_mobile {
+}
+
+.navbar_link_mobile {
+  color: white;
+  font-size: 1.5em;
+  margin-bottom: 0.75em;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.navbar_language_mobile {
+  color: white;
+  font-size: 1em;
+  margin-bottom: 0.75em;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.mobile_nav_member_button {
+  margin-bottom: 0.5em;
+  .navbar_member_link {
     color: white;
-    font-size: 1.5em;
-    margin-bottom: 0.75em;
-    align-items: center;
     text-decoration: none;
-    padding: 0 1rem;
-    cursor: pointer;
   }
+}
 
-  .navbar_language_mobile {
-    color: white;
-    font-size: 1em;
-    margin-bottom: 0.75em;
-    align-items: center;
+.navbar_internal_button {
+  background-color: white;
+  .navbar_internal_link {
+    color: black;
     text-decoration: none;
-    padding: 0 1rem;
-    cursor: pointer;
-  }
-
-  .navbar_member_button {
-    .navbar_member_link {
-      color: white;
-      text-decoration: none;
-    }
-  }
-
-  .navbar_internal_button {
-    background-color: white;
-    .navbar_internal_link {
-      color: black;
-      text-decoration: none;
-    }
   }
 }
 
@@ -148,6 +167,22 @@
   padding: 1px;
   padding-left: 6px;
   padding-right: 6px;
+  background-color: inherit;
+  @include for-desktop-down {
+    display: none;
+  }
+}
+
+.navbar_profile_mobile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1em;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 1px;
+  padding-top: 6px;
   background-color: inherit;
 }
 
@@ -167,5 +202,5 @@
   margin-right: 10px;
   cursor: pointer;
   border-radius: 3px;
-  box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.1);
+  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
 }

@@ -38,38 +38,30 @@ export function Navbar() {
     return <></>;
   }
 
+  function profileButtonMobile() {
+    if (loggedIn) {
+      return (
+        <div className={styles.navbar_profile_mobile}>
+          <img src={profileIcon} className={styles.navbar_profile_icon}></img>
+          <Link to={ROUTES.frontend.home} className={styles.navbar_profile_text}>
+            Username
+          </Link>
+        </div>
+      );
+    }
+    return <></>;
+  }
+
   function hamburgerFunction(): JSX.Element {
     return (
       <div
-        className={styles.navbar_hamburger}
+        id={styles.navbar_hamburger}
         onClick={() => (mobileNavigation ? setMobileNavigation(0) : setMobileNavigation(1))}
+        className={mobileNavigation ? styles.open : styles.closed}
       >
-        <div
-          className={styles.navbar_hamburger_line}
-          style={
-            mobileNavigation
-              ? {
-                  transform: 'translateY(12px) rotate(-45deg)',
-                  transition: 'transform 400ms ease',
-                }
-              : {}
-          }
-        />
-        <div
-          className={styles.navbar_hamburger_line}
-          style={mobileNavigation ? { opacity: '0%' } : { opacity: '100%' }}
-        />
-        <div
-          className={styles.navbar_hamburger_line}
-          style={
-            mobileNavigation
-              ? {
-                  transform: 'translateY(-11px) rotate(45deg)',
-                  transition: 'transform 400ms ease',
-                }
-              : {}
-          }
-        />
+        <div className={styles.navbar_hamburger_line + ' ' + styles.top} />
+        <div className={styles.navbar_hamburger_line + ' ' + styles.middle} />
+        <div className={styles.navbar_hamburger_line + ' ' + styles.bottom} />{' '}
       </div>
     );
   }
@@ -93,7 +85,7 @@ export function Navbar() {
         <a onClick={() => changeLanguage()} className={styles.navbar_language_mobile}>
           English
         </a>
-        <Button className={styles.navbar_member_button}>
+        <Button className={styles.mobile_nav_member_button}>
           <Link to={ROUTES.frontend.health} className={styles.navbar_member_link}>
             Medlem
           </Link>
@@ -103,6 +95,7 @@ export function Navbar() {
             Intern
           </Link>
         </Button>
+        {profileButtonMobile()}
       </nav>
     );
   }
