@@ -93,5 +93,7 @@ export const ROUTES = {
     home: '/',
     health: '/health/',
     components: '/components/',
+    login: '/login/',
+    signup: '/signup/',
   },
 };
