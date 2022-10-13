@@ -16,7 +16,7 @@ indent_size = 2
 [*.{css,less,scss}]
 indent_size = 2
 
-[*.{jsx,js,json}]
+[*.{jsx,js,json,ts,tsx}]
 indent_size = 2
 
 [*.{yml,yaml}]
