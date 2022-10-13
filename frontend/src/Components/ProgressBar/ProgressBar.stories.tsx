@@ -34,3 +34,6 @@ Loading.args = {};
 
 export const WithLabel = Template.bind({});
 WithLabel.args = { children: <div>Label</div> };
+
+export const FullWidth = Template.bind({});
+FullWidth.args = { fullWidth: true };

@@ -7,9 +7,10 @@ type ProgressBarProps = {
   children?: Children;
   value?: number;
   max?: number;
+  fullWidth: boolean;
 };
 
-export function ProgressBar({ className, children, value, max }: ProgressBarProps) {
+export function ProgressBar({ className, children, value, max, fullWidth = true }: ProgressBarProps) {
   // Breakpoints:
   const bpLower = 0.33;
   const bpUpper = 0.67;
@@ -31,6 +32,7 @@ export function ProgressBar({ className, children, value, max }: ProgressBarProp
           [styles.orange]: isMedium,
           [styles.green]: isHigh,
           [styles.blue]: isLoading,
+          [styles.full_width]: fullWidth,
         })}
         value={value}
         max={max}
