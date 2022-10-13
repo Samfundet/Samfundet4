@@ -7,9 +7,9 @@ type InputProps = {
 
 export function Input({ children }: InputProps) {
   return (
-    <label>
+    <label className={styles.input_samf}>
       {children}
-      <input type="text" className=".input_samf" />
+      <input type="text" className={styles.input_field} />
     </label>
   );
 }
