@@ -1,0 +1,16 @@
+@import "../../constants";
+
+.input_samf {
+  border: 1px solid black;
+  min-width: 8em;
+  padding: 0.4em 0em 0.4em 0.4em;
+  font-size: 1.2em;
+}
+
+.input_secondary {
+  border: 1px solid $grey-1;
+  height: 3em;
+  min-width: 8em;
+  padding: 0.2em;
+  font-size: 1em;
+}
