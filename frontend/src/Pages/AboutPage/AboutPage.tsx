@@ -77,7 +77,7 @@ export function AboutPage() {
           <img src={edgar} alt="Edgar" className={styles.venueImg}></img>
           <h3>Edgar</h3>
         </a>
-        <a href="https://samfundet.no/lyche">
+        <a href="/lyche">
           <img src={lyche} alt="Lyche" className={styles.venueImg}></img>
           <h3>Lyche</h3>
         </a>
