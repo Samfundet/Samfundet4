@@ -1,0 +1,14 @@
+@import 'src/constants';
+
+.dropdown_samf{
+  border: none;
+  padding: 10px 25px;
+  background-color: $red-samf;
+  color: black;
+}
+
+.dropdown_secondary{
+  border: none;
+  padding: 10px 25px;
+  background-color: $grey-3;
+}
