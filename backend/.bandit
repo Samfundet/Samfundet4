@@ -1,0 +1,5 @@
+[bandit]
+exclude = tests,.venv,venv,.pytest_cache
+severity-level = all
+confidence-level = all
+skips = B101,B102
