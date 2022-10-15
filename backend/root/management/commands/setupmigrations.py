@@ -20,6 +20,6 @@ class Command(BaseCommand):
                 init = f'{migrations}/__init__.py'
                 open(file=init, mode='a', encoding='utf-8').close()  # pylint: disable=consider-using-with
 
-            except Exception as _e:  # pylint: disable=broad-except
+            except Exception as _e:  # pylint: disable=broad-except # nosec try_except_pass
                 pass
                 # print(f'{app} failed. {_e}')
