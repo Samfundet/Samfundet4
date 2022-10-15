@@ -58,6 +58,9 @@ jobs:
       - name: Run bandit
         run: python -m pipenv run bandit --recursive --ini .bandit .
 
+      - name: Run flake8
+        run: python -m pipenv run flake8 --config .flake8 .
+
   job_verify_docker:
     name: Verify docker
     runs-on: ubuntu-latest

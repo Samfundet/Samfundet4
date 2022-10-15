@@ -57,6 +57,6 @@ class Command(BaseCommand):
                 shutil.rmtree(pycache)
                 print(f'Removed {pycache}')
 
-            except Exception as _e:  # pylint: disable=broad-except # nosec try_except_pass
+            except Exception as _e:  # pylint: disable=broad-except # nosec try_except_pass # noqa: F841
                 pass
                 # print(f'{app} failed. {_e}')
