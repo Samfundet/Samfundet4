@@ -16,6 +16,7 @@ django-environ = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 dataclasses-json = "*"
+bandit = "*"
 
 [dev-packages]
 

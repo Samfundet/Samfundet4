@@ -43,6 +43,6 @@ class Command(BaseCommand):
             try:
                 appname = app.split('.')[-1]
                 management.call_command('migrate', appname, 'zero')
-            except Exception as _e:  # pylint: disable=broad-except
+            except Exception as _e:  # pylint: disable=broad-except # nosec try_except_pass
                 pass
                 # print(f"{app} failed. {_e}")
