@@ -1,8 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './EventPage.module.scss';
 
+interface Event {
+  title: string;
+  start_dt: Date;
+  end_dt: Date;
+  description_short: string;
+  description_long: string;
+  publish_dt: Date;
+  host: string;
+}
+
 export function EventPage() {
-  console.log('Inside event page!');
+  const { id } = useParams();
+  const [event, setEvent] = useState<Event>();
+
+  useEffect(() => {
+    const url = 'http://localhost:8000/samfunder/api/events/' + id;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setEvent({
+          title: data.title,
+          start_dt: data.start_dt,
+          end_dt: data.end_dt,
+          description_short: data.description_short,
+          description_long: data.description_long,
+          publish_dt: data.publish_dt,
+          host: data.host,
+        });
+      });
+  }, []);
   return (
     <div className={styles.container}>
       <div>
@@ -12,7 +41,7 @@ export function EventPage() {
         <table>
           <tr>
             <td className={styles.table_element_left}> LOKALE </td>
-            <td className={styles.table_element_right}> STORSALEN </td>
+            <td className={styles.table_element_right}> {event?.host}</td>
           </tr>
           <tr>
             <td className={styles.table_element_left}> ARRANGØR </td>

@@ -34,5 +34,6 @@ export const ROUTES = {
     home: '/',
     health: '/health/',
     events: '/events/',
+    event: '/events/:id',
   },
 };
