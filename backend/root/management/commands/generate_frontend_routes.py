@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from typing import Any
 
 from dataclasses_json import dataclass_json
 
@@ -11,7 +12,7 @@ from django.core.management.base import BaseCommand
 # pylint: disable=positional-arguments
 
 
-def to_camel_case(snake_str: str):
+def to_camel_case(snake_str: str) -> str:
     components = snake_str.split('_')
     # We capitalize the first letter of each component except the first one
     # with the 'title' method and join them together.
@@ -25,7 +26,7 @@ class Colorize:
     _ENDC = '\033[0m'
 
     @staticmethod
-    def __call__(string, *modifiers) -> str:
+    def __call__(string: str, *modifiers: Any) -> str:
         return ''.join(modifiers) + string + colorize._ENDC
 
 
@@ -87,7 +88,7 @@ def parse_url(url: str) -> str:
 class Command(BaseCommand):
     """Generate frontend routes"""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:  # type: ignore
         # Get all urls as json.
         urls_json: str = management.call_command('show_urls', format_style='json')
 
@@ -95,7 +96,7 @@ class Command(BaseCommand):
         urls_dict: dict = json.loads(urls_json)
 
         # Parse urls into objects.
-        urls: list[Url] = [Url.from_dict(url) for url in urls_dict]
+        urls: list[Url] = [Url.from_dict(url) for url in urls_dict]  # type: ignore # Yes it does!
 
         # Create space from output after call_command('show_urls').
         print('\n' * 40)

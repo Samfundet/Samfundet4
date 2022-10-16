@@ -61,6 +61,9 @@ jobs:
       - name: Run flake8
         run: python -m pipenv run flake8 --config .flake8 .
 
+      - name: Run mypy
+        run: python -m pipenv run mypy --config-file mypy.ini .
+
   job_verify_docker:
     name: Verify docker
     runs-on: ubuntu-latest

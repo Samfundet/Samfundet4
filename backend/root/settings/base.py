@@ -30,7 +30,7 @@ print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 ENV = os.environ.get('ENV')
 

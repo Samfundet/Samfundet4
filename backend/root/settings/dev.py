@@ -7,7 +7,7 @@ from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import # 
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 if os.environ.get('DOMAIN'):
-    ALLOWED_HOSTS.append(os.environ.get('DOMAIN'))
+    ALLOWED_HOSTS.append(os.environ['DOMAIN'])
 
 SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True

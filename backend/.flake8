@@ -8,9 +8,17 @@ extend-exclude=
     __pycache__,
     venv,
     .venv,
+    tests,
+    migrations,
 
 extend-ignore=
     E266,
+    ANN101, # Don't require typing of self. (flake8-annotations)
+    ANN001, # Covered by mypy. (flake8-annotations)
+    ANN201, # Covered by mypy. (flake8-annotations)
+    ANN102, # Don't require typing of cls. (flake8-annotations)
+    ANN002, # Don't require typing of *args. (flake8-annotations)
+    ANN003, # Don't require typing of **kwargs. (flake8-annotations)
 
 # Disable individual lines with comment, example: "print(1) # noqa"
 
