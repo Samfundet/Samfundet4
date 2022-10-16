@@ -15,4 +15,4 @@ if ENV not in Environment.VALID:
 if ENV == Environment.DEV:
     from .dev import *  # noqa: F403,F401
 elif ENV == Environment.PROD:
-    from .prod import *  # noqa: F403,F401
+    from .prod import *  # type: ignore # noqa: F403,F401
