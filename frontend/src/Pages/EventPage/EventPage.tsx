@@ -1,3 +1,4 @@
+import { type } from 'cypress/types/jquery';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './EventPage.module.scss';
@@ -10,14 +11,30 @@ interface Event {
   description_long: string;
   publish_dt: Date;
   host: string;
+  location: string;
 }
+
+const monthNames = [
+  'Januar',
+  'Februar',
+  'Mars',
+  'April',
+  'May',
+  'Juni',
+  'Juli',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
 
 export function EventPage() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event>();
 
   useEffect(() => {
-    const url = 'http://localhost:8000/samfunder/api/events/' + id;
+    const url = 'http://localhost:8000/samfundet/api/events/' + id;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -29,6 +46,7 @@ export function EventPage() {
           description_long: data.description_long,
           publish_dt: data.publish_dt,
           host: data.host,
+          location: data.location,
         });
       });
   }, []);
@@ -41,19 +59,27 @@ export function EventPage() {
         <table>
           <tr>
             <td className={styles.table_element_left}> LOKALE </td>
-            <td className={styles.table_element_right}> {event?.host}</td>
+            <td className={styles.table_element_right}> {event?.location} </td>
           </tr>
           <tr>
             <td className={styles.table_element_left}> ARRANGØR </td>
-            <td className={styles.table_element_right}> STORSALEN </td>
+            <td className={styles.table_element_right}> {event?.host} </td>
           </tr>
           <tr>
             <td className={styles.table_element_left}> DATO </td>
-            <td className={styles.table_element_right}> STORSALEN </td>
+            <td className={styles.table_element_right}>
+              {' '}
+              {event?.start_dt.toString().split('-')[1] + '. '}
+              {monthNames[Number(event?.start_dt.toString().split('-')[1]) - 1]}{' '}
+            </td>
           </tr>
           <tr>
             <td className={styles.table_element_left}> TID </td>
-            <td className={styles.table_element_right}> STORSALEN </td>
+            <td className={styles.table_element_right}>
+              {' '}
+              {event?.start_dt.toString().split('-')[2].split('T')[1].split(':00')[0] + ' - '}
+              {event?.end_dt.toString().split('-')[2].split('T')[1].split(':00')[0]}
+            </td>
           </tr>
           <tr>
             <td className={styles.table_element_left}> BILLETT </td>
@@ -69,22 +95,10 @@ export function EventPage() {
         <p className={styles.text_title}> DESCRIPTION </p>
         <div className={styles.description}>
           <div className={styles.description_short}>
-            <p className={styles.text_short}>
-              {' '}
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo autem laudantium fuga saepe architecto
-              consectetur nihil.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo autem laudantium fuga
-              architecto consectetur nihil.Lorem ipsum dolor sit amet, consectetur adipisicing elit.{' '}
-            </p>
+            <p className={styles.text_short}>{event?.description_short}</p>
           </div>
           <div className={styles.description_long}>
-            <p>
-              {' '}
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo autem laudantium fuga saepe architecto
-              consectetur nihil.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo autem laudantium fuga
-              architecto consectetur nihil.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo autem
-              laudantium fuga saepe architecto consectetur nihil.Lorem ipsum dolor sit amet, consectetur adipisicing
-              elit. Illo autem laudantium fuga saepe architecto consectetur nihil.{' '}
-            </p>
+            <p> {event?.description_long}</p>
           </div>
         </div>
       </div>
