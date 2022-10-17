@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import styles from './Button.module.scss';
+import styles from './DropDown.module.scss';
 
 type DropDownTheme = 'samf' | 'secondary';
 

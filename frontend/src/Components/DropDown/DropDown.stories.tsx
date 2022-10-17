@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof DropDown> = function (args) {
 };
 
 export const Basic = Template.bind({});
-Basic.args = { dropDownList: ['a', 'b'] };
+Basic.args = { dropDownList: ['alternativ 1', 'alternativ 2'] };
