@@ -16,12 +16,3 @@ const Template: ComponentStory<typeof Checkbox> = function (args) {
 
 export const Basic = Template.bind({});
 Basic.args = {};
-
-export const Samf = Template.bind({});
-Samf.args = { theme: 'samf' };
-
-export const Secondary = Template.bind({});
-Secondary.args = { theme: 'secondary' };
-
-export const Disabled = Template.bind({});
-Disabled.args = { disabled: true };
