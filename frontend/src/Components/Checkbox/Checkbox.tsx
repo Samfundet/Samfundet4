@@ -10,7 +10,7 @@ type CheckboxProps = {
   checked: boolean;
   children?: Children;
   onClick?: () => void;
-  alignment: Alignment;
+  alignment?: Alignment;
 };
 
 export function Checkbox({ name, onClick, disabled, className, checked, children, alignment = 'left' }: CheckboxProps) {
