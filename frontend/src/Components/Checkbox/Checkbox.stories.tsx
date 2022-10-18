@@ -11,8 +11,11 @@ export default {
 } as ComponentMeta<typeof Checkbox>;
 
 const Template: ComponentStory<typeof Checkbox> = function (args) {
-  return <Checkbox {...args}>Submit</Checkbox>;
+  return <Checkbox {...args}>Approve</Checkbox>;
 };
 
 export const Basic = Template.bind({});
 Basic.args = {};
+
+export const Disabled = Template.bind({});
+Disabled.args = { disabled: true };

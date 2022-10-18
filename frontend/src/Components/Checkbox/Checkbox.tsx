@@ -1,21 +1,32 @@
 import classnames from 'classnames';
 import { Children } from '../../types';
 
-type CheckboxTheme = 'samf';
+type Alignment = 'left' | 'right';
 
 type CheckboxProps = {
-  name?: string /* Er dette rikitg props*/;
-  theme?: CheckboxTheme;
-  className?: string;
-  disabled?: boolean;
-  checked?: boolean;
+  name?: string;
+  className: string;
+  disabled: boolean;
+  checked: boolean;
   children?: Children;
   onClick?: () => void;
+  alignment: Alignment;
 };
 
-export function Checkbox({ name, onClick, disabled, className, checked }: CheckboxProps) {
+export function Checkbox({ name, onClick, disabled, className, checked, children, alignment = 'left' }: CheckboxProps) {
   const classNames = classnames(className);
   return (
-    <input type="checkbox" name={name} onClick={onClick} disabled={disabled} className={classNames} checked={checked} />
+    <label>
+      {alignment == 'left' ? children : ''}
+      <input
+        type="checkbox"
+        name={name}
+        onClick={onClick}
+        disabled={disabled}
+        className={classNames}
+        checked={checked}
+      />
+      {alignment == 'right' ? children : ''}
+    </label>
   );
 }
