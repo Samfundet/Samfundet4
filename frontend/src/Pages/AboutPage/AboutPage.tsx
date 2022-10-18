@@ -49,7 +49,7 @@ export function AboutPage() {
       </div>
       <div className={styles.venues}>
         <h1>LOKALER</h1>
-        <a className={styles.venueBox} href="/about/storsalen">
+        <a href="/about/storsalen">
           <img src={storsalen} alt="Storsalen" className={styles.venueImg}></img>
           <h3>Storsalen</h3>
         </a>

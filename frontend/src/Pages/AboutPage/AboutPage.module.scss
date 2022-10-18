@@ -4,22 +4,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  > * {
-    padding: 1em;
-    border-radius: 0.5em;
-  }
 }
 
 .about {
   display: flex;
   flex-direction: row;
+  padding: 1em;
 }
 
 .aboutText {
   padding: 1em;
   > * {
     margin: 0.5em;
-    border-radius: 0.5em;
   }
 }
 
@@ -36,6 +32,8 @@
   margin: 1em;
   row-gap: 2em;
   align-items: center;
+  padding: 1em;
+  border-radius: 0.5em;
 
   > *:first-child {
     width: 100%;
@@ -49,7 +47,7 @@
     transition: 1s;
   }
 
-  > *:hover {
+  > *:not(:first-child):hover {
     transform: scale(1.1);
   }
 }
@@ -62,7 +60,6 @@
 
 .mapButton {
   > * {
-    border-radius: 0.5em;
     margin: 0.5em;
   }
 }
@@ -70,9 +67,10 @@
 .samfundsmote {
   width: 95%;
   box-shadow: 0.25em 0.25em 0.25em 0.25em lightgray;
+  padding: 1em;
+  border-radius: 0.5em;
   > * {
     margin: 0.5em;
-    border-radius: 0.5em;
   }
 }
 
@@ -87,19 +85,16 @@
 .volunteer {
   background-color: #27ae60;
   border-radius: 1em;
-  padding: 1em;
+  width: 65%;
   > * {
     margin: 0.5em;
-    border-radius: 0.5em;
   }
 }
 
 .moreInfoRight {
   display: flex;
   flex-direction: column;
-  > * {
-    border-radius: 1em;
-  }
+  width: 35%;
 }
 
 .festival {
@@ -107,10 +102,10 @@
   border-style: solid;
   border-color: grey;
   border-width: 0.01em;
+  border-radius: 1em;
   margin-bottom: 1em;
   > * {
     margin: 0.5em;
-    border-radius: 0.5em;
   }
 }
 
@@ -120,19 +115,20 @@
   flex-wrap: wrap;
   height: 50%;
   padding: 1em;
+  border-radius: 1em;
   > *:first-child {
     width: 100%;
   }
   > * {
     width: 49%;
-    border-radius: 0.5em;
     margin: 0.5%;
   }
 }
 
 .splash {
-  background-color: red;
-  width: 46em;
+  width: 100%;
   margin: 0;
-  height: 11em;
+  height: 40%;
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
 }
