@@ -1,6 +1,8 @@
+from __future__ import annotations
 import sys
 import copy
 import logging
+from typing import Any, Union
 
 from django.db.models import DEFERRED, Model
 
@@ -50,7 +52,7 @@ class FieldTrackerMixin(Model):
     class Meta:
         abstract = True
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         if not hasattr(self, self._FTM_TRACK_FIELDS_NAME):
             raise Exception(f"Missing field '{self._FTM_TRACK_FIELDS_NAME}' : list[str]'")
@@ -78,21 +80,22 @@ class FieldTrackerMixin(Model):
                 fields_copy[field] = "Omitted, FieldTrackerMixin couldn't determine size."
         return fields_copy
 
-    def ftm_get_tracked_fields(self):
+    def ftm_get_tracked_fields(self) -> Union[list[str], str]:
         """Returns a list of all field names this mixin tracks."""
+        # ftm_track_fields can be '__all__'.
         return getattr(self, self._FTM_TRACK_FIELDS_NAME, [])
 
-    def ftm_get_loaded_fields(self):
+    def ftm_get_loaded_fields(self) -> dict:
         """Returns the cached tracked values currently on the instance."""
         return getattr(self, self._FTM_LOADED_FIELDS_NAME, {})
 
-    def ftm_get_dirty_fields(self) -> dict:
+    def ftm_get_dirty_fields(self) -> tuple[dict, dict]:
         """Detects all changes, return old and new states."""
         if not self.pk:
             return {}, {}  # No dirty fields on creation.
 
         # Get tracked and loaded fields.
-        track_fields: list[str] = self.ftm_get_tracked_fields()
+        track_fields = self.ftm_get_tracked_fields()
         loaded_fields: dict = self.ftm_get_loaded_fields()
 
         # Loop tracked field and keep fields that have changed.
@@ -107,7 +110,7 @@ class FieldTrackerMixin(Model):
 
         return dirty_fields_old, dirty_fields_new
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Extends django 'save' to log all changes."""
 
         # Ensure changes are logged when attempting to save.
@@ -148,7 +151,7 @@ class FieldTrackerMixin(Model):
             raise e
 
     @classmethod
-    def from_db(cls, db, field_names, values):
+    def from_db(cls, db, field_names, values):  # type: ignore # noqa: ANN001,ANN206 # Unknown types.
         """Extends django 'from_db' to set 'loaded_fields'."""
         # pylint: disable=positional-arguments # builtin django.model method
 
