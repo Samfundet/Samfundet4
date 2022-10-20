@@ -5,9 +5,7 @@ import { List } from './List';
 export default {
   title: 'Components/List',
   component: List,
-  args: {
-    name: 'name',
-  },
+  args: {},
 } as ComponentMeta<typeof List>;
 
 const Template: ComponentStory<typeof List> = function (args) {
