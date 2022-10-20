@@ -1,10 +1,12 @@
+type ListType = 'ordered' | 'unordered';
+
 type ListProps = {
   items: Array<string>;
-  ordered?: boolean;
+  type: ListType;
 };
 
-export function List({ items, ordered }: ListProps) {
-  if (ordered) {
+export function List({ items, type = 'unordered' }: ListProps) {
+  if (type === 'ordered') {
     return (
       <ol>
         {items.map(function (element, index) {
