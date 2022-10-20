@@ -1,22 +1,24 @@
-import { Children } from '../../types';
-
 type ListProps = {
-  //   id: string;
-  //   name?: string;
-  //   value?: string;
-  //   checked?: boolean;
-  //   className?: string;
-  //   disabled?: boolean;
-  children?: Children;
+  items: Array<string>;
+  ordered?: boolean;
 };
 
-export function List({ children }: ListProps) {
-  return (
-    <div>
-      {children}
+export function List({ items, ordered }: ListProps) {
+  if (ordered) {
+    return (
+      <ol>
+        {items.map(function (element, index) {
+          return <li key={index}>{element}</li>;
+        })}
+      </ol>
+    );
+  } else {
+    return (
       <ul>
-        <li>Item</li>
+        {items.map(function (element, index) {
+          return <li key={index}>{element}</li>;
+        })}
       </ul>
-    </div>
-  );
+    );
+  }
 }

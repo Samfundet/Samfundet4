@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof List> = function (args) {
 };
 
 export const Basic = Template.bind({});
-Basic.args = {};
+Basic.args = { items: ['First element', 'Second element'] };
