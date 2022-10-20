@@ -15,7 +15,21 @@ export interface ITableCell {
   compare?: (b: ITableCell) => number;
 }
 
+export class AlphabeticTableCell implements ITableCell {
+  children: String;
+  constructor(child: String) {
+    this.children = child;
+  }
+  compare(other: ITableCell) {
+    return this.children.localeCompare(other.children!.toString());
+  }
+}
+
 export function Table({ className, columns, data }: TableProps) {
+
+  const [sortColumn, setSortColumn] = useState(-1);
+  const [sortInverse, setSortInverse] = useState(false);
+
   function isColumnSortable(index: number) {
     const column: ITableCell[] = data.map((row) => row[index]);
     return column.reduce((othersSortable: boolean, cell: ITableCell) => {
@@ -24,21 +38,30 @@ export function Table({ className, columns, data }: TableProps) {
   }
 
   function sortButton(column: number): Children {
-    return <Button onClick={() => setSortColumn(column)}>V</Button>;
+    return <Button onClick={() => {
+      if (sortColumn===column){
+        setSortInverse(!sortInverse)
+      } else {
+        setSortInverse(false)
+        setSortColumn(column)
+      }
+    }}>
+      {sortInverse ? "V" : "^"}
+    </Button>;
   }
 
-  const [sortColumn, setSortColumn] = useState(-1);
-  const [sortInverse, setSortInverse] = useState(false);
-
   function sortedData(data: ITableCell[][]): ITableCell[][] {
-    if (sortColumn === -1 && isColumnSortable(sortColumn)) {
+    if (sortColumn === -1 || !isColumnSortable(sortColumn)) {
       return data;
     } else {
       return [...data].sort(
         (rowA: ITableCell[], rowB: ITableCell[]) => {
           if (rowA == null || rowA[sortColumn] == null)
             return 0;
-          return rowA[sortColumn].compare != null ? rowA[sortColumn].compare!(rowB[sortColumn]) : 0
+          if(sortInverse)
+            return -rowA[sortColumn].compare!(rowB[sortColumn])
+          else
+            return rowA[sortColumn].compare!(rowB[sortColumn])
         }
       );
     }
@@ -47,7 +70,6 @@ export function Table({ className, columns, data }: TableProps) {
 
   return (
     <>
-      <h1>Sort with {sortColumn}</h1>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead>
           <tr>

@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Table, ITableCell } from './Table';
+import { Table, ITableCell, AlphabeticTableCell } from './Table';
+import { Children } from 'types';
 
 // Local component config.
 export default {
@@ -23,11 +24,20 @@ Basic.args = {
   ],
 };
 
+export const NoHeader = Template.bind({});
+NoHeader.args = {
+  data: [
+    [{ children: 'A' } as ITableCell, { children: 'B' } as ITableCell],
+    [{ children: 'C' } as ITableCell, { children: 'D' } as ITableCell],
+  ],
+};
+
 export const Sortable = Template.bind({});
 Sortable.args = {
   columns: ['Sortable', 'Not sortable'],
   data: [
-    [{ children: 'A', compare: () => 0 } as ITableCell, { children: 'B' } as ITableCell],
-    [{ children: 'C', compare: () => 1 } as ITableCell, { children: 'D' } as ITableCell],
+    [new AlphabeticTableCell('A'), { children: '-A' } as ITableCell],
+    [new AlphabeticTableCell('Z'), { children: '-Z' } as ITableCell],
+    [new AlphabeticTableCell('B'), { children: '-B' } as ITableCell],
   ],
 };
