@@ -11,7 +11,7 @@ export default {
 } as ComponentMeta<typeof List>;
 
 const Template: ComponentStory<typeof List> = function (args) {
-  return <List {...args}>Option</List>;
+  return <List {...args} />;
 };
 
 export const Unordered = Template.bind({});
