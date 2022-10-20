@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Table, ITableCell, ISortableTableCell } from './Table';
+import { Table, ITableCell } from './Table';
 
 // Local component config.
 export default {
@@ -18,17 +18,16 @@ export const Basic = Template.bind({});
 Basic.args = {
   columns: ['Hello', 'Dude'],
   data: [
-    [{ children: "A" } as ITableCell, { children: "B" } as ITableCell],
-    [{ children: "C" } as ITableCell, { children: "D" } as ITableCell],
-  ]
+    [{ children: 'A' } as ITableCell, { children: 'B' } as ITableCell],
+    [{ children: 'C' } as ITableCell, { children: 'D' } as ITableCell],
+  ],
 };
-
 
 export const Sortable = Template.bind({});
 Sortable.args = {
   columns: ['Sortable', 'Not sortable'],
   data: [
-    [{ children: "A", compare: () => 0 } as ITableCell, { children: "B" } as ITableCell],
-    [{ children: "C", compare: () => 1 } as ITableCell, { children: "D" } as ITableCell],
-  ]
+    [{ children: 'A', compare: () => 0 } as ITableCell, { children: 'B' } as ITableCell],
+    [{ children: 'C', compare: () => 1 } as ITableCell, { children: 'D' } as ITableCell],
+  ],
 };
