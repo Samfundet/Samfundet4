@@ -1,32 +1,31 @@
-import classnames from 'classnames';
-import { Children } from '../../types';
+import styles from './Checkbox.module.scss';
 
 type Alignment = 'left' | 'right';
 
 type CheckboxProps = {
   name?: string;
-  className: string;
+  label?: string;
   disabled: boolean;
   checked: boolean;
-  children?: Children;
+
   onClick?: () => void;
   alignment?: Alignment;
 };
 
-export function Checkbox({ name, onClick, disabled, className, checked, children, alignment = 'left' }: CheckboxProps) {
-  const classNames = classnames(className);
+export function Checkbox({ name, onClick, disabled, checked, alignment = 'left', label }: CheckboxProps) {
   return (
-    <label>
-      {alignment == 'left' ? children : ''}
+    <label className={styles.checkbox}>
+      {alignment == 'left' && label}
       <input
+        className={styles.checkbox__input}
         type="checkbox"
         name={name}
         onClick={onClick}
         disabled={disabled}
-        className={classNames}
         checked={checked}
-      />
-      {alignment == 'right' ? children : ''}
+      ></input>
+      <div className={styles.checkbox__box}></div>
+      {alignment == 'right' && label}
     </label>
   );
 }

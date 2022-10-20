@@ -7,11 +7,12 @@ export default {
   component: Checkbox,
   args: {
     name: 'name',
+    label: 'Approve',
   },
 } as ComponentMeta<typeof Checkbox>;
 
 const Template: ComponentStory<typeof Checkbox> = function (args) {
-  return <Checkbox {...args}>Approve</Checkbox>;
+  return <Checkbox {...args}></Checkbox>;
 };
 
 export const Basic = Template.bind({});
