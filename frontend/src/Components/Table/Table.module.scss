@@ -1,0 +1,19 @@
+@import 'src/constants';
+
+.table_samf {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px;
+  text-align: left;
+}
+
+th{
+  border: 1px solid black;
+}
+
+td{
+  border: 1px solid $gray-0;
+}
+
+
