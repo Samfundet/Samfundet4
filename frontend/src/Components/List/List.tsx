@@ -1,19 +1,22 @@
 import { Children } from '../../types';
 
 type ListProps = {
-  id: string;
-  name?: string;
-  value?: string;
-  checked?: boolean;
-  className?: string;
-  disabled?: boolean;
+  //   id: string;
+  //   name?: string;
+  //   value?: string;
+  //   checked?: boolean;
+  //   className?: string;
+  //   disabled?: boolean;
   children?: Children;
 };
 
-export function List({ id, name, value, checked, disabled, className, children }: ListProps) {
+export function List({ children }: ListProps) {
   return (
-    <ul>
-      <li>Item</li>
-    </ul>
+    <div>
+      {children}
+      <ul>
+        <li>Item</li>
+      </ul>
+    </div>
   );
 }
