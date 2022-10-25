@@ -13,6 +13,6 @@ if ENV not in Environment.VALID:
                     f'Possible values: {ENV_OPTIONS}')
 
 if ENV == Environment.DEV:
-    from .dev import *
+    from .dev import *  # noqa: F403,F401
 elif ENV == Environment.PROD:
-    from .prod import *
+    from .prod import *  # type: ignore # noqa: F403,F401

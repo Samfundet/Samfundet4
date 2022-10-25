@@ -7,6 +7,7 @@ variable-rgx=(([a-z_]+[a-z0-9_]*)|(_[a-z0-9_]*)|(__[a-z][a-z0-9_]+__))$
 argument-rgx=(([a-z_]+[a-z0-9_]*)|(_[a-z0-9_]*)|(__[a-z][a-z0-9_]+__))$
 method-rgx=(([a-z_]+[a-z0-9_]*)|(_[a-z0-9_]*)|(__[a-z][a-z0-9_]+__))$
 attr-rgx=(([a-z_]+[a-z0-9_]*)|(_[a-z0-9_]*)|(__[a-z][a-z0-9_]+__))$
+init-hook="import sys; import os; sys.path.append(os.getcwd());" # Needed to import custom checker
 
 [pylint-quotes]
 string-quote=single-avoid-escape

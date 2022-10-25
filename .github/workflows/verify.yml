@@ -3,13 +3,11 @@ name: Verify
 on: [push, workflow_dispatch]
 
 # Prevent multiple workflows with same branch/pull_request.
-concurrency: 
+concurrency:
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 
-
 jobs:
-  
   job_verify_tests:
     name: Verify tests
     runs-on: ubuntu-latest
@@ -24,11 +22,11 @@ jobs:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: Django123
       DJANGO_SUPERUSER_EMAIL: admin@example.com
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-    
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -41,10 +39,10 @@ jobs:
           echo $PY
           python -m pip install --upgrade pip
           python -m pip install pipenv
-          python -m pipenv install --python $PY
-      
+          python -m pipenv install --deploy --python $PY
+
       - name: Run pylint
-        run: python -m pipenv run ./run-pylint.sh 
+        run: python -m pipenv run ./run-pylint.sh
 
       - name: Check yapf
         run: python -m pipenv run yapf --parallel --recursive --diff .
@@ -56,6 +54,15 @@ jobs:
 
       - name: Run tests
         run: python -m pipenv run pytest
+
+      - name: Run bandit
+        run: python -m pipenv run bandit --recursive --ini .bandit .
+
+      - name: Run flake8
+        run: python -m pipenv run flake8 --config .flake8 .
+
+      - name: Run mypy
+        run: python -m pipenv run mypy --config-file mypy.ini .
 
   job_verify_docker:
     name: Verify docker
@@ -70,19 +77,19 @@ jobs:
           echo ENV=development >> backend/.docker.env
           echo SECRET_KEY=NOT_SET >> backend/.docker.env
           echo DJANGO_SETTINGS_MODULE=root.settings >> backend/.docker.env
-    
+
       - name: Build images
         run: docker compose build
-          
+
       - name: Start containers
-        run: docker compose up -d; sleep 10 # Give additional seconds to boot. 
+        run: docker compose up -d; sleep 10 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
         run: |
           docker compose exec backend echo 
           docker compose exec frontend echo
-      
+
       - name: Stop containers
         run: docker compose down
 

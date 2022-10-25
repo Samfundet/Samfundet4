@@ -1,0 +1,14 @@
+@import 'src/constants';
+
+.underline {
+  text-decoration: underline $red-samf;
+  color: $red-samf;
+}
+
+.regular {
+  color: $red-samf;
+  text-decoration: none;
+}
+.regular:hover {
+  text-decoration: underline;
+}
