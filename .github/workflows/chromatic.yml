@@ -1,6 +1,8 @@
 name: 'Chromatic'
 
-on: push
+on:
+  push:
+    paths: ['frontend/src/Components/**']
 
 jobs:
   chromatic-deployment:

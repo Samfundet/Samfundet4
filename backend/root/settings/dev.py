@@ -2,12 +2,12 @@
 import os
 
 from root.constants import Environment
-from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import
+from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import # noqa: F403
 # End: imports -----------------------------------------------------
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 if os.environ.get('DOMAIN'):
-    ALLOWED_HOSTS.append(os.environ.get('DOMAIN'))
+    ALLOWED_HOSTS.append(os.environ['DOMAIN'])
 
 SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
@@ -35,8 +35,10 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database' / 'db.sqlite3',
-    }
+    'default':
+        {
+            'ENGINE': 'django.db.backends.sqlite3',
+            # We know BASE_DIR and other variables are available from star import.
+            'NAME': BASE_DIR / 'database' / 'db.sqlite3',  # noqa: F405
+        }
 }
