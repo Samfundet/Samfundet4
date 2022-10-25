@@ -17,3 +17,6 @@ Unordered.args = { items: ['First element', 'Second element'] };
 
 export const Ordered = Template.bind({});
 Ordered.args = { items: ['First element', 'Second element'], type: 'ordered' };
+
+export const NoBullets = Template.bind({});
+Ordered.args = { items: ['First element', 'Second element'], type: 'no_bullets' };
