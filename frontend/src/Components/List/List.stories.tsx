@@ -13,10 +13,16 @@ const Template: ComponentStory<typeof List> = function (args) {
 };
 
 export const Unordered = Template.bind({});
-Unordered.args = { items: ['First element', 'Second element'] };
+Unordered.args = { items: [<div key={1}>{'First element'}</div>, <div key={2}>{'Second element'}</div>] };
 
 export const Ordered = Template.bind({});
-Ordered.args = { items: ['First element', 'Second element'], type: 'ordered' };
+Ordered.args = {
+  items: [<div key={1}>{'First element'}</div>, <div key={2}>{'Second element'}</div>],
+  type: 'ordered',
+};
 
 export const NoBullets = Template.bind({});
-Ordered.args = { items: ['First element', 'Second element'], type: 'no_bullets' };
+NoBullets.args = {
+  items: [<div key={1}>{'First element'}</div>, <div key={2}>{'Second element'}</div>],
+  type: 'no_bullets',
+};
