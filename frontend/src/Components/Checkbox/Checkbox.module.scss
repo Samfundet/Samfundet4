@@ -1,17 +1,20 @@
 @import 'src/constants';
 
+//label wraper i checkbox.tsx
 .checkbox{
   display: inline-flex;
   align-items:center;
   cursor: pointer; 
 }
+//selve input checkbox typen
 .checkbox__input{
   display:none;
 }
+//Div som styles for å representere en checkbox
 .checkbox__box{
   width: 1.0em;
   height: 1.0em;
-  border:2px solid #cccccc;
+  border:2px solid $grey-3;
   border-radius:3px;
   display:flex;
   align-items:center;
@@ -19,20 +22,22 @@
   margin-right:10px;
   margin-left:10px;
   flex-shrink:0;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s; //bakgrunn kommer gradvis inn
 }
-
+//psudoklasse. Det settes et hvit ASCII check-symbol etter .checkbox__box elementet
 .checkbox__box::after{
-  content:'\2714';
-  color:#ffffff;
-  transform: scale(0);
+  content:'\2714';  // ASCII "check"-sybol
+  color:$white; //fargen til symbolet
+  transform: scale(0); //størrelsen på sybolet
 
 
 }
+//Her velges (og styles) det elementet med klassen .checkboc__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked"
 .checkbox__input:checked + .checkbox__box{
-  background: #a03033;
-  border-color:#a03033;
+  background-color: $red-samf;
+  border-color: $red-samf;
 }
+//Her velges (og styles) det elementet med psudoklassen .checkbox__box::after, som ligger rett etter elementet med klassen .checkbox__input:checked, når det sistnevte elementet er "checked"
 .checkbox__input:checked + .checkbox__box::after{
   transform:scale(1);
 }

@@ -7,7 +7,6 @@ type CheckboxProps = {
   label?: string;
   disabled: boolean;
   checked: boolean;
-
   onClick?: () => void;
   alignment?: Alignment;
 };
@@ -23,8 +22,9 @@ export function Checkbox({ name, onClick, disabled, checked, alignment = 'left',
         onClick={onClick}
         disabled={disabled}
         checked={checked}
-      ></input>
+      />
       <div className={styles.checkbox__box}></div>
+      {/* Denne diven styles i .scss fil for å representere en checkbox. Input tas i input elementet over */}
       {alignment == 'right' && label}
     </label>
   );
