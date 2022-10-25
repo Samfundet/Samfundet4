@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import styles from './List.module.scss';
 
 type ListType = 'ordered' | 'unordered' | 'no_bullets';
@@ -5,17 +6,24 @@ type ListType = 'ordered' | 'unordered' | 'no_bullets';
 type ListProps = {
   items: Array<JSX.Element>;
   type: ListType;
+  classNameList?: string;
+  classNameListEntries?: string;
 };
 
-export function List({ items, type = 'unordered' }: ListProps) {
+export function List({ items, type = 'unordered', classNameList, classNameListEntries }: ListProps) {
   function MakeList(element: JSX.Element, index: number) {
-    return <li key={index}>{element}</li>;
+    return (
+      <li key={index} className={classNameListEntries}>
+        {element}
+      </li>
+    );
   }
   if (type === 'ordered') {
-    return <ol>{items?.map((element, index) => MakeList(element, index))}</ol>;
+    return <ol className={classNameList}>{items?.map((element, index) => MakeList(element, index))}</ol>;
   } else if (type === 'no_bullets') {
-    return <ul className={styles.list_no_bullets}>{items?.map((element, index) => MakeList(element, index))}</ul>;
+    const classNames = classnames(styles.list_no_bullets, classNameList);
+    return <ul className={classNames}>{items?.map((element, index) => MakeList(element, index))}</ul>;
   } else {
-    return <ul>{items?.map((element, index) => MakeList(element, index))}</ul>;
+    return <ul className={classNameList}>{items?.map((element, index) => MakeList(element, index))}</ul>;
   }
 }
