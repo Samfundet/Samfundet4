@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import logo from '../../assets/logo_white.png';
-import profileIcon from '../../assets/user.png';
-import englishFlag from '../../assets/english.png';
-import norwegianFlag from '../../assets/norwegian.png';
-import { NavLink as Link, Routes } from 'react-router-dom';
+import { useState } from 'react';
+import { profileIcon, englishFlag, norwegianFlag, logoWhite } from 'assets';
+import { NavLink as Link } from 'react-router-dom';
 import styles from './Navbar.module.scss';
 import { ROUTES } from '../../routes';
 import { Button } from '../Button';
@@ -14,8 +11,8 @@ function changeLanguage() {
 }
 
 export function Navbar() {
-  const [mobileNavigation, setMobileNavigation] = useState(0);
-  const [loggedIn, setLoggedIn] = useState(1);
+  const [mobileNavigation, setMobileNavigation] = useState(true);
+  const [loggedIn] = useState(true);
   const [language, setLanguage] = useState(0);
 
   // Return norwegian or english flag depending on language
@@ -27,64 +24,68 @@ export function Navbar() {
   }
 
   // Return profile button for navbar if logged in
-  function profileButton() {
-    if (loggedIn) {
-      return (
-        <div className={styles.navbar_profile_button}>
-          <img src={profileIcon} className={styles.profile_icon}></img>
-          <Link to={ROUTES.frontend.home} className={styles.profile_text}>
-            Username
-          </Link>
-        </div>
-      );
-    }
-    return <></>;
-  }
+  const profileButton = (
+    <div className={styles.navbar_profile_button}>
+      <img src={profileIcon} className={styles.profile_icon}></img>
+      <Link to={ROUTES.frontend.home} className={styles.profile_text}>
+        Username
+      </Link>
+    </div>
+  );
 
   //Return profile button for popup if logged in
-  function profileButtonMobile() {
-    if (loggedIn) {
-      return (
-        <div className={styles.popup_profile}>
-          <img src={profileIcon} className={styles.profile_icon}></img>
-          <Link to={ROUTES.frontend.home} className={styles.profile_text}>
-            Username
-          </Link>
-        </div>
-      );
-    }
-    return <></>;
-  }
+  const profileButtonMobile = (
+    <div className={styles.popup_profile}>
+      <img src={profileIcon} className={styles.profile_icon}></img>
+      <Link to={ROUTES.frontend.home} className={styles.profile_text}>
+        Username
+      </Link>
+    </div>
+  );
 
   // return hamburger menu icon
-  function hamburgerFunction(): JSX.Element {
-    return (
-      <div
-        id={styles.navbar_hamburger}
-        onClick={() => (mobileNavigation ? setMobileNavigation(0) : setMobileNavigation(1))}
-        className={mobileNavigation ? styles.open : styles.closed}
-      >
-        <div className={classNames(styles.navbar_hamburger_line, styles.top)} />
-        <div className={classNames(styles.navbar_hamburger_line, styles.middle)} />
-        <div className={classNames(styles.navbar_hamburger_line, styles.bottom)} />
-      </div>
-    );
-  }
+  const hamburgerMenu = (
+    <div
+      id={styles.navbar_hamburger}
+      onClick={() => setMobileNavigation(!mobileNavigation)}
+      className={mobileNavigation ? styles.open : styles.closed}
+    >
+      <div className={classNames(styles.navbar_hamburger_line, styles.top)} />
+      <div className={classNames(styles.navbar_hamburger_line, styles.middle)} />
+      <div className={classNames(styles.navbar_hamburger_line, styles.bottom)} />
+    </div>
+  );
 
   // Show mobile popup for navigation
-  function showMobileNavigation() {
-    return (
+  const showMobileNavigation = (
+    <>
       <nav id={styles.mobile_popup_container}>
-        <Link to={ROUTES.frontend.health} className={styles.popup_link_mobile}>
+        <Link
+          to={ROUTES.frontend.health}
+          className={styles.popup_link_mobile}
+          onClick={() => setMobileNavigation(false)}
+        >
           Arrangement
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.popup_link_mobile}>
+        <Link
+          to={ROUTES.frontend.health}
+          className={styles.popup_link_mobile}
+          onClick={() => setMobileNavigation(false)}
+        >
           Information
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.popup_link_mobile}>
+        <Link
+          to={ROUTES.frontend.health}
+          className={styles.popup_link_mobile}
+          onClick={() => setMobileNavigation(false)}
+        >
           Restaurant
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.popup_link_mobile}>
+        <Link
+          to={ROUTES.frontend.health}
+          className={styles.popup_link_mobile}
+          onClick={() => setMobileNavigation(false)}
+        >
           Opptak
         </Link>
         <br />
@@ -101,16 +102,16 @@ export function Navbar() {
             Intern
           </Link>
         </Button>
-        {profileButtonMobile()}
+        {loggedIn && profileButtonMobile}
       </nav>
-    );
-  }
+    </>
+  );
 
   return (
     <>
       <nav id={styles.navbar_container}>
         <Link to="/">
-          <img src={logo} id={styles.navbar_logo} />
+          <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
           Arrangement
@@ -125,7 +126,7 @@ export function Navbar() {
           Opptak
         </Link>
         <div className={styles.navbar_signup}>
-          {profileButton()}
+          {loggedIn && profileButton}
           {languageImage()}
           <Button className={styles.navbar_member_button}>
             <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
@@ -138,9 +139,9 @@ export function Navbar() {
             </Link>
           </Button>
         </div>
-        {hamburgerFunction()}
+        {hamburgerMenu}
       </nav>
-      {mobileNavigation ? showMobileNavigation() : <></>}
+      {mobileNavigation && showMobileNavigation}
     </>
   );
 }
