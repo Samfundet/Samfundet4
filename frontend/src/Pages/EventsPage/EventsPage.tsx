@@ -17,6 +17,14 @@ const monthNames = [
   'Desember',
 ];
 
+interface EventPreview {
+  id: number;
+  title: string;
+  start_dt: Date;
+  end_dt: Date;
+  location: string;
+}
+
 export function EventsPage() {
   const [events, setEvents] = useState([]);
   const [dates, setDates] = useState<string[]>([]);
@@ -27,7 +35,7 @@ export function EventsPage() {
         const events = data;
         setEvents(events);
         const dates_arr: string[] = [];
-        events.map((event: any) => {
+        events.map((event: EventPreview) => {
           const dateStr =
             event.start_dt.toString().split('-')[1] + '-' + event.start_dt.toString().split('-')[2].split('T')[0];
           if (dates_arr.indexOf(dateStr) == -1) {
@@ -39,13 +47,11 @@ export function EventsPage() {
   }, []);
   return (
     <div className={styles.container}>
-      {dates.map((date: string) => {
+      {dates.map((date: string, index: number) => {
         return (
-          // eslint-disable-next-line react/jsx-key
-          <div className={styles.dates_container}>
-            {/* <div className={styles.events_container}> */}
+          <div key={index} className={styles.dates_container}>
             <h2>{date.split('-')[1] + '. ' + monthNames[Number(date.split('-')[0]) - 1]}</h2>
-            {events.map((event: any, index: number) => {
+            {events.map((event: EventPreview, index: number) => {
               if (
                 event.start_dt.toString().split('-')[1] + '-' + event.start_dt.toString().split('-')[2].split('T')[0] ==
                 date
@@ -74,7 +80,6 @@ export function EventsPage() {
                 );
               }
             })}
-            {/* </div> */}
           </div>
         );
       })}
