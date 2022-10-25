@@ -43,26 +43,38 @@ export function EventsPage() {
         return (
           // eslint-disable-next-line react/jsx-key
           <div className={styles.dates_container}>
-            <div className={styles.events_container}>
-              <h2>{date.split('-')[1] + '. ' + monthNames[Number(date.split('-')[0]) - 1]}</h2>
-              {events.map((event: any) => {
-                if (
-                  event.start_dt.toString().split('-')[1] +
-                    '-' +
-                    event.start_dt.toString().split('-')[2].split('T')[0] ==
-                  date
-                ) {
-                  // eslint-disable-next-line react/jsx-key
-                  return (
-                    // eslint-disable-next-line react/jsx-key
-                    <Link to={'/events/' + event.id}>
-                      {' '}
-                      <p> {event.title}</p>{' '}
-                    </Link>
-                  );
-                }
-              })}
-            </div>
+            {/* <div className={styles.events_container}> */}
+            <h2>{date.split('-')[1] + '. ' + monthNames[Number(date.split('-')[0]) - 1]}</h2>
+            {events.map((event: any, index: number) => {
+              if (
+                event.start_dt.toString().split('-')[1] + '-' + event.start_dt.toString().split('-')[2].split('T')[0] ==
+                date
+              ) {
+                return (
+                  <div className={styles.events_container} key={index}>
+                    {' '}
+                    <div className={styles.event_row}>
+                      <div className={styles.column_title}>
+                        <Link to={'/events/' + event.id}>
+                          <p> {event.title}</p>{' '}
+                        </Link>
+                      </div>
+                      <div className={styles.column_area_time}>
+                        <div className={styles.time_wrapper}>
+                          <p>
+                            {' '}
+                            {event?.start_dt.toString().split('-')[2].split('T')[1].split(':00')[0] + ' - '}
+                            {event?.end_dt.toString().split('-')[2].split('T')[1].split(':00')[0]}
+                          </p>
+                        </div>
+                        <p> {event?.location}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+            })}
+            {/* </div> */}
           </div>
         );
       })}
