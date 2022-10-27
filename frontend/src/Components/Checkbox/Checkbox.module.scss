@@ -28,7 +28,6 @@
 .checkbox__box::after {
   content: '\2714'; // ASCII "check"-sybol
   color: $white; //fargen til symbolet
-  transform: scale(0); //størrelsen på sybolet
 }
 //Her velges (og styles) det elementet med klassen .checkboc__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked"
 .checkbox__input:checked + .checkbox__box {
