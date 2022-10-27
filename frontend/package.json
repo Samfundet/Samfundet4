@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "stylelint-check": "stylelint-config-prettier-scss-check"
+    "stylelint-check": "stylelint-config-prettier-scss-check",
+    "cypress:open": "yarn run cypress open",
+    "cypress:run": "yarn run cypress run"
   },
   "dependencies": {
     "@babel/core": "^7.19.6",
@@ -53,6 +55,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.11.2",
     "cypress": "^10.11.0",
+    "cypress-vite": "^1.2.1",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",

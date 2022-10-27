@@ -6610,6 +6610,13 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==
 
+cypress-vite@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/cypress-vite/-/cypress-vite-1.2.1.tgz#f1a276bc22e43f47270dc5bd10c6ad4cc3981baf"
+  integrity sha512-/72GXXTcKvIv4NPK64qngcuim5U8WtflyBz9N4dzCqxR6MiIcGAK1EukrOCDpyChYbmjUy6LqbWhAgvXcs8lFw==
+  dependencies:
+    debug "^4.3.4"
+
 cypress@^10.11.0:
   version "10.11.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-10.11.0.tgz#e9fbdd7638bae3d8fb7619fd75a6330d11ebb4e8"
