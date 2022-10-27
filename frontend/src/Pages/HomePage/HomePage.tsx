@@ -1,5 +1,5 @@
-import logo from '../../assets/logo_black.png';
-import splash from '../../assets/splash.jpeg';
+import logo from '~/assets/logo_black.png';
+import splash from '~/assets/splash.jpeg';
 import styles from './HomePage.module.scss';
 
 export function HomePage() {

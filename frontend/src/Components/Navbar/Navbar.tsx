@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { profileIcon, englishFlag, norwegianFlag, logoWhite } from 'assets';
-import { NavLink as Link } from 'react-router-dom';
-import styles from './Navbar.module.scss';
-import { ROUTES } from '../../routes';
-import { Button } from '../Button';
 import classNames from 'classnames';
+import { useState } from 'react';
+import { NavLink as Link } from 'react-router-dom';
+import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
+import { Button } from '~/Components';
+import { ROUTES } from '~/routes';
+import styles from './Navbar.module.scss';
 
 function changeLanguage() {
   console.log('language changed :)');
