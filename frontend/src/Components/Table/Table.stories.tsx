@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Table, ITableCell, AlphabeticTableCell } from './Table';
-import { Children } from 'types';
+// import { Children } from 'types';
 
 // Local component config.
 export default {
@@ -34,10 +34,21 @@ NoHeader.args = {
 
 export const Sortable = Template.bind({});
 Sortable.args = {
-  columns: ['Sortable', 'Not sortable'],
+  columns: ['Sortable', 'Not sortable', "Random col"],
   data: [
-    [new AlphabeticTableCell('A'), { children: '-A' } as ITableCell],
-    [new AlphabeticTableCell('Z'), { children: '-Z' } as ITableCell],
-    [new AlphabeticTableCell('B'), { children: '-B' } as ITableCell],
+    [new AlphabeticTableCell('A'), { children: '-A' } as ITableCell, { children: '-X' } as ITableCell],
+    [new AlphabeticTableCell('Z'), { children: '-Z' } as ITableCell, { children: '-Y' } as ITableCell],
+    [new AlphabeticTableCell('B'), { children: '-B' } as ITableCell, { children: '-Z' } as ITableCell],
+  ],
+};
+
+
+export const MultipleSortableRows = Template.bind({});
+Sortable.args = {
+  columns: ['Sortable', 'Not sortable', "Random col"],
+  data: [
+    [new AlphabeticTableCell('A'), new AlphabeticTableCell('N'), { children: 'X' } as ITableCell],
+    [new AlphabeticTableCell('Z'), new AlphabeticTableCell('M'), { children: 'Y' } as ITableCell],
+    [new AlphabeticTableCell('B'), new AlphabeticTableCell('O'), { children: 'Z' } as ITableCell],
   ],
 };
