@@ -1,0 +1,45 @@
+@import 'src/constants';
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: $grey-5;
+  color: black;
+  text-align: left;
+}
+
+//TODO: Create own classes of ul and li depending on which part of the footer it is used in
+ul {
+  list-style-type: none; /* Remove bullets */
+  border: red;
+  border-style: dotted;
+}
+
+li {
+  font-size: 1em;
+  margin: 0.2em;
+  border: blue;
+  border-style: dotted;
+}
+
+.liHorizontal{
+  display: inline;
+}
+
+.contact {
+  text-align: center;
+  font-size: 1em;
+  a {
+    text-decoration: none;
+  }
+
+}
+
+.cookies{
+  text-align: center;
+  font-size: 0.7em;
+  a {
+    text-decoration: none;
+  }
+}
