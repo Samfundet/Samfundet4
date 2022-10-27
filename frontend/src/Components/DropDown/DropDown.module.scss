@@ -1,20 +1,15 @@
 @import 'src/constants';
 
-.dropdown_samf {
-  border: none;
-  padding: 10px 25px;
-  color: black;
+.samf_select {
+  background: $red-samf;
+  font-size: 1.15rem; //root element font størrelse. Skalert etter HTML dokumentets font størrelse
+  padding: 1em 3.5em 1em 0.5em;
+  color: white;
+  border: 0;
+  cursor: pointer;
 }
-
-// select.mySelect option{
-// 	color: #000;
-//     padding: 0 10px;
-// }
-
-// select {
-//   width: 100%;
-//   padding: 16px 20px;
-//   border: none;
-//   background-color: firebrick;
-//   color:white;
-// }
+.samf_select option {
+  border-radius: 0;
+  padding: 50px;
+  pointer-events: none;
+}
