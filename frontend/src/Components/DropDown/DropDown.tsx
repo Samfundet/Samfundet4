@@ -15,14 +15,16 @@ const mapThemeToStyle: { [theme in DropDownTheme]: string } = {
 export function DropDown({ dropDownList, theme = 'samf', className }: DropDownProps) {
   const classNames = classnames(mapThemeToStyle[theme], className);
   return (
-    <select>
-      {dropDownList?.map(function (element, index) {
-        return (
-          <option value={element} key={index} className={classNames}>
-            {element}
-          </option>
-        );
-      })}
-    </select>
+    <div class="custom-select" style={{"width:200px"}}>
+      <select>
+        {dropDownList?.map(function (element, index) {
+          return (
+            <option value={element} key={index} className={classNames}>
+              {element}
+            </option>
+          );
+        })}
+      </select>
+    </div>
   );
 }
