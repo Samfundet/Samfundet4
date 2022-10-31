@@ -33,5 +33,6 @@ export const ROUTES = {
   frontend: {
     home: '/',
     health: '/health/',
+    internal_price_list: '/internal-price/',
   },
 };
