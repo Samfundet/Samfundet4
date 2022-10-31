@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Children } from 'types';
+import { Children } from '~/types';
 import styles from './ProgressBar.module.scss';
 
 type ProgressBarProps = {
