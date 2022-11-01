@@ -31,7 +31,7 @@ export function DropDown({ dropDownList, className, alignment = 'top', label }: 
           );
         })}
       </select>
-      <span className={styles.custom_select_arrow}></span>
+      <span className={styles.custom_select_arrow}>&#9660;</span>
       {alignment == 'bottom' && label}
     </label>
   );
