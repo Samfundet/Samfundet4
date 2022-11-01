@@ -16,26 +16,27 @@ from pylint.lint import PyLinter
 from pylint.checkers import utils
 
 # pylint: disable=unused-argument # Functions are for demonstrative purposes.
+# flake8: noqa
 
 
-def no_args():
+def no_args():  # type: ignore
     """ Checker doesn't complain when no arguments. """
 
 
-def invalid(_pos_arg):
+def invalid(_pos_arg):  # type: ignore
     # pylint: disable=positional-arguments
     """ Checker complains with positional arguments. """
 
 
-def valid(*, _named_arg):
+def valid(*, _named_arg):  # type: ignore
     """ Checker doesn't complain with named arguments. """
 
 
-def test_func_whitelist(_pos_arg):
+def test_func_whitelist(_pos_arg):  # type: ignore
     """ Checker skips function prefixed with 'test_'. """
 
 
-def check_sig_whitelist(request, _pos_arg):
+def check_sig_whitelist(request, _pos_arg):  # type: ignore
     """ Checker whitelists entire signature because 'request' is present. """
 
 
@@ -77,7 +78,7 @@ class NamedArgumentsChecker(checkers.BaseChecker):
     }
     ### End: Linter config ###
 
-    @utils.check_messages(name)
+    @utils.check_messages(name)  # type: ignore
     def visit_functiondef(self, node: FunctionDef):  # pylint: disable=positional-arguments
         """
         Checks for presence of positional arguments that are not whitelisted.
@@ -127,7 +128,7 @@ class NamedArgumentsChecker(checkers.BaseChecker):
         return any(fnmatchcase(name=name, pat=pattern) for pattern in pattern_list)
 
 
-def register(linter: PyLinter):
+def register(linter: PyLinter):  # type: ignore
     """ Required method to auto register this checker. """
     # pylint: disable=positional-arguments # Do the same as the tutorial.
     linter.register_checker(NamedArgumentsChecker(linter))

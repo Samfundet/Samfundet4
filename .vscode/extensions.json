@@ -1,17 +1,16 @@
 {
   "recommendations": [
-    "fnando.linter",
     "eamodio.gitlens",
     "mikestead.dotenv",
     "ms-python.python",
     "mrorz.language-gettext",
+    "esbenp.prettier-vscode",
     "alexcvzz.vscode-sqlite",
     "batisteo.vscode-django",
     "dbaeumer.vscode-eslint",
     "ms-python.vscode-pylance",
     "editorconfig.editorconfig",
     "yzhang.markdown-all-in-one",
-    "rvest.vs-code-prettier-eslint",
     "visualstudioexptteam.vscodeintellicode"
   ]
 }
