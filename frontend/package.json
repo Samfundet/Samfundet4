@@ -11,7 +11,8 @@
     "build-storybook": "build-storybook -s public",
     "stylelint-check": "stylelint-config-prettier-scss-check",
     "cypress:open": "yarn run cypress open",
-    "cypress:run": "yarn run cypress run"
+    "cypress:run": "yarn run cypress run",
+    "eslint:check": "eslint --config .eslintrc.js src"
   },
   "dependencies": {
     "@babel/core": "^7.19.6",

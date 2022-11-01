@@ -109,12 +109,18 @@ jobs:
           build: yarn run build
           start: yarn start
 
-  job_eslint:
-   eslint:
+  job_verify_eslint:
+    name: Verify ESLint
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
-    - uses: actions/checkout@v2
-    - name: Install modules
-      run: yarn
-    - name: Run ESLint
-      run: eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install modules
+        run: yarn install
+
+      - name: Run ESLint
+        run: yarn run eslint:check
