@@ -6,21 +6,26 @@ import { Button, ThemeSwitch } from '~/Components';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
 
-function changeLanguage() {
-  console.log('language changed :)');
-}
+import { useTranslation } from 'react-i18next';
+import { namespaces } from 'i18n/i18n.constants';
+import { i18n } from 'i18next';
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(true);
   const [loggedIn] = useState(true);
-  const [language, setLanguage] = useState(0);
+  const { t, i18n } = useTranslation(namespaces.components.navbar);
+
+  function switchLanguage(i18n: i18n) {
+    i18n.language == 'nb' ? i18n.changeLanguage('en') : i18n.changeLanguage('nb');
+  }
 
   // Return norwegian or english flag depending on language
   function languageImage() {
-    if (language) {
-      return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(0)} />;
+    if (i18n.language == 'nb') {
+      console.log(i18n.language);
+      return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => switchLanguage(i18n)} />;
     }
-    return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(1)} />;
+    return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => switchLanguage(i18n)} />;
   }
 
   // Return profile button for navbar if logged in
@@ -90,7 +95,7 @@ export function Navbar() {
           Opptak
         </Link>
         <br />
-        <a onClick={() => changeLanguage()} className={styles.popup_change_language}>
+        <a onClick={() => switchLanguage(i18n)} className={styles.popup_change_language}>
           English
         </a>
         <Button className={styles.popup_member_button}>
@@ -115,7 +120,7 @@ export function Navbar() {
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Arrangement
+          {t('event') as string}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
           Information
