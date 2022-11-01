@@ -7,6 +7,7 @@ export default {
   component: DropDown,
   args: {
     name: 'name',
+    label: 'Choose option',
   },
 } as ComponentMeta<typeof DropDown>;
 
