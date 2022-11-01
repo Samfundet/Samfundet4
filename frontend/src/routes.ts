@@ -38,7 +38,7 @@ export const ROUTES = {
     daglighallen: '/about/daglighallen',
     edgar: '/about/edgar',
     klubben: '/about/klubben',
-    knauss: '/about/knauss',
+    knaus: '/about/knaus',
     lyche: '/lyche',
     rundhallen: '/about/rundhallen',
     selskapssiden: '/about/selskapssiden',

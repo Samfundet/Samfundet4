@@ -12,6 +12,7 @@ import splash from '../../assets/splash.jpeg';
 import storsalen from '../../assets/storsalen.jpg';
 import strossa from '../../assets/strossa.jpg';
 import { Button } from 'Components';
+import { ROUTES } from 'routes';
 
 export function AboutPage() {
   return (
@@ -49,43 +50,43 @@ export function AboutPage() {
       </div>
       <div className={styles.venues}>
         <h1>LOKALER</h1>
-        <a href="/about/storsalen">
+        <a href={ROUTES.frontend.storsalen}>
           <img src={storsalen} alt="Storsalen" className={styles.venueImg}></img>
           <h3>Storsalen</h3>
         </a>
-        <a href="/about/bodegaen">
+        <a href={ROUTES.frontend.bodegaen}>
           <img src={bodegaen} alt="Bodegaen" className={styles.venueImg}></img>
           <h3>Bodegaen</h3>
         </a>
-        <a href="/about/klubben">
+        <a href={ROUTES.frontend.klubben}>
           <img src={klubben} alt="Klubben" className={styles.venueImg}></img>
           <h3>Klubben</h3>
         </a>
-        <a href="/about/strossa">
+        <a href={ROUTES.frontend.strossa}>
           <img src={strossa} alt="Strossa" className={styles.venueImg}></img>
           <h3>Strossa</h3>
         </a>
-        <a href="/about/selskapssiden">
+        <a href={ROUTES.frontend.selskapssiden}>
           <img src={selskapssiden} alt="Selskapssiden" className={styles.venueImg}></img>
           <h3>Selskapssiden</h3>
         </a>
-        <a href="/about/knaus">
+        <a href={ROUTES.frontend.knaus}>
           <img src={knaus} alt="Knaus" className={styles.venueImg}></img>
           <h3>Knaus</h3>
         </a>
-        <a href="/about/edgar">
+        <a href={ROUTES.frontend.edgar}>
           <img src={edgar} alt="Edgar" className={styles.venueImg}></img>
           <h3>Edgar</h3>
         </a>
-        <a href="/lyche">
+        <a href={ROUTES.frontend.lyche}>
           <img src={lyche} alt="Lyche" className={styles.venueImg}></img>
           <h3>Lyche</h3>
         </a>
-        <a href="/about/daglighallen">
+        <a href={ROUTES.frontend.daglighallen}>
           <img src={daglighallen} alt="Daglighallen" className={styles.venueImg}></img>
           <h3>Daglighallen</h3>
         </a>
-        <a href="/about/rundhallen">
+        <a href={ROUTES.frontend.rundhallen}>
           <img src={rundhallen} alt="Rundhallen" className={styles.venueImg}></img>
           <h3>Rundhallen</h3>
         </a>

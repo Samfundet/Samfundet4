@@ -1,15 +1,25 @@
+@import './_mixins.scss';
+
 .container {
   width: 100%;
-  height: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+  margin-top: 2em;
+  padding: 0;
 }
 
 .about {
+  width: 100%;
   display: flex;
-  flex-direction: row;
-  padding: 1em;
+  flex-direction: column;
+  margin: 1em;
+
+  @include for-tablet-up {
+    flex-direction: row;
+    margin: 2em;
+  }
 }
 
 .aboutText {
@@ -20,10 +30,29 @@
 }
 
 .runderode {
-  background-color: bisque;
-  width: 40em;
-  height: 26em;
+  width: 100%;
+  height: 65%;
   border-radius: 1em;
+
+  @include for-tablet-up {
+    width: 50%;
+    height: 32%;
+  }
+}
+
+.samfundsmote {
+  box-shadow: 0.25em 0.25em 0.25em 0.25em lightgray;
+  padding: 1em;
+  border-radius: 0.5em;
+  width: 100%;
+  margin: 1em;
+  > * {
+    margin: 0.5em;
+  }
+
+  @include for-tablet-up {
+    margin: 2em;
+  }
 }
 
 .venues {
@@ -41,21 +70,34 @@
   }
 
   > * {
-    width: 20%;
+    width: 50%;
     border-radius: 0.5em;
     text-align: center;
     transition: 1s;
   }
 
   > *:not(:first-child):hover {
+    /*picture in lokaler expands on hover except from the first child (title)*/
     transform: scale(1.1);
+  }
+  @include for-tablet-up {
+    > * {
+      width: 20%;
+      text-align: center;
+      transition: 1s;
+    }
   }
 }
 
 .venueImg {
-  width: 12em;
-  height: 12em;
+  width: 8em;
+  height: 8em;
   border-radius: 50%;
+
+  @include for-tablet-up {
+    width: 12em;
+    height: 12em;
+  }
 }
 
 .mapButton {
@@ -64,41 +106,42 @@
   }
 }
 
-.samfundsmote {
-  width: 95%;
-  box-shadow: 0.25em 0.25em 0.25em 0.25em lightgray;
-  padding: 1em;
-  border-radius: 0.5em;
-  > * {
-    margin: 0.5em;
-  }
-}
-
 .moreInfo {
   display: flex;
-  flex-direction: row;
-  > * {
-    margin: 0.5em;
+  flex-direction: column;
+  margin: 1em;
+  width: 100%;
+
+  @include for-tablet-up {
+    flex-direction: row;
+    margin: 2em;
   }
 }
 
 .volunteer {
   background-color: #27ae60;
   border-radius: 1em;
-  width: 65%;
+  width: 23em;
+  color: white;
+  margin-bottom: 1em;
   > * {
     margin: 0.5em;
+  }
+  @include for-tablet-up {
+    width: 48em;
+    height: 30em;
+    margin-right: 1em;
   }
 }
 
 .moreInfoRight {
   display: flex;
   flex-direction: column;
-  width: 35%;
+  width: 23em;
 }
 
 .festival {
-  height: 50%;
+  height: 62%;
   border-style: solid;
   border-color: grey;
   border-width: 0.01em;
@@ -110,25 +153,45 @@
 }
 
 .otherInfo {
-  background-color: #a03033;
+  background-color: #eee;
+  border-style: solid;
+  border-color: lightgrey;
+  border-width: 0.01em;
   display: flex;
   flex-wrap: wrap;
-  height: 50%;
-  padding: 1em;
+  height: 38%;
+  padding: 0.5em;
   border-radius: 1em;
+
   > *:first-child {
     width: 100%;
+    margin-bottom: 3%;
+    text-transform: none;
   }
+
   > * {
-    width: 49%;
+    width: 99%;
+    height: 15%;
     margin: 0.5%;
+  }
+
+  @include for-tablet-up {
+    > * {
+      width: 48%;
+      margin: 1%;
+    }
   }
 }
 
 .splash {
   width: 100%;
   margin: 0;
-  height: 40%;
+  height: 6em;
   border-top-right-radius: 1em;
   border-top-left-radius: 1em;
+
+  @include for-tablet-up {
+    width: 100%;
+    height: 40%;
+  }
 }
