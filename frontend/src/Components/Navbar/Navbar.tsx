@@ -7,25 +7,24 @@ import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
 
 import { useTranslation } from 'react-i18next';
-import { namespaces } from 'i18n/i18n.constants';
+import { LANGUAGES, namespaces } from 'i18n/i18n.constants';
 import { i18n } from 'i18next';
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(true);
   const [loggedIn] = useState(true);
-  const { t, i18n } = useTranslation(namespaces.components.navbar);
+  const { t, i18n } = useTranslation();
 
   function switchLanguage(i18n: i18n) {
-    i18n.language == 'nb' ? i18n.changeLanguage('en') : i18n.changeLanguage('nb');
+    i18n.language == LANGUAGES.NB ? i18n.changeLanguage(LANGUAGES.EN) : i18n.changeLanguage(LANGUAGES.NB);
   }
 
   // Return norwegian or english flag depending on language
   function languageImage() {
-    if (i18n.language == 'nb') {
-      console.log(i18n.language);
-      return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => switchLanguage(i18n)} />;
+    if (i18n.language == LANGUAGES.NB) {
+      return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => switchLanguage(i18n)} />;
     }
-    return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => switchLanguage(i18n)} />;
+    return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => switchLanguage(i18n)} />;
   }
 
   // Return profile button for navbar if logged in
@@ -120,7 +119,7 @@ export function Navbar() {
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          {t('event') as string}
+          {t(`${namespaces.components.navbar}:event`) as string}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
           Information

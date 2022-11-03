@@ -5,7 +5,7 @@ export const namespaces = {
   common: 'common',
 };
 
-export const languages = {
-  nb: 'nb',
-  en: 'en',
+export const LANGUAGES = {
+  NB: 'nb',
+  EN: 'en',
 };
