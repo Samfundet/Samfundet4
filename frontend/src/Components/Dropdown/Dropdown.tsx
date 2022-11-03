@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import styles from './DropDown.module.scss';
+import styles from './Dropdown.module.scss';
 
 type DropDownProps = {
   className?: string;
@@ -7,7 +7,7 @@ type DropDownProps = {
   label?: string;
 };
 
-export function DropDown({ option, className, label }: DropDownProps) {
+export function Dropdown({ option, className, label }: DropDownProps) {
   const classNames = classnames(className);
   return (
     <label className={styles.select_wrapper}>
