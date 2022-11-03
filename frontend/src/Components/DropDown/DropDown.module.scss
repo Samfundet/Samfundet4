@@ -9,7 +9,7 @@
   position: relative;
 }
 .samf_select {
-  //selve boksen
+  //selve select boksen
   background: $red-samf;
   font-size: 1rem; //root element font størrelse. Skalert etter HTML dokumentets font størrelse
   padding: 0.5em 1.5em 0.5em 0.5em;
@@ -23,6 +23,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
+  overflow-y: auto;
 }
 .custom_select_arrow {
   //dette er hensiktsmessig fordi pil-delen av select elementet har varierende utseende i forskjellige browsere

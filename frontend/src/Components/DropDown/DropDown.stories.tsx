@@ -16,4 +16,33 @@ const Template: ComponentStory<typeof DropDown> = function (args) {
 };
 
 export const Basic = Template.bind({});
-Basic.args = { dropDownList: ['alternativ 1', 'alternativ 2'] };
+Basic.args = {
+  option: ['alternativ 1', 'alternativ 2'],
+};
+export const Many = Template.bind({});
+Many.args = {
+  option: [
+    'alternativ 1',
+    'alternativ 2',
+    'alternativ 3',
+    'alternativ 4',
+    'alternativ 5',
+    'alternativ 6',
+    'alternativ 7',
+    'alternativ 8',
+    'alternativ 9',
+    'alternativ 10',
+    'alternativ 11',
+    'alternativ 12',
+    'alternativ 13',
+    'alternativ 14',
+    'alternativ 15',
+    'alternativ 16',
+    'alternativ 17',
+    'alternativ 18',
+    'alternativ 19',
+    'alternativ 20',
+    'alternativ 21',
+    'alternativ 22',
+  ],
+};
