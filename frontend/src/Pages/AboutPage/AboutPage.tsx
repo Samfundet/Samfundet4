@@ -41,44 +41,44 @@ export function AboutPage() {
         </Button>
       </div>
       <div className={styles.venues}>
-        <h1>LOKALER</h1>
-        <a href={ROUTES.frontend.storsalen}>
+        <h1 className={styles.venueText}>LOKALER</h1>
+        <a className={styles.venueBox} href={ROUTES.frontend.storsalen}>
           <img src={require('../../assets/storsalen.jpg')} alt="Storsalen" className={styles.venueImg}></img>
           <h3>Storsalen</h3>
         </a>
-        <a href={ROUTES.frontend.bodegaen}>
+        <a className={styles.venueBox} href={ROUTES.frontend.bodegaen}>
           <img src={require('../../assets/bodegaen.jpg')} alt="Bodegaen" className={styles.venueImg}></img>
           <h3>Bodegaen</h3>
         </a>
-        <a href={ROUTES.frontend.klubben}>
+        <a className={styles.venueBox} href={ROUTES.frontend.klubben}>
           <img src={require('../../assets/klubben.jpg')} alt="Klubben" className={styles.venueImg}></img>
           <h3>Klubben</h3>
         </a>
-        <a href={ROUTES.frontend.strossa}>
+        <a className={styles.venueBox} href={ROUTES.frontend.strossa}>
           <img src={require('../../assets/strossa.jpg')} alt="Strossa" className={styles.venueImg}></img>
           <h3>Strossa</h3>
         </a>
-        <a href={ROUTES.frontend.selskapssiden}>
+        <a className={styles.venueBox} href={ROUTES.frontend.selskapssiden}>
           <img src={require('../../assets/selskapssiden.jpg')} alt="Selskapssiden" className={styles.venueImg}></img>
           <h3>Selskapssiden</h3>
         </a>
-        <a href={ROUTES.frontend.knaus}>
+        <a className={styles.venueBox} href={ROUTES.frontend.knaus}>
           <img src={require('../../assets/knaus.jpg')} alt="Knaus" className={styles.venueImg}></img>
           <h3>Knaus</h3>
         </a>
-        <a href={ROUTES.frontend.edgar}>
+        <a className={styles.venueBox} href={ROUTES.frontend.edgar}>
           <img src={require('../../assets/edgar.jpg')} alt="Edgar" className={styles.venueImg}></img>
           <h3>Edgar</h3>
         </a>
-        <a href={ROUTES.frontend.lyche}>
+        <a className={styles.venueBox} href={ROUTES.frontend.lyche}>
           <img src={require('../../assets/lyche.jpg')} alt="Lyche" className={styles.venueImg}></img>
           <h3>Lyche</h3>
         </a>
-        <a href={ROUTES.frontend.daglighallen}>
+        <a className={styles.venueBox} href={ROUTES.frontend.daglighallen}>
           <img src={require('../../assets/daglighallen.jpg')} alt="Daglighallen" className={styles.venueImg}></img>
           <h3>Daglighallen</h3>
         </a>
-        <a href={ROUTES.frontend.rundhallen}>
+        <a className={styles.venueBox} href={ROUTES.frontend.rundhallen}>
           <img src={require('../../assets/rundhallen.jpg')} alt="Rundhallen" className={styles.venueImg}></img>
           <h3>Rundhallen</h3>
         </a>
@@ -121,29 +121,29 @@ export function AboutPage() {
             <Button className={styles.button}>ISFiT</Button>
           </div>
           <div className={styles.otherInfo}>
-            <h2>Annen info</h2>
-            <Button className={styles.button} theme="secondary">
+            <h2 className={styles.infoText}>Annen info</h2>
+            <Button className={styles.buttonInfo} theme="secondary">
               Aldersgrenser
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Booking
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Quiz
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Leie og tjenester
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Presse
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Filmklubben
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Personvern
             </Button>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.buttonInfo} theme="secondary">
               Tilrettelegging
             </Button>
           </div>

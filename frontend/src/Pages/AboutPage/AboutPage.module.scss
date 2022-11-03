@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   margin: 1em;
-  max-width: 1160px;
+  max-width: $desktop-bp-upper;
 
   @include for-tablet-up {
     flex-direction: row;
@@ -25,7 +25,6 @@
 
 .button {
   margin: 0.5em;
-  border-radius: 0.5em;
 }
 
 .aboutText {
@@ -49,7 +48,7 @@
   border-radius: 0.5em;
   width: 100%;
   margin: 1em;
-  max-width: 1160px;
+  max-width: $desktop-bp-upper;
 
   @include for-tablet-up {
     margin: 2em;
@@ -64,23 +63,21 @@
   align-items: center;
   padding: 1em;
   border-radius: 0.5em;
-  max-width: 1160px;
+  max-width: $desktop-bp-upper;
+}
 
-  > *:first-child {
-    width: 100%;
-    text-align: center;
-  }
+.venueText {
+  width: 100%;
+  text-align: center;
+}
 
-  > * {
-    width: 50%;
-    text-align: center;
-  }
+.venueBox {
+  width: 50%;
+  text-align: center;
 
   @include for-tablet-up {
-    > * {
-      width: 20%;
-      text-align: center;
-    }
+    width: 20%;
+    text-align: center;
   }
 }
 
@@ -107,7 +104,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  max-width: 1160px;
+  max-width: $desktop-bp-upper;
 
   @include for-tablet-up {
     flex-direction: row;
@@ -126,6 +123,19 @@
     width: 48em;
     height: 30em;
     margin-right: 1em;
+  }
+}
+
+.splash {
+  width: 100%;
+  margin: 0;
+  height: 6em;
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
+
+  @include for-tablet-up {
+    width: 100%;
+    height: 40%;
   }
 }
 
@@ -159,36 +169,20 @@
   height: 38%;
   padding: 0.5em;
   border-radius: 1em;
-
-  > *:first-child {
-    width: 100%;
-    margin-bottom: 3%;
-    text-transform: none;
-  }
-
-  > * {
-    width: 99%;
-    height: 15%;
-    margin: 0.5%;
-  }
-
-  @include for-tablet-up {
-    > * {
-      width: 48%;
-      margin: 1%;
-    }
-  }
 }
 
-.splash {
+.infoText {
   width: 100%;
-  margin: 0;
-  height: 6em;
-  border-top-right-radius: 1em;
-  border-top-left-radius: 1em;
+  margin-bottom: 3%;
+}
+
+.buttonInfo {
+  width: 99%;
+  height: 15%;
+  margin: 0.5%;
 
   @include for-tablet-up {
-    width: 100%;
-    height: 40%;
+    width: 48%;
+    margin: 1%;
   }
 }
