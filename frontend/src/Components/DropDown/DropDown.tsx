@@ -2,13 +2,12 @@ import classnames from 'classnames';
 import styles from './DropDown.module.scss';
 
 // type DropDownTheme = 'samf' | 'secondary';
-type Alignment = 'top' | 'bottom';
 
 type DropDownProps = {
   className?: string;
   dropDownList?: Array<string>;
   label?: string;
-  alignment?: Alignment;
+
   //   theme?: DropDownTheme;
 };
 
@@ -16,12 +15,12 @@ type DropDownProps = {
 //   samf: styles.dropdown_samf,
 //   secondary: styles.dropdown_secondary,
 // };
-export function DropDown({ dropDownList, className, alignment = 'top', label }: DropDownProps) {
+export function DropDown({ dropDownList, className, label }: DropDownProps) {
   //theme = 'samf'
   const classNames = classnames(className); //mapThemeToStyle[theme],
   return (
     <label className={styles.select_wrapper}>
-      {alignment == 'top' && label}
+      {label}
       <select className={styles.samf_select}>
         {dropDownList?.map(function (element, index) {
           return (
@@ -32,7 +31,7 @@ export function DropDown({ dropDownList, className, alignment = 'top', label }: 
         })}
       </select>
       <span className={styles.custom_select_arrow}>&#9660;</span>
-      {alignment == 'bottom' && label}
+      {/* span inneholder "nedover pil" symbol */}
     </label>
   );
 }

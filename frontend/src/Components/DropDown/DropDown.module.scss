@@ -1,6 +1,7 @@
 @import 'src/constants';
 
 .select_wrapper {
+  //label som wrapper
   display: flex;
   flex-direction: column;
   font-size: 1.1rem;
@@ -8,6 +9,7 @@
   position: relative;
 }
 .samf_select {
+  //selve boksen
   background: $red-samf;
   font-size: 1rem; //root element font størrelse. Skalert etter HTML dokumentets font størrelse
   padding: 0.5em 1.5em 0.5em 0.5em;
@@ -15,39 +17,25 @@
   cursor: pointer;
   border: 0;
   outline: none;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 5px;
   width: 150px;
-  appearance: none;
-  -webkit-appearance: none; //appearance "none" i flere browsere
+  appearance: none; //appearance "none" i flere browsere
+  -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
-}
-.samf_selector::after {
-  content: '';
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent;
-  border-top-color: #222;
-  display: inline-block;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  border-radius: 2px;
 }
 .custom_select_arrow {
   //dette er hensiktsmessig fordi pil-delen av select elementet har varierende utseende i forskjellige browsere
   position: absolute;
   top: 26px;
-  right: 0;
+  right: 0px;
   display: block;
   height: 35px;
   width: 35px;
-  //HTML kode for triangel symbol
   pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
   color: $white;
-  transform: scale(1.1, 0.9); //transformerer trekanten
+  transform: scale(0.65, 0.65); //transformerer trekanten
 }
