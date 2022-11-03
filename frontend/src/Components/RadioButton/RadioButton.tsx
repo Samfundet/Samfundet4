@@ -1,4 +1,4 @@
-import { Children } from '../../types';
+import { Children } from '~/types';
 
 type RadioButtonProps = {
   name?: string;
