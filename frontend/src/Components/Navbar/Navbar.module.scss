@@ -1,3 +1,7 @@
+/* stylelint-disable selector-max-compound-selectors */
+/* stylelint-disable selector-max-class */
+/* TODO: fix later */
+
 @import 'src/mixins';
 $navbar-bg: #000000;
 
@@ -26,8 +30,7 @@ $navbar-bg: #000000;
   cursor: pointer;
 }
 
-// Desktop navigation items:
-
+/* Desktop navigation items: */
 .navbar_link {
   color: white;
   display: flex;
@@ -102,12 +105,13 @@ $navbar-bg: #000000;
   height: 16px;
   margin-right: 4px;
 }
+
 .profile_text {
   text-decoration: none;
-  color: #777;
+  color: #777777;
 }
 
-// Hamburger menu
+/* Hamburger menu */
 
 #navbar_hamburger {
   display: none;
@@ -143,7 +147,7 @@ $navbar-bg: #000000;
   }
 }
 
-// Mobile popup navigation
+/* Mobile popup navigation */
 
 #mobile_popup_container {
   position: absolute;

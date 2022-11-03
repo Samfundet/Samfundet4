@@ -12,7 +12,8 @@
     "stylelint-check": "stylelint-config-prettier-scss-check",
     "cypress:open": "yarn run cypress open",
     "cypress:run": "yarn run cypress run",
-    "eslint:check": "eslint --config .eslintrc.js src"
+    "eslint:check": "eslint --config .eslintrc.js src",
+    "stylelint:check": "stylelint --config .stylelintrc src/**/*.{css,scss}"
   },
   "dependencies": {
     "@babel/core": "^7.19.6",
@@ -70,8 +71,10 @@
     "stylelint": "^14.14.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-sass-guidelines": "^9.0.1",
     "stylelint-config-standard": "^29.0.0",
     "stylelint-config-standard-scss": "^6.0.0",
+    "stylelint-prettier": "^2.0.0",
     "stylelint-scss": "^4.3.0",
     "typescript": "^4.8.4",
     "vite": "^3.2.0",
