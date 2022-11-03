@@ -1,4 +1,4 @@
-import { Children } from 'types';
+import { Children } from '~/types';
 import styles from './Input.module.scss';
 
 type InputProps = {
@@ -7,7 +7,7 @@ type InputProps = {
 
 export function Input({ children }: InputProps) {
   return (
-    <label className={styles.input_samf}>
+    <label className={styles.label}>
       {children}
       <input type="text" className={styles.input_field} />
     </label>
