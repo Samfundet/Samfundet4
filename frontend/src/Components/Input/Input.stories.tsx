@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Input } from './Input';
 
 export default {
@@ -17,3 +18,6 @@ WithLabel.args = { children: 'Label' };
 
 export const WithComplexLabel = Template.bind({});
 WithComplexLabel.args = { children: <span style={{ color: 'red' }}>Complex label</span> };
+
+export const OnChange = Template.bind({});
+OnChange.args = { onChange: action('OnChange') };
