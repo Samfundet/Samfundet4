@@ -9,12 +9,12 @@
 .input_field {
   padding: 8px;
   display: block;
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  border: 1px solid $grey-2;
+  border-bottom: 1px solid $grey-2;
   width: 100%;
   border-radius: 3px;
   &:focus {
-    outline: 1px solid #505050;
+    outline: 1px solid $grey-1;
     border: none;
   }
 }
