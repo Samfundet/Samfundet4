@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './EventsPage.module.scss';
-import { ROUTES } from ':./../routes';
+import { ROUTES } from '../../routes';
 import { Event, monthNamesNo, weekDayNamesNo } from '../../types';
 
 export function EventsPage() {
