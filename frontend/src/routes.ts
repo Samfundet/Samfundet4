@@ -29,6 +29,8 @@ export const ROUTES = {
     samfundet__api2_test: '/samfundet/api2/test',
     static: '/static/:path',
     media: '/media/:path',
+    events: 'samfundet/api/events/',
+    event: 'samfundet/api/events/:id',
   },
   frontend: {
     home: '/',
