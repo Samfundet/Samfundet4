@@ -7,7 +7,7 @@
   align-items: center;
   flex-wrap: wrap;
   margin-top: 2em;
-  padding: 0;
+  flex-direction: column;
 }
 
 .about {
@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column;
   margin: 1em;
+  max-width: 1160px;
 
   @include for-tablet-up {
     flex-direction: row;
@@ -22,11 +23,13 @@
   }
 }
 
+.button {
+  margin: 0.5em;
+  border-radius: 0.5em;
+}
+
 .aboutText {
   padding: 1em;
-  > * {
-    margin: 0.5em;
-  }
 }
 
 .runderode {
@@ -42,13 +45,11 @@
 
 .samfundsmote {
   box-shadow: 0.25em 0.25em 0.25em 0.25em lightgray;
-  padding: 1em;
+  padding: 1.5em;
   border-radius: 0.5em;
   width: 100%;
   margin: 1em;
-  > * {
-    margin: 0.5em;
-  }
+  max-width: 1160px;
 
   @include for-tablet-up {
     margin: 2em;
@@ -63,6 +64,7 @@
   align-items: center;
   padding: 1em;
   border-radius: 0.5em;
+  max-width: 1160px;
 
   > *:first-child {
     width: 100%;
@@ -71,20 +73,13 @@
 
   > * {
     width: 50%;
-    border-radius: 0.5em;
     text-align: center;
-    transition: 1s;
   }
 
-  > *:not(:first-child):hover {
-    /*picture in lokaler expands on hover except from the first child (title)*/
-    transform: scale(1.1);
-  }
   @include for-tablet-up {
     > * {
       width: 20%;
       text-align: center;
-      transition: 1s;
     }
   }
 }
@@ -94,15 +89,14 @@
   height: 8em;
   border-radius: 50%;
 
+  &:hover {
+    transform: scale(1.1);
+    transition: 1s;
+  }
+
   @include for-tablet-up {
     width: 12em;
     height: 12em;
-  }
-}
-
-.mapButton {
-  > * {
-    margin: 0.5em;
   }
 }
 
@@ -111,6 +105,9 @@
   flex-direction: column;
   margin: 1em;
   width: 100%;
+  justify-content: center;
+  align-items: center;
+  max-width: 1160px;
 
   @include for-tablet-up {
     flex-direction: row;
@@ -124,14 +121,16 @@
   width: 23em;
   color: white;
   margin-bottom: 1em;
-  > * {
-    margin: 0.5em;
-  }
+
   @include for-tablet-up {
     width: 48em;
     height: 30em;
     margin-right: 1em;
   }
+}
+
+.volunteerText {
+  margin: 1em;
 }
 
 .moreInfoRight {
@@ -147,9 +146,7 @@
   border-width: 0.01em;
   border-radius: 1em;
   margin-bottom: 1em;
-  > * {
-    margin: 0.5em;
-  }
+  padding: 1em;
 }
 
 .otherInfo {
