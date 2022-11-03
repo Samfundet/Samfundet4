@@ -23,7 +23,11 @@ export type Event = {
   location: string;
 };
 
-export const monthNamesNo = {
+type dateStrOptions = {
+  [key: number]: string;
+};
+
+export const monthNamesNo: dateStrOptions = {
   1: 'Januar',
   2: 'Februar',
   3: 'Mars',
@@ -36,9 +40,9 @@ export const monthNamesNo = {
   10: 'Oktober',
   11: 'November',
   12: 'Desember',
-};
+} as const;
 
-export const monthNamesEn = {
+export const monthNamesEn: dateStrOptions = {
   1: 'January',
   2: 'February',
   3: 'March',
@@ -51,9 +55,9 @@ export const monthNamesEn = {
   10: 'October',
   11: 'November',
   12: 'December',
-};
+} as const;
 
-export const weekDayNamesNo = {
+export const weekDayNamesNo: dateStrOptions = {
   1: 'Mandag',
   2: 'Tirsdag',
   3: 'Onsdag',
@@ -61,9 +65,9 @@ export const weekDayNamesNo = {
   5: 'Fredag',
   6: 'Lørdag',
   7: 'Søndag',
-};
+} as const;
 
-export const weekDayNamesEn = {
+export const weekDayNamesEn: dateStrOptions = {
   1: 'Monday',
   2: 'Tuesday',
   3: 'Wednesday',
