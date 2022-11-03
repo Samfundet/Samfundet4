@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './EventsPage.module.scss';
-import { ROUTES } from '../../routes';
-import { Event, monthNamesNo, weekDayNamesNo } from '../../types';
+import { ROUTES } from 'routes';
+import { Event, monthNamesNo, weekDayNamesNo } from 'types';
+
+// check if dates are equal
+export const compareDates = (event_date: Date, array_date: string) => {
+  let is_similar = false;
+  const event_date_str = event_date.toISOString();
+  if (event_date_str.includes(array_date)) is_similar = true;
+  return is_similar;
+};
+// get date on format hh.mm
+export const getTimeStr = (date: Date) => {
+  return (date.getHours() + '.' + date.getMinutes()).toString();
+};
 
 export function EventsPage() {
   const [events, setEvents] = useState([]);
   const [dates, setDates] = useState<string[]>([]);
-  // check if dates are equal
-  const compareDates = (event_date: Date, array_date: string) => {
-    let is_similar = false;
-    const event_date_str = event_date.toISOString();
-    if (event_date_str.includes(array_date)) is_similar = true;
-    return is_similar;
-  };
-  // get date on format hh.mm
-  const getTimeStr = (date: Date) => {
-    return (date.getHours() + '.' + date.getMinutes()).toString();
-  };
   useEffect(() => {
     fetch(ROUTES.backend.events)
       .then((response) => response.json())
