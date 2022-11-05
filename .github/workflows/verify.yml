@@ -109,8 +109,8 @@ jobs:
           build: yarn run build
           start: yarn start
 
-  job_verify_eslint:
-    name: Verify ESLint
+  job_verify_frontend_lint:
+    name: Verify frontend lint
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -124,3 +124,6 @@ jobs:
 
       - name: Run ESLint
         run: yarn run eslint:check
+
+      - name: Run stylelint
+        run: yarn run stylelint:check
