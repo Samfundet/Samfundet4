@@ -1,0 +1,1 @@
+export { InternalPriceListPage } from './InternalPriceListPage';
