@@ -1,21 +1,19 @@
-import i18next, { i18n as i18nInstance } from 'i18next';
+import { use } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { LANGUAGES } from './i18n.constants';
-import { nb, en } from './i18n.translations';
+import { LANGUAGES } from './constants';
+import { en, nb } from './translations';
 
-const createI18n = (): i18nInstance => {
-  const i18n = i18next.createInstance().use(initReactI18next);
+export const defaultNS = 'common';
 
-  i18n.init({
-    lng: LANGUAGES.NB,
-    fallbackLng: LANGUAGES.NB,
-    resources: {
-      [LANGUAGES.NB]: nb,
-      [LANGUAGES.EN]: en,
-    },
-  });
-
-  return i18n;
+export const resources = {
+  [LANGUAGES.NB]: { [defaultNS]: nb },
+  [LANGUAGES.EN]: { [defaultNS]: en },
 };
 
-export const i18n = createI18n();
+use(initReactI18next).init({
+  lng: LANGUAGES.NB,
+  fallbackLng: LANGUAGES.NB,
+  debug: true,
+  resources: resources,
+  defaultNS: defaultNS,
+});
