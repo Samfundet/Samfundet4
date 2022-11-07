@@ -1,12 +1,13 @@
 import { createContext, useContext, useState } from 'react';
+import { THEME, ThemeValue } from '~/constants';
 import { Children, SetState } from '~/types';
 
 /**
  * Define which values the global context can contain.
  */
 type GlobalContextProps = {
-  test: number;
-  setTest: SetState<number>;
+  theme: ThemeValue;
+  setTheme: SetState<ThemeValue>;
 };
 
 /**
@@ -36,11 +37,11 @@ type GlobalContextProviderProps = {
 };
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
-  const [test, setTest] = useState<number>(0);
+  const [theme, setTheme] = useState<ThemeValue>(THEME.DARK);
 
-  const globalContextValues = {
-    test: test,
-    setTest: setTest,
+  const globalContextValues: GlobalContextProps = {
+    theme: theme,
+    setTheme: setTheme,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;

@@ -4,8 +4,8 @@ import { Navbar } from '~/Components/Navbar';
 import { useGlobalContext } from '~/GlobalContextProvider';
 
 export function App() {
-  const { test } = useGlobalContext();
-  console.log(test);
+  const { theme } = useGlobalContext();
+  document.body.classList.add(theme);
 
   return (
     <BrowserRouter>
