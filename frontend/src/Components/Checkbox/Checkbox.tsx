@@ -5,8 +5,8 @@ type Alignment = 'left' | 'right';
 type CheckboxProps = {
   name?: string;
   label?: string;
-  disabled: boolean;
-  checked: boolean;
+  disabled?: boolean;
+  checked?: boolean;
   onClick?: () => void;
   alignment?: Alignment;
 };
