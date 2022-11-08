@@ -4,12 +4,13 @@
 
 @import 'src/mixins';
 $navbar-bg: #000000;
+$navbar-height: 60px;
 
 #navbar_container {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 60px;
+  height: $navbar-height;
   background: $navbar-bg;
   display: flex;
   align-items: center;
@@ -42,6 +43,11 @@ $navbar-bg: #000000;
   @include for-tablet-down {
     display: none;
   }
+}
+
+// Push page below navbar.
+.navbar_margin {
+  margin-top: $navbar-height;
 }
 
 .navbar_signup {

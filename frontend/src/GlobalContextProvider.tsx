@@ -38,7 +38,7 @@ type GlobalContextProviderProps = {
 };
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
-  const [theme, setTheme] = useState<ThemeValue>(THEME.DARK);
+  const [theme, setTheme] = useState<ThemeValue>(THEME.LIGHT);
 
   /** Simplified theme switching. */
   function switchTheme() {
