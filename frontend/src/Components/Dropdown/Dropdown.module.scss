@@ -8,6 +8,7 @@
   width: 150px;
   position: relative;
 }
+
 .samf_select {
   //selve select boksen
   background: $red-samf;
@@ -25,6 +26,7 @@
   -ms-appearance: none;
   overflow-y: auto;
 }
+
 .custom_select_arrow {
   //dette er hensiktsmessig fordi pil-delen av select elementet har varierende utseende i forskjellige browsere
   position: absolute;
@@ -34,7 +36,6 @@
   height: 35px;
   width: 35px;
   pointer-events: none;
-  display: flex;
   justify-content: center;
   align-items: center;
   color: $white;
