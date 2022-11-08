@@ -45,7 +45,9 @@ export function EventsPage() {
 
         return (
           <div key={index} className={styles.dates_container}>
-            <h2>{weekDayNamesNo[day_week] + ' ' + day_month + '.' + monthNamesNo[month]}</h2>
+            <h2 className={styles.date_header}>
+              {weekDayNamesNo[day_week] + ' ' + day_month + '.' + monthNamesNo[month]}
+            </h2>
             {events.map((event: Event, index: number) => {
               if (compareDates(event.start_dt, date_str)) {
                 return (

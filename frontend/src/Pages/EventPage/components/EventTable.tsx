@@ -10,7 +10,7 @@ export function EventTable({ event }: EventTableProps) {
   const date_field: string = event.start_dt.getDate() + '. ' + monthNamesNo[event.start_dt.getMonth()];
   const time_field: string = getTimeStr(event.start_dt) + ' - ' + getTimeStr(event.end_dt);
   return (
-    <table>
+    <table className={styles.table_container}>
       <tr>
         <td className={styles.table_element_left}> LOKALE </td>
         <td className={styles.table_element_right}> {event.location} </td>
