@@ -34,7 +34,7 @@ NoHeader.args = {
 
 export const Sortable = Template.bind({});
 Sortable.args = {
-  columns: ['Sortable', 'Not sortable', "Random col"],
+  columns: ['Sortable', 'Not sortable', 'Random col'],
   data: [
     [new AlphabeticTableCell('A'), { children: '-A' } as ITableCell, { children: '-X' } as ITableCell],
     [new AlphabeticTableCell('Z'), { children: '-Z' } as ITableCell, { children: '-Y' } as ITableCell],
@@ -42,10 +42,9 @@ Sortable.args = {
   ],
 };
 
-
 export const MultipleSortableRows = Template.bind({});
 Sortable.args = {
-  columns: ['Sortable', 'Not sortable', "Random col"],
+  columns: ['Sortable', 'Not sortable', 'Random col'],
   data: [
     [new AlphabeticTableCell('A'), new AlphabeticTableCell('N'), { children: 'X' } as ITableCell],
     [new AlphabeticTableCell('Z'), new AlphabeticTableCell('M'), { children: 'Y' } as ITableCell],

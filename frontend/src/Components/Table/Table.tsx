@@ -16,61 +16,62 @@ export interface ITableCell {
 }
 
 export class AlphabeticTableCell implements ITableCell {
-  children: String;
-  constructor(child: String) {
+  children: string;
+  constructor(child: string) {
     this.children = child;
   }
   compare(other: ITableCell) {
-    return this.children.localeCompare(other.children!.toString()); 
+    return this.children.localeCompare(other.children!.toString());
     //Returns 0 − If this and other matches 100%.
     //Returns 1 if no match, and the parameter value comes before the string object's value in the locale sort order.
-    //Returns a negative value if no match, and the parameter value comes after the string object's value in the local sort order.
+    //Returns a negative value if no match,
+    // and the parameter value comes after the string object's value in the local sort order.
   }
 }
 
 export function Table({ className, columns, data }: TableProps) {
-
   const [sortColumn, setSortColumn] = useState(-1);
   const [sortInverse, setSortInverse] = useState(false);
 
   function isColumnSortable(index: number) {
-    const column: ITableCell[] = data.map((row) => row[index]); //Grabs the index-th element of each row, so we get a column. Sort of transpose
+    //Grabs the index-th element of each row, so we get a column. Sort of transpose
+    const column: ITableCell[] = data.map((row) => row[index]); 
     return column.reduce((othersSortable: boolean, cell: ITableCell) => {
       return cell != null && cell.compare != null && othersSortable;
-    }, true); //othersSortble is the previous value. If othersSortable becomes False at any point the function will return False
+    }, true); 
+    //othersSortble is the previous value.
+    //If othersSortable becomes False at any point the function will return False
   }
 
   //Temporary button
   function sortButton(column: number): Children {
-    return <Button onClick={() => {
-      if (sortColumn===column){
-        setSortInverse(!sortInverse)
-      } else {
-        setSortInverse(false)
-        setSortColumn(column)
-      }
-    }}>
-      {sortInverse ? "V" : "^"}
-    </Button>;
+    return (
+      <Button
+        onClick={() => {
+          if (sortColumn === column) {
+            setSortInverse(!sortInverse);
+          } else {
+            setSortInverse(false);
+            setSortColumn(column);
+          }
+        }}
+      >
+        {sortInverse ? 'V' : '^'}
+      </Button>
+    );
   }
 
   function sortedData(data: ITableCell[][]): ITableCell[][] {
     if (sortColumn === -1 || !isColumnSortable(sortColumn)) {
       return data;
     } else {
-      return [...data].sort(
-        (rowA: ITableCell[], rowB: ITableCell[]) => {
-          if (rowA == null || rowA[sortColumn] == null)
-            return 0;
-          if(sortInverse)
-            return -rowA[sortColumn].compare!(rowB[sortColumn])
-          else
-            return rowA[sortColumn].compare!(rowB[sortColumn])
-        }
-      );
+      return [...data].sort((rowA: ITableCell[], rowB: ITableCell[]) => {
+        if (rowA == null || rowA[sortColumn] == null) return 0;
+        if (sortInverse) return -rowA[sortColumn].compare!(rowB[sortColumn]);
+        else return rowA[sortColumn].compare!(rowB[sortColumn]);
+      });
     }
   }
-
 
   return (
     <>
