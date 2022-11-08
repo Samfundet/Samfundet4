@@ -1,7 +1,7 @@
 @import "src/constants";
 @import "src/mixins";
 
-#container {
+.container {
   display: flex;
   justify-content: space-around;
   align-items: stretch;
@@ -10,7 +10,7 @@
   min-height: calc(100vh - 200px);
 }
 
-#content_container {
+.content_container {
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -23,14 +23,14 @@
   text-transform: uppercase;
 }
 
-#header_text {
+.header_text {
   text-align: center;
   font-size: 1.8em;
 }
 
 .input_field {
   display: block;
-  width: calc(100% - 0.4em - 2px);
+  width: calc(100%);
   margin-bottom: 0.8em;
 }
 
@@ -39,7 +39,7 @@
   font-size: 1em;
 }
 
-#forgotten_password {
+.forgotten_password {
   color: $red-samf;
   text-align: center;
   margin-top: 0.4em;

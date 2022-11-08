@@ -1,22 +1,26 @@
-import classNames from 'classnames';
+import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-type InputTheme = 'samf' | 'secondary';
+type types = 'text' | 'number' | 'emai' | 'password';
 
 type InputFieldProps = {
-  placeholder?: string;
+  children?: Children;
   className?: string;
-  theme?: InputTheme;
-  type?: string;
-  onChange?: (e: any) => void;
+  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  type?: types;
 };
 
-const mapThemeToStyle: { [theme in InputTheme]: string } = {
-  samf: styles.input_samf,
-  secondary: styles.input_secondary,
-};
-
-export function InputField({ placeholder, className, type, onChange, theme = 'samf' }: InputFieldProps) {
-  const classnames = classNames(mapThemeToStyle[theme], className);
-  return <input placeholder={placeholder} className={classnames} type={type} onChange={onChange} />;
+export function InputField({ children, className, onChange, placeholder, type = 'text' }: InputFieldProps) {
+  return (
+    <label className={styles.label}>
+      {children}
+      <input
+        onChange={onChange}
+        className={`${styles.InputField_field} ${className}`}
+        placeholder={placeholder}
+        type={type}
+      />
+    </label>
+  );
 }
