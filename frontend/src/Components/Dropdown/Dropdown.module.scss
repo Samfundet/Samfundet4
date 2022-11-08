@@ -1,0 +1,42 @@
+@import 'src/constants';
+
+.select_wrapper {
+  //label som wrapper
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+  width: 150px;
+  position: relative;
+}
+.samf_select {
+  //selve select boksen
+  background: $red-samf;
+  font-size: 1rem; //root element font størrelse. Skalert etter HTML dokumentets font størrelse
+  padding: 0.5em 1.5em 0.5em 0.5em;
+  color: $white;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  margin: 5px;
+  width: 150px;
+  appearance: none; //appearance "none" i flere browsere
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  overflow-y: auto;
+}
+.custom_select_arrow {
+  //dette er hensiktsmessig fordi pil-delen av select elementet har varierende utseende i forskjellige browsere
+  position: absolute;
+  top: 26px;
+  right: 0;
+  display: block;
+  height: 35px;
+  width: 35px;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $white;
+  transform: scale(0.65, 0.65); //transformerer trekanten
+}
