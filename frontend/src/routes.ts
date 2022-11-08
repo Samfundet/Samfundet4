@@ -35,11 +35,8 @@ export const ROUTES = {
   frontend: {
     home: '/',
     health: '/health/',
-<<<<<<< HEAD
     events: '/events/',
     event: '/events/:id',
-=======
     components: '/components/',
->>>>>>> master
   },
 };
