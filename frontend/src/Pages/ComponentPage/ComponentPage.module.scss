@@ -1,0 +1,7 @@
+@import 'src/mixins';
+
+.wrapper {
+  @include for-tablet-up {
+    margin: 30px 30px;
+  }
+}

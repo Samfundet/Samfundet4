@@ -1,34 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "ESNext"],
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
-  "include": [
-    "src",
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "excludeDirectories": [
-    "node_modules"
-  ]
+  // Need glob pattern on files for editor to recognise alias/paths when importing.
+  "include": ["src", "**/*.{ts,tsx,js,jsx}"],
+  "exclude": ["node_modules"],
+  "excludeDirectories": ["node_modules"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Children } from 'types';
+import { Children } from '~/types';
 import styles from './ProgressBar.module.scss';
 
 type ProgressBarProps = {
@@ -7,7 +7,7 @@ type ProgressBarProps = {
   children?: Children;
   value?: number;
   max?: number;
-  fullWidth: boolean;
+  fullWidth?: boolean;
 };
 
 export function ProgressBar({ className, children, value, max, fullWidth = true }: ProgressBarProps) {

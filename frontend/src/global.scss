@@ -1,6 +1,14 @@
+/* stylelint-disable selector-max-type */
+@import 'constants';
+
 html {
   width: 100%;
   height: 100%;
+}
+
+/* stylelint-disable-next-line selector-max-universal */
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -21,3 +29,14 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+// Themes:
+// Use names from constant THEME.
+
+// THEME.DARK
+.theme-dark {
+  background-color: $theme-dark-bg;
+  color: $theme-dark-color;
+}
+
+// End: Themes --------------------------------------------------------------------------------------------------------

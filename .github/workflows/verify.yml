@@ -108,3 +108,22 @@ jobs:
           browser: chrome
           build: yarn run build
           start: yarn start
+
+  job_verify_frontend_lint:
+    name: Verify frontend lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install modules
+        run: yarn install
+
+      - name: Run ESLint
+        run: yarn run eslint:check
+
+      - name: Run stylelint
+        run: yarn run stylelint:check
