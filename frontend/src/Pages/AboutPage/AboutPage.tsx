@@ -1,12 +1,26 @@
 import styles from './AboutPage.module.scss';
 import { Button } from 'Components';
 import { ROUTES } from 'routes';
+import {
+  bodegaen,
+  daglighallen,
+  edgar,
+  klubben,
+  knaus,
+  lyche,
+  runderode,
+  rundhallen,
+  selskapssiden,
+  splash,
+  storsalen,
+  strossa,
+} from '../../assets';
 
 export function AboutPage() {
   return (
     <div className={styles.container}>
       <div className={styles.about}>
-        <img src={require('../../assets/runderode.jpg')} alt="Runderode" className={styles.runderode} />
+        <img src={runderode} alt="Runderode" className={styles.runderode} />
         <div className={styles.aboutText}>
           <h2>Om Samfundet</h2>
           <p>
@@ -43,43 +57,43 @@ export function AboutPage() {
       <div className={styles.venues}>
         <h1 className={styles.venueText}>LOKALER</h1>
         <a className={styles.venueBox} href={ROUTES.frontend.storsalen}>
-          <img src={require('../../assets/storsalen.jpg')} alt="Storsalen" className={styles.venueImg}></img>
+          <img src={storsalen} alt="Storsalen" className={styles.venueImg}></img>
           <h3>Storsalen</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.bodegaen}>
-          <img src={require('../../assets/bodegaen.jpg')} alt="Bodegaen" className={styles.venueImg}></img>
+          <img src={bodegaen} alt="Bodegaen" className={styles.venueImg}></img>
           <h3>Bodegaen</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.klubben}>
-          <img src={require('../../assets/klubben.jpg')} alt="Klubben" className={styles.venueImg}></img>
+          <img src={klubben} alt="Klubben" className={styles.venueImg}></img>
           <h3>Klubben</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.strossa}>
-          <img src={require('../../assets/strossa.jpg')} alt="Strossa" className={styles.venueImg}></img>
+          <img src={strossa} alt="Strossa" className={styles.venueImg}></img>
           <h3>Strossa</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.selskapssiden}>
-          <img src={require('../../assets/selskapssiden.jpg')} alt="Selskapssiden" className={styles.venueImg}></img>
+          <img src={selskapssiden} alt="Selskapssiden" className={styles.venueImg}></img>
           <h3>Selskapssiden</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.knaus}>
-          <img src={require('../../assets/knaus.jpg')} alt="Knaus" className={styles.venueImg}></img>
+          <img src={knaus} alt="Knaus" className={styles.venueImg}></img>
           <h3>Knaus</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.edgar}>
-          <img src={require('../../assets/edgar.jpg')} alt="Edgar" className={styles.venueImg}></img>
+          <img src={edgar} alt="Edgar" className={styles.venueImg}></img>
           <h3>Edgar</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.lyche}>
-          <img src={require('../../assets/lyche.jpg')} alt="Lyche" className={styles.venueImg}></img>
+          <img src={lyche} alt="Lyche" className={styles.venueImg}></img>
           <h3>Lyche</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.daglighallen}>
-          <img src={require('../../assets/daglighallen.jpg')} alt="Daglighallen" className={styles.venueImg}></img>
+          <img src={daglighallen} alt="Daglighallen" className={styles.venueImg}></img>
           <h3>Daglighallen</h3>
         </a>
         <a className={styles.venueBox} href={ROUTES.frontend.rundhallen}>
-          <img src={require('../../assets/rundhallen.jpg')} alt="Rundhallen" className={styles.venueImg}></img>
+          <img src={rundhallen} alt="Rundhallen" className={styles.venueImg}></img>
           <h3>Rundhallen</h3>
         </a>
       </div>
@@ -93,7 +107,7 @@ export function AboutPage() {
       </div>
       <div className={styles.moreInfo}>
         <div className={styles.volunteer}>
-          <img src={require('../../assets/splash.jpeg')} alt="Splash" className={styles.splash} />
+          <img src={splash} alt="Splash" className={styles.splash} />
           <div className={styles.volunteerText}>
             <h2>Frivilligheten</h2>
             <p>
