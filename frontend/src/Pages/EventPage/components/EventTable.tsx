@@ -1,4 +1,4 @@
-import { Event, monthNamesNo } from 'types';
+import { Event } from 'types';
 import { getTimeStr } from '../../EventsPage/EventsPage';
 import styles from './EventTable.module.scss';
 
@@ -7,7 +7,8 @@ type EventTableProps = {
 };
 
 export function EventTable({ event }: EventTableProps) {
-  const date_field: string = event.start_dt.getDate() + '. ' + monthNamesNo[event.start_dt.getMonth()];
+  const month: string = event.start_dt.toLocaleDateString('no', { month: 'long' });
+  const monthday: number = event.start_dt.getDate();
   const time_field: string = getTimeStr(event.start_dt) + ' - ' + getTimeStr(event.end_dt);
   return (
     <table className={styles.table_container}>
@@ -21,7 +22,7 @@ export function EventTable({ event }: EventTableProps) {
       </tr>
       <tr>
         <td className={styles.table_element_left}> DATO </td>
-        <td className={styles.table_element_right}>{date_field}</td>
+        <td className={styles.table_element_right}>{monthday + '. ' + month}</td>
       </tr>
       <tr>
         <td className={styles.table_element_left}> TID </td>

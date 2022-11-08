@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './EventPage.module.scss';
-import { Event, monthNamesNo } from 'types';
-import { getTimeStr } from '../EventsPage/EventsPage';
+import { Event } from 'types';
 import { ROUTES } from 'routes';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event>();
-  const month = event?.start_dt.getMonth();
   useEffect(() => {
     const url = ROUTES.backend.events + id;
     fetch(url)

@@ -2,16 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './EventsPage.module.scss';
 import { ROUTES } from 'routes';
-import { Event, monthNamesNo, weekDayNamesNo } from 'types';
+import { Event } from 'types';
 
-// check if dates are equal
-export const compareDates = (event_date: Date, array_date: string) => {
-  let is_similar = false;
-  const event_date_str = event_date.toISOString();
-  if (event_date_str.includes(array_date)) is_similar = true;
-  return is_similar;
-};
-// get date on format hh.mm
+/** check if dates are equal */
+function compareDates(event_date: Date, array_date: string) {
+  return event_date.toISOString().includes(array_date);
+}
+/** get date on format hh.mm */
 export const getTimeStr = (date: Date) => {
   return (date.getHours() + '.' + date.getMinutes()).toString();
 };
@@ -39,15 +36,13 @@ export function EventsPage() {
     <div className={styles.container}>
       {dates.map((date_str: string, index: number) => {
         const date: Date = new Date(date_str);
-        const month: number = date.getMonth();
-        const day_week: number = date.getDay();
-        const day_month: number = date.getDate();
+        const month: string = date.toLocaleDateString('no', { month: 'long' });
+        const weekday: string = date.toLocaleDateString('no', { weekday: 'long' });
+        const monthday: number = date.getDate();
 
         return (
           <div key={index} className={styles.dates_container}>
-            <h2 className={styles.date_header}>
-              {weekDayNamesNo[day_week] + ' ' + day_month + '.' + monthNamesNo[month]}
-            </h2>
+            <h2 className={styles.date_header}>{weekday + ' ' + monthday + '.' + month}</h2>
             {events.map((event: Event, index: number) => {
               if (compareDates(event.start_dt, date_str)) {
                 return (
