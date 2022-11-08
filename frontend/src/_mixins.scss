@@ -40,7 +40,6 @@ Usage:
 }
 
 // Up:
-
 @mixin for-mobile-up {
   @media (min-width: $mobile-bp-lower) {
     @content;
@@ -66,7 +65,6 @@ Usage:
 }
 
 // Down:
-
 @mixin for-mobile-down {
   @media (max-width: $mobile-bp-upper) {
     @content;
@@ -94,7 +92,6 @@ Usage:
 /* End: Screen size media queries */
 
 /* Color classes */
-
 @mixin color-loop($colorMap, $classNamePrefix, $styleName) {
   /*
   Usage:
@@ -107,15 +104,13 @@ Usage:
   */
   @each $key, $value in $colorMap {
     #{$classNamePrefix + $key} {
-      #{$styleName}: $value !important;
+      #{$styleName}: $value;
     }
   }
 }
-
 /* End: Color classes */
 
 /* Spacing classes */
-
 @mixin list-loop($className, $styleName, $max, $offset, $unit) {
   /*
   Defined margins (use when you need special spacing between elements)
@@ -131,5 +126,4 @@ Usage:
     $i: $i + $offset;
   }
 }
-
 /* End: Spacing classes */

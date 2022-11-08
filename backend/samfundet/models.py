@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext as _
 
 # Create your models here.
 
@@ -20,6 +21,14 @@ class Event(models.Model):
     host = models.CharField(max_length=140)
     location = models.CharField(max_length=140)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT)
+
+    class PriceGroup(models.TextChoices):
+        INCLUDED = 'INCLUDED', _('Included with entrance')
+        FREE = 'FREE', _('Free')
+        BILLIG = 'BILLIG', _('Paid')
+        REGISTRATION = 'REGISTRATION', _('Free with registration')
+
+    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE)
 
 
 class Venue(models.Model):

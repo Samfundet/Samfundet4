@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { ButtonType, Children } from '../../types';
+import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 
 type ButtonTheme = 'samf' | 'secondary';
