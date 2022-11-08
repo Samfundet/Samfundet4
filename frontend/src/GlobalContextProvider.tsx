@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { THEME, ThemeValue } from '~/constants';
 import { Children, SetState } from '~/types';
 
@@ -8,6 +8,7 @@ import { Children, SetState } from '~/types';
 type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
+  switchTheme: () => void;
 };
 
 /**
@@ -39,9 +40,34 @@ type GlobalContextProviderProps = {
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
   const [theme, setTheme] = useState<ThemeValue>(THEME.DARK);
 
+  /** Simplified theme switching. */
+  function switchTheme() {
+    if (theme === THEME.LIGHT) {
+      setTheme(THEME.DARK);
+    } else {
+      setTheme(THEME.LIGHT);
+    }
+  }
+
+  // Update body classes when theme changes.
+  useEffect(() => {
+    switch (theme) {
+      case THEME.DARK:
+        document.body.classList.add(THEME.DARK);
+        document.body.classList.remove(THEME.LIGHT);
+        break;
+      case THEME.LIGHT:
+        document.body.classList.add(THEME.LIGHT);
+        document.body.classList.remove(THEME.DARK);
+        break;
+    }
+  }, [theme]);
+
+  /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
     theme: theme,
     setTheme: setTheme,
+    switchTheme: switchTheme,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
