@@ -1,12 +1,12 @@
 import styles from './ToggleSwitch.module.scss';
 
 type ToggleSwitchProps = {
-  className: string;
+  className?: string;
   checked?: boolean;
   offIcon?: string; // TODO: change later
   onIcon?: string; // TODO: change later
   disabled?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export function ToggleSwitch({ className, checked, onClick, disabled, offIcon, onIcon }: ToggleSwitchProps) {
