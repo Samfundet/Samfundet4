@@ -6,6 +6,7 @@ export default {
   title: 'Components/Image',
   component: Image,
   args: {
+    // eslint-disable-next-line max-len
     src: 'https://www.visitbergen.com/imageresizer/?image=%2Fdbimgs%2FVerdensarvstedet-Bryggen-i-Bergen.jpg&action=Background_Overlay',
   },
 } as ComponentMeta<typeof Image>;
