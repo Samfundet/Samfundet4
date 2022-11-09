@@ -10,7 +10,7 @@ import { KEY, LANGUAGES } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 
 export function Navbar() {
-  const [mobileNavigation, setMobileNavigation] = useState(true);
+  const [mobileNavigation, setMobileNavigation] = useState(false);
   const [loggedIn] = useState(true);
   const { t, i18n } = useTranslation();
 
@@ -77,41 +77,44 @@ export function Navbar() {
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Arrangement
+          {t(KEY.navbar_event)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Information
+          {t(KEY.navbar_information)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Restaurant
+          {t(KEY.navbar_restaurant)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Opptak
+          {t(KEY.navbar_volunteer)}
         </Link>
         <br />
-        {/* <a onClick={() => switchLanguage(i18n)} className={styles.popup_change_language}>
-          English
-        </a> */}
+        <a
+          onClick={() => i18n.changeLanguage(i18n.language === LANGUAGES.EN ? LANGUAGES.NB : LANGUAGES.EN)}
+          className={styles.popup_change_language}
+        >
+          {t(KEY.navbar_other_language)}
+        </a>
         <Button className={styles.popup_member_button}>
           <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-            Medlem
+            {t(KEY.navbar_member)}
           </Link>
         </Button>
         <Button theme="secondary" className={styles.popup_internal_button}>
           <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
-            Intern
+            {t(KEY.navbar_internal)}
           </Link>
         </Button>
         {loggedIn && profileButtonMobile}
@@ -126,16 +129,16 @@ export function Navbar() {
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          <>{t(KEY.title)}</>
+          {t(KEY.navbar_event)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Information
+          {t(KEY.navbar_information)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Restaurant
+          {t(KEY.navbar_restaurant)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Opptak
+          {t(KEY.navbar_volunteer)}
         </Link>
         <div className={styles.navbar_signup}>
           <ThemeSwitch />
@@ -143,12 +146,12 @@ export function Navbar() {
           {languageImage()}
           <Button className={styles.navbar_member_button}>
             <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-              Medlem
+              {t(KEY.navbar_member)}
             </Link>
           </Button>
           <Button theme="secondary" className={styles.navbar_internal_button}>
             <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
-              Intern
+              {t(KEY.navbar_internal)}
             </Link>
           </Button>
         </div>
