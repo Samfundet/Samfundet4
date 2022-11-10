@@ -107,7 +107,7 @@ export function Navbar() {
         >
           {t(KEY.navbar_other_language)}
         </a>
-        <Button className={styles.popup_member_button}>
+        <Button theme="samf" className={styles.popup_member_button}>
           <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
             {t(KEY.navbar_member)}
           </Link>
@@ -144,7 +144,7 @@ export function Navbar() {
           <ThemeSwitch />
           {loggedIn && profileButton}
           {languageImage()}
-          <Button className={styles.navbar_member_button}>
+          <Button theme="samf" className={styles.navbar_member_button}>
             <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
               {t(KEY.navbar_member)}
             </Link>
