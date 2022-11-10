@@ -1,13 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Image } from './Image';
+import { logoBlack } from '~/assets';
 
 // Local component config.
 export default {
   title: 'Components/Image',
   component: Image,
   args: {
-    // eslint-disable-next-line max-len
-    src: 'https://www.visitbergen.com/imageresizer/?image=%2Fdbimgs%2FVerdensarvstedet-Bryggen-i-Bergen.jpg&action=Background_Overlay',
+    src: logoBlack,
   },
 } as ComponentMeta<typeof Image>;
 
