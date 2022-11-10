@@ -16,6 +16,10 @@ django-environ = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 dataclasses-json = "*"
+bandit = "*"
+flake8 = "*"
+mypy = "*"
+flake8-annotations = "*"
 
 [dev-packages]
 
