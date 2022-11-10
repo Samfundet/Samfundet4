@@ -8,8 +8,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  job_verify_tests:
-    name: Verify tests
+  job_verify_backend:
+    name: Verify backend
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -108,3 +108,22 @@ jobs:
           browser: chrome
           build: yarn run build
           start: yarn start
+
+  job_verify_frontend_lint:
+    name: Verify frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install modules
+        run: yarn install
+
+      - name: Run ESLint
+        run: yarn run eslint:check
+
+      - name: Run stylelint
+        run: yarn run stylelint:check

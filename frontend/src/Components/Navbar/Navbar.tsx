@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { profileIcon, englishFlag, norwegianFlag, logoWhite } from 'assets';
-import { NavLink as Link } from 'react-router-dom';
-import styles from './Navbar.module.scss';
-import { ROUTES } from '../../routes';
-import { Button } from '../Button';
 import classNames from 'classnames';
+import { useState } from 'react';
+import { NavLink as Link } from 'react-router-dom';
+import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
+import { Button, ThemeSwitch } from '~/Components';
+import { ROUTES } from '~/routes';
+import styles from './Navbar.module.scss';
 
 function changeLanguage() {
   console.log('language changed :)');
@@ -59,6 +59,7 @@ export function Navbar() {
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
+      <div className={styles.navbar_margin} />
       <nav id={styles.mobile_popup_container}>
         <Link
           to={ROUTES.frontend.health}
@@ -126,6 +127,7 @@ export function Navbar() {
           Opptak
         </Link>
         <div className={styles.navbar_signup}>
+          <ThemeSwitch />
           {loggedIn && profileButton}
           {languageImage()}
           <Button className={styles.navbar_member_button}>
