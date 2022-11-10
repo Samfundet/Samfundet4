@@ -12,4 +12,5 @@ router.register('venues', views.VenueView, 'venues')
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('login/', views.LoginView.as_view()),
 ]
