@@ -11,32 +11,10 @@ export type Children = ReactNode;
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
 /**Type for label alignment */
-export type AlignLabel = 'top' | 'right' | 'bottom' | 'left';
+export type Alignment = 'top' | 'right' | 'bottom' | 'left' | 'none';
 
 /**Type for input placeholders  */
-export type Placeholder =
-  | 'Navn'
-  | 'E-post'
-  | 'Nummer'
-  | 'Alder'
-  | 'Passord'
-  | 'Adresse'
-  | 'DD/MM/YYY'
-  | 'Medlemsnummer'
-  | '19:00'
-  | 'Lokale'
-  | 'Arrangement';
+export type Placeholder = ReactNode;
 
 /***Type for input default value  */
-export type DefaultValue =
-  | 'Navn'
-  | 'E-post'
-  | 'Nummer'
-  | 'Alder'
-  | 'Passord'
-  | 'Adresse'
-  | 'DD/MM/YYY'
-  | 'Medlemsnummer'
-  | '19:00'
-  | 'Lokale'
-  | 'Arrangement';
+export type DefaultValue = ReactNode;
