@@ -29,8 +29,23 @@
   color: white;
 }
 
+.button_success {
+  background-color: $green;
+  color: white;
+}
+
 .button_secondary {
   border: none;
   padding: 10px 25px;
   background-color: $grey-3;
+}
+
+.button_outlined {
+  background-color: transparent;
+  border: 1px solid #888;
+  color: black;
+  &:hover:not([disabled]) {
+    border-color: $red-samf;
+    color: $red-samf;
+  }
 }
