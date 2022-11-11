@@ -10,8 +10,8 @@ export function ColorDisplay({ color }: ColorDisplayProps) {
   return (
     <div className={styles.div}>
       <div className={styles.dot} style={{ backgroundColor: bg }} />
-      <label>{`Farge: ${bg}`}</label>
-      <label>{`Navn: ${color}`}</label>
+      <div>{`Farge: ${bg}`}</div>
+      <div>{`Navn: ${color}`}</div>
     </div>
   );
 }

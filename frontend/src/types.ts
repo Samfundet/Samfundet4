@@ -20,7 +20,7 @@ export const COLORS = {
   turquoise: '#5accb9',
   turquoise_deep: '#288474',
   white: '#ffffff',
-  black: '#111111',
+  black: '#000000',
   grey_5: '#f4f4f4',
   grey_4: '#eeeeee',
   grey_3: '#dddddd',
@@ -30,7 +30,6 @@ export const COLORS = {
 };
 
 export type Color = typeof COLORS;
-export type ColorValue = ColorKey[keyof ColorKey];
 export type ColorKey = keyof Color;
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
