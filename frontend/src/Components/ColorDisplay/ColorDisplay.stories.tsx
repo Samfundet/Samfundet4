@@ -19,4 +19,4 @@ const ListTemplate: ComponentStory<typeof ColorDisplay> = function () {
   );
 };
 
-export const SamfundetRed = ListTemplate.bind({});
+export const AllColors = ListTemplate.bind({});
