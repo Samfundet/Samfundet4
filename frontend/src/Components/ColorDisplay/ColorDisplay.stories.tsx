@@ -11,10 +11,9 @@ export default {
 const ListTemplate: ComponentStory<typeof ColorDisplay> = function () {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-      {Object.entries(COLORS).map(([key], index) => {
-        const colorkey = key as ColorKey;
-        return <ColorDisplay key={index} color={colorkey} />;
-      })}
+      {Object.entries(COLORS).map(([key], index) => (
+        <ColorDisplay key={index} color={key as ColorKey} />
+      ))}
     </div>
   );
 };
