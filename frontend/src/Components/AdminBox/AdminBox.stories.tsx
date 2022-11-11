@@ -13,24 +13,28 @@ const Template: ComponentStory<typeof AdminBox> = function (args) {
 
 export const Basic = Template.bind({});
 Basic.args = {
-  title: 'Bodegaen',
+  title: 'Gjenger',
   options: [
-    { text: 'Opprett ny kjønnsykdom', url: 'www.google.com', type: 'ADD' },
-    { text: 'Vis Alle Kjønnsykdommer', url: 'www.google.com', type: 'MANAGE' },
+    { text: 'Administrer gjenger', url: 'www.google.com', type: 'ADD' },
+    { text: 'Gjengene på huset', url: 'www.google.com', type: 'MANAGE' },
   ],
 };
 
 export const Steal = Template.bind({});
 Steal.args = {
-  title: 'Stjel Kakefat',
+  title: 'Stjel bruker',
   options: [{ text: 'Stjel identitet', url: 'www.google.com', type: 'STEAL' }],
 };
 
 export const Info = Template.bind({});
 Info.args = {
-  title: 'Info',
+  title: 'Tilgang',
   options: [
-    { text: 'Dersom du ser dette er du en dum agurk', url: '', type: 'INFO' },
+    {
+      text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjenglederen din for å få tilgang.',
+      url: '',
+      type: 'INFO',
+    },
     { text: '', url: '', type: 'KILROY' },
   ],
 };

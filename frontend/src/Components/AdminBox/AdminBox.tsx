@@ -6,6 +6,12 @@ type AdminBoxProps = {
   options: Array;
 };
 
+const ADD = 'ADD';
+const MANAGE = 'MANAGE';
+const STEAL = 'STEAL';
+const INFO = 'INFO';
+const KILROY = 'KILROY';
+
 /* TODO 
   ADD more options, such as navigation with button links may require react routers
   Test with Posting and such
@@ -28,37 +34,41 @@ export function AdminBox({ title, options }: AdminBoxProps) {
   return (
     <div className={styles.applet}>
       <div className={styles.top}>
-        <h2>{title}</h2>
+        <h2 className={styles.header}>{title}</h2>
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {
-          if (element.type == 'ADD') {
+          if (element.type == ADD) {
             return (
               <Button key={key} theme="success" className={styles.button}>
                 {' '}
                 {element.text}
               </Button>
             );
-          } else if (element.type == 'MANAGE') {
+          } else if (element.type == MANAGE) {
             return (
               <Button key={key} theme="outlined" className={styles.button}>
                 {element.text}
               </Button>
             );
-          } else if (element.type == 'STEAL') {
+          } else if (element.type == STEAL) {
             return (
               <form key={key} className={styles.search} action={element.url} method="post">
                 <div style={{ flex: 1 }}>
-                  <input type="text" placeholder="Navn/ID/E-post" />
+                  <input type="text" className={styles.searchInput} placeholder="Navn/ID/E-post" />
                 </div>
                 <Button theme="samf" className={styles.searchButton}>
                   {element.text}
                 </Button>
               </form>
             );
-          } else if (element.type == 'INFO') {
-            return <p key={key}>{element.text}</p>;
-          } else if (element.type == 'KILROY') {
+          } else if (element.type == INFO) {
+            return (
+              <p key={key} className={styles.text}>
+                {element.text}
+              </p>
+            );
+          } else if (element.type == KILROY) {
             return <div key={key} className={styles.KILROY}></div>;
           }
         })}

@@ -42,7 +42,7 @@
 
 .button_outlined {
   background-color: transparent;
-  border: 1px solid #888;
+  border: 1px solid $grey-1;
   color: black;
   &:hover:not([disabled]) {
     border-color: $red-samf;
