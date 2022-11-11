@@ -27,6 +27,7 @@ disable=
     fixme,
     no-member, # BUG: added indefinitely because it suddenly caused many errors
     duplicate-code,
+    imported-auth-user, # Don't require get_user_model().
     too-many-ancestors,
     too-many-instance-attributes,
     too-few-public-methods,

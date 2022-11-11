@@ -152,6 +152,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+### DRF ###
+INSTALLED_APPS.append('rest_framework.authtoken')
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+### End: DRF ###
+
 ################## LOGGING ##################
 
 # pylint: disable=wrong-import-position,wrong-import-order
