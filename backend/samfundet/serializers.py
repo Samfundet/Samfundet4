@@ -1,8 +1,11 @@
 from rest_framework import serializers
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.models import Permission, Group
 
 from .models import Event, Venue
+
+User = get_user_model()
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -26,6 +29,7 @@ class LoginSerializer(serializers.Serializer):
       * username
       * password.
     It will try to authenticate the user with when validated.
+    https://www.guguweb.com/2022/01/23/django-rest-framework-authentication-the-easy-way/
     """
     username = serializers.CharField(label='Username', write_only=True)
     password = serializers.CharField(
@@ -56,3 +60,29 @@ class LoginSerializer(serializers.Serializer):
         # It will be used in the view.
         attrs['user'] = user
         return attrs
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+        ]
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Group
+        fields = '__all__'
