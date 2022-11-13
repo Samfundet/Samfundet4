@@ -44,14 +44,21 @@ MEDIA_URL = '/media/'
 
 # Production settings:
 X_FRAME_OPTIONS = 'DENY'
-CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 SECURE_HSTS_SECONDS = 60  # TODO: Find a decent value
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_PRELOAD = True
-SESSION_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 DATE_INPUT_FORMATS = [
     '%d-%m-%Y',
@@ -75,7 +82,6 @@ INSTALLED_APPS = [
     # Imported apps.
     'django_extensions',
     'corsheaders',
-    'rest_framework',
     'root',  # Register to enable management.commands.
     'samfundet',
 ]
@@ -153,12 +159,14 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ### DRF ###
-INSTALLED_APPS.append('rest_framework.authtoken')
+INSTALLED_APPS += [
+    'rest_framework',
+]
+# https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated']
 }
 ### End: DRF ###
 
