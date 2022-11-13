@@ -27,6 +27,12 @@ export const COLORS = {
   grey_2: '#cccccc',
   grey_1: '#767676',
   grey_0: '#444444',
+  green_lighter: '#f6ffed',
+  green_light: '#b7eb8f',
+  orange_ligher: '#fffbe6',
+  orange_light: '#ffe99e',
+  red_lighter: '#fff2f0',
+  red_light: '#ffcfca',
 };
 
 export type Color = typeof COLORS;

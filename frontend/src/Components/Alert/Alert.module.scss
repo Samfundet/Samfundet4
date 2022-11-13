@@ -1,0 +1,42 @@
+@import 'src/constants';
+
+.alert {
+  border-radius: 5px;
+  margin: 1em;
+  padding: 0 1em 0 1em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: large;
+}
+.closeButton {
+  cursor: pointer;
+}
+
+.info {
+  background-color: $blue-lighter;
+  border: 1px solid $blue-light;
+}
+
+.success {
+  background-color: $green-lighter;
+  border: 1px solid $green-light;
+}
+
+.warning {
+  background-color: $orange-ligher;
+  border: 1px solid $orange-light;
+}
+
+.error {
+  background-color: $red-lighter;
+  border: 1px solid $red-light;
+}
+
+.samf {
+  background-color: $red-samf;
+  border: 1px solid $red-samf;
+  color: $white;
+}
