@@ -87,7 +87,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'root.middlewares.RequestLogMiddleware',
+    'root.utils.middlewares.RequestLogMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -166,17 +166,31 @@ INSTALLED_APPS += [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated']
+    'DEFAULT_PERMISSION_CLASSES':
+        [
+            # 'rest_framework.permissions.IsAuthenticated',
+            # 'rest_framework.permissions.DjangoObjectPermissions',
+            'root.utils.permissions.CustomDjangoObjectPermissions',
+        ]
 }
 ### End: DRF ###
+
+### django-guardian ###
+INSTALLED_APPS += [
+    'guardian',
+]
+AUTHENTICATION_BACKENDS += [
+    'guardian.backends.ObjectPermissionBackend',
+]
+### End: django-guardian ###
 
 ################## LOGGING ##################
 
 # pylint: disable=wrong-import-position,wrong-import-order
 import logging.config  # noqa: E402
 
-from root.json_formatter import JsonFormatter  # noqa: E402
-from root.request_context_filter import RequestContextFilter  # noqa: E402
+from root.utils.json_formatter import JsonFormatter  # noqa: E402
+from root.utils.request_context_filter import RequestContextFilter  # noqa: E402
 
 # pylint: enable=wrong-import-position,wrong-import-order
 
