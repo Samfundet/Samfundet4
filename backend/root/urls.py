@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('samfundet.urls')),
+    path('', include('samfundet.urls')),  # Put last.
 ]
 
 # Setup static access and media upload
