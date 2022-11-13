@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" style="background-color: grey" stroke-width="10" stroke="#a03033" stroke-linecap="square" stroke-linejoin="miter" fill="none" overflow="visible">
+    
+    <g transform=""> <!-- Half of stroke-width. -->
+
+        <g class="outer">
+            <g class="outer-corners">
+                <g transform="translate(0,0) rotate(0)" class="corner">
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(0)" class="outer-top"/>
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(90)" class="outer-top"/>
+                </g>
+                <g transform="translate(100,0) rotate(90)" class="corner">
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(0)" class="outer-top"/>
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(90)" class="outer-top"/>
+                </g>
+                <g transform="translate(0,100) rotate(-90)" class="corner">
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(0)" class="outer-top"/>
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(90)" class="outer-top"/>
+                </g>
+                <g transform="translate(100,100) rotate(180)" class="corner">
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(0)" class="outer-top"/>
+                    <polyline points="0 0 20 0" transform="translate(0,0) rotate(90)" class="outer-top"/>
+                </g>
+                <!-- <polyline points="0 26 0 0 26 0" transform="translate(0,0) rotate(0)" class="outer-top-left"/>
+                <polyline points="0 26 0 0 26 0" transform="translate(100,0) rotate(90)" class="outer-top-right"/>
+                <polyline points="0 26 0 0 26 0" transform="translate(0,100) rotate(-90)" class="outer-bottom-left"/>
+                <polyline points="0 26 0 0 26 0" transform="translate(100,100) rotate(180)" class="outer-bottom-right"/> -->
+            </g>
+
+            <g class="outer-bridge">
+                <polyline points="0 0 20 0" transform="translate(40,0) rotate(0)" class="outer-top"/>
+                <polyline points="0 0 20 0" transform="translate(0,40) rotate(90)" class="outer-top"/>
+                <polyline points="0 0 20 0" transform="translate(100,60) rotate(-90)" class="outer-top"/>
+                <polyline points="0 0 20 0" transform="translate(60,100) rotate(180)" class="outer-top"/>
+                <!-- <polyline points="34 0 66 0" transform="translate(0,0) rotate(0)" class="outer-top"/>
+                <polyline points="34 0 66 0" transform="translate(0,0) rotate(90)" class="outer-left"/>
+                <polyline points="34 0 66 0" transform="translate(100,0) rotate(90)" class="outer-right"/>
+                <polyline points="34 0 66 0" transform="translate(0,100) rotate(0)" class="outer-bottom"/> -->
+            </g>
+        </g>
+
+        <g class="middle">
+            <!-- Copies of outer-corners. -->
+            <polyline points="0 26 0 0 26 0" transform="translate(19,19) rotate(0)" class="middle-top-left"/>
+            <polyline points="0 26 0 0 26 0" transform="translate(81,19) rotate(90)" class="middle-top-left"/>
+            <polyline points="0 26 0 0 26 0" transform="translate(19,81) rotate(-90)" class="middle-top-left"/>
+            <polyline points="0 26 0 0 26 0" transform="translate(81,81) rotate(180)" class="middle-top-left"/>
+        </g>
+
+        <g class="inner">
+            <!-- Copies of outer-corners. -->
+            <polyline points="0 26 0 0 26 0" transform="translate(39,39) rotate(0)" class="middle-top-left"/>
+            <polyline points="0 26 0 0 26 0" transform="translate(60,60) rotate(180)" class="middle-top-left"/>
+        </g>
+
+
+    </g>
+</svg>
+
+
+        <g class="inner">
+            <!-- Copies of outer-bridge as borders to achieve same size. -->
+            <polyline points="34 0 66 0" transform="translate(0,38.5) rotate(0)" class="inner-top"/>
+            <polyline points="34 0 66 0" transform="translate(38.5,0) rotate(90)" class="inner-left"/>
+            <polyline points="34 0 66 0" transform="translate(61.5,0) rotate(90)" class="inner-right"/>
+            <polyline points="34 0 66 0" transform="translate(0,61.5) rotate(0)" class="inner-bottom"/>
+            <!-- x = (svg.width - rect.width/2) -->
+            <!-- Needed to fill the empty space -->
+            <rect x="40" y="40" width="20" height="20" stroke-width="0" fill="#a03033" class="inner-middle"/>
+        </g>
