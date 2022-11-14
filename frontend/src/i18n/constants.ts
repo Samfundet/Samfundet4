@@ -4,16 +4,16 @@ export const KEY = {
    *
    * referenced to as "KEY.example"
    *
-   * Naming convention: <component/page>_<key>: '<component/page>.<key>'
+   * Naming convention: <component/page/common>_<key>: '<component/page/common>.<key>'
    * This is because the right side strings MUST be unique
    */
-  navbar_event: 'navbar.event',
-  navbar_information: 'navbar.information',
-  navbar_restaurant: 'navbar.restaurant',
-  navbar_volunteer: 'navbar.volunteer',
-  navbar_member: 'navbar.member',
-  navbar_internal: 'navbar.internal',
-  navbar_other_language: 'navbar.internal',
+  common_event: 'common.event',
+  common_information: 'common.information',
+  common_restaurant: 'common.restaurant',
+  common_volunteer: 'common.volunteer',
+  common_member: 'common.member',
+  common_internal: 'common.internal',
+  common_other_language: 'common.other_language',
 } as const;
 
 /**

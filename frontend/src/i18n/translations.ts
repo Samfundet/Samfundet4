@@ -1,21 +1,21 @@
 import { KEY, KeyValues } from '~/i18n/constants';
 
 export const nb: Record<KeyValues, string> = {
-  [KEY.navbar_event]: 'Arrangement',
-  [KEY.navbar_information]: 'Informasjon',
-  [KEY.navbar_internal]: 'Intern',
-  [KEY.navbar_member]: 'Medlem',
-  [KEY.navbar_restaurant]: 'Restaurant',
-  [KEY.navbar_volunteer]: 'Opptak',
-  [KEY.navbar_other_language]: 'English',
+  [KEY.common_event]: 'Arrangement',
+  [KEY.common_information]: 'Informasjon',
+  [KEY.common_internal]: 'Intern',
+  [KEY.common_member]: 'Medlem',
+  [KEY.common_restaurant]: 'Restaurant',
+  [KEY.common_volunteer]: 'Opptak',
+  [KEY.common_other_language]: 'English',
 };
 
 export const en: Record<KeyValues, string> = {
-  [KEY.navbar_event]: 'Event',
-  [KEY.navbar_information]: 'Information',
-  [KEY.navbar_internal]: 'Internal',
-  [KEY.navbar_member]: 'Member',
-  [KEY.navbar_restaurant]: 'Restaurant',
-  [KEY.navbar_volunteer]: 'Volunteer',
-  [KEY.navbar_other_language]: 'Norsk',
+  [KEY.common_event]: 'Event',
+  [KEY.common_information]: 'Information',
+  [KEY.common_internal]: 'Internal',
+  [KEY.common_member]: 'Member',
+  [KEY.common_restaurant]: 'Restaurant',
+  [KEY.common_volunteer]: 'Volunteer',
+  [KEY.common_other_language]: 'Norsk',
 };

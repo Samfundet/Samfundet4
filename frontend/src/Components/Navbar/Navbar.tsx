@@ -77,44 +77,44 @@ export function Navbar() {
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          {t(KEY.navbar_event)}
+          {t(KEY.common_event)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          {t(KEY.navbar_information)}
+          {t(KEY.common_information)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          {t(KEY.navbar_restaurant)}
+          {t(KEY.common_restaurant)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          {t(KEY.navbar_volunteer)}
+          {t(KEY.common_volunteer)}
         </Link>
         <br />
         <a
           onClick={() => i18n.changeLanguage(i18n.language === LANGUAGES.EN ? LANGUAGES.NB : LANGUAGES.EN)}
           className={styles.popup_change_language}
         >
-          {t(KEY.navbar_other_language)}
+          {t(KEY.common_other_language)}
         </a>
         <Button theme="samf" className={styles.popup_member_button}>
           <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-            {t(KEY.navbar_member)}
+            {t(KEY.common_member)}
           </Link>
         </Button>
         <Button theme="secondary" className={styles.popup_internal_button}>
           <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
-            {t(KEY.navbar_internal)}
+            {t(KEY.common_internal)}
           </Link>
         </Button>
         {loggedIn && profileButtonMobile}
@@ -129,16 +129,16 @@ export function Navbar() {
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          {t(KEY.navbar_event)}
+          {t(KEY.common_event)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          {t(KEY.navbar_information)}
+          {t(KEY.common_information)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          {t(KEY.navbar_restaurant)}
+          {t(KEY.common_restaurant)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          {t(KEY.navbar_volunteer)}
+          {t(KEY.common_volunteer)}
         </Link>
         <div className={styles.navbar_signup}>
           <ThemeSwitch />
@@ -146,12 +146,12 @@ export function Navbar() {
           {languageImage()}
           <Button theme="samf" className={styles.navbar_member_button}>
             <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-              {t(KEY.navbar_member)}
+              {t(KEY.common_member)}
             </Link>
           </Button>
           <Button theme="secondary" className={styles.navbar_internal_button}>
             <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
-              {t(KEY.navbar_internal)}
+              {t(KEY.common_internal)}
             </Link>
           </Button>
         </div>
