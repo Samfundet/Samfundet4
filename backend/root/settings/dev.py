@@ -16,21 +16,34 @@ DEBUG = True
 ENV = Environment.DEV
 
 ### CORS ###
-CORS_ORIGIN_WHITELIST = [
+CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+# https://testdriven.io/blog/django-spa-auth/#frontend-served-separately-cross-domain
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CORS_ALLOW_CREDENTIALS = True
 ### End: CORS ###
 
 # Security
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-CSRF_COOKIE_SECURE = False
+
+SESSION_COOKIE_SECURE = False
+
 SECURE_HSTS_SECONDS = 0
 SECURE_SSL_REDIRECT = False
 SECURE_HSTS_PRELOAD = False
-SESSION_COOKIE_SECURE = False
 SECURE_BROWSER_XSS_FILTER = False
 SECURE_CONTENT_TYPE_NOSNIFF = False
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = True
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
