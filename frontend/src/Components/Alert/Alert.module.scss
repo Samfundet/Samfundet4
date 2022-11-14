@@ -23,6 +23,28 @@
   box-shadow: none;
 }
 
+.center {
+  text-align: center;
+  flex-basis: 100%;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+  flex-basis: 100%;
+}
+
+.rightWrapper {
+  flex-direction: row-reverse;
+}
+
+.offset {
+  flex-basis: 2em;
+}
+
 .info {
   background-color: $blue-lighter;
   border: 1px solid $blue-light;
