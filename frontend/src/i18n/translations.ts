@@ -10,7 +10,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.navbar_other_language]: 'English',
 };
 
-export const en = {
+export const en: Record<KeyValues, string> = {
   [KEY.navbar_event]: 'Event',
   [KEY.navbar_information]: 'Information',
   [KEY.navbar_internal]: 'Internal',

@@ -10,10 +10,13 @@ export const resources = {
   [LANGUAGES.EN]: { [defaultNS]: en },
 };
 
+const devSetting = process.env.NODE_ENV === 'development' ? true : false;
+
 use(initReactI18next).init({
   lng: LANGUAGES.NB,
   fallbackLng: LANGUAGES.NB,
-  debug: true,
   resources: resources,
   defaultNS: defaultNS,
+  nsSeparator: false,
+  debug: devSetting,
 });
