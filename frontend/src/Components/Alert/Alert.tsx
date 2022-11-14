@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import { useState } from 'react';
+import { Button } from '../Button';
 import styles from './Alert.module.scss';
 
 type AlertProps = {
@@ -22,9 +23,9 @@ export function Alert({ message, type = 'info', title, className, closable = fal
             <p>{message}</p>
           </div>
           {closable && (
-            <p className={styles.closeButton} onClick={() => setClosed(true)}>
+            <Button className={styles.closeButton} onClick={() => setClosed(true)}>
               x
-            </p>
+            </Button>
           )}
         </div>
       )}

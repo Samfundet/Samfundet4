@@ -22,14 +22,10 @@ const TypesTemplate: ComponentStory<typeof Alert> = function (args) {
   );
 };
 
-const Template: ComponentStory<typeof Alert> = function (args) {
-  return <Alert {...args} />;
-};
-
 export const AllTypes = TypesTemplate.bind({});
 
 export const WithTitle = TypesTemplate.bind({});
 WithTitle.args = { title: 'Example Title' };
 
-export const Closable = Template.bind({});
+export const Closable = TypesTemplate.bind({});
 Closable.args = { closable: true };
