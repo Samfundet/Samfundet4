@@ -6,7 +6,7 @@ export default {
   title: 'Components/Alert',
   component: Alert,
   args: {
-    message: 'Sigve:	Konfirmasjon er bare en shitty versjon av bryllup',
+    message: 'Sigve: Konfirmasjon er bare en shitty versjon av bryllup',
   },
 } as ComponentMeta<typeof Alert>;
 
