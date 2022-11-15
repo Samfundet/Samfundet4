@@ -1,0 +1,50 @@
+/* stylelint-disable selector-max-type */
+@import 'constants';
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+/* stylelint-disable-next-line selector-max-universal */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+// Themes:
+// Use names from constant THEME.
+
+// THEME.DARK
+.theme-dark {
+  background-color: $theme-dark-bg;
+  color: $theme-dark-color;
+
+  input {
+    background-color: $theme-dark-input-bg;
+    color: inherit;
+    &:focus {
+      outline-color: $white;
+    }
+  }
+}
+
+// End: Themes --------------------------------------------------------------------------------------------------------

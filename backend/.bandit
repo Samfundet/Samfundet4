@@ -1,0 +1,7 @@
+[bandit]
+exclude = tests,.venv,venv,.pytest_cache
+severity-level = all
+confidence-level = all
+skips = B101
+
+# Disable individual lines with comment, example: "print(1) # nosec"

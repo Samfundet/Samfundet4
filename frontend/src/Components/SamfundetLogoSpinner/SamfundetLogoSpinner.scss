@@ -1,0 +1,53 @@
+@import 'src/constants';
+
+/* The animation code */
+@keyframes rainbow {
+  0% {
+    color: $red-samf;
+  }
+  50% {
+    color: #c8c81e;
+  }
+}
+
+@keyframes scale-up {
+  50% {
+    transform: scale(1.5);
+  }
+}
+
+@keyframes scale-down {
+  50% {
+    transform: scale(0.1);
+  }
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+/* The element to apply the animation to */
+.samfundet-logo-spinner {
+  color: $red-samf;
+  animation-name: rainbow;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+  .outer {
+    transform-origin: center;
+    animation: scale-up 3s ease-in-out infinite normal, rotate 3s ease-in-out infinite normal;
+  }
+
+  .middle {
+    transform-origin: center;
+    animation: rotate 3s ease-in-out infinite reverse;
+  }
+
+  .inner {
+    transform-origin: center;
+    animation: scale-down 3s ease-in-out infinite, rotate 3s ease-in-out infinite;
+  }
+}

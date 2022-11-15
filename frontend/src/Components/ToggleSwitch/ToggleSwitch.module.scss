@@ -1,0 +1,58 @@
+@import 'src/constants';
+
+// Needed to display component properly.
+// This is also set in global.scss.
+// Added here because global.scss is not included in storybook preview.
+/* stylelint-disable-next-line selector-max-universal */
+* {
+  box-sizing: border-box;
+}
+
+$switch-width: 50px;
+$switch-height: 25px;
+$switch-color: $grey-2;
+$switch-color-checked: $red-samf;
+$toggle-transition: 0.2s ease;
+$ball-size: 20px;
+$ball-color: $white;
+
+// No need to touch these:
+
+.toggle_switch {
+  opacity: 0;
+  position: absolute;
+}
+
+.label {
+  width: $switch-width;
+  height: $switch-height;
+  display: flex;
+  background-color: $switch-color;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  position: relative;
+  transition: background-color $toggle-transition;
+}
+
+// Styling on label when toggle_switch is checked.
+.label:has(.toggle_switch:checked) {
+  background-color: $switch-color-checked;
+}
+
+.ball {
+  width: $ball-size;
+  height: $ball-size;
+  background-color: $ball-color;
+  position: absolute;
+  top: calc(($switch-height - $ball-size) / 2); // Align center vertically.
+  left: 2px;
+  border-radius: 50%;
+  transition: transform $toggle-transition;
+}
+
+// Styling on ball when toggle_switch is checked.
+.toggle_switch:checked ~ .ball {
+  transform: translateX(25px); // Move all the way to the end.
+}

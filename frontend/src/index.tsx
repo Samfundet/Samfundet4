@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
-import './global.css';
-import { App } from './App';
+import { App } from '~/App';
+import { AuthContextProvider } from '~/AuthContext';
+import '~/global.scss';
+import { GlobalContextProvider } from '~/GlobalContextProvider';
+import { reportWebVitals } from '~/reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <GlobalContextProvider>
+    <AuthContextProvider>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </AuthContextProvider>
+  </GlobalContextProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

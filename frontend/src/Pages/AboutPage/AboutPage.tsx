@@ -1,6 +1,6 @@
 import styles from './AboutPage.module.scss';
-import { Button } from 'Components';
-import { ROUTES } from 'routes';
+import { Button } from '~/Components';
+import { ROUTES } from '~/routes';
 import {
   bodegaen,
   daglighallen,
