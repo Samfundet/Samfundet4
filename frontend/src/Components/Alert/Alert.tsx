@@ -1,16 +1,12 @@
 import classnames from 'classnames';
 import { useState } from 'react';
+import { AlertType } from '~/types';
 import { Button } from '../Button';
 import styles from './Alert.module.scss';
 
-type AlertProps = {
-  message: string;
-  type?: 'info' | 'success' | 'warning' | 'error' | 'samf';
-  title?: string;
+interface AlertProps extends AlertType {
   className?: 'string';
-  closable?: boolean;
-  align?: 'center' | 'left' | 'right';
-};
+}
 
 export function Alert({ message, type = 'info', title, className, closable = false, align = 'left' }: AlertProps) {
   const [closed, setClosed] = useState(false);
