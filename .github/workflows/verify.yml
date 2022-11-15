@@ -1,6 +1,13 @@
 name: Verify
 
-on: [push, workflow_dispatch]
+# https://github.com/reviewdog/action-eslint/issues/29#issuecomment-985939887
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 # Prevent multiple workflows with same branch/pull_request.
 concurrency:
@@ -10,6 +17,7 @@ concurrency:
 jobs:
   job_verify_backend:
     name: Verify backend
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -66,6 +74,7 @@ jobs:
 
   job_verify_docker:
     name: Verify docker
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -96,6 +105,7 @@ jobs:
   job_verify_cypress:
     # https://github.com/marketplace/actions/cypress-io
     name: Verify Cypress
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -111,6 +121,7 @@ jobs:
 
   job_verify_frontend_lint:
     name: Verify frontend
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     defaults:
       run:

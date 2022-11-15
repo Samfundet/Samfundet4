@@ -6,21 +6,32 @@ import { Button, ThemeSwitch } from '~/Components';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
 
-function changeLanguage() {
-  console.log('language changed :)');
-}
+import { KEY, LANGUAGES } from '~/i18n/constants';
+import { useTranslation } from 'react-i18next';
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(false);
   const [loggedIn] = useState(true);
-  const [language, setLanguage] = useState(0);
+  const { t, i18n } = useTranslation();
 
   // Return norwegian or english flag depending on language
   function languageImage() {
-    if (language) {
-      return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(0)} />;
+    if (i18n.language == LANGUAGES.NB) {
+      return (
+        <img
+          src={englishFlag}
+          className={styles.navbar_language_flag}
+          onClick={() => i18n.changeLanguage(LANGUAGES.EN)}
+        />
+      );
     }
-    return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(1)} />;
+    return (
+      <img
+        src={norwegianFlag}
+        className={styles.navbar_language_flag}
+        onClick={() => i18n.changeLanguage(LANGUAGES.NB)}
+      />
+    );
   }
 
   // Return profile button for navbar if logged in
@@ -66,41 +77,44 @@ export function Navbar() {
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Arrangement
+          {t(KEY.common_event)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Information
+          {t(KEY.common_information)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Restaurant
+          {t(KEY.common_restaurant)}
         </Link>
         <Link
           to={ROUTES.frontend.health}
           className={styles.popup_link_mobile}
           onClick={() => setMobileNavigation(false)}
         >
-          Opptak
+          {t(KEY.common_volunteer)}
         </Link>
         <br />
-        <a onClick={() => changeLanguage()} className={styles.popup_change_language}>
-          English
+        <a
+          onClick={() => i18n.changeLanguage(i18n.language === LANGUAGES.EN ? LANGUAGES.NB : LANGUAGES.EN)}
+          className={styles.popup_change_language}
+        >
+          {t(KEY.common_other_language)}
         </a>
-        <Button className={styles.popup_member_button}>
+        <Button theme="samf" className={styles.popup_member_button}>
           <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-            Medlem
+            {t(KEY.common_member)}
           </Link>
         </Button>
         <Button theme="secondary" className={styles.popup_internal_button}>
           <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
-            Intern
+            {t(KEY.common_internal)}
           </Link>
         </Button>
         {loggedIn && profileButtonMobile}
@@ -115,29 +129,29 @@ export function Navbar() {
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Arrangement
+          {t(KEY.common_event)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Information
+          {t(KEY.common_information)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Restaurant
+          {t(KEY.common_restaurant)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Opptak
+          {t(KEY.common_volunteer)}
         </Link>
         <div className={styles.navbar_signup}>
           <ThemeSwitch />
           {loggedIn && profileButton}
           {languageImage()}
-          <Button className={styles.navbar_member_button}>
+          <Button theme="samf" className={styles.navbar_member_button}>
             <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-              Medlem
+              {t(KEY.common_member)}
             </Link>
           </Button>
           <Button theme="secondary" className={styles.navbar_internal_button}>
             <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
-              Intern
+              {t(KEY.common_internal)}
             </Link>
           </Button>
         </div>
