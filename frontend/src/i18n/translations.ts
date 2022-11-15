@@ -8,6 +8,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_other_language]: 'English',
+  [KEY.common_buy]: 'Kjøp',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -18,4 +19,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_volunteer]: 'Volunteer',
   [KEY.common_other_language]: 'Norsk',
+  [KEY.common_buy]: 'Buy',
 };

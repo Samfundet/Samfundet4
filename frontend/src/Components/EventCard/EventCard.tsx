@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { TimeDisplay, Button, Link } from '~/Components';
+import { KEY } from '~/i18n/constants';
 import styles from './EventCard.module.scss';
 
 type EventCardProps = {
@@ -11,6 +13,8 @@ type EventCardProps = {
   };
 };
 export function EventCard({ event }: EventCardProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.eventCard}>
       <Link url={event.title}>
@@ -25,7 +29,7 @@ export function EventCard({ event }: EventCardProps) {
           {event.title}
         </Link>
         <Button theme="samf" className={styles.button}>
-          Buy
+          {t(KEY.common_buy)}
         </Button>
       </div>
     </div>
