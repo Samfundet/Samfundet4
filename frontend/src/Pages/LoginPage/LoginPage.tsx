@@ -26,7 +26,7 @@ export function LoginPage() {
           type="password"
           onChange={(e) => setPassword(e ? e.currentTarget.value : '')}
         />
-        <Button className={styles.login_button} onClick={handleLogin}>
+        <Button className={styles.login_button} onClick={handleLogin} theme="samf">
           Logg inn
         </Button>
         <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>

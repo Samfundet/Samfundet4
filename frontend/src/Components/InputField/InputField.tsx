@@ -1,7 +1,8 @@
+import classNames from 'classnames';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-type types = 'text' | 'number' | 'emai' | 'password';
+type types = 'text' | 'number' | 'email' | 'password';
 
 type InputFieldProps = {
   children?: Children;
@@ -9,17 +10,19 @@ type InputFieldProps = {
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   type?: types;
+  value?: string;
 };
 
-export function InputField({ children, className, onChange, placeholder, type = 'text' }: InputFieldProps) {
+export function InputField({ children, className, onChange, placeholder, value, type = 'text' }: InputFieldProps) {
   return (
     <label className={styles.label}>
       {children}
       <input
         onChange={onChange}
-        className={`${styles.InputField_field} ${className}`}
+        className={classNames(styles.input_field, className)}
         placeholder={placeholder}
         type={type}
+        value={value}
       />
     </label>
   );
