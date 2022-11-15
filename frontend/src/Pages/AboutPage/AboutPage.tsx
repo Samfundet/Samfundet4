@@ -14,7 +14,7 @@ import {
   splash,
   storsalen,
   strossa,
-} from '../../assets';
+} from '~/assets';
 
 export function AboutPage() {
   return (
