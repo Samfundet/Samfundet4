@@ -1,5 +1,5 @@
-import { Alerts } from './Components/Alerts';
-import { BannerLock } from './Components/BannerLock';
+import { Alerts } from './components/Alerts';
+import { BannerLock } from './components/BannerLock';
 
 export function HomePage() {
   return (
