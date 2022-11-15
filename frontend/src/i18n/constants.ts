@@ -1,19 +1,19 @@
+/**
+ * Mapping of every existing translation key.
+ *
+ * referenced to as "KEY.example"
+ *
+ * Naming convention: <component/page/common>_<key>: '<component/page/common>_<key>'
+ * This is because the right side strings MUST be unique
+ */
 export const KEY = {
-  /**
-   * Mapping of every existing translation key.
-   *
-   * referenced to as "KEY.example"
-   *
-   * Naming convention: <component/page/common>_<key>: '<component/page/common>.<key>'
-   * This is because the right side strings MUST be unique
-   */
-  common_event: 'common.event',
-  common_information: 'common.information',
-  common_restaurant: 'common.restaurant',
-  common_volunteer: 'common.volunteer',
-  common_member: 'common.member',
-  common_internal: 'common.internal',
-  common_other_language: 'common.other_language',
+  common_event: 'common_event',
+  common_information: 'common_information',
+  common_restaurant: 'common_restaurant',
+  common_volunteer: 'common_volunteer',
+  common_member: 'common_member',
+  common_internal: 'common_internal',
+  common_other_language: 'common_other_language',
 } as const;
 
 /**
