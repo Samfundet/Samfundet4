@@ -24,7 +24,7 @@ export function LoginPage() {
           className={styles.input_field}
           placeholder="Passord"
           type="password"
-          onChange={(e) => setPassword(e ? e.currentTarget.value : '')}
+          onChange={(e) => setPassword(e?.currentTarget.value || '')}
         />
         <Button className={styles.login_button} onClick={handleLogin} theme="samf">
           Logg inn
