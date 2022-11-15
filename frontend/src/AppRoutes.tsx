@@ -1,6 +1,5 @@
-import { HealthPage, HomePage, EventPage, EventsPage } from 'Pages';
+import { HealthPage, HomePage, ComponentPage, EventPage, EventsPage } from '~/Pages';
 import { Route, Routes } from 'react-router-dom';
-import { ComponentPage, HealthPage, HomePage } from '~/Pages';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {

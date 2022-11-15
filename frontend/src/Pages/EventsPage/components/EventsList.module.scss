@@ -1,9 +1,7 @@
-body {
-  font-family: 'futura-pt', 'Lato', sans-serif;
-}
+@import 'src/constants';
 
 .date_header {
-  background-color: #a03033;
+  background-color: $red-samf;
   width: 100%;
   text-align: center;
   color: white;
@@ -57,9 +55,6 @@ body {
   flex: 1;
   flex-direction: row;
   justify-content: flex-end;
-}
-
-.time_wrapper {
 }
 
 .event_row {

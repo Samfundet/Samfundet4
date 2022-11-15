@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './EventsList.module.scss';
-import { Event } from 'types';
-import { getTimeStr } from '../EventsPage';
+import { Event } from '~/types';
+import { getTimeStr } from '~/Pages/EventsPage/EventsPage';
 
 type EventsListProps = {
   event_list: Event[];
@@ -28,16 +28,15 @@ export function EventsList({ event_list, date_list }: EventsListProps) {
               if (compareDates(event.start_dt, date_str)) {
                 return (
                   <div className={styles.events_container} key={index}>
-                    {' '}
                     <div className={styles.event_row}>
                       <div className={styles.column_title}>
                         <Link to={'/events/' + event.id}>
-                          <p> {event.title_no}</p>{' '}
+                          <p> {event.title_no}</p>
                         </Link>
                       </div>
                       <div className={styles.column_area_time}>
                         <div className={styles.time_wrapper}>
-                          <p>{getTimeStr(event?.start_dt) + ' - ' + getTimeStr(event?.end_dt)}</p>
+                          <p>{`${getTimeStr(event?.start_dt)} - ${getTimeStr(event?.end_dt)}`}</p>
                         </div>
                         <p> {event?.location}</p>
                       </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './EventPage.module.scss';
-import { Event } from 'types';
-import { ROUTES } from 'routes';
+import { Event } from '~/types';
+import { ROUTES } from '~/routes';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {

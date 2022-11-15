@@ -1,5 +1,5 @@
-import { Event } from 'types';
-import { getTimeStr } from '../../EventsPage/EventsPage';
+import { Event } from '~/types';
+import { getTimeStr } from '~/Pages/EventsPage/EventsPage';
 import styles from './EventTable.module.scss';
 
 type EventTableProps = {
