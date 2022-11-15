@@ -9,7 +9,6 @@
   box-shadow: 2px 2px 20px 5px rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   border: 1px solid rgb(230, 230, 230);
-  filter: brightness(100%);
   overflow: hidden;
 
   @include for-tablet-down {
@@ -47,7 +46,6 @@
   cursor: pointer;
   transition: 0.5s;
   overflow: hidden;
-  filter: brightness(100%);
 
   &:hover {
     filter: brightness(105%);
