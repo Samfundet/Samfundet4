@@ -59,7 +59,6 @@ export function Navbar() {
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
-      <div className={styles.navbar_margin} />
       <nav id={styles.mobile_popup_container}>
         <Link
           to={ROUTES.frontend.health}
@@ -110,6 +109,7 @@ export function Navbar() {
 
   return (
     <>
+      <div className={styles.navbar_margin} />
       <nav id={styles.navbar_container}>
         <Link to="/">
           <img src={logoWhite} id={styles.navbar_logo} />
