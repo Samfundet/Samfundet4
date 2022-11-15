@@ -39,3 +39,12 @@ export type Color = typeof COLORS;
 export type ColorKey = keyof Color;
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
+
+/** Type for Alerts */
+export type AlertType = {
+  message: string;
+  type?: 'info' | 'success' | 'warning' | 'error' | 'samf';
+  title?: string;
+  closable?: boolean;
+  align?: 'center' | 'left' | 'right';
+};

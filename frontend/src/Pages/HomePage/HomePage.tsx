@@ -1,14 +1,11 @@
-import styles from './HomePage.module.scss';
+import { Alerts } from './Components/Alerts';
+import { BannerLock } from './Components/BannerLock';
 
 export function HomePage() {
   return (
-    <div className={styles.containter}>
-      <div>
-        <h1>BannerLock</h1>
-      </div>
-      <div>
-        <h3>Alert</h3>
-      </div>
+    <div>
+      <BannerLock />
+      <Alerts />
       <div>
         <div>
           <h2>Hva skjer</h2>
