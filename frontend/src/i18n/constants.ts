@@ -14,6 +14,7 @@ export const KEY = {
   common_member: 'common_member',
   common_internal: 'common_internal',
   common_other_language: 'common_other_language',
+  common_buy: 'common_buy',
 } as const;
 
 /**
