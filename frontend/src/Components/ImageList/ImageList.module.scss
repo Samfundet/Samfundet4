@@ -1,7 +1,7 @@
 @import 'src/constants';
 
 .container {
-  background-color: white;
+  background-color: $white;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -9,13 +9,14 @@
 }
 
 .imageBox {
-  margin: 4px;
+  margin: .5em;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  text-decoration: none;
   &:hover {
-    filter: brightness(1.25);
+    filter: brightness(1.2);
     transform: scale(1.05);
     transition: .5s;
   }
@@ -30,21 +31,21 @@
   margin-top: 0.5em;
   font-size: 1.2em;
   text-align: center;
-  color: black;
-  font-family: "futura-pt", "Lato", sans-serif;
+  color: $black;
+  text-decoration: none;
 }
+
 .imageMask {
   display: inline-block;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
   overflow: hidden;
   margin: 1em;
   margin-bottom: 0.5em;
   border-radius: 50em;
-  background-color: #fcfcfc;
+  background-color: $grey-5;
   background-size: cover;
-  box-shadow: 2px 2px 10px 4px rgba(0,0,0,0.18);
+  box-shadow: 2px 2px 10px 4px rgba(0, 0, 0, 0.18);
   transition: 2s;
   transform: none;
 }

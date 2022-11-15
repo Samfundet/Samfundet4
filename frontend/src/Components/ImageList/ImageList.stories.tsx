@@ -35,6 +35,7 @@ Basic.args = {
     {
       title: 'Profilgruppa',
       src: 'https://samfundet.no/assets/groups/profilgruppa-94148ec351fa28087a9ee826266c9c6ffd9cec2ffd04aa3c78b928f61bd459c8.jpg',
+      url: 'www.google.com',
     },
   ],
 };

@@ -14,11 +14,12 @@
 
 .groups {
   background-color: transparent;
-  border: 1px solid #ddd;
+  border: 1px solid $grey-3;
   box-shadow: none;
   border-radius: 0.5em;
   overflow: hidden;
   margin: .5em;
+  padding: 1em;
 }
 
 .groupsTitle {
@@ -27,5 +28,6 @@
   width: 100%;
   font-weight: bold;
   text-transform: uppercase;
+  margin-bottom: .5em;
 }
 
