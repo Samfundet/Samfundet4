@@ -20,6 +20,7 @@ bandit = "*"
 flake8 = "*"
 mypy = "*"
 flake8-annotations = "*"
+django-guardian = "*"
 
 [dev-packages]
 

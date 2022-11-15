@@ -1,12 +1,17 @@
+from typing import Type
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
-from django.contrib.auth import login, get_user_model
+from django.contrib.auth import login, get_user_model, logout
+from django.middleware.csrf import get_token
+from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group, Permission
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from .utils import (
     user_to_dataclass,
@@ -30,6 +35,7 @@ class VenueView(ModelViewSet):
     queryset = Venue.objects.all()
 
 
+@method_decorator(csrf_protect, 'dispatch')
 class LoginView(APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = [AllowAny]
@@ -39,7 +45,26 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request=request, user=user)
-        return Response(data=None, status=status.HTTP_202_ACCEPTED)
+        new_csrf_token = get_token(request=request)
+
+        return Response(
+            status=status.HTTP_202_ACCEPTED,
+            data=new_csrf_token,
+            headers={'X-CSRFToken': new_csrf_token},
+        )
+
+
+@method_decorator(csrf_protect, 'dispatch')
+class LogoutView(APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
 
 
 class UserView(APIView):
@@ -75,3 +100,12 @@ class AllGroupsView(APIView):
         all_groups = groups_to_dataclass(groups=list(Group.objects.all()))
         all_groups_objs = [group.to_dict() for group in all_groups]  # type: ignore[attr-defined]
         return Response(data=all_groups_objs)
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class CsrfView(APIView):
+    permission_classes: list[Type[BasePermission]] = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        csrf_token = get_token(request=request)
+        return Response(data=csrf_token, headers={'X-CSRFToken': csrf_token})
