@@ -21,6 +21,7 @@ export type Event = {
   publish_dt: Date;
   host: string;
   location: string;
+  price_group: string;
 };
 /**Duplicate of colors and hex from _constants.scss */
 export const COLORS = {

@@ -13,7 +13,7 @@ export function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [dates, setDates] = useState<string[]>([]);
   useEffect(() => {
-    fetch(ROUTES.backend.events)
+    fetch(ROUTES.backend.samfundet__events_list)
       .then((response) => response.json())
       .then((data) => {
         const events = data;
