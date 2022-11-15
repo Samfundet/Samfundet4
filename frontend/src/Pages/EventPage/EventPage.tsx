@@ -9,7 +9,7 @@ export function EventPage() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event>();
   useEffect(() => {
-    const url = ROUTES.backend.events + id;
+    const url = ROUTES.backend.samfundet__events_detail + id;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {

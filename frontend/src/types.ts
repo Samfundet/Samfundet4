@@ -21,6 +21,7 @@ export type Event = {
   publish_dt: Date;
   host: string;
   location: string;
+  price_group: string;
 };
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;

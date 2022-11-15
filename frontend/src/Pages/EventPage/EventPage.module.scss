@@ -1,29 +1,11 @@
-
-body {
-  font-family: "futura-pt", "Lato", sans-serif;
-}
-
-p {
-  margin: 1em 0;
-  font-weight: 300;
-  font-size: 1.2em;
-  line-height: 1.3;
-  letter-spacing: 0.01rem;
-  max-width: 40em;
-  display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-}
-
 .container_list {
   width: 100%;
-  height: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   color: #222222;
+  margin-bottom: 0;
 }
 
 .container {
@@ -33,13 +15,15 @@ p {
   overflow: auto;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   color: #222222;
+  margin-top: 5em;
 }
 
 .description {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -63,18 +47,5 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  max-width:90%
+  max-width: 90%;
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-
-
-
-
-
-
