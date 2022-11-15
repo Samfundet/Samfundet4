@@ -8,6 +8,13 @@ from django.core.management.base import BaseCommand
 
 # pylint: disable=positional-arguments
 
+# pylint: disable=pointless-string-statement
+"""
+This command cannot run within docker container because the backend has no access to the frontend.
+Use on host machine.
+Therefore, the database must be up to date to get the latest permissions.
+"""
+
 
 def parse_permission_name(permission: Permission) -> str:
     """
@@ -35,16 +42,31 @@ def parse_line(permission: Permission):
     """
     name = parse_permission_name(permission=permission)
     value = parse_permission_value(permission=permission)
-    line = f"{name} = '{value}'\n"
+    line = f"{name} = '{value}'"
     return line
 
 
+def ts_comment(string: str, /) -> str:
+    return '// ' + string
+
+
+def ts_docstring(string: str, /) -> str:
+    return f'/**{string}*/'
+
+
+### common ###
+NEWLINE = '\n'
+SEPARATOR = '#' * 60 + NEWLINE
+
+### frontend ###
+OUTPUT_FRONTEND_FILE = '../frontend/src/permissions.ts'
+
+### backend ###
 DOCSTRING = '"""'
 YAPF_DISABLE = '# yapf: disable'
 QUOTE = "'"
-NEWLINE = '\n'
-SEPARATOR = '#' * 60 + NEWLINE
-FILE = 'root/utils/permission.py'
+
+OUTPUT_BACKEND_FILE = 'root/utils/permission.py'
 
 ENTRY_MSG = f"""
 {DOCSTRING}
@@ -62,39 +84,51 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options) -> None:  # type: ignore
 
-        with open(file=settings.BASE_DIR / FILE, mode='w', encoding='UTF-8') as file:
-            # Write header.
-            file.write(YAPF_DISABLE)
-            file.write(ENTRY_MSG)
-            file.write(NEWLINE)
-            file.write(SEPARATOR)
+        # Fetch all permissions.
+        permissions = Permission.objects.all()
 
-            # Fetch all permissions.
-            permissions = Permission.objects.all()
+        with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:
+            with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:
 
-            current_app = None
-            current_model = None
+                # Write header.
+                backend_file.write(YAPF_DISABLE)
+                backend_file.write(ENTRY_MSG)
+                backend_file.write(NEWLINE)
+                backend_file.write(SEPARATOR)
+                backend_file.write(NEWLINE)
 
-            for permission in permissions:
+                frontend_file.write(ts_docstring(ENTRY_MSG))
+                frontend_file.write(NEWLINE * 2)
+                frontend_file.write(ts_comment(SEPARATOR))
+                frontend_file.write(NEWLINE)
 
-                # Write between different apps.
-                if current_app != permission.content_type.app_label:
-                    prev_app = current_app
-                    current_app = permission.content_type.app_label
+                current_app = None
+                current_model = None
 
-                    app_footer = f'### End: {prev_app} ###'
-                    app_header = f'### {current_app} ###'
+                for permission in permissions:
 
-                    if prev_app:
-                        file.write(app_footer)
-                    file.write(NEWLINE * 2)
-                    file.write(app_header)
+                    # Write between different apps.
+                    if current_app != permission.content_type.app_label:
+                        prev_app = current_app
+                        current_app = permission.content_type.app_label
 
-                # Write between different models within app.
-                if current_model != permission.content_type.model:
-                    current_model = permission.content_type.model
-                    file.write(NEWLINE)
+                        app_footer = f'### End: {prev_app} ###'
+                        app_header = f'### {current_app} ###'
 
-                # Write permission.
-                line = parse_line(permission=permission)
-                file.write(line)
+                        if prev_app:
+                            backend_file.write(app_footer + NEWLINE * 2)
+                            frontend_file.write(ts_comment(app_footer) + NEWLINE * 2)
+
+                        backend_file.write(app_header)
+                        frontend_file.write(ts_comment(app_header))
+
+                    # Write between different models within app.
+                    if current_model != permission.content_type.model:
+                        current_model = permission.content_type.model
+                        backend_file.write(NEWLINE)
+                        frontend_file.write(NEWLINE)
+
+                    # Write permission.
+                    line = parse_line(permission=permission)
+                    backend_file.write(line + NEWLINE)
+                    frontend_file.write(f'export const {line};{NEWLINE}')
