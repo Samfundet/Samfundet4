@@ -1,0 +1,1 @@
+export { SamfundetLogo } from './SamfundetLogo';

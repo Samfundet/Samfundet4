@@ -11,7 +11,7 @@ function changeLanguage() {
 }
 
 export function Navbar() {
-  const [mobileNavigation, setMobileNavigation] = useState(true);
+  const [mobileNavigation, setMobileNavigation] = useState(false);
   const [loggedIn] = useState(true);
   const [language, setLanguage] = useState(0);
 

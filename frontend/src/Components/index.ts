@@ -1,5 +1,6 @@
 export { Link } from './Link';
 export { Input } from './Input';
+export { Alert } from './Alert';
 export { Button } from './Button';
 export { EventCard } from './EventCard';
 export { ProgressBar } from './ProgressBar';
@@ -7,3 +8,5 @@ export { RadioButton } from './RadioButton';
 export { TimeDisplay } from './TimeDisplay';
 export { ThemeSwitch } from './ThemeSwitch';
 export { ToggleSwitch } from './ToggleSwitch';
+export { SamfundetLogo } from './SamfundetLogo';
+export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
