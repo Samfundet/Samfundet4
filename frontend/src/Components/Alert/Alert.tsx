@@ -14,13 +14,13 @@ type AlertProps = {
 
 export function Alert({ message, type = 'info', title, className, closable = false, align = 'left' }: AlertProps) {
   const [closed, setClosed] = useState(false);
-  const classNames = classnames(styles[type], className, styles.alert, align === 'right' && styles.rightWrapper);
+  const wrapperClassNames = classnames(styles[type], className, styles.alert, align === 'right' && styles.rightWrapper);
+  const contentClassName = classnames(styles[align], align === 'center' && closable ? styles.offset : undefined);
   return (
     <>
       {!closed && (
-        <div className={classNames}>
-          {closable && align === 'center' && <div className={styles.offset} />}
-          <div className={styles[align]}>
+        <div className={wrapperClassNames}>
+          <div className={contentClassName}>
             {title && <p className={styles.title}>{title}</p>}
             <p>{message}</p>
           </div>

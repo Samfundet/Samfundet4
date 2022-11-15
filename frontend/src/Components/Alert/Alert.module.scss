@@ -6,7 +6,7 @@
   padding: 0 1em 0 1em;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .title {
@@ -17,7 +17,8 @@
   border: none;
   background-color: transparent;
   padding: 0;
-  border-radius: 50%;
+  margin-top: 1em;
+  border-radius: 25%;
   height: 2em;
   width: 2em;
   box-shadow: none;
@@ -42,7 +43,7 @@
 }
 
 .offset {
-  flex-basis: 2em;
+  margin-left: 2em;
 }
 
 .info {
