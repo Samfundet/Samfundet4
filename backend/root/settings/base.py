@@ -44,14 +44,21 @@ MEDIA_URL = '/media/'
 
 # Production settings:
 X_FRAME_OPTIONS = 'DENY'
-CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 SECURE_HSTS_SECONDS = 60  # TODO: Find a decent value
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_PRELOAD = True
-SESSION_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 DATE_INPUT_FORMATS = [
     '%d-%m-%Y',
@@ -75,13 +82,12 @@ INSTALLED_APPS = [
     # Imported apps.
     'django_extensions',
     'corsheaders',
-    'rest_framework',
     'root',  # Register to enable management.commands.
     'samfundet',
 ]
 
 MIDDLEWARE = [
-    'root.middlewares.RequestLogMiddleware',
+    'root.utils.middlewares.RequestLogMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -152,13 +158,39 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+### DRF ###
+INSTALLED_APPS += [
+    'rest_framework',
+]
+# https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_PERMISSION_CLASSES':
+        [
+            # 'rest_framework.permissions.IsAuthenticated',
+            # 'rest_framework.permissions.DjangoObjectPermissions',
+            'root.utils.permissions.CustomDjangoObjectPermissions',
+        ]
+}
+### End: DRF ###
+
+### django-guardian ###
+INSTALLED_APPS += [
+    'guardian',
+]
+AUTHENTICATION_BACKENDS += [
+    'guardian.backends.ObjectPermissionBackend',
+]
+### End: django-guardian ###
+
 ################## LOGGING ##################
 
 # pylint: disable=wrong-import-position,wrong-import-order
 import logging.config  # noqa: E402
 
-from root.json_formatter import JsonFormatter  # noqa: E402
-from root.request_context_filter import RequestContextFilter  # noqa: E402
+from root.utils.json_formatter import JsonFormatter  # noqa: E402
+from root.utils.request_context_filter import RequestContextFilter  # noqa: E402
 
 # pylint: enable=wrong-import-position,wrong-import-order
 

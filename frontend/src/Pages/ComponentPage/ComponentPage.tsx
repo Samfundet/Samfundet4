@@ -11,46 +11,49 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
-      <p>
-        <div>Buttons:</div>
-        <Button>Test</Button>
+      <h1>Components:</h1>
+      <div>
+        <h2>Buttons:</h2>
+        <Button theme="samf">Test</Button>
         <br />
-        <Button disabled>Disabled</Button>
+        <Button theme="samf" disabled>
+          Disabled
+        </Button>
         <br />
         <Button theme="secondary">Secondary</Button>
-      </p>
-      <p>
-        <div>Checkboxes:</div>
+      </div>
+      <div>
+        <h2>Checkboxes:</h2>
         <Checkbox label="Unchecked" />
         <br />
-        <Checkbox label="Checked" checked />
+        <Checkbox label="Checked" />
         <br />
         <Checkbox label="Disabled" disabled />
-      </p>
-      <p>
-        <div>Radiobuttons:</div>
+      </div>
+      <div>
+        <h2>Radiobuttons:</h2>
         <RadioButton>Unchecked</RadioButton>
         <br />
-        <RadioButton checked>Checked</RadioButton>
+        <RadioButton defaultChecked>Checked</RadioButton>
         <br />
         <RadioButton disabled>Disabled</RadioButton>
-      </p>
-      <p>
-        <div>Inputs:</div>
+      </div>
+      <div>
+        <h2>Inputs:</h2>
         <Input>Label</Input>
-      </p>
-      <p>
-        <div>Links:</div>
+      </div>
+      <div>
+        <h2>Links:</h2>
         <Link>Link</Link>
-      </p>
-      <p>
-        <div>List:</div>
+      </div>
+      <div>
+        <h2>List:</h2>
         <List items={['1', '2', '3']} type={'ordered'} />
-      </p>
-      <p>
-        <div>ProgressBar:</div>
+      </div>
+      <div>
+        <h2>ProgressBar:</h2>
         <ProgressBar value={75} max={100} />
-      </p>
+      </div>
     </div>
   );
 }
