@@ -9,17 +9,19 @@ type AlertProps = {
   title?: string;
   className?: 'string';
   closable?: boolean;
+  align?: 'center' | 'left' | 'right';
 };
 
-export function Alert({ message, type = 'info', title, className, closable = false }: AlertProps) {
+export function Alert({ message, type = 'info', title, className, closable = false, align = 'left' }: AlertProps) {
   const [closed, setClosed] = useState(false);
-  const classNames = classnames(styles[type], className, styles.alert);
+  const wrapperClassNames = classnames(styles[type], className, styles.alert, align === 'right' && styles.rightWrapper);
+  const contentClassName = classnames(styles[align], align === 'center' && closable ? styles.offset : undefined);
   return (
     <>
       {!closed && (
-        <div className={classNames}>
-          <div>
-            <p className={styles.title}>{title}</p>
+        <div className={wrapperClassNames}>
+          <div className={contentClassName}>
+            {title && <p className={styles.title}>{title}</p>}
             <p>{message}</p>
           </div>
           {closable && (

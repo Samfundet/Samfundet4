@@ -22,6 +22,17 @@ const TypesTemplate: ComponentStory<typeof Alert> = function (args) {
   );
 };
 
+const AlignTemplate: ComponentStory<typeof Alert> = function (args) {
+  return (
+    <>
+      <Alert {...args} />
+      <Alert {...args} closable={true} />
+      <Alert {...args} title={'Example Title'} />
+      <Alert {...args} closable={true} title={'Example Title'} />
+    </>
+  );
+};
+
 export const AllTypes = TypesTemplate.bind({});
 
 export const WithTitle = TypesTemplate.bind({});
@@ -29,3 +40,12 @@ WithTitle.args = { title: 'Example Title' };
 
 export const Closable = TypesTemplate.bind({});
 Closable.args = { closable: true };
+
+export const AlignCenter = AlignTemplate.bind({});
+AlignCenter.args = { align: 'center' };
+
+export const AlignLeft = AlignTemplate.bind({});
+AlignLeft.args = { align: 'left' };
+
+export const AlignRight = AlignTemplate.bind({});
+AlignRight.args = { align: 'right' };
