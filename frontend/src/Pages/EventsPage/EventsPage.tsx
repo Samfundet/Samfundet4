@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import styles from './EventsPage.module.scss';
-import { ROUTES } from 'routes';
-import { Event } from 'types';
+import { ROUTES } from '~/routes';
+import { Event } from '~/types';
 import { EventsList } from './components/EventsList';
 
 /** get date on format hh.mm */
-export const getTimeStr = (date: Date) => {
+export function getTimeStr(date: Date) {
   return (date.getHours() + '.' + date.getMinutes()).toString();
-};
+}
 
 export function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
