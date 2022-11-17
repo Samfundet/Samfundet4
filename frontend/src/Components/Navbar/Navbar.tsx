@@ -113,7 +113,7 @@ export function Navbar() {
           </Link>
         </Button>
         <Button theme="secondary" className={styles.popup_internal_button}>
-          <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
+          <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
             {t(KEY.common_internal)}
           </Link>
         </Button>
@@ -150,7 +150,7 @@ export function Navbar() {
             </Link>
           </Button>
           <Button theme="secondary" className={styles.navbar_internal_button}>
-            <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
+            <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
               {t(KEY.common_internal)}
             </Link>
           </Button>

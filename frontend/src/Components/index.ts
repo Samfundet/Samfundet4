@@ -1,8 +1,8 @@
 export { Link } from './Link';
-export { Input } from './Input';
 export { Alert } from './Alert';
 export { Button } from './Button';
 export { EventCard } from './EventCard';
+export { InputField } from './InputField';
 export { ProgressBar } from './ProgressBar';
 export { RadioButton } from './RadioButton';
 export { TimeDisplay } from './TimeDisplay';
