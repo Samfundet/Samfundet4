@@ -10,11 +10,12 @@ export type Children = ReactNode;
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
-/**Type for label alignment */
-export type Alignment = 'top' | 'right' | 'bottom' | 'left' | 'none';
+/**Type for label alignment. Label tag is an inline element and is positioned such
+ * To the right or the left of the associated tag*/
+export type Alignment = 'right' | 'left';
 
 /**Type for input placeholders  */
-export type Placeholder = ReactNode;
+export type Placeholder = string;
 
 /***Type for input default value  */
-export type DefaultValue = ReactNode;
+export type DefaultValue = string;
