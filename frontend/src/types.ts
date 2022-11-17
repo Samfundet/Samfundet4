@@ -39,3 +39,13 @@ export type Color = typeof COLORS;
 export type ColorKey = keyof Color;
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
+
+/**Type for label alignment. Label tag is an inline element and is positioned such
+ * To the right or the left of the associated tag*/
+export type Alignment = 'right' | 'left';
+
+/**Type for input placeholders  */
+export type Placeholder = string;
+
+/***Type for input default value  */
+export type DefaultValue = string;
