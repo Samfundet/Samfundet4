@@ -9,6 +9,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_other_language]: 'English',
   [KEY.common_buy]: 'Kjøp',
+  [KEY.common_login]: 'Logg inn',
+  [KEY.common_password]: 'passord',
+  [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
+  [KEY.login_internal_login]: 'Logg inn som intern',
+  [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -20,4 +25,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_volunteer]: 'Volunteer',
   [KEY.common_other_language]: 'Norsk',
   [KEY.common_buy]: 'Buy',
+  [KEY.common_login]: 'Log in',
+  [KEY.common_password]: 'password',
+  [KEY.login_forgotten_password]: 'Forgot password?',
+  [KEY.login_internal_login]: 'Log in as internal',
+  [KEY.login_email_placeholder]: 'Email or membership ID',
 };
