@@ -20,8 +20,9 @@ bandit = "*"
 flake8 = "*"
 mypy = "*"
 flake8-annotations = "*"
+django-guardian = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10.5" # from .python-version
+python_version = "3.11.0" # from .python-version

@@ -1,5 +1,5 @@
 # Use same version as defined in .python-version.
-FROM python:3.10.5-slim-buster
+FROM python:3.11.0-slim-buster
 
 # Update Ubuntu Software repository.
 RUN apt update -y \

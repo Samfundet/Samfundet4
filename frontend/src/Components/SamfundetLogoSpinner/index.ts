@@ -1,0 +1,1 @@
+export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';

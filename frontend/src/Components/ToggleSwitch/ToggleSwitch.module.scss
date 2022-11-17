@@ -46,7 +46,7 @@ $ball-color: $white;
   height: $ball-size;
   background-color: $ball-color;
   position: absolute;
-  top: ($switch-height - $ball-size) / 2; // Align center vertically.
+  top: calc(($switch-height - $ball-size) / 2); // Align center vertically.
   left: 2px;
   border-radius: 50%;
   transition: transform $toggle-transition;
