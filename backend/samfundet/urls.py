@@ -4,11 +4,14 @@ from rest_framework import routers
 from django.urls import path, include
 
 from . import views
+from .dapps.gangs import views as gang_views
 # End: imports -----------------------------------------------------------------
 
 router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
 router.register('venues', views.VenueView, 'venues')
+
+router.register('gangs', gang_views.GangView, 'gangs')
 
 app_name = 'samfundet'
 

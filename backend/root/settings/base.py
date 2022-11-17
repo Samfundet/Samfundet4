@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'root',  # Register to enable management.commands.
     'samfundet',
+    'samfundet.dapps.gangs',
 ]
 
 MIDDLEWARE = [
