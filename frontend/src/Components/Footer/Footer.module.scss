@@ -1,35 +1,145 @@
 @import 'src/constants';
+@import 'src/mixins';
+
 .footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
   background-color: $grey-5;
-  color: black;
+  // color: black;
   text-align: left;
 }
 
-//TODO: Create own classes of ul and li depending on which part of the footer it is used in
 ul {
   list-style-type: none; /* Remove bullets */
-  border: red;
-  border-style: dotted;
 }
 
-li {
-  font-size: 1em;
-  margin: 0.2em;
-  border: blue;
-  border-style: dotted;
-}
+.sponsor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2em;
+  border: solid green;
+  .sponsorBox{
+    width: 10em;
+    margin: 0.5em;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
-.liHorizontal {
-  display: inline;
+  .centerUL{
+    padding: 0em;
+    margin: 0;
+    text-align: center;
+    list-style: inside;
+    list-style-type: none;
+  }
+
+
+  .horisontalLi {
+    margin: 0.5em;
+    display:inline-block;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .kommuneIcon {
+    background-size: contain;
+    width: 2.5em;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    align-self: center;
+  }
+
+  .kulturromIcon {
+    background-size: contain;
+    width: 8em;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+  }
+
+
+  .reitanIcon {
+    background-size: contain;
+    width: 10em;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+  }
+
+  .ukaIcon {
+    background-size: contain;
+    width: 7em;
+    background-repeat: no-repeat;
+    vertical-align: middle;  
+  }
+  .isfitIcon {
+    background-size: contain;
+    width: 7em;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+  }
+
+  a {
+    font-size: 0.8em;
+    @include for-mobile-only {
+      font-size: 0.6em;
+    }
+    text-decoration: none;
+  }
+
+
+  }
+
+.social{
+  border: dotted blue;
+  background-color: $grey-5;
+  text-align: center;
+  align-items:center;
+  justify-content:center;
+  display:inline-block;
+
+  li {
+    font-size: 0.9em;
+    @include for-mobile-only {
+      font-size: 0.65em;
+    }
+    margin: 0.2em;
+
+    display: flex;
+    align-items:center;
+    justify-content:center;
+
+    .leftbox {
+      text-align: right;
+      width: 50%;
+      vertical-align: middle;
+      padding: 0.3em;
+    }
+    .rightbox {
+      text-align: left;
+      width: 50%;
+      vertical-align: middle;
+      padding: 0.3em;
+    }
+  
+  .icon{
+    height: 100em;
+    width: 1000em;
+    font-size: 10em;
+  }
+
+
+  }
 }
 
 .contact {
   text-align: center;
   font-size: 1em;
+  align-items:center;
+  @include for-mobile-only {
+    font-size: 0.8em;
+  }
   a {
     text-decoration: none;
   }
@@ -38,6 +148,9 @@ li {
 .cookies {
   text-align: center;
   font-size: 0.7em;
+  @include for-mobile-only {
+    font-size: 0.6em;
+  }
   a {
     text-decoration: none;
   }
