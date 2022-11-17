@@ -24,6 +24,12 @@ CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
 ### End: CORS ###
 
+# Bypass authentication for testing purposes. Only applies when ENV==DEVELOPMENT.
+BYPASS_AUTHENTICATION = os.environ.get('BYPASS_AUTHENTICATION') == 'True'
+if BYPASS_AUTHENTICATION:
+    # We know REST_FRAMEWORK and other variables are available from star import.
+    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = ['rest_framework.permissions.AllowAny']  # noqa: F405
+
 # Security
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
