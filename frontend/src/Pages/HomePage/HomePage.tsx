@@ -2,6 +2,8 @@ import { getAllPermissions, getCsrfToken, getUser, login, logout } from '~/api';
 import logo from '~/assets/logo_black.png';
 import splash from '~/assets/splash.jpeg';
 import { Button } from '~/Components';
+import { AUTH_ADD_GROUP } from '~/permissions';
+import { hasPerm } from '~/utils';
 import styles from './HomePage.module.scss';
 
 export function HomePage() {
@@ -20,6 +22,21 @@ export function HomePage() {
         <Button onClick={() => getUser()}>user</Button>
         <Button onClick={() => getAllPermissions()}>perms</Button>
         <Button onClick={() => logout()}>logout</Button>
+        <Button
+          onClick={() => {
+            getUser().then((user) =>
+              console.log(
+                hasPerm({
+                  user: user,
+                  permission: AUTH_ADD_GROUP,
+                  obj: { id: '1', app_label: 'auth', model: 'group' },
+                }),
+              ),
+            );
+          }}
+        >
+          test
+        </Button>
       </div>
     </div>
   );
