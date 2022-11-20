@@ -50,3 +50,8 @@ class UserPreference(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT)
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    nickname = models.CharField(max_length=30)
