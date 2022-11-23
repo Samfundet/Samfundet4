@@ -7,7 +7,16 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Event, Venue, EventGroup, Gang, GangType, InformationPage
+from .models import (
+    Gang,
+    Event,
+    Venue,
+    Profile,
+    GangType,
+    EventGroup,
+    UserPreference,
+    InformationPage,
+)
 
 # Guardian models.
 admin.site.register(guardian_models.GroupObjectPermission, guardian_admin.GuardedModelAdmin)
@@ -20,6 +29,16 @@ admin.site.register(LogEntry, guardian_admin.GuardedModelAdmin)
 admin.site.register(Session, guardian_admin.GuardedModelAdmin)
 
 # Our models.
+
+
+@admin.register(UserPreference)
+class UserPreferenceManager(guardian_admin.GuardedModelAdmin):
+    ...
+
+
+@admin.register(Profile)
+class ProfileManager(guardian_admin.GuardedModelAdmin):
+    ...
 
 
 @admin.register(Event)
