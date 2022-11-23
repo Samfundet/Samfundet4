@@ -10,6 +10,7 @@ router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
 router.register('venues', views.VenueView, 'venues')
 router.register('gangs', views.GangView, 'gangs')
+router.register('information', views.InformationPageView, 'information')
 
 app_name = 'samfundet'
 

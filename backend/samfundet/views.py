@@ -21,8 +21,8 @@ from .utils import (
     groups_to_dataclass,
     permissions_to_dataclass,
 )
-from .models import Event, Venue, Gang, GangType
-from .serializers import EventSerializer, VenueSerializer, LoginSerializer, GangSerializer, GangTypeSerializer
+from .models import Event, Venue, Gang, GangType, InformationPage
+from .serializers import EventSerializer, VenueSerializer, LoginSerializer, GangSerializer, GangTypeSerializer, InformationPageSerializer
 
 User = get_user_model()
 
@@ -122,3 +122,12 @@ class GangView(ModelViewSet):
 class GangTypeView(ModelViewSet):
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
+
+
+### Information Page ###
+
+
+class InformationPageView(ModelViewSet):
+    serializer_class = InformationPageSerializer
+    queryset = InformationPage.objects.all()
+    lookup_field = 'name_no'
