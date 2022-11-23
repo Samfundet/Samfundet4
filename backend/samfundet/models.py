@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext as _
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -39,6 +40,21 @@ class Venue(models.Model):
     handicapped_approved = models.BooleanField()
     responsible_crew = models.CharField(max_length=140)
 
+class UserPreference(models.Model):
+    """Group all preferences and config per user"""
+
+    class Theme(models.TextChoices):
+        LIGHT = 'LIGHT'
+        DARK = 'FREE'
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT)
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    nickname = models.CharField(max_length=30)
+    
 
 ### GANGS ###
 class GangType(models.Model):
@@ -67,3 +83,4 @@ class Gang(models.Model):
 
     def __str__(self):
         return f'{self.group_type} {self.name}'
+

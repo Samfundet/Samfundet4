@@ -1,10 +1,11 @@
+import { ReactNode } from 'react';
 import styles from './ToggleSwitch.module.scss';
 
 type ToggleSwitchProps = {
   className?: string;
   checked?: boolean;
-  offIcon?: string; // TODO: change later
-  onIcon?: string; // TODO: change later
+  offIcon?: ReactNode;
+  onIcon?: ReactNode;
   disabled?: boolean;
   onClick?: () => void;
 };
@@ -20,8 +21,8 @@ export function ToggleSwitch({ className, checked, onClick, disabled, offIcon, o
           disabled={disabled}
           onClick={onClick}
         />
-        <span>{offIcon}</span>
-        <span>{onIcon}</span>
+        <span className={styles.off_icon}>{offIcon}</span>
+        <span className={styles.on_icon}>{onIcon}</span>
         <span className={styles.ball} />
       </label>
     </div>
