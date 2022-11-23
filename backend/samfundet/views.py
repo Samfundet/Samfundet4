@@ -13,6 +13,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
+from root.constants import XCSRFTOKEN
+
 from .utils import (
     user_to_dataclass,
     users_to_dataclass,
@@ -50,7 +52,7 @@ class LoginView(APIView):
         return Response(
             status=status.HTTP_202_ACCEPTED,
             data=new_csrf_token,
-            headers={'X-CSRFToken': new_csrf_token},
+            headers={XCSRFTOKEN: new_csrf_token},
         )
 
 
@@ -71,7 +73,7 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        user = user_to_dataclass(user=request.user)
+        user = user_to_dataclass(user=request.user, flat=False)
         return Response(data=user.to_dict())  # type: ignore[attr-defined]
 
 
@@ -79,7 +81,7 @@ class AllUsersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        users = users_to_dataclass(users=User.objects.all())
+        users = users_to_dataclass(users=User.objects.all(), flat=False)
         users_objs = [user.to_dict() for user in users]  # type: ignore[attr-defined]
         return Response(data=users_objs)
 
@@ -97,7 +99,7 @@ class AllGroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        all_groups = groups_to_dataclass(groups=list(Group.objects.all()))
+        all_groups = groups_to_dataclass(groups=list(Group.objects.all()), flat=False)
         all_groups_objs = [group.to_dict() for group in all_groups]  # type: ignore[attr-defined]
         return Response(data=all_groups_objs)
 
@@ -108,7 +110,7 @@ class CsrfView(APIView):
 
     def get(self, request: Request) -> Response:
         csrf_token = get_token(request=request)
-        return Response(data=csrf_token, headers={'X-CSRFToken': csrf_token})
+        return Response(data=csrf_token, headers={XCSRFTOKEN: csrf_token})
 
 
 ### GANGS ###
