@@ -1,1 +1,0 @@
-CWD = 'samfundet.dapps'
