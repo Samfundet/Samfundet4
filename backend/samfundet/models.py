@@ -57,7 +57,7 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=30)
 
 
-### GANGS ###
+# GANGS ###
 class GangType(models.Model):
     title = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype')
 
@@ -76,3 +76,19 @@ class Gang(models.Model):
 
     def __str__(self) -> str:
         return f'{self.group_type} {self.name}'
+
+
+class InformationPage(models.Model):
+    name_no = models.CharField(max_length=64, unique=True, blank=False, null=False, verbose_name='Navn Norsk')
+    title_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Tittel Norsk')
+    text_no = models.TextField(blank=False, null=False, verbose_name='Tekst Norsk')
+
+    name_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Engelsk')
+    title_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Tittel Engelsk')
+    text_en = models.TextField(blank=False, null=False, verbose_name='Tekst Engelsk')
+
+    # TODO Implement HTML and Markdown
+    # TODO Find usage for owner field
+
+    def __str__(self) -> str:
+        return f'{self.name_no}'
