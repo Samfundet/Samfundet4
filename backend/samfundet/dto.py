@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -20,9 +19,12 @@ class UserDto:
     is_superuser: bool
     date_joined: datetime
     last_login: datetime
+    # nested
     groups: list[GroupDto]
-    user_permissions: Optional[list[PermissionDto]]
-    user_object_perms: Optional[list[UserObjectPermissionDto]]
+    user_preference: UserPreferenceDto
+    profile: ProfileDto
+    user_permissions: list[PermissionDto] | None
+    user_object_perms: list[UserObjectPermissionDto] | None
     content_type: ContentTypeDto
 
 
@@ -32,7 +34,7 @@ class GroupDto:
     id: int
     name: str
     permissions: list[PermissionDto]
-    group_object_perms: Optional[list[GroupObjectPermissionDto]]
+    group_object_perms: list[GroupObjectPermissionDto] | None
     content_type: ContentTypeDto
 
 
@@ -109,4 +111,20 @@ class EventDto:
 @dataclass
 class EventGroupDto:
     id: int
+    content_type: ContentTypeDto
+
+
+@dataclass_json
+@dataclass
+class UserPreferenceDto:
+    id: int
+    theme: str
+    content_type: ContentTypeDto
+
+
+@dataclass_json
+@dataclass
+class ProfileDto:
+    id: int
+    nickname: str
     content_type: ContentTypeDto

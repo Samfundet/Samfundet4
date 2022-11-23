@@ -21,6 +21,11 @@ from .dto import (
 def user_to_dataclass(*, user: User, flat: bool) -> UserDto:
     user_object_perms_qs = UserObjectPermission.objects.filter(user=user) if not flat else None
     user_object_perms_dtos = user_object_perms_to_dataclass(user_object_perms=user_object_perms_qs) if not flat else None
+
+    from .models import UserPreference, Profile  # Prevent circular imports.
+    user_preference, _created = UserPreference.objects.get_or_create(user=user)
+    profile, _created = Profile.objects.get_or_create(user=user)
+
     content_type = get_content_type(user)
     return UserDto(
         id=user.id,
@@ -33,6 +38,8 @@ def user_to_dataclass(*, user: User, flat: bool) -> UserDto:
         is_superuser=user.is_superuser,
         date_joined=user.date_joined,
         last_login=user.last_login,
+        user_preference=user_preference.to_dataclass(),
+        profile=profile.to_dataclass(),
         content_type=content_type_to_dataclass(content_type=content_type),
         groups=groups_to_dataclass(groups=user.groups.all(), flat=False),
         user_permissions=permissions_to_dataclass(permissions=user.user_permissions.all()),
