@@ -1,13 +1,12 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink as Link } from 'react-router-dom';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
 import { Button, ThemeSwitch } from '~/Components';
+import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
-
-import { KEY, LANGUAGES } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(false);
