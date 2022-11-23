@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Event, Venue, EventGroup
+from .models import Event, Venue, EventGroup, Gang, GangType
 
 # Guardian models.
 admin.site.register(guardian_models.GroupObjectPermission, guardian_admin.GuardedModelAdmin)
@@ -34,4 +34,15 @@ class EventGroupManager(guardian_admin.GuardedModelAdmin):
 
 @admin.register(Venue)
 class VenueManager(guardian_admin.GuardedModelAdmin):
+    ...
+
+
+### GANGS ###
+@admin.register(Gang)
+class GangManager(guardian_admin.GuardedModelAdmin):
+    ...
+
+
+@admin.register(GangType)
+class GangTypeManager(guardian_admin.GuardedModelAdmin):
     ...
