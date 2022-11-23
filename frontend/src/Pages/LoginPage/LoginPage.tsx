@@ -1,10 +1,10 @@
-import { Button, InputField } from '~/Components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { Button, InputField } from '~/Components';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LoginPage.module.scss';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 
 export function LoginPage() {
   const { t } = useTranslation();
