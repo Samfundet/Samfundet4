@@ -1,8 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
+import { useGoatCounter } from '~/hooks';
 import { ComponentPage, HealthPage, HomePage, LoginPage } from '~/Pages';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
+  // Must be called within <BrowserRouter> because it uses hook useLocation().
+  useGoatCounter();
+
   return (
     <Routes>
       <Route path={ROUTES.frontend.home} element={<HomePage />} />
