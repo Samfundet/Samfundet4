@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
-from .models import Event, Venue
+from .models import Event, Venue, Gang, GangType
 
 User = get_user_model()
 
@@ -85,4 +85,19 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
+        fields = '__all__'
+
+
+### GANGS ###
+class GangSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Gang
+        fields = '__all__'
+
+
+class GangTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GangType
         fields = '__all__'

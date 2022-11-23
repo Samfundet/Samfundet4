@@ -21,7 +21,6 @@ flake8 = "*"
 mypy = "*"
 flake8-annotations = "*"
 django-guardian = "*"
-tzdata = "*"
 
 [dev-packages]
 

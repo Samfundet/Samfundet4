@@ -19,8 +19,8 @@ from .utils import (
     groups_to_dataclass,
     permissions_to_dataclass,
 )
-from .models import Event, Venue
-from .serializers import EventSerializer, VenueSerializer, LoginSerializer
+from .models import Event, Venue, Gang, GangType
+from .serializers import EventSerializer, VenueSerializer, LoginSerializer, GangSerializer, GangTypeSerializer
 
 User = get_user_model()
 
@@ -109,3 +109,14 @@ class CsrfView(APIView):
     def get(self, request: Request) -> Response:
         csrf_token = get_token(request=request)
         return Response(data=csrf_token, headers={'X-CSRFToken': csrf_token})
+
+
+### GANGS ###
+class GangView(ModelViewSet):
+    serializer_class = GangSerializer
+    queryset = Gang.objects.all()
+
+
+class GangTypeView(ModelViewSet):
+    serializer_class = GangTypeSerializer
+    queryset = GangType.objects.all()
