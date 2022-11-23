@@ -15,6 +15,7 @@ class SamfundetConfig(AppConfig):
     name = 'samfundet'
 
     def ready(self) -> None:
+        from . import signals  # noqa: F401
         from django.core import management
 
         if os.environ['ENV'] == Environment.DEV:
