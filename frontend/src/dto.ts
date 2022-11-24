@@ -1,3 +1,5 @@
+import { ThemeValue } from '~/constants';
+
 export type UserDto = {
   id: number;
   username: string;
@@ -9,6 +11,8 @@ export type UserDto = {
   is_superuser: boolean;
   date_joined: Date;
   last_login: Date;
+  user_preference: UserPreferenceDto;
+  profile: ProfileDto;
   groups: GroupDto[];
   user_permissions?: PermissionDto[];
   user_object_perms?: UserObjectPermissionDto[];
@@ -82,5 +86,17 @@ export type EventDto = {
 
 export type EventGroupDto = {
   id: number;
+  content_type: ContentTypeDto;
+};
+
+export type ProfileDto = {
+  id: number;
+  nickname: string;
+  content_type: ContentTypeDto;
+};
+
+export type UserPreferenceDto = {
+  id: number;
+  theme: ThemeValue;
   content_type: ContentTypeDto;
 };

@@ -2,8 +2,6 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 
-# Create your models here.
-
 
 class EventGroup(models.Model):
     ...
@@ -45,10 +43,11 @@ class UserPreference(models.Model):
     """Group all preferences and config per user"""
 
     class Theme(models.TextChoices):
-        LIGHT = 'LIGHT'
-        DARK = 'FREE'
+        """Same as in frontend"""
+        LIGHT = 'theme-light'
+        DARK = 'theme-dark'
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT)
 
 

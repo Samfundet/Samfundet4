@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getUser } from '~/api';
 import { THEME, ThemeValue } from '~/constants';
+import { UserDto } from '~/dto';
 import { Children, SetState } from '~/types';
 
 /**
@@ -9,6 +11,8 @@ type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => void;
+  user: UserDto | undefined;
+  setUser: SetState<UserDto | undefined>;
 };
 
 /**
@@ -39,9 +43,15 @@ type GlobalContextProviderProps = {
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
   const [theme, setTheme] = useState<ThemeValue>(THEME.LIGHT);
+  const [user, setUser] = useState<UserDto>();
+
+  // Always attempt to load user on first render.
+  useEffect(() => {
+    getUser().then((user) => setUser(user));
+  }, []);
 
   /** Simplified theme switching. */
-  function switchTheme() {
+  function switchTheme(): void {
     if (theme === THEME.LIGHT) {
       setTheme(THEME.DARK);
     } else {
@@ -63,11 +73,20 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     }
   }, [theme]);
 
+  // Update theme when user changes.
+  useEffect(() => {
+    if (user?.user_preference.theme) {
+      setTheme(user?.user_preference.theme);
+    }
+  }, [user]);
+
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
     theme: theme,
     setTheme: setTheme,
     switchTheme: switchTheme,
+    user: user,
+    setUser: setUser,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;

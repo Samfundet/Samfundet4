@@ -6,11 +6,20 @@ from guardian.shortcuts import get_content_type
 from django.contrib.auth.models import Group, User, Permission
 from django.contrib.contenttypes.models import ContentType
 
+from .models import (
+    Venue,
+    Profile,
+    UserPreference,
+)
+
 from .dto import (
     UserDto,
+    VenueDto,
     GroupDto,
+    ProfileDto,
     PermissionDto,
     ContentTypeDto,
+    UserPreferenceDto,
     UserObjectPermissionDto,
     GroupObjectPermissionDto,
 )
@@ -21,6 +30,10 @@ from .dto import (
 def user_to_dataclass(*, user: User, flat: bool) -> UserDto:
     user_object_perms_qs = UserObjectPermission.objects.filter(user=user) if not flat else None
     user_object_perms_dtos = user_object_perms_to_dataclass(user_object_perms=user_object_perms_qs) if not flat else None
+
+    user_preference, _created = UserPreference.objects.get_or_create(user=user)
+    profile, _created = Profile.objects.get_or_create(user=user)
+
     content_type = get_content_type(user)
     return UserDto(
         id=user.id,
@@ -33,6 +46,8 @@ def user_to_dataclass(*, user: User, flat: bool) -> UserDto:
         is_superuser=user.is_superuser,
         date_joined=user.date_joined,
         last_login=user.last_login,
+        user_preference=user_preference_to_dataclass(user_preference=user_preference),
+        profile=profile_to_dataclass(profile=profile),
         content_type=content_type_to_dataclass(content_type=content_type),
         groups=groups_to_dataclass(groups=user.groups.all(), flat=False),
         user_permissions=permissions_to_dataclass(permissions=user.user_permissions.all()),
@@ -135,3 +150,41 @@ def permissions_to_dataclass(*, permissions: list[Permission]) -> list[Permissio
 
 
 ###
+
+
+def venue_to_dataclass(*, venue: Venue) -> VenueDto:
+    content_type = get_content_type(venue)
+    return VenueDto(
+        id=venue.id,
+        name=venue.name,
+        description=venue.description,
+        floor=venue.floor,
+        last_renovated=venue.last_renovated,
+        handicapped_approved=venue.handicapped_approved,
+        responsible_crew=venue.responsible_crew,
+        content_type=content_type_to_dataclass(content_type=content_type),
+    )
+
+
+###
+
+
+def user_preference_to_dataclass(*, user_preference: UserPreference) -> UserPreferenceDto:
+    content_type = get_content_type(user_preference)
+    return UserPreferenceDto(
+        id=user_preference.id,
+        theme=user_preference.theme,
+        content_type=content_type_to_dataclass(content_type=content_type),
+    )
+
+
+###
+
+
+def profile_to_dataclass(*, profile: Profile) -> ProfileDto:
+    content_type = get_content_type(profile)
+    return ProfileDto(
+        id=profile.id,
+        nickname=profile.nickname,
+        content_type=content_type_to_dataclass(content_type=content_type),
+    )
