@@ -47,12 +47,12 @@ class UserPreference(models.Model):
         LIGHT = 'theme-light'
         DARK = 'theme-dark'
 
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT)
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=30)
 
 
