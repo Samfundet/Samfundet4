@@ -1,11 +1,6 @@
-from guardian.shortcuts import get_content_type
-
 from django.db import models
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
-
-from .dto import ProfileDto, UserPreferenceDto, VenueDto
-from .utils import content_type_to_dataclass
 
 
 class EventGroup(models.Model):
@@ -43,19 +38,6 @@ class Venue(models.Model):
     handicapped_approved = models.BooleanField()
     responsible_crew = models.CharField(max_length=140)
 
-    def to_dataclass(self) -> VenueDto:
-        content_type = get_content_type(self)
-        return VenueDto(
-            id=self.id,
-            name=self.name,
-            description=self.description,
-            floor=self.floor,
-            last_renovated=self.last_renovated,
-            handicapped_approved=self.handicapped_approved,
-            responsible_crew=self.responsible_crew,
-            content_type=content_type_to_dataclass(content_type=content_type),
-        )
-
 
 class UserPreference(models.Model):
     """Group all preferences and config per user"""
@@ -68,26 +50,10 @@ class UserPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT)
 
-    def to_dataclass(self) -> UserPreferenceDto:
-        content_type = get_content_type(self)
-        return UserPreferenceDto(
-            id=self.id,
-            theme=self.theme,
-            content_type=content_type_to_dataclass(content_type=content_type),
-        )
-
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     nickname = models.CharField(max_length=30)
-
-    def to_dataclass(self) -> ProfileDto:
-        content_type = get_content_type(self)
-        return ProfileDto(
-            id=self.id,
-            nickname=self.nickname,
-            content_type=content_type_to_dataclass(content_type=content_type),
-        )
 
 
 # GANGS ###

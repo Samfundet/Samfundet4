@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 
 from .models import UserPreference, Profile
 
+# pylint: disable=unused-argument, positional-arguments
+
 
 @receiver(post_save, sender=User)
 def create_user_preference(sender: User, instance: User, created: bool, **kwargs: Any) -> None:

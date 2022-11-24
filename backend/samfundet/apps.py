@@ -15,7 +15,7 @@ class SamfundetConfig(AppConfig):
     name = 'samfundet'
 
     def ready(self) -> None:
-        from . import signals  # noqa: F401
+        from . import signals  # noqa: F401,  # pylint: disable=unused-import, import-outside-toplevel
         from django.core import management
 
         if os.environ['ENV'] == Environment.DEV:
