@@ -61,6 +61,7 @@ def parse_name(name: str) -> str:
     return scoped_snake_name
 
 
+### common ###
 NEWLINE = '\n'
 SEPARATOR = '#' * 60 + NEWLINE
 
@@ -70,7 +71,8 @@ OUTPUT_FRONTEND_FILE = '../frontend/src/routes/backend.ts'
 ### backend ###
 DOCSTRING = '"""'
 YAPF_DISABLE = '# yapf: disable'
-QUOTE = "'"
+PYLINT_DISABLE_INVALID_NAME = '# pylint: disable=invalid-name'
+OUTPUT_BACKEND_FILE = 'root/utils/routes.py'
 
 ENTRY_MSG = f"""
 {DOCSTRING}
@@ -134,32 +136,44 @@ class Command(BaseCommand):
         print('\n' * 40)
 
         with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:
+            with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:
 
-            frontend_file.write(ts_docstring(ENTRY_MSG))
-            frontend_file.write(NEWLINE)
-            frontend_file.write(ts_comment(SEPARATOR))
-            frontend_file.write(NEWLINE)
+                ### entry message ###
+                # backend
+                backend_file.write(YAPF_DISABLE)
+                backend_file.write(PYLINT_DISABLE_INVALID_NAME)
+                backend_file.write(ENTRY_MSG)
+                backend_file.write(NEWLINE)
+                backend_file.write(SEPARATOR)
+                backend_file.write(NEWLINE)
 
-            frontend_file.write('export const ROUTES_BACKEND = {')
+                # frontend
+                frontend_file.write(ts_docstring(ENTRY_MSG))
+                frontend_file.write(NEWLINE)
+                frontend_file.write(ts_comment(SEPARATOR))
+                frontend_file.write(NEWLINE)
 
-            # Parse all urls to frontend routes.
-            for url in urls:
+                frontend_file.write('export const ROUTES_BACKEND = {')
 
-                if '<format>' in url.url:
-                    # Generic and malformed urls we don't need to keep.
-                    continue
+                # Parse all urls to frontend routes.
+                for url in urls:
 
-                # Parse url to frontend route.
-                url.url = parse_url(url.url)
-                url.name = parse_name(url.name or url.url)  # 'feide:new_tjeneste' -> 'feide__new_tjeneste'
+                    if '<format>' in url.url:
+                        # Generic and malformed urls we don't need to keep.
+                        continue
 
-                # Write to file.
-                frontend_file.write(NEWLINE + f"  {url.name}: '{url.url}',")
+                    # Parse url to frontend route.
+                    parsed_url = parse_url(url.url)
+                    parsed_name = parse_name(url.name or parsed_url)  # 'feide:new_tjeneste' -> 'feide__new_tjeneste'
 
-                # Print in javascript mode for easy copy.
-                red_name = colorize(url.name or 'unknown', Colorize.RED)
-                green_url = colorize(f"'{url.url}'", Colorize.GREEN)
-                print(f"{red_name}: {green_url},")
+                    # Write to file.
+                    frontend_file.write(NEWLINE + f"  {parsed_name}: '{parsed_url}',")
+                    backend_file.write(NEWLINE + f"{parsed_name} = '{parsed_url}'")
 
-            frontend_file.write(NEWLINE)
-            frontend_file.write('}')
+                    # Print in javascript mode for easy copy.
+                    red_name = colorize(parsed_name or 'unknown', Colorize.RED)
+                    green_url = colorize(f"'{parsed_url}'", Colorize.GREEN)
+                    print(f"{red_name}: {green_url},")
+
+                frontend_file.write(NEWLINE)
+                frontend_file.write('} as const;')
