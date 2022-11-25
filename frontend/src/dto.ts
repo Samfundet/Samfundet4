@@ -96,7 +96,7 @@ export type ProfileDto = {
 };
 
 export type UserPreferenceDto = {
-  id: number;
-  theme: ThemeValue;
-  content_type: ContentTypeDto;
+  id?: number;
+  theme?: ThemeValue;
+  content_type?: ContentTypeDto;
 };

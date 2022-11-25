@@ -3,7 +3,14 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
-from .models import Event, Venue, Gang, GangType, InformationPage
+from .models import (
+    Gang,
+    Event,
+    Venue,
+    GangType,
+    UserPreference,
+    InformationPage,
+)
 
 User = get_user_model()
 
@@ -107,4 +114,11 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
+        fields = '__all__'
+
+
+class UserPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserPreference
         fields = '__all__'
