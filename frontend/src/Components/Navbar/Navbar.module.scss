@@ -3,6 +3,7 @@
 /* TODO: fix later */
 
 @import 'src/mixins';
+
 $navbar-bg: #000000;
 $navbar-height: 60px;
 
@@ -46,8 +47,8 @@ $navbar-height: 60px;
 }
 
 // Push page below navbar.
-.navbar_margin {
-  margin-top: $navbar-height;
+.navbar_padding {
+  padding-top: $navbar-height;
 }
 
 .navbar_signup {
