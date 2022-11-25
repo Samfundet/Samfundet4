@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { PermissionDto, UserDto } from '~/dto';
+import { PermissionDto, UserDto, UserPreferenceDto } from '~/dto';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
 const TEMP_DOMAIN = 'http://localhost:8000';
@@ -11,11 +12,11 @@ export async function getCsrfToken(): Promise<string> {
 }
 
 export async function login(username: string, password: string): Promise<number> {
-  // TODO: might not need to fetch token everytime.
-  axios.defaults.headers.common['X-CSRFToken'] = await getCsrfToken();
   const url = TEMP_DOMAIN + ROUTES.backend.samfundet__login;
   const data = { username, password };
   const response = await axios.post(url, data, { withCredentials: true });
+
+  // Django rotates csrftoken after login, set new token received.
   const new_token = response.data;
   axios.defaults.headers.common['X-CSRFToken'] = new_token;
 
@@ -39,6 +40,18 @@ export async function getAllPermissions(): Promise<PermissionDto[]> {
 export async function getUser(): Promise<UserDto> {
   const url = TEMP_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putUserPreference(data: UserPreferenceDto): Promise<unknown> {
+  const url =
+    TEMP_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__user_preference_detail,
+      urlParams: { pk: data.id },
+    });
+  const response = await axios.put<UserPreferenceDto>(url, data, { withCredentials: true });
 
   return response.data;
 }

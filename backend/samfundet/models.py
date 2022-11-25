@@ -47,29 +47,29 @@ class UserPreference(models.Model):
         LIGHT = 'theme-light'
         DARK = 'theme-dark'
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=False)
+    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=False)
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=False)
+    nickname = models.CharField(max_length=30, blank=True, null=True)
 
 
 # GANGS ###
 class GangType(models.Model):
-    title = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype')
+    title = models.CharField(max_length=64, blank=True, null=False, verbose_name='Gruppetype')
 
     def __str__(self) -> str:
         return f'{self.title}'
 
 
 class Gang(models.Model):
-    name = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn')
-    abbreviation = models.CharField(max_length=64, blank=False, null=False, verbose_name='Forkortelse')
+    name = models.CharField(max_length=64, blank=True, null=False, verbose_name='Navn', unique=True)
+    abbreviation = models.CharField(max_length=64, blank=True, null=False, verbose_name='Forkortelse', unique=True)
     webpage = models.URLField(verbose_name='Nettside')
 
-    group_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', null=True, on_delete=models.SET_NULL)
+    group_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
 
     # TODO ADD Information Page
 
@@ -78,13 +78,13 @@ class Gang(models.Model):
 
 
 class InformationPage(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=False, null=False, verbose_name='Navn Norsk')
-    title_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Tittel Norsk')
-    text_no = models.TextField(blank=False, null=False, verbose_name='Tekst Norsk')
+    name_no = models.CharField(max_length=64, unique=True, blank=True, null=False, verbose_name='Navn Norsk')
+    title_no = models.CharField(max_length=64, blank=True, null=False, verbose_name='Tittel Norsk')
+    text_no = models.TextField(blank=True, null=False, verbose_name='Tekst Norsk')
 
-    name_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Engelsk')
-    title_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Tittel Engelsk')
-    text_en = models.TextField(blank=False, null=False, verbose_name='Tekst Engelsk')
+    name_en = models.CharField(max_length=64, blank=True, null=False, verbose_name='Navn Engelsk')
+    title_en = models.CharField(max_length=64, blank=True, null=False, verbose_name='Tittel Engelsk')
+    text_en = models.TextField(blank=True, null=False, verbose_name='Tekst Engelsk')
 
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
