@@ -15,11 +15,11 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         if request.user.is_superuser:
-            print(18, super().get_queryset(request))
+            # print(18, super().get_queryset(request))
             return super().get_queryset(request)
 
         data = self.get_model_objects(request=request)
-        print(20, self.opts.model_name, data)
+        # print(22, self.opts.model_name, data)
         return data
 
     def get_model_objects(
@@ -36,7 +36,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         model_name: str = klass._meta.model_name
         perms: list[str] = [f'{opts.app_label}.{action}_{model_name}' for action in actions]
 
-        print(39, self.opts.model_name, get_objects_for_user(user=request.user, perms=perms, any_perm=True))
+        # print(39, self.opts.model_name, get_objects_for_user(user=request.user, perms=perms, any_perm=True))
         return get_objects_for_user(
             user=request.user,
             perms=perms,
@@ -49,7 +49,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         We extend this method to set true if user has permission to any of the models.
         """
         if super().has_module_permission(request=request):
-            print(52, self.opts.model_name, True)
+            # print(52, self.opts.model_name, True)
             return True
 
         has_at_least_one_object_permission: bool = self.get_model_objects(request=request).exists()
@@ -66,14 +66,10 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         opts = self.opts
         perm: str = f'{opts.app_label}.{action}_{opts.model_name}'
 
-        if obj:
-            has_perm: bool = request.user.has_perm(perm=perm, obj=obj)
-            print(71, self.opts.model_name, has_perm)
-            return has_perm
-
-        has_action_object_permission: bool = self.get_model_objects(request=request, actions=[action]).exists()
-        print(75, self.opts.model_name, has_action_object_permission)
-        return has_action_object_permission
+        has_module_or_obj_perm: bool = request.user.has_perm(perm=perm, obj=obj)
+        has_action_object_perm: bool = self.get_model_objects(request=request, actions=[action]).exists()
+        # print(71, self.opts.model_name, has_module_or_obj_perm, has_action_object_perm)
+        return has_module_or_obj_perm or has_action_object_perm
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='add')
