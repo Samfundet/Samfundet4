@@ -54,6 +54,22 @@ class Venue(models.Model):
     opening = models.TimeField(default=time(hour=8), blank=True, null=True)
     closing = models.TimeField(default=time(hour=20), blank=True, null=True)
 
+    opening_monday = models.TimeField(default=time(hour=8), blank=True, null=True)
+    opening_tuesday = models.TimeField(default=time(hour=8), blank=True, null=True)
+    opening_wednesday = models.TimeField(default=time(hour=8), blank=True, null=True)
+    opening_thursday = models.TimeField(default=time(hour=8), blank=True, null=True)
+    opening_friday = models.TimeField(default=time(hour=8), blank=True, null=True)
+    opening_saturday = models.TimeField(default=time(hour=8), blank=True, null=True)
+    opening_sunday = models.TimeField(default=time(hour=8), blank=True, null=True)
+
+    closing_monday = models.TimeField(default=time(hour=20), blank=True, null=True)
+    closing_tuesday = models.TimeField(default=time(hour=20), blank=True, null=True)
+    closing_wednesday = models.TimeField(default=time(hour=20), blank=True, null=True)
+    closing_thursday = models.TimeField(default=time(hour=20), blank=True, null=True)
+    closing_friday = models.TimeField(default=time(hour=20), blank=True, null=True)
+    closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
+    closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
+
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
@@ -145,6 +161,26 @@ class InformationPage(models.Model):
     class Meta:
         verbose_name = 'InformationPage'
         verbose_name_plural = 'InformationPages'
+
+    def __str__(self) -> str:
+        return f'{self.name_no}'
+
+
+class Table(models.Model):
+    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn Norsk')
+    description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Norsk')
+
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
+    description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Engelsk')
+
+    seating = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    # TODO Implement HTML and Markdown
+    # TODO Find usage for owner field
+
+    class Meta:
+        verbose_name = 'Table'
+        verbose_name_plural = 'Tables'
 
     def __str__(self) -> str:
         return f'{self.name_no}'
