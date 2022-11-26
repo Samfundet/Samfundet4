@@ -1,4 +1,5 @@
 from typing import Any
+from datetime import time
 
 from guardian.shortcuts import assign_perm
 
@@ -19,16 +20,16 @@ class EventGroup(models.Model):
 class Event(models.Model):
     title_no = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
-    start_dt = models.DateTimeField()
-    end_dt = models.DateTimeField()
-    description_long_no = models.TextField()
-    description_long_en = models.TextField()
-    description_short_no = models.TextField()
-    description_short_en = models.TextField()
-    publish_dt = models.DateTimeField()
-    host = models.CharField(max_length=140)
-    location = models.CharField(max_length=140)
-    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT)
+    start_dt = models.DateTimeField(blank=True, null=False)
+    end_dt = models.DateTimeField(blank=True, null=False)
+    description_long_no = models.TextField(blank=True, null=False)
+    description_long_en = models.TextField(blank=True, null=False)
+    description_short_no = models.TextField(blank=True, null=False)
+    description_short_en = models.TextField(blank=True, null=False)
+    publish_dt = models.DateTimeField(blank=True, null=False)
+    host = models.CharField(max_length=140, blank=True, null=False)
+    location = models.CharField(max_length=140, blank=True, null=False)
+    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=False)
 
     class PriceGroup(models.TextChoices):
         INCLUDED = 'INCLUDED', _('Included with entrance')
@@ -36,7 +37,7 @@ class Event(models.Model):
         BILLIG = 'BILLIG', _('Paid')
         REGISTRATION = 'REGISTRATION', _('Free with registration')
 
-    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE)
+    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=False)
 
     class Meta:
         verbose_name = 'Event'
@@ -44,16 +45,21 @@ class Event(models.Model):
 
 
 class Venue(models.Model):
-    name = models.CharField(max_length=140)
-    description = models.TextField()
+    name = models.CharField(max_length=140, blank=True, null=False, unique=True)
+    description = models.TextField(blank=True, null=False)
     floor = models.IntegerField()
-    last_renovated = models.IntegerField()
-    handicapped_approved = models.BooleanField()
-    responsible_crew = models.CharField(max_length=140)
+    last_renovated = models.DateTimeField(blank=True, null=False)
+    handicapped_approved = models.BooleanField(blank=True, null=False)
+    responsible_crew = models.CharField(max_length=140, blank=True, null=False)
+    opening = models.TimeField(default=time(hour=8), blank=True, null=False)
+    closing = models.TimeField(default=time(hour=20), blank=True, null=False)
 
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
 
 
 class UserPreference(models.Model):

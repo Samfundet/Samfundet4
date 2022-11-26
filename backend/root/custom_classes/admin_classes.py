@@ -8,21 +8,35 @@ from django.db.models import QuerySet
 
 
 class CustomGuardedModelAdmin(GuardedModelAdmin):
+    """
+    https://www.youtube.com/watch?v=2jhQyWeEVHc&list=LL&index=2
+    """
     user_can_access_owned_objects_only = True  # setting for GuardedModelAdmin
 
-    def custom_get_model_objects(
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        if request.user.is_superuser:
+            print(18, super().get_queryset(request))
+            return super().get_queryset(request)
+
+        data = self.get_model_objects(request=request)
+        print(20, self.opts.model_name, data)
+        return data
+
+    def get_model_objects(
         self,
         *,
         request: HttpRequest,
         actions: list[str] | None = None,
         klass: Any = None,
     ) -> QuerySet:
-        """Return all objects of a model if user has any of given permission on it."""
+        """Return accessible objects of a model if user has any of given permission on it."""
         opts = self.opts
         actions = actions if actions else ['add', 'view', 'change', 'delete']
         klass = klass if klass else opts.model
         model_name: str = klass._meta.model_name
         perms: list[str] = [f'{opts.app_label}.{action}_{model_name}' for action in actions]
+
+        print(39, self.opts.model_name, get_objects_for_user(user=request.user, perms=perms, any_perm=True))
         return get_objects_for_user(
             user=request.user,
             perms=perms,
@@ -34,59 +48,41 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         Determines if user can see index page in admin panel.
         We extend this method to set true if user has permission to any of the models.
         """
-        has_at_least_one_model_permission: bool = self.custom_get_model_objects(request=request).exists()
-        return has_at_least_one_model_permission
+        if super().has_module_permission(request=request):
+            print(52, self.opts.model_name, True)
+            return True
+
+        has_at_least_one_object_permission: bool = self.get_model_objects(request=request).exists()
+        return has_at_least_one_object_permission
+
+    def has_permission(
+        self,
+        *,
+        request: HttpRequest,
+        obj: Any,
+        action: str,
+    ) -> bool:
+        """Return all objects of a model if user has any of given permission on it."""
+        opts = self.opts
+        perm: str = f'{opts.app_label}.{action}_{opts.model_name}'
+
+        if obj:
+            has_perm: bool = request.user.has_perm(perm=perm, obj=obj)
+            print(71, self.opts.model_name, has_perm)
+            return has_perm
+
+        has_action_object_permission: bool = self.get_model_objects(request=request, actions=[action]).exists()
+        print(75, self.opts.model_name, has_action_object_permission)
+        return has_action_object_permission
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        # pylint: disable=unused-argument
-        has_permission: bool = self.custom_get_model_objects(request=request, actions=['add']).exists()
-        return has_permission
+        return self.has_permission(request=request, obj=obj, action='add')
 
     def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        # pylint: disable=unused-argument
-        has_permission: bool = self.custom_get_model_objects(request=request, actions=['view']).exists()
-        return has_permission
+        return self.has_permission(request=request, obj=obj, action='view')
 
     def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        # pylint: disable=unused-argument
-        has_permission: bool = self.custom_get_model_objects(request=request, actions=['change']).exists()
-        return has_permission
+        return self.has_permission(request=request, obj=obj, action='change')
 
     def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        # pylint: disable=unused-argument
-        has_permission: bool = self.custom_get_model_objects(request=request, actions=['delete']).exists()
-        return has_permission
-
-    # NOTE: doesn't work because methods has_*_permission doesn't send obj.
-    # def custom_has_permission(
-    #     self,
-    #     *,
-    #     request: HttpRequest,
-    #     obj: Any,
-    #     actions: list[str] | None = None,
-    #     any_: bool = False,
-    # ) -> bool:
-    #     """Return all objects of a model if user has any of given permission on it."""
-    #     opts = self.opts
-    #     actions = actions if actions else ['add', 'view', 'change', 'delete']
-    #     klass = opts.model
-    #     model_name: str = klass._meta.model_name
-    #     perms: list[str] = [f'{opts.app_label}.{action}_{model_name}' for action in actions]
-
-    #     if any_:
-    #         has_permission: bool = any(request.user.has_perm(perm=perm, obj=obj) for perm in perms)
-    #     else:
-    #         has_permission = request.user.has_perms(perm_list=perms, obj=obj)
-    #     return has_permission
-
-    # def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-    #     return self.custom_has_permission(request=request, obj=obj, actions=['add'])
-
-    # def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-    #     return self.custom_has_permission(request=request, obj=obj, actions=['view'])
-
-    # def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-    #     return self.custom_has_permission(request=request, obj=obj, actions=['change'])
-
-    # def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-    #     return self.custom_has_permission(request=request, obj=obj, actions=['delete'])
+        return self.has_permission(request=request, obj=obj, action='delete')
