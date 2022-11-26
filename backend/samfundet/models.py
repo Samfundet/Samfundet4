@@ -20,16 +20,16 @@ class EventGroup(models.Model):
 class Event(models.Model):
     title_no = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
-    start_dt = models.DateTimeField(blank=True, null=False)
-    end_dt = models.DateTimeField(blank=True, null=False)
-    description_long_no = models.TextField(blank=True, null=False)
-    description_long_en = models.TextField(blank=True, null=False)
-    description_short_no = models.TextField(blank=True, null=False)
-    description_short_en = models.TextField(blank=True, null=False)
-    publish_dt = models.DateTimeField(blank=True, null=False)
-    host = models.CharField(max_length=140, blank=True, null=False)
-    location = models.CharField(max_length=140, blank=True, null=False)
-    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=False)
+    start_dt = models.DateTimeField(blank=True, null=True)
+    end_dt = models.DateTimeField(blank=True, null=True)
+    description_long_no = models.TextField(blank=True, null=True)
+    description_long_en = models.TextField(blank=True, null=True)
+    description_short_no = models.TextField(blank=True, null=True)
+    description_short_en = models.TextField(blank=True, null=True)
+    publish_dt = models.DateTimeField(blank=True, null=True)
+    host = models.CharField(max_length=140, blank=True, null=True)
+    location = models.CharField(max_length=140, blank=True, null=True)
+    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
 
     class PriceGroup(models.TextChoices):
         INCLUDED = 'INCLUDED', _('Included with entrance')
@@ -37,7 +37,7 @@ class Event(models.Model):
         BILLIG = 'BILLIG', _('Paid')
         REGISTRATION = 'REGISTRATION', _('Free with registration')
 
-    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=False)
+    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Event'
@@ -45,14 +45,14 @@ class Event(models.Model):
 
 
 class Venue(models.Model):
-    name = models.CharField(max_length=140, blank=True, null=False, unique=True)
-    description = models.TextField(blank=True, null=False)
-    floor = models.IntegerField()
-    last_renovated = models.DateTimeField(blank=True, null=False)
-    handicapped_approved = models.BooleanField(blank=True, null=False)
-    responsible_crew = models.CharField(max_length=140, blank=True, null=False)
-    opening = models.TimeField(default=time(hour=8), blank=True, null=False)
-    closing = models.TimeField(default=time(hour=20), blank=True, null=False)
+    name = models.CharField(max_length=140, blank=True, null=True, unique=True)
+    description = models.TextField(blank=True, null=True)
+    floor = models.IntegerField(blank=True, null=True)
+    last_renovated = models.DateTimeField(blank=True, null=True)
+    handicapped_approved = models.BooleanField(blank=True, null=True)
+    responsible_crew = models.CharField(max_length=140, blank=True, null=True)
+    opening = models.TimeField(default=time(hour=8), blank=True, null=True)
+    closing = models.TimeField(default=time(hour=20), blank=True, null=True)
 
     class Meta:
         verbose_name = 'Venue'
@@ -70,8 +70,8 @@ class UserPreference(models.Model):
         LIGHT = 'theme-light'
         DARK = 'theme-dark'
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=False)
-    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
 
     class Meta:
         verbose_name = 'UserPreference'
@@ -82,7 +82,7 @@ class UserPreference(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(max_length=30, blank=True, null=True)
 
     class Meta:
@@ -103,7 +103,7 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title = models.CharField(max_length=64, blank=True, null=False, verbose_name='Gruppetype')
+    title = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype')
 
     class Meta:
         verbose_name = 'GangType'
@@ -114,8 +114,8 @@ class GangType(models.Model):
 
 
 class Gang(models.Model):
-    name = models.CharField(max_length=64, blank=True, null=False, verbose_name='Navn', unique=True)
-    abbreviation = models.CharField(max_length=64, blank=True, null=False, verbose_name='Forkortelse', unique=True)
+    name = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn', unique=True)
+    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse', unique=True)
     webpage = models.URLField(verbose_name='Nettside')
 
     group_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
@@ -131,13 +131,13 @@ class Gang(models.Model):
 
 
 class InformationPage(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=False, verbose_name='Navn Norsk')
-    title_no = models.CharField(max_length=64, blank=True, null=False, verbose_name='Tittel Norsk')
-    text_no = models.TextField(blank=True, null=False, verbose_name='Tekst Norsk')
+    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn Norsk')
+    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Norsk')
+    text_no = models.TextField(blank=True, null=True, verbose_name='Tekst Norsk')
 
-    name_en = models.CharField(max_length=64, blank=True, null=False, verbose_name='Navn Engelsk')
-    title_en = models.CharField(max_length=64, blank=True, null=False, verbose_name='Tittel Engelsk')
-    text_en = models.TextField(blank=True, null=False, verbose_name='Tekst Engelsk')
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Engelsk')
+    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst Engelsk')
 
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
