@@ -57,14 +57,31 @@ export type ContentTypeDto = {
 };
 
 export type VenueDto = {
-  id: number;
-  name: string;
-  description: string;
-  floor: number;
-  last_renovated: number;
-  handicapped_approved: boolean;
-  responsible_crew: string;
-  content_type: ContentTypeDto;
+  id?: number;
+  name?: string;
+  description?: string;
+  floor?: number;
+  last_renovated?: number;
+  handicapped_approved?: boolean;
+  responsible_crew?: string;
+  content_type?: ContentTypeDto;
+  opening?: string;
+  closing?: string;
+  opening_monday?: string;
+  opening_tuesday?: string;
+  opening_wednesday?: string;
+  opening_thursday?: string;
+  opening_friday?: string;
+  opening_saturday?: string;
+  opening_sunday?: string;
+
+  closing_monday?: string;
+  closing_tuesday?: string;
+  closing_wednesday?: string;
+  closing_thursday?: string;
+  closing_friday?: string;
+  closing_saturday?: string;
+  closing_sunday?: string;
 };
 
 export type EventDto = {

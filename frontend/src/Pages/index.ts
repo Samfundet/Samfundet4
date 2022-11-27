@@ -1,5 +1,6 @@
+export { ApiTestingPage } from './ApiTestingPage';
 export { ComponentPage } from './ComponentPage';
 export { HealthPage } from './HealthPage';
 export { HomePage } from './HomePage';
 export { LoginPage } from './LoginPage';
-export { ApiTestingPage } from './ApiTestingPage';
+export { LychePage } from './LychePage';

@@ -133,7 +133,7 @@ export function Navbar() {
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
           {t(KEY.common_information)}
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
+        <Link to={ROUTES.frontend.lyche} className={styles.navbar_link}>
           {t(KEY.common_restaurant)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
