@@ -151,4 +151,3 @@ class GangTypeView(ModelViewSet):
 class InformationPageView(ModelViewSet):
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
-    lookup_field = 'name_no'

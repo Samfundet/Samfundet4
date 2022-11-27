@@ -147,15 +147,14 @@ class Gang(models.Model):
 
 
 class InformationPage(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn Norsk')
+    slug_field = models.SlugField(max_length=64, blank=True, null=False, unique=True, primary_key=True)
+
     title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Norsk')
     text_no = models.TextField(blank=True, null=True, verbose_name='Tekst Norsk')
 
-    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Engelsk')
     text_en = models.TextField(blank=True, null=True, verbose_name='Tekst Engelsk')
 
-    # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
 
     class Meta:
