@@ -5,4 +5,5 @@ export const ROUTES_FRONTEND = {
   api_testing: '/api-testing/',
   login: '/login/',
   signup: '/signup/',
+  lyche: '/lyche/',
 };
