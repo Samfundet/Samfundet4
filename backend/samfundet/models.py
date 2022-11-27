@@ -162,7 +162,7 @@ class InformationPage(models.Model):
         verbose_name_plural = 'InformationPages'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.slug_field}'
 
 
 class Table(models.Model):
