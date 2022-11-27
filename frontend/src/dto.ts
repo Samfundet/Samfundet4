@@ -117,3 +117,13 @@ export type UserPreferenceDto = {
   theme?: ThemeValue;
   content_type?: ContentTypeDto;
 };
+
+export type InformationPageDto = {
+  slug_field?: string;
+
+  title_no?: string;
+  text_no?: string;
+
+  title_en?: string;
+  text_en?: string;
+};

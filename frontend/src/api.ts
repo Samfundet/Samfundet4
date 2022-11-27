@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PermissionDto, UserDto, UserPreferenceDto, VenueDto } from '~/dto';
+import { InformationPageDto, PermissionDto, UserDto, UserPreferenceDto, VenueDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
@@ -66,6 +66,21 @@ export async function getVenues(): Promise<VenueDto[]> {
 export async function getVenue(id: number): Promise<VenueDto> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
   const response = await axios.get<VenueDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getInformationPages(): Promise<InformationPageDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const response = await axios.get<InformationPageDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getInformationPage(slug_field: string): Promise<InformationPageDto> {
+  const url =
+    TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
+  const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
 
   return response.data;
 }

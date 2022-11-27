@@ -32,4 +32,7 @@ export type KeyValues = typeof KEY[KeyKeys];
 export const LANGUAGES = {
   NB: 'nb',
   EN: 'en',
-};
+} as const;
+
+export type LanguageKey = keyof typeof LANGUAGES;
+export type LanguageValue = typeof LANGUAGES[LanguageKey];

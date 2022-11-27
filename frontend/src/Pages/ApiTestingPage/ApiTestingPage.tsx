@@ -1,6 +1,18 @@
-import { getAllPermissions, getCsrfToken, getUser, getVenue, getVenues, login, logout, putUserPreference } from '~/api';
+import {
+  getAllPermissions,
+  getCsrfToken,
+  getInformationPage,
+  getInformationPages,
+  getUser,
+  getVenue,
+  getVenues,
+  login,
+  logout,
+  putUserPreference,
+} from '~/api';
 import { Button } from '~/Components';
 import { useGlobalContext } from '~/GlobalContextProvider';
+
 import styles from './ApiTestingPage.module.scss';
 
 /**
@@ -46,6 +58,20 @@ export function ApiTestingPage() {
       </Button>
       <Button theme="samf" className={styles.btn} onClick={() => getVenue(1).then(console.log).catch(console.error)}>
         getVenue
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getInformationPages().then(console.log).catch(console.error)}
+      >
+        getInformationPages
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getInformationPage('test').then(console.log).catch(console.error)}
+      >
+        getInformationPage
       </Button>
     </div>
   );
