@@ -147,13 +147,20 @@ class Gang(models.Model):
 
 
 class InformationPage(models.Model):
-    slug_field = models.SlugField(max_length=64, blank=True, null=False, unique=True, primary_key=True)
+    slug_field = models.SlugField(
+        max_length=64,
+        blank=True,
+        null=False,
+        unique=True,
+        primary_key=True,
+        help_text='Primary key, this field will identify the object and be used in the URL.',
+    )
 
-    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Norsk')
-    text_no = models.TextField(blank=True, null=True, verbose_name='Tekst Norsk')
+    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_no = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
 
-    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Engelsk')
-    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst Engelsk')
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
+    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
 
     # TODO Find usage for owner field
 
@@ -166,11 +173,11 @@ class InformationPage(models.Model):
 
 
 class Table(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn Norsk')
-    description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Norsk')
+    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
 
-    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
-    description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel Engelsk')
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
+    description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
 
     seating = models.PositiveSmallIntegerField(blank=True, null=True)
 
