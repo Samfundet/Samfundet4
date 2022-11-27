@@ -1,4 +1,4 @@
-import { getAllPermissions, getCsrfToken, getUser, login, logout, putUserPreference } from '~/api';
+import { getAllPermissions, getCsrfToken, getUser, getVenue, getVenues, login, logout, putUserPreference } from '~/api';
 import { Button } from '~/Components';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import styles from './ApiTestingPage.module.scss';
@@ -40,6 +40,12 @@ export function ApiTestingPage() {
         onClick={() => putUserPreference({ id: user?.user_preference.id }).then(console.log).catch(console.error)}
       >
         putUserPreference
+      </Button>
+      <Button theme="samf" className={styles.btn} onClick={() => getVenues().then(console.log).catch(console.error)}>
+        getVenues
+      </Button>
+      <Button theme="samf" className={styles.btn} onClick={() => getVenue(1).then(console.log).catch(console.error)}>
+        getVenue
       </Button>
     </div>
   );
