@@ -26,21 +26,18 @@ export function InformationListPage() {
 
   return (
     <div className={styles.wrapper}>
-      {pages.map((page) => {
+      {pages.map((page, i) => {
         return (
-          <>
-            <div>
-              <Link
-                url={reverse({
-                  pattern: ROUTES.frontend.information_page_detail,
-                  urlParams: { slugField: page.slug_field },
-                })}
-              >
-                {page.slug_field}
-              </Link>
-              {getTranslatedTitle(page, i18n.language)}
-            </div>
-          </>
+          <Link
+            key={i}
+            url={reverse({
+              pattern: ROUTES.frontend.information_page_detail,
+              urlParams: { slugField: page.slug_field },
+            })}
+          >
+            {page.slug_field}
+            {getTranslatedTitle(page, i18n.language)}
+          </Link>
         );
       })}
     </div>

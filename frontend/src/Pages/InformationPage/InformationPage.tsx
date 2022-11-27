@@ -15,6 +15,7 @@ import styles from './InformationPage.module.scss';
  */
 export function InformationPage() {
   const [page, setPage] = useState<InformationPageDto>();
+  const [showSpinner, setShowSpinner] = useState<boolean>(false);
   const { i18n } = useTranslation();
   const { slugField } = useParams();
 
@@ -23,13 +24,16 @@ export function InformationPage() {
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => setPage(data))
-        .catch(console.error);
+        .catch((data) => {
+          console.error(data);
+          setShowSpinner(true);
+        });
     }
   }, [slugField]);
 
   const text = getTranslatedText(page, i18n.language);
 
-  if (text === undefined) {
+  if (showSpinner) {
     return (
       <div className={styles.spinner}>
         <SamfundetLogoSpinner />
@@ -39,7 +43,7 @@ export function InformationPage() {
 
   return (
     <div className={styles.wrapper}>
-      <ReactMarkdown>{text}</ReactMarkdown>
+      <ReactMarkdown>{text || ''}</ReactMarkdown>
     </div>
   );
 }

@@ -49,9 +49,6 @@ jobs:
           python -m pip install pipenv
           python -m pipenv install --deploy --python $PY
 
-      - name: Run pylint
-        run: python -m pipenv run ./run-pylint.sh
-
       - name: Check yapf
         run: python -m pipenv run yapf --parallel --recursive --diff .
 
@@ -71,6 +68,9 @@ jobs:
 
       - name: Run mypy
         run: python -m pipenv run mypy --config-file mypy.ini .
+
+      - name: Run pylint
+        run: python -m pipenv run ./run-pylint.sh
 
   job_verify_docker:
     name: Verify docker
