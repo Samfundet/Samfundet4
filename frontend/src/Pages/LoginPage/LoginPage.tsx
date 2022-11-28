@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '~/api';
+import { getUser, login } from '~/api';
+import { useAuthContext } from '~/AuthContext';
 import { Alert, Button, InputField } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -12,11 +13,22 @@ export function LoginPage() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
+  const { setUser } = useAuthContext();
   const navigate = useNavigate();
+
   function handleLogin() {
     login(name, password)
-      .then((token) => {
-        token === 202 ? navigate(ROUTES.frontend.home) : setLoginFailed(true);
+      .then((status) => {
+        if (status === 202) {
+          getUser()
+            .then((user) => {
+              setUser(user);
+            })
+            .catch();
+          navigate(ROUTES.frontend.home);
+        } else {
+          setLoginFailed(true);
+        }
       })
       .catch(() => {
         setLoginFailed(true);

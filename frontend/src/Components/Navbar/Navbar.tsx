@@ -1,8 +1,10 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink as Link } from 'react-router-dom';
+import { NavLink as Link, useNavigate } from 'react-router-dom';
+import { logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
+import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -10,8 +12,9 @@ import styles from './Navbar.module.scss';
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(false);
-  const [loggedIn] = useState(true);
   const { t, i18n } = useTranslation();
+  const { user, setUser } = useAuthContext();
+  const navigate = useNavigate();
 
   // Return norwegian or english flag depending on language
   function languageImage() {
@@ -38,7 +41,7 @@ export function Navbar() {
     <div className={styles.navbar_profile_button}>
       <img src={profileIcon} className={styles.profile_icon}></img>
       <Link to={ROUTES.frontend.home} className={styles.profile_text}>
-        Username
+        {user?.username}
       </Link>
     </div>
   );
@@ -48,7 +51,7 @@ export function Navbar() {
     <div className={styles.popup_profile}>
       <img src={profileIcon} className={styles.profile_icon}></img>
       <Link to={ROUTES.frontend.home} className={styles.profile_text}>
-        Username
+        {user?.username}
       </Link>
     </div>
   );
@@ -106,17 +109,31 @@ export function Navbar() {
         >
           {t(KEY.common_other_language)}
         </a>
-        <Button theme="samf" className={styles.popup_member_button}>
-          <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-            {t(KEY.common_member)}
-          </Link>
+        <Button
+          theme="samf"
+          className={styles.popup_member_button}
+          onClick={() => {
+            navigate(ROUTES.frontend.login);
+            setMobileNavigation(false);
+          }}
+        >
+          {t(KEY.common_member)}
         </Button>
-        <Button theme="secondary" className={styles.popup_internal_button}>
-          <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
-            {t(KEY.common_internal)}
-          </Link>
+        <Button
+          theme="secondary"
+          className={styles.popup_internal_button}
+          onClick={() => {
+            user
+              ? logout().then((status) => {
+                  status === 200 && setUser(undefined);
+                })
+              : navigate(ROUTES.frontend.login);
+            setMobileNavigation(false);
+          }}
+        >
+          {user ? t(KEY.common_logout) : t(KEY.common_internal)}
         </Button>
-        {loggedIn && profileButtonMobile}
+        {user && profileButtonMobile}
       </nav>
     </>
   );
@@ -141,17 +158,31 @@ export function Navbar() {
         </Link>
         <div className={styles.navbar_signup}>
           <ThemeSwitch />
-          {loggedIn && profileButton}
+          {user && profileButton}
           {languageImage()}
-          <Button theme="samf" className={styles.navbar_member_button}>
-            <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-              {t(KEY.common_member)}
-            </Link>
+          <Button
+            theme="samf"
+            className={styles.navbar_member_button}
+            onClick={() => {
+              navigate(ROUTES.frontend.login);
+              setMobileNavigation(false);
+            }}
+          >
+            {t(KEY.common_member)}
           </Button>
-          <Button theme="secondary" className={styles.navbar_internal_button}>
-            <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
-              {t(KEY.common_internal)}
-            </Link>
+          <Button
+            theme="secondary"
+            className={styles.navbar_internal_button}
+            onClick={() => {
+              user
+                ? logout().then((status) => {
+                    status === 200 && setUser(undefined);
+                  })
+                : navigate(ROUTES.frontend.login);
+              setMobileNavigation(false);
+            }}
+          >
+            {user ? t(KEY.common_logout) : t(KEY.common_internal)}
           </Button>
         </div>
         {hamburgerMenu}
