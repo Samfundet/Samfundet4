@@ -53,6 +53,7 @@ class UserAdmin(CustomGuardedUserAdmin):
 
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
+        # pylint: disable=positional-arguments
         n: int = obj.groups.all().count()
         return n
 
@@ -65,6 +66,7 @@ class GroupAdmin(CustomGuardedGroupAdmin):
     list_select_related = True
 
     def members(self, obj: Group) -> int:
+        # pylint: disable=positional-arguments
         n: int = obj.user_set.all().count()
         return n
 
@@ -194,7 +196,7 @@ class EventAdmin(CustomGuardedModelAdmin):
 class EventGroupAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id']
-    list_filter = []
+    # list_filter = [] # TODO
     list_display = ['id', '__str__']
     # search_fields = []
     # filter_horizontal = []
@@ -262,8 +264,7 @@ class TableAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'name_no', 'name_en', 'seating']
     # list_filter = []
     list_display = ['id', '__str__', 'name_no', 'name_en', 'seating']
-    search_fields = ['id'
-                     'name_no', 'name_en']
+    search_fields = ['id', 'name_no', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []

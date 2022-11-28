@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 
 from root.utils import routes, permissions
 
-from samfundet.models import Venue
-
 ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__index,
     routes.admin__auth_user_add,

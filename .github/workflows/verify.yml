@@ -47,7 +47,7 @@ jobs:
           echo $PY
           python -m pip install --upgrade pip
           python -m pip install pipenv
-          python -m pipenv install --deploy --python $PY
+          python -m pipenv install --dev --deploy --python $PY
 
       - name: Check yapf
         run: python -m pipenv run yapf --parallel --recursive --diff .
@@ -64,7 +64,7 @@ jobs:
         run: python -m pipenv run bandit --recursive --ini .bandit .
 
       - name: Run flake8
-        run: python -m pipenv run flake8 --config .flake8 .
+        run: python -m pipenv run flake8 --config=.flake8 .
 
       - name: Run mypy
         run: python -m pipenv run mypy --config-file mypy.ini .
