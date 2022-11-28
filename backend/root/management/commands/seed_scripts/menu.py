@@ -73,4 +73,4 @@ def seed():
     )
 
 
-    yield 100, "Menu created"
+    yield 100, "Created menu"
