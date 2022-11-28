@@ -2,15 +2,16 @@
 import random
 
 from samfundet.models import Menu, MenuItem, FoodCategory, FoodPreference
+from root.utils.samfundet_random import words
 
 
 preferences = [
     ("Vegetar", "Vegetarian"),
-    ("Uten alkohol", "Non-alkoholic"),
+    ("Uten alkohol", "Non-alcoholic"),
     ("Uten ananas", "Without pineapple"),
 ]
 
-menu = {
+menu_template = {
     ('Middag', 'Dinner'): [
         ('Pølse', 'Sausage'), 
         ('Burger', 'Burger'), 
@@ -30,11 +31,16 @@ menu = {
 
 def seed():
 
+    Menu.objects.all().delete()
+    MenuItem.objects.all().delete()
+    FoodCategory.objects.all().delete()
+    FoodPreference.objects.all().delete()
+
     # Create food preferences
     prefs = [
         FoodPreference.objects.create(
             name_no=p_name[0],
-            name_no=p_name[1],
+            name_en=p_name[1],
         )
         for p_name in preferences
     ]
@@ -42,7 +48,7 @@ def seed():
     
     # Create menu categories
     menu_items = []
-    for i, cat_name in enumerate(menu):
+    for i, cat_name in enumerate(menu_template):
         category = FoodCategory.objects.create(
             name_no=cat_name[0],
             name_en=cat_name[1],
@@ -50,27 +56,31 @@ def seed():
         )
 
         # Menu items
-        for j, it_name in enumerate(menu[category]):
+        for j, it_name in enumerate(menu_template[cat_name]):
+            base_price = random.randint(15, 150)
             item = MenuItem.objects.create(
                 name_no=it_name[0],
                 name_en=it_name[1],
-                food_category=category,
-                food_preferences=random.sample(
-                    prefs, random.randint(0, 3)
-                ),
-                menu=menu,
-                order=j
+                description_no=words(10),
+                description_en=words(10),
+                food_category = category,
+                price=base_price,
+                price_member=int(base_price*0.8)
             )
+            item.food_preferences.add(*random.sample(
+                prefs, random.randint(0, 3)
+            ))
             menu_items.append(item)
-
-        yield 10 + (i/len(menu.keys())) * 80, f"Created menu items for '{cat_name[0]}'"
+        
+        yield 10 + (i/len(menu_template.keys())) * 80, f"Created menu items for '{cat_name[0]}'"
 
     # Create menu
     menu = Menu.objects.create(
         name_no="Frø-meny",
         name_en="Seed menu",
-        menu_items=menu_items
+        description_no=words(10),
+        description_en=words(10),
     )
-
+    menu.menu_items.add(*menu_items)
 
     yield 100, "Created menu"

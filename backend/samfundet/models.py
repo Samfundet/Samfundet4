@@ -220,7 +220,9 @@ class MenuItem(models.Model):
     price_member = models.PositiveSmallIntegerField(blank=True, null=True)
 
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
+
     food_preferences = models.ManyToManyField(FoodPreference, blank=True)
+    food_category = models.ForeignKey(FoodCategory, blank=True, null=True, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = 'MenuItem'
