@@ -22,6 +22,7 @@ from .utils import (
     permissions_to_dataclass,
 )
 from .models import (
+    Menu,
     Gang,
     Event,
     Venue,
@@ -31,6 +32,7 @@ from .models import (
 )
 from .serializers import (
     GangSerializer,
+    MenuSerializer,
     EventSerializer,
     VenueSerializer,
     LoginSerializer,
@@ -151,3 +153,8 @@ class GangTypeView(ModelViewSet):
 class InformationPageView(ModelViewSet):
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
+
+
+class MenuView(ModelViewSet):
+    serializer_class = MenuSerializer
+    queryset = Menu.objects.all()

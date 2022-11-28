@@ -12,6 +12,7 @@ router.register('venues', views.VenueView, 'venues')
 router.register('gangs', views.GangView, 'gangs')
 router.register('information', views.InformationPageView, 'information')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
+router.register('menu', views.MenuView, 'menu')
 
 app_name = 'samfundet'
 
