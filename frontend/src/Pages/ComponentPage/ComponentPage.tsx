@@ -1,4 +1,4 @@
-import { Button, Input, ProgressBar, RadioButton } from '~/Components';
+import { Button, InputField, ProgressBar, RadioButton } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -40,7 +40,7 @@ export function ComponentPage() {
       </div>
       <div>
         <h2>Inputs:</h2>
-        <Input>Label</Input>
+        <InputField>Label</InputField>
       </div>
       <div>
         <h2>Links:</h2>

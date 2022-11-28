@@ -15,6 +15,11 @@ export const KEY = {
   common_internal: 'common_internal',
   common_other_language: 'common_other_language',
   common_buy: 'common_buy',
+  common_login: 'common_login',
+  common_password: 'common_password',
+  login_forgotten_password: 'login_forgotten_password',
+  login_internal_login: 'login_internal_login',
+  login_email_placeholder: 'login_email_placeholder',
 } as const;
 
 /**
@@ -27,4 +32,7 @@ export type KeyValues = typeof KEY[KeyKeys];
 export const LANGUAGES = {
   NB: 'nb',
   EN: 'en',
-};
+} as const;
+
+export type LanguageKey = keyof typeof LANGUAGES;
+export type LanguageValue = typeof LANGUAGES[LanguageKey];

@@ -1,3 +1,5 @@
+import { ThemeValue } from '~/constants';
+
 export type UserDto = {
   id: number;
   username: string;
@@ -9,14 +11,20 @@ export type UserDto = {
   is_superuser: boolean;
   date_joined: Date;
   last_login: Date;
+  user_preference: UserPreferenceDto;
+  profile: ProfileDto;
   groups: GroupDto[];
-  user_permissions: PermissionDto[];
+  user_permissions?: PermissionDto[];
+  user_object_perms?: UserObjectPermissionDto[];
+  content_type: ContentTypeDto;
 };
 
 export type GroupDto = {
   id: number;
   name: string;
-  permissions: PermissionDto[];
+  permissions?: PermissionDto[];
+  group_object_perms?: GroupObjectPermissionDto[];
+  content_type: ContentTypeDto;
 };
 
 export type PermissionDto = {
@@ -26,6 +34,22 @@ export type PermissionDto = {
   codename: string;
 };
 
+export type UserObjectPermissionDto = {
+  id: number;
+  permission: PermissionDto;
+  content_type: ContentTypeDto;
+  obj_id: string;
+  user: UserDto;
+};
+
+export type GroupObjectPermissionDto = {
+  id: number;
+  permission: PermissionDto;
+  content_type: ContentTypeDto;
+  obj_id: string;
+  group: GroupDto;
+};
+
 export type ContentTypeDto = {
   id: number;
   app_label: string;
@@ -33,13 +57,31 @@ export type ContentTypeDto = {
 };
 
 export type VenueDto = {
-  id: number;
-  name: string;
-  description: string;
-  floor: number;
-  last_renovated: number;
-  handicapped_approved: boolean;
-  responsible_crew: string;
+  id?: number;
+  name?: string;
+  description?: string;
+  floor?: number;
+  last_renovated?: number;
+  handicapped_approved?: boolean;
+  responsible_crew?: string;
+  content_type?: ContentTypeDto;
+  opening?: string;
+  closing?: string;
+  opening_monday?: string;
+  opening_tuesday?: string;
+  opening_wednesday?: string;
+  opening_thursday?: string;
+  opening_friday?: string;
+  opening_saturday?: string;
+  opening_sunday?: string;
+
+  closing_monday?: string;
+  closing_tuesday?: string;
+  closing_wednesday?: string;
+  closing_thursday?: string;
+  closing_friday?: string;
+  closing_saturday?: string;
+  closing_sunday?: string;
 };
 
 export type EventDto = {
@@ -56,8 +98,32 @@ export type EventDto = {
   host: string;
   location: string;
   event_group: EventGroupDto;
+  content_type: ContentTypeDto;
 };
 
 export type EventGroupDto = {
   id: number;
+  content_type: ContentTypeDto;
+};
+
+export type ProfileDto = {
+  id: number;
+  nickname: string;
+  content_type: ContentTypeDto;
+};
+
+export type UserPreferenceDto = {
+  id?: number;
+  theme?: ThemeValue;
+  content_type?: ContentTypeDto;
+};
+
+export type InformationPageDto = {
+  slug_field?: string;
+
+  title_no?: string;
+  text_no?: string;
+
+  title_en?: string;
+  text_en?: string;
 };

@@ -1,0 +1,17 @@
+@import 'src/mixins';
+
+// Make a grid with 3 columns where items are centered and aligned.
+// Items fills each column before wrapping onto another.
+.wrapper {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  align-content: center;
+  gap: 10px;
+  margin: 20px auto;
+
+  @include for-tablet-up {
+    width: 90vw;
+    height: 70vh;
+  }
+}

@@ -1,13 +1,12 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink as Link } from 'react-router-dom';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
 import { Button, ThemeSwitch } from '~/Components';
+import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
-
-import { KEY, LANGUAGES } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
 
 export function Navbar() {
   const [mobileNavigation, setMobileNavigation] = useState(false);
@@ -70,7 +69,6 @@ export function Navbar() {
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
-      <div className={styles.navbar_margin} />
       <nav id={styles.mobile_popup_container}>
         <Link
           to={ROUTES.frontend.health}
@@ -113,7 +111,7 @@ export function Navbar() {
           </Link>
         </Button>
         <Button theme="secondary" className={styles.popup_internal_button}>
-          <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
+          <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
             {t(KEY.common_internal)}
           </Link>
         </Button>
@@ -124,6 +122,7 @@ export function Navbar() {
 
   return (
     <>
+      <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container}>
         <Link to="/">
           <img src={logoWhite} id={styles.navbar_logo} />
@@ -131,10 +130,10 @@ export function Navbar() {
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
           {t(KEY.common_event)}
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
+        <Link to={ROUTES.frontend.information_page_list} className={styles.navbar_link}>
           {t(KEY.common_information)}
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
+        <Link to={ROUTES.frontend.lyche} className={styles.navbar_link}>
           {t(KEY.common_restaurant)}
         </Link>
         <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
@@ -150,7 +149,7 @@ export function Navbar() {
             </Link>
           </Button>
           <Button theme="secondary" className={styles.navbar_internal_button}>
-            <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
+            <Link to={ROUTES.frontend.login} className={styles.internal_button_link}>
               {t(KEY.common_internal)}
             </Link>
           </Button>

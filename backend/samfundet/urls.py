@@ -9,6 +9,9 @@ from . import views
 router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
 router.register('venues', views.VenueView, 'venues')
+router.register('gangs', views.GangView, 'gangs')
+router.register('information', views.InformationPageView, 'information')
+router.register('user-preference', views.UserPreferenceView, 'user_preference')
 
 app_name = 'samfundet'
 
