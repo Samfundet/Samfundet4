@@ -5,6 +5,7 @@ from guardian.shortcuts import get_objects_for_user
 
 from django.http import HttpRequest
 from django.db.models import QuerySet
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 
 class CustomGuardedModelAdmin(GuardedModelAdmin):
@@ -82,3 +83,11 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
     def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='delete')
+
+
+class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):
+    ...
+
+
+class CustomGuardedGroupAdmin(CustomGuardedModelAdmin, GroupAdmin):
+    ...

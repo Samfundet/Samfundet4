@@ -134,7 +134,7 @@ class Gang(models.Model):
     abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse', unique=True)
     webpage = models.URLField(verbose_name='Nettside')
 
-    group_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
+    gang_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
 
     # TODO ADD Information Page
 
@@ -143,7 +143,7 @@ class Gang(models.Model):
         verbose_name_plural = 'Gangs'
 
     def __str__(self) -> str:
-        return f'{self.group_type} {self.name}'
+        return f'{self.gang_type} {self.name}'
 
 
 class InformationPage(models.Model):
