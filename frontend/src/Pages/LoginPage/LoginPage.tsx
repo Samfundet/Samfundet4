@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUser, login } from '~/api';
@@ -16,7 +16,8 @@ export function LoginPage() {
   const { setUser } = useAuthContext();
   const navigate = useNavigate();
 
-  function handleLogin() {
+  function handleLogin(event: SyntheticEvent) {
+    event.preventDefault();
     login(name, password)
       .then((status) => {
         if (status === 202) {
@@ -50,20 +51,24 @@ export function LoginPage() {
       )}
       <div className={styles.content_container}>
         <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
-        <InputField
-          className={styles.input_field}
-          placeholder={t(KEY.login_email_placeholder) || undefined}
-          onChange={(e) => setName(e ? e.currentTarget.value : '')}
-        />
-        <InputField
-          className={styles.input_field}
-          placeholder={t(KEY.common_password) || undefined}
-          type="password"
-          onChange={(e) => setPassword(e?.currentTarget.value || '')}
-        />
-        <Button className={styles.login_button} onClick={handleLogin} theme="samf">
-          {t(KEY.common_login)}
-        </Button>
+        <form onSubmit={handleLogin}>
+          <InputField
+            className={styles.input_field}
+            placeholder={t(KEY.login_email_placeholder)}
+            onChange={(e) => setName(e ? e.currentTarget.value : '')}
+            value={name}
+          />
+          <InputField
+            className={styles.input_field}
+            placeholder={t(KEY.common_password)}
+            type="password"
+            onChange={(e) => setPassword(e?.currentTarget.value || '')}
+            value={password}
+          />
+          <Button className={styles.login_button} theme="samf" type="submit">
+            {t(KEY.common_login)}
+          </Button>
+        </form>
         <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>
           {t(KEY.login_forgotten_password)}
         </Link>
