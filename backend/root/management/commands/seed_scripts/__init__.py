@@ -1,6 +1,7 @@
 
 import root.management.commands.seed_scripts.venues as venues
 import root.management.commands.seed_scripts.events as events
+import root.management.commands.seed_scripts.menu as menu
 import root.management.commands.seed_scripts.example as example
 
 # Insert seed scripts here (in order of priority)
@@ -13,6 +14,7 @@ import root.management.commands.seed_scripts.example as example
 SEED_SCRIPTS = [
     ("venue", venues.seed),
     ("event", events.seed),
+    ("menu", menu.seed),
 
     # Example seed (not run unless targeted specifically)
     ("example", example.seed),
