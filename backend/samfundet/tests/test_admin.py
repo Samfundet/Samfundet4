@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 
 from root.utils import routes, permissions
 
-from samfundet.models import Venue
-
 ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__index,
     routes.admin__auth_user_add,
@@ -99,23 +97,23 @@ def test_staff_permission_admin_panel(fixture_django_client: Client, fixture_sta
 def test_staff_object_permission_admin_panel(fixture_django_client: Client, fixture_staff: User):
     fixture_django_client.force_login(user=fixture_staff)
 
-    some_venue = Venue.objects.create()
-    other_venue = Venue.objects.create()
+    some_user = User.objects.create_user(username='some_user')
+    other_user = User.objects.create_user(username='other_user')
 
-    url_some_venue = reverse(routes.admin__samfundet_venue_change, args=[some_venue.id])
-    url_other_venue = reverse(routes.admin__samfundet_venue_change, args=[other_venue.id])
+    url_some_user = reverse(routes.admin__auth_user_change, args=[some_user.id])
+    url_other_user = reverse(routes.admin__auth_user_change, args=[other_user.id])
 
-    # Should not be able to change some_venue or other_venue.
-    response = fixture_django_client.get(path=url_some_venue)
+    # Should not be able to change some_user or other_user.
+    response = fixture_django_client.get(path=url_some_user)
     assert response.status_code == HTTP_403_FORBIDDEN
-    response = fixture_django_client.get(path=url_other_venue)
+    response = fixture_django_client.get(path=url_other_user)
     assert response.status_code == HTTP_403_FORBIDDEN
 
-    # Give permission to change some_venue.
-    assign_perm(user_or_group=fixture_staff, perm=permissions.SAMFUNDET_CHANGE_VENUE, obj=some_venue)
+    # Give permission to change some_user.
+    assign_perm(user_or_group=fixture_staff, perm=permissions.AUTH_CHANGE_USER, obj=some_user)
 
-    # Should now be able to change some_venue but not other_venue.
-    response = fixture_django_client.get(path=url_some_venue)
+    # Should now be able to change some_user but not other_user.
+    response = fixture_django_client.get(path=url_some_user)
     assert is_success(code=response.status_code)
-    response = fixture_django_client.get(path=url_other_venue)
+    response = fixture_django_client.get(path=url_other_user)
     assert not is_success(response.status_code)
