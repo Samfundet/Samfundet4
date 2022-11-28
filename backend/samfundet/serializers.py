@@ -4,10 +4,14 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
+    Menu,
     Gang,
     Event,
     Venue,
+    MenuItem,
     GangType,
+    FoodCategory,
+    FoodPreference,
     UserPreference,
     InformationPage,
 )
@@ -121,4 +125,34 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserPreference
+        fields = '__all__'
+
+
+class FoodPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodCategory
+        fields = '__all__'
+
+
+class MenuItemSerializer(serializers.ModelSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(serializers.ModelSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
         fields = '__all__'

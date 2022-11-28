@@ -13,13 +13,17 @@ from root.custom_classes.admin_classes import (
 )
 
 from .models import (
+    Menu,
     Gang,
     Event,
     Venue,
     Table,
     Profile,
+    MenuItem,
     GangType,
     EventGroup,
+    FoodCategory,
+    FoodPreference,
     UserPreference,
     InformationPage,
 )
@@ -264,6 +268,63 @@ class TableAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'name_no', 'name_en', 'seating']
     # list_filter = []
     list_display = ['id', '__str__', 'name_no', 'name_en', 'seating']
+    search_fields = ['id', 'name_no', 'name_en']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Menu)
+class MenuAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_no', 'name_en']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name_no', 'name_en', 'menu_item_count']
+    search_fields = ['id', 'name_no', 'name_en']
+    filter_horizontal = ['menu_items']
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+    def menu_item_count(self, obj: Menu) -> int:
+        # pylint: disable=positional-arguments
+        n: int = obj.menu_items.all().count()
+        return n
+
+
+@admin.register(MenuItem)
+class MenuItemAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_no', 'name_en', 'price', 'price_member', 'order']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name_no', 'name_en', 'price', 'price_member', 'order']
+    search_fields = ['id', 'name_no', 'name_en']
+    filter_horizontal = ['food_preferences']
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(FoodCategory)
+class FoodCategoryAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_no', 'name_en', 'order']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name_no', 'name_en', 'order']
+    search_fields = ['id', 'name_no', 'name_en']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(FoodPreference)
+class FoodPreferenceAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_no', 'name_en']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name_no', 'name_en']
     search_fields = ['id', 'name_no', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
