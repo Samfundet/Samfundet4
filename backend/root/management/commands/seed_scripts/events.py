@@ -1,8 +1,9 @@
 import random
 from django.utils import timezone
 
-from samfundet.models import Event, EventGroup, Venue
 from root.utils.samfundet_random import words
+
+from samfundet.models import Event, EventGroup, Venue
 
 # Number of events
 COUNT = 300
@@ -22,7 +23,7 @@ RECURRING_CHANCE = 0.1
 def seed():
     Event.objects.all().delete()
     EventGroup.objects.all().delete()
-    yield 0, "Deleted old events"
+    yield 0, 'Deleted old events'
 
     venues = Venue.objects.all()
 
@@ -52,7 +53,11 @@ def seed():
 
         # Create event(s)
         for j in range(recurring):
-            tag = "" if recurring == 1 else f" ({j + 1}/{recurring})"
+
+            tag = f' ({j + 1}/{recurring})'
+            if recurring == 1:
+                tag = ''
+
             recurring_offset = timezone.timedelta(days=j * 7)
             Event.objects.create(
                 title_no=title_no + tag,
@@ -72,4 +77,4 @@ def seed():
         yield int(i / COUNT * 100), f"Created event '{title_no}'"
 
     # Done!
-    yield 100, f"Created {Event.objects.all().count()} events ({n_recurring} recurring)"
+    yield 100, f'Created {Event.objects.all().count()} events ({n_recurring} recurring)'

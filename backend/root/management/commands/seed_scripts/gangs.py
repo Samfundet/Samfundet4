@@ -2,32 +2,32 @@ from samfundet.models import GangType, Gang
 
 # Template gangs for seeding
 GANGS = {
-    "Arrangerende": [
-        ("Kulturutvalget", "KU"),
-        ("Lørdagskomiteen", "LØK"),
-        ("Klubbstyret", "KLST"),
+    'Arrangerende': [
+        ('Kulturutvalget', 'KU'),
+        ('Lørdagskomiteen', 'LØK'),
+        ('Klubbstyret', 'KLST'),
     ],
-    "Drift":
+    'Drift':
         [
-            ("Markedsføringsgjengen", "MG"),
-            ("Fotogjengen", "FG"),
-            ("Diversegjengen", "DG"),
-            ("Forsterkerkomiteen", "FK"),
-            ("Regi", None),
-            ("Videokomiteen", "VK"),
+            ('Markedsføringsgjengen', 'MG'),
+            ('Fotogjengen', 'FG'),
+            ('Diversegjengen', 'DG'),
+            ('Forsterkerkomiteen', 'FK'),
+            ('Regi', None),
+            ('Videokomiteen', 'VK'),
         ],
-    "Kunstneriske":
+    'Kunstneriske':
         [
-            ("Studentersamfundets interne teater", "SIT"),
-            ("Studentersamfundets Symfoniorkester", "Symforch"),
-            ("Strindens promenadeorkester", "SPO"),
-            ("Pirum", None),
-            ("Candiss", None),
+            ('Studentersamfundets interne teater', 'SIT'),
+            ('Studentersamfundets Symfoniorkester', 'Symforch'),
+            ('Strindens promenadeorkester', 'SPO'),
+            ('Pirum', None),
+            ('Candiss', None),
         ],
-    "Styrende": [
-        ("Finansstyret", "FS"),
-        ("Styret", None),
-        ("Rådet", None),
+    'Styrende': [
+        ('Finansstyret', 'FS'),
+        ('Styret', None),
+        ('Rådet', None),
     ]
 }
 
@@ -35,7 +35,7 @@ GANGS = {
 def seed():
     Gang.objects.all().delete()
     GangType.objects.all().delete()
-    yield 10, "Deleted old gangs"
+    yield 10, 'Deleted old gangs'
 
     # Create gang types
     for i, gang_type in enumerate(GANGS):
@@ -47,10 +47,10 @@ def seed():
             Gang.objects.create(
                 name=name,
                 abbreviation=abbr,
-                webpage="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                webpage='https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 gang_type=gtype,
             )
 
         yield 10 + i / len(GANGS.keys()) * 90, f"Created gangs for '{gang_type}'"
 
-    yield 100, f"Created {Gang.objects.all().count()} gangs"
+    yield 100, f'Created {Gang.objects.all().count()} gangs'

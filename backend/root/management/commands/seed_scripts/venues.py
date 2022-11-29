@@ -6,22 +6,22 @@ from samfundet.models import Venue
 from root.utils.samfundet_random import words
 
 VENUES = [
-    "Storsalen",
-    "Bodegaen",
-    "Klubben",
-    "Strossa",
-    "Selskapssiden",
-    "Knaus",
-    "Edgar",
-    "Lyche",
-    "Daglighallen",
-    "Rundhallen",
+    'Storsalen',
+    'Bodegaen',
+    'Klubben',
+    'Strossa',
+    'Selskapssiden',
+    'Knaus',
+    'Edgar',
+    'Lyche',
+    'Daglighallen',
+    'Rundhallen',
 ]
 
 
 def seed():
     Venue.objects.all().delete()
-    yield 0, "Deleted old venues"
+    yield 0, 'Deleted old venues'
 
     for i, name in enumerate(VENUES):
         Venue.objects.create(
@@ -34,4 +34,4 @@ def seed():
         )
         yield i / len(VENUES), f"Created venue '{name}'"
 
-    yield 100, f"Created {len(Venue.objects.all())} venues"
+    yield 100, f'Created {len(Venue.objects.all())} venues'
