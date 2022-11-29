@@ -46,7 +46,7 @@ class Command(BaseCommand):
                     self.print_progress(step, prefix=prefix)
                 else:
                     raise Exception(
-                        f"Seed script {target[0]} yielded wrong type '{type(step)}', " +
+                        f"Seed script {target[0]} yielded wrong type '{type(step)}', " + \
                         "expected number type or tuple of (number, str)"
                     )
 
@@ -75,10 +75,7 @@ class Command(BaseCommand):
             print(" It's quicker if you don't need to seed everything.", end="")
             print(" Try something like 'python3 manage.py seed event'.\n")
 
-            seed_targets = [
-                seed_target for seed_target in SEED_SCRIPTS
-                if seed_target[0] != "example"
-            ]
+            seed_targets = [seed_target for seed_target in SEED_SCRIPTS if seed_target[0] != "example"]
             for i, seed_target in enumerate(seed_targets):
                 self.run_seed_script(seed_target, i, len(seed_targets))
         else:

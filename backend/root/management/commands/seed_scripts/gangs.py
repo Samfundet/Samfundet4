@@ -5,27 +5,29 @@ GANGS = {
     "Arrangerende": [
         ("Kulturutvalget", "KU"),
         ("Lørdagskomiteen", "LØK"),
-        ("Klubbstyret", "KLST")
+        ("Klubbstyret", "KLST"),
     ],
-    "Drift": [
-        ("Markedsføringsgjengen", "MG"),
-        ("Fotogjengen", "FG"),
-        ("Diversegjengen", "DG"),
-        ("Forsterkerkomiteen", "FK"),
-        ("Regi", None),
-        ("Videokomiteen", "VK")
-    ],
-    "Kunstneriske": [
-        ("Studentersamfundets interne teater", "SIT"),
-        ("Studentersamfundets Symfoniorkester", "Symforch"),
-        ("Strindens promenadeorkester", "SPO"),
-        ("Pirum", None),
-        ("Candiss", None)
-    ],
+    "Drift":
+        [
+            ("Markedsføringsgjengen", "MG"),
+            ("Fotogjengen", "FG"),
+            ("Diversegjengen", "DG"),
+            ("Forsterkerkomiteen", "FK"),
+            ("Regi", None),
+            ("Videokomiteen", "VK"),
+        ],
+    "Kunstneriske":
+        [
+            ("Studentersamfundets interne teater", "SIT"),
+            ("Studentersamfundets Symfoniorkester", "Symforch"),
+            ("Strindens promenadeorkester", "SPO"),
+            ("Pirum", None),
+            ("Candiss", None),
+        ],
     "Styrende": [
         ("Finansstyret", "FS"),
         ("Styret", None),
-        ("Rådet", None)
+        ("Rådet", None),
     ]
 }
 
@@ -46,7 +48,7 @@ def seed():
                 name=name,
                 abbreviation=abbr,
                 webpage="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                gang_type=gtype
+                gang_type=gtype,
             )
 
         yield 10 + i / len(GANGS.keys()) * 90, f"Created gangs for '{gang_type}'"

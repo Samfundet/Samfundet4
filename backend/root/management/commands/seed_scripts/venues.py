@@ -15,7 +15,7 @@ VENUES = [
     "Edgar",
     "Lyche",
     "Daglighallen",
-    "Rundhallen"
+    "Rundhallen",
 ]
 
 
@@ -28,9 +28,7 @@ def seed():
             name=name,
             description=words(10),
             floor=random.randint(1, 4),
-            last_renovated=timezone.now() + timezone.timedelta(
-                days=-random.randint(30, 365 * 30)
-            ),
+            last_renovated=timezone.now() + timezone.timedelta(days=-random.randint(30, 365 * 30)),
             handicapped_approved=random.randint(1, 3) != 1,
             responsible_crew=words(1)
         )

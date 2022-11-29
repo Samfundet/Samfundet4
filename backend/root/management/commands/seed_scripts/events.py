@@ -34,11 +34,11 @@ def seed():
         event_time = timezone.now() + timezone.timedelta(
             days=random.randint(-DAY_RANGE, DAY_RANGE),
             hours=random.randint(-12, 12),
-            minutes=random.randint(-30, 30)
+            minutes=random.randint(-30, 30),
         )
         event_duration = timezone.timedelta(
             hours=random.randint(DURATION_MIN, DURATION_MAX),
-            minutes=random.randint(0, 60)
+            minutes=random.randint(0, 60),
         )
         event_venue = random.choice(venues)
 
@@ -66,7 +66,7 @@ def seed():
                 publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
                 host=words(1),
                 location=event_venue.name,
-                event_group=group
+                event_group=group,
             )
 
         yield int(i / COUNT * 100), f"Created event '{title_no}'"

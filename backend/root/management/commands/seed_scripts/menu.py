@@ -13,7 +13,7 @@ menu_template = {
     ('Middag', 'Dinner'): [
         ('Pølse', 'Sausage'),
         ('Burger', 'Burger'),
-        ('Suppe', 'Soup')
+        ('Suppe', 'Soup'),
     ],
     ('Drikke', 'Drinks'): [
         ('Brus', 'Soda'),
@@ -35,13 +35,10 @@ def seed():
     FoodPreference.objects.all().delete()
 
     # Create food preferences
-    prefs = [
-        FoodPreference.objects.create(
-            name_no=p_name[0],
-            name_en=p_name[1],
-        )
-        for p_name in preferences
-    ]
+    prefs = [FoodPreference.objects.create(
+        name_no=p_name[0],
+        name_en=p_name[1],
+    ) for p_name in preferences]
     yield 10, f"Created {len(preferences)} food preferences"
 
     # Create menu categories
@@ -50,7 +47,7 @@ def seed():
         category = FoodCategory.objects.create(
             name_no=cat_name[0],
             name_en=cat_name[1],
-            order=i
+            order=i,
         )
 
         # Menu items
@@ -65,9 +62,7 @@ def seed():
                 price=base_price,
                 price_member=int(base_price * 0.8)
             )
-            item.food_preferences.add(*random.sample(
-                prefs, random.randint(0, 3)
-            ))
+            item.food_preferences.add(*random.sample(prefs, random.randint(0, 3)))
             menu_items.append(item)
 
         # Estimate seeding progress (80% to create items + 10% from earlier)
