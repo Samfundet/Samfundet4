@@ -8,7 +8,7 @@ type InputFieldProps = {
   children?: Children;
   className?: string;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
+  placeholder?: string | null;
   type?: types;
   value?: string;
 };
@@ -20,7 +20,7 @@ export function InputField({ children, className, onChange, placeholder, value, 
       <input
         onChange={onChange}
         className={classNames(styles.input_field, className)}
-        placeholder={placeholder}
+        placeholder={placeholder || ''}
         type={type}
         value={value}
       />
