@@ -22,6 +22,7 @@ from .models import (
     MenuItem,
     GangType,
     EventGroup,
+    Saksdokument,
     FoodCategory,
     FoodPreference,
     UserPreference,
@@ -326,6 +327,19 @@ class FoodPreferenceAdmin(CustomGuardedModelAdmin):
     # list_filter = []
     list_display = ['id', '__str__', 'name_no', 'name_en']
     search_fields = ['id', 'name_no', 'name_en']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Saksdokument)
+class SaksdokumentAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_no']
+    # list_filter = []
+    list_display = ['id', '__str__', 'title_no']
+    search_fields = ['id', 'title_no']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []

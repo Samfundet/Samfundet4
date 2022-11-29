@@ -245,3 +245,25 @@ class Menu(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name_no}'
+
+
+class Saksdokument(models.Model):
+    title_no = models.CharField(max_length=80, unique=False, blank=False, null=False, verbose_name='Tittel (Norsk)')
+    title_en = models.CharField(max_length=80, unique=False, blank=False, null=False, verbose_name='Tittel (Engelsk)')
+    publication_date = models.DateTimeField(blank=False, null=False)
+
+    class SaksdokumentChoices(models.TextChoices):
+        FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
+        STYRET = 'STYRET', _('Styret')
+        RADET = 'RADET', _('Rådet')
+        ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringger')
+
+    category = models.CharField(max_length=25, choices=SaksdokumentChoices.choices)
+    file = models.FileField(upload_to='uploads/saksdokument/')
+
+    class Meta:
+        verbose_name = 'Saksdokument'
+        verbose_name_plural = 'Saksdokument'
+
+    def __str__(self) -> str:
+        return f'{self.title_no}'

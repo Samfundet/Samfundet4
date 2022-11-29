@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from .models import (
     Venue,
     Profile,
+    Saksdokument,
     UserPreference,
 )
 
@@ -17,6 +18,7 @@ from .dto import (
     VenueDto,
     GroupDto,
     ProfileDto,
+    SakdokumentDto,
     PermissionDto,
     ContentTypeDto,
     UserPreferenceDto,
@@ -186,5 +188,20 @@ def profile_to_dataclass(*, profile: Profile) -> ProfileDto:
     return ProfileDto(
         id=profile.id,
         nickname=profile.nickname,
+        content_type=content_type_to_dataclass(content_type=content_type),
+    )
+
+
+###
+
+
+def saksdokument_to_dataclass(*, saksdokument: Saksdokument) -> SakdokumentDto:
+    content_type = get_content_type(saksdokument)
+    return VenueDto(
+        id=saksdokument.id,
+        title_no=saksdokument.title_no,
+        title_en=saksdokument.title_en,
+        publication_date=saksdokument.publication_date,
+        file=saksdokument.file,
         content_type=content_type_to_dataclass(content_type=content_type),
     )
