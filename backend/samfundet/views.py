@@ -25,8 +25,12 @@ from .models import (
     Menu,
     Gang,
     Event,
+    Profile,
     Venue,
+    MenuItem,
     GangType,
+    FoodCategory,
+    FoodPreference,
     UserPreference,
     InformationPage,
 )
@@ -34,9 +38,13 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
+    ProfileSerializer,
     VenueSerializer,
     LoginSerializer,
+    MenuItemSerializer,
     GangTypeSerializer,
+    FoodCategorySerializer,
+    FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
 )
@@ -136,6 +144,11 @@ class UserPreferenceView(ModelViewSet):
     queryset = UserPreference.objects.all()
 
 
+class ProfileView(ModelViewSet):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+
+
 ### GANGS ###
 class GangView(ModelViewSet):
     serializer_class = GangSerializer
@@ -158,3 +171,18 @@ class InformationPageView(ModelViewSet):
 class MenuView(ModelViewSet):
     serializer_class = MenuSerializer
     queryset = Menu.objects.all()
+
+
+class MenuItemView(ModelViewSet):
+    serializer_class = MenuItemSerializer
+    queryset = MenuItem.objects.all()
+
+
+class FoodCategoryView(ModelViewSet):
+    serializer_class = FoodCategorySerializer
+    queryset = FoodCategory.objects.all()
+
+
+class FoodPreferenceView(ModelViewSet):
+    serializer_class = FoodPreferenceSerializer
+    queryset = FoodPreference.objects.all()

@@ -127,3 +127,48 @@ export type InformationPageDto = {
   title_en?: string;
   text_en?: string;
 };
+
+export type TableDto = {
+  name_no?: string;
+  description_no?: string;
+
+  name_en?: string;
+  description_en?: string;
+
+  seating?: number;
+};
+
+export type FoodPreferenceDto = {
+  name_no?: string;
+  name_en?: string;
+};
+
+export type FoodCategoryDto = {
+  name_no?: string;
+  name_en?: string;
+  order?: number;
+};
+
+export type MenuItemDto = {
+  name_no?: string;
+  description_no?: string;
+
+  name_en?: string;
+  description_en?: string;
+
+  price?: number;
+  price_member?: number;
+
+  order?: number;
+  food_preferences?: FoodPreferenceDto[];
+};
+
+export type MenuDto = {
+  name_no?: string;
+  description_no?: string;
+
+  name_en?: string;
+  description_en?: string;
+
+  menu_items?: MenuItemDto[];
+};
