@@ -45,10 +45,8 @@ class Command(BaseCommand):
                 elif type(step) in [int, float]:
                     self.print_progress(step, prefix=prefix)
                 else:
-                    raise Exception(
-                        f"Seed script {target[0]} yielded wrong type '{type(step)}', " + \
-                        "expected number type or tuple of (number, str)"
-                    )
+                    raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', "
+                                    "expected number type or tuple of (number, str)")
 
             # Final output 100%
             if type(step) is tuple:
@@ -66,7 +64,7 @@ class Command(BaseCommand):
 
         # Avoid running seed in production
         if settings.ENV == Environment.PROD:
-            print(f"Detected production environment! Cancelled seed script. You're welcome.")
+            print("Detected production environment! Cancelled seed script. You're welcome.")
             return
 
         # No target specified in command, run all seed scripts in order

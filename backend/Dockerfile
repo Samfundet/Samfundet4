@@ -27,7 +27,7 @@ RUN python -m pip install pipenv
 COPY Pipfile Pipfile.lock ./
 
 # Install virtual environment.
-RUN python -m pipenv install --deploy
+RUN python -m pipenv install --dev --deploy
 
 # Copy rest of the project into image.
 COPY . .
