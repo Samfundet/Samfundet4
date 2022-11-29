@@ -1,5 +1,15 @@
 import axios from 'axios';
-import { InformationPageDto, PermissionDto, UserDto, UserPreferenceDto, VenueDto } from '~/dto';
+import {
+  FoodCategoryDto,
+  FoodPreferenceDto,
+  InformationPageDto,
+  MenuDto,
+  MenuItemDto,
+  PermissionDto,
+  UserDto,
+  UserPreferenceDto,
+  VenueDto,
+} from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
@@ -81,6 +91,62 @@ export async function getInformationPage(slug_field: string): Promise<Informatio
   const url =
     TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
   const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getMenus(): Promise<MenuDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_list });
+  const response = await axios.get<MenuDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getMenu(pk: number): Promise<MenuDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_detail, urlParams: { pk: pk } });
+  const response = await axios.get<MenuDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getMenuItems(): Promise<MenuItemDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const response = await axios.get<MenuItemDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getMenuItem(pk: number): Promise<MenuItemDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const response = await axios.get<MenuItemDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getFoodPreferences(): Promise<FoodPreferenceDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const response = await axios.get<FoodPreferenceDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getFoodPreference(pk: number): Promise<FoodPreferenceDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const response = await axios.get<FoodPreferenceDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const response = await axios.get<FoodCategoryDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
 
   return response.data;
 }

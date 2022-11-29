@@ -8,6 +8,7 @@ from .models import (
     Gang,
     Event,
     Venue,
+    Profile,
     MenuItem,
     GangType,
     FoodCategory,
@@ -125,6 +126,13 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserPreference
+        fields = '__all__'
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
         fields = '__all__'
 
 

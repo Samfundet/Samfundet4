@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getVenues } from '~/api';
-import { VenueDto } from '~/dto';
+import { getMenus, getVenues } from '~/api';
+import { MenuDto, VenueDto } from '~/dto';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -8,6 +8,7 @@ import { VenueDto } from '~/dto';
  */
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
+  const [lycheMenu, setLycheMenu] = useState<MenuDto>();
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -17,11 +18,33 @@ export function LychePage() {
         setLycheVenue(lyche);
       })
       .catch(console.error);
+    getMenus()
+      .then((data) => {
+        const menu = data.find((menu) => menu.name_no?.toLowerCase() === 'lyche');
+        setLycheMenu(menu);
+      })
+      .catch(console.error);
   }, []);
 
   return (
     <>
       <h1>Lyche</h1>
+
+      <div>
+        {lycheMenu?.menu_items?.map((item, i) => {
+          return (
+            <div key={i}>
+              <div>{item.name_no}</div>
+              <div>{item.description_no}</div>
+              <div>{item.order}</div>
+              <div>
+                {item.price}/{item.price_member}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       <div>
         Monday: {lycheVenue?.opening_monday} - {lycheVenue?.closing_monday}
       </div>
