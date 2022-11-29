@@ -35,10 +35,9 @@ class Command(BaseCommand):
 
         # Generator types print their progress throughout
         if isinstance(generator, types.GeneratorType):
-            progress = 0
 
             # Run script and print progress
-            step: Union[int, Tuple[int, str]]
+            step: Union[int, Tuple[int, str]] = 0
             for step in generator:
                 if type(step) is tuple:
                     progress, suffix = step
@@ -52,10 +51,10 @@ class Command(BaseCommand):
                     )
 
             # Final output 100%
-            if type(progress) is tuple:
-                if progress[0] < 100:
+            if type(step) is tuple:
+                if step[0] < 100:
                     self.print_progress(100, prefix=prefix, suffix="OK")
-            elif progress < 100:
+            elif step < 100:
                 self.print_progress(100, prefix=prefix, suffix="OK")
 
             print()
