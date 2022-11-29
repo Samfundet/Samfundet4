@@ -1,4 +1,3 @@
-
 import random
 from django.utils import timezone
 
@@ -21,7 +20,6 @@ RECURRING_CHANCE = 0.1
 
 
 def seed():
-
     Event.objects.all().delete()
     EventGroup.objects.all().delete()
     yield 0, "Deleted old events"
@@ -54,8 +52,8 @@ def seed():
 
         # Create event(s)
         for j in range(recurring):
-            tag = "" if recurring == 1 else f" ({j+1}/{recurring})"
-            recurring_offset = timezone.timedelta(days=j*7)
+            tag = "" if recurring == 1 else f" ({j + 1}/{recurring})"
+            recurring_offset = timezone.timedelta(days=j * 7)
             Event.objects.create(
                 title_no=title_no + tag,
                 title_en=title_en + tag,
@@ -71,8 +69,7 @@ def seed():
                 event_group=group
             )
 
-        yield int(i/COUNT * 100), f"Created event '{title_no}'"
+        yield int(i / COUNT * 100), f"Created event '{title_no}'"
 
     # Done!
     yield 100, f"Created {Event.objects.all().count()} events ({n_recurring} recurring)"
-

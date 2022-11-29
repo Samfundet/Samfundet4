@@ -1,9 +1,7 @@
-
 import random
 
 from samfundet.models import Menu, MenuItem, FoodCategory, FoodPreference
 from root.utils.samfundet_random import words
-
 
 preferences = [
     ("Vegetar", "Vegetarian"),
@@ -31,7 +29,6 @@ menu_template = {
 
 
 def seed():
-
     Menu.objects.all().delete()
     MenuItem.objects.all().delete()
     FoodCategory.objects.all().delete()
@@ -64,9 +61,9 @@ def seed():
                 name_en=it_name[1],
                 description_no=words(10),
                 description_en=words(10),
-                food_category = category,
+                food_category=category,
                 price=base_price,
-                price_member=int(base_price*0.8)
+                price_member=int(base_price * 0.8)
             )
             item.food_preferences.add(*random.sample(
                 prefs, random.randint(0, 3)
@@ -74,7 +71,7 @@ def seed():
             menu_items.append(item)
 
         # Estimate seeding progress (80% to create items + 10% from earlier)
-        progress = 10 + (i/len(menu_template.keys())) * 80
+        progress = 10 + (i / len(menu_template.keys())) * 80
         yield progress, f"Created menu items for '{cat_name[0]}'"
 
     # Create menu

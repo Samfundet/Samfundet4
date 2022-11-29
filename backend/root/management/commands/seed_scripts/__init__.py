@@ -1,4 +1,3 @@
-
 import root.management.commands.seed_scripts.gangs as gangs
 import root.management.commands.seed_scripts.venues as venues
 import root.management.commands.seed_scripts.events as events
@@ -21,5 +20,3 @@ SEED_SCRIPTS = [
     # Example seed (not run unless targeted specifically)
     ("example", example.seed),
 ]
-
-

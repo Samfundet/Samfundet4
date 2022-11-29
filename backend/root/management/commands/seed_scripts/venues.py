@@ -20,7 +20,6 @@ VENUES = [
 
 
 def seed():
-
     Venue.objects.all().delete()
     yield 0, "Deleted old venues"
 
@@ -35,7 +34,6 @@ def seed():
             handicapped_approved=random.randint(1, 3) != 1,
             responsible_crew=words(1)
         )
-        yield i/len(VENUES), f"Created venue '{name}'"
+        yield i / len(VENUES), f"Created venue '{name}'"
 
     yield 100, f"Created {len(Venue.objects.all())} venues"
-
