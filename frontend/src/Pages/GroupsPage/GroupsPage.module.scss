@@ -1,0 +1,31 @@
+@import 'src/mixins';
+
+.wrapper {
+  margin: 128px 30px;
+  @include for-tablet-up {
+    margin: 30px 30px;
+  }
+}
+
+.description {
+  text-align: center;
+  justify-content: center;
+}
+
+.groups {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  box-shadow: none;
+  border-radius: 0.5em;
+  overflow: hidden;
+  margin: .5em;
+}
+
+.groupsTitle {
+  text-align: center;
+  font-size: 1.4em;
+  width: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+

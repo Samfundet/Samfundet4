@@ -5,3 +5,4 @@ export { HomePage } from './HomePage';
 export { InformationListPage } from './InformationListPage';
 export { LoginPage } from './LoginPage';
 export { LychePage } from './LychePage';
+export { GroupsPage } from './GroupsPage';

@@ -32,9 +32,9 @@ Basic.args = {
       title: 'ARK',
       src: 'https://samfundet.no/assets/groups/akademisk%20radioklubb-cd2ce61eb1a6ce273fc3eb492c7a1a05255024e892dbad151c7ecc671d0a6df1.jpg',
     },
-    { 
+    {
       title: 'Profilgruppa',
       src: 'https://samfundet.no/assets/groups/profilgruppa-94148ec351fa28087a9ee826266c9c6ffd9cec2ffd04aa3c78b928f61bd459c8.jpg',
-    }
+    },
   ],
 };
