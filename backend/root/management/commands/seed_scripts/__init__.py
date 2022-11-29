@@ -1,4 +1,5 @@
 
+import root.management.commands.seed_scripts.gangs as gangs
 import root.management.commands.seed_scripts.venues as venues
 import root.management.commands.seed_scripts.events as events
 import root.management.commands.seed_scripts.menu as menu
@@ -12,6 +13,7 @@ import root.management.commands.seed_scripts.example as example
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
+    ("gang", gangs.seed),
     ("venue", venues.seed),
     ("event", events.seed),
     ("menu", menu.seed),

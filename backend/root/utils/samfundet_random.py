@@ -49,7 +49,7 @@ samf_words = [
 ]
 
 
-def words(count=1, include_english=False):
+def words(count, *_, include_english=False):
     choice = random.choices(samf_words, k=count)
     no = " ".join([w[0] for w in choice])
     en = " ".join([w[1] for w in choice])

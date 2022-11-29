@@ -1,5 +1,6 @@
-
+import math
 import types
+from typing import Union, Tuple
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from root.constants import Environment
@@ -15,18 +16,21 @@ class Command(BaseCommand):
         parser.add_argument('target', type=str, nargs='?', default=None)
 
     def print_progress(self, progress, prefix=None, suffix=None):
-        # Calculate size
-        p = min(100, max(0, progress))
-        bar = "█" * int(p/5) + " " * (20 - int(p/5))
-        # Clear line
+        bar_len = 20
+        # Calculate size of bar and padding
+        percent = min(1, max(0, progress / 100.0))
+        filled = "█" * math.floor(percent * bar_len)
+        padding = " " * math.ceil((1 - percent) * bar_len)
+        bar = filled + padding
+        # Clear line (special character)
         print("\033[K", end="\r")
-        # Write bar
+        # Print loading bar and prefix/suffix
         desc = f"- {suffix}" if suffix else ""
-        print(f"\r{prefix or ''} |{bar}| {p:.0f}% {desc}", end="\r")
+        print(f"\r{prefix or ''} |{bar}| {100 * percent:.0f}% {desc}", end="\r")
 
     def run_seed_script(self, target, index, count):
         # Run specific seed script
-        prefix = f"{index+1}/{count} '{target[0]}'\t"
+        prefix = f"{index + 1}/{count} '{target[0]}'\t"
         generator = target[1]()
 
         # Generator types print their progress throughout
@@ -34,11 +38,18 @@ class Command(BaseCommand):
             progress = 0
 
             # Run script and print progress
-            for progress in generator:
-                if type(progress) is tuple:
-                    self.print_progress(progress[0], prefix=prefix, suffix=progress[1])
+            step: Union[int, Tuple[int, str]]
+            for step in generator:
+                if type(step) is tuple:
+                    progress, suffix = step
+                    self.print_progress(progress, prefix=prefix, suffix=suffix)
+                elif type(step) in [int, float]:
+                    self.print_progress(step, prefix=prefix)
                 else:
-                    self.print_progress(progress, prefix=prefix)
+                    raise Exception(
+                        f"Seed script {target[0]} yielded wrong type '{type(step)}', " +
+                        "expected number type or tuple of (number, str)"
+                    )
 
             # Final output 100%
             if type(progress) is tuple:
@@ -65,9 +76,12 @@ class Command(BaseCommand):
             print(" It's quicker if you don't need to seed everything.", end="")
             print(" Try something like 'python3 manage.py seed event'.\n")
 
-            scripts = [s for s in SEED_SCRIPTS if s[0] != "example"]
-            for i, seed_target in enumerate(scripts):
-                self.run_seed_script(seed_target, i, len(scripts))
+            seed_targets = [
+                seed_target for seed_target in SEED_SCRIPTS
+                if seed_target[0] != "example"
+            ]
+            for i, seed_target in enumerate(seed_targets):
+                self.run_seed_script(seed_target, i, len(seed_targets))
         else:
             # Find the specific seed script based on target name
             keys = [seed_target[0] for seed_target in SEED_SCRIPTS]

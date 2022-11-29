@@ -143,7 +143,7 @@ class Gang(models.Model):
         verbose_name_plural = 'Gangs'
 
     def __str__(self) -> str:
-        return f'{self.gang_type} {self.name}'
+        return f'{self.gang_type} - {self.name}'
 
 
 class InformationPage(models.Model):

@@ -2,8 +2,22 @@
 import random
 from django.utils import timezone
 
-from samfundet.models import Event, EventGroup
+from samfundet.models import Event, EventGroup, Venue
 from root.utils.samfundet_random import words
+
+# Number of events
+COUNT = 300
+
+# Event time as offset plus/minus today
+DAY_RANGE = 365 // 2
+
+# Duration in hours
+DURATION_MIN = 1
+DURATION_MAX = 5
+
+# Chance for recurring event
+# (multiple events with same event group)
+RECURRING_CHANCE = 0.1
 
 
 def seed():
@@ -12,30 +26,53 @@ def seed():
     EventGroup.objects.all().delete()
     yield 0, "Deleted old events"
 
-    for i in range(100):
-        group = EventGroup()
-        group.save()
+    venues = Venue.objects.all()
+
+    n_recurring = 0
+    for i in range(COUNT):
+
+        # Event title and time
         title_no, title_en = words(2, include_english=True)
         event_time = timezone.now() + timezone.timedelta(
-            days=random.randint(-30, 30), 
-            hours=random.randint(-12, 12)
+            days=random.randint(-DAY_RANGE, DAY_RANGE),
+            hours=random.randint(-12, 12),
+            minutes=random.randint(-30, 30)
         )
-        obj = Event(
-            title_no=title_no,
-            title_en=title_en,
-            start_dt=event_time,
-            end_dt=event_time + timezone.timedelta(hours=random.randint(1, 5)),
-            description_long_no=words(10),
-            description_long_en=words(10),
-            description_short_no=words(10),
-            description_short_en=words(10),
-            publish_dt=event_time - timezone.timedelta(days=random.randint(7, 21)),
-            host=words(1),
-            location=words(2),
-            event_group=group
+        event_duration = timezone.timedelta(
+            hours=random.randint(DURATION_MIN, DURATION_MAX),
+            minutes=random.randint(0, 60)
         )
-        obj.save()
-        yield i, f"Created event '{title_no}'"
+        event_venue = random.choice(venues)
 
-    yield 100, f"Created {len(Event.objects.all())} events"
+        # Small chance of recurring event
+        if random.random() <= RECURRING_CHANCE:
+            recurring = random.randint(2, 3)
+        else:
+            recurring = 1
+        n_recurring += 1 if recurring > 1 else 0
+        group = EventGroup.objects.create()
+
+        # Create event(s)
+        for j in range(recurring):
+            tag = "" if recurring == 1 else f" ({j+1}/{recurring})"
+            recurring_offset = timezone.timedelta(days=j*7)
+            Event.objects.create(
+                title_no=title_no + tag,
+                title_en=title_en + tag,
+                start_dt=event_time + recurring_offset,
+                end_dt=event_time + recurring_offset + event_duration,
+                description_long_no=words(10),
+                description_long_en=words(10),
+                description_short_no=words(10),
+                description_short_en=words(10),
+                publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
+                host=words(1),
+                location=event_venue.name,
+                event_group=group
+            )
+
+        yield int(i/COUNT * 100), f"Created event '{title_no}'"
+
+    # Done!
+    yield 100, f"Created {Event.objects.all().count()} events ({n_recurring} recurring)"
 
