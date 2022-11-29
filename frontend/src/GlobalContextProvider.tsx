@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken, getUser } from '~/api';
+import { getCsrfToken } from '~/api';
+import { useAuthContext } from '~/AuthContext';
 import { THEME, ThemeValue, XCSRFTOKEN } from '~/constants';
-import { UserDto } from '~/dto';
 import { Children, SetState } from '~/types';
 
 /**
@@ -12,8 +12,6 @@ type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
-  user: UserDto | undefined;
-  setUser: SetState<UserDto | undefined>;
 };
 
 /**
@@ -44,7 +42,7 @@ type GlobalContextProviderProps = {
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
   const [theme, setTheme] = useState<ThemeValue>(THEME.LIGHT);
-  const [user, setUser] = useState<UserDto>();
+  const { user } = useAuthContext();
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -53,11 +51,6 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
       .then((token) => {
         axios.defaults.headers.common[XCSRFTOKEN] = token;
       })
-      .catch(console.error);
-
-    // Always attempt to load user on first render.
-    getUser()
-      .then((user) => setUser(user))
       .catch(console.error);
   }, []);
 
@@ -98,8 +91,6 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     theme: theme,
     setTheme: setTheme,
     switchTheme: switchTheme,
-    user: user,
-    setUser: setUser,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
