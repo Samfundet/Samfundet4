@@ -13,7 +13,7 @@
 
 .content {
   flex: 1;
-  max-width: 1200px;
+  max-width: $content-max-size;
   width: 100%;
   padding: .5em;
   padding-top: 1em;

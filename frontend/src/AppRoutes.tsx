@@ -5,6 +5,7 @@ import {
   ComponentPage,
   HealthPage,
   HomePage,
+  InformationPage,
   InformationListPage,
   LoginPage,
   LychePage,
