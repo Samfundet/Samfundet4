@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getCsrfToken } from '~/api';
 import { useAuthContext } from '~/AuthContext';
-import { THEME, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
 import { Children, SetState } from '~/types';
 
 /**
@@ -41,7 +41,14 @@ type GlobalContextProviderProps = {
 };
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
-  const [theme, setTheme] = useState<ThemeValue>(THEME.LIGHT);
+  // Get theme from localStorage.
+  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
+  // Detect browser preference.
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
+  const initialTheme = storedTheme || detectedTheme;
+
+  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
   const { user } = useAuthContext();
 
   // Stuff to do on first render.
@@ -67,16 +74,15 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   // Update body classes when theme changes.
   useEffect(() => {
-    switch (theme) {
-      case THEME.DARK:
-        document.body.classList.add(THEME.DARK);
-        document.body.classList.remove(THEME.LIGHT);
-        break;
-      case THEME.LIGHT:
-        document.body.classList.add(THEME.LIGHT);
-        document.body.classList.remove(THEME.DARK);
-        break;
+    if (theme === THEME.DARK) {
+      document.body.classList.add(THEME.DARK);
+      document.body.classList.remove(THEME.LIGHT);
+    } else if (theme === THEME.LIGHT) {
+      document.body.classList.add(THEME.LIGHT);
+      document.body.classList.remove(THEME.DARK);
     }
+    // Remember theme in localStorage between refreshes.
+    localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
   // Update theme when user changes.
