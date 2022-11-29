@@ -11,6 +11,12 @@ router.register('events', views.EventView, 'events')
 router.register('venues', views.VenueView, 'venues')
 router.register('gangs', views.GangView, 'gangs')
 router.register('information', views.InformationPageView, 'information')
+router.register('user-preference', views.UserPreferenceView, 'user_preference')
+router.register('profile', views.ProfileView, 'profile')
+router.register('menu', views.MenuView, 'menu')
+router.register('menu-items', views.MenuItemView, 'menu_items')
+router.register('food-preference', views.FoodPreferenceView, 'food_preference')
+router.register('food-category', views.FoodCategoryView, 'food_category')
 
 app_name = 'samfundet'
 

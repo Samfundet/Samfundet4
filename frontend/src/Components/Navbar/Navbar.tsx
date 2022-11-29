@@ -79,14 +79,14 @@ export function Navbar() {
         {t(KEY.common_event)}
       </Link>
       <Link
-        to={ROUTES.frontend.health}
+        to={ROUTES.frontend.information_page_list}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
         {t(KEY.common_information)}
       </Link>
       <Link
-        to={ROUTES.frontend.health}
+        to={ROUTES.frontend.lyche}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
@@ -134,7 +134,6 @@ export function Navbar() {
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
-      <div className={styles.navbar_margin} />
       <nav id={styles.mobile_popup_container}>
         {navbarHeaders}
         <br />
@@ -147,6 +146,7 @@ export function Navbar() {
 
   return (
     <>
+      <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container}>
         <Link to="/">
           <img src={logoWhite} id={styles.navbar_logo} />

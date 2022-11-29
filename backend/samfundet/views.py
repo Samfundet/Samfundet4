@@ -21,8 +21,33 @@ from .utils import (
     groups_to_dataclass,
     permissions_to_dataclass,
 )
-from .models import Event, Venue, Gang, GangType, InformationPage
-from .serializers import EventSerializer, VenueSerializer, LoginSerializer, GangSerializer, GangTypeSerializer, InformationPageSerializer
+from .models import (
+    Menu,
+    Gang,
+    Event,
+    Profile,
+    Venue,
+    MenuItem,
+    GangType,
+    FoodCategory,
+    FoodPreference,
+    UserPreference,
+    InformationPage,
+)
+from .serializers import (
+    GangSerializer,
+    MenuSerializer,
+    EventSerializer,
+    ProfileSerializer,
+    VenueSerializer,
+    LoginSerializer,
+    MenuItemSerializer,
+    GangTypeSerializer,
+    FoodCategorySerializer,
+    FoodPreferenceSerializer,
+    UserPreferenceSerializer,
+    InformationPageSerializer,
+)
 
 User = get_user_model()
 
@@ -113,6 +138,17 @@ class CsrfView(APIView):
         return Response(data=csrf_token, headers={XCSRFTOKEN: csrf_token})
 
 
+@method_decorator(csrf_protect, 'dispatch')
+class UserPreferenceView(ModelViewSet):
+    serializer_class = UserPreferenceSerializer
+    queryset = UserPreference.objects.all()
+
+
+class ProfileView(ModelViewSet):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+
+
 ### GANGS ###
 class GangView(ModelViewSet):
     serializer_class = GangSerializer
@@ -130,4 +166,23 @@ class GangTypeView(ModelViewSet):
 class InformationPageView(ModelViewSet):
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
-    lookup_field = 'name_no'
+
+
+class MenuView(ModelViewSet):
+    serializer_class = MenuSerializer
+    queryset = Menu.objects.all()
+
+
+class MenuItemView(ModelViewSet):
+    serializer_class = MenuItemSerializer
+    queryset = MenuItem.objects.all()
+
+
+class FoodCategoryView(ModelViewSet):
+    serializer_class = FoodCategorySerializer
+    queryset = FoodCategory.objects.all()
+
+
+class FoodPreferenceView(ModelViewSet):
+    serializer_class = FoodPreferenceSerializer
+    queryset = FoodPreference.objects.all()

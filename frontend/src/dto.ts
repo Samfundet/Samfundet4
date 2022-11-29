@@ -57,14 +57,31 @@ export type ContentTypeDto = {
 };
 
 export type VenueDto = {
-  id: number;
-  name: string;
-  description: string;
-  floor: number;
-  last_renovated: number;
-  handicapped_approved: boolean;
-  responsible_crew: string;
-  content_type: ContentTypeDto;
+  id?: number;
+  name?: string;
+  description?: string;
+  floor?: number;
+  last_renovated?: number;
+  handicapped_approved?: boolean;
+  responsible_crew?: string;
+  content_type?: ContentTypeDto;
+  opening?: string;
+  closing?: string;
+  opening_monday?: string;
+  opening_tuesday?: string;
+  opening_wednesday?: string;
+  opening_thursday?: string;
+  opening_friday?: string;
+  opening_saturday?: string;
+  opening_sunday?: string;
+
+  closing_monday?: string;
+  closing_tuesday?: string;
+  closing_wednesday?: string;
+  closing_thursday?: string;
+  closing_friday?: string;
+  closing_saturday?: string;
+  closing_sunday?: string;
 };
 
 export type EventDto = {
@@ -96,7 +113,62 @@ export type ProfileDto = {
 };
 
 export type UserPreferenceDto = {
-  id: number;
-  theme: ThemeValue;
-  content_type: ContentTypeDto;
+  id?: number;
+  theme?: ThemeValue;
+  content_type?: ContentTypeDto;
+};
+
+export type InformationPageDto = {
+  slug_field?: string;
+
+  title_no?: string;
+  text_no?: string;
+
+  title_en?: string;
+  text_en?: string;
+};
+
+export type TableDto = {
+  name_no?: string;
+  description_no?: string;
+
+  name_en?: string;
+  description_en?: string;
+
+  seating?: number;
+};
+
+export type FoodPreferenceDto = {
+  name_no?: string;
+  name_en?: string;
+};
+
+export type FoodCategoryDto = {
+  name_no?: string;
+  name_en?: string;
+  order?: number;
+};
+
+export type MenuItemDto = {
+  name_no?: string;
+  description_no?: string;
+
+  name_en?: string;
+  description_en?: string;
+
+  price?: number;
+  price_member?: number;
+
+  order?: number;
+  food_preferences?: FoodPreferenceDto[];
+};
+
+export type MenuDto = {
+  name_no?: string;
+  description_no?: string;
+
+  name_en?: string;
+  description_en?: string;
+
+  menu_items?: MenuItemDto[];
 };

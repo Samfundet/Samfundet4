@@ -141,6 +141,7 @@ class Command(BaseCommand):
                 ### entry message ###
                 # backend
                 backend_file.write(YAPF_DISABLE)
+                backend_file.write(NEWLINE)
                 backend_file.write(PYLINT_DISABLE_INVALID_NAME)
                 backend_file.write(ENTRY_MSG)
                 backend_file.write(NEWLINE)
@@ -168,12 +169,13 @@ class Command(BaseCommand):
 
                     # Write to file.
                     frontend_file.write(NEWLINE + f"  {parsed_name}: '{parsed_url}',")
-                    backend_file.write(NEWLINE + f"{parsed_name} = '{parsed_url}'")
+                    backend_file.write(NEWLINE + f"{parsed_name} = '{url.name}'")
 
                     # Print in javascript mode for easy copy.
                     red_name = colorize(parsed_name or 'unknown', Colorize.RED)
                     green_url = colorize(f"'{parsed_url}'", Colorize.GREEN)
                     print(f"{red_name}: {green_url},")
 
+                backend_file.write(NEWLINE)
                 frontend_file.write(NEWLINE)
                 frontend_file.write('} as const;')
