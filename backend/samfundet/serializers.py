@@ -4,9 +4,11 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
+    Booking,
     Menu,
     Gang,
     Event,
+    Table,
     Venue,
     Profile,
     MenuItem,
@@ -163,4 +165,21 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
+        fields = '__all__'
+
+
+class TableSerializer(serializers.ModelSerializer):
+    venue = VenueSerializer(many=True)
+
+    class Meta:
+        model = Table
+        fields = '__all__'
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    tables = TableSerializer(many=True)
+    user = UserSerializer(many=True)
+
+    class Meta:
+        model = Booking
         fields = '__all__'

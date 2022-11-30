@@ -25,8 +25,10 @@ from .models import (
     Menu,
     Gang,
     Event,
-    Profile,
+    Table,
     Venue,
+    Profile,
+    Booking,
     MenuItem,
     GangType,
     FoodCategory,
@@ -38,9 +40,11 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
-    ProfileSerializer,
+    TableSerializer,
     VenueSerializer,
     LoginSerializer,
+    ProfileSerializer,
+    BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     FoodCategorySerializer,
@@ -186,3 +190,13 @@ class FoodCategoryView(ModelViewSet):
 class FoodPreferenceView(ModelViewSet):
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
+
+
+class TableView(ModelViewSet):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+
+
+class BookingView(ModelViewSet):
+    serializer_class = BookingSerializer
+    queryset = Booking.objects.all()

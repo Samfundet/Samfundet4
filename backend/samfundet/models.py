@@ -176,10 +176,12 @@ class Table(models.Model):
     name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
-    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
+    name_en = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     seating = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True)
 
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
@@ -247,3 +249,40 @@ class Menu(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name_no}'
+
+
+class Booking(models.Model):
+    name = models.CharField(max_length=64, blank=True, null=True)
+    text = models.TextField(blank=True, null=True)
+
+    tables = models.ManyToManyField(Table, blank=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+
+    # Solution 1:
+    class Duration(models.TextChoices):
+        ONE_HOUR = 'ONE_HOUR'
+        TWO_HOURS = 'TWO_HOURS'
+
+    when = models.DateTimeField(blank=True, null=True)
+    duration = models.CharField(
+        max_length=64,
+        default=Duration.TWO_HOURS,
+        choices=Duration.choices,
+        blank=True,
+        null=True,
+    )
+
+    # Solution 2:
+    from_dt = models.DateTimeField(blank=True, null=True)
+    to_dt = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Booking'
+        verbose_name_plural = 'Bookings'
+
+    def __str__(self) -> str:
+        return f'Booking: {self.name} - {self.user} - {self.when} ({self.table_count()})'
+
+    def table_count(self) -> int:
+        n: int = self.tables.count()
+        return n
