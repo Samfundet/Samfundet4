@@ -19,17 +19,18 @@ const TemplateMultiple: ComponentStory<typeof ExpandableHeader> = function (args
   return (
     <>
       <ExpandableHeader {...args}></ExpandableHeader>
-      <ExpandableHeader label="second child"></ExpandableHeader>
+      <ExpandableHeader {...args}></ExpandableHeader>
     </>
   );
 };
 
 export const Basic = TemplateSingular.bind({});
-Basic.args = {
+Basic.args = { children: <div>Peek-a-Boo</div> };
+
+export const Nested = TemplateSingular.bind({});
+Nested.args = {
   children: <ExpandableHeader />,
 };
 
 export const Multiple = TemplateMultiple.bind({});
-Basic.args = {
-  children: <ExpandableHeader />,
-};
+Multiple.args = { children: <div>Peek-a-Boo</div> };

@@ -1,15 +1,12 @@
 @import 'src/constants';
 
 .extendable_header_wrapper {
-  //label som wrapper
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   font-size: 1rem;
-  //selve select boksen
   background: $red-samf;
-  font-size: 1rem; //root element font størrelse. Skalert etter HTML dokumentets font størrelse
   padding: 0.5em 1.5em 0.5em 0.5em;
   color: $white;
   cursor: pointer;
@@ -27,7 +24,6 @@
 }
 
 .expandable_header_arrow {
-  //dette er hensiktsmessig fordi pil-delen av select elementet har varierende utseende i forskjellige browsere
   flex-basis: 25%;
   height: 35px;
   width: 35px;
@@ -40,5 +36,5 @@
 }
 
 .expandable_header_arrow.open {
-  transform: rotate(-180deg)
+  transform: rotate(-180deg);
 }
