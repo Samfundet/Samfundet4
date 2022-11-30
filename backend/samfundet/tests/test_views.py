@@ -15,9 +15,13 @@ def test_csrf(fixture_rest_client: APIClient):
     assert is_success(code=response.status_code)
 
 
-def test_login(fixture_rest_client: APIClient, fixture_user: User):
+def test_login(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_user_pw: str,
+):
     url = reverse('samfundet:login')
-    response = fixture_rest_client.post(path=url, data={'username': fixture_user.username, 'password': 'Django123'})
+    response = fixture_rest_client.post(path=url, data={'username': fixture_user.username, 'password': fixture_user_pw})
     assert is_success(code=response.status_code)
 
     url = reverse('samfundet:logout')
