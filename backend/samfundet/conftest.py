@@ -17,6 +17,7 @@ https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
 
 # pylint: disable=unused-argument # These are fixtures.
+# pylint: disable=redefined-outer-name # Fixtures are meant to be used this way.
 
 
 @pytest.fixture
