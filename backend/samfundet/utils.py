@@ -18,7 +18,7 @@ from .dto import (
     VenueDto,
     GroupDto,
     ProfileDto,
-    SakdokumentDto,
+    SaksdokumentDto,
     PermissionDto,
     ContentTypeDto,
     UserPreferenceDto,
@@ -195,9 +195,9 @@ def profile_to_dataclass(*, profile: Profile) -> ProfileDto:
 ###
 
 
-def saksdokument_to_dataclass(*, saksdokument: Saksdokument) -> SakdokumentDto:
+def saksdokument_to_dataclass(*, saksdokument: Saksdokument) -> SaksdokumentDto:
     content_type = get_content_type(saksdokument)
-    return VenueDto(
+    return SaksdokumentDto(
         id=saksdokument.id,
         title_no=saksdokument.title_no,
         title_en=saksdokument.title_en,

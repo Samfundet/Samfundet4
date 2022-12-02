@@ -152,7 +152,7 @@ export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
   return response.data;
 }
 
-export async function getSaksdokument(): Promise<SaksdokumentDto> {
+export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
   const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
 

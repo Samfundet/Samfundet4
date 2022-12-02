@@ -248,18 +248,18 @@ class Menu(models.Model):
 
 
 class Saksdokument(models.Model):
-    title_no = models.CharField(max_length=80, unique=False, blank=False, null=False, verbose_name='Tittel (Norsk)')
-    title_en = models.CharField(max_length=80, unique=False, blank=False, null=False, verbose_name='Tittel (Engelsk)')
-    publication_date = models.DateTimeField(blank=False, null=False)
+    title_no = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
+    title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
+    publication_date = models.DateTimeField(blank=True, null=True)
 
-    class SaksdokumentChoices(models.TextChoices):
+    class SaksdokumentCategories(models.TextChoices):
         FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
         STYRET = 'STYRET', _('Styret')
         RADET = 'RADET', _('Rådet')
-        ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringger')
+        ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
 
-    category = models.CharField(max_length=25, choices=SaksdokumentChoices.choices)
-    file = models.FileField(upload_to='uploads/saksdokument/')
+    category = models.CharField(max_length=25, choices=SaksdokumentCategories.choices, default=SaksdokumentCategories.FS_REFERAT)
+    file = models.FileField(upload_to='uploads/saksdokument/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Saksdokument'

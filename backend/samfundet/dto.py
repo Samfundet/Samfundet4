@@ -132,10 +132,11 @@ class ProfileDto:
 
 @dataclass_json
 @dataclass
-class SakdokumentDto:
+class SaksdokumentDto:
     id: int
     title_no: str
     title_en: str
     publication_date: datetime
     category: str
-    file: __file__
+    file: str
+    content_type: ContentTypeDto
