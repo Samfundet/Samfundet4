@@ -1,15 +1,15 @@
 import classnames from 'classnames';
-import { ReactNode } from 'react';
+import { Children } from '~/types';
 import styles from './Carousel.module.scss';
 
 type CarouselProps = {
-  children: Array<ReactNode>;
-  header: string;
+  children: Array<Children>;
+  header?: string;
   spacing?: number;
 };
 
 export function Carousel({ children, header, spacing }: CarouselProps) {
-  const wrappedChildren = children.map((child: ReactNode, idx: number) => {
+  const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
       <div className={styles.itemContainer} style={{ padding: (spacing ? spacing : 0.2) + 'em' }} key={idx}>
         {child}
@@ -19,7 +19,7 @@ export function Carousel({ children, header, spacing }: CarouselProps) {
 
   return (
     <div className={styles.carousel}>
-      <div className={styles.header}>{header}</div>
+      {header && <div className={styles.header}>{header}</div>}
       <div className={styles.container}>
         <div className={styles.navContainer}>
           <div className={classnames(styles.button, styles.left)}>{'<'}</div>
