@@ -37,6 +37,18 @@ code {
 .theme-dark {
   background-color: $theme-dark-bg;
   color: $theme-dark-color;
+
+  input {
+    background-color: $theme-dark-input-bg;
+    color: inherit;
+    &:focus {
+      outline-color: $white;
+    }
+  }
+
+  a {
+    color: pink;
+  }
 }
 
 // End: Themes --------------------------------------------------------------------------------------------------------

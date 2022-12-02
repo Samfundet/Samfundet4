@@ -1,0 +1,50 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  align-content: stretch;
+  min-width: 100%;
+  min-height: calc(100vh - 200px);
+  padding: 10em 10vw 10em 10vw;
+}
+
+.content_container {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: 31em;
+  width: calc(100%);
+  margin: 0 1em;
+  background-color: $white;
+  text-transform: uppercase;
+}
+
+.header_text {
+  text-align: center;
+  font-size: 1.8em;
+}
+
+.input_field {
+  display: block;
+  width: calc(100%);
+  margin-bottom: 0.8em;
+}
+
+.login_button {
+  width: 100%;
+  font-size: 1em;
+}
+
+.forgotten_password {
+  color: $red-samf;
+  text-align: center;
+  margin-top: 0.4em;
+  font-size: 0.8em;
+}

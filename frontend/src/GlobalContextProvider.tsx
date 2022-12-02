@@ -1,5 +1,8 @@
+import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { THEME, ThemeValue } from '~/constants';
+import { getCsrfToken } from '~/api';
+import { useAuthContext } from '~/AuthContext';
+import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
 import { Children, SetState } from '~/types';
 
 /**
@@ -8,7 +11,7 @@ import { Children, SetState } from '~/types';
 type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
-  switchTheme: () => void;
+  switchTheme: () => ThemeValue;
 };
 
 /**
@@ -38,30 +41,56 @@ type GlobalContextProviderProps = {
 };
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
-  const [theme, setTheme] = useState<ThemeValue>(THEME.LIGHT);
+  // Get theme from localStorage.
+  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
+  // Detect browser preference.
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
+  const initialTheme = storedTheme || detectedTheme;
 
-  /** Simplified theme switching. */
-  function switchTheme() {
+  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+  const { user } = useAuthContext();
+
+  // Stuff to do on first render.
+  useEffect(() => {
+    // Fetch and set fresh csrf token for future requests.
+    getCsrfToken()
+      .then((token) => {
+        axios.defaults.headers.common[XCSRFTOKEN] = token;
+      })
+      .catch(console.error);
+  }, []);
+
+  /** Simplified theme switching. Returns theme it switched to. */
+  function switchTheme(): ThemeValue {
     if (theme === THEME.LIGHT) {
       setTheme(THEME.DARK);
+      return THEME.DARK;
     } else {
       setTheme(THEME.LIGHT);
+      return THEME.LIGHT;
     }
   }
 
   // Update body classes when theme changes.
   useEffect(() => {
-    switch (theme) {
-      case THEME.DARK:
-        document.body.classList.add(THEME.DARK);
-        document.body.classList.remove(THEME.LIGHT);
-        break;
-      case THEME.LIGHT:
-        document.body.classList.add(THEME.LIGHT);
-        document.body.classList.remove(THEME.DARK);
-        break;
+    if (theme === THEME.DARK) {
+      document.body.classList.add(THEME.DARK);
+      document.body.classList.remove(THEME.LIGHT);
+    } else if (theme === THEME.LIGHT) {
+      document.body.classList.add(THEME.LIGHT);
+      document.body.classList.remove(THEME.DARK);
     }
+    // Remember theme in localStorage between refreshes.
+    localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
+
+  // Update theme when user changes.
+  useEffect(() => {
+    if (user?.user_preference.theme) {
+      setTheme(user?.user_preference.theme);
+    }
+  }, [user]);
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {

@@ -1,44 +1,58 @@
 import classNames from 'classnames';
-import { useState } from 'react';
-import { NavLink as Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink as Link, useNavigate } from 'react-router-dom';
+import { logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
+import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { STATUS } from '~/http_status_codes';
+import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
 
-function changeLanguage() {
-  console.log('language changed :)');
-}
-
 export function Navbar() {
-  const [mobileNavigation, setMobileNavigation] = useState(true);
-  const [loggedIn] = useState(true);
-  const [language, setLanguage] = useState(0);
+  const [mobileNavigation, setMobileNavigation] = useState(false);
+  const { t, i18n } = useTranslation();
+  const { user, setUser } = useAuthContext();
+  const navigate = useNavigate();
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 992);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
 
   // Return norwegian or english flag depending on language
   function languageImage() {
-    if (language) {
-      return <img src={norwegianFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(0)} />;
+    if (i18n.language == LANGUAGES.NB) {
+      return (
+        <img
+          src={englishFlag}
+          className={isDesktop ? styles.navbar_language_flag : styles.popup_change_language}
+          onClick={() => i18n.changeLanguage(LANGUAGES.EN)}
+        />
+      );
     }
-    return <img src={englishFlag} className={styles.navbar_language_flag} onClick={() => setLanguage(1)} />;
+    return (
+      <img
+        src={norwegianFlag}
+        className={isDesktop ? styles.navbar_language_flag : styles.popup_change_language}
+        onClick={() => i18n.changeLanguage(LANGUAGES.NB)}
+      />
+    );
   }
 
   // Return profile button for navbar if logged in
   const profileButton = (
-    <div className={styles.navbar_profile_button}>
+    <div className={isDesktop ? styles.navbar_profile_button : styles.popup_profile}>
       <img src={profileIcon} className={styles.profile_icon}></img>
       <Link to={ROUTES.frontend.home} className={styles.profile_text}>
-        Username
-      </Link>
-    </div>
-  );
-
-  //Return profile button for popup if logged in
-  const profileButtonMobile = (
-    <div className={styles.popup_profile}>
-      <img src={profileIcon} className={styles.profile_icon}></img>
-      <Link to={ROUTES.frontend.home} className={styles.profile_text}>
-        Username
+        {user?.username}
       </Link>
     </div>
   );
@@ -56,90 +70,111 @@ export function Navbar() {
     </div>
   );
 
+  const navbarHeaders = (
+    <>
+      <Link
+        to={ROUTES.frontend.health}
+        className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
+        onClick={() => setMobileNavigation(false)}
+      >
+        {t(KEY.common_event)}
+      </Link>
+      <Link
+        to={ROUTES.frontend.information_page_list}
+        className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
+        onClick={() => setMobileNavigation(false)}
+      >
+        {t(KEY.common_information)}
+      </Link>
+      <Link
+        to={ROUTES.frontend.lyche}
+        className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
+        onClick={() => setMobileNavigation(false)}
+      >
+        {t(KEY.common_restaurant)}
+      </Link>
+      <Link
+        to={ROUTES.frontend.health}
+        className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
+        onClick={() => setMobileNavigation(false)}
+      >
+        {t(KEY.common_volunteer)}
+      </Link>
+    </>
+  );
+
+  const loginButtons = (
+    <>
+      <Button
+        theme="samf"
+        className={isDesktop ? styles.navbar_member_button : styles.popup_member_button}
+        onClick={() => {
+          navigate(ROUTES.frontend.login);
+          setMobileNavigation(false);
+        }}
+      >
+        {t(KEY.common_member)}
+      </Button>
+      {/* Show login button */}
+      {!user && (
+        <Button
+          theme="secondary"
+          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          onClick={() => {
+            navigate(ROUTES.frontend.login);
+            setMobileNavigation(false);
+          }}
+        >
+          {t(KEY.common_internal)}
+        </Button>
+      )}
+      {/* Show logout button */}
+      {user && (
+        <Button
+          theme="secondary"
+          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          onClick={() => {
+            logout()
+              .then((response) => {
+                response.status === STATUS.HTTP_200_OK && setUser(undefined);
+              })
+              .catch(console.error);
+
+            setMobileNavigation(false);
+          }}
+        >
+          {t(KEY.common_logout)}
+        </Button>
+      )}
+    </>
+  );
+
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
-      <div className={styles.navbar_margin} />
       <nav id={styles.mobile_popup_container}>
-        <Link
-          to={ROUTES.frontend.health}
-          className={styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          Arrangement
-        </Link>
-        <Link
-          to={ROUTES.frontend.health}
-          className={styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          Information
-        </Link>
-        <Link
-          to={ROUTES.frontend.health}
-          className={styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          Restaurant
-        </Link>
-        <Link
-          to={ROUTES.frontend.health}
-          className={styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          Opptak
-        </Link>
+        {navbarHeaders}
         <br />
-        <a onClick={() => changeLanguage()} className={styles.popup_change_language}>
-          English
-        </a>
-        <Button className={styles.popup_member_button}>
-          <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-            Medlem
-          </Link>
-        </Button>
-        <Button theme="secondary" className={styles.popup_internal_button}>
-          <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
-            Intern
-          </Link>
-        </Button>
-        {loggedIn && profileButtonMobile}
+        {languageImage()}
+        {loginButtons}
+        {user && profileButton}
       </nav>
     </>
   );
 
   return (
     <>
+      <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container}>
         <Link to="/">
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Arrangement
-        </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Information
-        </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Restaurant
-        </Link>
-        <Link to={ROUTES.frontend.health} className={styles.navbar_link}>
-          Opptak
-        </Link>
+        {isDesktop && navbarHeaders}
         <div className={styles.navbar_signup}>
           <ThemeSwitch />
-          {loggedIn && profileButton}
+          {user && profileButton}
           {languageImage()}
-          <Button className={styles.navbar_member_button}>
-            <Link to={ROUTES.frontend.health} className={styles.member_button_link}>
-              Medlem
-            </Link>
-          </Button>
-          <Button theme="secondary" className={styles.navbar_internal_button}>
-            <Link to={ROUTES.frontend.health} className={styles.internal_button_link}>
-              Intern
-            </Link>
-          </Button>
+          {loginButtons}
         </div>
         {hamburgerMenu}
       </nav>

@@ -10,3 +10,7 @@ class Environment:
 
     ALL = [BASE, DEV, PROD, HEROKU]
     VALID = [DEV, PROD, HEROKU]
+
+
+# Name of exposed csrf-token header in http traffic.
+XCSRFTOKEN = 'X-CSRFToken'
