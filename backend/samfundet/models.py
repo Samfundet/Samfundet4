@@ -1,9 +1,10 @@
 from typing import Any
-from datetime import time
+from datetime import time, timedelta
 
 from guardian.shortcuts import assign_perm
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 
@@ -258,21 +259,6 @@ class Booking(models.Model):
     tables = models.ManyToManyField(Table, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
-    # Solution 1:
-    class Duration(models.TextChoices):
-        ONE_HOUR = 'ONE_HOUR'
-        TWO_HOURS = 'TWO_HOURS'
-
-    when = models.DateTimeField(blank=True, null=True)
-    duration = models.CharField(
-        max_length=64,
-        default=Duration.TWO_HOURS,
-        choices=Duration.choices,
-        blank=True,
-        null=True,
-    )
-
-    # Solution 2:
     from_dt = models.DateTimeField(blank=True, null=True)
     to_dt = models.DateTimeField(blank=True, null=True)
 
@@ -281,8 +267,31 @@ class Booking(models.Model):
         verbose_name_plural = 'Bookings'
 
     def __str__(self) -> str:
-        return f'Booking: {self.name} - {self.user} - {self.when} ({self.table_count()})'
+        return f'Booking: {self.name} - {self.user} - {self.from_dt} ({self.table_count()})'
 
     def table_count(self) -> int:
         n: int = self.tables.count()
         return n
+
+    def get_duration(self) -> timedelta | None:
+        if self.to_dt and self.from_dt:
+            duration: timedelta = self.to_dt - self.from_dt
+            return duration
+        return None
+
+    def clean(self) -> None:
+        errors: dict[str, ValidationError] = {}
+
+        field_to_validate = 'to_dt'
+        duration_constraint_hours = 2
+        duration = self.get_duration()
+        if duration and duration > timedelta(hours=duration_constraint_hours):
+            error = f'Duration cannot be longer than {duration_constraint_hours} hours.'
+            errors.setdefault(field_to_validate, []).append(error)
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)

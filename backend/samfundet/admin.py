@@ -336,9 +336,8 @@ class FoodPreferenceAdmin(CustomGuardedModelAdmin):
 @admin.register(Booking)
 class BookingAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name', 'when', 'tables_count']
-    list_filter = ['duration']
-    list_display = ['id', '__str__', 'name', 'when', 'table_count']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count']
     _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'name', *_user_search_fields]
     filter_horizontal = ['tables']
