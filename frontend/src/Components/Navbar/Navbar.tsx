@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink as Link, useNavigate } from 'react-router-dom';
 import { logout } from '~/api';
@@ -9,6 +9,7 @@ import { Button, ThemeSwitch } from '~/Components';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { useDesktop } from '~/utils';
 import styles from './Navbar.module.scss';
 
 export function Navbar() {
@@ -16,18 +17,8 @@ export function Navbar() {
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 992);
+  const isDesktop = useDesktop();
 
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 992);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
-
-  // Return norwegian or english flag depending on language
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
       return (

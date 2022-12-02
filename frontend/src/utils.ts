@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { GroupDto, PermissionDto, UserDto } from '~/dto';
 
 /** Inspired by Django PermissionMixin. */
@@ -89,3 +90,32 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
 }
 
 // ------------------------------
+
+// Return true while on desktop width, false otherwise
+export function useDesktop(): boolean {
+  const [width, setWidth] = useState(window.innerWidth);
+  const updateMedia = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
+  return width > 992;
+}
+
+// ------------------------------
+
+export function useMobile(): boolean {
+  const [width, setWidth] = useState(window.innerWidth);
+  const updateMedia = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateMedia);
+    return () => window.removeEventListener('resize', updateMedia);
+  });
+  return width < 768;
+}
