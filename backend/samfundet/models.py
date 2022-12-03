@@ -255,12 +255,16 @@ class Menu(models.Model):
 class Booking(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     text = models.TextField(blank=True, null=True)
-
-    tables = models.ManyToManyField(Table, blank=True)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-
     from_dt = models.DateTimeField(blank=True, null=True)
     to_dt = models.DateTimeField(blank=True, null=True)
+
+    tables = models.ManyToManyField(Table, blank=True)
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    first_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    email = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Booking'
