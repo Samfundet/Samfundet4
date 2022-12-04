@@ -9,7 +9,7 @@ import { Button, ThemeSwitch } from '~/Components';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useDesktop } from '~/utils';
+import { useDesktop } from '~/hooks';
 import styles from './Navbar.module.scss';
 
 export function Navbar() {
