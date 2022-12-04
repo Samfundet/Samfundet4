@@ -13,7 +13,10 @@ export type ThemeValue = typeof THEME[ThemeKey];
 export const XCSRFTOKEN = 'X-CSRFToken';
 export const THEME_KEY = 'theme';
 
-/* Screen sizes, breakpoint (bp) */
+/**
+ * Screen sizes, breakpoint (bp).
+ * These values are also in _constants.scss
+ */
 export const largeDesktopBpLower = 1201;
 export const desktopBpUpper = 1200;
 export const desktopBpLower = 993;
