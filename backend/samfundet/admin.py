@@ -19,6 +19,7 @@ from .models import (
     Venue,
     Table,
     Profile,
+    Booking,
     MenuItem,
     GangType,
     EventGroup,
@@ -106,8 +107,8 @@ class LogEntryAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'user', 'action_flag', 'object_repr', 'action_time']
     list_filter = ['action_flag']
     list_display = ['id', '__str__', 'user', 'action_flag', 'object_repr', 'action_time']
-    _user_search_fields = [f'user__{field}' for field in UserAdmin.search_fields]
-    search_fields = ['id', *_user_search_fields, 'object_repr']
+    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
+    search_fields = ['id', 'object_repr', *_user_search_fields]
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     autocomplete_fields = ['user', 'content_type']
@@ -142,7 +143,7 @@ class UserObjectPermissionAdmin(CustomGuardedModelAdmin):
     ordering = ['user']
     sortable_by = ['id', 'user', 'permission', 'content_type']
     # list_filter = [] # TODO
-    _user_search_fields = [f'user__{field}' for field in UserAdmin.search_fields]
+    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     list_display = ['id', '__str__', 'user', 'permission', 'content_type']
     search_fields = [*_user_search_fields]
     # filter_horizontal = [] # TODO
@@ -161,7 +162,7 @@ class UserPreferenceAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'user', 'theme']
     list_filter = ['theme']
     list_display = ['id', '__str__', 'user', 'theme']
-    _user_search_fields = [f'user__{field}' for field in UserAdmin.search_fields]
+    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'theme', *_user_search_fields]
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -175,7 +176,7 @@ class ProfileAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'user', 'nickname']
     # list_filter = []
     list_display = ['id', '__str__', 'user', 'nickname']
-    _user_search_fields = [f'user__{field}' for field in UserAdmin.search_fields]
+    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'nickname', *_user_search_fields]
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -329,6 +330,19 @@ class FoodPreferenceAdmin(CustomGuardedModelAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Booking)
+class BookingAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    # list_filter = []
+    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count']
+    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
+    search_fields = ['id', 'name', *_user_search_fields]
+    filter_horizontal = ['tables']
+    list_display_links = ['id', '__str__']
+    autocomplete_fields = ['user']
     list_select_related = True
 
 
