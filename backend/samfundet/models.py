@@ -120,31 +120,33 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype')
+    title_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype Norsk')
+    title_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype Engelsk')
 
     class Meta:
         verbose_name = 'GangType'
         verbose_name_plural = 'GangTypes'
 
     def __str__(self) -> str:
-        return f'{self.title}'
+        return f'{self.title_no}'
 
 
 class Gang(models.Model):
-    name = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn', unique=True)
-    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse', unique=True)
-    webpage = models.URLField(verbose_name='Nettside')
+    name_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Norsk', unique=True)
+    name_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Engelsk', unique=True)
+    abbreviation = models.CharField(max_length=64, blank=False, null=False, verbose_name='Forkortelse', unique=True)
+    webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
+    logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name="Logo")
     gang_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
-
-    # TODO ADD Information Page
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
 
     def __str__(self) -> str:
-        return f'{self.gang_type} - {self.name}'
+        return f'{self.gang_type} - {self.name_no}'
 
 
 class InformationPage(models.Model):
