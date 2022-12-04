@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { AuthContextProvider } from '~/AuthContext';
 import { GlobalContextProvider } from '~/GlobalContextProvider';
 import { ThemeSwitch } from './ThemeSwitch';
 
@@ -11,9 +12,11 @@ export default {
 const Template: ComponentStory<typeof ThemeSwitch> = function (args) {
   return (
     <>
-      <GlobalContextProvider>
-        <ThemeSwitch {...args} />
-      </GlobalContextProvider>
+      <AuthContextProvider>
+        <GlobalContextProvider>
+          <ThemeSwitch {...args} />
+        </GlobalContextProvider>
+      </AuthContextProvider>
     </>
   );
 };
