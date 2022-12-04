@@ -172,3 +172,14 @@ export type MenuDto = {
 
   menu_items?: MenuItemDto[];
 };
+
+export type BookingDto = {
+  name?: string;
+  text?: string;
+
+  tables?: TableDto[];
+  user?: UserDto;
+
+  from_dto?: Date;
+  from_to?: Date;
+};

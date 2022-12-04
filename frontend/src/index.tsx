@@ -8,13 +8,13 @@ import { reportWebVitals } from '~/reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <GlobalContextProvider>
-    <AuthContextProvider>
+  <AuthContextProvider>
+    <GlobalContextProvider>
       <React.StrictMode>
         <App />
       </React.StrictMode>
-    </AuthContextProvider>
-  </GlobalContextProvider>,
+    </GlobalContextProvider>
+  </AuthContextProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

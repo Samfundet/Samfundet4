@@ -33,6 +33,7 @@ disable=
     too-few-public-methods,
     too-many-public-methods,
     too-many-arguments,
+    disallowed-name, # Don't care about "foo", "bar" etc.
     too-many-locals,
     too-many-statements,
     unsubscriptable-object, # https://github.com/PyCQA/pylint/issues/1498

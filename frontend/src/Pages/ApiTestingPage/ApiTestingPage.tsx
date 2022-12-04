@@ -10,8 +10,8 @@ import {
   logout,
   putUserPreference,
 } from '~/api';
+import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
-import { useGlobalContext } from '~/GlobalContextProvider';
 
 import styles from './ApiTestingPage.module.scss';
 
@@ -20,7 +20,7 @@ import styles from './ApiTestingPage.module.scss';
  * Useful when styling global themes.
  */
 export function ApiTestingPage() {
-  const { user } = useGlobalContext();
+  const { user } = useAuthContext();
   return (
     <div className={styles.wrapper}>
       <Button theme="samf" className={styles.btn} onClick={() => getCsrfToken().then(console.log).catch(console.error)}>

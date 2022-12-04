@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken, getUser } from '~/api';
-import { THEME, ThemeValue, XCSRFTOKEN } from '~/constants';
-import { UserDto } from '~/dto';
+import { getCsrfToken } from '~/api';
+import { useAuthContext } from '~/AuthContext';
+import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
 import { Children, SetState } from '~/types';
 
 /**
@@ -12,8 +12,6 @@ type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
-  user: UserDto | undefined;
-  setUser: SetState<UserDto | undefined>;
 };
 
 /**
@@ -43,8 +41,15 @@ type GlobalContextProviderProps = {
 };
 
 export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
-  const [theme, setTheme] = useState<ThemeValue>(THEME.LIGHT);
-  const [user, setUser] = useState<UserDto>();
+  // Get theme from localStorage.
+  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
+  // Detect browser preference.
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
+  const initialTheme = storedTheme || detectedTheme;
+
+  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+  const { user } = useAuthContext();
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -53,11 +58,6 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
       .then((token) => {
         axios.defaults.headers.common[XCSRFTOKEN] = token;
       })
-      .catch(console.error);
-
-    // Always attempt to load user on first render.
-    getUser()
-      .then((user) => setUser(user))
       .catch(console.error);
   }, []);
 
@@ -74,16 +74,15 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   // Update body classes when theme changes.
   useEffect(() => {
-    switch (theme) {
-      case THEME.DARK:
-        document.body.classList.add(THEME.DARK);
-        document.body.classList.remove(THEME.LIGHT);
-        break;
-      case THEME.LIGHT:
-        document.body.classList.add(THEME.LIGHT);
-        document.body.classList.remove(THEME.DARK);
-        break;
+    if (theme === THEME.DARK) {
+      document.body.classList.add(THEME.DARK);
+      document.body.classList.remove(THEME.LIGHT);
+    } else if (theme === THEME.LIGHT) {
+      document.body.classList.add(THEME.LIGHT);
+      document.body.classList.remove(THEME.DARK);
     }
+    // Remember theme in localStorage between refreshes.
+    localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
   // Update theme when user changes.
@@ -98,8 +97,6 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     theme: theme,
     setTheme: setTheme,
     switchTheme: switchTheme,
-    user: user,
-    setUser: setUser,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;

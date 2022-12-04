@@ -1,14 +1,14 @@
 import { getAllPermissions, getCsrfToken, getUser, login, logout } from '~/api';
 import logo from '~/assets/logo_black.png';
 import splash from '~/assets/splash.jpeg';
+import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
-import { useGlobalContext } from '~/GlobalContextProvider';
 import { AUTH_ADD_GROUP } from '~/permissions';
 import { hasPerm } from '~/utils';
 import styles from './HomePage.module.scss';
 
 export function HomePage() {
-  const { setUser } = useGlobalContext();
+  const { setUser } = useAuthContext();
   return (
     <div className={styles.container}>
       <img src={splash} alt="Splash" className={styles.splash} />
@@ -23,7 +23,7 @@ export function HomePage() {
         <Button onClick={() => login('emilte', 'Django123')}>login</Button>
         <Button onClick={() => getUser()}>user</Button>
         <Button onClick={() => getAllPermissions()}>perms</Button>
-        <Button onClick={() => logout()}>logout</Button>
+        <Button onClick={() => logout().then(() => setUser(undefined))}>logout</Button>
         <Button
           onClick={() => {
             getUser().then((user) => {

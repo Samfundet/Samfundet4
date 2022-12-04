@@ -1,3 +1,4 @@
+from typing import Iterator
 import pytest
 
 from rest_framework.test import APIClient
@@ -16,6 +17,7 @@ https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
 
 # pylint: disable=unused-argument # These are fixtures.
+# pylint: disable=redefined-outer-name # Fixtures are meant to be used this way.
 
 
 @pytest.fixture
@@ -29,22 +31,32 @@ def fixture_django_client() -> Client:
 
 
 @pytest.fixture
-def fixture_superuser(db) -> User:  # type: ignore[no-untyped-def]
+def fixture_superuser_pw() -> Iterator[str]:
+    yield 'Django123'
+
+
+@pytest.fixture
+def fixture_superuser(db, fixture_superuser_pw: str) -> Iterator[User]:  # type: ignore[no-untyped-def]
     superuser = User.objects.create_superuser(  # nosec hardcoded_password_funcarg
         username='superuser',
         email='superuser@test.com',
-        password='Django123',
+        password=fixture_superuser_pw,
     )
     yield superuser
     superuser.delete()
 
 
 @pytest.fixture
-def fixture_staff(db) -> User:  # type: ignore[no-untyped-def]
+def fixture_staff_pw() -> Iterator[str]:
+    yield 'Django123'
+
+
+@pytest.fixture
+def fixture_staff(db, fixture_staff_pw) -> Iterator[User]:  # type: ignore[no-untyped-def]
     staff = User.objects.create_user(  # nosec hardcoded_password_funcarg
         username='staff',
         email='staff@test.com',
-        password='Django123',
+        password=fixture_staff_pw,
         is_staff=True,
     )
     yield staff
@@ -52,11 +64,16 @@ def fixture_staff(db) -> User:  # type: ignore[no-untyped-def]
 
 
 @pytest.fixture
-def fixture_user(db) -> User:  # type: ignore[no-untyped-def]
+def fixture_user_pw() -> Iterator[str]:
+    yield 'Django123'
+
+
+@pytest.fixture
+def fixture_user(db, fixture_user_pw) -> Iterator[User]:  # type: ignore[no-untyped-def]
     user = User.objects.create_user(  # nosec hardcoded_password_funcarg
         username='user',
         email='user@test.com',
-        password='Django123',
+        password=fixture_user_pw,
     )
     yield user
     user.delete()

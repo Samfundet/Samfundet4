@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getUser, login } from '~/api';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Button, InputField } from '~/Components';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LoginPage.module.scss';
@@ -20,7 +21,7 @@ export function LoginPage() {
     event.preventDefault();
     login(name, password)
       .then((status) => {
-        if (status === 202) {
+        if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser()
             .then((user) => {
               setUser(user);

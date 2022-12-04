@@ -6,6 +6,7 @@ import { logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
@@ -114,20 +115,37 @@ export function Navbar() {
       >
         {t(KEY.common_member)}
       </Button>
-      <Button
-        theme="secondary"
-        className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
-        onClick={() => {
-          user
-            ? logout().then((status) => {
-                status === 200 && setUser(undefined);
+      {/* Show login button */}
+      {!user && (
+        <Button
+          theme="secondary"
+          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          onClick={() => {
+            navigate(ROUTES.frontend.login);
+            setMobileNavigation(false);
+          }}
+        >
+          {t(KEY.common_internal)}
+        </Button>
+      )}
+      {/* Show logout button */}
+      {user && (
+        <Button
+          theme="secondary"
+          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          onClick={() => {
+            logout()
+              .then((response) => {
+                response.status === STATUS.HTTP_200_OK && setUser(undefined);
               })
-            : navigate(ROUTES.frontend.login);
-          setMobileNavigation(false);
-        }}
-      >
-        {user ? t(KEY.common_logout) : t(KEY.common_internal)}
-      </Button>
+              .catch(console.error);
+
+            setMobileNavigation(false);
+          }}
+        >
+          {t(KEY.common_logout)}
+        </Button>
+      )}
     </>
   );
 
