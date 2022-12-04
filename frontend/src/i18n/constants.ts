@@ -23,6 +23,7 @@ export const KEY = {
   login_email_placeholder: 'login_email_placeholder',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
+  opening_hours: 'opening_hours',
 } as const;
 
 /**
