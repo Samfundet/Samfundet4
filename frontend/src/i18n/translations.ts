@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { KEY, KeyValues } from '~/i18n/constants';
 
 export const nb: Record<KeyValues, string> = {
@@ -15,6 +16,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
   [KEY.login_internal_login]: 'Logg inn som intern',
   [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
+  [KEY.gangs_title]: 'Gjengene på Samfundet',
+  [KEY.gangs_text]:
+    'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -32,4 +36,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Forgot password?',
   [KEY.login_internal_login]: 'Log in as internal',
   [KEY.login_email_placeholder]: 'Email or membership ID',
+  [KEY.gangs_title]: 'The groups at Samfundet',
+  [KEY.gangs_text]:
+    'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
 };

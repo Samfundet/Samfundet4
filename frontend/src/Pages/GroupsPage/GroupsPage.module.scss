@@ -1,0 +1,30 @@
+@import 'src/mixins';
+
+.wrapper {
+  margin: 0.2em 0.1em;
+}
+
+.description {
+  text-align: center;
+  justify-content: center;
+}
+
+.groups {
+  background-color: transparent;
+  border: 1px solid $grey-3;
+  box-shadow: none;
+  border-radius: 0.5em;
+  overflow: hidden;
+  margin: .5em;
+  padding: 1em;
+}
+
+.groupsTitle {
+  text-align: center;
+  font-size: 1.4em;
+  width: 100%;
+  font-weight: '700';
+  text-transform: uppercase;
+  margin-bottom: .5em;
+}
+
