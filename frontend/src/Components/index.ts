@@ -12,3 +12,4 @@ export { Skeleton } from './Skeleton';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { ToggleSwitch } from './ToggleSwitch';
+export { OpeningHours } from './OpeningHours';
