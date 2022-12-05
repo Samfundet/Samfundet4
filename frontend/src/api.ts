@@ -6,6 +6,7 @@ import {
   MenuDto,
   MenuItemDto,
   PermissionDto,
+  SaksdokumentDto,
   UserDto,
   UserPreferenceDto,
   VenueDto,
@@ -147,6 +148,13 @@ export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
 export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
+  const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
 
   return response.data;
 }
