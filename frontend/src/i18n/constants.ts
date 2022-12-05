@@ -21,6 +21,8 @@ export const KEY = {
   login_forgotten_password: 'login_forgotten_password',
   login_internal_login: 'login_internal_login',
   login_email_placeholder: 'login_email_placeholder',
+  gangs_title: 'gangs_title',
+  gangs_text: 'gangs_text',
 } as const;
 
 /**

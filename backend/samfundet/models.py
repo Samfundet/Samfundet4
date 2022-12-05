@@ -1,9 +1,10 @@
 from typing import Any
-from datetime import time
+from datetime import time, timedelta
 
 from guardian.shortcuts import assign_perm
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 
@@ -176,10 +177,12 @@ class Table(models.Model):
     name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
-    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
+    name_en = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     seating = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True)
 
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
@@ -247,3 +250,52 @@ class Menu(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name_no}'
+
+
+class Booking(models.Model):
+    name = models.CharField(max_length=64, blank=True, null=True)
+    text = models.TextField(blank=True, null=True)
+    from_dt = models.DateTimeField(blank=True, null=True)
+    to_dt = models.DateTimeField(blank=True, null=True)
+
+    tables = models.ManyToManyField(Table, blank=True)
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    first_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    email = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Booking'
+        verbose_name_plural = 'Bookings'
+
+    def __str__(self) -> str:
+        return f'Booking: {self.name} - {self.user} - {self.from_dt} ({self.table_count()})'
+
+    def table_count(self) -> int:
+        n: int = self.tables.count()
+        return n
+
+    def get_duration(self) -> timedelta | None:
+        if self.to_dt and self.from_dt:
+            duration: timedelta = self.to_dt - self.from_dt
+            return duration
+        return None
+
+    def clean(self) -> None:
+        errors: dict[str, ValidationError] = {}
+
+        field_to_validate = 'to_dt'
+        duration_constraint_hours = 2
+        duration = self.get_duration()
+        if duration and duration > timedelta(hours=duration_constraint_hours):
+            error = f'Duration cannot be longer than {duration_constraint_hours} hours.'
+            errors.setdefault(field_to_validate, []).append(error)
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)

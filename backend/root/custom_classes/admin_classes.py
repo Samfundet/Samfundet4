@@ -84,6 +84,28 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
     def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='delete')
 
+    @classmethod
+    def custom_search_fields(cls, *, prefix: str = '') -> list[str]:
+        """
+        Helper to get search_fields for related models in other admins.
+
+        For example if a Profile has an owner (User), we likely
+        want to be able to search for usernames in the admin panel.
+        To do this we fetch all of the UserAdmin.search_fields
+        and prefix them with our the Profile field name.
+
+        ```py
+        class ProfileAdmin(CustomGuardedModelAdmin):
+            # Fetch and unpack fields.
+            _user_search_fields = UserAdmin.custom_search_fields(prefix='owner')
+            search_fields = [*_user_search_fields]
+
+            # Results in e.g.:
+            search_fields = ['owner__username', 'owner__first_name', 'owner__last_name']
+        """
+        prefix__ = f'{prefix}__' if prefix else ''
+        return [f'{prefix__}{field}' for field in cls.search_fields]
+
 
 class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):
     ...
