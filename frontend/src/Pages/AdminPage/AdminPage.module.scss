@@ -1,0 +1,43 @@
+@import 'src/mixins';
+@import 'src/constants';
+
+.wrapper {
+  margin: 1em 1em;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.header {
+  text-align: center;
+  justify-content: center;
+  text-transform: uppercase;
+  h1 {
+    margin-bottom: 0.2em;
+  }
+}
+.wisewords {
+  color: $grey-1;
+  font-weight: 600;
+  font-size: medium;
+}
+.faq_button {
+  border-color: $grey-1;
+  padding: 0.3em 0.8em;
+  text-transform: uppercase;
+  p {
+    margin: 0;
+    font-size: .9em;
+    color: $black;
+
+  }
+}
+.applets {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}

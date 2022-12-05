@@ -9,4 +9,5 @@ export const ROUTES_FRONTEND = {
   information_page_list: '/information-page/',
   information_page_detail: '/information-page/:slugField/',
   groups: '/groups/',
+  admin: '/admin/',
 };

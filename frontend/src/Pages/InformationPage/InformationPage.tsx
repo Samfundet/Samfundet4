@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
 import { SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
 import { InformationPageDto } from '~/dto';
 import { getTranslatedText } from '~/Pages/InformationPage/utils';
 
@@ -42,8 +43,8 @@ export function InformationPage() {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <Page>
       <ReactMarkdown>{text || ''}</ReactMarkdown>
-    </div>
+    </Page>
   );
 }
