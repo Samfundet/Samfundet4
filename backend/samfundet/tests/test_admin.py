@@ -39,6 +39,10 @@ ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__samfundet_userpreference_changelist,
     routes.admin__samfundet_venue_add,
     routes.admin__samfundet_venue_changelist,
+    routes.admin__samfundet_table_add,
+    routes.admin__samfundet_table_changelist,
+    routes.admin__samfundet_booking_add,
+    routes.admin__samfundet_booking_changelist,
     routes.admin__sessions_session_add,
     routes.admin__sessions_session_changelist,
 ]

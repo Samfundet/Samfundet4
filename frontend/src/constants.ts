@@ -11,3 +11,4 @@ export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
+export const THEME_KEY = 'theme';

@@ -18,6 +18,8 @@ router.register('menu', views.MenuView, 'menu')
 router.register('menu-items', views.MenuItemView, 'menu_items')
 router.register('food-preference', views.FoodPreferenceView, 'food_preference')
 router.register('food-category', views.FoodCategoryView, 'food_category')
+router.register('booking', views.BookingView, 'booking')
+router.register('table', views.TableView, 'table')
 
 app_name = 'samfundet'
 

@@ -1,6 +1,7 @@
 export { Alert } from './Alert';
 export { Button } from './Button';
 export { EventCard } from './EventCard';
+export { ExpandableHeader } from './ExpandableHeader';
 export { InputField } from './InputField';
 export { Link } from './Link';
 export { ProgressBar } from './ProgressBar';

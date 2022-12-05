@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import {
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -34,7 +34,7 @@ export async function login(username: string, password: string): Promise<number>
   return response.status;
 }
 
-export async function logout(): Promise<unknown> {
+export async function logout(): Promise<AxiosResponse> {
   const url = TEMP_DOMAIN + ROUTES.backend.samfundet__logout;
   const response = await axios.post(url, undefined, { withCredentials: true });
 
