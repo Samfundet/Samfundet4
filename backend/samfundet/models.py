@@ -137,7 +137,7 @@ class Gang(models.Model):
     abbreviation = models.CharField(max_length=64, blank=False, null=False, verbose_name='Forkortelse', unique=True)
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
-    logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name="Logo")
+    logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
