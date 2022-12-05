@@ -14,6 +14,7 @@ from .models import (
     MenuItem,
     GangType,
     FoodCategory,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
@@ -165,6 +166,13 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
+        fields = '__all__'
+
+
+class SaksdokumentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Saksdokument
         fields = '__all__'
 
 

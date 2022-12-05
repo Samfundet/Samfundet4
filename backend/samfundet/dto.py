@@ -128,3 +128,15 @@ class ProfileDto:
     id: int
     nickname: str
     content_type: ContentTypeDto
+
+
+@dataclass_json
+@dataclass
+class SaksdokumentDto:
+    id: int
+    title_no: str
+    title_en: str
+    publication_date: datetime
+    category: str
+    file: str
+    content_type: ContentTypeDto

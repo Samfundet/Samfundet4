@@ -32,6 +32,7 @@ from .models import (
     MenuItem,
     GangType,
     FoodCategory,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
@@ -47,6 +48,7 @@ from .serializers import (
     BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    SaksdokumentSerializer,
     FoodCategorySerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -190,6 +192,11 @@ class FoodCategoryView(ModelViewSet):
 class FoodPreferenceView(ModelViewSet):
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
+
+
+class SaksdokumentView(ModelViewSet):
+    serializer_class = SaksdokumentSerializer
+    queryset = Saksdokument.objects.all()
 
 
 class TableView(ModelViewSet):

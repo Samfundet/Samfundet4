@@ -173,6 +173,15 @@ export type MenuDto = {
   menu_items?: MenuItemDto[];
 };
 
+export type SaksdokumentDto = {
+  title_no?: string;
+  title_en?: string;
+  category?: string;
+  publication_date?: Date;
+  file?: string;
+  content_type: ContentTypeDto;
+};
+
 export type BookingDto = {
   name?: string;
   text?: string;
