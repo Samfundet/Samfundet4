@@ -1,4 +1,5 @@
 @import 'src/mixins';
+
 @import 'src/constants';
 
 .wrapper {
@@ -15,26 +16,29 @@
   text-align: center;
   justify-content: center;
   text-transform: uppercase;
-  h1 {
+  .headerText {
     margin-bottom: 0.2em;
   }
 }
+
 .wisewords {
   color: $grey-1;
   font-weight: 600;
   font-size: medium;
 }
+
 .faq_button {
   border-color: $grey-1;
   padding: 0.3em 0.8em;
   text-transform: uppercase;
-  p {
+  .faq_text {
     margin: 0;
     font-size: .9em;
     color: $black;
 
   }
 }
+
 .applets {
   margin-top: 1em;
   display: flex;

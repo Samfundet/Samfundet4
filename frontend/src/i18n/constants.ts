@@ -25,6 +25,9 @@ export const KEY = {
   gangs_text: 'gangs_text',
   control_panel_title: 'control_panel_title',
   control_panel_faq: 'control_panel_faq',
+  back: 'back',
+  admin_gangs_title: 'admin_gangs_title',
+  admin_gangs_create: 'admin_gangs_create',
 } as const;
 
 /**

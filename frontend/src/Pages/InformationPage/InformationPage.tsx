@@ -36,15 +36,17 @@ export function InformationPage() {
 
   if (showSpinner) {
     return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
+      <Page>
+        <div className={styles.spinner}>
+          <SamfundetLogoSpinner />
+        </div>
+      </Page>
     );
   }
 
   return (
-    <Page>
+    <div className={styles.wrapper}>
       <ReactMarkdown>{text || ''}</ReactMarkdown>
-    </Page>
+    </div>
   );
 }

@@ -140,3 +140,26 @@ class SaksdokumentDto:
     category: str
     file: str
     content_type: ContentTypeDto
+
+
+@dataclass_json
+@dataclass
+class GangDto:
+    id: int
+    name_no: str
+    name_en: str
+    abbreviation: str
+    webpage: str
+    logo: str
+    gang_type: int
+    info_page: int
+    content_type: ContentTypeDto
+
+
+@dataclass_json
+@dataclass
+class GangTypeDto:
+    id: int
+    title_no: str
+    title_en: str
+    gangs: list[GangDto]

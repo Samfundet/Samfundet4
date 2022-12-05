@@ -4,9 +4,8 @@
 .applet {
   background-color: $white;
   text-align: center;
-  margin: 1em 0.5em 1em 0.5em;
+  margin: 1em 0.5em;
   box-shadow: 3px 7px 6px $grey-2;
-  
   border-radius: .2em;
   width: 100%;
   max-width: 350px;
@@ -33,7 +32,7 @@
   text-transform: uppercase;
   margin: 0;
   color: white;
-  font-size: 20px;
+  font-size: 1.4em;
 }
 
 .text {

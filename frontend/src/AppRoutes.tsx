@@ -12,6 +12,7 @@ import {
   GroupsPage,
   AdminPage,
 } from '~/Pages';
+import { GroupsAdminPage } from '~/PagesAdmin';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
@@ -30,6 +31,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
       <Route path={ROUTES.frontend.admin} element={<AdminPage />} />
+      <Route path={ROUTES.frontend.admin_groups} element={<GroupsAdminPage />} />
     </Routes>
   );
 }
