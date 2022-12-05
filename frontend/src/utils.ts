@@ -25,7 +25,7 @@ export function groupHasPerm({ group, permission }: groupHasPerm): boolean {
 // ------------------------------
 
 export type hasPerm = {
-  user: UserDto;
+  user: UserDto | undefined;
   permission: string;
   obj?: { id: string; model: string; app_label: string };
   // obj?: { id: string; contentType: ContentTypeDto };
@@ -34,6 +34,10 @@ export type hasPerm = {
 /** Inspired by Django PermissionMixin. */
 export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Superuser always has permission.
+
+  if (user == null) {
+    return false;
+  }
   if (user.is_active && user.is_superuser) {
     // console.log('superuser perm');
     return true;
