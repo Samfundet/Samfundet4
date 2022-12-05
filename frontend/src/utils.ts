@@ -87,5 +87,3 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Nothing found.
   return false;
 }
-
-// ------------------------------
