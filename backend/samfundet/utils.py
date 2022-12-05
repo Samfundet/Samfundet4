@@ -202,6 +202,7 @@ def saksdokument_to_dataclass(*, saksdokument: Saksdokument) -> SaksdokumentDto:
         title_no=saksdokument.title_no,
         title_en=saksdokument.title_en,
         publication_date=saksdokument.publication_date,
+        category=saksdokument.category,
         file=saksdokument.file,
         content_type=content_type_to_dataclass(content_type=content_type),
     )
