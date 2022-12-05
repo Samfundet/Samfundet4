@@ -36,7 +36,7 @@ export function AdminBox({ title, options }: AdminBoxProps) {
   return (
     <div className={styles.applet}>
       <div className={styles.top}>
-        <h3 className={styles.header}>{title}</h3>
+        <h1 className={styles.header}>{title}</h1>
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {

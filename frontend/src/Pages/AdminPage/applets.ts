@@ -18,8 +18,8 @@ export const applets = [
     title: 'Gjenger',
     perm: AUTH_ADD_GROUP,
     options: [
-      { text: 'Administrer gjenger', url: ROUTES.frontend.groups, type: 'ADD' },
+      { text: 'Administrer gjenger', url: ROUTES.frontend.admin_groups, type: 'ADD' },
       { text: 'Gjengene på huset', url: ROUTES.frontend.groups, type: 'MANAGE' },
     ],
   },
-]
+];

@@ -31,6 +31,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.information_form_page__preview]: 'Forhåndsvisning',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.control_panel_faq]: 'Ofte stilte spørsmål',
+  [KEY.back]: 'Tilbake',
+  [KEY.admin_gangs_title]: 'Administrer gjenger',
+  [KEY.admin_gangs_create]: 'Opprett gjeng',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -62,4 +65,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.information_form_page__preview]: 'Preview',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.control_panel_faq]: 'Frequently asked questions',
+  [KEY.back]: 'Back',
+  [KEY.admin_gangs_title]: 'Groups administration',
+  [KEY.admin_gangs_create]: 'Create group',
 };

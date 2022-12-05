@@ -35,6 +35,9 @@ export const KEY = {
   information_form_page__preview: 'information_form_page__preview',
   control_panel_title: 'control_panel_title',
   control_panel_faq: 'control_panel_faq',
+  back: 'back',
+  admin_gangs_title: 'admin_gangs_title',
+  admin_gangs_create: 'admin_gangs_create',
 } as const;
 
 /**

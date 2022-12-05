@@ -237,6 +237,7 @@ export const ROUTES_BACKEND = {
   samfundet__gangs_list: '/api/gangs/',
   samfundet__gangs_detail: '/api/gangs/:pk/',
   samfundet__information_list: '/api/information/',
+  samfundet__gangs_organized: '/api/gangsorganized/',
   samfundet__information_detail: '/api/information/:pk/',
   samfundet__user_preference_list: '/api/user-preference/',
   samfundet__user_preference_detail: '/api/user-preference/:pk/',

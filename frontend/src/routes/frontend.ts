@@ -11,4 +11,5 @@ export const ROUTES_FRONTEND = {
   information_page_edit: '/information-page/:slugField/edit',
   groups: '/groups/',
   admin: '/admin/',
+  admin_groups: '/admin/groups/',
 };
