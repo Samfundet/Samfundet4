@@ -13,6 +13,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 dataclasses-json = "*"
 django-guardian = "*"
+pillow = "*"
 
 [dev-packages]
 yapf = "*"
@@ -21,6 +22,7 @@ pylint-django = "*"
 pylint-quotes = "*"
 mypy = "*"
 bandit = "*"
+pillow = "*"
 flake8 = "*"
 flake8-annotations = "*"
 
