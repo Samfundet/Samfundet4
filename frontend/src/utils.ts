@@ -35,7 +35,7 @@ export type hasPerm = {
 export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Superuser always has permission.
 
-  if (user == null) {
+  if (!user) {
     return false;
   }
   if (user.is_active && user.is_superuser) {

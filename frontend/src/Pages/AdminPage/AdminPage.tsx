@@ -55,7 +55,6 @@ export function AdminPage() {
 
   // Stuff to do on first render.
   useEffect(() => {
-    console.log(user);
     setShowSpinner(false);
   }, [user]);
 
@@ -70,9 +69,10 @@ export function AdminPage() {
   return (
     <Page>
       <div className={styles.header}>
-        <h1>{t(KEY.control_panel_title)}</h1>
+        <h1 className={styles.headerText}>{t(KEY.control_panel_title)}</h1>
         <p className={styles.wisewords}>{WISEWORDS[Math.floor(Math.random() * WISEWORDS.length)]}</p>
-        <Button theme='outlined' className={styles.faq_button}><p>{t(KEY.control_panel_faq)}</p>
+        <Button theme="outlined" className={styles.faq_button}>
+          <p className={styles.faq_text}>{t(KEY.control_panel_faq)}</p>
         </Button>
       </div>
       <div className={styles.applets}>

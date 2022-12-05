@@ -10,6 +10,7 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
+  GangTypeDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -155,6 +156,13 @@ export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
 export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
   const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getGangList(): Promise<GangTypeDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_organized });
+  const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
   return response.data;
 }

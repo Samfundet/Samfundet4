@@ -192,3 +192,21 @@ export type BookingDto = {
   from_dto?: Date;
   from_to?: Date;
 };
+
+export type GangDto = {
+  id: number;
+  name_no: string;
+  name_en: string;
+  abbreviation: string;
+  webpage?: string;
+  logo?: string;
+  gang_type?: number;
+  info_page?: number;
+};
+
+export type GangTypeDto = {
+  id: number;
+  title_no: string;
+  title_en: string;
+  gangs: GangDto[];
+};

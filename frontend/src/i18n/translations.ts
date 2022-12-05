@@ -21,6 +21,9 @@ export const nb: Record<KeyValues, string> = {
     'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.control_panel_faq]: 'Ofte stilte spørsmål',
+  [KEY.back]: 'Tilbake',
+  [KEY.admin_gangs_title]: 'Administrer gjenger',
+  [KEY.admin_gangs_create]: 'Opprett gjeng',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -43,4 +46,7 @@ export const en: Record<KeyValues, string> = {
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.control_panel_faq]: 'Frequently asked questions',
+  [KEY.back]: 'Back',
+  [KEY.admin_gangs_title]: 'Groups administration',
+  [KEY.admin_gangs_create]: 'Create group',
 };
