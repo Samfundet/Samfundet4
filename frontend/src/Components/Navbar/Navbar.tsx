@@ -42,7 +42,7 @@ export function Navbar() {
   const profileButton = (
     <div className={isDesktop ? styles.navbar_profile_button : styles.popup_profile}>
       <img src={profileIcon} className={styles.profile_icon}></img>
-      <Link to={ROUTES.frontend.home} className={styles.profile_text}>
+      <Link to={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
       </Link>
     </div>

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getUser } from '~/api';
+import { hasPerm } from '~/utils';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { UserDto } from '~/dto';
-
+import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-
+import { applets } from './applets';
 import styles from './AdminPage.module.scss';
 import { AdminBox } from '~/Components/AdminBox';
 
@@ -50,33 +48,16 @@ const WISEWORDS = [
   'Reker er sjøens influencere.',
 ];
 
-const TEST = [
-      {
-        text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjenglederen din for å få tilgang.',
-        url: '',
-        type: 'INFO',
-      },
-      { text: '', url: '', type: 'KILROY' },
-    ];
-
-const TEST2 = [
-  { text: 'Administrer gjenger', url: 'www.google.com', type: 'ADD' },
-  { text: 'Gjengene på huset', url: 'www.google.com', type: 'MANAGE' },
-]
 export function AdminPage() {
-  const [page, setPage] = useState<UserDto>();
-  const [showSpinner, setShowSpinner] = useState<boolean>(false);
+  const { user } = useAuthContext();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
   // Stuff to do on first render.
   useEffect(() => {
-    getUser()
-      .then((data) => setPage(data))
-      .catch((data) => {
-        console.error(data);
-        setShowSpinner(true);
-      });
-  }, []);
+    console.log(user);
+    setShowSpinner(false);
+  }, [user]);
 
   if (showSpinner) {
     return (
@@ -95,19 +76,11 @@ export function AdminPage() {
         </Button>
       </div>
       <div className={styles.applets}>
-        <AdminBox title='Tilgang' options={TEST} />
-        <AdminBox title='Gjenger' options={TEST2} />
-        <AdminBox title='Tilgang' options={TEST} />
-        <AdminBox title='Gjenger' options={TEST2} />
-        <AdminBox title='Tilgang' options={TEST} />
-        <AdminBox title='Gjenger' options={TEST2} />
-        <AdminBox title='Tilgang' options={TEST} />
-        <AdminBox title='Gjenger' options={TEST2} />
-        <AdminBox title='Tilgang' options={TEST} />
-        <AdminBox title='Gjenger' options={TEST2} />
-        <AdminBox title='Tilgang' options={TEST} />
-        <AdminBox title='Gjenger' options={TEST2} />
-        <AdminBox title='Gjenger' options={TEST2} />
+        {applets.map(function (element, key) {
+          if (element.perm == null || hasPerm({ user: user, permission: element.perm })) {
+            return <AdminBox key={key} title={element.title} options={element.options} />;
+          }
+        })}
       </div>
     </Page>
   );
