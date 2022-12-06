@@ -3,13 +3,14 @@ import { useGoatCounter } from '~/hooks';
 import {
   ApiTestingPage,
   ComponentPage,
+  GroupsPage,
   HealthPage,
   HomePage,
-  InformationPage,
   InformationListPage,
+  InformationPage,
   LoginPage,
   LychePage,
-  GroupsPage,
+  SaksdokumenterPage,
 } from '~/Pages';
 import { ROUTES } from './routes';
 
@@ -28,6 +29,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
+      <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
     </Routes>
   );
 }

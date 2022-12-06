@@ -7,3 +7,4 @@ export { InformationListPage } from './InformationListPage';
 export { LoginPage } from './LoginPage';
 export { LychePage } from './LychePage';
 export { GroupsPage } from './GroupsPage';
+export { SaksdokumenterPage } from './SaksdokumenterPage';
