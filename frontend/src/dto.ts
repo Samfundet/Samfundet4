@@ -178,7 +178,7 @@ export type SaksdokumentDto = {
   title_no?: string;
   title_en?: string;
   category?: string;
-  publication_date?: Date;
+  publication_date?: string;
   file?: string;
   content_type: ContentTypeDto;
 };

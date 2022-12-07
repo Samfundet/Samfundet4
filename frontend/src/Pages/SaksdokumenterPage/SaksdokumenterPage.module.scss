@@ -11,3 +11,32 @@
   min-height: calc(100vh - 200px);
 }
 
+.content_container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-height: 60vh;
+  overflow-y: scroll;
+  border: 1px solid $grey-0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $grey-0;
+  width: 100%;
+  justify-content: space-between;
+  margin: 0;
+  padding: 1em;
+}
+
+.item {
+  border-bottom: 1px solid $grey-0;
+  padding: 1em;
+  width: 100%;
+  cursor: pointer;
+}
+
+.back_button {
+  cursor: pointer;
+}
