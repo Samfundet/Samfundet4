@@ -168,6 +168,7 @@ $navbar-height: 60px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  z-index: 100;
   @include for-desktop-up {
     display: none;
   }
