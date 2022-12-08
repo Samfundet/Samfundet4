@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import { useState } from 'react';
 import { Children } from '~/types';
 import styles from './SaksdokumenterPage.module.scss';
 
@@ -20,15 +22,22 @@ type ParentProps = {
 };
 
 export function Parent({ content, children, onClick, visible }: ParentProps) {
+  const [showChildren, setShowChildren] = useState(false);
+
+  function handleClick() {
+    onClick && onClick();
+    setShowChildren(true);
+  }
   return (
     <>
       {visible && (
-        <div className={styles.item} onClick={onClick}>
-          {content}
+        <div className={classNames(styles.item, styles.parent)} onClick={handleClick}>
+          <div>{content}</div>
+          <div>{'>'}</div>
         </div>
       )}
 
-      {children}
+      {showChildren && children}
     </>
   );
 }
