@@ -9,6 +9,7 @@ export { RadioButton } from './RadioButton';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
 export { Skeleton } from './Skeleton';
+export { SpinningBorder } from './SpinningBorder';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { ToggleSwitch } from './ToggleSwitch';
