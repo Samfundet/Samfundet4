@@ -30,7 +30,7 @@ class RequestContextFilter(logging.Filter):
             # We are not currently in a request, so we cannot attach any request information to the log message.
             return True
 
-        user = getattr(request_obj, 'user', None)
+        user = getattr(request_obj, 'user', None)  # noqa: FKA01
         if user:
             record.username = user.username
 
