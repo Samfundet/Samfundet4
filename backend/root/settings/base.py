@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 environ.Env.read_env(env_file=BASE_DIR / '.env')
 
 ### Print variables ###
-print(f'=== {BASE_DIR=}')
-print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")
+print(f'=== {BASE_DIR=}')  # noqa: T201
+print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
 ### End: Print variables ###
 
 # SECURITY WARNING: don't run with debug turned on in production!
