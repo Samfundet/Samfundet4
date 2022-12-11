@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage, putInformationPage } from '~/api';
 import { Button, InputField, RadioButton, SamfundetLogoSpinner } from '~/Components';
 import { InformationPageDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
 import { KEY, KeyValues, LANGUAGES, LanguageValue } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 
 import styles from './InformationFormPage.module.scss';
 
@@ -37,6 +40,7 @@ export function InformationFormPage() {
   const [language, setLanguage] = useState<LanguageValue>(LANGUAGES.NB);
   const { t } = useTranslation();
   const { slugField } = useParams();
+  const navigate = useNavigate();
 
   /** Find field suffix given language. */
   const currentSuffix = LANG_TO_SUFFIX[language];
@@ -78,7 +82,13 @@ export function InformationFormPage() {
 
   function handleSave() {
     if (page) {
-      putInformationPage(page);
+      putInformationPage(page).then((response) => {
+        if (response.status === STATUS.HTTP_200_OK) {
+          navigate(
+            reverse({ pattern: ROUTES.frontend.information_page_detail, urlParams: { slugField: page.slug_field } }),
+          );
+        }
+      });
     }
   }
 
