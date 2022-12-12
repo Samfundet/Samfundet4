@@ -3,13 +3,14 @@ import { useGoatCounter } from '~/hooks';
 import {
   ApiTestingPage,
   ComponentPage,
+  GroupsPage,
   HealthPage,
   HomePage,
-  InformationPage,
+  InformationFormPage,
   InformationListPage,
+  InformationPage,
   LoginPage,
   LychePage,
-  GroupsPage,
 } from '~/Pages';
 import { ROUTES } from './routes';
 
@@ -27,6 +28,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.lyche} element={<LychePage />} />
       <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
+      <Route path={ROUTES.frontend.information_page_edit} element={<InformationFormPage />} />
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
     </Routes>
   );

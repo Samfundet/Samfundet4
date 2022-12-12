@@ -39,13 +39,14 @@ def seed():
 
     # Create gang types
     for i, gang_type in enumerate(GANGS):
-        gtype = GangType.objects.create(title=gang_type)
+        gtype = GangType.objects.create(title_no=gang_type)
 
         # Create gangs
         for gang in GANGS[gang_type]:
             name, abbr = gang
             Gang.objects.create(
-                name=name,
+                name_no=name,
+                name_en=name,
                 abbreviation=abbr,
                 webpage='https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 gang_type=gtype,

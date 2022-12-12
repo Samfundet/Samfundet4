@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { EventCard } from './EventCard';
+import { BrowserRouter } from 'react-router-dom';
 import { kitteh } from '~/assets';
+import { EventCard } from './EventCard';
 
 const now = new Date();
 
@@ -26,18 +27,22 @@ export default {
 } as ComponentMeta<typeof EventCard>;
 
 const OneEvent: ComponentStory<typeof EventCard> = function (args) {
-  return <EventCard {...args} />;
+  return (
+    <BrowserRouter>
+      <EventCard {...args} />
+    </BrowserRouter>
+  );
 };
 
 const ManyEvents: ComponentStory<typeof EventCard> = function (args) {
   return (
-    <>
+    <BrowserRouter>
       {Array(8)
         .fill(1)
         .map((_, i) => (
           <EventCard key={i} {...args} />
         ))}
-    </>
+    </BrowserRouter>
   );
 };
 

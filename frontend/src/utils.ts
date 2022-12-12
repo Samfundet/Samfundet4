@@ -87,3 +87,9 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Nothing found.
   return false;
 }
+
+// ------------------------------
+
+export function getGlobalBackgroundColor(): string {
+  return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
+}
