@@ -1,36 +1,34 @@
 import classNames from 'classnames';
 import { Children } from '~/types';
-import styles from './InputField.module.scss';
+import styles from './TextAreaField.module.scss';
 
 type types = 'text' | 'number' | 'email' | 'password';
 
-type InputFieldProps = {
+type TextAreaFieldProps = {
   children?: Children;
   className?: string;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string | null;
-  multiline?: boolean;
-  type?: types;
+  rows?: number;
   value?: string;
 };
 
-export function InputField({
+export function TextAreaField({
   children,
   className,
   onChange,
   placeholder,
   value,
-  multiline = false,
-  type = 'text',
-}: InputFieldProps) {
+  rows = 10,
+}: TextAreaFieldProps) {
   return (
     <label className={styles.label}>
       {children}
-      <input
+      <textarea
         onChange={onChange}
         className={classNames(styles.input_field, className)}
         placeholder={placeholder || ''}
-        type={type}
+        rows={rows}
         value={value}
       />
     </label>

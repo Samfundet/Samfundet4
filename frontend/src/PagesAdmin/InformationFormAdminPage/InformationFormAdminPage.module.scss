@@ -1,0 +1,44 @@
+@import 'src/mixins';
+@import 'src/constants';
+
+.wrapper {
+  margin: 1em 1em;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.backButton {
+  border-color: $grey-1;
+  padding: 0.5em 1.6em;
+  text-transform: uppercase;
+  p {
+    margin: 0;
+    font-weight: 700;
+  }
+}
+
+.labelText {
+  font-weight: 100;
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+}
+
+.inputGroup {
+  border-top: 0.15em solid $grey-2;
+}
+
+.submit {
+  margin:0;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+.submitContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2em;
+}
