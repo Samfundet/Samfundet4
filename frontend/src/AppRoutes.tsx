@@ -13,7 +13,7 @@ import {
   LychePage,
   AdminPage,
 } from '~/Pages';
-import { GroupsAdminPage } from '~/PagesAdmin';
+import { GroupsAdminPage, InformationAdminPage, InformationFormAdminPage } from '~/PagesAdmin';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
@@ -34,6 +34,8 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
       <Route path={ROUTES.frontend.admin} element={<AdminPage />} />
       <Route path={ROUTES.frontend.admin_groups} element={<GroupsAdminPage />} />
+      <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
+      <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
     </Routes>
   );
 }

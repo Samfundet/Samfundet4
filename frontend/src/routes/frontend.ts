@@ -12,4 +12,6 @@ export const ROUTES_FRONTEND = {
   groups: '/groups/',
   admin: '/admin/',
   admin_groups: '/admin/groups/',
+  admin_information: '/admin/information/',
+  admin_information_create: '/admin/information/create/',
 };

@@ -35,9 +35,21 @@ export const KEY = {
   information_form_page__preview: 'information_form_page__preview',
   control_panel_title: 'control_panel_title',
   control_panel_faq: 'control_panel_faq',
-  back: 'back',
   admin_gangs_title: 'admin_gangs_title',
   admin_gangs_create: 'admin_gangs_create',
+  admin_information_manage_title: 'admin_information_manage_title',
+  admin_information_new_page: 'admin_information_new_page',
+  admin_information_create_page: 'admin_information_create_page',
+  back: 'back',
+  name: 'name',
+  title: 'title',
+  owner: 'owner',
+  last_updated: 'last_updated',
+  edit: 'last_updated',
+  delete: 'delete',
+  content: 'content',
+  english: 'english',
+  norwegian: 'norwegian',
 } as const;
 
 /**

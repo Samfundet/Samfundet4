@@ -10,6 +10,7 @@ type InputFieldProps = {
   inputClassName?: string;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string | null;
+  multiline?: boolean;
   type?: types;
   disabled?: boolean;
   value?: string;
