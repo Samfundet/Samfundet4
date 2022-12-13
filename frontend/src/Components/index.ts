@@ -5,6 +5,7 @@ export { ExpandableHeader } from './ExpandableHeader';
 export { InputField } from './InputField';
 export { Link } from './Link';
 export { ProgressBar } from './ProgressBar';
+export { PulseEffect } from './PulseEffect';
 export { RadioButton } from './RadioButton';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';

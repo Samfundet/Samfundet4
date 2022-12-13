@@ -23,4 +23,7 @@ export const Basic = Template.bind({});
 Basic.args = {};
 
 export const Circle = Template.bind({});
-Circle.args = {};
+Circle.args = { radius: '100%' };
+
+export const Purple = Template.bind({});
+Purple.args = { colors: ['purple', 'cyan'] };
