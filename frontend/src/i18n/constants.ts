@@ -30,6 +30,8 @@ export const KEY = {
   admin_information_manage_title: 'admin_information_manage_title',
   admin_information_new_page: 'admin_information_new_page',
   admin_information_create_page: 'admin_information_create_page',
+  admin_information_edit_page: 'admin_information_edit_page',
+  admin_information_update_page: 'admin_information_update_page',
   back: 'back',
   name: 'name',
   title: 'title',

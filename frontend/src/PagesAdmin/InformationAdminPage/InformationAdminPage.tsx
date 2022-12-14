@@ -65,7 +65,12 @@ export function InformationAdminPage() {
                 <td>Legg til</td>
                 <td>Legg til</td>
                 <td>
-                  <Button theme="blue">{t(KEY.edit)}</Button>
+                  <Button
+                    theme="blue"
+                    onClick={() => navigate(ROUTES.frontend.admin_information + 'edit/' + element.slug_field)}
+                  >
+                    {t(KEY.edit)}
+                  </Button>
                   <Button theme="samf">{t(KEY.delete)}</Button>
                 </td>
               </tr>
