@@ -7,7 +7,7 @@ type OpeningHoursProps = {
   venues: Array;
 };
 
-export function OpeningHours({ venues }: OpeningHoursProps) {æ
+export function OpeningHours({ venues }: OpeningHoursProps) {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
@@ -18,11 +18,11 @@ export function OpeningHours({ venues }: OpeningHoursProps) {æ
             <tr key={key} className={styles.openingRow}>
               <td>
                 <a href={element.url}>
-                  <p>{element.name}</p>
+                  <p className={styles.openingHoursText}>{element.name}</p>
                 </a>
               </td>
               <td className={styles.startEnd}>
-                <TimeDuration start={element.start} end={element.end} />
+                <TimeDuration className={styles.openingHoursText} start={element.start} end={element.end} />
               </td>
             </tr>
           );

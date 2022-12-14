@@ -3,14 +3,15 @@ import styles from './TimeDuration.module.scss';
 type TimeDurationProps = {
   start: string;
   end: string;
+  className?: string;
 };
 
-export function TimeDuration({ start, end }: TimeDurationProps) {
+export function TimeDuration({ start, end, className }: TimeDurationProps) {
   return (
     <div className={styles.container}>
-      <TimeDisplay timestamp={start} displayType="time" />
+      <TimeDisplay className={className} timestamp={start} displayType="time" />
       <p>-</p>
-      <TimeDisplay timestamp={end} displayType='time' />
+      <TimeDisplay className={className} timestamp={end} displayType="time" />
     </div>
   );
 }

@@ -13,4 +13,4 @@ const Template: ComponentStory<typeof TimeDuration> = function (args) {
 const now = new Date().toISOString();
 
 export const Basic = Template.bind({});
-Basic.args = { start: now, end: now}
+Basic.args = { start: now, end: now };
