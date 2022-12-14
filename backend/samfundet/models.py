@@ -152,7 +152,7 @@ class Gang(models.Model):
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=True,
+        blank=False,
         null=False,
         unique=True,
         primary_key=True,
