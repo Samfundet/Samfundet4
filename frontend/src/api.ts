@@ -97,6 +97,15 @@ export async function getInformationPage(slug_field: string): Promise<Informatio
   return response.data;
 }
 
+export async function putInformationPage(page: InformationPageDto): Promise<AxiosResponse> {
+  const url =
+    TEMP_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
+  const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
+
+  return response;
+}
+
 export async function getMenus(): Promise<MenuDto[]> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_list });
   const response = await axios.get<MenuDto[]>(url, { withCredentials: true });

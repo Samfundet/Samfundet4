@@ -120,8 +120,8 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype Norsk')
-    title_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype Engelsk')
+    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
     class Meta:
         verbose_name = 'GangType'
@@ -132,9 +132,9 @@ class GangType(models.Model):
 
 
 class Gang(models.Model):
-    name_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Norsk', unique=True)
-    name_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Engelsk', unique=True)
-    abbreviation = models.CharField(max_length=64, blank=False, null=False, verbose_name='Forkortelse', unique=True)
+    name_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk', unique=True)
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk', unique=True)
+    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { hasPerm } from '~/utils';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -50,27 +50,14 @@ const WISEWORDS = [
 
 export function AdminPage() {
   const { user } = useAuthContext();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-
-  // Stuff to do on first render.
-  useEffect(() => {
-    setShowSpinner(false);
-  }, [user]);
-
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  const WISEWORD = WISEWORDS[Math.floor(Math.random() * WISEWORDS.length)];
 
   return (
     <Page>
       <div className={styles.header}>
         <h1 className={styles.headerText}>{t(KEY.control_panel_title)}</h1>
-        <p className={styles.wisewords}>{WISEWORDS[Math.floor(Math.random() * WISEWORDS.length)]}</p>
+        <p className={styles.wisewords}>{WISEWORD}</p>
         <Button theme="outlined" className={styles.faq_button}>
           <p className={styles.faq_text}>{t(KEY.control_panel_faq)}</p>
         </Button>

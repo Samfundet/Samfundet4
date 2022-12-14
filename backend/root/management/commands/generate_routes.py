@@ -174,7 +174,7 @@ class Command(BaseCommand):
                     # Print in javascript mode for easy copy.
                     red_name = colorize(parsed_name or 'unknown', Colorize.RED)
                     green_url = colorize(f"'{parsed_url}'", Colorize.GREEN)
-                    print(f"{red_name}: {green_url},")
+                    print(f'{red_name}: {green_url},')
 
                 backend_file.write(NEWLINE)
                 frontend_file.write(NEWLINE)

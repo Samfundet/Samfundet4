@@ -18,6 +18,8 @@
   text-transform: uppercase;
   .headerText {
     margin-bottom: 0.2em;
+    font-size: 2em;
+    font-weight: 700;
   }
 }
 
@@ -31,6 +33,7 @@
   border-color: $grey-1;
   padding: 0.3em 0.8em;
   text-transform: uppercase;
+  margin-top: 1em;
   .faq_text {
     margin: 0;
     font-size: .9em;

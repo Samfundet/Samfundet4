@@ -1,12 +1,16 @@
+import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
-import { SamfundetLogoSpinner } from '~/Components';
+import { Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { InformationPageDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { getTranslatedText } from '~/Pages/InformationPage/utils';
+import { ROUTES } from '~/routes';
 
 import styles from './InformationPage.module.scss';
 
@@ -16,7 +20,6 @@ import styles from './InformationPage.module.scss';
  */
 export function InformationPage() {
   const [page, setPage] = useState<InformationPageDto>();
-  const [showSpinner, setShowSpinner] = useState<boolean>(false);
   const { i18n } = useTranslation();
   const { slugField } = useParams();
 
@@ -27,14 +30,13 @@ export function InformationPage() {
         .then((data) => setPage(data))
         .catch((data) => {
           console.error(data);
-          setShowSpinner(true);
         });
     }
   }, [slugField]);
 
   const text = getTranslatedText(page, i18n.language);
 
-  if (showSpinner) {
+  if (!page) {
     return (
       <Page>
         <div className={styles.spinner}>
@@ -46,6 +48,11 @@ export function InformationPage() {
 
   return (
     <div className={styles.wrapper}>
+      <Link
+        url={reverse({ pattern: ROUTES.frontend.information_page_edit, urlParams: { slugField: page?.slug_field } })}
+      >
+        {t(KEY.common_edit)}
+      </Link>
       <ReactMarkdown>{text || ''}</ReactMarkdown>
     </div>
   );

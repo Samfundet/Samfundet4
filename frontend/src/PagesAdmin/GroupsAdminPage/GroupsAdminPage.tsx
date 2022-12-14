@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { hasPerm } from '~/utils';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { KEY, LANGUAGES } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './GroupsAdminPage.module.scss';
 import { GangTypeDto } from '~/dto';
 import { getGangList } from '~/api';
 
 export function GroupsAdminPage() {
-  const { user } = useAuthContext();
   const navigate = useNavigate();
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -28,6 +26,7 @@ export function GroupsAdminPage() {
       })
       .catch(console.error);
   }, []);
+
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -39,7 +38,7 @@ export function GroupsAdminPage() {
   return (
     <Page>
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p>{t(KEY.back)}</p>
+        <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
       <h1>{t(KEY.admin_gangs_title)}</h1>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin)}>
@@ -51,10 +50,10 @@ export function GroupsAdminPage() {
             <h3>{element.title_no}</h3>
             <table className={styles.samfTable}>
               <colgroup>
-                <col span='2'/>
-                <col span='2'/>
-                <col span='1'/>
-                <col span='1'/>
+                <col span="2" />
+                <col span="2" />
+                <col span="1" />
+                <col span="1" />
               </colgroup>
               <thead className={styles.tableHeader}>
                 <th>Gjeng</th>
