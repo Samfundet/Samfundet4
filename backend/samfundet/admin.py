@@ -231,7 +231,7 @@ class GangAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'name_no', 'abbreviation', 'gang_type']
     list_filter = ['gang_type']
     list_display = ['id', '__str__', 'name_no', 'abbreviation', 'gang_type']
-    search_fields = ['id', 'name', 'abbreviation']
+    search_fields = ['id', 'name_no', 'abbreviation']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     autocomplete_fields = ['gang_type']

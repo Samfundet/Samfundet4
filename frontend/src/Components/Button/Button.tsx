@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 
-type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined';
+type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined' | 'blue';
 
 type ButtonProps = {
   name?: string;
@@ -20,6 +20,7 @@ const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
   secondary: styles.button_secondary,
   success: styles.button_success,
   outlined: styles.button_outlined,
+  blue: styles.button_blue,
 };
 
 export function Button({ name, type, theme = 'basic', onClick, disabled, className, children }: ButtonProps) {
