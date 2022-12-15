@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
 import { Link, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -44,13 +45,15 @@ export function InformationPage() {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <Link
-        url={reverse({ pattern: ROUTES.frontend.information_page_edit, urlParams: { slugField: page?.slug_field } })}
-      >
-        {t(KEY.common_edit)}
-      </Link>
-      <ReactMarkdown>{text || ''}</ReactMarkdown>
-    </div>
+    <Page>
+      <div className={styles.wrapper}>
+        <Link
+          url={reverse({ pattern: ROUTES.frontend.information_page_edit, urlParams: { slugField: page?.slug_field } })}
+        >
+          {t(KEY.common_edit)}
+        </Link>
+        <ReactMarkdown>{text || ''}</ReactMarkdown>
+      </div>
+    </Page>
   );
 }

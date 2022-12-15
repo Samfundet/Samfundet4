@@ -29,6 +29,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.information_form_page__show_draft]: 'Vis redigert side',
   [KEY.information_form_page__edit]: 'Rediger',
   [KEY.information_form_page__preview]: 'Forhåndsvisning',
+  [KEY.control_panel_title]: 'Kontrollpanel',
+  [KEY.control_panel_faq]: 'Ofte stilte spørsmål',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -57,6 +59,7 @@ export const en: Record<KeyValues, string> = {
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
   [KEY.information_form_page__show_original]: 'Show original page',
   [KEY.information_form_page__show_draft]: 'Show draft page',
-  [KEY.information_form_page__edit]: 'Edit',
   [KEY.information_form_page__preview]: 'Preview',
+  [KEY.control_panel_title]: 'Control panel',
+  [KEY.control_panel_faq]: 'Frequently asked questions',
 };

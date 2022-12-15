@@ -33,6 +33,8 @@ export const KEY = {
   information_form_page__show_draft: 'information_form_page__show_draft',
   information_form_page__edit: 'information_form_page__edit',
   information_form_page__preview: 'information_form_page__preview',
+  control_panel_title: 'control_panel_title',
+  control_panel_faq: 'control_panel_faq',
 } as const;
 
 /**
