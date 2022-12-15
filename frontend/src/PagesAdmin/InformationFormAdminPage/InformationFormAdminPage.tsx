@@ -10,9 +10,9 @@ import { ROUTES } from '~/routes';
 import { useParams } from 'react-router-dom';
 import styles from './InformationFormAdminPage.module.scss';
 import { InformationPageDto } from '~/dto';
+import ReactMarkdown from 'react-markdown';
 import {  getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import { STATUS } from '~/http_status_codes';
-import { reverse } from '~/named-urls';
 
 export function InformationFormAdminPage() {
   const { user } = useAuthContext();
@@ -20,11 +20,11 @@ export function InformationFormAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  const [name, setName] = useState<string>('');
-  const [titleNo, setTitleNo] = useState<string>('');
-  const [textNo, setTextNo] = useState<string>('');
-  const [titleEn, setTitleEn] = useState<string>('');
-  const [textEn, setTextEn] = useState<string>('');
+  const [name, setName] = useState<Object>({value: '', error: ''});
+  const [titleNo, setTitleNo] = useState<Object>({value: '', error: ''});
+  const [textNo, setTextNo] = useState<Object>({value: '', error: ''});
+  const [titleEn, setTitleEn] = useState<Object>({ value: '', error: '' });
+  const [textEn, setTextEn] = useState<Object>({value: '', error: ''});
 
   // If form has a slugfield, check if it exists, and then load that item.
   const { slugField } = useParams();
@@ -40,18 +40,17 @@ export function InformationFormAdminPage() {
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => {
-          setName(data.slug_field);
-          setTitleNo(data.title_no);
-          setTitleEn(data.title_en);
-          setTextEn(data.text_en);
-          setTextNo(data.text_no);
+          setName({ value: data.slug_field, error: '' });
+          setTitleNo({ value: data.title_no, error: '' });
+          setTitleEn({ value: data.title_en, error: '' });
+          setTextEn({ value: data.text_en, error: '' });
+          setTextNo({ value: data.text_no, error: '' });
         }).catch((data) => {
           console.log(data);
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin_information);
           }
-          
         });
     }
   }, [slugField]);
@@ -67,28 +66,44 @@ export function InformationFormAdminPage() {
   function post(event: SyntheticEvent) {
     event.preventDefault();
     const data = {
-      title_no: titleNo,
-      title_en: titleEn,
-      text_no: textNo,
-      text_en: textEn,
+      title_no: titleNo.value,
+      title_en: titleEn.value,
+      text_no: textNo.value,
+      text_en: textEn.value,
     };
     if (slugField) {
-      putInformationPage(slugField, data)
+      data.slug_field = slugField;
+      putInformationPage(data)
         .then((status) => {
-            navigate(ROUTES.frontend.information_page_list + slugField);
+          navigate(ROUTES.frontend.information_page_list + slugField);
         })
         .catch((e) => {
           console.log(e);
       });
     } else {
-      data.slug_field = name;
+      data.slug_field = name.value;
       postInformationPage(data)
         .then((status) => {
           navigate(ROUTES.frontend.information_page_list + data.slug_field);
         })
         .catch((e) => {
-          console.log(e);
-      });
+          console.log(e.response.data);
+          if ('slug_field' in e.response.data) {
+            setName({ value: name.value, error: e.response.data.slug_field });
+          }
+          if ('title_no' in e.response.data) {
+            setTitleNo({ value: titleNo.value, error: e.response.data.title_no });
+          }
+          if ('title_en' in e.response.data) {
+            setTitleEn({ value: titleEn.value, error: e.response.data.title_en });
+          }
+          if ('text_en' in e.response.data) {
+            setTextEn({ value: textEn.value, error: e.response.data.text_en });
+          }
+          if ('text_no' in e.response.data) {
+            setTextNo({ value: textNo.value, error: e.response.data.text_no });
+          }
+        });
     }
   }
 
@@ -101,38 +116,83 @@ export function InformationFormAdminPage() {
       >
         <p>{t(KEY.back)}</p>
       </Button>
-      <h1>{slugField ? t(KEY.admin_information_edit_page) : t(KEY.admin_information_new_page)}</h1>
+      <h1 className={styles.header}>
+        {slugField ? t(KEY.admin_information_edit_page) : t(KEY.admin_information_new_page)}
+      </h1>
       <form onSubmit={post}>
         {!slugField && (
-          <InputField value={name} onChange={(e) => setName(e ? e.currentTarget.value : '')}>
-            <p className={styles.labelText}>{t(KEY.name)}</p>
-          </InputField>
+          <div className={styles.inputGroup}>
+            <InputField
+              className={styles.input}
+              value={name.value}
+              error={name.error}
+              onChange={(e) => setName({ value: e ? e.currentTarget.value : '', error: '' })}
+            >
+              <p className={styles.labelText}>{t(KEY.name)}</p>
+            </InputField>
+          </div>
         )}
         <div className={styles.inputGroup}>
-          <h2>{t(KEY.norwegian)}</h2>
-          <InputField value={titleNo} onChange={(e) => setTitleNo(e ? e.currentTarget.value : '')}>
-            <p className={styles.labelText}>
-              {t(KEY.norwegian)} {t(KEY.title)}
-            </p>
-          </InputField>
-          <TextAreaField value={textNo} onChange={(e) => setTextNo(e ? e.currentTarget.value : '')}>
-            <p className={styles.labelText}>
-              {t(KEY.norwegian)} {t(KEY.content)}
-            </p>
-          </TextAreaField>
+          <h2 className={styles.inputGroupHeader}>{t(KEY.norwegian)}</h2>
+          <div className={styles.row}>
+            <div className={styles.col}>
+              <InputField
+                className={styles.input}
+                value={titleNo.value}
+                error={titleNo.error}
+                onChange={(e) => setTitleNo({ value: e ? e.currentTarget.value : '', error: '' })}
+              >
+                <p className={styles.labelText}>
+                  {t(KEY.norwegian)} {t(KEY.title)}
+                </p>
+              </InputField>
+              <TextAreaField
+                className={styles.input}
+                value={textNo.value}
+                onChange={(e) => setTextNo({ value: e ? e.currentTarget.value : '', error: '' })}
+              >
+                <p className={styles.labelText}>
+                  {t(KEY.norwegian)} {t(KEY.content)}
+                </p>
+              </TextAreaField>
+            </div>
+            <div className={styles.col}>
+              <div className={styles.markdownField}>
+                <ReactMarkdown>{textNo.value}</ReactMarkdown>
+              </div>
+            </div>
+          </div>
         </div>
         <div className={styles.inputGroup}>
-          <h2>{t(KEY.english)}</h2>
-          <InputField value={titleEn} onChange={(e) => setTitleEn(e ? e.currentTarget.value : '')}>
-            <p className={styles.labelText}>
-              {t(KEY.english)} {t(KEY.title)}
-            </p>
-          </InputField>
-          <TextAreaField value={textEn} onChange={(e) => setTextEn(e ? e.currentTarget.value : '')}>
-            <p className={styles.labelText}>
-              {t(KEY.english)} {t(KEY.content)}
-            </p>
-          </TextAreaField>
+          <h2 className={styles.inputGroupHeader}>{t(KEY.english)}</h2>
+          <div className={styles.row}>
+            <div className={styles.col}>
+              <InputField
+                className={styles.input}
+                value={titleEn.value}
+                error={titleEn.error}
+                onChange={(e) => setTitleEn({ value: e ? e.currentTarget.value : '', error: '' })}
+              >
+                <p className={styles.labelText}>
+                  {t(KEY.english)} {t(KEY.title)}
+                </p>
+              </InputField>
+              <TextAreaField
+                className={styles.input}
+                value={textEn.value}
+                onChange={(e) => setTextEn({ value: e ? e.currentTarget.value : '', error: '' })}
+              >
+                <p className={styles.labelText}>
+                  {t(KEY.english)} {t(KEY.content)}
+                </p>
+              </TextAreaField>
+            </div>
+            <div className={styles.col}>
+              <div className={styles.markdownField}>
+                <ReactMarkdown>{textEn.value}</ReactMarkdown>
+              </div>
+            </div>
+          </div>
         </div>
         <div className={styles.submitContainer}>
           <Button theme={'success'} type='submit'>

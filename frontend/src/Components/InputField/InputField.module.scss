@@ -11,3 +11,11 @@
     outline: 1px solid $grey-1;
   }
 }
+
+.error {
+  outline: 2px solid $red;
+}
+
+.error_text {
+  color: $red;
+}

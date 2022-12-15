@@ -4,12 +4,8 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
-<<<<<<< HEAD
 import { Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-=======
-import { SamfundetLogoSpinner } from '~/Components';
->>>>>>> 413ce5e... add dashboard for managing groups
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
