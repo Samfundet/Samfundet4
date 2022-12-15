@@ -24,5 +24,4 @@ export const tabletBpUpper = 992;
 export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 
-
 export const BACKEND_DOMAIN = 'http://localhost:8000';

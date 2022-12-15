@@ -6,6 +6,17 @@
   margin: 1em 1em;
 }
 
+.header {
+  font-weight: 700;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.headerContainer {
+  margin-bottom: 0.5em;
+}
+
 .spinner {
   display: flex;
   justify-content: center;
@@ -31,33 +42,9 @@
   flex-wrap: wrap;
 }
 
-/* stylelint-disable selector-max-type */
-.tableHeader {
-  background-color: $red-samf;
-  color: $white;
-  text-align: left;
-  row-gap: 0;
-  padding: 0;
-  th {
-    padding: 0.6em;
-    font-size: 1.2em;
-    font-weight: 300;
-  }
+.gangTypeHeader {
+  font-weight: 600;
+  font-size: 1.4em;
+  margin-bottom: 0.4em;
+  margin-top: 0.5em;
 }
-
-.samfTable {
-  width: 100%;
-  border-collapse: collapse;
-  tr:nth-child(even) {
-    background-color: $grey-3;
-  }
-  tr:nth-child(odd) {
-    background-color: $grey-5;
-  }
-  td {
-    font-size: 1em;
-    font-weight: 300;
-    padding: 0.5em;
-  }
-}
-/* stylelint-enable */

@@ -1,39 +1,32 @@
 import { useEffect, useState, SyntheticEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { hasPerm } from '~/utils';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, InputField, SamfundetLogoSpinner, TextAreaField } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { KEY, LANGUAGES } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useParams } from 'react-router-dom';
 import styles from './InformationFormAdminPage.module.scss';
-import { InformationPageDto } from '~/dto';
 import ReactMarkdown from 'react-markdown';
-import {  getInformationPage, postInformationPage, putInformationPage } from '~/api';
+import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import { STATUS } from '~/http_status_codes';
 
 export function InformationFormAdminPage() {
-  const { user } = useAuthContext();
   const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  const [name, setName] = useState<Object>({value: '', error: ''});
-  const [titleNo, setTitleNo] = useState<Object>({value: '', error: ''});
-  const [textNo, setTextNo] = useState<Object>({value: '', error: ''});
-  const [titleEn, setTitleEn] = useState<Object>({ value: '', error: '' });
-  const [textEn, setTextEn] = useState<Object>({value: '', error: ''});
+  const [name, setName] = useState({ value: '', error: '' });
+  const [titleNo, setTitleNo] = useState({ value: '', error: '' });
+  const [textNo, setTextNo] = useState({ value: '', error: '' });
+  const [titleEn, setTitleEn] = useState({ value: '', error: '' });
+  const [textEn, setTextEn] = useState({ value: '', error: '' });
 
   // If form has a slugfield, check if it exists, and then load that item.
   const { slugField } = useParams();
 
   // Stuff to do on first render.
   //TODO add permissions on render
-  useEffect(() => {
-    setShowSpinner(false);
-  }, []);
 
   useEffect(() => {
     // TODO add fix on no slugfield on editpage
@@ -45,7 +38,8 @@ export function InformationFormAdminPage() {
           setTitleEn({ value: data.title_en, error: '' });
           setTextEn({ value: data.text_en, error: '' });
           setTextNo({ value: data.text_no, error: '' });
-        }).catch((data) => {
+        })
+        .catch((data) => {
           console.log(data);
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
@@ -53,7 +47,8 @@ export function InformationFormAdminPage() {
           }
         });
     }
-  }, [slugField]);
+    setShowSpinner(false);
+  }, []);
 
   if (showSpinner) {
     return (
@@ -75,15 +70,17 @@ export function InformationFormAdminPage() {
       data.slug_field = slugField;
       putInformationPage(data)
         .then((status) => {
+          console.log(status);
           navigate(ROUTES.frontend.information_page_list + slugField);
         })
         .catch((e) => {
           console.log(e);
-      });
+        });
     } else {
       data.slug_field = name.value;
       postInformationPage(data)
         .then((status) => {
+          console.log(status);
           navigate(ROUTES.frontend.information_page_list + data.slug_field);
         })
         .catch((e) => {
@@ -114,7 +111,7 @@ export function InformationFormAdminPage() {
         onClick={() => navigate(ROUTES.frontend.admin_information)}
         className={styles.backButton}
       >
-        <p>{t(KEY.back)}</p>
+        <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
       <h1 className={styles.header}>
         {slugField ? t(KEY.admin_information_edit_page) : t(KEY.admin_information_new_page)}
@@ -195,7 +192,7 @@ export function InformationFormAdminPage() {
           </div>
         </div>
         <div className={styles.submitContainer}>
-          <Button theme={'success'} type='submit'>
+          <Button theme={'success'} type="submit">
             <p className={styles.submit}>
               {slugField ? t(KEY.admin_information_update_page) : t(KEY.admin_information_create_page)}
             </p>

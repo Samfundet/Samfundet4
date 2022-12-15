@@ -1,5 +1,20 @@
 @import 'src/mixins';
+
 @import 'src/constants';
+
+/* stylelint-disable selector-max-type */
+.tableHeader {
+  background-color: $red-samf;
+  color: $white;
+  text-align: left;
+  row-gap: 0;
+  padding: 0;
+  th {
+    padding: 0.6em;
+    font-size: 1.2em;
+    font-weight: 300;
+  }
+}
 
 .samfTable {
   width: 100%;
@@ -16,16 +31,4 @@
     padding: 0.5em;
   }
 }
-
-.tableHeader {
-  background-color: $red-samf;
-  color: $white;
-  text-align: left;
-  row-gap: 0;
-  padding: 0;
-  th {
-    padding:0.6em;
-    font-size: 1.2em;
-    font-weight: 300;
-  }
-}
+/* stylelint-enable */

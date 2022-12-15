@@ -57,6 +57,7 @@ export const KEY = {
   content: 'content',
   english: 'english',
   norwegian: 'norwegian',
+  gang: 'gang',
 } as const;
 
 /**

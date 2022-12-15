@@ -1,9 +1,8 @@
-import classnames from 'classnames';
 import styles from './Table.module.scss';
-
-
+import { Children } from '~/types';
 type TableProps = {
   cols: Array;
+  children: Children;
 };
 
 /*
@@ -11,12 +10,14 @@ type TableProps = {
 */
 export function Table({ cols, children }: TableProps) {
   const colSum = cols.reduce((partialSum, c) => partialSum + c[1], 0);
-  const colWidths = cols.map(function (element) { return (element[1]/colSum)*100 + '%'})
+  const colWidths = cols.map(function (element) {
+    return (element[1] / colSum) * 100 + '%';
+  });
   return (
     <table className={styles.samfTable}>
       <colgroup className={styles.cols}>
         {cols.map(function (element, key) {
-          return <col key={key} span="1" style={{width:colWidths[key]}} />;
+          return <col key={key} span="1" style={{ width: colWidths[key] }} />;
         })}
       </colgroup>
       <thead className={styles.tableHeader}>

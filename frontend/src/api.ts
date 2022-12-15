@@ -95,6 +95,7 @@ export async function getInformationPage(slug_field: string): Promise<Informatio
 
   return response.data;
 }
+
 export async function deleteInformationPage(slug_field: string): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
@@ -114,7 +115,6 @@ export async function putInformationPage(page: InformationPageDto): Promise<Axio
     BACKEND_DOMAIN +
     reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
-
   return response;
 }
 
@@ -140,7 +140,8 @@ export async function getMenuItems(): Promise<MenuItemDto[]> {
 }
 
 export async function getMenuItem(pk: number): Promise<MenuItemDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<MenuItemDto>(url, { withCredentials: true });
 
   return response.data;
@@ -154,7 +155,8 @@ export async function getFoodPreferences(): Promise<FoodPreferenceDto[]> {
 }
 
 export async function getFoodPreference(pk: number): Promise<FoodPreferenceDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodPreferenceDto>(url, { withCredentials: true });
 
   return response.data;
@@ -168,7 +170,8 @@ export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
 }
 
 export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
 
   return response.data;

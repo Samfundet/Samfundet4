@@ -2,8 +2,6 @@ import classNames from 'classnames';
 import { Children } from '~/types';
 import styles from './TextAreaField.module.scss';
 
-type types = 'text' | 'number' | 'email' | 'password';
-
 type TextAreaFieldProps = {
   children?: Children;
   className?: string;
@@ -12,6 +10,7 @@ type TextAreaFieldProps = {
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string | null;
   rows?: number;
+  cols?: number;
   value?: string;
   error?: string;
 };
@@ -25,6 +24,7 @@ export function TextAreaField({
   placeholder,
   value,
   error,
+  cols,
   rows = 10,
 }: TextAreaFieldProps) {
   return (
@@ -36,6 +36,7 @@ export function TextAreaField({
           className={classNames(styles.input_field, inputClassName, error && error.length > 0 && styles.error)}
           placeholder={placeholder || ''}
           rows={rows}
+          cols={cols}
           value={value}
         />
       </label>

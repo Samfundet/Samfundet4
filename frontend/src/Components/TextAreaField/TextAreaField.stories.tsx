@@ -1,14 +1,14 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { InputField } from './TextAreaField';
+import { TextAreaField } from './TextAreaField';
 
 export default {
-  title: 'Components/InputField',
-  component: InputField,
-} as ComponentMeta<typeof InputField>;
+  title: 'Components/TextAreaField',
+  component: TextAreaField,
+} as ComponentMeta<typeof TextAreaField>;
 
-const Template: ComponentStory<typeof InputField> = function (args) {
-  return <InputField {...args} />;
+const Template: ComponentStory<typeof TextAreaField> = function (args) {
+  return <TextAreaField {...args} />;
 };
 
 export const Basic = Template.bind({});
