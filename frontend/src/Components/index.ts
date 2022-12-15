@@ -13,5 +13,6 @@ export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
+export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { OpeningHours } from './OpeningHours';

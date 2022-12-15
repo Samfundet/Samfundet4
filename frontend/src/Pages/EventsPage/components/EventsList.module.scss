@@ -1,6 +1,8 @@
+@import 'src/mixins';
+
 @import 'src/constants';
 
-.date_header {
+.dateHeader {
   background-color: $red-samf;
   width: 100%;
   text-align: center;
@@ -10,6 +12,13 @@
   line-height: 1.2;
   text-transform: uppercase;
   margin-top: 0;
+}
+
+.dateHeaderText {
+  font-size: 1.4em;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.3em;
 }
 
 .container {
@@ -35,12 +44,9 @@
 
 .events_container {
   display: flex;
-  flex-direction: row;
-  overflow: hidden;
+  flex-direction: column;
   align-items: center;
   width: 100%;
-  font-size: 0.8em;
-  padding: 0.2em;
   padding-left: 1em;
   padding-right: 1em;
 }
@@ -49,14 +55,29 @@
   flex: 1;
 }
 
+.link {
+  color: $red-samf;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
 .column_title {
   flex: 1;
   flex-direction: row;
   justify-content: flex-end;
 }
 
+.column_price {
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: $grey-1;
+}
+
 .event_row {
   display: flex;
   flex-direction: row;
   width: 100%;
+  padding: 0.3em;
+  border-top: 1px solid $grey-2;
 }

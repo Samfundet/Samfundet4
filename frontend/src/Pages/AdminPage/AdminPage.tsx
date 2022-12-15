@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { hasPerm } from '~/utils';
 import { Button } from '~/Components';
 import { Page } from '~/Components/Page';

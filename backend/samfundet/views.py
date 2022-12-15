@@ -1,5 +1,4 @@
 from typing import Type
-from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -63,17 +62,20 @@ class EventView(ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
+
 class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        
-        events = Event.objects.all() # To be used if some kind of query is used
+
+        events = Event.objects.all()  # To be used if some kind of query is used
         dates = Event.objects.all().order_by('start_dt__date').values_list('start_dt__date').distinct()
         events = {
-            str(date[0]):[event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))] for date in dates
+            str(date[0]): [event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))]
+            for date in dates
         }
         return Response(data=events)  # type: ignore[attr-defined]
+
 
 class VenueView(ModelViewSet):
     serializer_class = VenueSerializer

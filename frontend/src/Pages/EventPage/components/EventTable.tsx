@@ -1,3 +1,4 @@
+import { TimeDisplay, TimeDuration } from '~/Components';
 import { Event } from '~/types';
 import styles from './EventTable.module.scss';
 
@@ -5,14 +6,7 @@ type EventTableProps = {
   event: Event;
 };
 
-function getTimeStr(test) {
-  return "";
-}
-
 export function EventTable({ event }: EventTableProps) {
-  const month: string = event.start_dt.toLocaleDateString('no', { month: 'long' });
-  const monthday: number = event.start_dt.getDate();
-  const time_field: string = getTimeStr(event.start_dt) + ' - ' + getTimeStr(event.end_dt);
   const ticket_field: string = event.price_group;
   return (
     <table className={styles.table_container}>
@@ -26,11 +20,15 @@ export function EventTable({ event }: EventTableProps) {
       </tr>
       <tr>
         <td className={styles.table_element_left}> DATO </td>
-        <td className={styles.table_element_right}>{monthday + '. ' + month}</td>
+        <td className={styles.table_element_right}>
+          <TimeDisplay timestamp={event.start_dt} displayType="date-nice" />{' '}
+        </td>
       </tr>
       <tr>
         <td className={styles.table_element_left}> TID </td>
-        <td className={styles.table_element_right}> {time_field}</td>
+        <td className={styles.table_element_right}>
+          <TimeDuration start={event.start_dt} end={event.end_dt} />
+        </td>
       </tr>
       <tr>
         <td className={styles.table_element_left}> BILLETT </td>

@@ -1,5 +1,9 @@
-.root_container {
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.spinner {
   display: flex;
-  flex-direction: column;
-  margin-top: 5em;
+  justify-content: center;
+  margin-top: 20%;
 }

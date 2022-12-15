@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
-import { TimeDisplay } from '~/Components';
+import { Button, TimeDisplay } from '~/Components';
+import { TimeDuration } from '~/Components/TimeDuration';
 import { EventDto } from '~/dto';
+import { ROUTES } from '~/routes';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
-  event_list: Object;
+  events: unknown;
 };
 
-function getTimeStr(str) {
-  return "";
-}
 export function EventsList({ events }: EventsListProps) {
   /** check if dates are equal */
   return (
@@ -17,26 +16,34 @@ export function EventsList({ events }: EventsListProps) {
       {Object.keys(events).map(function (date_str: string, key: number) {
         return (
           <div key={key} className={styles.dates_container}>
-            <TimeDisplay timestamp={date_str}/>
-            {events[date_str].map(function (event: EventDto, key: number) {
-              return (
-                <div className={styles.events_container} key={key}>
-                  <div className={styles.event_row}>
+            <div className={styles.dateHeader}>
+              <TimeDisplay className={styles.dateHeaderText} timestamp={date_str} displayType="nice-date" />
+            </div>
+            <div className={styles.events_container}>
+              {events[date_str].map(function (event: EventDto, key: number) {
+                return (
+                  <div key={key} className={styles.event_row}>
                     <div className={styles.column_title}>
-                      <Link to={'/events/' + event.id}>
-                        <p> {event.title_no}</p>
+                      <Link to={ROUTES.frontend.events + event.id} className={styles.link}>
+                        {event.title_no}
                       </Link>
                     </div>
                     <div className={styles.column_area_time}>
                       <div className={styles.time_wrapper}>
-                        <p>{`${getTimeStr(event?.start_dt)} - ${getTimeStr(event?.end_dt)}`}</p>
+                        <TimeDuration start={event.start_dt} end={event.end_dt} />
                       </div>
-                      <p> {event?.location}</p>
+                      <p>{event?.location}</p>
+                    </div>
+                    <div className={styles.column_price}>
+                      <p>{event?.price_group}</p>
+                    </div>
+                    <div className={styles.column_buy}>
+                      <Button theme="samf">Kjøp</Button>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         );
       })}

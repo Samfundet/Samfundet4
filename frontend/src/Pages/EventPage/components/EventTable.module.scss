@@ -1,10 +1,14 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
 .table_container {
   display: table;
   border-spacing: 0;
 }
 
 .table_element_left {
-  border-right: solid;
+  border-right: 0.01em solid $grey-0;
   padding: 0.5em;
   padding-bottom: 0;
 }
@@ -13,6 +17,3 @@
   padding: 0.5em;
 }
 
-.table_column {
-  border-right: 1px solid black;
-}

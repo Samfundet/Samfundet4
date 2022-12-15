@@ -108,7 +108,8 @@ def event_to_dataclass(*, event: Event) -> EventDto:
         publish_dt=event.publish_dt,
         host=event.host,
         location=event.location,
-        event_group=event.event_group
+        event_group=event.event_group,
+        price_group=event.price_group
     )
 
 
