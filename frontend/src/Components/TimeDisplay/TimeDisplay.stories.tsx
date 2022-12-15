@@ -13,10 +13,13 @@ const Template: ComponentStory<typeof TimeDisplay> = function (args) {
 const now = new Date().toISOString();
 
 export const Basic = Template.bind({});
-Basic.args = { timestamp: now };
+Basic.args = { timestamp: now, displayType: 'datetime' };
 
-export const ShowTime = Template.bind({});
-ShowTime.args = { timestamp: now, showTime: true };
+export const ShowDate = Template.bind({});
+ShowDate.args = { timestamp: now, displayType: 'date' };
+
+export const Time = Template.bind({});
+Time.args = { timestamp: now, displayType: 'time' };
 
 export const InvalidTime = Template.bind({});
 InvalidTime.args = { timestamp: '' };
