@@ -6,6 +6,8 @@ export const ROUTES_FRONTEND = {
   login: '/login/',
   signup: '/signup/',
   lyche: '/lyche/',
+  events: '/events/',
+  event: '/events/:id',
   information_page_list: '/information-page/',
   information_page_detail: '/information-page/:slugField/',
   information_page_edit: '/information-page/:slugField/edit',

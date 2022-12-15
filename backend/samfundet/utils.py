@@ -10,12 +10,14 @@ from .models import (
     Profile,
     Saksdokument,
     UserPreference,
+    Event,
 )
 
 from .dto import (
     UserDto,
     VenueDto,
     GroupDto,
+    EventDto,
     ProfileDto,
     SaksdokumentDto,
     UserPreferenceDto,
@@ -87,6 +89,31 @@ def group_to_dataclass(*, group: Group) -> GroupDto:
 
 def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
     return [group_to_dataclass(group=group) for group in groups]
+
+
+###
+
+
+def event_to_dataclass(*, event: Event) -> EventDto:
+    return EventDto(
+        id=event.id,
+        title_no=event.title_no,
+        title_en=event.title_en,
+        start_dt=event.start_dt,
+        end_dt=event.end_dt,
+        description_long_no=event.description_long_no,
+        description_long_en=event.description_long_en,
+        description_short_no=event.description_short_en,
+        description_short_en=event.description_short_en,
+        publish_dt=event.publish_dt,
+        host=event.host,
+        location=event.location,
+        event_group=event.event_group
+    )
+
+
+def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
+    return [event_to_dataclass(event=event) for event in events]
 
 
 ###

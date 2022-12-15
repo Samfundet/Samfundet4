@@ -1,21 +1,51 @@
 import { Link } from 'react-router-dom';
+import { TimeDisplay } from '~/Components';
+import { EventDto } from '~/dto';
 import styles from './EventsList.module.scss';
-import { Event } from '~/types';
-import { getTimeStr } from '~/Pages/EventsPage/EventsPage';
 
 type EventsListProps = {
-  event_list: Event[];
-  date_list: string[];
+  event_list: Object;
 };
 
-export function EventsList({ event_list, date_list }: EventsListProps) {
+function getTimeStr(str) {
+  return "";
+}
+export function EventsList({ events }: EventsListProps) {
   /** check if dates are equal */
-  function compareDates(event_date: Date, array_date: string) {
-    return event_date.toISOString().includes(array_date);
-  }
   return (
     <div className={styles.container}>
-      {date_list.map((date_str: string, index: number) => {
+      {Object.keys(events).map(function (date_str: string, key: number) {
+        return (
+          <div key={key} className={styles.dates_container}>
+            <TimeDisplay timestamp={date_str}/>
+            {events[date_str].map(function (event: EventDto, key: number) {
+              return (
+                <div className={styles.events_container} key={key}>
+                  <div className={styles.event_row}>
+                    <div className={styles.column_title}>
+                      <Link to={'/events/' + event.id}>
+                        <p> {event.title_no}</p>
+                      </Link>
+                    </div>
+                    <div className={styles.column_area_time}>
+                      <div className={styles.time_wrapper}>
+                        <p>{`${getTimeStr(event?.start_dt)} - ${getTimeStr(event?.end_dt)}`}</p>
+                      </div>
+                      <p> {event?.location}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * {date_list.map((date_str: string, index: number) => {
         const date: Date = new Date(date_str);
         const month: string = date.toLocaleDateString('no', { month: 'long' });
         const weekday: string = date.toLocaleDateString('no', { weekday: 'long' });
@@ -48,6 +78,4 @@ export function EventsList({ event_list, date_list }: EventsListProps) {
           </div>
         );
       })}
-    </div>
-  );
-}
+ */

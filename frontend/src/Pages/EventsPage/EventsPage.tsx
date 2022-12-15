@@ -1,36 +1,19 @@
 import { useEffect, useState } from 'react';
-import styles from './EventsPage.module.scss';
-import { ROUTES } from '~/routes';
-import { Event } from '~/types';
 import { EventsList } from './components/EventsList';
-
-/** get date on format hh.mm */
-export function getTimeStr(date: Date) {
-  return (date.getHours() + '.' + date.getMinutes()).toString();
-}
+import { getEventsPerDay } from '~/api';
+import { Page } from '~/Components/Page';
 
 export function EventsPage() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [dates, setDates] = useState<string[]>([]);
+  const [events, setEvents] = useState({});
   useEffect(() => {
-    fetch(ROUTES.backend.samfundet__events_list)
-      .then((response) => response.json())
-      .then((data) => {
-        const events = data;
-        setEvents(events);
-        const dates_arr: string[] = [];
-        events.map((event: Event) => {
-          const dateStr = event.start_dt.toISOString().split('T')[0]; // format: YYYY-MM-DD
-          if (dates_arr.indexOf(dateStr) == -1) {
-            dates_arr.push(dateStr);
-          }
-        });
-        setDates(dates_arr);
-      });
+    getEventsPerDay().then((data) => {
+      setEvents(data);
+      console.log(typeof data);
+    });
   }, []);
   return (
-    <div className={styles.root_container}>
-      <EventsList event_list={events} date_list={dates} />
-    </div>
+    <Page>
+      <EventsList events={events} />
+    </Page>
   );
 }

@@ -230,6 +230,7 @@ export const ROUTES_BACKEND = {
   admin__url: '/admin/:url',
   rest_framework__login: '/rest_framework/login/',
   rest_framework__logout: '/rest_framework/logout/',
+  samfundet__events_perday: '/events-per-day/',
   samfundet__events_list: '/api/events/',
   samfundet__events_detail: '/api/events/:pk/',
   samfundet__venues_list: '/api/venues/',

@@ -1,10 +1,13 @@
 import { Event } from '~/types';
-import { getTimeStr } from '~/Pages/EventsPage/EventsPage';
 import styles from './EventTable.module.scss';
 
 type EventTableProps = {
   event: Event;
 };
+
+function getTimeStr(test) {
+  return "";
+}
 
 export function EventTable({ event }: EventTableProps) {
   const month: string = event.start_dt.toLocaleDateString('no', { month: 'long' });
