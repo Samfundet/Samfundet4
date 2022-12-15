@@ -1,7 +1,7 @@
 import { UserDto } from '~/dto';
 
 export type hasPerm = {
-  user: UserDto;
+  user: UserDto | undefined;
   permission: string;
   obj: string | number;
 };
@@ -9,6 +9,10 @@ export type hasPerm = {
 /** Inspired by Django PermissionMixin. */
 export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Superuser always has permission.
+
+  if (!user) {
+    return false;
+  }
   if (user.is_active && user.is_superuser) {
     // console.log('superuser perm');
     return true;

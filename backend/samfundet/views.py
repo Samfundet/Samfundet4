@@ -152,6 +152,7 @@ class GangView(ModelViewSet):
 
 
 class GangTypeView(ModelViewSet):
+    http_method_names = ['get']
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
 

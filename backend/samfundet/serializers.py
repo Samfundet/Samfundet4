@@ -112,6 +112,7 @@ class GangSerializer(serializers.ModelSerializer):
 
 
 class GangTypeSerializer(serializers.ModelSerializer):
+    gangs = GangSerializer(read_only=True, many=True)
 
     class Meta:
         model = GangType
