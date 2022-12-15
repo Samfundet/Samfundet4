@@ -120,37 +120,39 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype')
+    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
     class Meta:
         verbose_name = 'GangType'
         verbose_name_plural = 'GangTypes'
 
     def __str__(self) -> str:
-        return f'{self.title}'
+        return f'{self.title_no}'
 
 
 class Gang(models.Model):
-    name = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn', unique=True)
-    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse', unique=True)
-    webpage = models.URLField(verbose_name='Nettside')
+    name_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk', unique=True)
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk', unique=True)
+    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
+    webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
-    gang_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
-
-    # TODO ADD Information Page
+    logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
+    gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
 
     def __str__(self) -> str:
-        return f'{self.gang_type} - {self.name}'
+        return f'{self.gang_type} - {self.name_no}'
 
 
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=True,
+        blank=False,
         null=False,
         unique=True,
         primary_key=True,
@@ -250,6 +252,28 @@ class Menu(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name_no}'
+
+
+class Saksdokument(models.Model):
+    title_no = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
+    title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
+    publication_date = models.DateTimeField(blank=True, null=True)
+
+    class SaksdokumentCategory(models.TextChoices):
+        FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
+        STYRET = 'STYRET', _('Styret')
+        RADET = 'RADET', _('Rådet')
+        ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
+
+    category = models.CharField(max_length=25, choices=SaksdokumentCategory.choices, default=SaksdokumentCategory.FS_REFERAT)
+    file = models.FileField(upload_to='uploads/saksdokument/', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Saksdokument'
+        verbose_name_plural = 'Saksdokument'
+
+    def __str__(self) -> str:
+        return f'{self.title_no}'
 
 
 class Booking(models.Model):

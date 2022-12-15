@@ -13,6 +13,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 dataclasses-json = "*"
 django-guardian = "*"
+pillow = "*"
 
 [dev-packages]
 yapf = "*"
@@ -21,8 +22,12 @@ pylint-django = "*"
 pylint-quotes = "*"
 mypy = "*"
 bandit = "*"
-flake8 = "*"
+pillow = "*"
+flake8 = "~=5.0"
 flake8-annotations = "*"
+flake8-keyword-arguments = "*"
+flake8-print = "*"
+flake8-quotes = "*"
 
 [requires]
 python_version = "3.11.0" # from .python-version

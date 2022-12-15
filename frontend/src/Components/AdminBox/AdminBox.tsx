@@ -1,4 +1,5 @@
 import { Button } from '../Button';
+import { useNavigate } from 'react-router-dom';
 import styles from './AdminBox.module.scss';
 
 type AdminBoxProps = {
@@ -31,23 +32,24 @@ const KILROY = 'KILROY';
 
 */
 export function AdminBox({ title, options }: AdminBoxProps) {
+  const navigate = useNavigate();
   return (
     <div className={styles.applet}>
       <div className={styles.top}>
-        <h2 className={styles.header}>{title}</h2>
+        <h1 className={styles.header}>{title}</h1>
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {
           if (element.type == ADD) {
             return (
-              <Button key={key} theme="success" className={styles.button}>
+              <Button key={key} theme="success" onClick={() => navigate(element.url)} className={styles.button}>
                 {' '}
                 {element.text}
               </Button>
             );
           } else if (element.type == MANAGE) {
             return (
-              <Button key={key} theme="outlined" className={styles.button}>
+              <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
                 {element.text}
               </Button>
             );

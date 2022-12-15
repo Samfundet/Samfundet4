@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from django.contrib.auth import login, get_user_model, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import XCSRFTOKEN
@@ -19,7 +19,6 @@ from .utils import (
     user_to_dataclass,
     users_to_dataclass,
     groups_to_dataclass,
-    permissions_to_dataclass,
 )
 from .models import (
     Menu,
@@ -32,6 +31,7 @@ from .models import (
     MenuItem,
     GangType,
     FoodCategory,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
@@ -47,6 +47,7 @@ from .serializers import (
     BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    SaksdokumentSerializer,
     FoodCategorySerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -102,7 +103,7 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        user = user_to_dataclass(user=request.user, flat=False)
+        user = user_to_dataclass(user=request.user)
         return Response(data=user.to_dict())  # type: ignore[attr-defined]
 
 
@@ -110,25 +111,16 @@ class AllUsersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        users = users_to_dataclass(users=User.objects.all(), flat=False)
+        users = users_to_dataclass(users=User.objects.all())
         users_objs = [user.to_dict() for user in users]  # type: ignore[attr-defined]
         return Response(data=users_objs)
-
-
-class AllPermissionsView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request) -> Response:
-        all_permissions = permissions_to_dataclass(permissions=Permission.objects.all())
-        all_permissions_objs = [permission.to_dict() for permission in all_permissions]  # type: ignore[attr-defined]
-        return Response(data=all_permissions_objs)
 
 
 class AllGroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        all_groups = groups_to_dataclass(groups=list(Group.objects.all()), flat=False)
+        all_groups = groups_to_dataclass(groups=Group.objects.all())
         all_groups_objs = [group.to_dict() for group in all_groups]  # type: ignore[attr-defined]
         return Response(data=all_groups_objs)
 
@@ -160,6 +152,7 @@ class GangView(ModelViewSet):
 
 
 class GangTypeView(ModelViewSet):
+    http_method_names = ['get']
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
 
@@ -190,6 +183,11 @@ class FoodCategoryView(ModelViewSet):
 class FoodPreferenceView(ModelViewSet):
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
+
+
+class SaksdokumentView(ModelViewSet):
+    serializer_class = SaksdokumentSerializer
+    queryset = Saksdokument.objects.all()
 
 
 class TableView(ModelViewSet):

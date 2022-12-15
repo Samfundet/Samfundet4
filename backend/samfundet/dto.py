@@ -19,13 +19,12 @@ class UserDto:
     is_superuser: bool
     date_joined: datetime
     last_login: datetime
-    # nested
+    permissions: list[str]
+    object_permissions: list[ObjectPermissionDto]
+    # Related models:
     groups: list[GroupDto]
     user_preference: UserPreferenceDto
     profile: ProfileDto
-    user_permissions: list[PermissionDto] | None
-    user_object_perms: list[UserObjectPermissionDto] | None
-    content_type: ContentTypeDto
 
 
 @dataclass_json
@@ -33,46 +32,14 @@ class UserDto:
 class GroupDto:
     id: int
     name: str
-    permissions: list[PermissionDto]
-    group_object_perms: list[GroupObjectPermissionDto] | None
-    content_type: ContentTypeDto
 
 
 @dataclass_json
 @dataclass
-class PermissionDto:
-    id: int
-    name: str
-    content_type: ContentTypeDto
-    codename: str
-
-
-@dataclass_json
-@dataclass
-class UserObjectPermissionDto:
-    id: int
-    permission: PermissionDto
-    content_type: ContentTypeDto
-    obj_id: int
-    user: UserDto
-
-
-@dataclass_json
-@dataclass
-class GroupObjectPermissionDto:
-    id: int
-    permission: PermissionDto
-    content_type: ContentTypeDto
-    obj_id: int
-    group: GroupDto
-
-
-@dataclass_json
-@dataclass
-class ContentTypeDto:
-    id: int
-    app_label: str
-    model: str
+class ObjectPermissionDto:
+    """Sub type for UserDto."""
+    permission: str
+    obj_pk: int
 
 
 @dataclass_json
@@ -85,7 +52,6 @@ class VenueDto:
     last_renovated: int
     handicapped_approved: bool
     responsible_crew: str
-    content_type: ContentTypeDto
 
 
 @dataclass_json
@@ -104,14 +70,12 @@ class EventDto:
     host: str
     location: str
     event_group: EventGroupDto
-    content_type: ContentTypeDto
 
 
 @dataclass_json
 @dataclass
 class EventGroupDto:
     id: int
-    content_type: ContentTypeDto
 
 
 @dataclass_json
@@ -119,7 +83,6 @@ class EventGroupDto:
 class UserPreferenceDto:
     id: int
     theme: str
-    content_type: ContentTypeDto
 
 
 @dataclass_json
@@ -127,4 +90,36 @@ class UserPreferenceDto:
 class ProfileDto:
     id: int
     nickname: str
-    content_type: ContentTypeDto
+
+
+@dataclass_json
+@dataclass
+class SaksdokumentDto:
+    id: int
+    title_no: str
+    title_en: str
+    publication_date: datetime
+    category: str
+    file: str
+
+
+@dataclass_json
+@dataclass
+class GangDto:
+    id: int
+    name_no: str
+    name_en: str
+    abbreviation: str
+    webpage: str
+    logo: str
+    gang_type: int
+    info_page: int
+
+
+@dataclass_json
+@dataclass
+class GangTypeDto:
+    id: int
+    title_no: str
+    title_en: str
+    gangs: list[GangDto]

@@ -14,46 +14,24 @@ export type UserDto = {
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];
-  user_permissions?: PermissionDto[];
-  user_object_perms?: UserObjectPermissionDto[];
-  content_type: ContentTypeDto;
+  permissions?: string[];
+  object_permissions?: ObjectPermissionDto[];
 };
 
 export type GroupDto = {
   id: number;
   name: string;
-  permissions?: PermissionDto[];
-  group_object_perms?: GroupObjectPermissionDto[];
-  content_type: ContentTypeDto;
 };
 
 export type PermissionDto = {
   id: number;
   name: string;
-  content_type: ContentTypeDto;
   codename: string;
 };
 
-export type UserObjectPermissionDto = {
-  id: number;
-  permission: PermissionDto;
-  content_type: ContentTypeDto;
-  obj_id: string;
-  user: UserDto;
-};
-
-export type GroupObjectPermissionDto = {
-  id: number;
-  permission: PermissionDto;
-  content_type: ContentTypeDto;
-  obj_id: string;
-  group: GroupDto;
-};
-
-export type ContentTypeDto = {
-  id: number;
-  app_label: string;
-  model: string;
+export type ObjectPermissionDto = {
+  obj_pk: number;
+  permission: string;
 };
 
 export type VenueDto = {
@@ -64,7 +42,6 @@ export type VenueDto = {
   last_renovated?: number;
   handicapped_approved?: boolean;
   responsible_crew?: string;
-  content_type?: ContentTypeDto;
   opening?: string;
   closing?: string;
   opening_monday?: string;
@@ -98,24 +75,20 @@ export type EventDto = {
   host: string;
   location: string;
   event_group: EventGroupDto;
-  content_type: ContentTypeDto;
 };
 
 export type EventGroupDto = {
   id: number;
-  content_type: ContentTypeDto;
 };
 
 export type ProfileDto = {
   id: number;
   nickname: string;
-  content_type: ContentTypeDto;
 };
 
 export type UserPreferenceDto = {
   id?: number;
   theme?: ThemeValue;
-  content_type?: ContentTypeDto;
 };
 
 export type InformationPageDto = {
@@ -173,6 +146,14 @@ export type MenuDto = {
   menu_items?: MenuItemDto[];
 };
 
+export type SaksdokumentDto = {
+  title_no?: string;
+  title_en?: string;
+  category?: string;
+  publication_date?: Date;
+  file?: string;
+};
+
 export type BookingDto = {
   name?: string;
   text?: string;
@@ -182,4 +163,22 @@ export type BookingDto = {
 
   from_dto?: Date;
   from_to?: Date;
+};
+
+export type GangDto = {
+  id: number;
+  name_no: string;
+  name_en: string;
+  abbreviation: string;
+  webpage?: string;
+  logo?: string;
+  gang_type?: number;
+  info_page?: number;
+};
+
+export type GangTypeDto = {
+  id: number;
+  title_no: string;
+  title_en: string;
+  gangs: GangDto[];
 };

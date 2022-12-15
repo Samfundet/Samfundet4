@@ -4,16 +4,17 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
-    Booking,
     Menu,
     Gang,
     Event,
     Table,
     Venue,
+    Booking,
     Profile,
     MenuItem,
     GangType,
     FoodCategory,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
@@ -111,6 +112,7 @@ class GangSerializer(serializers.ModelSerializer):
 
 
 class GangTypeSerializer(serializers.ModelSerializer):
+    gangs = GangSerializer(read_only=True, many=True)
 
     class Meta:
         model = GangType
@@ -165,6 +167,13 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
+        fields = '__all__'
+
+
+class SaksdokumentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Saksdokument
         fields = '__all__'
 
 

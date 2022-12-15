@@ -10,8 +10,10 @@ router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
 router.register('venues', views.VenueView, 'venues')
 router.register('gangs', views.GangView, 'gangs')
+router.register('gangsorganized', views.GangTypeView, 'gangsorganized')
 router.register('information', views.InformationPageView, 'information')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
+router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
 router.register('profile', views.ProfileView, 'profile')
 router.register('menu', views.MenuView, 'menu')
 router.register('menu-items', views.MenuItemView, 'menu_items')
@@ -30,5 +32,4 @@ urlpatterns = [
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
-    path('permissions/', views.AllPermissionsView.as_view(), name='permissions'),
 ]

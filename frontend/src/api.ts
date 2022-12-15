@@ -6,9 +6,11 @@ import {
   MenuDto,
   MenuItemDto,
   PermissionDto,
+  SaksdokumentDto,
   UserDto,
   UserPreferenceDto,
   VenueDto,
+  GangTypeDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -95,6 +97,15 @@ export async function getInformationPage(slug_field: string): Promise<Informatio
   return response.data;
 }
 
+export async function putInformationPage(page: InformationPageDto): Promise<AxiosResponse> {
+  const url =
+    TEMP_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
+  const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
+
+  return response;
+}
+
 export async function getMenus(): Promise<MenuDto[]> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_list });
   const response = await axios.get<MenuDto[]>(url, { withCredentials: true });
@@ -147,6 +158,20 @@ export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
 export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
   const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
+  const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getGangList(): Promise<GangTypeDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_organized });
+  const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
   return response.data;
 }

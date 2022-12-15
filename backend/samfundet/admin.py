@@ -23,6 +23,7 @@ from .models import (
     MenuItem,
     GangType,
     EventGroup,
+    Saksdokument,
     FoodCategory,
     FoodPreference,
     UserPreference,
@@ -227,10 +228,10 @@ class VenueAdmin(CustomGuardedModelAdmin):
 @admin.register(Gang)
 class GangAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name', 'abbreviation', 'gang_type']
+    sortable_by = ['id', 'name_no', 'abbreviation', 'gang_type']
     list_filter = ['gang_type']
-    list_display = ['id', '__str__', 'name', 'abbreviation', 'gang_type']
-    search_fields = ['id', 'name', 'abbreviation']
+    list_display = ['id', '__str__', 'name_no', 'abbreviation', 'gang_type']
+    search_fields = ['id', 'name_no', 'abbreviation']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     autocomplete_fields = ['gang_type']
@@ -240,10 +241,10 @@ class GangAdmin(CustomGuardedModelAdmin):
 @admin.register(GangType)
 class GangTypeAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'title']
+    sortable_by = ['id', 'title_no']
     # list_filter = []
-    list_display = ['id', '__str__', 'title']
-    search_fields = ['id', 'title']
+    list_display = ['id', '__str__', 'title_no']
+    search_fields = ['id', 'title_no']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -331,6 +332,18 @@ class FoodPreferenceAdmin(CustomGuardedModelAdmin):
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
+
+
+@admin.register(Saksdokument)
+class SaksdokumentAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_no']
+    # list_filter = []
+    list_display = ['id', '__str__', 'title_no']
+    search_fields = ['id', 'title_no']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
 
 
 @admin.register(Booking)
