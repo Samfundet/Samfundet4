@@ -1,3 +1,4 @@
+
 import { Route, Routes } from 'react-router-dom';
 import { useGoatCounter } from '~/hooks';
 import {
@@ -26,6 +27,8 @@ export function AppRoutes() {
     <Routes>
       <Route path={ROUTES.frontend.home} element={<HomePage />} />
       <Route path={ROUTES.frontend.health} element={<HealthPage />} />
+      <Route path={ROUTES.frontend.events} element={<EventsPage />} />
+      <Route path={ROUTES.frontend.event} element={<EventPage />} />
       <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
       <Route path={ROUTES.frontend.login} element={<LoginPage />} />
       <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
