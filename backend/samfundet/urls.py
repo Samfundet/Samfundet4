@@ -31,5 +31,4 @@ urlpatterns = [
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
-    path('permissions/', views.AllPermissionsView.as_view(), name='permissions'),
 ]
