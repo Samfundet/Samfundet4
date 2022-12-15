@@ -38,9 +38,11 @@ export function InformationPage() {
 
   if (!page) {
     return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
+      <Page>
+        <div className={styles.spinner}>
+          <SamfundetLogoSpinner />
+        </div>
+      </Page>
     );
   }
 

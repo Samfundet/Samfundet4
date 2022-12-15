@@ -25,6 +25,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
     'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
+  [KEY.control_panel_title]: 'Kontrollpanel',
+  [KEY.control_panel_faq]: 'Ofte stilte spørsmål',
+  [KEY.back]: 'Tilbake',
+  [KEY.admin_gangs_title]: 'Administrer gjenger',
+  [KEY.admin_gangs_create]: 'Opprett gjeng',
   [KEY.information_form_page__show_original]: 'Vis original side',
   [KEY.information_form_page__show_draft]: 'Vis redigert side',
   [KEY.information_form_page__edit]: 'Rediger',
@@ -74,6 +79,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.gangs_title]: 'The groups at Samfundet',
   [KEY.gangs_text]:
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
+  [KEY.control_panel_title]: 'Control panel',
+  [KEY.control_panel_faq]: 'Frequently asked questions',
+  [KEY.back]: 'Back',
+  [KEY.admin_gangs_title]: 'Groups administration',
+  [KEY.admin_gangs_create]: 'Create group',
   [KEY.information_form_page__show_original]: 'Show original page',
   [KEY.information_form_page__show_draft]: 'Show draft page',
   [KEY.information_form_page__preview]: 'Preview',
