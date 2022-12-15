@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
 import { Link, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -37,9 +38,11 @@ export function InformationPage() {
 
   if (!page) {
     return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
+      <Page>
+        <div className={styles.spinner}>
+          <SamfundetLogoSpinner />
+        </div>
+      </Page>
     );
   }
 
