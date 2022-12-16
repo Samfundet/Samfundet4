@@ -1,4 +1,4 @@
-import { Children } from '../../types';
+import { Children } from '~/types';
 
 type RadioButtonProps = {
   name?: string;
@@ -6,11 +6,23 @@ type RadioButtonProps = {
   checked?: boolean;
   className?: string;
   disabled?: boolean;
+  defaultValue?: string | number;
+  defaultChecked?: boolean;
   children?: Children;
   onChange?: () => void;
 };
 
-export function RadioButton({ name, value, checked, onChange, disabled, className, children }: RadioButtonProps) {
+export function RadioButton({
+  name,
+  value,
+  checked,
+  onChange,
+  disabled,
+  defaultValue,
+  defaultChecked,
+  className,
+  children,
+}: RadioButtonProps) {
   return (
     <label>
       <input
@@ -18,6 +30,8 @@ export function RadioButton({ name, value, checked, onChange, disabled, classNam
         name={name}
         value={value}
         onChange={onChange}
+        defaultChecked={defaultChecked}
+        defaultValue={defaultValue}
         checked={checked}
         disabled={disabled}
         className={className}

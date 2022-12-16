@@ -43,8 +43,8 @@ Sortable.args = {
 };
 
 export const MultipleSortableRows = Template.bind({});
-Sortable.args = {
-  columns: ['Sortable', 'Not sortable', 'Random col'],
+MultipleSortableRows.args = {
+  columns: ['Sortable', 'Also rtable', 'Random col'],
   data: [
     [new AlphabeticTableCell('A'), new AlphabeticTableCell('N'), { children: 'X' } as ITableCell],
     [new AlphabeticTableCell('Z'), new AlphabeticTableCell('M'), { children: 'Y' } as ITableCell],

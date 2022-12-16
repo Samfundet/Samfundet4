@@ -1,9 +1,41 @@
 @import 'src/constants';
 
-.button_samf {
+.button {
   border: none;
   padding: 10px 25px;
+  cursor: pointer;
+  border-radius: 0.25em;
+  transition: 0.2s;
+  box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.1);
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &:hover:not([disabled]) {
+    filter: brightness(120%);
+    transform: translateY(-1px);
+    transition: 0.2s;
+    box-shadow: 1px 2px 8px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.button_basic {
+  background-color: white;
+}
+
+.button_samf {
   background-color: $red-samf;
+  color: white;
+}
+
+.button_success {
+  background-color: $green;
+  color: white;
+}
+
+.button_blue {
+  background-color: $blue;
   color: white;
 }
 
@@ -11,4 +43,14 @@
   border: none;
   padding: 10px 25px;
   background-color: $grey-3;
+}
+
+.button_outlined {
+  background-color: transparent;
+  border: 1px solid $grey-1;
+  color: black;
+  &:hover:not([disabled]) {
+    border-color: $red-samf;
+    color: $red-samf;
+  }
 }

@@ -1,0 +1,212 @@
+/* stylelint-disable selector-max-compound-selectors */
+/* stylelint-disable selector-max-class */
+/* TODO: fix later */
+
+@import 'src/mixins';
+
+$navbar-bg: #000000;
+$navbar-height: 60px;
+
+#navbar_container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: $navbar-height;
+  background: $navbar-bg;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  z-index: 12;
+  @include for-tablet-down {
+    justify-content: space-between;
+  }
+}
+
+#navbar_logo {
+  display: flex;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: auto;
+  width: 240px;
+  max-width: 70%;
+  cursor: pointer;
+}
+
+/* Desktop navigation items: */
+.navbar_link {
+  color: white;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  @include for-tablet-down {
+    display: none;
+  }
+}
+
+// Push page below navbar.
+.navbar_padding {
+  padding-top: $navbar-height;
+}
+
+.navbar_signup {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-right: 24px;
+  @include for-tablet-down {
+    display: none;
+  }
+}
+
+.navbar_language_flag {
+  width: 28px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
+}
+
+.navbar_member_button {
+  display: flex;
+  align-items: center;
+  margin-right: 0.8em;
+}
+
+.member_button_link {
+  text-decoration: none;
+  color: white;
+}
+
+.navbar_internal_button {
+  background-color: white;
+}
+
+.internal_button_link {
+  text-decoration: none;
+  color: black;
+}
+
+.navbar_profile_button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1em;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 1px;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: inherit;
+  @include for-tablet-down {
+    display: none;
+  }
+}
+
+.profile_icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+.profile_text {
+  text-decoration: none;
+  color: #777777;
+}
+
+/* Hamburger menu */
+
+#navbar_hamburger {
+  display: none;
+  @include for-tablet-down {
+    height: 69%;
+    width: 55px;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+}
+
+.navbar_hamburger_line {
+  background-color: white;
+  width: 35px;
+  height: 4px;
+  border-radius: 10px;
+  transition: transform 400ms;
+}
+
+#navbar_hamburger.open {
+  .navbar_hamburger_line.top {
+    transform: translateY(12px) rotate(-45deg);
+  }
+
+  .navbar_hamburger_line.middle {
+    opacity: 0;
+  }
+
+  .navbar_hamburger_line.bottom {
+    transform: translateY(-11px) rotate(45deg);
+  }
+}
+
+/* Mobile popup navigation */
+
+#mobile_popup_container {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 60px);
+  min-height: 400px;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  @include for-desktop-up {
+    display: none;
+  }
+}
+
+.popup_link_mobile {
+  color: white;
+  font-size: 1.5em;
+  margin-bottom: 0.75em;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.popup_change_language {
+  height: 2.5em;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
+}
+
+.popup_member_button {
+  margin-bottom: 0.5em;
+}
+
+.popup_internal_button {
+  background-color: white;
+}
+
+.popup_profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 1px;
+  padding-top: 0.6em;
+  background-color: inherit;
+}

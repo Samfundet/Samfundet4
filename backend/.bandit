@@ -1,7 +1,7 @@
 [bandit]
-exclude = tests,.venv,venv,.pytest_cache
+exclude = tests,.venv,venv,.pytest_cache,root/utils/routes.py
 severity-level = all
 confidence-level = all
-skips = B101
+skips = B101,B311
 
 # Disable individual lines with comment, example: "print(1) # nosec"

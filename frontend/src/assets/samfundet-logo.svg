@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 110 110" height="100" width="100" stroke-width="10" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" fill="none" overflow="visible">
+    <!-- 
+        All the elements are equal copies of one another.
+        They are only transformed to create logo.
+        This makes size changes and proportions easy to work with.
+        The classname are carefully selected to be easily targetable.
+    -->
+    
+    <g class="outer">
+
+        <g class="corners">
+            <g transform="translate(0,0) rotate(0)" class="corner-top-left">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+            <g transform="translate(100,0) rotate(90)" class="corner-top-right">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+            <g transform="translate(0,100) rotate(-90)" class="corner-bottom-left">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+            <g transform="translate(100,100) rotate(180)" class="corner-bottom-right">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+        </g>
+
+        <g class="bridges">
+            <polyline points="0 0 20 0" transform="translate(40,0) rotate(0)" class="bridge-top"/>
+            <polyline points="0 0 20 0" transform="translate(0,40) rotate(90)" class="bridge-left"/>
+            <polyline points="0 0 20 0" transform="translate(100,60) rotate(-90)" class="bridge-right"/>
+            <polyline points="0 0 20 0" transform="translate(60,100) rotate(180)" class="bridge-bottom"/>
+        </g>
+    </g>
+
+    <g class="middle">
+        <g class="corners">
+            <!-- Copies of outer-corners. -->
+            <g transform="translate(20,20) rotate(0)" class="corner-top-left">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+            <g transform="translate(80,20) rotate(90)" class="corner-top-right">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+            <g transform="translate(20,80) rotate(-90)" class="corner-bottom-left">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+            <g transform="translate(80,80) rotate(180)" class="corner-bottom-right">
+                <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+                <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+            </g>
+        </g>
+    </g>
+
+    <g class="inner">
+        <!-- Copies of outer-corners. -->
+        <g transform="translate(40,40) rotate(0)" class="corner-top-left">
+            <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+            <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+        </g>
+        <g transform="translate(60,60) rotate(180)" class="corner-bottom-right">
+            <polyline points="0 0 20 0" transform="rotate(0)" class="corner-foot-left"/>
+            <polyline points="0 0 20 0" transform="rotate(90)" class="corner-foot-right"/>
+        </g>
+        <rect x="40" y="40" width="20" height="20" stroke-width="0" fill="currentColor" class="inner-middle"/>
+    </g>
+
+</svg>

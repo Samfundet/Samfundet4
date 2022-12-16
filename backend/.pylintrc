@@ -1,5 +1,5 @@
 [MASTER]
-load-plugins=pylint_django,pylint_quotes,root.named_arguments_checker
+load-plugins=pylint_django,pylint_quotes,root.custom_classes.named_arguments_checker
 ignore=migrations
 max-line-length=160
 include-naming-hint=y
@@ -27,11 +27,13 @@ disable=
     fixme,
     no-member, # BUG: added indefinitely because it suddenly caused many errors
     duplicate-code,
+    imported-auth-user, # Don't require get_user_model().
     too-many-ancestors,
     too-many-instance-attributes,
     too-few-public-methods,
     too-many-public-methods,
     too-many-arguments,
+    disallowed-name, # Don't care about "foo", "bar" etc.
     too-many-locals,
     too-many-statements,
     unsubscriptable-object, # https://github.com/PyCQA/pylint/issues/1498

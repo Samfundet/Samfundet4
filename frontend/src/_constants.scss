@@ -1,5 +1,8 @@
 // Colors:
+// When adding new colors, types.ts must be updated to reflect all colors
 $red-samf: #a03033;
+$blue: #337ab7;
+$blue-deep: #1a3b80;
 $blue-lighter: #e3f2ff;
 $blue-light: #c4dbf3;
 $blue-medium: #88b3e0;
@@ -10,12 +13,26 @@ $turquoise-medium: #9fe9dc;
 $turquoise: #5accb9;
 $turquoise-deep: #288474;
 $white: #ffffff;
+$black: #000000;
 $grey-5: #f4f4f4;
 $grey-4: #eeeeee;
 $grey-3: #dddddd;
 $grey-2: #cccccc;
 $grey-1: #767676;
 $grey-0: #444444;
+$green: #4ab74c;
+$green-lighter: #f6ffed;
+$green-light: #b7eb8f;
+$orange-ligher: #fffbe6;
+$orange-light: #ffe99e;
+$red-lighter: #fff2f0;
+$red-light: #ffcfca;
+
+// Theme colors:
+$theme-dark-bg: #1f0000;
+$theme-dark-color: #dddddd;
+$theme-dark-input-bg: #404040;
+$theme-dark-input-bg-disabled: #7b7b7b;
 
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;
@@ -24,3 +41,4 @@ $desktop-bp-lower: 993px;
 $tablet-bp-upper: 992px;
 $tablet-bp-lower: 769px;
 $mobile-bp-upper: 768px;
+$content-max-size: 1200px;

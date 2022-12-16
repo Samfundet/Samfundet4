@@ -1,0 +1,15 @@
+@import 'src/mixins';
+
+.wrapper {
+  @include for-tablet-up {
+    margin: 0 auto;
+    width: 80vw;
+    height: 70vh;
+  }
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}

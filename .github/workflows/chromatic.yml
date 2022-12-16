@@ -1,11 +1,17 @@
 name: 'Chromatic'
 
+# https://github.com/reviewdog/action-eslint/issues/29#issuecomment-985939887
 on:
-  push:
-    paths: ['frontend/src/Components/**']
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
   chromatic-deployment:
+    if: ${{ !github.event.pull_request.draft }}
     # https://www.chromatic.com/docs/github-actions
     runs-on: ubuntu-latest
     defaults:
