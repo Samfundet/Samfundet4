@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button, TimeDisplay } from '~/Components';
 import { TimeDuration } from '~/Components/TimeDuration';
 import { EventDto } from '~/dto';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './EventsList.module.scss';
 
@@ -24,12 +25,15 @@ export function EventsList({ events }: EventsListProps) {
                 return (
                   <div key={key} className={styles.event_row}>
                     <div className={styles.column_title}>
-                      <Link to={ROUTES.frontend.events + event.id} className={styles.link}>
+                      <Link
+                        to={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+                        className={styles.link}
+                      >
                         {event.title_no}
                       </Link>
                     </div>
                     <div className={styles.column_area_time}>
-                      <div className={styles.time_wrapper}>
+                      <div>
                         <TimeDuration start={event.start_dt} end={event.end_dt} />
                       </div>
                       <p>{event?.location}</p>
@@ -50,39 +54,3 @@ export function EventsList({ events }: EventsListProps) {
     </div>
   );
 }
-
-/**
- * {date_list.map((date_str: string, index: number) => {
-        const date: Date = new Date(date_str);
-        const month: string = date.toLocaleDateString('no', { month: 'long' });
-        const weekday: string = date.toLocaleDateString('no', { weekday: 'long' });
-        const monthday: number = date.getDate();
-
-        return (
-          <div key={index} className={styles.dates_container}>
-            <h2 className={styles.date_header}>{weekday + ' ' + monthday + '.' + month}</h2>
-            {event_list.map((event: Event, index: number) => {
-              if (compareDates(event.start_dt, date_str)) {
-                return (
-                  <div className={styles.events_container} key={index}>
-                    <div className={styles.event_row}>
-                      <div className={styles.column_title}>
-                        <Link to={'/events/' + event.id}>
-                          <p> {event.title_no}</p>
-                        </Link>
-                      </div>
-                      <div className={styles.column_area_time}>
-                        <div className={styles.time_wrapper}>
-                          <p>{`${getTimeStr(event?.start_dt)} - ${getTimeStr(event?.end_dt)}`}</p>
-                        </div>
-                        <p> {event?.location}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            })}
-          </div>
-        );
-      })}
- */

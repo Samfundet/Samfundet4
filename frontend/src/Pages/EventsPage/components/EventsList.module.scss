@@ -68,10 +68,14 @@
 }
 
 .column_price {
+  display: none;
   flex: 1;
   flex-direction: row;
   justify-content: flex-end;
   color: $grey-1;
+  @include for-tablet-up {
+    display: block;
+  }
 }
 
 .event_row {

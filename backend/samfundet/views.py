@@ -71,10 +71,11 @@ class EventPerDayView(APIView):
         events = Event.objects.all()  # To be used if some kind of query is used
         dates = Event.objects.all().order_by('start_dt__date').values_list('start_dt__date').distinct()
         events = {
-            str(date[0]): [event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))]
+            str(date[0]):
+            [event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))]  # type: ignore[attr-defined]
             for date in dates
         }
-        return Response(data=events)  # type: ignore[attr-defined]
+        return Response(data=events)
 
 
 class VenueView(ModelViewSet):
