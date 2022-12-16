@@ -53,7 +53,9 @@ export function InformationPage() {
       >
         {t(KEY.common_edit)}
       </Link>
-      <ReactMarkdown>{text || ''}</ReactMarkdown>
+      <ReactMarkdown transformLinkUri={false} className={styles.md}>
+        {text || ''}
+      </ReactMarkdown>
     </div>
   );
 }
