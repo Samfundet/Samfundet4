@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @import 'constants';
 
 /* stylelint-disable selector-max-type */
@@ -73,6 +75,13 @@ a {
 
   a {
     color: pink;
+  }
+
+  pre {
+    color: $grey-3;
+    /* stylelint-disable-next-line function-no-unknown */
+    background-color: color.adjust($theme-dark-bg, $lightness: -2%);
+    border: 1px solid $grey-1;
   }
 }
 
