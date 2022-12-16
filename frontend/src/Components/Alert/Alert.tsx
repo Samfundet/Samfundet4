@@ -10,9 +10,18 @@ type AlertProps = {
   className?: 'string';
   closable?: boolean;
   align?: 'center' | 'left' | 'right';
+  onClose?: () => void;
 };
 
-export function Alert({ message, type = 'info', title, className, closable = false, align = 'left' }: AlertProps) {
+export function Alert({
+  message,
+  type = 'info',
+  title,
+  className,
+  closable = false,
+  onClose,
+  align = 'left',
+}: AlertProps) {
   const [closed, setClosed] = useState(false);
   const wrapperClassNames = classnames(styles[type], className, styles.alert, align === 'right' && styles.rightWrapper);
   const contentClassName = classnames(styles[align], align === 'center' && closable ? styles.offset : undefined);
@@ -22,10 +31,16 @@ export function Alert({ message, type = 'info', title, className, closable = fal
         <div className={wrapperClassNames}>
           <div className={contentClassName}>
             {title && <p className={styles.title}>{title}</p>}
-            <p>{message}</p>
+            <p className={styles.content}>{message}</p>
           </div>
           {closable && (
-            <Button className={styles.closeButton} onClick={() => setClosed(true)}>
+            <Button
+              className={styles.closeButton}
+              onClick={() => {
+                setClosed(true);
+                onClose && onClose();
+              }}
+            >
               x
             </Button>
           )}

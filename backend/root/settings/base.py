@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 environ.Env.read_env(env_file=BASE_DIR / '.env')
 
 ### Print variables ###
-print(f'=== {BASE_DIR=}')
-print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")
+print(f'=== {BASE_DIR=}')  # noqa: T201
+print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
 ### End: Print variables ###
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -87,7 +87,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'root.utils.middlewares.RequestLogMiddleware',
+    'root.custom_classes.middlewares.RequestLogMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -170,7 +170,7 @@ REST_FRAMEWORK = {
         [
             # 'rest_framework.permissions.IsAuthenticated',
             # 'rest_framework.permissions.DjangoObjectPermissions',
-            'root.utils.permissions.CustomDjangoObjectPermissions',
+            'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
         ]
 }
 ### End: DRF ###
@@ -190,7 +190,7 @@ AUTHENTICATION_BACKENDS += [
 import logging.config  # noqa: E402
 
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
-from root.utils.request_context_filter import RequestContextFilter  # noqa: E402
+from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
 
 # pylint: enable=wrong-import-position,wrong-import-order
 

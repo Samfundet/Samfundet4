@@ -3,7 +3,22 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
-from .models import Event, Venue
+from .models import (
+    Menu,
+    Gang,
+    Event,
+    Table,
+    Venue,
+    Booking,
+    Profile,
+    MenuItem,
+    GangType,
+    FoodCategory,
+    Saksdokument,
+    FoodPreference,
+    UserPreference,
+    InformationPage,
+)
 
 User = get_user_model()
 
@@ -85,4 +100,95 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
+        fields = '__all__'
+
+
+# GANGS ###
+class GangSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Gang
+        fields = '__all__'
+
+
+class GangTypeSerializer(serializers.ModelSerializer):
+    gangs = GangSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = GangType
+        fields = '__all__'
+
+
+class InformationPageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InformationPage
+        fields = '__all__'
+
+
+class UserPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserPreference
+        fields = '__all__'
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
+class FoodPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodCategory
+        fields = '__all__'
+
+
+class MenuItemSerializer(serializers.ModelSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(serializers.ModelSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+
+class SaksdokumentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Saksdokument
+        fields = '__all__'
+
+
+class TableSerializer(serializers.ModelSerializer):
+    venue = VenueSerializer(many=True)
+
+    class Meta:
+        model = Table
+        fields = '__all__'
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    tables = TableSerializer(many=True)
+    user = UserSerializer(many=True)
+
+    class Meta:
+        model = Booking
         fields = '__all__'

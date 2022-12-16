@@ -1,6 +1,7 @@
 from __future__ import annotations
-from dataclasses import dataclass
+
 from datetime import datetime
+from dataclasses import dataclass
 
 from dataclasses_json import dataclass_json
 
@@ -18,8 +19,12 @@ class UserDto:
     is_superuser: bool
     date_joined: datetime
     last_login: datetime
+    permissions: list[str]
+    object_permissions: list[ObjectPermissionDto]
+    # Related models:
     groups: list[GroupDto]
-    user_permissions: list[PermissionDto]
+    user_preference: UserPreferenceDto
+    profile: ProfileDto
 
 
 @dataclass_json
@@ -27,24 +32,14 @@ class UserDto:
 class GroupDto:
     id: int
     name: str
-    permissions: list[PermissionDto]
 
 
 @dataclass_json
 @dataclass
-class PermissionDto:
-    id: int
-    name: str
-    content_type: ContentTypeDto
-    codename: str
-
-
-@dataclass_json
-@dataclass
-class ContentTypeDto:
-    id: int
-    app_label: str
-    model: str
+class ObjectPermissionDto:
+    """Sub type for UserDto."""
+    permission: str
+    obj_pk: int
 
 
 @dataclass_json
@@ -81,3 +76,50 @@ class EventDto:
 @dataclass
 class EventGroupDto:
     id: int
+
+
+@dataclass_json
+@dataclass
+class UserPreferenceDto:
+    id: int
+    theme: str
+
+
+@dataclass_json
+@dataclass
+class ProfileDto:
+    id: int
+    nickname: str
+
+
+@dataclass_json
+@dataclass
+class SaksdokumentDto:
+    id: int
+    title_no: str
+    title_en: str
+    publication_date: datetime
+    category: str
+    file: str
+
+
+@dataclass_json
+@dataclass
+class GangDto:
+    id: int
+    name_no: str
+    name_en: str
+    abbreviation: str
+    webpage: str
+    logo: str
+    gang_type: int
+    info_page: int
+
+
+@dataclass_json
+@dataclass
+class GangTypeDto:
+    id: int
+    title_no: str
+    title_en: str
+    gangs: list[GangDto]

@@ -10,3 +10,6 @@ __pycache__
 *.pyc
 *.pyo
 .log
+
+# Script for debugging purposes.
+root/scripts/testing.py

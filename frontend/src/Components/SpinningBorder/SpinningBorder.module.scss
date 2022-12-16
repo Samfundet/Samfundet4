@@ -1,0 +1,31 @@
+@import 'src/constants';
+
+.outer {
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  height: fit-content;
+}
+
+@keyframes spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+.spinner {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  animation: spin linear infinite;
+  scale: 1.5;
+}
+
+.inner {
+  position: relative;
+  z-index: 3;
+}

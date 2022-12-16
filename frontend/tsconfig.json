@@ -21,7 +21,7 @@
     }
   },
   // Need glob pattern on files for editor to recognise alias/paths when importing.
-  "include": ["src", "**/*.{ts,tsx,js,jsx}"],
+  "include": ["src", "**/*.{ts,tsx,js,jsx,scss}"],
   "exclude": ["node_modules"],
   "excludeDirectories": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]

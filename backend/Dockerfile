@@ -1,5 +1,5 @@
 # Use same version as defined in .python-version.
-FROM python:3.10.5-slim-buster
+FROM python:3.11.0-slim-buster
 
 # Update Ubuntu Software repository.
 RUN apt update -y \
@@ -27,7 +27,7 @@ RUN python -m pip install pipenv
 COPY Pipfile Pipfile.lock ./
 
 # Install virtual environment.
-RUN python -m pipenv install --deploy
+RUN python -m pipenv install --dev --deploy
 
 # Copy rest of the project into image.
 COPY . .

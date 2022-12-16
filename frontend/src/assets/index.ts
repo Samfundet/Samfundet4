@@ -16,3 +16,4 @@ export { default as selskapssiden } from './selskapssiden.jpg';
 export { default as splash } from './splash.jpeg';
 export { default as storsalen } from './storsalen.jpg';
 export { default as strossa } from './strossa.jpg';
+export { default as kitteh } from './kitteh.jpeg';
