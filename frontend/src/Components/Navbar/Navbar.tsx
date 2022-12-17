@@ -71,7 +71,7 @@ export function Navbar() {
         {t(KEY.common_event)}
       </Link>
       <Link
-        to={ROUTES.frontend.information_page_list}
+        to={ROUTES.frontend.about}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
