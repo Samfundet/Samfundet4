@@ -10,6 +10,7 @@ import styles from './InformationFormAdminPage.module.scss';
 import ReactMarkdown from 'react-markdown';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import { STATUS } from '~/http_status_codes';
+import { reverse } from '~/named-urls';
 
 export function InformationFormAdminPage() {
   const navigate = useNavigate();
@@ -71,20 +72,24 @@ export function InformationFormAdminPage() {
       putInformationPage(data)
         .then((status) => {
           console.log(status);
-          navigate(ROUTES.frontend.information_page_list + slugField);
+          navigate(
+            reverse({ pattern: ROUTES.frontend.information_page_detail, urlParams: { slugField: data.slug_field } }),
+          );
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e.response.data);
         });
     } else {
       data.slug_field = name.value;
       postInformationPage(data)
         .then((status) => {
           console.log(status);
-          navigate(ROUTES.frontend.information_page_list + data.slug_field);
+          navigate(
+            reverse({ pattern: ROUTES.frontend.information_page_detail, urlParams: { slugField: data.slug_field } }),
+          );
         })
         .catch((e) => {
-          console.log(e.response.data);
+          console.error(e.response.data);
           if ('slug_field' in e.response.data) {
             setName({ value: name.value, error: e.response.data.slug_field });
           }
@@ -114,7 +119,7 @@ export function InformationFormAdminPage() {
         <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
       <h1 className={styles.header}>
-        {slugField ? t(KEY.admin_information_edit_page) : t(KEY.admin_information_new_page)}
+        {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
       </h1>
       <form onSubmit={post}>
         {!slugField && (
@@ -140,7 +145,7 @@ export function InformationFormAdminPage() {
                 onChange={(e) => setTitleNo({ value: e ? e.currentTarget.value : '', error: '' })}
               >
                 <p className={styles.labelText}>
-                  {t(KEY.norwegian)} {t(KEY.title)}
+                  {t(KEY.norwegian)} {t(KEY.common_title)}
                 </p>
               </InputField>
               <TextAreaField
@@ -171,7 +176,7 @@ export function InformationFormAdminPage() {
                 onChange={(e) => setTitleEn({ value: e ? e.currentTarget.value : '', error: '' })}
               >
                 <p className={styles.labelText}>
-                  {t(KEY.english)} {t(KEY.title)}
+                  {t(KEY.english)} {t(KEY.common_title)}
                 </p>
               </InputField>
               <TextAreaField

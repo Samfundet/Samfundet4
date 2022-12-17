@@ -9,6 +9,7 @@ import styles from './InformationAdminPage.module.scss';
 import { InformationPageDto } from '~/dto';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { Table } from '~/Components/Table';
+import { reverse } from '~/named-urls';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
@@ -59,13 +60,13 @@ export function InformationAdminPage() {
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
-        {t(KEY.admin_information_new_page)}
+        {t(KEY.common_create)} {t(KEY.information_page_short)}
       </Button>
       <div className={styles.tableContainer}>
         <Table
           cols={[
             [t(KEY.name), 1],
-            [t(KEY.title), 1],
+            [t(KEY.common_title), 1],
             [t(KEY.owner), 1],
             [t(KEY.last_updated), 1],
             ['', 1],
@@ -74,21 +75,37 @@ export function InformationAdminPage() {
           {informationPages.map(function (element, key) {
             return (
               <tr key={key}>
-                <td>{element.slug_field}</td>
+                <td>
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.information_page_detail,
+                      urlParams: { slugField: element.slug_field },
+                    })}
+                  >
+                    {element.slug_field}
+                  </Link>
+                </td>
                 <td>{element.title_no}</td>
                 <td>Legg til</td>
                 <td>Legg til</td>
                 <td>
                   <Button
                     theme="blue"
-                    onClick={() => navigate(ROUTES.frontend.admin_information + 'edit/' + element.slug_field)}
+                    onClick={() => {
+                      navigate(
+                        reverse({
+                          pattern: ROUTES.frontend.information_page_edit,
+                          urlParams: { slugField: element.slug_field },
+                        }),
+                      );
+                    }}
                   >
                     {t(KEY.edit)}
                   </Button>
                   <Button
                     theme="samf"
                     onClick={() => {
-                      if (window.confirm('Are you sure to delete this informationpage?')) {
+                      if (window.confirm(t(KEY.admin_information_confirm_delete))) {
                         deletePage(element.slug_field);
                       }
                     }}
