@@ -1,7 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import {
+  EventDto,
   FoodCategoryDto,
   FoodPreferenceDto,
+  GangTypeDto,
   InformationPageDto,
   MenuDto,
   MenuItemDto,
@@ -10,8 +12,6 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
-  GangTypeDto,
-  EventDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -120,21 +120,21 @@ export async function putInformationPage(page: InformationPageDto): Promise<Axio
 }
 
 export async function getEventsPerDay(): Promise<EventDto[]> {
-  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getEvents(): Promise<EventDto[]> {
-  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getEvent(pk: number): Promise<EventDto> {
-  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
 
   return response.data;
