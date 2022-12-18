@@ -118,7 +118,7 @@ export function InformationFormPage() {
       </Button>
 
       <div className={styles.row}>
-        <h2 className={styles.col}>{t(KEY.information_form_page__edit)}:</h2>
+        <h2 className={styles.col}>{t(KEY.common_edit)}:</h2>
         <h2 className={styles.col}>{t(KEY.information_form_page__preview)}:</h2>
       </div>
 
@@ -131,7 +131,7 @@ export function InformationFormPage() {
           value={currentPage[currentTitleFieldName]}
           onChange={(e) => handleChange(e, currentTitleFieldName)}
         >
-          {t(KEY.title, { lng: language })}:
+          {t(KEY.common_title, { lng: language })}:
         </InputField>
         <h1 className={styles.col}>{currentPage[currentTitleFieldName]}</h1>
       </div>

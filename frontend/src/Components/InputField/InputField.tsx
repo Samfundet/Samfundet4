@@ -6,6 +6,7 @@ type types = 'text' | 'number' | 'email' | 'password';
 
 type InputFieldProps = {
   children?: Children;
+  className?: string;
   labelClassName?: string;
   inputClassName?: string;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,29 +14,35 @@ type InputFieldProps = {
   type?: types;
   disabled?: boolean;
   value?: string;
+  error?: string;
 };
 
 export function InputField({
   children,
+  className,
   labelClassName,
   inputClassName,
   onChange,
   placeholder,
   disabled,
   value,
+  error,
   type = 'text',
 }: InputFieldProps) {
   return (
-    <label className={classNames(styles.label, labelClassName)}>
-      {children}
-      <input
-        onChange={onChange}
-        className={classNames(styles.input_field, inputClassName)}
-        placeholder={placeholder || ''}
-        disabled={disabled}
-        type={type}
-        value={value}
-      />
-    </label>
+    <div className={className}>
+      <label className={classNames(styles.label, labelClassName)}>
+        {children}
+        <input
+          onChange={onChange}
+          className={classNames(styles.input_field, inputClassName, error && error.length > 0 && styles.error)}
+          placeholder={placeholder || ''}
+          disabled={disabled}
+          type={type}
+          value={value.value}
+        />
+        {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
+      </label>
+    </div>
   );
 }

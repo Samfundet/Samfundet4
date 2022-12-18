@@ -1,0 +1,9 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
