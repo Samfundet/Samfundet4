@@ -14,4 +14,5 @@ export { SpinningBorder } from './SpinningBorder';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { ToggleSwitch } from './ToggleSwitch';
+export { TextAreaField } from './TextAreaField';
 export { OpeningHours } from './OpeningHours';

@@ -6,6 +6,12 @@
   margin: 1em 1em;
 }
 
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
 .header {
   font-weight: 700;
   font-size: 2em;
@@ -15,12 +21,6 @@
 
 .headerContainer {
   margin-bottom: 0.5em;
-}
-
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
 }
 
 .backButton {
@@ -34,17 +34,7 @@
   font-weight: 700;
 }
 
-.applets {
-  margin-top: 1em;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
+.tableContainer {
+  margin-top: 2em;
 }
 
-.gangTypeHeader {
-  font-weight: 600;
-  font-size: 1.4em;
-  margin-bottom: 0.4em;
-  margin-top: 0.5em;
-}
