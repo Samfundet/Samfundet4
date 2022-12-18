@@ -70,6 +70,7 @@ class EventDto:
     host: str
     location: str
     event_group: EventGroupDto
+    price_group: str
 
 
 @dataclass_json

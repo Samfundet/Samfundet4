@@ -6,10 +6,10 @@ import { logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { useDesktop } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useDesktop } from '~/hooks';
 import styles from './Navbar.module.scss';
 
 export function Navbar() {
@@ -64,7 +64,7 @@ export function Navbar() {
   const navbarHeaders = (
     <>
       <Link
-        to={ROUTES.frontend.health}
+        to={ROUTES.frontend.events}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
