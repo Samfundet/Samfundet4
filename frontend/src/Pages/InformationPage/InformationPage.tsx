@@ -47,15 +47,13 @@ export function InformationPage() {
   }
 
   return (
-    <Page>
-      <div className={styles.wrapper}>
-        <Link
-          url={reverse({ pattern: ROUTES.frontend.information_page_edit, urlParams: { slugField: page?.slug_field } })}
-        >
-          {t(KEY.common_edit)}
-        </Link>
-        <ReactMarkdown>{text || ''}</ReactMarkdown>
-      </div>
-    </Page>
+    <div className={styles.wrapper}>
+      <Link
+        url={reverse({ pattern: ROUTES.frontend.information_page_edit, urlParams: { slugField: page?.slug_field } })}
+      >
+        {t(KEY.common_edit)}
+      </Link>
+      <ReactMarkdown className={styles.md}>{text || ''}</ReactMarkdown>
+    </div>
   );
 }
