@@ -11,6 +11,7 @@ import {
   UserPreferenceDto,
   VenueDto,
   GangTypeDto,
+  GangDto,
   EventDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
@@ -43,7 +44,7 @@ export async function logout(): Promise<AxiosResponse> {
 }
 
 export async function getAllPermissions(): Promise<PermissionDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions;
+  const url = BACKEND_DOMAIN + ROUTES.backend.admin__auth_permission_permissions;
   const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -111,7 +112,7 @@ export async function postInformationPage(data: InformationPageDto): Promise<Inf
   return response.data;
 }
 
-export async function putInformationPage(page: InformationPageDto): Promise<AxiosResponse> {
+export async function putInformationPage(page: InformationPageDto): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
@@ -120,21 +121,21 @@ export async function putInformationPage(page: InformationPageDto): Promise<Axio
 }
 
 export async function getEventsPerDay(): Promise<EventDto[]> {
-  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getEvents(): Promise<EventDto[]> {
-  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getEvent(pk: number): Promise<EventDto> {
-  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
 
   return response.data;
@@ -207,8 +208,36 @@ export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
 }
 
 export async function getGangList(): Promise<GangTypeDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_organized });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangsorganized_list });
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function getGang(id: number): Promise<GangDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
+
+  const response = await axios.get<GangDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getGangs(): Promise<GangDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
+  const response = await axios.get<GangDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postGang(data: GangDto): Promise<GangDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
+  const response = await axios.post<GangDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putGang(data: GangDto): Promise<GangDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: data.id } });
+  const response = await axios.put<GangDto>(url, data, { withCredentials: true });
+  return response;
 }

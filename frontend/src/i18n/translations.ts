@@ -23,9 +23,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
   [KEY.common_title]: 'Tittel',
   [KEY.common_text]: 'Tekst',
+  [KEY.gang]: 'Gjeng',
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
     'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
+  [KEY.gang_type]: 'Gjeng type',
   [KEY.opening_hours]: 'Åpningstider',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.control_panel_faq]: 'Ofte stilte spørsmål',
@@ -73,6 +75,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.edit]: 'Rediger',
   [KEY.delete]: 'Slett',
   [KEY.content]: 'Innhold',
+  [KEY.abbreviation]: 'Forkortelse',
+  [KEY.webpage]: 'Nettside',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -97,9 +101,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Forgot password?',
   [KEY.login_internal_login]: 'Log in as internal',
   [KEY.login_email_placeholder]: 'Email or membership ID',
+  [KEY.gang]: 'Group',
   [KEY.gangs_title]: 'The groups at Samfundet',
   [KEY.gangs_text]:
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
+  [KEY.gang_type]: 'Gang type',
   [KEY.opening_hours]: 'Opening hours',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.control_panel_faq]: 'Frequently asked questions',
@@ -145,4 +151,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.edit]: 'Edit',
   [KEY.delete]: 'Delete',
   [KEY.content]: 'Content',
+  [KEY.abbreviation]: 'Abbreviation',
+  [KEY.webpage]: 'Webpage',
 };
