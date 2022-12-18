@@ -3,7 +3,7 @@ import logo from '~/assets/logo_black.png';
 import splash from '~/assets/splash.jpeg';
 import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
-import { AUTH_ADD_GROUP } from '~/permissions';
+import { SAMFUNDET_ADD_EVENT } from '~/permissions';
 import { hasPerm } from '~/utils';
 import styles from './HomePage.module.scss';
 
@@ -32,8 +32,8 @@ export function HomePage() {
               console.log(
                 hasPerm({
                   user: user,
-                  permission: AUTH_ADD_GROUP,
-                  obj: { id: '1', app_label: 'auth', model: 'group' },
+                  permission: SAMFUNDET_ADD_EVENT,
+                  obj: 339,
                 }),
               );
             });

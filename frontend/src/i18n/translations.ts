@@ -26,6 +26,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
     'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
+  [KEY.opening_hours]: 'Åpningstider',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.control_panel_faq]: 'Ofte stilte spørsmål',
   [KEY.back]: 'Tilbake',
@@ -82,6 +83,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.gangs_title]: 'The groups at Samfundet',
   [KEY.gangs_text]:
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
+  [KEY.opening_hours]: 'Opening hours',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.control_panel_faq]: 'Frequently asked questions',
   [KEY.back]: 'Back',

@@ -1,31 +1,98 @@
+import classNames from 'classnames';
+import { useState } from 'react';
+import { Children } from 'types';
 import styles from './Table.module.scss';
-import { Children } from '~/types';
+
 type TableProps = {
-  cols: Array;
-  children: Children;
+  className?: string;
+  columns?: Children[];
+  data: ITableCell[][];
 };
 
-/*
-  Cols: array, array of tuples, first is the title of the col, secound is the span
-*/
-export function Table({ cols, children }: TableProps) {
-  const colSum = cols.reduce((partialSum, c) => partialSum + c[1], 0);
-  const colWidths = cols.map(function (element) {
-    return (element[1] / colSum) * 100 + '%';
-  });
+export interface ITableCell {
+  children: Children;
+  compare?: (b: ITableCell) => number;
+}
+
+export class AlphabeticTableCell implements ITableCell {
+  children: string;
+  constructor(child: string) {
+    this.children = child;
+  }
+  compare(other: ITableCell) {
+    return this.children.localeCompare(other.children?.toString());
+    //Returns 0 − If this and other matches 100%.
+    //Returns 1 if no match, and the parameter value comes before the string object's value in the locale sort order.
+    //Returns a negative value if no match,
+    // and the parameter value comes after the string object's value in the local sort order.
+  }
+}
+
+export function Table({ className, columns, data }: TableProps) {
+  const [sortColumn, setSortColumn] = useState(-1);
+  const [sortInverse, setSortInverse] = useState(false);
+
+  function isColumnSortable(index: number) {
+    //Grabs the index-th element of each row, so we get a column. Sort of transpose
+    const column: ITableCell[] = data.map((row) => row[index]);
+    return column.reduce((othersSortable: boolean, cell: ITableCell) => {
+      return cell != null && cell.compare != null && othersSortable;
+    }, true);
+    //othersSortble is the previous value.
+    //If othersSortable becomes False at any point the function will return False
+  }
+
+  function sort(column: number) {
+    if (sortColumn === column) {
+      setSortInverse(!sortInverse);
+    } else {
+      setSortInverse(false);
+      setSortColumn(column);
+    }
+  }
+
+  function sortedData(data: ITableCell[][]): ITableCell[][] {
+    if (sortColumn === -1 || !isColumnSortable(sortColumn)) {
+      return data;
+    } else {
+      return [...data].sort((rowA: ITableCell[], rowB: ITableCell[]) => {
+        if (rowA == null || rowA[sortColumn] == null) return 0;
+        if (sortInverse) {
+          return -rowA[sortColumn].compare?.(rowB[sortColumn]);
+        } else {
+          return rowA[sortColumn].compare?.(rowB[sortColumn]);
+        }
+      });
+    }
+  }
+
   return (
-    <table className={styles.samfTable}>
-      <colgroup className={styles.cols}>
-        {cols.map(function (element, key) {
-          return <col key={key} span="1" style={{ width: colWidths[key] }} />;
-        })}
-      </colgroup>
-      <thead className={styles.tableHeader}>
-        {cols.map(function (element, key) {
-          return <th key={key}>{element[0]}</th>;
-        })}
-      </thead>
-      <tbody>{children}</tbody>
-    </table>
+    <>
+      <table className={classNames(className ?? '', styles.table_samf)}>
+        <thead>
+          <tr>
+            {columns &&
+              columns?.map((value, index) => {
+                if (isColumnSortable(index)) {
+                  return (
+                    <th key={index}>
+                      <a key={index} onClick={() => sort(index)}>
+                        {value}
+                      </a>
+                    </th>
+                  );
+                } else {
+                  return <th key={index}>{value}</th>;
+                }
+              })}
+          </tr>
+        </thead>
+        <tbody>
+          {sortedData(data).map((row, index1) => (
+            <tr key={index1}>{row && row.map((cell, index2) => <td key={index2}>{cell.children}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 }

@@ -30,6 +30,7 @@ export const KEY = {
   common_text: 'common_text',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
+  opening_hours: 'opening_hours',
   control_panel_title: 'control_panel_title',
   control_panel_faq: 'control_panel_faq',
   back: 'back',

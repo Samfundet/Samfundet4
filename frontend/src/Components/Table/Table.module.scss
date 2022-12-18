@@ -1,34 +1,50 @@
-@import 'src/mixins';
-
 @import 'src/constants';
 
-/* stylelint-disable selector-max-type */
-.tableHeader {
-  background-color: $red-samf;
-  color: $white;
-  text-align: left;
-  row-gap: 0;
-  padding: 0;
-  th {
-    padding: 0.6em;
-    font-size: 1.2em;
-    font-weight: 300;
-  }
-}
+/* stylelint-disable selector-max-combinators, selector-max-compound-selectors, selector-max-type, max-nesting-depth */
 
-.samfTable {
+.table_samf {
+  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  tr:nth-child(even) {
-    background-color: $grey-3;
+  border: 1px;
+  text-align: left;
+  overflow: hidden;
+  box-shadow: 0 0 .5em .1em rgba(0, 0, 0, 0.4);
+
+  thead {
+    background-color: $red-samf;
+
+    tr {
+      th {
+        padding: .2em .75em;
+        color: $white;
+        font-weight: 100;
+        font-size: 1.2em;
+        a {
+          display: block;
+        }
+      }
+    }
+
   }
-  tr:nth-child(odd) {
-    background-color: $grey-5;
+
+  tbody {
+    tr {
+      td {
+        padding: .2em .75em;
+      }
+      &:hover {
+        filter: brightness(102%);
+      }
+    }
+    tr:nth-child(even) {
+      background-color: $grey-4;
+    }
+    tr:nth-child(odd) {
+      background-color: $grey-3;
+    }
   }
-  td {
-    font-size: 1em;
-    font-weight: 300;
-    padding: 0.5em;
-  }
+  
 }
+
 /* stylelint-enable */

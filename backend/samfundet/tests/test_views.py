@@ -15,7 +15,7 @@ def test_csrf(fixture_rest_client: APIClient):
     assert is_success(code=response.status_code)
 
 
-def test_login(
+def test_login_logout(
     fixture_rest_client: APIClient,
     fixture_user: User,
     fixture_user_pw: str,
@@ -29,8 +29,23 @@ def test_login(
     assert is_success(code=response.status_code)
 
 
-def test_permissions(fixture_rest_client: APIClient, fixture_user: User):
+def test_user(fixture_rest_client: APIClient, fixture_user: User):
     fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse('samfundet:permissions')
+    url = reverse('samfundet:user')
+    response = fixture_rest_client.get(path=url)
+    assert is_success(code=response.status_code)
+    assert response.data['username'] == fixture_user.username
+
+
+def test_users(fixture_rest_client: APIClient, fixture_user: User):
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse('samfundet:users')
+    response = fixture_rest_client.get(path=url)
+    assert is_success(code=response.status_code)
+
+
+def test_groups(fixture_rest_client: APIClient, fixture_user: User):
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse('samfundet:groups')
     response = fixture_rest_client.get(path=url)
     assert is_success(code=response.status_code)

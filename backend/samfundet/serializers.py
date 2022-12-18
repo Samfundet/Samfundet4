@@ -4,12 +4,12 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
-    Booking,
     Menu,
     Gang,
     Event,
     Table,
     Venue,
+    Booking,
     Profile,
     MenuItem,
     GangType,
