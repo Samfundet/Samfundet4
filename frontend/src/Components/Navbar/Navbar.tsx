@@ -64,7 +64,7 @@ export function Navbar() {
   const navbarHeaders = (
     <>
       <Link
-        to={ROUTES.frontend.health}
+        to={ROUTES.frontend.events}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >

@@ -11,6 +11,7 @@ import {
   UserPreferenceDto,
   VenueDto,
   GangTypeDto,
+  EventDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -116,6 +117,27 @@ export async function putInformationPage(page: InformationPageDto): Promise<Axio
     reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
   return response;
+}
+
+export async function getEventsPerDay(): Promise<EventDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
+  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getEvents(): Promise<EventDto[]> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getEvent(pk: number): Promise<EventDto> {
+  const url = TEMP_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
+  const response = await axios.get<EventDto>(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function getMenus(): Promise<MenuDto[]> {

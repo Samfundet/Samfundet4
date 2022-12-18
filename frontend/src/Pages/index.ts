@@ -2,6 +2,8 @@ export { ApiTestingPage } from './ApiTestingPage';
 export { ComponentPage } from './ComponentPage';
 export { GroupsPage } from './GroupsPage';
 export { HealthPage } from './HealthPage';
+export { EventPage } from './EventPage';
+export { EventsPage } from './EventsPage';
 export { HomePage } from './HomePage';
 export { InformationFormPage } from './InformationFormPage';
 export { InformationListPage } from './InformationListPage';

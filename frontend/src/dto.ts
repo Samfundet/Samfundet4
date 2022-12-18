@@ -75,6 +75,7 @@ export type EventDto = {
   host: string;
   location: string;
   event_group: EventGroupDto;
+  price_group: string;
 };
 
 export type EventGroupDto = {
