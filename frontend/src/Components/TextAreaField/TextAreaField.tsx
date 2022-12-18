@@ -1,48 +1,46 @@
 import classNames from 'classnames';
 import { Children } from '~/types';
-import styles from './InputField.module.scss';
+import styles from './TextAreaField.module.scss';
 
-type types = 'text' | 'number' | 'email' | 'password';
-
-type InputFieldProps = {
+type TextAreaFieldProps = {
   children?: Children;
   className?: string;
-  labelClassName?: string;
   inputClassName?: string;
+  labelClassName?: string;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string | null;
-  type?: types;
-  disabled?: boolean;
+  rows?: number;
+  cols?: number;
   value?: string;
   error?: string;
 };
 
-export function InputField({
+export function TextAreaField({
   children,
   className,
-  labelClassName,
   inputClassName,
+  labelClassName,
   onChange,
   placeholder,
-  disabled,
   value,
   error,
-  type = 'text',
-}: InputFieldProps) {
+  cols,
+  rows = 10,
+}: TextAreaFieldProps) {
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
-        <input
+        <textarea
           onChange={onChange}
           className={classNames(styles.input_field, inputClassName, error && error.length > 0 && styles.error)}
           placeholder={placeholder || ''}
-          disabled={disabled}
-          type={type}
-          value={value.value}
+          rows={rows}
+          cols={cols}
+          value={value}
         />
-        {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
       </label>
+      {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
     </div>
   );
 }

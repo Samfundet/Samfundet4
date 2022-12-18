@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Children } from '~/types';
+import { BACKEND_DOMAIN } from '~/constants';
 import styles from './Link.module.scss';
 
 type LinkProps = {
@@ -25,7 +26,7 @@ export function Link({ underline, className, children, url, target = 'frontend' 
     // React navigation.
     if (target === 'frontend' && !isCmdClick) navigate(url);
     // Normal change of href to trigger reload.
-    else if (target === 'backend' && !isCmdClick) window.location.href = url;
+    else if (target === 'backend' && !isCmdClick) window.location.href = BACKEND_DOMAIN + url;
     // Open in new tab.
     else window.open(url, '_blank');
   }

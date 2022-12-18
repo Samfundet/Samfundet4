@@ -1,5 +1,5 @@
 import { ROUTES } from '~/routes';
-import { AUTH_ADD_GROUP } from '~/permissions';
+import { SAMFUNDET_ADD_GANG, SAMFUNDET_ADD_INFORMATIONPAGE } from '~/permissions';
 
 export const applets = [
   {
@@ -16,10 +16,18 @@ export const applets = [
   },
   {
     title: 'Gjenger',
-    perm: AUTH_ADD_GROUP,
+    perm: SAMFUNDET_ADD_GANG,
     options: [
       { text: 'Administrer gjenger', url: ROUTES.frontend.admin_groups, type: 'ADD' },
       { text: 'Gjengene på huset', url: ROUTES.frontend.groups, type: 'MANAGE' },
+    ],
+  },
+  {
+    title: 'Informasjons­­sider',
+    perm: SAMFUNDET_ADD_INFORMATIONPAGE,
+    options: [
+      { text: 'Ny side', url: ROUTES.frontend.admin_information_create, type: 'ADD' },
+      { text: 'Administrer sider', url: ROUTES.frontend.admin_information, type: 'MANAGE' },
     ],
   },
 ];

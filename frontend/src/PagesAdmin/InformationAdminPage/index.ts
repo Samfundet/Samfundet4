@@ -1,0 +1,1 @@
+export { InformationAdminPage } from './InformationAdminPage';

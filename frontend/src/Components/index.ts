@@ -15,4 +15,5 @@ export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
+export { TextAreaField } from './TextAreaField';
 export { OpeningHours } from './OpeningHours';

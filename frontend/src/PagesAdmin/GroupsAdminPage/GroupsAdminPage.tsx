@@ -8,6 +8,7 @@ import { ROUTES } from '~/routes';
 import styles from './GroupsAdminPage.module.scss';
 import { GangTypeDto } from '~/dto';
 import { getGangList } from '~/api';
+import { Table } from '~/Components/Table';
 
 export function GroupsAdminPage() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function GroupsAdminPage() {
   const { t } = useTranslation();
 
   // Stuff to do on first render.
-  //TODO add permissions on render
+  // TODO add permissions on render
   useEffect(() => {
     getGangList()
       .then((data) => {
@@ -39,44 +40,42 @@ export function GroupsAdminPage() {
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
         <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
-      <h1>{t(KEY.admin_gangs_title)}</h1>
+      <div className={styles.headerContainer}>
+        <h1 className={styles.header}>{t(KEY.admin_gangs_title)}</h1>
+        <Link target="backend" url={ROUTES.backend.admin__samfundet_gang_changelist}>
+          View in backend
+        </Link>
+      </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin)}>
         {t(KEY.admin_gangs_create)}
       </Button>
       {gangTypes.map(function (element, key) {
         return (
           <div key={key}>
-            <h3>{element.title_no}</h3>
-            <table className={styles.samfTable}>
-              <colgroup>
-                <col span="2" />
-                <col span="2" />
-                <col span="1" />
-                <col span="1" />
-              </colgroup>
-              <thead className={styles.tableHeader}>
-                <th>Gjeng</th>
-                <th>Forkortelse</th>
-                <th>Webside</th>
-                <th></th>
-              </thead>
-              <tbody>
-                {element.gangs.map(function (element2, key2) {
-                  return (
-                    <tr key={key2}>
-                      <td style={{ width: '30%' }}>
-                        <Link>{element2.name_no}</Link>
-                      </td>
-                      <td style={{ width: '30%' }}>{element2.abbreviation}</td>
-                      <td style={{ width: '20%' }}>{element2.webpage}</td>
-                      <td style={{ width: '20%' }}>
-                        <Button theme="blue">Rediger gjeng</Button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <h2 className={styles.gangTypeHeader}>{element.title_no}</h2>
+            <Table
+              cols={[
+                ['Gjeng', 2],
+                ['Forkortelse', 2],
+                ['Nettside', 1],
+                ['', 1],
+              ]}
+            >
+              {element.gangs.map(function (element2, key2) {
+                return (
+                  <tr key={key2}>
+                    <td>
+                      <Link>{element2.name_no}</Link>
+                    </td>
+                    <td>{element2.abbreviation}</td>
+                    <td>{element2.webpage}</td>
+                    <td>
+                      <Button theme="blue">Rediger gjeng</Button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </Table>
           </div>
         );
       })}
