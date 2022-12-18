@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   # docker syntax
@@ -12,14 +12,20 @@ services:
     env_file:
       - ./backend/.docker.env
     ports:
-      - "8000:8000" # Quotes are required.
+      - '8000:8000' # Quotes are required.
 
   # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
   frontend:
     build: ./frontend
+    image: samfundet-frontend
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
+    env_file:
+      - ./frontend/.env.docker
     environment:
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
+      - VITE_GOATCOUNTER_CODE=samfundet-dev
+      - VITE_BACKEND_DOMAIN=http://backend:8000
+      - CYPRESS_BASE_URL=http://frontend:3000
     ports:
-      - "3000:3000"
+      - '3000:3000'

@@ -24,7 +24,7 @@ class Command(BaseCommand):
     help = 'Seed database for testing and development.'
 
     def handle(self, *args, **options):
-        print(f"Running seed script for Cypress...")
+        print('Running seed script for Cypress...')
 
         # Avoid running seed in production.
         if settings.ENV == Environment.PROD:
