@@ -63,7 +63,6 @@ export function Table({ className, columns, data }: TableProps) {
   }
 
   function sortedData(data: ITableCell[][]): ITableCell[][] {
-    console.log(data);
     if (sortColumn === -1 || !isColumnSortable(sortColumn)) {
       return data;
     } else {

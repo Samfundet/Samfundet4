@@ -74,9 +74,6 @@ export function GangsFormAdminPage() {
     setShowSpinner(false);
   }, []);
 
-  useEffect(() => {
-    console.log(nameNo);
-  },[nameNo]);
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
