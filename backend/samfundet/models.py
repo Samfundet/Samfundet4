@@ -132,8 +132,8 @@ class GangType(models.Model):
 
 
 class Gang(models.Model):
-    name_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Norsk', unique=True)
-    name_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Engelsk', unique=True)
+    name_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 

@@ -43,13 +43,6 @@ export async function logout(): Promise<AxiosResponse> {
   return response;
 }
 
-export async function getAllPermissions(): Promise<PermissionDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.admin__auth_permission_permissions;
-  const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
-
-  return response.data;
-}
-
 export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
@@ -112,7 +105,7 @@ export async function postInformationPage(data: InformationPageDto): Promise<Inf
   return response.data;
 }
 
-export async function putInformationPage(page: InformationPageDto): Promise<InformationPageDto> {
+export async function putInformationPage(page: InformationPageDto): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
@@ -236,7 +229,7 @@ export async function postGang(data: GangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(data: GangDto): Promise<GangDto> {
+export async function putGang(data: GangDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: data.id } });
   const response = await axios.put<GangDto>(url, data, { withCredentials: true });
   return response;
