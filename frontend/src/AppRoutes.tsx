@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { useGoatCounter } from '~/hooks';
 import {
+  AboutPage,
   ApiTestingPage,
   ComponentPage,
   GroupsPage,
@@ -25,6 +26,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path={ROUTES.frontend.home} element={<HomePage />} />
+      <Route path={ROUTES.frontend.about} element={<AboutPage />} />
       <Route path={ROUTES.frontend.health} element={<HealthPage />} />
       <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
       <Route path={ROUTES.frontend.login} element={<LoginPage />} />

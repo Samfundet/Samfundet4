@@ -1,4 +1,5 @@
 export { ApiTestingPage } from './ApiTestingPage';
+export { AboutPage } from './AboutPage';
 export { ComponentPage } from './ComponentPage';
 export { GroupsPage } from './GroupsPage';
 export { HealthPage } from './HealthPage';
