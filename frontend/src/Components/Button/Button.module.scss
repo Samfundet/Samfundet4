@@ -2,7 +2,6 @@
 
 .button {
   border: none;
-  padding: 10px 25px;
   cursor: pointer;
   border-radius: 0.25em;
   transition: 0.2s;
@@ -53,4 +52,16 @@
     border-color: $red-samf;
     color: $red-samf;
   }
+}
+
+.display_basic {
+  padding: 10px 25px;
+}
+
+.display_pill {
+  padding: 0.3em 0.4em;
+}
+.display_block {
+  padding: 10px 25px;
+  width: 100%;
 }

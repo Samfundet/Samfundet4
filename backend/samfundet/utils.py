@@ -5,19 +5,14 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 
 from django.contrib.auth.models import Group, User
 
-from .models import (
-    Venue,
-    Profile,
-    Saksdokument,
-    UserPreference,
-    Event,
-)
+from .models import (Venue, Profile, Saksdokument, UserPreference, Event, EventGroup)
 
 from .dto import (
     UserDto,
     VenueDto,
     GroupDto,
     EventDto,
+    EventGroupDto,
     ProfileDto,
     SaksdokumentDto,
     UserPreferenceDto,
@@ -94,6 +89,10 @@ def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
 ###
 
 
+def eventgroup_to_dataclass(*, event_group: EventGroup) -> EventGroupDto:
+    return EventGroupDto(id=event_group.id, name=event_group.name)
+
+
 def event_to_dataclass(*, event: Event) -> EventDto:
     return EventDto(
         id=event.id,
@@ -108,7 +107,7 @@ def event_to_dataclass(*, event: Event) -> EventDto:
         publish_dt=event.publish_dt,
         host=event.host,
         location=event.location,
-        event_group=event.event_group,
+        event_group=eventgroup_to_dataclass(event_group=event.event_group),
         price_group=event.price_group
     )
 

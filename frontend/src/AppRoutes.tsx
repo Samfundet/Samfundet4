@@ -15,7 +15,7 @@ import {
   EventPage,
   EventsPage,
 } from '~/Pages';
-import { GangsAdminPage, InformationAdminPage, InformationFormAdminPage } from '~/PagesAdmin';
+import { EventsAdminPage, GangsAdminPage, InformationAdminPage, InformationFormAdminPage } from '~/PagesAdmin';
 import { GangsFormAdminPage } from './PagesAdmin/GangsFormAdminPage';
 import { ROUTES } from './routes';
 
@@ -41,6 +41,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_gangs_edit} element={<GangsFormAdminPage />} />
       <Route path={ROUTES.frontend.events} element={<EventsPage />} />
       <Route path={ROUTES.frontend.event} element={<EventPage />} />
+      <Route path={ROUTES.frontend.admin_events_upcomming} element={<EventsAdminPage />} />
       <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />

@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
+from django.utils import timezone
 from django.contrib.auth import login, get_user_model, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -77,6 +78,14 @@ class EventPerDayView(APIView):
         }
         return Response(data=events)
 
+class EventsUpcommingView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        events = Event.objects.all()  # To be used if some kind of query is used
+        events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
+        events = [event.to_dict() for event in events_to_dataclass(events=events)]
+        return Response(data=events)
 
 class VenueView(ModelViewSet):
     serializer_class = VenueSerializer

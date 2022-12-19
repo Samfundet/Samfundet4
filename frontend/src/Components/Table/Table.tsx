@@ -26,10 +26,18 @@ export class AlphabeticTableCell implements ITableCell {
     let child1 = this.children;
     let child2 = other.children;
     if (typeof child1 != 'string') {
-      child1 = child1.props.children;
+      if (!('children' in child1.props)) {
+        child1 = child1.props.timestamp;
+      } else {
+        child1 = child1.props.children;
+      }
     }
     if (typeof child2 != 'string') {
-      child2 = child2.props.children;
+      if (!('children' in child2.props)) {
+        child2 = child2.props.timestamp; //Todo upgrade timestamp compare
+      } else {
+        child2 = child2.props.children;
+      }
     }
     return child1.localeCompare(child2);
     //Returns 0 − If this and other matches 100%.

@@ -32,5 +32,6 @@ urlpatterns = [
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
-    path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday')
+    path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
+    path('events-upcomming/', views.EventsUpcommingView.as_view(), name='eventsupcomming')
 ]

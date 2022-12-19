@@ -77,6 +77,7 @@ class EventDto:
 @dataclass
 class EventGroupDto:
     id: int
+    name: str
 
 
 @dataclass_json

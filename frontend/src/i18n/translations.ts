@@ -77,6 +77,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.content]: 'Innhold',
   [KEY.abbreviation]: 'Forkortelse',
   [KEY.webpage]: 'Nettside',
+  [KEY.past]: 'Tidligere',
+  [KEY.upcomming]: 'Kommende',
+  [KEY.event]: 'Arrangement',
+  [KEY.event_type]: 'Arrangementstype',
+  [KEY.start_time]: 'Starttid',
+  [KEY.end_time]: 'Sluttid',
+  [KEY.organizer]: 'Arrangør',
+  [KEY.venue]: 'Lokale',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -153,4 +161,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.content]: 'Content',
   [KEY.abbreviation]: 'Abbreviation',
   [KEY.webpage]: 'Webpage',
+
+  [KEY.past]: 'Past',
+  [KEY.upcomming]: 'Upcomming',
+  [KEY.event]: 'Event',
+  [KEY.event_type]: 'Event type',
+  [KEY.start_time]: 'Start time',
+  [KEY.end_time]: 'End time',
+  [KEY.organizer]: 'Organizer',
+  [KEY.venue]: 'Venue',
 };

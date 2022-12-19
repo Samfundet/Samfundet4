@@ -12,6 +12,7 @@ from root.utils import permissions
 
 
 class EventGroup(models.Model):
+    name = models.CharField(max_length=140)
 
     class Meta:
         verbose_name = 'EventGroup'
