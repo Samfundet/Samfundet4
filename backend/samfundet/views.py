@@ -16,16 +16,12 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import XCSRFTOKEN
 
-from .utils import (
-    user_to_dataclass,
-    users_to_dataclass,
-    groups_to_dataclass,
-    events_to_dataclass,
-)
+from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
 from .models import (
     Menu,
     Gang,
     Event,
+    EventGroup,
     Table,
     Venue,
     Profile,
@@ -42,6 +38,7 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
+    EventGroupSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
@@ -78,14 +75,17 @@ class EventPerDayView(APIView):
         }
         return Response(data=events)
 
+
 class EventsUpcommingView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        events = Event.objects.all()  # To be used if some kind of query is used
+        print(request.query_params)
+        events = event_query(request.query_params)
         events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
         events = [event.to_dict() for event in events_to_dataclass(events=events)]
         return Response(data=events)
+
 
 class VenueView(ModelViewSet):
     serializer_class = VenueSerializer
@@ -180,6 +180,12 @@ class GangTypeView(ModelViewSet):
     http_method_names = ['get']
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
+
+
+class EventGroupView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = EventGroupSerializer
+    queryset = EventGroup.objects.all()
 
 
 ### Information Page ###

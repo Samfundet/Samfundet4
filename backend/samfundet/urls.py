@@ -8,6 +8,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
+router.register('eventgroups', views.EventGroupView, 'eventgroups')
 router.register('venues', views.VenueView, 'venues')
 router.register('gangs', views.GangView, 'gangs')
 router.register('gangsorganized', views.GangTypeView, 'gangsorganized')

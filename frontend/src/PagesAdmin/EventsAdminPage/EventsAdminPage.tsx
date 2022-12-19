@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Link, SamfundetLogoSpinner, Skeleton, TimeDisplay } from '~/Components';
+import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -14,6 +14,7 @@ import { reverse } from '~/named-urls';
 export function EventsAdminPage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<EventDto[]>([]);
+  const [allEvents, setAllEvents] = useState<EventDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
@@ -23,6 +24,7 @@ export function EventsAdminPage() {
     getEventsUpcomming()
       .then((data) => {
         setEvents(data);
+        setAllEvents(data);
         setShowSpinner(false);
       })
       .catch(console.error);
@@ -56,12 +58,14 @@ export function EventsAdminPage() {
         <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
       <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_information_manage_title)}</h1>
+        <h1 className={styles.header}>
+          {t(KEY.edit)} {t(KEY.event)}
+        </h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_eventgroup_changelist}>
           View in backend
         </Link>
       </div>
-      <h1 className={styles.header}></h1>
+      <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
         <Table
           columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.event_type), t(KEY.organizer), t(KEY.venue), '']}

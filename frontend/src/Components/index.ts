@@ -13,6 +13,7 @@ export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
+export { EventQuery } from './EventQuery';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { TextAreaField } from './TextAreaField';

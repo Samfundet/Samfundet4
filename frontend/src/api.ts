@@ -13,6 +13,7 @@ import {
   GangTypeDto,
   GangDto,
   EventDto,
+  EventGroupDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -137,6 +138,13 @@ export async function getEvents(): Promise<EventDto[]> {
 export async function getEvent(pk: number): Promise<EventDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getEventGroups(): Promise<EventGroupDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventgroups_list });
+  const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
 
   return response.data;
 }

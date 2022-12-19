@@ -1,5 +1,8 @@
 from __future__ import annotations
 from typing import Sequence
+from django.http import QueryDict
+from django.db.models import Q
+from django.db.models.query import QuerySet
 
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
@@ -114,6 +117,29 @@ def event_to_dataclass(*, event: Event) -> EventDto:
 
 def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
     return [event_to_dataclass(event=event) for event in events]
+
+
+def event_query(query: QueryDict, events: QuerySet[Event] = Event.objects.all()) -> QuerySet[Event]:
+    search = query.get('search', None)
+    if search:
+        events = events.filter(
+            Q(title_no__icontains=search) |
+            Q(title_en__icontains=search) |
+            Q(description_long_no__icontains=search) |
+            Q(description_long_en__icontains=search) |
+            Q(description_short_en=search) |
+            Q(description_short_no=search) |
+            Q(location__icontains=search) |
+            Q(event_group__name=search) 
+        )
+    event_group = query.get('event_group', None)
+    if event_group: 
+        events = events.filter(event_group__id= event_group)
+
+    location = query.get('venue', None)
+    if location: 
+        events = events.filter(location__icontains=location) #Todo should maybe be a foreignKey?
+    return events
 
 
 ###

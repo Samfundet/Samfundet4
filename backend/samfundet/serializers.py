@@ -7,6 +7,7 @@ from .models import (
     Menu,
     Gang,
     Event,
+    EventGroup,
     Table,
     Venue,
     Booking,
@@ -27,6 +28,13 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
+        fields = '__all__'
+
+
+class EventGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EventGroup
         fields = '__all__'
 
 

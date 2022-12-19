@@ -28,6 +28,8 @@ export const KEY = {
   login_internal_login: 'login_internal_login',
   login_email_placeholder: 'login_email_placeholder',
   common_text: 'common_text',
+  common_search: 'common_search',
+  common_choose: 'common_choose',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
