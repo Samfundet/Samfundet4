@@ -92,8 +92,9 @@ jobs:
           echo VITE_BACKEND_DOMAIN=http://backend:8000 >> frontend/.env.docker
           echo CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
 
-      - name: Build images
-        run: docker compose build
+      # No need to build when pulling image from hub.docker.
+      # - name: Build images
+      #   run: docker compose build
 
       - name: Start containers
         run: docker compose up -d; sleep 10 # Give additional seconds to boot.
@@ -113,6 +114,7 @@ jobs:
       - name: Stop containers
         run: docker compose down
 
+  # This job doesn't work when running backend is required.
   # job_verify_cypress:
   #   # https://github.com/marketplace/actions/cypress-io
   #   name: Verify Cypress
