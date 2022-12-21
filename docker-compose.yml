@@ -8,7 +8,7 @@ services:
 
   # Custom name for our service (container to build)
   backend:
-    image: emilte/samfundet4-backend # from hub.docker
+    image: samfundet/samfundet4-backend # from hub.docker
     # build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     volumes:
       - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
@@ -21,7 +21,7 @@ services:
   # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
   frontend:
     build: ./frontend
-    image: emilte/samfundet4-frontend # from hub.docker
+    image: samfundet/samfundet4-frontend # from hub.docker
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
     env_file:
