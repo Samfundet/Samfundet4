@@ -1,11 +1,15 @@
 version: '3.9'
 
+# Images are built and pushed to dockerhub for optimization purposes.
+# If Dockerfile or dependencies change, rebuild and push new image.
+
 services:
   # docker syntax
 
   # Custom name for our service (container to build)
   backend:
-    build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    image: emilte/samfundet4-backend # from hub.docker
+    # build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     volumes:
       - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
       - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
@@ -17,15 +21,12 @@ services:
   # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
   frontend:
     build: ./frontend
-    image: samfundet-frontend
+    image: emilte/samfundet4-frontend # from hub.docker
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
     env_file:
       - ./frontend/.env.docker
     environment:
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
-      - VITE_GOATCOUNTER_CODE=samfundet-dev
-      - VITE_BACKEND_DOMAIN=http://backend:8000
-      - CYPRESS_BASE_URL=http://frontend:3000
     ports:
       - '3000:3000'
