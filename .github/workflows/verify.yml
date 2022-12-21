@@ -86,6 +86,11 @@ jobs:
           echo ENV=development >> backend/.docker.env
           echo SECRET_KEY=NOT_SET >> backend/.docker.env
           echo DJANGO_SETTINGS_MODULE=root.settings >> backend/.docker.env
+          echo DOMAIN=* >> backend/.docker.env
+          touch frontend/.docker.env
+          echo VITE_GOATCOUNTER_CODE=samfundet-dev >> frontend/.env.docker
+          echo VITE_BACKEND_DOMAIN=http://backend:8000 >> frontend/.env.docker
+          echo CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
 
       - name: Build images
         run: docker compose build
@@ -99,25 +104,31 @@ jobs:
           docker compose exec backend echo 
           docker compose exec frontend echo
 
+      - name: Seed backend for Cypress tests
+        run: docker compose exec backend pipenv run python manage.py seed_cypress
+
+      - name: Run cypress
+        run: docker compose exec frontend yarn run cypress:run
+
       - name: Stop containers
         run: docker compose down
 
-  job_verify_cypress:
-    # https://github.com/marketplace/actions/cypress-io
-    name: Verify Cypress
-    if: ${{ !github.event.pull_request.draft }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # job_verify_cypress:
+  #   # https://github.com/marketplace/actions/cypress-io
+  #   name: Verify Cypress
+  #   if: ${{ !github.event.pull_request.draft }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Run cypress
-        uses: cypress-io/github-action@v4.2.0
-        with:
-          working-directory: ./frontend
-          browser: chrome
-          build: yarn run build
-          start: yarn start
+  #     - name: Run cypress
+  #       uses: cypress-io/github-action@v4.2.0
+  #       with:
+  #         working-directory: ./frontend
+  #         browser: chrome
+  #         build: yarn run build
+  #         start: yarn start
 
   job_verify_frontend_lint:
     name: Verify frontend
