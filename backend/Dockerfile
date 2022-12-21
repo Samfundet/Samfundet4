@@ -1,5 +1,5 @@
 # Use same version as defined in .python-version.
-FROM python:3.11.0-slim-buster
+FROM python:3.11.0-slim-bullseye
 
 # Update Ubuntu Software repository.
 RUN apt update -y \
@@ -18,10 +18,9 @@ ENV PIPENV_DONT_LOAD_ENV=1
 WORKDIR /app
 
 # Upgrade pip.
-RUN python -m pip install --upgrade pip
-
 # Install pipenv.
-RUN python -m pip install pipenv
+RUN python -m pip install --upgrade pip \
+    && python -m pip install pipenv
 
 # Copy dependency files into workdir (optimise docker cache layers).
 COPY Pipfile Pipfile.lock ./
