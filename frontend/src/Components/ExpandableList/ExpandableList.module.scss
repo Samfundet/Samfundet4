@@ -1,0 +1,47 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.content_container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-height: 40vh;
+  overflow-y: scroll;
+  border: 1px solid $grey-0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $grey-0;
+  width: 100%;
+  justify-content: space-between;
+  margin: 0;
+  padding: 1em;
+  position: sticky;
+  background-color: $white;
+  top: 0%;
+}
+
+.item {
+  border-bottom: 1px solid $grey-0;
+  padding: 1em;
+  width: 100%;
+  cursor: pointer;
+}
+
+.parent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.child {
+  display: flex;
+  gap: 1em;
+}
+
+.back_button {
+  cursor: pointer;
+}
