@@ -1,6 +1,7 @@
 export const ROUTES_FRONTEND = {
   home: '/',
   health: '/health/',
+  about: '/about/',
   components: '/components/',
   api_testing: '/api-testing/',
   login: '/login/',
