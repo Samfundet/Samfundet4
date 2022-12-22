@@ -14,6 +14,8 @@ django-cors-headers = "*"
 dataclasses-json = "*"
 django-guardian = "*"
 pillow = "*"
+debugpy = "*"
+gunicorn = "*"
 
 [dev-packages]
 yapf = "*"

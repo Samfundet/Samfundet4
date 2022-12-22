@@ -1,5 +1,6 @@
 from . import (
     gangs,
+    information_pages,
     venues,
     events,
     menu,
@@ -18,6 +19,7 @@ SEED_SCRIPTS = [
     ('venue', venues.seed),
     ('event', events.seed),
     ('menu', menu.seed),
+    ('information_page', information_pages.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),

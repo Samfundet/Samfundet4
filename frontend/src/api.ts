@@ -1,7 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import {
+  EventDto,
   FoodCategoryDto,
   FoodPreferenceDto,
+  GangTypeDto,
   InformationPageDto,
   MenuDto,
   MenuItemDto,
@@ -10,9 +12,7 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
-  GangTypeDto,
   GangDto,
-  EventDto,
   EventGroupDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
@@ -244,7 +244,7 @@ export async function postGang(data: GangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(data: GangDto): Promise<GangDto> {
+export async function putGang(data: GangDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: data.id } });
   const response = await axios.put<GangDto>(url, data, { withCredentials: true });
   return response;

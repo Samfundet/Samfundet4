@@ -80,7 +80,6 @@ class EventsUpcommingView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        print(request.query_params)
         events = event_query(request.query_params)
         events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
         events = [event.to_dict() for event in events_to_dataclass(events=events)]
