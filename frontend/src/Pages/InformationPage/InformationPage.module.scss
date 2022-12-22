@@ -13,3 +13,41 @@
   justify-content: center;
   margin-top: 20%;
 }
+
+/* stylelint-disable selector-max-type */
+.md {
+  h1 {
+    font-size: 2em;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 1.17em;
+    font-weight: 700;
+  }
+  h4 {
+    font-size: 1em;
+    font-weight: 700;
+  }
+  h5 {
+    font-size: 0.83em;
+    font-weight: 700;
+  }
+  h6 {
+    font-size: 0.67em;
+    font-weight: 700;
+  }
+  p {
+    margin: 1em 0;
+  }
+  li {
+    margin-left: 2em;
+  }
+  hr {
+    margin: 1em 0;
+  }
+}
+/* stylelint-enable selector-max-type */
