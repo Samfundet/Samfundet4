@@ -1,7 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import {
+  EventDto,
   FoodCategoryDto,
   FoodPreferenceDto,
+  GangTypeDto,
   InformationPageDto,
   MenuDto,
   MenuItemDto,
@@ -10,9 +12,7 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
-  GangTypeDto,
   GangDto,
-  EventDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

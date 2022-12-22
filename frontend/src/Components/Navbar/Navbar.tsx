@@ -6,10 +6,10 @@ import { logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { useDesktop } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useDesktop } from '~/hooks';
 import styles from './Navbar.module.scss';
 
 export function Navbar() {
@@ -71,7 +71,7 @@ export function Navbar() {
         {t(KEY.common_event)}
       </Link>
       <Link
-        to={ROUTES.frontend.information_page_list}
+        to={ROUTES.frontend.about}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
