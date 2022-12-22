@@ -1,1 +1,2 @@
-export { Table } from './Table';
+export { Table, AlphabeticTableCell } from './Table';
+export type { ITableCell } from './Table';

@@ -18,7 +18,7 @@ export const applets = [
     title: 'Gjenger',
     perm: SAMFUNDET_ADD_GANG,
     options: [
-      { text: 'Administrer gjenger', url: ROUTES.frontend.admin_groups, type: 'ADD' },
+      { text: 'Administrer gjenger', url: ROUTES.frontend.admin_gangs, type: 'ADD' },
       { text: 'Gjengene på huset', url: ROUTES.frontend.groups, type: 'MANAGE' },
     ],
   },

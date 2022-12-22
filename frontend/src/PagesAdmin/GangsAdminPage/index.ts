@@ -1,0 +1,1 @@
+export { GangsAdminPage } from './GangsAdminPage';

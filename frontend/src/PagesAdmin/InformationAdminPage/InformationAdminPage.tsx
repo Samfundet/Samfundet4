@@ -8,7 +8,7 @@ import { ROUTES } from '~/routes';
 import styles from './InformationAdminPage.module.scss';
 import { InformationPageDto } from '~/dto';
 import { deleteInformationPage, getInformationPages } from '~/api';
-import { Table } from '~/Components/Table';
+import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
 import { reverse } from '~/named-urls';
 
 export function InformationAdminPage() {
@@ -64,18 +64,11 @@ export function InformationAdminPage() {
       </Button>
       <div className={styles.tableContainer}>
         <Table
-          cols={[
-            [t(KEY.name), 1],
-            [t(KEY.common_title), 1],
-            [t(KEY.owner), 1],
-            [t(KEY.last_updated), 1],
-            ['', 1],
-          ]}
-        >
-          {informationPages.map(function (element, key) {
-            return (
-              <tr key={key}>
-                <td>
+          columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']}
+          data={informationPages.map(function (element, key) {
+            return [
+              new AlphabeticTableCell(
+                (
                   <Link
                     url={reverse({
                       pattern: ROUTES.frontend.information_page_detail,
@@ -84,39 +77,43 @@ export function InformationAdminPage() {
                   >
                     {element.slug_field}
                   </Link>
-                </td>
-                <td>{element.title_no}</td>
-                <td>Legg til</td>
-                <td>Legg til</td>
-                <td>
-                  <Button
-                    theme="blue"
-                    onClick={() => {
-                      navigate(
-                        reverse({
-                          pattern: ROUTES.frontend.information_page_edit,
-                          urlParams: { slugField: element.slug_field },
-                        }),
-                      );
-                    }}
-                  >
-                    {t(KEY.edit)}
-                  </Button>
-                  <Button
-                    theme="samf"
-                    onClick={() => {
-                      if (window.confirm(t(KEY.admin_information_confirm_delete))) {
-                        deletePage(element.slug_field);
-                      }
-                    }}
-                  >
-                    {t(KEY.delete)}
-                  </Button>
-                </td>
-              </tr>
-            );
+                ),
+              ),
+              new AlphabeticTableCell(element.title_no),
+              new AlphabeticTableCell('To be added'),
+              new AlphabeticTableCell('To be added'),
+              {
+                children: (
+                  <div>
+                    <Button
+                      theme="blue"
+                      onClick={() => {
+                        navigate(
+                          reverse({
+                            pattern: ROUTES.frontend.information_page_edit,
+                            urlParams: { slugField: element.slug_field },
+                          }),
+                        );
+                      }}
+                    >
+                      {t(KEY.edit)}
+                    </Button>
+                    <Button
+                      theme="samf"
+                      onClick={() => {
+                        if (window.confirm(t(KEY.admin_information_confirm_delete))) {
+                          deletePage(element.slug_field);
+                        }
+                      }}
+                    >
+                      {t(KEY.delete)}
+                    </Button>{' '}
+                  </div>
+                ),
+              } as ITableCell,
+            ];
           })}
-        </Table>
+        />
       </div>
     </Page>
   );
