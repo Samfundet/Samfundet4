@@ -9,10 +9,12 @@ services:
     volumes:
       - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
       - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
+      - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
     env_file:
       - ./backend/.docker.env
     ports:
-      - '8000:8000' # Quotes are required.
+      - '8000:8000' # Quotes are required. django
+      - '5678:5678' # Quotes are required. debugpy
 
   # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
   frontend:

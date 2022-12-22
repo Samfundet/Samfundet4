@@ -32,11 +32,27 @@ RUN python -m pipenv install --dev --deploy
 # Copy rest of the project into image.
 COPY . .
 
-# Expose port.
+# Expose port for django and debugpy.
 EXPOSE 8000
+EXPOSE 5678
 
 # Update static and migration on each startup.
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Final command.
-CMD ["python", "-m", "pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "-m", "pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD [ \
+  "python", \
+  "-m", \
+  "pipenv", \
+  "run", \
+  "gunicorn", \
+  "--bind=0.0.0.0:8000", \
+  "--forwarded-allow-ips=*", \
+  "--pythonpath=/app", \
+  "--workers=1", \
+  "--timeout=120", \
+  "--worker-class=gthread", \
+  "--threads=5", \
+  "root.wsgi:application" \
+]

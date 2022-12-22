@@ -11,6 +11,10 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+from root.utils.debugpy import initialize_debugpy
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'root.settings')
 
 application = get_asgi_application()
+
+initialize_debugpy()
