@@ -1,1 +1,0 @@
-export { GroupsAdminPage } from './GroupsAdminPage';

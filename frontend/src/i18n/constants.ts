@@ -73,6 +73,9 @@ export const KEY = {
   delete: 'delete',
   content: 'content',
   gang: 'gang',
+  abbreviation: 'abbreviation',
+  webpage: 'webpage',
+  gang_type: 'gang_type',
 } as const;
 
 /**

@@ -39,7 +39,7 @@ export function InputField({
           placeholder={placeholder || ''}
           disabled={disabled}
           type={type}
-          value={value.value}
+          value={value}
         />
         {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
       </label>

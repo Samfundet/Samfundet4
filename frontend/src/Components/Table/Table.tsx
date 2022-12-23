@@ -20,7 +20,18 @@ export class AlphabeticTableCell implements ITableCell {
     this.children = child;
   }
   compare(other: ITableCell) {
-    return this.children.localeCompare(other.children?.toString());
+    if (!this.children) {
+      return 1;
+    }
+    let child1 = this.children;
+    let child2 = other.children;
+    if (typeof child1 != 'string') {
+      child1 = child1.props.children;
+    }
+    if (typeof child2 != 'string') {
+      child2 = child2.props.children;
+    }
+    return child1.localeCompare(child2);
     //Returns 0 − If this and other matches 100%.
     //Returns 1 if no match, and the parameter value comes before the string object's value in the locale sort order.
     //Returns a negative value if no match,

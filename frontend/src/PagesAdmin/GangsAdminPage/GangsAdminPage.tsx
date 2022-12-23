@@ -5,12 +5,13 @@ import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './GroupsAdminPage.module.scss';
+import styles from './GangsAdminPage.module.scss';
 import { GangTypeDto } from '~/dto';
 import { getGangList } from '~/api';
-import { Table } from '~/Components/Table';
+import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
+import { reverse } from '~/named-urls';
 
-export function GroupsAdminPage() {
+export function GangsAdminPage() {
   const navigate = useNavigate();
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -46,7 +47,7 @@ export function GroupsAdminPage() {
           View in backend
         </Link>
       </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin)}>
+      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
         {t(KEY.admin_gangs_create)}
       </Button>
       {gangTypes.map(function (element, key) {
@@ -54,15 +55,54 @@ export function GroupsAdminPage() {
           <div key={key}>
             <h2 className={styles.gangTypeHeader}>{element.title_no}</h2>
             <Table
-              cols={[
-                ['Gjeng', 2],
-                ['Forkortelse', 2],
-                ['Nettside', 1],
-                ['', 1],
-              ]}
-            >
-              {element.gangs.map(function (element2, key2) {
-                return (
+              columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
+              data={element.gangs.map(function (element2, key2) {
+                return [
+                  new AlphabeticTableCell(
+                    (
+                      <Link
+                        url={
+                          element2.info_page &&
+                          reverse({
+                            pattern: ROUTES.frontend.information_page_detail,
+                            urlParams: { slugField: element2.info_page },
+                          })
+                        }
+                      >
+                        {element2.name_no}
+                      </Link>
+                    ),
+                  ),
+                  new AlphabeticTableCell(element2.abbreviation),
+                  new AlphabeticTableCell(element2.webpage),
+                  {
+                    children: (
+                      <Button
+                        onClick={() =>
+                          navigate(
+                            reverse({
+                              pattern: ROUTES.frontend.admin_gangs_edit,
+                              urlParams: { id: element2.id },
+                            }),
+                          )
+                        }
+                        theme="blue"
+                      >
+                        Rediger gjeng
+                      </Button>
+                    ),
+                  } as ITableCell,
+                ];
+              })}
+            />
+          </div>
+        );
+      })}
+    </Page>
+  );
+}
+
+/**                return (
                   <tr key={key2}>
                     <td>
                       <Link>{element2.name_no}</Link>
@@ -75,10 +115,4 @@ export function GroupsAdminPage() {
                   </tr>
                 );
               })}
-            </Table>
-          </div>
-        );
-      })}
-    </Page>
-  );
-}
+            </Table> */

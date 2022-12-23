@@ -17,3 +17,5 @@ export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { TextAreaField } from './TextAreaField';
 export { OpeningHours } from './OpeningHours';
+export { Dropdown } from './Dropdown';
+export { Select } from './Select';

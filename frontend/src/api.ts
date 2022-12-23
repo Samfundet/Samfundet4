@@ -12,6 +12,7 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
+  GangDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -40,13 +41,6 @@ export async function logout(): Promise<AxiosResponse> {
   const response = await axios.post(url, undefined, { withCredentials: true });
 
   return response;
-}
-
-export async function getAllPermissions(): Promise<PermissionDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions;
-  const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
-
-  return response.data;
 }
 
 export async function getUser(): Promise<UserDto> {
@@ -207,8 +201,36 @@ export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
 }
 
 export async function getGangList(): Promise<GangTypeDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_organized });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangsorganized_list });
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function getGang(id: number): Promise<GangDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
+
+  const response = await axios.get<GangDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getGangs(): Promise<GangDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
+  const response = await axios.get<GangDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postGang(data: GangDto): Promise<GangDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
+  const response = await axios.post<GangDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putGang(data: GangDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: data.id } });
+  const response = await axios.put<GangDto>(url, data, { withCredentials: true });
+  return response;
 }
