@@ -110,7 +110,7 @@ export function Navbar() {
       {!user && (
         <Button
           theme="secondary"
-          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             navigate(ROUTES.frontend.login);
             setMobileNavigation(false);
@@ -123,7 +123,7 @@ export function Navbar() {
       {user && (
         <Button
           theme="secondary"
-          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             logout()
               .then((response) => {

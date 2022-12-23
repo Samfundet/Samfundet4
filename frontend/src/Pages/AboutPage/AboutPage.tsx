@@ -1,11 +1,10 @@
-import styles from './AboutPage.module.scss';
-import { Button } from '~/Components';
-import { ROUTES } from '~/routes';
-import { VENUES } from './data';
-import { Page } from '~/Components/Page';
 import classNames from 'classnames';
-import { ImageList } from '~/Components/ImageList';
 import { runderode, splash } from '~/assets';
+import { Button } from '~/Components';
+import { ImageList } from '~/Components/ImageList';
+import { Page } from '~/Components/Page';
+import styles from './AboutPage.module.scss';
+import { VENUES } from './data';
 
 export function AboutPage() {
   return (
@@ -97,8 +96,8 @@ export function AboutPage() {
               ISFiT
             </Button>
           </div>
-          <div className={styles.box3}>
-            <h3 className={styles.header3}>Annen Info</h3>
+          <div className={styles.other_info}>
+            <h3 className={styles.other_info_header}>Annen Info</h3>
             <div className={styles.buttonTable}>
               <Button className={styles.tableButton} theme="outlined">
                 Aldersgrenser
