@@ -100,14 +100,7 @@
 .image_box {
   background-color: $green;
   border-radius: 0.1em;
-  width: 23em;
   color: white;
-  margin-bottom: 1em;
-  @include for-tablet-up {
-    width: 48em;
-    height: 31em;
-    margin-right: 1em;
-  }
 }
 
 .splash {
