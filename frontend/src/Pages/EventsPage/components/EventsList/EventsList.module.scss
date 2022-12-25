@@ -15,10 +15,14 @@
 }
 
 .dateHeaderText {
-  font-size: 1.4em;
+  font-size: 1.1em;
   font-weight: 600;
   text-transform: uppercase;
   padding: 0.3em;
+  @include for-tablet-up {
+    font-size: 1.3em;
+    font-weight: 600;
+  }
 }
 
 .container {
@@ -27,7 +31,7 @@
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  margin: 16px;
+  margin-top: 32px;
 }
 
 .dates_container {
@@ -47,34 +51,59 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-left: 1em;
-  padding-right: 1em;
 }
 
-.column_area_time {
-  flex: 1;
-}
 
 .link {
   color: $red-samf;
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1em;
+  @include for-tablet-up {
+    font-size: 1.2em;
+  }
+}
+
+.column_area_time {
+  flex: 1;
+  display:flex;
+  flex-direction: column;
+  @include for-tablet-up {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.column_area {
+  flex: 1;
+}
+
+.column_time {
+  flex: 1;
 }
 
 .column_title {
   flex: 1;
+  display:flex;
   flex-direction: row;
-  justify-content: flex-end;
+  align-items: center;
+}
+
+.column_pay {
+  display:flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
 }
 
 .column_price {
   display: none;
   flex: 1;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
   color: $grey-1;
   @include for-tablet-up {
-    display: block;
+    display: flex;
   }
 }
 
@@ -83,5 +112,10 @@
   flex-direction: row;
   width: 100%;
   padding: 0.3em;
-  border-top: 1px solid $grey-2;
+  border-top: 1px solid $grey-4;
+  padding-left: 1em;
+  padding-right: 1em;
+  @include for-tablet-up {
+    padding: 0.5em;
+  }
 }

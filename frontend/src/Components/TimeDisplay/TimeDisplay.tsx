@@ -10,6 +10,7 @@ type TimeDisplayProps = {
 const DATETIME = 'datetime';
 const DATE = 'date';
 const NICEDATE = 'nice-date';
+const NICEDATETIME = 'nice-datetime';
 const TIME = 'time';
 
 export function TimeDisplay({ timestamp, className, displayType = DATETIME }: TimeDisplayProps) {
@@ -50,7 +51,14 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
         {niceDays[date.getDay()]} {date.getDate()}. {niceMonths[date.getMonth()]}
       </p>
     );
-  } else if (displayType == TIME) {
+  } else if (displayType == NICEDATETIME) {
+    return (
+      <p className={className}>
+        {date.getDate()}. {niceMonths[date.getMonth()]} {date.toTimeString().slice(0, 5)}
+      </p>
+    );
+  } 
+  else if (displayType == TIME) {
     return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
   }
 }

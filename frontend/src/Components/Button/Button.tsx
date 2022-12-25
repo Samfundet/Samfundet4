@@ -2,7 +2,7 @@ import { default as classNames, default as classnames } from 'classnames';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 
-type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined' | 'blue';
+type ButtonTheme = 'basic' | 'samf' | 'darksamf' | 'secondary' | 'success' | 'outlined' | 'blue';
 type ButtonDisplay = 'basic' | 'pill' | 'block';
 
 type ButtonProps = {
@@ -19,6 +19,7 @@ type ButtonProps = {
 const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
   basic: styles.button_basic,
   samf: styles.button_samf,
+  darksamf: styles.button_darksamf,
   secondary: styles.button_secondary,
   success: styles.button_success,
   outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.

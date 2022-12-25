@@ -117,7 +117,6 @@ def event_to_dataclass(*, event: Event) -> EventDto:
 def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
     return [event_to_dataclass(event=event) for event in events]
 
-
 def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:  # pylint: disable=positional-arguments
     if not events:
         events = Event.objects.all()
