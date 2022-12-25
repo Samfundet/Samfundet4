@@ -3,10 +3,9 @@ from typing import Sequence
 from django.http import QueryDict
 from django.db.models import Q
 from django.db.models.query import QuerySet
+from django.contrib.auth.models import Group, User
 
 from guardian.models import GroupObjectPermission, UserObjectPermission
-
-from django.contrib.auth.models import Group, User
 
 from .models import (Venue, Profile, Saksdokument, UserPreference, Event, EventGroup)
 
@@ -118,8 +117,9 @@ def event_to_dataclass(*, event: Event) -> EventDto:
 def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
     return [event_to_dataclass(event=event) for event in events]
 
-
-def event_query(query: QueryDict, events: QuerySet[Event] = Event.objects.all()) -> QuerySet[Event]:
+def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:  # pylint: disable=positional-arguments
+    if not events:
+        events = Event.objects.all()
     search = query.get('search', None)
     if search:
         events = events.filter(
@@ -133,7 +133,7 @@ def event_query(query: QueryDict, events: QuerySet[Event] = Event.objects.all())
 
     location = query.get('venue', None)
     if location:
-        events = events.filter(location__icontains=location)  #Todo should maybe be a foreignKey?
+        events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
     return events
 
 

@@ -1,8 +1,6 @@
 import { EventDto } from '~/dto';
 
 export function eventQuery(events: EventDto[], search: string, venue: string, event_type: string): EventDto[] {
-  console.log(search, typeof search);
-  console.log(search.length);
   search = search.toLowerCase();
   venue = venue.toLowerCase();
   return events.filter(
