@@ -80,6 +80,7 @@ export type EventDto = {
 
 export type EventGroupDto = {
   id: number;
+  name: string;
 };
 
 export type ProfileDto = {

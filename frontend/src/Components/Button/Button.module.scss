@@ -3,7 +3,6 @@
 
 .button {
   border: none;
-  padding: 14px 25px;
   cursor: pointer;
   border-radius: 0.25em;
   transition: 0.15s;
@@ -57,4 +56,17 @@
     color: $red-samf;
     transition: 0.15s;
   }
+}
+
+.display_basic {
+  padding: 10px 25px;
+}
+
+.display_pill {
+  padding: 0.3em 0.4em;
+}
+
+.display_block {
+  padding: 10px 25px;
+  width: 100%;
 }

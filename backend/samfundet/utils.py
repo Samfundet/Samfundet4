@@ -1,23 +1,20 @@
 from __future__ import annotations
 from typing import Sequence
+from django.http import QueryDict
+from django.db.models import Q
+from django.db.models.query import QuerySet
+from django.contrib.auth.models import Group, User
 
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
-from django.contrib.auth.models import Group, User
-
-from .models import (
-    Venue,
-    Profile,
-    Saksdokument,
-    UserPreference,
-    Event,
-)
+from .models import (Venue, Profile, Saksdokument, UserPreference, Event, EventGroup)
 
 from .dto import (
     UserDto,
     VenueDto,
     GroupDto,
     EventDto,
+    EventGroupDto,
     ProfileDto,
     SaksdokumentDto,
     UserPreferenceDto,
@@ -94,6 +91,10 @@ def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
 ###
 
 
+def eventgroup_to_dataclass(*, event_group: EventGroup) -> EventGroupDto:
+    return EventGroupDto(id=event_group.id, name=event_group.name)
+
+
 def event_to_dataclass(*, event: Event) -> EventDto:
     return EventDto(
         id=event.id,
@@ -108,13 +109,33 @@ def event_to_dataclass(*, event: Event) -> EventDto:
         publish_dt=event.publish_dt,
         host=event.host,
         location=event.location,
-        event_group=event.event_group,
+        event_group=eventgroup_to_dataclass(event_group=event.event_group),
         price_group=event.price_group
     )
 
 
 def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
     return [event_to_dataclass(event=event) for event in events]
+
+
+def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:  # pylint: disable=positional-arguments
+    if not events:
+        events = Event.objects.all()
+    search = query.get('search', None)
+    if search:
+        events = events.filter(
+            Q(title_no__icontains=search) | Q(title_en__icontains=search) | Q(description_long_no__icontains=search) |
+            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(description_short_no=search) | Q(location__icontains=search) |
+            Q(event_group__name=search)
+        )
+    event_group = query.get('event_group', None)
+    if event_group:
+        events = events.filter(event_group__id=event_group)
+
+    location = query.get('venue', None)
+    if location:
+        events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
+    return events
 
 
 ###

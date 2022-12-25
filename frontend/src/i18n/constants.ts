@@ -28,6 +28,8 @@ export const KEY = {
   login_internal_login: 'login_internal_login',
   login_email_placeholder: 'login_email_placeholder',
   common_text: 'common_text',
+  common_search: 'common_search',
+  common_choose: 'common_choose',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
@@ -76,6 +78,14 @@ export const KEY = {
   abbreviation: 'abbreviation',
   webpage: 'webpage',
   gang_type: 'gang_type',
+  past: 'past',
+  upcomming: 'upcomming',
+  event: 'event',
+  event_type: 'event_type',
+  start_time: 'start_time',
+  end_time: 'start_time',
+  organizer: 'organizer',
+  venue: 'venue',
 } as const;
 
 /**

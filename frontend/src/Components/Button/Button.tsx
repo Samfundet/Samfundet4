@@ -3,10 +3,12 @@ import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 
 type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined' | 'blue';
+type ButtonDisplay = 'basic' | 'pill' | 'block';
 
 type ButtonProps = {
   name?: string;
   theme?: ButtonTheme;
+  display?: ButtonDisplay;
   type?: ButtonType;
   className?: string;
   disabled?: boolean;
@@ -23,8 +25,23 @@ const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
   blue: styles.button_blue,
 };
 
-export function Button({ name, type, theme = 'basic', onClick, disabled, className, children }: ButtonProps) {
-  const classNames = classnames(styles.button, mapThemeToStyle[theme], className);
+const mapDisplayToStyle: { [display in ButtonDisplay]: string } = {
+  basic: styles.display_basic,
+  pill: styles.display_pill,
+  block: styles.display_block,
+};
+
+export function Button({
+  name,
+  type,
+  theme = 'basic',
+  display = 'basic',
+  onClick,
+  disabled,
+  className,
+  children,
+}: ButtonProps) {
+  const classNames = classnames(styles.button, mapThemeToStyle[theme], mapDisplayToStyle[display], className);
   return (
     <button name={name} onClick={onClick} type={type} disabled={disabled} className={classNames}>
       {children}

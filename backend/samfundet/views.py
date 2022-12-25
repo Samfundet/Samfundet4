@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
+from django.utils import timezone
 from django.contrib.auth import login, get_user_model, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -15,16 +16,12 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import XCSRFTOKEN
 
-from .utils import (
-    user_to_dataclass,
-    users_to_dataclass,
-    groups_to_dataclass,
-    events_to_dataclass,
-)
+from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
 from .models import (
     Menu,
     Gang,
     Event,
+    EventGroup,
     Table,
     Venue,
     Profile,
@@ -41,6 +38,7 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
+    EventGroupSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
@@ -75,6 +73,16 @@ class EventPerDayView(APIView):
             [event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))]  # type: ignore[attr-defined]
             for date in dates
         }
+        return Response(data=events)
+
+
+class EventsUpcommingView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        events = event_query(request.query_params)
+        events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
+        events = [event.to_dict() for event in events_to_dataclass(events=events)]  # type: ignore[attr-defined]
         return Response(data=events)
 
 
@@ -171,6 +179,12 @@ class GangTypeView(ModelViewSet):
     http_method_names = ['get']
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
+
+
+class EventGroupView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = EventGroupSerializer
+    queryset = EventGroup.objects.all()
 
 
 ### Information Page ###

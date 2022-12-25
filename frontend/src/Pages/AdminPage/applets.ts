@@ -1,5 +1,5 @@
 import { ROUTES } from '~/routes';
-import { SAMFUNDET_ADD_GANG, SAMFUNDET_ADD_INFORMATIONPAGE } from '~/permissions';
+import { SAMFUNDET_ADD_EVENT, SAMFUNDET_ADD_GANG, SAMFUNDET_ADD_INFORMATIONPAGE } from '~/permissions';
 
 export const applets = [
   {
@@ -28,6 +28,15 @@ export const applets = [
     options: [
       { text: 'Ny side', url: ROUTES.frontend.admin_information_create, type: 'ADD' },
       { text: 'Administrer sider', url: ROUTES.frontend.admin_information, type: 'MANAGE' },
+    ],
+  },
+  {
+    title: 'Arrangementer',
+    perm: SAMFUNDET_ADD_EVENT,
+    options: [
+      { text: 'Opprett arrangement', url: '', type: 'ADD' },
+      { text: 'Rediger arrangementer', url: '', type: 'MANAGE' },
+      { text: 'Tidligere arrangementer', url: '', type: 'MANAGE' },
     ],
   },
 ];
