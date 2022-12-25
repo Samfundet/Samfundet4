@@ -1,10 +1,11 @@
+/* stylelint-disable declaration-no-important */
 @import 'src/constants';
 
 .button {
   border: none;
   cursor: pointer;
   border-radius: 0.25em;
-  transition: 0.2s;
+  transition: 0.15s;
   box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.1);
 
   &:disabled {
@@ -13,14 +14,14 @@
 
   &:hover:not([disabled]) {
     filter: brightness(120%);
-    transform: translateY(-1px);
-    transition: 0.2s;
+    transition: 0.15s;
     box-shadow: 1px 2px 8px 3px rgba(0, 0, 0, 0.1);
   }
 }
 
 .button_basic {
   background-color: white;
+  color: black;
 }
 
 .button_samf {
@@ -42,15 +43,18 @@
   border: none;
   padding: 10px 25px;
   background-color: $grey-3;
+  color: white;
 }
 
 .button_outlined {
-  background-color: transparent;
+  background-color: inherit;
   border: 1px solid $grey-1;
-  color: black;
+  transition: 0.15s;
+
   &:hover:not([disabled]) {
     border-color: $red-samf;
     color: $red-samf;
+    transition: 0.15s;
   }
 }
 

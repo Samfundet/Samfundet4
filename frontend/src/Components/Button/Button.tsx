@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import { default as classNames, default as classnames } from 'classnames';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 
@@ -21,7 +21,7 @@ const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
   samf: styles.button_samf,
   secondary: styles.button_secondary,
   success: styles.button_success,
-  outlined: styles.button_outlined,
+  outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.
   blue: styles.button_blue,
 };
 

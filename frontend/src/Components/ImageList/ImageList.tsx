@@ -1,8 +1,14 @@
 import { Image } from '../Image';
 import styles from './ImageList.module.scss';
 
+type Image = {
+  src: string;
+  url?: string;
+  title?: string;
+};
+
 type ImageListProps = {
-  images: Array;
+  images: Image[];
   size?: number;
 };
 
