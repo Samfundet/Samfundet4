@@ -7,3 +7,11 @@
   justify-content: center;
   margin-top: 20%;
 }
+
+.header {
+  display:flex;
+  flex-direction: column;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}

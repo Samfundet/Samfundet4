@@ -28,6 +28,12 @@
   color: white;
 }
 
+.button_darksamf {
+  background-color: $dark-red-samf;
+  color: white;
+}
+
+
 .button_success {
   background-color: $green;
   color: white;
@@ -59,7 +65,7 @@
 }
 
 .display_pill {
-  padding: 0.3em 0.4em;
+  padding: 0.2em 0.4em;
 }
 
 .display_block {

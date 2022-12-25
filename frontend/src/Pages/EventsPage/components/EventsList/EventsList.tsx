@@ -25,24 +25,23 @@ export function EventsList({ events }: EventsListProps) {
                 return (
                   <div key={key} className={styles.event_row}>
                     <div className={styles.column_title}>
-                      <Link
-                        to={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
-                        className={styles.link}
-                      >
-                        {event.title_no}
+                      <Link to={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}>
+                        <p className={styles.link}>{event.title_no}</p>
                       </Link>
                     </div>
                     <div className={styles.column_area_time}>
-                      <div>
+                      <div className={styles.column_time}>
                         <TimeDuration start={event.start_dt} end={event.end_dt} />
                       </div>
-                      <p>{event?.location}</p>
+                      <p className={styles.column_area}>{event?.location}</p>
                     </div>
                     <div className={styles.column_price}>
                       <p>{event?.price_group}</p>
                     </div>
-                    <div className={styles.column_buy}>
-                      <Button theme="samf">Kjøp</Button>
+                    <div className={styles.column_pay}>
+                      <Button theme="samf" display="pill">
+                        Kjøp
+                      </Button>
                     </div>
                   </div>
                 );

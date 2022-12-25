@@ -1,2 +1,1 @@
 export { EventsBoxes } from './EventsBoxes';
-export { EventsList } from './EventsList';

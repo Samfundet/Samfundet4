@@ -1,0 +1,33 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.dateHeader {
+  color: $red-samf;
+  font-weight: 500;
+  font-size: 1.2em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+
+.dateHeaderText {
+  font-size: 0.9em;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0.3em;
+}
+
+.container {
+  margin-top: 1em;
+}
+
+.eventBoxes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.eventCard {
+  margin: 0.5em;
+}

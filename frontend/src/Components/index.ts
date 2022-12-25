@@ -1,6 +1,7 @@
 export { Alert } from './Alert';
 export { Button } from './Button';
 export { EventCard } from './EventCard';
+export { EventSlip } from './EventSlip';
 export { ExpandableHeader } from './ExpandableHeader';
 export { InputField } from './InputField';
 export { Link } from './Link';

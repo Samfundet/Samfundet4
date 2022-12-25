@@ -116,6 +116,7 @@ export async function putInformationPage(page: InformationPageDto): Promise<Axio
 
 export async function getEventsPerDay(): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
+  console.log(url);
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
