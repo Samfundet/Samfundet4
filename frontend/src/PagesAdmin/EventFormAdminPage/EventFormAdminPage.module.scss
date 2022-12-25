@@ -1,0 +1,98 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.wrapper {
+  margin: 1em 1em;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.backButton {
+  border-color: $grey-1;
+  padding: 0.5em 1.6em;
+  text-transform: uppercase;
+}
+
+.backButtonText {
+  margin: 0;
+  font-weight: 700;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.labelText {
+  font-weight: 100;
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+}
+
+.inputGroup {
+  border-top: 0.15em solid $grey-2;
+  margin-top: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.input {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.inputGroupHeader {
+  font-weight: 700;
+  font-size: 2em;
+  margin-bottom: 1em;
+  margin-top: 0.5em;
+}
+
+.submit {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+.submitContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  flex: 1;
+}
+
+.markdownField {
+  border: 1px solid $grey-2;
+  border-radius: 2px;
+  height: 100%;
+  margin: 1em;
+  padding: 2em;
+}
+
+.row {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+}

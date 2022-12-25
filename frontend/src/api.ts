@@ -135,6 +135,13 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
+export async function postEvent(data: EventDto): Promise<EventDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getEvent(pk: number): Promise<EventDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
