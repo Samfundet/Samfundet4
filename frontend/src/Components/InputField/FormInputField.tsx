@@ -14,7 +14,7 @@ type InputFieldProps = {
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;
-  error?: Object;
+  errors?: Object;
 };
 
 export function FormInputField({
@@ -22,7 +22,7 @@ export function FormInputField({
   className,
   labelClassName,
   inputClassName,
-  error,
+  errors,
   name,
   required,
   register,
@@ -36,12 +36,12 @@ export function FormInputField({
           className={classNames(
             styles.input_field,
             inputClassName,
-            error && error.hasOwnProperty(name) && styles.error,
+            errors && errors.hasOwnProperty(name) && styles.errors,
           )}
           type={type}
           {...register(name, { required })}
         />
-        {error && error.hasOwnProperty(name) && <div className={styles.error_text}>{error[name]}</div>}
+        {errors && errors.hasOwnProperty(name) && <div className={styles.errors_text}>{errors[name].message}</div>}
       </label>
     </div>
   );

@@ -66,6 +66,7 @@ export type EventDto = {
   title_no: string;
   title_en: string;
   start_dt: Date;
+  duration: number;
   end_dt: Date;
   description_long_no: string;
   description_long_en: string;
@@ -76,6 +77,10 @@ export type EventDto = {
   location: string;
   event_group: EventGroupDto;
   price_group: string;
+  status_group: string;
+  age_group: string;
+  codeword: string;
+  banner_image: string;
 };
 
 export type EventGroupDto = {

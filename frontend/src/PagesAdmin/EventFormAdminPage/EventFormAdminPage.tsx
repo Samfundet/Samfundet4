@@ -22,6 +22,7 @@ export function EventFormAdminPage() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
@@ -41,6 +42,10 @@ export function EventFormAdminPage() {
     );
   }
 
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
   const onSubmit = (data) => {
     console.log(data);
     postEvent(data)
@@ -49,8 +54,10 @@ export function EventFormAdminPage() {
         navigate(ROUTES.frontend.admin_events_upcomming);
       })
       .catch((e) => {
-        console.log(e);
         console.log(e.response.data);
+        for (const err in e.response.data) {
+          setError(err, { type: 'custom', message: e.response.data[err][0] });
+        }
       });
   };
 
@@ -65,46 +72,46 @@ export function EventFormAdminPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.row}>
           <div className={styles.col}>
-            <FormInputField className={styles.input} name="title_no" register={register} required>
+            <FormInputField errors={errors} className={styles.input} name="title_no" register={register}>
               <p className={styles.labelText}>
                 {t(KEY.norwegian)} {t(KEY.common_title)}
               </p>
             </FormInputField>
             <FormTextAreaField
+              errors={errors}
               className={styles.input}
               rows={2}
               name="description_short_no"
               register={register}
-              required
             >
               <p className={styles.labelText}>
                 {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
-            <FormTextAreaField className={styles.input} name="description_long_no" register={register} required>
+            <FormTextAreaField errors={errors} className={styles.input} name="description_long_no" register={register}>
               <p className={styles.labelText}>
                 {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
           </div>
           <div className={styles.col}>
-            <FormInputField className={styles.input} name="title_en" register={register} required>
+            <FormInputField errors={errors} className={styles.input} name="title_en" register={register}>
               <p className={styles.labelText}>
                 {t(KEY.common_title)} ({t(KEY.english)})
               </p>
             </FormInputField>
             <FormTextAreaField
+              errors={errors}
               className={styles.input}
               rows={2}
               name="description_short_en"
               register={register}
-              required
             >
               <p className={styles.labelText}>
                 {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
-            <FormTextAreaField className={styles.input} name="description_long_en" register={register} required>
+            <FormTextAreaField errors={errors} className={styles.input} name="description_long_en" register={register}>
               <p className={styles.labelText}>
                 {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
@@ -114,7 +121,7 @@ export function EventFormAdminPage() {
         <div className={styles.submitContainer}>
           <Button theme={'success'} type="submit">
             <p className={styles.submit}>
-              {id ? t(KEY.common_save) : t(KEY.common_create)} {t(KEY.gang)}
+              {id ? t(KEY.common_save) : t(KEY.common_create)} {t(KEY.common_event)}
             </p>
           </Button>
         </div>

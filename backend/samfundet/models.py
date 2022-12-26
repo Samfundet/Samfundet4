@@ -20,19 +20,49 @@ class EventGroup(models.Model):
 
 
 class Event(models.Model):
+
+    # INFO
     title_no = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
-    start_dt = models.DateTimeField(blank=True, null=True)
-    end_dt = models.DateTimeField(blank=True, null=True)
     description_long_no = models.TextField(blank=True, null=True)
     description_long_en = models.TextField(blank=True, null=True)
     description_short_no = models.TextField(blank=True, null=True)
     description_short_en = models.TextField(blank=True, null=True)
-    publish_dt = models.DateTimeField(blank=True, null=True)
-    host = models.CharField(max_length=140, blank=True, null=True)
-    location = models.CharField(max_length=140, blank=True, null=True)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
+    location = models.CharField(max_length=140, blank=True, null=True)
+    codeword = models.CharField(max_length=140, blank=True, null=True)
 
+    # Duration
+    start_dt = models.DateTimeField(blank=True, null=True)
+    duration = models.PositiveIntegerField(blank=True, null=False)
+    publish_dt = models.DateTimeField(blank=True, null=True)
+
+    # Host
+    host = models.CharField(max_length=140, blank=True, null=True)
+
+    # Display
+    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner') # TODO fix null response
+
+    # TODO Maybe add color choice?
+    # TODO add social media?
+
+    # Choice infos
+    class AgeGroup(models.TextChoices):
+        NO_RESTRICTION = None, _('Ingen aldersgrense')
+        AGE_18 = 'EIGHTEEN', _('18 år')
+        AGE_20 = 'TWENTY', _('20 år')
+        MIXED = 'MIXED', _('18 år (student), 20 år (ikke-student)')
+
+    class StatusGroup(models.TextChoices):
+        ACTIVE = 'active', _('Aktiv')
+        ARCHIVED = 'archived', _('Arkivert')
+        CANCELED = 'canceled', _('Avlyst')
+
+    status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
+    age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
+
+    # Price 
+    # TODO FIX PRICE CATEGORIES
     class PriceGroup(models.TextChoices):
         INCLUDED = 'INCLUDED', _('Included with entrance')
         FREE = 'FREE', _('Free')
@@ -40,7 +70,10 @@ class Event(models.Model):
         REGISTRATION = 'REGISTRATION', _('Free with registration')
 
     price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
+    capacity = models.PositiveIntegerField(blank=True, null=True)
 
+    def end_dt(self): 
+        return self.start_dt+timedelta(minutes=self.duration)
     class Meta:
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
