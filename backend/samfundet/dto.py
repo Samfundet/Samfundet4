@@ -70,8 +70,8 @@ class EventDto:
     age_group: str
     codeword: str
     start_dt: datetime
-    duration: int
     end_dt: datetime
+    duration: int
     publish_dt: datetime
     host: str
     banner_image: str

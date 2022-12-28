@@ -2,7 +2,6 @@ import { useEffect, useState, SyntheticEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, InputField, SamfundetLogoSpinner, TextAreaField } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -49,7 +48,7 @@ export function InformationFormAdminPage() {
         });
     }
     setShowSpinner(false);
-  }, []);
+  }, [slugField]);
 
   if (showSpinner) {
     return (

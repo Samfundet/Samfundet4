@@ -4,6 +4,7 @@ from datetime import time, timedelta
 from guardian.shortcuts import assign_perm
 
 from django.db import models
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
@@ -73,7 +74,7 @@ class Event(models.Model):
     capacity = models.PositiveIntegerField(blank=True, null=True)
 
     def end_dt(self): 
-        return self.start_dt+timedelta(minutes=self.duration)
+        return self.start_dt+timezone.timedelta(minutes=self.duration)
     class Meta:
         verbose_name = 'Event'
         verbose_name_plural = 'Events'

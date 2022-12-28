@@ -25,6 +25,7 @@ User = get_user_model()
 
 
 class EventSerializer(serializers.ModelSerializer):
+    end_dt = serializers.DateTimeField()
 
     class Meta:
         model = Event

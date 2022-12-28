@@ -2,15 +2,12 @@ import { useEffect, useState, SyntheticEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, InputField, SamfundetLogoSpinner, Select } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './GangsFormAdminPage.module.scss';
-import ReactMarkdown from 'react-markdown';
 import { getGang, getGangList, postGang, putGang, getInformationPages } from '~/api';
 import { STATUS } from '~/http_status_codes';
-import { reverse } from '~/named-urls';
 
 export function GangsFormAdminPage() {
   const navigate = useNavigate();
@@ -38,7 +35,7 @@ export function GangsFormAdminPage() {
     getGangList().then((data) => {
       setGangTypeOptions(
         [['', '']].concat(
-          data.map(function (element, index) {
+          data.map(function (element) {
             return [element.id, element.title_no];
           }),
         ),
@@ -47,7 +44,7 @@ export function GangsFormAdminPage() {
     getInformationPages().then((data) => {
       setInfoPageOptions(
         [['', '']].concat(
-          data.map(function (element, index) {
+          data.map(function (element) {
             return [element.slug_field, element.slug_field];
           }),
         ),
@@ -72,7 +69,7 @@ export function GangsFormAdminPage() {
         });
     }
     setShowSpinner(false);
-  }, []);
+  }, [id]);
 
   if (showSpinner) {
     return (
@@ -95,7 +92,7 @@ export function GangsFormAdminPage() {
     if (id) {
       data.id = id;
       putGang(data)
-        .then((status) => {
+        .then(() => {
           navigate(ROUTES.frontend.admin_gangs);
         })
         .catch((e) => {
@@ -103,7 +100,7 @@ export function GangsFormAdminPage() {
         });
     } else {
       postGang(data)
-        .then((status) => {
+        .then(() => {
           navigate(ROUTES.frontend.admin_gangs);
         })
         .catch((e) => {

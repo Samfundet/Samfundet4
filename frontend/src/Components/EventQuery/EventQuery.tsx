@@ -1,4 +1,3 @@
-import classnames from 'classnames';
 import { useState, useEffect } from 'react';
 import { Dropdown } from '../Dropdown';
 import { InputField } from '../InputField';
@@ -26,7 +25,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
     getVenues()
       .then((data) => {
         setVenues(
-          data.map(function (element, key) {
+          data.map(function (element) {
             return [element.name];
           }),
         );
@@ -35,7 +34,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
     getEventGroups()
       .then((data) => {
         setEventGroups(
-          data.map(function (element, key) {
+          data.map(function (element) {
             return [element.id, element.name];
           }),
         );

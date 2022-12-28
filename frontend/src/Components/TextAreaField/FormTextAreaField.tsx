@@ -13,7 +13,7 @@ type TextAreaFieldProps = {
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;
-  errors?: string;
+  errors?: Record<string, unknown>;
 };
 
 export function FormTextAreaField({
@@ -33,17 +33,13 @@ export function FormTextAreaField({
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <textarea
-          className={classNames(
-            styles.input_field,
-            inputClassName,
-            errors && errors.hasOwnProperty(name) && styles.errors,
-          )}
+          className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
           {...register(name, { required })}
           rows={rows}
           cols={cols}
         />
       </label>
-      {errors && errors.hasOwnProperty(name) && <div className={styles.errors_text}>{errors[name].message}</div>}
+      {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
     </div>
   );
 }

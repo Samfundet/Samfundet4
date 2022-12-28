@@ -11,8 +11,8 @@ type SelectProps = {
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;
-  errors?: Object;
   children?: Children;
+  errors?: Record<string, unknown>;
 };
 
 export function FormSelect({
@@ -32,7 +32,7 @@ export function FormSelect({
         {children}
         <select
           {...register(name, { required })}
-          className={classNames(styles.select, selectClassName, errors && errors.hasOwnProperty(name) && styles.error)}
+          className={classNames(styles.select, selectClassName, errors && name in errors && styles.error)}
         >
           <option value="" className={styles.option}>
             -------
@@ -46,7 +46,7 @@ export function FormSelect({
           })}
         </select>
       </label>
-      {errors && errors.hasOwnProperty(name) && <div className={styles.error_text}>{errors[name].message}</div>}
+      {errors && name in errors && <div className={styles.error_text}>{errors[name].message}</div>}
     </div>
   );
 }

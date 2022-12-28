@@ -3,15 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, SamfundetLogoSpinner, Select } from '~/Components';
 
 import { Page } from '~/Components/Page';
-import { useAuthContext } from '~/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './EventFormAdminPage.module.scss';
-import ReactMarkdown from 'react-markdown';
-import { getEventForm, getEventGroups, getVenues, postEvent } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { reverse } from '~/named-urls';
+import { getEventForm, postEvent } from '~/api';
 import { useForm } from 'react-hook-form';
 import { FormInputField } from '~/Components/InputField';
 import { FormTextAreaField } from '~/Components/TextAreaField';
@@ -31,33 +27,27 @@ export function EventFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<Object>([]);
+  const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
   // Stuff to do on first render.
   //TODO add permissions on render
 
   useEffect(() => {
     getEventForm()
       .then((data) => {
-        console.log(data);
         setFormChoices(data);
         setShowSpinner(false);
       })
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
   const onSubmit = (data) => {
     console.log(data);
     postEvent(data)
-      .then((status) => {
-        console.log(status);
+      .then(() => {
         navigate(ROUTES.frontend.admin_events_upcomming);
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.error(e.response.data);
         for (const err in e.response.data) {
           setError(err, { type: 'custom', message: e.response.data[err][0] });
         }
@@ -212,7 +202,7 @@ export function EventFormAdminPage() {
               type="datetime-local"
               errors={errors}
               className={styles.input}
-              name="start_dt"
+              name="publish_dt"
               register={register}
               required={t(KEY.form_required)}
             >
@@ -233,10 +223,6 @@ export function EventFormAdminPage() {
               <p className={styles.labelText}>{t(KEY.duration)} (min)*</p>
             </FormInputField>
           </div>
-        </div>
-        <div className={styles.seperator}>Bilde</div>
-        <div className={styles.col}>
-          
         </div>
         <div className={styles.submitContainer}>
           <Button theme={'success'} type="submit">

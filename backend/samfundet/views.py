@@ -94,7 +94,7 @@ class EventFormView(APIView):
             'age_groups': Event.AgeGroup.choices,
             'status_groups': Event.StatusGroup.choices,
             'venues': [[v.name] for v in Venue.objects.all()],
-            'event_groups':[[e.id, e.name] for e in EventGroup.objects.all()]
+            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
         }
         return Response(data=data)
 
