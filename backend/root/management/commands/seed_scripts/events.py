@@ -47,7 +47,7 @@ def seed():
         else:
             recurring = 1
         n_recurring += 1 if recurring > 1 else 0
-        group = EventGroup.objects.create()
+        group = EventGroup.objects.create(name=words(1))
 
         # Create event(s)
         for j in range(recurring):

@@ -33,6 +33,8 @@ export const KEY = {
   common_text: 'common_text',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_age_res: 'common_age_res',
+  common_time: 'common_time',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
@@ -86,9 +88,13 @@ export const KEY = {
   event: 'event',
   event_type: 'event_type',
   start_time: 'start_time',
-  end_time: 'start_time',
+  end_time: 'end_time',
   organizer: 'organizer',
   venue: 'venue',
+  form_must_choose: 'form_must_choose',
+  form_required: 'form_required',
+  duration: 'duration',
+  publication: 'publication',
 } as const;
 
 /**

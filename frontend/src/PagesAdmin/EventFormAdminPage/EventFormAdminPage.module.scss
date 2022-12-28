@@ -45,7 +45,11 @@
 
 .input {
   margin-top: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
+}
+
+.select {
+  width: 100%;
 }
 
 .inputGroupHeader {
@@ -67,15 +71,6 @@
   margin: 2em;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-}
-
-.col {
-  flex: 1;
-}
-
 .markdownField {
   border: 1px solid $grey-2;
   border-radius: 2px;
@@ -94,5 +89,17 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 2em;
+  padding: 0.5em;
 }
+
+.seperator {
+  text-align: center;
+  background-color: $red-samf;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0.2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  color: $white;
+}
+

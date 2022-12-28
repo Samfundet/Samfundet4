@@ -28,6 +28,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_description]: 'Beskrivelse',
   [KEY.common_short]: 'Kort',
   [KEY.common_long]: 'Lang',
+  [KEY.common_age_res]: 'Aldersgrense',
+  [KEY.common_time]: 'Tid',
   [KEY.gang]: 'Gjeng',
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
@@ -89,6 +91,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.end_time]: 'Sluttid',
   [KEY.organizer]: 'Arrangør',
   [KEY.venue]: 'Lokale',
+  [KEY.form_must_choose]: 'Velg et valg fra lista',
+  [KEY.form_required]: 'Må fylles inn',
+  [KEY.duration]: 'Varighet',
+  [KEY.publication]: 'Publisering',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -113,6 +119,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_description]: 'Description',
   [KEY.common_short]: 'Short',
   [KEY.common_long]: 'Long',
+  [KEY.common_age_res]: 'Age limit',
+  [KEY.common_time]: 'Time',
   [KEY.norwegian]: 'Norwegian',
   [KEY.english]: 'English',
   [KEY.login_forgotten_password]: 'Forgot password?',
@@ -177,4 +185,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.end_time]: 'End time',
   [KEY.organizer]: 'Organizer',
   [KEY.venue]: 'Venue',
+  [KEY.form_must_choose]: 'Choose an option from the list',
+  [KEY.form_required]: 'Must be filled in',
+  [KEY.duration]: 'Duration',
+  [KEY.publication]: 'Publication',
 };
