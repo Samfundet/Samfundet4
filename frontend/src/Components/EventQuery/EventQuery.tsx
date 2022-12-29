@@ -21,6 +21,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
   const [selectedVenue, setSelectedVenue] = useState<string>('');
   const [selectedEventType, setSelectedEventType] = useState<string>('');
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     getVenues()
       .then((data) => {
@@ -40,7 +41,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
         );
       })
       .catch(console.error);
-  }, []);
+  }, [allEvents]);
 
   useEffect(() => {
     setEvents(eventQuery(allEvents, search, selectedVenue, selectedEventType));

@@ -30,6 +30,7 @@ export function GangsFormAdminPage() {
   // Stuff to do on first render.
   //TODO add permissions on render
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // TODO add fix on no id on editpage
     getGangList().then((data) => {

@@ -113,8 +113,8 @@ def event_to_dataclass(*, event: Event) -> EventDto:
         price_group=event.price_group,
         status_group=event.status_group,
         age_group=event.age_group,
-        banner_image=None if not event.banner_image else event.banner_image.path,
-        duration=event.duration, 
+        banner_image='' if not event.banner_image else event.banner_image.path,
+        duration=event.duration,
         codeword=event.codeword,
     )
 
