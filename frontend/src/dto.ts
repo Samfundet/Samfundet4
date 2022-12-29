@@ -67,7 +67,7 @@ export type EventDto = {
   title_en: string;
   start_dt: Date;
   duration: number;
-  end_dt: Date;
+  end_dt?: Date;
   description_long_no: string;
   description_long_en: string;
   description_short_no: string;

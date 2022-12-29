@@ -7,7 +7,6 @@ import {
   InformationPageDto,
   MenuDto,
   MenuItemDto,
-  PermissionDto,
   SaksdokumentDto,
   UserDto,
   UserPreferenceDto,
@@ -138,6 +137,13 @@ export async function getEvents(): Promise<EventDto[]> {
 export async function postEvent(data: EventDto): Promise<EventDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
   const response = await axios.post<EventDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function deleteEvent(id: number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
 
   return response.data;
 }

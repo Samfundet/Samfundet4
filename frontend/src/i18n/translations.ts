@@ -30,6 +30,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_long]: 'Lang',
   [KEY.common_age_res]: 'Aldersgrense',
   [KEY.common_time]: 'Tid',
+  [KEY.common_price]: 'Pris',
+  [KEY.common_capacity]: 'Kapasitet',
   [KEY.gang]: 'Gjeng',
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
@@ -93,6 +95,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.venue]: 'Lokale',
   [KEY.form_must_choose]: 'Velg et valg fra lista',
   [KEY.form_required]: 'Må fylles inn',
+  [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.duration]: 'Varighet',
   [KEY.publication]: 'Publisering',
 };
@@ -121,6 +124,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_long]: 'Long',
   [KEY.common_age_res]: 'Age limit',
   [KEY.common_time]: 'Time',
+  [KEY.common_price]: 'Price',
+  [KEY.common_capacity]: 'Capacity',
   [KEY.norwegian]: 'Norwegian',
   [KEY.english]: 'English',
   [KEY.login_forgotten_password]: 'Forgot password?',
@@ -187,6 +192,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.venue]: 'Venue',
   [KEY.form_must_choose]: 'Choose an option from the list',
   [KEY.form_required]: 'Must be filled in',
+  [KEY.form_confirm]: 'Are you sure you want do',
   [KEY.duration]: 'Duration',
   [KEY.publication]: 'Publication',
 };

@@ -1,17 +1,20 @@
-import { useEffect, useState, SyntheticEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, Select } from '~/Components';
+import { Button, SamfundetLogoSpinner } from '~/Components';
 
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './EventFormAdminPage.module.scss';
-import { getEventForm, postEvent } from '~/api';
+import { getEvent, getEventForm, postEvent } from '~/api';
 import { useForm } from 'react-hook-form';
 import { FormInputField } from '~/Components/InputField';
 import { FormTextAreaField } from '~/Components/TextAreaField';
 import { FormSelect } from '~/Components/Select/FormSelect';
+import { STATUS } from '~/http_status_codes';
+import { DTOToForm } from '~/utils';
+
 export function EventFormAdminPage() {
   const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -20,6 +23,7 @@ export function EventFormAdminPage() {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -31,6 +35,7 @@ export function EventFormAdminPage() {
   // Stuff to do on first render.
   //TODO add permissions on render
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     getEventForm()
       .then((data) => {
@@ -38,7 +43,20 @@ export function EventFormAdminPage() {
         setShowSpinner(false);
       })
       .catch(console.error);
-  }, []);
+    if (id) {
+      getEvent(id)
+        .then((data) => {
+          DTOToForm(data, setValue, ['end_dt']);
+        })
+        .catch((data) => {
+          console.log(data);
+          // TODO add error pop up message?
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.admin_information);
+          }
+        });
+    }
+  }, [id]);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -63,7 +81,11 @@ export function EventFormAdminPage() {
   }
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_gangs)} className={styles.backButton}>
+      <Button
+        theme="outlined"
+        onClick={() => navigate(ROUTES.frontend.admin_events_upcomming)}
+        className={styles.backButton}
+      >
         <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
       <h1 className={styles.header}>
@@ -223,6 +245,19 @@ export function EventFormAdminPage() {
               <p className={styles.labelText}>{t(KEY.duration)} (min)*</p>
             </FormInputField>
           </div>
+        </div>
+        <div className={styles.seperator}>{t(KEY.common_price)}</div>
+        <div className={styles.col}>
+          <FormInputField
+            type="number"
+            errors={errors}
+            className={styles.input}
+            name="capacity"
+            register={register}
+            required={t(KEY.form_required)}
+          >
+            <p className={styles.labelText}>{t(KEY.common_capacity)} *</p>
+          </FormInputField>
         </div>
         <div className={styles.submitContainer}>
           <Button theme={'success'} type="submit">

@@ -35,6 +35,8 @@ export const KEY = {
   common_choose: 'common_choose',
   common_age_res: 'common_age_res',
   common_time: 'common_time',
+  common_price: 'common_price',
+  common_capacity: 'common_capacity',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
@@ -93,6 +95,7 @@ export const KEY = {
   venue: 'venue',
   form_must_choose: 'form_must_choose',
   form_required: 'form_required',
+  form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
 } as const;

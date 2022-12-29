@@ -42,7 +42,7 @@ class Event(models.Model):
     host = models.CharField(max_length=140, blank=True, null=True)
 
     # Display
-    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner') # TODO fix null response
+    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner')  # TODO fix null response
 
     # TODO Maybe add color choice?
     # TODO add social media?
@@ -62,7 +62,7 @@ class Event(models.Model):
     status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
     age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
 
-    # Price 
+    # Price
     # TODO FIX PRICE CATEGORIES
     class PriceGroup(models.TextChoices):
         INCLUDED = 'INCLUDED', _('Included with entrance')
@@ -73,8 +73,9 @@ class Event(models.Model):
     price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
     capacity = models.PositiveIntegerField(blank=True, null=True)
 
-    def end_dt(self): 
-        return self.start_dt+timezone.timedelta(minutes=self.duration)
+    def end_dt(self) -> timezone.datetime:
+        return self.start_dt + timezone.timedelta(minutes=self.duration)
+
     class Meta:
         verbose_name = 'Event'
         verbose_name_plural = 'Events'

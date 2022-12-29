@@ -28,6 +28,7 @@ export function InformationFormAdminPage() {
   // Stuff to do on first render.
   //TODO add permissions on render
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // TODO add fix on no slugfield on editpage
     if (slugField) {
