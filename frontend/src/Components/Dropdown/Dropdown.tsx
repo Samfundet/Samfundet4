@@ -3,20 +3,28 @@ import styles from './Dropdown.module.scss';
 
 type DropdownProps = {
   className?: string;
-  option?: string[];
+  wrapper?: string;
+  default_value?: string;
+  options?: string[];
   label?: string;
+  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function Dropdown({ option, className, label }: DropdownProps) {
+export function Dropdown({ options, wrapper, default_value, onChange, className, label }: DropdownProps) {
   const classNames = classnames(className);
   return (
-    <label className={styles.select_wrapper}>
+    <label className={classnames(styles.select_wrapper, wrapper)}>
       {label}
-      <select className={styles.samf_select}>
-        {option?.map(function (element, index) {
+      <select className={styles.samf_select} onChange={onChange}>
+        {default_value && (
+          <option value="" className={classNames}>
+            {default_value}
+          </option>
+        )}
+        {options?.map(function (element, index) {
           return (
-            <option value={element} key={index} className={classNames}>
-              {element}
+            <option value={element[0]} key={index} className={classNames}>
+              {element[element.length - 1]}
             </option>
           );
         })}

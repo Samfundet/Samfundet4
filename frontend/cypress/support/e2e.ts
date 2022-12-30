@@ -14,7 +14,13 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import failOnConsoleError from 'cypress-fail-on-console-error';
 import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+/**
+ * This command will check that no error was raised in the console on all tests.
+ */
+failOnConsoleError();

@@ -1,0 +1,1 @@
+export { InformationFormPage } from './InformationFormPage';

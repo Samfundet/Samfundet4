@@ -1,0 +1,52 @@
+@import 'src/constants';
+
+.container {
+  // background-color: $white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.imageBox {
+  margin: 0.5em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: 0.5s;
+  &:hover {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+    transition: 0.5s;
+  }
+}
+
+.image {
+  width: 100%;
+  height: auto;
+}
+
+.label {
+  margin-top: 0.5em;
+  font-size: 1.2em;
+  // text-align: center; // Doesn't seem to have any effect.
+  // color: $black;
+  // text-decoration: none; // Doesn't seem to have any effect.
+}
+
+.imageMask {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  margin: 1em;
+  margin-bottom: 0.5em;
+  border-radius: 50em;
+  background-color: $grey-5;
+  background-size: cover;
+  box-shadow: 2px 2px 10px 4px rgba(0, 0, 0, 0.18);
+  transition: 2s;
+  transform: none;
+}

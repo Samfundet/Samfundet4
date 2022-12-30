@@ -2,8 +2,6 @@ name: 'Chromatic'
 
 # https://github.com/reviewdog/action-eslint/issues/29#issuecomment-985939887
 on:
-  push:
-    paths: ['frontend/src/Components/**']
   pull_request:
     types:
       - opened

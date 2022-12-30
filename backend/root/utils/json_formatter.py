@@ -209,7 +209,7 @@ def main() -> None:
     try:
         d: dict = {}
         # Trigger exception.
-        print(d['a'])
+        print(d['a'])  # noqa: T201
     except Exception:  # pylint: disable=broad-except
         logging.exception('oops')
 

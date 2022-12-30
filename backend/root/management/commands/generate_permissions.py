@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 
 # pylint: disable=pointless-string-statement
 """
-This command cannot run within docker container because the backend has no access to the frontend.
+NOTE: This command cannot run within docker container because the backend has no access to the frontend.
 Use on host machine.
 Therefore, the database must be up to date to get the latest permissions.
 """
@@ -66,7 +66,7 @@ DOCSTRING = '"""'
 YAPF_DISABLE = '# yapf: disable'
 QUOTE = "'"
 
-OUTPUT_BACKEND_FILE = 'root/utils/permission.py'
+OUTPUT_BACKEND_FILE = 'root/utils/permissions.py'
 
 ENTRY_MSG = f"""
 {DOCSTRING}

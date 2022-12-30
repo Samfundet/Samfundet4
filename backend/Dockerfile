@@ -1,5 +1,5 @@
 # Use same version as defined in .python-version.
-FROM python:3.11.0-slim-buster
+FROM python:3.11.0-slim-bullseye
 
 # Update Ubuntu Software repository.
 RUN apt update -y \
@@ -27,16 +27,32 @@ RUN python -m pip install pipenv
 COPY Pipfile Pipfile.lock ./
 
 # Install virtual environment.
-RUN python -m pipenv install --deploy
+RUN python -m pipenv install --dev --deploy
 
 # Copy rest of the project into image.
 COPY . .
 
-# Expose port.
+# Expose port for django and debugpy.
 EXPOSE 8000
+EXPOSE 5678
 
 # Update static and migration on each startup.
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Final command.
-CMD ["python", "-m", "pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "-m", "pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD [ \
+  "python", \
+  "-m", \
+  "pipenv", \
+  "run", \
+  "gunicorn", \
+  "--bind=0.0.0.0:8000", \
+  "--forwarded-allow-ips=*", \
+  "--pythonpath=/app", \
+  "--workers=1", \
+  "--timeout=120", \
+  "--worker-class=gthread", \
+  "--threads=5", \
+  "root.wsgi:application" \
+]

@@ -8,22 +8,22 @@
   box-sizing: border-box;
 }
 
-$switch-width: 50px;
-$switch-height: 25px;
+$switch-width: 60px;
+$switch-height: 30px;
 $switch-color: $grey-2;
 $switch-color-checked: $red-samf;
 $toggle-transition: 0.2s ease;
-$ball-size: 20px;
+$ball-size: 25px;
 $ball-color: $white;
-
-// No need to touch these:
 
 .toggle_switch {
   opacity: 0;
   position: absolute;
+  cursor: pointer;
 }
 
 .label {
+  cursor: pointer;
   width: $switch-width;
   height: $switch-height;
   display: flex;
@@ -54,5 +54,13 @@ $ball-color: $white;
 
 // Styling on ball when toggle_switch is checked.
 .toggle_switch:checked ~ .ball {
-  transform: translateX(25px); // Move all the way to the end.
+  transform: translateX(30px); // Move all the way to the end.
+}
+
+.off_icon {
+  margin-left: -2px;
+}
+
+.on_icon {
+  margin-right: -2px;
 }
