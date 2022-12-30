@@ -1,11 +1,4 @@
-from . import (
-    gangs,
-    information_pages,
-    venues,
-    events,
-    menu,
-    example,
-)
+from . import (images, gangs, information_pages, venues, events, menu, example)
 
 # Insert seed scripts here (in order of priority)
 # Format is (name, seed_function).
@@ -15,6 +8,7 @@ from . import (
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
+    ('images', images.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),
     ('event', events.seed),

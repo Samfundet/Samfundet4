@@ -61,6 +61,7 @@ class TagDto:
     name: str
     color: str
 
+
 @dataclass_json
 @dataclass
 class ImageDto:

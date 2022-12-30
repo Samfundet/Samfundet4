@@ -20,6 +20,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
+
     class Meta:
         model = Image
         fields = '__all__'
