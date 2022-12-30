@@ -20,6 +20,11 @@ export const KEY = {
   login_forgotten_password: 'login_forgotten_password',
   login_internal_login: 'login_internal_login',
   login_email_placeholder: 'login_email_placeholder',
+  footer_sponsors:'footer_sponsors',
+  footer_contact:'footer_contact',
+  footer_cookies:'footer_cookies',
+  footer_festivals:'footer_festivals'
+  
 } as const;
 
 /**

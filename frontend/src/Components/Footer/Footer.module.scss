@@ -7,12 +7,7 @@
   bottom: 0;
   width: 100%;
   background-color: $grey-5;
-  // color: black;
   text-align: left;
-}
-
-ul {
-  list-style-type: none; /* Remove bullets */
 }
 
 .sponsor {
@@ -20,7 +15,6 @@ ul {
   justify-content: center;
   align-items: center;
   margin-top: 2em;
-  border: solid green;
   .sponsorBox{
     width: 10em;
     margin: 0.5em;
@@ -92,35 +86,37 @@ ul {
   }
 
 .social{
-  border: dotted blue;
   background-color: $grey-5;
   text-align: center;
   align-items:center;
   justify-content:center;
-  display:inline-block;
+  // display:inline-block;
+  padding: 0;
 
   li {
     font-size: 0.9em;
     @include for-mobile-only {
-      font-size: 0.65em;
+      font-size: 0.7em;
     }
     margin: 0.2em;
 
     display: flex;
     align-items:center;
     justify-content:center;
-
+    text-align: center;
     .leftbox {
       text-align: right;
-      width: 50%;
+      width: 40%;
       vertical-align: middle;
       padding: 0.3em;
+      margin-right: 1em;
     }
     .rightbox {
       text-align: left;
       width: 50%;
       vertical-align: middle;
       padding: 0.3em;
+      margin-left: 1em;
     }
   
   .icon{
@@ -148,6 +144,7 @@ ul {
 .cookies {
   text-align: center;
   font-size: 0.7em;
+  align-items:center;
   @include for-mobile-only {
     font-size: 0.6em;
   }

@@ -14,6 +14,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
   [KEY.login_internal_login]: 'Logg inn som intern',
   [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
+  [KEY.footer_sponsors]: 'Sponsorer',
+  [KEY.footer_contact]: 'Lurer du på noe? Kontakt oss',
+  [KEY.footer_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies her.',
+  [KEY.footer_festivals]: 'Festivaler',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -30,4 +34,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Forgot password?',
   [KEY.login_internal_login]: 'Log in as internal',
   [KEY.login_email_placeholder]: 'Email or membership ID',
+  [KEY.footer_sponsors]: 'Sponsors',
+  [KEY.footer_contact]: 'Questions? Contact us',
+  [KEY.footer_cookies]: 'We use cookies to give you the best experience possible. Read more about cookies here.',
+  [KEY.footer_festivals]: 'Festivals',
 };

@@ -10,3 +10,4 @@ export { ThemeSwitch } from './ThemeSwitch';
 export { ToggleSwitch } from './ToggleSwitch';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
+export { Footer } from './Footer';
