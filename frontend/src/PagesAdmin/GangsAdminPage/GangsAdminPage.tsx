@@ -56,7 +56,7 @@ export function GangsAdminPage() {
             <h2 className={styles.gangTypeHeader}>{element.title_no}</h2>
             <Table
               columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
-              data={element.gangs.map(function (element2, key2) {
+              data={element.gangs.map(function (element2) {
                 return [
                   new AlphabeticTableCell(
                     (

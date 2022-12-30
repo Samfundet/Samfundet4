@@ -1,4 +1,5 @@
 import { UserDto } from '~/dto';
+import { FieldValues, UseFormSetValue } from 'react-hook-form/dist/types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -45,4 +46,20 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
 
 export function getGlobalBackgroundColor(): string {
   return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
+}
+
+export function DTOToForm(
+  data: Record<string, unknown>,
+  setValue: UseFormSetValue<FieldValues>,
+  ignore: string[],
+): void {
+  for (const v in data) {
+    if (!(v in ignore)) {
+      if (new Date(data[v]).getTime() > 0) {
+        setValue(v, new Date(data[v]).toISOString().slice(0, 16));
+      } else if (Number.isInteger(data[v])) {
+        setValue(v, parseInt(data[v]));
+      } else setValue(v, data[v]);
+    }
+  }
 }

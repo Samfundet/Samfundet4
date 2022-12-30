@@ -18,6 +18,8 @@ from root.constants import XCSRFTOKEN
 
 from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
 from .models import (
+    Tag,
+    Image,
     Menu,
     Gang,
     Event,
@@ -35,6 +37,8 @@ from .models import (
     InformationPage,
 )
 from .serializers import (
+    TagSerializer,
+    ImageSerializer,
     GangSerializer,
     MenuSerializer,
     EventSerializer,
@@ -81,9 +85,22 @@ class EventsUpcommingView(APIView):
 
     def get(self, request: Request) -> Response:
         events = event_query(request.query_params)
-        events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')  # TODO Update with duration
         events = [event.to_dict() for event in events_to_dataclass(events=events)]  # type: ignore[attr-defined]
         return Response(data=events)
+
+
+class EventFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {
+            'age_groups': Event.AgeGroup.choices,
+            'status_groups': Event.StatusGroup.choices,
+            'venues': [[v.name] for v in Venue.objects.all()],
+            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
+        }
+        return Response(data=data)
 
 
 class VenueView(ModelViewSet):
@@ -228,3 +245,13 @@ class TableView(ModelViewSet):
 class BookingView(ModelViewSet):
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
+
+
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()

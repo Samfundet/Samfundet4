@@ -7,7 +7,7 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './EventsAdminPage.module.scss';
 import { EventDto } from '~/dto';
-import { getEventsUpcomming } from '~/api';
+import { deleteEvent, getEventsUpcomming } from '~/api';
 import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
 import { reverse } from '~/named-urls';
 
@@ -20,7 +20,8 @@ export function EventsAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
-  useEffect(() => {
+
+  function getEvents() {
     getEventsUpcomming()
       .then((data) => {
         setEvents(data);
@@ -28,20 +29,16 @@ export function EventsAdminPage() {
         setShowSpinner(false);
       })
       .catch(console.error);
+  }
+
+  useEffect(() => {
+    getEvents();
   }, []);
 
-  function deletePage(slug_field: string) {
-    /**
-    deleteInformationPage(slug_field).then((response) => {
-      console.log(response);
-      getevents()
-        .then((data) => {
-          E(data);
-          setShowSpinner(false);
-        })
-        .catch(console.error);
+  function deletePage(id: number) {
+    deleteEvent(id).then(() => {
+      getEvents();
     });
-     */
   }
 
   if (showSpinner) {
@@ -61,7 +58,7 @@ export function EventsAdminPage() {
         <h1 className={styles.header}>
           {t(KEY.edit)} {t(KEY.event)}
         </h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_eventgroup_changelist}>
+        <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
           View in backend
         </Link>
       </div>
@@ -69,7 +66,7 @@ export function EventsAdminPage() {
       <div className={styles.tableContainer}>
         <Table
           columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.event_type), t(KEY.organizer), t(KEY.venue), '']}
-          data={events.map(function (element, key) {
+          data={events.map(function (element) {
             return [
               new AlphabeticTableCell(
                 (
@@ -90,10 +87,29 @@ export function EventsAdminPage() {
               {
                 children: (
                   <div>
-                    <Button theme="blue" display="block">
+                    <Button
+                      theme="blue"
+                      display="block"
+                      onClick={() => {
+                        navigate(
+                          reverse({
+                            pattern: ROUTES.frontend.admin_events_edit,
+                            urlParams: { id: element.id },
+                          }),
+                        );
+                      }}
+                    >
                       {t(KEY.edit)}
                     </Button>
-                    <Button theme="samf" display="block">
+                    <Button
+                      theme="samf"
+                      display="block"
+                      onClick={() => {
+                        if (window.confirm(t(KEY.form_confirm) + ' ' + t(KEY.delete) + ' ' + element.title_no)) {
+                          deletePage(element.id);
+                        }
+                      }}
+                    >
                       {t(KEY.delete)}
                     </Button>{' '}
                   </div>
