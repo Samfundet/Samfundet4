@@ -56,6 +56,22 @@ class VenueDto:
 
 @dataclass_json
 @dataclass
+class TagDto:
+    id: int
+    name: str
+    color: str
+
+@dataclass_json
+@dataclass
+class ImageDto:
+    id: int
+    name: str
+    tags: list[TagDto]
+    image: str
+
+
+@dataclass_json
+@dataclass
 class EventDto:
     id: int
     title_no: str
