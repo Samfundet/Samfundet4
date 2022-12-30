@@ -13,6 +13,8 @@ from root.custom_classes.admin_classes import (
 )
 
 from .models import (
+    Tag,
+    Image,
     Menu,
     Gang,
     Event,
@@ -194,6 +196,31 @@ class EventAdmin(CustomGuardedModelAdmin):
     search_fields = ['id', 'title_no', 'title_en', 'host', 'location']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Tag)
+class TagAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name', 'color']
+    search_fields = ['id', 'name']
+    # filter_horizontal = []
+    list_display_links = ['id']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Image)
+class ImageAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title', 'image']
+    list_display = ['id', 'title', 'image']
+    list_filter = ['tags']
+    search_fields = ['id', 'title', 'image', 'tags']
+    # filter_horizontal = []
+    list_display_links = ['id']
     # autocomplete_fields = []
     list_select_related = True
 

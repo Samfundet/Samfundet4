@@ -18,6 +18,8 @@ from root.constants import XCSRFTOKEN
 
 from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
 from .models import (
+    Tag,
+    Image,
     Menu,
     Gang,
     Event,
@@ -35,6 +37,8 @@ from .models import (
     InformationPage,
 )
 from .serializers import (
+    TagSerializer,
+    ImageSerializer,
     GangSerializer,
     MenuSerializer,
     EventSerializer,
@@ -241,3 +245,13 @@ class TableView(ModelViewSet):
 class BookingView(ModelViewSet):
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
+
+
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()
