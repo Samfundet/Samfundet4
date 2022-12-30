@@ -22,7 +22,10 @@ class Tag(models.Model):
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
 
-    def save(self, *args, **kwargs):
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
         # Saves with random color
         if not self.color or not re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', self.color):
             hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
@@ -41,6 +44,9 @@ class Image(models.Model):
     class Meta:
         verbose_name = 'Image'
         verbose_name_plural = 'Images'
+
+    def __str__(self) -> str:
+        return f'{self.title}'
 
 
 class EventGroup(models.Model):
