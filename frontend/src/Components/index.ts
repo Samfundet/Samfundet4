@@ -1,26 +1,23 @@
 export { Alert } from './Alert';
 export { Button } from './Button';
+export { Dropdown } from './Dropdown';
 export { EventCard } from './EventCard';
+export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
+export { Footer } from './Footer';
 export { InputField } from './InputField';
 export { Link } from './Link';
+export { OpeningHours } from './OpeningHours';
 export { ProgressBar } from './ProgressBar';
 export { PulseEffect } from './PulseEffect';
 export { RadioButton } from './RadioButton';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
-<<<<<<< HEAD
-export { Footer } from './Footer';
-=======
+export { Select } from './Select';
 export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
+export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
-export { EventQuery } from './EventQuery';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
-export { TextAreaField } from './TextAreaField';
-export { OpeningHours } from './OpeningHours';
-export { Dropdown } from './Dropdown';
-export { Select } from './Select';
->>>>>>> origin/master

@@ -27,13 +27,11 @@ export const KEY = {
   login_forgotten_password: 'login_forgotten_password',
   login_internal_login: 'login_internal_login',
   login_email_placeholder: 'login_email_placeholder',
-<<<<<<< HEAD
-  footer_sponsors:'footer_sponsors',
-  footer_contact:'footer_contact',
-  footer_cookies:'footer_cookies',
-  footer_festivals:'footer_festivals'
-  
-=======
+  footer_sponsors: 'footer_sponsors',
+  footer_contact: 'footer_contact',
+  footer_cookies1: 'footer_cookies1',
+  footer_cookies2: 'footer_cookies2',
+  footer_festivals: 'footer_festivals',
   common_text: 'common_text',
   common_search: 'common_search',
   common_choose: 'common_choose',
@@ -93,7 +91,6 @@ export const KEY = {
   end_time: 'start_time',
   organizer: 'organizer',
   venue: 'venue',
->>>>>>> origin/master
 } as const;
 
 /**

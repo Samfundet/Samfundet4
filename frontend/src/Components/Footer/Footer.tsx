@@ -21,8 +21,8 @@ export function Footer({ iconSize }: FooterProps) {
                 <span className={styles.sponsorBox}>
                   <a href="https://www.trondheim.kommune.no/">
                     <img src={trondheimKommune} className={styles.kommuneIcon} />
-                    Trondheim Kommune
                   </a>
+                  <a href="https://www.trondheim.kommune.no/">Trondheim Kommune</a>
                 </span>
                 <span className={styles.sponsorBox}>
                   <a href="https://www.kulturrom.no/">
@@ -57,9 +57,11 @@ export function Footer({ iconSize }: FooterProps) {
         </ul>
       </div>
       <div className={styles.social}>
-        <ul className={styles.contact}>
+        <ul>
           <li>
-            <a href={'https://www.samfundet.no/informasjon/kontaktinfo'}> {t(KEY.footer_contact)}</a>
+            <a href={'https://www.samfundet.no/informasjon/kontaktinfo'} className={styles.contact}>
+              {t(KEY.footer_contact)}
+            </a>
           </li>
         </ul>
         <ul>
@@ -71,32 +73,31 @@ export function Footer({ iconSize }: FooterProps) {
           </li>
           <li>
             <span className={styles.leftbox}>
-              {/* Instagram &nbsp; */}
               <SocialIcon url="https://instagram.com/samfundet" style={{ height: iconSize, width: iconSize }} />
             </span>
             <span className={styles.rightbox}>Org.nr: 970 088 466</span>
           </li>
           <li>
             <span className={styles.leftbox}>
-              {/* Spotify &nbsp; */}
-              <SocialIcon url="https://open.spotify.com/user/samfundet" style={{ height: iconSize, width: iconSize }} />
+              <SocialIcon url="https://www.tiktok.com/@samfundet" style={{ height: iconSize, width: iconSize }} />
             </span>
             <span className={styles.rightbox}>Elgeseter gate 1 </span>
           </li>
           <li>
             <div className={styles.leftbox}>
-              {/* Twitter &nbsp; */}
               <SocialIcon url="https://twitter.com/samfundet" style={{ height: iconSize, width: iconSize }} />
             </div>
             <div className={styles.rightbox}>7030 Trondheim</div>
           </li>
         </ul>
-        <ul className={styles.cookies}>
+        <ul>
           <li>
-            <a href={'http://www.whatarecookies.com/'}> {t(KEY.footer_cookies)} </a>
+            <p className={styles.cookies}>{t(KEY.footer_cookies1)} &nbsp; </p>
+            <a href={'http://www.whatarecookies.com/'} className={styles.cookies}>
+              {t(KEY.footer_cookies2)}
+            </a>
           </li>
         </ul>
-        <p className={styles.cookies}>{t(KEY.footer_cookies)}</p>
       </div>
     </div>
   );

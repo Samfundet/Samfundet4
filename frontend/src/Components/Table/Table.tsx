@@ -1,11 +1,6 @@
 import classNames from 'classnames';
-<<<<<<< HEAD
-import { Children } from 'types';
-import { Button } from "../Button"
-=======
 import { useState } from 'react';
 import { Children } from 'types';
->>>>>>> origin/master
 import styles from './Table.module.scss';
 
 type TableProps = {
@@ -15,25 +10,6 @@ type TableProps = {
 };
 
 export interface ITableCell {
-<<<<<<< HEAD
-  children: Children
-  compare?: (a: ITableCell, b: ITableCell) => number
-}
-
-export function Table({ className, columns, data }: TableProps) {
-
-  function isColumnSortable(index: number) {
-    let column: ITableCell[] = data.map(row => row[index]);
-    return column.reduce((othersSortable: boolean, cell: ITableCell) => {
-      return cell.compare != undefined && othersSortable;
-    }, true)
-  }
-
-  function sortButton(): Children {
-    return <Button { {name: "Sort"} }/>
-  }
-  
-=======
   children: Children;
   compare?: (b: ITableCell) => number;
 }
@@ -109,30 +85,11 @@ export function Table({ className, columns, data }: TableProps) {
     }
   }
 
->>>>>>> origin/master
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead>
           <tr>
-<<<<<<< HEAD
-            {columns && columns?.map((value, index) => {
-                return (
-                  <th key={index}>
-                    {value}
-                    {isColumnSortable(index) && sortButton()}
-                  </th>
-                )
-              })
-            }
-          </tr>
-        </thead>
-        <tbody>
-          {data && data.map((row, index1) => (
-            <tr key={index1}>
-              {row && row.map((cell, index2) => <td key={index2}>{cell.children}</td>)}
-            </tr>
-=======
             {columns &&
               columns?.map((value, index) => {
                 if (isColumnSortable(index)) {
@@ -152,7 +109,6 @@ export function Table({ className, columns, data }: TableProps) {
         <tbody>
           {sortedData(data).map((row, index1) => (
             <tr key={index1}>{row && row.map((cell, index2) => <td key={index2}>{cell.children}</td>)}</tr>
->>>>>>> origin/master
           ))}
         </tbody>
       </table>

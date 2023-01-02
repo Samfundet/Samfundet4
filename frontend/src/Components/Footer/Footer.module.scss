@@ -1,25 +1,31 @@
 @import 'src/constants';
 @import 'src/mixins';
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: $grey-5;
-  text-align: left;
-}
 
 .sponsor {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 2em;
+
   .sponsorBox{
     width: 10em;
     margin: 0.5em;
     justify-content: center;
-    flex-wrap: wrap;
+    display: inline-block;
+    a {
+      font-size: 0.8em;
+      @include for-mobile-only {
+        font-size: 0.6em;
+      }
+      color: inherit;
+      text-decoration: initial;
+      text-decoration: none;
+      white-space: nowrap ;
+      display: inline-block;
+      vertical-align: middle;
+      
+    }
   }
 
   .centerUL{
@@ -73,24 +79,13 @@
     background-repeat: no-repeat;
     vertical-align: middle;
   }
-
-  a {
-    font-size: 0.8em;
-    @include for-mobile-only {
-      font-size: 0.6em;
-    }
-    text-decoration: none;
-  }
-
-
-  }
+}
 
 .social{
   background-color: $grey-5;
   text-align: center;
   align-items:center;
   justify-content:center;
-  // display:inline-block;
   padding: 0;
 
   li {
@@ -118,14 +113,6 @@
       padding: 0.3em;
       margin-left: 1em;
     }
-  
-  .icon{
-    height: 100em;
-    width: 1000em;
-    font-size: 10em;
-  }
-
-
   }
 }
 
@@ -136,19 +123,17 @@
   @include for-mobile-only {
     font-size: 0.8em;
   }
-  a {
-    text-decoration: none;
-  }
+  // color: inherit;
+  // text-decoration: none;
 }
 
 .cookies {
   text-align: center;
   font-size: 0.7em;
   align-items:center;
+  color: inherit;
+  text-decoration: none;
   @include for-mobile-only {
     font-size: 0.6em;
-  }
-  a {
-    text-decoration: none;
   }
 }

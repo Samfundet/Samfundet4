@@ -1,27 +1,24 @@
-export { default as englishFlag } from './english_flag.png';
-export { default as logoBlack } from './logo_black.png';
-export { default as logoWhite } from './logo_white.png';
-export { default as norwegianFlag } from './norwegian_flag.png';
-export { default as samfundetLogo } from './samfundet-logo.svg';
-export { default as profileIcon } from './user.png';
-<<<<<<< HEAD
-export { default as uka } from './uka.png';
-export { default as isfit } from './isfit.png';
-export { default as reitan } from './reitan.png';
-export { default as kulturRom } from './kulturrom.png';
-export { default as trondheimKommune } from './trondheim_kommune.png';
-=======
 export { default as bodegaen } from './bodegaen.jpg';
 export { default as daglighallen } from './daglighallen.jpg';
 export { default as edgar } from './edgar.jpg';
+export { default as englishFlag } from './english_flag.png';
+export { default as isfit } from './isfit.png';
+export { default as kitteh } from './kitteh.jpeg';
 export { default as klubben } from './klubben.jpg';
 export { default as knaus } from './knaus.jpg';
+export { default as kulturRom } from './kulturrom.png';
+export { default as logoBlack } from './logo_black.png';
+export { default as logoWhite } from './logo_white.png';
 export { default as lyche } from './lyche.jpg';
+export { default as norwegianFlag } from './norwegian_flag.png';
+export { default as reitan } from './reitan.png';
 export { default as runderode } from './runderode.jpg';
 export { default as rundhallen } from './rundhallen.jpg';
+export { default as samfundetLogo } from './samfundet-logo.svg';
 export { default as selskapssiden } from './selskapssiden.jpg';
 export { default as splash } from './splash.jpeg';
 export { default as storsalen } from './storsalen.jpg';
 export { default as strossa } from './strossa.jpg';
->>>>>>> origin/master
-export { default as kitteh } from './kitteh.jpeg';
+export { default as trondheimKommune } from './trondheim_kommune.png';
+export { default as uka } from './uka.png';
+export { default as profileIcon } from './user.png';

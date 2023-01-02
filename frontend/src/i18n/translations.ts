@@ -21,12 +21,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
   [KEY.login_internal_login]: 'Logg inn som intern',
   [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
-<<<<<<< HEAD
   [KEY.footer_sponsors]: 'Sponsorer',
   [KEY.footer_contact]: 'Lurer du på noe? Kontakt oss',
-  [KEY.footer_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies her.',
+  [KEY.footer_cookies1]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no.',
+  [KEY.footer_cookies2]: 'Les mer om cookies her.',
   [KEY.footer_festivals]: 'Festivaler',
-=======
   [KEY.common_title]: 'Tittel',
   [KEY.common_text]: 'Tekst',
   [KEY.common_search]: 'Søk',
@@ -92,7 +91,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.end_time]: 'Sluttid',
   [KEY.organizer]: 'Arrangør',
   [KEY.venue]: 'Lokale',
->>>>>>> origin/master
 };
 
 export const en: Record<KeyValues, string> = {
@@ -119,12 +117,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.login_forgotten_password]: 'Forgot password?',
   [KEY.login_internal_login]: 'Log in as internal',
   [KEY.login_email_placeholder]: 'Email or membership ID',
-<<<<<<< HEAD
   [KEY.footer_sponsors]: 'Sponsors',
   [KEY.footer_contact]: 'Questions? Contact us',
-  [KEY.footer_cookies]: 'We use cookies to give you the best experience possible. Read more about cookies here.',
+  [KEY.footer_cookies1]: 'We use cookies to give you the best experience possible.',
+  [KEY.footer_cookies2]: 'Read more about cookies here.',
   [KEY.footer_festivals]: 'Festivals',
-=======
   [KEY.gang]: 'Group',
   [KEY.gangs_title]: 'The groups at Samfundet',
   [KEY.gangs_text]:
@@ -184,5 +181,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.end_time]: 'End time',
   [KEY.organizer]: 'Organizer',
   [KEY.venue]: 'Venue',
->>>>>>> origin/master
+  admin_information_new_page: '',
+  admin_information_create_page: '',
 };
