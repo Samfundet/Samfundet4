@@ -2,7 +2,6 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from '~/AppRoutes';
 import { Navbar } from '~/Components/Navbar';
-import {Footer} from '~/Components/Footer';
 
 // Neccessary import for translations.
 import './i18n/i18n';
@@ -13,13 +12,6 @@ export function App() {
   const localSetup = isDev ? '{"allow_local": true}' : undefined;
 
   return (
-<<<<<<< HEAD
-    <BrowserRouter>
-      <Navbar />
-      <AppRoutes />
-      <Footer iconSize={45}/>
-    </BrowserRouter>
-=======
     <HelmetProvider>
       <BrowserRouter>
         {goatCounterCode && (
@@ -40,6 +32,5 @@ export function App() {
         <AppRoutes />
       </BrowserRouter>
     </HelmetProvider>
->>>>>>> origin/master
   );
 }
