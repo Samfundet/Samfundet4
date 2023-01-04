@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner, FormInputField, FormTextAreaField } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -12,8 +12,6 @@ import { STATUS } from '~/http_status_codes';
 import { reverse } from '~/named-urls';
 import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
-import { FormInputField } from '~/Components/InputField';
-import { FormTextAreaField } from '~/Components/TextAreaField';
 
 export function InformationFormAdminPage() {
   const navigate = useNavigate();

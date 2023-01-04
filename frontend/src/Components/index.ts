@@ -20,3 +20,6 @@ export { TextAreaField } from './TextAreaField';
 export { OpeningHours } from './OpeningHours';
 export { Dropdown } from './Dropdown';
 export { Select } from './Select';
+export { FormSelect } from './FormSelect';
+export { FormInputField } from './FormInputField';
+export { FormTextAreaField } from './FormTextAreaField';

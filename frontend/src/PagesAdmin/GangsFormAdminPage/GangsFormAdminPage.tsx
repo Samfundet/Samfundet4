@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner, FormSelect, FormInputField } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -10,8 +10,6 @@ import { getGang, getGangForm, postGang, putGang } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
-import { FormInputField } from '~/Components/InputField';
-import { FormSelect } from '~/Components/Select';
 
 export function GangsFormAdminPage() {
   const navigate = useNavigate();

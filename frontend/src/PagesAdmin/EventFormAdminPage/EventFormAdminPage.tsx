@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner, FormSelect, FormInputField, FormTextAreaField } from '~/Components';
 
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
@@ -9,9 +9,6 @@ import { ROUTES } from '~/routes';
 import styles from './EventFormAdminPage.module.scss';
 import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
 import { useForm } from 'react-hook-form';
-import { FormInputField } from '~/Components/InputField';
-import { FormTextAreaField } from '~/Components/TextAreaField';
-import { FormSelect } from '~/Components/Select/FormSelect';
 import { STATUS } from '~/http_status_codes';
 import { DTOToForm } from '~/utils';
 
