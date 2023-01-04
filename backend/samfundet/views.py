@@ -81,9 +81,22 @@ class EventsUpcommingView(APIView):
 
     def get(self, request: Request) -> Response:
         events = event_query(request.query_params)
-        events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')  # TODO Update with duration
         events = [event.to_dict() for event in events_to_dataclass(events=events)]  # type: ignore[attr-defined]
         return Response(data=events)
+
+
+class EventFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {
+            'age_groups': Event.AgeGroup.choices,
+            'status_groups': Event.StatusGroup.choices,
+            'venues': [[v.name] for v in Venue.objects.all()],
+            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
+        }
+        return Response(data=data)
 
 
 class VenueView(ModelViewSet):
