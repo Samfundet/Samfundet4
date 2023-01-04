@@ -65,7 +65,7 @@ export function InformationAdminPage() {
       <div className={styles.tableContainer}>
         <Table
           columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']}
-          data={informationPages.map(function (element, key) {
+          data={informationPages.map(function (element) {
             return [
               new AlphabeticTableCell(
                 (

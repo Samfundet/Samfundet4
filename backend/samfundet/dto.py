@@ -60,16 +60,21 @@ class EventDto:
     id: int
     title_no: str
     title_en: str
-    start_dt: datetime
-    end_dt: datetime
     description_long_no: str
     description_long_en: str
     description_short_no: str
     description_short_en: str
-    publish_dt: datetime
-    host: str
     location: str
     event_group: EventGroupDto
+    status_group: str
+    age_group: str
+    codeword: str
+    start_dt: datetime
+    duration: int
+    end_dt: datetime
+    publish_dt: datetime
+    host: str
+    banner_image: str
     price_group: str
 
 
