@@ -105,7 +105,7 @@ export function EventsAdminPage() {
                       theme="samf"
                       display="block"
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${element.title_no}`) {
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${element.title_no}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}

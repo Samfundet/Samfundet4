@@ -145,12 +145,12 @@ export async function deleteEvent(id: number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
 
-  return response.data;
+  return response;
 }
 
-export async function getEventForm(): Promise<Record<string, unknown>> {
+export async function getEventForm(): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
-  const response = await axios.get<Record<string, unknown>>(url, { withCredentials: true });
+  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
 
   return response.data;
 }
