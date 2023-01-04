@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './EventFormAdminPage.module.scss';
-import { getEvent, getEventForm, postEvent } from '~/api';
+import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
 import { useForm } from 'react-hook-form';
 import { FormInputField } from '~/Components/InputField';
 import { FormTextAreaField } from '~/Components/TextAreaField';
@@ -59,7 +59,7 @@ export function EventFormAdminPage() {
   }, [id]);
 
   const onSubmit = (data) => {
-    postEvent(data)
+    (id ? putEvent(id, data) : postEvent(data))
       .then(() => {
         navigate(ROUTES.frontend.admin_events_upcomming);
       })

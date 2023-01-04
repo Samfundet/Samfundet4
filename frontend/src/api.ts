@@ -141,6 +141,13 @@ export async function postEvent(data: EventDto): Promise<EventDto> {
   return response.data;
 }
 
+export async function putEvent(id: number, data: EventDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  const response = await axios.put<EventDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+
 export async function deleteEvent(id: number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
@@ -264,8 +271,8 @@ export async function postGang(data: GangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(data: GangDto): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: data.id } });
+export async function putGang(id: number, data: GangDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
   const response = await axios.put<GangDto>(url, data, { withCredentials: true });
   return response;
 }

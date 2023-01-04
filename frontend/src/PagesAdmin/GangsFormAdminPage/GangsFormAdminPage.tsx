@@ -1,6 +1,6 @@
-import { useEffect, useState, SyntheticEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, InputField, SamfundetLogoSpinner, Select } from '~/Components';
+import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -57,7 +57,7 @@ export function GangsFormAdminPage() {
   }, [id]);
 
   const onSubmit = (data) => {
-    postGang(data)
+    (id ? putGang(id, data) : postGang(data))
       .then(() => {
         navigate(ROUTES.frontend.admin_gangs);
       })
