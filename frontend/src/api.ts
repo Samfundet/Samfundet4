@@ -105,10 +105,9 @@ export async function postInformationPage(data: InformationPageDto): Promise<Inf
   return response.data;
 }
 
-export async function putInformationPage(page: InformationPageDto): Promise<AxiosResponse> {
+export async function putInformationPage(slug_field: string, page: InformationPageDto): Promise<AxiosResponse> {
   const url =
-    BACKEND_DOMAIN +
-    reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
   return response;
 }
@@ -146,7 +145,6 @@ export async function putEvent(id: number, data: EventDto): Promise<AxiosRespons
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
   return response;
 }
-
 
 export async function deleteEvent(id: number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });

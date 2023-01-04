@@ -1,6 +1,6 @@
-import { useEffect, useState, SyntheticEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, InputField, SamfundetLogoSpinner, TextAreaField } from '~/Components';
+import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -10,17 +10,24 @@ import ReactMarkdown from 'react-markdown';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { reverse } from '~/named-urls';
+import { useForm } from 'react-hook-form';
+import { DTOToForm } from '~/utils';
+import { FormInputField } from '~/Components/InputField';
+import { FormTextAreaField } from '~/Components/TextAreaField';
 
 export function InformationFormAdminPage() {
   const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  const [name, setName] = useState({ value: '', error: '' });
-  const [titleNo, setTitleNo] = useState({ value: '', error: '' });
-  const [textNo, setTextNo] = useState({ value: '', error: '' });
-  const [titleEn, setTitleEn] = useState({ value: '', error: '' });
-  const [textEn, setTextEn] = useState({ value: '', error: '' });
+  const {
+    register,
+    handleSubmit,
+    setError,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
   // If form has a slugfield, check if it exists, and then load that item.
   const { slugField } = useParams();
@@ -34,14 +41,9 @@ export function InformationFormAdminPage() {
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => {
-          setName({ value: data.slug_field, error: '' });
-          setTitleNo({ value: data.title_no, error: '' });
-          setTitleEn({ value: data.title_en, error: '' });
-          setTextEn({ value: data.text_en, error: '' });
-          setTextNo({ value: data.text_no, error: '' });
+          DTOToForm(data, setValue, []);
         })
         .catch((data) => {
-          console.log(data);
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin_information);
@@ -59,55 +61,22 @@ export function InformationFormAdminPage() {
     );
   }
 
-  function post(event: SyntheticEvent) {
-    event.preventDefault();
-    const data = {
-      title_no: titleNo.value,
-      title_en: titleEn.value,
-      text_no: textNo.value,
-      text_en: textEn.value,
-    };
-    if (slugField) {
-      data.slug_field = slugField;
-      putInformationPage(data)
-        .then((status) => {
-          console.log(status);
-          navigate(
-            reverse({ pattern: ROUTES.frontend.information_page_detail, urlParams: { slugField: data.slug_field } }),
-          );
-        })
-        .catch((e) => {
-          console.error(e.response.data);
-        });
-    } else {
-      data.slug_field = name.value;
-      postInformationPage(data)
-        .then((status) => {
-          console.log(status);
-          navigate(
-            reverse({ pattern: ROUTES.frontend.information_page_detail, urlParams: { slugField: data.slug_field } }),
-          );
-        })
-        .catch((e) => {
-          console.error(e.response.data);
-          if ('slug_field' in e.response.data) {
-            setName({ value: name.value, error: e.response.data.slug_field });
-          }
-          if ('title_no' in e.response.data) {
-            setTitleNo({ value: titleNo.value, error: e.response.data.title_no });
-          }
-          if ('title_en' in e.response.data) {
-            setTitleEn({ value: titleEn.value, error: e.response.data.title_en });
-          }
-          if ('text_en' in e.response.data) {
-            setTextEn({ value: textEn.value, error: e.response.data.text_en });
-          }
-          if ('text_no' in e.response.data) {
-            setTextNo({ value: textNo.value, error: e.response.data.text_no });
-          }
-        });
-    }
-  }
+  const onSubmit = (data) => {
+    (slugField ? putInformationPage(slugField, data) : postInformationPage(data))
+      .then(() => {
+        navigate(
+          reverse({
+            pattern: ROUTES.frontend.information_page_detail,
+            urlParams: { slugField: slugField ? slugField : data.slug_field },
+          }),
+        );
+      })
+      .catch((e) => {
+        for (const err in e.response.data) {
+          setError(err, { type: 'custom', message: e.response.data[err][0] });
+        }
+      });
+  };
 
   return (
     <Page>
@@ -121,46 +90,44 @@ export function InformationFormAdminPage() {
       <h1 className={styles.header}>
         {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
       </h1>
-      <form onSubmit={post}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         {!slugField && (
           <div className={styles.inputGroup}>
-            <InputField
+            <FormInputField
+              errors={errors}
               className={styles.input}
-              value={name.value}
-              error={name.error}
-              onChange={(e) => setName({ value: e ? e.currentTarget.value : '', error: '' })}
+              name="slug_field"
+              register={register}
+              required={t(KEY.form_required)}
             >
               <p className={styles.labelText}>{t(KEY.name)}</p>
-            </InputField>
+            </FormInputField>
           </div>
         )}
         <div className={styles.inputGroup}>
           <h2 className={styles.inputGroupHeader}>{t(KEY.norwegian)}</h2>
           <div className={styles.row}>
             <div className={styles.col}>
-              <InputField
+              <FormInputField
+                errors={errors}
                 className={styles.input}
-                value={titleNo.value}
-                error={titleNo.error}
-                onChange={(e) => setTitleNo({ value: e ? e.currentTarget.value : '', error: '' })}
+                name="title_no"
+                register={register}
+                required={t(KEY.form_required)}
               >
                 <p className={styles.labelText}>
                   {t(KEY.norwegian)} {t(KEY.common_title)}
                 </p>
-              </InputField>
-              <TextAreaField
-                className={styles.input}
-                value={textNo.value}
-                onChange={(e) => setTextNo({ value: e ? e.currentTarget.value : '', error: '' })}
-              >
+              </FormInputField>
+              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_no" register={register}>
                 <p className={styles.labelText}>
                   {t(KEY.norwegian)} {t(KEY.content)}
                 </p>
-              </TextAreaField>
+              </FormTextAreaField>
             </div>
             <div className={styles.col}>
               <div className={styles.markdownField}>
-                <ReactMarkdown>{textNo.value}</ReactMarkdown>
+                <ReactMarkdown>{getValues('text_no')}</ReactMarkdown>
               </div>
             </div>
           </div>
@@ -169,29 +136,26 @@ export function InformationFormAdminPage() {
           <h2 className={styles.inputGroupHeader}>{t(KEY.english)}</h2>
           <div className={styles.row}>
             <div className={styles.col}>
-              <InputField
+              <FormInputField
+                errors={errors}
                 className={styles.input}
-                value={titleEn.value}
-                error={titleEn.error}
-                onChange={(e) => setTitleEn({ value: e ? e.currentTarget.value : '', error: '' })}
+                name="title_en"
+                register={register}
+                required={t(KEY.form_required)}
               >
                 <p className={styles.labelText}>
                   {t(KEY.english)} {t(KEY.common_title)}
                 </p>
-              </InputField>
-              <TextAreaField
-                className={styles.input}
-                value={textEn.value}
-                onChange={(e) => setTextEn({ value: e ? e.currentTarget.value : '', error: '' })}
-              >
+              </FormInputField>
+              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_en" register={register}>
                 <p className={styles.labelText}>
                   {t(KEY.english)} {t(KEY.content)}
                 </p>
-              </TextAreaField>
+              </FormTextAreaField>
             </div>
             <div className={styles.col}>
               <div className={styles.markdownField}>
-                <ReactMarkdown>{textEn.value}</ReactMarkdown>
+                <ReactMarkdown>{getValues('text_en')}</ReactMarkdown>
               </div>
             </div>
           </div>
