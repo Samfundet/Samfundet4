@@ -13,6 +13,7 @@ import {
   VenueDto,
   GangDto,
   EventGroupDto,
+  ImageDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -278,6 +279,13 @@ export async function putGang(id: number, data: GangDto): Promise<AxiosResponse>
 export async function getGangForm(): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangform });
   const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getImages(): Promise<ImageDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
+  const response = await axios.get<ImageDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
