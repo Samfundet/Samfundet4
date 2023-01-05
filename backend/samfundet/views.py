@@ -194,6 +194,14 @@ class GangTypeView(ModelViewSet):
     queryset = GangType.objects.all()
 
 
+class GangFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {'gang_type': [[e.id, e.title_no] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        return Response(data=data)
+
+
 class EventGroupView(ModelViewSet):
     http_method_names = ['get']
     serializer_class = EventGroupSerializer

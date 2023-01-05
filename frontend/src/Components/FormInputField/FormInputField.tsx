@@ -1,45 +1,44 @@
 import classNames from 'classnames';
-import { Children } from '~/types';
 import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
-import styles from './TextAreaField.module.scss';
+import { Children } from '~/types';
+import styles from './FormInputField.module.scss';
 
-type TextAreaFieldProps = {
+type types = 'text' | 'number' | 'email' | 'password';
+
+type FormInputFieldProps = {
   children?: Children;
   className?: string;
-  inputClassName?: string;
   labelClassName?: string;
-  rows?: number;
-  cols?: number;
+  inputClassName?: string;
+  type?: types;
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;
   errors?: Record<string, unknown>;
 };
 
-export function FormTextAreaField({
+export function FormInputField({
   children,
   className,
-  inputClassName,
   labelClassName,
+  inputClassName,
   errors,
-  cols,
   name,
   required,
   register,
-  rows = 10,
-}: TextAreaFieldProps) {
+  type = 'text',
+}: FormInputFieldProps) {
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
-        <textarea
+        <input
           className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
+          type={type}
           {...register(name, { required })}
-          rows={rows}
-          cols={cols}
         />
+        {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
       </label>
-      {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
     </div>
   );
 }

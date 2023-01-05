@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
 import { Children } from '~/types';
-import styles from './Select.module.scss';
+import styles from './FormSelect.module.scss';
 
-type SelectProps = {
+type FormSelectProps = {
   className?: string;
   labelClassName?: string;
   selectClassName?: string;
@@ -25,7 +25,7 @@ export function FormSelect({
   register,
   errors,
   children,
-}: SelectProps) {
+}: FormSelectProps) {
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>

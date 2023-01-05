@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner, FormSelect, FormInputField, FormTextAreaField } from '~/Components';
 
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './EventFormAdminPage.module.scss';
-import { getEvent, getEventForm, postEvent } from '~/api';
+import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
 import { useForm } from 'react-hook-form';
-import { FormInputField } from '~/Components/InputField';
-import { FormTextAreaField } from '~/Components/TextAreaField';
-import { FormSelect } from '~/Components/Select/FormSelect';
 import { STATUS } from '~/http_status_codes';
 import { DTOToForm } from '~/utils';
 
@@ -52,15 +49,14 @@ export function EventFormAdminPage() {
           console.log(data);
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_information);
+            navigate(ROUTES.frontend.admin_events_upcomming);
           }
         });
     }
   }, [id]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    postEvent(data)
+    (id ? putEvent(id, data) : postEvent(data))
       .then(() => {
         navigate(ROUTES.frontend.admin_events_upcomming);
       })
