@@ -1,5 +1,4 @@
 import {
-  getAllPermissions,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
@@ -35,13 +34,6 @@ export function ApiTestingPage() {
       </Button>
       <Button theme="samf" className={styles.btn} onClick={() => logout().then(console.log).catch(console.error)}>
         logout
-      </Button>
-      <Button
-        theme="samf"
-        className={styles.btn}
-        onClick={() => getAllPermissions().then(console.log).catch(console.error)}
-      >
-        getAllPermissions
       </Button>
       <Button theme="samf" className={styles.btn} onClick={() => getUser().then(console.log).catch(console.error)}>
         getUser

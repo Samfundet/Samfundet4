@@ -1,9 +1,9 @@
-import { getAllPermissions, getCsrfToken, getSaksdokumenter, getUser, login, logout } from '~/api';
+import { getCsrfToken, getSaksdokumenter, getUser, login, logout } from '~/api';
 import logo from '~/assets/logo_black.png';
 import splash from '~/assets/splash.jpeg';
 import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
-import { AUTH_ADD_GROUP } from '~/permissions';
+import { SAMFUNDET_ADD_EVENT } from '~/permissions';
 import { hasPerm } from '~/utils';
 import styles from './HomePage.module.scss';
 
@@ -22,7 +22,6 @@ export function HomePage() {
         <Button onClick={() => getCsrfToken()}>csrf</Button>
         <Button onClick={() => login('emilte', 'Django123')}>login</Button>
         <Button onClick={() => getUser()}>user</Button>
-        <Button onClick={() => getAllPermissions()}>perms</Button>
         <Button onClick={() => getSaksdokumenter()}>saksdok</Button>
         <Button onClick={() => logout().then(() => setUser(undefined))}>logout</Button>
         <Button
@@ -32,8 +31,8 @@ export function HomePage() {
               console.log(
                 hasPerm({
                   user: user,
-                  permission: AUTH_ADD_GROUP,
-                  obj: { id: '1', app_label: 'auth', model: 'group' },
+                  permission: SAMFUNDET_ADD_EVENT,
+                  obj: 339,
                 }),
               );
             });

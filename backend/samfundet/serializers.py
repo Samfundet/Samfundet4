@@ -4,12 +4,13 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
-    Booking,
     Menu,
     Gang,
     Event,
+    EventGroup,
     Table,
     Venue,
+    Booking,
     Profile,
     MenuItem,
     GangType,
@@ -24,9 +25,17 @@ User = get_user_model()
 
 
 class EventSerializer(serializers.ModelSerializer):
+    end_dt = serializers.DateTimeField(required=False)
 
     class Meta:
         model = Event
+        fields = '__all__'
+
+
+class EventGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EventGroup
         fields = '__all__'
 
 
@@ -112,6 +121,7 @@ class GangSerializer(serializers.ModelSerializer):
 
 
 class GangTypeSerializer(serializers.ModelSerializer):
+    gangs = GangSerializer(read_only=True, many=True)
 
     class Meta:
         model = GangType

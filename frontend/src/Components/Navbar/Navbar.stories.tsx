@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthContextProvider } from '~/AuthContext';
 import { GlobalContextProvider } from '~/GlobalContextProvider';
 import { Navbar } from './Navbar';
 
@@ -11,11 +12,13 @@ export default {
 
 const Template: ComponentStory<typeof Navbar> = () => {
   return (
-    <GlobalContextProvider>
-      <BrowserRouter>
-        <Navbar />
-      </BrowserRouter>
-    </GlobalContextProvider>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <BrowserRouter>
+          <Navbar />
+        </BrowserRouter>
+      </GlobalContextProvider>
+    </AuthContextProvider>
   );
 };
 

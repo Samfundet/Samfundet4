@@ -7,24 +7,21 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
+from django.utils import timezone
 from django.contrib.auth import login, get_user_model, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import XCSRFTOKEN
 
-from .utils import (
-    user_to_dataclass,
-    users_to_dataclass,
-    groups_to_dataclass,
-    permissions_to_dataclass,
-)
+from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
 from .models import (
     Menu,
     Gang,
     Event,
+    EventGroup,
     Table,
     Venue,
     Profile,
@@ -41,6 +38,7 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
+    EventGroupSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
@@ -61,6 +59,44 @@ User = get_user_model()
 class EventView(ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+
+
+class EventPerDayView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+
+        events = Event.objects.all()  # To be used if some kind of query is used
+        dates = Event.objects.all().order_by('start_dt__date').values_list('start_dt__date').distinct()
+        events = {
+            str(date[0]):
+            [event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))]  # type: ignore[attr-defined]
+            for date in dates
+        }
+        return Response(data=events)
+
+
+class EventsUpcommingView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        events = event_query(request.query_params)
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')  # TODO Update with duration
+        events = [event.to_dict() for event in events_to_dataclass(events=events)]  # type: ignore[attr-defined]
+        return Response(data=events)
+
+
+class EventFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {
+            'age_groups': Event.AgeGroup.choices,
+            'status_groups': Event.StatusGroup.choices,
+            'venues': [[v.name] for v in Venue.objects.all()],
+            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
+        }
+        return Response(data=data)
 
 
 class VenueView(ModelViewSet):
@@ -104,7 +140,7 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        user = user_to_dataclass(user=request.user, flat=False)
+        user = user_to_dataclass(user=request.user)
         return Response(data=user.to_dict())  # type: ignore[attr-defined]
 
 
@@ -112,25 +148,16 @@ class AllUsersView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        users = users_to_dataclass(users=User.objects.all(), flat=False)
+        users = users_to_dataclass(users=User.objects.all())
         users_objs = [user.to_dict() for user in users]  # type: ignore[attr-defined]
         return Response(data=users_objs)
-
-
-class AllPermissionsView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request) -> Response:
-        all_permissions = permissions_to_dataclass(permissions=Permission.objects.all())
-        all_permissions_objs = [permission.to_dict() for permission in all_permissions]  # type: ignore[attr-defined]
-        return Response(data=all_permissions_objs)
 
 
 class AllGroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        all_groups = groups_to_dataclass(groups=list(Group.objects.all()), flat=False)
+        all_groups = groups_to_dataclass(groups=Group.objects.all())
         all_groups_objs = [group.to_dict() for group in all_groups]  # type: ignore[attr-defined]
         return Response(data=all_groups_objs)
 
@@ -162,8 +189,23 @@ class GangView(ModelViewSet):
 
 
 class GangTypeView(ModelViewSet):
+    http_method_names = ['get']
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
+
+
+class GangFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {'gang_type': [[e.id, e.title_no] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        return Response(data=data)
+
+
+class EventGroupView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = EventGroupSerializer
+    queryset = EventGroup.objects.all()
 
 
 ### Information Page ###

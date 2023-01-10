@@ -8,8 +8,10 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('events', views.EventView, 'events')
+router.register('eventgroups', views.EventGroupView, 'eventgroups')
 router.register('venues', views.VenueView, 'venues')
 router.register('gangs', views.GangView, 'gangs')
+router.register('gangsorganized', views.GangTypeView, 'gangsorganized')
 router.register('information', views.InformationPageView, 'information')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
@@ -31,5 +33,8 @@ urlpatterns = [
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
-    path('permissions/', views.AllPermissionsView.as_view(), name='permissions'),
+    path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
+    path('events-upcomming/', views.EventsUpcommingView.as_view(), name='eventsupcomming'),
+    path('events/form/', views.EventFormView.as_view(), name='eventsform'),
+    path('gangs/form/', views.GangFormView.as_view(), name='gangform')
 ]

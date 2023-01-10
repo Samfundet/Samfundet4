@@ -1,0 +1,50 @@
+@import 'src/constants';
+
+/* stylelint-disable selector-max-combinators, selector-max-compound-selectors, selector-max-type, max-nesting-depth */
+
+.table_samf {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px;
+  text-align: left;
+  overflow: hidden;
+  box-shadow: 0 0 .5em .1em rgba(0, 0, 0, 0.4);
+
+  thead {
+    background-color: $red-samf;
+
+    tr {
+      th {
+        padding: .4em .75em;
+        color: $white;
+        font-weight: 100;
+        font-size: 1.3em;
+        a {
+          display: block;
+        }
+      }
+    }
+
+  }
+
+  tbody {
+    tr {
+      td {
+        padding: .2em .75em;
+      }
+      &:hover {
+        filter: brightness(102%);
+      }
+    }
+    tr:nth-child(even) {
+      background-color: $grey-4;
+    }
+    tr:nth-child(odd) {
+      background-color: $grey-3;
+    }
+  }
+  
+}
+
+/* stylelint-enable */

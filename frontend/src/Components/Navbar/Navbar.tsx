@@ -6,10 +6,10 @@ import { logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { useDesktop } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useDesktop } from '~/hooks';
 import styles from './Navbar.module.scss';
 
 export function Navbar() {
@@ -42,7 +42,7 @@ export function Navbar() {
   const profileButton = (
     <div className={isDesktop ? styles.navbar_profile_button : styles.popup_profile}>
       <img src={profileIcon} className={styles.profile_icon}></img>
-      <Link to={ROUTES.frontend.home} className={styles.profile_text}>
+      <Link to={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
       </Link>
     </div>
@@ -64,14 +64,14 @@ export function Navbar() {
   const navbarHeaders = (
     <>
       <Link
-        to={ROUTES.frontend.health}
+        to={ROUTES.frontend.events}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
         {t(KEY.common_event)}
       </Link>
       <Link
-        to={ROUTES.frontend.information_page_list}
+        to={ROUTES.frontend.about}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >
@@ -110,7 +110,7 @@ export function Navbar() {
       {!user && (
         <Button
           theme="secondary"
-          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             navigate(ROUTES.frontend.login);
             setMobileNavigation(false);
@@ -123,7 +123,7 @@ export function Navbar() {
       {user && (
         <Button
           theme="secondary"
-          className={isDesktop ? styles.navbar_internal_button : styles.popup_internal_button}
+          className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             logout()
               .then((response) => {

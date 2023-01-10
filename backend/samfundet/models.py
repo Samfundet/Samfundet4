@@ -4,6 +4,7 @@ from datetime import time, timedelta
 from guardian.shortcuts import assign_perm
 
 from django.db import models
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
@@ -12,6 +13,7 @@ from root.utils import permissions
 
 
 class EventGroup(models.Model):
+    name = models.CharField(max_length=140)
 
     class Meta:
         verbose_name = 'EventGroup'
@@ -19,19 +21,49 @@ class EventGroup(models.Model):
 
 
 class Event(models.Model):
+
+    # INFO
     title_no = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
-    start_dt = models.DateTimeField(blank=True, null=True)
-    end_dt = models.DateTimeField(blank=True, null=True)
     description_long_no = models.TextField(blank=True, null=True)
     description_long_en = models.TextField(blank=True, null=True)
     description_short_no = models.TextField(blank=True, null=True)
     description_short_en = models.TextField(blank=True, null=True)
-    publish_dt = models.DateTimeField(blank=True, null=True)
-    host = models.CharField(max_length=140, blank=True, null=True)
-    location = models.CharField(max_length=140, blank=True, null=True)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
+    location = models.CharField(max_length=140, blank=True, null=True)
+    codeword = models.CharField(max_length=140, blank=True, null=True)
 
+    # Duration
+    start_dt = models.DateTimeField(blank=True, null=True)
+    duration = models.PositiveIntegerField(blank=True, null=False)
+    publish_dt = models.DateTimeField(blank=True, null=True)
+
+    # Host
+    host = models.CharField(max_length=140, blank=True, null=True)
+
+    # Display
+    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner')  # TODO fix null response
+
+    # TODO Maybe add color choice? https://github.com/Samfundet/Samfundet4/issues/316
+    # TODO add social media?
+
+    # Choice infos
+    class AgeGroup(models.TextChoices):
+        NO_RESTRICTION = None, _('Ingen aldersgrense')
+        AGE_18 = 'EIGHTEEN', _('18 år')
+        AGE_20 = 'TWENTY', _('20 år')
+        MIXED = 'MIXED', _('18 år (student), 20 år (ikke-student)')
+
+    class StatusGroup(models.TextChoices):
+        ACTIVE = 'active', _('Aktiv')
+        ARCHIVED = 'archived', _('Arkivert')
+        CANCELED = 'canceled', _('Avlyst')
+
+    status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
+    age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
+
+    # Price
+    # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
     class PriceGroup(models.TextChoices):
         INCLUDED = 'INCLUDED', _('Included with entrance')
         FREE = 'FREE', _('Free')
@@ -39,6 +71,10 @@ class Event(models.Model):
         REGISTRATION = 'REGISTRATION', _('Free with registration')
 
     price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
+    capacity = models.PositiveIntegerField(blank=True, null=True)
+
+    def end_dt(self) -> timezone.datetime:
+        return self.start_dt + timezone.timedelta(minutes=self.duration)
 
     class Meta:
         verbose_name = 'Event'
@@ -120,8 +156,8 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype Norsk')
-    title_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Gruppetype Engelsk')
+    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
     class Meta:
         verbose_name = 'GangType'
@@ -132,13 +168,13 @@ class GangType(models.Model):
 
 
 class Gang(models.Model):
-    name_no = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Norsk', unique=True)
-    name_en = models.CharField(max_length=64, blank=False, null=False, verbose_name='Navn Engelsk', unique=True)
-    abbreviation = models.CharField(max_length=64, blank=False, null=False, verbose_name='Forkortelse', unique=True)
+    name_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
+    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
-    gang_type = models.ForeignKey(to=GangType, verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
+    gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
@@ -152,7 +188,7 @@ class Gang(models.Model):
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=True,
+        blank=False,
         null=False,
         unique=True,
         primary_key=True,

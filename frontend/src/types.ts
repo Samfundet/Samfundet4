@@ -38,4 +38,5 @@ export const COLORS = {
 export type Color = typeof COLORS;
 export type ColorKey = keyof Color;
 /** Easy type when adding setStates to Context. */
+
 export type SetState<T> = Dispatch<SetStateAction<T>>;

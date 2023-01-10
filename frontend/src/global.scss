@@ -1,14 +1,31 @@
-/* stylelint-disable selector-max-type */
+@use 'sass:color';
+
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'constants';
 
-html {
-  width: 100%;
-  height: 100%;
+/* stylelint-disable selector-max-type */
+/* stylelint-disable selector-max-universal */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* stylelint-disable-next-line selector-max-universal */
+// Reset all elements. More predictable and easier to set manually.
 * {
-  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+// Make media responsive.
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
 
 body {
@@ -17,8 +34,9 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  background-color: $white;
 }
 
 #root {
@@ -30,6 +48,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+a {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 // Themes:
 // Use names from constant THEME.
 
@@ -38,17 +62,40 @@ code {
   background-color: $theme-dark-bg;
   color: $theme-dark-color;
 
-  input {
+  input,
+  textarea {
     background-color: $theme-dark-input-bg;
     color: inherit;
     &:focus {
-      outline-color: $white;
+      outline-color: $grey-1;
+    }
+    &:disabled {
+      background-color: $theme-dark-input-bg-disabled;
     }
   }
 
   a {
     color: pink;
   }
+
+  .button_outlined {
+    color: $white;
+  }
+
+  pre {
+    color: $grey-3;
+    /* stylelint-disable-next-line function-no-unknown */
+    background-color: color.adjust($theme-dark-bg, $lightness: -2%);
+    border: 1px solid $grey-1;
+  }
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 // End: Themes --------------------------------------------------------------------------------------------------------

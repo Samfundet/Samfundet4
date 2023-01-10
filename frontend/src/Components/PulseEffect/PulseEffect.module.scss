@@ -1,0 +1,73 @@
+@import 'src/constants';
+
+.pulse {
+  display: inline-block;
+  animation: pulsate 3s ease-in-out;
+  animation-iteration-count: infinite;
+  padding: 0.3em;
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.01, 1.1);
+  }
+  20% {
+    transform: scale(1);
+  }
+}
+
+// common:
+$ripple-duration: 3s;
+$ripple-final-percentage: 30%;
+$ripple-final-size: 20px;
+$ripple-blur: 5px;
+$ripple-radius: 9999px;
+
+// theme-light:
+
+.ripple_theme_light {
+  display: inline-block;
+  animation: rippling-theme-light $ripple-duration ease-out;
+  animation-iteration-count: infinite;
+  border-radius: $ripple-radius;
+}
+
+$light-theme-ripple-color: $theme-dark-bg;
+$first-box-shadow-theme-light: 0 0 $ripple-blur 0 rgba($light-theme-ripple-color, 0.5);
+$final-box-shadow-theme-light: 0 0 $ripple-blur $ripple-final-size rgba($light-theme-ripple-color, 0);
+
+@keyframes rippling-theme-light {
+  // box-shadow: x y blur size color;
+  0% {
+    box-shadow: $first-box-shadow-theme-light;
+  }
+  50% {
+    box-shadow: $final-box-shadow-theme-light;
+  }
+}
+
+// theme-dark:
+
+.ripple_theme_dark {
+  display: inline-block;
+  animation: rippling-theme-dark $ripple-duration ease-out;
+  animation-iteration-count: infinite;
+  border-radius: $ripple-radius;
+}
+
+$dark-theme-ripple-color: $white;
+$first-box-shadow-theme-dark: 0 0 $ripple-blur 0 rgba($dark-theme-ripple-color, 0.5);
+$final-box-shadow-theme-dark: 0 0 $ripple-blur $ripple-final-size rgba($dark-theme-ripple-color, 0);
+
+@keyframes rippling-theme-dark {
+  // box-shadow: x y blur size color;
+  0% {
+    box-shadow: $first-box-shadow-theme-dark;
+  }
+  50% {
+    box-shadow: $final-box-shadow-theme-dark;
+  }
+}

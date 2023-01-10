@@ -37,11 +37,9 @@ def seed():
             hours=random.randint(-12, 12),
             minutes=random.randint(-30, 30),
         )
-        event_duration = timezone.timedelta(
-            hours=random.randint(DURATION_MIN, DURATION_MAX),
-            minutes=random.randint(0, 60),
-        )
+        event_duration = random.randint(0, 180)
         event_venue = random.choice(venues)
+        capacity = random.randint(0, 500)
 
         # Small chance of recurring event
         if random.random() <= RECURRING_CHANCE:
@@ -49,7 +47,7 @@ def seed():
         else:
             recurring = 1
         n_recurring += 1 if recurring > 1 else 0
-        group = EventGroup.objects.create()
+        group = EventGroup.objects.create(name=words(1))
 
         # Create event(s)
         for j in range(recurring):
@@ -63,7 +61,7 @@ def seed():
                 title_no=title_no + tag,
                 title_en=title_en + tag,
                 start_dt=event_time + recurring_offset,
-                end_dt=event_time + recurring_offset + event_duration,
+                duration=event_duration,
                 description_long_no=words(10),
                 description_long_en=words(10),
                 description_short_no=words(10),
@@ -72,6 +70,8 @@ def seed():
                 host=words(1),
                 location=event_venue.name,
                 event_group=group,
+                capacity=capacity,
+                codeword=words(1),
             )
 
         yield int(i / COUNT * 100), f"Created event '{title_no}'"

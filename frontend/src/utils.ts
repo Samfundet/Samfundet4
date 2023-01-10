@@ -1,89 +1,75 @@
-import { GroupDto, PermissionDto, UserDto } from '~/dto';
-
-/** Inspired by Django PermissionMixin. */
-export function permissionToString(permission: PermissionDto): string {
-  return `${permission.content_type.app_label}.${permission.codename}`;
-}
-
-// ------------------------------
-
-export type groupHasPerm = {
-  group: GroupDto;
-  permission: string;
-  obj?: unknown;
-};
-
-/** Inspired by Django PermissionMixin. */
-export function groupHasPerm({ group, permission }: groupHasPerm): boolean {
-  const foundPerm = group.permissions?.find((perm) => permissionToString(perm) === permission);
-  if (foundPerm) {
-    return true;
-  }
-  return false;
-}
-
-// ------------------------------
+import { UserDto } from '~/dto';
+import { FieldValues, UseFormSetValue } from 'react-hook-form/dist/types';
 
 export type hasPerm = {
-  user: UserDto;
+  user: UserDto | undefined;
   permission: string;
-  obj?: { id: string; model: string; app_label: string };
-  // obj?: { id: string; contentType: ContentTypeDto };
+  obj: string | number;
 };
 
 /** Inspired by Django PermissionMixin. */
 export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Superuser always has permission.
+
+  if (!user) {
+    return false;
+  }
   if (user.is_active && user.is_superuser) {
     // console.log('superuser perm');
     return true;
   }
 
-  // Check user permissions.
-  const foundUserPermission = user.user_permissions?.find((perm) => permissionToString(perm) === permission);
+  // Check permissions.
+  const foundPermission = user.permissions?.find((perm) => perm === permission);
   // Superuser always has permission.
-  if (foundUserPermission) {
-    // console.log('user perm');
+  if (foundPermission) {
+    // console.log('permission');
     return true;
   }
 
-  // Check group permissions.
-  const foundGroupPermission = user.groups.find((group) =>
-    group.permissions?.find((perm) => permissionToString(perm) === permission),
-  );
-  if (foundGroupPermission) {
-    // console.log('group perm');
-    return true;
-  }
-
-  // Check user object perms.
-  const foundUserObjectPerm = user.user_object_perms?.find(
-    (uop) =>
-      permissionToString(uop.permission) === permission &&
-      uop.obj_id === obj?.id &&
-      uop.content_type.model === obj.model &&
-      uop.content_type.app_label === obj.app_label,
-  );
-  if (foundUserObjectPerm) {
-    // console.log('user object perm');
-    return true;
-  }
-
-  // Check group object perms.
-  const foundGroupObjectPerm = user.groups.find((gops) =>
-    gops.group_object_perms?.find(
-      (gop) =>
-        permissionToString(gop.permission) === permission &&
-        gop.obj_id === obj?.id &&
-        gop.content_type.model === obj.model &&
-        gop.content_type.app_label === obj.app_label,
-    ),
-  );
-  if (foundGroupObjectPerm) {
-    // console.log('group object perm');
+  // Check object permissions.
+  const foundObjectPermission = user.object_permissions?.find((object_perm) => {
+    const isPermissionMatch = object_perm.permission === permission;
+    const isObjMatch = object_perm.obj_pk.toString() === obj.toString();
+    return isPermissionMatch && isObjMatch;
+  });
+  if (foundObjectPermission) {
+    // console.log('object permission');
     return true;
   }
 
   // Nothing found.
   return false;
+}
+
+// ------------------------------
+
+export function getGlobalBackgroundColor(): string {
+  return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
+}
+
+/**
+ * Function for converting JSONDTOData into values accepted by a HTML Form in ReactHookFormFormat
+ * Data is set into a reacthookform and returns nothing
+ * @param {Record<string, unknown>}  data - The DTO Data
+ * @param {UseFormSetValue<FieldValues>} setValue - Function for setting the data into a ReactHookForm
+ * @param {string[]} ignore - List of keys in the data to ignore converting
+ */
+export function DTOToForm(
+  data: Record<string, unknown>,
+  setValue: UseFormSetValue<FieldValues>,
+  ignore: string[],
+): void {
+  // TODO May need adding more forms of converting, now only accepts integers, strings and datetimes
+  for (const v in data) {
+    if (!(v in ignore)) {
+      if (new Date(data[v]).getTime() > 0) {
+        // Checks if data is string
+        setValue(v, new Date(data[v]).toISOString().slice(0, 16));
+      } else if (Number.isInteger(data[v])) {
+        // Check if data is a integer
+        setValue(v, parseInt(data[v]));
+      } else setValue(v, data[v]);
+    }
+  }
 }
