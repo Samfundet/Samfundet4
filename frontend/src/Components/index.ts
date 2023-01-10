@@ -14,6 +14,7 @@ export { SpinningBorder } from './SpinningBorder';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { EventQuery } from './EventQuery';
+export { ImageQuery } from './ImageQuery';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { TextAreaField } from './TextAreaField';

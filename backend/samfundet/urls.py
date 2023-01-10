@@ -7,6 +7,8 @@ from . import views
 # End: imports -----------------------------------------------------------------
 
 router = routers.DefaultRouter()
+router.register('images', views.ImageView, 'images')
+router.register('tags', views.TagView, 'tags')
 router.register('events', views.EventView, 'events')
 router.register('eventgroups', views.EventGroupView, 'eventgroups')
 router.register('venues', views.VenueView, 'venues')

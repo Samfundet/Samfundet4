@@ -1,0 +1,1 @@
+export { ImageFormAdminPage } from './ImageFormAdminPage';
