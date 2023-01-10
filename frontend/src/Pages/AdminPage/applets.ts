@@ -4,7 +4,6 @@ import {
   SAMFUNDET_ADD_GANG,
   SAMFUNDET_ADD_IMAGE,
   SAMFUNDET_ADD_INFORMATIONPAGE,
-  SAMFUNDET_CHANGE_IMAGE,
 } from '~/permissions';
 
 export const applets = [

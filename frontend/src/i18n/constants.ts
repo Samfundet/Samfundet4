@@ -39,6 +39,7 @@ export const KEY = {
   common_capacity: 'common_capacity',
   common_image: 'common_image',
   common_results: 'common_results',
+  common_tags: 'common_tags',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',

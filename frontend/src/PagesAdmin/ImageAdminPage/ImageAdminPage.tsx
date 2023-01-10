@@ -8,7 +8,6 @@ import { ROUTES } from '~/routes';
 import styles from './ImageAdminPage.module.scss';
 import { ImageDto } from '~/dto';
 import { getImages } from '~/api';
-import { reverse } from '~/named-urls';
 import { AdminImage } from './components';
 
 export function ImageAdminPage() {
@@ -58,7 +57,7 @@ export function ImageAdminPage() {
       <h2 className={styles.subHeader}>{t(KEY.common_results)}</h2>
       <div className={styles.imageContainer}>
         {images.map(function (element, key) {
-          return <AdminImage image={element} className={styles.imageBox} />;
+          return <AdminImage key={key} image={element} className={styles.imageBox} />;
         })}
       </div>
     </Page>
