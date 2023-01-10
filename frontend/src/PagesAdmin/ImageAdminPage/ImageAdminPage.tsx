@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, ImageQuery, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -14,6 +14,7 @@ import { AdminImage } from './components';
 export function ImageAdminPage() {
   const navigate = useNavigate();
   const [images, setImages] = useState<ImageDto[]>([]);
+  const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
@@ -22,8 +23,8 @@ export function ImageAdminPage() {
   useEffect(() => {
     getImages()
       .then((data) => {
-        console.log(data);
         setImages(data);
+        setAllImages(data);
         setShowSpinner(false);
       })
       .catch(console.error);
@@ -52,12 +53,12 @@ export function ImageAdminPage() {
         {t(KEY.admin_images_create)}
       </Button>
       <div className={styles.line} />
+      <ImageQuery allImages={allImages} setImages={setImages} />
+      <div className={styles.line} />
       <h2 className={styles.subHeader}>{t(KEY.common_results)}</h2>
       <div className={styles.imageContainer}>
         {images.map(function (element, key) {
-          return (
-            <AdminImage image={element} className={styles.imageBox} />
-          );
+          return <AdminImage image={element} className={styles.imageBox} />;
         })}
       </div>
     </Page>

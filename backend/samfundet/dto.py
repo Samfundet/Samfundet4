@@ -66,7 +66,7 @@ class TagDto:
 @dataclass
 class ImageDto:
     id: int
-    name: str
+    title: str
     tags: list[TagDto]
     image: str
 

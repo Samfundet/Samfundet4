@@ -198,7 +198,7 @@ export type TagDto = {
 
 export type ImageDto = {
   id: number;
-  name: string;
+  title: string;
   image: string;
   tags: TagDto[];
 };
