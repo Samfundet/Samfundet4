@@ -7,7 +7,7 @@
     // Attaches to injected debugpy hosted on port 5678.
     // https://code.visualstudio.com/docs/containers/docker-compose
     {
-      "name": "Django",
+      "name": "Django (docker)",
       "type": "python",
       "request": "attach",
       "django": true,
@@ -19,6 +19,24 @@
         {
           "localRoot": "${workspaceFolder}/backend",
           "remoteRoot": "/app"
+        }
+      ]
+    },
+    // Attaches to injected debugpy hosted on port 5678.
+    // https://code.visualstudio.com/docs/containers/docker-compose
+    {
+      "name": "Django (localhost)",
+      "type": "python",
+      "request": "attach",
+      "django": true,
+      "connect": {
+        "host": "0.0.0.0",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/backend",
+          "remoteRoot": "."
         }
       ]
     }
