@@ -14,6 +14,7 @@ type FormInputFieldProps = {
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;
+  helpText?: string;
   errors?: Record<string, unknown>;
 };
 
@@ -26,6 +27,7 @@ export function FormInputField({
   name,
   required,
   register,
+  helpText,
   type = 'text',
 }: FormInputFieldProps) {
   return (
@@ -39,6 +41,7 @@ export function FormInputField({
         />
         {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
       </label>
+      {helpText && <p className={styles.helpText}>{helpText}</p>}
     </div>
   );
 }
