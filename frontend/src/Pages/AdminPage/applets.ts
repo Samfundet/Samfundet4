@@ -34,8 +34,8 @@ export const applets = [
     title: 'Arrangementer',
     perm: SAMFUNDET_ADD_EVENT,
     options: [
-      { text: 'Opprett arrangement', url: '', type: 'ADD' },
-      { text: 'Rediger arrangementer', url: '', type: 'MANAGE' },
+      { text: 'Opprett arrangement', url: ROUTES.frontend.admin_events_create, type: 'ADD' },
+      { text: 'Rediger arrangementer', url: ROUTES.frontend.admin_events_upcomming, type: 'MANAGE' },
       { text: 'Tidligere arrangementer', url: '', type: 'MANAGE' },
     ],
   },

@@ -1,4 +1,3 @@
-import classnames from 'classnames';
 import { useState, useEffect } from 'react';
 import { Dropdown } from '../Dropdown';
 import { InputField } from '../InputField';
@@ -22,11 +21,12 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
   const [selectedVenue, setSelectedVenue] = useState<string>('');
   const [selectedEventType, setSelectedEventType] = useState<string>('');
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     getVenues()
       .then((data) => {
         setVenues(
-          data.map(function (element, key) {
+          data.map(function (element) {
             return [element.name];
           }),
         );
@@ -35,13 +35,13 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
     getEventGroups()
       .then((data) => {
         setEventGroups(
-          data.map(function (element, key) {
+          data.map(function (element) {
             return [element.id, element.name];
           }),
         );
       })
       .catch(console.error);
-  }, []);
+  }, [allEvents]);
 
   useEffect(() => {
     setEvents(eventQuery(allEvents, search, selectedVenue, selectedEventType));

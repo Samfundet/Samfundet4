@@ -7,7 +7,6 @@ import {
   InformationPageDto,
   MenuDto,
   MenuItemDto,
-  PermissionDto,
   SaksdokumentDto,
   UserDto,
   UserPreferenceDto,
@@ -106,10 +105,9 @@ export async function postInformationPage(data: InformationPageDto): Promise<Inf
   return response.data;
 }
 
-export async function putInformationPage(page: InformationPageDto): Promise<AxiosResponse> {
+export async function putInformationPage(slug_field: string, page: InformationPageDto): Promise<AxiosResponse> {
   const url =
-    BACKEND_DOMAIN +
-    reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: page.slug_field } });
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
   return response;
 }
@@ -131,6 +129,33 @@ export async function getEventsUpcomming(): Promise<EventDto[]> {
 export async function getEvents(): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postEvent(data: EventDto): Promise<EventDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putEvent(id: number, data: EventDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  const response = await axios.put<EventDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+export async function deleteEvent(id: number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getEventForm(): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
+  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
 
   return response.data;
 }
@@ -244,8 +269,15 @@ export async function postGang(data: GangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(data: GangDto): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: data.id } });
+export async function putGang(id: number, data: GangDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
   const response = await axios.put<GangDto>(url, data, { withCredentials: true });
   return response;
+}
+
+export async function getGangForm(): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangform });
+  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+
+  return response.data;
 }

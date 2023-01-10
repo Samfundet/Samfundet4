@@ -1,6 +1,7 @@
 @import 'src/constants';
 
-.input_field {
+
+.select {
   padding: 8px;
   display: block;
   outline: 1px solid $grey-2;
@@ -12,10 +13,10 @@
   }
 }
 
-.errors {
+.error {
   outline: 2px solid $red;
 }
 
-.errors_text {
+.error_text {
   color: $red;
 }

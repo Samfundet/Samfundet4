@@ -190,7 +190,7 @@ class EventAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'title_no', 'title_en', 'host', 'location', 'event_group']
     list_filter = ['event_group']
-    list_display = ['id', '__str__', 'title_no', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'end_dt']
+    list_display = ['id', '__str__', 'title_no', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt']
     search_fields = ['id', 'title_no', 'title_en', 'host', 'location']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']

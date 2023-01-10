@@ -101,7 +101,7 @@ def event_to_dataclass(*, event: Event) -> EventDto:
         title_no=event.title_no,
         title_en=event.title_en,
         start_dt=event.start_dt,
-        end_dt=event.end_dt,
+        end_dt=event.end_dt(),
         description_long_no=event.description_long_no,
         description_long_en=event.description_long_en,
         description_short_no=event.description_short_en,
@@ -110,7 +110,12 @@ def event_to_dataclass(*, event: Event) -> EventDto:
         host=event.host,
         location=event.location,
         event_group=eventgroup_to_dataclass(event_group=event.event_group),
-        price_group=event.price_group
+        price_group=event.price_group,
+        status_group=event.status_group,
+        age_group=event.age_group,
+        banner_image='' if not event.banner_image else event.banner_image.path,
+        duration=event.duration,
+        codeword=event.codeword,
     )
 
 
