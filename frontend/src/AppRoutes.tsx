@@ -12,6 +12,7 @@ import {
   InformationPage,
   LoginPage,
   LychePage,
+  SaksdokumenterPage,
   AdminPage,
   EventPage,
   EventsPage,
@@ -43,6 +44,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
       <Route path={ROUTES.frontend.information_page_edit} element={<InformationFormPage />} />
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
+      <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
       <Route path={ROUTES.frontend.admin} element={<AdminPage />} />
       <Route path={ROUTES.frontend.admin_gangs} element={<GangsAdminPage />} />
       <Route path={ROUTES.frontend.admin_gangs_create} element={<GangsFormAdminPage />} />
