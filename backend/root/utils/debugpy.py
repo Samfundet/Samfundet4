@@ -19,5 +19,7 @@ def initialize_debugpy() -> None:
         # pylint: disable=import-outside-toplevel
         import debugpy
         # This is okay as long as ENABLE_DEBUGPY only is enabled during development and NOT in production.
-        host_port = debugpy.listen((os.environ['DEBUGPY_HOST'], 5678))  # nosec: hardcoded_bind_all_interfaces
+        IS_DOCKER = os.environ.get('IS_DOCKER') == 'True'
+        HOST = '0.0.0.0' if IS_DOCKER else 'localhost'
+        host_port = debugpy.listen((HOST, 5678))  # nosec: hardcoded_bind_all_interfaces
         logger.info(f'Attached debugpy on {host_port}')

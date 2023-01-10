@@ -12,6 +12,8 @@ services:
       - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
     env_file:
       - ./backend/.docker.env
+    environment:
+      - IS_DOCKER=True
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
