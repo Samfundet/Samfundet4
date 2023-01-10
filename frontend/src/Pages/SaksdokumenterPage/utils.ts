@@ -1,20 +1,37 @@
-export function monthValueToString(month: number | undefined | ''): string {
+import { LANGUAGES } from '~/i18n/constants';
+
+export function monthValueToString(month: number | undefined | '', language: string): string {
   if (month) {
-    const months = [
-      'JAN',
-      'Feb',
-      'Mar',
+    const months_nb = [
+      'Januar',
+      'Februar',
+      'Mars',
       'April',
       'Mai',
       'Juni',
       'Juli',
       'August',
       'September',
-      'October',
+      'Oktober',
       'November',
       'Desember',
     ];
-    return months[month];
+
+    const months_en = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return language === LANGUAGES.EN ? months_en[month] : months_nb[month];
   }
   return 'month';
 }

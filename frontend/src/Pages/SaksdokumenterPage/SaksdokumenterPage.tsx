@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
+import { LANGUAGES } from '~/i18n/constants';
 import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '../../Components/ExpandableList';
 import styles from './SaksdokumenterPage.module.scss';
 import { monthValueToString } from './utils';
 
 export function SaksdokumenterPage() {
   const [loading, setLoading] = useState(true);
+  const { i18n } = useTranslation();
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
 
@@ -62,6 +65,11 @@ export function SaksdokumenterPage() {
     return currentSaksdokument;
   }
 
+  function getFormattedDate(publication_date: string) {
+    const date = new Date(publication_date);
+    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+  }
+
   return loading ? (
     <div className={styles.container}>
       <SamfundetLogoSpinner />
@@ -79,14 +87,18 @@ export function SaksdokumenterPage() {
                     {getYearsForCategory(category).map((year) => (
                       <Parent content={year || 'year'} key={year || 'year'} nestedDepth={1}>
                         {getMonthForYearAndCategory(category, year).map((month) => (
-                          <Parent content={monthValueToString(month) || 'month'} key={month || 'month'} nestedDepth={2}>
+                          <Parent
+                            content={monthValueToString(month, i18n.language) || 'month'}
+                            key={month || 'month'}
+                            nestedDepth={2}
+                          >
                             {getSaksdokumenterForFilters(category, year, month)?.map((saksdokument) => (
                               <Child key={saksdokument.id}>
                                 <div>
-                                  {saksdokument.publication_date && new Date(saksdokument.publication_date).getDate()}
+                                  {saksdokument.publication_date && getFormattedDate(saksdokument.publication_date)}
                                 </div>
                                 <a href={saksdokument.file} target="_blank" rel="noreferrer" className={styles.child}>
-                                  {saksdokument.title_no}
+                                  {i18n.language === LANGUAGES.NB ? saksdokument.title_no : saksdokument.title_en}
                                 </a>
                               </Child>
                             ))}
