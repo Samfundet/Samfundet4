@@ -1,38 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Children, SetState } from '~/types';
+import { useEffect } from 'react';
+import { Children } from '~/types';
 import styles from './ExpandableList.module.scss';
-
-type ExpandableListContextProps = {
-  depth: number | undefined;
-  setDepth: SetState<number | undefined>;
-};
-
-const ExpandableListContext = createContext<ExpandableListContextProps | undefined>(undefined);
-
-export function useExpandableListContext() {
-  const contextValue = useContext(ExpandableListContext);
-
-  if (contextValue === undefined) {
-    throw new Error('useExpandableListContext must be used within an ExpandableListContext');
-  }
-
-  return contextValue;
-}
-
-type ExpandableListContextProviderProps = {
-  children: Children;
-};
-
-export function ExpandableListContextProvider({ children }: ExpandableListContextProviderProps) {
-  const [depth, setDepth] = useState<number | undefined>();
-
-  const contextValue: ExpandableListContextProps = {
-    depth: depth,
-    setDepth: setDepth,
-  };
-
-  return <ExpandableListContext.Provider value={contextValue}>{children}</ExpandableListContext.Provider>;
-}
+import { useExpandableListContext } from './ExpandableListContext';
 
 type ExpandableListProps = {
   children: Children;
