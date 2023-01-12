@@ -16,7 +16,13 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import XCSRFTOKEN
 
-from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
+from .utils import (
+    event_query,
+    user_to_dataclass,
+    users_to_dataclass,
+    groups_to_dataclass,
+    events_to_dataclass,
+)
 from .models import (
     Menu,
     Gang,
@@ -38,7 +44,6 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
-    EventGroupSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
@@ -46,6 +51,7 @@ from .serializers import (
     BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    EventGroupSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
     FoodPreferenceSerializer,

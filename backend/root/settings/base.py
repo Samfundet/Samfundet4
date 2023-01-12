@@ -195,6 +195,10 @@ from root.custom_classes.request_context_filter import RequestContextFilter  # n
 # pylint: enable=wrong-import-position,wrong-import-order
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
+SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
+
+# Reset file each time server reloads.
+open(SQL_LOG_FILE, 'w').close()
 
 LOGGING = {
     'version': 1,
@@ -251,6 +255,13 @@ LOGGING = {
                     'stream': sys.stdout,
                     'filters': ['request_context_filter'],
                 },
+            'sql_file':
+                {
+                    'level': os.environ.get('SQL_LOG_LEVEL', 'INFO'),
+                    'class': 'logging.FileHandler',
+                    'filename': SQL_LOG_FILE,  # Added to '.gitignore'.
+                    'filters': ['require_debug_true'],
+                },
         },
     'loggers':
         {
@@ -267,9 +278,9 @@ LOGGING = {
                 'level': 'DEBUG',
             },
             'django.db.backends': {
-                'handlers': ['console'],
+                'handlers': ['console', 'sql_file'],
                 'propagate': False,  # Don't pass up to 'django'.
-                'level': 'INFO',
+                'level': 'DEBUG',
             },
             'django.server': {
                 'handlers': ['console'],
