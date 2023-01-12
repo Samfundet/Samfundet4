@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
-import { LANGUAGES } from '~/i18n/constants';
+import { KEY, LANGUAGES } from '~/i18n/constants';
 import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '../../Components/ExpandableList';
 import styles from './SaksdokumenterPage.module.scss';
-import { monthValueToString } from './utils';
 
 export function SaksdokumenterPage() {
   const [loading, setLoading] = useState(true);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
 
@@ -65,6 +64,24 @@ export function SaksdokumenterPage() {
     return currentSaksdokument;
   }
 
+  function monthValueToString(month: number | '' | undefined) {
+    const months = [
+      t(KEY.month_january),
+      t(KEY.month_february),
+      t(KEY.month_march),
+      t(KEY.month_april),
+      t(KEY.month_may),
+      t(KEY.month_june),
+      t(KEY.month_july),
+      t(KEY.month_august),
+      t(KEY.month_september),
+      t(KEY.month_october),
+      t(KEY.month_november),
+      t(KEY.month_december),
+    ];
+    return month ? months[month] : '-';
+  }
+
   function getFormattedDate(publication_date: string) {
     const date = new Date(publication_date);
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
@@ -87,11 +104,7 @@ export function SaksdokumenterPage() {
                     {getYearsForCategory(category).map((year) => (
                       <Parent content={year || 'year'} key={year || 'year'} nestedDepth={1}>
                         {getMonthForYearAndCategory(category, year).map((month) => (
-                          <Parent
-                            content={monthValueToString(month, i18n.language) || 'month'}
-                            key={month || 'month'}
-                            nestedDepth={2}
-                          >
+                          <Parent content={monthValueToString(month) || 'month'} key={month || 'month'} nestedDepth={2}>
                             {getSaksdokumenterForFilters(category, year, month)?.map((saksdokument) => (
                               <Child key={saksdokument.id}>
                                 <div>
