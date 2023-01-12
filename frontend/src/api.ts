@@ -240,6 +240,20 @@ export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
   return response.data;
 }
 
+export async function getSaksdokumentForm(): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
+  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postSaksdokument(data: SaksdokumentDto): Promise<SaksdokumentDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
+  const response = await axios.post<SaksdokumentDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getGangList(): Promise<GangTypeDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangsorganized_list });
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });

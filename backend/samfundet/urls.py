@@ -36,5 +36,6 @@ urlpatterns = [
     path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', views.EventsUpcommingView.as_view(), name='eventsupcomming'),
     path('events/form/', views.EventFormView.as_view(), name='eventsform'),
-    path('gangs/form/', views.GangFormView.as_view(), name='gangform')
+    path('gangs/form/', views.GangFormView.as_view(), name='gangform'),
+    path('saksdokument/form/', views.SaksdokumentFormView.as_view(), name='saksdokumentform')
 ]

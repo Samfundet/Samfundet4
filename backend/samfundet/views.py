@@ -241,6 +241,14 @@ class SaksdokumentView(ModelViewSet):
     queryset = Saksdokument.objects.all()
 
 
+class SaksdokumentFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {'categories': Saksdokument.SaksdokumentCategory.choices}
+        return Response(data=data)
+
+
 class TableView(ModelViewSet):
     serializer_class = TableSerializer
     queryset = Table.objects.all()

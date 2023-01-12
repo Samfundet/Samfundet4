@@ -23,6 +23,7 @@ import {
   GangsFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { ROUTES } from './routes';
 
@@ -55,6 +56,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
     </Routes>
   );
 }
