@@ -17,6 +17,7 @@ from .models import (
     Gang,
     Event,
     Venue,
+    ClosedPeriod,
     Table,
     Profile,
     Booking,
@@ -357,6 +358,19 @@ class BookingAdmin(CustomGuardedModelAdmin):
     list_display_links = ['id', '__str__']
     autocomplete_fields = ['user']
     list_select_related = True
+
+
+@admin.register(ClosedPeriod)
+class ClosedPerioddmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id']
+    # list_filter = [] # TODO
+    list_display = ['id', '__str__']
+    # search_fields = []
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    # list_select_related = True
 
 
 ### End: Our models ###
