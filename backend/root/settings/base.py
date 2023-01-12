@@ -278,7 +278,7 @@ LOGGING = {
                 'level': 'DEBUG',
             },
             'django.db.backends': {
-                'handlers': ['console', 'sql_file'],
+                'handlers': ['sql_file'],
                 'propagate': False,  # Don't pass up to 'django'.
                 'level': 'DEBUG',
             },
