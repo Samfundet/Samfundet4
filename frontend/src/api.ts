@@ -240,6 +240,14 @@ export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
   return response.data;
 }
 
+export async function getSaksdokument(pk: number): Promise<SaksdokumentDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: pk } });
+  const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getSaksdokumentForm(): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
   const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
@@ -252,6 +260,13 @@ export async function postSaksdokument(data: SaksdokumentDto): Promise<Saksdokum
   const response = await axios.post<SaksdokumentDto>(url, data, { withCredentials: true });
 
   return response.data;
+}
+
+export async function putSaksdokument(id: number, data: SaksdokumentDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
+  const response = await axios.put<SaksdokumentDto>(url, data, { withCredentials: true });
+  return response;
 }
 
 export async function getGangList(): Promise<GangTypeDto[]> {

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components/Page';
-import { getEvent, getSaksdokumentForm, postSaksdokument, putEvent } from '~/api';
+import { getSaksdokument, getSaksdokumentForm, postSaksdokument, putSaksdokument } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -42,9 +42,9 @@ export function SaksdokumentFormAdminPage() {
       })
       .catch(console.error);
     if (id) {
-      getEvent(id)
+      getSaksdokument(id)
         .then((data) => {
-          DTOToForm(data, setValue, ['end_dt']);
+          DTOToForm(data, setValue, []);
         })
         .catch((data) => {
           console.log(data);
@@ -57,7 +57,10 @@ export function SaksdokumentFormAdminPage() {
   }, [id]);
 
   const onSubmit = (data) => {
-    (id ? putEvent(id, data) : postSaksdokument(data))
+    // Remove file from data to be updated, as it currently cannot be changed
+    id && delete data['file'];
+
+    (id ? putSaksdokument(id, data) : postSaksdokument(data))
       .then(() => {
         navigate(ROUTES.frontend.admin);
       })
@@ -76,9 +79,7 @@ export function SaksdokumentFormAdminPage() {
       </div>
     );
   }
-  {
-    console.log(formChoices ? formChoices : 'nope');
-  }
+
   return (
     <Page>
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
