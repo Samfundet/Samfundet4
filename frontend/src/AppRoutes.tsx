@@ -1,9 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
-import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
+  AdminPage,
   ApiTestingPage,
   ComponentPage,
+  EventPage,
+  EventsPage,
   GroupsPage,
   HealthPage,
   HomePage,
@@ -12,18 +14,16 @@ import {
   InformationPage,
   LoginPage,
   LychePage,
-  AdminPage,
-  EventPage,
-  EventsPage,
 } from '~/Pages';
 import {
-  EventsAdminPage,
   EventFormAdminPage,
+  EventsAdminPage,
   GangsAdminPage,
   GangsFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
 } from '~/PagesAdmin';
+import { useGoatCounter } from '~/hooks';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
@@ -53,8 +53,6 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_events_create} element={<EventFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_events_edit} element={<EventFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
-      <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
-      <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
     </Routes>
   );
 }
