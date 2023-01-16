@@ -361,7 +361,7 @@ class BookingAdmin(CustomGuardedModelAdmin):
 
 
 @admin.register(ClosedPeriod)
-class ClosedPerioddmin(CustomGuardedModelAdmin):
+class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id']
     # list_filter = [] # TODO
