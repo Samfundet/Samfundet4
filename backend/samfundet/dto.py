@@ -57,6 +57,7 @@ class VenueDto:
 @dataclass_json
 @dataclass
 class ClosedPeriodDto:
+    id: int
     message_no: str
     description_no: str
     message_en: str
