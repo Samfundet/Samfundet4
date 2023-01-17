@@ -18,13 +18,13 @@ import {
 } from '~/Pages';
 import {
   EventsAdminPage,
-  EventFormAdminPage,
   GangsAdminPage,
-  GangsFormAdminPage,
-  InformationAdminPage,
-  InformationFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
+  GangsFormAdminPage,
+  EventFormAdminPage,
+  InformationAdminPage,
+  InformationFormAdminPage,
 } from '~/PagesAdmin';
 
 import { ROUTES } from './routes';

@@ -29,7 +29,6 @@ export function ImageFormAdminPage() {
   // Stuff to do on first render.
   //TODO add permissions on render
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (id) {
       getImage(id)
@@ -44,7 +43,7 @@ export function ImageFormAdminPage() {
         });
     }
     setShowSpinner(false);
-  }, [id]);
+  }, [id, getImage]);
 
   const onSubmit = (data) => {
     (id ? putImage(id, data) : postImage(data))

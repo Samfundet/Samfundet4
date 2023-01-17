@@ -15,19 +15,19 @@
 }
 
 .imageTitle {
-
   color: $white;
   text-align: center;
   min-height: 2em;
-  text-decoration: none !important;
   .text {
     font-size: 1.2em;
     padding: 0.2em;
     background-color: $black;
+    text-decoration: none;
   }
   .tags {
     font-size: 0.8em;
     padding: 0.4em;
     background-color: $black-t75;
+    text-decoration: none;
   }
 }

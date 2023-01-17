@@ -15,11 +15,9 @@ export function ImageQuery({ allImages, setImages }: ImageQueryProps) {
   const { t } = useTranslation();
   const [search, setSearch] = useState<string>('');
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-
   useEffect(() => {
     setImages(imageQuery(allImages, search));
-  }, [search]);
+  }, [search, allImages, setImages]);
 
   return (
     <div className={styles.queryBar}>

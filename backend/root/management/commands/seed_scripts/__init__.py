@@ -1,4 +1,12 @@
-from . import (images, gangs, information_pages, venues, events, menu, example)
+from . import (
+    images,
+    gangs,
+    information_pages,
+    venues,
+    events,
+    menu,
+    example,
+)
 
 # Insert seed scripts here (in order of priority)
 # Format is (name, seed_function).
