@@ -7,11 +7,12 @@ from django.contrib.auth.models import Group, User
 
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
-from .models import (Venue, Profile, Saksdokument, UserPreference, Event, EventGroup)
+from .models import (Venue, Profile, Saksdokument, UserPreference, Event, EventGroup, ClosedPeriod)
 
 from .dto import (
     UserDto,
     VenueDto,
+    ClosedPeriodDto,
     GroupDto,
     EventDto,
     EventGroupDto,
@@ -189,4 +190,16 @@ def saksdokument_to_dataclass(*, saksdokument: Saksdokument) -> SaksdokumentDto:
         publication_date=saksdokument.publication_date,
         category=saksdokument.category,
         file=saksdokument.file,
+    )
+
+
+def closedperiod_to_dataclass(*, closed_period: ClosedPeriod) -> ClosedPeriodDto:
+    return ClosedPeriodDto(
+        id=closed_period.id,
+        message_en=closed_period.message_en,
+        description_en=closed_period.description_en,
+        message_no=closed_period.message_no,
+        description_no=closed_period.description_en,
+        start_dt=closed_period.start_dt,
+        end_dt=closed_period.end_dt,
     )

@@ -10,6 +10,7 @@ from .models import (
     EventGroup,
     Table,
     Venue,
+    ClosedPeriod,
     Booking,
     Profile,
     MenuItem,
@@ -43,6 +44,13 @@ class VenueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Venue
+        fields = '__all__'
+
+
+class ClosedPeriodSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ClosedPeriod
         fields = '__all__'
 
 

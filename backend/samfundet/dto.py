@@ -56,6 +56,18 @@ class VenueDto:
 
 @dataclass_json
 @dataclass
+class ClosedPeriodDto:
+    id: int
+    message_no: str
+    description_no: str
+    message_en: str
+    description_en: str
+    start_dt: datetime
+    end_dt: datetime
+
+
+@dataclass_json
+@dataclass
 class EventDto:
     id: int
     title_no: str
