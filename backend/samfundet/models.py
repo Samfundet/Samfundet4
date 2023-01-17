@@ -152,6 +152,24 @@ class Venue(models.Model):
         return f'{self.name}'
 
 
+class ClosedPeriod(models.Model):
+    message_no = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
+    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+
+    message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
+    description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
+
+    start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
+    end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')
+
+    class Meta:
+        verbose_name = 'Stengt periode'
+        verbose_name_plural = 'Stengt perioder'
+
+    def __str__(self) -> str:
+        return f'{self.message_no} {self.start_dt}-{self.end_dt}'
+
+
 class UserPreference(models.Model):
     """Group all preferences and config per user."""
 

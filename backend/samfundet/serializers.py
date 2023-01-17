@@ -4,8 +4,24 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
-    Menu, Gang, Event, EventGroup, Table, Venue, Booking, Profile, MenuItem, GangType, FoodCategory, Saksdokument, FoodPreference, UserPreference,
-    InformationPage, Image, Tag
+    Tag,
+    Menu,
+    Gang,
+    Event,
+    Table,
+    Venue,
+    Image,
+    Booking,
+    Profile,
+    MenuItem,
+    GangType,
+    EventGroup,
+    FoodCategory,
+    Saksdokument,
+    ClosedPeriod,
+    FoodPreference,
+    UserPreference,
+    InformationPage,
 )
 
 User = get_user_model()
@@ -45,6 +61,13 @@ class VenueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Venue
+        fields = '__all__'
+
+
+class ClosedPeriodSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ClosedPeriod
         fields = '__all__'
 
 

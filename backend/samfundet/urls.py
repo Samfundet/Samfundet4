@@ -12,6 +12,7 @@ router.register('tags', views.TagView, 'tags')
 router.register('events', views.EventView, 'events')
 router.register('eventgroups', views.EventGroupView, 'eventgroups')
 router.register('venues', views.VenueView, 'venues')
+router.register('venues', views.ClosedPeriodView, 'closedperiods')
 router.register('gangs', views.GangView, 'gangs')
 router.register('gangsorganized', views.GangTypeView, 'gangsorganized')
 router.register('information', views.InformationPageView, 'information')
@@ -38,5 +39,6 @@ urlpatterns = [
     path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', views.EventsUpcommingView.as_view(), name='eventsupcomming'),
     path('events/form/', views.EventFormView.as_view(), name='eventsform'),
-    path('gangs/form/', views.GangFormView.as_view(), name='gangform')
+    path('gangs/form/', views.GangFormView.as_view(), name='gangform'),
+    path('isclosed/', views.IsClosedView().as_view(), name='isclosed')
 ]

@@ -7,11 +7,15 @@ services:
   backend:
     build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     volumes:
-      - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
-      - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
-      - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
+      - ./backend:/app
+      - ignore_venv:/app/.venv
+        # - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
+        # - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
+        # - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
     env_file:
       - ./backend/.docker.env
+    environment:
+      - IS_DOCKER=True
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
@@ -25,9 +29,13 @@ services:
     env_file:
       - ./frontend/.env.docker
     environment:
+      - IS_DOCKER=true
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
-      - VITE_GOATCOUNTER_CODE=samfundet-dev
-      - VITE_BACKEND_DOMAIN=http://backend:8000
+      - VITE_GOATCOUNTER_CODE=samfundet-dev2
+      - VITE_BACKEND_DOMAIN=http://localhost:8000
       - CYPRESS_BASE_URL=http://frontend:3000
     ports:
       - '3000:3000'
+
+volumes:
+  ignore_venv:
