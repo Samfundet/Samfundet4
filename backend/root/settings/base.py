@@ -198,6 +198,7 @@ LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
 
 # Reset file each time server reloads.
+# pylint: disable=consider-using-with, unspecified-encoding
 open(SQL_LOG_FILE, 'w').close()
 
 LOGGING = {
