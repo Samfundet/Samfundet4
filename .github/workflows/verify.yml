@@ -107,8 +107,8 @@ jobs:
       - name: Seed backend for Cypress tests
         run: docker compose exec backend pipenv run python manage.py seed_cypress
 
-      # - name: Run cypress
-      #   run: docker compose exec frontend yarn run cypress:run
+      - name: Run cypress
+        run: docker compose exec frontend yarn run cypress:run
 
       - name: Stop containers
         run: docker compose down
