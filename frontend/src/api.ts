@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import {
+  ClosedPeriodDto,
   EventDto,
   EventGroupDto,
   FoodCategoryDto,
@@ -280,4 +281,19 @@ export async function getGangForm(): Promise<AxiosResponse> {
   const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
+  const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function deleteClosedPeriod(id: number): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+
+  return response;
 }

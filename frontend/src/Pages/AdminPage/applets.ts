@@ -1,5 +1,10 @@
 import { ROUTES } from '~/routes';
-import { SAMFUNDET_ADD_EVENT, SAMFUNDET_ADD_GANG, SAMFUNDET_ADD_INFORMATIONPAGE } from '~/permissions';
+import {
+  SAMFUNDET_ADD_CLOSEDPERIOD,
+  SAMFUNDET_ADD_EVENT,
+  SAMFUNDET_ADD_GANG,
+  SAMFUNDET_ADD_INFORMATIONPAGE,
+} from '~/permissions';
 
 export const applets = [
   {
@@ -38,5 +43,10 @@ export const applets = [
       { text: 'Rediger arrangementer', url: ROUTES.frontend.admin_events_upcomming, type: 'MANAGE' },
       { text: 'Tidligere arrangementer', url: '', type: 'MANAGE' },
     ],
+  },
+  {
+    title: 'Åpningstider',
+    perm: SAMFUNDET_ADD_CLOSEDPERIOD,
+    options: [{ text: 'Endre stengte perioder', url: ROUTES.frontend.admin_closed, type: 'EDIT' }],
   },
 ];
