@@ -18,9 +18,11 @@ export function ClosedPeriodAdminPage() {
   const { t } = useTranslation();
 
   function getAllClosedPeriods() {
+    setShowSpinner(true);
     getClosedPeriods()
       .then((data) => {
         setClosedPeriods(data);
+        setShowSpinner(false);
       })
       .catch(console.error);
   }
@@ -30,7 +32,6 @@ export function ClosedPeriodAdminPage() {
 
   useEffect(() => {
     getAllClosedPeriods();
-    setShowSpinner(false);
   }, []);
 
   function deleteSelectedEvent(id: number) {
