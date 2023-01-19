@@ -24,4 +24,6 @@ export const ROUTES_FRONTEND = {
   admin_information_create: '/admin/information/create/',
   admin_information_edit: '/admin/information/edit/:slugField/',
   admin_closed: '/admin/closed/',
+  admin_closed_create: '/admin/closed/create/',
+  admin_closed_edit: '/admin/closed/edit/:id/',
 } as const;

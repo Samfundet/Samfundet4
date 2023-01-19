@@ -33,6 +33,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_price]: 'Pris',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_message]: 'Melding',
+  [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.gang]: 'Gjeng',
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
@@ -81,6 +82,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_delete]: 'Er du sikker du vil slette denne informasjonssiden?',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_closed_period_new_period]: 'Legg til ny periode',
+  [KEY.admin_closed_period_edit_period]: 'Endre periode',
   [KEY.name]: 'Navn',
   [KEY.owner]: 'Eier',
   [KEY.last_updated]: 'Sist oppdatert',
@@ -101,6 +103,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.duration]: 'Varighet',
   [KEY.publication]: 'Publisering',
+  [KEY.closed_period]: 'Stengt periode',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -130,6 +133,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_price]: 'Price',
   [KEY.common_capacity]: 'Capacity',
   [KEY.common_message]: 'Message',
+  [KEY.common_whatsup]: "what's up?",
   [KEY.norwegian]: 'Norwegian',
   [KEY.english]: 'English',
   [KEY.login_forgotten_password]: 'Forgot password?',
@@ -181,6 +185,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
+  [KEY.admin_closed_period_edit_period]: 'Edit closed period',
   [KEY.name]: 'Name',
   [KEY.owner]: 'Owner',
   [KEY.last_updated]: 'Last updated',
@@ -201,4 +206,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Are you sure you want do',
   [KEY.duration]: 'Duration',
   [KEY.publication]: 'Publication',
+  [KEY.closed_period]: 'Closed period',
 };

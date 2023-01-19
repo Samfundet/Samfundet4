@@ -58,7 +58,9 @@ export function ClosedPeriodAdminPage() {
           View in backend
         </Link>
       </div>
-      <Button theme="success">{t(KEY.admin_closed_period_new_period)}</Button>
+      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
+        {t(KEY.admin_closed_period_new_period)}
+      </Button>
       <div className={styles.tableContainer}>
         <Table
           columns={[t(KEY.common_message), 'Event ' + t(KEY.common_message), t(KEY.start_time), t(KEY.end_time), '']}
@@ -66,8 +68,8 @@ export function ClosedPeriodAdminPage() {
             return [
               new AlphabeticTableCell(element.message_no),
               new AlphabeticTableCell(element.description_no),
-              new AlphabeticTableCell(<TimeDisplay displayType='date' timestamp={element.start_dt} />),
-              new AlphabeticTableCell(<TimeDisplay displayType='date' timestamp={element.end_dt} />),
+              new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.start_dt} />),
+              new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.end_dt} />),
               {
                 children: (
                   <div>
@@ -78,7 +80,7 @@ export function ClosedPeriodAdminPage() {
                       onClick={() => {
                         navigate(
                           reverse({
-                            pattern: ROUTES.frontend.admin_events_edit,
+                            pattern: ROUTES.frontend.admin_closed_edit,
                             urlParams: { id: element.id },
                           }),
                         );
@@ -92,7 +94,7 @@ export function ClosedPeriodAdminPage() {
                       className={styles.smallButtons}
                       onClick={() => {
                         if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${element.message_no}`)) {
-                          deleteClosedPeriod(element.id);
+                          deleteSelectedEvent(element.id);
                         }
                       }}
                     >

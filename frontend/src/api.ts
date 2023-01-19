@@ -290,6 +290,28 @@ export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   return response.data;
 }
 
+export async function getClosedPeriod(id: number): Promise<ClosedPeriodDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
+  const response = await axios.get<ClosedPeriodDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
+  const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putClosedPeriod(id: number, data: ClosedPeriodDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
+  const response = await axios.put<ClosedPeriodDto>(url, data, { withCredentials: true });
+  return response;
+}
+
 export async function deleteClosedPeriod(id: number): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });

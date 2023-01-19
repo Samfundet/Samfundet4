@@ -38,6 +38,7 @@ export const KEY = {
   common_time: 'common_time',
   common_price: 'common_price',
   common_capacity: 'common_capacity',
+  common_whatsup: 'common_whatsup',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
@@ -78,6 +79,7 @@ export const KEY = {
   admin_information_confirm_delete: 'admin_information_confirm_delete',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
+  admin_closed_period_edit_period: 'admin_closed_period_edit_period',
   name: 'name',
   owner: 'owner',
   last_updated: 'last_updated',
@@ -101,6 +103,7 @@ export const KEY = {
   form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
+  closed_period: 'closed_period',
 } as const;
 
 /**

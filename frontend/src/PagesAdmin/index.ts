@@ -5,3 +5,4 @@ export { EventFormAdminPage } from './EventFormAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { ClosedPeriodAdminPage } from './ClosedPeriodAdminPage';
+export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';
