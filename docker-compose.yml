@@ -31,9 +31,6 @@ services:
     environment:
       - IS_DOCKER=true
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
-      - VITE_GOATCOUNTER_CODE=samfundet-dev2
-      - VITE_BACKEND_DOMAIN=http://backend:8000
-      - CYPRESS_BASE_URL=http://frontend:3000
     ports:
       - '3000:3000'
 
