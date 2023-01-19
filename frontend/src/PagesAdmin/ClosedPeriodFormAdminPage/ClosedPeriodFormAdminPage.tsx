@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormSelect, FormInputField, FormTextAreaField } from '~/Components';
+import { Button, SamfundetLogoSpinner, FormInputField, FormTextAreaField } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -86,7 +86,7 @@ export function ClosedPeriodFormAdminPage() {
               required={t(KEY.form_required)}
             >
               <p className={styles.labelText}>
-                {t(KEY.common_message)} under '{t(KEY.opening_hours)}' ({t(KEY.norwegian)})
+                {`${t(KEY.common_message)} under '${t(KEY.opening_hours)}' (${t(KEY.norwegian)})`}
               </p>
             </FormTextAreaField>
             <FormTextAreaField
@@ -97,7 +97,7 @@ export function ClosedPeriodFormAdminPage() {
               required={t(KEY.form_required)}
             >
               <p className={styles.labelText}>
-                {t(KEY.common_description)} under '{t(KEY.common_whatsup)}' ({t(KEY.norwegian)})
+                {`${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.norwegian)})`}
               </p>
             </FormTextAreaField>
           </div>
@@ -110,7 +110,7 @@ export function ClosedPeriodFormAdminPage() {
               required={t(KEY.form_required)}
             >
               <p className={styles.labelText}>
-                {t(KEY.common_message)} under '{t(KEY.opening_hours)}' ({t(KEY.norwegian)})
+                {`${t(KEY.common_message)} under '${t(KEY.opening_hours)}' (${t(KEY.english)})`}
               </p>
             </FormTextAreaField>
             <FormTextAreaField
@@ -121,7 +121,7 @@ export function ClosedPeriodFormAdminPage() {
               required={t(KEY.form_required)}
             >
               <p className={styles.labelText}>
-                {t(KEY.common_description)} under '{t(KEY.common_whatsup)}' ({t(KEY.norwegian)})
+                {`${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.english)})`}
               </p>
             </FormTextAreaField>
           </div>
