@@ -2,8 +2,11 @@ import { Route, Routes } from 'react-router-dom';
 import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
+  AdminPage,
   ApiTestingPage,
   ComponentPage,
+  EventPage,
+  EventsPage,
   GroupsPage,
   HealthPage,
   HomePage,
@@ -12,13 +15,10 @@ import {
   InformationPage,
   LoginPage,
   LychePage,
-  AdminPage,
-  EventPage,
-  EventsPage,
 } from '~/Pages';
 import {
-  EventsAdminPage,
   EventFormAdminPage,
+  EventsAdminPage,
   GangsAdminPage,
   GangsFormAdminPage,
   InformationAdminPage,
