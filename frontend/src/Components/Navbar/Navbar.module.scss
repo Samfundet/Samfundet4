@@ -23,12 +23,8 @@ $navbar-height: 60px;
 }
 
 #navbar_logo {
-  display: flex;
-  text-decoration: none;
-  padding: 0 1rem;
   height: auto;
   width: 240px;
-  max-width: 70%;
   cursor: pointer;
 }
 
@@ -53,9 +49,10 @@ $navbar-height: 60px;
 
 .navbar_signup {
   display: flex;
+  gap: 1em;
+  margin: 0 1em;
   align-items: center;
   justify-content: space-evenly;
-  margin-right: 24px;
   @include for-tablet-down {
     display: none;
   }
@@ -64,23 +61,11 @@ $navbar-height: 60px;
 .navbar_language_flag {
   width: 28px;
   height: 20px;
-  margin-right: 10px;
   cursor: pointer;
   border-radius: 3px;
-  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
-}
-
-.navbar_member_button {
-  display: flex;
-  align-items: center;
-  margin-right: 0.8em;
 }
 
 .member_button_link {
-  text-decoration: none;
-}
-
-.internal_button_link {
   text-decoration: none;
 }
 
@@ -88,7 +73,6 @@ $navbar-height: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 1em;
   white-space: nowrap;
   cursor: pointer;
   border-radius: 4px;
@@ -151,16 +135,11 @@ $navbar-height: 60px;
 /* Mobile popup navigation */
 
 #mobile_popup_container {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100vw;
-  height: calc(100vh - 60px);
-  min-height: 400px;
+  height: 100vh;
+  padding-top: 6em;
   background: black;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   @include for-desktop-up {
     display: none;
@@ -187,10 +166,6 @@ $navbar-height: 60px;
 
 .popup_member_button {
   margin-bottom: 0.5em;
-}
-
-.popup_internal_button {
-  background-color: white;
 }
 
 .popup_profile {

@@ -19,28 +19,30 @@ export function Navbar() {
   const navigate = useNavigate();
   const isDesktop = useDesktop();
 
-  function languageImage() {
-    if (i18n.language == LANGUAGES.NB) {
-      return (
-        <img
-          src={englishFlag}
-          className={isDesktop ? styles.navbar_language_flag : styles.popup_change_language}
-          onClick={() => i18n.changeLanguage(LANGUAGES.EN)}
-        />
-      );
-    }
-    return (
-      <img
-        src={norwegianFlag}
-        className={isDesktop ? styles.navbar_language_flag : styles.popup_change_language}
-        onClick={() => i18n.changeLanguage(LANGUAGES.NB)}
-      />
-    );
-  }
+  const currentLanguage = i18n.language;
+  const isNorwegian = currentLanguage == LANGUAGES.NB;
+  const otherLanguage = isNorwegian ? LANGUAGES.EN : LANGUAGES.NB;
+  const otherFlag = isNorwegian ? englishFlag : norwegianFlag;
+
+  const languageButton = (
+    <img
+      src={otherFlag}
+      className={classNames({
+        [styles.navbar_language_flag]: isDesktop,
+        [styles.popup_change_language]: !isDesktop,
+      })}
+      onClick={() => i18n.changeLanguage(otherLanguage)}
+    />
+  );
 
   // Return profile button for navbar if logged in
   const profileButton = (
-    <div className={isDesktop ? styles.navbar_profile_button : styles.popup_profile}>
+    <div
+      className={classNames({
+        [styles.navbar_profile_button]: isDesktop,
+        [styles.popup_profile]: !isDesktop,
+      })}
+    >
       <img src={profileIcon} className={styles.profile_icon}></img>
       <Link to={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
@@ -98,7 +100,7 @@ export function Navbar() {
     <>
       <Button
         theme="samf"
-        className={isDesktop ? styles.navbar_member_button : styles.popup_member_button}
+        className={isDesktop ? undefined : styles.popup_member_button}
         onClick={() => {
           navigate(ROUTES.frontend.login);
           setMobileNavigation(false);
@@ -110,7 +112,6 @@ export function Navbar() {
       {!user && (
         <Button
           theme="secondary"
-          className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             navigate(ROUTES.frontend.login);
             setMobileNavigation(false);
@@ -123,7 +124,6 @@ export function Navbar() {
       {user && (
         <Button
           theme="secondary"
-          className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             logout()
               .then((response) => {
@@ -146,7 +146,7 @@ export function Navbar() {
       <nav id={styles.mobile_popup_container}>
         {navbarHeaders}
         <br />
-        {languageImage()}
+        {languageButton}
         {loginButtons}
         {user && profileButton}
       </nav>
@@ -157,14 +157,16 @@ export function Navbar() {
     <>
       <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container}>
-        <Link to="/">
+        <Link className={styles.logoWrapper} to={ROUTES.frontend.home}>
           <img src={logoWhite} id={styles.navbar_logo} />
         </Link>
+
         {isDesktop && navbarHeaders}
+
         <div className={styles.navbar_signup}>
           <ThemeSwitch />
           {user && profileButton}
-          {languageImage()}
+          {languageButton}
           {loginButtons}
         </div>
         {hamburgerMenu}
