@@ -24,6 +24,7 @@ module.exports = {
     },
   },
   rules: {
+    'prettier/prettier': 'error',
     'max-len': [
       'error',
       {

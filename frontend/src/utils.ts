@@ -1,19 +1,19 @@
-import { UserDto } from '~/dto';
 import { FieldValues, UseFormSetValue } from 'react-hook-form/dist/types';
+import { UserDto } from '~/dto';
 
 export type hasPerm = {
   user: UserDto | undefined;
   permission: string;
-  obj: string | number;
+  obj?: string | number;
 };
 
 /** Inspired by Django PermissionMixin. */
 export function hasPerm({ user, permission, obj }: hasPerm): boolean {
-  // Superuser always has permission.
-
   if (!user) {
     return false;
   }
+
+  // Superuser always has permission.
   if (user.is_active && user.is_superuser) {
     // console.log('superuser perm');
     return true;
@@ -21,7 +21,6 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
 
   // Check permissions.
   const foundPermission = user.permissions?.find((perm) => perm === permission);
-  // Superuser always has permission.
   if (foundPermission) {
     // console.log('permission');
     return true;
@@ -30,7 +29,7 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   // Check object permissions.
   const foundObjectPermission = user.object_permissions?.find((object_perm) => {
     const isPermissionMatch = object_perm.permission === permission;
-    const isObjMatch = object_perm.obj_pk.toString() === obj.toString();
+    const isObjMatch = object_perm.obj_pk.toString() === obj?.toString();
     return isPermissionMatch && isObjMatch;
   });
   if (foundObjectPermission) {

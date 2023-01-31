@@ -5,7 +5,7 @@ from root.constants import Environment
 from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import # noqa: F403
 # End: imports -----------------------------------------------------
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'backend']
 if os.environ.get('DOMAIN'):
     ALLOWED_HOSTS.append(os.environ['DOMAIN'])
 
