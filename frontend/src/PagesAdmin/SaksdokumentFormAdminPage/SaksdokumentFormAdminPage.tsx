@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components/Page';
 import { getSaksdokument, getSaksdokumentForm, postSaksdokument, putSaksdokument } from '~/api';
+import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -29,7 +30,7 @@ export function SaksdokumentFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
+  const [formChoices, setFormChoices] = useState<string[][]>();
   // Stuff to do on first render.
   //TODO add permissions on render
 
@@ -37,7 +38,8 @@ export function SaksdokumentFormAdminPage() {
   useEffect(() => {
     getSaksdokumentForm()
       .then((data) => {
-        setFormChoices(data);
+        console.log(data);
+        setFormChoices(data.data.categories);
         setShowSpinner(false);
       })
       .catch(console.error);
@@ -45,6 +47,7 @@ export function SaksdokumentFormAdminPage() {
       getSaksdokument(id)
         .then((data) => {
           DTOToForm(data, setValue, []);
+          console.log(typeof data);
         })
         .catch((data) => {
           console.log(data);
@@ -56,7 +59,7 @@ export function SaksdokumentFormAdminPage() {
     }
   }, [id]);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: SaksdokumentDto) => {
     // Remove file from data to be updated, as it currently cannot be changed
     id && delete data['file'];
 
@@ -130,7 +133,7 @@ export function SaksdokumentFormAdminPage() {
           </FormInputField>
           <FormSelect
             register={register}
-            options={formChoices?.categories}
+            options={formChoices}
             selectClassName={styles.select}
             className={styles.col}
             errors={errors}

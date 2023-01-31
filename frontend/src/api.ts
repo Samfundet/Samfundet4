@@ -240,7 +240,7 @@ export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
   return response.data;
 }
 
-export async function getSaksdokument(pk: number): Promise<SaksdokumentDto> {
+export async function getSaksdokument(pk: number | string): Promise<SaksdokumentDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: pk } });
   const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
@@ -248,11 +248,15 @@ export async function getSaksdokument(pk: number): Promise<SaksdokumentDto> {
   return response.data;
 }
 
-export async function getSaksdokumentForm(): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
-  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+type SaksdokFormResponse = {
+  categories: Array<Array<string>>;
+};
 
-  return response.data;
+export async function getSaksdokumentForm(): Promise<AxiosResponse<SaksdokFormResponse>> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
+  const response = await axios.get<SaksdokFormResponse>(url, { withCredentials: true });
+
+  return response;
 }
 
 export async function postSaksdokument(data: SaksdokumentDto): Promise<SaksdokumentDto> {
@@ -262,7 +266,7 @@ export async function postSaksdokument(data: SaksdokumentDto): Promise<Saksdokum
   return response.data;
 }
 
-export async function putSaksdokument(id: number, data: SaksdokumentDto): Promise<AxiosResponse> {
+export async function putSaksdokument(id: number | string, data: SaksdokumentDto): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
   const response = await axios.put<SaksdokumentDto>(url, data, { withCredentials: true });
