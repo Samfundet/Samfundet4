@@ -38,7 +38,7 @@ export function LychePage() {
             <div key={i}>
               <div>{dbT(item, 'name', i18n.language)}</div>
               <div>{dbT(item, 'description', i18n.language)}</div>
-              <div>{dbT(item, 'order', i18n.language)}</div>
+              <div>{item.order}</div>
               <div>
                 {item.price}/{item.price_member}
               </div>
