@@ -7,7 +7,7 @@ export function getTranslatedTitle(page: InformationPageDto | undefined, languag
     title = page?.title_en;
   }
   if (language === LANGUAGES.NB) {
-    title = page?.title_no;
+    title = page?.title_nb;
   }
   return title;
 }
