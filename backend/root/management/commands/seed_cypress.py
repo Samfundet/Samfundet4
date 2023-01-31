@@ -52,9 +52,9 @@ class Command(BaseCommand):
 
             InformationPage.objects.create(
                 slug_field='cypress',
-                title_no='Cypress Test Side',
+                title_nb='Cypress Test Side',
                 title_en='Cypress Test Page',
-                text_no='Noe tekst',
+                text_nb='Noe tekst',
                 text_en='Some text',
             )
 
@@ -69,7 +69,7 @@ class Command(BaseCommand):
                 closing_monday=TIME_23,
             )
             ClosedPeriod.objects.create(
-                message_no='Closed', start_dt=timezone.now() - timezone.timedelta(hours=3), end_dt=timezone.now() - timezone.timedelta(hours=2)
+                message_nb='Closed', start_dt=timezone.now() - timezone.timedelta(hours=3), end_dt=timezone.now() - timezone.timedelta(hours=2)
             )
         # Done.
         print('Seeding complete.')
