@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './EventPage.module.scss';
+import { dbT } from '~/i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { EventTable } from './components/EventTable';
 import { getEvent } from '~/api';
 import { EventDto } from '~/dto';
@@ -10,6 +12,7 @@ export function EventPage() {
   const { id } = useParams();
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     getEvent(id).then((data) => {
@@ -38,10 +41,10 @@ export function EventPage() {
         <p className={styles.text_title}> DESCRIPTION </p>
         <div className={styles.description}>
           <div className={styles.description_short}>
-            <p className={styles.text_short}>{event?.description_short_no}</p>
+            <p className={styles.text_short}>{dbT(event, 'description_short', i18n.language)}</p>
           </div>
           <div className={styles.description_long}>
-            <p> {event?.description_long_no}</p>
+            <p>{dbT(event, 'description_long', i18n.language)}</p>
           </div>
         </div>
       </div>
