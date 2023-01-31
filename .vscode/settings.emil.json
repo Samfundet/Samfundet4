@@ -1,7 +1,8 @@
 {
   "files.autoSave": "onFocusChange",
   "editor.formatOnSave": true,
-  "python.linting.pylintArgs": ["--rcfile", ".pylintrc.vscode"],
+  "python.linting.pylintArgs": ["--rcfile", ".pylintrc", "--init-hook"],
+  "eslint.workingDirectories": ["frontend"],
   "python.linting.mypyEnabled": true,
   "python.linting.mypyArgs": ["--config-file", "backend/mypy.ini", "--no-pretty"],
   "window.title": "🟥 ${activeEditorShort}${separator}${rootName}",
@@ -68,5 +69,6 @@
   "stylelint.configFile": "frontend/.stylelintrc",
   "stylelint.enable": true,
   "stylelint.validate": ["css", "scss"],
-  "svg.preview.background": "editor"
+  "svg.preview.background": "editor",
+  "pylint.importStrategy": "fromEnvironment"
 }

@@ -21,7 +21,7 @@ from root.constants import Environment
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Load '.env'.
-environ.Env.read_env(env_file=BASE_DIR / '.env')
+environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
 ### Print variables ###
 print(f'=== {BASE_DIR=}')  # noqa: T201
