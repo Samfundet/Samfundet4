@@ -1,0 +1,1 @@
+export { PermissionRoute } from './PermissionRoute';

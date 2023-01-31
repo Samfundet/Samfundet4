@@ -11,6 +11,7 @@ from root.constants import Environment
 from samfundet.models import (
     Venue,
     InformationPage,
+    ClosedPeriod,
 )
 
 User = get_user_model()
@@ -67,6 +68,8 @@ class Command(BaseCommand):
                 opening_monday=TIME_8,
                 closing_monday=TIME_23,
             )
-
+            ClosedPeriod.objects.create(
+                message_no='Closed', start_dt=timezone.now() - timezone.timedelta(hours=3), end_dt=timezone.now() - timezone.timedelta(hours=2)
+            )
         # Done.
         print('Seeding complete.')
