@@ -248,13 +248,9 @@ export async function getSaksdokument(pk: number | string): Promise<Saksdokument
   return response.data;
 }
 
-type SaksdokFormResponse = {
-  categories: Array<Array<string>>;
-};
-
-export async function getSaksdokumentForm(): Promise<AxiosResponse<SaksdokFormResponse>> {
+export async function getSaksdokumentForm(): Promise<AxiosResponse<{ categories: Array<Array<string>> }>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
-  const response = await axios.get<SaksdokFormResponse>(url, { withCredentials: true });
+  const response = await axios.get<{ categories: Array<Array<string>> }>(url, { withCredentials: true });
 
   return response;
 }
