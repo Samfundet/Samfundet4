@@ -3,7 +3,8 @@ from rest_framework.status import is_success, is_redirect, HTTP_403_FORBIDDEN
 
 from django.urls import reverse
 from django.test.client import Client
-from django.contrib.auth.models import User
+
+from samfundet.models import User
 
 from root.utils import routes, permissions
 

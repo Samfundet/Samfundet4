@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Load '.env'.
 environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
+AUTH_USER_MODEL = 'samfundet.User'
+
 ### Print variables ###
 print(f'=== {BASE_DIR=}')  # noqa: T201
 print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
