@@ -9,6 +9,7 @@ services:
     volumes:
       - ./backend:/app
       - ignore_venv:/app/.venv
+      - ignore_database:/app/database
         # - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
         # - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
         # - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
@@ -36,3 +37,4 @@ services:
 
 volumes:
   ignore_venv:
+  ignore_database:
