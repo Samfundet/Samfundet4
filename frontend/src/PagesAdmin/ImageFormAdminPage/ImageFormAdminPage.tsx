@@ -43,7 +43,7 @@ export function ImageFormAdminPage() {
         });
     }
     setShowSpinner(false);
-  }, [id, getImage]);
+  }, [id, getImage, navigate, setValue]);
 
   const onSubmit = (data) => {
     (id ? putImage(id, data) : postImage(data))

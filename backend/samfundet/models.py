@@ -47,9 +47,11 @@ class Image(models.Model):
 
     def __str__(self) -> str:
         return f'{self.title}'
-        
+
+
 class User(AbstractUser):
     ...
+
 
 class EventGroup(models.Model):
     name = models.CharField(max_length=140)
