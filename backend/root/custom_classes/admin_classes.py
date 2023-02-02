@@ -54,7 +54,7 @@ def get_obj_link(obj: Any) -> str | None:
 def get_admin_url(*, obj: Any) -> str:
     """https://stackoverflow.com/questions/10420271/django-how-to-get-admin-url-from-model-instance"""
     info = (obj._meta.app_label, obj._meta.model_name)
-    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk, ))
+    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk, ))  # pylint: disable=consider-using-f-string
     return admin_url
 
 
