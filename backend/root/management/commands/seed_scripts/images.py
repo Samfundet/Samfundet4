@@ -1,6 +1,5 @@
 import random
 import os
-import sys
 from django.core.files.images import ImageFile
 from root.utils.samfundet_random import words
 
