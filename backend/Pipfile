@@ -16,6 +16,7 @@ django-guardian = "*"
 pillow = "*"
 debugpy = "*"
 gunicorn = "*"
+django-admin-autocomplete-filter = "*"
 
 [dev-packages]
 yapf = "*"

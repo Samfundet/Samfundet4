@@ -18,6 +18,6 @@ class Command(BaseCommand):
             try:
                 management.call_command('makemigrations', appname)
 
-            except Exception as _e:  # pylint: disable=broad-except
+            except Exception as _e:  # pylint: disable=broad-exception-raised
                 # pass
                 print(f'{app} failed. {_e}')

@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
 from django.utils import timezone
-from django.contrib.auth import login, get_user_model, logout
+from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
@@ -27,11 +27,12 @@ from .utils import (
 
 from .models import (
     Tag,
-    Image,
+    User,
     Menu,
     Gang,
     Event,
     Table,
+    Image,
     Venue,
     Profile,
     Booking,
@@ -66,8 +67,6 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
 )
-
-User = get_user_model()
 
 
 class EventView(ModelViewSet):

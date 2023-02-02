@@ -1,7 +1,7 @@
 from guardian import models as guardian_models
 
 from django.contrib import admin
-from django.contrib.auth.models import Permission, User, Group
+from django.contrib.auth.models import Permission, Group
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
@@ -14,12 +14,13 @@ from root.custom_classes.admin_classes import (
 
 from .models import (
     Tag,
-    Image,
+    User,
     Menu,
     Gang,
     Event,
     Venue,
     Table,
+    Image,
     Profile,
     Booking,
     MenuItem,
@@ -47,7 +48,6 @@ from .models import (
 ### Django models ###
 
 # Unregister User and Group to set new Admins.
-admin.site.unregister(User)
 admin.site.unregister(Group)
 
 
