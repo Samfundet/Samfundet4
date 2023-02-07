@@ -221,7 +221,7 @@ class GangFormView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        data = {'gang_type': [[e.id, e.title_no] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
         return Response(data=data)
 
 

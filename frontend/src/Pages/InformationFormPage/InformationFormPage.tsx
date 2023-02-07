@@ -17,7 +17,7 @@ import styles from './InformationFormPage.module.scss';
  * Needed to select which field to edit based on current selected language.
  */
 const LANG_TO_SUFFIX: Record<LanguageValue, string> = {
-  [LANGUAGES.NB]: '_no',
+  [LANGUAGES.NB]: '_nb',
   [LANGUAGES.EN]: '_en',
 } as const;
 

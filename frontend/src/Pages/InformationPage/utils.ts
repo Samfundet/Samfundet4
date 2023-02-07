@@ -7,7 +7,7 @@ export function getTranslatedText(page: InformationPageDto | undefined, language
     text = page?.text_en;
   }
   if (language === LANGUAGES.NB) {
-    text = page?.text_no;
+    text = page?.text_nb;
   }
   return text;
 }

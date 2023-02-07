@@ -108,13 +108,13 @@ def eventgroup_to_dataclass(*, event_group: EventGroup) -> EventGroupDto:
 def event_to_dataclass(*, event: Event) -> EventDto:
     return EventDto(
         id=event.id,
-        title_no=event.title_no,
+        title_nb=event.title_nb,
         title_en=event.title_en,
         start_dt=event.start_dt,
         end_dt=event.end_dt(),
-        description_long_no=event.description_long_no,
+        description_long_nb=event.description_long_nb,
         description_long_en=event.description_long_en,
-        description_short_no=event.description_short_en,
+        description_short_nb=event.description_short_en,
         description_short_en=event.description_short_en,
         publish_dt=event.publish_dt,
         host=event.host,
@@ -139,8 +139,8 @@ def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Ev
     search = query.get('search', None)
     if search:
         events = events.filter(
-            Q(title_no__icontains=search) | Q(title_en__icontains=search) | Q(description_long_no__icontains=search) |
-            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(description_short_no=search) | Q(location__icontains=search) |
+            Q(title_nb__icontains=search) | Q(title_en__icontains=search) | Q(description_long_nb__icontains=search) |
+            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(description_short_nb=search) | Q(location__icontains=search) |
             Q(event_group__name=search)
         )
     event_group = query.get('event_group', None)
@@ -194,7 +194,7 @@ def venue_to_dataclass(*, venue: Venue) -> VenueDto:
 def saksdokument_to_dataclass(*, saksdokument: Saksdokument) -> SaksdokumentDto:
     return SaksdokumentDto(
         id=saksdokument.id,
-        title_no=saksdokument.title_no,
+        title_nb=saksdokument.title_nb,
         title_en=saksdokument.title_en,
         publication_date=saksdokument.publication_date,
         category=saksdokument.category,
@@ -207,8 +207,8 @@ def closedperiod_to_dataclass(*, closed_period: ClosedPeriod) -> ClosedPeriodDto
         id=closed_period.id,
         message_en=closed_period.message_en,
         description_en=closed_period.description_en,
-        message_no=closed_period.message_no,
-        description_no=closed_period.description_en,
+        message_nb=closed_period.message_nb,
+        description_nb=closed_period.description_en,
         start_dt=closed_period.start_dt,
         end_dt=closed_period.end_dt,
     )
