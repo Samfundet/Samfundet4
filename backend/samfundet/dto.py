@@ -75,8 +75,8 @@ class ImageDto:
 @dataclass
 class ClosedPeriodDto:
     id: int
-    message_no: str
-    description_no: str
+    message_nb: str
+    description_nb: str
     message_en: str
     description_en: str
     start_dt: datetime
@@ -87,11 +87,11 @@ class ClosedPeriodDto:
 @dataclass
 class EventDto:
     id: int
-    title_no: str
+    title_nb: str
     title_en: str
-    description_long_no: str
+    description_long_nb: str
     description_long_en: str
-    description_short_no: str
+    description_short_nb: str
     description_short_en: str
     location: str
     event_group: EventGroupDto
@@ -132,7 +132,7 @@ class ProfileDto:
 @dataclass
 class SaksdokumentDto:
     id: int
-    title_no: str
+    title_nb: str
     title_en: str
     publication_date: datetime
     category: str
@@ -143,7 +143,7 @@ class SaksdokumentDto:
 @dataclass
 class GangDto:
     id: int
-    name_no: str
+    name_nb: str
     name_en: str
     abbreviation: str
     webpage: str
@@ -156,6 +156,6 @@ class GangDto:
 @dataclass
 class GangTypeDto:
     id: int
-    title_no: str
+    title_nb: str
     title_en: str
     gangs: list[GangDto]

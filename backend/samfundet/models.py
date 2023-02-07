@@ -64,11 +64,11 @@ class EventGroup(models.Model):
 class Event(models.Model):
 
     # INFO
-    title_no = models.CharField(max_length=140)
+    title_nb = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
-    description_long_no = models.TextField(blank=True, null=True)
+    description_long_nb = models.TextField(blank=True, null=True)
     description_long_en = models.TextField(blank=True, null=True)
-    description_short_no = models.TextField(blank=True, null=True)
+    description_short_nb = models.TextField(blank=True, null=True)
     description_short_en = models.TextField(blank=True, null=True)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
     location = models.CharField(max_length=140, blank=True, null=True)
@@ -157,8 +157,8 @@ class Venue(models.Model):
 
 
 class ClosedPeriod(models.Model):
-    message_no = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
-    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -171,7 +171,7 @@ class ClosedPeriod(models.Model):
         verbose_name_plural = 'Stengt perioder'
 
     def __str__(self) -> str:
-        return f'{self.message_no} {self.start_dt}-{self.end_dt}'
+        return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
 
 
 class UserPreference(models.Model):
@@ -215,7 +215,7 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
     class Meta:
@@ -223,11 +223,11 @@ class GangType(models.Model):
         verbose_name_plural = 'GangTypes'
 
     def __str__(self) -> str:
-        return f'{self.title_no}'
+        return f'{self.title_nb}'
 
 
 class Gang(models.Model):
-    name_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
+    name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
@@ -241,7 +241,7 @@ class Gang(models.Model):
         verbose_name_plural = 'Gangs'
 
     def __str__(self) -> str:
-        return f'{self.gang_type} - {self.name_no}'
+        return f'{self.gang_type} - {self.name_nb}'
 
 
 class InformationPage(models.Model):
@@ -254,8 +254,8 @@ class InformationPage(models.Model):
         help_text='Primary key, this field will identify the object and be used in the URL.',
     )
 
-    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
-    text_no = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
 
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
     text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
@@ -271,8 +271,8 @@ class InformationPage(models.Model):
 
 
 class Table(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
-    description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -289,29 +289,29 @@ class Table(models.Model):
         verbose_name_plural = 'Tables'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class FoodPreference(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class FoodCategory(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class MenuItem(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
-    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -329,12 +329,12 @@ class MenuItem(models.Model):
         verbose_name_plural = 'MenuItems'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class Menu(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
-    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -346,11 +346,11 @@ class Menu(models.Model):
         verbose_name_plural = 'Menus'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class Saksdokument(models.Model):
-    title_no = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
+    title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
 
@@ -368,7 +368,7 @@ class Saksdokument(models.Model):
         verbose_name_plural = 'Saksdokument'
 
     def __str__(self) -> str:
-        return f'{self.title_no}'
+        return f'{self.title_nb}'
 
 
 class Booking(models.Model):
