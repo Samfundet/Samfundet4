@@ -3,11 +3,20 @@ from typing import Sequence
 from django.http import QueryDict
 from django.db.models import Q
 from django.db.models.query import QuerySet
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
-from .models import (Venue, Profile, Saksdokument, UserPreference, Event, EventGroup, ClosedPeriod)
+from .models import (
+    User,
+    Venue,
+    Event,
+    Profile,
+    EventGroup,
+    ClosedPeriod,
+    Saksdokument,
+    UserPreference,
+)
 
 from .dto import (
     UserDto,

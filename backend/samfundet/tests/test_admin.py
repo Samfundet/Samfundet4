@@ -3,14 +3,15 @@ from rest_framework.status import is_success, is_redirect, HTTP_403_FORBIDDEN
 
 from django.urls import reverse
 from django.test.client import Client
-from django.contrib.auth.models import User
+
+from samfundet.models import User
 
 from root.utils import routes, permissions
 
 ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__index,
-    routes.admin__auth_user_add,
-    routes.admin__auth_user_changelist,
+    routes.admin__samfundet_user_add,
+    routes.admin__samfundet_user_changelist,
     routes.admin__admin_logentry_add,
     routes.admin__admin_logentry_changelist,
     routes.admin__auth_group_add,
@@ -76,24 +77,24 @@ def test_staff_permission_admin_panel(fixture_django_client: Client, fixture_sta
     assert is_success(code=response.status_code)
 
     # Should not be able to see any model information.
-    url = reverse(routes.admin__auth_user_changelist)
+    url = reverse(routes.admin__samfundet_user_changelist)
     response = fixture_django_client.get(path=url)
     assert response.status_code == HTTP_403_FORBIDDEN
 
     # Should not be able to add any model.
-    url = reverse(routes.admin__auth_user_add)
+    url = reverse(routes.admin__samfundet_user_add)
     response = fixture_django_client.get(path=url)
     assert response.status_code == HTTP_403_FORBIDDEN
 
-    assign_perm(user_or_group=fixture_staff, perm=permissions.AUTH_VIEW_USER)
+    assign_perm(user_or_group=fixture_staff, perm=permissions.SAMFUNDET_VIEW_USER)
 
     # Should now be able to see any model information.
-    url = reverse(routes.admin__auth_user_changelist)
+    url = reverse(routes.admin__samfundet_user_changelist)
     response = fixture_django_client.get(path=url)
     assert is_success(code=response.status_code)
 
     # Should still not be able to add any model.
-    url = reverse(routes.admin__auth_user_add)
+    url = reverse(routes.admin__samfundet_user_add)
     response = fixture_django_client.get(path=url)
     assert response.status_code == HTTP_403_FORBIDDEN
 
@@ -104,8 +105,8 @@ def test_staff_object_permission_admin_panel(fixture_django_client: Client, fixt
     some_user = User.objects.create_user(username='some_user')
     other_user = User.objects.create_user(username='other_user')
 
-    url_some_user = reverse(routes.admin__auth_user_change, args=[some_user.id])
-    url_other_user = reverse(routes.admin__auth_user_change, args=[other_user.id])
+    url_some_user = reverse(routes.admin__samfundet_user_change, args=[some_user.id])
+    url_other_user = reverse(routes.admin__samfundet_user_change, args=[other_user.id])
 
     # Should not be able to change some_user or other_user.
     response = fixture_django_client.get(path=url_some_user)
@@ -114,7 +115,7 @@ def test_staff_object_permission_admin_panel(fixture_django_client: Client, fixt
     assert response.status_code == HTTP_403_FORBIDDEN
 
     # Give permission to change some_user.
-    assign_perm(user_or_group=fixture_staff, perm=permissions.AUTH_CHANGE_USER, obj=some_user)
+    assign_perm(user_or_group=fixture_staff, perm=permissions.SAMFUNDET_CHANGE_USER, obj=some_user)
 
     # Should now be able to change some_user but not other_user.
     response = fixture_django_client.get(path=url_some_user)
