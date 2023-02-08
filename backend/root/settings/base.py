@@ -186,6 +186,12 @@ AUTHENTICATION_BACKENDS += [
 ]
 ### End: django-guardian ###
 
+### admin_auto_filters ###
+INSTALLED_APPS += [
+    'admin_auto_filters',
+]
+### End: admin_auto_filters ###
+
 ################## LOGGING ##################
 
 # pylint: disable=wrong-import-position,wrong-import-order

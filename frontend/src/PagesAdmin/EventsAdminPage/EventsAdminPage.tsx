@@ -10,13 +10,14 @@ import { EventDto } from '~/dto';
 import { deleteEvent, getEventsUpcomming } from '~/api';
 import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
 import { reverse } from '~/named-urls';
+import { dbT } from '~/i18n/i18n';
 
 export function EventsAdminPage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<EventDto[]>([]);
   const [allEvents, setAllEvents] = useState<EventDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   function getEvents() {
     getEventsUpcomming()
@@ -76,7 +77,7 @@ export function EventsAdminPage() {
                       urlParams: { id: element.id },
                     })}
                   >
-                    {element.title_no}
+                    {dbT(element, 'title', i18n.language)}
                   </Link>
                 ),
               ),
@@ -105,7 +106,11 @@ export function EventsAdminPage() {
                       theme="samf"
                       display="block"
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${element.title_no}`)) {
+                        if (
+                          window.confirm(
+                            `${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(element, 'title', i18n.language)}`,
+                          )
+                        ) {
                           deleteSelectedEvent(element.id);
                         }
                       }}

@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button, TimeDisplay } from '~/Components';
 import { TimeDuration } from '~/Components/TimeDuration';
 import { EventDto } from '~/dto';
+import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './EventsList.module.scss';
@@ -12,6 +14,7 @@ type EventsListProps = {
 
 export function EventsList({ events }: EventsListProps) {
   /** check if dates are equal */
+  const { i18n } = useTranslation();
   return (
     <div className={styles.container}>
       {Object.keys(events).map(function (date_str: string, key: number) {
@@ -29,7 +32,7 @@ export function EventsList({ events }: EventsListProps) {
                         to={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
                         className={styles.link}
                       >
-                        {event.title_no}
+                        {dbT(event, 'title', i18n.language)}
                       </Link>
                     </div>
                     <div className={styles.column_area_time}>

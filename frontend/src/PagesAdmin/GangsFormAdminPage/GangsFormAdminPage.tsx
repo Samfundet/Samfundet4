@@ -86,7 +86,7 @@ export function GangsFormAdminPage() {
         <FormInputField
           errors={errors}
           className={styles.input}
-          name="name_no"
+          name="name_nb"
           required={t(KEY.form_required)}
           register={register}
         >

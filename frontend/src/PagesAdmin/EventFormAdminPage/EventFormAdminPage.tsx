@@ -94,7 +94,7 @@ export function EventFormAdminPage() {
             <FormInputField
               errors={errors}
               className={styles.input}
-              name="title_no"
+              name="title_nb"
               register={register}
               required={t(KEY.form_required)}
             >
@@ -106,14 +106,14 @@ export function EventFormAdminPage() {
               errors={errors}
               className={styles.input}
               rows={2}
-              name="description_short_no"
+              name="description_short_nb"
               register={register}
             >
               <p className={styles.labelText}>
                 {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
-            <FormTextAreaField errors={errors} className={styles.input} name="description_long_no" register={register}>
+            <FormTextAreaField errors={errors} className={styles.input} name="description_long_nb" register={register}>
               <p className={styles.labelText}>
                 {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
