@@ -12,17 +12,17 @@ def seed():
     for i in range(COUNT):
 
         # Event title and time
-        title_no, title_en = words(2, include_english=True)
-        slug_field = title_no.lower().replace(' ', '-')
+        title_nb, title_en = words(2, include_english=True)
+        slug_field = title_nb.lower().replace(' ', '-')
         InformationPage.objects.create(
             slug_field=slug_field,
-            title_no=title_no,
+            title_nb=title_nb,
             title_en=title_en,
-            text_no=MARKDOWN,
+            text_nb=MARKDOWN,
             text_en=MARKDOWN,
         )
 
-        yield int(i / COUNT * 100), f"Created page: '{title_no}'"
+        yield int(i / COUNT * 100), f"Created page: '{title_nb}'"
 
     # Done!
     yield 100, f'Created {InformationPage.objects.all().count()}'

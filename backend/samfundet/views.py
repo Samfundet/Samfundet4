@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
 from django.utils import timezone
-from django.contrib.auth import login, get_user_model, logout
+from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
@@ -26,6 +26,7 @@ from .utils import (
 )
 
 from .models import (
+    User,
     Menu,
     Gang,
     Event,
@@ -62,8 +63,6 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
 )
-
-User = get_user_model()
 
 
 class EventView(ModelViewSet):
@@ -222,7 +221,7 @@ class GangFormView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        data = {'gang_type': [[e.id, e.title_no] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
         return Response(data=data)
 
 

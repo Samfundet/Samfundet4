@@ -1,7 +1,7 @@
 from guardian import models as guardian_models
 
 from django.contrib import admin
-from django.contrib.auth.models import Permission, User, Group
+from django.contrib.auth.models import Permission, Group
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
@@ -13,6 +13,7 @@ from root.custom_classes.admin_classes import (
 )
 
 from .models import (
+    User,
     Menu,
     Gang,
     Event,
@@ -45,7 +46,6 @@ from .models import (
 ### Django models ###
 
 # Unregister User and Group to set new Admins.
-admin.site.unregister(User)
 admin.site.unregister(Group)
 
 
@@ -189,10 +189,10 @@ class ProfileAdmin(CustomGuardedModelAdmin):
 @admin.register(Event)
 class EventAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'title_no', 'title_en', 'host', 'location', 'event_group']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group']
     list_filter = ['event_group']
-    list_display = ['id', '__str__', 'title_no', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt']
-    search_fields = ['id', 'title_no', 'title_en', 'host', 'location']
+    list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt']
+    search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -229,10 +229,10 @@ class VenueAdmin(CustomGuardedModelAdmin):
 @admin.register(Gang)
 class GangAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_no', 'abbreviation', 'gang_type']
+    sortable_by = ['id', 'name_nb', 'abbreviation', 'gang_type']
     list_filter = ['gang_type']
-    list_display = ['id', '__str__', 'name_no', 'abbreviation', 'gang_type']
-    search_fields = ['id', 'name_no', 'abbreviation']
+    list_display = ['id', '__str__', 'name_nb', 'abbreviation', 'gang_type']
+    search_fields = ['id', 'name_nb', 'abbreviation']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     autocomplete_fields = ['gang_type']
@@ -242,10 +242,10 @@ class GangAdmin(CustomGuardedModelAdmin):
 @admin.register(GangType)
 class GangTypeAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'title_no']
+    sortable_by = ['id', 'title_nb']
     # list_filter = []
-    list_display = ['id', '__str__', 'title_no']
-    search_fields = ['id', 'title_no']
+    list_display = ['id', '__str__', 'title_nb']
+    search_fields = ['id', 'title_nb']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -258,7 +258,7 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
     sortable_by = ['slug_field']
     # list_filter = []
     list_display = ['__str__', 'slug_field']
-    search_fields = ['slug_field', 'title_no', 'title_en']
+    search_fields = ['slug_field', 'title_nb', 'title_en']
     # filter_horizontal = []
     list_display_links = ['__str__', 'slug_field']
     # autocomplete_fields = []
@@ -268,10 +268,10 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
 @admin.register(Table)
 class TableAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_no', 'name_en', 'seating']
+    sortable_by = ['id', 'name_nb', 'name_en', 'seating']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_no', 'name_en', 'seating']
-    search_fields = ['id', 'name_no', 'name_en']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'seating']
+    search_fields = ['id', 'name_nb', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -281,10 +281,10 @@ class TableAdmin(CustomGuardedModelAdmin):
 @admin.register(Menu)
 class MenuAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_no', 'name_en']
+    sortable_by = ['id', 'name_nb', 'name_en']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_no', 'name_en', 'menu_item_count']
-    search_fields = ['id', 'name_no', 'name_en']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'menu_item_count']
+    search_fields = ['id', 'name_nb', 'name_en']
     filter_horizontal = ['menu_items']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -299,10 +299,10 @@ class MenuAdmin(CustomGuardedModelAdmin):
 @admin.register(MenuItem)
 class MenuItemAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_no', 'name_en', 'price', 'price_member', 'order']
+    sortable_by = ['id', 'name_nb', 'name_en', 'price', 'price_member', 'order']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_no', 'name_en', 'price', 'price_member', 'order']
-    search_fields = ['id', 'name_no', 'name_en']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'price', 'price_member', 'order']
+    search_fields = ['id', 'name_nb', 'name_en']
     filter_horizontal = ['food_preferences']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -312,10 +312,10 @@ class MenuItemAdmin(CustomGuardedModelAdmin):
 @admin.register(FoodCategory)
 class FoodCategoryAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_no', 'name_en', 'order']
+    sortable_by = ['id', 'name_nb', 'name_en', 'order']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_no', 'name_en', 'order']
-    search_fields = ['id', 'name_no', 'name_en']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'order']
+    search_fields = ['id', 'name_nb', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -325,10 +325,10 @@ class FoodCategoryAdmin(CustomGuardedModelAdmin):
 @admin.register(FoodPreference)
 class FoodPreferenceAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_no', 'name_en']
+    sortable_by = ['id', 'name_nb', 'name_en']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_no', 'name_en']
-    search_fields = ['id', 'name_no', 'name_en']
+    list_display = ['id', '__str__', 'name_nb', 'name_en']
+    search_fields = ['id', 'name_nb', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -338,10 +338,10 @@ class FoodPreferenceAdmin(CustomGuardedModelAdmin):
 @admin.register(Saksdokument)
 class SaksdokumentAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'title_no']
+    sortable_by = ['id', 'title_nb']
     # list_filter = []
-    list_display = ['id', '__str__', 'title_no']
-    search_fields = ['id', 'title_no']
+    list_display = ['id', '__str__', 'title_nb']
+    search_fields = ['id', 'title_nb']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
