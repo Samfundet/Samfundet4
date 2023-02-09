@@ -1,5 +1,5 @@
 import { Children } from '~/types';
-import styles from '../ExpandableList.module.scss';
+import styles from './Child.module.scss';
 import classNames from 'classnames';
 
 type ChildProps = {

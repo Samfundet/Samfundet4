@@ -25,23 +25,6 @@
   top: 0%;
 }
 
-.item {
-  border-bottom: 1px solid $grey-0;
-  padding: 1em;
-  width: 100%;
-  cursor: pointer;
-}
-
-.parent {
-  display: flex;
-  justify-content: space-between;
-}
-
-.child {
-  display: flex;
-  gap: 1em;
-}
-
 .back_button {
   cursor: pointer;
 }

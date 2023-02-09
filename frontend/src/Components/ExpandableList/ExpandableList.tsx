@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Children } from '~/types';
 import styles from './ExpandableList.module.scss';
-import { useExpandableListContext } from './components/ExpandableListContext';
+import { useExpandableListContext } from './ExpandableListContext/ExpandableListContext';
 
 type ExpandableListProps = {
   children: Children;

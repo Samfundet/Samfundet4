@@ -1,4 +1,4 @@
+export { Child } from './Child';
 export { ExpandableList } from './ExpandableList';
-export { Child } from './components/Child';
-export { ExpandableListContextProvider } from './components/ExpandableListContext';
-export { Parent } from './components/Parent';
+export { ExpandableListContextProvider } from './ExpandableListContext/ExpandableListContext';
+export { Parent } from './Parent';

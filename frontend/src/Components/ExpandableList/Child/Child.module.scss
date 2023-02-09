@@ -1,0 +1,12 @@
+@import 'src/constants';
+
+.child {
+  display: flex;
+  gap: 1em;
+}
+.item {
+  border-bottom: 1px solid $grey-0;
+  padding: 1em;
+  width: 100%;
+  cursor: pointer;
+}

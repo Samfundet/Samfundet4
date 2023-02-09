@@ -111,7 +111,7 @@ export function SaksdokumenterPage() {
                                   {saksdokument.publication_date && getFormattedDate(saksdokument.publication_date)}
                                 </div>
                                 <a href={saksdokument.file} target="_blank" rel="noreferrer" className={styles.child}>
-                                  {i18n.language === LANGUAGES.NB ? saksdokument.title_no : saksdokument.title_en}
+                                  {i18n.language === LANGUAGES.NB ? saksdokument.title_nb : saksdokument.title_en}
                                 </a>
                               </Child>
                             ))}
