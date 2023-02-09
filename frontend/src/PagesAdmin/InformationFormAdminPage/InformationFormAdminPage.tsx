@@ -109,7 +109,7 @@ export function InformationFormAdminPage() {
               <FormInputField
                 errors={errors}
                 className={styles.input}
-                name="title_no"
+                name="title_nb"
                 register={register}
                 required={t(KEY.form_required)}
               >
@@ -117,7 +117,7 @@ export function InformationFormAdminPage() {
                   {t(KEY.norwegian)} {t(KEY.common_title)}
                 </p>
               </FormInputField>
-              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_no" register={register}>
+              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_nb" register={register}>
                 <p className={styles.labelText}>
                   {t(KEY.norwegian)} {t(KEY.content)}
                 </p>
@@ -125,7 +125,7 @@ export function InformationFormAdminPage() {
             </div>
             <div className={styles.col}>
               <div className={styles.markdownField}>
-                <ReactMarkdown>{getValues('text_no')}</ReactMarkdown>
+                <ReactMarkdown>{getValues('text_nb')}</ReactMarkdown>
               </div>
             </div>
           </div>
