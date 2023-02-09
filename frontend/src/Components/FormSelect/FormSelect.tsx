@@ -7,7 +7,7 @@ type FormSelectProps = {
   className?: string;
   labelClassName?: string;
   selectClassName?: string;
-  options?: string[][];
+  options?: string[][] | undefined;
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;

@@ -3,7 +3,7 @@ import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
 import { Children } from '~/types';
 import styles from './FormInputField.module.scss';
 
-type types = 'text' | 'number' | 'email' | 'password';
+type types = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'file';
 
 type FormInputFieldProps = {
   children?: Children;

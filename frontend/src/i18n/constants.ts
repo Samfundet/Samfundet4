@@ -37,6 +37,7 @@ export const KEY = {
   common_time: 'common_time',
   common_price: 'common_price',
   common_capacity: 'common_capacity',
+  common_publication_date: 'common_publication_date',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
@@ -98,6 +99,7 @@ export const KEY = {
   form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
+  saksdokument: 'saksdokument',
 } as const;
 
 /**
