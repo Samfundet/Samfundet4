@@ -87,11 +87,11 @@ export function SaksdokumenterPage() {
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
   }
 
-  return loading ? (
-    <div className={styles.container}>
-      <SamfundetLogoSpinner />
-    </div>
-  ) : (
+  if (loading) {
+    <SamfundetLogoSpinner />;
+  }
+
+  return (
     <div className={styles.container}>
       <ExpandableListContextProvider>
         <ExpandableList header="" depth={3}>
