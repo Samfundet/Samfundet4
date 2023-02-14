@@ -10,6 +10,7 @@ export type Children = ReactNode;
 /**Duplicate of colors and hex from _constants.scss */
 export const COLORS = {
   red_samf: '#a03033',
+  compl_samf: '#2e802b',
   blue_lighter: '#e3f2ff',
   blue_light: '#c4dbf3',
   blue_medium: '#88b3e0',
