@@ -36,7 +36,7 @@ def seed():
 
     # Create food preferences
     prefs = [FoodPreference.objects.create(
-        name_no=p_name[0],
+        name_nb=p_name[0],
         name_en=p_name[1],
     ) for p_name in preferences]
     yield 10, f'Created {len(preferences)} food preferences'
@@ -45,7 +45,7 @@ def seed():
     menu_items = []
     for i, cat_name in enumerate(menu_template):
         category = FoodCategory.objects.create(
-            name_no=cat_name[0],
+            name_nb=cat_name[0],
             name_en=cat_name[1],
             order=i,
         )
@@ -54,9 +54,9 @@ def seed():
         for _, it_name in enumerate(menu_template[cat_name]):
             base_price = random.randint(15, 150)
             item = MenuItem.objects.create(
-                name_no=it_name[0],
+                name_nb=it_name[0],
                 name_en=it_name[1],
-                description_no=words(10),
+                description_nb=words(10),
                 description_en=words(10),
                 food_category=category,
                 price=base_price,
@@ -71,9 +71,9 @@ def seed():
 
     # Create menu
     menu = Menu.objects.create(
-        name_no='Frø-meny',
+        name_nb='Frø-meny',
         name_en='Seed menu',
-        description_no=words(10),
+        description_nb=words(10),
         description_en=words(10),
     )
     menu.menu_items.add(*menu_items)

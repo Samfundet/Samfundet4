@@ -10,7 +10,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_other_language]: 'English',
   [KEY.common_save]: 'Lagre',
-  [KEY.common_create]: 'Ny',
+  [KEY.common_create]: 'Opprett',
   [KEY.norwegian]: 'Norsk',
   [KEY.english]: 'Engelsk',
   [KEY.common_buy]: 'Kjøp',
@@ -18,6 +18,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_login]: 'Logg inn',
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_password]: 'passord',
+  [KEY.common_publication_date]: 'Publiserings dato',
   [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
   [KEY.login_internal_login]: 'Logg inn som intern',
   [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
@@ -98,6 +99,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.duration]: 'Varighet',
   [KEY.publication]: 'Publisering',
+  [KEY.saksdokument]: 'Saksdokument',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -108,7 +110,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_volunteer]: 'Volunteer',
   [KEY.common_other_language]: 'Norsk',
-  [KEY.common_create]: 'New',
+  [KEY.common_create]: 'Create',
   [KEY.common_save]: 'Save',
   [KEY.common_title]: 'Title',
   [KEY.common_buy]: 'Buy',
@@ -126,6 +128,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_time]: 'Time',
   [KEY.common_price]: 'Price',
   [KEY.common_capacity]: 'Capacity',
+  [KEY.common_publication_date]: 'Publication date',
   [KEY.norwegian]: 'Norwegian',
   [KEY.english]: 'English',
   [KEY.login_forgotten_password]: 'Forgot password?',
@@ -195,4 +198,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Are you sure you want do',
   [KEY.duration]: 'Duration',
   [KEY.publication]: 'Publication',
+  [KEY.saksdokument]: 'case document',
 };

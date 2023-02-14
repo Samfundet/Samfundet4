@@ -21,7 +21,9 @@ from root.constants import Environment
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Load '.env'.
-environ.Env.read_env(env_file=BASE_DIR / '.env')
+environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
+
+AUTH_USER_MODEL = 'samfundet.User'
 
 ### Print variables ###
 print(f'=== {BASE_DIR=}')  # noqa: T201
@@ -183,6 +185,12 @@ AUTHENTICATION_BACKENDS += [
     'guardian.backends.ObjectPermissionBackend',
 ]
 ### End: django-guardian ###
+
+### admin_auto_filters ###
+INSTALLED_APPS += [
+    'admin_auto_filters',
+]
+### End: admin_auto_filters ###
 
 ################## LOGGING ##################
 

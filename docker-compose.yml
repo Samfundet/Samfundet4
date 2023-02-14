@@ -9,6 +9,9 @@ services:
     volumes:
       - ./backend:/app
       - ignore_venv:/app/.venv
+      # It's important that the folder 'database' containing db.sqlite3 is not added to volume.
+      # We do not want to share database between localhost and container.
+      - ignore_database:/app/database
         # - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
         # - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
         # - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
@@ -31,11 +34,9 @@ services:
     environment:
       - IS_DOCKER=true
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
-      - VITE_GOATCOUNTER_CODE=samfundet-dev2
-      - VITE_BACKEND_DOMAIN=http://backend:8000
-      - CYPRESS_BASE_URL=http://frontend:3000
     ports:
       - '3000:3000'
 
 volumes:
   ignore_venv:
+  ignore_database:

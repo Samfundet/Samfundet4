@@ -2,7 +2,8 @@ from rest_framework.test import APIClient
 from rest_framework.status import is_success
 
 from django.urls import reverse
-from django.contrib.auth.models import User
+
+from samfundet.models import User
 
 
 def test_health():
