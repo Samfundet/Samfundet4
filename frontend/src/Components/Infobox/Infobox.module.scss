@@ -61,7 +61,7 @@
     display: block;
   }
 }
-@media only screen and (min-width: 770px) {
+@media only screen and (min-width: $tablet-bp-lower) {
   .infobox_wrap {
     display: flex;
     flex-direction: row;
