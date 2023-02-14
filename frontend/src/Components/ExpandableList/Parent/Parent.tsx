@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Children } from '~/types';
-import styles from './Parent.module.scss';
 import { useExpandableListContext } from '../ExpandableListContext/ExpandableListContext';
+import styles from './Parent.module.scss';
 
 type ParentProps = {
   children: Children;
