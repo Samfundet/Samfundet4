@@ -21,7 +21,9 @@ from root.constants import Environment
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Load '.env'.
-environ.Env.read_env(env_file=BASE_DIR / '.env')
+environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
+
+AUTH_USER_MODEL = 'samfundet.User'
 
 ### Print variables ###
 print(f'=== {BASE_DIR=}')  # noqa: T201
@@ -184,6 +186,12 @@ AUTHENTICATION_BACKENDS += [
 ]
 ### End: django-guardian ###
 
+### admin_auto_filters ###
+INSTALLED_APPS += [
+    'admin_auto_filters',
+]
+### End: admin_auto_filters ###
+
 ################## LOGGING ##################
 
 # pylint: disable=wrong-import-position,wrong-import-order
@@ -195,6 +203,11 @@ from root.custom_classes.request_context_filter import RequestContextFilter  # n
 # pylint: enable=wrong-import-position,wrong-import-order
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
+SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
+
+# Reset file each time server reloads.
+# pylint: disable=consider-using-with, unspecified-encoding
+open(SQL_LOG_FILE, 'w').close()
 
 LOGGING = {
     'version': 1,
@@ -251,6 +264,13 @@ LOGGING = {
                     'stream': sys.stdout,
                     'filters': ['request_context_filter'],
                 },
+            'sql_file':
+                {
+                    'level': os.environ.get('SQL_LOG_LEVEL', 'INFO'),
+                    'class': 'logging.FileHandler',
+                    'filename': SQL_LOG_FILE,  # Added to '.gitignore'.
+                    'filters': ['require_debug_true'],
+                },
         },
     'loggers':
         {
@@ -267,9 +287,9 @@ LOGGING = {
                 'level': 'DEBUG',
             },
             'django.db.backends': {
-                'handlers': ['console'],
+                'handlers': ['sql_file'],
                 'propagate': False,  # Don't pass up to 'django'.
-                'level': 'INFO',
+                'level': 'DEBUG',
             },
             'django.server': {
                 'handlers': ['console'],

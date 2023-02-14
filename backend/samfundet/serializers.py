@@ -10,6 +10,7 @@ from .models import (
     EventGroup,
     Table,
     Venue,
+    ClosedPeriod,
     Booking,
     Profile,
     MenuItem,
@@ -25,6 +26,7 @@ User = get_user_model()
 
 
 class EventSerializer(serializers.ModelSerializer):
+    end_dt = serializers.DateTimeField(required=False)
 
     class Meta:
         model = Event
@@ -42,6 +44,13 @@ class VenueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Venue
+        fields = '__all__'
+
+
+class ClosedPeriodSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ClosedPeriod
         fields = '__all__'
 
 

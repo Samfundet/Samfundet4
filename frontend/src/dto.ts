@@ -63,19 +63,24 @@ export type VenueDto = {
 
 export type EventDto = {
   id: number;
-  title_no: string;
+  title_nb: string;
   title_en: string;
   start_dt: Date;
-  end_dt: Date;
-  description_long_no: string;
+  duration: number;
+  end_dt?: Date;
+  description_long_nb: string;
   description_long_en: string;
-  description_short_no: string;
+  description_short_nb: string;
   description_short_en: string;
   publish_dt: Date;
   host: string;
   location: string;
   event_group: EventGroupDto;
   price_group: string;
+  status_group: string;
+  age_group: string;
+  codeword: string;
+  banner_image: string;
 };
 
 export type EventGroupDto = {
@@ -96,16 +101,16 @@ export type UserPreferenceDto = {
 export type InformationPageDto = {
   slug_field?: string;
 
-  title_no?: string;
-  text_no?: string;
+  title_nb?: string;
+  text_nb?: string;
 
   title_en?: string;
   text_en?: string;
 };
 
 export type TableDto = {
-  name_no?: string;
-  description_no?: string;
+  name_nb?: string;
+  description_nb?: string;
 
   name_en?: string;
   description_en?: string;
@@ -114,19 +119,19 @@ export type TableDto = {
 };
 
 export type FoodPreferenceDto = {
-  name_no?: string;
+  name_nb?: string;
   name_en?: string;
 };
 
 export type FoodCategoryDto = {
-  name_no?: string;
+  name_nb?: string;
   name_en?: string;
   order?: number;
 };
 
 export type MenuItemDto = {
-  name_no?: string;
-  description_no?: string;
+  name_nb?: string;
+  description_nb?: string;
 
   name_en?: string;
   description_en?: string;
@@ -139,8 +144,8 @@ export type MenuItemDto = {
 };
 
 export type MenuDto = {
-  name_no?: string;
-  description_no?: string;
+  name_nb?: string;
+  description_nb?: string;
 
   name_en?: string;
   description_en?: string;
@@ -149,7 +154,7 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
-  title_no?: string;
+  title_nb?: string;
   title_en?: string;
   category?: string;
   publication_date?: Date;
@@ -169,7 +174,7 @@ export type BookingDto = {
 
 export type GangDto = {
   id: number;
-  name_no: string;
+  name_nb: string;
   name_en: string;
   abbreviation: string;
   webpage?: string;
@@ -180,7 +185,7 @@ export type GangDto = {
 
 export type GangTypeDto = {
   id: number;
-  title_no: string;
+  title_nb: string;
   title_en: string;
   gangs: GangDto[];
 };

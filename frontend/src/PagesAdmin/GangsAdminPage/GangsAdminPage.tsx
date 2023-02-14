@@ -10,12 +10,13 @@ import { GangTypeDto } from '~/dto';
 import { getGangList } from '~/api';
 import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
 import { reverse } from '~/named-urls';
+import { dbT } from '~/i18n/i18n';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -53,10 +54,10 @@ export function GangsAdminPage() {
       {gangTypes.map(function (element, key) {
         return (
           <div key={key}>
-            <h2 className={styles.gangTypeHeader}>{element.title_no}</h2>
+            <h2 className={styles.gangTypeHeader}>{dbT(element, 'title', i18n.language)}</h2>
             <Table
               columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
-              data={element.gangs.map(function (element2, key2) {
+              data={element.gangs.map(function (element2) {
                 return [
                   new AlphabeticTableCell(
                     (
@@ -69,7 +70,7 @@ export function GangsAdminPage() {
                           })
                         }
                       >
-                        {element2.name_no}
+                        {dbT(element2, 'name', i18n.language)}
                       </Link>
                     ),
                   ),
@@ -101,18 +102,3 @@ export function GangsAdminPage() {
     </Page>
   );
 }
-
-/**                return (
-                  <tr key={key2}>
-                    <td>
-                      <Link>{element2.name_no}</Link>
-                    </td>
-                    <td>{element2.abbreviation}</td>
-                    <td>{element2.webpage}</td>
-                    <td>
-                      <Button theme="blue">Rediger gjeng</Button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </Table> */

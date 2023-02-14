@@ -22,5 +22,5 @@ class SamfundetConfig(AppConfig):
             try:
                 LOG.info(f"Attempt to create superuser '{os.environ.get('DJANGO_SUPERUSER_USERNAME')}'")
                 management.call_command('createsuperuser', interactive=False)
-            except Exception as e:  # pylint: disable=broad-except
+            except Exception as e:  # pylint: disable=broad-exception-raised
                 LOG.info(e)

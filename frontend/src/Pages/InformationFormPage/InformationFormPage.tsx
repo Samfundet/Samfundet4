@@ -17,7 +17,7 @@ import styles from './InformationFormPage.module.scss';
  * Needed to select which field to edit based on current selected language.
  */
 const LANG_TO_SUFFIX: Record<LanguageValue, string> = {
-  [LANGUAGES.NB]: '_no',
+  [LANGUAGES.NB]: '_nb',
   [LANGUAGES.EN]: '_en',
 } as const;
 
@@ -82,7 +82,7 @@ export function InformationFormPage() {
 
   function handleSave() {
     if (page) {
-      putInformationPage(page).then((response) => {
+      putInformationPage(page.slug_field, page).then((response) => {
         if (response.status === STATUS.HTTP_200_OK) {
           navigate(
             reverse({ pattern: ROUTES.frontend.information_page_detail, urlParams: { slugField: page.slug_field } }),

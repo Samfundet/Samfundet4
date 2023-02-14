@@ -1,5 +1,10 @@
+import {
+  SAMFUNDET_ADD_EVENT,
+  SAMFUNDET_ADD_GANG,
+  SAMFUNDET_ADD_INFORMATIONPAGE,
+  SAMFUNDET_ADD_SAKSDOKUMENT,
+} from '~/permissions';
 import { ROUTES } from '~/routes';
-import { SAMFUNDET_ADD_EVENT, SAMFUNDET_ADD_GANG, SAMFUNDET_ADD_INFORMATIONPAGE } from '~/permissions';
 
 export const applets = [
   {
@@ -34,9 +39,17 @@ export const applets = [
     title: 'Arrangementer',
     perm: SAMFUNDET_ADD_EVENT,
     options: [
-      { text: 'Opprett arrangement', url: '', type: 'ADD' },
-      { text: 'Rediger arrangementer', url: '', type: 'MANAGE' },
+      { text: 'Opprett arrangement', url: ROUTES.frontend.admin_events_create, type: 'ADD' },
+      { text: 'Rediger arrangementer', url: ROUTES.frontend.admin_events_upcomming, type: 'MANAGE' },
       { text: 'Tidligere arrangementer', url: '', type: 'MANAGE' },
+    ],
+  },
+  {
+    title: 'Saksdokumenter',
+    perm: SAMFUNDET_ADD_SAKSDOKUMENT,
+    options: [
+      { text: 'Last opp nytt saksdokument', url: ROUTES.frontend.admin_saksdokument_create, type: 'ADD' },
+      { text: 'Administrer saksdokument', url: ROUTES.frontend.admin_saksdokument, type: 'MANAGE' },
     ],
   },
 ];

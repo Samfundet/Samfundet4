@@ -18,7 +18,11 @@ export const ROUTES_FRONTEND = {
   admin_gangs_create: '/admin/gangs/create/',
   admin_gangs_edit: '/admin/gangs/edit/:id/',
   admin_events_upcomming: '/admin/events/upcomming/',
+  admin_events_create: '/admin/events/create/',
+  admin_events_edit: '/admin/events/edit/:id/',
   admin_information: '/admin/information/',
   admin_information_create: '/admin/information/create/',
   admin_information_edit: '/admin/information/edit/:slugField/',
+  admin_saksdokumenter_create: '/admin/saksdokument/create/',
+  admin_saksdokumenter_edit: '/admin/saksdokument/edit/:id/',
 } as const;

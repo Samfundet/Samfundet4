@@ -4,7 +4,8 @@ import pytest
 from rest_framework.test import APIClient
 
 from django.test import Client
-from django.contrib.auth.models import User
+
+from samfundet.models import User
 
 # pylint: disable=pointless-string-statement
 """

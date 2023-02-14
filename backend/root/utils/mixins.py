@@ -139,7 +139,7 @@ class FieldTrackerMixin(Model):
                     f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
                     f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
                 )
-        except Exception as e:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-exception-raised
             # Get all changes.
             dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()
             LOG.info(f'{self} failed attempting to save:\n\nold: {dirty_fields_old}\n\nnew: {dirty_fields_new}')

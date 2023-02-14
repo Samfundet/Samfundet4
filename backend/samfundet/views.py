@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
 from django.utils import timezone
-from django.contrib.auth import login, get_user_model, logout
+from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
@@ -16,20 +16,30 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import XCSRFTOKEN
 
-from .utils import (user_to_dataclass, users_to_dataclass, groups_to_dataclass, events_to_dataclass, event_query)
+from .utils import (
+    event_query,
+    user_to_dataclass,
+    users_to_dataclass,
+    groups_to_dataclass,
+    events_to_dataclass,
+    closedperiod_to_dataclass,
+)
+
 from .models import (
+    User,
     Menu,
     Gang,
     Event,
-    EventGroup,
     Table,
     Venue,
     Profile,
     Booking,
     MenuItem,
     GangType,
+    EventGroup,
     FoodCategory,
     Saksdokument,
+    ClosedPeriod,
     FoodPreference,
     UserPreference,
     InformationPage,
@@ -38,7 +48,6 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     EventSerializer,
-    EventGroupSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
@@ -46,14 +55,14 @@ from .serializers import (
     BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    EventGroupSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
+    ClosedPeriodSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
 )
-
-User = get_user_model()
 
 
 class EventView(ModelViewSet):
@@ -81,14 +90,41 @@ class EventsUpcommingView(APIView):
 
     def get(self, request: Request) -> Response:
         events = event_query(request.query_params)
-        events = events.filter(end_dt__gt=timezone.now()).order_by('start_dt')
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')  # TODO Update with duration
         events = [event.to_dict() for event in events_to_dataclass(events=events)]  # type: ignore[attr-defined]
         return Response(data=events)
+
+
+class EventFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {
+            'age_groups': Event.AgeGroup.choices,
+            'status_groups': Event.StatusGroup.choices,
+            'venues': [[v.name] for v in Venue.objects.all()],
+            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
+        }
+        return Response(data=data)
 
 
 class VenueView(ModelViewSet):
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+
+
+class ClosedPeriodView(ModelViewSet):
+    serializer_class = ClosedPeriodSerializer
+    queryset = ClosedPeriod.objects.all()
+
+
+class IsClosedView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        closed_period = ClosedPeriod.objects.filter(start_dt__lte=timezone.now(), end_dt__gte=timezone.now()).first()
+        data = closedperiod_to_dataclass(closed_period=closed_period) if closed_period else None
+        return Response(data={data})
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -181,6 +217,14 @@ class GangTypeView(ModelViewSet):
     queryset = GangType.objects.all()
 
 
+class GangFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        return Response(data=data)
+
+
 class EventGroupView(ModelViewSet):
     http_method_names = ['get']
     serializer_class = EventGroupSerializer
@@ -218,6 +262,14 @@ class FoodPreferenceView(ModelViewSet):
 class SaksdokumentView(ModelViewSet):
     serializer_class = SaksdokumentSerializer
     queryset = Saksdokument.objects.all()
+
+
+class SaksdokumentFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {'categories': Saksdokument.SaksdokumentCategory.choices}
+        return Response(data=data)
 
 
 class TableView(ModelViewSet):

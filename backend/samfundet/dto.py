@@ -56,20 +56,37 @@ class VenueDto:
 
 @dataclass_json
 @dataclass
-class EventDto:
+class ClosedPeriodDto:
     id: int
-    title_no: str
-    title_en: str
+    message_nb: str
+    description_nb: str
+    message_en: str
+    description_en: str
     start_dt: datetime
     end_dt: datetime
-    description_long_no: str
+
+
+@dataclass_json
+@dataclass
+class EventDto:
+    id: int
+    title_nb: str
+    title_en: str
+    description_long_nb: str
     description_long_en: str
-    description_short_no: str
+    description_short_nb: str
     description_short_en: str
-    publish_dt: datetime
-    host: str
     location: str
     event_group: EventGroupDto
+    status_group: str
+    age_group: str
+    codeword: str
+    start_dt: datetime
+    duration: int
+    end_dt: datetime
+    publish_dt: datetime
+    host: str
+    banner_image: str
     price_group: str
 
 
@@ -98,7 +115,7 @@ class ProfileDto:
 @dataclass
 class SaksdokumentDto:
     id: int
-    title_no: str
+    title_nb: str
     title_en: str
     publication_date: datetime
     category: str
@@ -109,7 +126,7 @@ class SaksdokumentDto:
 @dataclass
 class GangDto:
     id: int
-    name_no: str
+    name_nb: str
     name_en: str
     abbreviation: str
     webpage: str
@@ -122,6 +139,6 @@ class GangDto:
 @dataclass
 class GangTypeDto:
     id: int
-    title_no: str
+    title_nb: str
     title_en: str
     gangs: list[GangDto]

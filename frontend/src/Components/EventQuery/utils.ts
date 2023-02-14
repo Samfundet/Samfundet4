@@ -6,11 +6,11 @@ export function eventQuery(events: EventDto[], search: string, venue: string, ev
   return events.filter(
     (event) =>
       (search.length == 0 ||
-        event.title_no.toLowerCase().includes(search) ||
+        event.title_nb.toLowerCase().includes(search) ||
         event.title_en.toLowerCase().includes(search) ||
-        event.description_long_no.toLowerCase().includes(search) ||
+        event.description_long_nb.toLowerCase().includes(search) ||
         event.description_long_en.toLowerCase().includes(search) ||
-        event.description_short_no.toLowerCase().includes(search) ||
+        event.description_short_nb.toLowerCase().includes(search) ||
         event.description_short_en.toLowerCase().includes(search) ||
         event.location.toLowerCase().includes(search) ||
         event.event_group.name.toLowerCase().includes(search)) &&

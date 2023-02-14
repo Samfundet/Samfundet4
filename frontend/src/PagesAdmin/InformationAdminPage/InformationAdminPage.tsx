@@ -10,12 +10,13 @@ import { InformationPageDto } from '~/dto';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
 import { reverse } from '~/named-urls';
+import { dbT } from '~/i18n/i18n';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -65,7 +66,7 @@ export function InformationAdminPage() {
       <div className={styles.tableContainer}>
         <Table
           columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']}
-          data={informationPages.map(function (element, key) {
+          data={informationPages.map(function (element) {
             return [
               new AlphabeticTableCell(
                 (
@@ -79,7 +80,7 @@ export function InformationAdminPage() {
                   </Link>
                 ),
               ),
-              new AlphabeticTableCell(element.title_no),
+              new AlphabeticTableCell(dbT(element, 'title', i18n.language)),
               new AlphabeticTableCell('To be added'),
               new AlphabeticTableCell('To be added'),
               {

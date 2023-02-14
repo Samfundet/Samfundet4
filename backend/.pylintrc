@@ -29,6 +29,7 @@ disable=
     duplicate-code,
     imported-auth-user, # Don't require get_user_model().
     too-many-ancestors,
+    broad-exception-caught, broad-exception-raised,
     too-many-instance-attributes,
     too-few-public-methods,
     too-many-public-methods,
