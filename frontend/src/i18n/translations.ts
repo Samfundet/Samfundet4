@@ -105,6 +105,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.duration]: 'Varighet',
   [KEY.publication]: 'Publisering',
   [KEY.saksdokument]: 'Saksdokument',
+  event: '',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -209,4 +210,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.duration]: 'Duration',
   [KEY.publication]: 'Publication',
   [KEY.saksdokument]: 'case document',
+  admin_information_new_page: '',
+  admin_information_create_page: '',
+  event: '',
 };

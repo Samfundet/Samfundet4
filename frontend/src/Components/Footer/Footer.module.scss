@@ -1,6 +1,6 @@
 @import 'src/constants';
-@import 'src/mixins';
 
+@import 'src/mixins';
 
 .sponsor {
   display: flex;
@@ -8,7 +8,7 @@
   align-items: center;
   margin-top: 2em;
 
-  .sponsorBox{
+  .sponsorBox {
     width: 10em;
     margin: 0.5em;
     justify-content: center;
@@ -20,26 +20,23 @@
       }
       color: inherit;
       text-decoration: initial;
-      text-decoration: none;
-      white-space: nowrap ;
+      white-space: nowrap;
       display: inline-block;
       vertical-align: middle;
-      
     }
   }
 
-  .centerUL{
-    padding: 0em;
+  .centerUL {
+    padding: 0;
     margin: 0;
     text-align: center;
     list-style: inside;
     list-style-type: none;
   }
 
-
   .horisontalLi {
     margin: 0.5em;
-    display:inline-block;
+    display: inline-block;
     justify-content: center;
     text-align: center;
   }
@@ -59,7 +56,6 @@
     vertical-align: middle;
   }
 
-
   .reitanIcon {
     background-size: contain;
     width: 10em;
@@ -71,7 +67,7 @@
     background-size: contain;
     width: 7em;
     background-repeat: no-repeat;
-    vertical-align: middle;  
+    vertical-align: middle;
   }
   .isfitIcon {
     background-size: contain;
@@ -81,11 +77,11 @@
   }
 }
 
-.social{
+.social {
   background-color: $grey-5;
   text-align: center;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
   padding: 0;
 
   li {
@@ -94,10 +90,9 @@
       font-size: 0.7em;
     }
     margin: 0.2em;
-
     display: flex;
-    align-items:center;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     .leftbox {
       text-align: right;
@@ -119,7 +114,7 @@
 .contact {
   text-align: center;
   font-size: 1em;
-  align-items:center;
+  align-items: center;
   @include for-mobile-only {
     font-size: 0.8em;
   }
@@ -130,7 +125,7 @@
 .cookies {
   text-align: center;
   font-size: 0.7em;
-  align-items:center;
+  align-items: center;
   color: inherit;
   text-decoration: none;
   @include for-mobile-only {
