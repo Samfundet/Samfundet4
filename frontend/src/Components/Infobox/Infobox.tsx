@@ -1,11 +1,8 @@
-import classnames from 'classnames';
-import { Children } from '~/types';
-import styles from './Infobox.module.scss';
 import { COLORS } from '../../types';
+import styles from './Infobox.module.scss';
 
 type InfoboxProps = {
   className?: string;
-  children: Children;
   titel: string;
   img?: string;
   altTxt: string;
