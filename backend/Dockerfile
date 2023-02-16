@@ -17,6 +17,8 @@ ENV PIPENV_DONT_LOAD_ENV=1
 # Set working directory.
 WORKDIR /app
 
+RUN echo 'alias la="ls -la"' >> ~/.bashrc
+
 # Upgrade pip.
 RUN python -m pip install --upgrade pip
 

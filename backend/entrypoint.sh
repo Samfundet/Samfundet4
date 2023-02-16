@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 python -m pipenv run python manage.py collectstatic --noinput
 python -m pipenv run python manage.py makemigrations

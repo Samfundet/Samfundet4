@@ -1,8 +1,8 @@
 **/__pycache__
 **/.pytest_cache
 **/*.log
-venv
-.venv
+**/venv
+**/.venv
 .env
-.history
+**/.history
 *.sqlite3

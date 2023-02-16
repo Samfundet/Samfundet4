@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink as Link, useNavigate } from 'react-router-dom';
 import { logout } from '~/api';
@@ -11,9 +10,10 @@ import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
+import { useGlobalContext } from '../../GlobalContextProvider';
 
 export function Navbar() {
-  const [mobileNavigation, setMobileNavigation] = useState(false);
+  const { mobileNavigation, setMobileNavigation } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
