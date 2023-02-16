@@ -76,9 +76,8 @@ class EventPerDayView(APIView):
     def get(self, request: Request) -> Response:
         events = {}
         for event in Event.objects.all().values():
-            _data_ = str(event["start_dt"])[0:10]
-            if _data_ not in events:
-                events[_data_] = []
+            _data_ = event['start_dt'].strftime('%Y-%m-%d')
+            events.setdefault(_data_, [])
             events[_data_].append(event)
 
         return Response(data=events)
