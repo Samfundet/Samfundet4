@@ -76,7 +76,7 @@ class EventPerDayView(APIView):
     def get(self, request: Request) -> Response:
         events: dict = {}
         for event in Event.objects.all().values():
-            _data_: str = (event['start_dt'].strftime('%Y-%m-%d'))
+            _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)
 
