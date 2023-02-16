@@ -39,7 +39,7 @@ EXPOSE 8000
 EXPOSE 5678
 
 # Update static and migration on each startup.
-# ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Final command.
 # CMD ["python", "-m", "pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
