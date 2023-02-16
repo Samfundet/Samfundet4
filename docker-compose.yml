@@ -1,27 +1,31 @@
 version: '3.9'
 
-services:
-  # docker syntax
+### Bases ###
+x-backend-base: &backend-base
+  build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+  volumes:
+    - ./backend:/app
+    - ignore_venv:/app/.venv
+  env_file:
+    - ./backend/.docker.env
+  environment:
+    - IS_DOCKER=yes
+### End: Bases ###
 
-  # Custom name for our service (container to build)
+### Services ###
+services:
   backend:
-    build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
-    volumes:
-      - ./backend:/app
-      - ignore_venv:/app/.venv
-      # It's important that the folder 'database' containing db.sqlite3 is not added to volume.
-      # We do not want to share database between localhost and container.
-      - ignore_database:/app/database
-        # - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
-        # - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
-        # - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
-    env_file:
-      - ./backend/.docker.env
-    environment:
-      - IS_DOCKER=True
+    <<: *backend-base
+    depends_on:
+      - dbsetup
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
+
+  dbsetup:
+    <<: *backend-base
+    entrypoint: ./entrypoint.sh
+    command: 'echo "Database ready. Running server on http://localhost:8000"'
 
   # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
   frontend:
@@ -32,10 +36,11 @@ services:
     env_file:
       - ./frontend/.env.docker
     environment:
-      - IS_DOCKER=true
+      - IS_DOCKER=yes
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
     ports:
       - '3000:3000'
+### End: Services ###
 
 volumes:
   ignore_venv:
