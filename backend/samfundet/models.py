@@ -12,11 +12,19 @@ from django.contrib.auth.models import AbstractUser
 from root.utils import permissions
 
 
+class DatedModel(models.Model):
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class User(AbstractUser):
-    ...
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
 
-class EventGroup(models.Model):
+class EventGroup(DatedModel):
     name = models.CharField(max_length=140)
 
     class Meta:
@@ -24,7 +32,7 @@ class EventGroup(models.Model):
         verbose_name_plural = 'EventGroups'
 
 
-class Event(models.Model):
+class Event(DatedModel):
 
     # INFO
     title_nb = models.CharField(max_length=140)
@@ -85,7 +93,7 @@ class Event(models.Model):
         verbose_name_plural = 'Events'
 
 
-class Venue(models.Model):
+class Venue(DatedModel):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
@@ -119,7 +127,7 @@ class Venue(models.Model):
         return f'{self.name}'
 
 
-class ClosedPeriod(models.Model):
+class ClosedPeriod(DatedModel):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -137,7 +145,7 @@ class ClosedPeriod(models.Model):
         return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
 
 
-class UserPreference(models.Model):
+class UserPreference(DatedModel):
     """Group all preferences and config per user."""
 
     class Theme(models.TextChoices):
@@ -156,7 +164,7 @@ class UserPreference(models.Model):
         return f'UserPreference ({self.user})'
 
 
-class Profile(models.Model):
+class Profile(DatedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(max_length=30, blank=True, null=True)
 
@@ -177,7 +185,7 @@ class Profile(models.Model):
 
 
 # GANGS ###
-class GangType(models.Model):
+class GangType(DatedModel):
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
@@ -189,7 +197,7 @@ class GangType(models.Model):
         return f'{self.title_nb}'
 
 
-class Gang(models.Model):
+class Gang(DatedModel):
     name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
@@ -207,7 +215,7 @@ class Gang(models.Model):
         return f'{self.gang_type} - {self.name_nb}'
 
 
-class InformationPage(models.Model):
+class InformationPage(DatedModel):
     slug_field = models.SlugField(
         max_length=64,
         blank=False,
@@ -233,7 +241,7 @@ class InformationPage(models.Model):
         return f'{self.slug_field}'
 
 
-class Table(models.Model):
+class Table(DatedModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -255,7 +263,7 @@ class Table(models.Model):
         return f'{self.name_nb}'
 
 
-class FoodPreference(models.Model):
+class FoodPreference(DatedModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
 
@@ -263,7 +271,7 @@ class FoodPreference(models.Model):
         return f'{self.name_nb}'
 
 
-class FoodCategory(models.Model):
+class FoodCategory(DatedModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
@@ -272,7 +280,7 @@ class FoodCategory(models.Model):
         return f'{self.name_nb}'
 
 
-class MenuItem(models.Model):
+class MenuItem(DatedModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -295,7 +303,7 @@ class MenuItem(models.Model):
         return f'{self.name_nb}'
 
 
-class Menu(models.Model):
+class Menu(DatedModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -312,7 +320,7 @@ class Menu(models.Model):
         return f'{self.name_nb}'
 
 
-class Saksdokument(models.Model):
+class Saksdokument(DatedModel):
     title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
@@ -334,7 +342,7 @@ class Saksdokument(models.Model):
         return f'{self.title_nb}'
 
 
-class Booking(models.Model):
+class Booking(DatedModel):
     name = models.CharField(max_length=64, blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     from_dt = models.DateTimeField(blank=True, null=True)
