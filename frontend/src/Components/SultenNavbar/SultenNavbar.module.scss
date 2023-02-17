@@ -1,0 +1,133 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+$navbar-bg: #000000;
+$navbar-height: 100px;
+
+.parent_container {
+  display: flex;
+  width: 100%;
+}
+
+.container {
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100px;
+  transition: 0.2s;
+  background: linear-gradient(to bottom, black, transparent);
+  z-index: 100;
+}
+
+.navbar_menu {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  min-width: 100%;
+  padding: 2em;
+  z-index: 100;
+  @include for-tablet-down {
+    justify-content: space-between;
+  }
+}
+
+.item {
+  z-index: 100;
+  color: $white;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.language_flag {
+  width: 2em;
+}
+
+.mobile_item {
+  color: $white;
+  z-index: 81;
+  font-size: 1.7em;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.logo {
+  max-width: 12.5em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100px;
+  margin-top: 0.6em;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.hamburger {
+  display: none;
+  @include for-tablet-down {
+    height: 2.4em;
+    width: 2.2em;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+}
+
+.calendar_icon {
+  color: $white;
+  height: 2.6em;
+  width: 2.2em;
+  cursor: pointer;
+  @include for-desktop-up {
+    display: none;
+  }
+}
+
+.navbar_hamburger_line {
+  background-color: $white;
+  width: 100%;
+  height: 0.25em;
+  border-radius: 10px;
+  transition: transform 400ms;
+}
+
+.hamburger.open {
+  .navbar_hamburger_line.top {
+    transform: translateY(0.675em) rotate(-45deg);
+  }
+
+  .navbar_hamburger_line.middle {
+    opacity: 0;
+  }
+
+  .navbar_hamburger_line.bottom {
+    transform: translateY(-0.675em) rotate(45deg);
+  }
+}
+
+.mobile_navigation {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: $navbar-height 1em 1em;
+  gap: 2em;
+  z-index: 80;
+  background-color: $black;
+  @include for-desktop-up {
+    display: none;
+  }
+}

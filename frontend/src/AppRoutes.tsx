@@ -39,7 +39,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
       <Route path={ROUTES.frontend.login} element={<LoginPage />} />
       <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
-      <Route path={ROUTES.frontend.lyche} element={<LychePage />} />
+      <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
       <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
       <Route path={ROUTES.frontend.information_page_edit} element={<InformationFormPage />} />
