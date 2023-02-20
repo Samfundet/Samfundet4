@@ -78,7 +78,7 @@ export function Navbar() {
         {t(KEY.common_information)}
       </Link>
       <Link
-        to={ROUTES.frontend.lyche}
+        to={ROUTES.frontend.sulten}
         className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
         onClick={() => setMobileNavigation(false)}
       >

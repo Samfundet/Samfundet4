@@ -65,7 +65,7 @@ $navbar-height: 100px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: 100px;
+  height: $navbar-height;
   margin-top: 0.6em;
   transition: 0.5s;
   cursor: pointer;
@@ -101,18 +101,16 @@ $navbar-height: 100px;
   transition: transform 400ms;
 }
 
-.hamburger.open {
-  .navbar_hamburger_line.top {
-    transform: translateY(0.675em) rotate(-45deg);
-  }
+.top_open {
+  transform: translateY(0.675em) rotate(-45deg);
+}
 
-  .navbar_hamburger_line.middle {
-    opacity: 0;
-  }
+.middle_open {
+  opacity: 0;
+}
 
-  .navbar_hamburger_line.bottom {
-    transform: translateY(-0.675em) rotate(45deg);
-  }
+.bottom_open {
+  transform: translateY(-0.675em) rotate(45deg);
 }
 
 .mobile_navigation {
@@ -123,7 +121,7 @@ $navbar-height: 100px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-top: $navbar-height 1em 1em;
+  padding: $navbar-height 1em 1em;
   gap: 2em;
   z-index: 80;
   background-color: $black;

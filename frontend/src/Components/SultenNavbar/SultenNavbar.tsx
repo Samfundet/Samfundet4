@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
 import { useDesktop } from '~/hooks';
 import { KEY, LANGUAGES } from '~/i18n/constants';
@@ -14,6 +14,11 @@ export function SultenNavbar() {
   const isDesktop = useDesktop();
   const [showMobileNavigation, setMobileNavigation] = useState(false);
   const isNorwegian = i18n.language == LANGUAGES.NB;
+  const navigate = useNavigate();
+
+  const changeLanguage = () => {
+    isNorwegian ? i18n.changeLanguage(LANGUAGES.EN) : i18n.changeLanguage(LANGUAGES.NB);
+  };
 
   const itemStyling = classNames({
     [styles.item]: isDesktop,
@@ -22,10 +27,10 @@ export function SultenNavbar() {
 
   const leftItems = (
     <>
-      <Link to={ROUTES.frontend.sulten_reservation} className={itemStyling}>
+      <Link to={ROUTES.frontend.sulten_reservation} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_reservations)}
       </Link>
-      <Link to={ROUTES.frontend.sulten_menu} className={itemStyling}>
+      <Link to={ROUTES.frontend.sulten_menu} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_menu)}
       </Link>
     </>
@@ -33,33 +38,37 @@ export function SultenNavbar() {
 
   const rightItems = (
     <>
-      <Link to={ROUTES.frontend.sulten_about} className={itemStyling}>
+      <Link to={ROUTES.frontend.sulten_about} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_about_us)}
       </Link>
-      <Link to={ROUTES.frontend.sulten_contact} className={itemStyling}>
+      <Link to={ROUTES.frontend.sulten_contact} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_contact_us)}
       </Link>
     </>
   );
 
   const hamburgerMenu = (
-    <div
-      onClick={() => setMobileNavigation(!showMobileNavigation)}
-      className={classNames(styles.hamburger, {
-        [styles.open]: showMobileNavigation,
-      })}
-    >
-      <div className={classNames(styles.navbar_hamburger_line, styles.top)} />
-      <div className={classNames(styles.navbar_hamburger_line, styles.middle)} />
-      <div className={classNames(styles.navbar_hamburger_line, styles.bottom)} />
+    <div onClick={() => setMobileNavigation(!showMobileNavigation)} className={styles.hamburger}>
+      <div className={classNames(styles.navbar_hamburger_line, styles.top, showMobileNavigation && styles.top_open)} />
+      <div
+        className={classNames(styles.navbar_hamburger_line, styles.middle, showMobileNavigation && styles.middle_open)}
+      />
+      <div
+        className={classNames(styles.navbar_hamburger_line, styles.bottom, showMobileNavigation && styles.bottom_open)}
+      />
     </div>
   );
 
-  const calendarIcon = <Icon icon="material-symbols:calendar-add-on-outline" className={styles.calendar_icon} />;
-
-  const changeLanguage = () => {
-    isNorwegian ? i18n.changeLanguage(LANGUAGES.EN) : i18n.changeLanguage(LANGUAGES.NB);
-  };
+  const calendarIcon = (
+    <Icon
+      icon="material-symbols:calendar-add-on-outline"
+      onClick={() => {
+        navigate(ROUTES.frontend.sulten_reservation);
+        setMobileNavigation(false);
+      }}
+      className={styles.calendar_icon}
+    />
+  );
 
   const languageFlag = (
     <img
@@ -83,7 +92,14 @@ export function SultenNavbar() {
         {isDesktop && <div></div>}
         {hamburgerMenu}
         {isDesktop && leftItems}
-        <img src={lycheLogo} className={styles.logo}></img>
+        <img
+          src={lycheLogo}
+          onClick={() => {
+            navigate(ROUTES.frontend.sulten);
+            setMobileNavigation(false);
+          }}
+          className={styles.logo}
+        ></img>
         {isDesktop && rightItems}
         {calendarIcon}
         {isDesktop && languageFlag}
