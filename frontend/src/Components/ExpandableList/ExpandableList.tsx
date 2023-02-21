@@ -17,6 +17,12 @@ export function ExpandableList({ children }: ExpandableListProps) {
     setDepth(0);
   }, [setDepth]);
 
+  function decreseDepth() {
+    if (depth && depth > 0) {
+      setDepth(depth && depth - 1);
+    }
+  }
+
   return (
     <div className={styles.content_container}>
       <div className={styles.header}>
@@ -24,7 +30,7 @@ export function ExpandableList({ children }: ExpandableListProps) {
           <div
             className={styles.back_button}
             onClick={() => {
-              setDepth(depth && depth - 1);
+              decreseDepth();
             }}
           >
             ↩︎

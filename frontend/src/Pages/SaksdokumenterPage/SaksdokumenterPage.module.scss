@@ -14,6 +14,13 @@
 .child {
   text-decoration: none;
   color: $black;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.date {
+  color: $grey-2;
 }
 
 .back_button {

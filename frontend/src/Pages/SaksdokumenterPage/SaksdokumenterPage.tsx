@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
@@ -12,6 +13,8 @@ export function SaksdokumenterPage() {
   const { t, i18n } = useTranslation();
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
+  const isNorwegian = i18n.language === LANGUAGES.NB;
+  const navigate = useNavigate();
 
   useEffect(() => {
     getSaksdokumenter().then((data) => {
@@ -20,6 +23,15 @@ export function SaksdokumenterPage() {
       setLoading(false);
     });
   }, []);
+
+  function titleForSaksdokument(saksdokument: SaksdokumentDto) {
+    return isNorwegian ? saksdokument.title_nb : saksdokument.title_en;
+  }
+
+  function getFormattedDate(publication_date: string) {
+    const date = new Date(publication_date);
+    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+  }
 
   function getYearsForCategory(category: string | undefined) {
     if (!category) {
@@ -82,9 +94,55 @@ export function SaksdokumenterPage() {
     return month ? months[month] : '-';
   }
 
-  function getFormattedDate(publication_date: string) {
-    const date = new Date(publication_date);
-    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+  function saksdokumentList(
+    category: string | undefined,
+    year: number | '' | undefined,
+    month: number | '' | undefined,
+  ) {
+    return getSaksdokumenterForFilters(category, year, month)?.map((saksdokument) => (
+      <a href={saksdokument.file} target="_blank" rel="noreferrer" className={styles.child} key={saksdokument.id}>
+        <Child key={saksdokument.id}>
+          <p className={styles.date}>
+            {saksdokument.publication_date && getFormattedDate(saksdokument.publication_date)}
+          </p>
+          <a href={saksdokument.file} target="_blank" rel="noreferrer" className={styles.child}>
+            {titleForSaksdokument(saksdokument)}
+          </a>
+        </Child>
+      </a>
+    ));
+  }
+
+  function monthMapping(category: string | undefined, year: number | undefined | '') {
+    return getMonthForYearAndCategory(category, year).map((month) => (
+      <Parent content={monthValueToString(month) || 'month'} key={month || 'month'} nestedDepth={2}>
+        {saksdokumentList(category, year, month)}
+      </Parent>
+    ));
+  }
+
+  function yearMapping(category: string | undefined) {
+    return getYearsForCategory(category).map((year) => (
+      <Parent content={year || 'year'} key={year || 'year'} nestedDepth={1}>
+        {monthMapping(category, year)}
+      </Parent>
+    ));
+  }
+
+  function categoryMapping() {
+    return (
+      categories &&
+      saksdokumenter &&
+      categories.map((category) => (
+        <>
+          {
+            <Parent content={category || 'category'} key={category || 'category'} nestedDepth={0}>
+              {yearMapping(category)}
+            </Parent>
+          }
+        </>
+      ))
+    );
   }
 
   if (loading) {
@@ -95,34 +153,7 @@ export function SaksdokumenterPage() {
     <div className={styles.container}>
       <ExpandableListContextProvider>
         <ExpandableList header="" depth={3}>
-          {categories &&
-            saksdokumenter &&
-            categories.map((category) => (
-              <>
-                {
-                  <Parent content={category || 'category'} key={category || 'category'} nestedDepth={0}>
-                    {getYearsForCategory(category).map((year) => (
-                      <Parent content={year || 'year'} key={year || 'year'} nestedDepth={1}>
-                        {getMonthForYearAndCategory(category, year).map((month) => (
-                          <Parent content={monthValueToString(month) || 'month'} key={month || 'month'} nestedDepth={2}>
-                            {getSaksdokumenterForFilters(category, year, month)?.map((saksdokument) => (
-                              <Child key={saksdokument.id}>
-                                <div>
-                                  {saksdokument.publication_date && getFormattedDate(saksdokument.publication_date)}
-                                </div>
-                                <a href={saksdokument.file} target="_blank" rel="noreferrer" className={styles.child}>
-                                  {i18n.language === LANGUAGES.NB ? saksdokument.title_nb : saksdokument.title_en}
-                                </a>
-                              </Child>
-                            ))}
-                          </Parent>
-                        ))}
-                      </Parent>
-                    ))}
-                  </Parent>
-                }
-              </>
-            ))}
+          {categoryMapping()}
         </ExpandableList>
       </ExpandableListContextProvider>
     </div>
