@@ -27,6 +27,7 @@ export function RadioButton({
   return (
     <label className={styles.radioButton}>
       <input
+        className={styles.radioButton_input}
         type="radio"
         name={name}
         value={value}
@@ -35,7 +36,6 @@ export function RadioButton({
         defaultValue={defaultValue}
         checked={checked}
         disabled={disabled}
-        className={className}
       />
       <div className={styles.circle}></div>
       {children}
