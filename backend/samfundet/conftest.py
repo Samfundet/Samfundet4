@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 from django.test import Client
 from django.utils import timezone
 
-from samfundet.models import User, Event
+from samfundet.models import User, Event, InformationPage
 
 # pylint: disable=pointless-string-statement
 """
@@ -82,7 +82,7 @@ def fixture_user(db, fixture_user_pw) -> Iterator[User]:  # type: ignore[no-unty
 
 
 @pytest.fixture
-def fixture_event(db) -> Iterator[User]:  # type: ignore[no-untyped-def]
+def fixture_event(db) -> Iterator[Event]:  # type: ignore[no-untyped-def]
     event = Event.objects.create(  # nosec hardcoded_password_funcarg
         title_nb='Norsk tittel',
         title_en='Engel',
@@ -91,3 +91,14 @@ def fixture_event(db) -> Iterator[User]:  # type: ignore[no-untyped-def]
     )
     yield event
     event.delete()
+
+@pytest.fixture
+def fixture_informationpage(db) -> Iterator[InformationPage]:  # type: ignore[no-untyped-def]
+    informationpage = InformationPage.objects.create(  # nosec hardcoded_password_funcarg
+        title_nb='Norsk tittel',
+        title_en='Engel',
+        slug_field='Sygard'
+    )
+    yield informationpage
+    informationpage.delete()
+

@@ -4,7 +4,7 @@ from django.contrib.auth.models import Permission
 from guardian.shortcuts import assign_perm
 from django.urls import reverse
 
-from samfundet.models import User, Event
+from samfundet.models import User, Event, InformationPage
 
 
 def test_health():
@@ -67,8 +67,6 @@ def test_get_events(fixture_rest_client: APIClient, fixture_user: User, fixture_
     response = fixture_rest_client.get(path=url)
     assert is_success(code=response.status_code)
     assert response.data[0]['title_nb'] == fixture_event.title_nb
-    response = fixture_rest_client.post(path=url, data={'title_nb': 'lol', 'title_en': 'lol'})
-    assert not is_success(code=response.status_code)
 
 
 def test_create_event(fixture_rest_client: APIClient, fixture_user: User):
@@ -103,6 +101,60 @@ def test_put_event(fixture_rest_client: APIClient, fixture_user: User, fixture_e
     response = fixture_rest_client.put(path=url, data=data)
     assert HTTP_403_FORBIDDEN == response.status_code
     assign_perm('samfundet.change_event', fixture_user)
+    del fixture_user._user_perm_cache
+    del fixture_user._perm_cache
+    response = fixture_rest_client.put(path=url, data=data)
+    print(response.data)
+    assert is_success(code=response.status_code)
+    assert response.data['title_nb'] == data['title_nb']
+
+
+def test_get_informationpage(fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+    url = reverse('samfundet:information-detail', kwargs={'pk': fixture_informationpage.slug_field})
+    response = fixture_rest_client.get(path=url)
+    assert is_success(code=response.status_code)
+    assert response.data['slug_field'] == fixture_informationpage.slug_field
+
+
+def test_get_informationpages(fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+    url = reverse('samfundet:information-list')
+    response = fixture_rest_client.get(path=url)
+    assert is_success(code=response.status_code)
+    assert response.data[0]['slug_field'] == fixture_informationpage.slug_field
+
+
+def test_create_informationpage(fixture_rest_client: APIClient, fixture_user: User):
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse('samfundet:information-list')
+    data = {'slug_field': 'lol', 'title_en': 'lol'}
+    response = fixture_rest_client.post(path=url, data=data)
+    assert HTTP_403_FORBIDDEN == response.status_code
+    assign_perm('samfundet.add_informationpage', fixture_user)
+    del fixture_user._user_perm_cache
+    del fixture_user._perm_cache
+    response = fixture_rest_client.post(path=url, data=data)
+    assert is_success(code=response.status_code)
+
+
+def test_delete_informationpage(fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse('samfundet:information-detail', kwargs={'pk': fixture_informationpage.slug_field})
+    response = fixture_rest_client.delete(path=url)
+    assert HTTP_403_FORBIDDEN == response.status_code
+    assign_perm('samfundet.delete_informationpage', fixture_user)
+    del fixture_user._user_perm_cache
+    del fixture_user._perm_cache
+    response = fixture_rest_client.delete(path=url)
+    assert is_success(code=response.status_code)
+
+
+def test_put_informationpage(fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse('samfundet:information-detail', kwargs={'pk': fixture_informationpage.slug_field})
+    data = {'title_nb': 'lol'}
+    response = fixture_rest_client.put(path=url, data=data)
+    assert HTTP_403_FORBIDDEN == response.status_code
+    assign_perm('samfundet.change_informationpage', fixture_user)
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.put(path=url, data=data)

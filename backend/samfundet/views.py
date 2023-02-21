@@ -235,10 +235,11 @@ class EventGroupView(ModelViewSet):
 
 
 class InformationPageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
-
+### Lyche ###
 class MenuView(ModelViewSet):
     serializer_class = MenuSerializer
     queryset = Menu.objects.all()
