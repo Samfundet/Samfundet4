@@ -7,6 +7,9 @@ export const THEME = {
   LIGHT: 'theme-light',
 } as const;
 
+// Class added to body when mobile navigation is open
+export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
+
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
