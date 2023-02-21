@@ -71,8 +71,6 @@ class EventView(ModelViewSet):
 
 
 class EventPerDayView(APIView):
-    permission_classes = [AllowAny]
-
     def get(self, request: Request) -> Response:
 
         events = Event.objects.all()  # To be used if some kind of query is used

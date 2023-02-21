@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 
 from django.test import Client
 
-from samfundet.models import User
+from samfundet.models import User, Event
 
 # pylint: disable=pointless-string-statement
 """
@@ -78,3 +78,14 @@ def fixture_user(db, fixture_user_pw) -> Iterator[User]:  # type: ignore[no-unty
     )
     yield user
     user.delete()
+
+
+@pytest.fixture
+def fixture_event(db) -> Iterator[User]:  # type: ignore[no-untyped-def]
+    event = Event.objects.create(  # nosec hardcoded_password_funcarg
+        title_nb='Norsk tittel',
+        title_en='Engel',
+        duration=60,
+    )
+    yield event
+    event.delete()
