@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { COLORS } from '../../types';
 import styles from './InfoboxShort.module.scss';
 
-type InfoboxProps = {
+type InfoboxShortProps = {
   className?: string;
   titel: string;
   img?: string;
@@ -13,7 +13,7 @@ type InfoboxProps = {
   withURL: boolean;
 };
 
-export function Infobox({ titel, img, infoTxt, bgColor, infoURL, withImg, withURL }: InfoboxProps) {
+export function InfoboxShort({ titel, img, infoTxt, bgColor, infoURL, withImg, withURL }: InfoboxShortProps) {
   const bg = COLORS[bgColor];
   // applying diffrent styles to support the possibility of not having an image:
   const infobox_wrap_style = classNames({

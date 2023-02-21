@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { kitteh } from '~/assets';
-import { Infobox } from './InfoboxShort';
+import { InfoboxShort } from './InfoboxShort';
 
 export default {
-  title: 'Components/Infobox',
-  component: Infobox,
+  title: 'Components/InfoboxShort',
+  component: InfoboxShort,
   args: {
     titel: 'test title',
     img: kitteh,
@@ -14,9 +14,9 @@ export default {
     withImg: true,
     withURL: true,
   },
-} as ComponentMeta<typeof Infobox>;
-const Template: ComponentStory<typeof Infobox> = function (args) {
-  return <Infobox {...args} />;
+} as ComponentMeta<typeof InfoboxShort>;
+const Template: ComponentStory<typeof InfoboxShort> = function (args) {
+  return <InfoboxShort {...args} />;
 };
 export const Basic = Template.bind({});
 Basic.args = {};
