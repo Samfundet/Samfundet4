@@ -14,6 +14,7 @@ import {
   InformationPage,
   LoginPage,
   LychePage,
+  NotFoundPage,
 } from '~/Pages';
 import {
   EventFormAdminPage,
@@ -58,6 +59,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
