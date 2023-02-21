@@ -1,11 +1,14 @@
 @import 'src/constants';
 
-.infobox_wrap {
+.infobox_wrap,
+.no_img_infobox_wrap {
   display: flex;
   flex-direction: column;
   border-radius: 4px;
 }
-
+.no_img_infobox_wrap {
+  max-width: 60vw;
+}
 .infobox_txt_wrap {
   height: 90px;
   width: 100%;
@@ -13,39 +16,59 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  border-radius: 0 4px 4px 0;
+  color: white;
+}
+.no_img_infobox_txt_wrap {
+  padding: 10px;
+  height: fit-content;
+  color: white;
 }
 
-.infobox_link {
-  text-decoration: none !important;
-}
-
-.infobox_paragraph {
-  margin: 0;
-  padding: 0 15px 15px 15px;
-  color: black;
-  font-size: 1em;
-  display: none;
+.with_url,
+.with_url:hover {
   text-decoration: none;
 }
 
-.infobox_h1 {
+.without_url,
+.without_url:hover {
+  text-decoration: none;
+  pointer-events: none;
+}
+
+.infobox_paragraph {
+  padding: 0 7px 7px 7px;
+  font-size: 1em;
+  text-align: center;
+  display: none;
+}
+
+.no_img_infobox_paragraph {
+  display: block;
+  padding: 0 7px 7px 7px;
+  font-size: 1em;
+  overflow: hidden;
+}
+
+.infobox_h1,
+.no_img_h1 {
   font-size: 2em;
   font-weight: 700;
-  margin: 0;
-  color: black;
+  padding: 0 7px 7px 7px;
 }
 
-.infobox_h1:hover {
+.infobox_h1:hover,
+.no_img_h1:hover {
   text-decoration: underline;
 }
-
 .img_wrap {
   height: 90px;
   width: 100%;
   overflow: hidden;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+}
+.no_img_wrap {
+  display: none;
 }
 
 .infobox_img {
@@ -61,27 +84,28 @@
 }
 
 @media only screen and (min-width: 460px) {
-  .infobox_txt {
-    justify-content: left;
-    text-align: left;
-  }
   .infobox_paragraph {
     display: block;
+    // text-align: left;
+  }
+  .infobox_txt_wrap {
+    overflow: hidden;
+    margin: 10px;
   }
 }
-
 @media only screen and (min-width: $tablet-bp-lower) {
   .infobox_wrap {
     display: flex;
     flex-direction: row;
   }
   .infobox_txt_wrap {
-    margin: 0;
     height: 200px;
     width: 50%;
+    margin: 0;
   }
-  .infobox_txt {
-    justify-content: center;
+  .infobox_paragraph {
+    padding: 0 7px 7px 7px;
+    font-size: 1em;
     text-align: center;
   }
   .img_wrap {

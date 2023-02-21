@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { kitteh } from '~/assets';
-import { Infobox } from './Infobox';
+import { Infobox } from './InfoboxShort';
 
 export default {
   title: 'Components/Infobox',
@@ -8,10 +8,11 @@ export default {
   args: {
     titel: 'test title',
     img: kitteh,
-    altTxt: 'test alt text',
     infoURL: 'https://www.samfundet.no/',
     infoTxt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
     bgColor: 'red_samf',
+    withImg: true,
+    withURL: true,
   },
 } as ComponentMeta<typeof Infobox>;
 const Template: ComponentStory<typeof Infobox> = function (args) {
