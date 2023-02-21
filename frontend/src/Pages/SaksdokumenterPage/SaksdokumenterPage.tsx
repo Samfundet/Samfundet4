@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SamfundetLogoSpinner } from '~/Components';
+import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '~/Components/ExpandableList';
 import {
   getFormattedDate,
   getMonthForYearAndCategory,
@@ -11,7 +12,6 @@ import {
 import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
 import { LANGUAGES } from '~/i18n/constants';
-import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '../../Components/ExpandableList';
 import styles from './SaksdokumenterPage.module.scss';
 
 export function SaksdokumenterPage() {
