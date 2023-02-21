@@ -17,6 +17,7 @@ pillow = "*"
 debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
+pytz = "*"
 
 [dev-packages]
 yapf = "*"

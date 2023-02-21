@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 
 from django.utils import timezone
 from django.contrib.auth import login, logout
@@ -66,11 +66,13 @@ from .serializers import (
 
 
 class EventView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
 
 class EventPerDayView(APIView):
+
     def get(self, request: Request) -> Response:
 
         events = Event.objects.all()  # To be used if some kind of query is used

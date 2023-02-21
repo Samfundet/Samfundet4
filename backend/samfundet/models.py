@@ -27,8 +27,8 @@ class EventGroup(models.Model):
 class Event(models.Model):
 
     # INFO
-    title_nb = models.CharField(max_length=140)
-    title_en = models.CharField(max_length=140)
+    title_nb = models.CharField(max_length=140, blank=True, null=False)
+    title_en = models.CharField(max_length=140, blank=True, null=False)
     description_long_nb = models.TextField(blank=True, null=True)
     description_long_en = models.TextField(blank=True, null=True)
     description_short_nb = models.TextField(blank=True, null=True)

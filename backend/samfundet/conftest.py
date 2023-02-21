@@ -4,6 +4,7 @@ import pytest
 from rest_framework.test import APIClient
 
 from django.test import Client
+from django.utils import timezone
 
 from samfundet.models import User, Event
 
@@ -85,6 +86,7 @@ def fixture_event(db) -> Iterator[User]:  # type: ignore[no-untyped-def]
     event = Event.objects.create(  # nosec hardcoded_password_funcarg
         title_nb='Norsk tittel',
         title_en='Engel',
+        start_dt=timezone.now(),
         duration=60,
     )
     yield event
