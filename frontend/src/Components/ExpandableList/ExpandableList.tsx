@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Children } from '~/types';
 import styles from './ExpandableList.module.scss';
 import { useExpandableListContext } from './ExpandableListContext/ExpandableListContext';
@@ -11,22 +10,18 @@ type ExpandableListProps = {
 
 export function ExpandableList({ children }: ExpandableListProps) {
   const { depth, setDepth } = useExpandableListContext();
-
-  // Set depth to 0 on initial render
-  useEffect(() => {
-    setDepth(0);
-  }, [setDepth]);
+  const depthNotZero = depth > 0;
 
   function decreseDepth() {
-    if (depth && depth > 0) {
-      setDepth(depth && depth - 1);
+    if (depth > 0) {
+      setDepth(depth - 1);
     }
   }
 
   return (
     <div className={styles.content_container}>
       <div className={styles.header}>
-        {depth != 0 && (
+        {depthNotZero && (
           <div
             className={styles.back_button}
             onClick={() => {
@@ -42,3 +37,4 @@ export function ExpandableList({ children }: ExpandableListProps) {
     </div>
   );
 }
+

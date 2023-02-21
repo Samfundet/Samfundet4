@@ -2,8 +2,8 @@ import { createContext, useContext, useState } from 'react';
 import { Children, SetState } from '~/types';
 
 type ExpandableListContextProps = {
-  depth: number | undefined;
-  setDepth: SetState<number | undefined>;
+  depth: number;
+  setDepth: SetState<number>;
 };
 
 const ExpandableListContext = createContext<ExpandableListContextProps | undefined>(undefined);
@@ -23,7 +23,7 @@ type ExpandableListContextProviderProps = {
 };
 
 export function ExpandableListContextProvider({ children }: ExpandableListContextProviderProps) {
-  const [depth, setDepth] = useState<number | undefined>();
+  const [depth, setDepth] = useState<number>(0);
 
   const contextValue: ExpandableListContextProps = {
     depth: depth,
