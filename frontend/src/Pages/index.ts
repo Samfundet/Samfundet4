@@ -12,3 +12,4 @@ export { InformationListPage } from './InformationListPage';
 export { InformationPage } from './InformationPage';
 export { LoginPage } from './LoginPage';
 export { LychePage } from './LychePage';
+export { NotFoundPage } from './NotFoundPage';
