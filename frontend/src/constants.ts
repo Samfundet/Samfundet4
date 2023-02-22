@@ -7,11 +7,16 @@ export const THEME = {
   LIGHT: 'theme-light',
 } as const;
 
+// Class added to body when mobile navigation is open
+export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
+
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
 export const THEME_KEY = 'theme';
+
+export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
 /**
  * Screen sizes, breakpoint (bp).

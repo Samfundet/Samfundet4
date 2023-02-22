@@ -40,5 +40,6 @@ urlpatterns = [
     path('events-upcomming/', views.EventsUpcommingView.as_view(), name='eventsupcomming'),
     path('events/form/', views.EventFormView.as_view(), name='eventsform'),
     path('gangs/form/', views.GangFormView.as_view(), name='gangform'),
+    path('saksdokument/form/', views.SaksdokumentFormView.as_view(), name='saksdokumentform'),
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed')
 ]

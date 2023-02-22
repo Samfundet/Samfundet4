@@ -304,6 +304,7 @@ export const ROUTES_BACKEND = {
   samfundet__eventsupcomming: '/events-upcomming/',
   samfundet__eventsform: '/events/form/',
   samfundet__gangform: '/gangs/form/',
+  samfundet__saksdokumentform: '/saksdokument/form/',
   samfundet__isclosed: '/isclosed/',
   static__path: '/static/:path',
   media__path: '/media/:path',

@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
   AdminPage,
@@ -15,6 +14,7 @@ import {
   InformationPage,
   LoginPage,
   LychePage,
+  NotFoundPage,
 } from '~/Pages';
 import {
   EventsAdminPage,
@@ -25,8 +25,9 @@ import {
   EventFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
-
+import { useGoatCounter } from '~/hooks';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
@@ -41,7 +42,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
       <Route path={ROUTES.frontend.login} element={<LoginPage />} />
       <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
-      <Route path={ROUTES.frontend.lyche} element={<LychePage />} />
+      <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
       <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
       <Route path={ROUTES.frontend.information_page_edit} element={<InformationFormPage />} />
@@ -60,6 +61,9 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
       <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

@@ -1,10 +1,11 @@
-import { ROUTES } from '~/routes';
 import {
   SAMFUNDET_ADD_EVENT,
   SAMFUNDET_ADD_GANG,
   SAMFUNDET_ADD_IMAGE,
   SAMFUNDET_ADD_INFORMATIONPAGE,
+  SAMFUNDET_ADD_SAKSDOKUMENT,
 } from '~/permissions';
+import { ROUTES } from '~/routes';
 
 export const applets = [
   {
@@ -50,6 +51,14 @@ export const applets = [
     options: [
       { text: 'Nytt Bilde', url: '', type: 'ADD' },
       { text: 'Gå til Bildearkiv', url: ROUTES.frontend.admin_images, type: 'MANAGE' },
+    ],
+  },
+  {
+    title: 'Saksdokumenter',
+    perm: SAMFUNDET_ADD_SAKSDOKUMENT,
+    options: [
+      { text: 'Last opp nytt saksdokument', url: ROUTES.frontend.admin_saksdokument_create, type: 'ADD' },
+      { text: 'Administrer saksdokument', url: ROUTES.frontend.admin_saksdokument, type: 'MANAGE' },
     ],
   },
 ];

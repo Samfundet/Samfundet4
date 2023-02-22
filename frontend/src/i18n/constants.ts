@@ -36,10 +36,16 @@ export const KEY = {
   common_age_res: 'common_age_res',
   common_time: 'common_time',
   common_price: 'common_price',
+  common_reservations: 'common_reservations',
+  common_menu: 'common_menu',
+  common_about_us: 'common_about_us',
+  common_contact_us: 'common_contact_us',
   common_capacity: 'common_capacity',
   common_image: 'common_image',
   common_results: 'common_results',
   common_tags: 'common_tags',
+  common_publication_date: 'common_publication_date',
+  common_not_found: 'common_not_found',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',
@@ -80,6 +86,8 @@ export const KEY = {
   admin_information_edit_page: 'admin_information_edit_page',
   admin_information_update_page: 'admin_information_update_page',
   admin_information_confirm_delete: 'admin_information_confirm_delete',
+  not_found_text: 'not_found_text',
+  not_found_contact_prompt: 'not_found_contact_prompt',
   name: 'name',
   owner: 'owner',
   last_updated: 'last_updated',
@@ -103,6 +111,7 @@ export const KEY = {
   form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
+  saksdokument: 'saksdokument',
 } as const;
 
 /**

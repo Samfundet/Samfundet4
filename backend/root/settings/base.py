@@ -20,6 +20,8 @@ from root.constants import Environment
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+IS_DOCKER = os.environ.get('IS_DOCKER') == 'yes'
+
 # Load '.env'.
 environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
@@ -205,10 +207,6 @@ from root.custom_classes.request_context_filter import RequestContextFilter  # n
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
 
-# Reset file each time server reloads.
-# pylint: disable=consider-using-with, unspecified-encoding
-open(SQL_LOG_FILE, 'w').close()
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -266,8 +264,9 @@ LOGGING = {
                 },
             'sql_file':
                 {
-                    'level': os.environ.get('SQL_LOG_LEVEL', 'INFO'),
+                    'level': 'DEBUG',
                     'class': 'logging.FileHandler',
+                    'mode': 'w',
                     'filename': SQL_LOG_FILE,  # Added to '.gitignore'.
                     'filters': ['require_debug_true'],
                 },
