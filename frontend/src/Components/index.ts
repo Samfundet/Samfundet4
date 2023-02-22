@@ -2,6 +2,7 @@ export { AccessDenied } from './AccessDenied';
 export { Alert } from './Alert';
 export { Button } from './Button';
 export { Dropdown } from './Dropdown';
+export { Error } from './Error';
 export { EventCard } from './EventCard';
 export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
