@@ -13,6 +13,7 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
+  ImageDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -309,4 +310,31 @@ export async function getGangForm(): Promise<AxiosResponse> {
   const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function getImages(): Promise<ImageDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
+  const response = await axios.get<ImageDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getImage(id: number): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.get<ImageDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postImage(data: ImageDto): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
+  const response = await axios.post<ImageDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putImage(id: number, data: ImageDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
+  return response;
 }

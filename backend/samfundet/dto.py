@@ -56,6 +56,23 @@ class VenueDto:
 
 @dataclass_json
 @dataclass
+class TagDto:
+    id: int
+    name: str
+    color: str
+
+
+@dataclass_json
+@dataclass
+class ImageDto:
+    id: int
+    title: str
+    tags: list[TagDto]
+    image: str
+
+
+@dataclass_json
+@dataclass
 class ClosedPeriodDto:
     id: int
     message_nb: str

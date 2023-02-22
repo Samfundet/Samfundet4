@@ -189,3 +189,16 @@ export type GangTypeDto = {
   title_en: string;
   gangs: GangDto[];
 };
+
+export type TagDto = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+export type ImageDto = {
+  id: number;
+  title: string;
+  image: string;
+  tags: TagDto[];
+};
