@@ -1,3 +1,5 @@
+@import 'src/mixins';
+
 @import 'src/constants';
 
 .infobox_wrap,
@@ -5,10 +7,14 @@
   display: flex;
   flex-direction: column;
   border-radius: 4px;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
 }
 
 .no_img_infobox_wrap {
-  max-width: 60vw;
+  align-items: center;
+  justify-content: center;
 }
 
 .infobox_txt_wrap {
@@ -19,6 +25,14 @@
   justify-content: center;
   text-align: center;
   color: white;
+  @include for-tablet-up {
+    height: 200px;
+    width: 50%;
+    margin: 0;
+  }
+  @include for-mobile-only {
+    overflow: hidden;
+  }
 }
 
 .no_img_infobox_txt_wrap {
@@ -43,6 +57,14 @@
   font-size: 1em;
   text-align: center;
   display: none;
+  @include for-tablet-up {
+    padding: 0 7px 7px 7px;
+    font-size: 1em;
+    text-align: center;
+  }
+  @include for-mobile-up {
+    display: block;
+  }
 }
 
 .no_img_infobox_paragraph {
@@ -50,6 +72,7 @@
   padding: 0 7px 7px 7px;
   font-size: 1em;
   overflow: hidden;
+  text-align: center;
 }
 
 .infobox_h1,
@@ -57,6 +80,7 @@
   font-size: 2em;
   font-weight: 700;
   padding: 0 7px 7px 7px;
+  text-align: center;
 }
 
 .infobox_h1:hover,
@@ -70,6 +94,12 @@
   overflow: hidden;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+  @include for-tablet-up {
+    height: 200px;
+    width: 50%;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 4px;
+  }
 }
 
 .no_img_wrap {
@@ -82,45 +112,11 @@
   object-fit: cover;
   object-position: center;
   transition: transform 0.7s ease-in-out;
+  @include for-tablet-up {
+    height: 200px;
+  }
 }
 
 .infobox_img:hover {
   transform: scale(1.1);
-}
-
-@media only screen and (min-width: 460px) {
-  .infobox_paragraph {
-    display: block;
-  }
-  .infobox_txt_wrap {
-    overflow: hidden;
-    margin: 10px;
-  }
-}
-
-@media only screen and (min-width: $tablet-bp-lower) {
-  .infobox_wrap {
-    display: flex;
-    flex-direction: row;
-  }
-  .infobox_txt_wrap {
-    height: 200px;
-    width: 50%;
-    margin: 0;
-  }
-  .infobox_paragraph {
-    padding: 0 7px 7px 7px;
-    font-size: 1em;
-    text-align: center;
-  }
-  .img_wrap {
-    height: 200px;
-    width: 50%;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 4px;
-  }
-  .infobox_img {
-    height: 200px;
-    transition: transform 0.7s ease-in-out;
-  }
 }

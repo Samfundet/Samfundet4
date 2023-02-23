@@ -6,7 +6,7 @@ export default {
   title: 'Components/InfoboxShort',
   component: InfoboxShort,
   args: {
-    titel: 'test title',
+    title: 'test title',
     img: kitteh,
     infoURL: 'https://www.samfundet.no/',
     infoTxt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',

@@ -4,7 +4,7 @@ import styles from './InfoboxShort.module.scss';
 
 type InfoboxShortProps = {
   className?: string;
-  titel: string;
+  title: string;
   img?: string;
   bgColor: string;
   infoTxt: string;
@@ -13,7 +13,7 @@ type InfoboxShortProps = {
   withURL: boolean;
 };
 
-export function InfoboxShort({ titel, img, infoTxt, bgColor, infoURL, withImg, withURL }: InfoboxShortProps) {
+export function InfoboxShort({ title, img, infoTxt, bgColor, infoURL, withImg, withURL }: InfoboxShortProps) {
   const bg = COLORS[bgColor];
   // applying diffrent styles to support the possibility of not having an image:
   const infobox_wrap_style = classNames({
@@ -51,7 +51,7 @@ export function InfoboxShort({ titel, img, infoTxt, bgColor, infoURL, withImg, w
           <img className={img_style} src={img} alt="Image Missing"></img>
         </div>
         <div className={txt_wrap_style}>
-          <h1 className={infobox_h1_style}>{titel}</h1>
+          <h1 className={infobox_h1_style}>{title}</h1>
           <p className={infobox_paragraph_style}>{infoTxt}</p>
         </div>
       </div>
