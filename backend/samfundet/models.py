@@ -1,3 +1,5 @@
+import re
+import random
 from typing import Any
 from datetime import time, timedelta
 
@@ -10,6 +12,41 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=140)
+    color = models.CharField(max_length=6, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        # Saves with random color
+        if not self.color or not re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', self.color):
+            hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+            c = random.choices(range(len(hexnr)), k=6)
+            while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
+                c = random.choices(range(len(hexnr)), k=6)
+            self.color = ''.join([hexnr[i] for i in c])
+        super().save(*args, **kwargs)
+
+
+class Image(models.Model):
+    title = models.CharField(max_length=140)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='images')
+    image = models.ImageField(upload_to='images/', blank=True, null=False)
+
+    class Meta:
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+
+    def __str__(self) -> str:
+        return f'{self.title}'
 
 
 class User(AbstractUser):

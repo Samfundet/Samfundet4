@@ -1,0 +1,33 @@
+@import 'src/constants';
+
+
+.imageContainer {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 3px 7px 6px $grey-2;
+  &:hover {
+    transform: scale(1.05);
+    transition: 0.5s;
+  }
+}
+
+.imageTitle {
+  color: $white;
+  text-align: center;
+  min-height: 2em;
+  .text {
+    font-size: 1.2em;
+    padding: 0.2em;
+    background-color: $black;
+    text-decoration: none;
+  }
+  .tags {
+    font-size: 0.8em;
+    padding: 0.4em;
+    background-color: $black-t75;
+    text-decoration: none;
+  }
+}

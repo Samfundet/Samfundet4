@@ -17,10 +17,12 @@ import {
   NotFoundPage,
 } from '~/Pages';
 import {
-  EventFormAdminPage,
   EventsAdminPage,
   GangsAdminPage,
+  ImageAdminPage,
+  ImageFormAdminPage,
   GangsFormAdminPage,
+  EventFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   SaksdokumentFormAdminPage,
@@ -57,6 +59,8 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
+      <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
       <Route path="*" element={<NotFoundPage />} />

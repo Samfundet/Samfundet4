@@ -26,11 +26,13 @@ from .utils import (
 )
 
 from .models import (
+    Tag,
     User,
     Menu,
     Gang,
     Event,
     Table,
+    Image,
     Venue,
     Profile,
     Booking,
@@ -45,6 +47,8 @@ from .models import (
     InformationPage,
 )
 from .serializers import (
+    TagSerializer,
+    ImageSerializer,
     GangSerializer,
     MenuSerializer,
     EventSerializer,
@@ -278,3 +282,13 @@ class TableView(ModelViewSet):
 class BookingView(ModelViewSet):
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
+
+
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()

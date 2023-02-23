@@ -1,6 +1,7 @@
 import {
   SAMFUNDET_ADD_EVENT,
   SAMFUNDET_ADD_GANG,
+  SAMFUNDET_ADD_IMAGE,
   SAMFUNDET_ADD_INFORMATIONPAGE,
   SAMFUNDET_ADD_SAKSDOKUMENT,
 } from '~/permissions';
@@ -42,6 +43,14 @@ export const applets = [
       { text: 'Opprett arrangement', url: ROUTES.frontend.admin_events_create, type: 'ADD' },
       { text: 'Rediger arrangementer', url: ROUTES.frontend.admin_events_upcomming, type: 'MANAGE' },
       { text: 'Tidligere arrangementer', url: '', type: 'MANAGE' },
+    ],
+  },
+  {
+    title: 'Bildearkiv',
+    perm: SAMFUNDET_ADD_IMAGE,
+    options: [
+      { text: 'Nytt Bilde', url: '', type: 'ADD' },
+      { text: 'Gå til Bildearkiv', url: ROUTES.frontend.admin_images, type: 'MANAGE' },
     ],
   },
   {
