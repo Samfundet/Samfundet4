@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('samfundet', '0002_rename_description_no_closedperiod_description_nb_and_more'),
+        ('samfundet', '0003_tag_image'),
     ]
 
     operations = [
