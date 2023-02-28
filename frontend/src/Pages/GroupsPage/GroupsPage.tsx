@@ -34,7 +34,7 @@ export function GroupsPage() {
             <div className={styles.groupsTitle}>{dbT(element, 'title', i18n.language)}</div>
             <ImageList
               textMaxLength={12}
-              images={element.gangs.map((element, key) => ({
+              images={element.gangs.map((element) => ({
                 name_nb: element.name_nb,
                 name_en: element.name_en,
                 alt: element?.name_nb[0],

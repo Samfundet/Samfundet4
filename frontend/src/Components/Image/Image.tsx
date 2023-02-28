@@ -10,6 +10,6 @@ type ImageProps = {
   altText?: boolean;
 };
 
-export function Image({ src, height, width, alt, className, altText }: ImageProps) {
+export function Image({ src, height, width, alt, className }: ImageProps) {
   return <img src={src} height={height} width={width} alt={alt} className={classNames(styles.altText, className)} />;
 }

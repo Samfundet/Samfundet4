@@ -1,5 +1,4 @@
 import { use } from 'i18next';
-import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { LANGUAGES } from './constants';
 import { en, nb } from './translations';
@@ -12,7 +11,7 @@ export const resources = {
 };
 
 export function dbT(model: Record<string, string>, field: string, language: string): string {
-  if (model.hasOwnProperty(field + '_' + language)) {
+  if (Object.prototype.hasOwnProperty.call(model, field + '_' + language)) {
     return model[field + '_' + language];
   } else return model[field];
 }
