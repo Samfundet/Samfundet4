@@ -112,6 +112,7 @@ export const KEY = {
   duration: 'duration',
   publication: 'publication',
   saksdokument: 'saksdokument',
+  common_required: 'påkrevd',
 } as const;
 
 /**

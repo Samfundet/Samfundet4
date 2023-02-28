@@ -112,6 +112,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.duration]: 'Varighet',
   [KEY.publication]: 'Publisering',
   [KEY.saksdokument]: 'Saksdokument',
+  [KEY.common_required]: 'Påkrevd',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -223,4 +224,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.duration]: 'Duration',
   [KEY.publication]: 'Publication',
   [KEY.saksdokument]: 'case document',
+  [KEY.common_required]: 'Required',
 };
