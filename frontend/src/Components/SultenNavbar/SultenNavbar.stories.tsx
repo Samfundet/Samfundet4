@@ -2,8 +2,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 import { SultenNavbar } from './SultenNavbar';
 
-const now = new Date();
-
 export default {
   title: 'Components/SultenNavbar',
   component: SultenNavbar,
@@ -17,7 +15,7 @@ export default {
   ],
 } as ComponentMeta<typeof SultenNavbar>;
 
-const OneEvent: ComponentStory<typeof SultenNavbar> = function (args) {
+const OneEvent: ComponentStory<typeof SultenNavbar> = function () {
   return (
     <BrowserRouter>
       <SultenNavbar />

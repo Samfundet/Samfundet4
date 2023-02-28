@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
+import { Button, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';

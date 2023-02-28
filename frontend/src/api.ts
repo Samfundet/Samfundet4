@@ -316,7 +316,8 @@ export async function getGangForm(): Promise<AxiosResponse> {
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
   const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
-
+  return response.data;
+}
 
 export async function getClosedPeriod(id: number): Promise<ClosedPeriodDto> {
   const url =
