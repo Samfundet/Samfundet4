@@ -76,12 +76,13 @@ class TextItemView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        # items: dict = {}
-        # for item in TextItem.objects.all():
-        #     key = item.key
-        #     items.setdefault(key, item.)
-
-        return Response(data=TextItem.objects.all())
+        data = {}
+        keys = request.query_params.getlist('keys[]')
+        for item in TextItem.objects.all():
+            if item.key.lower() in keys:
+                key = item.key.lower()
+                data.setdefault(key, {"text_en": item.text_en, "text_nb": item.text_nb})
+        return Response(data=data)
 
 
 class EventPerDayView(APIView):

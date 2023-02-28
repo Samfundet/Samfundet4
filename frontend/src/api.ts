@@ -233,6 +233,15 @@ export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
   return response.data;
 }
 
+export async function getTextItem(): Promise<any> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__textitem });
+  const response = await axios.get<FoodCategoryDto>(url, {
+    withCredentials: true,
+    params: { keys: ['test', 'test2'] },
+  });
+  return response.data;
+}
+
 export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
   const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
