@@ -12,7 +12,9 @@ export const resources = {
 };
 
 export function dbT(model: Record<string, string>, field: string, language: string): string {
-  return model[field + '_' + language];
+  if (model.hasOwnProperty(field + '_' + language)) {
+    return model[field + '_' + language];
+  } else return model[field];
 }
 
 const devSetting = process.env.NODE_ENV === 'development' ? true : false;
