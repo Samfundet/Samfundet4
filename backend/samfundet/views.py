@@ -241,6 +241,7 @@ class InformationPageView(ModelViewSet):
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
+
 ### Lyche ###
 class MenuView(ModelViewSet):
     serializer_class = MenuSerializer
