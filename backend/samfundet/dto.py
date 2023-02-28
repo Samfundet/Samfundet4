@@ -142,3 +142,11 @@ class GangTypeDto:
     title_nb: str
     title_en: str
     gangs: list[GangDto]
+
+@dataclass_json
+@dataclass
+class TextItemDto:
+    id: int
+    key: str
+    text_nb: str
+    text_en: str

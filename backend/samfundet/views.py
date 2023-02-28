@@ -36,6 +36,7 @@ from .models import (
     Booking,
     MenuItem,
     GangType,
+    TextItem,
     EventGroup,
     FoodCategory,
     Saksdokument,
@@ -55,6 +56,7 @@ from .serializers import (
     BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    TextItemSerializer,
     EventGroupSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
@@ -68,6 +70,18 @@ from .serializers import (
 class EventView(ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+
+
+class TextItemView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        # items: dict = {}
+        # for item in TextItem.objects.all():
+        #     key = item.key
+        #     items.setdefault(key, item.)
+
+        return Response(data=TextItem.objects.all())
 
 
 class EventPerDayView(APIView):
