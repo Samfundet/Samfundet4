@@ -56,7 +56,6 @@ from .serializers import (
     BookingSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
-    TextItemSerializer,
     EventGroupSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
