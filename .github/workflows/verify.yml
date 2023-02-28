@@ -72,6 +72,9 @@ jobs:
       - name: Run pylint
         run: python -m pipenv run ./run-pylint.sh
 
+      - name: Run seeds
+        run:  python -m pipenv run python manage.py seed
+
   job_verify_docker:
     name: Verify docker
     if: ${{ !github.event.pull_request.draft }}

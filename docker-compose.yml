@@ -1,21 +1,21 @@
 version: '3.9'
 
-services:
-  # docker syntax
+### Bases ###
+x-backend-base: &backend-base
+  build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+  volumes:
+    - ./backend:/app
+    - ignore_venv:/app/.venv
+  env_file:
+    - ./backend/.docker.env
+  environment:
+    - IS_DOCKER=yes
+### End: Bases ###
 
-  # Custom name for our service (container to build)
+### Services ###
+services:
   backend:
-    build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
-    volumes:
-      - ./backend:/app
-      - ignore_venv:/app/.venv
-        # - ./backend/samfundet:/app/samfundet # Share project code between host machine and container to enable reload on changes.
-        # - ./backend/root:/app/root # Share project code between host machine and container to enable reload on changes.
-        # - ./backend/manage.py:/app/manage.py # Share project code between host machine and container to enable reload on changes.
-    env_file:
-      - ./backend/.docker.env
-    environment:
-      - IS_DOCKER=True
+    <<: *backend-base
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
@@ -29,13 +29,12 @@ services:
     env_file:
       - ./frontend/.env.docker
     environment:
-      - IS_DOCKER=true
+      - IS_DOCKER=yes
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
-      - VITE_GOATCOUNTER_CODE=samfundet-dev2
-      - VITE_BACKEND_DOMAIN=http://localhost:8000
-      - CYPRESS_BASE_URL=http://frontend:3000
     ports:
       - '3000:3000'
+### End: Services ###
 
 volumes:
   ignore_venv:
+  ignore_database:

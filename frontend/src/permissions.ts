@@ -27,11 +27,6 @@ export const AUTH_ADD_PERMISSION = 'auth.add_permission';
 export const AUTH_CHANGE_PERMISSION = 'auth.change_permission';
 export const AUTH_DELETE_PERMISSION = 'auth.delete_permission';
 export const AUTH_VIEW_PERMISSION = 'auth.view_permission';
-
-export const AUTH_ADD_USER = 'auth.add_user';
-export const AUTH_CHANGE_USER = 'auth.change_user';
-export const AUTH_DELETE_USER = 'auth.delete_user';
-export const AUTH_VIEW_USER = 'auth.view_user';
 // ### End: auth ###
 
 // ### contenttypes ###
