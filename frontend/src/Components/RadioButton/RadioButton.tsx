@@ -1,4 +1,5 @@
 import { Children } from '~/types';
+import classNames from 'classnames';
 import styles from './RadioButton.module.scss';
 
 type RadioButtonProps = {
@@ -27,7 +28,7 @@ export function RadioButton({
   return (
     <label className={styles.radioButton}>
       <input
-        className={styles.radioButton_input}
+        className={classNames(className, styles.radioButton_input)}
         type="radio"
         name={name}
         value={value}

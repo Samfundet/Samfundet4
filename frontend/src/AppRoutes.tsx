@@ -25,6 +25,8 @@ import {
   EventFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  ClosedPeriodAdminPage,
+  ClosedPeriodFormAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -59,6 +61,9 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
+      <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_closed_edit} element={<ClosedPeriodFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
       <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />

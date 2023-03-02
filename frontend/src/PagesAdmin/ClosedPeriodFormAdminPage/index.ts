@@ -1,0 +1,1 @@
+export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';

@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import {
+  ClosedPeriodDto,
   EventDto,
   EventGroupDto,
   FoodCategoryDto,
@@ -312,24 +313,54 @@ export async function getGangForm(): Promise<AxiosResponse> {
   return response.data;
 }
 
+export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
+  const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getClosedPeriod(id: number): Promise<ClosedPeriodDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
+  const response = await axios.get<ClosedPeriodDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function putClosedPeriod(id: number, data: ClosedPeriodDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
+  const response = await axios.put<ClosedPeriodDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
+  const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function deleteClosedPeriod(id: number): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+  return response;
+}
+
 export async function getImages(): Promise<ImageDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
   const response = await axios.get<ImageDto[]>(url, { withCredentials: true });
-
   return response.data;
 }
 
 export async function getImage(id: number): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.get<ImageDto>(url, { withCredentials: true });
-
   return response.data;
 }
 
 export async function postImage(data: ImageDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
   const response = await axios.post<ImageDto>(url, data, { withCredentials: true });
-
   return response.data;
 }
 

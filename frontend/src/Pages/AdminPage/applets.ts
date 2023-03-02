@@ -2,8 +2,9 @@ import {
   SAMFUNDET_ADD_EVENT,
   SAMFUNDET_ADD_GANG,
   SAMFUNDET_ADD_IMAGE,
-  SAMFUNDET_ADD_INFORMATIONPAGE,
   SAMFUNDET_ADD_SAKSDOKUMENT,
+  SAMFUNDET_ADD_CLOSEDPERIOD,
+  SAMFUNDET_ADD_INFORMATIONPAGE,
 } from '~/permissions';
 import { ROUTES } from '~/routes';
 
@@ -46,6 +47,9 @@ export const applets = [
     ],
   },
   {
+    title: 'Åpningstider',
+    perm: SAMFUNDET_ADD_CLOSEDPERIOD,
+    options: [{ text: 'Endre stengte perioder', url: ROUTES.frontend.admin_closed, type: 'EDIT' }],
     title: 'Bildearkiv',
     perm: SAMFUNDET_ADD_IMAGE,
     options: [
