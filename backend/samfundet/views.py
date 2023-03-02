@@ -262,6 +262,7 @@ class FoodPreferenceView(ModelViewSet):
 
 
 class SaksdokumentView(ModelViewSet):
+    permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
     queryset = Saksdokument.objects.all()
 
