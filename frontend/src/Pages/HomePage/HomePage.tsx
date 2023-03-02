@@ -1,6 +1,6 @@
 import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
-import { getCsrfToken, getSaksdokumenter, getUser, login, logout } from '~/api';
+import { getCsrfToken, getSaksdokumenter, getTextItem, getUser, login, logout } from '~/api';
 import logo from '~/assets/logo_black.png';
 import splash from '~/assets/splash.jpeg';
 import { SAMFUNDET_ADD_EVENT } from '~/permissions';
@@ -22,6 +22,7 @@ export function HomePage() {
         <Button onClick={() => getCsrfToken()}>csrf</Button>
         <Button onClick={() => login('emilte', 'Django123')}>login</Button>
         <Button onClick={() => getUser()}>user</Button>
+        <Button onClick={() => getTextItem('test')}>TextItem</Button>
         <Button onClick={() => getSaksdokumenter()}>saksdok</Button>
         <Button onClick={() => logout().then(() => setUser(undefined))}>logout</Button>
         <Button

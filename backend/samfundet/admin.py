@@ -377,12 +377,12 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
 @admin.register(TextItem)
 class TextItemAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id']
-    # list_filter = [] 
-    list_display = ['id', '__str__']
-    search_fields = ['id']
+    sortable_by = ['key']
+    # list_filter = []
+    list_display = ['key', '__str__']
+    search_fields = ['key']
     # filter_horizontal = []
-    list_display_links = ['id', '__str__']
+    list_display_links = ['key', '__str__']
     # autocomplete_fields = []
     # list_select_related = True
 

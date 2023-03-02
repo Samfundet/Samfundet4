@@ -54,6 +54,7 @@ from .serializers import (
     LoginSerializer,
     ProfileSerializer,
     BookingSerializer,
+    TextItemSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
@@ -66,22 +67,15 @@ from .serializers import (
 )
 
 
+class TextItemView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = TextItemSerializer
+    queryset = TextItem.objects.all()
+
+
 class EventView(ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
-
-
-class TextItemView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        data = {}
-        keys = request.query_params.getlist('keys[]')
-        for item in TextItem.objects.all():
-            if item.key.lower() in keys:
-                key = item.key.lower()
-                data.setdefault(key, {"text_en": item.text_en, "text_nb": item.text_nb})
-        return Response(data=data)
 
 
 class EventPerDayView(APIView):

@@ -234,12 +234,9 @@ export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
   return response.data;
 }
 
-export async function getTextItem(keys: Array<string>): Promise<TextItemDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__textitem });
-  const response = await axios.get<TextItemDto>(url, {
-    withCredentials: true,
-    params: { keys: keys },
-  });
+export async function getTextItem(pk: string): Promise<TextItemDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__text_item_detail, urlParams: { pk: pk } });
+  const response = await axios.get<TextItemDto>(url, { withCredentials: true });
   return response.data;
 }
 

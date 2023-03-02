@@ -384,7 +384,7 @@ class Booking(models.Model):
 
 
 class TextItem(models.Model):
-    key = models.CharField(max_length=40, blank=False, null=False, unique=True)
+    key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
     text_nb = models.TextField()
     text_en = models.TextField()
 
