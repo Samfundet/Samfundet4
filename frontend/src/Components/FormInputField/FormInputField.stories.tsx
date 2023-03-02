@@ -15,12 +15,3 @@ const Template: ComponentStory<typeof FormInputField> = function (args) {
 
 export const Basic = Template.bind({});
 Basic.args = {};
-
-/*export const WithLabel = Template.bind({});
-WithLabel.args = { children: 'Label' };
-
-export const WithComplexLabel = Template.bind({});
-WithComplexLabel.args = { children: <span style={{ color: 'red' }}>Complex label</span> };
-
-export const OnChange = Template.bind({});
-OnChange.args = { onChange: action('OnChange') };*/

@@ -18,6 +18,7 @@ type FormInputFieldProps = {
   required?: boolean;
   helpText?: string;
   errors?: Record<string, unknown>;
+  placeholder?: string;
 };
 
 export function FormInputField({
@@ -30,16 +31,17 @@ export function FormInputField({
   required,
   register,
   helpText,
+  placeholder = '',
   type = 'text',
 }: FormInputFieldProps) {
   const { t } = useTranslation();
+  const placeHolderText = placeholder.length ? placeholder : required ? t(KEY.common_required) : '';
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <input
-          placeholder={required ? t(KEY.common_required) : ''}
-          required
+          placeholder={placeHolderText}
           className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
           type={type}
           {...(register && register(name, { required }))}
