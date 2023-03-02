@@ -21,25 +21,24 @@ type ImageListProps = {
   textMaxLength?: number;
 };
 
-/**
- * images: Array of image objects
- * {title: String title of image, src: source of image, url: redirection of image}
- * TODO May need to add validation if image exists
- */
 export function ImageList({ images, size, textClassName, textMaxLength }: ImageListProps) {
   const { i18n } = useTranslation();
+
+  function getImageText(element: Record<string, string>) {
+    if (textMaxLength && dbT(element, 'name', i18n.language).length > textMaxLength) {
+      return element.short;
+    }
+    return dbT(element, 'name', i18n.language);
+  }
+
   return (
     <div className={styles.container}>
       {images.map((element, key) => (
         <a key={key} className={styles.imageBox} href={element.url}>
           <div className={styles.imageMask} style={{ width: size, height: size }}>
-            <Image src={element.src} className={styles.image} alt={element.alt} altText={true} />
+            <Image src={element.src} className={styles.image} alt={element.alt} />
           </div>
-          <p className={classNames(styles.label, textClassName)}>
-            {textMaxLength && dbT(element, 'name', i18n.language).length > textMaxLength
-              ? element.short
-              : dbT(element, 'name', i18n.language)}
-          </p>
+          <p className={classNames(styles.label, textClassName)}>{getImageText(element)}</p>
         </a>
       ))}
     </div>
