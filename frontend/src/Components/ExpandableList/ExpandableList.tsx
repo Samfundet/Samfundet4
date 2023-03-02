@@ -37,4 +37,3 @@ export function ExpandableList({ children }: ExpandableListProps) {
     </div>
   );
 }
-
