@@ -151,7 +151,7 @@ $navbar-height: 60px;
 /* Mobile popup navigation */
 
 #mobile_popup_container {
-  position: absolute;
+  position: fixed;
   top: 60px;
   left: 0;
   width: 100vw;

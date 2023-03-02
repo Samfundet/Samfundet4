@@ -190,3 +190,26 @@ export type GangTypeDto = {
   title_en: string;
   gangs: GangDto[];
 };
+
+export type ClosedPeriodDto = {
+  id: number;
+  message_no: string;
+  description_no: string;
+  message_en: string;
+  description_en: string;
+  start_dt: Date;
+  end_dt: Date;
+};
+
+export type TagDto = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+export type ImageDto = {
+  id: number;
+  title: string;
+  image: string;
+  tags: TagDto[];
+};

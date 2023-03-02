@@ -26,11 +26,13 @@ from .utils import (
 )
 
 from .models import (
+    Tag,
     User,
     Menu,
     Gang,
     Event,
     Table,
+    Image,
     Venue,
     Profile,
     Booking,
@@ -45,6 +47,8 @@ from .models import (
     InformationPage,
 )
 from .serializers import (
+    TagSerializer,
+    ImageSerializer,
     GangSerializer,
     MenuSerializer,
     EventSerializer,
@@ -74,14 +78,12 @@ class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
+        events: dict = {}
+        for event in Event.objects.all().values():
+            _data_ = event['start_dt'].strftime('%Y-%m-%d')
+            events.setdefault(_data_, [])
+            events[_data_].append(event)
 
-        events = Event.objects.all()  # To be used if some kind of query is used
-        dates = Event.objects.all().order_by('start_dt__date').values_list('start_dt__date').distinct()
-        events = {
-            str(date[0]):
-            [event.to_dict() for event in events_to_dataclass(events=events.filter(start_dt__date=date[0]).order_by('start_dt'))]  # type: ignore[attr-defined]
-            for date in dates
-        }
         return Response(data=events)
 
 
@@ -264,6 +266,14 @@ class SaksdokumentView(ModelViewSet):
     queryset = Saksdokument.objects.all()
 
 
+class SaksdokumentFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        data = {'categories': Saksdokument.SaksdokumentCategory.choices}
+        return Response(data=data)
+
+
 class TableView(ModelViewSet):
     serializer_class = TableSerializer
     queryset = Table.objects.all()
@@ -272,3 +282,13 @@ class TableView(ModelViewSet):
 class BookingView(ModelViewSet):
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
+
+
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()

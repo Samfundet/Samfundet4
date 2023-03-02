@@ -15,6 +15,7 @@ type InputFieldProps = {
   disabled?: boolean;
   value?: string;
   error?: string;
+  helpText?: string;
 };
 
 export function InputField({
@@ -27,6 +28,7 @@ export function InputField({
   disabled,
   value,
   error,
+  helpText,
   type = 'text',
 }: InputFieldProps) {
   return (
@@ -42,7 +44,9 @@ export function InputField({
           value={value}
         />
         {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
+        {helpText && <p className={styles.helpText}>{helpText}</p>}
       </label>
+      {helpText && <p className={styles.helpText}>{helpText}</p>}
     </div>
   );
 }

@@ -1,0 +1,18 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.queryBar {
+  display: flex;
+  flex-direction: column;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.element {
+  margin-top: 0.4em;
+  @include for-tablet-up {
+    margin-right: 0.4em;
+  }
+}
