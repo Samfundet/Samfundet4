@@ -1,6 +1,5 @@
 from rest_framework.test import APIClient
 from rest_framework.status import is_success, HTTP_403_FORBIDDEN
-from django.contrib.auth.models import Permission
 from guardian.shortcuts import assign_perm
 from django.urls import reverse
 
