@@ -85,7 +85,7 @@ def fixture_user(db, fixture_user_pw) -> Iterator[User]:  # type: ignore[no-unty
 def fixture_event(db) -> Iterator[Event]:  # type: ignore[no-untyped-def]
     event = Event.objects.create(  # nosec hardcoded_password_funcarg
         title_nb='Norsk tittel',
-        title_en='Engel',
+        title_en='English title',
         start_dt=timezone.now(),
         duration=60,
     )
@@ -96,7 +96,7 @@ def fixture_event(db) -> Iterator[Event]:  # type: ignore[no-untyped-def]
 @pytest.fixture
 def fixture_informationpage(db) -> Iterator[InformationPage]:  # type: ignore[no-untyped-def]
     informationpage = InformationPage.objects.create(  # nosec hardcoded_password_funcarg
-        title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard'
+        title_nb='Norsk tittel', title_en='English title', slug_field='Sygard'
     )
     yield informationpage
     informationpage.delete()

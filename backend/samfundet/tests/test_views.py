@@ -68,7 +68,13 @@ def test_get_events(fixture_rest_client: APIClient, fixture_user: User, fixture_
     url = reverse('samfundet:events-list')
     response = fixture_rest_client.get(path=url)
     assert is_success(code=response.status_code)
-    assert response.data[0]['title_nb'] == fixture_event.title_nb
+    exists = False
+    for event in response.data:
+        if event['id'] == fixture_event.id:
+            exists = True
+            assert event['title_nb'] == fixture_event.title_nb
+            break
+    assert exists
 
 
 def test_create_event(fixture_rest_client: APIClient, fixture_user: User):
@@ -79,6 +85,7 @@ def test_create_event(fixture_rest_client: APIClient, fixture_user: User):
     response = fixture_rest_client.post(path=url, data=data)
     assert response.status_code == HTTP_403_FORBIDDEN
     assign_perm('samfundet.add_event', fixture_user)
+    # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.post(path=url, data=data)
@@ -92,6 +99,7 @@ def test_delete_event(fixture_rest_client: APIClient, fixture_user: User, fixtur
     response = fixture_rest_client.delete(path=url)
     assert response.status_code == HTTP_403_FORBIDDEN
     assign_perm('samfundet.delete_event', fixture_user)
+    # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.delete(path=url)
@@ -106,6 +114,7 @@ def test_put_event(fixture_rest_client: APIClient, fixture_user: User, fixture_e
     response = fixture_rest_client.put(path=url, data=data)
     assert response.status_code == HTTP_403_FORBIDDEN
     assign_perm('samfundet.change_event', fixture_user)
+    # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.put(path=url, data=data)
@@ -127,7 +136,12 @@ def test_get_informationpages(fixture_rest_client: APIClient, fixture_informatio
     url = reverse('samfundet:information-list')
     response = fixture_rest_client.get(path=url)
     assert is_success(code=response.status_code)
-    assert response.data[0]['slug_field'] == fixture_informationpage.slug_field
+    exists = False
+    for event in response.data:
+        if event['slug_field'] == fixture_informationpage.slug_field:
+            exists = True
+            break
+    assert exists
 
 
 def test_create_informationpage(fixture_rest_client: APIClient, fixture_user: User):
@@ -138,6 +152,7 @@ def test_create_informationpage(fixture_rest_client: APIClient, fixture_user: Us
     response = fixture_rest_client.post(path=url, data=data)
     assert response.status_code == HTTP_403_FORBIDDEN
     assign_perm('samfundet.add_informationpage', fixture_user)
+    # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.post(path=url, data=data)
@@ -151,6 +166,7 @@ def test_delete_informationpage(fixture_rest_client: APIClient, fixture_user: Us
     response = fixture_rest_client.delete(path=url)
     assert response.status_code == HTTP_403_FORBIDDEN
     assign_perm('samfundet.delete_informationpage', fixture_user)
+    # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.delete(path=url)
@@ -165,9 +181,9 @@ def test_put_informationpage(fixture_rest_client: APIClient, fixture_user: User,
     response = fixture_rest_client.put(path=url, data=data)
     assert response.status_code == HTTP_403_FORBIDDEN
     assign_perm('samfundet.change_informationpage', fixture_user)
+    # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.put(path=url, data=data)
-    print(response.data)
     assert is_success(code=response.status_code)
     assert response.data['title_nb'] == data['title_nb']
