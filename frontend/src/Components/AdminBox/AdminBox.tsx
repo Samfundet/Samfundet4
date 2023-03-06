@@ -1,10 +1,15 @@
-import { Button } from '../Button';
+import { Icon } from '@iconify/react';
+import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import { THEME } from '~/constants';
+import { useGlobalContext } from '~/GlobalContextProvider';
+import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
 
 type AdminBoxProps = {
   title: string;
-  options: Array;
+  icon?: string;
+  options: Array<any>;
 };
 
 const ADD = 'ADD';
@@ -32,12 +37,18 @@ const KILROY = 'KILROY';
 
 
 */
-export function AdminBox({ title, options }: AdminBoxProps) {
+export function AdminBox({ title, icon, options }: AdminBoxProps) {
   const navigate = useNavigate();
+  const { theme } = useGlobalContext();
+  const isDarkTheme = theme === THEME.DARK;
+  
   return (
-    <div className={styles.applet}>
+    <div className={classNames(styles.applet, isDarkTheme ? styles.dark_theme : "")}>
       <div className={styles.top}>
-        <h1 className={styles.header}>{title}</h1>
+        <h1 className={styles.header}>
+          {title}
+          {icon && <Icon icon={icon} inline={true}></Icon>}
+        </h1>
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {

@@ -1,0 +1,12 @@
+@import 'src/constants';
+
+.button {
+  cursor: pointer;
+  transition: 0.1s;
+  &:hover {
+    * {
+      transform: scale(1.1);
+      transform-origin: 50% 50%;
+    }
+  }
+}

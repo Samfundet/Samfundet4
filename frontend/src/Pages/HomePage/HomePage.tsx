@@ -1,6 +1,5 @@
 import { getCsrfToken, getSaksdokumenter, getUser, login, logout } from '~/api';
-import logo from '~/assets/logo_black.png';
-import splash from '~/assets/splash.jpeg';
+import splash from '~/assets/banner-sample.jpg';
 import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
 import { SAMFUNDET_ADD_EVENT } from '~/permissions';
@@ -12,34 +11,43 @@ export function HomePage() {
   return (
     <div className={styles.container}>
       <img src={splash} alt="Splash" className={styles.splash} />
+      <div className={styles.splash_fade}></div>
       <div className={styles.content}>
-        <img src={logo} alt="Logo" className={styles.logo} />
-        <h1>Velkommen til Samfundet og MG::Web!</h1>
-        <p className={styles.homeText}>
-          Gratulerer! Du har nå fått tutorial-prosjektet opp å kjøre, og alt ser ut til å fungere som det skal! Det
-          første som er smart å gjøre er å utforske koden og bli litt kjent med hvordan ting er satt opp.
-        </p>
-        <Button onClick={() => getCsrfToken()}>csrf</Button>
-        <Button onClick={() => login('emilte', 'Django123')}>login</Button>
-        <Button onClick={() => getUser()}>user</Button>
-        <Button onClick={() => getSaksdokumenter()}>saksdok</Button>
-        <Button onClick={() => logout().then(() => setUser(undefined))}>logout</Button>
-        <Button
-          onClick={() => {
-            getUser().then((user) => {
-              setUser(user);
-              console.log(
-                hasPerm({
-                  user: user,
-                  permission: SAMFUNDET_ADD_EVENT,
-                  obj: 339,
-                }),
-              );
-            });
-          }}
-        >
-          test
-        </Button>
+        <div className={styles.inner_content}>
+          <h1 className={styles.header}>Samfundet4 - Dev</h1>
+          <div className={styles.button_row}>
+            <Button onClick={() => getCsrfToken()}>csrf</Button>
+            <Button onClick={() => login('emilte', 'Django123')}>login</Button>
+            <Button onClick={() => getUser()}>user</Button>
+            <Button onClick={() => getSaksdokumenter()}>saksdok</Button>
+            <Button onClick={() => logout().then(() => setUser(undefined))}>logout</Button>
+            <Button
+              onClick={() => {
+                getUser().then((user) => {
+                  setUser(user);
+                  console.log(
+                    hasPerm({
+                      user: user,
+                      permission: SAMFUNDET_ADD_EVENT,
+                      obj: 339,
+                    }),
+                  );
+                });
+              }}
+            >
+              test
+            </Button>
+          </div>
+          {[1, 2, 3].map(num => (
+            <p className={styles.text}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+          ))
+          }
+        </div>
       </div>
     </div>
   );

@@ -1,30 +1,74 @@
-import classNames from 'classnames';
+import { Icon } from '@iconify/react';
+import { default as classNames } from 'classnames';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink as Link, useNavigate } from 'react-router-dom';
+import { NavLink as Link, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '~/api';
-import { englishFlag, logoWhite, norwegianFlag, profileIcon } from '~/assets';
+import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { THEME } from '~/constants';
 import { useDesktop } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './Navbar.module.scss';
 import { useGlobalContext } from '../../GlobalContextProvider';
+import styles from './Navbar.module.scss';
 
 export function Navbar() {
+
+  const { theme } = useGlobalContext();
+  const isDarkTheme = theme === THEME.DARK;
   const { mobileNavigation, setMobileNavigation } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
 
+  // Scroll detection
+  const [scrollY, setScrollY] = useState(window.scrollY);
+  const scrolledNavbar = scrollY > 30;
+  const handleNavigation = useCallback(
+    (e: Event) => {
+      const window = e.currentTarget;
+      if(window != null) {
+        if (scrollY > window.scrollY) {
+          console.log("scrolling up");
+        } else if (scrollY < window.scrollY) {
+          console.log("scrolling down");
+        }
+        setScrollY(window.scrollY);
+      }
+    }, [scrollY]
+  );
+  useEffect(() => {
+    window.addEventListener("scroll", handleNavigation);
+    return () => { 
+      window.removeEventListener("scroll", handleNavigation);
+    };
+  }, [scrollY]);
+
+  // Navbar style
+  const transparentNavbar = (
+    useLocation().pathname == "/" && !scrolledNavbar && !mobileNavigation
+  )
+  const navbarStyle = classNames(
+    transparentNavbar ? styles.transparent_navbar : "",
+    mobileNavigation ? styles.navbar_mobile : "",
+    isDarkTheme ? styles.theme_dark : ""
+  )
+  const navbarImage = (
+    isDarkTheme ? logoWhite : (
+      transparentNavbar ? logoWhite : logoBlack
+    )
+  )
+
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
       return (
         <img
           src={englishFlag}
-          className={isDesktop ? styles.navbar_language_flag : styles.popup_change_language}
+          className={styles.language_flag}
           onClick={() => i18n.changeLanguage(LANGUAGES.EN)}
         />
       );
@@ -32,7 +76,7 @@ export function Navbar() {
     return (
       <img
         src={norwegianFlag}
-        className={isDesktop ? styles.navbar_language_flag : styles.popup_change_language}
+        className={styles.language_flag}
         onClick={() => i18n.changeLanguage(LANGUAGES.NB)}
       />
     );
@@ -41,7 +85,7 @@ export function Navbar() {
   // Return profile button for navbar if logged in
   const profileButton = (
     <div className={isDesktop ? styles.navbar_profile_button : styles.popup_profile}>
-      <img src={profileIcon} className={styles.profile_icon}></img>
+      <Icon icon="material-symbols:person"></Icon>
       <Link to={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
       </Link>
@@ -96,33 +140,25 @@ export function Navbar() {
 
   const loginButtons = (
     <>
-      <Button
-        theme="samf"
-        className={isDesktop ? styles.navbar_member_button : styles.popup_member_button}
-        onClick={() => {
-          navigate(ROUTES.frontend.login);
-          setMobileNavigation(false);
-        }}
-      >
-        {t(KEY.common_member)}
-      </Button>
       {/* Show login button */}
       {!user && (
         <Button
-          theme="secondary"
-          className={isDesktop ? undefined : styles.popup_internal_button}
+          theme={(isDarkTheme || (transparentNavbar && !mobileNavigation)) ? "white" : "black"}
+          rounded={true}
+          className={isDesktop ? styles.login_button : styles.popup_internal_button}
           onClick={() => {
             navigate(ROUTES.frontend.login);
             setMobileNavigation(false);
           }}
         >
-          {t(KEY.common_internal)}
+          {t(KEY.common_login)}
         </Button>
       )}
       {/* Show logout button */}
       {user && (
         <Button
-          theme="secondary"
+          theme={(isDarkTheme || (transparentNavbar && !mobileNavigation)) ? "white" : "black"}
+          rounded={true}
           className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
             logout()
@@ -143,29 +179,31 @@ export function Navbar() {
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
-      <nav id={styles.mobile_popup_container}>
+      <nav id={styles.mobile_popup_container} className={isDarkTheme ? styles.theme_dark : ""}>
         {navbarHeaders}
         <br />
         {languageImage()}
         {loginButtons}
         {user && profileButton}
+        <ThemeSwitch/>
       </nav>
     </>
   );
 
+
   return (
     <>
       <div className={styles.navbar_padding} />
-      <nav id={styles.navbar_container}>
-        <Link to="/">
-          <img src={logoWhite} id={styles.navbar_logo} />
+      <nav id={styles.navbar_container} className={navbarStyle}>
+        <Link to="/" id={styles.navbar_logo}>
+          <img src={navbarImage}/>
         </Link>
         {isDesktop && navbarHeaders}
-        <div className={styles.navbar_signup}>
-          <ThemeSwitch />
+        <div className={styles.navbar_widgets}>
           {user && profileButton}
           {languageImage()}
           {loginButtons}
+          <ThemeSwitch />
         </div>
         {hamburgerMenu}
       </nav>
