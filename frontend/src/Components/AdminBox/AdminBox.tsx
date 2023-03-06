@@ -43,7 +43,7 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
   const isDarkTheme = theme === THEME.DARK;
 
   return (
-    <div className={classNames(styles.applet, isDarkTheme ? styles.dark_theme : '')}>
+    <div className={classNames(styles.applet, isDarkTheme && styles.dark_theme)}>
       <div className={styles.top}>
         <h1 className={styles.header}>
           {icon && <Icon icon={icon} inline={true}></Icon>}

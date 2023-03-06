@@ -7,11 +7,19 @@
 
 @import 'src/constants';
 
+// Background
 $navbar-bg: rgba(255, 255, 255, 255);
 $navbar-bg-transparent: rgba(255, 255, 255, 0);
 $navbar-bg-dark: rgba(0, 0, 0, 255);
 $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
 
+// Link
+$navbar-link-light-hover-gradient-top: #f4f4f4;
+$navbar-link-light-hover-gradient-bottom: #ffffff;
+$navbar-link-dark-hover-gradient-top: #151515;
+$navbar-link-dark-hover-gradient-bottom: #000000;
+$navbar-link-transparent-hover-gradient-top: rgba(255, 255, 255, 0.1);
+$navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 
 /* Content padding */
 .navbar_padding {
@@ -72,15 +80,13 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
-      to bottom, #f4f4f4, #ffffff
+      to bottom, $navbar-link-light-hover-gradient-top, $navbar-link-light-hover-gradient-bottom
     );
-    color: #222222;
     text-decoration: none;
-
         
     @include theme-dark {
       background: linear-gradient(
-        to bottom, #151515, #000000
+        to bottom, $navbar-link-dark-hover-gradient-top, $navbar-link-dark-hover-gradient-bottom
       );
       color: #eeeeee;
     }
@@ -158,28 +164,6 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
 
 }
 
-/* Transparent navbar (on top of page) */ 
-.transparent_navbar {
-  background: $navbar-bg-transparent;
-  color: white;
-
-  .navbar_hamburger_line {
-    background-color: white;
-  }
-  .navbar_link:hover {
-    background: linear-gradient(
-      to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)
-    );
-    text-decoration: none;
-    color: inherit;
-  }
-  .navbar_profile_button {
-    color: inherit;
-    &:hover {
-      color: #cccccc;
-    }
-  }
-}
 
 /* Hamburger menu */
 #navbar_hamburger {
@@ -223,6 +207,33 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
 
 }
 
+/* Transparent navbar (on top of page) */ 
+#navbar_container.transparent_navbar {
+  background: $navbar-bg-transparent;
+  color: white;
+
+  @include theme-dark {
+    background: $navbar-bg-dark-transparent;
+    color: white;
+  }
+  .navbar_hamburger_line {
+    background-color: white;
+  }
+  .navbar_link:hover {
+    background: linear-gradient(
+      to bottom, $navbar-link-transparent-hover-gradient-top, $navbar-link-transparent-hover-gradient-bottom
+    );
+    text-decoration: none;
+    color: inherit;
+  }
+  .navbar_profile_button {
+    color: inherit;
+    &:hover {
+      color: $grey-4;
+    }
+  }
+}
+
 /* Mobile popup navigation */
 #mobile_popup_container {
   position: fixed;
@@ -249,7 +260,6 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
   }
 
 }
-
 
 /* Navbar link mobile */
 .popup_link_mobile {

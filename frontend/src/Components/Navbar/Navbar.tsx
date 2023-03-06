@@ -15,6 +15,8 @@ import { ROUTES } from '~/routes';
 import { useGlobalContext } from '../../GlobalContextProvider';
 import styles from './Navbar.module.scss';
 
+const scrollDistanceForOpaque = 30;
+
 export function Navbar() {
   const { theme } = useGlobalContext();
   const isDarkTheme = theme === THEME.DARK;
@@ -26,33 +28,25 @@ export function Navbar() {
 
   // Scroll detection
   const [scrollY, setScrollY] = useState(window.scrollY);
-  const scrolledNavbar = scrollY > 30;
-  const handleNavigation = useCallback(
-    (e: Event) => {
-      const window = e.currentTarget;
-      if (window != null) {
-        if (scrollY > window.scrollY) {
-          console.log('scrolling up');
-        } else if (scrollY < window.scrollY) {
-          console.log('scrolling down');
-        }
-        setScrollY(window.scrollY);
-      }
-    },
-    [scrollY],
-  );
+  const scrolledNavbar = scrollY > scrollDistanceForOpaque;
+  const handleNavigation = useCallback((e: Event) => {
+    const window = e.currentTarget;
+    if (window != null) {
+      setScrollY(window.scrollY);
+    }
+  }, []);
   useEffect(() => {
     window.addEventListener('scroll', handleNavigation);
     return () => {
       window.removeEventListener('scroll', handleNavigation);
     };
-  }, [scrollY, handleNavigation]);
+  }, [handleNavigation]);
 
   // Navbar style
   const transparentNavbar = useLocation().pathname == '/' && !scrolledNavbar && !mobileNavigation;
   const navbarStyle = classNames(
-    transparentNavbar ? styles.transparent_navbar : '',
-    mobileNavigation ? styles.navbar_mobile : '',
+    transparentNavbar && styles.transparent_navbar,
+    mobileNavigation && styles.navbar_mobile,
   );
   const navbarImage = isDarkTheme ? logoWhite : transparentNavbar ? logoWhite : logoBlack;
 
@@ -123,12 +117,14 @@ export function Navbar() {
     </>
   );
 
+  const lightLoginButton = isDarkTheme || (transparentNavbar && !mobileNavigation);
+
   const loginButtons = (
     <>
       {/* Show login button */}
       {!user && (
         <Button
-          theme={isDarkTheme || (transparentNavbar && !mobileNavigation) ? 'white' : 'black'}
+          theme={lightLoginButton ? 'white' : 'black'}
           rounded={true}
           className={isDesktop ? styles.login_button : styles.popup_internal_button}
           onClick={() => {
@@ -142,7 +138,7 @@ export function Navbar() {
       {/* Show logout button */}
       {user && (
         <Button
-          theme={isDarkTheme || (transparentNavbar && !mobileNavigation) ? 'white' : 'black'}
+          theme={lightLoginButton ? 'white' : 'black'}
           rounded={true}
           className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
