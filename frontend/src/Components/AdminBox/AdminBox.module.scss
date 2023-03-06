@@ -3,7 +3,6 @@
 @import 'src/mixins';
 
 .applet {
-  
   color: $black;
   background-color: white;
   text-align: center;
@@ -17,6 +16,7 @@
   @include for-tablet-only {
     max-width: 600px;
   }
+  
   @include for-mobile-only {
     max-width: 600px;
   }
@@ -25,85 +25,84 @@
     background-color: #1f1f1f;
     color: $white;
   }
-    
-  .top {
-    width: 100%;
-    padding: 12px;
-    padding-left: 18px;
-    padding-bottom: .75em;
-    background-color: $grey-5;
-
-    @include theme-dark {
-      background-color: $grey-1;
-    }
-  }
-
-  .options {
-    padding: 16px;
-  }
-
-  .header {
-    text-transform: capitalize;
-    text-align: left;
-    margin: 0;
-    color: black;
-    font-size: 1.4em;
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    align-items: center;
-
-    @include theme-dark {
-      color: white;
-    }
-  }
-
-  .text {
-    margin: 8px 4px;
-    font-weight: 300;
-    font-size: 1.2em;
-    line-height: 1.3;
-    letter-spacing: 0.01rem;
-  }
-
-  .button {
-    margin-bottom: 8px;
-    width: 100%;
-    text-transform: uppercase;
-    font-size: 1em;
-    padding: 0.5em;
-  }
-
-  .searchInput {
-    padding: 8px;
-    font-size: 18px;
-    border: 1px solid $grey-1;
-    margin-bottom: 8px;
-    flex: 1;
-  }
-
-  .search {
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .searchButton {
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    font-size: 1.2em;
-    border-radius: 0;
-    flex: 1;
-  }
-
-  .KILROY { // TODO Could be expanded to add more pictures
-    background-image: url('~/assets/kilroy.png');
-    background-size: cover;
-    background-position: center;
-    margin: auto;
-    width: 164px;
-    height: 72px;
-    margin-top: 16px;
-  }
 
 }
 
+.top {
+  width: 100%;
+  padding: 12px;
+  padding-left: 18px;
+  padding-bottom: .75em;
+  background-color: $grey-5;
+
+  @include theme-dark {
+    background-color: $grey-1;
+  }
+}
+
+.options {
+  padding: 16px;
+}
+
+.header {
+  text-transform: capitalize;
+  text-align: left;
+  margin: 0;
+  color: black;
+  font-size: 1.4em;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: center;
+
+  @include theme-dark {
+    color: white;
+  }
+}
+
+.text {
+  margin: 8px 4px;
+  font-weight: 300;
+  font-size: 1.2em;
+  line-height: 1.3;
+  letter-spacing: 0.01rem;
+}
+
+.button {
+  margin-bottom: 8px;
+  width: 100%;
+  text-transform: uppercase;
+  font-size: 1em;
+  padding: 0.5em;
+}
+
+.searchInput {
+  padding: 8px;
+  font-size: 18px;
+  border: 1px solid $grey-1;
+  margin-bottom: 8px;
+  flex: 1;
+}
+
+.search {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.searchButton {
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  border-radius: 0;
+  flex: 1;
+}
+
+.KILROY { // TODO Could be expanded to add more pictures
+  background-image: url('~/assets/kilroy.png');
+  background-size: cover;
+  background-position: center;
+  margin: auto;
+  width: 164px;
+  height: 72px;
+  margin-top: 16px;
+}

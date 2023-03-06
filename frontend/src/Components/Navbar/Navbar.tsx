@@ -184,7 +184,7 @@ export function Navbar() {
       <nav id={styles.navbar_container} className={navbarStyle}>
         <div className={styles.navbar_inner}>
           <Link to="/" id={styles.navbar_logo}>
-            <img src={navbarImage} />
+            <img src={navbarImage} id={styles.navbar_logo_img} />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>

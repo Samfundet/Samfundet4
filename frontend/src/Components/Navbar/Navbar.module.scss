@@ -1,8 +1,10 @@
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-class */
+/* stylelint-disable max-nesting-depth */
 /* TODO: fix later */
 
 @import 'src/mixins';
+
 @import 'src/constants';
 
 $navbar-bg: rgba(255, 255, 255, 255);
@@ -18,7 +20,6 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
 
 /* Main navbar */
 #navbar_container {
-
   position: fixed;
   top: 0;
   width: 100%;
@@ -73,7 +74,7 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
     background: linear-gradient(
       to bottom, #f4f4f4, #ffffff
     );
-    color: #222222 !important;
+    color: #222222;
     text-decoration: none;
 
         
@@ -81,7 +82,7 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
       background: linear-gradient(
         to bottom, #151515, #000000
       );
-      color: #eeeeee !important;
+      color: #eeeeee;
     }
 
   }
@@ -94,9 +95,11 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
   margin: 0 1rem;
   width: 250px;
   cursor: pointer;
-  img {
-    width: 100%;
-  }
+  
+}
+
+#navbar_logo_img {
+  width: 100%;
 }
 
 /* Widgets with language, theme, login */
@@ -157,23 +160,23 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
 
 /* Transparent navbar (on top of page) */ 
 .transparent_navbar {
-  background: $navbar-bg-transparent !important;
-  color: white !important;
+  background: $navbar-bg-transparent;
+  color: white;
+
   .navbar_hamburger_line {
-    background-color: white !important;
+    background-color: white;
   }
   .navbar_link:hover {
     background: linear-gradient(
       to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)
     );
     text-decoration: none;
-    color: inherit !important;
-
+    color: inherit;
   }
   .navbar_profile_button {
-    color: inherit !important;
+    color: inherit;
     &:hover {
-      color: #ccc !important;
+      color: #cccccc;
     }
   }
 }
@@ -197,11 +200,11 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
     height: 4px;
     border-radius: 10px;
     transition: transform 400ms;
-
+  
     @include theme-dark {
       background-color: $white;
     }
-
+  
   }
 
   &.open {

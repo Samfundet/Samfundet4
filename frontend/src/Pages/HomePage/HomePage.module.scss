@@ -45,30 +45,30 @@
   justify-content: center;
   padding-left: 16px;
   padding-right: 16px;
+}
 
-  .inner_content {
-    max-width:800px;
+.inner_content {
+  max-width: 800px;
+}
 
-    .header {
-      font-size: 2em;
-      font-weight: 700;
-      text-align: center;
-      padding-top: 30px;
-    }
+.header {
+  font-size: 2em;
+  font-weight: 700;
+  text-align: center;
+  padding-top: 30px;
+}
 
-    .button_row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-top: 20px;
-      justify-content: center;
-    }
+.button_row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
 
-    .text {
-      text-align: left;
-      margin-top: 50px;
-    }
-  }
+.text {
+  text-align: left;
+  margin-top: 50px;
 }
 
 .button {
