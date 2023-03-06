@@ -13,12 +13,14 @@ from root.custom_classes.admin_classes import (
 )
 
 from .models import (
+    Tag,
     User,
     Menu,
     Gang,
     Event,
     Venue,
     Table,
+    Image,
     Profile,
     Booking,
     MenuItem,
@@ -52,9 +54,10 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
-    sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined']
+    sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
     list_display = [
-        'id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'group_memberships', 'last_login', 'date_joined'
+        'id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'group_memberships', 'last_login', 'date_joined',
+        'updated_at'
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
@@ -162,9 +165,9 @@ class UserObjectPermissionAdmin(CustomGuardedModelAdmin):
 @admin.register(UserPreference)
 class UserPreferenceAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'user', 'theme']
+    sortable_by = ['id', 'user', 'theme', 'created_at', 'updated_at']
     list_filter = ['theme']
-    list_display = ['id', '__str__', 'user', 'theme']
+    list_display = ['id', '__str__', 'user', 'theme', 'created_at', 'updated_at']
     _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'theme', *_user_search_fields]
     # filter_horizontal = []
@@ -176,9 +179,9 @@ class UserPreferenceAdmin(CustomGuardedModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'user', 'nickname']
+    sortable_by = ['id', 'user', 'nickname', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'user', 'nickname']
+    list_display = ['id', '__str__', 'user', 'nickname', 'created_at', 'updated_at']
     _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'nickname', *_user_search_fields]
     # filter_horizontal = []
@@ -190,12 +193,37 @@ class ProfileAdmin(CustomGuardedModelAdmin):
 @admin.register(Event)
 class EventAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at']
     list_filter = ['event_group']
-    list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt']
+    list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Tag)
+class TagAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name', 'color']
+    search_fields = ['id', 'name']
+    # filter_horizontal = []
+    list_display_links = ['id']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Image)
+class ImageAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title', 'image']
+    list_display = ['id', 'title', 'image']
+    list_filter = ['tags']
+    search_fields = ['id', 'title', 'image', 'tags']
+    # filter_horizontal = []
+    list_display_links = ['id']
     # autocomplete_fields = []
     list_select_related = True
 
@@ -216,9 +244,11 @@ class EventGroupAdmin(CustomGuardedModelAdmin):
 @admin.register(Venue)
 class VenueAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing']
+    sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
     list_filter = ['handicapped_approved']
-    list_display = ['id', '__str__', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing']
+    list_display = [
+        'id', '__str__', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at'
+    ]
     search_fields = ['id', 'name', 'responsible_crew']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -230,9 +260,9 @@ class VenueAdmin(CustomGuardedModelAdmin):
 @admin.register(Gang)
 class GangAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_nb', 'abbreviation', 'gang_type']
+    sortable_by = ['id', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
     list_filter = ['gang_type']
-    list_display = ['id', '__str__', 'name_nb', 'abbreviation', 'gang_type']
+    list_display = ['id', '__str__', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'abbreviation']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -243,9 +273,9 @@ class GangAdmin(CustomGuardedModelAdmin):
 @admin.register(GangType)
 class GangTypeAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'title_nb']
+    sortable_by = ['id', 'title_nb', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'title_nb']
+    list_display = ['id', '__str__', 'title_nb', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -256,9 +286,9 @@ class GangTypeAdmin(CustomGuardedModelAdmin):
 @admin.register(InformationPage)
 class InformationPageAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['slug_field']
+    sortable_by = ['slug_field', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['__str__', 'slug_field']
+    list_display = ['__str__', 'slug_field', 'created_at', 'updated_at']
     search_fields = ['slug_field', 'title_nb', 'title_en']
     # filter_horizontal = []
     list_display_links = ['__str__', 'slug_field']
@@ -269,9 +299,9 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
 @admin.register(Table)
 class TableAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_nb', 'name_en', 'seating']
+    sortable_by = ['id', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_nb', 'name_en', 'seating']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -282,9 +312,9 @@ class TableAdmin(CustomGuardedModelAdmin):
 @admin.register(Menu)
 class MenuAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_nb', 'name_en']
+    sortable_by = ['id', 'name_nb', 'name_en', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_nb', 'name_en', 'menu_item_count']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'menu_item_count', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
     filter_horizontal = ['menu_items']
     list_display_links = ['id', '__str__']
@@ -300,9 +330,9 @@ class MenuAdmin(CustomGuardedModelAdmin):
 @admin.register(MenuItem)
 class MenuItemAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_nb', 'name_en', 'price', 'price_member', 'order']
+    sortable_by = ['id', 'name_nb', 'name_en', 'price', 'price_member', 'order', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_nb', 'name_en', 'price', 'price_member', 'order']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'price', 'price_member', 'order', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
     filter_horizontal = ['food_preferences']
     list_display_links = ['id', '__str__']
@@ -313,9 +343,9 @@ class MenuItemAdmin(CustomGuardedModelAdmin):
 @admin.register(FoodCategory)
 class FoodCategoryAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_nb', 'name_en', 'order']
+    sortable_by = ['id', 'name_nb', 'name_en', 'order', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_nb', 'name_en', 'order']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'order', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -326,9 +356,9 @@ class FoodCategoryAdmin(CustomGuardedModelAdmin):
 @admin.register(FoodPreference)
 class FoodPreferenceAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name_nb', 'name_en']
+    sortable_by = ['id', 'name_nb', 'name_en', 'created_at', 'updated_at']
     # list_filter = []
-    list_display = ['id', '__str__', 'name_nb', 'name_en']
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
@@ -352,7 +382,7 @@ class SaksdokumentAdmin(CustomGuardedModelAdmin):
 class BookingAdmin(CustomGuardedModelAdmin):
     # ordering = []
     # list_filter = []
-    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count']
+    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count', 'created_at', 'updated_at']
     _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'name', *_user_search_fields]
     filter_horizontal = ['tables']
@@ -366,7 +396,7 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id']
     # list_filter = [] # TODO
-    list_display = ['id', '__str__']
+    list_display = ['id', '__str__', 'created_at', 'updated_at']
     # search_fields = []
     # filter_horizontal = []
     list_display_links = ['id', '__str__']

@@ -4,4 +4,8 @@ export { EventsAdminPage } from './EventsAdminPage';
 export { EventFormAdminPage } from './EventFormAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
+export { ClosedPeriodAdminPage } from './ClosedPeriodAdminPage';
+export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';
+export { ImageAdminPage } from './ImageAdminPage';
+export { ImageFormAdminPage } from './ImageFormAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
