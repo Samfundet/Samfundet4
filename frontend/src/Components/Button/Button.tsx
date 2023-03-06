@@ -45,7 +45,13 @@ export function Button({
   className,
   children,
 }: ButtonProps) {
-  const classNames = classnames(styles.button, mapThemeToStyle[theme], mapDisplayToStyle[display], rounded ? styles.rounded : "", className);
+  const classNames = classnames(
+    styles.button,
+    mapThemeToStyle[theme],
+    mapDisplayToStyle[display],
+    rounded ? styles.rounded : '',
+    className,
+  );
   return (
     <button name={name} onClick={onClick} type={type} disabled={disabled} className={classNames}>
       {children}

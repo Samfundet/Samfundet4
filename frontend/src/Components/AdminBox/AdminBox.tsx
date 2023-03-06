@@ -9,7 +9,7 @@ import styles from './AdminBox.module.scss';
 type AdminBoxProps = {
   title: string;
   icon?: string;
-  options: Array<any>;
+  options: Array;
 };
 
 const ADD = 'ADD';
@@ -41,13 +41,13 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
   const navigate = useNavigate();
   const { theme } = useGlobalContext();
   const isDarkTheme = theme === THEME.DARK;
-  
+
   return (
-    <div className={classNames(styles.applet, isDarkTheme ? styles.dark_theme : "")}>
+    <div className={classNames(styles.applet, isDarkTheme ? styles.dark_theme : '')}>
       <div className={styles.top}>
         <h1 className={styles.header}>
-          {title}
           {icon && <Icon icon={icon} inline={true}></Icon>}
+          {title}
         </h1>
       </div>
       <div className={styles.options}>

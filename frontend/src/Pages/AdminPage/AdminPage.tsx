@@ -14,13 +14,13 @@ export function AdminPage() {
   const { user } = useAuthContext();
   const { t } = useTranslation();
   const WISEWORD = WISEWORDS[Math.floor(Math.random() * WISEWORDS.length)];
-  
+
   return (
     <Page>
       <div className={styles.header}>
         <div>
           <h1 className={styles.headerText}>
-            <Icon icon="ph:gear-fill" width={28}/>
+            <Icon icon="ph:gear-fill" width={28} />
             {t(KEY.control_panel_title)}
           </h1>
           <p className={styles.wisewords}>{WISEWORD}</p>

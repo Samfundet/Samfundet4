@@ -3,28 +3,39 @@
 @import 'src/mixins';
 
 .applet {
+  
   color: $black;
-  background-color: $white;
+  background-color: white;
   text-align: center;
   margin: 1.3em 1em;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.05);
-  border-radius: 1em;
+  border-radius: .75em;
   width: 100%;
   max-width: 360px;
   overflow: hidden;
+
   @include for-tablet-only {
     max-width: 600px;
   }
   @include for-mobile-only {
     max-width: 600px;
   }
+
+  @include theme-dark {
+    background-color: #1f1f1f;
+    color: $white;
+  }
     
   .top {
     width: 100%;
     padding: 12px;
     padding-left: 18px;
-    padding-bottom: 0;
-    background-color: $red-samf;
+    padding-bottom: .75em;
+    background-color: $grey-5;
+
+    @include theme-dark {
+      background-color: $grey-1;
+    }
   }
 
   .options {
@@ -35,12 +46,16 @@
     text-transform: capitalize;
     text-align: left;
     margin: 0;
-    color: white;
+    color: black;
     font-size: 1.4em;
-    padding-bottom: .5em;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 10px;
     align-items: center;
+
+    @include theme-dark {
+      color: white;
+    }
   }
 
   .text {
@@ -88,14 +103,6 @@
     width: 164px;
     height: 72px;
     margin-top: 16px;
-  }
-
-  &.dark_theme {
-    background-color: #1f1f1f;
-    color: $white;
-    .header {
-      border-color: $grey-2;
-    }
   }
 
 }

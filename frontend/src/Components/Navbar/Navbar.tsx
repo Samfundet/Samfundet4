@@ -16,7 +16,6 @@ import { useGlobalContext } from '../../GlobalContextProvider';
 import styles from './Navbar.module.scss';
 
 export function Navbar() {
-
   const { theme } = useGlobalContext();
   const isDarkTheme = theme === THEME.DARK;
   const { mobileNavigation, setMobileNavigation } = useGlobalContext();
@@ -31,60 +30,46 @@ export function Navbar() {
   const handleNavigation = useCallback(
     (e: Event) => {
       const window = e.currentTarget;
-      if(window != null) {
+      if (window != null) {
         if (scrollY > window.scrollY) {
-          console.log("scrolling up");
+          console.log('scrolling up');
         } else if (scrollY < window.scrollY) {
-          console.log("scrolling down");
+          console.log('scrolling down');
         }
         setScrollY(window.scrollY);
       }
-    }, [scrollY]
+    },
+    [scrollY],
   );
   useEffect(() => {
-    window.addEventListener("scroll", handleNavigation);
-    return () => { 
-      window.removeEventListener("scroll", handleNavigation);
+    window.addEventListener('scroll', handleNavigation);
+    return () => {
+      window.removeEventListener('scroll', handleNavigation);
     };
-  }, [scrollY]);
+  }, [scrollY, handleNavigation]);
 
   // Navbar style
-  const transparentNavbar = (
-    useLocation().pathname == "/" && !scrolledNavbar && !mobileNavigation
-  )
+  const transparentNavbar = useLocation().pathname == '/' && !scrolledNavbar && !mobileNavigation;
   const navbarStyle = classNames(
-    transparentNavbar ? styles.transparent_navbar : "",
-    mobileNavigation ? styles.navbar_mobile : "",
-    isDarkTheme ? styles.theme_dark : ""
-  )
-  const navbarImage = (
-    isDarkTheme ? logoWhite : (
-      transparentNavbar ? logoWhite : logoBlack
-    )
-  )
+    transparentNavbar ? styles.transparent_navbar : '',
+    mobileNavigation ? styles.navbar_mobile : '',
+  );
+  const navbarImage = isDarkTheme ? logoWhite : transparentNavbar ? logoWhite : logoBlack;
 
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
       return (
-        <img
-          src={englishFlag}
-          className={styles.language_flag}
-          onClick={() => i18n.changeLanguage(LANGUAGES.EN)}
-        />
+        <img src={englishFlag} className={styles.language_flag} onClick={() => i18n.changeLanguage(LANGUAGES.EN)} />
       );
     }
     return (
-      <img
-        src={norwegianFlag}
-        className={styles.language_flag}
-        onClick={() => i18n.changeLanguage(LANGUAGES.NB)}
-      />
+      <img src={norwegianFlag} className={styles.language_flag} onClick={() => i18n.changeLanguage(LANGUAGES.NB)} />
     );
   }
 
   // Return profile button for navbar if logged in
   const profileButton = (
-    <div className={isDesktop ? styles.navbar_profile_button : styles.popup_profile}>
+    <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person"></Icon>
       <Link to={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
@@ -143,7 +128,7 @@ export function Navbar() {
       {/* Show login button */}
       {!user && (
         <Button
-          theme={(isDarkTheme || (transparentNavbar && !mobileNavigation)) ? "white" : "black"}
+          theme={isDarkTheme || (transparentNavbar && !mobileNavigation) ? 'white' : 'black'}
           rounded={true}
           className={isDesktop ? styles.login_button : styles.popup_internal_button}
           onClick={() => {
@@ -157,7 +142,7 @@ export function Navbar() {
       {/* Show logout button */}
       {user && (
         <Button
-          theme={(isDarkTheme || (transparentNavbar && !mobileNavigation)) ? "white" : "black"}
+          theme={isDarkTheme || (transparentNavbar && !mobileNavigation) ? 'white' : 'black'}
           rounded={true}
           className={isDesktop ? undefined : styles.popup_internal_button}
           onClick={() => {
@@ -179,33 +164,38 @@ export function Navbar() {
   // Show mobile popup for navigation
   const showMobileNavigation = (
     <>
-      <nav id={styles.mobile_popup_container} className={isDarkTheme ? styles.theme_dark : ""}>
+      <nav id={styles.mobile_popup_container}>
         {navbarHeaders}
-        <br />
-        {languageImage()}
-        {loginButtons}
-        {user && profileButton}
-        <ThemeSwitch/>
+        <div className={styles.mobile_widgets}>
+          {languageImage()}
+          <div className={styles.mobile_user}>
+            {user && profileButton}
+            {loginButtons}
+          </div>
+          <ThemeSwitch />
+        </div>
       </nav>
     </>
   );
-
 
   return (
     <>
       <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container} className={navbarStyle}>
-        <Link to="/" id={styles.navbar_logo}>
-          <img src={navbarImage}/>
-        </Link>
-        {isDesktop && navbarHeaders}
-        <div className={styles.navbar_widgets}>
-          {user && profileButton}
-          {languageImage()}
-          {loginButtons}
-          <ThemeSwitch />
+        <div className={styles.navbar_inner}>
+          <Link to="/" id={styles.navbar_logo}>
+            <img src={navbarImage} />
+          </Link>
+          {isDesktop && navbarHeaders}
+          <div className={styles.navbar_widgets}>
+            {user && profileButton}
+
+            <ThemeSwitch />
+            {languageImage()}
+            {loginButtons}
+          </div>
+          {hamburgerMenu}
         </div>
-        {hamburgerMenu}
       </nav>
       {mobileNavigation && showMobileNavigation}
     </>

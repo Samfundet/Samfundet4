@@ -11,63 +11,41 @@ $navbar-bg-dark: rgba(0, 0, 0, 255);
 $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
 
 
+/* Content padding */
+.navbar_padding {
+  margin-top: $navbar-height;
+}
+
+/* Main navbar */
 #navbar_container {
-  
+
   position: fixed;
   top: 0;
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg;
   color: black;
-  transition: .5s;
+  transition: .3s;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   z-index: 12;
+  white-space: nowrap;
 
-  @include for-tablet-down {
-    justify-content: space-between;
-  }
-
-  
-  /* Transparent */ 
-  &.transparent_navbar {
-    background: $navbar-bg-transparent !important;
-    color: white !important;
-    .navbar_hamburger_line {
-      background-color: white;
-    }
-  }
-
-  /* Dark theme */
-  &.theme_dark {
+  @include theme-dark {
     background: $navbar-bg-dark;
-    color: white;
-    .navbar_hamburger_line {
-      background-color: white;
-    }
+    color: $white;
   }
 
-  /* Mobile */
-  .navbar_mobile {
-    transition: 0s !important;
-  }
-  
 }
 
-.navbar_padding {
-  margin-top: $navbar-height;
-}
-
-#navbar_logo {
+.navbar_inner {
+  flex: 1;
+  max-width: 1500px;
   display: flex;
-  text-decoration: none;
-  margin: 0 1rem;
-  width: 250px;
-  cursor: pointer;
-  img {
-    width: 100%;
-  }
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 }
 
 /* Desktop navigation items */
@@ -85,44 +63,39 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
   text-align: center;
   justify-content: center;
   background: transparent;
+
   @include for-tablet-down {
     display: none;
   }
-}
 
-/* Link hover for regular navbar */
-#navbar_container {
-  .navbar_link:hover {
+  /* Link hover for regular navbar */
+  &:hover {
     background: linear-gradient(
-      to bottom,
-      #f4f4f4,
-      #fff
+      to bottom, #f4f4f4, #ffffff
     );
-    color: #222 !important;
+    color: #222222 !important;
     text-decoration: none;
-  }
-  &.theme_dark {
-    .navbar_link:hover {
+
+        
+    @include theme-dark {
       background: linear-gradient(
-        to bottom,
-        #151515,
-        #000
+        to bottom, #151515, #000000
       );
-      color: #eee !important;
+      color: #eeeeee !important;
     }
+
   }
 }
 
-/* Link hover for transparent navbar */
-#navbar_container.transparent_navbar {
-  .navbar_link:hover {
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.1),
-      rgba(255, 255, 255, 0)
-    );
-    text-decoration: none;
-    color: inherit !important;
+/* Samf logo */
+#navbar_logo {
+  display: flex;
+  text-decoration: none;
+  margin: 0 1rem;
+  width: 250px;
+  cursor: pointer;
+  img {
+    width: 100%;
   }
 }
 
@@ -152,39 +125,63 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
   }
 }
 
+/* Container for profile */
 .navbar_profile_button {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 1em;
   white-space: nowrap;
   cursor: pointer;
-  border-radius: 4px;
-  padding: 1px;
   padding-left: 6px;
   padding-right: 6px;
   background-color: inherit;
+  border-bottom: 1px solid transparent;
   gap: 5px;
-  @include for-tablet-down {
-    display: none;
+
+  .profile_icon {
+    width: 16px;
+    height: 16px;
   }
+
+  .profile_text {
+    text-decoration: none;
+    text-transform: capitalize;
+    color: inherit;
+  }
+
+  &:hover {
+    color: $red-samf;
+  }
+
 }
 
-.profile_icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
-}
+/* Transparent navbar (on top of page) */ 
+.transparent_navbar {
+  background: $navbar-bg-transparent !important;
+  color: white !important;
+  .navbar_hamburger_line {
+    background-color: white !important;
+  }
+  .navbar_link:hover {
+    background: linear-gradient(
+      to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)
+    );
+    text-decoration: none;
+    color: inherit !important;
 
-.profile_text {
-  text-decoration: none;
-  text-transform: capitalize;
-  color: inherit;
+  }
+  .navbar_profile_button {
+    color: inherit !important;
+    &:hover {
+      color: #ccc !important;
+    }
+  }
 }
 
 /* Hamburger menu */
 #navbar_hamburger {
   display: none;
+
   @include for-tablet-down {
     height: 69%;
     width: 55px;
@@ -193,32 +190,37 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
     justify-content: space-evenly;
     flex-direction: column;
   }
-}
 
-.navbar_hamburger_line {
-  background-color: black;
-  width: 35px;
-  height: 4px;
-  border-radius: 10px;
-  transition: transform 400ms;
-}
+  .navbar_hamburger_line {
+    background-color: $black;
+    width: 35px;
+    height: 4px;
+    border-radius: 10px;
+    transition: transform 400ms;
 
-#navbar_hamburger.open {
-  .navbar_hamburger_line.top {
-    transform: translateY(12px) rotate(-45deg);
+    @include theme-dark {
+      background-color: $white;
+    }
+
   }
 
-  .navbar_hamburger_line.middle {
-    opacity: 0;
+  &.open {
+    .navbar_hamburger_line.top {
+      transform: translateY(12px) rotate(-45deg);
+    }
+
+    .navbar_hamburger_line.middle {
+      opacity: 0;
+    }
+
+    .navbar_hamburger_line.bottom {
+      transform: translateY(-11px) rotate(45deg);
+    }
   }
 
-  .navbar_hamburger_line.bottom {
-    transform: translateY(-11px) rotate(45deg);
-  }
 }
 
 /* Mobile popup navigation */
-
 #mobile_popup_container {
   position: fixed;
   top: 60px;
@@ -238,11 +240,13 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
     display: none;
   }
   
-  &.theme_dark {
+  @include theme-dark {
     background: $navbar-bg-dark;
     color: white;
   }
+
 }
+
 
 /* Navbar link mobile */
 .popup_link_mobile {
@@ -251,6 +255,26 @@ $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
   margin-bottom: 0.25em;
   align-items: center;
   text-decoration: none;
+  text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
+}
+
+
+.mobile_widgets {
+  display: flex;
+  align-items: center;
+  margin-top: 5em;
+  gap: 1em;
+}
+
+.mobile_user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .5em;
+  max-width: 150px;
+  overflow: visible;
+  white-space: nowrap;
 }

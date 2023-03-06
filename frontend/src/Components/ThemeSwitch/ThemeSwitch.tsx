@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import classnames from 'classnames';
 import { putUserPreference } from '~/api';
 import { useAuthContext } from '~/AuthContext';
 import { THEME } from '~/constants';
@@ -13,8 +14,8 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   const { switchTheme, theme } = useGlobalContext();
   const { user } = useAuthContext();
 
-  const onIcon = <Icon icon="ph:moon-stars-thin" inline={true} width={24}/>;
-  const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24}/>;
+  const onIcon = <Icon icon="ph:moon-stars-thin" inline={true} width={24} className={styles.icon} />;
+  const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24} className={styles.icon} />;
 
   function switchThemeHandler() {
     const switchedTo = switchTheme();
@@ -24,8 +25,8 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   }
 
   return (
-      <div onClick={switchThemeHandler} className={styles.button}>
-        {theme === THEME.DARK ? onIcon : offIcon}
-      </div>
+    <div onClick={switchThemeHandler} className={classnames(styles.button, className)}>
+      {theme === THEME.DARK ? onIcon : offIcon}
+    </div>
   );
 }

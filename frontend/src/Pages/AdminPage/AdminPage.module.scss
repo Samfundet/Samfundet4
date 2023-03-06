@@ -13,7 +13,6 @@
 }
 
 .header {
-  text-align: left;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -27,6 +26,7 @@
     align-items: center;
     margin-bottom: 10px;
     gap: 10px;
+    color: $red-samf;
   }
 }
 

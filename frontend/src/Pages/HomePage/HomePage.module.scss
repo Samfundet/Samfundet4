@@ -8,7 +8,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #222222;
 }
 
 .logo {
@@ -35,9 +34,7 @@
   top: 0;
   z-index: 1;
   background: linear-gradient(
-    to bottom, 
-    rgba(0, 0, 0, 0.5), 
-    rgba(0, 0, 0, 0)
+    to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)
   );
 }
 
@@ -50,11 +47,11 @@
   padding-right: 16px;
 
   .inner_content {
-    max-width: 500px;
+    max-width:800px;
 
     .header {
       font-size: 2em;
-      font-weight: bold;
+      font-weight: 700;
       text-align: center;
       padding-top: 30px;
     }
