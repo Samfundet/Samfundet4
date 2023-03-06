@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
-import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink as Link, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '~/api';
@@ -8,7 +7,7 @@ import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
 import { THEME } from '~/constants';
-import { useDesktop } from '~/hooks';
+import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -27,20 +26,8 @@ export function Navbar() {
   const isDesktop = useDesktop();
 
   // Scroll detection
-  const [scrollY, setScrollY] = useState(window.scrollY);
+  const scrollY = useScrollY();
   const scrolledNavbar = scrollY > scrollDistanceForOpaque;
-  const handleNavigation = useCallback((e: Event) => {
-    const window = e.currentTarget;
-    if (window != null) {
-      setScrollY(window.scrollY);
-    }
-  }, []);
-  useEffect(() => {
-    window.addEventListener('scroll', handleNavigation);
-    return () => {
-      window.removeEventListener('scroll', handleNavigation);
-    };
-  }, [handleNavigation]);
 
   // Navbar style
   const transparentNavbar = useLocation().pathname == '/' && !scrolledNavbar && !mobileNavigation;
@@ -48,7 +35,7 @@ export function Navbar() {
     transparentNavbar && styles.transparent_navbar,
     mobileNavigation && styles.navbar_mobile,
   );
-  const navbarImage = isDarkTheme ? logoWhite : transparentNavbar ? logoWhite : logoBlack;
+  const navbarImage = (isDarkTheme || transparentNavbar) ? logoWhite : logoBlack;
 
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
