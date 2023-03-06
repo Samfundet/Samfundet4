@@ -11,6 +11,7 @@ import {
   MenuDto,
   MenuItemDto,
   SaksdokumentDto,
+  TextItemDto,
   UserDto,
   UserPreferenceDto,
   VenueDto,
@@ -232,6 +233,12 @@ export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export async function getTextItem(pk: string): Promise<TextItemDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__text_item_detail, urlParams: { pk: pk } });
+  const response = await axios.get<TextItemDto>(url, { withCredentials: true });
   return response.data;
 }
 
