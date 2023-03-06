@@ -471,8 +471,8 @@ class TextItem(models.Model):
     text_en = models.TextField()
 
     class Meta:
-        verbose_name = "TextItem"
-        verbose_name_plural = "TextItems"
+        verbose_name = 'TextItem'
+        verbose_name_plural = 'TextItems'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.key}'
