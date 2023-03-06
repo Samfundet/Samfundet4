@@ -30,7 +30,8 @@ export function Navbar() {
   const scrolledNavbar = scrollY > scrollDistanceForOpaque;
 
   // Navbar style
-  const transparentNavbar = useLocation().pathname == '/' && !scrolledNavbar && !mobileNavigation;
+  const isRootPath = useLocation().pathname == '/';
+  const transparentNavbar = isRootPath && !scrolledNavbar && !mobileNavigation;
   const navbarStyle = classNames(
     transparentNavbar && styles.transparent_navbar,
     mobileNavigation && styles.navbar_mobile,
