@@ -160,6 +160,7 @@ class GangTypeDto:
     title_en: str
     gangs: list[GangDto]
 
+
 @dataclass_json
 @dataclass
 class TextItemDto:
