@@ -2,6 +2,8 @@
 
 @import 'src/mixins';
 
+$background-color-dark: #1f1f1f;
+
 .applet {
   color: $black;
   background-color: white;
@@ -22,7 +24,7 @@
   }
 
   @include theme-dark {
-    background-color: #1f1f1f;
+    background-color: $background-color-dark;
     color: $white;
   }
 
