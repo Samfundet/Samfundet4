@@ -36,7 +36,7 @@ export function Navbar() {
     transparentNavbar && styles.transparent_navbar,
     mobileNavigation && styles.navbar_mobile,
   );
-  const navbarImage = (isDarkTheme || transparentNavbar) ? logoWhite : logoBlack;
+  const navbarImage = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
 
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
