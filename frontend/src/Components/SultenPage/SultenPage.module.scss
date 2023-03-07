@@ -1,0 +1,24 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: stretch;
+  min-width: 100%;
+  min-height: calc(100vh - 200px);
+}
+
+.content {
+  flex: 1;
+  max-width: $content-max-size;
+  width: 100%;
+  padding: 0.5em;
+  padding-top: 1em;
+  margin: 0 auto;
+}
+// TODO ADD MOBILE PADDING?
