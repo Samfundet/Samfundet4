@@ -1,0 +1,74 @@
+@import 'src/constants';
+@import 'src/mixins';
+
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 800px;
+  max-width: calc(100vw - 2em);
+  margin: 0 auto;
+  gap: 2em;
+  transform: translateY(0);
+  margin-bottom: -40px;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.box {
+  flex: 1;
+  padding: 1.5em;
+  padding-top: 1em;
+  background-color: $white;
+  border-radius: 0.4em;
+  position: relative;
+  transform: translateY(-35px);
+  box-shadow: 0 0 100px 15px $black-t10;
+  border: 1px solid $grey-4;
+  color: black;
+  max-width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include theme-dark {
+    background-color: #151515;
+    border-color: #222;
+    color: $grey-3;
+  }
+
+  &.box_left {
+    flex-basis: 70%;
+  }
+  &.box_right {
+    flex-basis: 30%;
+    background-color: $blue;
+    color: white;
+    border: none;
+    @include theme-dark {
+      background-color: $blue;
+      color: white;
+    }
+  }
+}
+
+.title_left, .title_right {
+  display: flex;
+  gap: .5em;
+  align-items: center;
+  margin-bottom: 1em;
+  font-size: 1.25em;
+  color: $red-samf;
+  @include theme-dark {
+    color: $grey-4;
+  }
+}
+.title_right {
+  color: $white;
+}
+
+.button_right {
+  white-space: nowrap;
+}

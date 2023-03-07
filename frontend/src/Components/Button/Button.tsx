@@ -2,7 +2,7 @@ import { default as classNames, default as classnames } from 'classnames';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 
-type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined' | 'blue' | 'black' | 'white';
+type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined' | 'blue' | 'black' | 'white' | 'green';
 type ButtonDisplay = 'basic' | 'pill' | 'block';
 
 type ButtonProps = {
@@ -26,6 +26,7 @@ const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
   blue: styles.button_blue,
   black: styles.button_black,
   white: styles.button_white,
+  green: styles.button_green,
 };
 
 const mapDisplayToStyle: { [display in ButtonDisplay]: string } = {
