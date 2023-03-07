@@ -161,6 +161,12 @@ export type SaksdokumentDto = {
   file?: string;
 };
 
+export type TextItemDto = {
+  key: string;
+  text_en: string;
+  text_nb: string;
+};
+
 export type BookingDto = {
   name?: string;
   text?: string;
