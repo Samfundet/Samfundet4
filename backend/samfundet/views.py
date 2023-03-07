@@ -27,16 +27,19 @@ from .utils import (
 )
 
 from .models import (
+    Tag,
     User,
     Menu,
     Gang,
     Event,
     Table,
+    Image,
     Venue,
     Profile,
     Booking,
     MenuItem,
     GangType,
+    TextItem,
     EventGroup,
     FoodCategory,
     Saksdokument,
@@ -46,6 +49,8 @@ from .models import (
     InformationPage,
 )
 from .serializers import (
+    TagSerializer,
+    ImageSerializer,
     GangSerializer,
     MenuSerializer,
     EventSerializer,
@@ -54,6 +59,7 @@ from .serializers import (
     LoginSerializer,
     ProfileSerializer,
     BookingSerializer,
+    TextItemSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
@@ -64,6 +70,12 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
 )
+
+
+class TextItemView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = TextItemSerializer
+    queryset = TextItem.objects.all()
 
 
 class EventView(ModelViewSet):
@@ -315,3 +327,13 @@ class TableView(ModelViewSet):
 class BookingView(ModelViewSet):
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
+
+
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()

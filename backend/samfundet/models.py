@@ -1,3 +1,5 @@
+import re
+import random
 from typing import Any
 from datetime import time, timedelta
 
@@ -12,12 +14,49 @@ from django.contrib.auth.models import AbstractUser
 from root.utils import permissions
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=140)
+    color = models.CharField(max_length=6, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        # Saves with random color
+        if not self.color or not re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', self.color):
+            hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+            c = random.choices(range(len(hexnr)), k=6)
+            while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
+                c = random.choices(range(len(hexnr)), k=6)
+            self.color = ''.join([hexnr[i] for i in c])
+        super().save(*args, **kwargs)
+
+
+class Image(models.Model):
+    title = models.CharField(max_length=140)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='images')
+    image = models.ImageField(upload_to='images/', blank=True, null=False)
+
+    class Meta:
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+
+    def __str__(self) -> str:
+        return f'{self.title}'
+
+
 class User(AbstractUser):
-    ...
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
 
 class EventGroup(models.Model):
     name = models.CharField(max_length=140)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'EventGroup'
@@ -25,7 +64,6 @@ class EventGroup(models.Model):
 
 
 class Event(models.Model):
-
     # INFO
     title_nb = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
@@ -36,6 +74,8 @@ class Event(models.Model):
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
     location = models.CharField(max_length=140, blank=True, null=True)
     codeword = models.CharField(max_length=140, blank=True, null=True)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # Duration
     start_dt = models.DateTimeField(blank=True, null=True)
@@ -111,6 +151,9 @@ class Venue(models.Model):
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
@@ -128,6 +171,9 @@ class ClosedPeriod(models.Model):
 
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
     end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Stengt periode'
@@ -148,6 +194,9 @@ class UserPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'UserPreference'
         verbose_name_plural = 'UserPreferences'
@@ -159,6 +208,9 @@ class UserPreference(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(max_length=30, blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Profile'
@@ -181,6 +233,9 @@ class GangType(models.Model):
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'GangType'
         verbose_name_plural = 'GangTypes'
@@ -198,6 +253,9 @@ class Gang(models.Model):
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Gang'
@@ -223,6 +281,9 @@ class InformationPage(models.Model):
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
     text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     # TODO Find usage for owner field
 
     class Meta:
@@ -244,6 +305,9 @@ class Table(models.Model):
 
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
 
@@ -259,6 +323,9 @@ class FoodPreference(models.Model):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     def __str__(self) -> str:
         return f'{self.name_nb}'
 
@@ -267,6 +334,9 @@ class FoodCategory(models.Model):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     def __str__(self) -> str:
         return f'{self.name_nb}'
@@ -287,6 +357,9 @@ class MenuItem(models.Model):
     food_preferences = models.ManyToManyField(FoodPreference, blank=True)
     food_category = models.ForeignKey(FoodCategory, blank=True, null=True, on_delete=models.PROTECT)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'MenuItem'
         verbose_name_plural = 'MenuItems'
@@ -304,6 +377,9 @@ class Menu(models.Model):
 
     menu_items = models.ManyToManyField(MenuItem, blank=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'Menu'
         verbose_name_plural = 'Menus'
@@ -316,6 +392,9 @@ class Saksdokument(models.Model):
     title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class SaksdokumentCategory(models.TextChoices):
         FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
@@ -347,6 +426,9 @@ class Booking(models.Model):
     last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
     email = models.CharField(max_length=64, unique=True, blank=True, null=True)
     phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Booking'
@@ -381,3 +463,16 @@ class Booking(models.Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class TextItem(models.Model):
+    key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
+    text_nb = models.TextField()
+    text_en = models.TextField()
+
+    class Meta:
+        verbose_name = 'TextItem'
+        verbose_name_plural = 'TextItems'
+
+    def __str__(self) -> str:
+        return f'{self.key}'

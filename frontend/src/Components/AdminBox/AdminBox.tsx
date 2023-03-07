@@ -9,6 +9,7 @@ type AdminBoxProps = {
 
 const ADD = 'ADD';
 const MANAGE = 'MANAGE';
+const EDIT = 'EDIT';
 const STEAL = 'STEAL';
 const INFO = 'INFO';
 const KILROY = 'KILROY';
@@ -50,6 +51,12 @@ export function AdminBox({ title, options }: AdminBoxProps) {
           } else if (element.type == MANAGE) {
             return (
               <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
+                {element.text}
+              </Button>
+            );
+          } else if (element.type == EDIT) {
+            return (
+              <Button key={key} theme="blue" onClick={() => navigate(element.url)} className={styles.button}>
                 {element.text}
               </Button>
             );

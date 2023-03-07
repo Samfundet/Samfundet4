@@ -4,25 +4,43 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Permission, Group
 
 from .models import (
+    Tag,
     Menu,
     Gang,
     Event,
-    EventGroup,
     Table,
     Venue,
-    ClosedPeriod,
+    Image,
     Booking,
     Profile,
     MenuItem,
     GangType,
+    EventGroup,
     FoodCategory,
     Saksdokument,
+    ClosedPeriod,
     FoodPreference,
     UserPreference,
     InformationPage,
+    TextItem,
 )
 
 User = get_user_model()
+
+
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+
+    class Meta:
+        model = Image
+        fields = '__all__'
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -208,4 +226,11 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
+        fields = '__all__'
+
+
+class TextItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TextItem
         fields = '__all__'

@@ -12,6 +12,7 @@ from .models import (
     Venue,
     Event,
     Profile,
+    TextItem,
     EventGroup,
     ClosedPeriod,
     Saksdokument,
@@ -24,6 +25,7 @@ from .dto import (
     ClosedPeriodDto,
     GroupDto,
     EventDto,
+    TextItemDto,
     EventGroupDto,
     ProfileDto,
     SaksdokumentDto,
@@ -211,4 +213,13 @@ def closedperiod_to_dataclass(*, closed_period: ClosedPeriod) -> ClosedPeriodDto
         description_nb=closed_period.description_en,
         start_dt=closed_period.start_dt,
         end_dt=closed_period.end_dt,
+    )
+
+
+def textitem_to_dataclass(*, text_item: TextItem) -> TextItemDto:
+    return TextItemDto(
+        id=text_item.id,
+        key=text_item.key,
+        text_en=text_item.text_en,
+        text_nb=text_item.text_nb,
     )
