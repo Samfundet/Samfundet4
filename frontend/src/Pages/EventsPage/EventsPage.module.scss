@@ -7,3 +7,131 @@
   justify-content: center;
   margin-top: 20%;
 }
+
+.center {
+  margin-bottom: 10%;
+  margin: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include for-tablet-down {
+    margin-bottom: 10%;
+    margin: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}
+
+.buttonClass {
+  font-size:15px;
+  width:140px;
+  height:50px;
+  border-width:1px;
+  color:#ffffff;
+  border-color:#ffffff;
+  border-top-left-radius:4px;
+  border-top-right-radius:4px;
+  border-bottom-left-radius:4px;
+  border-bottom-right-radius:4px;
+  background:#a03033;
+}
+
+.buttonClass:hover {
+  background: #a03033
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #a9a9a9;
+  z-index: -5;
+
+}
+
+.filterColumn {
+  -webkit-column-count: 4;
+  -moz-column-count: 4;
+  column-count: 4;
+  -webkit-column-gap: 26px;
+  -moz-column-gap: 26px;
+  column-gap: 26px;
+  -webkit-column-rule: 1px solid rgba(28,110,164,0.39);
+  -moz-column-rule: 1px solid rgba(28,110,164,0.39);
+  column-rule: 1px solid rgba(28,110,164,0.39);
+  @include for-mobile-down {
+      -webkit-column-count: 1;
+      -moz-column-count: 1;
+      column-count: 1;
+      -webkit-column-gap: 26px;
+      -moz-column-gap: 26px;
+      column-gap: 26px;
+      -webkit-column-rule: 1px solid rgba(28,110,164,0.39);
+      -moz-column-rule: 1px solid rgba(28,110,164,0.39);
+      column-rule: 1px solid rgba(28,110,164,0.39);
+  }
+
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

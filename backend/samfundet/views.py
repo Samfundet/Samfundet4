@@ -13,6 +13,7 @@ from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.db.models import Q, CharField, TextField, QuerySet
 
 from root.constants import XCSRFTOKEN
 
@@ -73,9 +74,44 @@ class EventView(ModelViewSet):
 class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
+    def url_args(self, query_word: str) -> str:
+        query = self.request.GET.get(query_word, None)
+        if query is None:
+            return ''
+        return query.split(',')[0]
+
+    def general_search(self, search_term: str) -> QuerySet:
+        fields = [f for f in Event._meta.fields if (isinstance(f, CharField) or isinstance(f, TextField))]
+        queries = [Q(**{f.name+'__contains': search_term}) for f in fields]
+        qs = Q()
+        for query in queries:
+            qs = qs | query
+
+        return Event.objects.filter(qs)
+
     def get(self, request: Request) -> Response:
         events: dict = {}
-        for event in Event.objects.all().values():
+
+        if self.url_args('search') != '':
+            events_query = self.general_search(self.url_args('search'))
+
+        elif "?" in self.request.build_absolute_uri():
+            events_query = Event.objects.filter(
+                Q(title_nb__contains=self.url_args('title')),
+                Q(title_en__contains=self.url_args('title')),
+                Q(description_long_nb__contains=self.url_args('description')),
+                Q(description_long_en__contains=self.url_args('description')),
+                Q(description_short_nb__contains=self.url_args('description_short')),
+                Q(description_short_en__contains=self.url_args('description_short')),
+                Q(location__contains=self.url_args('event_group')),
+                Q(location__contains=self.url_args('location')),
+                Q(codeword__contains=self.url_args('codeword'))
+            )
+
+        else:
+            events_query = Event.objects.all()
+
+        for event in events_query.order_by("start_dt").values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)
@@ -219,7 +255,8 @@ class GangFormView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()],
+                'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
         return Response(data=data)
 
 
