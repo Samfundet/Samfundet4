@@ -9,9 +9,18 @@ type SultenCardProps = {
   text: string;
   buttonText?: string;
   imageAlignment?: 'left' | 'right';
+  onButtonClick?: () => void;
 };
 
-export function SultenCard({ header, image, imageAlt, text, buttonText, imageAlignment = 'left' }: SultenCardProps) {
+export function SultenCard({
+  header,
+  image,
+  imageAlt,
+  text,
+  buttonText,
+  onButtonClick,
+  imageAlignment = 'left',
+}: SultenCardProps) {
   const imageLeft = imageAlignment === 'left';
   const isMobile = useMobile();
 
@@ -28,7 +37,11 @@ export function SultenCard({ header, image, imageAlt, text, buttonText, imageAli
       <div className={styles.text_container}>
         <h2 className={styles.card_header}>{header}</h2>
         <p className={styles.card_text}>{text}</p>
-        {buttonText && <SultenButton className={styles.card_button}>{buttonText}</SultenButton>}
+        {buttonText && (
+          <SultenButton onClick={onButtonClick} className={styles.card_button}>
+            {buttonText}
+          </SultenButton>
+        )}
       </div>
       {rightAlignedImage}
     </div>

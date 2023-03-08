@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SultenCard } from '~/Components/SultenCard';
 import { SultenPage } from '~/Components/SultenPage';
 import { getMenus, getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { MenuDto, VenueDto } from '~/dto';
+import { ROUTES } from '~/routes';
 import styles from './LychePage.module.scss';
 
 /**
@@ -13,6 +15,8 @@ import styles from './LychePage.module.scss';
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const [lycheMenu, setLycheMenu] = useState<MenuDto>();
+  const navigate = useNavigate();
+
   useEffect(() => {
     getVenues()
       .then((data) => {
@@ -27,6 +31,7 @@ export function LychePage() {
       })
       .catch(console.error);
   }, []);
+
   const openingHours = (
     <div className={styles.opening_hour_container}>
       <h2 className={styles.opening_hour_header}>ÅPNINGSTIDER</h2>
@@ -59,6 +64,7 @@ export function LychePage() {
       text={'Vil du reservere bord på Lyche? Dette kan du gjøre gjennom vårt reservasjonssystem, eller på epost. '}
       buttonText={'Reserver bord'}
       imageAlignment="left"
+      onButtonClick={() => navigate(ROUTES.frontend.sulten_reservation)}
     />
   );
 
@@ -72,6 +78,7 @@ export function LychePage() {
       }
       buttonText={'Se vår meny'}
       imageAlignment="right"
+      onButtonClick={() => navigate(ROUTES.frontend.sulten_menu)}
     />
   );
 
@@ -85,6 +92,7 @@ export function LychePage() {
       }
       buttonText={'Mer om oss'}
       imageAlignment="left"
+      onButtonClick={() => navigate(ROUTES.frontend.sulten_about)}
     />
   );
 
@@ -98,6 +106,7 @@ export function LychePage() {
       }
       buttonText={'Kontakt oss'}
       imageAlignment="right"
+      onButtonClick={() => navigate(ROUTES.frontend.sulten_contact)}
     />
   );
 
