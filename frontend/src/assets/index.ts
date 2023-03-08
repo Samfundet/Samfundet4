@@ -18,4 +18,8 @@ export { default as selskapssiden } from './selskapssiden.jpg';
 export { default as splash } from './splash.jpeg';
 export { default as storsalen } from './storsalen.jpg';
 export { default as strossa } from './strossa.jpg';
+export { default as sulten_chef } from './sulten_chef.jpg';
+export { default as sulten_crowded } from './sulten_crowded.jpg';
+export { default as sulten_delivery } from './sulten_delivery.jpg';
+export { default as sulten_inside } from './sulten_inside.jpg';
 export { default as profileIcon } from './user.png';

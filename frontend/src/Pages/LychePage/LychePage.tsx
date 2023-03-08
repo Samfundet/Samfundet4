@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { SultenCard } from '~/Components/SultenCard';
 import { SultenPage } from '~/Components/SultenPage';
 import { getMenus, getVenues } from '~/api';
-import { front_lyche } from '~/assets';
+import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { MenuDto, VenueDto } from '~/dto';
 import styles from './LychePage.module.scss';
 
@@ -50,6 +51,56 @@ export function LychePage() {
     </div>
   );
 
+  const reservationCard = (
+    <SultenCard
+      image={sulten_inside}
+      imageAlt={'Bilde av Lyche'}
+      header={'Reservation'}
+      text={'Vil du reservere bord på Lyche? Dette kan du gjøre gjennom vårt reservasjonssystem, eller på epost. '}
+      buttonText={'Reserver bord'}
+      imageAlignment="left"
+    />
+  );
+
+  const menuCard = (
+    <SultenCard
+      image={sulten_delivery}
+      imageAlt={'Food delivery'}
+      header={'Meny'}
+      text={
+        'Hos Lyche ønsker vi å legge vekt på mat og drikke av høy kvalitet. Dette gjelder både å ha et variert men også godt gjennomtenkt utvalg.'
+      }
+      buttonText={'Se vår meny'}
+      imageAlignment="right"
+    />
+  );
+
+  const aboutSultenCard = (
+    <SultenCard
+      image={sulten_chef}
+      imageAlt={'Lyche Chef'}
+      header={'Om lyche'}
+      text={
+        'Lyche er en restaurant drevet på frivillig basis. Alle servitørene og kokkene på kjøkkenet jobber frivillig, og vi er en del av Kafé og serveringsgjengen (KSG) ved Studentersamfundet i Trondhjem.'
+      }
+      buttonText={'Mer om oss'}
+      imageAlignment="left"
+    />
+  );
+
+  const ContactCard = (
+    <SultenCard
+      image={sulten_crowded}
+      imageAlt={'Bilde av Lyche'}
+      header={'Kontakt'}
+      text={
+        'Har du spørsmål, henvendelser, forslag til forbedring eller av andre årsaker ønsker å komme i kontakt med oss? Her finner du kontaktinformasjonen vår.'
+      }
+      buttonText={'Kontakt oss'}
+      imageAlignment="right"
+    />
+  );
+
   return (
     <SultenPage>
       <div className={styles.image_container}>
@@ -59,6 +110,10 @@ export function LychePage() {
       <div className={styles.content_container}>
         <h1>LychePage</h1>
       </div>
+      {reservationCard}
+      {menuCard}
+      {aboutSultenCard}
+      {ContactCard}
     </SultenPage>
   );
 }

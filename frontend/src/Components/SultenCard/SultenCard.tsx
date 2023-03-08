@@ -8,7 +8,7 @@ type SultenCardProps = {
   imageAlt: string;
   text: string;
   buttonText?: string;
-  imageAlignment: 'left' | 'right';
+  imageAlignment?: 'left' | 'right';
 };
 
 export function SultenCard({ header, image, imageAlt, text, buttonText, imageAlignment = 'left' }: SultenCardProps) {
