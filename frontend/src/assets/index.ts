@@ -2,6 +2,7 @@ export { default as bodegaen } from './bodegaen.jpg';
 export { default as daglighallen } from './daglighallen.jpg';
 export { default as edgar } from './edgar.jpg';
 export { default as englishFlag } from './english_flag.png';
+export { default as front_lyche } from './front_lyche.jpg';
 export { default as kitteh } from './kitteh.jpeg';
 export { default as klubben } from './klubben.jpg';
 export { default as knaus } from './knaus.jpg';

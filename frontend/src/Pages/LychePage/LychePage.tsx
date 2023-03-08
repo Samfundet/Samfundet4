@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { SultenPage } from '~/Components/SultenPage';
 import { getMenus, getVenues } from '~/api';
+import { front_lyche } from '~/assets';
 import { MenuDto, VenueDto } from '~/dto';
-import { dbT } from '~/i18n/i18n';
+import styles from './LychePage.module.scss';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -11,8 +12,6 @@ import { dbT } from '~/i18n/i18n';
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const [lycheMenu, setLycheMenu] = useState<MenuDto>();
-  const { i18n } = useTranslation();
-  // Stuff to do on first render.
   useEffect(() => {
     getVenues()
       .then((data) => {
@@ -27,47 +26,39 @@ export function LychePage() {
       })
       .catch(console.error);
   }, []);
+  const openingHours = (
+    <div className={styles.opening_hour_container}>
+      <h2 className={styles.opening_hour_header}>ÅPNINGSTIDER</h2>
+      <div className={styles.hour_item_container}>
+        <p className={styles.hour_item}>Man-Tor</p>
+        <p className={styles.hour_item}>
+          {lycheVenue?.opening_monday} -{lycheVenue?.closing_monday}
+        </p>
+      </div>
+      <div className={styles.hour_item_container}>
+        <p className={styles.hour_item}>Fre-Lør</p>
+        <p className={styles.hour_item}>
+          {lycheVenue?.opening_friday} -{lycheVenue?.closing_friday}
+        </p>
+      </div>
+      <div className={styles.hour_item_container}>
+        <p className={styles.hour_item}>Søndag</p>
+        <p className={styles.hour_item}>
+          {lycheVenue?.opening_monday} -{lycheVenue?.closing_sunday}
+        </p>
+      </div>
+    </div>
+  );
 
   return (
-    <>
-      <h1>Lyche</h1>
-
-      <div>
-        {lycheMenu?.menu_items?.map((item, i) => {
-          return (
-            <div key={i}>
-              <div>{dbT(item, 'name', i18n.language)}</div>
-              <div>{dbT(item, 'description', i18n.language)}</div>
-              <div>{item.order}</div>
-              <div>
-                {item.price}/{item.price_member}
-              </div>
-            </div>
-          );
-        })}
+    <SultenPage>
+      <div className={styles.image_container}>
+        <img src={front_lyche} alt="Lyche" className={styles.background_image} />
+        {openingHours}
       </div>
-
-      <div>
-        Monday: {lycheVenue?.opening_monday} - {lycheVenue?.closing_monday}
+      <div className={styles.content_container}>
+        <h1>LychePage</h1>
       </div>
-      <div>
-        Tuesday: {lycheVenue?.opening_tuesday} - {lycheVenue?.closing_tuesday}
-      </div>
-      <div>
-        Wednesday: {lycheVenue?.opening_wednesday} - {lycheVenue?.closing_wednesday}
-      </div>
-      <div>
-        Thursday: {lycheVenue?.opening_thursday} - {lycheVenue?.closing_thursday}
-      </div>
-      <div>
-        Friday: {lycheVenue?.opening_friday} - {lycheVenue?.closing_friday}
-      </div>
-      <div>
-        Saturday: {lycheVenue?.opening_saturday} - {lycheVenue?.closing_saturday}
-      </div>
-      <div>
-        Sunday: {lycheVenue?.opening_sunday} - {lycheVenue?.closing_sunday}
-      </div>
-    </>
+    </SultenPage>
   );
 }

@@ -11,14 +11,25 @@
   align-content: stretch;
   min-width: 100%;
   min-height: calc(100vh - 200px);
+  z-index: 10;
+  @include for-mobile-down {
+    flex-direction: column;
+    padding: 0%;
+  }
 }
 
 .content {
+  background-color: black;
   flex: 1;
   max-width: $content-max-size;
-  width: 100%;
-  padding: 0.5em;
-  padding-top: 1em;
+  width: 100vw;
+  padding: 0 0.5em;
   margin: 0 auto;
+  z-index: 10;
+  @include for-mobile-down {
+    flex-direction: column;
+    padding: 0%;
+  }
 }
+
 // TODO ADD MOBILE PADDING?
