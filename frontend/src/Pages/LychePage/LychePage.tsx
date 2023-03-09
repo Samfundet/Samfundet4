@@ -111,18 +111,20 @@ export function LychePage() {
   );
 
   return (
-    <SultenPage>
+    <>
       <div className={styles.image_container}>
         <img src={front_lyche} alt="Lyche" className={styles.background_image} />
         {openingHours}
       </div>
-      <div className={styles.content_container}>
-        <h1>LychePage</h1>
-      </div>
-      {reservationCard}
-      {menuCard}
-      {aboutSultenCard}
-      {ContactCard}
-    </SultenPage>
+      <SultenPage>
+        <div className={styles.content_container}>
+          <h1>LychePage</h1>
+        </div>
+        {reservationCard}
+        {menuCard}
+        {aboutSultenCard}
+        {ContactCard}
+      </SultenPage>
+    </>
   );
 }
