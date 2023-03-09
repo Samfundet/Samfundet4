@@ -25,6 +25,7 @@ from .models import (
     Booking,
     MenuItem,
     GangType,
+    TextItem,
     EventGroup,
     ClosedPeriod,
     Saksdokument,
@@ -399,6 +400,19 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     # search_fields = []
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    # list_select_related = True
+
+
+@admin.register(TextItem)
+class TextItemAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['key']
+    # list_filter = []
+    list_display = ['key', '__str__']
+    search_fields = ['key']
+    # filter_horizontal = []
+    list_display_links = ['key', '__str__']
     # autocomplete_fields = []
     # list_select_related = True
 

@@ -38,6 +38,7 @@ from .models import (
     Booking,
     MenuItem,
     GangType,
+    TextItem,
     EventGroup,
     FoodCategory,
     Saksdokument,
@@ -57,6 +58,7 @@ from .serializers import (
     LoginSerializer,
     ProfileSerializer,
     BookingSerializer,
+    TextItemSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
@@ -67,6 +69,12 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
 )
+
+
+class TextItemView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = TextItemSerializer
+    queryset = TextItem.objects.all()
 
 
 class EventView(ModelViewSet):
