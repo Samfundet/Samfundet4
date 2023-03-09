@@ -57,12 +57,12 @@ $border-dark:#222222;
 
 .box_right {
   flex-basis: 30%;
-  background-color: $blue;
+  background-color: $red-samf;
   color: white;
   border: none;
 
   @include theme-dark {
-    background-color: $blue;
+    background-color: $red-samf;
     color: white;
   }
 

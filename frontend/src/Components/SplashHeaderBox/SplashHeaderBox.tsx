@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import { useScrollY } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import styles from './SplashHeaderBox.module.scss';
 
 type SplashHeaderBoxProps = {
@@ -8,6 +10,8 @@ type SplashHeaderBoxProps = {
 };
 
 export function SplashHeaderBox({ className }: SplashHeaderBoxProps) {
+  const { t } = useTranslation();
+
   const scrollY = useScrollY();
 
   const containerScrollSpeed = -0.1;
