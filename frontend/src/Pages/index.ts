@@ -13,3 +13,4 @@ export { InformationPage } from './InformationPage';
 export { LoginPage } from './LoginPage';
 export { LychePage } from './LychePage';
 export { NotFoundPage } from './NotFoundPage';
+export { SaksdokumenterPage } from './SaksdokumenterPage';

@@ -22,6 +22,7 @@ from .models import (
     FoodPreference,
     UserPreference,
     InformationPage,
+    TextItem,
 )
 
 User = get_user_model()
@@ -225,4 +226,11 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
+        fields = '__all__'
+
+
+class TextItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TextItem
         fields = '__all__'

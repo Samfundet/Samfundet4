@@ -154,11 +154,18 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
+  id: number;
   title_nb?: string;
   title_en?: string;
   category?: string;
-  publication_date?: Date;
+  publication_date?: string;
   file?: string;
+};
+
+export type TextItemDto = {
+  key: string;
+  text_en: string;
+  text_nb: string;
 };
 
 export type BookingDto = {

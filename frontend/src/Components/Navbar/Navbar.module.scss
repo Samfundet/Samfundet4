@@ -40,6 +40,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   justify-content: center;
   z-index: 12;
   white-space: nowrap;
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
 
   @include theme-dark {
     background: $navbar-bg-dark;
@@ -210,6 +211,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 /* Transparent navbar (on top of page) */ 
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
+  box-shadow: none;
   color: white;
 
   @include theme-dark {
@@ -247,9 +249,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 15px;
-  z-index: 1000;
-
+  z-index: 100;
   @include for-desktop-up {
     display: none;
   }
