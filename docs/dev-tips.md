@@ -67,7 +67,7 @@ def seed():
             # ... other fields
         )
 
-        # Yield progress (number between 1-100)and a descriptive string. 
+        # Yield progress (number between 1-100) and a descriptive string. 
         # Used for pretty loading indicators.
         yield i / COUNT, f"Created some object '{i}'"
 
