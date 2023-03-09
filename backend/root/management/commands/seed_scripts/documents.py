@@ -1,4 +1,3 @@
-import time
 import random
 
 from django.utils import timezone
@@ -10,7 +9,6 @@ CREATE_OFFSET = 30
 
 
 def seed():
-
     count = 100
     cats = [
         Saksdokument.SaksdokumentCategory.FS_REFERAT,
@@ -20,7 +18,6 @@ def seed():
     ]
 
     for i in range(count):
-
         name_no, name_en = words(2, include_english=True)
         pub_date = timezone.now() + timezone.timedelta(
             days=random.randint(-DAY_RANGE, DAY_RANGE),
