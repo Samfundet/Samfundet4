@@ -118,6 +118,9 @@ export const KEY = {
   publication: 'publication',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
+  select_event: 'select_event',
+  all_venues: 'all_venues',
+  search_all: 'search_all'
 } as const;
 
 /**

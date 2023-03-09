@@ -118,6 +118,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
+  [KEY.select_event]: 'Velg lokale',
+  [KEY.all_venues]: 'Alle',
+  [KEY.search_all]: 'Søk på alle arrangemanger!',
+
 };
 
 export const en: Record<KeyValues, string> = {
@@ -235,4 +239,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.publication]: 'Publication',
   [KEY.closed_period]: 'Closed period',
   [KEY.saksdokument]: 'case document',
+  [KEY.select_event]: 'Choose venue',
+  [KEY.all_venues]: 'All',
+  [KEY.search_all]: 'Search every event!',
 };

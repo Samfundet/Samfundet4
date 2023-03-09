@@ -8,6 +8,8 @@ import {getEventsFilter, getEventsPerDay, getVenues} from '~/api';
 import {Page} from '~/Components/Page';
 import {Button, InputField, RadioButton, SamfundetLogoSpinner} from '~/Components';
 import styles from './EventsPage.module.scss';
+import { KEY } from '~/i18n/constants';
+import {useTranslation} from "react-i18next";
 
 
 interface Venue {
@@ -18,6 +20,7 @@ interface Venue {
 
 
 export function EventsPage() {
+  const { t } = useTranslation();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [search, setSearch] = useState('');
@@ -25,7 +28,6 @@ export function EventsPage() {
   const [venues, setVenues] = useState<Venue[]>([]);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [filterToggle, setFilterToggle] = useState(true);
-
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
@@ -87,29 +89,28 @@ export function EventsPage() {
                 type='text'
                 key={'search'}
                 onChange={(e) => {
-                  console.log(search);
                   setSearch(e ? e.currentTarget.value : '')
                 }}
                 value={search}
-                placeholder={'Søk over alt!'}
+                placeholder={t(KEY.search_all)}
               /></div>
 
-          <label className={styles.center}>Venues</label>
+          <label className={styles.center}>{t(KEY.select_event)}</label>
 
           <div className={styles.filterColumn}>
-                <label className={styles.container} key={'All'}>
+                <label className={styles.container} key={t(KEY.all_venues)}>
 
                 <RadioButton name='venues'
-                   value='All'
-                   checked={selectedVenue.includes('All')}
+                   value=''
+                   checked={selectedVenue.includes('all')}
                    onChange={(event) => {
                      if (event.target.checked) {
-                       setSelectedVenue('');
+                       setSelectedVenue('all');
                      }
                    }}
 
                 />
-                  All
+                  {t(KEY.all_venues)}
                 </label>
 
           {venues.map((venue) => (
