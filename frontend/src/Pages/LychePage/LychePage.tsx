@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { SultenCard } from '~/Components/SultenCard';
 import { SultenPage } from '~/Components/SultenPage';
 import { getMenus, getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { MenuDto, VenueDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LychePage.module.scss';
 
@@ -16,6 +18,7 @@ export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const [lycheMenu, setLycheMenu] = useState<MenuDto>();
   const navigate = useNavigate();
+  const [t] = useTranslation();
 
   useEffect(() => {
     getVenues()
@@ -34,21 +37,25 @@ export function LychePage() {
 
   const openingHours = (
     <div className={styles.opening_hour_container}>
-      <h2 className={styles.opening_hour_header}>ÅPNINGSTIDER</h2>
+      <h2 className={styles.opening_hour_header}>{t(KEY.opening_hours)}</h2>
       <div className={styles.hour_item_container}>
-        <p className={styles.hour_item}>Man-Tor</p>
+        <p className={styles.hour_item}>
+          {t(KEY.day_monday)}-{t(KEY.day_thursday)}
+        </p>
         <p className={styles.hour_item}>
           {lycheVenue?.opening_monday} -{lycheVenue?.closing_monday}
         </p>
       </div>
       <div className={styles.hour_item_container}>
-        <p className={styles.hour_item}>Fre-Lør</p>
+        <p className={styles.hour_item}>
+          {t(KEY.day_friday)}-{t(KEY.day_saturday)}
+        </p>
         <p className={styles.hour_item}>
           {lycheVenue?.opening_friday} -{lycheVenue?.closing_friday}
         </p>
       </div>
       <div className={styles.hour_item_container}>
-        <p className={styles.hour_item}>Søndag</p>
+        <p className={styles.hour_item}>{t(KEY.day_sunday)}</p>
         <p className={styles.hour_item}>
           {lycheVenue?.opening_monday} -{lycheVenue?.closing_sunday}
         </p>
@@ -59,10 +66,10 @@ export function LychePage() {
   const reservationCard = (
     <SultenCard
       image={sulten_inside}
-      imageAlt={'Bilde av Lyche'}
-      header={'Reservation'}
+      imageAlt={t(KEY.sulten)}
+      header={t(KEY.common_reservations)}
       text={'Vil du reservere bord på Lyche? Dette kan du gjøre gjennom vårt reservasjonssystem, eller på epost. '}
-      buttonText={'Reserver bord'}
+      buttonText={t(KEY.sulten_book_table) || undefined}
       imageAlignment="left"
       onButtonClick={() => navigate(ROUTES.frontend.sulten_reservation)}
     />
@@ -72,11 +79,11 @@ export function LychePage() {
     <SultenCard
       image={sulten_delivery}
       imageAlt={'Food delivery'}
-      header={'Meny'}
+      header={t(KEY.common_menu)}
       text={
         'Hos Lyche ønsker vi å legge vekt på mat og drikke av høy kvalitet. Dette gjelder både å ha et variert men også godt gjennomtenkt utvalg.'
       }
-      buttonText={'Se vår meny'}
+      buttonText={t(KEY.sulten_see_menu) || undefined}
       imageAlignment="right"
       onButtonClick={() => navigate(ROUTES.frontend.sulten_menu)}
     />
@@ -85,12 +92,12 @@ export function LychePage() {
   const aboutSultenCard = (
     <SultenCard
       image={sulten_chef}
-      imageAlt={'Lyche Chef'}
-      header={'Om lyche'}
+      imageAlt={'Chef'}
+      header={t(KEY.sulten_about_us)}
       text={
         'Lyche er en restaurant drevet på frivillig basis. Alle servitørene og kokkene på kjøkkenet jobber frivillig, og vi er en del av Kafé og serveringsgjengen (KSG) ved Studentersamfundet i Trondhjem.'
       }
-      buttonText={'Mer om oss'}
+      buttonText={t(KEY.sulten_more_about_us) || undefined}
       imageAlignment="left"
       onButtonClick={() => navigate(ROUTES.frontend.sulten_about)}
     />
@@ -99,12 +106,12 @@ export function LychePage() {
   const ContactCard = (
     <SultenCard
       image={sulten_crowded}
-      imageAlt={'Bilde av Lyche'}
-      header={'Kontakt'}
+      imageAlt={t(KEY.sulten)}
+      header={t(KEY.common_contact)}
       text={
         'Har du spørsmål, henvendelser, forslag til forbedring eller av andre årsaker ønsker å komme i kontakt med oss? Her finner du kontaktinformasjonen vår.'
       }
-      buttonText={'Kontakt oss'}
+      buttonText={t(KEY.common_contact_us) || undefined}
       imageAlignment="right"
       onButtonClick={() => navigate(ROUTES.frontend.sulten_contact)}
     />
