@@ -5,7 +5,7 @@ from django.utils import timezone
 from samfundet.models import Saksdokument
 from root.utils.samfundet_random import words
 
-DAY_RANGE = 365*5
+DAY_RANGE = 365 * 5
 CREATE_OFFSET = 30
 
 
@@ -16,7 +16,7 @@ def seed():
         Saksdokument.SaksdokumentCategory.FS_REFERAT,
         Saksdokument.SaksdokumentCategory.STYRET,
         Saksdokument.SaksdokumentCategory.RADET,
-        Saksdokument.SaksdokumentCategory.ARSBERETNINGER
+        Saksdokument.SaksdokumentCategory.ARSBERETNINGER,
     ]
 
     for i in range(count):
@@ -33,16 +33,18 @@ def seed():
             minutes=random.randint(-30, 30),
         )
 
+        update_delta = timezone.timedelta(
+            days=random.randint(0, CREATE_OFFSET - 1),
+            hours=random.randint(-12, 12),
+            minutes=random.randint(-30, 30),
+        )
+
         Saksdokument.objects.create(
             title_nb=name_no,
             title_en=name_en,
             publication_date=pub_date,
             created_at=create_date,
-            updated_at=create_date + timezone.timedelta(
-                days=random.randint(0, CREATE_OFFSET-1),
-                hours=random.randint(-12, 12),
-                minutes=random.randint(-30, 30),
-            ) if random.randint(0, 2) != 0 else None,
+            updated_at=(create_date - update_delta) if random.randint(0, 2) == 0 else None,
             category=random.choice(cats),
             file=None
         )
