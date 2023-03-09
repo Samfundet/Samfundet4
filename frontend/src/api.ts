@@ -122,6 +122,13 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
   return response.data;
 }
 
+export async function getEventsFilter(query: any): Promise<EventDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday })+query;
+  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getEventsUpcomming(): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsupcomming });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });

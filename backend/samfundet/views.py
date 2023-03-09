@@ -104,26 +104,14 @@ class EventPerDayView(APIView):
     def get(self, request: Request) -> Response:
         events: dict = {}
 
-        if self.url_args('search') != '':
-            events_query = self.general_search(self.url_args('search'))
-
-        elif "?" in self.request.build_absolute_uri():
-            events_query = Event.objects.filter(
-                Q(title_nb__contains=self.url_args('title')),
-                Q(title_en__contains=self.url_args('title')),
-                Q(description_long_nb__contains=self.url_args('description')),
-                Q(description_long_en__contains=self.url_args('description')),
-                Q(description_short_nb__contains=self.url_args('description_short')),
-                Q(description_short_en__contains=self.url_args('description_short')),
-                Q(location__contains=self.url_args('event_group')),
-                Q(location__contains=self.url_args('location')),
-                Q(codeword__contains=self.url_args('codeword'))
-            )
+        if '?' in self.request.build_absolute_uri():
+            events_query = self.general_search(self.url_args('search')).filter(
+                Q(location__contains=self.url_args('location')))
 
         else:
             events_query = Event.objects.all()
 
-        for event in events_query.order_by("start_dt").values():
+        for event in events_query.order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)
