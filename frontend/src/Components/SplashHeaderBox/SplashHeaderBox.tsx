@@ -30,7 +30,7 @@ export function SplashHeaderBox({ className }: SplashHeaderBoxProps) {
       <div className={classnames(styles.box, styles.box_right)}>
         <h2 className={styles.title_right}>
           <Icon icon="material-symbols:calendar-month-rounded"></Icon>
-          Åpningstider
+          {t(KEY.opening_hours)}
         </h2>
         <p>10:13 - Some weird event</p>
         <p>10:13 - Some weird event</p>
