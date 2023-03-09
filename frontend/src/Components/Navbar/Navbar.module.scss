@@ -1,121 +1,175 @@
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-class */
+/* stylelint-disable max-nesting-depth */
 /* TODO: fix later */
 
 @import 'src/mixins';
 
-$navbar-bg: #000000;
-$navbar-height: 60px;
+@import 'src/constants';
 
+// Background
+$navbar-bg: rgba(255, 255, 255, 255);
+$navbar-bg-transparent: rgba(255, 255, 255, 0);
+$navbar-bg-dark: rgba(0, 0, 0, 255);
+$navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
+
+// Link
+$navbar-link-light-hover-gradient-top: #f4f4f4;
+$navbar-link-light-hover-gradient-bottom: #ffffff;
+$navbar-link-dark-hover-gradient-top: #151515;
+$navbar-link-dark-hover-gradient-bottom: #000000;
+$navbar-link-transparent-hover-gradient-top: rgba(255, 255, 255, 0.1);
+$navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
+
+/* Content padding */
+.navbar_padding {
+  margin-top: $navbar-height;
+}
+
+/* Main navbar */
 #navbar_container {
   position: fixed;
   top: 0;
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg;
+  color: black;
+  transition: .3s;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   z-index: 12;
-  @include for-tablet-down {
-    justify-content: space-between;
+  white-space: nowrap;
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
+    color: $white;
   }
+
 }
 
-#navbar_logo {
+.navbar_inner {
+  flex: 1;
+  max-width: 1500px;
   display: flex;
-  text-decoration: none;
-  padding: 0 1rem;
-  height: auto;
-  width: 240px;
-  max-width: 70%;
-  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 }
 
-/* Desktop navigation items: */
+/* Desktop navigation items */
 .navbar_link {
-  color: white;
+  color: inherit;
   display: flex;
   align-items: center;
   text-decoration: none;
   padding: 0 1rem;
   height: 100%;
   cursor: pointer;
+  text-transform: uppercase;
+  transition: .1s;
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+  background: transparent;
+
   @include for-tablet-down {
     display: none;
   }
+
+  /* Link hover for regular navbar */
+  &:hover {
+    background: linear-gradient(
+      to bottom, $navbar-link-light-hover-gradient-top, $navbar-link-light-hover-gradient-bottom
+    );
+    text-decoration: none;
+        
+    @include theme-dark {
+      background: linear-gradient(
+        to bottom, $navbar-link-dark-hover-gradient-top, $navbar-link-dark-hover-gradient-bottom
+      );
+      color: #eeeeee;
+    }
+
+  }
 }
 
-// Push page below navbar.
-.navbar_padding {
-  padding-top: $navbar-height;
+/* Samf logo */
+#navbar_logo {
+  display: flex;
+  text-decoration: none;
+  margin: 0 1rem;
+  width: 250px;
+  cursor: pointer;
+  
 }
 
-.navbar_signup {
+#navbar_logo_img {
+  width: 100%;
+}
+
+/* Widgets with language, theme, login */
+.navbar_widgets {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   margin-right: 24px;
+  margin-left: 24px;
+  gap: 15px;
   @include for-tablet-down {
     display: none;
   }
 }
 
-.navbar_language_flag {
+/* Pick language */
+.language_flag {
   width: 28px;
   height: 20px;
-  margin-right: 10px;
   cursor: pointer;
   border-radius: 3px;
   box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
+  transition: .1s;
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
-.navbar_member_button {
-  display: flex;
-  align-items: center;
-  margin-right: 0.8em;
-}
-
-.member_button_link {
-  text-decoration: none;
-}
-
-.internal_button_link {
-  text-decoration: none;
-}
-
+/* Container for profile */
 .navbar_profile_button {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 1em;
   white-space: nowrap;
   cursor: pointer;
-  border-radius: 4px;
-  padding: 1px;
   padding-left: 6px;
   padding-right: 6px;
   background-color: inherit;
-  @include for-tablet-down {
-    display: none;
+  border-bottom: 1px solid transparent;
+  gap: 5px;
+
+  .profile_icon {
+    width: 16px;
+    height: 16px;
   }
+
+  .profile_text {
+    text-decoration: none;
+    text-transform: capitalize;
+    color: inherit;
+  }
+
+  &:hover {
+    color: $red-samf;
+  }
+
 }
 
-.profile_icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
-}
-
-.profile_text {
-  text-decoration: none;
-  color: #777777;
-}
 
 /* Hamburger menu */
-
 #navbar_hamburger {
   display: none;
+
   @include for-tablet-down {
     height: 69%;
     width: 55px;
@@ -124,32 +178,65 @@ $navbar-height: 60px;
     justify-content: space-evenly;
     flex-direction: column;
   }
-}
 
-.navbar_hamburger_line {
-  background-color: white;
-  width: 35px;
-  height: 4px;
-  border-radius: 10px;
-  transition: transform 400ms;
-}
-
-#navbar_hamburger.open {
-  .navbar_hamburger_line.top {
-    transform: translateY(12px) rotate(-45deg);
+  .navbar_hamburger_line {
+    background-color: $black;
+    width: 35px;
+    height: 4px;
+    border-radius: 10px;
+    transition: transform 400ms;
+  
+    @include theme-dark {
+      background-color: $white;
+    }
+  
   }
 
-  .navbar_hamburger_line.middle {
-    opacity: 0;
+  &.open {
+    .navbar_hamburger_line.top {
+      transform: translateY(12px) rotate(-45deg);
+    }
+
+    .navbar_hamburger_line.middle {
+      opacity: 0;
+    }
+
+    .navbar_hamburger_line.bottom {
+      transform: translateY(-11px) rotate(45deg);
+    }
   }
 
-  .navbar_hamburger_line.bottom {
-    transform: translateY(-11px) rotate(45deg);
+}
+
+/* Transparent navbar (on top of page) */ 
+#navbar_container.transparent_navbar {
+  background: $navbar-bg-transparent;
+  box-shadow: none;
+  color: white;
+
+  @include theme-dark {
+    background: $navbar-bg-dark-transparent;
+    color: white;
+  }
+  .navbar_hamburger_line {
+    background-color: white;
+  }
+  .navbar_link:hover {
+    background: linear-gradient(
+      to bottom, $navbar-link-transparent-hover-gradient-top, $navbar-link-transparent-hover-gradient-bottom
+    );
+    text-decoration: none;
+    color: inherit;
+  }
+  .navbar_profile_button {
+    color: inherit;
+    &:hover {
+      color: $grey-4;
+    }
   }
 }
 
 /* Mobile popup navigation */
-
 #mobile_popup_container {
   position: fixed;
   top: 60px;
@@ -157,50 +244,51 @@ $navbar-height: 60px;
   width: 100vw;
   height: calc(100vh - 60px);
   min-height: 400px;
-  background: black;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 15px;
+  z-index: 1000;
+
   @include for-desktop-up {
     display: none;
   }
+  
+  @include theme-dark {
+    background: $navbar-bg-dark;
+    color: white;
+  }
+
 }
 
+/* Navbar link mobile */
 .popup_link_mobile {
-  color: white;
+  color: inherit;
   font-size: 1.5em;
-  margin-bottom: 0.75em;
+  margin-bottom: 0.25em;
   align-items: center;
   text-decoration: none;
+  text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
 }
 
-.popup_change_language {
-  height: 2.5em;
-  padding: 0.5rem;
-  cursor: pointer;
-  border-radius: 3px;
-  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
-}
-
-.popup_member_button {
-  margin-bottom: 0.5em;
-}
-
-.popup_internal_button {
-  background-color: white;
-}
-
-.popup_profile {
+.mobile_widgets {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  margin-top: 5em;
+  gap: 1em;
+}
+
+.mobile_user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .5em;
+  max-width: 150px;
+  overflow: visible;
   white-space: nowrap;
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 1px;
-  padding-top: 0.6em;
-  background-color: inherit;
 }

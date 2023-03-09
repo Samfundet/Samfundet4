@@ -57,3 +57,21 @@ export function useMobile(): boolean {
   });
   return width < mobileBpUpper;
 }
+
+// Scroll detection
+export function useScrollY(): number {
+  const [scrollY, setScrollY] = useState(window.scrollY);
+  useEffect(() => {
+    function handleNavigation(e: Event) {
+      const window = e.currentTarget;
+      if (window != null) {
+        setScrollY(window.scrollY);
+      }
+    }
+    window.addEventListener('scroll', handleNavigation);
+    return () => {
+      window.removeEventListener('scroll', handleNavigation);
+    };
+  }, []);
+  return scrollY;
+}
