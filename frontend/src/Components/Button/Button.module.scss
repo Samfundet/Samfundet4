@@ -80,6 +80,16 @@
   }
 }
 
+.button_green {
+  background-color: $green;
+  color: white;
+  transition: 0.15s;
+
+  &:hover:not([disabled]) {
+    filter: brightness(110%);
+    transition: 0.15s;
+  }
+}
 
 .display_basic {
   padding: 10px 25px;

@@ -2,6 +2,7 @@ import { getCsrfToken, getSaksdokumenter, getUser, login, logout } from '~/api';
 import splash from '~/assets/banner-sample.jpg';
 import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
+import { SplashHeaderBox } from '~/Components/SplashHeaderBox';
 import { SAMFUNDET_ADD_EVENT } from '~/permissions';
 import { hasPerm } from '~/utils';
 import styles from './HomePage.module.scss';
@@ -13,6 +14,7 @@ export function HomePage() {
       <img src={splash} alt="Splash" className={styles.splash} />
       <div className={styles.splash_fade}></div>
       <div className={styles.content}>
+        <SplashHeaderBox />
         <div className={styles.inner_content}>
           <h1 className={styles.header}>Samfundet4 - Dev</h1>
           <div className={styles.button_row}>
