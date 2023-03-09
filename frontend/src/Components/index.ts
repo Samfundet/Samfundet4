@@ -9,6 +9,7 @@ export { ExpandableHeader } from './ExpandableHeader';
 export { FormInputField } from './FormInputField';
 export { FormSelect } from './FormSelect';
 export { FormTextAreaField } from './FormTextAreaField';
+export { ImageQuery } from './ImageQuery';
 export { InputField } from './InputField';
 export { Link } from './Link';
 export { OpeningHours } from './OpeningHours';
@@ -24,6 +25,6 @@ export { SpinningBorder } from './SpinningBorder';
 export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
-export { ImageQuery } from './ImageQuery';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
+

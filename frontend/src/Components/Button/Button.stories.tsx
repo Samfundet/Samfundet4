@@ -25,3 +25,6 @@ Secondary.args = { theme: 'secondary' };
 
 export const Disabled = Template.bind({});
 Disabled.args = { disabled: true };
+
+export const Another = Template.bind({});
+Another.args = { disabled: true };
