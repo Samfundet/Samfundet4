@@ -19,7 +19,7 @@ export function SplashHeaderBox({ className }: SplashHeaderBoxProps) {
       <div className={classnames(styles.box, styles.box_left)}>
         <h2 className={styles.title_left}>
           <Icon icon="bx:party" />
-          Hva skjer?
+          {t(KEY.common_whatsup)}
         </h2>
         <p>10:13 - Some weird event</p>
         <p>10:13 - Some weird event</p>
