@@ -1,0 +1,228 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.infobox_wrap,
+.no_img_infobox_wrap {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.no_img_infobox_wrap {
+  align-items: center;
+  justify-content: center;
+}
+
+.infobox_txt_wrap {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  @include for-tablet-up {
+    height: 200px;
+    width: 50%;
+    margin: 0;
+  }
+  @include for-mobile-only {
+    overflow: hidden;
+  }
+}
+
+.no_img_infobox_txt_wrap {
+  padding: 10px;
+  height: fit-content;
+  color: white;
+}
+
+.with_url,
+.with_url:hover {
+  text-decoration: none;
+}
+
+.infobox_paragraph {
+  padding: 0 7px 7px 7px;
+  font-size: 1em;
+  text-align: center;
+  display: none;
+  overflow: hidden;
+  @include for-tablet-up {
+    padding: 0 7px 7px 7px;
+    font-size: 1em;
+    text-align: center;
+  }
+  @include for-mobile-up {
+    display: block;
+  }
+}
+
+.no_img_infobox_paragraph {
+  display: block;
+  padding: 0 7px 7px 7px;
+  font-size: 1em;
+  overflow: hidden;
+  text-align: center;
+}
+
+.infobox_h1,
+.no_url_h1 {
+  font-size: 2em;
+  font-weight: 700;
+  padding: 0 7px 7px 7px;
+  text-align: center;
+}
+
+.infobox_h1:hover {
+  text-decoration: underline;
+}
+
+.no_url_h1:hover {
+  text-decoration: none;
+}
+
+.img_wrap {
+  height: 90px;
+  width: 100%;
+  overflow: hidden;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  @include for-tablet-up {
+    height: 200px;
+    width: 50%;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 4px;
+  }
+}
+
+.no_img_wrap {
+  display: none;
+}
+
+.infobox_img {
+  height: 100px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.7s ease-in-out;
+  @include for-tablet-up {
+    height: 200px;
+  }
+}
+
+.infobox_img:hover {
+  transform: scale(1.1);
+}
+// From under here is the styling for long version of infobox
+.infoboxLong_wrap {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  border-radius: 4px;
+  overflow: hidden;
+  color: white;
+}
+
+.infoboxLong_with_img {
+  overflow: hidden;
+  height: 15vh;
+  border-radius: 4px 4px 0 0;
+}
+
+.infoboxLong_without_img {
+  display: none;
+}
+
+.infoboxLong_img {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 1.5s ease-in-out;
+}
+
+.infoboxLong_img:hover {
+  transform: scale(1.05);
+}
+
+.infoboxLong_txt_wrap {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: none;
+}
+
+.infoboxLong_h1 {
+  font-size: 2em;
+  padding: 5px 15px 0 15px;
+  font-weight: 700;
+}
+
+.infoboxLong_paragraph {
+  font-size: 1em;
+  margin: 0;
+  padding: 0 15px 5px 15px;
+  overflow: hidden;
+  transition: transform 1.5s ease-in-out;
+}
+
+.gradient {
+  position: relative;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, transparent, $red_samf);
+}
+
+.gradient_none {
+  display: none;
+  @include for-mobile-only {
+    //This fixes a problem to display the "Show more" button on mobile.
+    position: relative;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    background: linear-gradient(to bottom, transparent, $red_samf);
+  }
+}
+
+.infoboxLong_paragraph_exp {
+  font-size: 1em;
+  margin: 0;
+  padding: 0 15px 5px 15px;
+  height: fit-content;
+  // background-color: red;
+}
+
+.infoboxLong_paragraph_not {
+  font-size: 1em;
+  margin: 0;
+  padding: 0 15px 5px 15px;
+  // background-color: blue;
+  //this is a calculation to implement max-lines since CSS does not fully support this (yet):
+  --max-lines: 7;
+  --line-height: 1.4;
+  max-height: calc(var(--max-lines) * 1em * var(--line-height));
+  line-height: var(--line-height);
+}
+
+.expand_btn {
+  z-index: 100;
+  background-color: white;
+  color: black;
+  font-size: 1em;
+  font-weight: 500;
+  border: 4px solid $red_samf;
+  border-radius: 4px;
+  width: 100px;
+}
