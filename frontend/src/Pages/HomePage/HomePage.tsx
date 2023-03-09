@@ -14,7 +14,7 @@ export function HomePage() {
       <img src={splash} alt="Splash" className={styles.splash} />
       <div className={styles.splash_fade}></div>
       <div className={styles.content}>
-        <SplashHeaderBox/>
+        <SplashHeaderBox />
         <div className={styles.inner_content}>
           <h1 className={styles.header}>Samfundet4 - Dev</h1>
           <div className={styles.button_row}>
