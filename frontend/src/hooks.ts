@@ -1,6 +1,9 @@
+import { i18n } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getTextItem } from '~/api';
 import { desktopBpLower, mobileBpUpper } from './constants';
+import { TextItemDto } from './dto';
 
 // Make typescript happy.
 declare global {
@@ -56,4 +59,19 @@ export function useMobile(): boolean {
     return () => window.removeEventListener('resize', updateMedia);
   });
   return width < mobileBpUpper;
+}
+
+// ------------------------------
+
+// Hook that returns the correct translation for given key
+export function useTextItem(key: string, i18n: i18n): string | undefined {
+  const [textItem, setTextItem] = useState<TextItemDto>();
+  const isNorwegian = i18n.language === 'nb';
+  useEffect(() => {
+    getTextItem(key).then((data) => {
+      setTextItem(data);
+    });
+  }, [key, i18n]);
+
+  return isNorwegian ? textItem?.text_nb : textItem?.text_en;
 }

@@ -6,7 +6,7 @@ type SultenCardProps = {
   header: string;
   image: string;
   imageAlt: string;
-  text: string;
+  text?: string;
   buttonText?: string;
   imageAlignment?: 'left' | 'right';
   onButtonClick?: () => void;
