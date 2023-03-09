@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Children } from 'types';
@@ -85,6 +86,16 @@ export function Table({ className, columns, data }: TableProps) {
     }
   }
 
+  function getSortableIcon(column: number): string {
+    if (sortColumn != column) return 'carbon:chevron-sort';
+    return sortInverse ? 'carbon:chevron-up' : 'carbon:chevron-down';
+  }
+
+  function getIconClass(column: number): string {
+    if (sortColumn != column) return styles.icon;
+    return classNames(styles.icon, styles.active_icon);
+  }
+
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
@@ -94,10 +105,11 @@ export function Table({ className, columns, data }: TableProps) {
               columns?.map((value, index) => {
                 if (isColumnSortable(index)) {
                   return (
-                    <th key={index}>
-                      <a key={index} onClick={() => sort(index)}>
-                        {value}
-                      </a>
+                    <th key={index} className={styles.sortable_th} onClick={() => sort(index)}>
+                      {value}
+                      <span className={styles.sort_icons}>
+                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
+                      </span>
                     </th>
                   );
                 } else {
