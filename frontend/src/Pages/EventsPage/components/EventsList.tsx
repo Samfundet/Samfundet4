@@ -1,11 +1,9 @@
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Button, TimeDisplay } from '~/Components';
-import { TimeDuration } from '~/Components/TimeDuration';
+import { ImageCard } from '~/Components/ImageCard';
+import { ITableCell, Table } from '~/Components/Table';
 import { EventDto } from '~/dto';
 import { dbT } from '~/i18n/i18n';
-import { reverse } from '~/named-urls';
-import { ROUTES } from '~/routes';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -15,7 +13,61 @@ type EventsListProps = {
 export function EventsList({ events }: EventsListProps) {
   /** check if dates are equal */
   const { i18n } = useTranslation();
+
+  const eventColumns = [
+    "Dato", "Arrangement", "Lokale", "Type", "Kjøp"
+  ]
+
+  function getEventRows(events: unknown[]): ITableCell[][] {
+    let rows: ITableCell[][] = [];
+    
+    Object.keys(events).forEach((date: string) => {
+      
+
+      events[date].forEach((event: EventDto) => {
+        let row: ITableCell[] = [];
+        rows.push([
+          {children: <span>{date}</span>} as ITableCell,
+          {children: <span>{dbT(event, 'title', i18n.language)}</span>} as ITableCell,
+          {children: <span>{event.location}</span>} as ITableCell,
+          {children: <span>{event.event_group?.name}</span>} as ITableCell,
+          {children: <span>{event.price_group}</span>} as ITableCell,
+        ] as ITableCell[]);
+      })
+      
+    })
+
+
+    return rows;
+  }
+
+  function getEventCards(date: string): ReactNode[] {
+    return events[date].map((event: EventDto, key: number) => {
+      return (
+        <div className={styles.event_container}>
+          <ImageCard key={key} compact={true} />
+        </div>
+      );
+    })
+  }
+
   return (
+    <Table columns={eventColumns} data={getEventRows(events)} />
+    /*
+    <div className={styles.event_container}>
+      {Object.keys(events).map((date_str: string) => (
+        <div className={styles.event_group}>
+          <div className={styles.date_header}>
+              <TimeDisplay className={styles.dateHeaderText} timestamp={date_str} displayType="nice-date" />
+          </div>
+          <div className={styles.event_row}>
+            {getEventCards(date_str)}
+          </div>
+        </div>
+      ))}
+    </div>
+    */
+    /*
     <div className={styles.container}>
       {Object.keys(events).map(function (date_str: string, key: number) {
         return (
@@ -55,5 +107,6 @@ export function EventsList({ events }: EventsListProps) {
         );
       })}
     </div>
+    */
   );
 }

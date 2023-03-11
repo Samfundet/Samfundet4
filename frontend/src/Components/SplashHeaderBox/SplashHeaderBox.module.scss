@@ -17,13 +17,12 @@ $border-dark:#222222;
   max-width: calc(100vw - 2em);
   margin: 0 auto;
   gap: 2em;
-  transform: translateY(0);
-  margin-bottom: -40px;
   margin-left: 1em;
   margin-right: 1em;
 
   @include for-mobile-only {
     flex-direction: column;
+    gap: 0.5em;
   }
 }
 
@@ -34,7 +33,6 @@ $border-dark:#222222;
   background-color: $bg-light;
   border-radius: 0.4em;
   position: relative;
-  transform: translateY(-35px);
   box-shadow: 0 0 100px 15px $black-t10;
   border: 1px solid $border-light;
   color: black;
@@ -42,6 +40,14 @@ $border-dark:#222222;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 2em;
+  transform: translateY(-70px);
+  margin-bottom: -70px;
+
+  @include for-mobile-only {
+    transform: none;
+    margin-bottom: 0;
+  }
 
   @include theme-dark {
     background-color: $bg-dark;
@@ -53,6 +59,9 @@ $border-dark:#222222;
 
 .box_left {
   flex-basis: 70%;
+  @include for-mobile-only {
+    display: none;
+  }
 }
 
 .box_right {

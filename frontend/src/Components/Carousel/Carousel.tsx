@@ -18,12 +18,6 @@ export function Carousel({ children, header, spacing }: CarouselProps) {
     );
   });
 
-  const wrappedPadding = (
-    <div className={styles.itemContainer} style={{ opacity: 0, pointerEvents: "none" }}>
-      {children[children.length - 1]}
-    </div>
-  );
-
   return (
     <div className={styles.carousel}>
       {header && <div className={styles.header}>{header}</div>}
@@ -34,7 +28,6 @@ export function Carousel({ children, header, spacing }: CarouselProps) {
         <div className={classnames(styles.navButton, styles.left)}></div>
         <div className={styles.scroller} style={{ gap: (spacing ? spacing : 0.2) + 'em' }}>
           {wrappedChildren}
-          {wrappedPadding}
         </div>
         <div className={styles.navContainer}>
           <div className={classnames(styles.button, styles.right)}>{'>'}</div>

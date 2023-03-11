@@ -23,7 +23,7 @@
 
 .splash {
   width: 100vw;
-  min-height: 600px;
+  min-height: 60vh;
   max-height: 100vh;
   object-fit: cover;
   position: relative;
@@ -34,6 +34,7 @@
   @include for-mobile-only {
     min-height: 215px;
   }
+
 
 }
 
