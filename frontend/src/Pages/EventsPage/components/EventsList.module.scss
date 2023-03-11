@@ -16,17 +16,19 @@
   font-size: 1.5em;
   margin-bottom: .25em;
   margin-top: 1em;
-  font-weight: bold;
+  font-weight: 700;
   color: $red-samf;
   text-align: center;
   padding: .5em;
   border-radius: .5em .5em 0 0;
 }
+
 .event_group {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .event_row {
   display: flex;
   justify-content: flex-start;
