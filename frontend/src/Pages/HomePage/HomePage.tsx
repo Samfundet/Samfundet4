@@ -22,7 +22,7 @@ export function HomePage() {
         {['Konserter'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} />
+              <ImageCard key={num} title={"Konsert " + num} date={new Date().toString()}/>
             ))}
           </Carousel>
         ))}
@@ -32,7 +32,7 @@ export function HomePage() {
         {['Kulturarrangementer'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} />
+              <ImageCard key={num} title={"Kultur " + num}/>
             ))}
           </Carousel>
         ))}
@@ -42,7 +42,7 @@ export function HomePage() {
         {['Andre arrangementer', 'Flere arrangementer'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} />
+              <ImageCard key={num} title={"Annet " + num}/>
             ))}
           </Carousel>
         ))}
