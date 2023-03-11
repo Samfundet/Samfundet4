@@ -249,9 +249,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 15px;
-  z-index: 1000;
-
+  z-index: 100;
   @include for-desktop-up {
     display: none;
   }
