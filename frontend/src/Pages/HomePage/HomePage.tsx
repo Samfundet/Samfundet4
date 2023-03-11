@@ -1,5 +1,4 @@
 import splash from '~/assets/banner-sample.jpg';
-import { useAuthContext } from '~/AuthContext';
 import { Carousel } from '~/Components/Carousel';
 import { ContentCard } from '~/Components/ContentCard';
 import { ImageCard } from '~/Components/ImageCard';
@@ -7,7 +6,6 @@ import { SplashHeaderBox } from '~/Components/SplashHeaderBox';
 import styles from './HomePage.module.scss';
 
 export function HomePage() {
-  const { setUser } = useAuthContext();
   return (
     <div className={styles.container}>
       <img src={splash} alt="Splash" className={styles.splash} />
@@ -18,11 +16,11 @@ export function HomePage() {
         <div style={{ height: '1em' }} />
 
         {/* Below is just demo stuff until API integration is done */}
-        
+
         {['Konserter'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} title={"Konsert " + num} date={new Date().toString()}/>
+              <ImageCard key={num} title={'Konsert ' + num} date={new Date().toString()} />
             ))}
           </Carousel>
         ))}
@@ -32,7 +30,7 @@ export function HomePage() {
         {['Kulturarrangementer'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} title={"Kultur " + num}/>
+              <ImageCard key={num} title={'Kultur ' + num} />
             ))}
           </Carousel>
         ))}
@@ -42,7 +40,7 @@ export function HomePage() {
         {['Andre arrangementer', 'Flere arrangementer'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} title={"Annet " + num}/>
+              <ImageCard key={num} title={'Annet ' + num} />
             ))}
           </Carousel>
         ))}

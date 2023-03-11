@@ -1,13 +1,10 @@
 import { ComponentMeta } from '@storybook/react';
 import { ImageCard } from './ImageCard';
 
-const now = new Date();
-
 export default {
   title: 'Components/ImageCard',
   component: ImageCard,
-  args: {
-  },
+  args: {},
   decorators: [
     (Story) => (
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
@@ -17,4 +14,4 @@ export default {
   ],
 } as ComponentMeta<typeof ImageCard>;
 
-export const Basic = ImageCard.bind({ });
+export const Basic = ImageCard.bind({});

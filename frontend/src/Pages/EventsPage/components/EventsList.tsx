@@ -20,37 +20,34 @@ export function EventsList({ events }: EventsListProps) {
 
   const [tableView, setTableView] = useState(false);
 
-  const eventColumns = [
-    "Dato", "Fra", "Til", "Arrangement", "Lokale", "Type", "Kjøp"
-  ]
+  const eventColumns = ['Dato', 'Fra', 'Til', 'Arrangement', 'Lokale', 'Type', 'Kjøp'];
 
   // TODO improve table view for events
   function getEventRows(events: unknown[]): ITableCell[][] {
-    let rows: ITableCell[][] = [];
-    
+    const rows: ITableCell[][] = [];
+
     Object.keys(events).forEach((date: string) => {
       events[date].forEach((event: EventDto) => {
-        let row: ITableCell[] = [];
         rows.push([
-          {children: <TimeDisplay timestamp={date} displayType="event" />} as ITableCell,
-          {children: <TimeDisplay timestamp={date} displayType="time" />} as ITableCell,
-          {children: <TimeDisplay timestamp={event.end_dt} displayType="time" />} as ITableCell,
-          {children: (
-            <Link
-              url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
-              className={styles.link}
-            >
-              {dbT(event, 'title', i18n.language)}
-            </Link>
-          )} as ITableCell,
-          {children: <span>{event.location}</span>} as ITableCell,
-          {children: <span>{event.event_group?.name}</span>} as ITableCell,
-          {children: <span>{event.price_group}</span>} as ITableCell,
+          { children: <TimeDisplay timestamp={date} displayType="event" /> } as ITableCell,
+          { children: <TimeDisplay timestamp={date} displayType="time" /> } as ITableCell,
+          { children: <TimeDisplay timestamp={event.end_dt} displayType="time" /> } as ITableCell,
+          {
+            children: (
+              <Link
+                url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+                className={styles.link}
+              >
+                {dbT(event, 'title', i18n.language)}
+              </Link>
+            ),
+          } as ITableCell,
+          { children: <span>{event.location}</span> } as ITableCell,
+          { children: <span>{event.event_group?.name}</span> } as ITableCell,
+          { children: <span>{event.price_group}</span> } as ITableCell,
         ] as ITableCell[]);
-      })
-      
-    })
-
+      });
+    });
 
     return rows;
   }
@@ -58,22 +55,23 @@ export function EventsList({ events }: EventsListProps) {
   function getEventCards(date: string): ReactNode[] {
     return events[date].map((event: EventDto, key: number) => {
       return (
-        <div className={styles.event_container}>
-          <ImageCard 
-            key={key} compact={true} 
+        <div className={styles.event_container} key={key}>
+          <ImageCard
+            key={key}
+            compact={true}
             date={event.start_dt.toString()}
             title={dbT(event, 'title', i18n.language)}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
           />
         </div>
       );
-    })
+    });
   }
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (
       <Button rounded={true} onClick={func} theme={chosen ? 'black' : 'outlined'}>
-        <span style={{ display: "flex", gap: "1em" }}>
+        <span style={{ display: 'flex', gap: '1em' }}>
           {title}
           <Icon icon={icon} />
         </span>
@@ -83,35 +81,30 @@ export function EventsList({ events }: EventsListProps) {
 
   return (
     <div>
-
       {/* TODO make "tabs" component and cleanup local css */}
-      <div style={{ display: "flex", gap: "1em", justifyContent: "center", marginTop: "2em" }}>
-        {getButton("Dager", "mdi:grid", () => setTableView(false), !tableView)}
-        {getButton("Liste", "material-symbols:view-list", () => setTableView(true), tableView)}
+      <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', marginTop: '2em' }}>
+        {getButton('Dager', 'mdi:grid', () => setTableView(false), !tableView)}
+        {getButton('Liste', 'material-symbols:view-list', () => setTableView(true), tableView)}
       </div>
 
-      <div style={{ height: "1em" }} />
+      <div style={{ height: '1em' }} />
 
       {/* Table view */}
-      {tableView && 
-        <Table columns={eventColumns} data={getEventRows(events)} />
-      }
+      {tableView && <Table columns={eventColumns} data={getEventRows(events)} />}
 
       {/* Grid view */}
-      {!tableView &&
+      {!tableView && (
         <div className={styles.event_container}>
-          {Object.keys(events).map((date_str: string) => (
-            <div className={styles.event_group}>
+          {Object.keys(events).map((date_str: string, key: number) => (
+            <div className={styles.event_group} key={key}>
               <div className={styles.date_header}>
-                  <TimeDisplay className={styles.dateHeaderText} timestamp={date_str} displayType="nice-date" />
+                <TimeDisplay className={styles.dateHeaderText} timestamp={date_str} displayType="nice-date" />
               </div>
-              <div className={styles.event_row}>
-                {getEventCards(date_str)}
-              </div>
+              <div className={styles.event_row}>{getEventCards(date_str)}</div>
             </div>
           ))}
         </div>
-      }
+      )}
     </div>
   );
 }

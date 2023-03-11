@@ -9,7 +9,6 @@ type CarouselProps = {
 };
 
 export function Carousel({ children, header, spacing }: CarouselProps) {
-
   const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
       <div className={styles.itemContainer} key={idx}>

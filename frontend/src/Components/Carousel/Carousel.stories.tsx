@@ -12,12 +12,12 @@ export default {
 
 const Template: ComponentStory<typeof Carousel> = function (args) {
   const itemTemplate = <div style={{ width: '400px', height: '250px', background: '#aaa', borderRadius: '1em' }}></div>;
-  return <Carousel {...args}>{[...Array(100)].map((_) => itemTemplate)}</Carousel>;
+  return <Carousel {...args}>{[...Array(100)].map(() => itemTemplate)}</Carousel>;
 };
 
 const TemplateSmall: ComponentStory<typeof Carousel> = function (args) {
   const itemTemplate = <div style={{ width: '50px', height: '50px', background: '#aaa', borderRadius: '1em' }}></div>;
-  return <Carousel {...args}>{[...Array(100)].map((_) => itemTemplate)}</Carousel>;
+  return <Carousel {...args}>{[...Array(100)].map(() => itemTemplate)}</Carousel>;
 };
 
 export const Basic = Template.bind({});

@@ -1,13 +1,10 @@
 import { ComponentMeta } from '@storybook/react';
 import { ContentCard } from './ContentCard';
 
-const now = new Date();
-
 export default {
   title: 'Components/ContentCard',
   component: ContentCard,
-  args: {
-  },
+  args: {},
   decorators: [
     (Story) => (
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
@@ -17,4 +14,4 @@ export default {
   ],
 } as ComponentMeta<typeof ContentCard>;
 
-export const Basic = ContentCard.bind({ });
+export const Basic = ContentCard.bind({});

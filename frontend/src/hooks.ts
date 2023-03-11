@@ -76,7 +76,7 @@ export function useScrollY(): number {
   return scrollY;
 }
 
-// Element offset from screen center
+// Element offset from screen center (id of html element)
 export function useScreenCenterOffset(id: string): number {
   const element = document.getElementById(id);
   const rect = element?.getBoundingClientRect();
@@ -88,9 +88,9 @@ export function useScreenCenterOffset(id: string): number {
       if (window != null) {
         const element = document.getElementById(id);
         const rect = element?.getBoundingClientRect();
-        if(rect != null) {
-          let centerScreen = window.innerHeight / 2;
-          let centerEl = rect.y + rect.height / 2;
+        if (rect != null) {
+          const centerScreen = window.innerHeight / 2;
+          const centerEl = rect.y + rect.height / 2;
           setPositionY(centerEl - centerScreen);
         }
       }
@@ -99,6 +99,6 @@ export function useScreenCenterOffset(id: string): number {
     return () => {
       window.removeEventListener('scroll', handleNavigation);
     };
-  }, []);
-  return positionY;  
+  }, [id]);
+  return positionY;
 }

@@ -52,15 +52,11 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
       </p>
     );
   } else if (displayType == EVENT) {
-    var options = { dateStyle: 'short', timeStyle: 'short' };
-    return (
-      <p className={className}>
-        {date.toLocaleString('no-NO', options)}
-      </p>
-    );
-  }else if (displayType == TIME) {
+    const options = { dateStyle: 'short', timeStyle: 'short' };
+    return <p className={className}>{date.toLocaleString('no-NO', options)}</p>;
+  } else if (displayType == TIME) {
     return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
   } else {
-    return <p className={className}></p>
+    return <p className={className}></p>;
   }
 }
