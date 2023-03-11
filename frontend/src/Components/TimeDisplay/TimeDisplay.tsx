@@ -11,6 +11,7 @@ const DATETIME = 'datetime';
 const DATE = 'date';
 const NICEDATE = 'nice-date';
 const TIME = 'time';
+const EVENT = 'event';
 
 export function TimeDisplay({ timestamp, className, displayType = DATETIME }: TimeDisplayProps) {
   const { t } = useTranslation();
@@ -50,7 +51,16 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
         {niceDays[date.getDay()]} {date.getDate()}. {niceMonths[date.getMonth()]}
       </p>
     );
-  } else if (displayType == TIME) {
+  } else if (displayType == EVENT) {
+    var options = { dateStyle: 'short', timeStyle: 'short' };
+    return (
+      <p className={className}>
+        {date.toLocaleString('no-NO', options)}
+      </p>
+    );
+  }else if (displayType == TIME) {
     return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
+  } else {
+    return <p className={className}></p>
   }
 }

@@ -31,11 +31,12 @@ export function ContentCard({ className }: ContentCardProps) {
           </div>
           <div className={styles.info_description}>
             Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet
+            Indeed, it is lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet
           </div>
           <div className={styles.info_bottom_row}>
             <Button rounded={true} theme="black">
               <div className={styles.button_content} >
-                Les mer
+                Kjøp billett
                 <Icon icon="mdi:arrow-right" width={18} />
               </div>
             </Button>

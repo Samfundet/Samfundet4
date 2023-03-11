@@ -42,6 +42,10 @@ $mobile-width: $primary-content-width-mobile;
     flex-direction: column;
   }
 
+  @include theme-dark {
+    background-color: #2e2b2b;
+  }
+
 }
 
 .card_image {
@@ -95,11 +99,14 @@ $mobile-width: $primary-content-width-mobile;
   @include for-mobile-only {
     font-size: 1.5em;
   }
-
+  
 }
 
 .info_description {
   color: $grey-1;
+  @include theme-dark {
+    color: $grey-3;
+  }
 }
 
 .info_bottom_row {

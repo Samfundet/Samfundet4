@@ -17,7 +17,19 @@ export function HomePage() {
 
         <div style={{ height: '1em' }} />
 
-        {['Konserter', 'Kulturarrangementer'].map((name) => (
+        {/* Below is just demo stuff until API integration is done */}
+        
+        {['Konserter'].map((name) => (
+          <Carousel header={name} spacing={1.5} key={name}>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+              <ImageCard key={num} />
+            ))}
+          </Carousel>
+        ))}
+
+        <ContentCard />
+
+        {['Kulturarrangementer'].map((name) => (
           <Carousel header={name} spacing={1.5} key={name}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
               <ImageCard key={num} />
