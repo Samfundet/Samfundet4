@@ -2,6 +2,8 @@
 
 @import 'src/constants';
 
+$mobile-width: $primary-content-width-mobile;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -11,15 +13,22 @@
   height: 16em;
   width: 20em;
   overflow: visible;
+
+  // For transform overflow
+  padding-top: 3px;
+
+  @include for-mobile-only {
+    max-width: $mobile-width;
+  }
+
 }
 
 .card {
   background-color: #222;
-  border: 1px solid #ddd;
   border-radius: 1em;
   flex-basis: 100%;
   transition: .2s;
-  max-width: 80vw;
+  box-shadow: 0 0 5px 3px $black-t10;
   cursor: pointer;
 
   background-image: url("~/assets/banner-sample-2.jpeg");
@@ -65,13 +74,15 @@
   @include for-mobile-only {
     transform: none;
     opacity: 1;
+    padding: 0;
   }
 
 }
 
 .container:hover {
   .card {
-    border: 1px solid #aaa;
+    transform: translateY(-3px);
+    box-shadow: 0 3px 8px 2px $black-t25;
   }
   .bottom_description {
     opacity: 1;
