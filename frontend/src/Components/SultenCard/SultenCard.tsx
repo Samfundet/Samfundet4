@@ -1,5 +1,5 @@
+import { SultenButton } from '~/Components/SultenButton';
 import { useMobile } from '~/hooks';
-import { SultenButton } from '../SultenButton';
 import styles from './SultenCard.module.scss';
 
 type SultenCardProps = {
@@ -10,6 +10,7 @@ type SultenCardProps = {
   buttonText?: string;
   imageAlignment?: 'left' | 'right';
   onButtonClick?: () => void;
+  link?: string;
 };
 
 export function SultenCard({
@@ -19,6 +20,7 @@ export function SultenCard({
   text,
   buttonText,
   onButtonClick,
+  link,
   imageAlignment = 'left',
 }: SultenCardProps) {
   const alignImageLeft = imageAlignment === 'left';
@@ -35,7 +37,7 @@ export function SultenCard({
   );
 
   const cardButton = buttonText && (
-    <SultenButton onClick={onButtonClick} className={styles.card_button}>
+    <SultenButton onClick={onButtonClick} link={link} className={styles.card_button}>
       {buttonText}
     </SultenButton>
   );

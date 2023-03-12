@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { getTextItem } from '~/api';
 import { desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
+import { LANGUAGES } from './i18n/constants';
 
 // Make typescript happy.
 declare global {
@@ -66,7 +67,7 @@ export function useMobile(): boolean {
 // Hook that returns the correct translation for given key
 export function useTextItem(key: string, i18n: i18n): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
-  const isNorwegian = i18n.language === 'nb';
+  const isNorwegian = i18n.language === LANGUAGES.NB;
   useEffect(() => {
     getTextItem(key).then((data) => {
       setTextItem(data);
