@@ -75,3 +75,23 @@ export function useTextItem(key: string, i18n: i18n): string | undefined {
 
   return isNorwegian ? textItem?.text_nb : textItem?.text_en;
 }
+
+// ------------------------------
+
+// Scroll detection
+export function useScrollY(): number {
+  const [scrollY, setScrollY] = useState(window.scrollY);
+  useEffect(() => {
+    function handleNavigation(e: Event) {
+      const window = e.currentTarget;
+      if (window != null) {
+        setScrollY(window.scrollY);
+      }
+    }
+    window.addEventListener('scroll', handleNavigation);
+    return () => {
+      window.removeEventListener('scroll', handleNavigation);
+    };
+  }, []);
+  return scrollY;
+}

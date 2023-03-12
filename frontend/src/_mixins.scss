@@ -1,3 +1,5 @@
+/* stylelint-disable selector-max-type */
+/* Necessary for theme mixin */
 @import './constants';
 
 /* Screen size media queries */
@@ -127,3 +129,19 @@ Usage:
   }
 }
 /* End: Spacing classes */
+
+
+/* Theme mixins */
+/* Use THEME constants */
+@mixin theme-dark {
+  body:global(.theme-dark) & {
+    @content;
+  }
+}
+
+
+@mixin theme-light {
+  body:global(.theme-light) & {
+    @content;
+  }
+}

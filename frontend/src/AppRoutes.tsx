@@ -15,6 +15,7 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
+  SaksdokumenterPage,
 } from '~/Pages';
 import {
   ClosedPeriodAdminPage,
@@ -63,6 +64,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
         <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+        <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
         <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_closed_edit} element={<ClosedPeriodFormAdminPage />} />

@@ -1,6 +1,7 @@
 // Colors:
 // When adding new colors, types.ts must be updated to reflect all colors
 $red-samf: #a03033;
+$red-samf-faded: #fac7c8;
 $blue: #337ab7;
 $blue-deep: #1a3b80;
 $blue-lighter: #e3f2ff;
@@ -34,9 +35,10 @@ $sulten-orange: #fbb042;
 $black-t75: rgba(0, 0, 0, 0.75);
 $black-t50: rgba(0, 0, 0, 0.5);
 $black-t25: rgba(0, 0, 0, 0.25);
+$black-t10: rgba(0, 0, 0, 0.1);
 
 // Theme colors:
-$theme-dark-bg: #1f0000;
+$theme-dark-bg: #111111;
 $theme-dark-color: #dddddd;
 $theme-dark-input-bg: #404040;
 $theme-dark-input-bg-disabled: #7b7b7b;
@@ -49,3 +51,6 @@ $tablet-bp-upper: 992px;
 $tablet-bp-lower: 769px;
 $mobile-bp-upper: 768px;
 $content-max-size: 1200px;
+
+// Navbar size
+$navbar-height: 60px;
