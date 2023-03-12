@@ -21,14 +21,23 @@ export function SultenCard({
   onButtonClick,
   imageAlignment = 'left',
 }: SultenCardProps) {
-  const imageLeft = imageAlignment === 'left';
+  const alignImageLeft = imageAlignment === 'left';
   const isMobile = useMobile();
 
-  const leftAlignedImage = (imageLeft || isMobile) && (
+  // position image to the left, or top if mobile
+  const leftAlignedImage = (alignImageLeft || isMobile) && (
     <img src={image} alt={imageAlt} className={styles.card_image}></img>
   );
-  const rightAlignedImage = !imageLeft && !isMobile && (
+
+  // position image to the right, not at the bottom if mobile
+  const rightAlignedImage = !alignImageLeft && !isMobile && (
     <img src={image} alt={imageAlt} className={styles.card_image}></img>
+  );
+
+  const cardButton = buttonText && (
+    <SultenButton onClick={onButtonClick} className={styles.card_button}>
+      {buttonText}
+    </SultenButton>
   );
 
   return (
@@ -37,11 +46,7 @@ export function SultenCard({
       <div className={styles.text_container}>
         <h2 className={styles.card_header}>{header}</h2>
         <p className={styles.card_text}>{text}</p>
-        {buttonText && (
-          <SultenButton onClick={onButtonClick} className={styles.card_button}>
-            {buttonText}
-          </SultenButton>
-        )}
+        {cardButton}
       </div>
       {rightAlignedImage}
     </div>
