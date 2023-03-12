@@ -19,35 +19,94 @@ export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const navigate = useNavigate();
   const [t, i18n] = useTranslation();
+  const [consistentWeekdayHours, setConsistentWeekdayHours] = useState(false);
+  const [consistentWeekendHours, setConsistentWeekendHours] = useState(false);
 
   useEffect(() => {
     getVenues()
       .then((data) => {
         const lyche = data.find((venue) => venue.name?.toLowerCase() === 'lyche');
         setLycheVenue(lyche);
+        setConsistentWeekdayHours(
+          (lycheVenue?.opening_monday === lycheVenue?.opening_tuesday && lycheVenue?.opening_wednesday) ===
+            lycheVenue?.opening_thursday && lycheVenue?.opening_monday === lycheVenue?.opening_thursday,
+        );
+        setConsistentWeekendHours(lycheVenue?.opening_friday === lycheVenue?.opening_saturday);
       })
       .catch(console.error);
-  }, []);
+  }, [consistentWeekdayHours, consistentWeekendHours]);
 
   const openingHours = (
     <div className={styles.opening_hour_container}>
       <h2 className={styles.opening_hour_header}>{t(KEY.opening_hours)}</h2>
-      <div className={styles.hour_item_container}>
-        <p className={styles.hour_item}>
-          {t(KEY.day_monday)}-{t(KEY.day_thursday)}
-        </p>
-        <p className={styles.hour_item}>
-          {lycheVenue?.opening_monday?.substring(0, 5)}-{lycheVenue?.closing_monday?.substring(0, 5)}
-        </p>
-      </div>
-      <div className={styles.hour_item_container}>
-        <p className={styles.hour_item}>
-          {t(KEY.day_friday)}-{t(KEY.day_saturday)}
-        </p>
-        <p className={styles.hour_item}>
-          {lycheVenue?.opening_friday?.substring(0, 5)}-{lycheVenue?.closing_friday?.substring(0, 5)}
-        </p>
-      </div>
+
+      {/* Weekday hours */}
+      {consistentWeekdayHours ? (
+        <div className={styles.hour_item_container}>
+          <p className={styles.hour_item}>
+            {t(KEY.day_monday)}-{t(KEY.day_thursday)}
+          </p>
+          <p className={styles.hour_item}>
+            {lycheVenue?.opening_monday?.substring(0, 5)}-{lycheVenue?.closing_monday?.substring(0, 5)}
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className={styles.hour_item_container}>
+            <p className={styles.hour_item}>{t(KEY.day_monday)}</p>
+            <p className={styles.hour_item}>
+              {lycheVenue?.opening_monday?.substring(0, 5)}-{lycheVenue?.closing_monday?.substring(0, 5)}
+            </p>
+          </div>
+          <div className={styles.hour_item_container}>
+            <p className={styles.hour_item}>{t(KEY.day_tuesday)}</p>
+            <p className={styles.hour_item}>
+              {lycheVenue?.opening_tuesday?.substring(0, 5)}-{lycheVenue?.closing_tuesday?.substring(0, 5)}
+            </p>
+          </div>
+          <div className={styles.hour_item_container}>
+            <p className={styles.hour_item}>{t(KEY.day_wednesday)}</p>
+            <p className={styles.hour_item}>
+              {lycheVenue?.opening_wednesday?.substring(0, 5)}-{lycheVenue?.closing_wednesday?.substring(0, 5)}
+            </p>
+          </div>
+          <div className={styles.hour_item_container}>
+            <p className={styles.hour_item}>{t(KEY.day_thursday)}</p>
+            <p className={styles.hour_item}>
+              {lycheVenue?.opening_thursday?.substring(0, 5)}-{lycheVenue?.closing_thursday?.substring(0, 5)}
+            </p>
+          </div>
+        </>
+      )}
+
+      {/* Weekend hours */}
+      {consistentWeekendHours ? (
+        <div className={styles.hour_item_container}>
+          <p className={styles.hour_item}>
+            {t(KEY.day_friday)}-{t(KEY.day_saturday)}
+          </p>
+          <p className={styles.hour_item}>
+            {lycheVenue?.opening_friday?.substring(0, 5)}-{lycheVenue?.closing_friday?.substring(0, 5)}
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className={styles.hour_item_container}>
+            <p className={styles.hour_item}>{t(KEY.day_friday)}</p>
+            <p className={styles.hour_item}>
+              {lycheVenue?.opening_friday?.substring(0, 5)}-{lycheVenue?.closing_friday?.substring(0, 5)}
+            </p>
+          </div>
+          <div className={styles.hour_item_container}>
+            <p className={styles.hour_item}>{t(KEY.day_saturday)}</p>
+            <p className={styles.hour_item}>
+              {lycheVenue?.opening_saturday?.substring(0, 5)}-{lycheVenue?.closing_saturday?.substring(0, 5)}
+            </p>
+          </div>
+        </>
+      )}
+
+      {/* Sunday hours */}
       <div className={styles.hour_item_container}>
         <p className={styles.hour_item}>{t(KEY.day_sunday)}</p>
         <p className={styles.hour_item}>
