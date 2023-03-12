@@ -17,7 +17,7 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: Infobox
   const bg = COLORS[bgColor];
   const [wrapHeightRatio, setWrapHeightRatio] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
   };
