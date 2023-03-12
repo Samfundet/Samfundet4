@@ -116,7 +116,6 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: Infobox
         <div className={styles.infoboxLong_txt_wrap}>
           <h1 className={styles.infoboxLong_h1}>{title}</h1>
           <div>
-            <p>{wrapHeightRatio}</p>
             <p className={isExpanded ? styles.infoboxLong_paragraph_exp : styles.infoboxLong_paragraph_not}>
               {infoTxt}
             </p>
