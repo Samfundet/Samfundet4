@@ -98,6 +98,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.duration]: 'Varighet',
   [KEY.publication]: 'Publisering',
+  [KEY.see_more]: 'Se mer',
+  [KEY.see_less]: 'Se mindre',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -195,4 +197,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Are you sure you want do',
   [KEY.duration]: 'Duration',
   [KEY.publication]: 'Publication',
+  [KEY.see_more]: 'See more',
+  [KEY.see_less]: 'See less',
 };

@@ -98,6 +98,8 @@ export const KEY = {
   form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
+  see_more: 'see_more',
+  see_less: 'see_less',
 } as const;
 
 /**

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { KEY } from '~/i18n/constants';
 import { COLORS } from '../../types';
 import styles from './Infobox.module.scss';
 type InfoboxProps = {
@@ -9,30 +11,32 @@ type InfoboxProps = {
   infoTxt: string;
   infoURL?: string;
   type: 'WithImgWithURL' | 'NoImgWithURL' | 'WithImgNoURL' | 'NoImgNoURL' | 'LongWithImg' | 'LongWithOutImg';
-  // wrapHeightRatio: number;
 };
 
 export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: InfoboxProps) {
   const bg = COLORS[bgColor];
-  const [wrapHeightRatio, setWrapHeightRatio] = useState<number>(0); // add state variable here
+  const [wrapHeightRatio, setWrapHeightRatio] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState(false);
-  // const [height, setHeight] = useState<number | null>(null);
-  // const ref = useRef<HTMLDivElement>(null);
+  const { t, i18n } = useTranslation();
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
   };
-  //MULIG useEffect kan hjelpe meg å sørge for at knappen vises på riktig størrelse
+  //This calculates the ratio of a div and the screen.
+  //It is used to change style when the div becomes a certain ratio
+  //The style is changed to show a "Read more" button on the infobox
+  //The useEffect hook is used because an load-eventlistener did not work
   useEffect(() => {
-    // if (ref.current && !isExpanded) {
-    //   setHeight(ref.current.offsetHeight);
-    // }
-  }, [isExpanded]);
-  window.addEventListener('resize', function () {
-    const wrapHeight = document.getElementById('infoboxLong_wrap_id').offsetHeight;
-    const screenHeight = screen.height; //endrer fra screen.height til screen.Height
+    const wrapHeight = document.getElementById('infoboxLong_wrap_id')?.offsetHeight || 0;
+    const screenHeight = screen.height;
     const ratio = wrapHeight / screenHeight;
     setWrapHeightRatio(ratio);
-    // setWrapHeightRatio(wrapHeight);
+  }, []);
+  //This does the same, as the useEffect hook, but when the screen is resized
+  window.addEventListener('resize', function () {
+    const wrapHeight = document.getElementById('infoboxLong_wrap_id')?.offsetHeight || 0;
+    const screenHeight = screen.height;
+    const ratio = wrapHeight / screenHeight;
+    setWrapHeightRatio(ratio);
   });
   if (type == 'WithImgWithURL') {
     return (
@@ -86,34 +90,21 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: Infobox
   }
   if (type == 'LongWithImg') {
     return (
-      <div className={styles.infoboxLong_wrap} style={{ backgroundColor: bg }}>
+      <div className={styles.infoboxLong_wrap} style={{ backgroundColor: bg }} id="infoboxLong_wrap_id">
         <div className={styles.infoboxLong_with_img}>
           <img className={styles.infoboxLong_img} src={img} alt="Image Missing"></img>
         </div>
         <div className={styles.infoboxLong_txt_wrap}>
           <h1 className={styles.infoboxLong_h1}>{title}</h1>
           <div>
-            <p
-              // ref={ref}
-              className={isExpanded ? styles.infoboxLong_paragraph_exp : styles.infoboxLong_paragraph_not}
-              id="infoboxLong_wrap_id"
-            >
+            <p className={isExpanded ? styles.infoboxLong_paragraph_exp : styles.infoboxLong_paragraph_not}>
               {infoTxt}
             </p>
           </div>
         </div>
-        {/* {wrapHeightRatio > 0.15 && ( //har kontroll på tekst størrelsen
-          //Snudd > DET FUNKA!
-          //Mulig dette har med at funksjonen ikke loades
-          <div className={styles.gradient}>
-            <button className={styles.expand_btn} onClick={toggleExpansion}>
-              {isExpanded ? 'Se minder' : 'Se mer'}
-            </button>
-          </div>
-        )} */}
-        <div className={wrapHeightRatio > 0.15 ? styles.gradient : styles.gradient_none}>
+        <div className={wrapHeightRatio > 0.25 ? styles.gradient : styles.gradient_none}>
           <button className={styles.expand_btn} onClick={toggleExpansion}>
-            {!isExpanded ? 'Se mer' : 'Se mindre'}
+            {!isExpanded ? t(KEY.see_more) : t(KEY.see_less)}
           </button>
         </div>
       </div>
@@ -121,25 +112,19 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: Infobox
   }
   if (type == 'LongWithOutImg') {
     return (
-      <div className={styles.infoboxLong_wrap} style={{ backgroundColor: bg }}>
+      <div className={styles.infoboxLong_wrap} style={{ backgroundColor: bg }} id="infoboxLong_wrap_id">
         <div className={styles.infoboxLong_txt_wrap}>
           <h1 className={styles.infoboxLong_h1}>{title}</h1>
           <div>
             <p>{wrapHeightRatio}</p>
-            <p
-              // ref={ref}
-              className={!isExpanded ? styles.infoboxLong_paragraph_exp : styles.infoboxLong_paragraph_not}
-              id="infoboxLong_wrap_id"
-            >
+            <p className={isExpanded ? styles.infoboxLong_paragraph_exp : styles.infoboxLong_paragraph_not}>
               {infoTxt}
             </p>
           </div>
         </div>
-        {/* {wrapHeightRatio > 0.15 && ( )} */}
-
-        <div className={wrapHeightRatio > 0.15 ? styles.gradient : styles.gradient_none}>
+        <div className={wrapHeightRatio > 0.25 ? styles.gradient : styles.gradient_none}>
           <button className={styles.expand_btn} onClick={toggleExpansion}>
-            {!isExpanded ? 'Se mer' : 'Se mindre'}
+            {!isExpanded ? t(KEY.see_more) : t(KEY.see_less)}
           </button>
         </div>
       </div>
