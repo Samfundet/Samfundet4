@@ -1,4 +1,8 @@
-from typing import Any
+from __future__ import annotations
+
+import re
+import random
+from typing import TYPE_CHECKING
 from datetime import time, timedelta
 
 from guardian.shortcuts import assign_perm
@@ -7,13 +11,70 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
+
+if TYPE_CHECKING:
+    from typing import Any, Optional
+    from django.db.models import Model
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=140)
+    color = models.CharField(max_length=6, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        # Saves with random color
+        if not self.color or not re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', self.color):
+            hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+            c = random.choices(range(len(hexnr)), k=6)
+            while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
+                c = random.choices(range(len(hexnr)), k=6)
+            self.color = ''.join([hexnr[i] for i in c])
+        super().save(*args, **kwargs)
+
+
+class Image(models.Model):
+    title = models.CharField(max_length=140)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='images')
+    image = models.ImageField(upload_to='images/', blank=True, null=False)
+
+    class Meta:
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+
+    def __str__(self) -> str:
+        return f'{self.title}'
+
+
+class User(AbstractUser):
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
+        """
+        Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
+        are completely separate, calling `has_perm()` with an `obj` will return `False`
+        even though the user has global perms.
+            We have decided that global permissions implies that any obj perm check
+        should return `True`. This function is extended to check both.
+        """
+        has_global_perm = super().has_perm(perm=perm)
+        has_object_perm = super().has_perm(perm=perm, obj=obj)
+        return has_global_perm or has_object_perm
 
 
 class EventGroup(models.Model):
     name = models.CharField(max_length=140)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'EventGroup'
@@ -21,17 +82,18 @@ class EventGroup(models.Model):
 
 
 class Event(models.Model):
-
     # INFO
-    title_no = models.CharField(max_length=140)
+    title_nb = models.CharField(max_length=140)
     title_en = models.CharField(max_length=140)
-    description_long_no = models.TextField(blank=True, null=True)
+    description_long_nb = models.TextField(blank=True, null=True)
     description_long_en = models.TextField(blank=True, null=True)
-    description_short_no = models.TextField(blank=True, null=True)
+    description_short_nb = models.TextField(blank=True, null=True)
     description_short_en = models.TextField(blank=True, null=True)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
     location = models.CharField(max_length=140, blank=True, null=True)
     codeword = models.CharField(max_length=140, blank=True, null=True)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # Duration
     start_dt = models.DateTimeField(blank=True, null=True)
@@ -42,7 +104,7 @@ class Event(models.Model):
     host = models.CharField(max_length=140, blank=True, null=True)
 
     # Display
-    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner')  # TODO fix null response
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True)
 
     # TODO Maybe add color choice? https://github.com/Samfundet/Samfundet4/issues/316
     # TODO add social media?
@@ -59,8 +121,17 @@ class Event(models.Model):
         ARCHIVED = 'archived', _('Arkivert')
         CANCELED = 'canceled', _('Avlyst')
 
+    class Category(models.TextChoices):
+        SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
+        CONCERT = 'concert', _('Konsert')
+        DEBATE = 'debate', _('Debatt')
+        QUIZ = 'quiz', _('Quiz')
+        LECTURE = 'lecture', _('Kurs')
+        OTHER = 'other', _('Annet')
+
     status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
     age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
+    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
 
     # Price
     # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
@@ -107,6 +178,9 @@ class Venue(models.Model):
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
@@ -116,8 +190,8 @@ class Venue(models.Model):
 
 
 class ClosedPeriod(models.Model):
-    message_no = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
-    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -125,12 +199,15 @@ class ClosedPeriod(models.Model):
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
     end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'Stengt periode'
         verbose_name_plural = 'Stengt perioder'
 
     def __str__(self) -> str:
-        return f'{self.message_no} {self.start_dt}-{self.end_dt}'
+        return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
 
 
 class UserPreference(models.Model):
@@ -144,6 +221,9 @@ class UserPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'UserPreference'
         verbose_name_plural = 'UserPreferences'
@@ -155,6 +235,9 @@ class UserPreference(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(max_length=30, blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Profile'
@@ -174,19 +257,22 @@ class Profile(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
-    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'GangType'
         verbose_name_plural = 'GangTypes'
 
     def __str__(self) -> str:
-        return f'{self.title_no}'
+        return f'{self.title_nb}'
 
 
 class Gang(models.Model):
-    name_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
+    name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
@@ -195,12 +281,15 @@ class Gang(models.Model):
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
 
     def __str__(self) -> str:
-        return f'{self.gang_type} - {self.name_no}'
+        return f'{self.gang_type} - {self.name_nb}'
 
 
 class InformationPage(models.Model):
@@ -213,11 +302,14 @@ class InformationPage(models.Model):
         help_text='Primary key, this field will identify the object and be used in the URL.',
     )
 
-    title_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
-    text_no = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
 
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
     text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # TODO Find usage for owner field
 
@@ -230,8 +322,8 @@ class InformationPage(models.Model):
 
 
 class Table(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
-    description_no = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -239,6 +331,9 @@ class Table(models.Model):
     seating = models.PositiveSmallIntegerField(blank=True, null=True)
 
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
@@ -248,29 +343,35 @@ class Table(models.Model):
         verbose_name_plural = 'Tables'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class FoodPreference(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class FoodCategory(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class MenuItem(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
-    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
@@ -283,35 +384,44 @@ class MenuItem(models.Model):
     food_preferences = models.ManyToManyField(FoodPreference, blank=True)
     food_category = models.ForeignKey(FoodCategory, blank=True, null=True, on_delete=models.PROTECT)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'MenuItem'
         verbose_name_plural = 'MenuItems'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class Menu(models.Model):
-    name_no = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
-    description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     menu_items = models.ManyToManyField(MenuItem, blank=True)
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
     class Meta:
         verbose_name = 'Menu'
         verbose_name_plural = 'Menus'
 
     def __str__(self) -> str:
-        return f'{self.name_no}'
+        return f'{self.name_nb}'
 
 
 class Saksdokument(models.Model):
-    title_no = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
+    title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class SaksdokumentCategory(models.TextChoices):
         FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
@@ -327,7 +437,7 @@ class Saksdokument(models.Model):
         verbose_name_plural = 'Saksdokument'
 
     def __str__(self) -> str:
-        return f'{self.title_no}'
+        return f'{self.title_nb}'
 
 
 class Booking(models.Model):
@@ -343,6 +453,9 @@ class Booking(models.Model):
     last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
     email = models.CharField(max_length=64, unique=True, blank=True, null=True)
     phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Booking'
@@ -377,3 +490,16 @@ class Booking(models.Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class TextItem(models.Model):
+    key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
+    text_nb = models.TextField()
+    text_en = models.TextField()
+
+    class Meta:
+        verbose_name = 'TextItem'
+        verbose_name_plural = 'TextItems'
+
+    def __str__(self) -> str:
+        return f'{self.key}'

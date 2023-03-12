@@ -2,13 +2,18 @@ import classNames from 'classnames';
 import { Children } from '~/types';
 import styles from './Select.module.scss';
 
+type Option = {
+  value: string | number;
+  label: string;
+};
+
 type SelectProps = {
   name: string;
   className?: string;
   labelClassName?: string;
-  options?: string[][];
+  options?: Option[];
   required?: boolean;
-  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
   value?: string;
   error?: string;
   children?: Children;
@@ -29,15 +34,10 @@ export function Select({
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <select onChange={onChange} required={required} className={styles.select}>
-          {options?.map(function (element, index) {
+          {options?.map(function (option, index) {
             return (
-              <option
-                value={element[0]}
-                key={index}
-                className={styles.option}
-                selected={element[0] == value && 'selected'}
-              >
-                {element[1]}
+              <option value={option.value} key={index} className={styles.option} selected={option.value == value}>
+                {option.label}
               </option>
             );
           })}

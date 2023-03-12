@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getMenus, getVenues } from '~/api';
 import { MenuDto, VenueDto } from '~/dto';
+import { dbT } from '~/i18n/i18n';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -9,7 +11,7 @@ import { MenuDto, VenueDto } from '~/dto';
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const [lycheMenu, setLycheMenu] = useState<MenuDto>();
-
+  const { i18n } = useTranslation();
   // Stuff to do on first render.
   useEffect(() => {
     getVenues()
@@ -20,7 +22,7 @@ export function LychePage() {
       .catch(console.error);
     getMenus()
       .then((data) => {
-        const menu = data.find((menu) => menu.name_no?.toLowerCase() === 'lyche');
+        const menu = data.find((menu) => menu.name_nb?.toLowerCase() === 'lyche');
         setLycheMenu(menu);
       })
       .catch(console.error);
@@ -34,8 +36,8 @@ export function LychePage() {
         {lycheMenu?.menu_items?.map((item, i) => {
           return (
             <div key={i}>
-              <div>{item.name_no}</div>
-              <div>{item.description_no}</div>
+              <div>{dbT(item, 'name', i18n.language) as string}</div>
+              <div>{dbT(item, 'description', i18n.language) as string}</div>
               <div>{item.order}</div>
               <div>
                 {item.price}/{item.price_member}

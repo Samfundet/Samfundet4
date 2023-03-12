@@ -2,27 +2,44 @@
 
 @import 'src/mixins';
 
+$background-color-dark: #1f1f1f;
+
 .applet {
-  background-color: $white;
+  color: $black;
+  background-color: white;
   text-align: center;
-  margin: 1em 0.5em;
-  box-shadow: 3px 7px 6px $grey-2;
-  border-radius: .2em;
+  margin: 1.3em 1em;
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.05);
+  border-radius: .75em;
   width: 100%;
-  max-width: 350px;
+  max-width: 360px;
+  overflow: hidden;
+
   @include for-tablet-only {
     max-width: 600px;
   }
+  
   @include for-mobile-only {
     max-width: 600px;
   }
+
+  @include theme-dark {
+    background-color: $background-color-dark;
+    color: $white;
+  }
+
 }
 
 .top {
-  background: $red-samf;
   width: 100%;
   padding: 12px;
-  border-radius: .2em;
+  padding-left: 18px;
+  padding-bottom: .75em;
+  background-color: $grey-5;
+
+  @include theme-dark {
+    background-color: $grey-1;
+  }
 }
 
 .options {
@@ -30,10 +47,19 @@
 }
 
 .header {
-  text-transform: uppercase;
+  text-transform: capitalize;
+  text-align: left;
   margin: 0;
-  color: white;
+  color: black;
   font-size: 1.4em;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: center;
+
+  @include theme-dark {
+    color: white;
+  }
 }
 
 .text {
@@ -42,7 +68,6 @@
   font-size: 1.2em;
   line-height: 1.3;
   letter-spacing: 0.01rem;
-  
 }
 
 .button {
@@ -50,6 +75,7 @@
   width: 100%;
   text-transform: uppercase;
   font-size: 1em;
+  padding: 0.5em;
 }
 
 .searchInput {
@@ -82,4 +108,3 @@
   height: 72px;
   margin-top: 16px;
 }
-

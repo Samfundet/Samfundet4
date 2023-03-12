@@ -20,13 +20,12 @@ from root.constants import Environment
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Load '.env'.
-environ.Env.read_env(env_file=BASE_DIR / '.env')
+IS_DOCKER = os.environ.get('IS_DOCKER') == 'yes'
 
-### Print variables ###
-print(f'=== {BASE_DIR=}')  # noqa: T201
-print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
-### End: Print variables ###
+# Load '.env'.
+environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
+
+AUTH_USER_MODEL = 'samfundet.User'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -165,7 +164,10 @@ INSTALLED_APPS += [
 # https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES':
         [
             # 'rest_framework.permissions.IsAuthenticated',
@@ -184,22 +186,19 @@ AUTHENTICATION_BACKENDS += [
 ]
 ### End: django-guardian ###
 
-################## LOGGING ##################
+### admin_auto_filters ###
+INSTALLED_APPS += [
+    'admin_auto_filters',
+]
+### End: admin_auto_filters ###
 
-# pylint: disable=wrong-import-position,wrong-import-order
-import logging.config  # noqa: E402
+################## LOGGING ##################
 
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
 from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
 
-# pylint: enable=wrong-import-position,wrong-import-order
-
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
-
-# Reset file each time server reloads.
-# pylint: disable=consider-using-with, unspecified-encoding
-open(SQL_LOG_FILE, 'w').close()
 
 LOGGING = {
     'version': 1,
@@ -258,8 +257,9 @@ LOGGING = {
                 },
             'sql_file':
                 {
-                    'level': os.environ.get('SQL_LOG_LEVEL', 'INFO'),
+                    'level': 'DEBUG',
                     'class': 'logging.FileHandler',
+                    'mode': 'w',
                     'filename': SQL_LOG_FILE,  # Added to '.gitignore'.
                     'filters': ['require_debug_true'],
                 },
@@ -295,8 +295,6 @@ LOGGING = {
             },
         },
 }
-
-logging.config.dictConfig(LOGGING)
 
 # Quick fix for avoiding concurrency issues related to db access
 # Note: this might not be an ideal solution. See these links for information

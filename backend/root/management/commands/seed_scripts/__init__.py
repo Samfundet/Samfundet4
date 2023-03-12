@@ -1,9 +1,11 @@
 from . import (
+    images,
     gangs,
     information_pages,
     venues,
     events,
     menu,
+    documents,
     example,
 )
 
@@ -15,10 +17,12 @@ from . import (
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
+    ('images', images.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),
     ('event', events.seed),
     ('menu', menu.seed),
+    ('documents', documents.seed),
     ('information_page', information_pages.seed),
 
     # Example seed (not run unless targeted specifically)

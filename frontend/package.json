@@ -8,13 +8,16 @@
     "dev": "yarn run start",
     "build": "vite build",
     "preview": "vite preview",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
-    "stylelint-check": "stylelint-config-prettier-scss-check",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public --quiet",
+    "storybook-dev": "start-storybook -p 6006 -s public",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -s public",
+    "build-storybook-dev": "build-storybook -s public",
     "cypress:open": "cypress open",
     "cypress:run": "yarn run cypress run",
     "eslint:check": "eslint --config .eslintrc.js src",
-    "stylelint:check": "stylelint --config .stylelintrc src/**/*.{css,scss}"
+    "stylelint:check": "stylelint --config .stylelintrc src/**/*.{css,scss}",
+    "tsc:check": "tsc",
+    "tsc:watch": "tsc --watch"
   },
   "dependencies": {
     "@babel/core": "^7.19.6",
@@ -88,7 +91,7 @@
     "stylelint-scss": "^4.3.0",
     "typescript": "^4.8.4",
     "vite": "^3.2.0",
-    "webpack": "^5.74.0"
+    "webpack": "^5.76.0"
   },
   "browserslist": {
     "production": [

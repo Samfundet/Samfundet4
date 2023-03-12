@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormInputField, FormTextAreaField } from '~/Components';
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getInformationPage } from '~/api';
+import { Button, FormInputField, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './InformationFormAdminPage.module.scss';
-import ReactMarkdown from 'react-markdown';
-import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { reverse } from '~/named-urls';
-import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
+import styles from './InformationFormAdminPage.module.scss';
 
 export function InformationFormAdminPage() {
   const navigate = useNavigate();
@@ -20,8 +19,8 @@ export function InformationFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
     getValues,
     formState: { errors },
@@ -59,22 +58,22 @@ export function InformationFormAdminPage() {
     );
   }
 
-  const onSubmit = (data) => {
-    (slugField ? putInformationPage(slugField, data) : postInformationPage(data))
-      .then(() => {
-        navigate(
-          reverse({
-            pattern: ROUTES.frontend.information_page_detail,
-            urlParams: { slugField: slugField ? slugField : data.slug_field },
-          }),
-        );
-      })
-      .catch((e) => {
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  // function onSubmit(data: InformationPageDto) {
+  //   (slugField ? putInformationPage(slugField, data) : postInformationPage(data))
+  //     .then(() => {
+  //       navigate(
+  //         reverse({
+  //           pattern: ROUTES.frontend.information_page_detail,
+  //           urlParams: { slugField: slugField ? slugField : data.slug_field },
+  //         }),
+  //       );
+  //     })
+  //     .catch((e) => {
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   return (
     <Page>
@@ -88,7 +87,9 @@ export function InformationFormAdminPage() {
       <h1 className={styles.header}>
         {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         {!slugField && (
           <div className={styles.inputGroup}>
             <FormInputField
@@ -109,7 +110,7 @@ export function InformationFormAdminPage() {
               <FormInputField
                 errors={errors}
                 className={styles.input}
-                name="title_no"
+                name="title_nb"
                 register={register}
                 required={t(KEY.form_required)}
               >
@@ -117,7 +118,7 @@ export function InformationFormAdminPage() {
                   {t(KEY.norwegian)} {t(KEY.common_title)}
                 </p>
               </FormInputField>
-              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_no" register={register}>
+              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_nb" register={register}>
                 <p className={styles.labelText}>
                   {t(KEY.norwegian)} {t(KEY.content)}
                 </p>
@@ -125,7 +126,7 @@ export function InformationFormAdminPage() {
             </div>
             <div className={styles.col}>
               <div className={styles.markdownField}>
-                <ReactMarkdown>{getValues('text_no')}</ReactMarkdown>
+                <ReactMarkdown>{getValues('text_nb')}</ReactMarkdown>
               </div>
             </div>
           </div>

@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { getGangList } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useTranslation } from 'react-i18next';
+import { AlphabeticTableCell, Table } from '~/Components/Table';
+import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { dbT } from '~/i18n/i18n';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './GangsAdminPage.module.scss';
-import { GangTypeDto } from '~/dto';
-import { getGangList } from '~/api';
-import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
-import { reverse } from '~/named-urls';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -53,25 +54,24 @@ export function GangsAdminPage() {
       {gangTypes.map(function (element, key) {
         return (
           <div key={key}>
-            <h2 className={styles.gangTypeHeader}>{element.title_no}</h2>
+            <h2 className={styles.gangTypeHeader}>{dbT(element, 'title', i18n.language) as string}</h2>
             <Table
               columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
               data={element.gangs.map(function (element2) {
                 return [
                   new AlphabeticTableCell(
-                    (
-                      <Link
-                        url={
-                          element2.info_page &&
-                          reverse({
-                            pattern: ROUTES.frontend.information_page_detail,
-                            urlParams: { slugField: element2.info_page },
-                          })
-                        }
-                      >
-                        {element2.name_no}
-                      </Link>
-                    ),
+                    // <Link
+                    //   url={
+                    //     element2.info_page &&
+                    //     reverse({
+                    //       pattern: ROUTES.frontend.information_page_detail,
+                    //       urlParams: { slugField: element2.info_page },
+                    //     })
+                    //   }
+                    // >
+                    //   {dbT(element2, 'name', i18n.language) as string}
+                    // </Link>
+                    dbT(element2, 'name', i18n.language) as string,
                   ),
                   new AlphabeticTableCell(element2.abbreviation),
                   new AlphabeticTableCell(element2.webpage),
@@ -91,7 +91,7 @@ export function GangsAdminPage() {
                         Rediger gjeng
                       </Button>
                     ),
-                  } as ITableCell,
+                  },
                 ];
               })}
             />
@@ -101,18 +101,3 @@ export function GangsAdminPage() {
     </Page>
   );
 }
-
-/**                return (
-                  <tr key={key2}>
-                    <td>
-                      <Link>{element2.name_no}</Link>
-                    </td>
-                    <td>{element2.abbreviation}</td>
-                    <td>{element2.webpage}</td>
-                    <td>
-                      <Button theme="blue">Rediger gjeng</Button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </Table> */

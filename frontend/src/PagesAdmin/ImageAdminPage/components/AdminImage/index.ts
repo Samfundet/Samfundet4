@@ -1,0 +1,1 @@
+export { AdminImage } from './AdminImage';
