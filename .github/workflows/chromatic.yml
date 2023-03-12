@@ -1,5 +1,8 @@
 name: 'Chromatic'
 
+env:
+  NODE_OPTIONS: --openssl-legacy-provider
+
 # https://github.com/reviewdog/action-eslint/issues/29#issuecomment-985939887
 on:
   pull_request:

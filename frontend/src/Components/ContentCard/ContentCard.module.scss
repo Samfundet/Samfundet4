@@ -3,6 +3,9 @@
 @import 'src/constants';
 
 $mobile-width: $primary-content-width-mobile;
+$background-light: #b7afaf;
+$background-dark: #2e2b2b;
+
 
 .container {
   display: flex;
@@ -26,7 +29,7 @@ $mobile-width: $primary-content-width-mobile;
 .card {
   display: flex;
   flex-direction: row;
-  background-color: #b7afaf;
+  background-color: $background-light;
   border-radius: 1em;
   overflow: hidden;
   flex-basis: 100%;
@@ -38,7 +41,7 @@ $mobile-width: $primary-content-width-mobile;
   }
 
   @include theme-dark {
-    background-color: #2e2b2b;
+    background-color: $background-dark;
   }
 
 }

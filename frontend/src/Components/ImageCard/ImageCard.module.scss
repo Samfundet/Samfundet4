@@ -3,7 +3,9 @@
 @import 'src/constants';
 
 $mobile-width: $primary-content-width-mobile;
-
+$date-label-color: #888888;
+$card-background: #222222;
+$description-color: #aaaaaa;
 // TODO color variables
 
 .container {
@@ -27,7 +29,7 @@ $mobile-width: $primary-content-width-mobile;
 }
 
 .card {
-  background-color: #222222;
+  background-color: $card-background;
   border-radius: 1em;
   flex-basis: 100%;
   transition: .2s;
@@ -47,7 +49,7 @@ $mobile-width: $primary-content-width-mobile;
 }
 
 .bottom_description {
-  color: #aaaaaa;
+  color: $description-color;
   padding-left: .3em;
   padding-right: .3em;
   opacity: 0;
@@ -62,7 +64,7 @@ $mobile-width: $primary-content-width-mobile;
 
 .date_label {
   font-weight: 400;
-  color: #888888;
+  color: $date-label-color;
 }
 
 .compact {
