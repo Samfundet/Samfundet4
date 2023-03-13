@@ -13,7 +13,7 @@ COPY package.json yarn.lock ./
 # Require up to date package.json and yarn.lock, fail otherwise.
 RUN yarn install --frozen-lockfile
 
-COPY . .
+COPY . /app
 
 EXPOSE 3000
 

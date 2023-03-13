@@ -19,7 +19,6 @@ services:
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
-
   # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
   frontend:
     build: ./frontend
