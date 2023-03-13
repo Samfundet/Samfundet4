@@ -10,6 +10,7 @@ import {Button, InputField, RadioButton, SamfundetLogoSpinner} from '~/Component
 import styles from './EventsPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import {useTranslation} from "react-i18next";
+import {Checkbox} from "~/Components/Checkbox";
 
 
 interface Venue {
@@ -28,17 +29,19 @@ export function EventsPage() {
   const [venues, setVenues] = useState<Venue[]>([]);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [filterToggle, setFilterToggle] = useState(true);
+  const [archived, setArchived] = useState(false);
 
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-  };
 
-  const handleTitle = (event) => {
-    setTitle(event.target.value);
-  };
+  const handleArchived = () => {
+      setArchived(!archived)
+  }
 
   const handleClick = () => {
-    const fields = '?title=' + title + '&search=' + search +'&location='+selectedVenue
+    const fields =
+      '?title=' + title +
+      '&search=' + search +
+      '&location=' + selectedVenue +
+      '&archived=' + archived
 
     getEventsFilter(fields).then((data) => {
       setEvents(data);
@@ -129,6 +132,10 @@ export function EventsPage() {
           </label>
           ))}
           </div>
+          <label className={styles.center}>
+          <Checkbox onClick={handleArchived} />
+            Se arkiverte hendelser
+        </label>
         </div>
 
         <div className={styles.center}>

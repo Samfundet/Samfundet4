@@ -101,13 +101,18 @@ class EventPerDayView(APIView):
 
         return Event.objects.filter(qs)
 
+    def statusGroup(self) -> str:
+        if self.request.GET.get("archived", None) == 'true':
+            return 'active'
+        return 'archived'
+
     def get(self, request: Request) -> Response:
         events: dict = {}
 
         if '?' in self.request.build_absolute_uri():
             events_query = self.general_search(self.url_args('search')).filter(
                 Q(location__contains=self.url_args('location')),
-                # TODO Add Q(status_group='active') when seeder supports
+                Q(status_group=self.statusGroup())
             )
 
         else:
