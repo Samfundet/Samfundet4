@@ -13,6 +13,7 @@ from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from root.custom_classes.permission_classes import ReadOnly
 
 from root.constants import XCSRFTOKEN
 
@@ -78,8 +79,7 @@ class TextItemView(ModelViewSet):
 
 
 class EventView(ModelViewSet):
-    permission_classes = [AllowAny]
-    http_method_names = ['get']
+    permission_classes = [IsAuthenticated | ReadOnly]
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -121,8 +121,7 @@ class EventFormView(APIView):
 
 
 class VenueView(ModelViewSet):
-    permission_classes = [AllowAny]
-    http_method_names = ['get']
+    permission_classes = [IsAuthenticated | ReadOnly]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
 
