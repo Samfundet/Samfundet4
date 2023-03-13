@@ -2,8 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import sys
 
-# pylint: disable=import-outside-toplevel
-
 
 def main() -> None:
     try:

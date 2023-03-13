@@ -66,7 +66,6 @@ class Command(BaseCommand):
     help = 'Seed database for testing and development.'
 
     def add_arguments(self, parser):
-        # pylint: disable=positional-arguments
         parser.add_argument('target', type=str, nargs='?', default=None)
 
     def handle(self, *args, **options):
