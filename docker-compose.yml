@@ -32,6 +32,43 @@ services:
     ports:
       - '3000:3000'
 
+  ### Storybook React ###
+  storybook:
+    build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    image: samfundet-frontend-storybook
+    volumes:
+      - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
+    env_file:
+      - ./frontend/.env.docker # Environment for frontend docker
+    environment:
+      - IS_DOCKER=yes
+      - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
+    ports:
+      - '6006:6006'
+    command: yarn run storybook
+
+  ### Welcome Splash ###
+  welcome:
+    image: alpine:latest # Minimal image (~ 5MB)
+    command: >
+      /bin/ash -c "sleep 5 && printf '
+      \n
+      -------------------------------------------------------------------------------
+      \n\n\e[31m
+      ███████╗ █████╗ ███╗   ███╗███████╗██╗   ██╗███╗   ██╗██████╗ ███████╗████████╗\n\e[31m
+      ██╔════╝██╔══██╗████╗ ████║██╔════╝██║   ██║████╗  ██║██╔══██╗██╔════╝╚══██╔══╝\n\e[31m
+      ███████╗███████║██╔████╔██║█████╗  ██║   ██║██╔██╗ ██║██║  ██║█████╗     ██║   \n\e[31m
+      ╚════██║██╔══██║██║╚██╔╝██║██╔══╝  ██║   ██║██║╚██╗██║██║  ██║██╔══╝     ██║   \n\e[31m
+      ███████║██║  ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║ ╚████║██████╔╝███████╗   ██║   \n\e[31m
+      ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝   ╚═╝   \n
+        
+      \e[34m Backend:    http://localhost:8000\n
+      \e[34mFrontend:   http://localhost:3000\n
+      \e[34mStorybook:  http://localhost:6006\n
+      \n\e[0m
+      -------------------------------------------------------------------------------\n\n
+      '"
+
 ### Ignore volume names ###
 volumes:
   ignore_venv:

@@ -27,11 +27,6 @@ environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
 AUTH_USER_MODEL = 'samfundet.User'
 
-### Print variables ###
-print(f'=== {BASE_DIR=}')  # noqa: T201
-print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
-### End: Print variables ###
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS: list[str] = []
