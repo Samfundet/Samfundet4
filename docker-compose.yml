@@ -1,39 +1,37 @@
 version: '3.9'
 
-### Bases ###
-x-backend-base: &backend-base
-  build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
-  volumes:
-    - ./backend:/app
-    - ignore_venv:/app/.venv
-  env_file:
-    - ./backend/.docker.env
-  environment:
-    - IS_DOCKER=yes
-### End: Bases ###
-
 ### Services ###
 services:
+
+  ### Backend Django ###
   backend:
-    <<: *backend-base
+    build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    volumes:
+      - ./backend:/app # Mount backend folder to docker image
+      - ignore_venv:/app/.venv # Ignore local virtual environment
+    env_file:
+      - ./backend/.docker.env # Environment for backend docker
+    environment:
+      - IS_DOCKER=yes
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
-  # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
+
+  ### Frontend React ###
   frontend:
-    build: ./frontend
+    build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     image: samfundet-frontend
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
     env_file:
-      - ./frontend/.env.docker
+      - ./frontend/.env.docker # Environment for frontend docker
     environment:
       - IS_DOCKER=yes
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
     ports:
       - '3000:3000'
-### End: Services ###
 
+### Ignore volume names ###
 volumes:
   ignore_venv:
   ignore_database:
