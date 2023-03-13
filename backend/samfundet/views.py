@@ -106,7 +106,9 @@ class EventPerDayView(APIView):
 
         if '?' in self.request.build_absolute_uri():
             events_query = self.general_search(self.url_args('search')).filter(
-                Q(location__contains=self.url_args('location')))
+                Q(location__contains=self.url_args('location')),
+                # TODO Add Q(status_group='active') when seeder supports
+            )
 
         else:
             events_query = Event.objects.all()
