@@ -75,4 +75,4 @@ def seed():
     yield 100, f'Created {len(Venue.objects.all())} venues'
 ```
 
-Checkout python generators to see how yield works. In short, the function basically works as a list that is computed in real time, so inside `seed.py` the script "loops through" the seed function and prints progress over time. Good luck!
+Checkout python generators to see how yield works. In short, the function basically works as a list that is computed in real time, so inside `seed.py` the script "loops through" the seed function and prints progress over time. Good luck!!
