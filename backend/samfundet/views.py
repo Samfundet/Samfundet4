@@ -78,6 +78,8 @@ class TextItemView(ModelViewSet):
 
 
 class EventView(ModelViewSet):
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -119,6 +121,8 @@ class EventFormView(APIView):
 
 
 class VenueView(ModelViewSet):
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
 
