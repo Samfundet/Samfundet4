@@ -64,3 +64,10 @@ DATABASES = {
     }
 }
 ### End: Database ###
+
+# Clean console logging in development (pretty stack trace)
+LOGGING['loggers'][''] = {
+    'handlers': ['console'], 
+    'level': 'DEBUG',
+    'propagate': True,
+}

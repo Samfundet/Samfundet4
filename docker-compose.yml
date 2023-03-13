@@ -6,6 +6,7 @@ services:
   ### Backend Django ###
   backend:
     build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    image: samfundet-backend
     volumes:
       - ./backend:/app # Mount backend folder to docker image
       - ignore_venv:/app/.venv # Ignore local virtual environment
