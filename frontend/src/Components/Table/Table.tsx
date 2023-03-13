@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { Children } from 'types';
+import { Children } from '~/types';
 import styles from './Table.module.scss';
 
 type TableProps = {

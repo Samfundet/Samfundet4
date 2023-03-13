@@ -31,7 +31,7 @@ export function AdminPage() {
       </div>
       <div className={styles.applets}>
         {applets.map(function (element, key) {
-          if (element.perm == null || hasPerm({ user: user, permission: element.perm })) {
+          if (!element.perm || hasPerm({ user: user, permission: element.perm })) {
             return <AdminBox key={key} title={element.title} icon={element.icon} options={element.options} />;
           }
         })}

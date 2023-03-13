@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Dropdown } from '../Dropdown';
-import { InputField } from '../InputField';
-import { KEY } from '~/i18n/constants';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './EventQuery.module.scss';
 import { getEventGroups, getVenues } from '~/api';
 import { EventDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { SetState } from '~/types';
+import { Dropdown } from '../Dropdown';
+import { InputField } from '../InputField';
+import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';
 
 type EventQueryProps = {
   allEvents: EventDto[];
-  setEvents: void;
+  setEvents: SetState<EventDto[]>;
 };
 
 export function EventQuery({ allEvents, setEvents }: EventQueryProps) {

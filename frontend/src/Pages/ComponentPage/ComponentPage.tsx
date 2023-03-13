@@ -44,7 +44,7 @@ export function ComponentPage() {
       </div>
       <div>
         <h2>Links:</h2>
-        <Link>Link</Link>
+        <Link url="">Link</Link>
       </div>
       <div>
         <h2>List:</h2>

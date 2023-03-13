@@ -7,7 +7,7 @@ type TextAreaFieldProps = {
   className?: string;
   inputClassName?: string;
   labelClassName?: string;
-  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e?: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string | null;
   rows?: number;
   cols?: number;
@@ -27,20 +27,22 @@ export function TextAreaField({
   cols,
   rows = 10,
 }: TextAreaFieldProps) {
+  const isError = error && error.length > 0;
+
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <textarea
           onChange={onChange}
-          className={classNames(styles.input_field, inputClassName, error && error.length > 0 && styles.error)}
+          className={classNames(styles.input_field, inputClassName, isError && styles.error)}
           placeholder={placeholder || ''}
           rows={rows}
           cols={cols}
           value={value}
         />
       </label>
-      {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
+      {isError && <div className={styles.error_text}>{error}</div>}
     </div>
   );
 }

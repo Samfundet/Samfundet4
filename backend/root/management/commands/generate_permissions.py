@@ -59,7 +59,7 @@ NEWLINE = '\n'
 SEPARATOR = '#' * 60 + NEWLINE
 
 ### frontend ###
-OUTPUT_FRONTEND_FILE = '../frontend/src/permissions.ts'
+OUTPUT_FRONTEND_FILE = '../frontend/src/permissions/permissions.ts'
 
 ### backend ###
 DOCSTRING = '"""'
