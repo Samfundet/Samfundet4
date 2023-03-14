@@ -154,7 +154,7 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
-  id: number;
+  id?: number;
   title_nb?: string;
   title_en?: string;
   category?: string;

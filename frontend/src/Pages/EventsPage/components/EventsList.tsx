@@ -11,7 +11,7 @@ import { ROUTES } from '~/routes';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
-  events: unknown;
+  events: Record<string, EventDto[]>;
 };
 
 export function EventsList({ events }: EventsListProps) {
@@ -23,7 +23,7 @@ export function EventsList({ events }: EventsListProps) {
   const eventColumns = ['Dato', 'Fra', 'Til', 'Arrangement', 'Lokale', 'Type', 'Kjøp'];
 
   // TODO improve table view for events
-  function getEventRows(events: unknown[]): ITableCell[][] {
+  function getEventRows(events: Record<string, EventDto[]>): ITableCell[][] {
     const rows: ITableCell[][] = [];
 
     Object.keys(events).forEach((date: string) => {
@@ -31,14 +31,15 @@ export function EventsList({ events }: EventsListProps) {
         rows.push([
           { children: <TimeDisplay timestamp={date} displayType="event" /> } as ITableCell,
           { children: <TimeDisplay timestamp={date} displayType="time" /> } as ITableCell,
-          { children: <TimeDisplay timestamp={event.end_dt} displayType="time" /> } as ITableCell,
+          { children: event.end_dt },
+          // { children: <TimeDisplay timestamp={event.end_dt} displayType="time" /> } as ITableCell,
           {
             children: (
               <Link
                 url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
                 className={styles.link}
               >
-                {dbT(event, 'title', i18n.language)}
+                {dbT(event, 'title', i18n.language) as string}
               </Link>
             ),
           } as ITableCell,
@@ -60,7 +61,7 @@ export function EventsList({ events }: EventsListProps) {
             key={key}
             compact={true}
             date={event.start_dt.toString()}
-            title={dbT(event, 'title', i18n.language)}
+            title={dbT(event, 'title', i18n.language) as string}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
           />
         </div>

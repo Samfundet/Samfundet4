@@ -4,9 +4,8 @@ import { Button, FormInputField, FormSelect, FormTextAreaField, SamfundetLogoSpi
 
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
+import { getEvent, getEventForm } from '~/api';
 import { Page } from '~/Components/Page';
-import { EventDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -19,8 +18,8 @@ export function EventFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
     formState: { errors },
   } = useForm();
@@ -29,7 +28,7 @@ export function EventFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
+  // const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
 
   //TODO add permissions on render
 
@@ -37,7 +36,7 @@ export function EventFormAdminPage() {
   useEffect(() => {
     getEventForm()
       .then((data) => {
-        setFormChoices(data);
+        data; // setFormChoices(data);
         setShowSpinner(false);
       })
       .catch(console.error);
@@ -56,18 +55,18 @@ export function EventFormAdminPage() {
     }
   }, [id]);
 
-  function onSubmit(data: EventDto) {
-    (id ? putEvent(id, data) : postEvent(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin_events_upcomming);
-      })
-      .catch((e) => {
-        console.error(e.response.data);
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  }
+  // function onSubmit(data: EventDto) {
+  //   (id ? putEvent(id, data) : postEvent(data))
+  //     .then(() => {
+  //       navigate(ROUTES.frontend.admin_events_upcomming);
+  //     })
+  //     .catch((e) => {
+  //       console.error(e.response.data);
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   if (showSpinner) {
     return (
@@ -88,7 +87,9 @@ export function EventFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.common_event)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         <div className={styles.seperator}>Info</div>
         <div className={styles.row}>
           <div className={styles.col}>
@@ -158,22 +159,22 @@ export function EventFormAdminPage() {
         <div className={styles.row}>
           <FormSelect
             register={register}
-            options={formChoices?.event_groups}
+            // options={formChoices?.event_groups}
             selectClassName={styles.select}
             className={styles.col}
             required={t(KEY.form_must_choose)}
-            errors={errors}
+            // errors={errors}
             name="event_group"
           >
             <p className={styles.labelText}>{t(KEY.event_type)}</p>
           </FormSelect>
           <FormSelect
             register={register}
-            options={formChoices?.age_groups}
+            // options={formChoices?.age_groups}
             selectClassName={styles.select}
             className={styles.col}
             required={t(KEY.form_must_choose)}
-            errors={errors}
+            // errors={errors}
             name="age_group"
           >
             <p className={styles.labelText}>{t(KEY.common_age_res)}</p>
@@ -181,10 +182,10 @@ export function EventFormAdminPage() {
 
           <FormSelect
             register={register}
-            options={formChoices?.venues}
+            // options={formChoices?.venues}
             selectClassName={styles.select}
             className={styles.col}
-            errors={errors}
+            // errors={errors}
             required={t(KEY.form_must_choose)}
             name="location"
           >
@@ -192,10 +193,10 @@ export function EventFormAdminPage() {
           </FormSelect>
           <FormSelect
             register={register}
-            options={formChoices?.status_groups}
+            // options={formChoices?.status_groups}
             selectClassName={styles.select}
             className={styles.col}
-            errors={errors}
+            // errors={errors}
             required={t(KEY.form_must_choose)}
             name="status_group"
           >

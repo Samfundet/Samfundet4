@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
-import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { deleteClosedPeriod, getClosedPeriods } from '~/api';
+import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './ClosedPeriodAdminPage.module.scss';
-import { ClosedPeriodDto } from '~/dto';
-import { deleteClosedPeriod, getClosedPeriods } from '~/api';
-import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
-import { reverse } from '~/named-urls';
 
 export function ClosedPeriodAdminPage() {
   const navigate = useNavigate();
@@ -69,8 +69,10 @@ export function ClosedPeriodAdminPage() {
             return [
               new AlphabeticTableCell(element.message_no),
               new AlphabeticTableCell(element.description_no),
-              new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.start_dt} />),
-              new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.end_dt} />),
+              // new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.start_dt} />),
+              new AlphabeticTableCell(element.start_dt.toLocaleString()),
+              // new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.end_dt} />),
+              new AlphabeticTableCell(element.end_dt.toLocaleString()),
               {
                 children: (
                   <div>

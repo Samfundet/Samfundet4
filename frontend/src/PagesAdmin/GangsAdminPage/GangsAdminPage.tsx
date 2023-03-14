@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getGangList } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { AlphabeticTableCell, Table } from '~/Components/Table';
 import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
@@ -60,19 +60,18 @@ export function GangsAdminPage() {
               data={element.gangs.map(function (element2) {
                 return [
                   new AlphabeticTableCell(
-                    (
-                      <Link
-                        url={
-                          element2.info_page &&
-                          reverse({
-                            pattern: ROUTES.frontend.information_page_detail,
-                            urlParams: { slugField: element2.info_page },
-                          })
-                        }
-                      >
-                        {dbT(element2, 'name', i18n.language) as string}
-                      </Link>
-                    ),
+                    // <Link
+                    //   url={
+                    //     element2.info_page &&
+                    //     reverse({
+                    //       pattern: ROUTES.frontend.information_page_detail,
+                    //       urlParams: { slugField: element2.info_page },
+                    //     })
+                    //   }
+                    // >
+                    //   {dbT(element2, 'name', i18n.language) as string}
+                    // </Link>
+                    dbT(element2, 'name', i18n.language) as string,
                   ),
                   new AlphabeticTableCell(element2.abbreviation),
                   new AlphabeticTableCell(element2.webpage),
@@ -92,7 +91,7 @@ export function GangsAdminPage() {
                         Rediger gjeng
                       </Button>
                     ),
-                  } as ITableCell,
+                  },
                 ];
               })}
             />
