@@ -12,5 +12,5 @@ RUN yarn install --frozen-lockfile
 # Copy remaining files
 COPY . /app
 
-# Start dev server
-CMD ["yarn", "start:docker", "--host", "0.0.0.0", "--port", "3000"]
+# Commands are run from docker-compose
+# to use same image for storybook and vite

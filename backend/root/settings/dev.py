@@ -2,7 +2,6 @@
 import os
 
 from root.constants import Environment
-
 from .base import *  # noqa: F403
 # End: imports -----------------------------------------------------
 
@@ -19,6 +18,7 @@ ENV = Environment.DEV
 ### CORS ###
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://localhost:6006',
 ]
 # https://testdriven.io/blog/django-spa-auth/#frontend-served-separately-cross-domain
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']

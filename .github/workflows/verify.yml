@@ -103,6 +103,7 @@ jobs:
         run: |
           docker compose exec backend echo 
           docker compose exec frontend echo
+          docker compose exec storybook echo
 
       - name: Seed backend for Cypress tests
         run: docker compose exec backend pipenv run python manage.py seed_cypress

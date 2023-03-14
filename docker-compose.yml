@@ -32,11 +32,11 @@ services:
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
     ports:
       - '3000:3000'
+    command: yarn start:docker --host 0.0.0.0 --port 3000
 
   ## Storybook React ###
   storybook:
-    build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
-    image: samfundet-frontend-storybook
+    image: samfundet-frontend
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
     env_file:
@@ -46,6 +46,8 @@ services:
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
     ports:
       - '6006:6006'
+    depends_on:
+      - frontend
     command: yarn run storybook
 
   ### Welcome Splash ###
