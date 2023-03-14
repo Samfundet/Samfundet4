@@ -12,5 +12,6 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
 
 
 class ReadOnly(BasePermission):
+
     def has_permission(self, request: Request, view: View) -> bool:
         return request.method in SAFE_METHODS
