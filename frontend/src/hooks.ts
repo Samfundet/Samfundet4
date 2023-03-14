@@ -20,9 +20,7 @@ export function useGoatCounter(): void {
   useEffect(() => {
     if (window.goatcounter === undefined) return;
     const path = location.pathname + location.search + location.hash;
-    window.goatcounter.count({
-      path: path,
-    });
+    window.goatcounter.count({ path: path });
     console.log(`GoatCounter tracked path: ${path}`);
   }, [location]);
 }
@@ -63,8 +61,8 @@ export function useScrollY(): number {
   const [scrollY, setScrollY] = useState(window.scrollY);
   useEffect(() => {
     function handleNavigation(e: Event) {
-      const window = e.currentTarget;
-      if (window != null) {
+      const target = e.currentTarget;
+      if (target != null) {
         setScrollY(window.scrollY);
       }
     }
@@ -84,8 +82,8 @@ export function useScreenCenterOffset(id: string): number {
 
   useEffect(() => {
     function handleNavigation(e: Event) {
-      const window = e.currentTarget;
-      if (window != null) {
+      const target = e.currentTarget;
+      if (target != null) {
         const element = document.getElementById(id);
         const rect = element?.getBoundingClientRect();
         if (rect != null) {

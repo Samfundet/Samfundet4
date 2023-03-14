@@ -36,8 +36,8 @@ export function LychePage() {
         {lycheMenu?.menu_items?.map((item, i) => {
           return (
             <div key={i}>
-              <div>{dbT(item, 'name', i18n.language)}</div>
-              <div>{dbT(item, 'description', i18n.language)}</div>
+              <div>{dbT(item, 'name', i18n.language) as string}</div>
+              <div>{dbT(item, 'description', i18n.language) as string}</div>
               <div>{item.order}</div>
               <div>
                 {item.price}/{item.price_member}
