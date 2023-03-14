@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Sequence, Type
 from django.http import QueryDict
-from django.db.models import Q
+from django.db.models import Q, CharField, TextField
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import Group
 
@@ -32,6 +32,7 @@ from .dto import (
     UserPreferenceDto,
     ObjectPermissionDto,
 )
+
 
 ###
 
@@ -102,14 +103,16 @@ def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
 
 ###
 
-def general_search(events_query: Type[Event], search_term: str, types: list) -> QuerySet:
-    fields = [f for f in events_query._meta.fields if True in [(isinstance(f, typ)) for typ in types]]
-    queries = [Q(**{f.name + '__contains': search_term}) for f in fields]
-    qs = Q()
-    for query in queries:
-        qs = qs | query
 
-    return events_query.objects.all().filter(qs)
+def general_search(events_query: QuerySet, search_term: str, types: tuple = (CharField, TextField)) -> QuerySet:
+    qs = Q()
+    for field in events_query.model._meta.fields:
+        for typ in types:
+            if isinstance(field, typ):
+                qs = qs | Q(**{field.name + '__icontains': search_term})
+
+    return events_query.filter(qs)
+
 
 ###
 
@@ -146,14 +149,16 @@ def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
     return [event_to_dataclass(event=event) for event in events]
 
 
-def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:  # pylint: disable=positional-arguments
+def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[
+    Event]:  # pylint: disable=positional-arguments
     if not events:
         events = Event.objects.all()
     search = query.get('search', None)
     if search:
         events = events.filter(
             Q(title_nb__icontains=search) | Q(title_en__icontains=search) | Q(description_long_nb__icontains=search) |
-            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(description_short_nb=search) | Q(location__icontains=search) |
+            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(
+                description_short_nb=search) | Q(location__icontains=search) |
             Q(event_group__name=search)
         )
     event_group = query.get('event_group', None)

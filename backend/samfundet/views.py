@@ -13,7 +13,7 @@ from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
-from django.db.models import Q, CharField, TextField
+from django.db.models import Q
 
 from root.constants import XCSRFTOKEN
 
@@ -23,7 +23,8 @@ from .utils import (
     users_to_dataclass,
     groups_to_dataclass,
     events_to_dataclass,
-    closedperiod_to_dataclass, general_search,
+    closedperiod_to_dataclass,
+    general_search,
 )
 
 from .models import (
@@ -93,22 +94,20 @@ class EventPerDayView(APIView):
         return query.split(',')[0]
 
     def statusGroup(self) -> str:
-        if self.request.GET.get('archived', None) == 'true':
-            return 'active'
-        return 'archived'
+        if self.request.GET.get('archived', None) != 'true':
+            return 'archived'
+        return 'active'
 
     def get(self, request: Request) -> Response:
         events: dict = {}
-        events_query = Event
+        events_query = Event.objects.all()
 
         if '?' in self.request.build_absolute_uri():
-            events_query = general_search(events_query, self.url_args('search'), [CharField, TextField]).filter(
-                Q(location__contains=self.url_args('location')), Q(status_group=self.statusGroup())
+            events_query = general_search(events_query, self.url_args('search')).filter(
+                Q(location__contains=self.url_args('location'))
             )
-        else:
-            events_query = events_query.objects.all()
 
-        for event in events_query.order_by('start_dt').values():
+        for event in events_query.order_by('start_dt').filter(status_group=self.statusGroup()).values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)
