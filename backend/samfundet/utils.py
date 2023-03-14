@@ -104,6 +104,17 @@ def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
 
 
 def general_search(events_query: QuerySet, search_term: str, types: tuple = (CharField, TextField)) -> QuerySet:
+    """
+
+    Args:
+        events_query: Event object
+        search_term: What to search for
+        types: What fields to search in
+
+    Returns:
+        Filtered QuerySet
+
+    """
     qs = Q()
     for field in events_query.model._meta.fields:
         for typ in types:

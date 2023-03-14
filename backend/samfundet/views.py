@@ -88,12 +88,26 @@ class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
     def url_args(self, query_word: str) -> str:
+        """
+
+        Args:
+            query_word: url query param key
+
+        Returns:
+            url value for param key
+
+        """
         query = self.request.GET.get(query_word, None)
         if query is None:
             return ''
         return query.split(',')[0]
 
     def status_group(self) -> str:
+        """
+
+        Returns: Archived or active events, true/false in url query
+
+        """
         if self.request.GET.get('archived', None) != 'true':
             return 'archived'
         return 'active'
@@ -105,7 +119,7 @@ class EventPerDayView(APIView):
         if '?' in self.request.build_absolute_uri():
             events_query = general_search(events_query, self.url_args('search')).filter(Q(location__contains=self.url_args('location')))
 
-        for event in events_query.order_by('start_dt').filter(status_group=self.statusGroup()).values():
+        for event in events_query.order_by('start_dt').filter(status_group=self.status_group()).values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)
