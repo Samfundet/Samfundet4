@@ -1,0 +1,125 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+$mobile-width: $primary-content-width-mobile;
+$background-light: #b7afaf;
+$background-dark: #2e2b2b;
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: .25em;
+  height: 24em;
+  width: $primary-content-width-wide;
+  overflow: visible;
+  padding-top: 1em;
+  padding-bottom: 1em;
+
+  @include for-mobile-only {
+    width: $mobile-width;
+    height: auto;
+  }
+
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  background-color: $background-light;
+  border-radius: 1em;
+  overflow: hidden;
+  flex-basis: 100%;
+  transition: .2s;
+  box-shadow: 0 0 15px 3px $black-t10;
+
+  @include for-mobile-only {
+    flex-direction: column;
+  }
+
+  @include theme-dark {
+    background-color: $background-dark;
+  }
+
+}
+
+.card_image {
+  background-image: url('~/assets/banner-sample-2.jpeg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 1em 0 0 1em;
+  transition: .5s;
+  flex-basis: 50%;
+  height: 100%;
+
+  &:hover {
+    filter: brightness(115%) contrast(110%);
+    cursor: pointer;
+  }
+
+  @include for-mobile-only {
+    min-height: 12em;
+    max-height: 12em;
+    border-radius: 1em 1em 0 0;
+  }
+
+}
+
+.card_info {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 2.5em;
+  padding-right: 2.5em;
+  padding-top: 4em;
+  padding-bottom: 4em;
+
+  @include for-mobile-only {
+    padding-top: 1em;
+    padding-bottom: 1.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+  }
+
+}
+
+.info_header {
+  color: white;
+  font-size: 2em;
+  font-weight: 700;
+  padding-bottom: .5em;
+
+  @include for-mobile-only {
+    font-size: 1.5em;
+  }
+  
+}
+
+.info_description {
+  color: $grey-1;
+  @include theme-dark {
+    color: $grey-3;
+  }
+}
+
+.info_bottom_row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-top: 3em;
+
+  @include for-mobile-only {
+    margin-top: 1em;
+  }
+
+}
+
+.button_content {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}

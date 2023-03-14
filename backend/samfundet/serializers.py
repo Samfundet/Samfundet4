@@ -73,7 +73,6 @@ class ClosedPeriodSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    # pylint: disable=abstract-method
     """
     This serializer defines two fields for authentication:
       * username
@@ -91,7 +90,7 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs: dict) -> dict:
-        # pylint: disable=positional-arguments # Inherited function.
+        # Inherited function.
         # Take username and password from request
         username = attrs.get('username')
         password = attrs.get('password')

@@ -13,20 +13,28 @@
 }
 
 .header {
-  text-align: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
   text-transform: uppercase;
+  margin: 1em;
   .headerText {
-    margin-bottom: 0.2em;
     font-size: 2em;
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+    color: $red-samf;
   }
 }
 
 .wisewords {
-  color: $grey-1;
+  color: inherit;
   font-weight: 600;
   font-size: medium;
+  opacity: 0.5;
 }
 
 .faq_button {
@@ -37,8 +45,7 @@
   .faq_text {
     margin: 0;
     font-size: .9em;
-    color: $black;
-
+    color: inherit;
   }
 }
 
@@ -46,6 +53,6 @@
   margin-top: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
 }

@@ -99,7 +99,7 @@ export type UserPreferenceDto = {
 };
 
 export type InformationPageDto = {
-  slug_field?: string;
+  slug_field: string;
 
   title_nb?: string;
   text_nb?: string;
@@ -154,10 +154,11 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
+  id: number;
   title_nb?: string;
   title_en?: string;
   category?: string;
-  publication_date?: Date;
+  publication_date?: string;
   file?: string;
 };
 

@@ -15,7 +15,7 @@ type FormInputFieldProps = {
   register: UseFormRegister<FieldValues>;
   required?: boolean;
   helpText?: string;
-  errors?: Record<string, unknown>;
+  errors?: Record<string, { message: string }>;
 };
 
 export function FormInputField({
@@ -30,16 +30,15 @@ export function FormInputField({
   helpText,
   type = 'text',
 }: FormInputFieldProps) {
+  const isError = errors && name in errors;
+  const classnames = classNames(styles.input_field, inputClassName, { [styles.errors]: isError });
+
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
-        <input
-          className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
-          type={type}
-          {...register(name, { required })}
-        />
-        {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
+        <input className={classnames} type={type} {...register(name, { required })} />
+        {isError && <div className={styles.errors_text}>{errors[name]?.message}</div>}
       </label>
       {helpText && <p className={styles.helpText}>{helpText}</p>}
     </div>

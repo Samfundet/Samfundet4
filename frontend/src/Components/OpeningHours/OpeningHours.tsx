@@ -1,8 +1,8 @@
+import { useTranslation } from 'react-i18next';
+import { VenueDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { TimeDuration } from '../TimeDuration';
 import styles from './OpeningHours.module.scss';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { VenueDto } from '~/dto';
 
 type OpeningHoursProps = {
   venues: VenueDto[];
