@@ -2,7 +2,7 @@
 import os
 
 from root.constants import Environment
-from .base import *  # pylint: disable=wildcard-import, unused-wildcard-import # noqa: F403,F401
+from .base import *  # noqa: F403,F401
 # End: imports -----------------------------------------------------
 
 ALLOWED_HOSTS = [os.environ['DOMAIN']]

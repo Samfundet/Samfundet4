@@ -1,5 +1,0 @@
-#! /bin/bash
-PROJECT_DIR=$(pwd)
-PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
-echo "PYTHONPATH=$PYTHONPATH"
-PYTHONPATH=$PYTHONPATH pylint --rcfile .pylintrc ../"$PROJECT_DIR"

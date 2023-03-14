@@ -9,16 +9,6 @@ LOG = logging.getLogger(__name__)
 # This token can be imported anywhere to retrieve the values.
 request_contextvar: ContextVar[HttpRequest] = ContextVar('request_contextvar', default=None)
 
-# def remote_address_middleware(get_response):
-#     # pylint: disable=positional-arguments
-
-#     def remote_address_middleware_impl(request):
-#         if 'HTTP_X_REAL_IP' in request.META:
-#             request.META['REMOTE_ADDR'] = request.META['HTTP_X_REAL_IP']
-#         return get_response(request)
-
-#     return remote_address_middleware_impl
-
 
 class RequestLogMiddleware:
     """Request Logging Middleware."""

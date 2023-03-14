@@ -5,8 +5,6 @@ from django.db.models.signals import post_save
 
 from .models import UserPreference, Profile, User
 
-# pylint: disable=unused-argument, positional-arguments
-
 
 @receiver(post_save, sender=User)
 def create_user_preference(sender: User, instance: User, created: bool, **kwargs: Any) -> None:

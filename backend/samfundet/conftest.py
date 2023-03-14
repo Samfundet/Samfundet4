@@ -6,8 +6,6 @@ from rest_framework.test import APIClient
 from django.test import Client
 
 from samfundet.models import User
-
-# pylint: disable=pointless-string-statement
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.
@@ -16,9 +14,6 @@ It's recommended to yield objects, and tear them down afterwards.
 
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
-
-# pylint: disable=unused-argument # These are fixtures.
-# pylint: disable=redefined-outer-name # Fixtures are meant to be used this way.
 
 
 @pytest.fixture
@@ -38,7 +33,7 @@ def fixture_superuser_pw() -> Iterator[str]:
 
 @pytest.fixture
 def fixture_superuser(db, fixture_superuser_pw: str) -> Iterator[User]:  # type: ignore[no-untyped-def]
-    superuser = User.objects.create_superuser(  # nosec hardcoded_password_funcarg
+    superuser = User.objects.create_superuser(
         username='superuser',
         email='superuser@test.com',
         password=fixture_superuser_pw,
@@ -54,7 +49,7 @@ def fixture_staff_pw() -> Iterator[str]:
 
 @pytest.fixture
 def fixture_staff(db, fixture_staff_pw) -> Iterator[User]:  # type: ignore[no-untyped-def]
-    staff = User.objects.create_user(  # nosec hardcoded_password_funcarg
+    staff = User.objects.create_user(
         username='staff',
         email='staff@test.com',
         password=fixture_staff_pw,
@@ -71,7 +66,7 @@ def fixture_user_pw() -> Iterator[str]:
 
 @pytest.fixture
 def fixture_user(db, fixture_user_pw) -> Iterator[User]:  # type: ignore[no-untyped-def]
-    user = User.objects.create_user(  # nosec hardcoded_password_funcarg
+    user = User.objects.create_user(
         username='user',
         email='user@test.com',
         password=fixture_user_pw,
