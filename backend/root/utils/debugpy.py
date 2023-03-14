@@ -16,10 +16,8 @@ def initialize_debugpy() -> None:
     This may be called in wsgi.py if hosting with gunicorn or in manage.py::__main__.
     """
     if os.environ.get('ENABLE_DEBUGPY') == 'yes':
-        # pylint: disable=import-outside-toplevel
         import debugpy
         # This is okay as long as ENABLE_DEBUGPY only is enabled during development and NOT in production.
-        # pylint: disable=invalid-name
-        HOST = '0.0.0.0'  # nosec: hardcoded_bind_all_interfaces
-        host_port = debugpy.listen((HOST, 5678))  # nosec: hardcoded_bind_all_interfaces
+        HOST = '0.0.0.0'
+        host_port = debugpy.listen((HOST, 5678))
         logger.info(f'Attached debugpy on {host_port}')
