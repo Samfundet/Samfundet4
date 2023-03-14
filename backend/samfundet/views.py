@@ -93,7 +93,7 @@ class EventPerDayView(APIView):
             return ''
         return query.split(',')[0]
 
-    def statusGroup(self) -> str:
+    def status_group(self) -> str:
         if self.request.GET.get('archived', None) != 'true':
             return 'archived'
         return 'active'
