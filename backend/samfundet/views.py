@@ -103,9 +103,7 @@ class EventPerDayView(APIView):
         events_query = Event.objects.all()
 
         if '?' in self.request.build_absolute_uri():
-            events_query = general_search(events_query, self.url_args('search')).filter(
-                Q(location__contains=self.url_args('location'))
-            )
+            events_query = general_search(events_query, self.url_args('search')).filter(Q(location__contains=self.url_args('location')))
 
         for event in events_query.order_by('start_dt').filter(status_group=self.statusGroup()).values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')

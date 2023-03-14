@@ -35,10 +35,7 @@ export function EventsPage() {
     } else {
       venue_value = selectedVenue;
     }
-
-    const fields = '?search=' + search + '&location=' + venue_value + '&archived=' + archived;
-
-    getEventsFilter(fields).then((data) => {
+    getEventsFilter({ search: search, location: venue_value, archived: String(archived) }).then((data) => {
       setEvents(data);
     });
   };
