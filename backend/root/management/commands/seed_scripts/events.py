@@ -26,6 +26,7 @@ def seed():
     yield 0, 'Deleted old events'
 
     venues = Venue.objects.all()
+    seed_events = []
 
     n_recurring = 0
     for i in range(COUNT):
@@ -57,24 +58,28 @@ def seed():
                 tag = ''
 
             recurring_offset = timezone.timedelta(days=j * 7)
-            Event.objects.create(
-                title_nb=title_nb + tag,
-                title_en=title_en + tag,
-                start_dt=event_time + recurring_offset,
-                duration=event_duration,
-                description_long_nb=words(10),
-                description_long_en=words(10),
-                description_short_nb=words(10),
-                description_short_en=words(10),
-                publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
-                host=words(1),
-                location=event_venue.name,
-                event_group=group,
-                capacity=capacity,
-                codeword=words(1),
+            seed_events.append(
+                Event(
+                    title_nb=title_nb + tag,
+                    title_en=title_en + tag,
+                    start_dt=event_time + recurring_offset,
+                    duration=event_duration,
+                    description_long_nb=words(10),
+                    description_long_en=words(10),
+                    description_short_nb=words(10),
+                    description_short_en=words(10),
+                    publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
+                    host=words(1),
+                    location=event_venue.name,
+                    event_group=group,
+                    capacity=capacity,
+                    codeword=words(1),
+                )
             )
 
         yield int(i / COUNT * 100), f"Created event '{title_nb}'"
+
+    Event.objects.bulk_create(seed_events)
 
     # Done!
     yield 100, f'Created {Event.objects.all().count()} events ({n_recurring} recurring)'

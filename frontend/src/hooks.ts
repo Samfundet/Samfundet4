@@ -61,7 +61,7 @@ export function useScrollY(): number {
   const [scrollY, setScrollY] = useState(window.scrollY);
   useEffect(() => {
     function handleNavigation(e: Event) {
-      const target = e.currentTarget;
+      const target = e.currentTarget as Window;
       if (target != null) {
         setScrollY(window.scrollY);
       }
