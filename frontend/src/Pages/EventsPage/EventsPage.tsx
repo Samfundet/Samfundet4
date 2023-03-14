@@ -139,7 +139,7 @@ export function EventsPage() {
           </div>
           <label className={styles.center}>
           <Checkbox onClick={handleArchived} />
-            Se arkiverte hendelser
+            {t(KEY.archived_events)}
         </label>
         </div>
 

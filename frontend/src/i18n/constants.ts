@@ -120,7 +120,8 @@ export const KEY = {
   saksdokument: 'saksdokument',
   select_event: 'select_event',
   all_venues: 'all_venues',
-  search_all: 'search_all'
+  search_all: 'search_all',
+  archived_events: 'archived_events',
 } as const;
 
 /**
