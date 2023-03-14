@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormInputField, FormTextAreaField } from '~/Components';
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
+import { Button, FormInputField, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './ClosedPeriodFormAdminPage.module.scss';
-import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
+import styles from './ClosedPeriodFormAdminPage.module.scss';
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export function ClosedPeriodFormAdminPage() {
     setShowSpinner(false);
   }, [id]);
 
-  const onSubmit = (data) => {
+  function onSubmit(data) {
     (id ? putClosedPeriod(id, data) : postClosedPeriod(data))
       .then(() => {
         navigate(ROUTES.frontend.admin_closed);
@@ -57,7 +57,7 @@ export function ClosedPeriodFormAdminPage() {
           setError(err, { type: 'custom', message: e.response.data[err][0] });
         }
       });
-  };
+  }
 
   if (showSpinner) {
     return (

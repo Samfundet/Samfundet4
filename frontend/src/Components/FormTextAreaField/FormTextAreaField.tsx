@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { Children } from '~/types';
 import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
+import { Children } from '~/types';
 import styles from './FormTextAreaField.module.scss';
 
 type FormTextAreaFieldProps = {
@@ -13,7 +13,7 @@ type FormTextAreaFieldProps = {
   name: string;
   register: UseFormRegister<FieldValues>;
   required?: boolean;
-  errors?: Record<string, unknown>;
+  errors?: Record<string, { message: string }>;
 };
 
 export function FormTextAreaField({
@@ -28,18 +28,19 @@ export function FormTextAreaField({
   register,
   rows = 10,
 }: FormTextAreaFieldProps) {
+  const isError = errors && name in errors;
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <textarea
-          className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
+          className={classNames(styles.input_field, inputClassName, { [styles.errors]: isError })}
           {...register(name, { required })}
           rows={rows}
           cols={cols}
         />
       </label>
-      {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
+      {isError && <div className={styles.errors_text}>{errors[name].message}</div>}
     </div>
   );
 }

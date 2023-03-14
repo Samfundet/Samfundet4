@@ -196,13 +196,10 @@ INSTALLED_APPS += [
 
 ################## LOGGING ##################
 
-# pylint: disable=wrong-import-position,wrong-import-order
 import logging.config  # noqa: E402
 
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
 from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
-
-# pylint: enable=wrong-import-position,wrong-import-order
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'

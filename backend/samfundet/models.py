@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import re
 import random
-from typing import Any
+from typing import TYPE_CHECKING
 from datetime import time, timedelta
 
 from guardian.shortcuts import assign_perm
@@ -12,6 +14,10 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
+
+if TYPE_CHECKING:
+    from typing import Any, Optional
+    from django.db.models import Model
 
 
 class Tag(models.Model):
@@ -51,6 +57,18 @@ class Image(models.Model):
 
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
+        """
+        Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
+        are completely separate, calling `has_perm()` with an `obj` will return `False`
+        even though the user has global perms.
+            We have decided that global permissions implies that any obj perm check
+        should return `True`. This function is extended to check both.
+        """
+        has_global_perm = super().has_perm(perm=perm)
+        has_object_perm = super().has_perm(perm=perm, obj=obj)
+        return has_global_perm or has_object_perm
 
 
 class EventGroup(models.Model):

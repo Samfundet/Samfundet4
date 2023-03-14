@@ -10,7 +10,8 @@ export const resources = {
   [LANGUAGES.EN]: { [defaultNS]: en },
 };
 
-export function dbT(model: Record<string, string>, field: string, language: string): string {
+export function dbT(model: Record<string, unknown> | undefined, field: string, language: string): unknown {
+  if (model === undefined) return undefined;
   return model[field + '_' + language];
 }
 
