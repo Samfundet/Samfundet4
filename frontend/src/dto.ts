@@ -99,7 +99,7 @@ export type UserPreferenceDto = {
 };
 
 export type InformationPageDto = {
-  slug_field?: string;
+  slug_field: string;
 
   title_nb?: string;
   text_nb?: string;
