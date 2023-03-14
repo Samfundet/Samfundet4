@@ -17,7 +17,7 @@ import {
   UserPreferenceDto,
   VenueDto,
 } from '~/dto';
-import {Params, reverse} from '~/named-urls';
+import { Params, reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
 
