@@ -30,17 +30,18 @@
 
 /* Pseudoklasse. Det settes et hvit ASCII check-symbol etter .checkbox__box elementet. */
 .checkbox__box::after {
-  content: '\2714'; /* ASCII "check"-symbol. */
   color: $white; /* Fargen til symbolet. */
 }
 
 /* Her velges (og styles) det elementet med klassen .checkbox__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked". */
 .checkbox__input:checked + .checkbox__box {
   background-color: $red-samf;
+  content: '\2714'; /* ASCII "check"-symbol. */
   border-color: $red-samf;
 }
 
 /* Her velges (og styles) det elementet med psudoklassen .checkbox__box::after, som ligger rett etter elementet med klassen .checkbox__input:checked, når det sistnevte elementet er "checked". */
 .checkbox__input:checked + .checkbox__box::after {
+  content: '\2714'; /* ASCII "check"-symbol. */
   transform: scale(1);
 }

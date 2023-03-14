@@ -132,8 +132,6 @@ class Venue(models.Model):
     last_renovated = models.DateTimeField(blank=True, null=True)
     handicapped_approved = models.BooleanField(blank=True, null=True)
     responsible_crew = models.CharField(max_length=140, blank=True, null=True)
-    opening = models.TimeField(default=time(hour=8), blank=True, null=True)
-    closing = models.TimeField(default=time(hour=20), blank=True, null=True)
 
     opening_monday = models.TimeField(default=time(hour=8), blank=True, null=True)
     opening_tuesday = models.TimeField(default=time(hour=8), blank=True, null=True)
@@ -151,12 +149,21 @@ class Venue(models.Model):
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
 
+    is_open_monday = models.BooleanField(blank=True, null=True, default=False)
+    is_open_tuesday = models.BooleanField(blank=True, null=True, default=False)
+    is_open_wednesday = models.BooleanField(blank=True, null=True, default=False)
+    is_open_thursday = models.BooleanField(blank=True, null=True, default=False)
+    is_open_friday = models.BooleanField(blank=True, null=True, default=False)
+    is_open_saturday = models.BooleanField(blank=True, null=True, default=False)
+    is_open_sunday = models.BooleanField(blank=True, null=True, default=False)
+
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
+        permissions = [("set_opened", "Can set the opening hours of a venue")]
 
     def __str__(self) -> str:
         return f'{self.name}'

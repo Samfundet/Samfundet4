@@ -3,7 +3,7 @@ import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
 import { Children } from '~/types';
 import styles from './FormInputField.module.scss';
 
-type types = 'text' | 'number' | 'email' | 'password' | 'date' | 'image' | 'datetime-local' | 'file';
+type types = 'text' | 'number' | 'email' | 'password' | 'date' | 'image' | 'datetime-local' | 'file' | 'time';
 
 type FormInputFieldProps = {
   children?: Children;
@@ -32,15 +32,13 @@ export function FormInputField({
 }: FormInputFieldProps) {
   return (
     <div className={className}>
-      <label className={classNames(styles.label, labelClassName)}>
-        {children}
-        <input
-          className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
-          type={type}
-          {...register(name, { required })}
-        />
-        {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
-      </label>
+      <label className={classNames(styles.label, labelClassName)}>{children}</label>
+      <input
+        className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
+        type={type}
+        {...register(name, { required })}
+      />
+      {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
       {helpText && <p className={styles.helpText}>{helpText}</p>}
     </div>
   );

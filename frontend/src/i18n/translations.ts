@@ -3,6 +3,7 @@ import { KEY, KeyValues } from '~/i18n/constants';
 
 export const nb: Record<KeyValues, string> = {
   [KEY.common_event]: 'Arrangement',
+  [KEY.common_day]: 'Dag',
   [KEY.common_information]: 'Informasjon',
   [KEY.common_internal]: 'Intern',
   [KEY.common_member]: 'Medlem',
@@ -118,10 +119,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
+  [KEY.open]: 'Åpent',
+  [KEY.opening]: 'Åpner',
+  [KEY.closing]: 'Stenger',
 };
 
 export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
+  [KEY.common_day]: 'Day',
   [KEY.common_information]: 'Information',
   [KEY.common_internal]: 'Internal',
   [KEY.common_member]: 'Member',
@@ -235,4 +240,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.publication]: 'Publication',
   [KEY.closed_period]: 'Closed period',
   [KEY.saksdokument]: 'case document',
+  [KEY.open]: 'Open',
+  [KEY.opening]: 'Opening',
+  [KEY.closing]: 'Closing',
 };

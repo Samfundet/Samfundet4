@@ -1,5 +1,7 @@
-import { Button } from '../Button';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '~/AuthContext';
+import { hasPerm } from '~/utils';
+import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
 
 type AdminBoxProps = {
@@ -34,6 +36,7 @@ const KILROY = 'KILROY';
 */
 export function AdminBox({ title, options }: AdminBoxProps) {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   return (
     <div className={styles.applet}>
       <div className={styles.top}>
@@ -41,44 +44,46 @@ export function AdminBox({ title, options }: AdminBoxProps) {
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {
-          if (element.type == ADD) {
-            return (
-              <Button key={key} theme="success" onClick={() => navigate(element.url)} className={styles.button}>
-                {' '}
-                {element.text}
-              </Button>
-            );
-          } else if (element.type == MANAGE) {
-            return (
-              <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
-                {element.text}
-              </Button>
-            );
-          } else if (element.type == EDIT) {
-            return (
-              <Button key={key} theme="blue" onClick={() => navigate(element.url)} className={styles.button}>
-                {element.text}
-              </Button>
-            );
-          } else if (element.type == STEAL) {
-            return (
-              <form key={key} className={styles.search} action={element.url} method="post">
-                <div style={{ flex: 1 }}>
-                  <input type="text" className={styles.searchInput} placeholder="Navn/ID/E-post" />
-                </div>
-                <Button theme="samf" className={styles.searchButton}>
+          if (element.perm == null || hasPerm({ user: user, permission: element.perm })) {
+            if (element.type == ADD) {
+              return (
+                <Button key={key} theme="success" onClick={() => navigate(element.url)} className={styles.button}>
+                  {' '}
                   {element.text}
                 </Button>
-              </form>
-            );
-          } else if (element.type == INFO) {
-            return (
-              <p key={key} className={styles.text}>
-                {element.text}
-              </p>
-            );
-          } else if (element.type == KILROY) {
-            return <div key={key} className={styles.KILROY}></div>;
+              );
+            } else if (element.type == MANAGE) {
+              return (
+                <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
+                  {element.text}
+                </Button>
+              );
+            } else if (element.type == EDIT) {
+              return (
+                <Button key={key} theme="blue" onClick={() => navigate(element.url)} className={styles.button}>
+                  {element.text}
+                </Button>
+              );
+            } else if (element.type == STEAL) {
+              return (
+                <form key={key} className={styles.search} action={element.url} method="post">
+                  <div style={{ flex: 1 }}>
+                    <input type="text" className={styles.searchInput} placeholder="Navn/ID/E-post" />
+                  </div>
+                  <Button theme="samf" className={styles.searchButton}>
+                    {element.text}
+                  </Button>
+                </form>
+              );
+            } else if (element.type == INFO) {
+              return (
+                <p key={key} className={styles.text}>
+                  {element.text}
+                </p>
+              );
+            } else if (element.type == KILROY) {
+              return <div key={key} className={styles.KILROY}></div>;
+            }
           }
         })}
       </div>

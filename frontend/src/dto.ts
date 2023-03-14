@@ -42,8 +42,7 @@ export type VenueDto = {
   last_renovated?: number;
   handicapped_approved?: boolean;
   responsible_crew?: string;
-  opening?: string;
-  closing?: string;
+
   opening_monday?: string;
   opening_tuesday?: string;
   opening_wednesday?: string;
@@ -59,6 +58,14 @@ export type VenueDto = {
   closing_friday?: string;
   closing_saturday?: string;
   closing_sunday?: string;
+
+  is_open_monday?: boolean;
+  is_open_tuesday?: boolean;
+  is_open_wednesday?: boolean;
+  is_open_thursday?: boolean;
+  is_open_friday?: boolean;
+  is_open_saturday?: boolean;
+  is_open_sunday?: boolean;
 };
 
 export type EventDto = {

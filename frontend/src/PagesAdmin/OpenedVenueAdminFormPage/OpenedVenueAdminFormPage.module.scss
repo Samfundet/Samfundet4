@@ -1,0 +1,98 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.wrapper {
+  margin: 1em 1em;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.headerContainer {
+  margin-bottom: 0.5em;
+}
+
+.backButton {
+  border-color: $grey-1;
+  padding: 0.5em 1.6em;
+  text-transform: uppercase;
+}
+
+.backButtonText {
+  margin: 0;
+  font-weight: 700;
+}
+
+.smallButtons {
+  padding: 0.2em;
+}
+
+.dayContainer  {
+  position: relative;
+  background-color: $white;
+  text-align: center;
+  margin: 1em 0.5em;
+  box-shadow: 3px 7px 6px $grey-2;
+  border-radius: .2em;
+  width: 100%;
+  max-width: 350px;
+  @include for-tablet-only {
+    max-width: 600px;
+  }
+  @include for-mobile-only {
+    max-width: 600px;
+  }
+}
+
+.top {
+  background: $blue;
+  width: 100%;
+  padding: 0.8em;
+  border-radius: .2em;
+}
+
+.checkboxDay {
+  position: absolute;
+  right: 0px;
+  top: 10px;
+}
+
+.header {
+  text-transform: uppercase;
+  margin: 0;
+  color: white;
+  font-size: 1.2em;
+}
+
+.col {
+  display:flex;
+  flex-direction: column;
+}
+
+.timeSelectContainer {
+  padding:0.5em;
+  display:flex;
+  flex-direction: row;
+}
+
+.timeSelect {
+  flex:1;
+}
+
+.dayName {}
+
+.checkBox {
+  border: 2px solid $black;
+  color: none;
+}

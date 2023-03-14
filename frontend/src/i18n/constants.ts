@@ -8,6 +8,7 @@
  */
 export const KEY = {
   common_event: 'common_event',
+  common_day: 'common_day',
   common_information: 'common_information',
   common_restaurant: 'common_restaurant',
   common_volunteer: 'common_volunteer',
@@ -118,6 +119,9 @@ export const KEY = {
   publication: 'publication',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
+  open:'open',
+  opening: 'opening',
+  closing: 'closing',
 } as const;
 
 /**

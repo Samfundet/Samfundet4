@@ -243,11 +243,9 @@ class EventGroupAdmin(CustomGuardedModelAdmin):
 @admin.register(Venue)
 class VenueAdmin(CustomGuardedModelAdmin):
     # ordering = []
-    sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
+    sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'created_at', 'updated_at']
     list_filter = ['handicapped_approved']
-    list_display = [
-        'id', '__str__', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at'
-    ]
+    list_display = ['id', '__str__', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'created_at', 'updated_at']
     search_fields = ['id', 'name', 'responsible_crew']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']

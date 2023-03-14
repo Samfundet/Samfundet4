@@ -1,10 +1,10 @@
 import {
+  SAMFUNDET_ADD_CLOSEDPERIOD,
   SAMFUNDET_ADD_EVENT,
   SAMFUNDET_ADD_GANG,
-  SAMFUNDET_ADD_IMAGE,
-  SAMFUNDET_ADD_SAKSDOKUMENT,
-  SAMFUNDET_ADD_CLOSEDPERIOD,
   SAMFUNDET_ADD_INFORMATIONPAGE,
+  SAMFUNDET_ADD_SAKSDOKUMENT,
+  SAMFUNDET_SET_OPENED,
 } from '~/permissions';
 import { ROUTES } from '~/routes';
 
@@ -49,9 +49,24 @@ export const applets = [
   {
     title: 'Åpningstider',
     perm: SAMFUNDET_ADD_CLOSEDPERIOD,
-    options: [{ text: 'Endre stengte perioder', url: ROUTES.frontend.admin_closed, type: 'EDIT' }],
+    options: [
+      {
+        text: 'Endre stengte perioder',
+        url: ROUTES.frontend.admin_closed,
+        type: 'EDIT',
+        perm: SAMFUNDET_ADD_CLOSEDPERIOD,
+      },
+      {
+        text: 'Endre åpningstider',
+        url: ROUTES.frontend.admin_opened_venues_edit,
+        type: 'MANAGE',
+        perm: SAMFUNDET_SET_OPENED,
+      },
+    ],
+  },
+  {
     title: 'Bildearkiv',
-    perm: SAMFUNDET_ADD_IMAGE,
+    perm: SAMFUNDET_ADD_CLOSEDPERIOD,
     options: [
       { text: 'Nytt Bilde', url: '', type: 'ADD' },
       { text: 'Gå til Bildearkiv', url: ROUTES.frontend.admin_images, type: 'MANAGE' },

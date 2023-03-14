@@ -53,6 +53,30 @@ class VenueDto:
     handicapped_approved: bool
     responsible_crew: str
 
+    opening_monday: str
+    opening_tuesday: str
+    opening_wednesday: str
+    opening_thursday: str
+    opening_friday: str
+    opening_saturday: str
+    opening_sunday: str
+
+    closing_monday: str
+    closing_tuesday: str
+    closing_wednesday: str
+    closing_thursday: str
+    closing_friday: str
+    closing_saturday: str
+    closing_sunday: str
+
+    is_open_monday: bool
+    is_open_tuesday: bool
+    is_open_wednesday: bool
+    is_open_thursday: bool
+    is_open_friday: bool
+    is_open_saturday: bool
+    is_open_sunday: bool
+
 
 @dataclass_json
 @dataclass

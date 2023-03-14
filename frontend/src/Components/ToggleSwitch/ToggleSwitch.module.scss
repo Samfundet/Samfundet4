@@ -36,6 +36,10 @@ $ball-color: $white;
   transition: background-color $toggle-transition;
 }
 
+.children {
+  margin: 5em;
+}
+
 // Styling on label when toggle_switch is checked.
 .label:has(.toggle_switch:checked) {
   background-color: $switch-color-checked;

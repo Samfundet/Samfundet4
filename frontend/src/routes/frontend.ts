@@ -30,6 +30,7 @@ export const ROUTES_FRONTEND = {
   admin_closed: '/admin/closed/',
   admin_closed_create: '/admin/closed/create/',
   admin_closed_edit: '/admin/closed/edit/:id/',
+  admin_opened_venues_edit: '/admin/openedvenues/',
   admin_images: '/admin/images/',
   admin_images_create: '/admin/images/create/',
   admin_saksdokumenter_create: '/admin/saksdokument/create/',
