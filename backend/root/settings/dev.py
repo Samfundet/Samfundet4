@@ -2,7 +2,8 @@
 import os
 
 from root.constants import Environment
-from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import # noqa: F403
+
+from .base import *  # noqa: F403
 # End: imports -----------------------------------------------------
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'backend']
@@ -66,8 +67,8 @@ DATABASES = {
 ### End: Database ###
 
 # Clean console logging in development (pretty stack trace)
-LOGGING['loggers'][''] = {
-    'handlers': ['console'], 
+LOGGING['loggers'][''] = {  # type: ignore[index] # noqa: 405
+    'handlers': ['console'],
     'level': 'DEBUG',
     'propagate': True,
 }

@@ -9,7 +9,7 @@ services:
     image: samfundet-backend
     volumes:
       - ./backend:/app # Mount backend folder to docker image
-      - ignore_venv:/app/.venv # Ignore local virtual environment
+      - /app/.venv/ # Ignore local virtual environment
     env_file:
       - ./backend/.docker.env # Environment for backend docker
     environment:
@@ -19,6 +19,7 @@ services:
       - '5678:5678' # Quotes are required. debugpy
 
   ### Frontend React ###
+  # Mount sync on OSX Docker VM is really slow on some systems. Perhaps run on host machine instead.
   frontend:
     build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     image: samfundet-frontend
@@ -32,7 +33,7 @@ services:
     ports:
       - '3000:3000'
 
-  ### Storybook React ###
+  ## Storybook React ###
   storybook:
     build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     image: samfundet-frontend-storybook
@@ -61,7 +62,7 @@ services:
       ╚════██║██╔══██║██║╚██╔╝██║██╔══╝  ██║   ██║██║╚██╗██║██║  ██║██╔══╝     ██║   \n\e[31m
       ███████║██║  ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║ ╚████║██████╔╝███████╗   ██║   \n\e[31m
       ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝   ╚═╝   \n
-        
+
       \e[34m Backend:    http://localhost:8000\n
       \e[34mFrontend:   http://localhost:3000\n
       \e[34mStorybook:  http://localhost:6006\n
@@ -69,7 +70,4 @@ services:
       -------------------------------------------------------------------------------\n\n
       '"
 
-### Ignore volume names ###
-volumes:
-  ignore_venv:
-  ignore_database:
+
