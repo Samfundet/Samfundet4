@@ -16,16 +16,20 @@ export interface ITableCell {
 }
 
 export class AlphabeticTableCell implements ITableCell {
-  children: string;
-  constructor(child: string) {
+  children: string | undefined;
+
+  constructor(child?: string) {
     this.children = child;
   }
+
   compare(other: ITableCell) {
     if (!this.children) {
       return 1;
     }
+
     let child1 = this.children;
     let child2 = other.children;
+
     if (typeof child1 != 'string') {
       if (!('children' in child1.props)) {
         child1 = child1.props.timestamp;
@@ -33,6 +37,7 @@ export class AlphabeticTableCell implements ITableCell {
         child1 = child1.props.children;
       }
     }
+
     if (typeof child2 != 'string') {
       if (!('children' in child2.props)) {
         child2 = child2.props.timestamp; //Todo upgrade timestamp compare

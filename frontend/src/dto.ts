@@ -219,3 +219,13 @@ export type ImageDto = {
   image: string;
   tags: TagDto[];
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Tuple = [any, any];
+
+export type EventFormDto = {
+  age_groups: Tuple[];
+  status_groups: Tuple[];
+  venues: Array<string[]>;
+  event_groups: Tuple[];
+};

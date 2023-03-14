@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormSelect, FormInputField, FormTextAreaField } from '~/Components';
+import { Button, FormInputField, FormSelect, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
 
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
+import { Page } from '~/Components/Page';
+import { EventDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './EventFormAdminPage.module.scss';
-import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
-import { useForm } from 'react-hook-form';
-import { STATUS } from '~/http_status_codes';
 import { DTOToForm } from '~/utils';
+import styles from './EventFormAdminPage.module.scss';
 
 export function EventFormAdminPage() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export function EventFormAdminPage() {
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
   const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
-  // Stuff to do on first render.
+
   //TODO add permissions on render
 
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -55,7 +56,7 @@ export function EventFormAdminPage() {
     }
   }, [id]);
 
-  const onSubmit = (data) => {
+  function onSubmit(data: EventDto) {
     (id ? putEvent(id, data) : postEvent(data))
       .then(() => {
         navigate(ROUTES.frontend.admin_events_upcomming);
@@ -66,7 +67,7 @@ export function EventFormAdminPage() {
           setError(err, { type: 'custom', message: e.response.data[err][0] });
         }
       });
-  };
+  }
 
   if (showSpinner) {
     return (
@@ -132,7 +133,7 @@ export function EventFormAdminPage() {
               </p>
             </FormInputField>
             <FormTextAreaField
-              errors={errors}
+              // errors={errors}
               className={styles.input}
               rows={2}
               name="description_short_en"
@@ -142,7 +143,12 @@ export function EventFormAdminPage() {
                 {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
-            <FormTextAreaField errors={errors} className={styles.input} name="description_long_en" register={register}>
+            <FormTextAreaField
+              // errors={errors}
+              className={styles.input}
+              name="description_long_en"
+              register={register}
+            >
               <p className={styles.labelText}>
                 {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>

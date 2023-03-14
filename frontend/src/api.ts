@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import {
   ClosedPeriodDto,
   EventDto,
+  EventFormDto,
   EventGroupDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -143,7 +144,7 @@ export async function postEvent(data: EventDto): Promise<EventDto> {
   return response.data;
 }
 
-export async function putEvent(id: string | number, data: EventDto): Promise<AxiosResponse> {
+export async function putEvent(id: string | number, data: EventDto): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
   return response;
@@ -156,9 +157,9 @@ export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   return response;
 }
 
-export async function getEventForm(): Promise<AxiosResponse> {
+export async function getEventForm(): Promise<AxiosResponse<EventFormDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
-  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+  const response = await axios.get<AxiosResponse<EventFormDto>>(url, { withCredentials: true });
 
   return response.data;
 }
