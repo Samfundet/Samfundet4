@@ -9,22 +9,18 @@
 }
 
 .center {
-  margin-bottom: 10%;
   margin: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
 
   @include for-tablet-down {
-    margin-bottom: 10%;
     margin: 5%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-
 }
-
 
 .container {
   display: block;
@@ -39,7 +35,6 @@
   user-select: none;
 }
 
-
 .filterColumn {
   -webkit-column-count: 4;
   -moz-column-count: 4;
@@ -47,20 +42,18 @@
   -webkit-column-gap: 26px;
   -moz-column-gap: 26px;
   column-gap: 26px;
-  -webkit-column-rule: 1px solid rgba(28,110,164,0.39);
-  -moz-column-rule: 1px solid rgba(28,110,164,0.39);
-  column-rule: 1px solid rgba(28,110,164,0.39);
+  -webkit-column-rule: 1px solid rgba(28, 110, 164, 0.39);
+  -moz-column-rule: 1px solid rgba(28, 110, 164, 0.39);
+  column-rule: 1px solid rgba(28, 110, 164, 0.39);
   @include for-mobile-down {
-      -webkit-column-count: 1;
-      -moz-column-count: 1;
-      column-count: 1;
-      -webkit-column-gap: 26px;
-      -moz-column-gap: 26px;
-      column-gap: 26px;
-      -webkit-column-rule: 1px solid rgba(28,110,164,0.39);
-      -moz-column-rule: 1px solid rgba(28,110,164,0.39);
-      column-rule: 1px solid rgba(28,110,164,0.39);
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1;
+    -webkit-column-gap: 26px;
+    -moz-column-gap: 26px;
+    column-gap: 26px;
+    -webkit-column-rule: 1px solid rgba(28, 110, 164, 0.39);
+    -moz-column-rule: 1px solid rgba(28, 110, 164, 0.39);
+    column-rule: 1px solid rgba(28, 110, 164, 0.39);
   }
-
 }
-

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Sequence
+from typing import Sequence, Type
 from django.http import QueryDict
 from django.db.models import Q
 from django.db.models.query import QuerySet
@@ -99,6 +99,17 @@ def group_to_dataclass(*, group: Group) -> GroupDto:
 def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
     return [group_to_dataclass(group=group) for group in groups]
 
+
+###
+
+def general_search(events_query: Type[Event], search_term: str, types: list) -> QuerySet:
+    fields = [f for f in events_query._meta.fields if True in [(isinstance(f, typ)) for typ in types]]
+    queries = [Q(**{f.name + '__contains': search_term}) for f in fields]
+    qs = Q()
+    for query in queries:
+        qs = qs | query
+
+    return events_query.objects.all().filter(qs)
 
 ###
 

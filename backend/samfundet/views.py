@@ -13,7 +13,7 @@ from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
-from django.db.models import Q, CharField, TextField, QuerySet
+from django.db.models import Q, CharField, TextField
 
 from root.constants import XCSRFTOKEN
 
@@ -23,7 +23,7 @@ from .utils import (
     users_to_dataclass,
     groups_to_dataclass,
     events_to_dataclass,
-    closedperiod_to_dataclass,
+    closedperiod_to_dataclass, general_search,
 )
 
 from .models import (
@@ -92,15 +92,6 @@ class EventPerDayView(APIView):
             return ''
         return query.split(',')[0]
 
-    def general_search(self, events_query: QuerySet, search_term: str) -> QuerySet:
-        fields = [f for f in Event._meta.fields if (isinstance(f, CharField) or isinstance(f, TextField))]
-        queries = [Q(**{f.name + '__contains': search_term}) for f in fields]
-        qs = Q()
-        for query in queries:
-            qs = qs | query
-
-        return events_query.filter(qs)
-
     def statusGroup(self) -> str:
         if self.request.GET.get('archived', None) == 'true':
             return 'active'
@@ -108,14 +99,16 @@ class EventPerDayView(APIView):
 
     def get(self, request: Request) -> Response:
         events: dict = {}
-        events_query = Event.objects.all()
+        events_query = Event
 
         if '?' in self.request.build_absolute_uri():
-            events_query = self.general_search(events_query, self.url_args('search')).filter(
+            events_query = general_search(events_query, self.url_args('search'), [CharField, TextField]).filter(
                 Q(location__contains=self.url_args('location')), Q(status_group=self.statusGroup())
             )
+        else:
+            events_query = events_query.objects.all()
 
-        for event in events_query.all().order_by('start_dt').values():
+        for event in events_query.order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)
