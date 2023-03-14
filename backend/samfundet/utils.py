@@ -149,16 +149,14 @@ def events_to_dataclass(*, events: Sequence[Event]) -> list[EventDto]:
     return [event_to_dataclass(event=event) for event in events]
 
 
-def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[
-    Event]:  # pylint: disable=positional-arguments
+def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:
     if not events:
         events = Event.objects.all()
     search = query.get('search', None)
     if search:
         events = events.filter(
             Q(title_nb__icontains=search) | Q(title_en__icontains=search) | Q(description_long_nb__icontains=search) |
-            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(
-                description_short_nb=search) | Q(location__icontains=search) |
+            Q(description_long_en__icontains=search) | Q(description_short_en=search) | Q(description_short_nb=search) | Q(location__icontains=search) |
             Q(event_group__name=search)
         )
     event_group = query.get('event_group', None)
