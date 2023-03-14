@@ -7,20 +7,15 @@ import styles from './EventsPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { Checkbox } from '~/Components/Checkbox';
-
-interface Venue {
-  id: number;
-  name: string;
-  description: string;
-}
+import { VenueDto } from '~/dto';
 
 export function EventsPage() {
   const { t } = useTranslation();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [search, setSearch] = useState('');
-  const [venues, setVenues] = useState<Venue[]>([]);
-  const [selectedVenue, setSelectedVenue] = useState('');
+  const [venues, setVenues] = useState<VenueDto[]>([]);
+  const [selectedVenue, setSelectedVenue] = useState('all');
   const [filterToggle, setFilterToggle] = useState(true);
   const [archived, setArchived] = useState(false);
 
@@ -92,11 +87,7 @@ export function EventsPage() {
                   name="venues"
                   value=""
                   checked={selectedVenue.includes('all')}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      setSelectedVenue('all');
-                    }
-                  }}
+                  onChange={() => setSelectedVenue('all')}
                 />
                 {t(KEY.all_venues)}
               </label>
@@ -106,12 +97,8 @@ export function EventsPage() {
                   <RadioButton
                     name="venues"
                     value={venue.name}
-                    checked={selectedVenue.includes(venue.name)}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        setSelectedVenue(venue.name);
-                      }
-                    }}
+                    checked={selectedVenue.includes(venue.name as string)}
+                    onChange={() => setSelectedVenue(venue.name as string)}
                   />
                   {venue.name}
                 </label>
