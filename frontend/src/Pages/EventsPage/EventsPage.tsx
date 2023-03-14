@@ -10,12 +10,13 @@ import { Checkbox } from '~/Components/Checkbox';
 import { VenueDto } from '~/dto';
 
 export function EventsPage() {
+  const all_venues = 'all';
   const { t } = useTranslation();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [search, setSearch] = useState('');
   const [venues, setVenues] = useState<VenueDto[]>([]);
-  const [selectedVenue, setSelectedVenue] = useState('all');
+  const [selectedVenue, setSelectedVenue] = useState(all_venues);
   const [filterToggle, setFilterToggle] = useState(true);
   const [archived, setArchived] = useState(false);
 
@@ -25,7 +26,7 @@ export function EventsPage() {
 
   const handleClick = () => {
     let venue_value;
-    if (selectedVenue == 'all') {
+    if (selectedVenue == all_venues) {
       venue_value = '';
     } else {
       venue_value = selectedVenue;
@@ -83,12 +84,7 @@ export function EventsPage() {
 
             <div className={styles.filterColumn}>
               <label className={styles.container} key={t(KEY.all_venues)}>
-                <RadioButton
-                  name="venues"
-                  value=""
-                  checked={selectedVenue.includes('all')}
-                  onChange={() => setSelectedVenue('all')}
-                />
+                <RadioButton name="venues" value="" onChange={() => setSelectedVenue(all_venues)} />
                 {t(KEY.all_venues)}
               </label>
 
@@ -97,7 +93,6 @@ export function EventsPage() {
                   <RadioButton
                     name="venues"
                     value={venue.name}
-                    checked={selectedVenue.includes(venue.name as string)}
                     onChange={() => setSelectedVenue(venue.name as string)}
                   />
                   {venue.name}
