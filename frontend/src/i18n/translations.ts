@@ -122,6 +122,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.all_venues]: 'Alle',
   [KEY.search_all]: 'Søk på alle arrangemanger!',
   [KEY.archived_events]: 'Vis arkiverte arrangemanger',
+  [KEY.event]: '',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -243,4 +244,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.all_venues]: 'All',
   [KEY.search_all]: 'Search every event!',
   [KEY.archived_events]: 'Show archived events',
+  [KEY.admin_information_new_page]: '',
+  [KEY.admin_information_create_page]: '',
+  [KEY.event]: '',
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteEvent, getEventsUpcomming } from '~/api';
-import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
+import { Button, EventQuery, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
 import { EventDto } from '~/dto';
@@ -53,18 +53,18 @@ export function EventsAdminPage() {
   const data = events.map(function (event) {
     return [
       new AlphabeticTableCell(
-        (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.event,
-              urlParams: { id: event.id },
-            })}
-          >
-            {dbT(event, 'title', i18n.language) as string}
-          </Link>
-        ),
+        // <Link
+        //   url={reverse({
+        //     pattern: ROUTES.frontend.event,
+        //     urlParams: { id: event.id },
+        //   })}
+        // >
+        //   {dbT(event, 'title', i18n.language) as string}
+        // </Link>
+        dbT(event, 'title', i18n.language) as string,
       ),
-      new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
+      // new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
+      new AlphabeticTableCell(event.start_dt.toLocaleString()),
       new AlphabeticTableCell(event.event_group.name),
       new AlphabeticTableCell(event.host),
       new AlphabeticTableCell(event.location),

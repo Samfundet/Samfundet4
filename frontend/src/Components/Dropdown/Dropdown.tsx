@@ -5,7 +5,7 @@ type DropdownProps = {
   className?: string;
   wrapper?: string;
   default_value?: string;
-  options?: string[];
+  options?: string[][];
   label?: string;
   onChange?: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
 };

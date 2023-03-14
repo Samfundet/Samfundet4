@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import {
   ClosedPeriodDto,
   EventDto,
+  EventFormDto,
   EventGroupDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -53,7 +54,7 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function putUserPreference(data: UserPreferenceDto): Promise<unknown> {
+export async function putUserPreference(data: Partial<UserPreferenceDto>): Promise<unknown> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -108,7 +109,10 @@ export async function postInformationPage(data: InformationPageDto): Promise<Inf
   return response.data;
 }
 
-export async function putInformationPage(slug_field: string, page: InformationPageDto): Promise<AxiosResponse> {
+export async function putInformationPage(
+  slug_field: string,
+  page: Partial<InformationPageDto>,
+): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
@@ -150,7 +154,7 @@ export async function postEvent(data: EventDto): Promise<EventDto> {
   return response.data;
 }
 
-export async function putEvent(id: string | number, data: EventDto): Promise<AxiosResponse> {
+export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
   return response;
@@ -163,9 +167,9 @@ export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   return response;
 }
 
-export async function getEventForm(): Promise<AxiosResponse> {
+export async function getEventForm(): Promise<AxiosResponse<EventFormDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
-  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+  const response = await axios.get<AxiosResponse<EventFormDto>>(url, { withCredentials: true });
 
   return response.data;
 }
@@ -248,6 +252,7 @@ export async function getTextItem(pk: string): Promise<TextItemDto> {
   const response = await axios.get<TextItemDto>(url, { withCredentials: true });
   return response.data;
 }
+
 export async function getSaksdokumenter(): Promise<SaksdokumentDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
   const response = await axios.get<SaksdokumentDto[]>(url, { withCredentials: true });
@@ -277,7 +282,7 @@ export async function postSaksdokument(data: SaksdokumentDto): Promise<Saksdokum
   return response.data;
 }
 
-export async function putSaksdokument(id: string | number, data: SaksdokumentDto): Promise<AxiosResponse> {
+export async function putSaksdokument(id: string | number, data: Partial<SaksdokumentDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
   const response = await axios.put<SaksdokumentDto>(url, data, { withCredentials: true });
@@ -313,7 +318,7 @@ export async function postGang(data: GangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(id: string | number, data: GangDto): Promise<AxiosResponse> {
+export async function putGang(id: string | number, data: Partial<GangDto>): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
   const response = await axios.put<GangDto>(url, data, { withCredentials: true });
   return response;
@@ -339,7 +344,7 @@ export async function getClosedPeriod(id: string | number): Promise<ClosedPeriod
   return response.data;
 }
 
-export async function putClosedPeriod(id: string | number, data: ClosedPeriodDto): Promise<AxiosResponse> {
+export async function putClosedPeriod(id: string | number, data: Partial<ClosedPeriodDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
   const response = await axios.put<ClosedPeriodDto>(url, data, { withCredentials: true });
@@ -377,7 +382,7 @@ export async function postImage(data: ImageDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function putImage(id: string | number, data: ImageDto): Promise<AxiosResponse> {
+export async function putImage(id: string | number, data: Partial<ImageDto>): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
   return response;

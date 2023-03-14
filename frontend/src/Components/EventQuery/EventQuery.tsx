@@ -16,8 +16,8 @@ type EventQueryProps = {
 
 export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
   const { t } = useTranslation();
-  const [venues, setVenues] = useState<string[]>([]);
-  const [eventGroups, setEventGroups] = useState<string[]>([]);
+  const [venues, setVenues] = useState<string[][]>([]);
+  const [eventGroups, setEventGroups] = useState<string[][]>([]);
   const [search, setSearch] = useState<string>('');
   const [selectedVenue, setSelectedVenue] = useState<string>('');
   const [selectedEventType, setSelectedEventType] = useState<string>('');
@@ -28,7 +28,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       .then((data) => {
         setVenues(
           data.map(function (element) {
-            return [element.name];
+            return [element.name || ''];
           }),
         );
       })
@@ -37,7 +37,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       .then((data) => {
         setEventGroups(
           data.map(function (element) {
-            return [element.id, element.name];
+            return [String(element.id), element.name];
           }),
         );
       })
