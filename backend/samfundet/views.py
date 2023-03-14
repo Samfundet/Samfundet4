@@ -112,9 +112,7 @@ class EventPerDayView(APIView):
 
         if '?' in self.request.build_absolute_uri():
             events_query = self.general_search(events_query, self.url_args('search')).filter(
-                Q(location__contains=self.url_args('location')),
-                Q(status_group=self.statusGroup())
-            )
+                Q(location__contains=self.url_args('location')), Q(status_group=self.statusGroup()))
 
         for event in events_query.all().order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
@@ -260,8 +258,7 @@ class GangFormView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()],
-                'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
         return Response(data=data)
 
 
