@@ -92,14 +92,14 @@ class EventPerDayView(APIView):
             return ''
         return query.split(',')[0]
 
-    def general_search(self, search_term: str) -> QuerySet:
+    def general_search(self, events_query: QuerySet, search_term: str) -> QuerySet:
         fields = [f for f in Event._meta.fields if (isinstance(f, CharField) or isinstance(f, TextField))]
         queries = [Q(**{f.name+'__contains': search_term}) for f in fields]
         qs = Q()
         for query in queries:
             qs = qs | query
 
-        return Event.objects.filter(qs)
+        return events_query.filter(qs)
 
     def statusGroup(self) -> str:
         if self.request.GET.get('archived', None) == 'true':
@@ -108,17 +108,15 @@ class EventPerDayView(APIView):
 
     def get(self, request: Request) -> Response:
         events: dict = {}
+        events_query = Event.objects.all()
 
         if '?' in self.request.build_absolute_uri():
-            events_query = self.general_search(self.url_args('search')).filter(
+            events_query = self.general_search(events_query, self.url_args('search')).filter(
                 Q(location__contains=self.url_args('location')),
                 Q(status_group=self.statusGroup())
             )
 
-        else:
-            events_query = Event.objects.all()
-
-        for event in events_query.order_by('start_dt').values():
+        for event in events_query.all().order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)

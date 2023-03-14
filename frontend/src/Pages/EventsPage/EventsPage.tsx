@@ -1,14 +1,10 @@
-import {
-  useEffect,
-  useState }
-
-  from 'react';
+import {useEffect, useState} from 'react';
 import {EventsList} from './components/EventsList';
 import {getEventsFilter, getEventsPerDay, getVenues} from '~/api';
 import {Page} from '~/Components/Page';
 import {Button, InputField, RadioButton, SamfundetLogoSpinner} from '~/Components';
 import styles from './EventsPage.module.scss';
-import { KEY } from '~/i18n/constants';
+import {KEY} from '~/i18n/constants';
 import {useTranslation} from "react-i18next";
 import {Checkbox} from "~/Components/Checkbox";
 
@@ -36,11 +32,20 @@ export function EventsPage() {
       setArchived(!archived)
   }
 
+
   const handleClick = () => {
+    let venue_value;
+    if (selectedVenue == 'all') {
+      venue_value = '';
+
+    } else {
+      venue_value = selectedVenue;
+    }
+
     const fields =
       '?title=' + title +
       '&search=' + search +
-      '&location=' + selectedVenue +
+      '&location=' + venue_value +
       '&archived=' + archived
 
     getEventsFilter(fields).then((data) => {
