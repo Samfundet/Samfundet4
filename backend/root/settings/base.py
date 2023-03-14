@@ -191,8 +191,6 @@ INSTALLED_APPS += [
 
 ################## LOGGING ##################
 
-import logging.config  # noqa: E402
-
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
 from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
 
