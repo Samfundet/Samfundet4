@@ -19,7 +19,6 @@ export function EventsPage() {
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [search, setSearch] = useState('');
-  const [title, setTitle] = useState('');
   const [venues, setVenues] = useState<Venue[]>([]);
   const [selectedVenue, setSelectedVenue] = useState('');
   const [filterToggle, setFilterToggle] = useState(true);
@@ -37,7 +36,7 @@ export function EventsPage() {
       venue_value = selectedVenue;
     }
 
-    const fields = '?title=' + title + '&search=' + search + '&location=' + venue_value + '&archived=' + archived;
+    const fields = '?search=' + search + '&location=' + venue_value + '&archived=' + archived;
 
     getEventsFilter(fields).then((data) => {
       setEvents(data);

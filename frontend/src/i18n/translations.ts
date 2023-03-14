@@ -122,7 +122,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.all_venues]: 'Alle',
   [KEY.search_all]: 'Søk på alle arrangemanger!',
   [KEY.archived_events]: 'Vis arkiverte arrangemanger',
-
 };
 
 export const en: Record<KeyValues, string> = {
