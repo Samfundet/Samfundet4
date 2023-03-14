@@ -8,8 +8,8 @@ import { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './LychePage.module.scss';
 import { TextItem } from '~/textItems';
+import styles from './LychePage.module.scss';
 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
@@ -23,13 +23,18 @@ export function LychePage() {
       .then((data) => {
         const lyche = data.find((venue) => venue.name?.toLowerCase() === 'lyche');
         setLycheVenue(lyche);
-        setConsistentWeekdayHours(
-          // prettier-ignore
-          (lycheVenue?.opening_monday === lycheVenue?.opening_tuesday && 
-            lycheVenue?.opening_wednesday) === lycheVenue?.opening_thursday && 
-            lycheVenue?.opening_monday === lycheVenue?.opening_thursday,
-        );
-        setConsistentWeekendHours(lycheVenue?.opening_friday === lycheVenue?.opening_saturday);
+        const consistentWeekdayOpeningHours =
+          lycheVenue?.opening_monday === lycheVenue?.opening_tuesday &&
+          lycheVenue?.opening_wednesday === lycheVenue?.opening_thursday &&
+          lycheVenue?.opening_monday === lycheVenue?.opening_thursday;
+        const consistentWeekdayClosingHours =
+          lycheVenue?.closing_monday === lycheVenue?.closing_tuesday &&
+          lycheVenue?.closing_wednesday === lycheVenue?.closing_thursday &&
+          lycheVenue?.closing_monday === lycheVenue?.closing_thursday;
+        setConsistentWeekdayHours(consistentWeekdayOpeningHours && consistentWeekdayClosingHours);
+        const consistentWeekendOpeningHours = lycheVenue?.opening_friday === lycheVenue?.opening_saturday;
+        const consistentWeekendClosingHours = lycheVenue?.closing_friday === lycheVenue?.closing_saturday;
+        setConsistentWeekendHours(consistentWeekendOpeningHours && consistentWeekendClosingHours);
         setLoading(false);
       })
       .catch(console.error);
@@ -42,6 +47,12 @@ export function LychePage() {
     lycheVenue?.opening_thursday,
     lycheVenue?.opening_friday,
     lycheVenue?.opening_saturday,
+    lycheVenue?.closing_monday,
+    lycheVenue?.closing_tuesday,
+    lycheVenue?.closing_wednesday,
+    lycheVenue?.closing_thursday,
+    lycheVenue?.closing_friday,
+    lycheVenue?.closing_saturday,
   ]);
 
   const openingHourRow = (days: string, openingHours: string) => {
@@ -122,7 +133,7 @@ export function LychePage() {
       image={sulten_inside}
       imageAlt={t(KEY.common_sulten)}
       header={t(KEY.common_reservations)}
-      text={useTextItem(TextItem.sulten_reservation_text, i18n)}
+      text={useTextItem(TextItem.sulten_reservation_text)}
       buttonText={t(KEY.sulten_page_book_table) || undefined}
       imageAlignment="left"
       link={ROUTES.frontend.sulten_reservation}
@@ -134,7 +145,7 @@ export function LychePage() {
       image={sulten_delivery}
       imageAlt={'Food delivery'}
       header={t(KEY.common_menu)}
-      text={useTextItem(TextItem.sulten_menu_text, i18n)}
+      text={useTextItem(TextItem.sulten_menu_text)}
       buttonText={t(KEY.sulten_page_see_menu) || undefined}
       imageAlignment="right"
       link={ROUTES.frontend.sulten_menu}
@@ -146,7 +157,7 @@ export function LychePage() {
       image={sulten_chef}
       imageAlt={'Chef'}
       header={t(KEY.sulten_page_about_us)}
-      text={useTextItem(TextItem.sulten_about_us_text, i18n)}
+      text={useTextItem(TextItem.sulten_about_us_text)}
       buttonText={t(KEY.sulten_page_more_about_us) || undefined}
       imageAlignment="left"
       link={ROUTES.frontend.sulten_about}
@@ -158,7 +169,7 @@ export function LychePage() {
       image={sulten_crowded}
       imageAlt={t(KEY.common_sulten)}
       header={t(KEY.common_contact)}
-      text={useTextItem(TextItem.sulten_contact_text, i18n)}
+      text={useTextItem(TextItem.sulten_contact_text)}
       buttonText={t(KEY.common_contact_us) || undefined}
       imageAlignment="right"
       link={ROUTES.frontend.sulten_contact}

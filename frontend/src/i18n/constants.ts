@@ -119,12 +119,12 @@ export const KEY = {
   publication: 'publication',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
-  common_sulten: 'lyche',
-  sulten_page_book_table: 'book_table',
-  sulten_page_kitchen: 'kitchen',
-  sulten_page_see_menu: 'see_menu',
-  sulten_page_about_us: 'about_us',
-  sulten_page_more_about_us: 'more_about_us',
+  common_sulten: 'common_sulten',
+  sulten_page_book_table: 'sulten_page_book_table',
+  sulten_page_kitchen: 'sulten_page_kitchen',
+  sulten_page_see_menu: 'sulten_page_see_menu',
+  sulten_page_about_us: 'sulten_page_about_us',
+  sulten_page_more_about_us: 'sulten_page_more_about_us',
 } as const;
 
 /**

@@ -1,5 +1,5 @@
-import { i18n } from 'i18next';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { getTextItem } from '~/api';
 import { desktopBpLower, mobileBpUpper } from './constants';
@@ -31,9 +31,9 @@ export function useGoatCounter(): void {
   }, [location]);
 }
 
-// ------------------------------
-
-// Return true while on desktop width, false otherwise
+/**
+ * Return true while on desktop width, false otherwise
+ */
 export function useDesktop(): boolean {
   const [width, setWidth] = useState(window.innerWidth);
   const updateMedia = () => {
@@ -47,8 +47,9 @@ export function useDesktop(): boolean {
   return width > desktopBpLower;
 }
 
-// ------------------------------
-
+/**
+ * @returns true if mobile, false otherwise
+ */
 export function useMobile(): boolean {
   const [width, setWidth] = useState(window.innerWidth);
   const updateMedia = () => {
@@ -62,24 +63,25 @@ export function useMobile(): boolean {
   return width < mobileBpUpper;
 }
 
-// ------------------------------
-
-// Hook that returns the correct translation for given key
-export function useTextItem(key: string, i18n: i18n): string | undefined {
+/**
+ *  Hook that returns the correct translation for given key
+ */
+export function useTextItem(key: string): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
+  const { i18n } = useTranslation();
   const isNorwegian = i18n.language === LANGUAGES.NB;
   useEffect(() => {
     getTextItem(key).then((data) => {
       setTextItem(data);
     });
-  }, [key, i18n]);
-
+  }, [key]);
   return isNorwegian ? textItem?.text_nb : textItem?.text_en;
 }
 
-// ------------------------------
-
-// Scroll detection
+/**
+ *
+ * @returns the current scrollY position
+ */
 export function useScrollY(): number {
   const [scrollY, setScrollY] = useState(window.scrollY);
   useEffect(() => {
