@@ -15,8 +15,8 @@ export function ContentCard({ className }: ContentCardProps) {
 
   const scrollContainer = scrollY * 0.03;
   const scrollInfo = scrollY * 0.02;
-  const containerTransform = 'translateY(' + scrollContainer + 'px)';
-  const infoTransform = 'translateY(' + scrollInfo + 'px)';
+  const containerTransform = `translateY(${scrollContainer}px)`;
+  const infoTransform = `translateY('${scrollInfo}px)`;
 
   return (
     <div className={classnames(styles.container, className)} style={{ transform: containerTransform }} id={id}>
