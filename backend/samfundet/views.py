@@ -94,7 +94,7 @@ class EventPerDayView(APIView):
 
     def general_search(self, events_query: QuerySet, search_term: str) -> QuerySet:
         fields = [f for f in Event._meta.fields if (isinstance(f, CharField) or isinstance(f, TextField))]
-        queries = [Q(**{f.name+'__contains': search_term}) for f in fields]
+        queries = [Q(**{f.name + '__contains': search_term}) for f in fields]
         qs = Q()
         for query in queries:
             qs = qs | query
@@ -112,7 +112,8 @@ class EventPerDayView(APIView):
 
         if '?' in self.request.build_absolute_uri():
             events_query = self.general_search(events_query, self.url_args('search')).filter(
-                Q(location__contains=self.url_args('location')), Q(status_group=self.statusGroup()))
+                Q(location__contains=self.url_args('location')), Q(status_group=self.statusGroup())
+            )
 
         for event in events_query.all().order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
