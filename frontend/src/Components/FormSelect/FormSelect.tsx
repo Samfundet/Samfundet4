@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
+import { FieldValues, Message, UseFormRegister, ValidationRule } from 'react-hook-form/dist/types';
 import { Children } from '~/types';
 import styles from './FormSelect.module.scss';
 
@@ -10,9 +10,9 @@ type FormSelectProps = {
   options?: string[][] | undefined;
   name: string;
   register: UseFormRegister<FieldValues>;
-  required?: boolean;
+  required?: Message | ValidationRule<boolean> | null;
   children?: Children;
-  errors?: Record<string, unknown>;
+  errors?: Record<string, { message: string }>;
 };
 
 export function FormSelect({
@@ -26,13 +26,18 @@ export function FormSelect({
   errors,
   children,
 }: FormSelectProps) {
+  const isError = errors && name in errors;
+
+  /** RHF required doesn't allow null value. */
+  const required_ = required || undefined;
+
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <select
-          {...register(name, { required })}
-          className={classNames(styles.select, selectClassName, errors && name in errors && styles.error)}
+          {...register(name, { required: required_ })}
+          className={classNames(styles.select, selectClassName, { [styles.error]: isError })}
         >
           <option value="" className={styles.option}>
             -------
@@ -46,7 +51,7 @@ export function FormSelect({
           })}
         </select>
       </label>
-      {errors && name in errors && <div className={styles.error_text}>{errors[name].message}</div>}
+      {isError && <div className={styles.error_text}>{errors[name].message}</div>}
     </div>
   );
 }

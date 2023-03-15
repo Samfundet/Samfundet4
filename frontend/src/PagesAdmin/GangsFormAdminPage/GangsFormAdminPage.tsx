@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormSelect, FormInputField } from '~/Components';
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getGang, getGangForm } from '~/api';
+import { Button, FormInputField, FormSelect, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './GangsFormAdminPage.module.scss';
-import { getGang, getGangForm, postGang, putGang } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
+import styles from './GangsFormAdminPage.module.scss';
 
 export function GangsFormAdminPage() {
   const navigate = useNavigate();
@@ -18,24 +18,24 @@ export function GangsFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
     formState: { errors },
   } = useForm();
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
+  const [formChoices, setFormChoices] = useState<Record<string, unknown>>();
+  formChoices;
 
-  // Stuff to do on first render.
   //TODO add permissions on render
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // TODO add fix on no id on editpage
     getGangForm()
-      .then((data) => {
-        setFormChoices(data);
+      .then((response) => {
+        setFormChoices(response.data);
         setShowSpinner(false);
       })
       .catch(console.error);
@@ -54,17 +54,17 @@ export function GangsFormAdminPage() {
     setShowSpinner(false);
   }, [id]);
 
-  const onSubmit = (data) => {
-    (id ? putGang(id, data) : postGang(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin_gangs);
-      })
-      .catch((e) => {
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  // function onSubmit(data: GangDto) {
+  //   (id ? putGang(id, data) : postGang(data))
+  //     .then(() => {
+  //       navigate(ROUTES.frontend.admin_gangs);
+  //     })
+  //     .catch((e) => {
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   if (showSpinner) {
     return (
@@ -82,7 +82,9 @@ export function GangsFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.gang)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         <FormInputField
           errors={errors}
           className={styles.input}
@@ -119,10 +121,10 @@ export function GangsFormAdminPage() {
         </FormInputField>
         <FormSelect
           register={register}
-          options={formChoices?.gang_type}
+          // options={formChoices?.gang_type}
           selectClassName={styles.select}
           className={styles.col}
-          errors={errors}
+          // errors={errors}
           name="gang_type"
           required={t(KEY.form_must_choose)}
         >
@@ -130,10 +132,10 @@ export function GangsFormAdminPage() {
         </FormSelect>
         <FormSelect
           register={register}
-          options={formChoices?.info_page}
+          // options={formChoices?.info_page}
           selectClassName={styles.select}
           className={styles.col}
-          errors={errors}
+          // errors={errors}
           name="info_page"
           required={t(KEY.form_must_choose)}
         >

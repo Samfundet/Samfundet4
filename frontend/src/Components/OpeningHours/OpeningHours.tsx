@@ -1,11 +1,17 @@
-import { TimeDuration } from '../TimeDuration';
-import styles from './OpeningHours.module.scss';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-import { VenueDto } from '~/dto';
+import { TimeDuration } from '../TimeDuration';
+import styles from './OpeningHours.module.scss';
+
+type FakeVenue = {
+  name: string;
+  url: string;
+  start: string;
+  end: string;
+};
 
 type OpeningHoursProps = {
-  venues: VenueDto[];
+  venues: FakeVenue[];
 };
 
 export function OpeningHours({ venues }: OpeningHoursProps) {
