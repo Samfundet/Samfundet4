@@ -46,8 +46,6 @@ services:
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
     ports:
       - '6006:6006'
-    depends_on:
-      - frontend
     command: yarn run storybook
 
   ### Welcome Splash ###
