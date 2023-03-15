@@ -128,11 +128,20 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'nickname']
 
 
+class UserPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserPreference
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
     permissions = serializers.SerializerMethodField(read_only=True)
     object_permissions = serializers.SerializerMethodField(read_only=True)
+    object_permissions = serializers.SerializerMethodField(read_only=True)
+    user_preference = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -152,6 +161,10 @@ class UserSerializer(serializers.ModelSerializer):
         perms += [p.permission for p in list(group_object_perms_qs)]
         # Use list comprehension to generate string representation
         return list(set([self.permission_to_str(perm) for perm in perms]))
+
+    def get_user_preference(self, user) -> dict:  # type: ignore
+        prefs = UserPreference.objects.get_or_create(user=user)
+        return UserPreferenceSerializer(prefs, many=False).data
 
 
 # GANGS ###
@@ -174,13 +187,6 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
-        fields = '__all__'
-
-
-class UserPreferenceSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserPreference
         fields = '__all__'
 
 
