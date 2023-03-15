@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -20,6 +21,7 @@ from .utils import (
     event_query,
     user_to_dataclass,
     users_to_dataclass,
+    venue_to_dataclass,
     groups_to_dataclass,
     events_to_dataclass,
     closedperiod_to_dataclass,
@@ -113,6 +115,19 @@ class EventFormView(APIView):
 class VenueView(ModelViewSet):
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+
+
+class UpdateVenueHours(APIView):
+    permission_classes = [AllowAny]  # TODO find system to handle specific permission
+
+    def put(self, request: Request, pk: int) -> Response:
+        venue = get_object_or_404(Venue, id=pk)
+        for (key, value) in request.data.items():
+            if (key != 'venue'):
+                setattr(venue, key, value)
+        venue.save()
+        data = venue_to_dataclass(venue=venue)
+        return Response(data=data.to_json())
 
 
 class ClosedPeriodView(ModelViewSet):

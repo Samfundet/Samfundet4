@@ -34,27 +34,6 @@
   font-weight: 700;
 }
 
-.smallButtons {
-  padding: 0.2em;
-}
-
-.dayContainer  {
-  position: relative;
-  background-color: $white;
-  text-align: center;
-  margin: 1em 0.5em;
-  box-shadow: 3px 7px 6px $grey-2;
-  border-radius: .2em;
-  width: 100%;
-  max-width: 350px;
-  @include for-tablet-only {
-    max-width: 600px;
-  }
-  @include for-mobile-only {
-    max-width: 600px;
-  }
-}
-
 .top {
   background: $blue;
   width: 100%;
@@ -64,35 +43,46 @@
 
 .checkboxDay {
   position: absolute;
-  right: 0px;
+  right: 0;
   top: 10px;
 }
 
-.header {
-  text-transform: uppercase;
-  margin: 0;
-  color: white;
-  font-size: 1.2em;
-}
-
-.col {
-  display:flex;
+.formContainer {
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+.form {
+  @include for-desktop-up {
+    max-width: 800px;
+  }
+}
+
+.select {
+  margin-bottom: 1em;
+}
 .timeSelectContainer {
-  padding:0.5em;
-  display:flex;
+  padding: 0.5em;
+  display: flex;
   flex-direction: row;
 }
 
 .timeSelect {
-  flex:1;
+  flex: 1;
 }
 
-.dayName {}
+.dayName {font-size: 1.2em;}
 
 .checkBox {
   border: 2px solid $black;
   color: none;
+}
+
+.submitContainer {
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  padding: 2em 1em;
 }

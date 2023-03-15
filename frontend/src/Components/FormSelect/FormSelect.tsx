@@ -12,6 +12,7 @@ type FormSelectProps = {
   register: UseFormRegister<FieldValues>;
   required?: boolean;
   children?: Children;
+  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   errors?: Record<string, unknown>;
 };
 
@@ -23,6 +24,7 @@ export function FormSelect({
   name,
   required,
   register,
+  onChange,
   errors,
   children,
 }: FormSelectProps) {
@@ -33,6 +35,7 @@ export function FormSelect({
         <select
           {...register(name, { required })}
           className={classNames(styles.select, selectClassName, errors && name in errors && styles.error)}
+          onChange={(e) => onChange(e.currentTarget.value)}
         >
           <option value="" className={styles.option}>
             -------

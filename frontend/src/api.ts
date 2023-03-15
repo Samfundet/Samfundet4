@@ -7,6 +7,7 @@ import {
   FoodPreferenceDto,
   GangDto,
   GangTypeDto,
+  ImageDto,
   InformationPageDto,
   MenuDto,
   MenuItemDto,
@@ -14,7 +15,6 @@ import {
   UserDto,
   UserPreferenceDto,
   VenueDto,
-  ImageDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -74,6 +74,15 @@ export async function getVenues(): Promise<VenueDto[]> {
 export async function getVenue(id: number): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
   const response = await axios.get<VenueDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function updateVenueTime(id: number, data: VenueDto): Promise<VenueDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__update_venue_hours, urlParams: { pk: id } });
+  console.log(url);
+  const response = await axios.put<VenueDto>(url, data, { withCredentials: true });
 
   return response.data;
 }

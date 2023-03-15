@@ -18,6 +18,7 @@ export const KEY = {
   common_save: 'common_save',
   common_title: 'common_title',
   common_create: 'common_create',
+  common_update: 'common_update',
   norwegian: 'norwegian',
   english: 'english',
   common_buy: 'common_buy',

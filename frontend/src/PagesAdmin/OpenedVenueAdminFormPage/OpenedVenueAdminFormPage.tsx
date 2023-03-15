@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getVenues } from '~/api';
+import { getVenues, updateVenueTime } from '~/api';
 import { Button, FormInputField, FormSelect, Link, SamfundetLogoSpinner } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Page } from '~/Components/Page';
@@ -13,19 +13,20 @@ import { ROUTES } from '~/routes';
 import styles from './OpenedVenueAdminFormPage.module.scss';
 
 export function OpenedVenueAdminFormPage() {
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const navigate = useNavigate();
   const [venues, setVenues] = useState<VenueDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const {
     register,
     handleSubmit,
-    setError,
+    watch,
     setValue,
+    setError,
     formState: { errors },
   } = useForm();
+  const watchVenue = watch(['venue']);
 
   function getAllvenues() {
     setShowSpinner(true);
@@ -44,10 +45,31 @@ export function OpenedVenueAdminFormPage() {
     getAllvenues();
   }, []);
 
-  const updateFields = () => {};
+  const updateFields = (id: string) => {
+    if (!isNaN(id)) {
+      const venue = venues.filter((obj) => {
+        return obj.id === parseInt(id);
+      });
+      if (venue.length > 0) {
+        for (const day of days) {
+          setValue('opening_' + day, venue[0]['opening_' + day]);
+          setValue('closing_' + day, venue[0]['closing_' + day]);
+          setValue('is_open_' + day, venue[0]['is_open_' + day]);
+        }
+      }
+    }
+  };
 
   const onSubmit = (data) => {
-    console.log(data);
+    updateVenueTime(data['venue'], data)
+      .then(() => {
+        console.log(data);
+      })
+      .catch((e) => {
+        for (const err in e.response.data) {
+          setError(err, { type: 'custom', message: e.response.data[err][0] });
+        }
+      });
   };
 
   if (showSpinner) {
@@ -71,13 +93,13 @@ export function OpenedVenueAdminFormPage() {
           View in backend
         </Link>
       </div>
-      <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className={styles.formContainer}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <FormSelect
             register={register}
             options={venues.map((element) => [element.id, element.name])}
             selectClassName={styles.select}
-            className={styles.col}
+            className={styles.select}
             onChange={updateFields}
             required={t(KEY.form_must_choose)}
             errors={errors}
@@ -120,6 +142,11 @@ export function OpenedVenueAdminFormPage() {
               ];
             })}
           />
+          <div className={styles.submitContainer}>
+            <Button type="submit" theme="samf">
+              {t(KEY.common_update)}
+            </Button>
+          </div>
         </form>
       </div>
     </Page>

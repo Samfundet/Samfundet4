@@ -49,7 +49,7 @@ class VenueDto:
     name: str
     description: str
     floor: int
-    last_renovated: int
+    last_renovated: datetime
     handicapped_approved: bool
     responsible_crew: str
 
