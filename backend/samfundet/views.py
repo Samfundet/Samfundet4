@@ -128,8 +128,8 @@ class EventsUpcomingView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        # events = event_query(request.query_params)
-        events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
+        events = event_query(request.query_params)
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         return Response(data=EventSerializer(events, many=True).data)
 
 
