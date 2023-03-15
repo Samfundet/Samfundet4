@@ -48,10 +48,14 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     end_dt = serializers.DateTimeField(required=False)
+    image_url = serializers.SerializerMethodField(method_name='get_image_url')
 
     class Meta:
         model = Event
-        fields = '__all__'
+        exclude = ['image']
+
+    def get_image_url(self, event: Event) -> str:
+        return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):
@@ -138,10 +142,9 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
-    permissions = serializers.SerializerMethodField(read_only=True)
-    object_permissions = serializers.SerializerMethodField(read_only=True)
-    object_permissions = serializers.SerializerMethodField(read_only=True)
-    user_preference = serializers.SerializerMethodField(read_only=True)
+    permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
+    object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
+    user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
 
     class Meta:
         model = User

@@ -98,7 +98,7 @@ class EventsUpcomingView(APIView):
     def get(self, request: Request) -> Response:
         events = event_query(request.query_params)
         events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        return Response(data=EventSerializer(events).data)
+        return Response(data=EventSerializer(events, many=True).data)
 
 
 class EventFormView(APIView):
