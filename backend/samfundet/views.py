@@ -68,38 +68,6 @@ from .serializers import (
 )
 
 
-class HomePageView(APIView):
-    """
-        Processes data for the home page.
-        This would otherwise require several dependent requests
-        which would make the index page too slow.
-    """
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-
-        events_soon = Event.objects.filter(
-            start_dt__gt=timezone.now() - timezone.timedelta(hours=1),
-            status=Event.StatusGroup.ACTIVE
-        ).order_by('start_dt')[0:10]
-
-        events_concert = Event.objects.filter(
-            start_dt__gt=timezone.now() - timezone.timedelta(hours=1),
-            status=Event.StatusGroup.ACTIVE
-        )[0:10]
-
-        result = {
-            'events': {
-                'soon': EventSerializer(events_soon).data,
-                'soon': EventSerializer(events_soon).data,
-            },
-        }
-        events = event_query(request.query_params)
-        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        return Response(data=EventSerializer(events).data)
-
-
-
 class TextItemView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = TextItemSerializer
