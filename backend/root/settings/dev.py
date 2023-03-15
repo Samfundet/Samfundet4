@@ -72,6 +72,3 @@ LOGGING['loggers'][''] = {  # type: ignore[index] # noqa: 405
     'level': 'DEBUG',
     'propagate': True,
 }
-
-# REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = []
-# REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = []
