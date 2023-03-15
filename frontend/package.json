@@ -8,7 +8,7 @@
     "dev": "yarn run start",
     "build": "vite build",
     "preview": "vite preview",
-    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public --quiet",
     "storybook-dev": "start-storybook -p 6006 -s public",
     "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -s public",
     "build-storybook-dev": "build-storybook -s public",
