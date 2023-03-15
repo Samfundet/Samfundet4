@@ -27,15 +27,9 @@ export function HomePage() {
   function eventsByCategory(category: string): Children[] {
     const filteredEvents = events.filter((e) => e.category === category);
     return filteredEvents.map((event) => {
-      const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })
+      const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
       return (
-        <ImageCard
-          key={event.id}
-          title={event.title_en}
-          date={new Date().toString()}
-          imageUrl={event.image_url}
-          url={url}
-        />
+        <ImageCard key={event.id} title={event.title_en} date={event.start_dt} imageUrl={event.image_url} url={url} />
       );
     });
   }
