@@ -86,3 +86,17 @@
   justify-content: center;
   padding: 2em 1em;
 }
+.table {
+  tbody {
+    tr {
+      border-bottom: $grey-4 2px solid;
+    }
+    tr:nth-child(even) {
+      background-color: $grey-5;
+    }
+    tr:nth-child(odd) {
+      background-color: $grey-5;
+    }
+  }
+  
+}

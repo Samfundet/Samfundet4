@@ -87,7 +87,7 @@ export function Table({ className, columns, data }: TableProps) {
 
   return (
     <>
-      <table className={classNames(className ?? '', styles.table_samf)}>
+      <table className={classNames(styles.table_samf, className)}>
         <thead>
           <tr>
             {columns &&

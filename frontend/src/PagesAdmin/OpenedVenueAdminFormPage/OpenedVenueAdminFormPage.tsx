@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getVenues, updateVenueTime } from '~/api';
-import { Button, FormInputField, FormSelect, Link, SamfundetLogoSpinner } from '~/Components';
+import { Alert, Button, FormInputField, FormSelect, Link, SamfundetLogoSpinner } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Page } from '~/Components/Page';
 import { ITableCell, Table } from '~/Components/Table';
@@ -15,18 +15,20 @@ import styles from './OpenedVenueAdminFormPage.module.scss';
 export function OpenedVenueAdminFormPage() {
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const navigate = useNavigate();
+  const [alertState, setAlertState] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+
   const [venues, setVenues] = useState<VenueDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     setError,
     formState: { errors },
   } = useForm();
-  const watchVenue = watch(['venue']);
 
   function getAllvenues() {
     setShowSpinner(true);
@@ -45,6 +47,23 @@ export function OpenedVenueAdminFormPage() {
     getAllvenues();
   }, []);
 
+  useEffect(() => {
+    // Method for automatically get to specific venue times
+    const venue = searchParams.get('venue');
+    if (venue) {
+      if (
+        venues
+          .map(function (v) {
+            return v.id?.toString();
+          })
+          .includes(venue)
+      ) {
+        setValue('venue', venue);
+        updateFields(venue);
+      }
+    }
+  }, [searchParams, venues]);
+
   const updateFields = (id: string) => {
     if (!isNaN(id)) {
       const venue = venues.filter((obj) => {
@@ -52,8 +71,8 @@ export function OpenedVenueAdminFormPage() {
       });
       if (venue.length > 0) {
         for (const day of days) {
-          setValue('opening_' + day, venue[0]['opening_' + day]);
-          setValue('closing_' + day, venue[0]['closing_' + day]);
+          setValue('opening_' + day, venue[0]['opening_' + day].slice(0, -3));
+          setValue('closing_' + day, venue[0]['closing_' + day].slice(0, -3));
           setValue('is_open_' + day, venue[0]['is_open_' + day]);
         }
       }
@@ -61,9 +80,10 @@ export function OpenedVenueAdminFormPage() {
   };
 
   const onSubmit = (data) => {
+    console.log(data);
     updateVenueTime(data['venue'], data)
       .then(() => {
-        console.log(data);
+        setAlertState(true);
       })
       .catch((e) => {
         for (const err in e.response.data) {
@@ -82,6 +102,7 @@ export function OpenedVenueAdminFormPage() {
 
   return (
     <Page>
+      <Alert type="success" message="Åpningstider oppdatert!" closable={alertState}></Alert>
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
         <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
@@ -109,6 +130,7 @@ export function OpenedVenueAdminFormPage() {
           </FormSelect>
           <Table
             columns={[t(KEY.common_day), t(KEY.opening), t(KEY.closing), t(KEY.open)]}
+            className={styles.table}
             data={days.map(function (day) {
               return [
                 { children: <p className={styles.dayName}>{t(KEY['day_' + day])}</p> } as ITableCell,
@@ -120,6 +142,7 @@ export function OpenedVenueAdminFormPage() {
                       name={'opening_' + day}
                       className={styles.timeSelect}
                       register={register}
+                      required={t(KEY.form_required)}
                     ></FormInputField>
                   ),
                 } as ITableCell,
@@ -131,6 +154,7 @@ export function OpenedVenueAdminFormPage() {
                       name={'closing_' + day}
                       className={styles.timeSelect}
                       register={register}
+                      required={t(KEY.form_required)}
                     />
                   ),
                 } as ITableCell,
