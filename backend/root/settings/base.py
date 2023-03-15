@@ -167,8 +167,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
     'DEFAULT_PERMISSION_CLASSES':
         [
-            # 'rest_framework.permissions.IsAuthenticated',
-            # 'rest_framework.permissions.DjangoObjectPermissions',
+            'rest_framework.permissions.DjangoObjectPermissions',
             'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
         ]
 }
