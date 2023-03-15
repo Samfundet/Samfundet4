@@ -110,7 +110,7 @@ class EventPerDayView(APIView):
         Returns: archived if false, else active
 
         """
-        if self.request.GET.get('archived', None) == "true":
+        if self.request.GET.get('archived', None) == 'true':
             return 'archived'
         return 'active'
 
