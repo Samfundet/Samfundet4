@@ -7,24 +7,24 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
+from django.db.models import Q
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
-from django.db.models import Q
 
 from root.constants import XCSRFTOKEN
 
 from .utils import (
     event_query,
+    general_search,
     user_to_dataclass,
     users_to_dataclass,
     groups_to_dataclass,
     events_to_dataclass,
     closedperiod_to_dataclass,
-    general_search,
 )
 
 from .models import (
@@ -95,31 +95,34 @@ class EventPerDayView(APIView):
 
         Returns:
             url value for param key
+            Returns blank if no query
 
         """
         query = self.request.GET.get(query_word, None)
         if query is None:
             return ''
-        return query.split(',')[0]
+        return query
 
     def status_group(self) -> str:
         """
+        archived param returns true/false formats it properly for the query
 
-        Returns: Archived or active events, true/false in url query
+        Returns: archived if false, else active
 
         """
-        if self.request.GET.get('archived', None) != 'true':
+        if self.request.GET.get('archived', None) == "true":
             return 'archived'
         return 'active'
 
     def get(self, request: Request) -> Response:
         events: dict = {}
-        events_query = Event.objects.all()
+        events_query = Event.objects.all().filter(status_group=self.status_group())
 
         if '?' in self.request.build_absolute_uri():
-            events_query = general_search(events_query, self.url_args('search')).filter(Q(location__contains=self.url_args('location')))
+            events_query = general_search(events_query, self.url_args('search'))
+            events_query = events_query.filter(location__contains=self.url_args('location'))
 
-        for event in events_query.order_by('start_dt').filter(status_group=self.status_group()).values():
+        for event in events_query.order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
             events.setdefault(_data_, [])
             events[_data_].append(event)

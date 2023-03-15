@@ -103,11 +103,11 @@ def groups_to_dataclass(*, groups: Sequence[Group]) -> list[GroupDto]:
 ###
 
 
-def general_search(events_query: QuerySet, search_term: str, types: tuple = (CharField, TextField)) -> QuerySet:
+def general_search(query: QuerySet, search_term: str, types: tuple = (CharField, TextField)) -> QuerySet:
     """
 
     Args:
-        events_query: Event object
+        query: QuerySet
         search_term: What to search for
         types: What fields to search in
 
@@ -116,12 +116,12 @@ def general_search(events_query: QuerySet, search_term: str, types: tuple = (Cha
 
     """
     qs = Q()
-    for field in events_query.model._meta.fields:
+    for field in query.model._meta.fields:
         for typ in types:
             if isinstance(field, typ):
                 qs = qs | Q(**{field.name + '__icontains': search_term})
 
-    return events_query.filter(qs)
+    return query.filter(qs)
 
 
 ###

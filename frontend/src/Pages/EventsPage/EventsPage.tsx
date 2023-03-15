@@ -11,21 +11,22 @@ import { VenueDto } from '~/dto';
 
 export function EventsPage() {
   const all_venues = 'all';
-  const { t } = useTranslation();
+  const { t } = useTranslation<string>();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState<string>('');
   const [venues, setVenues] = useState<VenueDto[]>([]);
-  const [selectedVenue, setSelectedVenue] = useState(all_venues);
-  const [filterToggle, setFilterToggle] = useState(true);
-  const [archived, setArchived] = useState(false);
+  const [selectedVenue, setSelectedVenue] = useState<string>(all_venues);
+  const [filterToggle, setFilterToggle] = useState<boolean>(true);
+  const [archived, setArchived] = useState<boolean>(false);
 
-  const handleArchived = () => {
+  function handleArchived() {
     setArchived(!archived);
-  };
+  }
 
   const handleClick = () => {
     let venue_value;
+    // If statement to change the value of venue from all to empty if venue == all
     if (selectedVenue == all_venues) {
       venue_value = '';
     } else {
@@ -39,12 +40,12 @@ export function EventsPage() {
   useEffect(() => {
     getEventsPerDay().then((data) => {
       setEvents(data);
-      setShowSpinner(false);
     });
 
     getVenues().then((data) => {
       setVenues(data);
     });
+    setShowSpinner(false);
   }, []);
 
   const handleFilterToggle = () => {
@@ -73,7 +74,7 @@ export function EventsPage() {
                 type="text"
                 key={'search'}
                 onChange={(e) => {
-                  setSearch(e ? e.currentTarget.value : '');
+                  setSearch(e?.currentTarget.value || '');
                 }}
                 value={search}
                 placeholder={t(KEY.search_all)}
@@ -84,23 +85,23 @@ export function EventsPage() {
 
             <div className={styles.filterColumn}>
               <label className={styles.container} key={t(KEY.all_venues)}>
-                <RadioButton name="venues" value="" onChange={() => setSelectedVenue(all_venues)} />
+                <RadioButton name="venues" value={all_venues} onChange={() => setSelectedVenue(all_venues)} />
                 {t(KEY.all_venues)}
               </label>
 
               {venues.map((venue) => (
-                <label className={styles.container} key={venue.name}>
+                <label className={styles.container} key={venue.name || ''}>
                   <RadioButton
                     name="venues"
-                    value={venue.name}
-                    onChange={() => setSelectedVenue(venue.name as string)}
+                    value={venue.name || ''}
+                    onChange={() => setSelectedVenue(venue.name || '')}
                   />
-                  {venue.name}
+                  {venue.name || ''}
                 </label>
               ))}
             </div>
             <label className={styles.center}>
-              <Checkbox onClick={handleArchived} />
+              <Checkbox onClick={() => handleArchived()} />
               {t(KEY.archived_events)}
             </label>
           </div>
