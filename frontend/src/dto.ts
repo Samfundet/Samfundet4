@@ -80,7 +80,8 @@ export type EventDto = {
   status_group: string;
   age_group: string;
   codeword: string;
-  banner_image: string;
+  image_url?: string;
+  category: string;
 };
 
 export type EventGroupDto = {

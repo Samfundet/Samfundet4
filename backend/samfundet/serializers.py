@@ -48,10 +48,14 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     end_dt = serializers.DateTimeField(required=False)
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
-        fields = '__all__'
+        exclude = ['image']
+
+    def get_image_url(self, event: Event) -> str:
+        return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):

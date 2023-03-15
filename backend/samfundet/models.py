@@ -104,7 +104,7 @@ class Event(models.Model):
     host = models.CharField(max_length=140, blank=True, null=True)
 
     # Display
-    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner')  # TODO fix null response
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True)
 
     # TODO Maybe add color choice? https://github.com/Samfundet/Samfundet4/issues/316
     # TODO add social media?
@@ -121,8 +121,17 @@ class Event(models.Model):
         ARCHIVED = 'archived', _('Arkivert')
         CANCELED = 'canceled', _('Avlyst')
 
+    class Category(models.TextChoices):
+        SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
+        CONCERT = 'concert', _('Konsert')
+        DEBATE = 'debate', _('Debatt')
+        QUIZ = 'quiz', _('Quiz')
+        LECTURE = 'lecture', _('Kurs')
+        OTHER = 'other', _('Annet')
+
     status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
     age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
+    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
 
     # Price
     # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
