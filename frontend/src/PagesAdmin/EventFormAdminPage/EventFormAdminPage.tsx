@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormSelect, FormInputField, FormTextAreaField } from '~/Components';
+import { Button, FormInputField, FormSelect, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
 
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { getEvent, getEventForm } from '~/api';
+import { Page } from '~/Components/Page';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './EventFormAdminPage.module.scss';
-import { getEvent, getEventForm, postEvent, putEvent } from '~/api';
-import { useForm } from 'react-hook-form';
-import { STATUS } from '~/http_status_codes';
 import { DTOToForm } from '~/utils';
+import styles from './EventFormAdminPage.module.scss';
 
 export function EventFormAdminPage() {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ export function EventFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
     formState: { errors },
   } = useForm();
@@ -28,15 +28,15 @@ export function EventFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
-  // Stuff to do on first render.
+  // const [formChoices, setFormChoices] = useState<Record<string, unknown>>([]);
+
   //TODO add permissions on render
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     getEventForm()
       .then((data) => {
-        setFormChoices(data);
+        data; // setFormChoices(data);
         setShowSpinner(false);
       })
       .catch(console.error);
@@ -55,18 +55,18 @@ export function EventFormAdminPage() {
     }
   }, [id]);
 
-  const onSubmit = (data) => {
-    (id ? putEvent(id, data) : postEvent(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin_events_upcomming);
-      })
-      .catch((e) => {
-        console.error(e.response.data);
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  // function onSubmit(data: EventDto) {
+  //   (id ? putEvent(id, data) : postEvent(data))
+  //     .then(() => {
+  //       navigate(ROUTES.frontend.admin_events_upcomming);
+  //     })
+  //     .catch((e) => {
+  //       console.error(e.response.data);
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   if (showSpinner) {
     return (
@@ -87,14 +87,16 @@ export function EventFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.common_event)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         <div className={styles.seperator}>Info</div>
         <div className={styles.row}>
           <div className={styles.col}>
             <FormInputField
               errors={errors}
               className={styles.input}
-              name="title_no"
+              name="title_nb"
               register={register}
               required={t(KEY.form_required)}
             >
@@ -106,14 +108,14 @@ export function EventFormAdminPage() {
               errors={errors}
               className={styles.input}
               rows={2}
-              name="description_short_no"
+              name="description_short_nb"
               register={register}
             >
               <p className={styles.labelText}>
                 {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
-            <FormTextAreaField errors={errors} className={styles.input} name="description_long_no" register={register}>
+            <FormTextAreaField errors={errors} className={styles.input} name="description_long_nb" register={register}>
               <p className={styles.labelText}>
                 {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
@@ -132,7 +134,7 @@ export function EventFormAdminPage() {
               </p>
             </FormInputField>
             <FormTextAreaField
-              errors={errors}
+              // errors={errors}
               className={styles.input}
               rows={2}
               name="description_short_en"
@@ -142,7 +144,12 @@ export function EventFormAdminPage() {
                 {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
             </FormTextAreaField>
-            <FormTextAreaField errors={errors} className={styles.input} name="description_long_en" register={register}>
+            <FormTextAreaField
+              // errors={errors}
+              className={styles.input}
+              name="description_long_en"
+              register={register}
+            >
               <p className={styles.labelText}>
                 {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
               </p>
@@ -152,22 +159,22 @@ export function EventFormAdminPage() {
         <div className={styles.row}>
           <FormSelect
             register={register}
-            options={formChoices?.event_groups}
+            // options={formChoices?.event_groups}
             selectClassName={styles.select}
             className={styles.col}
             required={t(KEY.form_must_choose)}
-            errors={errors}
+            // errors={errors}
             name="event_group"
           >
             <p className={styles.labelText}>{t(KEY.event_type)}</p>
           </FormSelect>
           <FormSelect
             register={register}
-            options={formChoices?.age_groups}
+            // options={formChoices?.age_groups}
             selectClassName={styles.select}
             className={styles.col}
             required={t(KEY.form_must_choose)}
-            errors={errors}
+            // errors={errors}
             name="age_group"
           >
             <p className={styles.labelText}>{t(KEY.common_age_res)}</p>
@@ -175,10 +182,10 @@ export function EventFormAdminPage() {
 
           <FormSelect
             register={register}
-            options={formChoices?.venues}
+            // options={formChoices?.venues}
             selectClassName={styles.select}
             className={styles.col}
-            errors={errors}
+            // errors={errors}
             required={t(KEY.form_must_choose)}
             name="location"
           >
@@ -186,10 +193,10 @@ export function EventFormAdminPage() {
           </FormSelect>
           <FormSelect
             register={register}
-            options={formChoices?.status_groups}
+            // options={formChoices?.status_groups}
             selectClassName={styles.select}
             className={styles.col}
-            errors={errors}
+            // errors={errors}
             required={t(KEY.form_must_choose)}
             name="status_group"
           >

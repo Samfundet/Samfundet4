@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getCsrfToken } from '~/api';
 import { useAuthContext } from '~/AuthContext';
-import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
+import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN, MOBILE_NAVIGATION_OPEN } from '~/constants';
 import { Children, SetState } from '~/types';
 
 /**
@@ -12,6 +12,8 @@ type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
+  mobileNavigation: boolean;
+  setMobileNavigation: SetState<boolean>;
 };
 
 /**
@@ -49,6 +51,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
   const initialTheme = storedTheme || detectedTheme;
 
   const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+  const [mobileNavigation, setMobileNavigation] = useState(false);
   const { user } = useAuthContext();
 
   // Stuff to do on first render.
@@ -72,6 +75,15 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     }
   }
 
+  // Update body classes when mobile navigation opens/closes
+  useEffect(() => {
+    if (mobileNavigation) {
+      document.body.classList.add(MOBILE_NAVIGATION_OPEN);
+    } else {
+      document.body.classList.remove(MOBILE_NAVIGATION_OPEN);
+    }
+  }, [mobileNavigation]);
+
   // Update body classes when theme changes.
   useEffect(() => {
     if (theme === THEME.DARK) {
@@ -94,9 +106,11 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
-    theme: theme,
-    setTheme: setTheme,
-    switchTheme: switchTheme,
+    theme,
+    setTheme,
+    switchTheme,
+    mobileNavigation,
+    setMobileNavigation,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;

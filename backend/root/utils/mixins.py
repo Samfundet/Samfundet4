@@ -38,8 +38,6 @@ class FieldTrackerMixin(Model):
     ```
     """
 
-    # pylint: disable=protected-access
-
     _FTM_TRACK_FIELDS_NAME = 'ftm_track_fields'  # Not private because developer should set this manually.
     _FTM_LOADED_FIELDS_NAME = '_ftm_loaded_fields'
 
@@ -139,7 +137,7 @@ class FieldTrackerMixin(Model):
                     f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
                     f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
                 )
-        except Exception as e:  # pylint: disable=broad-except
+        except Exception as e:
             # Get all changes.
             dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()
             LOG.info(f'{self} failed attempting to save:\n\nold: {dirty_fields_old}\n\nnew: {dirty_fields_new}')
@@ -153,7 +151,6 @@ class FieldTrackerMixin(Model):
     @classmethod
     def from_db(cls, db, field_names, values):  # type: ignore # noqa: ANN001,ANN206 # Unknown types.
         """Extends django 'from_db' to set 'loaded_fields'."""
-        # pylint: disable=positional-arguments # builtin django.model method
 
         instance = super().from_db(db, field_names, values)  # noqa: FKA01
 

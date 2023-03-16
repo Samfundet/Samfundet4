@@ -27,3 +27,6 @@ yarn-error.log*
 build-storybook.log
 
 .env.docker
+
+# From building frontend.
+dist

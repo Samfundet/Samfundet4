@@ -37,6 +37,11 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: $white;
+
+  // Disable scrolling when mobile navbar is open
+  &.mobile-navigation-open {
+    overflow: hidden;
+  }
 }
 
 #root {
@@ -72,10 +77,6 @@ a {
     &:disabled {
       background-color: $theme-dark-input-bg-disabled;
     }
-  }
-
-  a {
-    color: pink;
   }
 
   .button_outlined {

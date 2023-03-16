@@ -1,9 +1,9 @@
 import { SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { getUser, login } from '~/api';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Button, InputField } from '~/Components';
+import { getUser, login } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';

@@ -174,7 +174,6 @@ class JsonFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """ Override with custom json formatting. """
-        # pylint: disable=positional-arguments
 
         # Prepend custom fields.
         # NOTE: Custom fields will be overwritten by any collision with default and extra fields.
@@ -191,10 +190,7 @@ class JsonFormatter(logging.Formatter):
         return data
 
 
-# pylint: disable=logging-too-many-args
-#
 # Run this file for quick testing.
-#
 def main() -> None:
     handler = logging.StreamHandler()
 
@@ -210,7 +206,7 @@ def main() -> None:
         d: dict = {}
         # Trigger exception.
         print(d['a'])  # noqa: T201
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         logging.exception('oops')
 
 
