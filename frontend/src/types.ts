@@ -33,10 +33,11 @@ export const COLORS = {
   orange_light: '#ffe99e',
   red_lighter: '#fff2f0',
   red_light: '#ffcfca',
-};
+} as const;
 
 export type Color = typeof COLORS;
 export type ColorKey = keyof Color;
-/** Easy type when adding setStates to Context. */
+export type ColorValue = typeof COLORS[ColorKey];
 
+/** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;

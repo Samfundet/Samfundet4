@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import { InputField } from '../InputField';
-import { KEY } from '~/i18n/constants';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './ImageQuery.module.scss';
 import { ImageDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { SetState } from '~/types';
+import { InputField } from '../InputField';
+import styles from './ImageQuery.module.scss';
 import { imageQuery } from './utils';
 
 type ImageQueryProps = {
   allImages: ImageDto[];
-  setImages: void;
+  setImages: SetState<ImageDto[]>;
 };
 
 export function ImageQuery({ allImages, setImages }: ImageQueryProps) {

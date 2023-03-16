@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
-import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { deleteEvent, getEventsUpcomming } from '~/api';
+import { Button, EventQuery, Link, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { dbT } from '~/i18n/i18n';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './EventsAdminPage.module.scss';
-import { EventDto } from '~/dto';
-import { deleteEvent, getEventsUpcomming } from '~/api';
-import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
-import { reverse } from '~/named-urls';
-import { dbT } from '~/i18n/i18n';
 
 export function EventsAdminPage() {
   const navigate = useNavigate();
@@ -50,6 +50,58 @@ export function EventsAdminPage() {
     );
   }
 
+  const data = events.map(function (event) {
+    return [
+      new AlphabeticTableCell(
+        // <Link
+        //   url={reverse({
+        //     pattern: ROUTES.frontend.event,
+        //     urlParams: { id: event.id },
+        //   })}
+        // >
+        //   {dbT(event, 'title', i18n.language) as string}
+        // </Link>
+        dbT(event, 'title', i18n.language) as string,
+      ),
+      // new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
+      new AlphabeticTableCell(event.start_dt.toLocaleString()),
+      new AlphabeticTableCell(event.event_group.name),
+      new AlphabeticTableCell(event.host),
+      new AlphabeticTableCell(event.location),
+      {
+        children: (
+          <div>
+            <Button
+              theme="blue"
+              display="block"
+              onClick={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_events_edit,
+                    urlParams: { id: event.id },
+                  }),
+                );
+              }}
+            >
+              {t(KEY.edit)}
+            </Button>
+            <Button
+              theme="samf"
+              display="block"
+              onClick={() => {
+                if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title', i18n.language)}`)) {
+                  deleteSelectedEvent(event.id);
+                }
+              }}
+            >
+              {t(KEY.delete)}
+            </Button>{' '}
+          </div>
+        ),
+      } as ITableCell,
+    ];
+  });
+
   return (
     <Page>
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
@@ -67,61 +119,7 @@ export function EventsAdminPage() {
       <div className={styles.tableContainer}>
         <Table
           columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.event_type), t(KEY.organizer), t(KEY.venue), '']}
-          data={events.map(function (element) {
-            return [
-              new AlphabeticTableCell(
-                (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.event,
-                      urlParams: { id: element.id },
-                    })}
-                  >
-                    {dbT(element, 'title', i18n.language)}
-                  </Link>
-                ),
-              ),
-              new AlphabeticTableCell(<TimeDisplay timestamp={element.start_dt} />),
-              new AlphabeticTableCell(element.event_group.name),
-              new AlphabeticTableCell(element.host),
-              new AlphabeticTableCell(element.location),
-              {
-                children: (
-                  <div>
-                    <Button
-                      theme="blue"
-                      display="block"
-                      onClick={() => {
-                        navigate(
-                          reverse({
-                            pattern: ROUTES.frontend.admin_events_edit,
-                            urlParams: { id: element.id },
-                          }),
-                        );
-                      }}
-                    >
-                      {t(KEY.edit)}
-                    </Button>
-                    <Button
-                      theme="samf"
-                      display="block"
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            `${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(element, 'title', i18n.language)}`,
-                          )
-                        ) {
-                          deleteSelectedEvent(element.id);
-                        }
-                      }}
-                    >
-                      {t(KEY.delete)}
-                    </Button>{' '}
-                  </div>
-                ),
-              } as ITableCell,
-            ];
-          })}
+          data={data}
         />
       </div>
     </Page>

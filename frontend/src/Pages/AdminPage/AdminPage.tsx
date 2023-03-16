@@ -1,12 +1,13 @@
-import { hasPerm } from '~/utils';
-import { Button } from '~/Components';
-import { Page } from '~/Components/Page';
-import { useAuthContext } from '~/AuthContext';
+import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { applets } from './applets';
-import styles from './AdminPage.module.scss';
+import { useAuthContext } from '~/AuthContext';
+import { Button } from '~/Components';
 import { AdminBox } from '~/Components/AdminBox';
+import { Page } from '~/Components/Page';
+import { KEY } from '~/i18n/constants';
+import { hasPerm } from '~/utils';
+import styles from './AdminPage.module.scss';
+import { applets } from './applets';
 import { WISEWORDS } from './data';
 
 export function AdminPage() {
@@ -17,16 +18,21 @@ export function AdminPage() {
   return (
     <Page>
       <div className={styles.header}>
-        <h1 className={styles.headerText}>{t(KEY.control_panel_title)}</h1>
-        <p className={styles.wisewords}>{WISEWORD}</p>
-        <Button theme="outlined" className={styles.faq_button}>
+        <div>
+          <h1 className={styles.headerText}>
+            <Icon icon="ph:gear-fill" width={28} />
+            {t(KEY.control_panel_title)}
+          </h1>
+          <p className={styles.wisewords}>{WISEWORD}</p>
+        </div>
+        <Button theme="outlined" rounded={true} className={styles.faq_button}>
           <p className={styles.faq_text}>{t(KEY.control_panel_faq)}</p>
         </Button>
       </div>
       <div className={styles.applets}>
         {applets.map(function (element, key) {
-          if (element.perm == null || hasPerm({ user: user, permission: element.perm })) {
-            return <AdminBox key={key} title={element.title} options={element.options} />;
+          if (!element.perm || hasPerm({ user: user, permission: element.perm })) {
+            return <AdminBox key={key} title={element.title} icon={element.icon} options={element.options} />;
           }
         })}
       </div>

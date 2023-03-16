@@ -1,0 +1,28 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  align-content: stretch;
+  min-width: 100%;
+  min-height: calc(100vh - 200px);
+}
+
+.child {
+  text-decoration: none;
+  color: $black;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.date {
+  color: $grey-2;
+}
+
+.back_button {
+  cursor: pointer;
+}

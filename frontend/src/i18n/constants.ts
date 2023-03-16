@@ -27,6 +27,7 @@ export const KEY = {
   common_description: 'common_description',
   common_short: 'common_short',
   common_long: 'common_long',
+  common_message: 'common_message',
   login_forgotten_password: 'login_forgotten_password',
   login_internal_login: 'login_internal_login',
   login_email_placeholder: 'login_email_placeholder',
@@ -41,6 +42,7 @@ export const KEY = {
   common_about_us: 'common_about_us',
   common_contact_us: 'common_contact_us',
   common_capacity: 'common_capacity',
+  common_whatsup: 'common_whatsup',
   common_image: 'common_image',
   common_results: 'common_results',
   common_tags: 'common_tags',
@@ -86,6 +88,9 @@ export const KEY = {
   admin_information_edit_page: 'admin_information_edit_page',
   admin_information_update_page: 'admin_information_update_page',
   admin_information_confirm_delete: 'admin_information_confirm_delete',
+  admin_closed_period_title: 'admin_closed_period_title',
+  admin_closed_period_new_period: 'admin_closed_period_new_period',
+  admin_closed_period_edit_period: 'admin_closed_period_edit_period',
   not_found_text: 'not_found_text',
   not_found_contact_prompt: 'not_found_contact_prompt',
   name: 'name',
@@ -111,6 +116,7 @@ export const KEY = {
   form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
+  closed_period: 'closed_period',
   saksdokument: 'saksdokument',
 } as const;
 

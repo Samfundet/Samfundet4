@@ -1,5 +1,4 @@
 import { use } from 'i18next';
-import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { LANGUAGES } from './constants';
 import { en, nb } from './translations';
@@ -11,7 +10,8 @@ export const resources = {
   [LANGUAGES.EN]: { [defaultNS]: en },
 };
 
-export function dbT(model: Record<string, string>, field: string, language: string): string {
+export function dbT(model: Record<string, unknown> | undefined, field: string, language: string): unknown {
+  if (model === undefined) return undefined;
   return model[field + '_' + language];
 }
 

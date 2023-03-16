@@ -15,14 +15,17 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
+  SaksdokumenterPage,
 } from '~/Pages';
 import {
+  ClosedPeriodAdminPage,
+  ClosedPeriodFormAdminPage,
+  EventFormAdminPage,
   EventsAdminPage,
   GangsAdminPage,
+  GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
-  GangsFormAdminPage,
-  EventFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   SaksdokumentFormAdminPage,
@@ -47,6 +50,7 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
       <Route path={ROUTES.frontend.information_page_edit} element={<InformationFormPage />} />
       <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
+      <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
       <Route path={ROUTES.frontend.admin} element={<AdminPage />} />
       <Route path={ROUTES.frontend.admin_gangs} element={<GangsAdminPage />} />
       <Route path={ROUTES.frontend.admin_gangs_create} element={<GangsFormAdminPage />} />
@@ -59,6 +63,9 @@ export function AppRoutes() {
       <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
+      <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_closed_edit} element={<ClosedPeriodFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
       <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
       <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />

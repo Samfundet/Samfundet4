@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { deleteInformationPage, getInformationPages } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useTranslation } from 'react-i18next';
+import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { dbT } from '~/i18n/i18n';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './InformationAdminPage.module.scss';
-import { InformationPageDto } from '~/dto';
-import { deleteInformationPage, getInformationPages } from '~/api';
-import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
-import { reverse } from '~/named-urls';
-import { dbT } from '~/i18n/i18n';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
@@ -29,9 +29,10 @@ export function InformationAdminPage() {
       .catch(console.error);
   }, []);
 
-  function deletePage(slug_field: string) {
-    deleteInformationPage(slug_field).then((response) => {
-      console.log(response);
+  function deletePage(slug_field: string | undefined) {
+    if (!slug_field) return;
+
+    deleteInformationPage(slug_field).then(() => {
       getInformationPages()
         .then((data) => {
           setInformationPages(data);
@@ -48,6 +49,50 @@ export function InformationAdminPage() {
       </div>
     );
   }
+
+  const data = informationPages.map(function (element) {
+    return [
+      new AlphabeticTableCell(
+        reverse({
+          pattern: ROUTES.frontend.information_page_detail,
+          urlParams: { slugField: element.slug_field },
+        }),
+      ),
+      new AlphabeticTableCell(dbT(element, 'title', i18n.language) as string),
+      new AlphabeticTableCell('To be added'),
+      new AlphabeticTableCell('To be added'),
+      {
+        children: (
+          <div>
+            <Button
+              theme="blue"
+              onClick={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.information_page_edit,
+                    urlParams: { slugField: element.slug_field },
+                  }),
+                );
+              }}
+            >
+              {t(KEY.edit)}
+            </Button>
+            <Button
+              theme="samf"
+              onClick={() => {
+                if (window.confirm(t(KEY.admin_information_confirm_delete) as string)) {
+                  deletePage(element.slug_field);
+                }
+              }}
+            >
+              {t(KEY.delete)}
+            </Button>{' '}
+          </div>
+        ),
+      } as ITableCell,
+    ];
+  });
+
   // TODO ADD TRANSLATIONS pr element
   return (
     <Page>
@@ -64,57 +109,7 @@ export function InformationAdminPage() {
         {t(KEY.common_create)} {t(KEY.information_page_short)}
       </Button>
       <div className={styles.tableContainer}>
-        <Table
-          columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']}
-          data={informationPages.map(function (element) {
-            return [
-              new AlphabeticTableCell(
-                (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.information_page_detail,
-                      urlParams: { slugField: element.slug_field },
-                    })}
-                  >
-                    {element.slug_field}
-                  </Link>
-                ),
-              ),
-              new AlphabeticTableCell(dbT(element, 'title', i18n.language)),
-              new AlphabeticTableCell('To be added'),
-              new AlphabeticTableCell('To be added'),
-              {
-                children: (
-                  <div>
-                    <Button
-                      theme="blue"
-                      onClick={() => {
-                        navigate(
-                          reverse({
-                            pattern: ROUTES.frontend.information_page_edit,
-                            urlParams: { slugField: element.slug_field },
-                          }),
-                        );
-                      }}
-                    >
-                      {t(KEY.edit)}
-                    </Button>
-                    <Button
-                      theme="samf"
-                      onClick={() => {
-                        if (window.confirm(t(KEY.admin_information_confirm_delete))) {
-                          deletePage(element.slug_field);
-                        }
-                      }}
-                    >
-                      {t(KEY.delete)}
-                    </Button>{' '}
-                  </div>
-                ),
-              } as ITableCell,
-            ];
-          })}
-        />
+        <Table columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']} data={data} />
       </div>
     </Page>
   );

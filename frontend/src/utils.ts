@@ -62,12 +62,18 @@ export function DTOToForm(
   // TODO May need adding more forms of converting, now only accepts integers, strings and datetimes
   for (const v in data) {
     if (!(v in ignore)) {
-      if (new Date(data[v]).getTime() > 0) {
-        // Checks if data is string
-        setValue(v, new Date(data[v]).toISOString().slice(0, 16));
+      if (new Date(data[v] as string).getTime() > 0) {
+        // Checks if data is date
+        const date = new Date(data[v] as string).toISOString();
+        // Determine if data is datetime or date TODO should find better method
+        if ('T00:00:00.00' === date.slice(10, 22)) {
+          setValue(v, date.slice(0, 10));
+        } else {
+          setValue(v, date.slice(0, 16));
+        }
       } else if (Number.isInteger(data[v])) {
         // Check if data is a integer
-        setValue(v, parseInt(data[v]));
+        setValue(v, parseInt(data[v] as string));
       } else setValue(v, data[v]);
     }
   }

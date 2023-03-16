@@ -77,7 +77,8 @@ export function InformationFormPage() {
     fieldname: PageFieldName,
   ) {
     const value = e?.currentTarget.value || '';
-    setPage({ ...page, [fieldname]: value });
+    const updatedInformationPage = { ...page, [fieldname]: value } as InformationPageDto;
+    setPage(updatedInformationPage);
   }
 
   function handleSave() {

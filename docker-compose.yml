@@ -1,40 +1,73 @@
 version: '3.9'
 
-### Bases ###
-x-backend-base: &backend-base
-  build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
-  volumes:
-    - ./backend:/app
-    - ignore_venv:/app/.venv
-  env_file:
-    - ./backend/.docker.env
-  environment:
-    - IS_DOCKER=yes
-### End: Bases ###
-
 ### Services ###
 services:
+
+  ### Backend Django ###
   backend:
-    <<: *backend-base
+    build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    image: samfundet-backend
+    volumes:
+      - ./backend:/app # Mount backend folder to docker image
+      - /app/.venv/ # Ignore local virtual environment
+    env_file:
+      - ./backend/.docker.env # Environment for backend docker
+    environment:
+      - IS_DOCKER=yes
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
 
-  # Mount sync on OSX Docker VM is really slow. Run on host machine instead.
+  ### Frontend React ###
+  # Mount sync on OSX Docker VM is really slow on some systems. Perhaps run on host machine instead.
   frontend:
-    build: ./frontend
+    build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     image: samfundet-frontend
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
     env_file:
-      - ./frontend/.env.docker
+      - ./frontend/.env.docker # Environment for frontend docker
     environment:
       - IS_DOCKER=yes
       - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
     ports:
       - '3000:3000'
-### End: Services ###
+    command: yarn start:docker --host 0.0.0.0 --port 3000
 
-volumes:
-  ignore_venv:
-  ignore_database:
+  ## Storybook React ###
+  storybook:
+    image: samfundet-frontend
+    volumes:
+      - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
+    env_file:
+      - ./frontend/.env.docker # Environment for frontend docker
+    environment:
+      - IS_DOCKER=yes
+      - CHOKIDAR_USEPOLLING=true # Might not be needed. Used for hot reload.
+    ports:
+      - '6006:6006'
+    command: yarn run storybook
+
+  ### Welcome Splash ###
+  welcome:
+    image: alpine:latest # Minimal image (~ 5MB)
+    command: >
+      /bin/ash -c "sleep 5 && printf '
+      \n
+      -------------------------------------------------------------------------------
+      \n\n\e[31m
+      ███████╗ █████╗ ███╗   ███╗███████╗██╗   ██╗███╗   ██╗██████╗ ███████╗████████╗\n\e[31m
+      ██╔════╝██╔══██╗████╗ ████║██╔════╝██║   ██║████╗  ██║██╔══██╗██╔════╝╚══██╔══╝\n\e[31m
+      ███████╗███████║██╔████╔██║█████╗  ██║   ██║██╔██╗ ██║██║  ██║█████╗     ██║   \n\e[31m
+      ╚════██║██╔══██║██║╚██╔╝██║██╔══╝  ██║   ██║██║╚██╗██║██║  ██║██╔══╝     ██║   \n\e[31m
+      ███████║██║  ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║ ╚████║██████╔╝███████╗   ██║   \n\e[31m
+      ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝   ╚═╝   \n
+
+      \e[34m Backend:    http://localhost:8000\n
+      \e[34mFrontend:   http://localhost:3000\n
+      \e[34mStorybook:  http://localhost:6006\n
+      \n\e[0m
+      -------------------------------------------------------------------------------\n\n
+      '"
+
+

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormInputField } from '~/Components';
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getImage } from '~/api';
+import { Button, FormInputField, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './ImageFormAdminPage.module.scss';
-import { getImage, postImage, putImage } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
+import styles from './ImageFormAdminPage.module.scss';
 
 export function ImageFormAdminPage() {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ export function ImageFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
     formState: { errors },
   } = useForm();
@@ -43,19 +43,19 @@ export function ImageFormAdminPage() {
         });
     }
     setShowSpinner(false);
-  }, [id, getImage, navigate, setValue]);
+  }, [id, navigate, setValue]);
 
-  const onSubmit = (data) => {
-    (id ? putImage(id, data) : postImage(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin_images);
-      })
-      .catch((e) => {
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  // function onSubmit(data: ImageDto) {
+  //   (id ? putImage(id, data) : postImage(data))
+  //     .then(() => {
+  //       navigate(ROUTES.frontend.admin_images);
+  //     })
+  //     .catch((e) => {
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   if (showSpinner) {
     return (
@@ -73,7 +73,9 @@ export function ImageFormAdminPage() {
       <h1 className={styles.header}>
         {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         <div className={styles.seperator}>Info</div>
         <FormInputField
           errors={errors}
