@@ -25,6 +25,7 @@ from .models import (
     Booking,
     MenuItem,
     GangType,
+    TextItem,
     EventGroup,
     ClosedPeriod,
     Saksdokument,
@@ -63,7 +64,6 @@ class UserAdmin(CustomGuardedUserAdmin):
 
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
-        # pylint: disable=positional-arguments
         n: int = obj.groups.all().count()
         return n
 
@@ -76,7 +76,7 @@ class GroupAdmin(CustomGuardedGroupAdmin):
     list_select_related = True
 
     def members(self, obj: Group) -> int:
-        # pylint: disable=positional-arguments
+
         n: int = obj.user_set.all().count()
         return n
 
@@ -321,7 +321,7 @@ class MenuAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
     def menu_item_count(self, obj: Menu) -> int:
-        # pylint: disable=positional-arguments
+
         n: int = obj.menu_items.all().count()
         return n
 
@@ -399,6 +399,19 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     # search_fields = []
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    # list_select_related = True
+
+
+@admin.register(TextItem)
+class TextItemAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['key']
+    # list_filter = []
+    list_display = ['key', '__str__']
+    search_fields = ['key']
+    # filter_horizontal = []
+    list_display_links = ['key', '__str__']
     # autocomplete_fields = []
     # list_select_related = True
 

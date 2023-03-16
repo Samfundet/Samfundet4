@@ -80,7 +80,8 @@ export type EventDto = {
   status_group: string;
   age_group: string;
   codeword: string;
-  banner_image: string;
+  image_url?: string;
+  category: string;
 };
 
 export type EventGroupDto = {
@@ -99,7 +100,7 @@ export type UserPreferenceDto = {
 };
 
 export type InformationPageDto = {
-  slug_field?: string;
+  slug_field: string;
 
   title_nb?: string;
   text_nb?: string;
@@ -154,11 +155,18 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
+  id?: number;
   title_nb?: string;
   title_en?: string;
   category?: string;
-  publication_date?: Date;
+  publication_date?: string;
   file?: string;
+};
+
+export type TextItemDto = {
+  key: string;
+  text_en: string;
+  text_nb: string;
 };
 
 export type BookingDto = {
@@ -190,6 +198,16 @@ export type GangTypeDto = {
   gangs: GangDto[];
 };
 
+export type ClosedPeriodDto = {
+  id: number;
+  message_no: string;
+  description_no: string;
+  message_en: string;
+  description_en: string;
+  start_dt: Date;
+  end_dt: Date;
+};
+
 export type TagDto = {
   id: number;
   name: string;
@@ -201,4 +219,14 @@ export type ImageDto = {
   title: string;
   image: string;
   tags: TagDto[];
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Tuple = [any, any];
+
+export type EventFormDto = {
+  age_groups: Tuple[];
+  status_groups: Tuple[];
+  venues: Array<string[]>;
+  event_groups: Tuple[];
 };

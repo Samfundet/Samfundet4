@@ -22,7 +22,6 @@ def create_link_method(*, field: str) -> Callable[[Any], str]:
 
     @admin.display(description=field, ordering=field)
     def link_method(obj: Any) -> str | None:
-        # pylint: disable=positional-arguments # Admin method.
         related_obj = getattr(obj, field, None)  # noqa: FKA01
         return get_obj_link(related_obj)
 
@@ -30,7 +29,6 @@ def create_link_method(*, field: str) -> Callable[[Any], str]:
 
 
 def get_obj_link(obj: Any) -> str | None:
-    # pylint: disable=positional-arguments
     """
     Returns an <a> tag linking to the admin-change-page for the given instance.
     Intended to be used for enhanced columns in the admin-panel by ModelAdmins.
@@ -47,14 +45,14 @@ def get_obj_link(obj: Any) -> str | None:
     """
     if obj:
         href = get_admin_url(obj=obj)
-        return mark_safe(f'<a href="{href}">{obj}</a>')  # nosec django_mark_safe,blacklist
+        return mark_safe(f'<a href="{href}">{obj}</a>')  # nosec mark_safe
     return None
 
 
 def get_admin_url(*, obj: Any) -> str:
     """https://stackoverflow.com/questions/10420271/django-how-to-get-admin-url-from-model-instance"""
     info = (obj._meta.app_label, obj._meta.model_name)
-    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk, ))  # pylint: disable=consider-using-f-string
+    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk, ))
     return admin_url
 
 
