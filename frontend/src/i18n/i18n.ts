@@ -17,7 +17,7 @@ export const resources = {
  * @param {string} field - the field to be translated, use root of the field, such as title, name
  * @param {string} language- the language, use i18n.language for dynamic translation
  */
-export function dbT(model: Record<string, string>, field: string, language: string): string {
+export function dbT(model: Record<string, unknown>, field: string, language: string): string {
   if (Object.prototype.hasOwnProperty.call(model, field + '_' + language)) {
     return model[field + '_' + language];
   } else return model[field];

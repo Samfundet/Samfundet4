@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { Children } from '~/types';
-import classNames from 'classnames';
 import styles from './RadioButton.module.scss';
 
 type RadioButtonProps = {
