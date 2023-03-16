@@ -1,55 +1,79 @@
-import { getCsrfToken, getSaksdokumenter, getUser, login, logout } from '~/api';
+import { reverse } from '~/named-urls';
+import { useEffect, useState } from 'react';
+import { getEventsUpcomming } from '~/api';
 import splash from '~/assets/banner-sample.jpg';
-import { useAuthContext } from '~/AuthContext';
-import { Button } from '~/Components';
+import { Carousel } from '~/Components/Carousel';
+import { ContentCard } from '~/Components/ContentCard';
+import { ImageCard } from '~/Components/ImageCard';
 import { SplashHeaderBox } from '~/Components/SplashHeaderBox';
-import { SAMFUNDET_ADD_EVENT } from '~/permissions';
-import { hasPerm } from '~/utils';
+import { EventDto } from '~/dto';
+import { Children } from '~/types';
 import styles from './HomePage.module.scss';
+import { ROUTES } from '~/routes';
 
 export function HomePage() {
-  const { setUser } = useAuthContext();
+  const [events, setEvents] = useState<EventDto[]>([]);
+
+  useEffect(() => {
+    getEventsUpcomming().then((events: EventDto[]) => {
+      setEvents(events);
+    });
+  }, []);
+
+  function eventCategories(): string[] {
+    return Array.from(new Set(events.map((e) => e.category)));
+  }
+
+  function eventsByCategory(category: string): Children[] {
+    const filteredEvents = events.filter((e) => e.category === category);
+    return filteredEvents.map((event) => {
+      const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
+      return (
+        <ImageCard key={event.id} title={event.title_en} date={event.start_dt} imageUrl={event.image_url} url={url} />
+      );
+    });
+  }
+
   return (
     <div className={styles.container}>
       <img src={splash} alt="Splash" className={styles.splash} />
       <div className={styles.splash_fade}></div>
       <div className={styles.content}>
         <SplashHeaderBox />
-        <div className={styles.inner_content}>
-          <h1 className={styles.header}>Samfundet4 - Dev</h1>
-          <div className={styles.button_row}>
-            <Button onClick={() => getCsrfToken()}>csrf</Button>
-            <Button onClick={() => login('emilte', 'Django123')}>login</Button>
-            <Button onClick={() => getUser()}>user</Button>
-            <Button onClick={() => getSaksdokumenter()}>saksdok</Button>
-            <Button onClick={() => logout().then(() => setUser(undefined))}>logout</Button>
-            <Button
-              onClick={() => {
-                getUser().then((user) => {
-                  setUser(user);
-                  console.log(
-                    hasPerm({
-                      user: user,
-                      permission: SAMFUNDET_ADD_EVENT,
-                      obj: 339,
-                    }),
-                  );
-                });
-              }}
-            >
-              test
-            </Button>
-          </div>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-            <p className={styles.text} key={num}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-              ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-              mollit anim id est laborum.
-            </p>
-          ))}
-        </div>
+
+        <div style={{ height: '1em' }} />
+
+        {eventCategories().map((category: string) => (
+          <Carousel key={category} header={category} spacing={1.5}>
+            {eventsByCategory(category)}
+          </Carousel>
+        ))}
+
+        {/* Below is just demo stuff until API integration is fully done */}
+
+        <ContentCard />
+
+        {['Testarr'].map((name) => (
+          <Carousel header={name} spacing={1.5} key={name}>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+              <ImageCard key={num} title={'Kultur ' + num} />
+            ))}
+          </Carousel>
+        ))}
+
+        <ContentCard />
+
+        {['Andre arrangementer', 'Flere arrangementer'].map((name) => (
+          <Carousel header={name} spacing={1.5} key={name}>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+              <ImageCard key={num} title={'Annet ' + num} />
+            ))}
+          </Carousel>
+        ))}
+
+        <ContentCard />
+
+        <div className={styles.inner_content}></div>
       </div>
     </div>
   );

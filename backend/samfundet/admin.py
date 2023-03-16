@@ -64,7 +64,6 @@ class UserAdmin(CustomGuardedUserAdmin):
 
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
-        # pylint: disable=positional-arguments
         n: int = obj.groups.all().count()
         return n
 
@@ -77,7 +76,7 @@ class GroupAdmin(CustomGuardedGroupAdmin):
     list_select_related = True
 
     def members(self, obj: Group) -> int:
-        # pylint: disable=positional-arguments
+
         n: int = obj.user_set.all().count()
         return n
 
@@ -322,7 +321,7 @@ class MenuAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
     def menu_item_count(self, obj: Menu) -> int:
-        # pylint: disable=positional-arguments
+
         n: int = obj.menu_items.all().count()
         return n
 

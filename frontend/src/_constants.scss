@@ -54,3 +54,13 @@ $content-max-size: 1200px;
 
 // Navbar size
 $navbar-height: 60px;
+
+// Content size
+$primary-content-width: 1000px;
+$primary-content-padding: calc((100vw - 1000px) / 2);
+
+$primary-content-wide-padding: 2.5em;
+$primary-content-width-wide: calc(100vw - 5em);
+
+$primary-content-mobile-padding: 1em;
+$primary-content-width-mobile: calc(100vw - 2em);

@@ -3,16 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { Children } from '~/types';
 import { BACKEND_DOMAIN } from '~/constants';
 import styles from './Link.module.scss';
+import { CSSProperties } from 'react';
 
 type LinkProps = {
   className?: string;
+  style?: CSSProperties;
   underline?: boolean;
   url: string;
   target?: 'frontend' | 'backend' | 'external' | 'email';
   children?: Children;
 };
 
-export function Link({ underline, className, children, url, target = 'frontend' }: LinkProps) {
+export function Link({ underline, className, style, children, url, target = 'frontend' }: LinkProps) {
   const navigate = useNavigate();
 
   function handleClick(event: React.MouseEvent) {
@@ -37,6 +39,7 @@ export function Link({ underline, className, children, url, target = 'frontend' 
         [styles.underline]: underline,
         [styles.regular]: !underline,
       })}
+      style={style}
       onClick={(e) => handleClick(e)}
       href={url}
     >

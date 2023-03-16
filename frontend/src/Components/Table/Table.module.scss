@@ -2,49 +2,96 @@
 
 /* stylelint-disable selector-max-combinators, selector-max-compound-selectors, selector-max-type, max-nesting-depth */
 
+$thead-bg: #dcdcdc;
+$thead-bg-hover: #dfdfdf;
+
+$tr-odd-bg: #f5f5f5;
+$tr-even-bg: #fdfdfd;
+
+$th-border-color: #cdcdcd;
+$tr-border-color: #eaeaea;
+$tr-hover-color: #f3f9fc;
+
+$sort-icon-bg: #eeeeee;
+$sort-icon-color: #222222;
+
+$table-font-color: #555555;
+$table-font-color-head: #222222;
+
 .table_samf {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  border: 1px;
   text-align: left;
   overflow: hidden;
-  box-shadow: 0 0 .5em .1em rgba(0, 0, 0, 0.4);
-
-  thead {
-    background-color: $red-samf;
-
-    tr {
-      th {
-        padding: .4em .75em;
-        color: $white;
-        font-weight: 100;
-        font-size: 1.3em;
-        a {
-          display: block;
-        }
-      }
-    }
-
-  }
-
-  tbody {
-    tr {
-      td {
-        padding: .2em .75em;
-      }
-      &:hover {
-        filter: brightness(102%);
-      }
-    }
-    tr:nth-child(even) {
-      background-color: $grey-4;
-    }
-    tr:nth-child(odd) {
-      background-color: $grey-3;
-    }
-  }
-  
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
 }
+
+thead {
+  background-color: $thead-bg;
+  border-bottom: 1px solid $tr-border-color;
+}
+
+tbody {
+  tr {
+    border-bottom: 1px solid $tr-border-color;
+  }
+  tr:nth-child(even) {
+    background-color: $tr-even-bg;
+  }
+  tr:nth-child(odd) {
+    background-color: $tr-odd-bg;
+  }
+  tr:hover {
+    background-color: $tr-hover-color;
+  }
+}
+
+th, td {
+  padding: .2em .75em;
+  color: $table-font-color;
+  font-size: 1em;
+  border-right: 1px solid $tr-border-color;
+  border-left: 1px solid $tr-border-color;
+}
+
+th {
+  padding: .4em .75em;
+  border: 1px solid $th-border-color;
+  font-weight: 500;
+  color: $table-font-color-head;
+}
+
+th:hover, td:hover {
+  filter: brightness(103%);
+}
+
+.sortable_th {
+  cursor: pointer;
+  transition: .2s;
+  &:hover {
+    background-color: $thead-bg-hover;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.03);
+  }
+}
+
+.sort_icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  .icon {
+    background-color: transparent;
+    padding: 2px;
+    border-radius: 4px;
+  }
+  .active_icon {
+    background-color: $sort-icon-bg;
+    color: $sort-icon-color;
+  }
+}
+
 
 /* stylelint-enable */

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import re
 import random
-from typing import Any
+from typing import TYPE_CHECKING
 from datetime import time, timedelta
 
 from guardian.shortcuts import assign_perm
@@ -12,6 +14,10 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
+
+if TYPE_CHECKING:
+    from typing import Any, Optional
+    from django.db.models import Model
 
 
 class Tag(models.Model):
@@ -52,6 +58,18 @@ class Image(models.Model):
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
+        """
+        Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
+        are completely separate, calling `has_perm()` with an `obj` will return `False`
+        even though the user has global perms.
+            We have decided that global permissions implies that any obj perm check
+        should return `True`. This function is extended to check both.
+        """
+        has_global_perm = super().has_perm(perm=perm)
+        has_object_perm = super().has_perm(perm=perm, obj=obj)
+        return has_global_perm or has_object_perm
+
 
 class EventGroup(models.Model):
     name = models.CharField(max_length=140)
@@ -86,7 +104,7 @@ class Event(models.Model):
     host = models.CharField(max_length=140, blank=True, null=True)
 
     # Display
-    banner_image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name='Banner')  # TODO fix null response
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True)
 
     # TODO Maybe add color choice? https://github.com/Samfundet/Samfundet4/issues/316
     # TODO add social media?
@@ -103,8 +121,17 @@ class Event(models.Model):
         ARCHIVED = 'archived', _('Arkivert')
         CANCELED = 'canceled', _('Avlyst')
 
+    class Category(models.TextChoices):
+        SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
+        CONCERT = 'concert', _('Konsert')
+        DEBATE = 'debate', _('Debatt')
+        QUIZ = 'quiz', _('Quiz')
+        LECTURE = 'lecture', _('Kurs')
+        OTHER = 'other', _('Annet')
+
     status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
     age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
+    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
 
     # Price
     # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315

@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
+import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useScrollY } from '~/hooks';
+import { useScreenCenterOffset } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './SplashHeaderBox.module.scss';
 
@@ -12,14 +13,15 @@ type SplashHeaderBoxProps = {
 export function SplashHeaderBox({ className }: SplashHeaderBoxProps) {
   const { t } = useTranslation();
 
-  const scrollY = useScrollY();
+  const id = useId();
+  const scrollY = useScreenCenterOffset(id);
 
-  const containerScrollSpeed = -0.1;
+  const containerScrollSpeed = 0.05;
   const containerTranslation = scrollY * containerScrollSpeed;
   const containerTransform = 'translateY(' + containerTranslation + 'px)';
 
   return (
-    <div className={classnames(styles.container, className)} style={{ transform: containerTransform }}>
+    <div className={classnames(styles.container, className)} style={{ transform: containerTransform }} id={id}>
       <div className={classnames(styles.box, styles.box_left)}>
         <h2 className={styles.title_left}>
           <Icon icon="bx:party" />

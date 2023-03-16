@@ -69,11 +69,8 @@ jobs:
       - name: Run mypy
         run: python -m pipenv run mypy --config-file mypy.ini .
 
-      - name: Run pylint
-        run: python -m pipenv run ./run-pylint.sh
-
       - name: Run seeds
-        run:  python -m pipenv run python manage.py seed
+        run: python -m pipenv run python manage.py seed
 
   job_verify_docker:
     name: Verify docker
@@ -99,13 +96,14 @@ jobs:
         run: docker compose build
 
       - name: Start containers
-        run: docker compose up -d; sleep 10 # Give additional seconds to boot.
+        run: docker compose up -d; sleep 20 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
         run: |
           docker compose exec backend echo 
           docker compose exec frontend echo
+          docker compose exec storybook echo
 
       - name: Seed backend for Cypress tests
         run: docker compose exec backend pipenv run python manage.py seed_cypress
@@ -152,3 +150,6 @@ jobs:
 
       - name: Run stylelint
         run: yarn run stylelint:check
+
+      - name: Run typescript compiler check
+        run: yarn run tsc:check

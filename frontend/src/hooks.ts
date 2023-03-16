@@ -24,9 +24,7 @@ export function useGoatCounter(): void {
   useEffect(() => {
     if (window.goatcounter === undefined) return;
     const path = location.pathname + location.search + location.hash;
-    window.goatcounter.count({
-      path: path,
-    });
+    window.goatcounter.count({ path: path });
     console.log(`GoatCounter tracked path: ${path}`);
   }, [location]);
 }
@@ -86,8 +84,8 @@ export function useScrollY(): number {
   const [scrollY, setScrollY] = useState(window.scrollY);
   useEffect(() => {
     function handleNavigation(e: Event) {
-      const window = e.currentTarget;
-      if (window != null) {
+      const target = e.currentTarget as Window;
+      if (target != null) {
         setScrollY(window.scrollY);
       }
     }
@@ -97,4 +95,31 @@ export function useScrollY(): number {
     };
   }, []);
   return scrollY;
+}
+
+// Element offset from screen center (id of html element)
+export function useScreenCenterOffset(id: string): number {
+  const element = document.getElementById(id);
+  const rect = element?.getBoundingClientRect();
+  const [positionY, setPositionY] = useState(rect?.y ?? 0);
+
+  useEffect(() => {
+    function handleNavigation(e: Event) {
+      const target = e.currentTarget;
+      if (target != null) {
+        const element = document.getElementById(id);
+        const rect = element?.getBoundingClientRect();
+        if (rect != null) {
+          const centerScreen = window.innerHeight / 2;
+          const centerEl = rect.y + rect.height / 2;
+          setPositionY(centerEl - centerScreen);
+        }
+      }
+    }
+    window.addEventListener('scroll', handleNavigation);
+    return () => {
+      window.removeEventListener('scroll', handleNavigation);
+    };
+  }, [id]);
+  return positionY;
 }

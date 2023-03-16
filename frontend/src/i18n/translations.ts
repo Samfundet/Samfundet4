@@ -125,6 +125,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.sulten_page_see_menu]: 'Se meny',
   [KEY.sulten_page_about_us]: 'Om Lyche',
   [KEY.sulten_page_more_about_us]: 'Mer om oss',
+  [KEY.event]: '',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -249,4 +250,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.sulten_page_see_menu]: 'See our menu',
   [KEY.sulten_page_about_us]: 'About Lyche',
   [KEY.sulten_page_more_about_us]: 'More about us',
+  [KEY.admin_information_new_page]: '',
+  [KEY.admin_information_create_page]: '',
+  [KEY.event]: '',
 };

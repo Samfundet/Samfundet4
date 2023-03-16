@@ -5,9 +5,9 @@ type DropdownProps = {
   className?: string;
   wrapper?: string;
   default_value?: string;
-  options?: string[];
+  options?: string[][];
   label?: string;
-  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 export function Dropdown({ options, wrapper, default_value, onChange, className, label }: DropdownProps) {

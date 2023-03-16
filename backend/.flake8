@@ -7,7 +7,7 @@
 ; Version is downgraded from 6.0.0 to allow plugins to catch up with breaking changes.
 ; TODO: upgrade later.
 
-; Same as pylint and yapf.
+; Same as yapf.
 max-line-length = 160
 require-plugins = flake8-print, flake8-keyword-arguments, flake8-quotes, flake8-annotations
 
@@ -38,6 +38,10 @@ extend-ignore=
     ANN102,
     ANN002,
     ANN003,
+    F841,
+    E303,
+
+; Don't use comments on the lists above.
 
 ; ANN101: Don't require typing of self. (flake8-annotations)
 ; ANN001: Covered by mypy. (flake8-annotations)

@@ -5,9 +5,8 @@ import { Button, FormInputField, FormSelect, SamfundetLogoSpinner } from '~/Comp
 import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { getSaksdokument, getSaksdokumentForm } from '~/api';
 import { Page } from '~/Components/Page';
-import { getSaksdokument, getSaksdokumentForm, postSaksdokument, putSaksdokument } from '~/api';
-import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -20,10 +19,10 @@ export function SaksdokumentFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
 
   const { t } = useTranslation();
@@ -59,21 +58,21 @@ export function SaksdokumentFormAdminPage() {
     }
   }, [id]);
 
-  const onSubmit = (data: SaksdokumentDto) => {
-    // Remove file from data to be updated, as it currently cannot be changed
-    id && delete data['file'];
+  // function onSubmit(data: SaksdokumentDto) {
+  //   // Remove file from data to be updated, as it currently cannot be changed
+  //   id && delete data['file'];
 
-    (id ? putSaksdokument(id, data) : postSaksdokument(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin);
-      })
-      .catch((e) => {
-        console.error(e.response.data);
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  //   (id ? putSaksdokument(id, data) : postSaksdokument(data))
+  //     .then(() => {
+  //       navigate(ROUTES.frontend.admin);
+  //     })
+  //     .catch((e) => {
+  //       console.error(e.response.data);
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   if (showSpinner) {
     return (
@@ -91,11 +90,13 @@ export function SaksdokumentFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         <div className={styles.row}>
           <div className={styles.col}>
             <FormInputField
-              errors={errors}
+              // errors={errors}
               className={styles.input}
               name="title_no"
               register={register}
@@ -108,7 +109,7 @@ export function SaksdokumentFormAdminPage() {
           </div>
           <div className={styles.col}>
             <FormInputField
-              errors={errors}
+              // errors={errors}
               className={styles.input}
               name="title_en"
               required={true}
@@ -123,7 +124,7 @@ export function SaksdokumentFormAdminPage() {
         <div className={styles.row}>
           <FormInputField
             type="datetime-local"
-            errors={errors}
+            // errors={errors}
             className={classNames(styles.input, styles.col)}
             name="publication_date"
             register={register}
@@ -136,7 +137,7 @@ export function SaksdokumentFormAdminPage() {
             options={formChoices}
             selectClassName={styles.select}
             className={styles.col}
-            errors={errors}
+            // errors={errors}
             required={true}
             name="category"
           >
