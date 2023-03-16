@@ -1,6 +1,9 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 /** Module for global generic types. */
 
+/** Type for home page element. */
+export type HomePageElementVariation = 'carousel' | 'large-card';
+
 /** Type for html button types. */
 export type ButtonType = 'submit' | 'reset' | 'button';
 

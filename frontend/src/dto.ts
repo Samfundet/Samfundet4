@@ -1,4 +1,5 @@
 import { ThemeValue } from '~/constants';
+import { HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -16,6 +17,15 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+};
+
+export type HomePageElementDto = {
+  variation: HomePageElementVariation;
+  title_nb: string;
+  title_en: string;
+  description_nb?: string;
+  description_no?: string;
+  events: EventDto[];
 };
 
 export type GroupDto = {

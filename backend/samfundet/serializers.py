@@ -1,10 +1,9 @@
-from rest_framework import serializers
+from typing import List
 
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
-
 from guardian.models import GroupObjectPermission, UserObjectPermission
-from typing import List
+from rest_framework import serializers
 
 from .models import (
     Tag,
@@ -47,8 +46,12 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    end_dt = serializers.DateTimeField(required=False)
-    image_url = serializers.SerializerMethodField(method_name='get_image_url')
+    # Read only properties (computed property, foreign model)
+    end_dt = serializers.DateTimeField(read_only=True)
+    image_url = serializers.SerializerMethodField(method_name='get_image_url', read_only=True)
+
+    # For post/put (change image by id)
+    image_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Event
