@@ -38,7 +38,7 @@ def large_card(event: Event) -> HomePageElement:
         title_en=event.title_en,
         description_nb=event.description_short_nb,
         description_en=event.description_short_en,
-        events=[event]
+        events=[event],
     )
 
 
@@ -51,51 +51,54 @@ def carousel(title_nb: str, title_en: str, events: list[Event]) -> HomePageEleme
     )
 
 
-def generate() -> str:
+def generate() -> list[dict]:
     elements: list[HomePageElement] = []
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
 
     # Splash event
     # TODO we should make a datamodel for this
     splash_event: Event = upcoming_events.first()
-    elements.append(large_card(splash_event))
+    if splash_event:
+        elements.append(large_card(splash_event))
 
     # Upcoming events
     elements.append(carousel(
-        title_nb="Arrangementer",
-        title_en="Events",
+        title_nb='Arrangementer',
+        title_en='Events',
         events=list(upcoming_events[:10]),
     ))
 
     # Another highlight
     # TODO we should make a datamodel for this
     splash_event2: Event = upcoming_events.last()
-    elements.append(large_card(splash_event2))
+    if splash_event2:
+        elements.append(large_card(splash_event2))
 
     # Concerts
     elements.append(carousel(
-        title_nb="Konserter",
-        title_en="Concerts",
+        title_nb='Konserter',
+        title_en='Concerts',
         events=list(upcoming_events.filter(category=Event.Category.CONCERT)[:10]),
     ))
 
     # Another highlight
     # TODO we should make a datamodel for this
     splash_event3: Event = upcoming_events[2]
-    elements.append(large_card(splash_event3))
+    if splash_event3:
+        elements.append(large_card(splash_event3))
 
     # Debates
     elements.append(carousel(
-        title_nb="Debatter",
-        title_en="Debates",
+        title_nb='Debatter',
+        title_en='Debates',
         events=list(upcoming_events.filter(category=Event.Category.DEBATE)[:10]),
     ))
 
     # Courses
     elements.append(
         carousel(
-            title_nb="Kurs og Forelesninger",
-            title_en="Courses & Lectures",
+            title_nb='Kurs og Forelesninger',
+            title_en='Courses & Lectures',
             events=list(upcoming_events.filter(category=Event.Category.LECTURE)[:10]),
         )
     )
@@ -103,8 +106,8 @@ def generate() -> str:
     # Other
     elements.append(
         carousel(
-            title_nb="Andre arrangementer",
-            title_en="Other events",
+            title_nb='Andre arrangementer',
+            title_en='Other events',
             events=list(upcoming_events.filter(category=Event.Category.OTHER)[:10]),
         )
     )
