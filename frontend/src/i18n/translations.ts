@@ -6,6 +6,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_information]: 'Informasjon',
   [KEY.common_internal]: 'Intern',
   [KEY.common_member]: 'Medlem',
+  [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_other_language]: 'English',
@@ -40,6 +41,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_reservations]: 'Reservasjon',
   [KEY.common_menu]: 'Meny',
   [KEY.common_about_us]: 'Om oss',
+  [KEY.common_about_samfundet]: 'Om Samfundet',
   [KEY.common_contact_us]: 'Kontakt oss',
   [KEY.common_not_found]: 'Ikke funnet',
   [KEY.gang]: 'Gjeng',
@@ -118,6 +120,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
+  [KEY.photos]: 'Foto',
+  [KEY.nybygg]: 'Nybygg',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -125,6 +129,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_information]: 'Information',
   [KEY.common_internal]: 'Internal',
   [KEY.common_member]: 'Member',
+  [KEY.common_membership]: 'Membership',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_volunteer]: 'Volunteer',
   [KEY.common_other_language]: 'Norsk',
@@ -154,6 +159,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_menu]: 'Menu',
   [KEY.common_about_us]: 'About us',
+  [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_not_found]: 'Not found',
@@ -235,4 +241,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.publication]: 'Publication',
   [KEY.closed_period]: 'Closed period',
   [KEY.saksdokument]: 'case document',
+  [KEY.photos]: 'Photos',
+  [KEY.nybygg]: 'New building',
 };

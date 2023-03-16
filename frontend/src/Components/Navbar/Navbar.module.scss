@@ -33,7 +33,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg;
-  color: black;
+  color: $black;
   transition: .3s;
   display: flex;
   align-items: center;
@@ -58,6 +58,53 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: 100%;
 }
 
+.navbar_item {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.dropdown_container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  width: 100%;
+  flex-direction: column;
+  background: $navbar-bg;
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
+    color: $white;
+  }
+}
+
+.navbar_dropdown_item:hover .dropdown_container, .dropdown_container:hover {
+  display: flex;
+}
+
+.navbar_dropdown_link {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $black;
+
+  @include theme-dark {
+    color: $white;
+  }
+
+  &:hover {
+    background: $navbar-link-light-hover-gradient-top;
+    text-decoration: none;
+
+    @include theme-dark {
+      background: $navbar-link-dark-hover-gradient-top;
+    }
+  }
+}
+
 /* Desktop navigation items */
 .navbar_link {
   color: inherit;
@@ -72,7 +119,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   flex: 1;
   text-align: center;
   justify-content: center;
-  background: transparent;
+  z-index: 2;
 
   @include for-tablet-down {
     display: none;
@@ -91,7 +138,15 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
       );
       color: #eeeeee;
     }
+  }
+}
 
+/* Set background color to ensure box-shadow from dropdown menus comes beneath entire menu */
+#navbar_container:not(.transparent_navbar) .navbar_link:not(:hover) {
+  background: $navbar-bg;
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
   }
 }
 
@@ -271,6 +326,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
+  display: flex;
 }
 
 .mobile_widgets {

@@ -12,6 +12,7 @@ export const KEY = {
   common_restaurant: 'common_restaurant',
   common_volunteer: 'common_volunteer',
   common_member: 'common_member',
+  common_membership: 'common_membership',
   common_internal: 'common_internal',
   common_other_language: 'common_other_language',
   common_save: 'common_save',
@@ -40,6 +41,7 @@ export const KEY = {
   common_reservations: 'common_reservations',
   common_menu: 'common_menu',
   common_about_us: 'common_about_us',
+  common_about_samfundet: 'common_about_samfundet',
   common_contact_us: 'common_contact_us',
   common_capacity: 'common_capacity',
   common_whatsup: 'common_whatsup',
@@ -118,6 +120,8 @@ export const KEY = {
   publication: 'publication',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
+  photos: 'photos',
+  nybygg: 'nybygg',
 } as const;
 
 /**

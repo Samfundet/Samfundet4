@@ -18,6 +18,8 @@ export const THEME_KEY = 'theme';
 
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
+export const FOTO_URL = 'https://foto.samfundet.no/';
+
 /**
  * Screen sizes, breakpoint (bp).
  * These values are also in _constants.scss
