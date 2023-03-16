@@ -65,8 +65,18 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   position: relative;
 }
 
+.hidden {
+  display: none;
+}
+
 .navbar_mobile_item {
   position: relative;
+}
+
+.mobile_dropdown_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .dropdown_container {
@@ -85,7 +95,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
 }
 
-.navbar_dropdown_item:hover .dropdown_container, .dropdown_container:hover {
+.navbar_dropdown_item:hover .dropdown_container, .dropdown_container:hover, .dropdown_open {
   display: flex;
 }
 

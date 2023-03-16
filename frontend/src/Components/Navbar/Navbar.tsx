@@ -11,9 +11,9 @@ import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useGlobalContext } from '../../GlobalContextProvider';
+import { useGlobalContext } from '~/GlobalContextProvider';
 import styles from './Navbar.module.scss';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 const scrollDistanceForOpaque = 30;
 
@@ -25,6 +25,7 @@ export function Navbar() {
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
+  const [expandedDropdown, setExpandedDropdown] = useState('');
 
   // Scroll detection
   const scrollY = useScrollY();
@@ -38,6 +39,13 @@ export function Navbar() {
     mobileNavigation && styles.navbar_mobile,
   );
   const navbarImage = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
+
+  useEffect(() => {
+    // Close expanded dropdown menu whenever mobile navbar is closed
+    if (!mobileNavigation) {
+      setExpandedDropdown('');
+    }
+  }, [mobileNavigation]);
 
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
@@ -96,19 +104,36 @@ export function Navbar() {
   const navbarItem = (route: string, label: string, dropdownLinks?: ReactNode) => {
     const itemClasses = classNames(
       isDesktop ? styles.navbar_item : styles.navbar_mobile_item,
-      dropdownLinks ? styles.navbar_dropdown_item : '',
+      dropdownLinks && styles.navbar_dropdown_item,
+      expandedDropdown !== '' && expandedDropdown !== label && styles.hidden,
     );
+
+    const dropdownClasses = classNames(
+      isDesktop ? styles.dropdown_container : styles.mobile_dropdown_container,
+      expandedDropdown === label && styles.dropdown_open,
+    );
+
+    // Desktop: show dropdown on hover. Mobile: show dropdown after clicking
+    const showDropdown = dropdownLinks && (isDesktop || expandedDropdown === label);
+
     return (
       <div className={itemClasses}>
         <Link
           to={route}
           className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
+          onClick={() => {
+            if (!dropdownLinks) {
+              setMobileNavigation(false);
+            } else {
+              // toggle dropdown
+              setExpandedDropdown(expandedDropdown === label ? '' : label);
+            }
+          }}
         >
           {label}
-          {dropdownLinks && <Icon icon={'carbon:chevron-down'} width={18} />}
+          {dropdownLinks && <Icon icon={`carbon:chevron-${expandedDropdown === label ? 'up' : 'down'}`} width={18} />}
         </Link>
-        {dropdownLinks && <div className={styles.dropdown_container}>{dropdownLinks}</div>}
+        {showDropdown && <div className={dropdownClasses}>{dropdownLinks}</div>}
       </div>
     );
   };
