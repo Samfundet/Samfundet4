@@ -1,23 +1,22 @@
+import { Icon } from '@iconify/react';
+import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
+import { Options, TYPE } from '~/Components/AdminBox/types';
+import { THEME } from '~/constants';
+import { useGlobalContext } from '~/GlobalContextProvider';
 import { hasPerm } from '~/utils';
 import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
 
 type AdminBoxProps = {
   title: string;
-  options: Array;
+  icon?: string;
+  options: Options[];
 };
 
-const ADD = 'ADD';
-const MANAGE = 'MANAGE';
-const EDIT = 'EDIT';
-const STEAL = 'STEAL';
-const INFO = 'INFO';
-const KILROY = 'KILROY';
-
 /* TODO 
-  ADD more options, such as navigation with button links may require react routers
+  TYPE.ADD more options, such as navigation with button links may require react routers
   Test with Posting and such
   Only visual, not any functionality yet
    
@@ -25,52 +24,53 @@ const KILROY = 'KILROY';
     Header
   OPTIONS: list of json objects: {text:String,url:String,type:String}
   KEYS for different types:
-    ADD: Creates a green button link, with text
-    MANAGE: Creates an outlined button link, with text
-    STEAL: Creates an input Form, where url is post location, text is button text
-    INFO: Plain text
-    KILROY: Our demigod of shrimp heaven and hell
+    TYPE.ADD: Creates a green button link, with text
+    TYPE.MANAGE: Creates an outlined button link, with text
+    TYPE.STEAL: Creates an input Form, where url is post location, text is button text
+    TYPE.INFO: Plain text
+    TYPE.KILROY: Our demigod of shrimp heaven and hell
 
 
 
 */
-export function AdminBox({ title, options }: AdminBoxProps) {
+export function AdminBox({ title, icon, options }: AdminBoxProps) {
   const navigate = useNavigate();
+  const { theme } = useGlobalContext();
   const { user } = useAuthContext();
+  const isDarkTheme = theme === THEME.DARK;
 
-  fuc;
   return (
-    <div className={styles.applet}>
+    <div className={classNames(styles.applet, isDarkTheme && styles.dark_theme)}>
       <div className={styles.top}>
-        <h1 className={styles.header}>{title}</h1>
+        <h1 className={styles.header}>
+          {icon && <Icon icon={icon} inline={true}></Icon>}
+          {title}
+        </h1>
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {
           const userHasPerm = element.perm == null || hasPerm({ user: user, permission: element.perm });
           if (userHasPerm) {
-            if (element.type == ADD) {
+            if (element.type == TYPE.ADD) {
               return (
                 <Button key={key} theme="success" onClick={() => navigate(element.url)} className={styles.button}>
                   {' '}
                   {element.text}
                 </Button>
               );
-            }
-            if (element.type == MANAGE) {
+            } else if (element.type == TYPE.MANAGE) {
               return (
                 <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
                   {element.text}
                 </Button>
               );
-            }
-            if (element.type == EDIT) {
+            } else if (element.type == TYPE.EDIT) {
               return (
                 <Button key={key} theme="blue" onClick={() => navigate(element.url)} className={styles.button}>
                   {element.text}
                 </Button>
               );
-            }
-            if (element.type == STEAL) {
+            } else if (element.type == TYPE.STEAL) {
               return (
                 <form key={key} className={styles.search} action={element.url} method="post">
                   <div style={{ flex: 1 }}>
@@ -81,13 +81,13 @@ export function AdminBox({ title, options }: AdminBoxProps) {
                   </Button>
                 </form>
               );
-            } else if (element.type == INFO) {
+            } else if (element.type == TYPE.INFO) {
               return (
                 <p key={key} className={styles.text}>
                   {element.text}
                 </p>
               );
-            } else if (element.type == KILROY) {
+            } else if (element.type == TYPE.KILROY) {
               return <div key={key} className={styles.KILROY}></div>;
             }
           }

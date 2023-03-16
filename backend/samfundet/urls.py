@@ -25,6 +25,7 @@ router.register('food-preference', views.FoodPreferenceView, 'food_preference')
 router.register('food-category', views.FoodCategoryView, 'food_category')
 router.register('booking', views.BookingView, 'booking')
 router.register('table', views.TableView, 'table')
+router.register('textitem', views.TextItemView, 'text_item')
 
 app_name = 'samfundet'
 
@@ -37,7 +38,7 @@ urlpatterns = [
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
     path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
-    path('events-upcomming/', views.EventsUpcommingView.as_view(), name='eventsupcomming'),
+    path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
     path('events/form/', views.EventFormView.as_view(), name='eventsform'),
     path('gangs/form/', views.GangFormView.as_view(), name='gangform'),
     path('saksdokument/form/', views.SaksdokumentFormView.as_view(), name='saksdokumentform'),

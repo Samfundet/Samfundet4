@@ -120,9 +120,13 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
+<<<<<<< HEAD
   [KEY.open]: 'Åpent',
   [KEY.opening]: 'Åpner',
   [KEY.closing]: 'Stenger',
+=======
+  [KEY.event]: '',
+>>>>>>> master
 };
 
 export const en: Record<KeyValues, string> = {
@@ -245,4 +249,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.open]: 'Open',
   [KEY.opening]: 'Opening',
   [KEY.closing]: 'Closing',
+  [KEY.admin_information_new_page]: '',
+  [KEY.admin_information_create_page]: '',
+  [KEY.event]: '',
 };

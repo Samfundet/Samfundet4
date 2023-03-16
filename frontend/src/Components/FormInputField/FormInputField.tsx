@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
+import { FieldErrors, FieldValues, Message, UseFormRegister, ValidationRule } from 'react-hook-form/dist/types';
 import { Children } from '~/types';
 import styles from './FormInputField.module.scss';
 
@@ -13,9 +13,9 @@ type FormInputFieldProps = {
   type?: types;
   name: string;
   register: UseFormRegister<FieldValues>;
-  required?: boolean;
+  required?: Message | ValidationRule<boolean> | null;
   helpText?: string;
-  errors?: Record<string, unknown>;
+  errors?: FieldErrors;
 };
 
 export function FormInputField({
@@ -30,12 +30,19 @@ export function FormInputField({
   helpText,
   type = 'text',
 }: FormInputFieldProps) {
-  const inputStyle = classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors);
+  const isError = errors && name in errors;
+  const classnames = classNames(styles.input_field, inputClassName, { [styles.errors]: isError });
+
+  /** RHF required doesn't allow null value. */
+  const required_ = required || undefined;
+
   return (
     <div className={className}>
-      <label className={classNames(styles.label, labelClassName)}>{children}</label>
-      <input className={inputStyle} type={type} {...register(name, { required })} />
-      {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
+      <label className={classNames(styles.label, labelClassName)}>
+        {children}
+        <input className={classnames} type={type} {...register(name, { required: required_ })} />
+        {isError && <div className={styles.errors_text}>{errors[name]?.message as string}</div>}
+      </label>
       {helpText && <p className={styles.helpText}>{helpText}</p>}
     </div>
   );

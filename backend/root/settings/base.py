@@ -27,11 +27,6 @@ environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
 AUTH_USER_MODEL = 'samfundet.User'
 
-### Print variables ###
-print(f'=== {BASE_DIR=}')  # noqa: T201
-print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
-### End: Print variables ###
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS: list[str] = []
@@ -169,7 +164,10 @@ INSTALLED_APPS += [
 # https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES':
         [
             # 'rest_framework.permissions.IsAuthenticated',
@@ -196,13 +194,8 @@ INSTALLED_APPS += [
 
 ################## LOGGING ##################
 
-# pylint: disable=wrong-import-position,wrong-import-order
-import logging.config  # noqa: E402
-
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
 from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
-
-# pylint: enable=wrong-import-position,wrong-import-order
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
@@ -302,8 +295,6 @@ LOGGING = {
             },
         },
 }
-
-logging.config.dictConfig(LOGGING)
 
 # Quick fix for avoiding concurrency issues related to db access
 # Note: this might not be an ideal solution. See these links for information

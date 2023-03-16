@@ -20,9 +20,6 @@ django-admin-autocomplete-filter = "*"
 
 [dev-packages]
 yapf = "*"
-pylint = "*"
-pylint-django = "*"
-pylint-quotes = "*"
 mypy = "*"
 bandit = "*"
 pillow = "*"

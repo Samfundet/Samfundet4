@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormInputField, FormTextAreaField } from '~/Components';
-import { Page } from '~/Components/Page';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getClosedPeriod } from '~/api';
+import { Button, FormInputField, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './ClosedPeriodFormAdminPage.module.scss';
-import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { useForm } from 'react-hook-form';
 import { DTOToForm } from '~/utils';
+import styles from './ClosedPeriodFormAdminPage.module.scss';
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ export function ClosedPeriodFormAdminPage() {
 
   const {
     register,
-    handleSubmit,
-    setError,
+    // handleSubmit,
+    // setError,
     setValue,
     formState: { errors },
   } = useForm();
@@ -47,17 +47,17 @@ export function ClosedPeriodFormAdminPage() {
     setShowSpinner(false);
   }, [id]);
 
-  const onSubmit = (data) => {
-    (id ? putClosedPeriod(id, data) : postClosedPeriod(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin_closed);
-      })
-      .catch((e) => {
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  // function onSubmit(data: ClosedPeriodDto) {
+  //   (id ? putClosedPeriod(id, data) : postClosedPeriod(data))
+  //     .then(() => {
+  //       navigate(ROUTES.frontend.admin_closed);
+  //     })
+  //     .catch((e) => {
+  //       for (const err in e.response.data) {
+  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
+  //       }
+  //     });
+  // }
 
   if (showSpinner) {
     return (
@@ -75,7 +75,9 @@ export function ClosedPeriodFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* TODO: fix */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      <form>
         <div className={styles.row}>
           <div className={styles.col}>
             <FormTextAreaField

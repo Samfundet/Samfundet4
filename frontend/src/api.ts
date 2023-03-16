@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import {
   ClosedPeriodDto,
   EventDto,
+  EventFormDto,
   EventGroupDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -12,6 +13,7 @@ import {
   MenuDto,
   MenuItemDto,
   SaksdokumentDto,
+  TextItemDto,
   UserDto,
   UserPreferenceDto,
   VenueDto,
@@ -52,7 +54,7 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function putUserPreference(data: UserPreferenceDto): Promise<unknown> {
+export async function putUserPreference(data: Partial<UserPreferenceDto>): Promise<unknown> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -71,7 +73,7 @@ export async function getVenues(): Promise<VenueDto[]> {
   return response.data;
 }
 
-export async function getVenue(id: number): Promise<VenueDto> {
+export async function getVenue(id: string | number): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
   const response = await axios.get<VenueDto>(url, { withCredentials: true });
 
@@ -115,7 +117,10 @@ export async function postInformationPage(data: InformationPageDto): Promise<Inf
   return response.data;
 }
 
-export async function putInformationPage(slug_field: string, page: InformationPageDto): Promise<AxiosResponse> {
+export async function putInformationPage(
+  slug_field: string,
+  page: Partial<InformationPageDto>,
+): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
@@ -150,27 +155,27 @@ export async function postEvent(data: EventDto): Promise<EventDto> {
   return response.data;
 }
 
-export async function putEvent(id: number, data: EventDto): Promise<AxiosResponse> {
+export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
   return response;
 }
 
-export async function deleteEvent(id: number): Promise<AxiosResponse> {
+export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
 
   return response;
 }
 
-export async function getEventForm(): Promise<AxiosResponse> {
+export async function getEventForm(): Promise<AxiosResponse<EventFormDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
-  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
+  const response = await axios.get<AxiosResponse<EventFormDto>>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function getEvent(pk: number): Promise<EventDto> {
+export async function getEvent(pk: string | number): Promise<EventDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
 
@@ -191,7 +196,7 @@ export async function getMenus(): Promise<MenuDto[]> {
   return response.data;
 }
 
-export async function getMenu(pk: number): Promise<MenuDto> {
+export async function getMenu(pk: string | number): Promise<MenuDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_detail, urlParams: { pk: pk } });
   const response = await axios.get<MenuDto>(url, { withCredentials: true });
 
@@ -205,7 +210,7 @@ export async function getMenuItems(): Promise<MenuItemDto[]> {
   return response.data;
 }
 
-export async function getMenuItem(pk: number): Promise<MenuItemDto> {
+export async function getMenuItem(pk: string | number): Promise<MenuItemDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<MenuItemDto>(url, { withCredentials: true });
@@ -220,7 +225,7 @@ export async function getFoodPreferences(): Promise<FoodPreferenceDto[]> {
   return response.data;
 }
 
-export async function getFoodPreference(pk: number): Promise<FoodPreferenceDto> {
+export async function getFoodPreference(pk: string | number): Promise<FoodPreferenceDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodPreferenceDto>(url, { withCredentials: true });
@@ -235,7 +240,7 @@ export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
   return response.data;
 }
 
-export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
+export async function getFoodCategory(pk: string | number): Promise<FoodCategoryDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
@@ -243,14 +248,20 @@ export async function getFoodCategory(pk: number): Promise<FoodCategoryDto> {
   return response.data;
 }
 
-export async function getSaksdokumenter(): Promise<SaksdokumentDto> {
+export async function getTextItem(pk: string): Promise<TextItemDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__text_item_detail, urlParams: { pk: pk } });
+  const response = await axios.get<TextItemDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getSaksdokumenter(): Promise<SaksdokumentDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
-  const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
+  const response = await axios.get<SaksdokumentDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function getSaksdokument(pk: number | string): Promise<SaksdokumentDto> {
+export async function getSaksdokument(pk: string | number): Promise<SaksdokumentDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: pk } });
   const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
@@ -272,7 +283,7 @@ export async function postSaksdokument(data: SaksdokumentDto): Promise<Saksdokum
   return response.data;
 }
 
-export async function putSaksdokument(id: number | string, data: SaksdokumentDto): Promise<AxiosResponse> {
+export async function putSaksdokument(id: string | number, data: Partial<SaksdokumentDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
   const response = await axios.put<SaksdokumentDto>(url, data, { withCredentials: true });
@@ -286,7 +297,7 @@ export async function getGangList(): Promise<GangTypeDto[]> {
   return response.data;
 }
 
-export async function getGang(id: number): Promise<GangDto> {
+export async function getGang(id: string | number): Promise<GangDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
 
   const response = await axios.get<GangDto>(url, { withCredentials: true });
@@ -308,7 +319,7 @@ export async function postGang(data: GangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(id: number, data: GangDto): Promise<AxiosResponse> {
+export async function putGang(id: string | number, data: Partial<GangDto>): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
   const response = await axios.put<GangDto>(url, data, { withCredentials: true });
   return response;
@@ -327,14 +338,14 @@ export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   return response.data;
 }
 
-export async function getClosedPeriod(id: number): Promise<ClosedPeriodDto> {
+export async function getClosedPeriod(id: string | number): Promise<ClosedPeriodDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
   const response = await axios.get<ClosedPeriodDto>(url, { withCredentials: true });
   return response.data;
 }
 
-export async function putClosedPeriod(id: number, data: ClosedPeriodDto): Promise<AxiosResponse> {
+export async function putClosedPeriod(id: string | number, data: Partial<ClosedPeriodDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
   const response = await axios.put<ClosedPeriodDto>(url, data, { withCredentials: true });
@@ -347,7 +358,7 @@ export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPer
   return response.data;
 }
 
-export async function deleteClosedPeriod(id: number): Promise<AxiosResponse> {
+export async function deleteClosedPeriod(id: string | number): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
@@ -360,7 +371,7 @@ export async function getImages(): Promise<ImageDto[]> {
   return response.data;
 }
 
-export async function getImage(id: number): Promise<ImageDto> {
+export async function getImage(id: string | number): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.get<ImageDto>(url, { withCredentials: true });
   return response.data;
@@ -372,7 +383,7 @@ export async function postImage(data: ImageDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function putImage(id: number, data: ImageDto): Promise<AxiosResponse> {
+export async function putImage(id: string | number, data: Partial<ImageDto>): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
   return response;
