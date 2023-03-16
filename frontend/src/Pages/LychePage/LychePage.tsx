@@ -22,7 +22,7 @@ export function LychePage() {
   useEffect(() => {
     getVenues()
       .then((data) => {
-        const lyche = data.find((venue) => venue.name?.toLowerCase() === venue);
+        const lyche = data.find((venue) => venue.name?.toLowerCase() === venueName);
         setLycheVenue(lyche);
         const consistentWeekdayOpeningHours =
           lycheVenue?.opening_monday === lycheVenue?.opening_tuesday &&
