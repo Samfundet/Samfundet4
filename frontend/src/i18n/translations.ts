@@ -120,6 +120,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
+  [KEY.event]: '',
   [KEY.photos]: 'Foto',
   [KEY.nybygg]: 'Nybygg',
 };
@@ -241,6 +242,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.publication]: 'Publication',
   [KEY.closed_period]: 'Closed period',
   [KEY.saksdokument]: 'case document',
+  [KEY.admin_information_new_page]: '',
+  [KEY.admin_information_create_page]: '',
+  [KEY.event]: '',
   [KEY.photos]: 'Photos',
   [KEY.nybygg]: 'New building',
 };

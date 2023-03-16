@@ -18,6 +18,7 @@ ENV = Environment.DEV
 ### CORS ###
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://localhost:6006',
 ]
 # https://testdriven.io/blog/django-spa-auth/#frontend-served-separately-cross-domain
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
@@ -64,3 +65,10 @@ DATABASES = {
     }
 }
 ### End: Database ###
+
+# Clean console logging in development (pretty stack trace)
+LOGGING['loggers'][''] = {  # type: ignore[index] # noqa: 405
+    'handlers': ['console'],
+    'level': 'DEBUG',
+    'propagate': True,
+}

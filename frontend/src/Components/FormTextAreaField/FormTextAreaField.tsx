@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FieldValues, UseFormRegister } from 'react-hook-form/dist/types';
+import { FieldErrors, FieldValues, Message, UseFormRegister, ValidationRule } from 'react-hook-form/dist/types';
 import { Children } from '~/types';
 import styles from './FormTextAreaField.module.scss';
 
@@ -12,8 +12,8 @@ type FormTextAreaFieldProps = {
   cols?: number;
   name: string;
   register: UseFormRegister<FieldValues>;
-  required?: boolean;
-  errors?: Record<string, { message: string }>;
+  required?: Message | ValidationRule<boolean> | null;
+  errors?: FieldErrors;
 };
 
 export function FormTextAreaField({
@@ -29,18 +29,22 @@ export function FormTextAreaField({
   rows = 10,
 }: FormTextAreaFieldProps) {
   const isError = errors && name in errors;
+
+  /** RHF required doesn't allow null value. */
+  const required_ = required || undefined;
+
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <textarea
           className={classNames(styles.input_field, inputClassName, { [styles.errors]: isError })}
-          {...register(name, { required })}
+          {...register(name, { required: required_ })}
           rows={rows}
           cols={cols}
         />
       </label>
-      {isError && <div className={styles.errors_text}>{errors[name].message}</div>}
+      {isError && <div className={styles.errors_text}>{errors[name]?.message as string}</div>}
     </div>
   );
 }

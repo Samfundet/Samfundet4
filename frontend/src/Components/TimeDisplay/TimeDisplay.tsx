@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
 type TimeDisplayProps = {
-  timestamp: string;
+  timestamp: string | Date;
   displayType?: string;
   className?: string;
 };
@@ -52,7 +52,7 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
       </p>
     );
   } else if (displayType == EVENT) {
-    const options = { dateStyle: 'short', timeStyle: 'short' };
+    const options = { dateStyle: 'short' as const, timeStyle: 'short' as const };
     return <p className={className}>{date.toLocaleString('no-NO', options)}</p>;
   } else if (displayType == TIME) {
     return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
