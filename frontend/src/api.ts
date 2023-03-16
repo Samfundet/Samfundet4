@@ -81,7 +81,6 @@ export async function getVenue(id: number): Promise<VenueDto> {
 export async function updateVenueTime(id: number, data: VenueDto): Promise<VenueDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__update_venue_hours, urlParams: { pk: id } });
-  console.log(url);
   const response = await axios.put<VenueDto>(url, data, { withCredentials: true });
 
   return response.data;

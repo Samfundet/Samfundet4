@@ -37,6 +37,8 @@ const KILROY = 'KILROY';
 export function AdminBox({ title, options }: AdminBoxProps) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+
+  fuc;
   return (
     <div className={styles.applet}>
       <div className={styles.top}>
@@ -44,7 +46,8 @@ export function AdminBox({ title, options }: AdminBoxProps) {
       </div>
       <div className={styles.options}>
         {options.map(function (element, key) {
-          if (element.perm == null || hasPerm({ user: user, permission: element.perm })) {
+          const userHasPerm = element.perm == null || hasPerm({ user: user, permission: element.perm });
+          if (userHasPerm) {
             if (element.type == ADD) {
               return (
                 <Button key={key} theme="success" onClick={() => navigate(element.url)} className={styles.button}>
@@ -52,19 +55,22 @@ export function AdminBox({ title, options }: AdminBoxProps) {
                   {element.text}
                 </Button>
               );
-            } else if (element.type == MANAGE) {
+            }
+            if (element.type == MANAGE) {
               return (
                 <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
                   {element.text}
                 </Button>
               );
-            } else if (element.type == EDIT) {
+            }
+            if (element.type == EDIT) {
               return (
                 <Button key={key} theme="blue" onClick={() => navigate(element.url)} className={styles.button}>
                   {element.text}
                 </Button>
               );
-            } else if (element.type == STEAL) {
+            }
+            if (element.type == STEAL) {
               return (
                 <form key={key} className={styles.search} action={element.url} method="post">
                   <div style={{ flex: 1 }}>

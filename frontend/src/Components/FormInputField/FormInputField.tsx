@@ -30,14 +30,11 @@ export function FormInputField({
   helpText,
   type = 'text',
 }: FormInputFieldProps) {
+  const inputClassName = classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors);
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>{children}</label>
-      <input
-        className={classNames(styles.input_field, inputClassName, errors && name in errors && styles.errors)}
-        type={type}
-        {...register(name, { required })}
-      />
+      <input className={inputClassName} type={type} {...register(name, { required })} />
       {errors && name in errors && <div className={styles.errors_text}>{errors[name].message}</div>}
       {helpText && <p className={styles.helpText}>{helpText}</p>}
     </div>

@@ -126,8 +126,8 @@ class UpdateVenueHours(APIView):
             if (key != 'venue'):
                 setattr(venue, key, value)
         venue.save()
-        data = venue_to_dataclass(venue=venue)
-        return Response(data=data.to_json())
+        data = VenueSerializer(venue).data
+        return Response(data=data)
 
 
 class ClosedPeriodView(ModelViewSet):

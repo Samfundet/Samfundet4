@@ -80,7 +80,6 @@ export function OpenedVenueAdminFormPage() {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     updateVenueTime(data['venue'], data)
       .then(() => {
         setAlertState(true);
