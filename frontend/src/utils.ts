@@ -83,8 +83,6 @@ export function DTOToForm(
 /**
  * Function for creating a style with image url from domain
  * @param {string} url - Server relative URL (eg. /media/image.png)
- * @param {UseFormSetValue<FieldValues>} setValue - Function for setting the data into a ReactHookForm
- * @param {string[]} ignore - List of keys in the data to ignore converting
  */
 export function backgroundImageFromUrl(url?: string): CSSProperties {
   if (url != null) {
