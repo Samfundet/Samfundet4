@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
 type TimeDisplayProps = {
-  timestamp: string;
+  timestamp: string | Date;
   displayType?: string;
   className?: string;
 };

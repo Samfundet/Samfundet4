@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from root.utils.samfundet_random import words
 
-from samfundet.models import Event, EventGroup, Venue
+from samfundet.models import Event, EventGroup, Venue, Image
 
 # Number of events
 COUNT = 300
@@ -19,6 +19,16 @@ DURATION_MAX = 5
 # (multiple events with same event group)
 RECURRING_CHANCE = 0.1
 
+# Event categories to choose from
+CATEGORIES = [
+    Event.Category.SAMFUNDET_MEETING,
+    Event.Category.CONCERT,
+    Event.Category.DEBATE,
+    Event.Category.LECTURE,
+    Event.Category.QUIZ,
+    Event.Category.OTHER,
+]
+
 
 def seed():
     Event.objects.all().delete()
@@ -26,6 +36,7 @@ def seed():
     yield 0, 'Deleted old events'
 
     venues = Venue.objects.all()
+    images = Image.objects.all()
     seed_events = []
 
     n_recurring = 0
@@ -41,6 +52,8 @@ def seed():
         event_duration = random.randint(0, 180)
         event_venue = random.choice(venues)
         capacity = random.randint(0, 500)
+        category = random.choice(CATEGORIES)
+        image = random.choice(images)
 
         # Small chance of recurring event
         if random.random() <= RECURRING_CHANCE:
@@ -74,6 +87,8 @@ def seed():
                     event_group=group,
                     capacity=capacity,
                     codeword=words(1),
+                    category=category,
+                    image=image
                 )
             )
 

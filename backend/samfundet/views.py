@@ -1,10 +1,12 @@
 from typing import Type
 
+from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
 from django.db.models import Q
@@ -20,11 +22,6 @@ from root.constants import XCSRFTOKEN
 from .utils import (
     event_query,
     general_search,
-    user_to_dataclass,
-    users_to_dataclass,
-    groups_to_dataclass,
-    events_to_dataclass,
-    closedperiod_to_dataclass,
 )
 
 from .models import (
@@ -70,6 +67,8 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    UserSerializer,
+    GroupSerializer,
 )
 
 
@@ -130,14 +129,13 @@ class EventPerDayView(APIView):
         return Response(data=events)
 
 
-class EventsUpcommingView(APIView):
+class EventsUpcomingView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
         events = event_query(request.query_params)
-        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')  # TODO Update with duration
-        events = [event.to_dict() for event in events_to_dataclass(events=events)]  # type: ignore[attr-defined]
-        return Response(data=events)
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
+        return Response(data=EventSerializer(events, many=True).data)
 
 
 class EventFormView(APIView):
@@ -163,13 +161,15 @@ class ClosedPeriodView(ModelViewSet):
     queryset = ClosedPeriod.objects.all()
 
 
-class IsClosedView(APIView):
+class IsClosedView(ListAPIView):
     permission_classes = [AllowAny]
+    serializer_class = ClosedPeriodSerializer
 
-    def get(self, request: Request) -> Response:
-        closed_period = ClosedPeriod.objects.filter(start_dt__lte=timezone.now(), end_dt__gte=timezone.now()).first()
-        data = closedperiod_to_dataclass(closed_period=closed_period) if closed_period else None
-        return Response(data={data})
+    def get_queryset(self) -> QuerySet:
+        return ClosedPeriod.objects.filter(
+            start_dt__lte=timezone.now(),
+            end_dt__gte=timezone.now(),
+        )
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -208,26 +208,19 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        user = user_to_dataclass(user=request.user)
-        return Response(data=user.to_dict())  # type: ignore[attr-defined]
+        return Response(data=UserSerializer(request.user, many=False).data)
 
 
-class AllUsersView(APIView):
+class AllUsersView(ListAPIView):
     permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request) -> Response:
-        users = users_to_dataclass(users=User.objects.all())
-        users_objs = [user.to_dict() for user in users]  # type: ignore[attr-defined]
-        return Response(data=users_objs)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
-class AllGroupsView(APIView):
+class AllGroupsView(ListAPIView):
     permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request) -> Response:
-        all_groups = groups_to_dataclass(groups=Group.objects.all())
-        all_groups_objs = [group.to_dict() for group in all_groups]  # type: ignore[attr-defined]
-        return Response(data=all_groups_objs)
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -262,6 +255,7 @@ class GangTypeView(ModelViewSet):
     queryset = GangType.objects.all()
 
 
+# TODO delete
 class GangFormView(APIView):
     permission_classes = [AllowAny]
 

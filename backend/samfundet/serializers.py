@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import Group, Permission
+
+from guardian.models import GroupObjectPermission, UserObjectPermission
+from typing import List
 
 from .models import (
     Tag,
@@ -45,10 +48,14 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     end_dt = serializers.DateTimeField(required=False)
+    image_url = serializers.SerializerMethodField(method_name='get_image_url')
 
     class Meta:
         model = Event
-        fields = '__all__'
+        exclude = ['image']
+
+    def get_image_url(self, event: Event) -> str:
+        return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):
@@ -111,30 +118,56 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 
-class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = [
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-        ]
-
-
-class PermissionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Permission
-        fields = '__all__'
-
-
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
         fields = '__all__'
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['id', 'nickname']
+
+
+class UserPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserPreference
+        fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True, read_only=True)
+    profile = ProfileSerializer(many=False, read_only=True)
+    permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
+    object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
+    user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
+
+    class Meta:
+        model = User
+        exclude = ['password', 'user_permissions']
+
+    def get_permissions(self, user) -> List[str]:  # type: ignore
+        return user.get_all_permissions()
+
+    def permission_to_str(self, permission: Permission) -> str:
+        return f'{permission.content_type.app_label}.{permission.codename}'
+
+    def get_object_permissions(self, user) -> List[str]:  # type: ignore
+        # Collect user-level and group-level object permissions
+        user_object_perms_qs = UserObjectPermission.objects.filter(user=user)
+        group_object_perms_qs = GroupObjectPermission.objects.filter(group__in=user.groups.all())
+        perms = [p.permission for p in list(user_object_perms_qs)]
+        perms += [p.permission for p in list(group_object_perms_qs)]
+        # Use list comprehension to generate string representation
+        return list(set([self.permission_to_str(perm) for perm in perms]))
+
+    def get_user_preference(self, user) -> dict:  # type: ignore
+        prefs = UserPreference.objects.get_or_create(user=user)
+        return UserPreferenceSerializer(prefs, many=False).data
 
 
 # GANGS ###
@@ -157,20 +190,6 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
-        fields = '__all__'
-
-
-class UserPreferenceSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserPreference
-        fields = '__all__'
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Profile
         fields = '__all__'
 
 
