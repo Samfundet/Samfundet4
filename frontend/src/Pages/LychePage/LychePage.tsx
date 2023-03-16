@@ -13,15 +13,16 @@ import styles from './LychePage.module.scss';
 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
-  const [t, i18n] = useTranslation();
+  const [t] = useTranslation();
   const [consistentWeekdayHours, setConsistentWeekdayHours] = useState(false);
   const [consistentWeekendHours, setConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
+  const venueName = 'lyche';
 
   useEffect(() => {
     getVenues()
       .then((data) => {
-        const lyche = data.find((venue) => venue.name?.toLowerCase() === 'lyche');
+        const lyche = data.find((venue) => venue.name?.toLowerCase() === venue);
         setLycheVenue(lyche);
         const consistentWeekdayOpeningHours =
           lycheVenue?.opening_monday === lycheVenue?.opening_tuesday &&
