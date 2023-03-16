@@ -41,11 +41,12 @@ export function Navbar() {
   const navbarImage = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
 
   useEffect(() => {
-    // Close expanded dropdown menu whenever mobile navbar is closed
-    if (!mobileNavigation) {
+    // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
+    // switching from portrait to landscape on iPad
+    if (!mobileNavigation || isDesktop) {
       setExpandedDropdown('');
     }
-  }, [mobileNavigation]);
+  }, [mobileNavigation, isDesktop]);
 
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
