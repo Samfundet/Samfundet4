@@ -13,7 +13,7 @@ import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { useGlobalContext } from '../../GlobalContextProvider';
 import styles from './Navbar.module.scss';
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 const scrollDistanceForOpaque = 30;
 
@@ -93,46 +93,32 @@ export function Navbar() {
     </>
   );
 
+  const navbarItem = (route: string, label: string, dropdownLinks?: ReactNode) => {
+    const itemClasses = classNames(
+      isDesktop ? styles.navbar_item : styles.navbar_mobile_item,
+      dropdownLinks ? styles.navbar_dropdown_item : '',
+    );
+    return (
+      <div className={itemClasses}>
+        <Link
+          to={route}
+          className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
+          onClick={() => setMobileNavigation(false)}
+        >
+          {label}
+          {dropdownLinks && <Icon icon={'carbon:chevron-down'} width={18} />}
+        </Link>
+        {dropdownLinks && <div className={styles.dropdown_container}>{dropdownLinks}</div>}
+      </div>
+    );
+  };
+
   const navbarHeaders = (
     <>
-      <div className={styles.navbar_item}>
-        <Link
-          to={ROUTES.frontend.events}
-          className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          {t(KEY.common_event)}
-        </Link>
-      </div>
-      <div className={classNames(styles.navbar_item, styles.navbar_dropdown_item)}>
-        <Link
-          to={ROUTES.frontend.about}
-          className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          {t(KEY.common_information)}
-          <Icon icon={'carbon:chevron-down'} width={18} />
-        </Link>
-        <div className={styles.dropdown_container}>{infoLinks}</div>
-      </div>
-      <div className={styles.navbar_item}>
-        <Link
-          to={ROUTES.frontend.sulten}
-          className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          {t(KEY.common_restaurant)}
-        </Link>
-      </div>
-      <div className={styles.navbar_item}>
-        <Link
-          to={ROUTES.frontend.health}
-          className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
-          onClick={() => setMobileNavigation(false)}
-        >
-          {t(KEY.common_volunteer)}
-        </Link>
-      </div>
+      {navbarItem(ROUTES.frontend.events, t(KEY.common_event))}
+      {navbarItem('#', t(KEY.common_information), infoLinks)}
+      {navbarItem(ROUTES.frontend.sulten, t(KEY.common_restaurant))}
+      {navbarItem(ROUTES.frontend.health, t(KEY.common_volunteer))}
     </>
   );
 
