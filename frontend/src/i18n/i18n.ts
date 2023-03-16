@@ -17,10 +17,11 @@ export const resources = {
  * @param {string} field - the field to be translated, use root of the field, such as title, name
  * @param {string} language- the language, use i18n.language for dynamic translation
  */
-export function dbT(model: Record<string, unknown>, field: string, language: string): string {
+export function dbT(model: Record<string, unknown> | undefined, field: string, language: string): string | undefined {
+  if (model === undefined) return undefined;
   if (Object.prototype.hasOwnProperty.call(model, field + '_' + language)) {
-    return model[field + '_' + language];
-  } else return model[field];
+    return model[field + '_' + language] as string;
+  } else return model[field] as string;
 }
 
 const devSetting = process.env.NODE_ENV === 'development' ? true : false;

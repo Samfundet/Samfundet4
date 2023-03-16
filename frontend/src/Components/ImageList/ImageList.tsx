@@ -4,7 +4,7 @@ import { dbT } from '~/i18n/i18n';
 import { Image } from '../Image';
 import styles from './ImageList.module.scss';
 
-type Image = {
+export type ImageProps = {
   src: string;
   url?: string;
   name?: string;
@@ -15,7 +15,7 @@ type Image = {
 };
 
 type ImageListProps = {
-  images: Image[];
+  images: ImageProps[];
   size?: number;
   textClassName?: string;
   textMaxLength?: number;
@@ -25,7 +25,7 @@ export function ImageList({ images, size, textClassName, textMaxLength }: ImageL
   const { i18n } = useTranslation();
 
   function getImageText(element: Record<string, string>) {
-    if (textMaxLength && dbT(element, 'name', i18n.language).length > textMaxLength) {
+    if (textMaxLength && (dbT(element, 'name', i18n.language) as string).length > textMaxLength) {
       return element.short;
     }
     return dbT(element, 'name', i18n.language);
