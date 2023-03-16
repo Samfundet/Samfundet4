@@ -120,13 +120,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
-<<<<<<< HEAD
   [KEY.open]: 'Åpent',
   [KEY.opening]: 'Åpner',
   [KEY.closing]: 'Stenger',
-=======
   [KEY.event]: '',
->>>>>>> master
 };
 
 export const en: Record<KeyValues, string> = {

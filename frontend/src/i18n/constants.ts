@@ -120,7 +120,7 @@ export const KEY = {
   publication: 'publication',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
-  open:'open',
+  open: 'open',
   opening: 'opening',
   closing: 'closing',
 } as const;

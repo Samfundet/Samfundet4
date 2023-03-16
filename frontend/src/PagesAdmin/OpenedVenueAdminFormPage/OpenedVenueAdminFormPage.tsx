@@ -62,7 +62,7 @@ export function OpenedVenueAdminFormPage() {
         updateFields(venue);
       }
     }
-  }, [searchParams, venues]);
+  }, [searchParams, venues, setValue, updateFields]);
 
   const updateFields = (id: string) => {
     if (!isNaN(id)) {

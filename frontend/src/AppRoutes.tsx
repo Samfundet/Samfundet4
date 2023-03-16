@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
   AdminPage,
@@ -28,10 +29,9 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
-  SaksdokumentFormAdminPage,
   OpenedVenueAdminFormPage,
+  SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
-import { useGoatCounter } from '~/hooks';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {

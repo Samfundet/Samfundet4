@@ -15,6 +15,7 @@ export type Options = {
   text: string;
   url: string;
   type: TypeValue;
+  perm?: string;
 };
 
 export type Applet = {
