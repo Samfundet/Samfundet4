@@ -388,5 +388,3 @@ export async function putImage(id: string | number, data: Partial<ImageDto>): Pr
   const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
   return response;
 }
-
-

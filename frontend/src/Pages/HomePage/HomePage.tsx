@@ -1,6 +1,6 @@
 import { reverse } from '~/named-urls';
 import { useEffect, useState } from 'react';
-import { getEventsUpcomming, getHomeData } from '~/api';
+import { getHomeData } from '~/api';
 import splash from '~/assets/banner-sample.jpg';
 import { Carousel } from '~/Components/Carousel';
 import { ContentCard } from '~/Components/ContentCard';
@@ -10,7 +10,6 @@ import { EventDto, HomePageElementDto } from '~/dto';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { ROUTES } from '~/routes';
-import { HomePageElementType } from '~/types';
 import { dbT } from '~/i18n/i18n';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +22,6 @@ export function HomePage() {
       setHomeElements(elements);
     });
   }, []);
-
 
   function renderLargeCard(element: HomePageElementDto): Children {
     const event = element.events[0];
