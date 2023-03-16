@@ -190,7 +190,7 @@ class Venue(models.Model):
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
-        permissions = [("set_opened", "Can set the opening hours of a venue")]
+        permissions = [('set_opened', 'Can set the opening hours of a venue')]
 
     def __str__(self) -> str:
         return f'{self.name}'

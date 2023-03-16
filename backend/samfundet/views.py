@@ -127,7 +127,7 @@ class UpdateVenueHours(APIView):
         venue = get_object_or_404(Venue, id=pk)
         for (key, value) in request.data.items():
             if (key != 'venue'):
-                setattr(venue, key, value)
+                setattr(__obj=venue, _name=key, __value=value)
         venue.save()
         data = VenueSerializer(venue).data
         return Response(data=data)

@@ -1,3 +1,5 @@
+/* stylelint-disable selector-max-type */
+/* stylelint-disable max-nesting-depth */
 @import 'src/mixins';
 
 @import 'src/constants';
@@ -63,6 +65,7 @@
 .select {
   margin-bottom: 1em;
 }
+
 .timeSelectContainer {
   padding: 0.5em;
   display: flex;
@@ -86,15 +89,16 @@
   justify-content: center;
   padding: 2em 1em;
 }
+
 .table {
-  tbody {
-    tr {
+  &tbody {
+    & tr {
       border-bottom: $grey-4 2px solid;
     }
-    tr:nth-child(even) {
+    & tr:nth-child(even) {
       background-color: $grey-5;
     }
-    tr:nth-child(odd) {
+    & tr:nth-child(odd) {
       background-color: $grey-5;
     }
   }
