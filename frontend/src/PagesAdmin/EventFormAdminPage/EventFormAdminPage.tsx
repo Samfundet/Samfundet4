@@ -90,72 +90,79 @@ export function EventFormAdminPage() {
       {/* TODO: fix */}
       {/* <form onSubmit={handleSubmit(onSubmit)}> */}
       <form>
-        <div className={styles.seperator}>Info</div>
-        <div className={styles.row}>
-          <div className={styles.col}>
-            <FormInputField
-              errors={errors}
-              className={styles.input}
-              name="title_nb"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.norwegian)} {t(KEY.common_title)} *
-              </p>
-            </FormInputField>
-            <FormTextAreaField
-              errors={errors}
-              className={styles.input}
-              rows={2}
-              name="description_short_nb"
-              register={register}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
-              </p>
-            </FormTextAreaField>
-            <FormTextAreaField errors={errors} className={styles.input} name="description_long_nb" register={register}>
-              <p className={styles.labelText}>
-                {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
-              </p>
-            </FormTextAreaField>
+        <fieldset>
+          <legend>Info</legend>
+          <div className={styles.row}>
+            <div className={styles.col}>
+              <FormInputField
+                errors={errors}
+                className={styles.input}
+                name="title_nb"
+                register={register}
+                required={t(KEY.form_required)}
+              >
+                <label>
+                  {t(KEY.norwegian)} {t(KEY.common_title)} *
+                </label>
+              </FormInputField>
+              <FormTextAreaField
+                errors={errors}
+                className={styles.input}
+                rows={2}
+                name="description_short_nb"
+                register={register}
+              >
+                <label>
+                  {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
+                </label>
+              </FormTextAreaField>
+              <FormTextAreaField
+                errors={errors}
+                className={styles.input}
+                name="description_long_nb"
+                register={register}
+              >
+                <label>
+                  {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
+                </label>
+              </FormTextAreaField>
+            </div>
+            <div className={styles.col}>
+              <FormInputField
+                errors={errors}
+                className={styles.input}
+                name="title_en"
+                required={t(KEY.form_required)}
+                register={register}
+              >
+                <label>
+                  {t(KEY.common_title)} ({t(KEY.english)}) *
+                </label>
+              </FormInputField>
+              <FormTextAreaField
+                // errors={errors}
+                className={styles.input}
+                rows={2}
+                name="description_short_en"
+                register={register}
+              >
+                <label>
+                  {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
+                </label>
+              </FormTextAreaField>
+              <FormTextAreaField
+                // errors={errors}
+                className={styles.input}
+                name="description_long_en"
+                register={register}
+              >
+                <label>
+                  {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
+                </label>
+              </FormTextAreaField>
+            </div>
           </div>
-          <div className={styles.col}>
-            <FormInputField
-              errors={errors}
-              className={styles.input}
-              name="title_en"
-              required={t(KEY.form_required)}
-              register={register}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.common_title)} ({t(KEY.english)}) *
-              </p>
-            </FormInputField>
-            <FormTextAreaField
-              // errors={errors}
-              className={styles.input}
-              rows={2}
-              name="description_short_en"
-              register={register}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.common_short)} {t(KEY.common_description)} ({t(KEY.norwegian)})
-              </p>
-            </FormTextAreaField>
-            <FormTextAreaField
-              // errors={errors}
-              className={styles.input}
-              name="description_long_en"
-              register={register}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.common_long)} {t(KEY.common_description)} ({t(KEY.norwegian)})
-              </p>
-            </FormTextAreaField>
-          </div>
-        </div>
+        </fieldset>
         <div className={styles.row}>
           <FormSelect
             register={register}
@@ -166,7 +173,7 @@ export function EventFormAdminPage() {
             // errors={errors}
             name="event_group"
           >
-            <p className={styles.labelText}>{t(KEY.event_type)}</p>
+            <label>{t(KEY.event_type)}</label>
           </FormSelect>
           <FormSelect
             register={register}
@@ -177,7 +184,7 @@ export function EventFormAdminPage() {
             // errors={errors}
             name="age_group"
           >
-            <p className={styles.labelText}>{t(KEY.common_age_res)}</p>
+            <label>{t(KEY.common_age_res)}</label>
           </FormSelect>
 
           <FormSelect
@@ -189,7 +196,7 @@ export function EventFormAdminPage() {
             required={t(KEY.form_must_choose)}
             name="location"
           >
-            <p className={styles.labelText}>{t(KEY.venue)}</p>
+            <label>{t(KEY.venue)}</label>
           </FormSelect>
           <FormSelect
             register={register}
@@ -200,12 +207,12 @@ export function EventFormAdminPage() {
             required={t(KEY.form_must_choose)}
             name="status_group"
           >
-            <p className={styles.labelText}>Status</p>
+            <label>Status</label>
           </FormSelect>
         </div>
         <div className={styles.col}>
           <FormInputField errors={errors} className={styles.input} name="codeword" register={register}>
-            <p className={styles.labelText}>Codeword</p>
+            <label>Codeword</label>
           </FormInputField>
         </div>
         <div className={styles.seperator}>Tidspunkt</div>
@@ -219,7 +226,7 @@ export function EventFormAdminPage() {
               register={register}
               required={t(KEY.form_required)}
             >
-              <p className={styles.labelText}>{t(KEY.start_time)} *</p>
+              <label>{t(KEY.start_time)} *</label>
             </FormInputField>
           </div>
           <div className={styles.col}>
@@ -231,9 +238,9 @@ export function EventFormAdminPage() {
               register={register}
               required={t(KEY.form_required)}
             >
-              <p className={styles.labelText}>
+              <label>
                 {t(KEY.publication)} {t(KEY.common_time)} *
-              </p>
+              </label>
             </FormInputField>
           </div>
           <div className={styles.col}>
@@ -245,7 +252,7 @@ export function EventFormAdminPage() {
               register={register}
               required={t(KEY.form_required)}
             >
-              <p className={styles.labelText}>{t(KEY.duration)} (min)*</p>
+              <label>{t(KEY.duration)} (min)*</label>
             </FormInputField>
           </div>
         </div>
@@ -259,7 +266,7 @@ export function EventFormAdminPage() {
             register={register}
             required={t(KEY.form_required)}
           >
-            <p className={styles.labelText}>{t(KEY.common_capacity)} *</p>
+            <label>{t(KEY.common_capacity)} *</label>
           </FormInputField>
         </div>
         <div className={styles.submitContainer}>

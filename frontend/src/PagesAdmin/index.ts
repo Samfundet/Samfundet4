@@ -9,3 +9,4 @@ export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';
 export { ImageAdminPage } from './ImageAdminPage';
 export { ImageFormAdminPage } from './ImageFormAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
+export { EventCreatorAdminPage } from './EventCreatorAdminPage';
