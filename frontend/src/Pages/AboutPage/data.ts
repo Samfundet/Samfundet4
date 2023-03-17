@@ -15,43 +15,43 @@ export const VENUES = {
   size: 64,
   images: [
     {
-      title: 'Storsalen',
+      name: 'Storsalen',
       src: storsalen,
     },
     {
-      title: 'Bodegaen',
+      name: 'Bodegaen',
       src: bodegaen,
     },
     {
-      title: 'Daglighallen',
+      name: 'Daglighallen',
       src: daglighallen,
     },
     {
-      title: 'Edgar',
+      name: 'Edgar',
       src: edgar,
     },
     {
-      title: 'Klubben',
+      name: 'Klubben',
       src: klubben,
     },
     {
-      title: 'Knaus',
+      name: 'Knaus',
       src: knaus,
     },
     {
-      title: 'Lyche',
+      name: 'Lyche',
       src: lyche,
     },
     {
-      title: 'Rundhallen',
+      name: 'Rundhallen',
       src: rundhallen,
     },
     {
-      title: 'Selskapssiden',
+      name: 'Selskapssiden',
       src: selskapssiden,
     },
     {
-      title: 'Strossa',
+      name: 'Strossa',
       src: strossa,
     },
   ],

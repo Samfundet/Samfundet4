@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-import re
 import random
-from typing import TYPE_CHECKING
+import re
 from datetime import time, timedelta
+from typing import TYPE_CHECKING
 
-from guardian.shortcuts import assign_perm
-
+from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import AbstractUser
+from guardian.shortcuts import assign_perm
 
 from root.utils import permissions
 
@@ -82,32 +81,26 @@ class EventGroup(models.Model):
 
 
 class Event(models.Model):
-    # INFO
-    title_nb = models.CharField(max_length=140)
-    title_en = models.CharField(max_length=140)
-    description_long_nb = models.TextField(blank=True, null=True)
-    description_long_en = models.TextField(blank=True, null=True)
-    description_short_nb = models.TextField(blank=True, null=True)
-    description_short_en = models.TextField(blank=True, null=True)
+    # General info
+    title_nb = models.CharField(max_length=140, blank=False, null=False)
+    title_en = models.CharField(max_length=140, blank=False, null=False)
+    description_long_nb = models.TextField(blank=False, null=False)
+    description_long_en = models.TextField(blank=False, null=False)
+    description_short_nb = models.TextField(blank=False, null=False)
+    description_short_en = models.TextField(blank=False, null=False)
+    location = models.CharField(max_length=140, blank=False, null=False)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
+    host = models.CharField(max_length=140, blank=False, null=False)
+
+    # Event group is used for events occurring multiple times (eg. a concert repeating twice)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
-    location = models.CharField(max_length=140, blank=True, null=True)
-    codeword = models.CharField(max_length=140, blank=True, null=True)
+
+    # Timestamps
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    # Duration
-    start_dt = models.DateTimeField(blank=True, null=True)
-    duration = models.PositiveIntegerField(blank=True, null=False)
-    publish_dt = models.DateTimeField(blank=True, null=True)
-
-    # Host
-    host = models.CharField(max_length=140, blank=True, null=True)
-
-    # Display
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True)
-
-    # TODO Maybe add color choice? https://github.com/Samfundet/Samfundet4/issues/316
-    # TODO add social media?
+    start_dt = models.DateTimeField(blank=False, null=False)
+    duration = models.PositiveIntegerField(blank=False, null=False)
+    publish_dt = models.DateTimeField(blank=False, null=False)
 
     # Choice infos
     class AgeGroup(models.TextChoices):
@@ -144,6 +137,7 @@ class Event(models.Model):
     price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
     capacity = models.PositiveIntegerField(blank=True, null=True)
 
+    @property
     def end_dt(self) -> timezone.datetime:
         return self.start_dt + timezone.timedelta(minutes=self.duration)
 
