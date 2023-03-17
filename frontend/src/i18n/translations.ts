@@ -119,10 +119,13 @@ export const nb: Record<KeyValues, string> = {
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
   [KEY.select_event]: 'Velg lokale',
-  [KEY.all_venues]: 'Alle',
+  [KEY.all]: 'Alle',
   [KEY.search_all]: 'Søk på alle arrangemanger!',
   [KEY.archived_events]: 'Vis arkiverte arrangemanger',
   [KEY.event]: '',
+  [KEY.event_category]: 'Velg type arrangemang',
+  [KEY.choose_age]: 'Aldersgrense',
+  [KEY.choose_status]: 'Status',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -241,10 +244,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.closed_period]: 'Closed period',
   [KEY.saksdokument]: 'case document',
   [KEY.select_event]: 'Choose venue',
-  [KEY.all_venues]: 'All',
+  [KEY.all]: 'All',
   [KEY.search_all]: 'Search every event!',
   [KEY.archived_events]: 'Show archived events',
   [KEY.admin_information_new_page]: '',
   [KEY.admin_information_create_page]: '',
   [KEY.event]: '',
+  [KEY.event_category]: 'Choose event category',
+  [KEY.choose_age]: 'Age restriction',
+  [KEY.choose_status]: 'Status',
 };

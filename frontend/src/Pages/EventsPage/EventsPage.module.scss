@@ -9,16 +9,34 @@
 }
 
 .center {
-  margin: 5%;
+  margin: 1%;
   display: flex;
   justify-content: center;
   align-items: center;
 
   @include for-tablet-down {
-    margin: 5%;
+    margin: 3%;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+}
+
+.colour_label {
+  margin: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #a03033;
+
+
+  @include for-tablet-down {
+    margin: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #a03033;
+
   }
 }
 
@@ -26,9 +44,9 @@
   display: block;
   position: relative;
   padding-left: 35px;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 18px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -36,6 +54,7 @@
 }
 
 .filterColumn {
+  margin: 5%;
   -webkit-column-count: 4;
   -moz-column-count: 4;
   column-count: 4;
@@ -44,7 +63,7 @@
    column-gap: 2%;
   -webkit-column-rule: 1px solid rgba(28, 110, 164, 0.39);
   -moz-column-rule: 1px solid rgba(28, 110, 164, 0.39);
-  column-rule: 1px solid rgba(28, 110, 164, 0.39);
+  column-rule: 2px solid rgba(28, 110, 164, 0.39);
   @include for-mobile-down {
     -webkit-column-count: 1;
     -moz-column-count: 1;

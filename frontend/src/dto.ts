@@ -1,4 +1,5 @@
 import { ThemeValue } from '~/constants';
+import { string } from 'prop-types';
 
 export type UserDto = {
   id: number;
@@ -60,6 +61,62 @@ export type VenueDto = {
   closing_saturday?: string;
   closing_sunday?: string;
 };
+
+export type EventOptionsDto = {
+  name?: string;
+  description?: string;
+  renders?: object;
+  actions: { POST: EventOptionsPostDto };
+};
+
+export type EventOptionsPostDto = {
+  id?: EventOptionsPostKeysDto;
+  end_dt?: EventOptionsPostKeysDto;
+  image_url?: EventOptionsPostKeysDto;
+  title_nb: EventOptionsPostKeysDto;
+  title_en?: EventOptionsPostKeysDto;
+  description_long_nb?: EventOptionsPostKeysDto;
+  description_long_en?: EventOptionsPostKeysDto;
+  description_short_nb?: EventOptionsPostKeysDto;
+  description_short_en?: EventOptionsPostKeysDto;
+  location?: EventOptionsPostKeysDto;
+  codeword?: EventOptionsPostKeysDto;
+  created_at?: EventOptionsPostKeysDto;
+  updated_at?: EventOptionsPostKeysDto;
+  start_dt?: EventOptionsPostKeysDto;
+  duration?: EventOptionsPostKeysDto;
+  publish_dt?: EventOptionsPostKeysDto;
+  host?: EventOptionsPostKeysDto;
+  status_group: EventOptionsPostKeysChoisesDto;
+  age_group: EventOptionsPostKeysChoisesDto;
+  category: EventOptionsPostKeysChoisesDto;
+  price_group: EventOptionsPostKeysChoisesDto;
+  capacity?: EventOptionsPostKeysDto;
+  event_group?: EventOptionsPostKeysDto;
+};
+
+export type EventOptionsPostKeysDto = {
+  actions?: object;
+  type?: string;
+  required?: boolean;
+  read_only?: boolean;
+  label: string;
+};
+
+export type EventOptionsPostKeysChoisesDto = {
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  label: string;
+  choices: EventOptionsChoises_Dto;
+};
+
+export type EventOptionsChoises_Dto = [
+  {
+    value: string;
+    display_name: string;
+  },
+];
 
 export type EventDto = {
   id: number;

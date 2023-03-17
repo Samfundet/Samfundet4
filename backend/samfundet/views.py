@@ -1,6 +1,6 @@
 from typing import Type
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
@@ -9,7 +9,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 
-from django.db.models import Q
 from django.utils import timezone
 from django.contrib.auth import login, logout
 from django.middleware.csrf import get_token
@@ -86,40 +85,23 @@ class EventView(ModelViewSet):
 class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
-    def url_args(self, query_word: str) -> str:
-        """
-
-        Args:
-            query_word: url query param key
-
-        Returns:
-            url value for param key
-            Returns blank if no query
-
-        """
-        query = self.request.GET.get(query_word, None)
-        if query is None:
-            return ''
-        return query
-
-    def status_group(self) -> str:
-        """
-        archived param returns true/false formats it properly for the query
-
-        Returns: archived if false, else active
-
-        """
-        if self.request.GET.get('archived', None) == 'true':
-            return 'archived'
-        return 'active'
-
     def get(self, request: Request) -> Response:
         events: dict = {}
-        events_query = Event.objects.all().filter(status_group=self.status_group())
+        events_query = Event.objects.all()
 
         if '?' in self.request.build_absolute_uri():
-            events_query = general_search(events_query, self.url_args('search'))
-            events_query = events_query.filter(location__contains=self.url_args('location'))
+            search_term = self.request.GET.get('search')
+            if search_term is not None:
+                events_query = general_search(events_query, search_term)
+
+            qs = Q()
+            for field in ['location', 'age_group', 'category', 'status_group']:
+                field_query = self.request.GET.get(field)
+                if field_query is None:
+                    continue
+
+                qs = qs & Q(**{field: field_query})
+            events_query = events_query.filter(qs)
 
         for event in events_query.order_by('start_dt').values():
             _data_ = event['start_dt'].strftime('%Y-%m-%d')
@@ -260,7 +242,8 @@ class GangFormView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
+        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()],
+                'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
         return Response(data=data)
 
 

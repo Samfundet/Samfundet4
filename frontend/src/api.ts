@@ -4,6 +4,7 @@ import {
   EventDto,
   EventFormDto,
   EventGroupDto,
+  EventOptionsDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
@@ -129,6 +130,13 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
 export async function getEventsFilter(query: Params): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday, queryParams: query });
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function optionsEvents(): Promise<EventOptionsDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const response = await axios.options<EventOptionsDto>(url, { withCredentials: true });
 
   return response.data;
 }

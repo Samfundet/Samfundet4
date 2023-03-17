@@ -119,9 +119,12 @@ export const KEY = {
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
   select_event: 'select_event',
-  all_venues: 'all_venues',
+  all: 'all',
   search_all: 'search_all',
   archived_events: 'archived_events',
+  event_category: 'event_category',
+  choose_age: 'choose_age',
+  choose_status: 'choose_status',
 } as const;
 
 /**
