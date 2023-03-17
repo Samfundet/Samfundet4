@@ -1,5 +1,4 @@
 import { ThemeValue } from '~/constants';
-import { string } from 'prop-types';
 
 export type UserDto = {
   id: number;
