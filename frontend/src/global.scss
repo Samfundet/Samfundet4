@@ -3,6 +3,8 @@
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'constants';
 
+@import 'mixins';
+
 /* stylelint-disable selector-max-type */
 /* stylelint-disable selector-max-universal */
 
@@ -101,6 +103,7 @@ a {
 
 // End: Themes --------------------------------------------------------------------------------------------------------
 
+
 form {
   background-color: $grey-5;
   border: 1px solid $grey-4;
@@ -109,8 +112,13 @@ form {
   padding: 1.5em;
 }
 
+/*
 fieldset {
   padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border: none;
 }
 
 legend {
@@ -119,12 +127,15 @@ legend {
 
 label {
   font-weight: bold;
+  color: $grey-1;
 }
 
 input[type=text], textarea {
-  border-radius: .5em;
-  border: 1px solid $grey-3;
+  @include rounded;
+  padding: 1em 1em;
+  border: 1px solid transparent;
   outline: none;
+  
 
   &:focus {
     outline: none;
@@ -132,3 +143,4 @@ input[type=text], textarea {
     background-color: $blue-lighter;
   }
 }
+*/

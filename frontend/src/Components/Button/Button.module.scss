@@ -1,13 +1,19 @@
 /* stylelint-disable declaration-no-important */
 @import 'src/constants';
 
+@import 'src/mixins';
+
+
 .button {
+  @include flex-row;
+  gap: 1em;
   border: none;
   cursor: pointer;
   border-radius: 0.25em;
   transition: 0.15s;
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
-
+  
+  
   &:disabled {
     cursor: not-allowed;
   }

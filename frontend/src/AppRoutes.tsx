@@ -29,7 +29,7 @@ import {
   InformationAdminPage,
   InformationFormAdminPage,
   SaksdokumentFormAdminPage,
-  EventCreatorAdminPage
+  EventCreatorAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
 import { ROUTES } from './routes';

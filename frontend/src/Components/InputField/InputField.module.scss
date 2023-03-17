@@ -1,14 +1,17 @@
 @import 'src/constants';
 
+@import 'src/mixins';
+
+
 .input_field {
-  padding: 8px;
-  display: block;
-  outline: 1px solid $grey-2;
-  border: none;
-  width: 100%;
-  border-radius: 3px;
+  @include rounded;
+  padding: 1em 1em;
+  border: 1px solid transparent;
+  outline: none;
   &:focus {
-    outline: 1px solid $grey-1;
+    outline: none;
+    border: 1px solid $blue;
+    background-color: $blue-lighter;
   }
 }
 
@@ -24,4 +27,9 @@
   color: $grey-2;
   font-weight: 100;
   font-size: 1em;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
 }

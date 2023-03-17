@@ -1,0 +1,44 @@
+
+@import 'src/mixins';
+@import 'src/constants';
+
+.tab_bar {
+    @include rounded-full;
+    @include flex-row;
+    
+    background-color: $background-secondary;
+    padding: .4em;
+    gap: .75em;
+
+    &.vertical {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      @include rounded-heavy;
+    }
+
+    &.space_between {
+      justify-content: space-between;
+    }
+}
+
+.tab_button {
+    @include rounded-full;
+    @include flex-row-center;
+    background-color: transparent;
+    padding: .8em 1.25em;
+    transition: .2s;
+    cursor: pointer;
+    outline: none;
+    border: none;
+   
+    &.selected {
+        @include shadow-light;
+        background-color: $background-primary;
+        color: black;
+    }
+    &:not(.selected):hover {
+        color: $blue;
+    }
+}
+
