@@ -4,7 +4,7 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-type types = 'text' | 'number' | 'email' | 'password';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password';
 
 type InputFieldProps<T> = {
   children?: Children;
@@ -13,7 +13,7 @@ type InputFieldProps<T> = {
   inputClassName?: string;
   onChange?: (value: T) => void;
   placeholder?: string | null;
-  type?: types;
+  type?: InputFieldType;
   disabled?: boolean;
   value?: string;
   error?: string | boolean;
@@ -36,11 +36,19 @@ export function InputField<T>({
   register,
 }: InputFieldProps<T>) {
   function handleChange(e?: ChangeEvent<HTMLInputElement>) {
-    onChange?.(e?.currentTarget.value as T);
+    let value: string | number | null = e?.currentTarget.value ?? '';
+    if(type === 'number') {
+      if(value.length > 0) { 
+        value = Number.parseFloat(value as string);
+      } else {
+        value = null;
+      }
+    }
+    onChange?.(value as T);
   }
   return (
     <div className={className}>
-      <label className={classNames(styles.label, labelClassName)}>
+      <label className={classNames(styles.label, disabled && styles.disabled_label, labelClassName)}>
         {children}
         <input
           onChange={handleChange}

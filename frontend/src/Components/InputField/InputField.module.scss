@@ -32,6 +32,7 @@
 .error_text {
   @include rounded;
   background-color: red;
+  color: $white;
   height: 1.5em;
   font-size: 0.75em;
   line-height: 1.5em;
@@ -47,3 +48,10 @@
 }
 
 
+.input_field:disabled {
+  border: 1px solid transparent;
+}
+
+.disabled_label {
+  opacity: 0.25;
+}
