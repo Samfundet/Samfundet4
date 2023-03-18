@@ -56,14 +56,14 @@ export function LoginPage() {
           <InputField
             className={styles.input_field}
             placeholder={t(KEY.login_email_placeholder)}
-            onChange={(e) => setName(e ? e.currentTarget.value : '')}
+            onChange={setName}
             value={name}
           />
           <InputField
             className={styles.input_field}
             placeholder={t(KEY.common_password)}
             type="password"
-            onChange={(e) => setPassword(e?.currentTarget.value || '')}
+            onChange={setPassword}
             value={password}
           />
           <Button className={styles.login_button} theme="samf" type="submit">

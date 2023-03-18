@@ -5,7 +5,8 @@
 .tab_bar {
     @include rounded-full;
     @include flex-row;
-    
+
+    overflow-x: auto;
     background-color: $background-secondary;
     padding: .4em;
     gap: .75em;

@@ -112,6 +112,15 @@ form {
   padding: 1.5em;
 }
 
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  margin-bottom: .5em;
+  margin-left: .2em;
+  color: black;
+}
+
 /*
 fieldset {
   padding: 1em;

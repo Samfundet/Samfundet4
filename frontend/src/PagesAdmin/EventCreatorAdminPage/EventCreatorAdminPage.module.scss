@@ -34,8 +34,12 @@
   gap: 1em;
 }
 
-.tab_icon_done {
+.done {
   color: $green;
+}
+
+.error {
+  color: $red;
 }
 
 .tab_form {
@@ -48,6 +52,9 @@
   @include flex-row;
   justify-content: stretch;
   gap: 1.5em;
+  @include for-mobile-only {
+    flex-direction: column;
+  }
 }
 
 .half {
@@ -58,6 +65,7 @@
 
 .button_row {
   @include flex-row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  justify-content: space-between;
 }
 

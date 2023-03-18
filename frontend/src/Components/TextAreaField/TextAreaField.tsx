@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { UseFormRegisterReturn } from 'react-hook-form';
 import { Children } from '~/types';
 import styles from './TextAreaField.module.scss';
 
@@ -12,7 +13,8 @@ type TextAreaFieldProps = {
   rows?: number;
   cols?: number;
   value?: string;
-  error?: string;
+  error?: string | boolean;
+  register?: UseFormRegisterReturn;
 };
 
 export function TextAreaField({
@@ -26,23 +28,23 @@ export function TextAreaField({
   error,
   cols,
   rows = 10,
+  register,
 }: TextAreaFieldProps) {
-  const isError = error && error.length > 0;
-
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <textarea
           onChange={onChange}
-          className={classNames(styles.input_field, inputClassName, isError && styles.error)}
+          className={classNames(styles.input_field, inputClassName, error && styles.error)}
           placeholder={placeholder || ''}
           rows={rows}
           cols={cols}
           value={value}
+          {...register}
         />
       </label>
-      {isError && <div className={styles.error_text}>{error}</div>}
+      {error && (error as string).length > 0 && <div className={styles.error_text}>{error}</div>}
     </div>
   );
 }

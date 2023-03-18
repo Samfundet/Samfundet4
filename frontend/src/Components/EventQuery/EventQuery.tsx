@@ -50,11 +50,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
 
   return (
     <div className={styles.queryBar}>
-      <InputField
-        onChange={(e) => setSearch(e ? e.currentTarget.value : '')}
-        placeholder={t(KEY.common_search)}
-        className={styles.element}
-      />
+      <InputField onChange={setSearch} placeholder={t(KEY.common_search)} className={styles.element} />
       <Dropdown
         options={venues}
         onChange={(e) => setSelectedVenue(e ? e.currentTarget.value : '')}
