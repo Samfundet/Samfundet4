@@ -95,7 +95,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
 }
 
-.navbar_dropdown_item:hover .dropdown_container, .dropdown_container:hover, .dropdown_open {
+.dropdown_open, .dropdown_container:hover, .navbar_dropdown_item:hover .dropdown_container {
   display: flex;
 }
 

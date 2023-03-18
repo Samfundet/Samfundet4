@@ -6,7 +6,7 @@ import { logout } from '~/api';
 import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
-import { FOTO_URL, THEME } from '~/constants';
+import { THEME } from '~/constants';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
@@ -93,7 +93,7 @@ export function Navbar() {
       <a href="#" className={styles.navbar_dropdown_link}>
         {t(KEY.opening_hours)}
       </a>
-      <a href={FOTO_URL} className={styles.navbar_dropdown_link}>
+      <a href={ROUTES.other.foto} className={styles.navbar_dropdown_link}>
         {t(KEY.photos)}
       </a>
       <a href="#" className={styles.navbar_dropdown_link}>
