@@ -2,6 +2,7 @@ import { Button, ContentCard, Page, TimeDisplay } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import { t } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { postEvent } from '~/api';
@@ -10,6 +11,7 @@ import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { EventDto } from '~/dto';
 import { FormField, GenericForm, OptionsFormField } from '~/Forms/GenericForm';
 import { usePrevious } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
 import { Children } from '~/types';
 import styles from './EventCreatorAdminPage.module.scss';
@@ -32,6 +34,9 @@ export function EventCreatorAdminPage() {
 
   const [didComplete, setDidComplete] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
+  const allStepsComplete = Object.keys(completedSteps).reduce((others, step) => {
+    return others && completedSteps[step];
+  }, true);
 
   const categoryOptions: DropDownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
@@ -75,7 +80,7 @@ export function EventCreatorAdminPage() {
       partial: {
         start_dt: undefined,
         duration: 60,
-        category: 'concert',
+        category: undefined,
         host: undefined,
         location: undefined,
         publish_dt: undefined,
@@ -246,18 +251,18 @@ export function EventCreatorAdminPage() {
       <div className={styles.button_row}>
         {currentFormTab.key !== createSteps[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
-            Forrige
+            {t(KEY.common_previous)}
           </Button>
         ) : (
           <div></div>
         )}
         {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
-            Neste
+            {t(KEY.common_next)}
           </Button>
         ) : (
-          <Button theme="green" rounded={true} onClick={trySave}>
-            Lagre
+          <Button theme="green" rounded={true} onClick={trySave} disabled={!allStepsComplete}>
+            {t(KEY.common_save)}
           </Button>
         )}
       </div>

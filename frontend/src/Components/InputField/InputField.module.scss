@@ -55,3 +55,20 @@
 .disabled_label {
   opacity: 0.25;
 }
+
+.icon_container {
+  position: relative;
+  max-height: 0;
+  max-width: 0;
+  top: -2.4em;
+  left: calc(100% - 2.5em);
+  margin-right: 0.2em;
+}
+
+.field_icon {
+  width: 1.5em;
+  height: 1.5em;
+  opacity: 0.4;
+}
+
+

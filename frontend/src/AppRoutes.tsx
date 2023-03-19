@@ -16,18 +16,20 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
-  SaksdokumenterPage
+  SaksdokumenterPage,
 } from '~/Pages';
 import {
   ClosedPeriodAdminPage,
-  ClosedPeriodFormAdminPage, EventCreatorAdminPage, EventsAdminPage,
+  ClosedPeriodFormAdminPage,
+  EventCreatorAdminPage,
+  EventsAdminPage,
   GangsAdminPage,
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
-  SaksdokumentFormAdminPage
+  SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { ROUTES } from './routes';
 

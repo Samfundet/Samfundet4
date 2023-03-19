@@ -9,4 +9,3 @@ export { ImageFormAdminPage } from './ImageFormAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
-

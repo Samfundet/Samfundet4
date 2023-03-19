@@ -46,12 +46,15 @@ export function Dropdown<T>({
       <select
         className={classNames(styles.samf_select, error && styles.error)}
         onChange={handleChange}
+        placeholder={default_value?.label ?? ''}
         disabled={disabled}
       >
-        {default_value && (
+        {default_value ? (
           <option value={-1} className={className}>
             {default_value.label}
           </option>
+        ) : (
+          <option hidden disabled selected value={undefined}></option>
         )}
         {options.map((opt, index) => {
           return (
@@ -61,8 +64,8 @@ export function Dropdown<T>({
           );
         })}
       </select>
-      <div className={styles.custom_select_arrow}>
-        <Icon icon="material-symbols:arrow-drop-down-circle" width={20} />
+      <div className={styles.arrow_container}>
+        <Icon icon="material-symbols:arrow-drop-down-circle" width={20} className={styles.arrow} />
       </div>
       {/* span inneholder "nedover pil" symbol */}
     </label>

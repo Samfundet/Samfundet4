@@ -109,7 +109,7 @@ export function EventsAdminPage() {
       </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>
-          {t(KEY.edit)} {t(KEY.event)}
+          {t(KEY.edit)} {t(KEY.common_event)}
         </h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
           View in backend

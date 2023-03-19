@@ -32,13 +32,13 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
     getVenues()
       .then((data) => setVenues(data))
       .catch(console.error);
-    getEventGroups()
+    getEventGroups() // TODO event groups are not categories. We don't have a datamodel for this yet
       .then((data) => setEventGroups(data))
       .catch(console.error);
   }, [allEvents]);
 
   useEffect(() => {
-    setEvents(eventQuery(allEvents, search, selectedVenue, selectedEventGroup));
+    setEvents(eventQuery(allEvents, search, selectedVenue));
   }, [search, selectedVenue, selectedEventGroup]);
 
   const venueOptions: DropDownOption<VenueDto>[] = venues.map((venue) => {
@@ -51,7 +51,12 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
 
   return (
     <div className={styles.queryBar}>
-      <InputField onChange={setSearch} placeholder={t(KEY.common_search)} className={styles.element} />
+      <InputField
+        onChange={setSearch}
+        placeholder={t(KEY.common_search)}
+        className={styles.searchBar}
+        icon="ic:baseline-search"
+      />
       <Dropdown<VenueDto | undefined>
         options={venueOptions}
         onChange={(venue) => setSelectedVenue(venue)}

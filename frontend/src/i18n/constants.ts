@@ -48,6 +48,8 @@ export const KEY = {
   common_tags: 'common_tags',
   common_publication_date: 'common_publication_date',
   common_not_found: 'common_not_found',
+  common_next: 'common_next',
+  common_previous: 'common_previous',
   gangs_title: 'gangs_title',
   gangs_text: 'gangs_text',
   opening_hours: 'opening_hours',

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { ChangeEvent } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
@@ -18,6 +19,7 @@ type InputFieldProps<T> = {
   value?: string;
   error?: string | boolean;
   helpText?: string;
+  icon?: string;
   register?: UseFormRegisterReturn;
 };
 
@@ -33,6 +35,7 @@ export function InputField<T>({
   error,
   helpText,
   type = 'text',
+  icon,
   register,
 }: InputFieldProps<T>) {
   function handleChange(e?: ChangeEvent<HTMLInputElement>) {
@@ -59,6 +62,11 @@ export function InputField<T>({
           value={value}
           {...register}
         />
+        {icon && (
+          <div className={styles.icon_container}>
+            <Icon icon={icon} width={24} className={styles.field_icon} />
+          </div>
+        )}
         {error && (error as string).length > 0 && (
           <div className={styles.error_container}>
             <div className={styles.error_text}>{error}</div>

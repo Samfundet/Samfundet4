@@ -15,6 +15,9 @@
   justify-content: center;
   
   &:disabled {
+    opacity: 0.5;
+    background-color: $grey-3;
+    color: $grey-1;
     cursor: not-allowed;
   }
 
@@ -113,3 +116,5 @@
 .rounded {
   border-radius: 10000px;
 }
+
+
