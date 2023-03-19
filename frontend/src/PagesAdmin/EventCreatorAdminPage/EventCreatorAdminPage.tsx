@@ -1,15 +1,16 @@
 import { Button, InputField, Page, TextAreaField } from '~/Components';
 
-import styles from './EventCreatorAdminPage.module.scss';
 import { Icon } from '@iconify/react';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { Children } from '~/types';
-import { ReactElement } from 'react-markdown/lib/react-markdown';
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
-import { dbT } from '~/i18n/i18n';
-import { EventDto } from '~/dto';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ReactElement } from 'react-markdown/lib/react-markdown';
+import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { EventDto } from '~/dto';
+import { GenericForm } from '~/Forms/GenericForm';
+import { dbT } from '~/i18n/i18n';
+import { Children } from '~/types';
+import styles from './EventCreatorAdminPage.module.scss';
 
 type FormPart<T> = {
   title_nb: string;
@@ -143,7 +144,18 @@ export function EventCreatorAdminPage() {
   }
 
   function formText(): Children {
-    const form: ReactElement = (
+    const initial: Partial<EventDto> = {
+
+    }
+    return (
+      <GenericForm<Partial<EventDto>>
+        initialData={initial}
+        layout={[[]]}
+        validateOn='submit'
+        onChange={(v) => {}}
+      />
+    )
+    /*const form: ReactElement = (
       <>
         <div className={styles.input_row}>
           {field<string>(
@@ -196,6 +208,7 @@ export function EventCreatorAdminPage() {
       </>
     );
     return form;
+    */
   }
 
   function formInfo(): Children {
@@ -255,11 +268,9 @@ export function EventCreatorAdminPage() {
           vertical={false}
           spaceBetween={true}
         />
-        <form>
-          <div className={styles.form_container}>
-            <div className={styles.tab_form}>{allForms}</div>
-          </div>
-        </form>
+        <div className={styles.form_container}>
+          <div className={styles.tab_form}>{allForms}</div>
+        </div>
         <p>{JSON.stringify(event)}</p>
       </div>
     </Page>

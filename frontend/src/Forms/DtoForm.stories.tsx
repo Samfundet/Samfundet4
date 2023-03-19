@@ -36,6 +36,10 @@ function validateShrimp(str: string) {
   return "Tittel må inneholde 'reke'";
 }
 
+function validateMinLength(str: string) {
+  if(str.length >= 60) return true;
+  return "Må være minst 60 bokstaver.";
+}
 
 function validate69(num: number) {
   if(num == 69) return true;
@@ -52,8 +56,8 @@ Basic.args = {
       { key: 'title_en', type: 'text', label: 'Tittel (engelsk)' },
     ],
     [
-      { key: 'description_short_nb', type: 'text', label: 'Kort beskrivelse (norsk)' },
-      { key: 'description_short_en', type: 'text', label: 'Kort beskrivelse (engelsk)' },
+      { key: 'description_short_nb', type: 'text', label: 'Kort beskrivelse (norsk)', validator: validateMinLength } as FormField<string>,
+      { key: 'description_short_en', type: 'text', label: 'Kort beskrivelse (engelsk)', validator: validateMinLength } as FormField<string>,
     ],
     [
       {key: 'duration', type: 'number', label: 'Varighet (minutter)', validator: validate69} as FormField<number>,
