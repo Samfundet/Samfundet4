@@ -18,6 +18,7 @@ $background-dark: #2e2b2b;
   overflow: visible;
   padding-top: 1em;
   padding-bottom: 1em;
+  max-width: 100%;
 
   @include for-mobile-only {
     width: $mobile-width;

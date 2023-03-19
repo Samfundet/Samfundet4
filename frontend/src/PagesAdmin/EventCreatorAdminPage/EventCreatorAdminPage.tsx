@@ -1,93 +1,120 @@
-import { Button, InputField, Page, TextAreaField } from '~/Components';
+import { Button, ContentCard, Page } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ReactElement } from 'react-markdown/lib/react-markdown';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { EventDto } from '~/dto';
-import { GenericForm } from '~/Forms/GenericForm';
+import { FormField, GenericForm, OptionsFormField } from '~/Forms/GenericForm';
+import { usePrevious } from '~/hooks';
 import { dbT } from '~/i18n/i18n';
 import { Children } from '~/types';
 import styles from './EventCreatorAdminPage.module.scss';
-
-type FormPart<T> = {
-  title_nb: string;
-  title_en: string;
-  apply(t: T): void;
-};
 
 type EventCreatorStep = {
   key: string; // Unique key
   title_nb: string; // Tab title norwegian
   title_en: string; // Tab title english
+  partial: Partial<EventDto>;
   customIcon?: string; // Custom icon in tab bar
-  validate?(event: Partial<EventDto>): boolean; // Validation for this step
-  layout: Array<Array<FormPart<unknown>>>;
-  render(): Children; // Render function
+  layout: FormField<unknown>[][];
 };
 
 export function EventCreatorAdminPage() {
   const { i18n } = useTranslation();
-  const [event, setEvent] = useState<Partial<EventDto>>({});
-  const [visitedTabs, setVisitedTabs] = useState<string[]>([]);
 
   // ================================== //
   //          Creation Steps            //
   // ================================== //
 
+  const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
+
+  const categoryOptions: DropDownOption<string>[] = [
+    { value: 'concert', label: 'Konsert' },
+    { value: 'debate', label: 'Debatt' },
+  ];
+
   const createSteps: EventCreatorStep[] = [
+    // Name and text descriptions
     {
       key: 'text',
       title_nb: 'Tittel/beskrivelse',
       title_en: 'Text & description',
-      validate(event): boolean {
-        const title_ok = event.title_nb != null && event.title_en != null;
-        const dsc_short_ok = event.description_short_nb != null && event.description_short_en != null;
-        const dsc_long_ok = true; //event.description_long_nb != null && event.description_long_en != null;
-        return title_ok && dsc_short_ok && dsc_long_ok;
+      partial: {
+        title_nb: undefined,
+        title_en: undefined,
+        description_short_nb: undefined,
+        description_short_en: undefined,
+        description_long_nb: undefined,
+        description_long_en: undefined,
       },
-      layout: [],
-      render: formText,
+      layout: [
+        [
+          { key: 'title_nb', label: 'Tittel (norsk)', type: 'text' },
+          { key: 'title_en', label: 'Tittel (engelsk)', type: 'text' },
+        ],
+        [
+          { key: 'description_short_nb', label: 'Kort beskrivelse (norsk)', type: 'text-long' },
+          { key: 'description_short_en', label: 'Kort beskrivelse (engelsk)', type: 'text-long' },
+        ],
+        [
+          { key: 'description_long_nb', label: 'Lang beskrivelse (norsk)', type: 'text-long' },
+          { key: 'description_long_en', label: 'Lang beskrivelse (engelsk)', type: 'text-long' },
+        ],
+      ],
     },
+    // General info (category, dates etc.)
     {
       key: 'info',
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
-      validate(event): boolean {
-        const start_and_duration = event.start_dt != null && event.duration != null;
-        const various_info = event.category != null && event.age_group != null && event.host != null;
-        return start_and_duration && various_info;
+      partial: {
+        start_dt: undefined,
+        duration: 60,
+        category: undefined,
       },
-      layout: [],
-      render: formInfo,
+      layout: [
+        [
+          { key: 'start_dt', label: 'Dato og tidspunkt', type: 'datetime' },
+          { key: 'duration', label: 'Varighet (minutter)', type: 'number' },
+        ],
+        [{ key: 'category', label: 'Kategori', type: 'options', options: categoryOptions } as OptionsFormField<string>],
+      ],
     },
+    // Payment options
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
       title_en: 'Payment/registration',
-      validate: undefined,
+      partial: {},
       layout: [],
-      render: formPayment,
     },
+    // Graphics
     {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
-      validate: undefined,
+      partial: {},
       layout: [],
-      render: formGraphics,
     },
+    // Summary
     {
       key: 'summary',
       title_nb: 'Oppsummering',
       title_en: 'Summary',
-      validate: undefined,
+      partial: {},
       layout: [],
-      render: formSummary,
+      customIcon: 'ic:outline-remove-red-eye',
     },
   ];
+
+  // Editor state
+  let initialEvent: Partial<EventDto> = {};
+  createSteps.forEach((step) => (initialEvent = { ...initialEvent, ...step.partial }));
+  const [event, setEvent] = useState<Partial<EventDto>>();
+  const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
   // ================================== //
   //             Tab Logic              //
@@ -95,15 +122,15 @@ export function EventCreatorAdminPage() {
 
   const formTabs: Tab[] = createSteps.map((step: EventCreatorStep) => {
     // Check if step is done
-    const done = step.validate?.(event) && true;
-    const incomplete = visitedTabs.includes(step.key) && !done;
-
-    // Generate icon
+    const custom = step.customIcon !== undefined;
     let icon = step.customIcon || 'material-symbols:circle-outline';
-    if (incomplete) {
-      icon = 'gridicons:cross-circle';
-    } else if (done) {
+    const valid = completedSteps[step.key] === true && !custom;
+    const visited = visitedTabs[step.key] === true && !custom;
+    const error = !valid && visited && !custom;
+    if (valid) {
       icon = 'material-symbols:check-circle';
+    } else if (error) {
+      icon = 'gridicons:cross-circle';
     }
 
     // Create label
@@ -111,7 +138,7 @@ export function EventCreatorAdminPage() {
       <div className={styles.tab_label}>
         <Icon
           icon={icon}
-          className={classNames(styles.tab_icon, done && styles.done, incomplete && styles.error)}
+          className={classNames(styles.tab_icon, valid && styles.done, error && styles.error)}
           width={24}
         />
         <span>{dbT(step, 'title', i18n.language)}</span>
@@ -121,135 +148,94 @@ export function EventCreatorAdminPage() {
   });
 
   const [currentFormTab, setFormTab] = useState<Tab>(formTabs[0]);
+  const previousTab = usePrevious(currentFormTab);
+
+  function setTabAndVisit(tab: Tab) {
+    if (previousTab !== undefined) {
+      setVisitedTabs({
+        ...visitedTabs,
+        [previousTab.key]: true,
+      });
+    }
+    setFormTab(tab);
+  }
 
   // ================================== //
   //               Forms                //
   // ================================== //
 
-  // Utility
-  function field<T>(setValue: (_: T) => void, label: string, required: boolean, area: boolean): Children {
-    if (area) {
-      return (
-        <TextAreaField className={styles.half}>
-          <label>{label}</label>
-        </TextAreaField>
-      );
-    } else {
-      return (
-        <InputField<T> className={styles.half} onChange={setValue}>
-          <label>{label}</label>
-        </InputField>
-      );
-    }
-  }
+  const eventPreview: Children = (
+    <ContentCard
+      title={dbT(event, 'title', i18n.language) ?? ''}
+      description={dbT(event, 'description_short', i18n.language) ?? ''}
+      buttonText={null}
+    />
+  );
 
-  function formText(): Children {
-    const initial: Partial<EventDto> = {
-
-    }
-    return (
+  function renderForm(step: EventCreatorStep): Children {
+    const form = (
       <GenericForm<Partial<EventDto>>
-        initialData={initial}
-        layout={[[]]}
-        validateOn='submit'
-        onChange={(v) => {}}
+        key={step.key}
+        initialData={step.partial}
+        layout={step.layout}
+        validateOn="change"
+        validateOnInit={visitedTabs[step.key] === true}
+        onChange={(part) => setEvent({ ...event, ...part })}
+        onValid={(valid) => {
+          setCompletedSteps({
+            ...completedSteps,
+            [step.key]: valid,
+          });
+        }}
+        showSubmitButton={false}
       />
-    )
-    /*const form: ReactElement = (
-      <>
-        <div className={styles.input_row}>
-          {field<string>(
-            (value) => {
-              setEvent({
-                ...event,
-                title_nb: value,
-              });
-            },
-            'Tittel (norsk)',
-            true,
-            false,
-          )}
-          {field<string>(
-            (value) => {
-              setEvent({
-                ...event,
-                title_en: value,
-              });
-            },
-            'Tittel (engelsk)',
-            true,
-            false,
-          )}
-        </div>
-        <div className={styles.input_row}>
-          {field<string>(
-            (value) => {
-              setEvent({
-                ...event,
-                description_short_nb: value,
-              });
-            },
-            'Kort beskrivelse (norsk)',
-            true,
-            false,
-          )}
-          {field<string>(
-            (value) => {
-              setEvent({
-                ...event,
-                description_short_en: value,
-              });
-            },
-            'Kort beskrivelse (engelsk)',
-            true,
-            false,
-          )}
-        </div>
-      </>
     );
-    return form;
-    */
+    return (
+      <div>
+        {step.key == 'summary' && eventPreview}
+        {form}
+      </div>
+    );
   }
 
-  function formInfo(): Children {
-    const form = <b>test</b>;
-    return form;
+  function navigateTabs(delta: number): () => void {
+    return () => {
+      const keys = createSteps.map((s) => s.key);
+      const idx = keys.indexOf(currentFormTab.key as string) + delta;
+      if (idx >= 0 && idx < createSteps.length) {
+        setFormTab(formTabs[idx]);
+      }
+    };
   }
 
-  function formPayment(): Children {
-    return <span>TODO</span>;
-  }
-
-  function formGraphics(): Children {
-    return <span>TODO</span>;
-  }
-
-  function formSummary(): Children {
-    return <span>TODO</span>;
-  }
-
-  // Form validation
-
-  function jumpButton(txt: string, delta: number): ReactElement {
-    const idx = formTabs.map((t: Tab) => t.key).indexOf(currentFormTab.key);
-    const target = idx + delta;
-    if (target < formTabs.length && target >= 0) {
-      return (
-        <Button rounded={true} theme="blue" onClick={() => setFormTab(formTabs[idx + delta])}>
-          {delta < 0 && <Icon icon="mdi:arrow-left" width={18} />}
-          {txt}
-          {delta > 0 && <Icon icon="mdi:arrow-right" width={18} />}
-        </Button>
-      );
-    }
-    return <div></div>;
-  }
+  const buttons: Children = (
+    <>
+      <div className={styles.button_row}>
+        {currentFormTab.key !== createSteps[0].key ? (
+          <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
+            Forrige
+          </Button>
+        ) : (
+          <div></div>
+        )}
+        {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
+          <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
+            Neste
+          </Button>
+        ) : (
+          <Button theme="green" rounded={true}>
+            Lagre
+          </Button>
+        )}
+      </div>
+    </>
+  );
 
   const allForms: Children = createSteps.map((step: EventCreatorStep) => {
     const hidden = currentFormTab.key !== step.key;
     return (
       <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
-        {step.render()}
+        {renderForm(step)}
       </div>
     );
   });
@@ -261,16 +247,15 @@ export function EventCreatorAdminPage() {
         <TabBar
           tabs={formTabs}
           selected={currentFormTab}
-          onSetTab={(tab) => {
-            setVisitedTabs([currentFormTab.key as string, ...visitedTabs]);
-            setFormTab(tab);
-          }}
+          onSetTab={setTabAndVisit}
           vertical={false}
           spaceBetween={true}
         />
         <div className={styles.form_container}>
           <div className={styles.tab_form}>{allForms}</div>
+          {buttons}
         </div>
+        <p>completed: {JSON.stringify(completedSteps)}</p>
         <p>{JSON.stringify(event)}</p>
       </div>
     </Page>

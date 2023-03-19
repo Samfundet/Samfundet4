@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getEventGroups, getVenues } from '~/api';
-import { EventDto } from '~/dto';
+import { EventDto, EventGroupDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { SetState } from '~/types';
 import { Dropdown } from '../Dropdown';
+import { DropDownOption } from '../Dropdown/Dropdown';
 import { InputField } from '../InputField';
 import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';
@@ -16,52 +17,52 @@ type EventQueryProps = {
 
 export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
   const { t } = useTranslation();
-  const [venues, setVenues] = useState<string[][]>([]);
-  const [eventGroups, setEventGroups] = useState<string[][]>([]);
+
+  // Data
+  const [venues, setVenues] = useState<VenueDto[]>([]);
+  const [eventGroups, setEventGroups] = useState<EventGroupDto[]>([]);
+
+  // Search
   const [search, setSearch] = useState<string>('');
-  const [selectedVenue, setSelectedVenue] = useState<string>('');
-  const [selectedEventType, setSelectedEventType] = useState<string>('');
+  const [selectedVenue, setSelectedVenue] = useState<VenueDto>();
+  const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto>();
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     getVenues()
-      .then((data) => {
-        setVenues(
-          data.map(function (element) {
-            return [element.name || ''];
-          }),
-        );
-      })
+      .then((data) => setVenues(data))
       .catch(console.error);
     getEventGroups()
-      .then((data) => {
-        setEventGroups(
-          data.map(function (element) {
-            return [String(element.id), element.name];
-          }),
-        );
-      })
+      .then((data) => setEventGroups(data))
       .catch(console.error);
   }, [allEvents]);
 
   useEffect(() => {
-    setEvents(eventQuery(allEvents, search, selectedVenue, selectedEventType));
-  }, [search, selectedVenue, selectedEventType]);
+    setEvents(eventQuery(allEvents, search, selectedVenue, selectedEventGroup));
+  }, [search, selectedVenue, selectedEventGroup]);
+
+  const venueOptions: DropDownOption<VenueDto>[] = venues.map((venue) => {
+    return { label: venue.name ?? '', value: venue };
+  });
+
+  const eventGroupOptions: DropDownOption<EventGroupDto>[] = eventGroups.map((group) => {
+    return { label: group.name ?? '', value: group };
+  });
 
   return (
     <div className={styles.queryBar}>
       <InputField onChange={setSearch} placeholder={t(KEY.common_search)} className={styles.element} />
-      <Dropdown
-        options={venues}
-        onChange={(e) => setSelectedVenue(e ? e.currentTarget.value : '')}
+      <Dropdown<VenueDto | undefined>
+        options={venueOptions}
+        onChange={(venue) => setSelectedVenue(venue)}
         wrapper={styles.element}
-        default_value={t(KEY.common_choose) + ' ' + t(KEY.venue)}
+        default_value={{ label: t(KEY.common_choose) + ' ' + t(KEY.venue), value: undefined }}
       />
-      <Dropdown
-        options={eventGroups}
-        onChange={(e) => setSelectedEventType(e ? e.currentTarget.value : '')}
+      <Dropdown<EventGroupDto | undefined>
+        options={eventGroupOptions}
+        onChange={(group) => setSelectedEventGroup(group)}
         wrapper={styles.element}
-        default_value={t(KEY.common_choose) + ' ' + t(KEY.event_type)}
+        default_value={{ label: t(KEY.common_choose) + ' ' + t(KEY.event_type), value: undefined }}
       />
     </div>
   );

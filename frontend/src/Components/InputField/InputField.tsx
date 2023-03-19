@@ -4,7 +4,7 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-export type InputFieldType = 'text' | 'number' | 'email' | 'password';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local';
 
 type InputFieldProps<T> = {
   children?: Children;
@@ -37,8 +37,8 @@ export function InputField<T>({
 }: InputFieldProps<T>) {
   function handleChange(e?: ChangeEvent<HTMLInputElement>) {
     let value: string | number | null = e?.currentTarget.value ?? '';
-    if(type === 'number') {
-      if(value.length > 0) { 
+    if (type === 'number') {
+      if (value.length > 0) {
         value = Number.parseFloat(value as string);
       } else {
         value = null;

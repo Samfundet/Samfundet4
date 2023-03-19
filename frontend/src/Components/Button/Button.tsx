@@ -14,6 +14,7 @@ type ButtonProps = {
   className?: string;
   disabled?: boolean;
   children?: Children;
+  buttonType?: ButtonType;
   onClick?: () => void;
 };
 
@@ -37,7 +38,6 @@ const mapDisplayToStyle: { [display in ButtonDisplay]: string } = {
 
 export function Button({
   name,
-  type,
   theme = 'basic',
   display = 'basic',
   rounded = false,
@@ -45,6 +45,7 @@ export function Button({
   disabled,
   className,
   children,
+  buttonType = 'button',
 }: ButtonProps) {
   const classNames = classnames(
     styles.button,
@@ -53,9 +54,19 @@ export function Button({
     rounded ? styles.rounded : '',
     className,
   );
+
   return (
-    <button name={name} onClick={onClick} type={type} disabled={disabled} className={classNames}>
-      {children}
-    </button>
+    <>
+      {buttonType === 'button' && (
+        <button name={name} onClick={onClick} disabled={disabled} className={classNames}>
+          {children}
+        </button>
+      )}
+      {buttonType === 'submit' && (
+        <input type="submit" name={name} onClick={onClick} disabled={disabled} className={classNames}>
+          {children}
+        </input>
+      )}
+    </>
   );
 }

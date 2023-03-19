@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { desktopBpLower, mobileBpUpper } from './constants';
 
@@ -99,4 +99,13 @@ export function useScreenCenterOffset(id: string): number {
     };
   }, [id]);
   return positionY;
+}
+
+// Utility hook to get the previous value of react state
+export function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
 }

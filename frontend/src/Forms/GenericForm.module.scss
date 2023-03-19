@@ -1,0 +1,22 @@
+
+.form_container {
+  
+}
+
+.input_row {
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  gap: 1em;
+  width: 100%;
+}
+
+.input_element {
+  flex: 1;
+}
+
+.button_row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1em;
+}

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { UseFormRegisterReturn } from 'react-hook-form';
+import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './TextAreaField.module.scss';
 
@@ -8,13 +8,13 @@ type TextAreaFieldProps = {
   className?: string;
   inputClassName?: string;
   labelClassName?: string;
-  onChange?: (e?: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (value: string) => void;
   placeholder?: string | null;
   rows?: number;
   cols?: number;
   value?: string;
   error?: string | boolean;
-  register?: UseFormRegisterReturn;
+  disabled?: boolean;
 };
 
 export function TextAreaField({
@@ -28,23 +28,31 @@ export function TextAreaField({
   error,
   cols,
   rows = 10,
-  register,
+  disabled = false,
 }: TextAreaFieldProps) {
+  function handleChange(e?: ChangeEvent<HTMLTextAreaElement>) {
+    const value = e?.currentTarget.value ?? '';
+    onChange?.(value);
+  }
   return (
     <div className={className}>
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <textarea
-          onChange={onChange}
+          onChange={handleChange}
           className={classNames(styles.input_field, inputClassName, error && styles.error)}
           placeholder={placeholder || ''}
+          disabled={disabled}
           rows={rows}
           cols={cols}
           value={value}
-          {...register}
         />
       </label>
-      {error && (error as string).length > 0 && <div className={styles.error_text}>{error}</div>}
+      {error && (error as string).length > 0 && (
+        <div className={styles.error_container}>
+          <div className={styles.error_text}>{error}</div>
+        </div>
+      )}
     </div>
   );
 }

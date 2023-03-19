@@ -1,54 +1,93 @@
-import { ReactElement, useEffect, useState } from 'react';
-import { InputField } from '~/Components';
+import { t } from 'i18next';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { Button, Dropdown, InputField, TextAreaField } from '~/Components';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { InputFieldType } from '~/Components/InputField/InputField';
-import { Children } from '~/types';
+import { usePrevious } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import styles from './GenericForm.module.scss';
 
-type FormFieldType = 'text' | 'text-long' | 'number';
+type FormFieldType = 'text' | 'text-long' | 'number' | 'datetime' | 'options';
 type FormFieldValidation = 'submit' | 'change';
 
-export type FormField<T> = {
+export type FormField<U> = {
   key: string;
   type: FormFieldType;
   label?: ReactElement | string;
   required?: boolean;
-  validator?<T>(data: T): boolean | string;
+  validator?<U>(data: U): boolean | string;
+  _?: U; // eslint does not detect (data: U) as use of type
+};
+
+export type OptionsFormField<T> = FormField<T> & {
+  options: DropDownOption<T>[];
+  default?: DropDownOption<T>;
 };
 
 type FormProps<T> = {
   initialData?: Partial<T>;
-  layout: FormField<T>[][];
+  layout: FormField<unknown>[][];
   validateOn?: FormFieldValidation;
   validateOnInit?: boolean;
+  showSubmitButton?: boolean;
   onChange<T>(data: Partial<T>): void;
+  onValid?(valid: boolean): void;
+  onSubmit?(data: Partial<T>): void;
 };
 
-export function GenericForm<T>({ initialData={}, layout, validateOn = 'submit', validateOnInit = false, onChange }: FormProps<T>) {
-  // Transform undefined values into null (necessary for safe react updates)
-  const processedInitialData: Record<string, unknown> = {
-    ...initialData
+// Default requirement validation (field cannot be empty/null)
+function isRequirementSatisfied(field: FormField<unknown>, value: unknown) {
+  if (field.required === false) {
+    return true;
   }
-  for(let key of Object.keys(processedInitialData)) {
-    if(processedInitialData[key] === undefined) {
-     // processedInitialData[key] = null;
-    }
+  if (value === undefined || value === null || (value as string) === '') {
+    return false;
   }
+  return true;
+}
 
-  // States
-  const [didInit, setDidInit] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Record<string, unknown>>({...processedInitialData});
-  const [changedFields, setChangedFields] = useState<string[]>([]);
-  const [validationState, setValidationState] = useState<Record<string, boolean | string>>({});
+// Gets the current error state for a field
+// Returns true (or an error string) if field has errors
+function getFieldError(field: FormField<unknown>, value: unknown): boolean | string {
+  // Run validation
+  if (!isRequirementSatisfied(field, value)) {
+    return true; // field is required
+  }
+  const validatorResult = field.validator?.(value);
+  if (validatorResult === true) {
+    return false; // everything OK
+  }
+  return validatorResult ?? false;
+}
+
+export function GenericForm<T>({
+  initialData = {},
+  layout,
+  validateOn = 'submit',
+  validateOnInit = false,
+  showSubmitButton = true,
+  onChange,
+  onValid,
+  onSubmit,
+}: FormProps<T>) {
   const allFields = Object.keys(initialData);
 
-  // Update form data
-  function updateValue<T>(field: FormField<T>, newValue: T) {
-    if(allFields.indexOf(field.key) == -1) {
+  // General states
+  const [didInit, setDidInit] = useState<boolean>(false);
+  const [formData, setFormData] = useState<Record<string, unknown>>({ ...initialData });
+  const [validationState, setValidationState] = useState<Record<string, boolean | string>>({});
+  const [changedFields, setChangedFields] = useState<string[]>([]);
+  const prevValidateOnInit = usePrevious(validateOnInit);
+
+  // Update value in form
+  function updateValue<T>(field: FormField<T>, newValue?: T) {
+    if (allFields.indexOf(field.key) == -1) {
       throw Error(`
         GenericForm: attempted to set field ${field.key} in generic T which may not have this member.
         Make sure the initialData contains all the same members as the layout prop!
       `);
       return;
-    } 
+    }
     setFormData({
       ...formData,
       [field.key]: newValue,
@@ -56,80 +95,103 @@ export function GenericForm<T>({ initialData={}, layout, validateOn = 'submit', 
     setChangedFields([...changedFields, field.key]);
   }
 
-  // Alert parent of change
+  // ================================== //
+  //             Validation             //
+  // ================================== //
+
+  // Update validation state for given fields
+  const updateValidation = useCallback(
+    (keys: string[]) => {
+      let newValidation: Record<string, string | boolean> = {};
+      layout.forEach((row) => {
+        row.forEach((field) => {
+          if (!keys.includes(field.key)) {
+            return;
+          }
+          // Update validations
+          newValidation = {
+            ...newValidation,
+            [field.key]: getFieldError(field, formData[field.key]),
+          };
+        });
+      });
+      // Rerender form with new validation state
+      setValidationState({
+        ...validationState,
+        ...newValidation,
+      });
+    },
+    [layout, formData, validationState, setValidationState],
+  );
+
+  // ================================== //
+  //              Effects               //
+  // ================================== //
+
+  // Validate changes and update parent
   useEffect(() => {
-    if(!didInit) {
+    // Validate on init (or when validate on init is suddenly turned on)
+    if (validateOnInit) {
+      if (!didInit || prevValidateOnInit === false) {
+        updateValidation(allFields);
+      }
+    }
+    // Validate and update parent
+    if (changedFields.length > 0) {
+      if (validateOn === 'change') {
+        updateValidation(changedFields);
+      }
+      onChange<T>(formData as T);
+    }
+    // Check if everything valid
+    if (!didInit || changedFields.length > 0) {
+      let valid = true;
+      layout.forEach((row) => {
+        row.forEach((field) => {
+          if (getFieldError(field, formData[field.key]) != false) {
+            valid = false;
+          }
+        });
+      });
+      onValid?.(valid);
+    }
+    // Reset dirty state
+    if (changedFields.length > 0) {
+      setChangedFields([]);
+    }
+    if (!didInit) {
       setDidInit(true);
-      if(validateOnInit) {
-        setChangedFields(allFields);
-      }
     }
-    onChange<T>(formData as T);
-  }, [formData]);
+  }, [
+    changedFields,
+    updateValidation,
+    setChangedFields,
+    onChange,
+    formData,
+    didInit,
+    layout,
+    onValid,
+    validateOn,
+    validateOnInit,
+    allFields,
+    prevValidateOnInit,
+  ]);
 
-  // Update validation for given field
-  useEffect(() => {
-    if(validateOn === 'change' && changedFields.length > 0) {
-      updateValidation(changedFields);
-      setChangedFields([])
-    }
-  }, [changedFields])
+  // ================================== //
+  //              Input UI              //
+  // ================================== //
 
-  // Update validation state for all fields
-  function updateValidation(validateKeys?: string[]) {
-    let newValidation: Record<string, string | boolean> = {}
-    layout.forEach(row => {
-      row.forEach(field => {
-        // Only validate desired list
-        if (validateKeys !== null && validateKeys?.indexOf(field.key) == -1){
-          return;
-        }
-        // Run validation
-        const value = formData[field.key];
-        let error: boolean | string = !isRequirementSatisfied(field);
-        let validatorResult = field.validator?.(value);
-        if(validatorResult === false) {
-          error = true;
-        } else if(validatorResult === true) {
-          error = false;
-        } else if (validatorResult !== undefined) {
-          error = validatorResult;
-        }
-        // Update validations
-        newValidation = {
-          ...newValidation,
-          [field.key]: error
-        }
-      })
-    })
-    // Rerender form with new validation state
-    setValidationState({
-      ...validationState,
-      ...newValidation
-    })
-  }
-
-  // Default requirement validation
-  function isRequirementSatisfied<T>(field: FormField<T>) {
-    const value = formData[field.key];
-    if(field.required === true || field.required === undefined) {
-      if(value === undefined || value === null || (value as string) === '') {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // Regular text input
-  function makeStandardInput<T>(field: FormField<T>, type: InputFieldType) {
+  // Regular text input for text, numbers, dates
+  function makeStandardInput<U>(field: FormField<U>, type: InputFieldType) {
     return (
-      <InputField<T>
+      <InputField<U>
         key={field.key}
         placeholder="some"
         value={(formData[field.key] ?? '') as string}
-        onChange={(v: T) => updateValue<T>(field, v as T)}
+        onChange={(v: U) => updateValue<U>(field, v)}
         disabled={allFields.indexOf(field.key) == -1}
         error={validationState[field.key] ?? false}
+        className={styles.input_element}
         type={type}
       >
         {field.label}
@@ -137,26 +199,75 @@ export function GenericForm<T>({ initialData={}, layout, validateOn = 'submit', 
     );
   }
 
-  // Make form field UI
-  function makeFormField(field: FormField<T>) {
-    switch (field.type) {
-      case 'text':
-        return makeStandardInput<string>(field, 'text');
-      case 'text-long': // TODO text area
-        return makeStandardInput<string>(field, 'text');
-      case 'number':
-        return makeStandardInput<number>(field, 'number');
-    }
-    return <b>FORM FIELD TYPE '{field.type}' NOT IMPLEMENTED</b>;
+  // Long text input for descriptions etc
+  function makeAreaInput(field: FormField<string>) {
+    return (
+      <TextAreaField
+        key={field.key}
+        placeholder="some"
+        value={(formData[field.key] ?? '') as string}
+        onChange={(v: string) => updateValue<string>(field, v)}
+        disabled={allFields.indexOf(field.key) == -1}
+        error={validationState[field.key] ?? false}
+        className={styles.input_element}
+      >
+        {field.label}
+      </TextAreaField>
+    );
   }
 
-  function makeRow(index: number, row: FormField<T>[]): Children {
-    return <div key={index} style={{ display: 'flex', gap: '1em' }}>{row.map((field) => makeFormField(field))}</div>;
+  // Long text input for descriptions etc
+  function makeOptionsInput<T>(field: OptionsFormField<T>) {
+    return (
+      <Dropdown<T>
+        key={field.key}
+        default_value={field.default}
+        options={field.options}
+        onChange={(v?: T) => updateValue<T>(field, v)}
+        disabled={allFields.indexOf(field.key) == -1}
+        label={field.label}
+        error={validationState[field.key] ? true : false}
+        className={styles.input_element}
+      />
+    );
+  }
+
+  // Make form field UI
+  function makeFormField<U>(field: FormField<U>) {
+    switch (field.type) {
+      case 'text':
+        return makeStandardInput<string>(field as FormField<string>, 'text');
+      case 'text-long':
+        return makeAreaInput(field as FormField<string>);
+      case 'datetime':
+        return makeStandardInput<string>(field as FormField<string>, 'datetime-local');
+      case 'number':
+        return makeStandardInput<number>(field as FormField<number>, 'number');
+      case 'options':
+        return makeOptionsInput<T>(field as OptionsFormField<T>);
+    }
+    return <b>FORM FIELD TYPE {field.type} NOT IMPLEMENTED</b>;
   }
 
   return (
     <div>
-      <form>{layout.map((row, index) => makeRow(index, row))}</form>
+      <div className={styles.form_container}>
+        {layout.map((row, index) => {
+          return (
+            <div key={index} className={styles.input_row}>
+              {row.map((field) => makeFormField(field))}
+            </div>
+          );
+        })}
+        {showSubmitButton && (
+          <div className={styles.button_row}>
+            <Button theme="green" rounded={true} onClick={() => onSubmit?.(formData as Partial<T>)}>
+              {t(KEY.common_save)}
+            </Button>
+          </div>
+        )}
+      </div>
+      {/* DEBUG */}
       <br></br>
       <code>allFields: {JSON.stringify(allFields)}</code>
       <br></br>
@@ -166,4 +277,3 @@ export function GenericForm<T>({ initialData={}, layout, validateOn = 'submit', 
     </div>
   );
 }
-

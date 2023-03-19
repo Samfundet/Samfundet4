@@ -1,8 +1,13 @@
-import { EventDto } from '~/dto';
+import { EventDto, EventGroupDto, VenueDto } from '~/dto';
 
-export function eventQuery(events: EventDto[], search: string, venue: string, event_type: string): EventDto[] {
+export function eventQuery(
+  events: EventDto[],
+  search: string,
+  venue?: VenueDto,
+  eventGroup?: EventGroupDto,
+): EventDto[] {
   search = search.toLowerCase();
-  venue = venue.toLowerCase();
+  const venueName = venue?.name ?? '';
   return events.filter(
     (event) =>
       (search.length == 0 ||
@@ -14,7 +19,7 @@ export function eventQuery(events: EventDto[], search: string, venue: string, ev
         event.description_short_en.toLowerCase().includes(search) ||
         event.location.toLowerCase().includes(search) ||
         event.event_group.name.toLowerCase().includes(search)) &&
-      (venue.length == 0 || event.location.toLowerCase().includes(venue)) &&
-      (event_type.length == 0 || event.event_group.id == Number(event_type)),
+      (venueName.length == 0 || event.location.toLowerCase().includes(venueName)) &&
+      (eventGroup === undefined || event.event_group.id == eventGroup?.id),
   );
 }
