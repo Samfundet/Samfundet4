@@ -7,9 +7,9 @@ export function eventQuery(
   eventGroup?: EventGroupDto,
 ): EventDto[] {
   search = search.toLowerCase();
-  const venueName = venue?.name ?? '';
+  const venueName = (venue?.name ?? '').toLowerCase();
   return events.filter(
-    (event) =>
+    (event: EventDto) =>
       (search.length == 0 ||
         event.title_nb.toLowerCase().includes(search) ||
         event.title_en.toLowerCase().includes(search) ||
@@ -17,8 +17,7 @@ export function eventQuery(
         event.description_long_en.toLowerCase().includes(search) ||
         event.description_short_nb.toLowerCase().includes(search) ||
         event.description_short_en.toLowerCase().includes(search) ||
-        event.location.toLowerCase().includes(search) ||
-        event.event_group.name.toLowerCase().includes(search)) &&
+        event.location.toLowerCase().includes(search)) &&
       (venueName.length == 0 || event.location.toLowerCase().includes(venueName)) &&
       (eventGroup === undefined || event.event_group.id == eventGroup?.id),
   );

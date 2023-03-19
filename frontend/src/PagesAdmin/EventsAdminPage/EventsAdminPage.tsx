@@ -50,7 +50,7 @@ export function EventsAdminPage() {
     );
   }
 
-  const data = events.map(function (event) {
+  const data = events.map(function (event: EventDto) {
     return [
       new AlphabeticTableCell(
         // <Link

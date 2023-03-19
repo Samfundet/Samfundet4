@@ -1,9 +1,9 @@
 import { SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { getUser, login } from '~/api';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Button, InputField } from '~/Components';
-import { getUser, login } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -51,8 +51,8 @@ export function LoginPage() {
         ></Alert>
       )}
       <div className={styles.content_container}>
-        <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
         <form onSubmit={handleLogin}>
+          <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
           <InputField
             className={styles.input_field}
             placeholder={t(KEY.login_email_placeholder)}
@@ -66,7 +66,7 @@ export function LoginPage() {
             onChange={setPassword}
             value={password}
           />
-          <Button className={styles.login_button} theme="samf" type="submit">
+          <Button className={styles.login_button} theme="samf" type="submit" rounded={true}>
             {t(KEY.common_login)}
           </Button>
         </form>

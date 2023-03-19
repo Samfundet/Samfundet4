@@ -8,9 +8,7 @@
   justify-content: space-around;
   align-items: center;
   align-content: stretch;
-  min-width: 100%;
-  min-height: calc(100vh - 200px);
-  padding: 10em 10vw 10em 10vw;
+  height: 100%;
 }
 
 .content_container {
@@ -28,6 +26,7 @@
 .header_text {
   text-align: center;
   font-size: 1.8em;
+  margin-bottom: 1em;
 }
 
 .input_field {
