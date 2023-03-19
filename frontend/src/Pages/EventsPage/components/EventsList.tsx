@@ -44,7 +44,7 @@ export function EventsList({ events }: EventsListProps) {
             ),
           } as ITableCell,
           { children: <span>{event.location}</span> } as ITableCell,
-          { children: <span>{event.event_group?.name}</span> } as ITableCell,
+          { children: <span>{event.category}</span> } as ITableCell,
           { children: <span>{event.price_group}</span> } as ITableCell,
         ] as ITableCell[]);
       });

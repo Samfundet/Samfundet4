@@ -65,7 +65,7 @@ export function EventsAdminPage() {
       ),
       // new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
       new AlphabeticTableCell(event.start_dt.toLocaleString()),
-      new AlphabeticTableCell(event.event_group.name),
+      //new AlphabeticTableCell(event.event_group.name),
       new AlphabeticTableCell(event.host),
       new AlphabeticTableCell(event.location),
       {
@@ -118,7 +118,7 @@ export function EventsAdminPage() {
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
         <Table
-          columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.event_type), t(KEY.organizer), t(KEY.venue), '']}
+          columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.organizer), t(KEY.venue), '']}
           data={data}
         />
       </div>

@@ -45,12 +45,12 @@ export function EventCreatorAdminPage() {
       title_nb: 'Tittel/beskrivelse',
       title_en: 'Text & description',
       partial: {
-        title_nb: 'undefined',
-        title_en: 'undefined',
-        description_short_nb: 'undefined',
-        description_short_en: 'undefined',
-        description_long_nb: 'undefined',
-        description_long_en: 'undefined',
+        title_nb: undefined,
+        title_en: undefined,
+        description_short_nb: undefined,
+        description_short_en: undefined,
+        description_long_nb: undefined,
+        description_long_en: undefined,
       },
       layout: [
         [
@@ -76,8 +76,8 @@ export function EventCreatorAdminPage() {
         start_dt: undefined,
         duration: 60,
         category: 'concert',
-        host: 'undefined',
-        location: 'undefined',
+        host: undefined,
+        location: undefined,
         publish_dt: undefined,
       },
       layout: [
@@ -133,7 +133,6 @@ export function EventCreatorAdminPage() {
   // ================================== //
 
   function trySave() {
-    alert(JSON.stringify(event));
     postEvent(event as EventDto)
       .then((response) => {
         setDidComplete(true);
