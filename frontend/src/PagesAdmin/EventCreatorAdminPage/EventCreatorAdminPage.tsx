@@ -34,9 +34,6 @@ export function EventCreatorAdminPage() {
 
   const [didComplete, setDidComplete] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
-  const allStepsComplete = Object.keys(completedSteps).reduce((others, step) => {
-    return others && completedSteps[step];
-  }, true);
 
   const categoryOptions: DropDownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
@@ -98,7 +95,8 @@ export function EventCreatorAdminPage() {
         [{ key: 'publish_dt', label: 'Publiseringsdato', type: 'datetime' }],
       ],
     },
-    // Payment options
+    // Payment options (not implemented yet)
+    /*
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
@@ -106,6 +104,7 @@ export function EventCreatorAdminPage() {
       partial: {},
       layout: [],
     },
+    */
     // Graphics
     {
       key: 'graphics',
@@ -132,6 +131,11 @@ export function EventCreatorAdminPage() {
   createSteps.forEach((step) => (initialEvent = { ...initialEvent, ...step.partial }));
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
+
+  // Ready to save?
+  const allStepsComplete = createSteps.reduce((others, step) => {
+    return others && completedSteps[step.key];
+  }, true);
 
   // ================================== //
   //             Save Logic             //
