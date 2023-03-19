@@ -16,9 +16,23 @@ export type TabBarProps = {
   onSetTab?(tab: Tab): void;
 };
 
-export function TabBar({ tabs, selected, vertical = false, spaceBetween = false, onSetTab, disabled = false}: TabBarProps) {
+export function TabBar({
+  tabs,
+  selected,
+  vertical = false,
+  spaceBetween = false,
+  onSetTab,
+  disabled = false,
+}: TabBarProps) {
   return (
-    <div className={classNames(styles.tab_bar, vertical && styles.vertical, spaceBetween && styles.space_between, disabled && styles.disabled)}>
+    <div
+      className={classNames(
+        styles.tab_bar,
+        vertical && styles.vertical,
+        spaceBetween && styles.space_between,
+        disabled && styles.disabled,
+      )}
+    >
       {tabs.map((tab: Tab) => {
         const isSelected = tab.key === selected.key;
         return (

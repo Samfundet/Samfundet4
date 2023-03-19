@@ -85,9 +85,9 @@ export type EventDto = {
   publish_dt: string;
   host: string;
   location: string;
-  // EVENT GROUP IS NOT THE EVENT TYPE/CATEGORY. 
+  // EVENT GROUP IS NOT THE EVENT TYPE/CATEGORY.
   // Used to group multiple similar events together
-  event_group: EventGroupDto; 
+  event_group: EventGroupDto;
   price_group: string;
   status_group: string;
   age_group: string;

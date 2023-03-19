@@ -28,11 +28,10 @@ export class AlphabeticTableCell implements ITableCell {
     }
     const child1 = this.children;
     const child2 = other.children;
-    if(child1 === undefined) return -1;
-    if(child2 === undefined) return 1;
+    if (child1 === undefined) return -1;
+    if (child2 === undefined) return 1;
     return child1.localeCompare(child1);
   }
-  
 }
 
 export function Table({ className, columns, data }: TableProps) {

@@ -40,18 +40,18 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
   return (
     <div className={styles.container}>
       <div className={styles.selected_container}>
-        {selected && 
+        {selected && (
           <>
-          <h1 className={styles.image_title}>{selected.title}</h1>
+            <h1 className={styles.image_title}>{selected.title}</h1>
           </>
-        }
+        )}
         <div className={styles.selected} style={backgroundImageFromUrl(selected?.url)}>
-          {selected === undefined &&
+          {selected === undefined && (
             <>
-              <Icon icon="ic:outline-image" width={24}/>
+              <Icon icon="ic:outline-image" width={24} />
               <p>Ingen bilde valgt</p>
             </>
-          }
+          )}
         </div>
         {/* TODO tags and other metadata */}
       </div>

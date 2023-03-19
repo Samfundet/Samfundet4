@@ -236,12 +236,7 @@ export function GenericForm<T>({
 
   // Image picker
   function makeImagePicker(field: FormField<ImageDto>) {
-    return (
-      <ImagePicker
-        key={field.key}
-        onSelected={(v?: ImageDto) => updateValue<ImageDto>(field, v)}
-      />
-    );
+    return <ImagePicker key={field.key} onSelected={(v?: ImageDto) => updateValue<ImageDto>(field, v)} />;
   }
 
   // Make form field UI

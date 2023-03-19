@@ -134,7 +134,7 @@ export function EventCreatorAdminPage() {
 
   function trySave() {
     postEvent(event as EventDto)
-      .then((response) => {
+      .then(() => {
         setDidComplete(true);
       })
       .catch((error) => {
@@ -292,15 +292,15 @@ export function EventCreatorAdminPage() {
               {buttons}
             </>
           )}
-          {didComplete &&
+          {didComplete && (
             <>
               {eventPreview}
               <div className={styles.done_row}>
                 <h1>Lagret</h1>
-                <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon}/>
+                <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon} />
               </div>
-            </> 
-          }
+            </>
+          )}
         </div>
         {/* DEBUG */}
         {/*

@@ -117,10 +117,7 @@ export function EventsAdminPage() {
       </div>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
-        <Table
-          columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.organizer), t(KEY.venue), '']}
-          data={data}
-        />
+        <Table columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.organizer), t(KEY.venue), '']} data={data} />
       </div>
     </Page>
   );
