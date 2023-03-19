@@ -12,7 +12,7 @@ export type DropDownOption<T> = {
 type DropdownProps<T> = {
   className?: string;
   wrapper?: string;
-  default_value?: DropDownOption<T>;
+  defaultValue?: DropDownOption<T>;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
   disabled?: boolean;
@@ -23,7 +23,7 @@ type DropdownProps<T> = {
 export function Dropdown<T>({
   options = [],
   wrapper,
-  default_value,
+  defaultValue,
   onChange,
   className,
   label,
@@ -33,11 +33,11 @@ export function Dropdown<T>({
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
     const choice = (e?.currentTarget.value ?? 0) as number;
     if (choice == -1 || choice === undefined) {
-      onChange?.(default_value?.value);
+      onChange?.(defaultValue?.value);
     } else if (choice >= 0 && choice <= options.length) {
       onChange?.(options[choice].value);
     } else {
-      onChange?.(default_value?.value);
+      onChange?.(defaultValue?.value);
     }
   }
   return (
@@ -46,12 +46,12 @@ export function Dropdown<T>({
       <select
         className={classNames(styles.samf_select, error && styles.error)}
         onChange={handleChange}
-        placeholder={default_value?.label ?? ''}
+        placeholder={defaultValue?.label ?? ''}
         disabled={disabled}
       >
-        {default_value ? (
+        {defaultValue ? (
           <option value={-1} className={className}>
-            {default_value.label}
+            {defaultValue.label}
           </option>
         ) : (
           <option hidden disabled selected value={undefined}></option>

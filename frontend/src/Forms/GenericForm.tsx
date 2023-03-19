@@ -223,7 +223,7 @@ export function GenericForm<T>({
     return (
       <Dropdown<T>
         key={field.key}
-        default_value={field.default}
+        defaultValue={field.default}
         options={field.options}
         onChange={(v?: T) => updateValue<T>(field, v)}
         disabled={allFields.indexOf(field.key) == -1}
