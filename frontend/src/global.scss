@@ -42,7 +42,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   height: 100vh;
-  background-color: $white;
+  background-color: $theme-light-bg;
 
   // Disable scrolling when mobile navbar is open
   &.mobile-navigation-open {
