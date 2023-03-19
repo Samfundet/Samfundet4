@@ -241,5 +241,4 @@ export const en: Record<KeyValues, string> = {
   [KEY.saksdokument]: 'case document',
   [KEY.admin_information_new_page]: '',
   [KEY.admin_information_create_page]: '',
-  [KEY.event]: '',
 };

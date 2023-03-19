@@ -107,7 +107,6 @@ export const KEY = {
   gang_type: 'gang_type',
   past: 'past',
   upcomming: 'upcomming',
-  event: 'event',
   event_type: 'event_type',
   start_time: 'start_time',
   end_time: 'end_time',

@@ -10,12 +10,12 @@ type ContentCardProps = {
   className?: string;
   title: string;
   description: string;
-  buttonText?: string | null;
+  buttonText?: string;
   url?: string;
   imageUrl?: string;
 };
 
-export function ContentCard({ className, title, description, buttonText = null, url, imageUrl }: ContentCardProps) {
+export function ContentCard({ className, title, description, buttonText, url, imageUrl }: ContentCardProps) {
   const id = useId();
   const scrollY = useScreenCenterOffset(id);
 

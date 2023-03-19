@@ -202,7 +202,6 @@ export function EventCreatorAdminPage() {
         title={dbT(event, 'title', i18n.language) ?? ''}
         description={dbT(event, 'description_short', i18n.language) ?? ''}
         imageUrl={event?.image?.url}
-        buttonText={null}
       />
       <p>{event?.category}</p>
       <TimeDisplay timestamp={event?.start_dt ?? ''} />
