@@ -1,9 +1,10 @@
-import { Button, ContentCard, Page } from '~/Components';
+import { Button, ContentCard, Page, TimeDisplay } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { EventDto } from '~/dto';
@@ -29,6 +30,7 @@ export function EventCreatorAdminPage() {
   //          Creation Steps            //
   // ================================== //
 
+  const [didComplete, setDidComplete] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
 
   const categoryOptions: DropDownOption<string>[] = [
@@ -43,12 +45,12 @@ export function EventCreatorAdminPage() {
       title_nb: 'Tittel/beskrivelse',
       title_en: 'Text & description',
       partial: {
-        title_nb: undefined,
-        title_en: undefined,
-        description_short_nb: undefined,
-        description_short_en: undefined,
-        description_long_nb: undefined,
-        description_long_en: undefined,
+        title_nb: 'undefined',
+        title_en: 'undefined',
+        description_short_nb: 'undefined',
+        description_short_en: 'undefined',
+        description_long_nb: 'undefined',
+        description_long_en: 'undefined',
       },
       layout: [
         [
@@ -73,14 +75,22 @@ export function EventCreatorAdminPage() {
       partial: {
         start_dt: undefined,
         duration: 60,
-        category: undefined,
+        category: 'concert',
+        host: 'undefined',
+        location: 'undefined',
+        publish_dt: undefined,
       },
       layout: [
         [
           { key: 'start_dt', label: 'Dato og tidspunkt', type: 'datetime' },
           { key: 'duration', label: 'Varighet (minutter)', type: 'number' },
         ],
+        [
+          { key: 'host', label: 'Arrangør', type: 'text' },
+          { key: 'location', label: 'Sted/lokale', type: 'text' },
+        ],
         [{ key: 'category', label: 'Kategori', type: 'options', options: categoryOptions } as OptionsFormField<string>],
+        [{ key: 'publish_dt', label: 'Publiseringsdato', type: 'datetime' }],
       ],
     },
     // Payment options
@@ -96,8 +106,10 @@ export function EventCreatorAdminPage() {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
-      partial: {},
-      layout: [],
+      partial: {
+        image: undefined,
+      },
+      layout: [[{ key: 'image', label: 'Bilde', type: 'image' }]],
     },
     // Summary
     {
@@ -117,15 +129,31 @@ export function EventCreatorAdminPage() {
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
   // ================================== //
+  //             Save Logic             //
+  // ================================== //
+
+  function trySave() {
+    alert(JSON.stringify(event));
+    postEvent(event as EventDto)
+      .then((response) => {
+        setDidComplete(true);
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error.response.data));
+        console.log('FAIL: ' + JSON.stringify(error));
+      });
+  }
+
+  // ================================== //
   //             Tab Logic              //
   // ================================== //
 
   const formTabs: Tab[] = createSteps.map((step: EventCreatorStep) => {
-    // Check if step is done
+    // Check step status to get icon and colors
     const custom = step.customIcon !== undefined;
     let icon = step.customIcon || 'material-symbols:circle-outline';
-    const valid = completedSteps[step.key] === true && !custom;
-    const visited = visitedTabs[step.key] === true && !custom;
+    const valid = completedSteps[step.key] === true && !custom && !didComplete;
+    const visited = visitedTabs[step.key] === true && !custom && !didComplete;
     const error = !valid && visited && !custom;
     if (valid) {
       icon = 'material-symbols:check-circle';
@@ -165,11 +193,17 @@ export function EventCreatorAdminPage() {
   // ================================== //
 
   const eventPreview: Children = (
-    <ContentCard
-      title={dbT(event, 'title', i18n.language) ?? ''}
-      description={dbT(event, 'description_short', i18n.language) ?? ''}
-      buttonText={null}
-    />
+    <div>
+      <ContentCard
+        title={dbT(event, 'title', i18n.language) ?? ''}
+        description={dbT(event, 'description_short', i18n.language) ?? ''}
+        imageUrl={event?.image?.url}
+        buttonText={null}
+      />
+      <p>{event?.category}</p>
+      <TimeDisplay timestamp={event?.start_dt ?? ''} />
+      <p>{event?.duration}min</p>
+    </div>
   );
 
   function renderForm(step: EventCreatorStep): Children {
@@ -223,7 +257,7 @@ export function EventCreatorAdminPage() {
             Neste
           </Button>
         ) : (
-          <Button theme="green" rounded={true}>
+          <Button theme="green" rounded={true} onClick={trySave}>
             Lagre
           </Button>
         )}
@@ -250,13 +284,30 @@ export function EventCreatorAdminPage() {
           onSetTab={setTabAndVisit}
           vertical={false}
           spaceBetween={true}
+          disabled={didComplete}
         />
         <div className={styles.form_container}>
-          <div className={styles.tab_form}>{allForms}</div>
-          {buttons}
+          {!didComplete && (
+            <>
+              <div className={styles.tab_form}>{allForms}</div>
+              {buttons}
+            </>
+          )}
+          {didComplete &&
+            <>
+              {eventPreview}
+              <div className={styles.done_row}>
+                <h1>Lagret</h1>
+                <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon}/>
+              </div>
+            </> 
+          }
         </div>
-        <p>completed: {JSON.stringify(completedSteps)}</p>
-        <p>{JSON.stringify(event)}</p>
+        {/* DEBUG */}
+        {/*
+          <p>completed: {JSON.stringify(completedSteps)}</p>
+          <p>{JSON.stringify(event)}</p>
+          */}
       </div>
     </Page>
   );

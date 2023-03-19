@@ -12,17 +12,19 @@ export type TabBarProps = {
   selected: Tab;
   vertical?: boolean;
   spaceBetween?: boolean;
+  disabled?: boolean;
   onSetTab?(tab: Tab): void;
 };
 
-export function TabBar({ tabs, selected, vertical = false, spaceBetween = false, onSetTab }: TabBarProps) {
+export function TabBar({ tabs, selected, vertical = false, spaceBetween = false, onSetTab, disabled = false}: TabBarProps) {
   return (
-    <div className={classNames(styles.tab_bar, vertical && styles.vertical, spaceBetween && styles.space_between)}>
+    <div className={classNames(styles.tab_bar, vertical && styles.vertical, spaceBetween && styles.space_between, disabled && styles.disabled)}>
       {tabs.map((tab: Tab) => {
         const isSelected = tab.key === selected.key;
         return (
           <button
             className={classNames(styles.tab_button, isSelected && styles.selected)}
+            disabled={disabled}
             onClick={() => onSetTab?.(tab)}
             key={tab.key}
           >

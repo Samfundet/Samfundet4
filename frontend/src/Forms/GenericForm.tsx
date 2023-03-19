@@ -2,12 +2,14 @@ import { t } from 'i18next';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Button, Dropdown, InputField, TextAreaField } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { InputFieldType } from '~/Components/InputField/InputField';
+import { ImageDto } from '~/dto';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './GenericForm.module.scss';
 
-type FormFieldType = 'text' | 'text-long' | 'number' | 'datetime' | 'options';
+type FormFieldType = 'text' | 'text-long' | 'number' | 'datetime' | 'options' | 'image';
 type FormFieldValidation = 'submit' | 'change';
 
 export type FormField<U> = {
@@ -232,6 +234,16 @@ export function GenericForm<T>({
     );
   }
 
+  // Image picker
+  function makeImagePicker(field: FormField<ImageDto>) {
+    return (
+      <ImagePicker
+        key={field.key}
+        onSelected={(v?: ImageDto) => updateValue<ImageDto>(field, v)}
+      />
+    );
+  }
+
   // Make form field UI
   function makeFormField<U>(field: FormField<U>) {
     switch (field.type) {
@@ -245,6 +257,8 @@ export function GenericForm<T>({
         return makeStandardInput<number>(field as FormField<number>, 'number');
       case 'options':
         return makeOptionsInput<T>(field as OptionsFormField<T>);
+      case 'image':
+        return makeImagePicker(field as FormField<ImageDto>);
     }
     return <b>FORM FIELD TYPE {field.type} NOT IMPLEMENTED</b>;
   }
@@ -268,12 +282,14 @@ export function GenericForm<T>({
         )}
       </div>
       {/* DEBUG */}
+      {/*
       <br></br>
       <code>allFields: {JSON.stringify(allFields)}</code>
       <br></br>
       <code>errors: {JSON.stringify(validationState, null, 2)}</code>
       <br></br>
       <code>formData: {JSON.stringify(formData)}</code>
+      */}
     </div>
   );
 }

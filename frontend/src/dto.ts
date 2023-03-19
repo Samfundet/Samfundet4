@@ -92,6 +92,7 @@ export type EventDto = {
   codeword: string;
   image_url: string;
   category: string;
+  image: ImageDto;
 };
 
 export type EventGroupDto = {
@@ -227,7 +228,7 @@ export type TagDto = {
 export type ImageDto = {
   id: number;
   title: string;
-  image: string;
+  url: string;
   tags: TagDto[];
 };
 

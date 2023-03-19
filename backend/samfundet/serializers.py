@@ -31,7 +31,6 @@ User = get_user_model()
 
 
 class TagSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Tag
         fields = '__all__'
@@ -39,10 +38,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
+    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
 
     class Meta:
         model = Image
-        fields = '__all__'
+        exclude = ['image']
+
+    def get_url(self, image: Image) -> str:
+        return image.image.url if image.image else None
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -55,28 +58,34 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        exclude = ['image']
+        fields = '__all__'
+        read_only_fields = ['image']
+
+    def create(self, validated_data: dict) -> Event:
+        print("validated data of type", type(validated_data))
+        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
+        print("got image", validated_data['image'])
+        event = Event(**validated_data)
+        event.save()
+        return event
 
     def get_image_url(self, event: Event) -> str:
         return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = EventGroup
         fields = '__all__'
 
 
 class VenueSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Venue
         fields = '__all__'
 
 
 class ClosedPeriodSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
@@ -122,21 +131,18 @@ class LoginSerializer(serializers.Serializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Group
         fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ['id', 'nickname']
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserPreference
         fields = '__all__'
@@ -175,7 +181,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 # GANGS ###
 class GangSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Gang
         fields = '__all__'
@@ -190,21 +195,18 @@ class GangTypeSerializer(serializers.ModelSerializer):
 
 
 class InformationPageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = InformationPage
         fields = '__all__'
 
 
 class FoodPreferenceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FoodPreference
         fields = '__all__'
 
 
 class FoodCategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FoodCategory
         fields = '__all__'
@@ -227,7 +229,6 @@ class MenuSerializer(serializers.ModelSerializer):
 
 
 class SaksdokumentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Saksdokument
         fields = '__all__'
@@ -251,7 +252,6 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 class TextItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = TextItem
         fields = '__all__'

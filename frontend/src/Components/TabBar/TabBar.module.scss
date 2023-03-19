@@ -21,6 +21,10 @@
     &.space_between {
       justify-content: space-between;
     }
+
+    &.disabled {
+      pointer-events: none;
+    }
 }
 
 .tab_button {
@@ -40,6 +44,10 @@
     }
     &:not(.selected):hover {
         color: $blue;
+    }
+
+    &.disabled {
+      color: $grey-1;
     }
 }
 

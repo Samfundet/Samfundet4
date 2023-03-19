@@ -67,5 +67,18 @@
   @include flex-row;
   justify-content: space-between;
   justify-content: space-between;
+  margin-top: 1.5em;
+}
+
+.done_row {
+  @include flex-row;
+  justify-content: flex-end;
+  font-weight: 700;
+  font-size: 1.25em;
+  gap: 1em;
+}
+
+.done_icon {
+  color: $green;
 }
 

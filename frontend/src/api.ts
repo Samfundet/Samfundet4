@@ -17,7 +17,7 @@ import {
   TextItemDto,
   UserDto,
   UserPreferenceDto,
-  VenueDto,
+  VenueDto
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -148,11 +148,12 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: EventDto): Promise<EventDto> {
+export async function postEvent(data: EventDto): Promise<AxiosResponse<EventDto>> {
+  const transformed: Record<string, unknown> = {...data}
+  transformed['image_id'] = data.image.id;
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
-  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
-
-  return response.data;
+  const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
+  return response;
 }
 
 export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
