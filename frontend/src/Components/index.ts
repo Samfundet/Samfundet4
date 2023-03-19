@@ -40,5 +40,6 @@ export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
+export { Toast } from './Toast';
 export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';

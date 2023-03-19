@@ -5,12 +5,13 @@ import styles from './ProgressBar.module.scss';
 type ProgressBarProps = {
   className?: string;
   children?: Children;
+  color?: string;
   value?: number;
   max?: number;
   fullWidth?: boolean;
 };
 
-export function ProgressBar({ className, children, value, max, fullWidth = true }: ProgressBarProps) {
+export function ProgressBar({ className, children, color, value, max, fullWidth = true }: ProgressBarProps) {
   // Breakpoints:
   const bpLower = 0.33;
   const bpUpper = 0.67;
@@ -27,7 +28,8 @@ export function ProgressBar({ className, children, value, max, fullWidth = true 
     <label>
       {children}
       <progress
-        className={classNames(className, styles.red, styles.progress_bar, {
+        style={{ accentColor: color, height: '10px' }}
+        className={classNames(className, styles.progress_bar, {
           [styles.red]: isLow,
           [styles.orange]: isMedium,
           [styles.green]: isHigh,

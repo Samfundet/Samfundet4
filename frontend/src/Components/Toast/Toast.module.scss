@@ -1,0 +1,66 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+$toast-bg-color: $turquoise-deep;
+
+.flexParent {
+  position: fixed;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  padding: 30px;
+}
+
+.toast {
+  max-width: 400px;
+  color: $white;
+  background-color: $turquoise-deep;
+  border: 1px solid black;
+  border-radius: 15px;
+  padding: 1em 1em 0 1em;
+
+  @include theme-dark {
+    border: 1px solid $white;
+  }
+}
+
+.inner {
+  position: relative; // Let .btn_close position relative to this.
+}
+
+.title {
+  font-weight: 500;
+  font-size: 1.2em;
+  margin-right: 35px; // Prevent overflowing with .close_btn.
+  overflow-wrap: break-word;
+}
+
+.message {
+  margin: 1em 0;
+}
+
+.btn_close {
+  position: absolute; // Relative to .inner.
+  top: -10px; // Negate .wrapper padding.
+  right: -7px; // Negate .wrapper padding.
+  cursor: pointer;
+  padding: 5px 7px; // More clickable area.
+  border-radius: 9999px;
+  font-size: 1.3em;
+  border: unset;
+  color: $white;
+  background-color: unset;
+
+  &:hover,
+  :focus {
+    /* stylelint-disable-next-line function-no-unknown */
+    background-color: darken($color: $toast-bg-color, $amount: 10);
+  }
+}
+
+.btn_undo,
+.btn_accept {
+  // background-color: unset;
+  color: unset;
+}

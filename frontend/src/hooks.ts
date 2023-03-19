@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { SetState } from '~/types';
 import { desktopBpLower, mobileBpUpper } from './constants';
 
 // Make typescript happy.
@@ -99,4 +100,21 @@ export function useScreenCenterOffset(id: string): number {
     };
   }, [id]);
   return positionY;
+}
+
+export function useTimePassed(refreshCycle = 1000): {
+  timePassed: number;
+  setTimePassed: SetState<number>;
+} {
+  const [timePassed, setTimePassed] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimePassed((prevTimePassed) => prevTimePassed + refreshCycle);
+    }, refreshCycle);
+
+    return () => clearInterval(interval);
+  }, [refreshCycle]);
+
+  return { timePassed, setTimePassed };
 }
