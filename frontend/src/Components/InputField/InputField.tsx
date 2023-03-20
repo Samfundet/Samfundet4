@@ -39,12 +39,12 @@ export function InputField<T>({
   register,
 }: InputFieldProps<T>) {
   function handleChange(e?: ChangeEvent<HTMLInputElement>) {
-    let value: string | number | null = e?.currentTarget.value ?? '';
+    let value: string | number | undefined = e?.currentTarget.value ?? '';
     if (type === 'number') {
       if (value.length > 0) {
         value = Number.parseFloat(value as string);
       } else {
-        value = null;
+        value = undefined;
       }
     }
     onChange?.(value as T);
