@@ -93,7 +93,7 @@ export function Navbar() {
       <a href="#" className={styles.navbar_dropdown_link}>
         {t(KEY.opening_hours)}
       </a>
-      <a href={ROUTES.other.foto} className={styles.navbar_dropdown_link}>
+      <a href={ROUTES.other.foto_samfundet_no} className={styles.navbar_dropdown_link}>
         {t(KEY.photos)}
       </a>
       <a href="#" className={styles.navbar_dropdown_link}>
