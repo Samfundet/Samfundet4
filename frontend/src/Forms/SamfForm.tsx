@@ -312,7 +312,7 @@ export function SamfFormField<U>({
     // Set value in samf form hook
     setValue(newValue as U, skipValidation);
   }
-  
+
   // Validate again whenever validateOnInit is turned on
   useEffect(() => {
     if (validateOnInit) {
