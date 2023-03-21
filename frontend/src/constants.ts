@@ -33,6 +33,6 @@ export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
 /**
  * Venues
  */
-export const VENUES = {
-  VENUE_LYCHE: 'lyche',
+export const VENUE = {
+  LYCHE: 'lyche',
 } as const;

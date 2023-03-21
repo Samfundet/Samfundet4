@@ -4,7 +4,7 @@ import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
-import { VENUES } from '~/constants';
+import { VENUE } from '~/constants';
 import { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -16,21 +16,24 @@ import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const [t] = useTranslation();
-  const [consistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
-  const [consistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
+  const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
+  const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getVenues()
       .then((data) => {
-        const lyche = data.find((venue) => venue.name?.toLowerCase() === VENUES.VENUE_LYCHE);
+        const lyche = data.find((venue) => venue.name?.toLowerCase() === VENUE.LYCHE);
         setLycheVenue(lyche);
-        setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
-        setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
-        setLoading(false);
       })
       .catch(console.error);
-  }, [consistentWeekdayHours, consistentWeekendHours, lycheVenue]);
+  }, []);
+
+  useEffect(() => {
+    setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
+    setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
+    setLoading(false);
+  }, [lycheVenue]);
 
   const openingHourRow = (days: string, openingHours: string) => {
     return (
@@ -46,7 +49,7 @@ export function LychePage() {
       <h2 className={styles.opening_hour_header}>{t(KEY.opening_hours)}</h2>
 
       {/* Weekday hours */}
-      {consistentWeekdayHours ? (
+      {isConsistentWeekdayHours ? (
         <>
           {openingHourRow(
             `${t(KEY.day_monday)}-${t(KEY.day_thursday)}`,
@@ -75,7 +78,7 @@ export function LychePage() {
       )}
 
       {/* Weekend hours */}
-      {consistentWeekendHours ? (
+      {isConsistentWeekendHours ? (
         <>
           {openingHourRow(
             `${t(KEY.day_friday)}-${t(KEY.day_saturday)}`,
