@@ -4,6 +4,7 @@ import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
+import { VENUES } from '~/constants';
 import { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -11,7 +12,6 @@ import { ROUTES } from '~/routes';
 import { TextItem } from '~/textItems';
 import styles from './LychePage.module.scss';
 import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
-import { globalLycheVenue } from '~/constants';
 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
@@ -23,30 +23,14 @@ export function LychePage() {
   useEffect(() => {
     getVenues()
       .then((data) => {
-        const lyche = data.find((venue) => venue.name?.toLowerCase() === globalLycheVenue);
+        const lyche = data.find((venue) => venue.name?.toLowerCase() === VENUES.VENUE_LYCHE);
         setLycheVenue(lyche);
         setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
         setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
         setLoading(false);
       })
       .catch(console.error);
-  }, [
-    consistentWeekdayHours,
-    consistentWeekendHours,
-    lycheVenue?.opening_monday,
-    lycheVenue?.opening_tuesday,
-    lycheVenue?.opening_wednesday,
-    lycheVenue?.opening_thursday,
-    lycheVenue?.opening_friday,
-    lycheVenue?.opening_saturday,
-    lycheVenue?.closing_monday,
-    lycheVenue?.closing_tuesday,
-    lycheVenue?.closing_wednesday,
-    lycheVenue?.closing_thursday,
-    lycheVenue?.closing_friday,
-    lycheVenue?.closing_saturday,
-    lycheVenue,
-  ]);
+  }, [consistentWeekdayHours, consistentWeekendHours, lycheVenue]);
 
   const openingHourRow = (days: string, openingHours: string) => {
     return (
