@@ -1,7 +1,16 @@
-type AccessDeniedProps = {
-  className?: string;
-};
+import styles from './AccessDenied.module.scss';
 
-export function AccessDenied({ className }: AccessDeniedProps) {
-  return <div className={className}>Forbidden! You do not have permission to perform this.</div>;
+export function AccessDenied() {
+  const header = 'You are not authorized.';
+  const message = `You somehow bypassed the outermost security layer, but luckily we stopped you!
+  You could have hurt someone! Now, go to your room and think about what you've done!`;
+
+  return (
+    <div className={styles.dialog}>
+      <h1 className={styles.header}>{header}</h1>
+      <div className={styles.content}>
+        <p className={styles.message}>{message}</p>
+      </div>
+    </div>
+  );
 }

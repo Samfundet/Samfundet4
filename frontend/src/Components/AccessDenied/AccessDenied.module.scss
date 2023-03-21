@@ -1,0 +1,27 @@
+@import 'src/constants';
+
+.dialog {
+  width: 33em;
+  min-height: 10em;
+  margin: 4em auto 0 auto;
+  border: 1px solid $grey-4;
+  border-right-color: $grey-3;
+  border-bottom-color: $grey-3;
+  background-color: white;
+  color: $grey-1;
+  text-align: center;
+  font-family: arial, sans-serif;
+  padding: 1em;
+}
+
+.header {
+  font-size: 100%;
+  font-weight: 700;
+  margin: 0 1em 1em;
+  color: $red;
+}
+
+.content {
+  padding: 0 4em;
+  line-height: 1.5em;
+}
