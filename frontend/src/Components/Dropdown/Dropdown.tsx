@@ -11,7 +11,6 @@ export type DropDownOption<T> = {
 
 type DropdownProps<T> = {
   className?: string;
-  wrapper?: string;
   defaultValue?: DropDownOption<T>;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
@@ -22,7 +21,6 @@ type DropdownProps<T> = {
 
 export function Dropdown<T>({
   options = [],
-  wrapper,
   defaultValue,
   onChange,
   className,
@@ -50,9 +48,7 @@ export function Dropdown<T>({
         defaultValue={-1}
       >
         {defaultValue ? (
-          <option value={-1}>
-            {defaultValue.label}
-          </option>
+          <option value={-1}>{defaultValue.label}</option>
         ) : (
           <option hidden disabled selected value={undefined}></option>
         )}

@@ -47,7 +47,7 @@ export function Button({
   className,
   children,
   buttonType = 'button',
-  preventDefault = false
+  preventDefault = false,
 }: ButtonProps) {
   const classNames = classnames(
     styles.button,
@@ -58,8 +58,8 @@ export function Button({
   );
 
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
-    if(preventDefault) {
-      e?.preventDefault()
+    if (preventDefault) {
+      e?.preventDefault();
     }
     onClick?.();
   }

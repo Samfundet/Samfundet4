@@ -107,7 +107,7 @@ export function EventCreatorAdminPage() {
       title_nb: 'Oppsummering',
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
-      template: <SamfFormField field="publish_dt" type="datetime" label="Publiseringsdato" />
+      template: <SamfFormField field="publish_dt" type="datetime" label="Publiseringsdato" />,
     },
   ];
 
@@ -228,7 +228,6 @@ export function EventCreatorAdminPage() {
           devMode={true}
         >
           {step.key == 'summary' ? eventPreview : <></>}
-          {visited ? <p>va on init</p> : <p>noval</p>}
           {step.template}
         </SamfForm>
       </div>

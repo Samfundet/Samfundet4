@@ -45,9 +45,6 @@ const SamfFormConfigContext = createContext<SamfFormConfigContext>({
   validateOnInit: false,
 });
 
-// Samf form context for constants
-const SamfFormValidateOnInitContext = createContext<boolean>(false);
-
 /**
  * Handles form event from children input components
  * @param state Current state
@@ -111,7 +108,7 @@ export function SamfForm<T>({
 
   // Calculate if entire form is valid
   let allValid = true;
-  for (let key of state.allFields) {
+  for (const key of state.allFields) {
     const err = state.errors[key];
     if (err !== false) {
       allValid = false;
@@ -127,11 +124,15 @@ export function SamfForm<T>({
   // Alert parent of form value changes
   useEffect(() => {
     onChange?.(state.values as Partial<T>);
+    // Depends on onChange function which should never change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.values]);
 
   // Alert parent of form error changes
   useEffect(() => {
     onValidityChanged?.(allValid);
+    // Depends on onValidityChanged function which should never change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.errors]);
 
   // Debug preview, very useful to develop forms
@@ -197,7 +198,7 @@ export function SamfForm<T>({
  * Hook for samfFormField. Wraps context and useful logic in a separate hook.
  * @param type The field type to use, eg text, number, image etc.
  * @param required Whether or not the field is required
- * @param validator Optional additional validator for the field. Returns error message or false for error, true or undefined for OK
+ * @param validator Optional additional validator function for the field
  * @returns
  */
 function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
@@ -211,7 +212,7 @@ function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U
   function setValue(newValue: U, skipValidation?: boolean) {
     // Validation check
     let validatorResponse: string | boolean = true;
-    if(newValue !== undefined && validator !== undefined) {
+    if (newValue !== undefined && validator !== undefined) {
       validatorResponse = validator?.(newValue);
     }
     const failedRequirement = required && newValue === undefined;
@@ -288,40 +289,44 @@ export function SamfFormField<U>({
   }
 
   // Handles all change events
-  function handleOnChange(newValue: any, skipValidation?: boolean) {
+  function handleOnChange(newValue: unknown, skipValidation?: boolean) {
     // Cast types (eg number inputs might initially be strings)
     // This should likely be moved to each input component
     switch (type) {
       case 'number':
-        newValue = numberCaster(newValue);
+        newValue = numberCaster(newValue as string);
         break;
       case 'float':
-        newValue = numberCaster(newValue);
+        newValue = numberCaster(newValue as string);
         break;
       case 'integer':
-        newValue = numberCaster(newValue);
+        newValue = numberCaster(newValue as string);
         break;
       case 'text':
-        newValue = stringCaster(newValue);
+        newValue = stringCaster(newValue as string);
         break;
       case 'text-long':
-        newValue = stringCaster(newValue);
+        newValue = stringCaster(newValue as string);
         break;
     }
     // Set value in samf form hook
     setValue(newValue as U, skipValidation);
   }
-
+  
   // Validate again whenever validateOnInit is turned on
   useEffect(() => {
     if (validateOnInit) {
       handleOnChange(value, false);
     }
+    // Handle on change depends on field type which should never change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validateOnInit]);
 
-  // Set value in context on first render
+  // Set value in context on first render (not critical to run every dep change)
   useEffect(() => {
     handleOnChange(value, !validateOnInit);
+    // Handle on change depends on field type which should never change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ================================== //
@@ -330,10 +335,11 @@ export function SamfFormField<U>({
 
   // Regular input for text, numbers, dates
   function makeStandardInput(type: InputFieldType) {
+    const safeVal = value === undefined ? '' : (value as string);
     return (
       <InputField<U>
         key={field}
-        value={value as string}
+        value={safeVal}
         onChange={handleOnChange}
         error={error}
         type={type}
@@ -346,10 +352,11 @@ export function SamfFormField<U>({
 
   // Long text input for descriptions etc
   function makeAreaInput() {
+    const safeVal = value === undefined ? '' : (value as string);
     return (
       <TextAreaField
         key={field}
-        value={value as string}
+        value={safeVal}
         onChange={handleOnChange}
         error={error}
         className={styles.input_element}
@@ -397,7 +404,7 @@ export function SamfFormField<U>({
       case 'image':
         return makeImagePicker();
     }
-    return <b style={{ color: 'red' }}>Field type '{type}' is not implemented!</b>;
+    return <b style={{ color: 'red' }}>Field type {type} is not implemented!</b>;
   }
 
   return makeFormField();
