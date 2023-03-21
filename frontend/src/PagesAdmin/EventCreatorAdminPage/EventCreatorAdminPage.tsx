@@ -5,11 +5,12 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ReactElement } from 'react-markdown/lib/react-markdown';
 import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { EventDto } from '~/dto';
-import { FormField, GenericForm, OptionsFormField } from '~/Forms/GenericForm';
+import { SamfForm, SamfFormField } from '~/Forms/GenericFormV2';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
@@ -20,14 +21,13 @@ type EventCreatorStep = {
   key: string; // Unique key
   title_nb: string; // Tab title norwegian
   title_en: string; // Tab title english
-  partial: Partial<EventDto>;
   customIcon?: string; // Custom icon in tab bar
-  layout: FormField<unknown>[][];
+  template: ReactElement
 };
 
 export function EventCreatorAdminPage() {
   const { i18n } = useTranslation();
-
+  
   // ================================== //
   //          Creation Steps            //
   // ================================== //
@@ -46,54 +46,29 @@ export function EventCreatorAdminPage() {
       key: 'text',
       title_nb: 'Tittel/beskrivelse',
       title_en: 'Text & description',
-      partial: {
-        title_nb: undefined,
-        title_en: undefined,
-        description_short_nb: undefined,
-        description_short_en: undefined,
-        description_long_nb: undefined,
-        description_long_en: undefined,
-      },
-      layout: [
-        [
-          { key: 'title_nb', label: 'Tittel (norsk)', type: 'text' },
-          { key: 'title_en', label: 'Tittel (engelsk)', type: 'text' },
-        ],
-        [
-          { key: 'description_short_nb', label: 'Kort beskrivelse (norsk)', type: 'text-long' },
-          { key: 'description_short_en', label: 'Kort beskrivelse (engelsk)', type: 'text-long' },
-        ],
-        [
-          { key: 'description_long_nb', label: 'Lang beskrivelse (norsk)', type: 'text-long' },
-          { key: 'description_long_en', label: 'Lang beskrivelse (engelsk)', type: 'text-long' },
-        ],
-      ],
+      template: (
+        <>
+          <div className={styles.input_row}>
+            <SamfFormField field="title_nb" type="text" label="Tittel (norsk)"/>
+            <SamfFormField field="title_eb" type="text" label="Tittel (engelsk)"/>
+          </div>
+          <div className={styles.input_row}>
+            <SamfFormField field="description_short_nb" type="text-long" label="Kort beskrivelse (norsk)"/>
+            <SamfFormField field="description_short_en" type="text-long" label="Kort beskrivelse (engelsk)"/>
+          </div>
+          <div className={styles.input_row}>
+            <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)"/>
+            <SamfFormField field="description_long_en" type="text-long" label="Lang beskrivelse (engelsk)"/>
+          </div>
+        </>
+      )
     },
     // General info (category, dates etc.)
     {
       key: 'info',
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
-      partial: {
-        start_dt: undefined,
-        duration: 60,
-        category: undefined,
-        host: undefined,
-        location: undefined,
-        publish_dt: undefined,
-      },
-      layout: [
-        [
-          { key: 'start_dt', label: 'Dato og tidspunkt', type: 'datetime' },
-          { key: 'duration', label: 'Varighet (minutter)', type: 'number' },
-        ],
-        [
-          { key: 'host', label: 'Arrangør', type: 'text' },
-          { key: 'location', label: 'Sted/lokale', type: 'text' },
-        ],
-        [{ key: 'category', label: 'Kategori', type: 'options', options: categoryOptions } as OptionsFormField<string>],
-        [{ key: 'publish_dt', label: 'Publiseringsdato', type: 'datetime' }],
-      ],
+      template: <></>
     },
     // Payment options (not implemented yet)
     /*
@@ -110,25 +85,19 @@ export function EventCreatorAdminPage() {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
-      partial: {
-        image: undefined,
-      },
-      layout: [[{ key: 'image', label: 'Bilde', type: 'image' }]],
+      template: <SamfFormField field="image" type="image" />
     },
     // Summary
     {
       key: 'summary',
       title_nb: 'Oppsummering',
       title_en: 'Summary',
-      partial: {},
-      layout: [],
       customIcon: 'ic:outline-remove-red-eye',
+      template: <></>
     },
   ];
 
   // Editor state
-  let initialEvent: Partial<EventDto> = {};
-  createSteps.forEach((step) => (initialEvent = { ...initialEvent, ...step.partial }));
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
@@ -213,32 +182,6 @@ export function EventCreatorAdminPage() {
     </div>
   );
 
-  function renderForm(step: EventCreatorStep): Children {
-    const form = (
-      <GenericForm<Partial<EventDto>>
-        key={step.key}
-        initialData={step.partial}
-        layout={step.layout}
-        validateOn="change"
-        validateOnInit={visitedTabs[step.key] === true}
-        onChange={(part) => setEvent({ ...event, ...part })}
-        onValid={(valid) => {
-          setCompletedSteps({
-            ...completedSteps,
-            [step.key]: valid,
-          });
-        }}
-        showSubmitButton={false}
-      />
-    );
-    return (
-      <div>
-        {step.key == 'summary' && eventPreview}
-        {form}
-      </div>
-    );
-  }
-
   function navigateTabs(delta: number): () => void {
     return () => {
       const keys = createSteps.map((s) => s.key);
@@ -272,11 +215,22 @@ export function EventCreatorAdminPage() {
     </>
   );
 
+  function setStepCompleted(step: EventCreatorStep, completed: boolean) {
+    setCompletedSteps({
+      ...completedSteps,
+      [step.key]: completed
+    })
+  } 
+
   const allForms: Children = createSteps.map((step: EventCreatorStep) => {
     const hidden = currentFormTab.key !== step.key;
+    const visited = visitedTabs[step.key];
     return (
       <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
-        {renderForm(step)}
+        <SamfForm onChange={setEvent} onValidityChanged={(valid) => setStepCompleted(step, valid)} validateOnInit={visited} devMode={true}>
+          {step.key == 'summary' ? eventPreview : <></>}
+          {step.template}
+        </SamfForm>
       </div>
     );
   });

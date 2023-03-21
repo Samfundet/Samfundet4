@@ -16,3 +16,35 @@
   justify-content: flex-end;
   margin-top: 1em;
 }
+
+// Debug styling
+
+.debug_box {
+  padding: 1em;
+  display: flex;
+  background-color: white;
+  gap: .5em;
+  border: 2px dashed red;
+}
+
+.debug_header {
+  text-align: center;
+  font-weight: bold;
+  background-color: cyan;
+  padding: .5em;
+}
+
+.debug_column {
+  flex-basis: 33%;
+  border: 1px solid black;
+}
+
+.debug_row {
+  margin: .5em;
+  background-color: #eeeeee;
+  padding: .2em;
+}
+
+.debug_error {
+  color: red;
+}
