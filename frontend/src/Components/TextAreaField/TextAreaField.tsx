@@ -36,24 +36,22 @@ export function TextAreaField({
   }
   const isErrorMsg = error && (error as string).length > 0;
   return (
-    <div className={className}>
-      <label className={classNames(styles.label, labelClassName)}>
-        {children}
-        <textarea
-          onChange={handleChange}
-          className={classNames(styles.input_field, inputClassName, error && styles.error)}
-          placeholder={placeholder || ''}
-          disabled={disabled}
-          rows={rows}
-          cols={cols}
-          value={value}
-        />
-      </label>
+    <label className={classNames(className, styles.label, labelClassName)}>
+      {children}
+      <textarea
+        onChange={handleChange}
+        className={classNames(styles.input_field, inputClassName, error && styles.error)}
+        placeholder={placeholder || ''}
+        disabled={disabled}
+        rows={rows}
+        cols={cols}
+        value={value}
+      />
       {isErrorMsg && (
         <div className={styles.error_container}>
           <div className={styles.error_text}>{error}</div>
         </div>
       )}
-    </div>
+    </label>
   );
 }

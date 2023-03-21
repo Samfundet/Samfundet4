@@ -1,14 +1,13 @@
 
-.input_row {
-  display: flex;
-  justify-content: stretch;
-  align-items: center;
-  gap: 1em;
+.samf_form {
   width: 100%;
 }
 
 .input_element {
+  display: flex;
   flex: 1;
+  flex-basis: 1;
+  justify-content: stretch;
 }
 
 .button_row {

@@ -10,7 +10,7 @@ import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { EventDto } from '~/dto';
-import { SamfForm, SamfFormField } from '~/Forms/GenericFormV2';
+import { SamfForm, SamfFormField } from '~/Forms/SamfForm';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
@@ -22,23 +22,25 @@ type EventCreatorStep = {
   title_nb: string; // Tab title norwegian
   title_en: string; // Tab title english
   customIcon?: string; // Custom icon in tab bar
-  template: ReactElement
+  template: ReactElement;
 };
 
 export function EventCreatorAdminPage() {
   const { i18n } = useTranslation();
-  
+  const [didSave, setDidSave] = useState(false);
+  const [event, setEvent] = useState<Partial<EventDto>>();
+
+  // TODO this is temporary and must be fetched from API when categories are implemented
+  const eventCategoryOptions: DropDownOption<string>[] = [
+    { value: 'concert', label: 'Konsert' },
+    { value: 'debate', label: 'Debatt' },
+  ];
+
   // ================================== //
   //          Creation Steps            //
   // ================================== //
 
-  const [didComplete, setDidComplete] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
-
-  const categoryOptions: DropDownOption<string>[] = [
-    { value: 'concert', label: 'Konsert' },
-    { value: 'debate', label: 'Debatt' },
-  ];
 
   const createSteps: EventCreatorStep[] = [
     // Name and text descriptions
@@ -49,26 +51,38 @@ export function EventCreatorAdminPage() {
       template: (
         <>
           <div className={styles.input_row}>
-            <SamfFormField field="title_nb" type="text" label="Tittel (norsk)"/>
-            <SamfFormField field="title_eb" type="text" label="Tittel (engelsk)"/>
+            <SamfFormField field="title_nb" type="text" label="Tittel (norsk)" />
+            <SamfFormField field="title_en" type="text" label="Tittel (engelsk)" />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_short_nb" type="text-long" label="Kort beskrivelse (norsk)"/>
-            <SamfFormField field="description_short_en" type="text-long" label="Kort beskrivelse (engelsk)"/>
+            <SamfFormField field="description_short_nb" type="text-long" label="Kort beskrivelse (norsk)" />
+            <SamfFormField field="description_short_en" type="text-long" label="Kort beskrivelse (engelsk)" />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)"/>
-            <SamfFormField field="description_long_en" type="text-long" label="Lang beskrivelse (engelsk)"/>
+            <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)" />
+            <SamfFormField field="description_long_en" type="text-long" label="Lang beskrivelse (engelsk)" />
           </div>
         </>
-      )
+      ),
     },
     // General info (category, dates etc.)
     {
       key: 'info',
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
-      template: <></>
+      template: (
+        <>
+          <div className={styles.input_row}>
+            <SamfFormField field="start_dt" type="datetime" label="Dato & tid" />
+            <SamfFormField field="duration" type="number" label="Varighet (minutter)" />
+          </div>
+          <div className={styles.input_row}>
+            <SamfFormField field="category" type="options" label="Kategori" options={eventCategoryOptions} />
+            <SamfFormField field="host" type="text" label="Arrangør" />
+            <SamfFormField field="location" type="text" label="Lokale" />
+          </div>
+        </>
+      ),
     },
     // Payment options (not implemented yet)
     /*
@@ -85,7 +99,7 @@ export function EventCreatorAdminPage() {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
-      template: <SamfFormField field="image" type="image" />
+      template: <SamfFormField field="image" type="image" />,
     },
     // Summary
     {
@@ -93,12 +107,11 @@ export function EventCreatorAdminPage() {
       title_nb: 'Oppsummering',
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
-      template: <></>
+      template: <SamfFormField field="publish_dt" type="datetime" label="Publiseringsdato" />
     },
   ];
 
   // Editor state
-  const [event, setEvent] = useState<Partial<EventDto>>();
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
   // Ready to save?
@@ -113,7 +126,7 @@ export function EventCreatorAdminPage() {
   function trySave() {
     postEvent(event as EventDto)
       .then(() => {
-        setDidComplete(true);
+        setDidSave(true);
       })
       .catch((error) => {
         console.log(JSON.stringify(error.response.data));
@@ -129,8 +142,8 @@ export function EventCreatorAdminPage() {
     // Check step status to get icon and colors
     const custom = step.customIcon !== undefined;
     let icon = step.customIcon || 'material-symbols:circle-outline';
-    const valid = completedSteps[step.key] === true && !custom && !didComplete;
-    const visited = visitedTabs[step.key] === true && !custom && !didComplete;
+    const valid = completedSteps[step.key] === true && !custom && !didSave;
+    const visited = visitedTabs[step.key] === true && !custom && !didSave;
     const error = !valid && visited && !custom;
     if (valid) {
       icon = 'material-symbols:check-circle';
@@ -169,6 +182,7 @@ export function EventCreatorAdminPage() {
   //               Forms                //
   // ================================== //
 
+  // Event preview on final step
   const eventPreview: Children = (
     <div>
       <ContentCard
@@ -182,6 +196,7 @@ export function EventCreatorAdminPage() {
     </div>
   );
 
+  // Move to next/previous tab
   function navigateTabs(delta: number): () => void {
     return () => {
       const keys = createSteps.map((s) => s.key);
@@ -192,7 +207,36 @@ export function EventCreatorAdminPage() {
     };
   }
 
-  const buttons: Children = (
+  // The form is valid, set step as completed
+  function setStepCompleted(step: EventCreatorStep, completed: boolean) {
+    setCompletedSteps({
+      ...completedSteps,
+      [step.key]: completed,
+    });
+  }
+
+  // Render all forms (some are hidden but not removed to keep values)
+  const allForms: Children = createSteps.map((step: EventCreatorStep) => {
+    const hidden = currentFormTab.key !== step.key;
+    const visited = visitedTabs[step.key];
+    return (
+      <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
+        <SamfForm
+          onChange={(part) => setEvent({ ...event, ...part })}
+          onValidityChanged={(valid) => setStepCompleted(step, valid)}
+          validateOnInit={visited}
+          devMode={true}
+        >
+          {step.key == 'summary' ? eventPreview : <></>}
+          {visited ? <p>va on init</p> : <p>noval</p>}
+          {step.template}
+        </SamfForm>
+      </div>
+    );
+  });
+
+  // Navigation buttons
+  const navigationButtons: Children = (
     <>
       <div className={styles.button_row}>
         {currentFormTab.key !== createSteps[0].key ? (
@@ -215,26 +259,6 @@ export function EventCreatorAdminPage() {
     </>
   );
 
-  function setStepCompleted(step: EventCreatorStep, completed: boolean) {
-    setCompletedSteps({
-      ...completedSteps,
-      [step.key]: completed
-    })
-  } 
-
-  const allForms: Children = createSteps.map((step: EventCreatorStep) => {
-    const hidden = currentFormTab.key !== step.key;
-    const visited = visitedTabs[step.key];
-    return (
-      <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
-        <SamfForm onChange={setEvent} onValidityChanged={(valid) => setStepCompleted(step, valid)} validateOnInit={visited} devMode={true}>
-          {step.key == 'summary' ? eventPreview : <></>}
-          {step.template}
-        </SamfForm>
-      </div>
-    );
-  });
-
   return (
     <Page>
       <div className={styles.header}>Opprett Arrangement</div>
@@ -245,16 +269,18 @@ export function EventCreatorAdminPage() {
           onSetTab={setTabAndVisit}
           vertical={false}
           spaceBetween={true}
-          disabled={didComplete}
+          disabled={didSave}
         />
         <div className={styles.form_container}>
-          {!didComplete && (
+          {/* Render form */}
+          {!didSave && (
             <>
               <div className={styles.tab_form}>{allForms}</div>
-              {buttons}
+              {navigationButtons}
             </>
           )}
-          {didComplete && (
+          {/* Show saved notice */}
+          {didSave && (
             <>
               {eventPreview}
               <div className={styles.done_row}>
@@ -264,11 +290,6 @@ export function EventCreatorAdminPage() {
             </>
           )}
         </div>
-        {/* DEBUG */}
-        {/*
-          <p>completed: {JSON.stringify(completedSteps)}</p>
-          <p>{JSON.stringify(event)}</p>
-          */}
       </div>
     </Page>
   );

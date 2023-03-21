@@ -1,26 +1,23 @@
 import classNames from 'classnames';
 import { createContext, Dispatch, ReactElement, useContext, useEffect, useReducer } from 'react';
-import { Dropdown, InputField, TextAreaField } from '~/Components';
+import { Button, Dropdown, InputField, TextAreaField } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { InputFieldType } from '~/Components/InputField/InputField';
-import styles from './GenericForm.module.scss';
-
-type FormFieldType = 'text' | 'text-long' | 'number' | 'datetime' | 'options' | 'image';
-type FormFieldValidation = 'submit' | 'change';
+import styles from './SamfForm.module.scss';
 
 // ================================== //
-//         State Management           //
+//    Context & State Management      //
 // ================================== //
 
-// Actions on form reducer
+// Action on form state
 type SamfFormAction<U> = {
   field: string;
   value: U;
   error: string | boolean;
 };
 
-// State of form
+// Current state of form
 type SamfFormModel = Record<string, unknown>;
 type SamfFormState<T extends SamfFormModel> = {
   values: T;
@@ -29,7 +26,7 @@ type SamfFormState<T extends SamfFormModel> = {
   allFields: string[];
 };
 
-// Global samf form context (for state)
+// Shared samf form context (passed to children form fields)
 type SamfFormContextType<T extends SamfFormModel> = {
   state: SamfFormState<T>;
   dispatch: Dispatch<SamfFormAction<unknown>>;
@@ -37,7 +34,15 @@ type SamfFormContextType<T extends SamfFormModel> = {
 const emptyState = { values: {}, validity: {}, errors: {} } as SamfFormState<SamfFormModel>;
 const SamfFormContext = createContext<SamfFormContextType<SamfFormModel>>({
   state: emptyState,
-  dispatch: () => emptyState
+  dispatch: () => emptyState,
+});
+
+// Samf form context for configs (currently only option to validate on init)
+type SamfFormConfigContext = {
+  validateOnInit: boolean;
+};
+const SamfFormConfigContext = createContext<SamfFormConfigContext>({
+  validateOnInit: false,
 });
 
 // Samf form context for constants
@@ -64,7 +69,7 @@ function samfFormReducer<T extends SamfFormModel, U>(
       ...state.errors,
       [action.field]: action.error,
     },
-    allFields: Array.from(new Set(state.allFields.concat(action.field)))
+    allFields: Array.from(new Set(state.allFields.concat(action.field))),
   };
 }
 
@@ -72,39 +77,38 @@ function samfFormReducer<T extends SamfFormModel, U>(
 //         Form Component             //
 // ================================== //
 
+// Form properties
 type SamfFormProps<T> = {
   initialData?: Partial<T>;
-  validateOn?: FormFieldValidation;
   validateOnInit?: boolean;
-  showSubmitButton?: boolean;
-  onChange<T>(data: Partial<T>): void;
+  submitButton?: boolean | string;
+  onChange?<T>(data: Partial<T>): void;
   onValidityChanged?(valid: boolean): void;
   onSubmit?(data: Partial<T>): void;
   children: ReactElement | ReactElement[];
-  // Debug mode
+  // Deb/debug mode
   devMode?: boolean;
 };
 
 export function SamfForm<T>({
   initialData = {},
-  validateOn = 'submit',
   validateOnInit = false,
-  showSubmitButton = true,
+  submitButton = false,
   onChange,
   onValidityChanged,
   onSubmit,
   children,
   devMode = false,
 }: SamfFormProps<T>) {
-  
+  // Initial state and reducer (a custom state manager)
   const initialFormState: SamfFormState<Partial<T>> = {
     values: { ...initialData },
     validity: {},
     errors: {},
-    allFields: Object.keys(initialData)
+    allFields: Object.keys(initialData),
   };
   const [state, dispatch] = useReducer(samfFormReducer, initialFormState);
-  
+
   // Calculate if entire form is valid
   let allValid = true;
   for (let key of state.allFields) {
@@ -115,39 +119,46 @@ export function SamfForm<T>({
     }
   }
 
-  // Form values changed
-  useEffect(() => {
-    onChange(state.values as Partial<T>);
-  }, [onChange, state.values]);
+  // Submit values to parent
+  function handleOnClickSubmit() {
+    onSubmit?.(state.values as T);
+  }
 
-  // Form validity changed
+  // Alert parent of form value changes
+  useEffect(() => {
+    onChange?.(state.values as Partial<T>);
+  }, [state.values]);
+
+  // Alert parent of form error changes
   useEffect(() => {
     onValidityChanged?.(allValid);
-  }, [onValidityChanged, state.errors]);
+  }, [state.errors]);
 
   // Debug preview, very useful to develop forms
   const devModePreview = devMode && (
     <div className={styles.debug_box}>
       <div className={styles.debug_column}>
         <h2 className={styles.debug_header}>Form State</h2>
-        {Object.keys(state.values).map(field => (
-          <div className={styles.debug_row}>
+        {Object.keys(state.values).map((field) => (
+          <div key={field} className={styles.debug_row}>
             {field}: {typeof state.values[field]} = {JSON.stringify(state.values[field]) ?? 'undefined'}
           </div>
         ))}
       </div>
       <div className={styles.debug_column}>
         <h2 className={styles.debug_header}>Form Errors ({allValid ? 'valid' : 'not valid'})</h2>
-        {Object.keys(state.errors).map(field => (
-          <div className={classNames(styles.debug_row, state.errors[field] != false && styles.debug_error)}>
+        {Object.keys(state.errors).map((field) => (
+          <div key={field} className={classNames(styles.debug_row, state.errors[field] != false && styles.debug_error)}>
             {field}: {JSON.stringify(state.errors[field])}
           </div>
         ))}
       </div>
       <div className={styles.debug_column}>
         <h2 className={styles.debug_header}>Form fields</h2>
-        {state.allFields.map(field => (
-          <div className={styles.debug_row}>{field}</div>
+        {state.allFields.map((field) => (
+          <div key={field} className={styles.debug_row}>
+            {field}
+          </div>
         ))}
       </div>
     </div>
@@ -156,10 +167,24 @@ export function SamfForm<T>({
   // Render children with form context
   return (
     <SamfFormContext.Provider value={{ state, dispatch }}>
-      <SamfFormValidateOnInitContext.Provider value={validateOnInit}>
-        <form>{children}</form>
+      <SamfFormConfigContext.Provider value={{ validateOnInit }}>
+        <form className={styles.samf_form}>
+          {children}
+          {submitButton && (
+            <Button
+              preventDefault={true}
+              type="submit"
+              theme="green"
+              rounded={true}
+              onClick={handleOnClickSubmit}
+              disabled={!allValid}
+            >
+              {submitButton !== true ? submitButton : 'Lagre'}
+            </Button>
+          )}
+        </form>
         {devModePreview}
-      </SamfFormValidateOnInitContext.Provider>
+      </SamfFormConfigContext.Provider>
     </SamfFormContext.Provider>
   );
 }
@@ -185,7 +210,10 @@ function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U
   // Set the current value of the state using form context
   function setValue(newValue: U, skipValidation?: boolean) {
     // Validation check
-    const validatorResponse = validator?.(newValue) ?? true;
+    let validatorResponse: string | boolean = true;
+    if(newValue !== undefined && validator !== undefined) {
+      validatorResponse = validator?.(newValue);
+    }
     const failedRequirement = required && newValue === undefined;
     const isError = failedRequirement || validatorResponse !== true;
     // Error state based on validation
@@ -194,7 +222,7 @@ function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U
       errorState = validatorResponse;
     }
     // Skipping validation
-    if(skipValidation === true) {
+    if (skipValidation === true) {
       errorState = state.errors[field];
     }
     // Dispatch event to form reducer
@@ -212,7 +240,7 @@ function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U
 }
 
 // SamfFormField properties
-type SamfFormFieldType = 'text' | 'text-long' | 'float' | 'integer' | 'number' | 'options' | 'image';
+type SamfFormFieldType = 'text' | 'text-long' | 'float' | 'integer' | 'number' | 'options' | 'image' | 'datetime';
 type SamfFormFieldProps<U> = {
   // General
   field: string;
@@ -234,10 +262,9 @@ export function SamfFormField<U>({
   defaultOption,
   validator,
 }: SamfFormFieldProps<U>) {
-
   // Validate on init context
-  const validateOnInit = useContext(SamfFormValidateOnInitContext);
-  
+  const { validateOnInit } = useContext(SamfFormConfigContext);
+
   // State (from context hook)
   const { value, error, setValue } = useSamfFormInput<U>(field, required, validator);
   const errorBoolean = error === false || error == undefined ? false : true;
@@ -246,7 +273,8 @@ export function SamfFormField<U>({
   function numberCaster(v: string): U | undefined {
     const num = type === 'integer' ? Number.parseInt(v) : Number.parseFloat(v);
     if (isNaN(num)) {
-      return undefined;
+      // TODO need to handle typing of commas etc. which are temporarily NaNs
+      return v as U;
     }
     return num as U;
   }
@@ -265,11 +293,17 @@ export function SamfFormField<U>({
     // This should likely be moved to each input component
     switch (type) {
       case 'number':
+        newValue = numberCaster(newValue);
+        break;
       case 'float':
+        newValue = numberCaster(newValue);
+        break;
       case 'integer':
         newValue = numberCaster(newValue);
         break;
       case 'text':
+        newValue = stringCaster(newValue);
+        break;
       case 'text-long':
         newValue = stringCaster(newValue);
         break;
@@ -278,26 +312,33 @@ export function SamfFormField<U>({
     setValue(newValue as U, skipValidation);
   }
 
-  // Validate on init (first render)
+  // Validate again whenever validateOnInit is turned on
   useEffect(() => {
     if (validateOnInit) {
-      handleOnChange(value);
+      handleOnChange(value, false);
     }
   }, [validateOnInit]);
 
   // Set value in context on first render
   useEffect(() => {
-    handleOnChange(value);
+    handleOnChange(value, !validateOnInit);
   }, []);
 
   // ================================== //
   //           Form Field UI            //
   // ================================== //
 
-  // Regular text input for text, numbers, dates
+  // Regular input for text, numbers, dates
   function makeStandardInput(type: InputFieldType) {
     return (
-      <InputField<U> key={field} value={(value ?? '') as string} onChange={handleOnChange} error={error} type={type}>
+      <InputField<U>
+        key={field}
+        value={value as string}
+        onChange={handleOnChange}
+        error={error}
+        type={type}
+        className={styles.input_element}
+      >
         {label}
       </InputField>
     );
@@ -306,13 +347,19 @@ export function SamfFormField<U>({
   // Long text input for descriptions etc
   function makeAreaInput() {
     return (
-      <TextAreaField key={field} value={value as string} onChange={handleOnChange} error={error}>
+      <TextAreaField
+        key={field}
+        value={value as string}
+        onChange={handleOnChange}
+        error={error}
+        className={styles.input_element}
+      >
         {label}
       </TextAreaField>
     );
   }
 
-  // Long text input for descriptions etc
+  // Options dropdown input
   function makeOptionsInput() {
     return (
       <Dropdown<U>
@@ -322,6 +369,7 @@ export function SamfFormField<U>({
         onChange={handleOnChange}
         label={label}
         error={errorBoolean}
+        className={styles.input_element}
       />
     );
   }
@@ -331,15 +379,15 @@ export function SamfFormField<U>({
     return <ImagePicker key={field} onSelected={handleOnChange} />;
   }
 
-  // Generate input based on type
+  // Generate UI based on type
   function makeFormField() {
     switch (type) {
       case 'text':
         return makeStandardInput('text');
       case 'text-long':
         return makeAreaInput();
-      //case 'datetime':
-      //  return makeStandardInput<string>(field as FormField<string>, 'datetime-local');
+      case 'datetime':
+        return makeStandardInput('datetime-local');
       case 'number':
       case 'integer':
       case 'float':
@@ -349,12 +397,8 @@ export function SamfFormField<U>({
       case 'image':
         return makeImagePicker();
     }
-    return <b>FORM FIELD TYPE {type} NOT IMPLEMENTED</b>;
+    return <b style={{ color: 'red' }}>Field type '{type}' is not implemented!</b>;
   }
 
-  return (
-    <div>
-      {makeFormField()}
-    </div>
-  );
+  return makeFormField();
 }

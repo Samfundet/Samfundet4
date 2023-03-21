@@ -41,16 +41,16 @@ export function Dropdown<T>({
     }
   }
   return (
-    <label className={classnames(styles.select_wrapper, wrapper)}>
+    <label className={classnames(className, styles.select_wrapper)}>
       {label}
       <select
         className={classNames(styles.samf_select, error && styles.error)}
         onChange={handleChange}
-        placeholder={defaultValue?.label ?? ''}
         disabled={disabled}
+        defaultValue={-1}
       >
         {defaultValue ? (
-          <option value={-1} className={className}>
+          <option value={-1}>
             {defaultValue.label}
           </option>
         ) : (
@@ -58,7 +58,7 @@ export function Dropdown<T>({
         )}
         {options.map((opt, index) => {
           return (
-            <option value={index} key={index} className={className}>
+            <option value={index} key={index}>
               {opt.label}
             </option>
           );

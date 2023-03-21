@@ -50,31 +50,28 @@ export function InputField<T>({
     onChange?.(value as T);
   }
   return (
-    <div className={className}>
-      <label className={classNames(styles.label, disabled && styles.disabled_label, labelClassName)}>
-        {children}
-        <input
-          onChange={handleChange}
-          className={classNames(styles.input_field, inputClassName, error && styles.error)}
-          placeholder={placeholder || ''}
-          disabled={disabled}
-          type={type}
-          value={value}
-          {...register}
-        />
-        {icon && (
-          <div className={styles.icon_container}>
-            <Icon icon={icon} width={24} className={styles.field_icon} />
-          </div>
-        )}
-        {error && (error as string).length > 0 && (
-          <div className={styles.error_container}>
-            <div className={styles.error_text}>{error}</div>
-          </div>
-        )}
-        {helpText && <p className={styles.helpText}>{helpText}</p>}
-      </label>
+    <label className={classNames(className, styles.label, disabled && styles.disabled_label, labelClassName)}>
+      {children}
+      <input
+        onChange={handleChange}
+        className={classNames(styles.input_field, inputClassName, error && styles.error)}
+        placeholder={placeholder || ''}
+        disabled={disabled}
+        type={type}
+        value={value}
+        {...register}
+      />
+      {icon && (
+        <div className={styles.icon_container}>
+          <Icon icon={icon} width={24} className={styles.field_icon} />
+        </div>
+      )}
+      {error && (error as string).length > 0 && (
+        <div className={styles.error_container}>
+          <div className={styles.error_text}>{error}</div>
+        </div>
+      )}
       {helpText && <p className={styles.helpText}>{helpText}</p>}
-    </div>
+    </label>
   );
 }

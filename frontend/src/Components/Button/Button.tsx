@@ -15,6 +15,7 @@ type ButtonProps = {
   disabled?: boolean;
   children?: Children;
   buttonType?: ButtonType;
+  preventDefault?: boolean;
   onClick?: () => void;
 };
 
@@ -46,6 +47,7 @@ export function Button({
   className,
   children,
   buttonType = 'button',
+  preventDefault = false
 }: ButtonProps) {
   const classNames = classnames(
     styles.button,
@@ -55,15 +57,22 @@ export function Button({
     className,
   );
 
+  function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
+    if(preventDefault) {
+      e?.preventDefault()
+    }
+    onClick?.();
+  }
+
   return (
     <>
       {buttonType === 'button' && (
-        <button name={name} onClick={onClick} disabled={disabled} className={classNames}>
+        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
           {children}
         </button>
       )}
       {buttonType === 'submit' && (
-        <input type="submit" name={name} onClick={onClick} disabled={disabled} className={classNames}>
+        <input type="submit" name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
           {children}
         </input>
       )}
