@@ -8,6 +8,7 @@ import {
   FoodPreferenceDto,
   GangDto,
   GangTypeDto,
+  HomePageElementDto,
   ImageDto,
   InformationPageDto,
   MenuDto,
@@ -50,6 +51,13 @@ export async function logout(): Promise<AxiosResponse> {
 export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getHomeData(): Promise<HomePageElementDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
+  const response = await axios.get<HomePageElementDto[]>(url, { withCredentials: true });
 
   return response.data;
 }

@@ -24,6 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 
 ### storybook ###
+/storybook-static
 build-storybook.log
 
 .env.docker

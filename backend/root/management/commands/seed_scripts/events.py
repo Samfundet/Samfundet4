@@ -1,8 +1,8 @@
 import random
+
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
-
 from samfundet.models import Event, EventGroup, Venue, Image
 
 # Number of events
@@ -86,7 +86,6 @@ def seed():
                     location=event_venue.name,
                     event_group=group,
                     capacity=capacity,
-                    codeword=words(1),
                     category=category,
                     image=image
                 )
