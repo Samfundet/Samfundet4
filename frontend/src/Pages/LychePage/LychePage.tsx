@@ -10,32 +10,23 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { TextItem } from '~/textItems';
 import styles from './LychePage.module.scss';
+import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
+import { globalLycheVenue } from '~/constants';
 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const [t] = useTranslation();
-  const [consistentWeekdayHours, setConsistentWeekdayHours] = useState(false);
-  const [consistentWeekendHours, setConsistentWeekendHours] = useState(false);
+  const [consistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
+  const [consistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
-  const venueName = 'lyche';
 
   useEffect(() => {
     getVenues()
       .then((data) => {
-        const lyche = data.find((venue) => venue.name?.toLowerCase() === venueName);
+        const lyche = data.find((venue) => venue.name?.toLowerCase() === globalLycheVenue);
         setLycheVenue(lyche);
-        const consistentWeekdayOpeningHours =
-          lycheVenue?.opening_monday === lycheVenue?.opening_tuesday &&
-          lycheVenue?.opening_wednesday === lycheVenue?.opening_thursday &&
-          lycheVenue?.opening_monday === lycheVenue?.opening_thursday;
-        const consistentWeekdayClosingHours =
-          lycheVenue?.closing_monday === lycheVenue?.closing_tuesday &&
-          lycheVenue?.closing_wednesday === lycheVenue?.closing_thursday &&
-          lycheVenue?.closing_monday === lycheVenue?.closing_thursday;
-        setConsistentWeekdayHours(consistentWeekdayOpeningHours && consistentWeekdayClosingHours);
-        const consistentWeekendOpeningHours = lycheVenue?.opening_friday === lycheVenue?.opening_saturday;
-        const consistentWeekendClosingHours = lycheVenue?.closing_friday === lycheVenue?.closing_saturday;
-        setConsistentWeekendHours(consistentWeekendOpeningHours && consistentWeekendClosingHours);
+        setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
+        setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
         setLoading(false);
       })
       .catch(console.error);
@@ -54,6 +45,7 @@ export function LychePage() {
     lycheVenue?.closing_thursday,
     lycheVenue?.closing_friday,
     lycheVenue?.closing_saturday,
+    lycheVenue,
   ]);
 
   const openingHourRow = (days: string, openingHours: string) => {
