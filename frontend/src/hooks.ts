@@ -110,7 +110,7 @@ export function useScreenCenterOffset(id: string): number {
 
 /**
  * Utility hook to get the previous value of react state
- * @param value tcurrent state
+ * @param value current state
  * @returns previous state after next render
  */
 export function usePrevious<T>(value: T): T | undefined {

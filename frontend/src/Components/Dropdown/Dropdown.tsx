@@ -28,14 +28,19 @@ export function Dropdown<T>({
   disabled = false,
   error,
 }: DropdownProps<T>) {
+  /**
+   * Handles the raw change event from <option>
+   * The raw value choice is an index where -1 is reserved for
+   * the empty/default option. Depending on the index selected
+   * the onChange callback is provided with the respective DropDownOption
+   * @param e Standard onChange HTML event for dropdown
+   */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
     const choice = (e?.currentTarget.value ?? 0) as number;
-    if (choice == -1 || choice === undefined) {
-      onChange?.(defaultValue?.value ?? undefined);
-    } else if (choice >= 0 && choice <= options.length) {
+    if (choice >= 0 && choice <= options.length) {
       onChange?.(options[choice].value);
     } else {
-      onChange?.(defaultValue?.value);
+      onChange?.(defaultValue?.value ?? undefined);
     }
   }
   return (
@@ -47,7 +52,7 @@ export function Dropdown<T>({
         disabled={disabled}
         defaultValue={-1}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option selected value={-2}></option>}
+        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option selected value={-1}></option>}
         {options.map((opt, index) => {
           return (
             <option value={index} key={index}>
