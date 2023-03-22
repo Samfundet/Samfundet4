@@ -12,6 +12,9 @@
     outline: none;
     border: 1px solid $grey-4;
     box-shadow: 0 0 25px 5px rgba(143, 181, 238, 0.391);
+    @include theme-dark {
+      border-color: $grey-1;
+    }
   }
   &.error {
     border: 1px solid red;

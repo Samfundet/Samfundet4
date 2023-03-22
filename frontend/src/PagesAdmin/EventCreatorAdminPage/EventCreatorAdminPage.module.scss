@@ -26,6 +26,9 @@
   background-color: $background-secondary;
   padding: 2em;
   flex: 1;
+  @include theme-dark {
+    background-color: $grey-1;
+  }
 }
 
 .tab_label {

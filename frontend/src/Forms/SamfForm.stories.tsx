@@ -1,7 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { EventDto } from '~/dto';
-import { SamfForm, SamfFormField } from './SamfForm';
+import { SamfForm } from './SamfForm';
+import { SamfFormField } from './SamfFormField';
 
 // Local component config.
 export default {

@@ -26,11 +26,15 @@
   -moz-appearance: none;
   -ms-appearance: none;
   overflow-y: auto;
-  
 
   &:hover {
     filter: brightness(110%);
   }
+
+}
+
+.error {
+  border: 1px solid $red;
 }
 
 .arrow_container {

@@ -31,7 +31,7 @@ export function Dropdown<T>({
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
     const choice = (e?.currentTarget.value ?? 0) as number;
     if (choice == -1 || choice === undefined) {
-      onChange?.(defaultValue?.value);
+      onChange?.(defaultValue?.value ?? undefined);
     } else if (choice >= 0 && choice <= options.length) {
       onChange?.(options[choice].value);
     } else {
@@ -47,11 +47,7 @@ export function Dropdown<T>({
         disabled={disabled}
         defaultValue={-1}
       >
-        {defaultValue ? (
-          <option value={-1}>{defaultValue.label}</option>
-        ) : (
-          <option hidden disabled selected value={undefined}></option>
-        )}
+        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option selected value={-2}></option>}
         {options.map((opt, index) => {
           return (
             <option value={index} key={index}>

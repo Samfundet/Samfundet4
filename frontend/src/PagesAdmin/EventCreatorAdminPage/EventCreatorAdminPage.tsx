@@ -10,7 +10,8 @@ import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { EventDto } from '~/dto';
-import { SamfForm, SamfFormField } from '~/Forms/SamfForm';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
@@ -225,7 +226,7 @@ export function EventCreatorAdminPage() {
           onChange={(part) => setEvent({ ...event, ...part })}
           onValidityChanged={(valid) => setStepCompleted(step, valid)}
           validateOnInit={visited}
-          devMode={true}
+          devMode={false}
         >
           {step.key == 'summary' ? eventPreview : <></>}
           {step.template}
@@ -274,7 +275,7 @@ export function EventCreatorAdminPage() {
           {/* Render form */}
           {!didSave && (
             <>
-              <div className={styles.tab_form}>{allForms}</div>
+              {allForms}
               {navigationButtons}
             </>
           )}

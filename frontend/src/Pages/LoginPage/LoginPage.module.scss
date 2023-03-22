@@ -5,10 +5,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   align-content: stretch;
+  gap: 1em;
   height: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .content_container {
