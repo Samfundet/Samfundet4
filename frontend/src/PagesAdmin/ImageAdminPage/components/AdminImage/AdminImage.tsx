@@ -1,5 +1,6 @@
 import { Link } from '~/Components';
 import { ImageDto } from '~/dto';
+import { backgroundImageFromUrl } from '~/utils';
 import styles from './AdminImage.module.scss';
 
 type AdminImageProps = {
@@ -8,8 +9,6 @@ type AdminImageProps = {
 };
 
 export function AdminImage({ image, className }: AdminImageProps) {
-  const BACKGROUND_IMAGE = `url(${image.image})`;
-
   const TAGS = image.tags
     .map((tag) => {
       return ' ' + tag.name;
@@ -17,7 +16,7 @@ export function AdminImage({ image, className }: AdminImageProps) {
     .toString();
   return (
     <Link url="" className={className}>
-      <div className={styles.imageContainer} style={{ backgroundImage: BACKGROUND_IMAGE }}>
+      <div className={styles.imageContainer} style={backgroundImageFromUrl(image.url)}>
         <div className={styles.imageTitle}>
           <p className={styles.text}>{image.title}</p>
           <p className={styles.tags}>{TAGS}</p>

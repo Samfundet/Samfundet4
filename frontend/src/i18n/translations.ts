@@ -42,6 +42,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_contact_us]: 'Kontakt oss',
   [KEY.common_not_found]: 'Ikke funnet',
+  [KEY.common_next]: 'Neste',
+  [KEY.common_previous]: 'Forrige',
   [KEY.gang]: 'Gjeng',
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
@@ -118,7 +120,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
-  [KEY.event]: '',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -158,6 +159,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_not_found]: 'Not found',
+  [KEY.common_next]: 'Next',
+  [KEY.common_previous]: 'Previous',
   [KEY.norwegian]: 'Norwegian',
   [KEY.english]: 'English',
   [KEY.login_forgotten_password]: 'Forgot password?',
@@ -238,5 +241,4 @@ export const en: Record<KeyValues, string> = {
   [KEY.saksdokument]: 'case document',
   [KEY.admin_information_new_page]: '',
   [KEY.admin_information_create_page]: '',
-  [KEY.event]: '',
 };

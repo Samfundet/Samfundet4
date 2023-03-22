@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { desktopBpLower, mobileBpUpper } from './constants';
 
@@ -56,7 +56,10 @@ export function useMobile(): boolean {
   return width < mobileBpUpper;
 }
 
-// Scroll detection
+/**
+ * Scroll detection hook
+ * @returns the current y scroll
+ */
 export function useScrollY(): number {
   const [scrollY, setScrollY] = useState(window.scrollY);
   useEffect(() => {
@@ -74,7 +77,11 @@ export function useScrollY(): number {
   return scrollY;
 }
 
-// Element offset from screen center (id of html element)
+/**
+ * Element offset from screen center (id of html element)
+ * @param id id of the html element
+ * @returns pixel offset from centre of screen
+ */
 export function useScreenCenterOffset(id: string): number {
   const element = document.getElementById(id);
   const rect = element?.getBoundingClientRect();
@@ -99,4 +106,17 @@ export function useScreenCenterOffset(id: string): number {
     };
   }, [id]);
   return positionY;
+}
+
+/**
+ * Utility hook to get the previous value of react state
+ * @param value current state
+ * @returns previous state after next render
+ */
+export function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
 }

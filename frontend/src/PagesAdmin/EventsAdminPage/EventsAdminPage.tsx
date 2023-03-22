@@ -50,7 +50,7 @@ export function EventsAdminPage() {
     );
   }
 
-  const data = events.map(function (event) {
+  const data = events.map(function (event: EventDto) {
     return [
       new AlphabeticTableCell(
         // <Link
@@ -65,7 +65,7 @@ export function EventsAdminPage() {
       ),
       // new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
       new AlphabeticTableCell(event.start_dt.toLocaleString()),
-      new AlphabeticTableCell(event.event_group.name),
+      //new AlphabeticTableCell(event.event_group.name),
       new AlphabeticTableCell(event.host),
       new AlphabeticTableCell(event.location),
       {
@@ -109,7 +109,7 @@ export function EventsAdminPage() {
       </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>
-          {t(KEY.edit)} {t(KEY.event)}
+          {t(KEY.edit)} {t(KEY.common_event)}
         </h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
           View in backend
@@ -117,10 +117,7 @@ export function EventsAdminPage() {
       </div>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
-        <Table
-          columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.event_type), t(KEY.organizer), t(KEY.venue), '']}
-          data={data}
-        />
+        <Table columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.organizer), t(KEY.venue), '']} data={data} />
       </div>
     </Page>
   );

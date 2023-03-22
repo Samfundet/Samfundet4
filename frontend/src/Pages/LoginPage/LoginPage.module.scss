@@ -5,12 +5,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   align-content: stretch;
-  min-width: 100%;
-  min-height: calc(100vh - 200px);
-  padding: 10em 10vw 10em 10vw;
+  gap: 1em;
+  height: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .content_container {
@@ -28,6 +29,7 @@
 .header_text {
   text-align: center;
   font-size: 1.8em;
+  margin-bottom: 1em;
 }
 
 .input_field {

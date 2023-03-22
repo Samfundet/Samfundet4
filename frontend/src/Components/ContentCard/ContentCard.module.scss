@@ -18,6 +18,7 @@ $background-dark: #2e2b2b;
   overflow: visible;
   padding-top: 1em;
   padding-bottom: 1em;
+  max-width: 100%;
 
   @include for-mobile-only {
     width: $mobile-width;
@@ -47,7 +48,6 @@ $background-dark: #2e2b2b;
 }
 
 .card_image {
-  background-image: url('~/assets/banner-sample-2.jpeg');
   background-size: cover;
   background-position: center;
   border-radius: 1em 0 0 1em;
