@@ -63,6 +63,11 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = ['image']
 
     def create(self, validated_data: dict) -> Event:
+        """
+        Uses the write_only field 'image_id' to get an Image object
+        and sets it in the new event. Read/write only fields enable
+        us to use the same serializer for both reading and writing.
+        """
         validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
         event = Event(**validated_data)
         event.save()
