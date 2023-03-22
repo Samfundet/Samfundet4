@@ -18,7 +18,7 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
   useEffect(() => {
     getImages()
       .then((imgs) => setImages(imgs))
-      .catch(() => setImages([]));
+      .catch(() => console.error);
   }, []);
 
   function select(image: ImageDto) {
