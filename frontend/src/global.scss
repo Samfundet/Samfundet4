@@ -3,6 +3,7 @@
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'constants';
 
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'mixins';
 
 /* stylelint-disable selector-max-type */
@@ -76,7 +77,7 @@ form {
 label {
   display: flex;
   flex-direction: column;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: .5em;
   margin-left: .2em;
   color: $black;
