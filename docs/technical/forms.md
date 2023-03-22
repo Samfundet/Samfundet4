@@ -19,7 +19,7 @@ Use the `<SamfForm>` component to create a new form. The component accepts any c
 
 ### Form Properties
 
-Forms should use either `onSubmit` or `onChanged`. Submit is useful for typical forms where you post/put data. By defining a form with a type (inside the `< >` after `SamfForm`) you can easily model any datatype.
+Forms should use either `onSubmit` or `onChange`. Submit is useful for typical forms where you post/put data. By defining a form with a type (inside the `< >` after `SamfForm`) you can easily model any datatype.
 
 #### Posting/putting data
 ```tsx
