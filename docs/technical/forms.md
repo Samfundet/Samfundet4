@@ -5,7 +5,7 @@ SamfForm is a generic system that makes it very easy to create forms for all kin
 
 ```html
 <SamfForm onSubmit={yourSubmitFunction} submitButton="Save Name">
-    <SamfFormInput field="name" type="text" label="Enter name"/>
+    <SamfFormField field="name" type="text" label="Enter name"/>
 </SamfForm>
 ```
 
@@ -28,7 +28,7 @@ function postEvent(event: EventDto) {
 }
 ```
 
-```tsx
+```html
 <SamfForm<EventDto> onSubmit={postEvent}>
     <!-- Your input fields -->
 </SamfForm>
@@ -36,13 +36,13 @@ function postEvent(event: EventDto) {
 
 #### Storing data in a state
 
-If the component needs to display some information about the form while you are editing, you can use the `onChanged` property to get notified when data changes. 
+If the component needs to display some information about the form while you are editing, you can use the `onChange` property to get notified when data changes. 
 
 ```tsx
 const [event, setEvent] = useState<EventDto>(undefined);
 ```
-```tsx
-<SamfForm<EventDto> onChanged={setEvent}>
+```html
+<SamfForm<EventDto> onChange={setEvent}>
     <!-- Your input fields -->
 </SamfForm>
 ```
