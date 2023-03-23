@@ -4,7 +4,7 @@ import { COLORS } from '~/types';
 import { Infobox } from './Infobox';
 
 export default {
-  title: 'Components/InfoboxTEST',
+  title: 'Components/Infobox',
   component: Infobox,
   args: {
     title: 'test title',
