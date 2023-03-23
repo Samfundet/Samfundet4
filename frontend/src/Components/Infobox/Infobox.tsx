@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-import { COLORS } from '../../types';
 import styles from './Infobox.module.scss';
 type InfoboxProps = {
   className?: string;
@@ -14,7 +13,7 @@ type InfoboxProps = {
 };
 
 export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: InfoboxProps) {
-  const bg = COLORS[bgColor];
+  const bg = bgColor;
   const [wrapHeightRatio, setWrapHeightRatio] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const { t } = useTranslation();
@@ -129,4 +128,12 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL, type }: Infobox
       </div>
     );
   }
+  return (
+    <div className={styles.no_img_infobox_wrap} style={{ backgroundColor: bg }}>
+      <div className={styles.no_img_infobox_txt_wrap}>
+        <h1 className={styles.no_url_h1}>{title}</h1>
+        <p className={styles.no_img_infobox_paragraph}>{infoTxt}</p>
+      </div>
+    </div>
+  );
 }

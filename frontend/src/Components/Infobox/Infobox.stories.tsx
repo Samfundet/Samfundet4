@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { kitteh } from '~/assets';
+import { COLORS } from '~/types';
 import { Infobox } from './Infobox';
 
 export default {
@@ -10,7 +11,7 @@ export default {
     img: kitteh,
     infoURL: 'https://www.samfundet.no/',
     infoTxt: 'Lorem ipsum dolor sit ametur adipiscing elit, sed do eiusmod tempor incididuntincididunt incididunt.',
-    bgColor: 'red_samf',
+    bgColor: COLORS.red_samf,
   },
 } as ComponentMeta<typeof Infobox>;
 const Template: ComponentStory<typeof Infobox> = function (args) {
