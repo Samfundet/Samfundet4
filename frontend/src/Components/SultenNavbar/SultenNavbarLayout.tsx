@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { SultenNavbar } from './SultenNavbar';
+import { SultenFooter } from '../SultenFooter';
 
 export function SultenNavbarLayout() {
   return (
@@ -8,6 +9,7 @@ export function SultenNavbarLayout() {
       <div>
         <Outlet />
       </div>
+      <SultenFooter />
     </div>
   );
 }

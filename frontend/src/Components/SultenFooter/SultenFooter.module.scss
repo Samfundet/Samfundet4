@@ -1,0 +1,53 @@
+@import 'src/constants';
+
+$header-width: 6em;
+
+.footer_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: $black-t25;
+  padding: 1rem;
+  color: $grey-3;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.footer_item {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  left: calc(50% - #{$header-width} + 0.5em);
+  align-items: center;
+  justify-content: flex-start;
+  align-self: flex-start;
+}
+
+.header {
+  font-size: 2em;
+  text-align: center;
+  width: $header-width;
+  border-bottom: 1px solid $grey-4;
+}
+
+.icon {
+  color: $grey-3;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.footer_link {
+  color: $grey-3;
+  text-decoration: none;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}

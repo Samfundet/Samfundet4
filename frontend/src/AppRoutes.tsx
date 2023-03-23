@@ -32,6 +32,7 @@ import {
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
 import { NavbarLayout } from './Components/Navbar';
+import { SultenFooter } from './Components/SultenFooter';
 import { SultenNavbarLayout } from './Components/SultenNavbar';
 import { ROUTES } from './routes';
 
@@ -76,6 +77,7 @@ export function AppRoutes() {
       </Route>
       <Route element={<SultenNavbarLayout />}>
         <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
+        <Route path="*" element={<SultenFooter />} />
       </Route>
     </Routes>
   );
