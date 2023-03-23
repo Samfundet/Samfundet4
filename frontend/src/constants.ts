@@ -29,3 +29,10 @@ export const tabletBpUpper = 992;
 export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
+
+/**
+ * Venues
+ */
+export const VENUE = {
+  LYCHE: 'lyche',
+} as const;
