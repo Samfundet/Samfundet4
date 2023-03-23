@@ -1,30 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getImage } from '~/api';
-import { Button, FormInputField, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
+import { Button, Page, SamfundetLogoSpinner } from '~/Components';
+import { ImageDto } from '~/dto';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { DTOToForm } from '~/utils';
 import styles from './ImageFormAdminPage.module.scss';
 
 export function ImageFormAdminPage() {
   const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  const {
-    register,
-    // handleSubmit,
-    // setError,
-    setValue,
-    formState: { errors },
-  } = useForm();
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
+
+  const [showSpinner, setShowSpinner] = useState<boolean>(id !== undefined);
+  const [image, setImage] = useState<Partial<ImageDto>>({});
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -33,7 +28,8 @@ export function ImageFormAdminPage() {
     if (id) {
       getImage(id)
         .then((data) => {
-          DTOToForm(data, setValue, []);
+          setImage(data);
+          setShowSpinner(false);
         })
         .catch((data) => {
           // TODO add error pop up message?
@@ -41,21 +37,19 @@ export function ImageFormAdminPage() {
             navigate(ROUTES.frontend.admin_images);
           }
         });
+    } else {
+      setShowSpinner(false);
     }
-    setShowSpinner(false);
-  }, [id, navigate, setValue]);
+  }, [id, navigate, setImage]);
 
-  // function onSubmit(data: ImageDto) {
-  //   (id ? putImage(id, data) : postImage(data))
-  //     .then(() => {
-  //       navigate(ROUTES.frontend.admin_images);
-  //     })
-  //     .catch((e) => {
-  //       for (const err in e.response.data) {
-  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
-  //       }
-  //     });
-  // }
+  function handleOnSubmit(data: ImageDto) {
+    if (id !== undefined) {
+      // TODO patch
+    } else {
+      // TODO post
+    }
+    alert('TODO');
+  }
 
   if (showSpinner) {
     return (
@@ -65,6 +59,7 @@ export function ImageFormAdminPage() {
     );
   }
 
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_image)}`;
   return (
     <Page>
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_images)} className={styles.backButton}>
@@ -73,42 +68,13 @@ export function ImageFormAdminPage() {
       <h1 className={styles.header}>
         {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
       </h1>
-      {/* TODO: fix */}
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      <form>
-        <div className={styles.seperator}>Info</div>
-        <FormInputField
-          errors={errors}
-          className={styles.input}
-          name="title"
-          required={t(KEY.form_required)}
-          register={register}
-        >
-          <p className={styles.labelText}>{t(KEY.name)}</p>
-        </FormInputField>
-        <FormInputField
-          errors={errors}
-          className={styles.input}
-          name="tags"
-          helpText="Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'"
-          register={register}
-        >
-          <p className={styles.labelText}>{t(KEY.common_tags)}</p>
-        </FormInputField>
-        <div className={styles.seperator}>{t(KEY.common_image)}</div>
-        <FormInputField className={styles.input} errors={errors} name="image" type="file" register={register}>
-          <p className={styles.labelText}>
-            {t(KEY.common_choose)} {t(KEY.common_image)}
-          </p>
-        </FormInputField>
-        <div className={styles.submitContainer}>
-          <Button theme={'success'} type="submit">
-            <p className={styles.submit}>
-              {id ? t(KEY.common_save) : t(KEY.common_create)} {t(KEY.gang)}
-            </p>
-          </Button>
-        </div>
-      </form>
+      <SamfForm onSubmit={handleOnSubmit} submitText={submitText}>
+        <SamfFormField field="title" type="text" label={`${t(KEY.name)}`} />
+        {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
+        <SamfFormField field="tags" type="text" label={`${t(KEY.common_tags)}`} />
+        {/* TODO create file picker input type */}
+        <SamfFormField field="image" type="text" label={`${t(KEY.common_choose)} ${t(KEY.common_image)}`} />
+      </SamfForm>
     </Page>
   );
 }

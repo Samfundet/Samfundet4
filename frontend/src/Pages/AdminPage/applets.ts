@@ -55,7 +55,7 @@ export const applets: Applet[] = [
     perm: PERM.SAMFUNDET_ADD_IMAGE,
     icon: 'clarity:image-gallery-line',
     options: [
-      { text: 'Nytt Bilde', url: '', type: TYPE.ADD },
+      { text: 'Nytt Bilde', url: ROUTES.frontend.admin_images_create, type: TYPE.ADD },
       { text: 'Gå til Bildearkiv', url: ROUTES.frontend.admin_images, type: TYPE.MANAGE },
     ],
   },

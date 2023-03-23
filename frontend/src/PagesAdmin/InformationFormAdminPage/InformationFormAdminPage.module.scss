@@ -70,17 +70,21 @@
 .row {
   display: flex;
   flex-direction: row;
+  gap: 1.5em;
 }
 
-.col {
-  flex: 1;
+.row_stretch {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5em;
 }
 
 .markdownField {
-  border: 1px solid $grey-2;
-  border-radius: 2px;
-  height: 100%;
+  @include shadow-light;
+  padding: 1em 1em;
+  outline: none;
+  flex-basis: 35%;
   margin: 1em;
-  padding: 2em;
+  margin-top: 1.75em;
 }
 

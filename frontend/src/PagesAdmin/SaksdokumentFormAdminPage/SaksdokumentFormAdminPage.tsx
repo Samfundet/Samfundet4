@@ -89,7 +89,7 @@ export function SaksdokumentFormAdminPage() {
         onSubmit={() => {
           return;
         }}
-        submitButton={submitText}
+        submitText={submitText}
       >
         <div className={styles.row}>
           <SamfFormField
@@ -122,16 +122,9 @@ export function SaksdokumentFormAdminPage() {
           />
           {/*
           TODO: Add support for uploading files, not currently implemented
-          <FormInputField
-            type="file"
-            errors={errors}
-            className={classNames(styles.input, styles.col)}
-            name="file"
-            register={register}
-            required={false}
-          >
+          <SamfFormField type="file" name="file">
             <p className={styles.labelText}>Document file *</p>
-          </FormInputField> */}
+          </SamfFormField> */}
         </div>
       </SamfForm>
     </Page>
