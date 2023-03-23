@@ -38,6 +38,7 @@ export function InformationFormAdminPage() {
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => {
+          data;
           //DTOToForm(data, setValue, []);
         })
         .catch((data) => {
@@ -65,6 +66,7 @@ export function InformationFormAdminPage() {
       // TODO post
     }
     alert('TODO');
+    console.log(JSON.stringify(data));
   }
 
   const nbDisplay = languageTab.key == 'nb' ? 'block' : 'none';
@@ -83,7 +85,7 @@ export function InformationFormAdminPage() {
       <h1 className={styles.header}>
         {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
       </h1>
-      <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab}/>
+      <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} />
       <br></br>
       <SamfForm onChange={setInfoPage} onSubmit={handleOnSubmit} submitText={submitText}>
         {!slugField && <SamfFormField field="slug_field" type="text" label={`${t(KEY.name)}`} />}

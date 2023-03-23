@@ -20,6 +20,7 @@ export function ImageFormAdminPage() {
 
   const [showSpinner, setShowSpinner] = useState<boolean>(id !== undefined);
   const [image, setImage] = useState<Partial<ImageDto>>({});
+  image;
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -49,6 +50,7 @@ export function ImageFormAdminPage() {
       // TODO post
     }
     alert('TODO');
+    console.log(JSON.stringify(data));
   }
 
   if (showSpinner) {

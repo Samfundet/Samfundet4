@@ -52,6 +52,7 @@ export function ClosedPeriodFormAdminPage() {
       // TODO post data
     }
     alert('TODO Submit');
+    console.log(JSON.stringify(data));
   }
 
   if (showSpinner) {

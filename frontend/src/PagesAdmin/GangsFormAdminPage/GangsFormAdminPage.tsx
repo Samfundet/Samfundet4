@@ -35,6 +35,7 @@ export function GangsFormAdminPage() {
     if (id) {
       getGang(id)
         .then((data) => {
+          data;
           //DTOToForm(data, setValue, []);
         })
         .catch((data) => {
@@ -54,6 +55,7 @@ export function GangsFormAdminPage() {
       // TODO post
     }
     alert('TODO');
+    console.log(JSON.stringify(data));
   }
 
   if (showSpinner) {
