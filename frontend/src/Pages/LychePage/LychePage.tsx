@@ -35,11 +35,11 @@ export function LychePage() {
     setLoading(false);
   }, [lycheVenue]);
 
-  const openingHourRow = (days: string, openingHours: string) => {
+  const openingHourRow = (days: string, open_hour: string | undefined, close_hour: string | undefined) => {
     return (
       <div className={styles.hour_item_container}>
         <p className={styles.hour_item}>{days}</p>
-        <p className={styles.hour_item}>{openingHours}</p>
+        <p className={styles.hour_item}>{`${open_hour?.substring(0, 5)}-${close_hour?.substring(0, 5)}`}</p>
       </div>
     );
   };
@@ -53,27 +53,16 @@ export function LychePage() {
         <>
           {openingHourRow(
             `${t(KEY.day_monday)}-${t(KEY.day_thursday)}`,
-            `${lycheVenue?.opening_monday?.substring(0, 5)}-${lycheVenue?.closing_monday?.substring(0, 5)}`,
+            lycheVenue?.opening_monday,
+            lycheVenue?.closing_monday,
           )}
         </>
       ) : (
         <>
-          {openingHourRow(
-            `${t(KEY.day_monday)}`,
-            `${lycheVenue?.opening_monday?.substring(0, 5)}-${lycheVenue?.closing_monday?.substring(0, 5)}`,
-          )}
-          {openingHourRow(
-            `${t(KEY.day_tuesday)}`,
-            `${lycheVenue?.opening_tuesday?.substring(0, 5)}-${lycheVenue?.closing_tuesday?.substring(0, 5)}`,
-          )}
-          {openingHourRow(
-            `${t(KEY.day_wednesday)}`,
-            `${lycheVenue?.opening_wednesday?.substring(0, 5)}-${lycheVenue?.closing_wednesday?.substring(0, 5)}`,
-          )}
-          {openingHourRow(
-            `${t(KEY.day_thursday)}`,
-            `${lycheVenue?.opening_thursday?.substring(0, 5)}-${lycheVenue?.closing_thursday?.substring(0, 5)}`,
-          )}
+          {openingHourRow(`${t(KEY.day_monday)}`, lycheVenue?.opening_monday, lycheVenue?.closing_monday)}
+          {openingHourRow(`${t(KEY.day_tuesday)}`, lycheVenue?.opening_tuesday, lycheVenue?.closing_tuesday)}
+          {openingHourRow(`${t(KEY.day_wednesday)}`, lycheVenue?.opening_wednesday, lycheVenue?.closing_wednesday)}
+          {openingHourRow(`${t(KEY.day_thursday)}`, lycheVenue?.opening_thursday, lycheVenue?.closing_thursday)}
         </>
       )}
 
@@ -82,29 +71,19 @@ export function LychePage() {
         <>
           {openingHourRow(
             `${t(KEY.day_friday)}-${t(KEY.day_saturday)}`,
-            `${lycheVenue?.opening_friday?.substring(0, 5)}-${lycheVenue?.closing_friday?.substring(0, 5)}`,
+            lycheVenue?.opening_friday,
+            lycheVenue?.closing_friday,
           )}
         </>
       ) : (
         <>
-          {openingHourRow(
-            `${t(KEY.day_friday)}`,
-            `${lycheVenue?.opening_friday?.substring(0, 5)}-${lycheVenue?.closing_friday?.substring(0, 5)}`,
-          )}
-          {openingHourRow(
-            `${t(KEY.day_saturday)}`,
-            `${lycheVenue?.opening_saturday?.substring(0, 5)}-${lycheVenue?.closing_saturday?.substring(0, 5)}`,
-          )}
+          {openingHourRow(`${t(KEY.day_friday)}`, lycheVenue?.opening_friday, lycheVenue?.closing_friday)}
+          {openingHourRow(`${t(KEY.day_saturday)}`, lycheVenue?.opening_saturday, lycheVenue?.closing_saturday)}
         </>
       )}
 
       {/* Sunday hours */}
-      <>
-        {openingHourRow(
-          `${t(KEY.day_sunday)}`,
-          `${lycheVenue?.opening_sunday?.substring(0, 5)}-${lycheVenue?.closing_sunday?.substring(0, 5)}`,
-        )}
-      </>
+      {openingHourRow(`${t(KEY.day_sunday)}`, lycheVenue?.opening_sunday, lycheVenue?.closing_sunday)}
     </div>
   );
 
