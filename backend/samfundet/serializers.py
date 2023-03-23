@@ -39,10 +39,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
+    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
 
     class Meta:
         model = Image
-        fields = '__all__'
+        exclude = ['image']
+
+    def get_url(self, image: Image) -> str:
+        return image.image.url if image.image else None
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -55,7 +59,19 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        exclude = ['image']
+        fields = '__all__'
+        read_only_fields = ['image']
+
+    def create(self, validated_data: dict) -> Event:
+        """
+        Uses the write_only field 'image_id' to get an Image object
+        and sets it in the new event. Read/write only fields enable
+        us to use the same serializer for both reading and writing.
+        """
+        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
+        event = Event(**validated_data)
+        event.save()
+        return event
 
     def get_image_url(self, event: Event) -> str:
         return event.image.image.url if event.image else None

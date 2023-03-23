@@ -75,16 +75,18 @@ export type EventDto = {
   id: number;
   title_nb: string;
   title_en: string;
-  start_dt: Date;
+  start_dt: string;
   duration: number;
-  end_dt: Date;
+  end_dt: string;
   description_long_nb: string;
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
-  publish_dt: Date;
+  publish_dt: string;
   host: string;
   location: string;
+  // EVENT GROUP IS NOT THE EVENT TYPE/CATEGORY.
+  // Used to group multiple similar events together
   event_group: EventGroupDto;
   price_group: string;
   status_group: string;
@@ -92,6 +94,7 @@ export type EventDto = {
   codeword: string;
   image_url: string;
   category: string;
+  image: ImageDto;
 };
 
 export type EventGroupDto = {
@@ -227,7 +230,7 @@ export type TagDto = {
 export type ImageDto = {
   id: number;
   title: string;
-  image: string;
+  url: string;
   tags: TagDto[];
 };
 

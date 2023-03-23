@@ -22,36 +22,16 @@ export class AlphabeticTableCell implements ITableCell {
     this.children = child;
   }
 
-  // compare(other: ITableCell) {
-  //   if (!this.children) {
-  //     return 1;
-  //   }
-
-  // const child1 = this.children;
-  // const child2 = other.children;
-
-  // if (typeof child1 != 'string') {
-  //   if (!('children' in child1.props)) {
-  //     child1 = child1.props.timestamp;
-  //   } else {
-  //     child1 = child1.props.children;
-  //   }
-  // }
-
-  // if (typeof child2 != 'string') {
-  //   if (!('children' in child2.props)) {
-  //     child2 = child2.props.timestamp; //Todo upgrade timestamp compare
-  //   } else {
-  //     child2 = child2.props.children;
-  //   }
-  // }
-  // return child1.localeCompare(child2);
-
-  // Returns 0 − If this and other matches 100%.
-  // Returns 1 if no match, and the parameter value comes before the string object's value in the locale sort order.
-  // Returns a negative value if no match,
-  // and the parameter value comes after the string object's value in the local sort order.
-  // }
+  compare(other: ITableCell) {
+    if (!this.children) {
+      return 1;
+    }
+    const child1 = this.children;
+    const child2 = other.children;
+    if (child1 === undefined) return -1;
+    if (child2 === undefined) return 1;
+    return child1.localeCompare(child1);
+  }
 }
 
 export function Table({ className, columns, data }: TableProps) {
@@ -66,7 +46,7 @@ export function Table({ className, columns, data }: TableProps) {
     // If allCellsAreSortable becomes false at any point the function will return false
     return column.reduce((allCellsAreSortable, cell) => {
       const hasCell = cell != undefined;
-      const hasCompare = cell.compare != undefined;
+      const hasCompare = hasCell && cell.compare != undefined;
       return hasCell && hasCompare && allCellsAreSortable;
     }, true);
   }
