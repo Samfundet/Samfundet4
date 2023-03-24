@@ -36,4 +36,5 @@ export const ROUTES_FRONTEND = {
   admin_images_create: '/admin/images/create/',
   admin_saksdokumenter_create: '/admin/saksdokument/create/',
   admin_saksdokumenter_edit: '/admin/saksdokument/edit/:id/',
+  route_overview: '/route/overview/',
 } as const;
