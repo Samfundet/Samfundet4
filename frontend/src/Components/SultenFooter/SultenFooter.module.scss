@@ -33,6 +33,7 @@ $header-width: 6em;
 
 .icon {
   color: $grey-3;
+  z-index: 1;
 
   &:hover {
     cursor: pointer;
