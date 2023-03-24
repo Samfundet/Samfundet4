@@ -31,9 +31,8 @@ import {
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
-import { NavbarLayout } from './Components/Navbar';
-import { SultenFooter } from './Components/SultenFooter';
-import { SultenNavbarLayout } from './Components/SultenNavbar';
+import { SamfOutlet } from './Components/SamfOutlet';
+import { SultenOutlet } from './Components/SultenOutlet';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
@@ -42,7 +41,7 @@ export function AppRoutes() {
 
   return (
     <Routes>
-      <Route element={<NavbarLayout />}>
+      <Route element={<SamfOutlet />}>
         <Route path={ROUTES.frontend.home} element={<HomePage />} />
         <Route path={ROUTES.frontend.about} element={<AboutPage />} />
         <Route path={ROUTES.frontend.health} element={<HealthPage />} />
@@ -75,9 +74,8 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
-      <Route element={<SultenNavbarLayout />}>
+      <Route element={<SultenOutlet />}>
         <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
-        <Route path="*" element={<SultenFooter />} />
       </Route>
     </Routes>
   );
