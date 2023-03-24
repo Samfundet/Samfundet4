@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
   AdminPage,
@@ -15,6 +16,7 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
+  RouteOverviewPage,
   SaksdokumenterPage,
 } from '~/Pages';
 import {
@@ -30,7 +32,6 @@ import {
   InformationFormAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
-import { useGoatCounter } from '~/hooks';
 import { NavbarLayout } from './Components/Navbar';
 import { SultenNavbarLayout } from './Components/SultenNavbar';
 import { ROUTES } from './routes';
@@ -72,6 +73,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+        <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route element={<SultenNavbarLayout />}>
