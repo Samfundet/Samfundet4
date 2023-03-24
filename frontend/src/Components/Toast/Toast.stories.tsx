@@ -12,6 +12,10 @@ export default {
   },
 } as ComponentMeta<typeof Toast>;
 
+const Template: ComponentStory<typeof Toast> = function (args) {
+  return <Toast {...args} />;
+};
+
 const AllPositionsTemplate: ComponentStory<typeof Toast> = function (args) {
   return (
     <>
@@ -23,3 +27,8 @@ const AllPositionsTemplate: ComponentStory<typeof Toast> = function (args) {
 };
 
 export const AllPositions = AllPositionsTemplate.bind({});
+
+export const TopRight = Template.bind({});
+TopRight.args = {
+  position: 'top-right',
+};
