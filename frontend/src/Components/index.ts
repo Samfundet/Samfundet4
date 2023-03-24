@@ -35,6 +35,8 @@ export { Select } from './Select';
 export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
 export { SplashHeaderBox } from './SplashHeaderBox';
+export { SultenButton } from './SultenButton';
+export { SultenCard } from './SultenCard';
 export { SultenNavbar } from './SultenNavbar';
 export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
