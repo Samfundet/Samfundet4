@@ -1,7 +1,6 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from '~/AppRoutes';
-import { Navbar } from '~/Components/Navbar';
 
 // Neccessary import for translations.
 import './i18n/i18n';
@@ -28,7 +27,6 @@ export function App() {
             </Helmet>
           </>
         )}
-        <Navbar />
         <AppRoutes />
       </BrowserRouter>
     </HelmetProvider>

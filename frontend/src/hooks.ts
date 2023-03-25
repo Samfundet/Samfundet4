@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { getTextItem } from '~/api';
 import { desktopBpLower, mobileBpUpper } from './constants';
+import { TextItemDto } from './dto';
+import { LANGUAGES } from './i18n/constants';
 
 // Make typescript happy.
 declare global {
@@ -25,9 +29,9 @@ export function useGoatCounter(): void {
   }, [location]);
 }
 
-// ------------------------------
-
-// Return true while on desktop width, false otherwise
+/**
+ * Return true while on desktop width, false otherwise
+ */
 export function useDesktop(): boolean {
   const [width, setWidth] = useState(window.innerWidth);
   const updateMedia = () => {
@@ -41,8 +45,9 @@ export function useDesktop(): boolean {
   return width > desktopBpLower;
 }
 
-// ------------------------------
-
+/**
+ * @returns true if mobile, false otherwise
+ */
 export function useMobile(): boolean {
   const [width, setWidth] = useState(window.innerWidth);
   const updateMedia = () => {
@@ -54,6 +59,21 @@ export function useMobile(): boolean {
     return () => window.removeEventListener('resize', updateMedia);
   });
   return width < mobileBpUpper;
+}
+
+/**
+ *  Hook that returns the correct translation for given key
+ */
+export function useTextItem(key: string, language?: string): string | undefined {
+  const [textItem, setTextItem] = useState<TextItemDto>();
+  const { i18n } = useTranslation();
+  const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
+  useEffect(() => {
+    getTextItem(key).then((data) => {
+      setTextItem(data);
+    });
+  }, [key]);
+  return isNorwegian ? textItem?.text_nb : textItem?.text_en;
 }
 
 /**

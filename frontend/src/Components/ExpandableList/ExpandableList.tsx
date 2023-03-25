@@ -1,6 +1,6 @@
 import { Children } from '~/types';
+import { useExpandableListContext } from './components/ExpandableListContextProvider/ExpandableListContextProvider';
 import styles from './ExpandableList.module.scss';
-import { useExpandableListContext } from './ExpandableListContext/ExpandableListContext';
 
 type ExpandableListProps = {
   children: Children;

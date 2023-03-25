@@ -48,6 +48,7 @@ export const KEY = {
   common_tags: 'common_tags',
   common_publication_date: 'common_publication_date',
   common_not_found: 'common_not_found',
+  common_contact: 'common_contact',
   common_next: 'common_next',
   common_previous: 'common_previous',
   gangs_title: 'gangs_title',
@@ -119,6 +120,12 @@ export const KEY = {
   publication: 'publication',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
+  common_sulten: 'common_sulten',
+  sulten_page_book_table: 'sulten_page_book_table',
+  sulten_page_kitchen: 'sulten_page_kitchen',
+  sulten_page_see_menu: 'sulten_page_see_menu',
+  sulten_page_about_us: 'sulten_page_about_us',
+  sulten_page_more_about_us: 'sulten_page_more_about_us',
 } as const;
 
 /**

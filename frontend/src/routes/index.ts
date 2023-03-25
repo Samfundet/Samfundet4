@@ -6,4 +6,4 @@ export const ROUTES = {
   backend: ROUTES_BACKEND,
   frontend: ROUTES_FRONTEND,
   other: ROUTES_OTHER,
-};
+} as const;
