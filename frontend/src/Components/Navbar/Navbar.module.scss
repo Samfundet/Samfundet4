@@ -1,3 +1,4 @@
+/* stylelint-disable function-comma-space-after */
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-class */
 /* stylelint-disable max-nesting-depth */
@@ -50,7 +51,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: $navbar-height;
   background: $navbar-bg;
   color: black;
-  transition: .3s;
+  transition: 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +63,6 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     background: $navbar-bg-dark;
     color: $white;
   }
-
 }
 
 .navbar_inner {
@@ -84,7 +84,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: 100%;
   cursor: pointer;
   text-transform: uppercase;
-  transition: .1s;
+  transition: 0.1s;
   flex: 1;
   text-align: center;
   justify-content: center;
@@ -97,17 +97,20 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
-      to bottom, $navbar-link-light-hover-gradient-top, $navbar-link-light-hover-gradient-bottom
+      to bottom,
+      $navbar-link-light-hover-gradient-top,
+      $navbar-link-light-hover-gradient-bottom
     );
     text-decoration: none;
-        
+
     @include theme-dark {
       background: linear-gradient(
-        to bottom, $navbar-link-dark-hover-gradient-top, $navbar-link-dark-hover-gradient-bottom
+        to bottom,
+        $navbar-link-dark-hover-gradient-top,
+        $navbar-link-dark-hover-gradient-bottom
       );
       color: #eeeeee;
     }
-
   }
 }
 
@@ -118,11 +121,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   margin: 0 1rem;
   width: 250px;
   cursor: pointer;
-  
 }
 
 #navbar_logo_img {
-  width: 100%;
+  width: 100%; // QUESTION: Why is this needed?
+  padding: 13px;
 }
 
 /* Widgets with language, theme, login */
@@ -145,7 +148,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   cursor: pointer;
   border-radius: 3px;
   box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
-  transition: .1s;
+  transition: 0.1s;
   &:hover {
     transform: scale(1.1);
   }
@@ -178,9 +181,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   &:hover {
     color: $red-samf;
   }
-
 }
-
 
 /* Hamburger menu */
 #navbar_hamburger {
@@ -201,11 +202,10 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     height: 4px;
     border-radius: 10px;
     transition: transform 400ms;
-  
+
     @include theme-dark {
       background-color: $white;
     }
-  
   }
 
   &.open {
@@ -221,10 +221,9 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
       transform: translateY(-11px) rotate(45deg);
     }
   }
-
 }
 
-/* Transparent navbar (on top of page) */ 
+/* Transparent navbar (on top of page) */
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
   box-shadow: none;
@@ -239,7 +238,9 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
   .navbar_link:hover {
     background: linear-gradient(
-      to bottom, $navbar-link-transparent-hover-gradient-top, $navbar-link-transparent-hover-gradient-bottom
+      to bottom,
+      $navbar-link-transparent-hover-gradient-top,
+      $navbar-link-transparent-hover-gradient-bottom
     );
     text-decoration: none;
     color: inherit;
@@ -269,12 +270,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   @include for-desktop-up {
     display: none;
   }
-  
+
   @include theme-dark {
     background: $navbar-bg-dark;
     color: white;
   }
-
 }
 
 /* Navbar link mobile */
@@ -301,7 +301,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: .5em;
+  gap: 0.5em;
   max-width: 150px;
   overflow: visible;
   white-space: nowrap;
