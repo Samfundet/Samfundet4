@@ -1,5 +1,4 @@
 import { CSSProperties } from 'react';
-import { FieldValues, UseFormSetValue } from 'react-hook-form/dist/types';
 import { UserDto } from '~/dto';
 
 export type hasPerm = {
@@ -49,47 +48,16 @@ export function getGlobalBackgroundColor(): string {
 }
 
 /**
- * Function for converting JSONDTOData into values accepted by a HTML Form in ReactHookFormFormat
- * Data is set into a reacthookform and returns nothing
- * @param {Record<string, unknown>}  data - The DTO Data
- * @param {UseFormSetValue<FieldValues>} setValue - Function for setting the data into a ReactHookForm
- * @param {string[]} ignore - List of keys in the data to ignore converting
- */
-export function DTOToForm(
-  data: Record<string, unknown>,
-  setValue: UseFormSetValue<FieldValues>,
-  ignore: string[],
-): void {
-  // TODO May need adding more forms of converting, now only accepts integers, strings and datetimes
-  for (const v in data) {
-    if (!(v in ignore)) {
-      if (new Date(data[v] as string).getTime() > 0) {
-        // Checks if data is date
-        const date = new Date(data[v] as string).toISOString();
-        // Determine if data is datetime or date TODO should find better method
-        if ('T00:00:00.00' === date.slice(10, 22)) {
-          setValue(v, date.slice(0, 10));
-        } else {
-          setValue(v, date.slice(0, 16));
-        }
-      } else if (Number.isInteger(data[v])) {
-        // Check if data is a integer
-        setValue(v, parseInt(data[v] as string));
-      } else setValue(v, data[v]);
-    }
-  }
-}
-
-/**
  * Function for creating a style with image url from domain
  * @param {string} url - Server relative URL (eg. /media/image.png)
  */
-export function backgroundImageFromUrl(url?: string): CSSProperties {
+export function backgroundImageFromUrl(url?: string, localImage?: boolean): CSSProperties {
   if (url != null) {
+    const path = localImage === true ? url : `http://localhost:8000${url}`;
     return {
       // TODO this is not safe for production, need to use absolute path
       // We should probably setup better hosting system for dev to emulate prod better
-      backgroundImage: `url("http://localhost:8000${url}")`,
+      backgroundImage: `url(${path})`,
     };
   }
   return {};

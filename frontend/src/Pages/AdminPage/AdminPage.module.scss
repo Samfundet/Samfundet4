@@ -18,7 +18,9 @@
   align-items: flex-end;
   justify-content: space-between;
   text-transform: uppercase;
-  margin: 1em;
+  flex-wrap: wrap;
+  margin-left: 1em;
+  margin-right: 2em;
   .headerText {
     font-size: 2em;
     font-weight: 700;
@@ -53,6 +55,7 @@
   margin-top: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: stretch;
   flex-wrap: wrap;
+  gap: 1em;
 }

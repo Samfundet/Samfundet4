@@ -8,7 +8,13 @@ export default {
 } as ComponentMeta<typeof InputField>;
 
 const Template: ComponentStory<typeof InputField> = function (args) {
-  return <InputField {...args} />;
+  return (
+    <form>
+      <fieldset>
+        <InputField {...args} />
+      </fieldset>
+    </form>
+  );
 };
 
 export const Basic = Template.bind({});

@@ -14,6 +14,7 @@ type ButtonProps = {
   className?: string;
   disabled?: boolean;
   children?: Children;
+  preventDefault?: boolean;
   onClick?: () => void;
 };
 
@@ -37,7 +38,6 @@ const mapDisplayToStyle: { [display in ButtonDisplay]: string } = {
 
 export function Button({
   name,
-  type,
   theme = 'basic',
   display = 'basic',
   rounded = false,
@@ -45,6 +45,7 @@ export function Button({
   disabled,
   className,
   children,
+  preventDefault = false,
 }: ButtonProps) {
   const classNames = classnames(
     styles.button,
@@ -53,9 +54,19 @@ export function Button({
     rounded ? styles.rounded : '',
     className,
   );
+
+  function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
+    if (preventDefault) {
+      e?.preventDefault();
+    }
+    onClick?.();
+  }
+
   return (
-    <button name={name} onClick={onClick} type={type} disabled={disabled} className={classNames}>
-      {children}
-    </button>
+    <>
+      <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
+        {children}
+      </button>
+    </>
   );
 }

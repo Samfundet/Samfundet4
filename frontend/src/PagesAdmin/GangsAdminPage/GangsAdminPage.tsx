@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { getGangList } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
+import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { AlphabeticTableCell, Table } from '~/Components/Table';
 import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -15,6 +17,7 @@ import styles from './GangsAdminPage.module.scss';
 export function GangsAdminPage() {
   const navigate = useNavigate();
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
+  const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t, i18n } = useTranslation();
 
@@ -25,8 +28,14 @@ export function GangsAdminPage() {
       .then((data) => {
         setGangs(data);
         setShowSpinner(false);
+        setGangTypeTab({
+          key: data[0].id,
+          label: dbT(data[0], 'title', i18n.language) ?? '?',
+          value: data[0],
+        });
       })
       .catch(console.error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (showSpinner) {
@@ -36,6 +45,17 @@ export function GangsAdminPage() {
       </div>
     );
   }
+
+  const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
+    return {
+      key: gangType.id,
+      label: dbT(gangType, 'title', i18n.language) ?? '?',
+      value: gangType,
+    };
+  });
+
+  const currentGangType = currentGangTypeTab?.value;
+
   // TODO ADD TRANSLATIONS pr element
   return (
     <Page>
@@ -51,53 +71,39 @@ export function GangsAdminPage() {
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
         {t(KEY.admin_gangs_create)}
       </Button>
-      {gangTypes.map(function (element, key) {
-        return (
-          <div key={key}>
-            <h2 className={styles.gangTypeHeader}>{dbT(element, 'title', i18n.language) as string}</h2>
-            <Table
-              columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
-              data={element.gangs.map(function (element2) {
-                return [
-                  new AlphabeticTableCell(
-                    // <Link
-                    //   url={
-                    //     element2.info_page &&
-                    //     reverse({
-                    //       pattern: ROUTES.frontend.information_page_detail,
-                    //       urlParams: { slugField: element2.info_page },
-                    //     })
-                    //   }
-                    // >
-                    //   {dbT(element2, 'name', i18n.language) as string}
-                    // </Link>
-                    dbT(element2, 'name', i18n.language) as string,
+
+      <br></br>
+      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab}></TabBar>
+      <br></br>
+
+      {currentGangType && (
+        <>
+          <Table
+            columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
+            data={currentGangType.gangs.map(function (element2) {
+              return [
+                new AlphabeticTableCell(dbT(element2, 'name', i18n.language) as string),
+                new AlphabeticTableCell(element2.abbreviation),
+                new AlphabeticTableCell(element2.webpage),
+                {
+                  children: (
+                    <CrudButtons
+                      onEdit={() => {
+                        navigate(
+                          reverse({
+                            pattern: ROUTES.frontend.admin_gangs_edit,
+                            urlParams: { id: element2.id },
+                          }),
+                        );
+                      }}
+                    />
                   ),
-                  new AlphabeticTableCell(element2.abbreviation),
-                  new AlphabeticTableCell(element2.webpage),
-                  {
-                    children: (
-                      <Button
-                        onClick={() =>
-                          navigate(
-                            reverse({
-                              pattern: ROUTES.frontend.admin_gangs_edit,
-                              urlParams: { id: element2.id },
-                            }),
-                          )
-                        }
-                        theme="blue"
-                      >
-                        Rediger gjeng
-                      </Button>
-                    ),
-                  },
-                ];
-              })}
-            />
-          </div>
-        );
-      })}
+                },
+              ];
+            })}
+          />
+        </>
+      )}
     </Page>
   );
 }

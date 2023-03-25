@@ -36,51 +36,13 @@
   margin-bottom: 0.2em;
 }
 
-.inputGroup {
-  border-top: 0.15em solid $grey-2;
-  margin-top: 1em;
-  padding-top: 1em;
-  padding-bottom: 1em;
-}
-
-.input {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-.inputGroupHeader {
-  font-weight: 700;
-  font-size: 2em;
-  margin-bottom: 1em;
-  margin-top: 0.5em;
-}
-
-.submit {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.5em;
-}
-
-.submitContainer {
-  display: flex;
-  justify-content: center;
-  margin: 2em;
-}
-
 .row {
   display: flex;
-  flex-direction: row;
-}
-
-.col {
-  flex: 1;
-}
-
-.markdownField {
-  border: 1px solid $grey-2;
-  border-radius: 2px;
-  height: 100%;
-  margin: 1em;
-  padding: 2em;
+  flex-direction: column;
+  margin-top: .5em;
+  gap: 1.5em;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
 }
 

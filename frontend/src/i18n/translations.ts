@@ -2,6 +2,7 @@
 import { KEY, KeyValues } from '~/i18n/constants';
 
 export const nb: Record<KeyValues, string> = {
+  [KEY.common_contact]: 'Kontakt',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_information]: 'Informasjon',
   [KEY.common_internal]: 'Intern',
@@ -42,6 +43,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_contact_us]: 'Kontakt oss',
   [KEY.common_not_found]: 'Ikke funnet',
+  [KEY.common_next]: 'Neste',
+  [KEY.common_previous]: 'Forrige',
   [KEY.gang]: 'Gjeng',
   [KEY.gangs_title]: 'Gjengene på Samfundet',
   [KEY.gangs_text]:
@@ -118,7 +121,13 @@ export const nb: Record<KeyValues, string> = {
   [KEY.publication]: 'Publisering',
   [KEY.closed_period]: 'Stengt periode',
   [KEY.saksdokument]: 'Saksdokument',
-  [KEY.event]: '',
+  [KEY.common_sulten]: 'Lyche',
+  [KEY.sulten_page_book_table]: 'Bestill bord',
+  [KEY.sulten_page_kitchen]: 'Kjøkken',
+  [KEY.sulten_page_see_menu]: 'Se meny',
+  [KEY.sulten_page_about_us]: 'Om Lyche',
+  [KEY.sulten_page_more_about_us]: 'Mer om oss',
+  [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -155,9 +164,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_menu]: 'Menu',
   [KEY.common_about_us]: 'About us',
+  [KEY.common_contact]: 'Contact',
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_not_found]: 'Not found',
+  [KEY.common_next]: 'Next',
+  [KEY.common_previous]: 'Previous',
   [KEY.norwegian]: 'Norwegian',
   [KEY.english]: 'English',
   [KEY.login_forgotten_password]: 'Forgot password?',
@@ -236,7 +248,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.publication]: 'Publication',
   [KEY.closed_period]: 'Closed period',
   [KEY.saksdokument]: 'case document',
+  [KEY.common_sulten]: 'Lyche',
+  [KEY.sulten_page_book_table]: 'Book table',
+  [KEY.sulten_page_kitchen]: 'Kitchen',
+  [KEY.sulten_page_see_menu]: 'See our menu',
+  [KEY.sulten_page_about_us]: 'About Lyche',
+  [KEY.sulten_page_more_about_us]: 'More about us',
   [KEY.admin_information_new_page]: '',
   [KEY.admin_information_create_page]: '',
-  [KEY.event]: '',
+  [KEY.admin_saksdokumenter_title]: 'Manage Documents',
 };

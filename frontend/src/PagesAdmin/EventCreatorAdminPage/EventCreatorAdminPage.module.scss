@@ -1,0 +1,90 @@
+/* stylelint-disable declaration-block-no-duplicate-properties */
+
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.header {
+  font-size: 2em;
+  font-weight: 700;
+  margin-top: 1em;
+  margin-bottom: .5em;
+  margin-left: .5em;
+}
+
+.inner_header {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.outer_container{
+  @include flex-row;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.form_container {
+  @include rounded-heavy;
+  background-color: $background-secondary;
+  padding: 2em;
+  flex: 1;
+  @include theme-dark {
+    background-color: $grey-1;
+  }
+}
+
+.tab_label {
+  @include flex-row;
+  flex: 1;
+  gap: 1em;
+}
+
+.done {
+  color: $green;
+}
+
+.error {
+  color: $red;
+}
+
+.tab_form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.input_row {
+  @include flex-row;
+  justify-content: stretch;
+  gap: 1.5em;
+  @include for-mobile-only {
+    flex-direction: column;
+  }
+}
+
+.half {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.button_row {
+  @include flex-row;
+  justify-content: space-between;
+  justify-content: space-between;
+  margin-top: 1.5em;
+}
+
+.done_row {
+  @include flex-row;
+  justify-content: flex-end;
+  font-weight: 700;
+  font-size: 1.25em;
+  gap: 1em;
+}
+
+.done_icon {
+  color: $green;
+}
+
