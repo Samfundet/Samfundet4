@@ -2,13 +2,7 @@
 
 @import 'src/mixins';
 
-.row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5em;
-}
-
-.crud_button {
+.icon_button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,12 +18,4 @@
     filter: brightness(105%);
     transform: scale(1.1);
   }
-}
-
-.red {
-  background-color: $red;
-}
-
-.blue {
-  background-color: $blue;
 }
