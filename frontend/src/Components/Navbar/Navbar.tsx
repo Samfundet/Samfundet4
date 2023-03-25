@@ -30,13 +30,13 @@ export function Navbar() {
   const scrolledNavbar = scrollY > scrollDistanceForOpaque;
 
   // Navbar style
-  const isRootPath = useLocation().pathname == '/';
+  const isRootPath = useLocation().pathname === ROUTES.frontend.home;
   const transparentNavbar = isRootPath && !scrolledNavbar && !mobileNavigation;
   const navbarStyle = classNames(
     transparentNavbar && styles.transparent_navbar,
     mobileNavigation && styles.navbar_mobile,
   );
-  const navbarImage = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
+  const navbarLogo = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
 
   function languageImage() {
     if (i18n.language == LANGUAGES.NB) {
@@ -166,8 +166,8 @@ export function Navbar() {
     <>
       <nav id={styles.navbar_container} className={navbarStyle}>
         <div className={styles.navbar_inner}>
-          <Link to="/" id={styles.navbar_logo}>
-            <img src={navbarImage} id={styles.navbar_logo_img} />
+          <Link to={ROUTES.frontend.home} id={styles.navbar_logo}>
+            <img src={navbarLogo} id={styles.navbar_logo_img} />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
