@@ -1,5 +1,7 @@
-import { Icon } from '@iconify/react';
-import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+import { IconButton } from '~/Components';
+import { KEY } from '~/i18n/constants';
+import { COLORS } from '~/types';
 import styles from './CrudButtons.module.scss';
 
 type CrudButtonsProps = {
@@ -8,29 +10,11 @@ type CrudButtonsProps = {
 };
 
 export function CrudButtons({ onEdit, onDelete }: CrudButtonsProps) {
-  function handleOnClickEdit(e?: React.MouseEvent<HTMLElement>) {
-    e?.preventDefault();
-    onEdit?.();
-  }
-  function handleOnClickDelete(e?: React.MouseEvent<HTMLElement>) {
-    e?.preventDefault();
-    onDelete?.();
-  }
-
+  const { t } = useTranslation();
   return (
-    <>
-      <div className={styles.row}>
-        {onEdit && (
-          <button onClick={handleOnClickEdit} className={classNames(styles.crud_button, styles.blue)}>
-            <Icon icon="mdi:pencil" />
-          </button>
-        )}
-        {onDelete && (
-          <button onClick={handleOnClickDelete} className={classNames(styles.crud_button, styles.red)}>
-            <Icon icon="mdi:bin" />
-          </button>
-        )}
-      </div>
-    </>
+    <div className={styles.row}>
+      {onEdit && <IconButton onClick={onEdit} color={COLORS.blue} title={t(KEY.common_edit)} icon="mdi:pencil" />}
+      {onDelete && <IconButton onClick={onDelete} color={COLORS.red} title={t(KEY.common_delete)} icon="mdi:bin" />}
+    </div>
   );
 }

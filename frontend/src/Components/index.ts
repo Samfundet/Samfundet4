@@ -12,6 +12,7 @@ export { EventCard } from './EventCard';
 export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
 export { ExpandableList } from './ExpandableList';
+export { IconButton } from './IconButton';
 export { Image } from './Image';
 export { ImageCard } from './ImageCard';
 export { ImageList } from './ImageList';
