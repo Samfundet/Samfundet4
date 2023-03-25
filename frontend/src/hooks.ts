@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { getTextItem } from '~/api';
+import { useAuthContext } from '~/AuthContext';
+import { hasPerm } from '~/utils';
 import { desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
@@ -139,4 +141,13 @@ export function usePrevious<T>(value: T): T | undefined {
     ref.current = value;
   }, [value]);
   return ref.current;
+}
+
+/**
+ * Shorthand to check if current user has a given permission.
+ */
+export function usePermission(permission: string, obj?: string | number): boolean {
+  const { user } = useAuthContext();
+  const hasPermission = hasPerm({ permission: permission, user: user, obj: obj });
+  return hasPermission;
 }

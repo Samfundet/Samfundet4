@@ -1,6 +1,8 @@
 import classNames from 'classnames';
-import { createContext, Dispatch, ReactNode, useEffect, useReducer } from 'react';
+import { createContext, Dispatch, ReactNode, useEffect, useReducer, useState } from 'react';
 import { Button } from '~/Components';
+import { usePermission } from '~/hooks';
+import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
 
 // ================================== //
@@ -80,8 +82,7 @@ type SamfFormProps<T> = {
   onValidityChanged?(valid: boolean): void;
   onSubmit?(data: Partial<T>): void;
   children: ReactNode;
-  // Deb/debug mode
-  devMode?: boolean;
+  devMode?: boolean; // Dev/debug mode.
 };
 
 export function SamfForm<T>({
@@ -102,6 +103,9 @@ export function SamfForm<T>({
     allFields: Object.keys(initialData),
   };
   const [state, dispatch] = useReducer(samfFormReducer, initialFormState);
+  const canDebug = usePermission(PERM.SAMFUNDET_DEBUG);
+  const [isDebugMode, setIsDebugMode] = useState(devMode);
+  const showDevMode = isDebugMode && canDebug;
 
   // Calculate if entire form is valid
   let allValid = true;
@@ -133,7 +137,7 @@ export function SamfForm<T>({
   }, [state.errors]);
 
   // Debug preview, very useful to develop forms
-  const devModePreview = devMode && (
+  const devModePreview = showDevMode && (
     <div className={styles.debug_box}>
       <div className={styles.debug_column}>
         <h2 className={styles.debug_header}>Form State</h2>
@@ -183,6 +187,7 @@ export function SamfForm<T>({
             </div>
           )}
         </form>
+        {canDebug && <button onClick={() => setIsDebugMode(!isDebugMode)}>Debug</button>}
         {devModePreview}
       </SamfFormConfigContext.Provider>
     </SamfFormContext.Provider>
