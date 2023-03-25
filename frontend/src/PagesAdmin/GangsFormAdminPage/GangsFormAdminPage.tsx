@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getGang, getGangForm } from '~/api';
+import { getGang } from '~/api';
 import { Button, Page, SamfundetLogoSpinner } from '~/Components';
 import { GangDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -18,25 +18,17 @@ export function GangsFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<Record<string, unknown>>();
-  formChoices;
+  const [gang, setGang] = useState<Partial<GangDto>>({});
 
   //TODO add permissions on render
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    // TODO add fix on no id on editpage
-    getGangForm()
-      .then((response) => {
-        setFormChoices(response.data);
-        setShowSpinner(false);
-      })
-      .catch(console.error);
     if (id) {
       getGang(id)
-        .then((data) => {
-          data;
-          //DTOToForm(data, setValue, []);
+        .then((gang) => {
+          setGang(gang);
+          setShowSpinner(false);
         })
         .catch((data) => {
           // TODO add error pop up message?
@@ -44,8 +36,9 @@ export function GangsFormAdminPage() {
             navigate(ROUTES.frontend.admin_gangs);
           }
         });
+    } else {
+      setShowSpinner(false);
     }
-    setShowSpinner(false);
   }, [id]);
 
   function handleOnSubmit(data: GangDto) {
@@ -76,7 +69,13 @@ export function GangsFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.gang)}
       </h1>
-      <SamfForm onSubmit={handleOnSubmit} submitText={submitText}>
+      <SamfForm
+        initialData={gang}
+        onSubmit={handleOnSubmit}
+        submitText={submitText}
+        validateOnInit={id !== undefined}
+        devMode={true}
+      >
         <div className={styles.row}>
           <SamfFormField field="name_nb" type="text" label={`${t(KEY.norwegian)} ${t(KEY.name)}`} />
           <SamfFormField field="name_en" type="text" label={`${t(KEY.english)} ${t(KEY.name)}`} />

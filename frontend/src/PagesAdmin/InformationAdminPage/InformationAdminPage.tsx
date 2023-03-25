@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
 import { InformationPageDto } from '~/dto';
@@ -63,31 +64,21 @@ export function InformationAdminPage() {
       new AlphabeticTableCell('To be added'),
       {
         children: (
-          <div>
-            <Button
-              theme="blue"
-              onClick={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.information_page_edit,
-                    urlParams: { slugField: element.slug_field },
-                  }),
-                );
-              }}
-            >
-              {t(KEY.edit)}
-            </Button>
-            <Button
-              theme="samf"
-              onClick={() => {
-                if (window.confirm(t(KEY.admin_information_confirm_delete) as string)) {
-                  deletePage(element.slug_field);
-                }
-              }}
-            >
-              {t(KEY.delete)}
-            </Button>{' '}
-          </div>
+          <CrudButtons
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.information_page_edit,
+                  urlParams: { slugField: element.slug_field },
+                }),
+              );
+            }}
+            onDelete={() => {
+              if (window.confirm(t(KEY.admin_information_confirm_delete) as string)) {
+                deletePage(element.slug_field);
+              }
+            }}
+          />
         ),
       } as ITableCell,
     ];
