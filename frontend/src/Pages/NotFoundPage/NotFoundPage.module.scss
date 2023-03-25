@@ -1,3 +1,23 @@
-.contact_prompt {
-  font-style: italic;
+@import "src/constants.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-width: 60vw;
+  margin: 0 auto;
+}
+
+.image {
+  max-width: 60vw;
+  background-size: cover;
+}
+
+.text {
+  margin-top: 1em;
+  max-width: 200px;
+  text-align: center;
+  color: $grey-3;
 }

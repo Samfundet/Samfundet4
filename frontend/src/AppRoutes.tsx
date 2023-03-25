@@ -76,11 +76,11 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
-        <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route element={<SultenNavbarLayout />}>
         <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
       </Route>
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
