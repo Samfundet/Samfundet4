@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { createContext, Dispatch, ReactElement, useEffect, useReducer } from 'react';
+import { createContext, Dispatch, ReactNode, useEffect, useReducer } from 'react';
 import { Button } from '~/Components';
 import styles from './SamfForm.module.scss';
 
@@ -75,11 +75,11 @@ function samfFormReducer<T extends SamfFormModel, U>(
 type SamfFormProps<T> = {
   initialData?: Partial<T>;
   validateOnInit?: boolean;
-  submitButton?: boolean | string;
+  submitText?: string;
   onChange?<T>(data: Partial<T>): void;
   onValidityChanged?(valid: boolean): void;
   onSubmit?(data: Partial<T>): void;
-  children: ReactElement | ReactElement[];
+  children: ReactNode;
   // Deb/debug mode
   devMode?: boolean;
 };
@@ -87,7 +87,7 @@ type SamfFormProps<T> = {
 export function SamfForm<T>({
   initialData = {},
   validateOnInit = false,
-  submitButton = false,
+  submitText,
   onChange,
   onValidityChanged,
   onSubmit,
@@ -168,7 +168,7 @@ export function SamfForm<T>({
       <SamfFormConfigContext.Provider value={{ validateOnInit }}>
         <form className={styles.samf_form}>
           {children}
-          {submitButton && (
+          {onSubmit !== undefined && (
             <div className={styles.submit_row}>
               <Button
                 preventDefault={true}
@@ -178,7 +178,7 @@ export function SamfForm<T>({
                 onClick={handleOnClickSubmit}
                 disabled={!allValid}
               >
-                {submitButton !== true ? submitButton : 'Lagre'}
+                {submitText !== undefined ? submitText : 'Lagre'}
               </Button>
             </div>
           )}

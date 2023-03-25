@@ -31,7 +31,7 @@ const options: DropDownOption<string>[] = [
 
 export const Basic = Template.bind({});
 Basic.args = {
-  submitButton: 'Lagre - Demo',
+  submitText: 'Lagre - Demo',
   devMode: true,
   children: (
     <>

@@ -35,14 +35,19 @@ video {
   max-width: initial;
 }
 
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: $theme-light-bg;
 
   // Disable scrolling when mobile navbar is open
@@ -92,8 +97,8 @@ label {
   color: $theme-dark-color;
 
   form {
-    background-color: $grey-1;
-    border: 1px solid $grey-2;
+    background-color: $form-bg-dark;
+    border: 1px solid $form-border-dark;
   }
 
   label {

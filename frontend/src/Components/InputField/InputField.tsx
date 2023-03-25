@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { ChangeEvent } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
@@ -20,7 +19,6 @@ type InputFieldProps<T> = {
   error?: string | boolean;
   helpText?: string;
   icon?: string;
-  register?: UseFormRegisterReturn;
 };
 
 export function InputField<T>({
@@ -36,7 +34,6 @@ export function InputField<T>({
   helpText,
   type = 'text',
   icon,
-  register,
 }: InputFieldProps<T>) {
   function handleChange(e?: ChangeEvent<HTMLInputElement>) {
     let value: string | number | undefined = e?.currentTarget.value ?? '';
@@ -59,7 +56,6 @@ export function InputField<T>({
         disabled={disabled}
         type={type}
         value={value}
-        {...register}
       />
       {icon && (
         <div className={styles.icon_container}>

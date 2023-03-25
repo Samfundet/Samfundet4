@@ -37,7 +37,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.login_container}>
       {loginFailed && (
         <Alert
           message="Login failed"
@@ -50,7 +50,7 @@ export function LoginPage() {
         ></Alert>
       )}
       <div className={styles.content_container}>
-        <SamfForm onSubmit={handleLogin} submitButton={t(KEY.common_login) ?? ''}>
+        <SamfForm onSubmit={handleLogin} submitText={t(KEY.common_login) ?? ''}>
           <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
           <SamfFormField field="name" type="text" label={t(KEY.login_email_placeholder) ?? ''} />
           <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />

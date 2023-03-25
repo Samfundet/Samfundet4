@@ -9,7 +9,7 @@ export const applets: Applet[] = [
     icon: 'material-symbols:help-outline-sharp',
     options: [
       {
-        text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjenglederen din for å få tilgang.',
+        text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjengsjefen din for å få tilgang.',
         url: '',
         type: TYPE.INFO,
       },
@@ -55,7 +55,7 @@ export const applets: Applet[] = [
     perm: PERM.SAMFUNDET_ADD_IMAGE,
     icon: 'clarity:image-gallery-line',
     options: [
-      { text: 'Nytt Bilde', url: '', type: TYPE.ADD },
+      { text: 'Nytt Bilde', url: ROUTES.frontend.admin_images_create, type: TYPE.ADD },
       { text: 'Gå til Bildearkiv', url: ROUTES.frontend.admin_images, type: TYPE.MANAGE },
     ],
   },
