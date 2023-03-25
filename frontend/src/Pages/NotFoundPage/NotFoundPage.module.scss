@@ -6,8 +6,9 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  max-width: 60vw;
+  width: 100%;
   margin: 0 auto;
+  background-color: white;
 }
 
 .image {
@@ -20,4 +21,8 @@
   max-width: 200px;
   text-align: center;
   color: $grey-3;
+}
+
+.button_text {
+  color: black;
 }

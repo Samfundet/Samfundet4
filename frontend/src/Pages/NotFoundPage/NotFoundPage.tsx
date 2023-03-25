@@ -20,7 +20,7 @@ export function NotFoundPage() {
           navigate('/');
         }}
       >
-        {t(KEY.back_to_samfundet)}
+        <span className={styles.button_text}>{t(KEY.back_to_samfundet)}</span>
       </Button>
       <br></br>
       <i className={styles.text}>
