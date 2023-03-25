@@ -23,3 +23,4 @@ export { default as sulten_crowded } from './sulten_crowded.jpg';
 export { default as sulten_delivery } from './sulten_delivery.jpg';
 export { default as sulten_inside } from './sulten_inside.jpg';
 export { default as profileIcon } from './user.png';
+export { default as NotFound } from './not-found-404.png';
