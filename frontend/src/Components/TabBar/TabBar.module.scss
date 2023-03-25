@@ -45,6 +45,7 @@
     background-color: $background-primary;
     color: black;
 
+    /* stylelint-disable-next-line max-nesting-depth */
     @include theme-dark {
       background-color: black;
       color: white;
