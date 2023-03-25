@@ -34,6 +34,7 @@ import {
 } from '~/PagesAdmin';
 import { NavbarLayout } from './Components/Navbar';
 import { SultenNavbarLayout } from './Components/SultenNavbar';
+import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
 
 export function AppRoutes() {
@@ -73,6 +74,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+        <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

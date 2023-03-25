@@ -7,8 +7,8 @@ export default {
   component: TabBar,
 } as ComponentMeta<typeof TabBar>;
 
-const Template: ComponentStory<typeof TabBar> = (props: TabBarProps) => {
-  const [tab, setTab] = useState<Tab>(props.tabs[0]);
+const Template: ComponentStory<typeof TabBar<void>> = (props: TabBarProps<void>) => {
+  const [tab, setTab] = useState<Tab<void>>(props.tabs[0]);
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <TabBar {...props} selected={tab} onSetTab={setTab} />

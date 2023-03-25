@@ -65,7 +65,7 @@ export const applets: Applet[] = [
     icon: 'mdi:file-document-outline',
     options: [
       { text: 'Last opp nytt saksdokument', url: ROUTES.frontend.admin_saksdokumenter_create, type: TYPE.ADD },
-      { text: 'Administrer saksdokument', url: ROUTES.frontend.admin_saksdokumenter_edit, type: TYPE.MANAGE },
+      { text: 'Administrer saksdokumenter', url: ROUTES.frontend.admin_saksdokumenter, type: TYPE.MANAGE },
     ],
   },
 ];

@@ -126,6 +126,7 @@ export const KEY = {
   sulten_page_see_menu: 'sulten_page_see_menu',
   sulten_page_about_us: 'sulten_page_about_us',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
+  admin_saksdokumenter_title: 'admin_saksdokumenter_title',
 } as const;
 
 /**

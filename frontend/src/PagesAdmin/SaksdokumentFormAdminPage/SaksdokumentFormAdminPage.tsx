@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
-import { getSaksdokument, getSaksdokumentForm } from '~/api';
+import { getSaksdokument } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -12,6 +12,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './SaksdokumentFormAdminPage.module.scss';
+import { SaksdokumentDto } from '~/dto';
 
 export function SaksdokumentFormAdminPage() {
   const navigate = useNavigate();
@@ -21,24 +22,29 @@ export function SaksdokumentFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<string[][]>();
+  const [document, setDocument] = useState<Partial<SaksdokumentDto>>();
   // Stuff to do on first render.
   //TODO add permissions on render
 
+  // TODO get categories from API (this will not work)
+  const categoryOptions: DropDownOption<string>[] = [
+    { value: 'FS_REFERAT', label: 'FS_REFERAT' },
+    { value: 'ARSBERETNING', label: 'ARSBERETNING' },
+    { value: 'STYRET', label: 'STYRET' },
+    { value: 'RADET', label: 'RADET' },
+  ];
+  const defaultCategoryOption: DropDownOption<string> = {
+    value: document?.category ?? 'FS_REFERAT',
+    label: document?.category ?? 'FS_REFERAT',
+  };
+
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    getSaksdokumentForm()
-      .then((data) => {
-        console.log(data);
-        setFormChoices(data.data.categories);
-        setShowSpinner(false);
-      })
-      .catch(console.error);
     if (id) {
       getSaksdokument(id)
         .then((data) => {
-          //DTOToForm(data, setValue, []);
-          console.log(typeof data);
+          setDocument(data);
+          setShowSpinner(false);
         })
         .catch((data) => {
           console.log(data);
@@ -47,6 +53,8 @@ export function SaksdokumentFormAdminPage() {
             navigate(ROUTES.frontend.admin);
           }
         });
+    } else {
+      setShowSpinner(false);
     }
   }, [id]);
 
@@ -78,7 +86,11 @@ export function SaksdokumentFormAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
+      <Button
+        theme="outlined"
+        onClick={() => navigate(ROUTES.frontend.admin_saksdokumenter)}
+        className={styles.backButton}
+      >
         <p className={styles.backButtonText}>{t(KEY.back)}</p>
       </Button>
       <h1 className={styles.header}>
@@ -86,6 +98,7 @@ export function SaksdokumentFormAdminPage() {
       </h1>
       {/* TODO: fix */}
       <SamfForm
+        initialData={document}
         onSubmit={() => {
           return;
         }}
@@ -109,11 +122,10 @@ export function SaksdokumentFormAdminPage() {
           <SamfFormField
             field="category"
             type="options"
-            options={formChoices?.map((s: string[]) => ({ label: s[0], value: s[0] } as DropDownOption<string>))}
-            label="Status"
+            options={categoryOptions}
+            defaultOption={defaultCategoryOption}
+            label="Type"
           />
-        </div>
-        <div className={styles.row}>
           <SamfFormField
             field="publication_date"
             type="datetime"

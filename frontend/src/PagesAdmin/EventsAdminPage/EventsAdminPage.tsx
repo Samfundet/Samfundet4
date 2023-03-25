@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteEvent, getEventsUpcomming } from '~/api';
 import { Button, EventQuery, Link, SamfundetLogoSpinner } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
 import { EventDto } from '~/dto';
@@ -70,33 +71,23 @@ export function EventsAdminPage() {
       new AlphabeticTableCell(event.location),
       {
         children: (
-          <div>
-            <Button
-              theme="blue"
-              display="block"
-              onClick={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.admin_events_edit,
-                    urlParams: { id: event.id },
-                  }),
-                );
-              }}
-            >
-              {t(KEY.edit)}
-            </Button>
-            <Button
-              theme="samf"
-              display="block"
-              onClick={() => {
-                if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title', i18n.language)}`)) {
-                  deleteSelectedEvent(event.id);
-                }
-              }}
-            >
-              {t(KEY.delete)}
-            </Button>{' '}
-          </div>
+          <CrudButtons
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_events_edit,
+                  urlParams: { id: event.id },
+                }),
+              );
+            }}
+            onDelete={() => {
+              // TODO custom modal confirm
+              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title', i18n.language)}`)) {
+                // TODO toast component? A bit too easy to delete events
+                deleteSelectedEvent(event.id);
+              }
+            }}
+          />
         ),
       } as ITableCell,
     ];
