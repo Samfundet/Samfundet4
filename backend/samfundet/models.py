@@ -57,6 +57,11 @@ class Image(models.Model):
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    class Meta:
+        permissions = [
+            ('debug', 'Can view debug mode'),
+        ]
+
     def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
