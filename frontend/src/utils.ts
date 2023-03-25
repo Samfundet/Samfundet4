@@ -51,12 +51,13 @@ export function getGlobalBackgroundColor(): string {
  * Function for creating a style with image url from domain
  * @param {string} url - Server relative URL (eg. /media/image.png)
  */
-export function backgroundImageFromUrl(url?: string): CSSProperties {
+export function backgroundImageFromUrl(url?: string, localImage?: boolean): CSSProperties {
   if (url != null) {
+    const path = localImage === true ? url : `http://localhost:8000${url}`;
     return {
       // TODO this is not safe for production, need to use absolute path
       // We should probably setup better hosting system for dev to emulate prod better
-      backgroundImage: `url("http://localhost:8000${url}")`,
+      backgroundImage: `url(${path})`,
     };
   }
   return {};

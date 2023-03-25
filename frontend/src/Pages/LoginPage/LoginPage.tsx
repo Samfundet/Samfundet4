@@ -37,7 +37,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.login_container}>
       {loginFailed && (
         <Alert
           message="Login failed"

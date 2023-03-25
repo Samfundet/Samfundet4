@@ -164,7 +164,6 @@ export function Navbar() {
 
   return (
     <>
-      <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container} className={navbarStyle}>
         <div className={styles.navbar_inner}>
           <Link to="/" id={styles.navbar_logo}>

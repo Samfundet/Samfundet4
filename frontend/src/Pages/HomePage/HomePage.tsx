@@ -5,7 +5,6 @@ import splash from '~/assets/banner-sample.jpg';
 import { Carousel } from '~/Components/Carousel';
 import { ContentCard } from '~/Components/ContentCard';
 import { ImageCard } from '~/Components/ImageCard';
-import { SplashHeaderBox } from '~/Components/SplashHeaderBox';
 import { EventDto, HomePageElementDto } from '~/dto';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
@@ -72,7 +71,7 @@ export function HomePage() {
       <img src={splash} alt="Splash" className={styles.splash} />
       <div className={styles.splash_fade}></div>
       <div className={styles.content}>
-        <SplashHeaderBox />
+        {/*<SplashHeaderBox />*/}
         {elements.map((el: HomePageElementDto) => renderElement(el))}
       </div>
     </div>

@@ -1,53 +1,61 @@
-
 @import 'src/mixins';
 
 @import 'src/constants';
 
 .tab_bar {
-    @include rounded-full;
-    @include flex-row;
-    overflow-x: auto;
-    background-color: $background-secondary;
-    padding: .4em;
-    gap: .75em;
+  @include rounded-full;
+  @include flex-row;
+  overflow-x: auto;
+  background-color: $background-secondary;
+  padding: .4em;
+  gap: .75em;
 
-    &.vertical {
-      flex-direction: column;
-      align-items: stretch;
-      text-align: center;
-      @include rounded-heavy;
-    }
+  &.vertical {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    @include rounded-heavy;
+  }
 
-    &.space_between {
-      justify-content: space-between;
-    }
+  &.space_between {
+    justify-content: space-between;
+  }
 
-    &.disabled {
-      pointer-events: none;
-    }
+  &.disabled {
+    pointer-events: none;
+  }
+
+  @include theme-dark {
+    background-color: $grey-1;
+  }
 }
 
 .tab_button {
-    @include rounded-full;
-    @include flex-row-center;
-    background-color: transparent;
-    padding: .8em 1.25em;
-    transition: .2s;
-    cursor: pointer;
-    outline: none;
-    border: none;
-   
-    &.selected {
-        @include shadow-light;
-        background-color: $background-primary;
-        color: black;
-    }
-    &:not(.selected):hover {
-        color: $blue;
-    }
+  @include rounded-full;
+  @include flex-row-center;
+  background-color: transparent;
+  padding: .8em 1.25em;
+  transition: .2s;
+  cursor: pointer;
+  outline: none;
+  border: none;
 
-    &.disabled {
-      color: $grey-1;
+  &.selected {
+    @include shadow-light;
+    background-color: $background-primary;
+    color: black;
+
+    @include theme-dark {
+      background-color: black;
+      color: white;
     }
+  }
+
+  &:not(.selected):hover {
+    color: $blue;
+  }
+
+  &.disabled {
+    color: $grey-1;
+  }
 }
-
