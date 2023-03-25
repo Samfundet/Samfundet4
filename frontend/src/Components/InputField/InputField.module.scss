@@ -2,10 +2,10 @@
 
 @import 'src/mixins';
 
-
 .input_field {
   @include rounded;
   padding: 1em 1em;
+  margin-top: 0.3em;
   border: 1px solid transparent;
   outline: none;
   &:focus {
@@ -54,7 +54,6 @@
   font-size: 1em;
 }
 
-
 .input_field:disabled {
   border: 1px solid transparent;
 }
@@ -77,5 +76,3 @@
   height: 1.5em;
   opacity: 0.4;
 }
-
-
