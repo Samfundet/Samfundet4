@@ -1,0 +1,21 @@
+
+.toast_manager_wrapper {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast_stack {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  transition: .2s;
+  pointer-events: all;
+  overflow-y: auto;
+}
+
