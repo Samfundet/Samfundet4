@@ -1,8 +1,10 @@
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { getTextItem } from '~/api';
-import { desktopBpLower, mobileBpUpper } from './constants';
+import { reverse, ReverseParams } from '~/named-urls';
+import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -139,4 +141,25 @@ export function usePrevious<T>(value: T): T | undefined {
     ref.current = value;
   }, [value]);
   return ref.current;
+}
+
+// type QueryResponse<T> = AxiosResponse<T> & { isLoading: boolean };
+type QueryResponse<T> = { data: T | undefined; isLoading: boolean };
+
+export function useQuery<T>({ pattern, urlParams = {}, queryParams = {} }: ReverseParams): QueryResponse<T> {
+  // const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<T>();
+  // const [response, setResponse] = useState<AxiosResponse<T> | undefined>(undefined);
+  const url = BACKEND_DOMAIN + reverse({ pattern, urlParams, queryParams });
+
+  useEffect(() => {
+    axios
+      .get<T>(url, { withCredentials: true })
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch(console.error);
+  }, [url]);
+
+  return { isLoading: data !== undefined, data };
 }

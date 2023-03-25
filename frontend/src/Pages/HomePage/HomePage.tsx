@@ -1,5 +1,5 @@
-import { reverse } from '~/named-urls';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getHomeData } from '~/api';
 import splash from '~/assets/banner-sample.jpg';
 import { Carousel } from '~/Components/Carousel';
@@ -7,15 +7,23 @@ import { ContentCard } from '~/Components/ContentCard';
 import { ImageCard } from '~/Components/ImageCard';
 import { SplashHeaderBox } from '~/Components/SplashHeaderBox';
 import { EventDto, HomePageElementDto } from '~/dto';
+import { useQuery } from '~/hooks';
+import { dbT } from '~/i18n/i18n';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
-import { ROUTES } from '~/routes';
-import { dbT } from '~/i18n/i18n';
-import { useTranslation } from 'react-i18next';
 
 export function HomePage() {
   const [elements, setHomeElements] = useState<HomePageElementDto[]>([]);
   const { i18n } = useTranslation();
+
+  const { data, isLoading } = useQuery({
+    pattern: ROUTES.backend.samfundet__images_list,
+  });
+
+  const a: string = data;
+  a;
 
   useEffect(() => {
     getHomeData().then((elements: HomePageElementDto[]) => {
