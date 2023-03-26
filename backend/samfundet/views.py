@@ -18,13 +18,11 @@ from rest_framework.viewsets import ModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models import (
-    Tag,
     User,
     Menu,
     Gang,
     Event,
     Table,
-    Image,
     Venue,
     Profile,
     Booking,
@@ -38,10 +36,10 @@ from .models import (
     FoodPreference,
     UserPreference,
     InformationPage,
+    Tag,
+    Image,
 )
 from .serializers import (
-    TagSerializer,
-    ImageSerializer,
     GangSerializer,
     MenuSerializer,
     EventSerializer,
@@ -62,8 +60,14 @@ from .serializers import (
     InformationPageSerializer,
     UserSerializer,
     GroupSerializer,
+    TagSerializer,
+    ImageSerializer,
 )
 from .utils import event_query
+
+# =============================== #
+#          Home Page              #
+# =============================== #
 
 
 class HomePageView(APIView):
@@ -73,10 +77,33 @@ class HomePageView(APIView):
         return Response(data=homepage.generate())
 
 
+# =============================== #
+#            Utility              #
+# =============================== #
+
+
+# Localized text storage
 class TextItemView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = TextItemSerializer
     queryset = TextItem.objects.all()
+
+
+# Images
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()
+
+
+# Image tags
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+# =============================== #
+#           Events                #
+# =============================== #
 
 
 class EventView(ModelViewSet):
@@ -119,6 +146,17 @@ class EventFormView(APIView):
         return Response(data=data)
 
 
+class EventGroupView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = EventGroupSerializer
+    queryset = EventGroup.objects.all()
+
+
+# =============================== #
+#            General              #
+# =============================== #
+
+
 class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
@@ -139,6 +177,68 @@ class IsClosedView(ListAPIView):
             start_dt__lte=timezone.now(),
             end_dt__gte=timezone.now(),
         )
+
+
+class SaksdokumentView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = SaksdokumentSerializer
+    queryset = Saksdokument.objects.all()
+
+
+class GangView(ModelViewSet):
+    serializer_class = GangSerializer
+    queryset = Gang.objects.all()
+
+
+class GangTypeView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = GangTypeSerializer
+    queryset = GangType.objects.all()
+
+
+class InformationPageView(ModelViewSet):
+    serializer_class = InformationPageSerializer
+    queryset = InformationPage.objects.all()
+
+
+# =============================== #
+#            Sulten               #
+# =============================== #
+
+
+class MenuView(ModelViewSet):
+    serializer_class = MenuSerializer
+    queryset = Menu.objects.all()
+
+
+class MenuItemView(ModelViewSet):
+    serializer_class = MenuItemSerializer
+    queryset = MenuItem.objects.all()
+
+
+class FoodCategoryView(ModelViewSet):
+    serializer_class = FoodCategorySerializer
+    queryset = FoodCategory.objects.all()
+
+
+class FoodPreferenceView(ModelViewSet):
+    serializer_class = FoodPreferenceSerializer
+    queryset = FoodPreference.objects.all()
+
+
+class TableView(ModelViewSet):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+
+
+class BookingView(ModelViewSet):
+    serializer_class = BookingSerializer
+    queryset = Booking.objects.all()
+
+
+# =============================== #
+#          Auth/Login             #
+# =============================== #
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -210,92 +310,3 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-
-
-### GANGS ###
-class GangView(ModelViewSet):
-    serializer_class = GangSerializer
-    queryset = Gang.objects.all()
-
-
-class GangTypeView(ModelViewSet):
-    http_method_names = ['get']
-    serializer_class = GangTypeSerializer
-    queryset = GangType.objects.all()
-
-
-# TODO delete
-class GangFormView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        data = {'gang_type': [[e.id, e.title_nb] for e in GangType.objects.all()], 'info_page': [[e.slug_field] for e in InformationPage.objects.all()]}
-        return Response(data=data)
-
-
-class EventGroupView(ModelViewSet):
-    http_method_names = ['get']
-    serializer_class = EventGroupSerializer
-    queryset = EventGroup.objects.all()
-
-
-### Information Page ###
-
-
-class InformationPageView(ModelViewSet):
-    serializer_class = InformationPageSerializer
-    queryset = InformationPage.objects.all()
-
-
-class MenuView(ModelViewSet):
-    serializer_class = MenuSerializer
-    queryset = Menu.objects.all()
-
-
-class MenuItemView(ModelViewSet):
-    serializer_class = MenuItemSerializer
-    queryset = MenuItem.objects.all()
-
-
-class FoodCategoryView(ModelViewSet):
-    serializer_class = FoodCategorySerializer
-    queryset = FoodCategory.objects.all()
-
-
-class FoodPreferenceView(ModelViewSet):
-    serializer_class = FoodPreferenceSerializer
-    queryset = FoodPreference.objects.all()
-
-
-class SaksdokumentView(ModelViewSet):
-    permission_classes = [AllowAny]
-    serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all()
-
-
-class SaksdokumentFormView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        data = {'categories': Saksdokument.SaksdokumentCategory.choices}
-        return Response(data=data)
-
-
-class TableView(ModelViewSet):
-    serializer_class = TableSerializer
-    queryset = Table.objects.all()
-
-
-class BookingView(ModelViewSet):
-    serializer_class = BookingSerializer
-    queryset = Booking.objects.all()
-
-
-class TagView(ModelViewSet):
-    serializer_class = TagSerializer
-    queryset = Tag.objects.all()
-
-
-class ImageView(ModelViewSet):
-    serializer_class = ImageSerializer
-    queryset = Image.objects.all()
