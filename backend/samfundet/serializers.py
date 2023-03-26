@@ -1,12 +1,13 @@
 from typing import List
 
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models import (
     Tag,
+    User,
     Menu,
     Gang,
     Event,
@@ -15,6 +16,7 @@ from .models import (
     Image,
     Booking,
     Profile,
+    TextItem,
     MenuItem,
     GangType,
     EventGroup,
@@ -24,10 +26,7 @@ from .models import (
     FoodPreference,
     UserPreference,
     InformationPage,
-    TextItem,
 )
-
-User = get_user_model()
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -151,6 +150,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'nickname']
 
 
+# class ObjectPermissionSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = UserObjectPermission
+#         fields = '__all__'
+
+#     return ObjectPermissionDto(
+#         obj_pk=object_permission.object_pk,
+#         permission=f'{permission.content_type.app_label}.{permission.codename}',
+#     )
+
+
 class UserPreferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -169,22 +180,30 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ['password', 'user_permissions']
 
-    def get_permissions(self, user) -> List[str]:  # type: ignore
+    def get_permissions(self, user: User) -> List[str]:
         return user.get_all_permissions()
 
-    def permission_to_str(self, permission: Permission) -> str:
+    def _permission_to_str(self, permission: Permission) -> str:
         return f'{permission.content_type.app_label}.{permission.codename}'
 
-    def get_object_permissions(self, user) -> List[str]:  # type: ignore
+    def get_object_permissions(self, user: User) -> List[dict[str, str]]:
         # Collect user-level and group-level object permissions
         user_object_perms_qs = UserObjectPermission.objects.filter(user=user)
         group_object_perms_qs = GroupObjectPermission.objects.filter(group__in=user.groups.all())
-        perms = [p.permission for p in list(user_object_perms_qs)]
-        perms += [p.permission for p in list(group_object_perms_qs)]
-        # Use list comprehension to generate string representation
-        return list(set([self.permission_to_str(perm) for perm in perms]))
+        perms = [p.permission for p in user_object_perms_qs]
+        perms += [p.permission for p in group_object_perms_qs]
 
-    def get_user_preference(self, user) -> dict:  # type: ignore
+        perm_objs = []
+        for perm in perms:
+            perm_obj = {
+                'obj_pk': perm.pk,
+                'permission': self._permission_to_str(permission=perm),
+            }
+            perm_objs.append(perm_obj)
+
+        return perm_objs
+
+    def get_user_preference(self, user: User) -> dict:
         prefs = UserPreference.objects.get_or_create(user=user)
         return UserPreferenceSerializer(prefs, many=False).data
 
