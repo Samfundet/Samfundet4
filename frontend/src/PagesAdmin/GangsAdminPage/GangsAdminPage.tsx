@@ -6,7 +6,7 @@ import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { TableRow, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
@@ -99,7 +99,7 @@ export function GangsAdminPage() {
                     />
                   ),
                 },
-              ] as TableRow;
+              ];
             })}
           />
         </>

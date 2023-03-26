@@ -40,7 +40,7 @@ export function SaksdokumentAdminPage() {
   }
 
   const tableColumns = [
-    { content: t(KEY.common_title) ?? '', sortable: true },
+    { content: t(KEY.common_title), sortable: true },
     { content: 'Type', sortable: true },
     { content: t(KEY.common_publication_date), sortable: true },
     '', // Buttons

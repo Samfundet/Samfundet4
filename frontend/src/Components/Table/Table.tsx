@@ -28,7 +28,7 @@ type TableDataType = TableRow[];
 
 type TableProps = {
   className?: string;
-  columns?: (TableColumn | string)[];
+  columns?: (TableColumn | string | undefined)[];
   // Data can either be a table cell with separated value and content, or just the raw value
   // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
@@ -64,15 +64,12 @@ export function Table({ className, columns, data }: TableProps) {
 
   function sortedData(data: TableDataType): TableDataType {
     if (sortColumn === -1 || !isColumnSortable(columns?.[sortColumn])) {
-      console.log('Not sorted');
       return data;
     }
 
-    console.log('sort by' + sortColumn + ' , ' + (sortInverse ? 'inv' : 'reg'));
     return [...data].sort((rowA, rowB) => {
       const cellA = getCellValue(rowA[sortColumn] ?? '');
       const cellB = getCellValue(rowB[sortColumn] ?? '');
-      console.log('val of date is ' + (cellA instanceof Date));
 
       // Not sortable
       if (typeof cellA !== typeof cellB) {
@@ -129,7 +126,10 @@ export function Table({ className, columns, data }: TableProps) {
     return cell.toString();
   }
 
-  function getColumnContent(col: TableColumn | string) {
+  function getColumnContent(col?: TableColumn | string) {
+    if (col === undefined) {
+      return '';
+    }
     if (typeof col === 'object') {
       return (col as TableColumn).content as string;
     }

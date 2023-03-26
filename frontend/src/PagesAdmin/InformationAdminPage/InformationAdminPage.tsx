@@ -52,10 +52,10 @@ export function InformationAdminPage() {
   }
 
   const tableColumns = [
-    { content: t(KEY.name) ?? '', sortable: true },
-    { content: t(KEY.common_title) ?? '', sortable: true },
-    { content: t(KEY.owner) ?? '', sortable: true },
-    { content: t(KEY.last_updated) ?? '', sortable: true },
+    { content: t(KEY.name), sortable: true },
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.owner), sortable: true },
+    { content: t(KEY.last_updated), sortable: true },
     '', // Buttons
   ];
   const data = informationPages.map(function (element) {
