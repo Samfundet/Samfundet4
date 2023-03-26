@@ -2,8 +2,6 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import { Options, TYPE } from '~/Components/AdminBox/types';
-import { THEME } from '~/constants';
-import { useGlobalContext } from '~/GlobalContextProvider';
 import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
 
@@ -27,17 +25,12 @@ type AdminBoxProps = {
     TYPE.STEAL: Creates an input Form, where url is post location, text is button text
     TYPE.INFO: Plain text
     TYPE.KILROY: Our demigod of shrimp heaven and hell
-
-
-
 */
 export function AdminBox({ title, icon, options }: AdminBoxProps) {
   const navigate = useNavigate();
-  const { theme } = useGlobalContext();
-  const isDarkTheme = theme === THEME.DARK;
 
   return (
-    <div className={classNames(styles.applet, isDarkTheme && styles.dark_theme)}>
+    <div className={classNames(styles.applet)}>
       <div className={styles.top}>
         <h1 className={styles.header}>
           {icon && <Icon icon={icon} inline={true}></Icon>}
