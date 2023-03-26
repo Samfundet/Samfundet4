@@ -18,12 +18,14 @@ from rest_framework.viewsets import ModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models import (
+    Tag,
     User,
     Menu,
     Gang,
     Event,
     Table,
     Venue,
+    Image,
     Profile,
     Booking,
     MenuItem,
@@ -36,16 +38,18 @@ from .models import (
     FoodPreference,
     UserPreference,
     InformationPage,
-    Tag,
-    Image,
 )
 from .serializers import (
+    TagSerializer,
     GangSerializer,
     MenuSerializer,
+    UserSerializer,
+    ImageSerializer,
     EventSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
+    GroupSerializer,
     ProfileSerializer,
     BookingSerializer,
     TextItemSerializer,
@@ -58,10 +62,6 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    UserSerializer,
-    GroupSerializer,
-    TagSerializer,
-    ImageSerializer,
 )
 from .utils import event_query
 

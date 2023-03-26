@@ -13,7 +13,7 @@ $description-color: #aaaaaa;
   flex-direction: column;
   align-items: stretch;
   justify-content: stretch;
-  gap: .25em;
+  gap: 0.25em;
   height: 16em;
   width: 20em;
   overflow: visible;
@@ -25,14 +25,13 @@ $description-color: #aaaaaa;
     max-width: $mobile-width;
     height: 13em;
   }
-
 }
 
 .card {
   background-color: $card-background;
   border-radius: 1em;
   flex-basis: 100%;
-  transition: .2s;
+  transition: 0.2s;
   box-shadow: 0 0 5px 3px $black-t10;
   background-image: url('~/assets/banner-sample-2.jpeg');
   background-size: cover;
@@ -42,8 +41,8 @@ $description-color: #aaaaaa;
 
 .bottom_label {
   font-weight: 700;
-  padding-left: .4em;
-  padding-right: .4em;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
   display: flex;
   justify-content: space-between;
   white-space: nowrap;
@@ -51,16 +50,15 @@ $description-color: #aaaaaa;
 
 .bottom_description {
   color: $description-color;
-  padding-left: .3em;
-  padding-right: .3em;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
   opacity: 0;
-  transition: .2s;
+  transition: 0.2s;
   transform: translateY(1em);
 
   @include for-mobile-only {
     display: none;
   }
-
 }
 
 .date_label {
@@ -81,7 +79,15 @@ $description-color: #aaaaaa;
   display: none;
 }
 
+.edit_button {
+  visibility: hidden;
+}
+
+// Styling to container and children when it is hovered.
 .container:hover {
+  .edit_button {
+    visibility: visible;
+  }
   .card {
     transform: translateY(-3px);
     box-shadow: 0 3px 8px 2px $black-t25;

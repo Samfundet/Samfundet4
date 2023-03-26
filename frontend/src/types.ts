@@ -39,7 +39,7 @@ export const COLORS = {
   orange_light: '#ffe99e',
   red_lighter: '#fff2f0',
   red_light: '#ffcfca',
-  red: '#dc1010a0',
+  red: '#dc1010',
   sulten_orange: '#fbb042',
 
   // Transparent colors
