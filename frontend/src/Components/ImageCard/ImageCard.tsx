@@ -24,13 +24,12 @@ export function ImageCard({
   date,
   url = '#',
   imageUrl,
-  localImage = false,
   compact,
   children,
 }: ImageCardProps) {
   return (
     <div className={classnames(styles.container, compact && styles.compact, className)}>
-      <Link url={url} className={styles.card} style={backgroundImageFromUrl(imageUrl, localImage)}>
+      <Link url={url} className={styles.card} style={backgroundImageFromUrl(imageUrl)}>
         {children}
       </Link>
 

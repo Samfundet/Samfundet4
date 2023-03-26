@@ -59,7 +59,7 @@ export function AboutPage() {
 
       <Carousel spacing={1.5}>
         {VENUES.images.map((image, idx) => {
-          return <ImageCard key={idx} title={image.name} imageUrl={image.src} localImage={true} />;
+          return <ImageCard key={idx} title={image.name} imageUrl={image.src} />;
         })}
       </Carousel>
 

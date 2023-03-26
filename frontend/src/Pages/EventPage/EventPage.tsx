@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getEvent } from '~/api';
 import { SamfundetLogoSpinner } from '~/Components';
 import { EventDto } from '~/dto';
-import { dbT } from '~/i18n/i18n';
+import { dbT } from '~/utils';
 import { EventTable } from './components/EventTable';
 import styles from './EventPage.module.scss';
 
@@ -43,10 +43,10 @@ export function EventPage() {
         <p className={styles.text_title}> DESCRIPTION </p>
         <div className={styles.description}>
           <div className={styles.description_short}>
-            <p className={styles.text_short}>{dbT(event, 'description_short', i18n.language) as string}</p>
+            <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
           </div>
           <div className={styles.description_long}>
-            <p>{dbT(event, 'description_long', i18n.language) as string}</p>
+            <p>{dbT(event, 'description_long')}</p>
           </div>
         </div>
       </div>

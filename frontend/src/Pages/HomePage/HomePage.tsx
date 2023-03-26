@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { getHomeData } from '~/api';
 import splash from '~/assets/banner-sample.jpg';
 import { useAuthContext } from '~/AuthContext';
@@ -7,18 +6,17 @@ import { IconButton } from '~/Components';
 import { Carousel } from '~/Components/Carousel';
 import { ContentCard } from '~/Components/ContentCard';
 import { ImageCard } from '~/Components/ImageCard';
+import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto, HomePageElementDto } from '~/dto';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { Children, COLORS } from '~/types';
-import { hasPerm } from '~/utils';
+import { dbT, hasPerm } from '~/utils';
 import styles from './HomePage.module.scss';
 
 export function HomePage() {
   const [elements, setHomeElements] = useState<HomePageElementDto[]>([]);
-  const { i18n } = useTranslation();
   const { user } = useAuthContext();
   const isStaff = user?.is_staff;
 
@@ -33,9 +31,9 @@ export function HomePage() {
     const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
     return (
       <ContentCard
-        title={dbT(element, 'title', i18n.language) as string}
-        description={dbT(element, 'description', i18n.language) as string}
-        imageUrl={event.image_url}
+        title={dbT(element, 'title')}
+        description={dbT(element, 'description')}
+        imageUrl={BACKEND_DOMAIN + event.image_url}
         url={url}
         buttonText=""
       />
@@ -60,7 +58,7 @@ export function HomePage() {
               key={event.id}
               title={event.title_en}
               date={event.start_dt}
-              imageUrl={event.image_url}
+              imageUrl={BACKEND_DOMAIN + event.image_url}
               url={url}
             >
               <div className={styles.button_bar}>

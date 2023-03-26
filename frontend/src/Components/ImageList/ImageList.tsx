@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
-import { dbT } from '~/i18n/i18n';
+import { dbT } from '~/utils';
 import { Image } from '../Image';
 import styles from './ImageList.module.scss';
 
@@ -22,13 +21,12 @@ type ImageListProps = {
 };
 
 export function ImageList({ images, size, textClassName, textMaxLength }: ImageListProps) {
-  const { i18n } = useTranslation();
-
   function getImageText(element: Record<string, string>) {
-    if (textMaxLength && (dbT(element, 'name', i18n.language) as string).length > textMaxLength) {
+    const name = dbT(element, 'name');
+    if (textMaxLength && name && name.length > textMaxLength) {
       return element.short;
     }
-    return dbT(element, 'name', i18n.language);
+    return dbT(element, 'name');
   }
 
   return (
