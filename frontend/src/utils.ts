@@ -79,16 +79,18 @@ export function dbT(
   const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
   if (hasFieldName) {
     const value = model[fieldName];
-    const isString = typeof value !== 'string';
-    if (!isString) throw Error(`${model}: Expected string value for field ${fieldName}, value was ${value}`);
+    const type = typeof value;
+    const isString = type === 'string';
+    if (!isString) throw Error(`Expected string value for field ${fieldName}, value was ${value} (${type})`);
     return value as string;
   }
 
   const hasField = Object.prototype.hasOwnProperty.call(model, field);
   if (hasField) {
     const value = model[field];
-    const isString = typeof value !== 'string';
-    if (!isString) throw Error(`${model}: Expected string value for field ${field}, value was ${value}`);
+    const type = typeof value;
+    const isString = type === 'string';
+    if (!isString) throw Error(`Expected string value for field ${field}, value was ${value} (${type})`);
     return value as string;
   }
 
