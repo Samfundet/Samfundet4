@@ -3,7 +3,7 @@ import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Link, TimeDisplay } from '~/Components';
 import { ImageCard } from '~/Components/ImageCard';
-import { ITableCell, Table } from '~/Components/Table';
+import { Table, TableRow } from '~/Components/Table';
 import { EventDto } from '~/dto';
 import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
@@ -20,21 +20,28 @@ export function EventsList({ events }: EventsListProps) {
 
   const [tableView, setTableView] = useState(false);
 
-  const eventColumns = ['Dato', 'Fra', 'Til', 'Arrangement', 'Lokale', 'Type', 'Kjøp'];
+  const eventColumns = [
+    { content: 'Dato', sortable: true },
+    'Fra',
+    'Til',
+    'Arrangement',
+    { content: 'Lokale', sortable: true },
+    'Type',
+    'Kjøp',
+  ];
 
   // TODO improve table view for events
-  function getEventRows(events: Record<string, EventDto[]>): ITableCell[][] {
-    const rows: ITableCell[][] = [];
+  function getEventRows(events: Record<string, EventDto[]>): TableRow[] {
+    const rows: TableRow[] = [];
 
     Object.keys(events).forEach((date: string) => {
       events[date].forEach((event: EventDto) => {
         rows.push([
-          { children: <TimeDisplay timestamp={date} displayType="event" /> } as ITableCell,
-          { children: <TimeDisplay timestamp={date} displayType="time" /> } as ITableCell,
-          { children: event.end_dt },
-          // { children: <TimeDisplay timestamp={event.end_dt} displayType="time" /> } as ITableCell,
+          { content: <TimeDisplay timestamp={date} displayType="event" />, value: new Date(date) },
+          { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(date) },
+          { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
           {
-            children: (
+            content: (
               <Link
                 url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
                 className={styles.link}
@@ -42,11 +49,11 @@ export function EventsList({ events }: EventsListProps) {
                 {dbT(event, 'title', i18n.language) as string}
               </Link>
             ),
-          } as ITableCell,
-          { children: <span>{event.location}</span> } as ITableCell,
-          { children: <span>{event.category}</span> } as ITableCell,
-          { children: <span>{event.price_group}</span> } as ITableCell,
-        ] as ITableCell[]);
+          },
+          event.location,
+          event.category,
+          event.price_group,
+        ]);
       });
     });
 

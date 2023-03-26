@@ -5,7 +5,7 @@ import { getSaksdokumenter } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/i18n/i18n';
@@ -39,6 +39,13 @@ export function SaksdokumentAdminPage() {
     );
   }
 
+  const tableColumns = [
+    { content: t(KEY.common_title) ?? '', sortable: true },
+    { content: 'Type', sortable: true },
+    { content: t(KEY.common_publication_date), sortable: true },
+    '', // Buttons
+  ];
+
   // TODO ADD TRANSLATIONS pr element
   return (
     <Page>
@@ -56,14 +63,14 @@ export function SaksdokumentAdminPage() {
       </Button>
       <br></br>
       <Table
-        columns={[t(KEY.common_title), 'Type', t(KEY.common_publication_date), '']}
+        columns={tableColumns}
         data={documents.map(function (document) {
           return [
-            new AlphabeticTableCell(dbT(document, 'title', i18n.language) as string),
-            new AlphabeticTableCell(document.category),
-            new AlphabeticTableCell(document.publication_date),
+            dbT(document, 'title', i18n.language) as string,
+            document.category,
+            document.publication_date,
             {
-              children: (
+              content: (
                 <CrudButtons
                   onEdit={() => {
                     navigate(
