@@ -71,13 +71,14 @@ export function Table({ className, columns, data }: TableProps) {
       const cellA = getCellValue(rowA[sortColumn] ?? '');
       const cellB = getCellValue(rowB[sortColumn] ?? '');
 
-      // Not sortable
+      // Not same type, force sort as string type
       if (typeof cellA !== typeof cellB) {
-        return 0;
+        const diff = (cellA?.toString() ?? '').localeCompare(cellB?.toString() ?? '');
+        return sortInverse ? -diff : diff;
       }
       const cellType = typeof cellA;
 
-      // Custom handling for dates
+      // Custom sort handling for dates
       if (cellA instanceof Date && cellB instanceof Date) {
         const diff = (cellA as Date).getTime() - (cellB as Date).getTime();
         return sortInverse ? -diff : diff;
