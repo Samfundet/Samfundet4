@@ -1,9 +1,9 @@
-from typing import List
+import itertools
 
+from rest_framework import serializers
+from guardian.models import GroupObjectPermission, UserObjectPermission
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
-from guardian.models import GroupObjectPermission, UserObjectPermission
-from rest_framework import serializers
 
 from .models import (
     Tag,
@@ -150,18 +150,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'nickname']
 
 
-# class ObjectPermissionSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = UserObjectPermission
-#         fields = '__all__'
-
-#     return ObjectPermissionDto(
-#         obj_pk=object_permission.object_pk,
-#         permission=f'{permission.content_type.app_label}.{permission.codename}',
-#     )
-
-
 class UserPreferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -180,26 +168,27 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ['password', 'user_permissions']
 
-    def get_permissions(self, user: User) -> List[str]:
+    def get_permissions(self, user: User) -> list[str]:
         return user.get_all_permissions()
 
     def _permission_to_str(self, permission: Permission) -> str:
         return f'{permission.content_type.app_label}.{permission.codename}'
 
-    def get_object_permissions(self, user: User) -> List[dict[str, str]]:
-        # Collect user-level and group-level object permissions
+    def _obj_permission_to_obj(self, obj_perm: UserObjectPermission | GroupObjectPermission) -> dict[str, str]:
+        perm_obj = {
+            'obj_pk': obj_perm.object_pk,
+            'permission': self._permission_to_str(permission=obj_perm.permission),
+        }
+        return perm_obj
+
+    def get_object_permissions(self, user: User) -> list[dict[str, str]]:
+        # Collect user-level and group-level object permissions.
         user_object_perms_qs = UserObjectPermission.objects.filter(user=user)
         group_object_perms_qs = GroupObjectPermission.objects.filter(group__in=user.groups.all())
-        perms = [p.permission for p in user_object_perms_qs]
-        perms += [p.permission for p in group_object_perms_qs]
 
         perm_objs = []
-        for perm in perms:
-            perm_obj = {
-                'obj_pk': perm.pk,
-                'permission': self._permission_to_str(permission=perm),
-            }
-            perm_objs.append(perm_obj)
+        for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
+            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))
 
         return perm_objs
 
