@@ -8,16 +8,16 @@ import { Page } from '~/Components/Page';
 import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './InformationAdminPage.module.scss';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -59,7 +59,7 @@ export function InformationAdminPage() {
           urlParams: { slugField: element.slug_field },
         }),
       ),
-      new AlphabeticTableCell(dbT(element, 'title', i18n.language) as string),
+      new AlphabeticTableCell(dbT(element, 'title')),
       new AlphabeticTableCell('To be added'),
       new AlphabeticTableCell('To be added'),
       {
@@ -74,7 +74,7 @@ export function InformationAdminPage() {
               );
             }}
             onDelete={() => {
-              if (window.confirm(t(KEY.admin_information_confirm_delete) as string)) {
+              if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
                 deletePage(element.slug_field);
               }
             }}

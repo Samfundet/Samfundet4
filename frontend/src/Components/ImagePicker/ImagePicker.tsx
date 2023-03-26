@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { getImages } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
 import { ImageDto } from '~/dto';
 import { Children } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
@@ -27,12 +28,13 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
   }
 
   function renderImage(image: ImageDto): Children {
+    const isSelected = selected?.id === image.id;
     return (
       <div
         key={image.id}
-        className={classNames(styles.image, selected?.id === image.id && styles.selected_image)}
+        className={classNames(styles.image, isSelected && styles.selected_image)}
         onClick={() => select(image)}
-        style={backgroundImageFromUrl(image.url)}
+        style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}
       />
     );
   }
@@ -45,7 +47,7 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
             <h1 className={styles.image_title}>{selected.title}</h1>
           </>
         )}
-        <div className={styles.selected} style={backgroundImageFromUrl(selected?.url)}>
+        <div className={styles.selected} style={backgroundImageFromUrl(BACKEND_DOMAIN + selected?.url)}>
           {selected === undefined && (
             <>
               <Icon icon="ic:outline-image" width={24} />
