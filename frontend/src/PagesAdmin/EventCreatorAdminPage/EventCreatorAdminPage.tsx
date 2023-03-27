@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
 import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
@@ -14,8 +13,8 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { Children } from '~/types';
+import { dbT } from '~/utils';
 import styles from './EventCreatorAdminPage.module.scss';
 
 type EventCreatorStep = {
@@ -27,7 +26,6 @@ type EventCreatorStep = {
 };
 
 export function EventCreatorAdminPage() {
-  const { i18n } = useTranslation();
   const [didSave, setDidSave] = useState(false);
   const [event, setEvent] = useState<Partial<EventDto>>();
 
@@ -160,7 +158,7 @@ export function EventCreatorAdminPage() {
           className={classNames(styles.tab_icon, valid && styles.done, error && styles.error)}
           width={24}
         />
-        <span>{dbT(step, 'title', i18n.language)}</span>
+        <span>{dbT(step, 'title')}</span>
       </div>
     );
     return { key: step.key, label: label };
@@ -187,8 +185,8 @@ export function EventCreatorAdminPage() {
   const eventPreview: Children = (
     <div>
       <ContentCard
-        title={dbT(event, 'title', i18n.language) ?? ''}
-        description={dbT(event, 'description_short', i18n.language) ?? ''}
+        title={dbT(event, 'title')}
+        description={dbT(event, 'description_short')}
         imageUrl={event?.image?.url}
       />
       <p>{event?.category}</p>

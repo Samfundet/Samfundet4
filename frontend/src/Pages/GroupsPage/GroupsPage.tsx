@@ -7,7 +7,7 @@ import { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
 import { GangDto, GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
+import { dbT } from '~/utils';
 import styles from './GroupsPage.module.scss';
 
 /**
@@ -15,7 +15,7 @@ import styles from './GroupsPage.module.scss';
  * Such as Organizing, events, drift, then displaying all of these groups
  */
 export function GroupsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function GroupsPage() {
         </div>
         {groups.map((element: GangTypeDto, key: number) => (
           <div key={key} className={styles.groups}>
-            <div className={styles.groupsTitle}>{dbT(element, 'title', i18n.language)}</div>
+            <div className={styles.groupsTitle}>{dbT(element, 'title')}</div>
             <ImageList
               textMaxLength={12}
               images={
