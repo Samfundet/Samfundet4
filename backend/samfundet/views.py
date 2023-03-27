@@ -92,7 +92,7 @@ class TextItemView(ModelViewSet):
 # Images
 class ImageView(ModelViewSet):
     serializer_class = ImageSerializer
-    queryset = Image.objects.all()
+    queryset = Image.objects.all().order_by('-pk')
 
 
 # Image tags

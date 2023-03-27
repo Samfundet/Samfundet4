@@ -9,6 +9,7 @@ import {
   GangTypeDto,
   HomePageElementDto,
   ImageDto,
+  ImagePostDto,
   InformationPageDto,
   MenuDto,
   MenuItemDto,
@@ -355,9 +356,11 @@ export async function getImage(id: string | number): Promise<ImageDto> {
   return response.data;
 }
 
-export async function postImage(data: ImageDto): Promise<ImageDto> {
+export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
-  const response = await axios.post<ImageDto>(url, data, { withCredentials: true });
+  const response = await axios.postForm<ImageDto>(url, data, {
+    withCredentials: true,
+  });
   return response.data;
 }
 

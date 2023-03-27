@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getImage } from '~/api';
+import { getImage, postImage } from '~/api';
 import { Button, Page, SamfundetLogoSpinner } from '~/Components';
-import { ImageDto } from '~/dto';
+import { ImagePostDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
@@ -19,8 +19,7 @@ export function ImageFormAdminPage() {
   const { id } = useParams();
 
   const [showSpinner, setShowSpinner] = useState<boolean>(id !== undefined);
-  const [image, setImage] = useState<Partial<ImageDto>>({});
-  image;
+  const [image, setImage] = useState<Partial<ImagePostDto>>({});
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -43,14 +42,22 @@ export function ImageFormAdminPage() {
     }
   }, [id, navigate, setImage]);
 
-  function handleOnSubmit(data: ImageDto) {
+  async function handleOnSubmit(data: ImagePostDto) {
+    setShowSpinner(true);
     if (id !== undefined) {
       // TODO patch
+      setShowSpinner(false);
     } else {
-      // TODO post
+      postImage(data)
+        .then(() => {
+          // Success!
+          navigate(ROUTES.frontend.admin_images);
+        })
+        .catch((err) => {
+          console.error(err);
+          setShowSpinner(false);
+        });
     }
-    alert('TODO');
-    console.log(JSON.stringify(data));
   }
 
   if (showSpinner) {
@@ -70,12 +77,17 @@ export function ImageFormAdminPage() {
       <h1 className={styles.header}>
         {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
       </h1>
-      <SamfForm onSubmit={handleOnSubmit} submitText={submitText}>
+      <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText}>
         <SamfFormField field="title" type="text" label={`${t(KEY.name)}`} />
         {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
-        <SamfFormField field="tags" type="text" label={`${t(KEY.common_tags)}`} />
+        <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
         {/* TODO create file picker input type */}
-        <SamfFormField field="image" type="text" label={`${t(KEY.common_choose)} ${t(KEY.common_image)}`} />
+        <SamfFormField field="file" type="upload-image" label={`${t(KEY.common_choose)} ${t(KEY.common_image)}`} />
+        <p>
+          {JSON.stringify(image.file)}
+          {image.file?.name}
+          {}
+        </p>
       </SamfForm>
     </Page>
   );

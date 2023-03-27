@@ -234,5 +234,10 @@ export type ImageDto = {
   tags: TagDto[];
 };
 
+export type ImagePostDto = ImageDto & {
+  tag_string: string;
+  file: File;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Tuple = [any, any];

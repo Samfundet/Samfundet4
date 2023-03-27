@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { TimeDisplay } from '../TimeDisplay';
@@ -10,10 +10,11 @@ export type InputFileType = 'image' | 'pdf';
 
 type InputFileProps = {
   fileType: InputFileType;
+  label?: ReactNode;
   onSelected: (file: File) => void;
 };
 
-export function InputFile({ fileType, onSelected }: InputFileProps) {
+export function InputFile({ fileType, label, onSelected }: InputFileProps) {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -63,37 +64,44 @@ export function InputFile({ fileType, onSelected }: InputFileProps) {
   const fileSizeMb = ((selectedFile?.size ?? 0) / 1024 / 1024).toFixed(2);
 
   return (
-    <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal)}>
-      <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
+    <div>
+      {/* Visual label */}
+      <label>{label}</label>
+      {/* Label container to accept button input */}
+      <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal)}>
+        <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
 
-      {/* Select button */}
-      <div className={styles.top_row}>
-        <div className={styles.upload_button}>
-          <Icon icon={icons[fileType] ?? ''} />
-          Velg en fil...
+        {/* Select button */}
+        <div className={styles.top_row}>
+          <div className={styles.upload_button}>
+            <Icon icon={icons[fileType] ?? ''} />
+            Velg en fil...
+          </div>
+          {fileType === 'image' && (
+            <span className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</span>
+          )}
         </div>
-        {fileType === 'image' && <span className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</span>}
-      </div>
 
-      {/* File Preview */}
-      <div className={classNames(styles.selected_container, fileType === 'pdf' && styles.pdf)}>
-        {/* PDF shows additional information */}
-        {fileType === 'pdf' && (
-          <div className={styles.preview_meta}>
-            <p className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</p>
-            <p>
-              <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
-            </p>
-            <p>{fileSizeMb} MB</p>
-          </div>
-        )}
-        {/* Image/pdf preview. Shows empty preview for pdf type */}
-        {(fileType === 'pdf' || preview) && (
-          <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-            {preview && <img className={styles.preview} src={preview} />}
-          </div>
-        )}
-      </div>
-    </label>
+        {/* File Preview */}
+        <div className={classNames(styles.selected_container, fileType === 'pdf' && styles.pdf)}>
+          {/* PDF shows additional information */}
+          {fileType === 'pdf' && (
+            <div className={styles.preview_meta}>
+              <p className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</p>
+              <p>
+                <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
+              </p>
+              <p>{fileSizeMb} MB</p>
+            </div>
+          )}
+          {/* Image/pdf preview. Shows empty preview for pdf type */}
+          {(fileType === 'pdf' || preview) && (
+            <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
+              {preview && <img className={styles.preview} src={preview} />}
+            </div>
+          )}
+        </div>
+      </label>
+    </div>
   );
 }
