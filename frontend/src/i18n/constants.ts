@@ -131,6 +131,7 @@ export const KEY = {
   back_to_samfundet: 'back_to_samfundet',
   no_file_selected: 'no_file_selected',
   category: 'category',
+  choose_a_file: 'choose_a_file',
 } as const;
 
 /**

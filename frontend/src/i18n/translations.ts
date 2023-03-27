@@ -132,6 +132,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.back_to_samfundet]: 'Gå tilbake til samfundet.no',
   [KEY.no_file_selected]: 'Ingen fil er valgt',
   [KEY.category]: 'Kategori',
+  [KEY.choose_a_file]: 'Velg en fil...',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -265,4 +266,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.back_to_samfundet]: 'Go back to samfundet.no',
   [KEY.no_file_selected]: 'No file selected',
   [KEY.category]: 'Category',
+  [KEY.choose_a_file]: 'Upload file...',
 };

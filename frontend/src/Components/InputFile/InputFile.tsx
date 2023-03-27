@@ -75,7 +75,7 @@ export function InputFile({ fileType, label, onSelected }: InputFileProps) {
         <div className={styles.top_row}>
           <div className={styles.upload_button}>
             <Icon icon={icons[fileType] ?? ''} />
-            Velg en fil...
+            {t(KEY.choose_a_file)}
           </div>
           {fileType === 'image' && (
             <span className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</span>
