@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteEvent, getEventsUpcomming } from '~/api';
-import { Button, EventQuery, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
@@ -54,6 +54,7 @@ export function EventsAdminPage() {
   const tableColumns = [
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.start_time), sortable: true },
+    { content: t(KEY.category), sortable: true },
     { content: t(KEY.organizer), sortable: true },
     { content: t(KEY.venue), sortable: true },
     '', // Buttons
@@ -62,9 +63,8 @@ export function EventsAdminPage() {
   const data = events.map(function (event: EventDto) {
     return [
       dbT(event, 'title', i18n.language) as string,
-      // { content: <TimeDisplay timestamp={event.start_dt} /> },
-      event.start_dt.toLocaleString(),
-      // event.event_group.name,
+      { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
+      event.category,
       event.host,
       event.location,
       {

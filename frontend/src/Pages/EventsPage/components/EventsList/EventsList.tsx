@@ -1,9 +1,11 @@
 import { Icon } from '@iconify/react';
 import { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, Link, TimeDisplay } from '~/Components';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, TableRow } from '~/Components/Table';
 import { EventDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
@@ -14,15 +16,16 @@ type EventsListProps = {
 };
 
 export function EventsList({ events }: EventsListProps) {
+  const { t } = useTranslation();
   const [tableView, setTableView] = useState(false);
 
   const eventColumns = [
     { content: 'Dato', sortable: true },
     'Fra',
     'Til',
-    'Arrangement',
-    { content: 'Lokale', sortable: true },
-    'Type',
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.venue), sortable: true },
+    { content: t(KEY.category), sortable: true },
     'Kjøp',
   ];
 
