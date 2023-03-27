@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { CSSProperties } from 'react';
 import { UserDto } from '~/dto';
 
@@ -51,14 +52,47 @@ export function getGlobalBackgroundColor(): string {
  * Function for creating a style with image url from domain
  * @param {string} url - Server relative URL (eg. /media/image.png)
  */
-export function backgroundImageFromUrl(url?: string, localImage?: boolean): CSSProperties {
-  if (url != null) {
-    const path = localImage === true ? url : `http://localhost:8000${url}`;
-    return {
-      // TODO this is not safe for production, need to use absolute path
-      // We should probably setup better hosting system for dev to emulate prod better
-      backgroundImage: `url(${path})`,
-    };
+export function backgroundImageFromUrl(url?: string): CSSProperties {
+  if (!url) {
+    return {};
   }
-  return {};
+  return {
+    backgroundImage: `url(${url})`,
+  };
+}
+
+/**
+ * Function for translation object fields, such as title_nb and title_en.
+ * If there is no translation for the field the common name would be given
+ * @param {Record<string, unknown>}  model - The object to translate
+ * @param {string} field - the field to be translated, use root of the field, such as title, name
+ * @param {string} language- the language, use i18n.language for dynamic translation
+ */
+export function dbT(
+  model: Record<string, unknown> | undefined,
+  field: string,
+  language: string = i18next.language,
+): string | undefined {
+  if (model === undefined) return undefined;
+
+  const fieldName = field + '_' + language;
+  const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
+  if (hasFieldName) {
+    const value = model[fieldName];
+    const type = typeof value;
+    const isString = type === 'string';
+    if (!isString) throw Error(`Expected string value for field ${fieldName}, value was ${value} (${type})`);
+    return value as string;
+  }
+
+  const hasField = Object.prototype.hasOwnProperty.call(model, field);
+  if (hasField) {
+    const value = model[field];
+    const type = typeof value;
+    const isString = type === 'string';
+    if (!isString) throw Error(`Expected string value for field ${field}, value was ${value} (${type})`);
+    return value as string;
+  }
+
+  throw Error(`Object ${model} does not have the any of the fields '${field}' or '${fieldName}'`);
 }

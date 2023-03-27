@@ -1,13 +1,12 @@
 import { Icon } from '@iconify/react';
 import { ReactNode, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button, Link, TimeDisplay } from '~/Components';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, TableRow } from '~/Components/Table';
 import { EventDto } from '~/dto';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -15,9 +14,6 @@ type EventsListProps = {
 };
 
 export function EventsList({ events }: EventsListProps) {
-  /** check if dates are equal */
-  const { i18n } = useTranslation();
-
   const [tableView, setTableView] = useState(false);
 
   const eventColumns = [
@@ -46,7 +42,7 @@ export function EventsList({ events }: EventsListProps) {
                 url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
                 className={styles.link}
               >
-                {dbT(event, 'title', i18n.language) as string}
+                {dbT(event, 'title')}
               </Link>
             ),
           },
@@ -68,7 +64,7 @@ export function EventsList({ events }: EventsListProps) {
             key={key}
             compact={true}
             date={event.start_dt.toString()}
-            title={dbT(event, 'title', i18n.language) as string}
+            title={dbT(event, 'title')}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
           />
         </div>

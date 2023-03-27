@@ -8,9 +8,9 @@ import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './EventsAdminPage.module.scss';
 
 export function EventsAdminPage() {
@@ -80,7 +80,7 @@ export function EventsAdminPage() {
             }}
             onDelete={() => {
               // TODO custom modal confirm
-              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title', i18n.language)}`)) {
+              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title')}`)) {
                 // TODO toast component? A bit too easy to delete events
                 deleteSelectedEvent(event.id);
               }

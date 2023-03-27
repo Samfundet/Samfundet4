@@ -8,9 +8,9 @@ import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
 import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './SaksdokumentAdminPage.module.scss';
 
 export function SaksdokumentAdminPage() {
@@ -18,7 +18,7 @@ export function SaksdokumentAdminPage() {
 
   const [documents, setDocuments] = useState<SaksdokumentDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -66,7 +66,7 @@ export function SaksdokumentAdminPage() {
         columns={tableColumns}
         data={documents.map(function (document) {
           return [
-            dbT(document, 'title', i18n.language) as string,
+            dbT(document, 'title') as string,
             document.category,
             document.publication_date,
             {

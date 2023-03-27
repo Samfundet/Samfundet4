@@ -9,9 +9,9 @@ import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
 import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './GangsAdminPage.module.scss';
 
 export function GangsAdminPage() {
@@ -19,7 +19,7 @@ export function GangsAdminPage() {
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
   const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -30,7 +30,7 @@ export function GangsAdminPage() {
         setShowSpinner(false);
         setGangTypeTab({
           key: data[0].id,
-          label: dbT(data[0], 'title', i18n.language) ?? '?',
+          label: dbT(data[0], 'title') ?? '?',
           value: data[0],
         });
       })
@@ -49,7 +49,7 @@ export function GangsAdminPage() {
   const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
     return {
       key: gangType.id,
-      label: dbT(gangType, 'title', i18n.language) ?? '?',
+      label: dbT(gangType, 'title') ?? '?',
       value: gangType,
     };
   });
@@ -82,7 +82,7 @@ export function GangsAdminPage() {
             columns={[t(KEY.gang) ?? '', t(KEY.abbreviation) ?? '', t(KEY.webpage) ?? '', '']}
             data={currentGangType.gangs.map(function (element2) {
               return [
-                dbT(element2, 'name', i18n.language) as string,
+                dbT(element2, 'name'),
                 element2.abbreviation,
                 element2.webpage,
                 {
