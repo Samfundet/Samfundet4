@@ -143,12 +143,7 @@ class Event(models.Model):
 
     status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
     age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
-    category = models.CharField(
-        max_length=30,
-        choices=Category.choices,
-        null=False,
-        default=Category.OTHER,
-    )
+    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
 
     # Price
     # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
@@ -158,13 +153,7 @@ class Event(models.Model):
         BILLIG = 'BILLIG', _('Paid')
         REGISTRATION = 'REGISTRATION', _('Free with registration')
 
-    price_group = models.CharField(
-        max_length=30,
-        choices=PriceGroup.choices,
-        default=PriceGroup.FREE,
-        blank=True,
-        null=True,
-    )
+    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
     capacity = models.PositiveIntegerField(blank=True, null=True)
 
     @property
@@ -244,13 +233,7 @@ class UserPreference(models.Model):
         DARK = 'theme-dark'
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    theme = models.CharField(
-        max_length=30,
-        choices=Theme.choices,
-        default=Theme.LIGHT,
-        blank=True,
-        null=True,
-    )
+    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -282,16 +265,8 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         # Extend Profile to assign permission to whichever user is related to it.
-        assign_perm(
-            perm=permissions.SAMFUNDET_VIEW_PROFILE,
-            user_or_group=self.user,
-            obj=self,
-        )
-        assign_perm(
-            perm=permissions.SAMFUNDET_CHANGE_PROFILE,
-            user_or_group=self.user,
-            obj=self,
-        )
+        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
+        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
 # GANGS ###
@@ -317,21 +292,8 @@ class Gang(models.Model):
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
-    gang_type = models.ForeignKey(
-        to=GangType,
-        related_name='gangs',
-        verbose_name='Gruppetype',
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
-    info_page = models.ForeignKey(
-        to='samfundet.InformationPage',
-        verbose_name='Infoside',
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-    )
+    gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -374,33 +336,11 @@ class InformationPage(models.Model):
 
 
 class Table(models.Model):
-    name_nb = models.CharField(
-        max_length=64,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name='Navn (norsk)',
-    )
-    description_nb = models.CharField(
-        max_length=64,
-        blank=True,
-        null=True,
-        verbose_name='Beskrivelse (norsk)',
-    )
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
+    description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
-    name_en = models.CharField(
-        max_length=64,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name='Navn (engelsk)',
-    )
-    description_en = models.CharField(
-        max_length=64,
-        blank=True,
-        null=True,
-        verbose_name='Beskrivelse (engelsk)',
-    )
+    name_en = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (engelsk)')
+    description_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     seating = models.PositiveSmallIntegerField(blank=True, null=True)
 
@@ -421,13 +361,7 @@ class Table(models.Model):
 
 
 class FoodPreference(models.Model):
-    name_nb = models.CharField(
-        max_length=64,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name='Navn (norsk)',
-    )
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
@@ -438,13 +372,7 @@ class FoodPreference(models.Model):
 
 
 class FoodCategory(models.Model):
-    name_nb = models.CharField(
-        max_length=64,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name='Navn (norsk)',
-    )
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
 
@@ -456,13 +384,7 @@ class FoodCategory(models.Model):
 
 
 class MenuItem(models.Model):
-    name_nb = models.CharField(
-        max_length=64,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name='Navn (norsk)',
-    )
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
@@ -488,13 +410,7 @@ class MenuItem(models.Model):
 
 
 class Menu(models.Model):
-    name_nb = models.CharField(
-        max_length=64,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name='Navn (norsk)',
-    )
+    name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
@@ -527,11 +443,7 @@ class Saksdokument(models.Model):
         RADET = 'RADET', _('Rådet')
         ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
 
-    category = models.CharField(
-        max_length=25,
-        choices=SaksdokumentCategory.choices,
-        default=SaksdokumentCategory.FS_REFERAT,
-    )
+    category = models.CharField(max_length=25, choices=SaksdokumentCategory.choices, default=SaksdokumentCategory.FS_REFERAT)
     file = models.FileField(upload_to='uploads/saksdokument/', blank=True, null=True)
 
     class Meta:
