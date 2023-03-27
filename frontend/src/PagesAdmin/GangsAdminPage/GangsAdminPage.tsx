@@ -6,7 +6,7 @@ import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { AlphabeticTableCell, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -79,14 +79,14 @@ export function GangsAdminPage() {
       {currentGangType && (
         <>
           <Table
-            columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
+            columns={[t(KEY.gang) ?? '', t(KEY.abbreviation) ?? '', t(KEY.webpage) ?? '', '']}
             data={currentGangType.gangs.map(function (element2) {
               return [
-                new AlphabeticTableCell(dbT(element2, 'name')),
-                new AlphabeticTableCell(element2.abbreviation),
-                new AlphabeticTableCell(element2.webpage),
+                dbT(element2, 'name'),
+                element2.abbreviation,
+                element2.webpage,
                 {
-                  children: (
+                  content: (
                     <CrudButtons
                       onEdit={() => {
                         navigate(
