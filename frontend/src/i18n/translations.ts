@@ -130,7 +130,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.sulten_page_more_about_us]: 'Mer om oss',
   [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
   [KEY.back_to_samfundet]: 'Gå tilbake til samfundet.no',
+  [KEY.no_file_selected]: 'Ingen fil er valgt',
   [KEY.category]: 'Kategori',
+  [KEY.choose_a_file]: 'Velg en fil...',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -262,5 +264,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_create_page]: '',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',
   [KEY.back_to_samfundet]: 'Go back to samfundet.no',
+  [KEY.no_file_selected]: 'No file selected',
   [KEY.category]: 'Category',
+  [KEY.choose_a_file]: 'Upload file...',
 };

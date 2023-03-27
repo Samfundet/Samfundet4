@@ -129,7 +129,9 @@ export const KEY = {
   sulten_page_more_about_us: 'sulten_page_more_about_us',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
   back_to_samfundet: 'back_to_samfundet',
+  no_file_selected: 'no_file_selected',
   category: 'category',
+  choose_a_file: 'choose_a_file',
 } as const;
 
 /**
