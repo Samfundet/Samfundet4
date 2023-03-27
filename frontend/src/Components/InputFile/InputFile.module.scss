@@ -4,37 +4,111 @@
 
 
 .file_label {
+  pointer-events: none;
   background-color: white;
   @include shadow-light;
   border-radius: .5em;
   transition: .2s;
   padding: 1.5em;
+}
+
+.top_row {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  line-height: 2em;
+  gap: 1em;
+  @include for-mobile-only {
+    flex-direction: column;
+  } 
+}
+
+.upload_button {
+  @include flex-row;
+  @include shadow-light;
+  gap: 1em;
+  pointer-events: all;
+  flex-grow: 0;
+  max-width: 10em;
+  height: 2em;
+  border-radius: 1em;
+  background-color: $grey-4;
+  padding: .2em 1em;
+  transition: .2s;
+  white-space: nowrap;
 
   &:hover {
     cursor: pointer;
-    background-color: $green;
+    background-color: $white;
   }
   &:active {
     filter: brightness(90%);
   }
-}
-.text_row {
-  @include flex-row;
-  gap: 1em;
+
 }
 
 .preview_container {
-  border: 1px dashed $grey-1;
-  width: 100%;
-  max-height: 8em;
+  height: 8em;
+  min-width: 6em;
+  background: white;
+}
+
+.preview_image {
   margin-top: 1em;
-  background: $grey-4;
-  background-image: linear-gradient($grey-3 .05em, transparent .05em), linear-gradient(90deg, $grey-3 .05em, transparent .05em);
-  background-size: 3em 3em;
+}
+
+.preview_pdf {
+  @include shadow-light;
+  pointer-events: all;
+  transition: .2s;
+  height: 12em;
+  min-width: 8em;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 .preview {
-  max-height: 8em;
+  @include shadow-light;
+  border: 1px solid $black;
+  height: auto;
   width: auto;
+  max-width: 100%;
+  max-height: 100%;
   margin: 0 auto;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.selected_container {
+  display: flex;
+  flex-direction: column;
+  &.pdf {
+    flex-direction: row;
+  }
+}
+
+.preview_meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: right;
+  gap: .5em;
+  margin-right: 2em;
+  font-weight: 500;
+}
+
+.title {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: right;
+  @include for-mobile-only {
+    flex-direction: column;
+  } 
 }
