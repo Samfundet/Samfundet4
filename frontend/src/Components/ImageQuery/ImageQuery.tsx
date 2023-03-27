@@ -20,9 +20,10 @@ export function ImageQuery({ allImages, setImages }: ImageQueryProps) {
     setImages(imageQuery(allImages, search));
   }, [search, allImages, setImages]);
 
+  const placeholder = `${t(KEY.common_search)} (${allImages.length})`;
   return (
     <div className={styles.queryBar}>
-      <InputField onChange={setSearch} placeholder={t(KEY.common_search)} className={styles.element} />
+      <InputField onChange={setSearch} icon="mdi:search" placeholder={placeholder} className={styles.element} />
     </div>
   );
 }
