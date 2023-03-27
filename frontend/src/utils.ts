@@ -93,12 +93,12 @@ export function dbT(
     const type = typeof value;
     const isString = type === 'string';
     if (!isString)
-      // throw Error(`Expected string value for field ${field}, value was ${value} (${type})`); 
+      // throw Error(`Expected string value for field ${field}, value was ${value} (${type})`);
       return undefined;
     return value as string;
   }
 
-  // This is not safe behavior if api changes or when working on a partial object. 
+  // This is not safe behavior if api changes or when working on a partial object.
   // Instead of failing silently, page will fail to load. Fallback to empty string.
   // throw Error(`Object ${model} does not have the any of the fields '${field}' or '${fieldName}'`);
   return undefined;
