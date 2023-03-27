@@ -17,7 +17,8 @@
     "eslint:check": "eslint --config .eslintrc.js src",
     "stylelint:check": "stylelint --config .stylelintrc src/**/*.{css,scss}",
     "tsc:check": "tsc",
-    "tsc:watch": "tsc --watch"
+    "tsc:watch": "tsc --watch",
+    "verify": "yarn eslint:check && yarn tsc:check && yarn stylelint:check"
   },
   "dependencies": {
     "@babel/core": "^7.19.6",

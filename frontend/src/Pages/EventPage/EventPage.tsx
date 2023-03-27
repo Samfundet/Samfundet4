@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { getEvent } from '~/api';
 import { SamfundetLogoSpinner } from '~/Components';
@@ -12,7 +11,6 @@ export function EventPage() {
   const { id } = useParams();
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { i18n } = useTranslation();
 
   useEffect(() => {
     if (id) {

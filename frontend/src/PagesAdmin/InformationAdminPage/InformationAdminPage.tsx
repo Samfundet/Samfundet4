@@ -5,7 +5,7 @@ import { deleteInformationPage, getInformationPages } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -51,19 +51,24 @@ export function InformationAdminPage() {
     );
   }
 
+  const tableColumns = [
+    { content: t(KEY.name), sortable: true },
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.owner), sortable: true },
+    { content: t(KEY.last_updated), sortable: true },
+    '', // Buttons
+  ];
   const data = informationPages.map(function (element) {
     return [
-      new AlphabeticTableCell(
-        reverse({
-          pattern: ROUTES.frontend.information_page_detail,
-          urlParams: { slugField: element.slug_field },
-        }),
-      ),
-      new AlphabeticTableCell(dbT(element, 'title')),
-      new AlphabeticTableCell('To be added'),
-      new AlphabeticTableCell('To be added'),
+      reverse({
+        pattern: ROUTES.frontend.information_page_detail,
+        urlParams: { slugField: element.slug_field },
+      }),
+      dbT(element, 'title'),
+      'To be added',
+      'To be added',
       {
-        children: (
+        content: (
           <CrudButtons
             onEdit={() => {
               navigate(
@@ -80,7 +85,7 @@ export function InformationAdminPage() {
             }}
           />
         ),
-      } as ITableCell,
+      },
     ];
   });
 
@@ -100,7 +105,7 @@ export function InformationAdminPage() {
         {t(KEY.common_create)} {t(KEY.information_page_short)}
       </Button>
       <div className={styles.tableContainer}>
-        <Table columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']} data={data} />
+        <Table columns={tableColumns} data={data} />
       </div>
     </Page>
   );

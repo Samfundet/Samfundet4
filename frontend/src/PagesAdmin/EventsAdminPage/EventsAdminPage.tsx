@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteEvent, getEventsUpcomming } from '~/api';
-import { Button, EventQuery, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -51,26 +51,24 @@ export function EventsAdminPage() {
     );
   }
 
+  const tableColumns = [
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.start_time), sortable: true },
+    { content: t(KEY.category), sortable: true },
+    { content: t(KEY.organizer), sortable: true },
+    { content: t(KEY.venue), sortable: true },
+    '', // Buttons
+  ];
+
   const data = events.map(function (event: EventDto) {
     return [
-      new AlphabeticTableCell(
-        // <Link
-        //   url={reverse({
-        //     pattern: ROUTES.frontend.event,
-        //     urlParams: { id: event.id },
-        //   })}
-        // >
-        //   {dbT(event, 'title')}
-        // </Link>
-        dbT(event, 'title'),
-      ),
-      // new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
-      new AlphabeticTableCell(event.start_dt.toLocaleString()),
-      //new AlphabeticTableCell(event.event_group.name),
-      new AlphabeticTableCell(event.host),
-      new AlphabeticTableCell(event.location),
+      dbT(event, 'title', i18n.language) as string,
+      { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
+      event.category,
+      event.host,
+      event.location,
       {
-        children: (
+        content: (
           <CrudButtons
             onEdit={() => {
               navigate(
@@ -89,7 +87,7 @@ export function EventsAdminPage() {
             }}
           />
         ),
-      } as ITableCell,
+      },
     ];
   });
 
@@ -108,7 +106,7 @@ export function EventsAdminPage() {
       </div>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
-        <Table columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.organizer), t(KEY.venue), '']} data={data} />
+        <Table columns={tableColumns} data={data} />
       </div>
     </Page>
   );
