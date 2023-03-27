@@ -186,8 +186,15 @@ export function SamfForm<T>({
               </Button>
             </div>
           )}
+          {canDebug && (
+            <>
+              <br></br>
+              <Button theme="blue" preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
+                Debug
+              </Button>
+            </>
+          )}
         </form>
-        {canDebug && <button onClick={() => setIsDebugMode(!isDebugMode)}>Debug</button>}
         {devModePreview}
       </SamfFormConfigContext.Provider>
     </SamfFormContext.Provider>
