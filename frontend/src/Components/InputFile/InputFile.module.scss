@@ -1,0 +1,40 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+
+.file_label {
+  background-color: white;
+  @include shadow-light;
+  border-radius: .5em;
+  transition: .2s;
+  padding: 1.5em;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $green;
+  }
+  &:active {
+    filter: brightness(90%);
+  }
+}
+.text_row {
+  @include flex-row;
+  gap: 1em;
+}
+
+.preview_container {
+  border: 1px dashed $grey-1;
+  width: 100%;
+  max-height: 8em;
+  margin-top: 1em;
+  background: $grey-4;
+  background-image: linear-gradient($grey-3 .05em, transparent .05em), linear-gradient(90deg, $grey-3 .05em, transparent .05em);
+  background-size: 3em 3em;
+}
+
+.preview {
+  max-height: 8em;
+  width: auto;
+  margin: 0 auto;
+}
