@@ -10,9 +10,10 @@ export type InputFileType = 'image' | 'pdf';
 
 type InputFileProps = {
   fileType: InputFileType;
+  onSelected: (file: File) => void;
 };
 
-export function InputFile({ fileType }: InputFileProps) {
+export function InputFile({ fileType, onSelected }: InputFileProps) {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -23,6 +24,9 @@ export function InputFile({ fileType }: InputFileProps) {
       setSelectedFile(undefined);
     } else {
       setSelectedFile(e.target.files?.[0]);
+      if (e.target.files?.[0] !== undefined) {
+        onSelected(e.target.files?.[0]);
+      }
     }
   }
 
