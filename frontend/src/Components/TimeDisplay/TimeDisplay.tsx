@@ -43,20 +43,28 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
 
   if (displayType == DATETIME) {
     return <p className={className}> {date.toLocaleString()}</p>;
-  } else if (displayType == DATE) {
+  }
+
+  if (displayType == DATE) {
     return <p className={className}>{date.toDateString()}</p>;
-  } else if (displayType == NICEDATE) {
+  }
+
+  if (displayType == NICEDATE) {
     return (
       <p className={className}>
         {niceDays[date.getDay()]} {date.getDate()}. {niceMonths[date.getMonth()]}
       </p>
     );
-  } else if (displayType == EVENT) {
+  }
+
+  if (displayType == EVENT) {
     const options = { dateStyle: 'short' as const, timeStyle: 'short' as const };
     return <p className={className}>{date.toLocaleString('no-NO', options)}</p>;
-  } else if (displayType == TIME) {
-    return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
-  } else {
-    return <p className={className}></p>;
   }
+
+  if (displayType == TIME) {
+    return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
+  }
+
+  return <p className={className}></p>;
 }

@@ -14,6 +14,8 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   const { switchTheme, theme } = useGlobalContext();
   const { user } = useAuthContext();
 
+  const isDarkTheme = theme === THEME.DARK;
+
   const onIcon = <Icon icon="ph:moon-stars-thin" inline={true} width={24} className={styles.icon} />;
   const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24} className={styles.icon} />;
 
@@ -26,7 +28,7 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
 
   return (
     <div onClick={switchThemeHandler} className={classnames(styles.button, className)}>
-      {theme === THEME.DARK ? onIcon : offIcon}
+      {isDarkTheme ? onIcon : offIcon}
     </div>
   );
 }

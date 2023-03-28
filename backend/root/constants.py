@@ -5,11 +5,10 @@ class Environment:
     """
     BASE = 'base'
     DEV = 'development'
-    HEROKU = 'heroku'
     PROD = 'production'
 
-    ALL = [BASE, DEV, PROD, HEROKU]
-    VALID = [DEV, PROD, HEROKU]
+    ALL = [BASE, DEV, PROD]
+    VALID = [DEV, PROD]
 
 
 # Name of exposed csrf-token header in http traffic.

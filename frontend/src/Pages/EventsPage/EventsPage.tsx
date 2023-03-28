@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { EventsList } from './components/EventsList';
 import { getEventsPerDay } from '~/api';
-import { Page } from '~/Components/Page';
 import { SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components/Page';
+import { EventsList } from './components/EventsList';
 import styles from './EventsPage.module.scss';
 
 export function EventsPage() {
