@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getCsrfToken } from '~/api';
 import { useAuthContext } from '~/AuthContext';
-import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN, MOBILE_NAVIGATION_OPEN } from '~/constants';
+import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
 import { Children, SetState } from '~/types';
 
 /**
@@ -12,6 +12,9 @@ type GlobalContextProps = {
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
+  mirrorDimension: boolean;
+  setMirrorDimension: SetState<boolean>;
+  toggleMirrorDimension: () => boolean;
   mobileNavigation: boolean;
   setMobileNavigation: SetState<boolean>;
 };
@@ -54,6 +57,8 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
   const [mobileNavigation, setMobileNavigation] = useState(false);
   const { user } = useAuthContext();
 
+  const [mirrorDimension, setMirrorDimension] = useState<boolean>(user?.user_preference.mirror_dimension ?? false);
+
   // Stuff to do on first render.
   useEffect(() => {
     // Fetch and set fresh csrf token for future requests.
@@ -75,6 +80,12 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     }
   }
 
+  function toggleMirrorDimension(): boolean {
+    const toggledValue = !mirrorDimension;
+    setMirrorDimension(toggledValue);
+    return toggledValue;
+  }
+
   // Update body classes when mobile navigation opens/closes
   useEffect(() => {
     if (mobileNavigation) {
@@ -83,6 +94,15 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
       document.body.classList.remove(MOBILE_NAVIGATION_OPEN);
     }
   }, [mobileNavigation]);
+
+  // Update body classes when mobile navigation opens/closes
+  useEffect(() => {
+    if (mirrorDimension) {
+      document.body.classList.add(MIRROR_CLASS);
+    } else {
+      document.body.classList.remove(MIRROR_CLASS);
+    }
+  }, [mirrorDimension]);
 
   // Update body classes when theme changes.
   useEffect(() => {
@@ -111,6 +131,9 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     switchTheme,
     mobileNavigation,
     setMobileNavigation,
+    mirrorDimension,
+    setMirrorDimension,
+    toggleMirrorDimension,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
