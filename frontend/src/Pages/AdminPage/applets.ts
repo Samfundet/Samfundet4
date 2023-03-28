@@ -69,8 +69,6 @@ export const applets: Applet[] = [
     perm: PERM.SAMFUNDET_ADD_GANG,
     icon: 'mdi:people-group',
     defaultUrl: ROUTES.frontend.admin_gangs,
-    options: [
-      { text: 'Administrer gjenger', url: ROUTES.frontend.admin_gangs, type: TYPE.ADD },
-    ],
+    options: [{ text: 'Administrer gjenger', url: ROUTES.frontend.admin_gangs, type: TYPE.ADD }],
   },
 ];
