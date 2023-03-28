@@ -2,9 +2,10 @@ import itertools
 
 from rest_framework import serializers
 from guardian.models import GroupObjectPermission, UserObjectPermission
+
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import Group, Permission
 from django.core.files.images import ImageFile
+from django.contrib.auth.models import Group, Permission
 
 from .models import (
     Tag,
@@ -38,13 +39,13 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    # Read only tags used in frontend
+    # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
 
-    # Write only fields for posting new images
+    # Write only fields for posting new images.
     file = serializers.FileField(write_only=True, required=True)
-    # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models
+    # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models.
     tag_string = serializers.CharField(write_only=True, allow_blank=True, required=True)
 
     class Meta:
@@ -72,11 +73,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    # Read only properties (computed property, foreign model)
+    # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)
     image_url = serializers.SerializerMethodField(method_name='get_image_url', read_only=True)
 
-    # For post/put (change image by id)
+    # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
 
     class Meta:
@@ -139,7 +140,7 @@ class LoginSerializer(serializers.Serializer):
 
     def validate(self, attrs: dict) -> dict:
         # Inherited function.
-        # Take username and password from request
+        # Take username and password from request.
         username = attrs.get('username')
         password = attrs.get('password')
 
@@ -147,7 +148,7 @@ class LoginSerializer(serializers.Serializer):
             # Try to authenticate the user using Django auth framework.
             user = authenticate(request=self.context.get('request'), username=username, password=password)
             if not user:
-                # If we don't have a regular user, raise a ValidationError
+                # If we don't have a regular user, raise a ValidationError.
                 msg = 'Access denied: wrong username or password.'
                 raise serializers.ValidationError(msg, code='authorization')
         else:

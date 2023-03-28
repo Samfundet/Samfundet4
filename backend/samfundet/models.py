@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-import random
 import re
-from datetime import time, timedelta
+import random
 from typing import TYPE_CHECKING
+from datetime import time, timedelta
 
-from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ValidationError
+from guardian.shortcuts import assign_perm
+
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from guardian.shortcuts import assign_perm
+from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
 
@@ -204,9 +205,9 @@ class Venue(models.Model):
 
 class ClosedPeriod(models.Model):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
-    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
-
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
+
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
@@ -216,8 +217,8 @@ class ClosedPeriod(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
-        verbose_name = 'Stengt periode'
-        verbose_name_plural = 'Stengt perioder'
+        verbose_name = 'ClosedPeriod'
+        verbose_name_plural = 'ClosedPeriods'
 
     def __str__(self) -> str:
         return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
@@ -367,6 +368,10 @@ class FoodPreference(models.Model):
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    class Meta:
+        verbose_name = 'FoodPreference'
+        verbose_name_plural = 'FoodPreferences'
+
     def __str__(self) -> str:
         return f'{self.name_nb}'
 
@@ -378,6 +383,10 @@ class FoodCategory(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        verbose_name = 'FoodCategory'
+        verbose_name_plural = 'FoodCategories'
 
     def __str__(self) -> str:
         return f'{self.name_nb}'
@@ -448,7 +457,7 @@ class Saksdokument(models.Model):
 
     class Meta:
         verbose_name = 'Saksdokument'
-        verbose_name_plural = 'Saksdokument'
+        verbose_name_plural = 'Saksdokumenter'
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
