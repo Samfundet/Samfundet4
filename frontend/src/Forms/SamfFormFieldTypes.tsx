@@ -133,6 +133,14 @@ function makeImagePicker(args: SamfFormFieldArgs) {
 // File picker
 function makeFilePickerFunction(fileType: InputFileType) {
   return function makeFilePicker(args: SamfFormFieldArgs) {
-    return <InputFile fileType={fileType} key={args.field} label={args.label} onSelected={args.onChange} />;
+    return (
+      <InputFile
+        fileType={fileType}
+        key={args.field}
+        label={args.label}
+        error={args.error}
+        onSelected={args.onChange}
+      />
+    );
   };
 }

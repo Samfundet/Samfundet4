@@ -74,7 +74,7 @@ export function GangsFormAdminPage() {
         onSubmit={handleOnSubmit}
         submitText={submitText}
         validateOnInit={id !== undefined}
-        devMode={true}
+        devMode={false}
       >
         <div className={styles.row}>
           <SamfFormField field="name_nb" type="text" label={`${t(KEY.norwegian)} ${t(KEY.name)}`} />

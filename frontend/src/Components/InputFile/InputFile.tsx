@@ -11,10 +11,11 @@ export type InputFileType = 'image' | 'pdf';
 type InputFileProps = {
   fileType: InputFileType;
   label?: ReactNode;
+  error?: boolean | string;
   onSelected: (file: File) => void;
 };
 
-export function InputFile({ fileType, label, onSelected }: InputFileProps) {
+export function InputFile({ fileType, label, error = false, onSelected }: InputFileProps) {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -62,13 +63,14 @@ export function InputFile({ fileType, label, onSelected }: InputFileProps) {
   const horizontalPreview = fileType === 'pdf';
   const typePreviewClass = 'preview_' + fileType.toLowerCase();
   const fileSizeMb = ((selectedFile?.size ?? 0) / 1024 / 1024).toFixed(2);
+  const isError = error !== false;
 
   return (
     <div>
       {/* Visual label */}
       <label>{label}</label>
       {/* Label container to accept button input */}
-      <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal)}>
+      <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal, isError && styles.error)}>
         <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
 
         {/* Select button */}

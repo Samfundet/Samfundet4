@@ -50,9 +50,14 @@ body {
   height: 100%;
   background-color: $theme-light-bg;
 
-  // Disable scrolling when mobile navbar is open
+  // Disable scrolling when mobile navbar is open.
   &.mobile-navigation-open {
     overflow: hidden;
+  }
+
+  // See constants MIRROR_CLASS.
+  &.mirror-dimension {
+    transform: scaleX(-1);
   }
 }
 
