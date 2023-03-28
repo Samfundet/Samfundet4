@@ -1,28 +1,24 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getClosedPeriod } from '~/api';
-import { Button, FormInputField, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
+import { ClosedPeriodDto } from '~/dto';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { DTOToForm } from '~/utils';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  const {
-    register,
-    // handleSubmit,
-    // setError,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [closedPeriod, setClosedPeriod] = useState<ClosedPeriodDto | undefined>(undefined);
+
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
 
@@ -35,7 +31,8 @@ export function ClosedPeriodFormAdminPage() {
     if (id) {
       getClosedPeriod(id)
         .then((data) => {
-          DTOToForm(data, setValue, []);
+          setClosedPeriod(data);
+          setShowSpinner(false);
         })
         .catch((data) => {
           // TODO add error pop up message?
@@ -43,21 +40,20 @@ export function ClosedPeriodFormAdminPage() {
             navigate(ROUTES.frontend.admin_gangs);
           }
         });
+    } else {
+      setShowSpinner(false);
     }
-    setShowSpinner(false);
   }, [id]);
 
-  // function onSubmit(data: ClosedPeriodDto) {
-  //   (id ? putClosedPeriod(id, data) : postClosedPeriod(data))
-  //     .then(() => {
-  //       navigate(ROUTES.frontend.admin_closed);
-  //     })
-  //     .catch((e) => {
-  //       for (const err in e.response.data) {
-  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
-  //       }
-  //     });
-  // }
+  function handleOnSubmit(data: ClosedPeriodDto) {
+    if (id !== undefined) {
+      // TODO patch data
+    } else {
+      // TODO post data
+    }
+    alert('TODO Submit');
+    console.log(JSON.stringify(data));
+  }
 
   if (showSpinner) {
     return (
@@ -67,6 +63,9 @@ export function ClosedPeriodFormAdminPage() {
     );
   }
 
+  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.opening_hours)}'`;
+  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.norwegian)})`;
+
   return (
     <Page>
       <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_closed)} className={styles.backButton}>
@@ -75,93 +74,32 @@ export function ClosedPeriodFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period)}
       </h1>
-      {/* TODO: fix */}
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      <form>
+      <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
         <div className={styles.row}>
-          <div className={styles.col}>
-            <FormTextAreaField
-              errors={errors}
-              className={styles.input}
-              name="message_no"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>
-                {`${t(KEY.common_message)} under '${t(KEY.opening_hours)}' (${t(KEY.norwegian)})`}
-              </p>
-            </FormTextAreaField>
-            <FormTextAreaField
-              errors={errors}
-              className={styles.input}
-              name="description_no"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>
-                {`${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.norwegian)})`}
-              </p>
-            </FormTextAreaField>
-          </div>
-          <div className={styles.col}>
-            <FormTextAreaField
-              errors={errors}
-              className={styles.input}
-              name="message_en"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>
-                {`${t(KEY.common_message)} under '${t(KEY.opening_hours)}' (${t(KEY.english)})`}
-              </p>
-            </FormTextAreaField>
-            <FormTextAreaField
-              errors={errors}
-              className={styles.input}
-              name="description_en"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>
-                {`${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.english)})`}
-              </p>
-            </FormTextAreaField>
-          </div>
+          <SamfFormField
+            field="message_no"
+            type="text-long"
+            label={`${labelMessage} (${KEY.norwegian})`}
+          ></SamfFormField>
+          <SamfFormField field="message_en" type="text-long" label={`${labelMessage} (${KEY.english})`}></SamfFormField>
         </div>
         <div className={styles.row}>
-          <div className={styles.col}>
-            <FormInputField
-              type="date"
-              errors={errors}
-              className={styles.input}
-              name="start_dt"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>{t(KEY.start_time)}</p>
-            </FormInputField>
-          </div>
-          <div className={styles.col}>
-            <FormInputField
-              type="date"
-              errors={errors}
-              className={styles.input}
-              name="end_dt"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>{t(KEY.end_time)}</p>
-            </FormInputField>
-          </div>
+          <SamfFormField
+            field="description_no"
+            type="text-long"
+            label={`${labelDescription} (${KEY.norwegian})`}
+          ></SamfFormField>
+          <SamfFormField
+            field="description_en"
+            type="text-long"
+            label={`${labelDescription} (${KEY.english})`}
+          ></SamfFormField>
         </div>
-        <div className={styles.submitContainer}>
-          <Button theme={'success'} type="submit">
-            <p className={styles.submit}>
-              {id ? t(KEY.common_save) : t(KEY.common_create)} {t(KEY.closed_period)}
-            </p>
-          </Button>
+        <div className={styles.row}>
+          <SamfFormField field="start_dt" type="datetime" label={`${t(KEY.start_time)}`}></SamfFormField>
+          <SamfFormField field="end_dt" type="datetime" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
-      </form>
+      </SamfForm>
     </Page>
   );
 }

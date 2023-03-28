@@ -3,20 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './InformationAdminPage.module.scss';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -50,46 +51,41 @@ export function InformationAdminPage() {
     );
   }
 
+  const tableColumns = [
+    { content: t(KEY.name), sortable: true },
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.owner), sortable: true },
+    { content: t(KEY.last_updated), sortable: true },
+    '', // Buttons
+  ];
   const data = informationPages.map(function (element) {
     return [
-      new AlphabeticTableCell(
-        reverse({
-          pattern: ROUTES.frontend.information_page_detail,
-          urlParams: { slugField: element.slug_field },
-        }),
-      ),
-      new AlphabeticTableCell(dbT(element, 'title', i18n.language) as string),
-      new AlphabeticTableCell('To be added'),
-      new AlphabeticTableCell('To be added'),
+      reverse({
+        pattern: ROUTES.frontend.information_page_detail,
+        urlParams: { slugField: element.slug_field },
+      }),
+      dbT(element, 'title'),
+      'To be added',
+      'To be added',
       {
-        children: (
-          <div>
-            <Button
-              theme="blue"
-              onClick={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.information_page_edit,
-                    urlParams: { slugField: element.slug_field },
-                  }),
-                );
-              }}
-            >
-              {t(KEY.edit)}
-            </Button>
-            <Button
-              theme="samf"
-              onClick={() => {
-                if (window.confirm(t(KEY.admin_information_confirm_delete) as string)) {
-                  deletePage(element.slug_field);
-                }
-              }}
-            >
-              {t(KEY.delete)}
-            </Button>{' '}
-          </div>
+        content: (
+          <CrudButtons
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.information_page_edit,
+                  urlParams: { slugField: element.slug_field },
+                }),
+              );
+            }}
+            onDelete={() => {
+              if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
+                deletePage(element.slug_field);
+              }
+            }}
+          />
         ),
-      } as ITableCell,
+      },
     ];
   });
 
@@ -109,7 +105,7 @@ export function InformationAdminPage() {
         {t(KEY.common_create)} {t(KEY.information_page_short)}
       </Button>
       <div className={styles.tableContainer}>
-        <Table columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']} data={data} />
+        <Table columns={tableColumns} data={data} />
       </div>
     </Page>
   );

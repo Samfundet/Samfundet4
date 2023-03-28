@@ -3,6 +3,9 @@
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'constants';
 
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
+@import 'mixins';
+
 /* stylelint-disable selector-max-type */
 /* stylelint-disable selector-max-universal */
 
@@ -28,15 +31,24 @@ video {
   max-width: 100%;
 }
 
+.iconify {
+  max-width: initial;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100vw;
-  height: 100vh;
-  background-color: $white;
+  width: 100%;
+  height: 100%;
+  background-color: $theme-light-bg;
 
   // Disable scrolling when mobile navbar is open
   &.mobile-navigation-open {
@@ -59,6 +71,23 @@ a {
   }
 }
 
+form {
+  background-color: $grey-5;
+  border: 1px solid $grey-4;
+  box-shadow: 0 0 25px 5px $black-t10;
+  border-radius: 2em;
+  padding: 1.5em;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+  margin-left: 0.2em;
+  color: $black;
+}
+
 // Themes:
 // Use names from constant THEME.
 
@@ -66,6 +95,15 @@ a {
 .theme-dark {
   background-color: $theme-dark-bg;
   color: $theme-dark-color;
+
+  form {
+    background-color: $form-bg-dark;
+    border: 1px solid $form-border-dark;
+  }
+
+  label {
+    color: $white;
+  }
 
   input,
   textarea {
@@ -100,3 +138,36 @@ a {
 }
 
 // End: Themes --------------------------------------------------------------------------------------------------------
+
+/*
+fieldset {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border: none;
+}
+
+legend {
+  margin-left: 1em;
+}
+
+label {
+  font-weight: bold;
+  color: $grey-1;
+}
+
+input[type=text], textarea {
+  @include rounded;
+  padding: 1em 1em;
+  border: 1px solid transparent;
+  outline: none;
+  
+
+  &:focus {
+    outline: none;
+    border: 1px solid $blue;
+    background-color: $blue-lighter;
+  }
+}
+*/

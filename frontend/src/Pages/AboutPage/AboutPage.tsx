@@ -1,12 +1,14 @@
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
 import { runderode, splash } from '~/assets';
-import { Button } from '~/Components';
-import { ImageList } from '~/Components/ImageList';
+import { Button, Carousel, ImageCard } from '~/Components';
 import { Page } from '~/Components/Page';
+import { ROUTES } from '~/routes';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
 
 export function AboutPage() {
+  const navigate = useNavigate();
   return (
     <Page>
       <div className={styles.row}>
@@ -54,7 +56,13 @@ export function AboutPage() {
         </Button>
       </div>
       <h2 className={styles.header2}>Lokaler</h2>
-      <ImageList size={160} images={VENUES.images} />
+
+      <Carousel spacing={1.5}>
+        {VENUES.images.map((image, idx) => {
+          return <ImageCard key={idx} title={image.name} imageUrl={image.src} />;
+        })}
+      </Carousel>
+
       <div className={styles.row}>
         <Button className={styles.button} theme="outlined">
           OVERSIKTSKART
@@ -74,7 +82,7 @@ export function AboutPage() {
               og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i
               Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.
             </p>
-            <Button className={styles.button} theme="secondary">
+            <Button className={styles.button} theme="secondary" onClick={() => navigate(ROUTES.frontend.groups)}>
               GJENGENE PÅ SAMFUNDET
             </Button>
             <Button className={styles.button} theme="secondary">

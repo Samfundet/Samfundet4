@@ -1,6 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { getTextItem } from '~/api';
+import { useAuthContext } from '~/AuthContext';
+import { hasPerm } from '~/utils';
 import { desktopBpLower, mobileBpUpper } from './constants';
+import { TextItemDto } from './dto';
+import { LANGUAGES } from './i18n/constants';
 
 // Make typescript happy.
 declare global {
@@ -25,9 +31,9 @@ export function useGoatCounter(): void {
   }, [location]);
 }
 
-// ------------------------------
-
-// Return true while on desktop width, false otherwise
+/**
+ * Return true while on desktop width, false otherwise
+ */
 export function useDesktop(): boolean {
   const [width, setWidth] = useState(window.innerWidth);
   const updateMedia = () => {
@@ -41,8 +47,9 @@ export function useDesktop(): boolean {
   return width > desktopBpLower;
 }
 
-// ------------------------------
-
+/**
+ * @returns true if mobile, false otherwise
+ */
 export function useMobile(): boolean {
   const [width, setWidth] = useState(window.innerWidth);
   const updateMedia = () => {
@@ -56,7 +63,25 @@ export function useMobile(): boolean {
   return width < mobileBpUpper;
 }
 
-// Scroll detection
+/**
+ *  Hook that returns the correct translation for given key
+ */
+export function useTextItem(key: string, language?: string): string | undefined {
+  const [textItem, setTextItem] = useState<TextItemDto>();
+  const { i18n } = useTranslation();
+  const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
+  useEffect(() => {
+    getTextItem(key).then((data) => {
+      setTextItem(data);
+    });
+  }, [key]);
+  return isNorwegian ? textItem?.text_nb : textItem?.text_en;
+}
+
+/**
+ * Scroll detection hook
+ * @returns the current y scroll
+ */
 export function useScrollY(): number {
   const [scrollY, setScrollY] = useState(window.scrollY);
   useEffect(() => {
@@ -74,7 +99,11 @@ export function useScrollY(): number {
   return scrollY;
 }
 
-// Element offset from screen center (id of html element)
+/**
+ * Element offset from screen center (id of html element)
+ * @param id id of the html element
+ * @returns pixel offset from centre of screen
+ */
 export function useScreenCenterOffset(id: string): number {
   const element = document.getElementById(id);
   const rect = element?.getBoundingClientRect();
@@ -99,4 +128,26 @@ export function useScreenCenterOffset(id: string): number {
     };
   }, [id]);
   return positionY;
+}
+
+/**
+ * Utility hook to get the previous value of react state
+ * @param value current state
+ * @returns previous state after next render
+ */
+export function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
+/**
+ * Shorthand to check if current user has a given permission.
+ */
+export function usePermission(permission: string, obj?: string | number): boolean {
+  const { user } = useAuthContext();
+  const hasPermission = hasPerm({ permission: permission, user: user, obj: obj });
+  return hasPermission;
 }
