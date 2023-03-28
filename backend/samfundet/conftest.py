@@ -4,9 +4,9 @@ import pytest
 from rest_framework.test import APIClient
 
 from django.test import Client
-from backend.samfundet.contants import DEV_PASSWORD
 
 from samfundet.models import User
+from samfundet.contants import DEV_PASSWORD
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.
@@ -49,7 +49,7 @@ def fixture_django_client() -> Client:
 
 @pytest.fixture
 def fixture_superuser_pw() -> Iterator[str]:
-    yield 'Django123'
+    yield DEV_PASSWORD
 
 
 @pytest.fixture
@@ -65,7 +65,7 @@ def fixture_superuser(fixture_superuser_pw: str) -> Iterator[User]:
 
 @pytest.fixture
 def fixture_staff_pw() -> Iterator[str]:
-    yield 'Django123'
+    yield DEV_PASSWORD
 
 
 @pytest.fixture
