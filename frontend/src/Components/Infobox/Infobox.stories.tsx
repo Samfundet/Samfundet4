@@ -17,30 +17,6 @@ export default {
 const Template: ComponentStory<typeof Infobox> = function (args) {
   return <Infobox {...args} />;
 };
-export const WithImgWithURL = Template.bind({});
-WithImgWithURL.args = {
-  type: 'WithImgWithURL',
-};
 
-export const NoImgWithURL = Template.bind({});
-NoImgWithURL.args = {
-  type: 'NoImgWithURL',
-};
-
-export const WithImgNoURL = Template.bind({});
-WithImgNoURL.args = {
-  type: 'WithImgNoURL',
-};
-
-export const NoImgNoURL = Template.bind({});
-NoImgNoURL.args = {
-  type: 'NoImgNoURL',
-};
-export const LongWithImg = Template.bind({});
-LongWithImg.args = {
-  type: 'LongWithImg',
-};
-export const LongWithOutImg = Template.bind({});
-LongWithOutImg.args = {
-  type: 'LongWithOutImg',
-};
+export const Basic = Template.bind({});
+Basic.args = {};

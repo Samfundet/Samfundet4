@@ -100,10 +100,6 @@
   }
 }
 
-.no_img_wrap {
-  display: none;
-}
-
 .infobox_img {
   height: 100px;
   width: 100%;
@@ -118,96 +114,13 @@
 .infobox_img:hover {
   transform: scale(1.1);
 }
-// From under here is the styling for long version of infobox
-.infoboxLong_wrap {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  border-radius: 4px;
-  overflow: hidden;
-  color: white;
-}
 
-.infoboxLong_with_img {
-  overflow: hidden;
-  height: 15vh;
-  border-radius: 4px 4px 0 0;
-}
-
-.infoboxLong_without_img {
-  display: none;
-}
-
-.infoboxLong_img {
+.infobox_img_noURL {
+  height: 100px;
+  width: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 1.5s ease-in-out;
-}
-
-.infoboxLong_img:hover {
-  transform: scale(1.05);
-}
-
-.infoboxLong_txt_wrap {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: none;
-}
-
-.infoboxLong_h1 {
-  font-size: 2em;
-  padding: 5px 15px 0 15px;
-  font-weight: 700;
-}
-
-.infoboxLong_paragraph {
-  font-size: 1em;
-  margin: 0;
-  padding: 0 15px 5px 15px;
-  overflow: hidden;
-  transition: transform 1.5s ease-in-out;
-}
-//This gradient is only visible if a wrapper div
-.gradient {
-  position: relative;
-  display: flex;
-  align-items: left;
-  justify-content: left;
-  bottom: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(to bottom, transparent, $red_samf);
-}
-
-.gradient_none {
-  display: none;
-}
-
-.infoboxLong_paragraph_exp {
-  font-size: 1em;
-  margin: 0;
-  padding: 0 15px 5px 15px;
-  height: fit-content;
-}
-
-.infoboxLong_paragraph_not {
-  font-size: 1em;
-  margin: 0;
-  padding: 0 15px 5px 15px;
-  overflow: hidden;
-  //this is a calculation to implement max-lines since CSS does not fully support this (yet):
-  --max-lines: 7;
-  --line-height: 1.4;
-  max-height: calc(var(--max-lines) * 1em * var(--line-height));
-  line-height: var(--line-height);
-}
-
-.expand_btn {
-  z-index: 100;
-  background-color: white;
-  color: black;
-  font-size: 1em;
-  font-weight: 500;
-  border: 4px solid white;
-  width: 100px;
+  @include for-tablet-up {
+    height: 200px;
+  }
 }
