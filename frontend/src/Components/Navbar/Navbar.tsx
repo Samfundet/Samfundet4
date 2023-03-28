@@ -114,7 +114,8 @@ export function Navbar() {
       expandedDropdown === label && styles.dropdown_open,
     );
 
-    // Desktop: show dropdown on hover. Mobile: show dropdown after clicking
+    // Desktop: show dropdown on hover
+    // Mobile: show dropdown after clicking
     const showDropdown = dropdownLinks && (isDesktop || expandedDropdown === label);
 
     return (
@@ -125,7 +126,7 @@ export function Navbar() {
           onClick={() => {
             if (!dropdownLinks) {
               setMobileNavigation(false);
-            } else {
+            } else if (!isDesktop) {
               // toggle dropdown
               setExpandedDropdown(expandedDropdown === label ? '' : label);
             }

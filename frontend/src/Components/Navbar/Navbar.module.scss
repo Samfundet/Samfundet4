@@ -8,10 +8,12 @@
 @import 'src/constants';
 
 // Background
-$navbar-bg: rgba(255, 255, 255, 0.6);
+$navbar-bg: rgba(255, 255, 255, 255);
 $navbar-bg-transparent: rgba(255, 255, 255, 0);
-$navbar-bg-dark: rgba(0, 0, 0, 0.6);
+$navbar-bg-dark: rgba(0, 0, 0, 255);
 $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
+$navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
+$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
 
 // Link
 $navbar-link-light-hover-gradient-top: #f4f4f4;
@@ -87,12 +89,12 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   z-index: 1;
   width: 100%;
   flex-direction: column;
-  background: $navbar-bg;
+  background: $navbar-dropdown-bg;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
 
   @include theme-dark {
-    background: $navbar-bg-dark;
+    background: $navbar-dropdown-bg-dark;
     color: $white;
   }
 }
