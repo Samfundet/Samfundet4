@@ -1,1 +1,3 @@
-export const ROUTES_OTHER = {} as const;
+export const ROUTES_OTHER = {
+  foto_samfundet_no: 'https://foto.samfundet.no/',
+} as const;
