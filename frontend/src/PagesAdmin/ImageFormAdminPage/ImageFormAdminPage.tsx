@@ -77,7 +77,7 @@ export function ImageFormAdminPage() {
       <h1 className={styles.header}>
         {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
       </h1>
-      <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText}>
+      <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
         <SamfFormField field="title" type="text" label={`${t(KEY.name)}`} />
         {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
         <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
