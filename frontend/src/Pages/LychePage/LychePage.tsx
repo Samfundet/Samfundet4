@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SultenCard } from '~/Components';
-import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
+import { SultenCard } from '~/Components';
+import { SultenPage } from '~/Components/SultenPage';
 import { VENUE } from '~/constants';
 import { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
