@@ -197,7 +197,8 @@ class UserSerializer(serializers.ModelSerializer):
     def get_permissions(self, user: User) -> list[str]:
         return user.get_all_permissions()
 
-    def _permission_to_str(self, permission: Permission) -> str:
+    @staticmethod
+    def _permission_to_str(permission: Permission) -> str:
         return f'{permission.content_type.app_label}.{permission.codename}'
 
     def _obj_permission_to_obj(self, obj_perm: UserObjectPermission | GroupObjectPermission) -> dict[str, str]:
@@ -219,8 +220,8 @@ class UserSerializer(serializers.ModelSerializer):
         return perm_objs
 
     def get_user_preference(self, user: User) -> dict:
-        prefs = UserPreference.objects.get_or_create(user=user)
-        return UserPreferenceSerializer(prefs, many=False).data
+        user_preference, _created = UserPreference.objects.get_or_create(user=user)
+        return UserPreferenceSerializer(user_preference, many=False).data
 
 
 # GANGS ###
