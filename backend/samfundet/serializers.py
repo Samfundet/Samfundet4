@@ -197,7 +197,8 @@ class UserSerializer(serializers.ModelSerializer):
     def get_permissions(self, user: User) -> list[str]:
         return user.get_all_permissions()
 
-    def _permission_to_str(self, permission: Permission) -> str:
+    @staticmethod
+    def _permission_to_str(permission: Permission) -> str:
         return f'{permission.content_type.app_label}.{permission.codename}'
 
     def _obj_permission_to_obj(self, obj_perm: UserObjectPermission | GroupObjectPermission) -> dict[str, str]:

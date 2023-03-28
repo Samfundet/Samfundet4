@@ -5,10 +5,12 @@ from typing import TYPE_CHECKING
 from rest_framework.status import is_success
 
 from django.urls import reverse
+from django.contrib.auth.models import Permission
 
 from root.utils import routes
 
 from samfundet.models import User
+from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
@@ -43,42 +45,50 @@ def test_login_logout(
 
 
 def test_get_user(fixture_rest_client: APIClient, fixture_user: User):
-    # Arrange
+    ### Arrange ###
+
+    # Give user an arbitrary permission.
+    some_perm = Permission.objects.first()
+    fixture_user.user_permissions.add(some_perm)
+    some_perm_str = UserSerializer._permission_to_str(permission=some_perm)
+
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(routes.samfundet__user)
 
-    # Act
+    ### Act ###
     response: Response = fixture_rest_client.get(path=url)
     data = response.json()
 
-    # Assert
+    ### Assert ###
     assert is_success(code=response.status_code)
     assert data['username'] == fixture_user.username
     # All users should have a UserPreference.
     assert data['user_preference']['id'] == fixture_user.userpreference.id
     # All users should have a Profile.
     assert data['profile']['id'] == fixture_user.profile.id
+    # Check permission in list.
+    assert some_perm_str in data['permissions']
 
 
 def test_get_users(fixture_rest_client: APIClient, fixture_user: User):
-    # Arrange
+    ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(routes.samfundet__users)
 
-    # Act
+    ### Act ###
     response: Response = fixture_rest_client.get(path=url)
 
-    # Assert
+    ### Assert ###
     assert is_success(code=response.status_code)
 
 
 def test_get_groups(fixture_rest_client: APIClient, fixture_user: User):
-    # Arrange
+    ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(routes.samfundet__groups)
 
-    # Act
+    ### Act ###
     response: Response = fixture_rest_client.get(path=url)
 
-    # Assert
+    ### Assert ###
     assert is_success(code=response.status_code)
