@@ -10,6 +10,8 @@ export const THEME = {
 // Class added to body when mobile navigation is open
 export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
 
+export const MIRROR_CLASS = 'mirror-dimension';
+
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
