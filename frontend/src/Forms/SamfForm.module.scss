@@ -16,8 +16,23 @@
   margin-top: 1em;
 }
 
-// Debug styling
+// Shake animation on error
+@keyframes shake {
+  0% { transform: translateX(0); }
+ 15% { transform: translateX(8px); }
+ 40% { transform: translateX(-8px); }
+ 75% { transform: translateX(8px); }
+ 100% { transform: translateX(0); }
+}
 
+// Error class
+.animate_error {
+  animation-name: shake;
+  animation-duration: .4s;
+  animation-timing-function: ease-out;
+}
+
+// Debug styling
 .debug_box {
   padding: 1em;
   display: flex;

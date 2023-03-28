@@ -1,7 +1,51 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
 import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
+
+// ================================== //
+//             Utilities              //
+// ================================== //
+
+/**
+ * Calculates the error state for a given value
+ * @param value Current value of the field
+ * @param required Whether the field is required
+ * @param validator Optional validation function
+ * @returns error state (true/false or error message string)
+ */
+function getErrorState<U>(value: U, required?: boolean, validator?: (v: U) => string | boolean) {
+  // Missing value but field is required
+  if (required === true && (value === undefined || value === '')) {
+    return true;
+  }
+  // Run custom validation check
+  const validationResult = validator?.(value);
+  // No error for validator
+  if (validationResult === undefined || validationResult === true) {
+    return false;
+  }
+  // Error for validator
+  if (validationResult === false) {
+    return true;
+  }
+  // Error message from validator
+  return validationResult;
+}
+
+/**
+ * Casts a string value to a number
+ * @param value string value
+ * @param int cast as int
+ * @returns number value
+ */
+function castNumber(value: string, int: boolean): number | undefined {
+  const num = int ? Number.parseInt(value) : Number.parseFloat(value);
+  if (isNaN(num)) {
+    return undefined;
+  }
+  return num;
+}
 
 // ================================== //
 //        Form Field Component        //
@@ -12,9 +56,9 @@ import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './Sa
  * @param type The field type to use, eg text, number, image etc.
  * @param required Whether or not the field is required
  * @param validator Optional additional validator function for the field
- * @returns
+ * @returns hook for value, state and setValue
  */
-function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
+function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
   // Get the context provided by SamfForm
   const { state, dispatch } = useContext(SamfFormContext);
   if (state === undefined || dispatch === undefined) {
@@ -22,35 +66,20 @@ function useSamfFormInput<U>(field: string, required: boolean, validator?: (v: U
   }
 
   // Set the current value of the state using form context
-  function setValue(newValue: U, skipValidation?: boolean) {
-    // Validation check
-    let validatorResponse: string | boolean = true;
-    if (newValue !== undefined && validator !== undefined) {
-      validatorResponse = validator?.(newValue);
-    }
-    const failedRequirement = required && newValue === undefined;
-    const isError = failedRequirement || validatorResponse !== true;
-    // Error state based on validation
-    let errorState: string | boolean = isError;
-    if (validatorResponse !== true && validatorResponse !== undefined) {
-      errorState = validatorResponse;
-    }
-    // Skipping validation
-    if (skipValidation === true) {
-      errorState = state.errors[field];
-    }
+  function setValue(newValue: U) {
     // Dispatch event to form reducer
     dispatch?.({
       field: field,
       value: newValue,
-      error: errorState,
+      error: getErrorState(newValue, required, validator),
     });
   }
 
   // Return state to render and update function
   const value = state.values[field] as U;
   const error = state.errors[field];
-  return { value, error, setValue };
+  const didSubmit = state.didSubmit;
+  return { value, error, didSubmit, setValue };
 }
 
 // SamfFormField properties
@@ -76,53 +105,38 @@ export function SamfFormField<U>({
   validator,
 }: SamfFormFieldProps<U>) {
   // Validate on init context
-  const { validateOnInit } = useContext(SamfFormConfigContext);
+  const { validateOnInit, validateOn } = useContext(SamfFormConfigContext);
 
-  // State (from context hook)
-  const { value, error, setValue } = useSamfFormInput<U>(field, required, validator);
+  // Value state (from context hook)
+  const { value, error, didSubmit, setValue } = useSamfForm<U>(field, required, validator);
 
-  // Casts a string to an integer (undefined if NaN)
-  function numberCaster(v: string): U | undefined {
-    const num = type === 'integer' ? Number.parseInt(v) : Number.parseFloat(v);
-    if (isNaN(num)) {
-      // TODO need to handle typing of commas etc. which are temporarily NaNs
-      return v as U;
-    }
-    return num as U;
-  }
-
-  // Casts an empty string to undefined
-  function stringCaster(v: string): U | undefined {
-    if (required && v === '') {
-      return undefined;
-    }
-    return v as U;
-  }
+  // Whether or not to show error for field
+  // Toggeled on submit or on field change
+  const [showError, setShowError] = useState<boolean>(validateOnInit);
 
   // Handles all change events
-  function handleOnChange(newValue: unknown, skipValidation?: boolean) {
+  function handleOnChange(newValue: unknown, initialUpdate?: boolean) {
     // Cast types (eg number inputs might initially be strings)
-    // This should likely be moved to each input component
-    switch (type) {
-      case 'number':
-        newValue = numberCaster(newValue as string);
-        break;
-      case 'float':
-        newValue = numberCaster(newValue as string);
-        break;
-      case 'integer':
-        newValue = numberCaster(newValue as string);
-        break;
-      case 'text':
-        newValue = stringCaster(newValue as string);
-        break;
-      case 'text-long':
-        newValue = stringCaster(newValue as string);
-        break;
+    if (type === 'number' || type === 'float') {
+      newValue = castNumber(newValue as string, false);
     }
-    // Set value in samf form hook
-    setValue(newValue as U, skipValidation);
+    if (type === 'integer') {
+      newValue = castNumber(newValue as string, true);
+    }
+    // Set value using samf form hook
+    setValue(newValue as U);
+    // Validate on change, enable display error
+    if (validateOn === 'change' && initialUpdate !== true) {
+      setShowError(true);
+    }
   }
+
+  // Enable show error for validate on submit
+  useEffect(() => {
+    if (didSubmit) {
+      setShowError(true);
+    }
+  }, [didSubmit]);
 
   // Validate again whenever validateOnInit is turned on
   useEffect(() => {
@@ -135,7 +149,7 @@ export function SamfFormField<U>({
 
   // Set value in context on first render (not critical to run every dep change)
   useEffect(() => {
-    handleOnChange(value, !validateOnInit);
+    handleOnChange(value, true);
     // Handle on change depends on field type which should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -151,7 +165,7 @@ export function SamfFormField<U>({
       field: field,
       value: value,
       onChange: handleOnChange,
-      error: error,
+      error: showError ? error : false,
       label: label,
       // Options args
       options: options,
