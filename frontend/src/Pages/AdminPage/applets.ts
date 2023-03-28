@@ -25,7 +25,6 @@ export const applets: Applet[] = [
     options: [
       { text: 'Opprett arrangement', url: ROUTES.frontend.admin_events_create, type: TYPE.ADD },
       { text: 'Rediger arrangementer', url: ROUTES.frontend.admin_events, type: TYPE.MANAGE },
-      { text: 'Tidligere arrangementer', url: '', type: TYPE.MANAGE },
     ],
   },
   {
@@ -72,7 +71,6 @@ export const applets: Applet[] = [
     defaultUrl: ROUTES.frontend.admin_gangs,
     options: [
       { text: 'Administrer gjenger', url: ROUTES.frontend.admin_gangs, type: TYPE.ADD },
-      { text: 'Gjengene på huset', url: ROUTES.frontend.groups, type: TYPE.MANAGE },
     ],
   },
 ];
