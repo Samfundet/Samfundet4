@@ -13,7 +13,9 @@ import { WISEWORDS } from './data';
 export function AdminPage() {
   const { user } = useAuthContext();
   const { t } = useTranslation();
-  const WISEWORD = WISEWORDS[Math.floor(Math.random() * WISEWORDS.length)];
+
+  const randomWisewordIndex = Math.floor(Math.random() * WISEWORDS.length);
+  const WISEWORD = WISEWORDS[randomWisewordIndex];
 
   return (
     <Page>
@@ -25,15 +27,20 @@ export function AdminPage() {
           </h1>
           <p className={styles.wisewords}>{WISEWORD}</p>
         </div>
+
         <Button theme="outlined" rounded={true} className={styles.faq_button}>
           <p className={styles.faq_text}>{t(KEY.control_panel_faq)}</p>
         </Button>
       </div>
+
       <div className={styles.applets}>
-        {applets.map(function (element, key) {
-          if (!element.perm || hasPerm({ user: user, permission: element.perm })) {
-            return <AdminBox key={key} title={element.title} icon={element.icon} options={element.options} />;
-          }
+        {applets.map((element, key) => {
+          const hasPermOrPermNotNeeded = !element.perm || hasPerm({ user: user, permission: element.perm });
+          return (
+            hasPermOrPermNotNeeded && (
+              <AdminBox key={key} title={element.title} icon={element.icon} options={element.options} />
+            )
+          );
         })}
       </div>
     </Page>

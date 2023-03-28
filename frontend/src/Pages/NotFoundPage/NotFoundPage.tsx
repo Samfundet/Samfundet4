@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { NotFound } from '~/assets';
 import { Button, Link } from '~/Components';
 import { SUPPORT_EMAIL } from '~/constants';
 import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
-import { NotFound } from '~/assets';
+import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ export function NotFoundPage() {
         rounded={true}
         theme="outlined"
         onClick={() => {
-          navigate('/');
+          navigate(ROUTES.frontend.home);
         }}
       >
         <span className={styles.button_text}>{t(KEY.back_to_samfundet)}</span>

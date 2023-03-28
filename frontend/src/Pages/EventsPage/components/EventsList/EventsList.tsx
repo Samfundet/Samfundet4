@@ -20,13 +20,13 @@ export function EventsList({ events }: EventsListProps) {
   const [tableView, setTableView] = useState(false);
 
   const eventColumns = [
-    { content: 'Dato', sortable: true },
-    'Fra',
-    'Til',
+    { content: t(KEY.common_date), sortable: true },
+    t(KEY.common_from),
+    { content: t(KEY.common_to), sortable: true },
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.venue), sortable: true },
     { content: t(KEY.category), sortable: true },
-    'Kjøp',
+    t(KEY.common_buy),
   ];
 
   // TODO improve table view for events
