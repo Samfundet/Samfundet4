@@ -234,6 +234,7 @@ class UserPreference(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
+    mirror_dimension = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
