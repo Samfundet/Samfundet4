@@ -1,11 +1,10 @@
 import itertools
 
-from rest_framework import serializers
-from guardian.models import GroupObjectPermission, UserObjectPermission
-
 from django.contrib.auth import authenticate
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from guardian.models import GroupObjectPermission, UserObjectPermission
+from rest_framework import serializers
 
 from .models import (
     Tag,
@@ -46,7 +45,7 @@ class ImageSerializer(serializers.ModelSerializer):
     # Write only fields for posting new images.
     file = serializers.FileField(write_only=True, required=True)
     # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models.
-    tag_string = serializers.CharField(write_only=True, allow_blank=True, required=True)
+    tag_string = serializers.CharField(write_only=True, allow_blank=True, required=False)
 
     class Meta:
         model = Image
@@ -58,8 +57,11 @@ class ImageSerializer(serializers.ModelSerializer):
         Automatically finds/creates new tags based on comma-separated string.
         """
         file = validated_data.pop('file')
-        tag_names = validated_data.pop('tag_string').split(',')
-        tags = [Tag.objects.get_or_create(name=name)[0] for name in tag_names]
+        if 'tag_string' in validated_data:
+            tag_names = validated_data.pop('tag_string').split(',')
+            tags = [Tag.objects.get_or_create(name=name)[0] for name in tag_names]
+        else:
+            tags = []
         image = Image.objects.create(
             image=ImageFile(file, validated_data['title']),
             **validated_data,

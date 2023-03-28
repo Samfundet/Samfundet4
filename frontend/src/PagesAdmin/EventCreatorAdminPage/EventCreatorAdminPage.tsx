@@ -8,6 +8,7 @@ import { ReactElement } from 'react-markdown/lib/react-markdown';
 import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -187,9 +188,10 @@ export function EventCreatorAdminPage() {
       <ContentCard
         title={dbT(event, 'title')}
         description={dbT(event, 'description_short')}
-        imageUrl={event?.image?.url}
+        imageUrl={BACKEND_DOMAIN + event?.image?.url}
       />
       <p>{event?.category}</p>
+      <p>{event?.image?.url}</p>
       <TimeDisplay timestamp={event?.start_dt ?? ''} />
       <p>{event?.duration}min</p>
     </div>
