@@ -219,8 +219,8 @@ class UserSerializer(serializers.ModelSerializer):
         return perm_objs
 
     def get_user_preference(self, user: User) -> dict:
-        prefs = UserPreference.objects.get_or_create(user=user)
-        return UserPreferenceSerializer(prefs, many=False).data
+        user_preference, _created = UserPreference.objects.get_or_create(user=user)
+        return UserPreferenceSerializer(user_preference, many=False).data
 
 
 # GANGS ###
