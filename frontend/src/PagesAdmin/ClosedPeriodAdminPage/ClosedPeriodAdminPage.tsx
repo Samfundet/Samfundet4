@@ -50,9 +50,6 @@ export function ClosedPeriodAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_closed_period_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_closedperiod_changelist}>

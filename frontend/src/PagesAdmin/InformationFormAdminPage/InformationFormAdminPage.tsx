@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
-import { Button, Page, SamfundetLogoSpinner } from '~/Components';
+import { Page, SamfundetLogoSpinner } from '~/Components';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { InformationPageDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -75,13 +75,6 @@ export function InformationFormAdminPage() {
 
   return (
     <Page>
-      <Button
-        theme="outlined"
-        onClick={() => navigate(ROUTES.frontend.admin_information)}
-        className={styles.backButton}
-      >
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
       </h1>

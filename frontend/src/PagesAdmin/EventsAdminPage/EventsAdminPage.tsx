@@ -93,16 +93,17 @@ export function EventsAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>
-          {t(KEY.edit)} {t(KEY.common_event)}
+          {t(KEY.common_edit)} {t(KEY.common_event)}
         </h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
           View in backend
         </Link>
+        <br></br>
+        <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+          {t(KEY.common_create)} {t(KEY.common_event)}
+        </Button>
       </div>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>

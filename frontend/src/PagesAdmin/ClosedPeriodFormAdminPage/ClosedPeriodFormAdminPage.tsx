@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getClosedPeriod } from '~/api';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { ClosedPeriodDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -68,9 +68,6 @@ export function ClosedPeriodFormAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_closed)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period)}
       </h1>

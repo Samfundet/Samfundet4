@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
 import { getSaksdokument } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
+import { SaksdokumentDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './SaksdokumentFormAdminPage.module.scss';
-import { SaksdokumentDto } from '~/dto';
 
 export function SaksdokumentFormAdminPage() {
   const navigate = useNavigate();
@@ -86,13 +86,6 @@ export function SaksdokumentFormAdminPage() {
 
   return (
     <Page>
-      <Button
-        theme="outlined"
-        onClick={() => navigate(ROUTES.frontend.admin_saksdokumenter)}
-        className={styles.backButton}
-      >
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
       </h1>

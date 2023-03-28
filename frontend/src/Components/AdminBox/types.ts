@@ -21,5 +21,6 @@ export type Applet = {
   title: string;
   perm?: string;
   icon: string;
+  defaultUrl?: string;
   options: Options[];
 };

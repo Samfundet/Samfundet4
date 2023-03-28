@@ -23,7 +23,7 @@ export const ROUTES_FRONTEND = {
   admin_gangs: '/admin/gangs/',
   admin_gangs_create: '/admin/gangs/create/',
   admin_gangs_edit: '/admin/gangs/edit/:id/',
-  admin_events_upcomming: '/admin/events/upcomming/',
+  admin_events: '/admin/events/',
   admin_events_create: '/admin/events/create/',
   admin_events_edit: '/admin/events/edit/:id/',
   admin_information: '/admin/information/',

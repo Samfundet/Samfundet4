@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getGang } from '~/api';
-import { Button, Page, SamfundetLogoSpinner } from '~/Components';
+import { Page, SamfundetLogoSpinner } from '~/Components';
 import { GangDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -63,9 +63,6 @@ export function GangsFormAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_gangs)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.gang)}
       </h1>
