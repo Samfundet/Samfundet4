@@ -13,9 +13,13 @@ $navbar-bg: rgba(255, 255, 255, 255);
 $navbar-bg-transparent: rgba(255, 255, 255, 0);
 $navbar-bg-dark: rgba(0, 0, 0, 255);
 $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
+$navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
+$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
 
 // Link
 $navbar-link-light-hover-gradient-top: #f4f4f4;
+$navbar-dropdown-link-light-hover: #151515;
+$navbar-dropdown-link-dark-hover: #f4f4f4;
 $navbar-link-light-hover-gradient-bottom: #ffffff;
 $navbar-link-dark-hover-gradient-top: #151515;
 $navbar-link-dark-hover-gradient-bottom: #000000;
@@ -50,7 +54,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg;
-  color: black;
+  color: $black;
   transition: 0.3s;
   display: flex;
   align-items: center;
@@ -74,6 +78,72 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: 100%;
 }
 
+.navbar_item {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.navbar_mobile_item {
+  position: relative;
+}
+
+.mobile_dropdown_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown_container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  width: 100%;
+  flex-direction: column;
+  background: $navbar-dropdown-bg;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+
+  @include theme-dark {
+    background: $navbar-dropdown-bg-dark;
+    color: $white;
+  }
+}
+
+.dropdown_open,
+.dropdown_container:hover,
+.navbar_dropdown_item:hover .dropdown_container {
+  display: flex;
+}
+
+.navbar_dropdown_link {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $black;
+
+  @include theme-dark {
+    color: $white;
+  }
+
+  &:hover {
+    background: $navbar-dropdown-link-light-hover;
+    color: white;
+    text-decoration: none;
+
+    @include theme-dark {
+      background: $navbar-dropdown-link-dark-hover;
+      color: black;
+    }
+  }
+}
+
 /* Desktop navigation items */
 .navbar_link {
   color: inherit;
@@ -88,7 +158,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   flex: 1;
   text-align: center;
   justify-content: center;
-  background: transparent;
+  z-index: 2;
 
   @include for-tablet-down {
     display: none;
@@ -111,6 +181,15 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
       );
       color: #eeeeee;
     }
+  }
+}
+
+/* Set background color to ensure box-shadow from dropdown menus comes beneath entire menu */
+#navbar_container:not(.transparent_navbar) .navbar_link:not(:hover) {
+  background: $navbar-bg;
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
   }
 }
 
@@ -287,6 +366,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
+  display: flex;
 }
 
 .mobile_widgets {
