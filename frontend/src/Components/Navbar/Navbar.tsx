@@ -32,13 +32,13 @@ export function Navbar() {
   const scrolledNavbar = scrollY > scrollDistanceForOpaque;
 
   // Navbar style
-  const isRootPath = useLocation().pathname == '/';
+  const isRootPath = useLocation().pathname === ROUTES.frontend.home;
   const transparentNavbar = isRootPath && !scrolledNavbar && !mobileNavigation;
   const navbarStyle = classNames(
     transparentNavbar && styles.transparent_navbar,
     mobileNavigation && styles.navbar_mobile,
   );
-  const navbarImage = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
+  const navbarLogo = isDarkTheme || transparentNavbar ? logoWhite : logoBlack;
 
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
@@ -208,11 +208,10 @@ export function Navbar() {
 
   return (
     <>
-      <div className={styles.navbar_padding} />
       <nav id={styles.navbar_container} className={navbarStyle}>
         <div className={styles.navbar_inner}>
-          <Link to="/" id={styles.navbar_logo}>
-            <img src={navbarImage} id={styles.navbar_logo_img} />
+          <Link to={ROUTES.frontend.home} id={styles.navbar_logo}>
+            <img src={navbarLogo} id={styles.navbar_logo_img} />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>

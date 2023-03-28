@@ -1,0 +1,13 @@
+.button_bar {
+  padding: 10px;
+  visibility: hidden;
+  justify-content: end;
+  display: flex;
+  gap: 5px;
+}
+
+.image_card:hover {
+  .button_bar {
+    visibility: visible;
+  }
+}

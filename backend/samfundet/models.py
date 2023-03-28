@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
 
 class Tag(models.Model):
+    # TODO make name case-insensitive
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
@@ -30,14 +31,27 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return f'{self.name}'
 
+    @classmethod
+    def random_color(cls) -> str:
+        hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+        c = random.choices(range(len(hexnr)), k=6)
+        while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
+            c = random.choices(range(len(hexnr)), k=6)
+        return ''.join([hexnr[i] for i in c])
+
+    @classmethod
+    def find_or_create(cls, name: str) -> Tag:
+        # TODO make name case-insensitive
+        obj = Tag.objects.get(name=name)
+        if obj is not None:
+            return obj
+        # Create new tag if none exists
+        return Tag.objects.create(name=name, color=Tag.random_color())
+
     def save(self, *args: Any, **kwargs: Any) -> None:
         # Saves with random color
         if not self.color or not re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', self.color):
-            hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
-            c = random.choices(range(len(hexnr)), k=6)
-            while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
-                c = random.choices(range(len(hexnr)), k=6)
-            self.color = ''.join([hexnr[i] for i in c])
+            self.color = Tag.random_color()
         super().save(*args, **kwargs)
 
 
@@ -56,6 +70,11 @@ class Image(models.Model):
 
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        permissions = [
+            ('debug', 'Can view debug mode'),
+        ]
 
     def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
         """
@@ -209,6 +228,7 @@ class UserPreference(models.Model):
 
     class Theme(models.TextChoices):
         """Same as in frontend"""
+
         LIGHT = 'theme-light'
         DARK = 'theme-dark'
 

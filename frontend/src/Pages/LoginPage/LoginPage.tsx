@@ -1,9 +1,11 @@
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { Alert, Button, InputField } from '~/Components';
 import { getUser, login } from '~/api';
+import { useAuthContext } from '~/AuthContext';
+import { Alert } from '~/Components';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -11,15 +13,12 @@ import styles from './LoginPage.module.scss';
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
   const { setUser } = useAuthContext();
   const navigate = useNavigate();
 
-  function handleLogin(event: SyntheticEvent) {
-    event.preventDefault();
-    login(name, password)
+  function handleLogin(formData: Record<string, string>) {
+    login(formData['name'], formData['password'])
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser()
@@ -38,7 +37,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.login_container}>
       {loginFailed && (
         <Alert
           message="Login failed"
@@ -51,25 +50,11 @@ export function LoginPage() {
         ></Alert>
       )}
       <div className={styles.content_container}>
-        <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
-        <form onSubmit={handleLogin}>
-          <InputField
-            className={styles.input_field}
-            placeholder={t(KEY.login_email_placeholder)}
-            onChange={(e) => setName(e ? e.currentTarget.value : '')}
-            value={name}
-          />
-          <InputField
-            className={styles.input_field}
-            placeholder={t(KEY.common_password)}
-            type="password"
-            onChange={(e) => setPassword(e?.currentTarget.value || '')}
-            value={password}
-          />
-          <Button className={styles.login_button} theme="samf" type="submit">
-            {t(KEY.common_login)}
-          </Button>
-        </form>
+        <SamfForm onSubmit={handleLogin} submitText={t(KEY.common_login) ?? ''}>
+          <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
+          <SamfFormField field="name" type="text" label={t(KEY.login_email_placeholder) ?? ''} />
+          <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
+        </SamfForm>
         <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>
           {t(KEY.login_forgotten_password)}
         </Link>

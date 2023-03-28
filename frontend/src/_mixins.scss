@@ -145,3 +145,37 @@ Usage:
     @content;
   }
 }
+
+/* Utility mixins */
+
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-row-center {
+  @include flex-row;
+  justify-content: center;
+}
+
+@mixin rounded {
+  border-radius: 1em;
+}
+
+@mixin rounded-light {
+  border-radius: .75em;
+}
+
+@mixin rounded-heavy {
+  border-radius: 1.5em;
+}
+
+@mixin rounded-full {
+  border-radius: 1000000px;
+}
+
+@mixin shadow-light {
+  box-shadow: 0 0 .5em .1em rgba(0, 0, 0, 0.05);
+}

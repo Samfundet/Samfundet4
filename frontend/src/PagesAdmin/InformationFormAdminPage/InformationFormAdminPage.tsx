@@ -1,33 +1,33 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
-import { Button, FormInputField, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
+import { Button, Page, SamfundetLogoSpinner } from '~/Components';
+import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { InformationPageDto } from '~/dto';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { DTOToForm } from '~/utils';
 import styles from './InformationFormAdminPage.module.scss';
 
 export function InformationFormAdminPage() {
   const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+
   const { t } = useTranslation();
 
-  const {
-    register,
-    // handleSubmit,
-    // setError,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm();
+  const languageTabs: Tab[] = [
+    { key: 'nb', label: 'Norsk' },
+    { key: 'en', label: 'Engelsk' },
+  ];
 
   // If form has a slugfield, check if it exists, and then load that item.
   const { slugField } = useParams();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [infoPage, setInfoPage] = useState<Partial<InformationPageDto>>({});
+  const [languageTab, setLanguageTab] = useState<Tab>(languageTabs[0]);
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -38,7 +38,8 @@ export function InformationFormAdminPage() {
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => {
-          DTOToForm(data, setValue, []);
+          data;
+          //DTOToForm(data, setValue, []);
         })
         .catch((data) => {
           // TODO add error pop up message?
@@ -58,22 +59,19 @@ export function InformationFormAdminPage() {
     );
   }
 
-  // function onSubmit(data: InformationPageDto) {
-  //   (slugField ? putInformationPage(slugField, data) : postInformationPage(data))
-  //     .then(() => {
-  //       navigate(
-  //         reverse({
-  //           pattern: ROUTES.frontend.information_page_detail,
-  //           urlParams: { slugField: slugField ? slugField : data.slug_field },
-  //         }),
-  //       );
-  //     })
-  //     .catch((e) => {
-  //       for (const err in e.response.data) {
-  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
-  //       }
-  //     });
-  // }
+  function handleOnSubmit(data: InformationPageDto) {
+    if (slugField) {
+      // TODO patch
+    } else {
+      // TODO post
+    }
+    alert('TODO');
+    console.log(JSON.stringify(data));
+  }
+
+  const nbDisplay = languageTab.key == 'nb' ? 'block' : 'none';
+  const enDisplay = languageTab.key == 'en' ? 'block' : 'none';
+  const submitText = slugField ? `${t(KEY.common_save)}` : `${t(KEY.common_create)} ${t(KEY.information_page)}`;
 
   return (
     <Page>
@@ -87,86 +85,34 @@ export function InformationFormAdminPage() {
       <h1 className={styles.header}>
         {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
       </h1>
-      {/* TODO: fix */}
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      <form>
-        {!slugField && (
-          <div className={styles.inputGroup}>
-            <FormInputField
-              errors={errors}
-              className={styles.input}
-              name="slug_field"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>{t(KEY.name)}</p>
-            </FormInputField>
-          </div>
-        )}
-        <div className={styles.inputGroup}>
-          <h2 className={styles.inputGroupHeader}>{t(KEY.norwegian)}</h2>
+      <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} />
+      <br></br>
+      <SamfForm onChange={setInfoPage} onSubmit={handleOnSubmit} submitText={submitText}>
+        {!slugField && <SamfFormField field="slug_field" type="text" label={`${t(KEY.name)}`} />}
+
+        <div style={{ display: nbDisplay }}>
           <div className={styles.row}>
-            <div className={styles.col}>
-              <FormInputField
-                errors={errors}
-                className={styles.input}
-                name="title_nb"
-                register={register}
-                required={t(KEY.form_required)}
-              >
-                <p className={styles.labelText}>
-                  {t(KEY.norwegian)} {t(KEY.common_title)}
-                </p>
-              </FormInputField>
-              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_nb" register={register}>
-                <p className={styles.labelText}>
-                  {t(KEY.norwegian)} {t(KEY.content)}
-                </p>
-              </FormTextAreaField>
-            </div>
-            <div className={styles.col}>
-              <div className={styles.markdownField}>
-                <ReactMarkdown>{getValues('text_nb')}</ReactMarkdown>
-              </div>
+            <SamfFormField field="title_nb" type="text" label={`${t(KEY.norwegian)} ${t(KEY.common_title)}`} />
+          </div>
+          <div className={styles.row_stretch}>
+            <SamfFormField field="text_nb" type="text-long" label={`${t(KEY.norwegian)} ${t(KEY.content)}`} />
+            <div className={styles.markdownField}>
+              <ReactMarkdown>{infoPage.text_nb ?? ''}</ReactMarkdown>
             </div>
           </div>
         </div>
-        <div className={styles.inputGroup}>
-          <h2 className={styles.inputGroupHeader}>{t(KEY.english)}</h2>
+        <div style={{ display: enDisplay }}>
           <div className={styles.row}>
-            <div className={styles.col}>
-              <FormInputField
-                errors={errors}
-                className={styles.input}
-                name="title_en"
-                register={register}
-                required={t(KEY.form_required)}
-              >
-                <p className={styles.labelText}>
-                  {t(KEY.english)} {t(KEY.common_title)}
-                </p>
-              </FormInputField>
-              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_en" register={register}>
-                <p className={styles.labelText}>
-                  {t(KEY.english)} {t(KEY.content)}
-                </p>
-              </FormTextAreaField>
-            </div>
-            <div className={styles.col}>
-              <div className={styles.markdownField}>
-                <ReactMarkdown>{getValues('text_en')}</ReactMarkdown>
-              </div>
+            <SamfFormField field="title_en" type="text" label={`${t(KEY.english)} ${t(KEY.common_title)}`} />
+          </div>
+          <div className={styles.row_stretch}>
+            <SamfFormField field="text_en" type="text-long" label={`${t(KEY.english)} ${t(KEY.content)}`} />
+            <div className={styles.markdownField}>
+              <ReactMarkdown>{infoPage.text_en ?? ''}</ReactMarkdown>
             </div>
           </div>
         </div>
-        <div className={styles.submitContainer}>
-          <Button theme={'success'} type="submit">
-            <p className={styles.submit}>
-              {slugField ? t(KEY.admin_information_update_page) : t(KEY.admin_information_create_page)}
-            </p>
-          </Button>
-        </div>
-      </form>
+      </SamfForm>
     </Page>
   );
 }

@@ -1,15 +1,13 @@
 @import 'src/constants';
 
-.underline {
-  text-decoration: underline $red-samf;
-  color: $red-samf;
-}
-
-.regular {
+.link {
   color: $red-samf;
   text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-.regular:hover {
-  text-decoration: underline;
+.underline {
+  text-decoration: underline $red-samf;
 }

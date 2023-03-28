@@ -1,10 +1,10 @@
-import { EventDto } from '~/dto';
+import { EventDto, VenueDto } from '~/dto';
 
-export function eventQuery(events: EventDto[], search: string, venue: string, event_type: string): EventDto[] {
+export function eventQuery(events: EventDto[], search: string, venue?: VenueDto): EventDto[] {
   search = search.toLowerCase();
-  venue = venue.toLowerCase();
+  const venueName = (venue?.name ?? '').toLowerCase();
   return events.filter(
-    (event) =>
+    (event: EventDto) =>
       (search.length == 0 ||
         event.title_nb.toLowerCase().includes(search) ||
         event.title_en.toLowerCase().includes(search) ||
@@ -12,9 +12,7 @@ export function eventQuery(events: EventDto[], search: string, venue: string, ev
         event.description_long_en.toLowerCase().includes(search) ||
         event.description_short_nb.toLowerCase().includes(search) ||
         event.description_short_en.toLowerCase().includes(search) ||
-        event.location.toLowerCase().includes(search) ||
-        event.event_group.name.toLowerCase().includes(search)) &&
-      (venue.length == 0 || event.location.toLowerCase().includes(venue)) &&
-      (event_type.length == 0 || event.event_group.id == Number(event_type)),
+        event.location.toLowerCase().includes(search)) &&
+      (venueName.length == 0 || event.location.toLowerCase().includes(venueName)),
   );
 }

@@ -72,11 +72,7 @@ export function InformationFormPage() {
   }, [slugField]);
 
   /** Given field, update that field on state page. */
-  function handleChange(
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined,
-    fieldname: PageFieldName,
-  ) {
-    const value = e?.currentTarget.value || '';
+  function handleChange(value: string, fieldname: PageFieldName) {
     const updatedInformationPage = { ...page, [fieldname]: value } as InformationPageDto;
     setPage(updatedInformationPage);
   }
@@ -125,12 +121,12 @@ export function InformationFormPage() {
 
       {/* Title */}
       <div className={styles.row}>
-        <InputField
+        <InputField<string>
           labelClassName={styles.col}
           type="text"
           disabled={showOriginal}
           value={currentPage[currentTitleFieldName]}
-          onChange={(e) => handleChange(e, currentTitleFieldName)}
+          onChange={(txt) => handleChange(txt, currentTitleFieldName)}
         >
           {t(KEY.common_title, { lng: language })}:
         </InputField>
@@ -146,7 +142,7 @@ export function InformationFormPage() {
             className="w-100 h-100"
             name={currentTextFieldName}
             value={currentPage[currentTextFieldName]}
-            onChange={(e) => handleChange(e, currentTextFieldName)}
+            onChange={(e) => handleChange(e?.currentTarget.value, currentTextFieldName)}
           />
         </label>
         <ReactMarkdown className={styles.col}>{currentPage[currentTextFieldName] || ''}</ReactMarkdown>
