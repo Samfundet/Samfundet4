@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
@@ -91,10 +91,12 @@ class TextItemView(ModelViewSet):
     queryset = TextItem.objects.all()
 
 
-class KeyValueView(ModelViewSet):
+class KeyValueView(ReadOnlyModelViewSet):
+    """All CRUD operations can be performed in the admin panel instead."""
     permission_classes = [AllowAny]
     serializer_class = KeyValueSerializer
     queryset = KeyValue.objects.all()
+    lookup_field = 'key'
 
 
 # Images
