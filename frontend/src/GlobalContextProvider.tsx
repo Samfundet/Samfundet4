@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken } from '~/api';
+import { getCsrfToken, getKeyValues } from '~/api';
 import { useAuthContext } from '~/AuthContext';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
-import { Children, SetState } from '~/types';
+import { Children, KeyValueMap, SetState } from '~/types';
 
 /**
  * Define which values the global context can contain.
@@ -17,6 +17,7 @@ type GlobalContextProps = {
   toggleMirrorDimension: () => boolean;
   mobileNavigation: boolean;
   setMobileNavigation: SetState<boolean>;
+  keyValues: KeyValueMap;
 };
 
 /**
@@ -53,6 +54,8 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
   const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
   const initialTheme = storedTheme || detectedTheme;
 
+  const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
+
   const [theme, setTheme] = useState<ThemeValue>(initialTheme);
   const [mobileNavigation, setMobileNavigation] = useState(false);
   const { user } = useAuthContext();
@@ -67,6 +70,13 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
         axios.defaults.headers.common[XCSRFTOKEN] = token;
       })
       .catch(console.error);
+
+    // Load keyValues.
+    getKeyValues().then((response) => {
+      // Transform KeyValue[] response to Map of [key,value] entries.
+      const keyValueMap = new Map(response.data.map((kv) => [kv.key, kv.value ?? '']));
+      setKeyValues(keyValueMap);
+    });
   }, []);
 
   /** Simplified theme switching. Returns theme it switched to. */
@@ -134,6 +144,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     mirrorDimension,
     setMirrorDimension,
     toggleMirrorDimension,
+    keyValues,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;

@@ -20,6 +20,7 @@ from .models import (
     TextItem,
     MenuItem,
     GangType,
+    KeyValue,
     EventGroup,
     FoodCategory,
     Saksdokument,
@@ -305,4 +306,11 @@ class TextItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TextItem
+        fields = '__all__'
+
+
+class KeyValueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = KeyValue
         fields = '__all__'

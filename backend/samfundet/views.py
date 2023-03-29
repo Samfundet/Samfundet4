@@ -31,6 +31,7 @@ from .models import (
     MenuItem,
     GangType,
     TextItem,
+    KeyValue,
     EventGroup,
     FoodCategory,
     Saksdokument,
@@ -53,6 +54,7 @@ from .serializers import (
     ProfileSerializer,
     BookingSerializer,
     TextItemSerializer,
+    KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
@@ -87,6 +89,12 @@ class TextItemView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = TextItemSerializer
     queryset = TextItem.objects.all()
+
+
+class KeyValueView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = KeyValueSerializer
+    queryset = KeyValue.objects.all()
 
 
 # Images
