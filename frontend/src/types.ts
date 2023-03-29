@@ -13,6 +13,8 @@ export type Children = ReactNode;
 /**Duplicate of colors and hex from _constants.scss */
 export const COLORS = {
   red_samf: '#a03033',
+  red_samf_faded: '#fac7c8',
+  blue: '#337ab7',
   blue_lighter: '#e3f2ff',
   blue_light: '#c4dbf3',
   blue_medium: '#88b3e0',
@@ -26,16 +28,40 @@ export const COLORS = {
   black: '#000000',
   grey_5: '#f4f4f4',
   grey_4: '#eeeeee',
-  grey_3: '#dddddd',
-  grey_2: '#cccccc',
-  grey_1: '#767676',
+  grey_3: '#999999',
+  grey_2: '#777777',
+  grey_1: '#555555',
   grey_0: '#444444',
+  green: '#4ab74c',
   green_lighter: '#f6ffed',
   green_light: '#b7eb8f',
   orange_ligher: '#fffbe6',
   orange_light: '#ffe99e',
   red_lighter: '#fff2f0',
   red_light: '#ffcfca',
+  red: '#dc1010',
+  sulten_orange: '#fbb042',
+
+  // Transparent colors
+  black_t75: 'rgba(0, 0, 0, 0.75)',
+  black_t50: 'rgba(0, 0, 0, 0.5)',
+  black_t25: 'rgba(0, 0, 0, 0.25)',
+  black_t10: 'rgba(0, 0, 0, 0.1)',
+
+  // Theme colors:
+  theme_light_bg: '#f5f5f5',
+
+  theme_dark_bg: '#202023',
+  theme_dark_color: '#dddddd',
+  theme_dark_input_bg: '#242323',
+  theme_dark_input_bg_disabled: '#7b7b7b',
+
+  form_bg_dark: '#161619',
+  form_border_dark: '#1c1919',
+
+  // Defaults
+  background_primary: '#ffffff',
+  background_secondary: '#efefef',
 } as const;
 
 export type Color = typeof COLORS;

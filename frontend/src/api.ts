@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import {
   ClosedPeriodDto,
   EventDto,
-  EventFormDto,
   EventGroupDto,
   EventOptionsDto,
   FoodCategoryDto,
@@ -11,6 +10,7 @@ import {
   GangTypeDto,
   HomePageElementDto,
   ImageDto,
+  ImagePostDto,
   InformationPageDto,
   MenuDto,
   MenuItemDto,
@@ -163,11 +163,11 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: EventDto): Promise<EventDto> {
+export async function postEvent(data: EventDto): Promise<AxiosResponse<EventDto>> {
+  const transformed = { ...data, image_id: data.image.id };
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
-  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
-
-  return response.data;
+  const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
+  return response;
 }
 
 export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
@@ -181,13 +181,6 @@ export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
 
   return response;
-}
-
-export async function getEventForm(): Promise<AxiosResponse<EventFormDto>> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
-  const response = await axios.get<AxiosResponse<EventFormDto>>(url, { withCredentials: true });
-
-  return response.data;
 }
 
 export async function getEvent(pk: string | number): Promise<EventDto> {
@@ -284,13 +277,6 @@ export async function getSaksdokument(pk: string | number): Promise<Saksdokument
   return response.data;
 }
 
-export async function getSaksdokumentForm(): Promise<AxiosResponse<{ categories: Array<Array<string>> }>> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
-  const response = await axios.get<{ categories: Array<Array<string>> }>(url, { withCredentials: true });
-
-  return response;
-}
-
 export async function postSaksdokument(data: SaksdokumentDto): Promise<SaksdokumentDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
   const response = await axios.post<SaksdokumentDto>(url, data, { withCredentials: true });
@@ -340,13 +326,6 @@ export async function putGang(id: string | number, data: Partial<GangDto>): Prom
   return response;
 }
 
-export async function getGangForm(): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangform });
-  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
-
-  return response.data;
-}
-
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
   const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
@@ -392,9 +371,11 @@ export async function getImage(id: string | number): Promise<ImageDto> {
   return response.data;
 }
 
-export async function postImage(data: ImageDto): Promise<ImageDto> {
+export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
-  const response = await axios.post<ImageDto>(url, data, { withCredentials: true });
+  const response = await axios.postForm<ImageDto>(url, data, {
+    withCredentials: true,
+  });
   return response.data;
 }
 

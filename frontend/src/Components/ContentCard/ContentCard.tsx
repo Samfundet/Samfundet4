@@ -8,14 +8,21 @@ import styles from './ContentCard.module.scss';
 
 type ContentCardProps = {
   className?: string;
-  title: string;
-  description: string;
-  buttonText: string;
+  title?: string;
+  description?: string;
+  buttonText?: string;
   url?: string;
   imageUrl?: string;
 };
 
-export function ContentCard({ className, title, description, buttonText, url, imageUrl }: ContentCardProps) {
+export function ContentCard({
+  className,
+  title = 'Missing title',
+  description,
+  buttonText,
+  url,
+  imageUrl,
+}: ContentCardProps) {
   const id = useId();
   const scrollY = useScreenCenterOffset(id);
 
@@ -35,14 +42,16 @@ export function ContentCard({ className, title, description, buttonText, url, im
         <div className={styles.card_info} style={{ transform: infoTransform }}>
           <div className={styles.info_header}>{title}</div>
           <div className={styles.info_description}>{description}</div>
-          <div className={styles.info_bottom_row}>
-            <Button rounded={true} theme="black" onClick={() => followLink(url ?? '#')}>
-              <div className={styles.button_content}>
-                <span>{buttonText}</span>
-                <Icon icon="mdi:arrow-right" width={18} />
-              </div>
-            </Button>
-          </div>
+          {buttonText && (
+            <div className={styles.info_bottom_row}>
+              <Button className={styles.btn} rounded={true} theme="black" onClick={() => followLink(url ?? '#')}>
+                <div className={styles.button_content}>
+                  <span>{buttonText}</span>
+                  <Icon className={styles.icon} icon="mdi:arrow-right" width={18} />
+                </div>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

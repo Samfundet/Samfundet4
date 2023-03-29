@@ -3,6 +3,7 @@ import { EventsList } from './components/EventsList';
 import { getEventsFilter, getEventsPerDay, getVenues, optionsEvents } from '~/api';
 import { Page } from '~/Components/Page';
 import { Button, InputField, RadioButton, SamfundetLogoSpinner } from '~/Components';
+
 import styles from './EventsPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';

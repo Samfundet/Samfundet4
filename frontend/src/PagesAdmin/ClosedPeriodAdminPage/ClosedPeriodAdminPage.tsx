@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -50,9 +50,6 @@ export function ClosedPeriodAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_closed_period_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_closedperiod_changelist}>
@@ -64,17 +61,23 @@ export function ClosedPeriodAdminPage() {
       </Button>
       <div className={styles.tableContainer}>
         <Table
-          columns={[t(KEY.common_message), 'Event ' + t(KEY.common_message), t(KEY.start_time), t(KEY.end_time), '']}
+          columns={[
+            t(KEY.common_message) ?? '',
+            'Event ' + t(KEY.common_message),
+            t(KEY.start_time) ?? '',
+            t(KEY.end_time) ?? '',
+            '',
+          ]}
           data={closedPeriods.map(function (element) {
             return [
-              new AlphabeticTableCell(element.message_no),
-              new AlphabeticTableCell(element.description_no),
-              // new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.start_dt} />),
-              new AlphabeticTableCell(element.start_dt.toLocaleString()),
-              // new AlphabeticTableCell(<TimeDisplay displayType="date" timestamp={element.end_dt} />),
-              new AlphabeticTableCell(element.end_dt.toLocaleString()),
+              element.message_no,
+              element.description_no,
+              // { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
+              element.start_dt.toLocaleString(),
+              // { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
+              element.end_dt.toLocaleString(),
               {
-                children: (
+                content: (
                   <div>
                     <Button
                       theme="blue"
@@ -105,7 +108,7 @@ export function ClosedPeriodAdminPage() {
                     </Button>{' '}
                   </div>
                 ),
-              } as ITableCell,
+              },
             ];
           })}
         />

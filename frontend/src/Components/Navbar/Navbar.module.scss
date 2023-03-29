@@ -1,3 +1,4 @@
+/* stylelint-disable function-comma-space-after */
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-class */
 /* stylelint-disable max-nesting-depth */
@@ -12,14 +13,34 @@ $navbar-bg: rgba(255, 255, 255, 255);
 $navbar-bg-transparent: rgba(255, 255, 255, 0);
 $navbar-bg-dark: rgba(0, 0, 0, 255);
 $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
+$navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
+$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
 
 // Link
 $navbar-link-light-hover-gradient-top: #f4f4f4;
+$navbar-dropdown-link-light-hover: #151515;
+$navbar-dropdown-link-dark-hover: #f4f4f4;
 $navbar-link-light-hover-gradient-bottom: #ffffff;
 $navbar-link-dark-hover-gradient-top: #151515;
 $navbar-link-dark-hover-gradient-bottom: #000000;
 $navbar-link-transparent-hover-gradient-top: rgba(255, 255, 255, 0.1);
 $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
+
+/* Outer container in navbar layout */
+.navbar_layout_outer {
+  min-height: 100%;
+  max-height: 100%;
+  height: 100%;
+}
+
+/* Inner container with padding */
+.navbar_layout_inner {
+  padding-top: $navbar-height;
+  min-height: 100%;
+  max-height: 100%;
+  height: 100%;
+  width: 100%;
+}
 
 /* Content padding */
 .navbar_padding {
@@ -33,8 +54,8 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg;
-  color: black;
-  transition: .3s;
+  color: $black;
+  transition: 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,7 +67,6 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     background: $navbar-bg-dark;
     color: $white;
   }
-
 }
 
 .navbar_inner {
@@ -56,6 +76,72 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   justify-content: space-between;
   align-items: center;
   height: 100%;
+}
+
+.navbar_item {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.navbar_mobile_item {
+  position: relative;
+}
+
+.mobile_dropdown_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown_container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  z-index: 1;
+  width: 100%;
+  flex-direction: column;
+  background: $navbar-dropdown-bg;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+
+  @include theme-dark {
+    background: $navbar-dropdown-bg-dark;
+    color: $white;
+  }
+}
+
+.dropdown_open,
+.dropdown_container:hover,
+.navbar_dropdown_item:hover .dropdown_container {
+  display: flex;
+}
+
+.navbar_dropdown_link {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $black;
+
+  @include theme-dark {
+    color: $white;
+  }
+
+  &:hover {
+    background: $navbar-dropdown-link-light-hover;
+    color: white;
+    text-decoration: none;
+
+    @include theme-dark {
+      background: $navbar-dropdown-link-dark-hover;
+      color: black;
+    }
+  }
 }
 
 /* Desktop navigation items */
@@ -68,11 +154,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: 100%;
   cursor: pointer;
   text-transform: uppercase;
-  transition: .1s;
+  transition: 0.1s;
   flex: 1;
   text-align: center;
   justify-content: center;
-  background: transparent;
+  z-index: 2;
 
   @include for-tablet-down {
     display: none;
@@ -81,17 +167,29 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
-      to bottom, $navbar-link-light-hover-gradient-top, $navbar-link-light-hover-gradient-bottom
+      to bottom,
+      $navbar-link-light-hover-gradient-top,
+      $navbar-link-light-hover-gradient-bottom
     );
     text-decoration: none;
-        
+
     @include theme-dark {
       background: linear-gradient(
-        to bottom, $navbar-link-dark-hover-gradient-top, $navbar-link-dark-hover-gradient-bottom
+        to bottom,
+        $navbar-link-dark-hover-gradient-top,
+        $navbar-link-dark-hover-gradient-bottom
       );
       color: #eeeeee;
     }
+  }
+}
 
+/* Set background color to ensure box-shadow from dropdown menus comes beneath entire menu */
+#navbar_container:not(.transparent_navbar) .navbar_link:not(:hover) {
+  background: $navbar-bg;
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
   }
 }
 
@@ -102,11 +200,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   margin: 0 1rem;
   width: 250px;
   cursor: pointer;
-  
 }
 
 #navbar_logo_img {
-  width: 100%;
+  width: 100%; // QUESTION: Why is this needed?
+  padding: 13px;
 }
 
 /* Widgets with language, theme, login */
@@ -129,7 +227,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   cursor: pointer;
   border-radius: 3px;
   box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
-  transition: .1s;
+  transition: 0.1s;
   &:hover {
     transform: scale(1.1);
   }
@@ -162,9 +260,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   &:hover {
     color: $red-samf;
   }
-
 }
-
 
 /* Hamburger menu */
 #navbar_hamburger {
@@ -185,11 +281,10 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     height: 4px;
     border-radius: 10px;
     transition: transform 400ms;
-  
+
     @include theme-dark {
       background-color: $white;
     }
-  
   }
 
   &.open {
@@ -205,10 +300,9 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
       transform: translateY(-11px) rotate(45deg);
     }
   }
-
 }
 
-/* Transparent navbar (on top of page) */ 
+/* Transparent navbar (on top of page) */
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
   box-shadow: none;
@@ -223,7 +317,9 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
   .navbar_link:hover {
     background: linear-gradient(
-      to bottom, $navbar-link-transparent-hover-gradient-top, $navbar-link-transparent-hover-gradient-bottom
+      to bottom,
+      $navbar-link-transparent-hover-gradient-top,
+      $navbar-link-transparent-hover-gradient-bottom
     );
     text-decoration: none;
     color: inherit;
@@ -253,12 +349,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   @include for-desktop-up {
     display: none;
   }
-  
+
   @include theme-dark {
     background: $navbar-bg-dark;
     color: white;
   }
-
 }
 
 /* Navbar link mobile */
@@ -271,6 +366,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
+  display: flex;
 }
 
 .mobile_widgets {
@@ -285,7 +381,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: .5em;
+  gap: 0.5em;
   max-width: 150px;
   overflow: visible;
   white-space: nowrap;

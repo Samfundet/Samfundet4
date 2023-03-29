@@ -1,5 +1,5 @@
+import i18next from 'i18next';
 import { CSSProperties } from 'react';
-import { FieldValues, UseFormSetValue } from 'react-hook-form/dist/types';
 import { UserDto } from '~/dto';
 
 export type hasPerm = {
@@ -49,48 +49,57 @@ export function getGlobalBackgroundColor(): string {
 }
 
 /**
- * Function for converting JSONDTOData into values accepted by a HTML Form in ReactHookFormFormat
- * Data is set into a reacthookform and returns nothing
- * @param {Record<string, unknown>}  data - The DTO Data
- * @param {UseFormSetValue<FieldValues>} setValue - Function for setting the data into a ReactHookForm
- * @param {string[]} ignore - List of keys in the data to ignore converting
- */
-export function DTOToForm(
-  data: Record<string, unknown>,
-  setValue: UseFormSetValue<FieldValues>,
-  ignore: string[],
-): void {
-  // TODO May need adding more forms of converting, now only accepts integers, strings and datetimes
-  for (const v in data) {
-    if (!(v in ignore)) {
-      if (new Date(data[v] as string).getTime() > 0) {
-        // Checks if data is date
-        const date = new Date(data[v] as string).toISOString();
-        // Determine if data is datetime or date TODO should find better method
-        if ('T00:00:00.00' === date.slice(10, 22)) {
-          setValue(v, date.slice(0, 10));
-        } else {
-          setValue(v, date.slice(0, 16));
-        }
-      } else if (Number.isInteger(data[v])) {
-        // Check if data is a integer
-        setValue(v, parseInt(data[v] as string));
-      } else setValue(v, data[v]);
-    }
-  }
-}
-
-/**
  * Function for creating a style with image url from domain
  * @param {string} url - Server relative URL (eg. /media/image.png)
  */
 export function backgroundImageFromUrl(url?: string): CSSProperties {
-  if (url != null) {
-    return {
-      // TODO this is not safe for production, need to use absolute path
-      // We should probably setup better hosting system for dev to emulate prod better
-      backgroundImage: `url("http://localhost:8000${url}")`,
-    };
+  if (!url) {
+    return {};
   }
-  return {};
+  return {
+    backgroundImage: `url(${url})`,
+  };
+}
+
+/**
+ * Function for translation object fields, such as title_nb and title_en.
+ * If there is no translation for the field the common name would be given
+ * @param {Record<string, unknown>}  model - The object to translate
+ * @param {string} field - the field to be translated, use root of the field, such as title, name
+ * @param {string} language- the language, use i18n.language for dynamic translation
+ */
+export function dbT(
+  model: Record<string, unknown> | undefined,
+  field: string,
+  language: string = i18next.language,
+): string | undefined {
+  if (model === undefined) return undefined;
+
+  const fieldName = field + '_' + language;
+  const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
+  if (hasFieldName) {
+    const value = model[fieldName];
+    const type = typeof value;
+    const isString = type === 'string';
+    if (!isString)
+      // throw Error(`Expected string value for field ${fieldName}, value was ${value} (${type})`);
+      return undefined;
+    return value as string;
+  }
+
+  const hasField = Object.prototype.hasOwnProperty.call(model, field);
+  if (hasField) {
+    const value = model[field];
+    const type = typeof value;
+    const isString = type === 'string';
+    if (!isString)
+      // throw Error(`Expected string value for field ${field}, value was ${value} (${type})`);
+      return undefined;
+    return value as string;
+  }
+
+  // This is not safe behavior if api changes or when working on a partial object.
+  // Instead of failing silently, page will fail to load. Fallback to empty string.
+  // throw Error(`Object ${model} does not have the any of the fields '${field}' or '${fieldName}'`);
+  return undefined;
 }

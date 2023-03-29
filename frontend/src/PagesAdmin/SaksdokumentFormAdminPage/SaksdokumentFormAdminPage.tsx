@@ -1,52 +1,50 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, FormInputField, FormSelect, SamfundetLogoSpinner } from '~/Components';
+import { SamfundetLogoSpinner } from '~/Components';
 
-import classNames from 'classnames';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { getSaksdokument, getSaksdokumentForm } from '~/api';
+import { getSaksdokument } from '~/api';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
+import { SaksdokumentDto } from '~/dto';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { DTOToForm } from '~/utils';
 import styles from './SaksdokumentFormAdminPage.module.scss';
 
 export function SaksdokumentFormAdminPage() {
   const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
-  const {
-    register,
-    // handleSubmit,
-    // setError,
-    setValue,
-    // formState: { errors },
-  } = useForm();
-
   const { t } = useTranslation();
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [formChoices, setFormChoices] = useState<string[][]>();
+  const [document, setDocument] = useState<Partial<SaksdokumentDto>>();
   // Stuff to do on first render.
   //TODO add permissions on render
 
+  // TODO get categories from API (this will not work)
+  const categoryOptions: DropDownOption<string>[] = [
+    { value: 'FS_REFERAT', label: 'FS_REFERAT' },
+    { value: 'ARSBERETNING', label: 'ARSBERETNING' },
+    { value: 'STYRET', label: 'STYRET' },
+    { value: 'RADET', label: 'RADET' },
+  ];
+  const defaultCategoryOption: DropDownOption<string> = {
+    value: document?.category ?? 'FS_REFERAT',
+    label: document?.category ?? 'FS_REFERAT',
+  };
+
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    getSaksdokumentForm()
-      .then((data) => {
-        console.log(data);
-        setFormChoices(data.data.categories);
-        setShowSpinner(false);
-      })
-      .catch(console.error);
     if (id) {
       getSaksdokument(id)
         .then((data) => {
-          DTOToForm(data, setValue, []);
-          console.log(typeof data);
+          setDocument(data);
+          setShowSpinner(false);
         })
         .catch((data) => {
           console.log(data);
@@ -55,6 +53,8 @@ export function SaksdokumentFormAdminPage() {
             navigate(ROUTES.frontend.admin);
           }
         });
+    } else {
+      setShowSpinner(false);
     }
   }, [id]);
 
@@ -82,90 +82,56 @@ export function SaksdokumentFormAdminPage() {
     );
   }
 
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.saksdokument)}`;
+
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
       </h1>
       {/* TODO: fix */}
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      <form>
+      <SamfForm
+        initialData={document}
+        onSubmit={() => {
+          return;
+        }}
+        submitText={submitText}
+      >
         <div className={styles.row}>
-          <div className={styles.col}>
-            <FormInputField
-              // errors={errors}
-              className={styles.input}
-              name="title_no"
-              register={register}
-              required={true}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.norwegian)} {t(KEY.common_title)} *
-              </p>
-            </FormInputField>
-          </div>
-          <div className={styles.col}>
-            <FormInputField
-              // errors={errors}
-              className={styles.input}
-              name="title_en"
-              required={true}
-              register={register}
-            >
-              <p className={styles.labelText}>
-                {t(KEY.common_title)} ({t(KEY.english)}) *
-              </p>
-            </FormInputField>
-          </div>
+          <SamfFormField
+            field="title_nb"
+            type="text"
+            required={true}
+            label={`${t(KEY.norwegian)} ${t(KEY.common_title)}`}
+          />
+          <SamfFormField
+            field="title_en"
+            type="text"
+            required={true}
+            label={`${t(KEY.english)} ${t(KEY.common_title)}`}
+          />
         </div>
         <div className={styles.row}>
-          <FormInputField
-            type="datetime-local"
-            // errors={errors}
-            className={classNames(styles.input, styles.col)}
-            name="publication_date"
-            register={register}
+          <SamfFormField
+            field="category"
+            type="options"
+            options={categoryOptions}
+            defaultOption={defaultCategoryOption}
+            label="Type"
+          />
+          <SamfFormField
+            field="publication_date"
+            type="datetime"
             required={true}
-          >
-            <p className={styles.labelText}>{t(KEY.common_publication_date)} *</p>
-          </FormInputField>
-          <FormSelect
-            register={register}
-            options={formChoices}
-            selectClassName={styles.select}
-            className={styles.col}
-            // errors={errors}
-            required={true}
-            name="category"
-          >
-            <p className={styles.labelText}>Status</p>
-          </FormSelect>
-        </div>
-        <div className={styles.row}>
+            label={`${t(KEY.common_publication_date)}`}
+          />
           {/*
           TODO: Add support for uploading files, not currently implemented
-          <FormInputField
-            type="file"
-            errors={errors}
-            className={classNames(styles.input, styles.col)}
-            name="file"
-            register={register}
-            required={false}
-          >
+          <SamfFormField type="file" name="file">
             <p className={styles.labelText}>Document file *</p>
-          </FormInputField> */}
+          </SamfFormField> */}
         </div>
-        <div className={styles.submitContainer}>
-          <Button theme={'success'} type="submit">
-            <p className={styles.submit}>
-              {id ? t(KEY.common_save) : t(KEY.common_create)} {t(KEY.saksdokument)}
-            </p>
-          </Button>
-        </div>
-      </form>
+      </SamfForm>
     </Page>
   );
 }

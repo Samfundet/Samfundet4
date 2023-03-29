@@ -1,0 +1,65 @@
+
+.samf_form {
+  width: 100%;
+}
+
+.input_element {
+  display: flex;
+  flex: 1;
+  flex-basis: 1;
+  justify-content: stretch;
+}
+
+.submit_row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1em;
+}
+
+// Shake animation on error
+@keyframes shake {
+  0% { transform: translateX(0); }
+ 15% { transform: translateX(8px); }
+ 40% { transform: translateX(-8px); }
+ 75% { transform: translateX(8px); }
+ 100% { transform: translateX(0); }
+}
+
+// Error class
+.animate_error {
+  animation-name: shake;
+  animation-duration: .4s;
+  animation-timing-function: ease-out;
+}
+
+// Debug styling
+.debug_box {
+  padding: 1em;
+  display: flex;
+  background-color: white;
+  gap: .5em;
+  border: 2px dashed red;
+  margin-top: 1.5em;
+}
+
+.debug_header {
+  text-align: center;
+  font-weight: 700;
+  background-color: cyan;
+  padding: .5em;
+}
+
+.debug_column {
+  flex-basis: 33%;
+  border: 1px solid black;
+}
+
+.debug_row {
+  margin: .5em;
+  background-color: #eeeeee;
+  padding: .2em;
+}
+
+.debug_error {
+  color: red;
+}

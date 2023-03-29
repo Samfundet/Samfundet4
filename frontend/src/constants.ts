@@ -10,6 +10,8 @@ export const THEME = {
 // Class added to body when mobile navigation is open
 export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
 
+export const MIRROR_CLASS = 'mirror-dimension';
+
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
@@ -28,4 +30,12 @@ export const desktopBpLower = 993;
 export const tabletBpUpper = 992;
 export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
+
 export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
+
+/**
+ * Venues
+ */
+export const VENUE = {
+  LYCHE: 'lyche',
+} as const;

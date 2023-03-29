@@ -1,40 +1,52 @@
 @import 'src/constants';
 
+@import 'src/mixins';
+
 .select_wrapper {
   //label som wrapper
   display: flex;
   flex-direction: column;
-  font-size: 1.1rem;
-  position: relative;
+  justify-content: flex-start;
+  align-content: center;
 }
 
 .samf_select {
-  //selve select boksen
-  background: $red-samf;
-  font-size: 1rem; //root element font størrelse. Skalert etter HTML dokumentets font størrelse
-  padding: 0.5em 1.5em 0.5em 0.5em;
-  color: $white;
+  @include rounded;
+  display: flex;
+  font-size: 1em;
+  padding: 1em 1em;
+  color: $black;
   cursor: pointer;
   border: 0;
   outline: none;
-  padding-right: 2em;
+  padding-right: 3em;
   appearance: none; //appearance "none" i flere browsere
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
   overflow-y: auto;
+  margin-top: 0.5em;
+
+  &:hover {
+    filter: brightness(110%);
+  }
 }
 
-.custom_select_arrow {
-  //dette er hensiktsmessig fordi pil-delen av select elementet har varierende utseende i forskjellige browsere
-  position: absolute;
-  right: 0;
+.error {
+  border: 1px solid $red;
+}
+
+.arrow_container {
+  position: relative;
+  max-height: 0;
+  max-width: 0;
+  top: -2.4em;
+  left: calc(100% - 2em);
   margin-right: 0.2em;
-  top: 0.5em;
-  display: block;
   pointer-events: none;
-  justify-content: center;
-  align-items: center;
-  color: $white;
-  transform: scale(0.65, 0.65); //transformerer trekanten
+}
+
+.arrow {
+  width: 1.5em;
+  height: 1.5em;
 }

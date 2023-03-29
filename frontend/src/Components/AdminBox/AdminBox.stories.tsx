@@ -38,7 +38,7 @@ Info.args = {
   icon: 'material-symbols:help-outline-sharp',
   options: [
     {
-      text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjenglederen din for å få tilgang.',
+      text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjengsjefen din for å få tilgang.',
       url: '',
       type: 'INFO',
     },

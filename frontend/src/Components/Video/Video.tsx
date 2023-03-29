@@ -5,7 +5,7 @@ type VideoProps = {
   embedId: string;
 };
 
-// Component for displaying a youtube video
+/** Component for displaying a youtube video */
 export function Video({ title, embedId = 'dQw4w9WgXcQ' }: VideoProps) {
   return (
     <div className={styles.container}>
@@ -14,7 +14,6 @@ export function Video({ title, embedId = 'dQw4w9WgXcQ' }: VideoProps) {
         height="480"
         className={styles.frame}
         src={`https://www.youtube.com/embed/${embedId}`}
-        frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
         title={title}

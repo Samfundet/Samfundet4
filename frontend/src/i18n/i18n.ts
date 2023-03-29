@@ -10,21 +10,7 @@ export const resources = {
   [LANGUAGES.EN]: { [defaultNS]: en },
 };
 
-/**
- * Function for translation object fields, such as title_nb and title_en.
- * If there is no translation for the field the common name would be given
- * @param {Record<string, unknown>}  model - The object to translate
- * @param {string} field - the field to be translated, use root of the field, such as title, name
- * @param {string} language- the language, use i18n.language for dynamic translation
- */
-export function dbT(model: Record<string, unknown> | undefined, field: string, language: string): string | undefined {
-  if (model === undefined) return undefined;
-  if (Object.prototype.hasOwnProperty.call(model, field + '_' + language)) {
-    return model[field + '_' + language] as string;
-  } else return model[field] as string;
-}
-
-const devSetting = process.env.NODE_ENV === 'development' ? true : false;
+const devSetting = process.env.NODE_ENV === 'development';
 
 use(initReactI18next).init({
   lng: LANGUAGES.NB,
