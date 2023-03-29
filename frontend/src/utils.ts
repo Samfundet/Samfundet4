@@ -103,3 +103,9 @@ export function dbT(
   // throw Error(`Object ${model} does not have the any of the fields '${field}' or '${fieldName}'`);
   return undefined;
 }
+
+/** Helper to determine if a KeyValue is truthy. */
+export function isTruthy(value = ''): boolean {
+  const falsy = ['', 'no', 'zero', '0'];
+  return !falsy.includes(value.toLowerCase());
+}

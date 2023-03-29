@@ -527,3 +527,43 @@ class TextItem(models.Model):
 
     def __str__(self) -> str:
         return f'{self.key}'
+
+
+class KeyValue(models.Model):
+    """
+    Model for environment variables in the database.
+    Should not be used for secrets.
+    Can be used to manage behaviour of the system on demand, such as feature toggling.
+    Solution is inspired by variables from Github Actions.
+    I.e. we do not want more fields on this model, CharField is sufficient, and is very flexible.
+
+    You may populate the field value with whatever is needed.
+    For boolean values, it's common to use e.g. `SOME_VAR=1` for `True`, or empty var for `False`.
+    This model has helper methods to check for boolean values.
+
+    All keys should be registered in 'samfundet.utils.key_values' for better overview and easy access backend.
+    """
+    key = models.CharField(max_length=60, blank=False, null=False, unique=True)
+    value = models.CharField(max_length=60, default='', blank=True, null=False)
+
+    # Keywords to annotate falsy values.
+    EMPTY = ''
+    FALSE = 'false'
+    NO = 'no'
+    ZERO = '0'
+    FALSY = [FALSE, NO, ZERO, EMPTY]
+
+    class Meta:
+        verbose_name = 'KeyValue'
+        verbose_name_plural = 'KeyValues'
+
+    def __str__(self) -> str:
+        return f'{self.key}={self.value}'
+
+    def is_true(self) -> bool:
+        """Check if value is truthy."""
+        return not self.is_false()
+
+    def is_false(self) -> bool:
+        """Check if value is falsy."""
+        return self.value.lower() in self.FALSY

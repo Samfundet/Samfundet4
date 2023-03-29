@@ -242,3 +242,9 @@ export type ImagePostDto = ImageDto & {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Tuple = [any, any];
+
+export type KeyValueDto = {
+  id: number;
+  key: string;
+  value: string;
+};
