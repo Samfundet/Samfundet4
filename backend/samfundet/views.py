@@ -85,7 +85,8 @@ class HomePageView(APIView):
 
 
 # Localized text storage
-class TextItemView(ModelViewSet):
+class TextItemView(ReadOnlyModelViewSet):
+    """All CRUD operations can be performed in the admin panel instead."""
     permission_classes = [AllowAny]
     serializer_class = TextItemSerializer
     queryset = TextItem.objects.all()

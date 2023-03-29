@@ -26,6 +26,7 @@ from .models import (
     MenuItem,
     GangType,
     TextItem,
+    KeyValue,
     EventGroup,
     ClosedPeriod,
     Saksdokument,
@@ -414,6 +415,13 @@ class TextItemAdmin(CustomGuardedModelAdmin):
     list_display_links = ['key', '__str__']
     # autocomplete_fields = []
     # list_select_related = True
+
+
+@admin.register(KeyValue)
+class KeyValueAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['key']
+    list_display = ['id', 'key', 'value']
+    search_fields = ['id', 'key', 'value']
 
 
 ### End: Our models ###

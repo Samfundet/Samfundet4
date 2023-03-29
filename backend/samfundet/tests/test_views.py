@@ -9,7 +9,7 @@ from django.contrib.auth.models import Permission
 
 from root.utils import routes
 
-from samfundet.models import User, KeyValue
+from samfundet.models import User, KeyValue, TextItem
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
@@ -130,6 +130,54 @@ class TestKeyValueView:
         fixture_rest_client.force_authenticate(user=fixture_superuser)
         create_url = reverse(routes.samfundet__key_value_list)
         detail_url = reverse(routes.samfundet__key_value_detail, kwargs={'key': 'FOO'})
+
+        ### Act ###
+        create_response: Response = fixture_rest_client.post(path=create_url)
+        put_response: Response = fixture_rest_client.put(path=detail_url)
+        patch_response: Response = fixture_rest_client.patch(path=detail_url)
+        delete_response: Response = fixture_rest_client.delete(path=detail_url)
+
+        ### Assert ###
+        assert create_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert put_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert patch_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert delete_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+class TestTextItemView:
+
+    def test_anyone_can_retrieve_textitems(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        textitem = TextItem.objects.create(key='FOO')
+        url = reverse(routes.samfundet__text_item_detail, kwargs={'pk': textitem.key})
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['key'] == textitem.key
+
+    def test_anyone_can_list_textitems(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        textitem = TextItem.objects.create(key='FOO')
+        url = reverse(routes.samfundet__text_item_list)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert any([kv['key'] == textitem.key for kv in data])
+
+    def test_crud_not_possible(self, fixture_rest_client: APIClient, fixture_superuser: User):
+        """Not even superuser can do anything."""
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        create_url = reverse(routes.samfundet__text_item_list)
+        detail_url = reverse(routes.samfundet__text_item_detail, kwargs={'pk': 'FOO'})
 
         ### Act ###
         create_response: Response = fixture_rest_client.post(path=create_url)
