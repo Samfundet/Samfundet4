@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { getTextItem } from '~/api';
 import { useAuthContext } from '~/AuthContext';
 import { useGlobalContext } from '~/GlobalContextProvider';
+import { getTextItem } from '~/api';
 import { Key } from '~/types';
 import { hasPerm, isTruthy } from '~/utils';
-import { desktopBpLower, mobileBpUpper } from './constants';
+import { THEME, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -170,4 +170,14 @@ export function useKeyValue(key: Key, checkTruthy?: boolean): string | boolean |
     return isTruthy(keyValue);
   }
   return keyValue;
+}
+
+export function useIsDarkTheme(): boolean {
+  const { theme } = useGlobalContext();
+  return theme === THEME.DARK;
+}
+
+export function useIsLightTheme(): boolean {
+  const { theme } = useGlobalContext();
+  return theme === THEME.LIGHT;
 }
