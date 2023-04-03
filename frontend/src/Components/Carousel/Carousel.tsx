@@ -8,7 +8,7 @@ type CarouselProps = {
   children: Array<Children>;
   header?: ReactNode;
   spacing?: number;
-  className: string;
+  className?: string;
 };
 
 export function Carousel({ children, className, header = <Skeleton width={'8em'} />, spacing }: CarouselProps) {
