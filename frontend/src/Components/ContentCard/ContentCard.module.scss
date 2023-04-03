@@ -6,18 +6,22 @@ $mobile-width: $primary-content-width-mobile;
 $background-light: #b7afaf;
 $background-dark: #2e2b2b;
 
+// Must match the sizing of .container.
+.skeleton_wrapper {
+  width: $primary-content-width-wide;
+  height: 24em;
+  border-radius: 1em;
+
+  @include for-mobile-only {
+    width: $mobile-width;
+    height: 12em;
+  }
+}
+
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch;
-  gap: 0.25em;
   height: 24em;
   width: $primary-content-width-wide;
-  overflow: visible;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  max-width: 100%;
 
   @include for-mobile-only {
     width: $mobile-width;
@@ -95,6 +99,7 @@ $background-dark: #2e2b2b;
 
 .info_description {
   color: $grey-1;
+
   @include theme-dark {
     color: $grey-3;
   }
