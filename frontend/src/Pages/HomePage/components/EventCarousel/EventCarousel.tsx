@@ -10,15 +10,29 @@ import { hasPerm } from '~/utils';
 import styles from './EventCarousel.module.scss';
 
 type EventCarouselProps = {
-  element: HomePageElementDto;
+  skeletonCount?: number;
+  element?: HomePageElementDto;
 };
 
-export function EventCarousel({ element }: EventCarouselProps) {
+const spacing = 1.5;
+
+export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps) {
   const { user } = useAuthContext();
   const isStaff = user?.is_staff;
+  const wrapperClass = styles.wrapper;
+
+  if (!element) {
+    return (
+      <Carousel className={wrapperClass} spacing={spacing}>
+        {Array.from({ length: skeletonCount }).map((_, i) => (
+          <ImageCard key={i} isSkeleton />
+        ))}
+      </Carousel>
+    );
+  }
 
   return (
-    <Carousel header={element.title_nb} spacing={1.5}>
+    <Carousel className={wrapperClass} header={element.title_nb} spacing={spacing}>
       {element.events.map((event: EventDto) => {
         const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
         const editUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } });
