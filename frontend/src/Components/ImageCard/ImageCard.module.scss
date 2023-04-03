@@ -33,10 +33,13 @@ $description-color: #aaaaaa;
   flex-basis: 100%;
   transition: 0.2s;
   box-shadow: 0 0 5px 3px $black-t10;
-  background-image: url('~/assets/banner-sample-2.jpeg');
   background-size: cover;
   background-position: center;
   cursor: pointer;
+}
+
+.default_image {
+  background-image: url('~/assets/banner-sample-2.jpeg');
 }
 
 .bottom_label {
