@@ -6,9 +6,9 @@ $mobile-width: $primary-content-width-mobile;
 $background-light: #b7afaf;
 $background-dark: #2e2b2b;
 
+// Must match the sizing of .container.
 .skeleton_wrapper {
-  // display: flex;
-  width: calc(100vw - 5em);
+  width: $primary-content-width-wide;
   height: 24em;
   border-radius: 1em;
 
