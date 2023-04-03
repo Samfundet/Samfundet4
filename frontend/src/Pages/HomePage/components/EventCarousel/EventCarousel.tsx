@@ -49,6 +49,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             title={event.title_en}
             date={event.start_dt}
             imageUrl={BACKEND_DOMAIN + event.image_url}
+            description=""
             url={url}
           >
             <div className={styles.button_bar}>
