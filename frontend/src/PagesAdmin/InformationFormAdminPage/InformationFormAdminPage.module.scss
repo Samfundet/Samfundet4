@@ -80,7 +80,7 @@
   padding-right: 1em;
   border: none;
   border-bottom: 1px solid $black;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 1.5em;
 }
 
@@ -99,7 +99,6 @@
   flex: 1;
   min-height: 100%;
   background-color: $white;
-  padding: 0;
   padding: 1.5em;
   padding-top: 3em;
   overflow-y: auto;
@@ -113,7 +112,8 @@
   padding-bottom: 1em;
   padding-right: 1em;
   color: $black;
-
+  
+  /* stylelint-disable selector-max-type */
   input {
     border: none;
     border-radius: .5em;
@@ -121,10 +121,11 @@
     padding: .5em;
     margin-left: .5em;
   }
-
   button {
     margin-top: .75em;
   }
+  /* stylelint-enable selector-max-type */
+
 }
 
 .url_preview {

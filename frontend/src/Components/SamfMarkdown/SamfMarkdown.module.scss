@@ -9,6 +9,7 @@ $medium-spacing: 1em;
   Since these tags are global by default, must be wrapped in 
   a samf_markdown custom class.
 */
+/* stylelint-disable */
 .samf_markdown {  
 
   // Headers
@@ -135,3 +136,4 @@ $medium-spacing: 1em;
   }
 
 }
+/* stylelint-enable */

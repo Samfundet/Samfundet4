@@ -52,15 +52,17 @@
     }
   }
 
-  &:not(.selected):hover {
-    color: $blue;
-  }
-
   &.disabled {
     color: $grey-1;
   }
 }
 
-.compact > .tab_button {
-  padding: .4em 0.75em;
+.compact {
+  .tab_button {
+    padding: .4em 0.75em;
+  }
+}
+
+.tab_button:not(.selected):hover {
+  color: $blue;
 }
