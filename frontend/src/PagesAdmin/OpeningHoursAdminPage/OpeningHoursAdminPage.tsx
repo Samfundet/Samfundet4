@@ -3,9 +3,9 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components/Page';
 import { getVenues, putVenue } from '~/api';
-import { ALL_DAYS } from '~/constants';
 import { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { ALL_DAYS } from '~/types';
 import { getDayKey } from '~/utils';
 import styles from './OpeningHoursAdminPage.module.scss';
 
@@ -31,8 +31,7 @@ export function OpeningHoursAdminPage() {
     // Get most recent edits if any
     const recent = venueRef.current.filter((v) => v.id === venue.id)[0];
     // Send field change to backend
-    putVenue({
-      id: venue.id,
+    putVenue(venue.id, {
       [field]: recent[field],
     })
       // Success
@@ -95,7 +94,7 @@ export function OpeningHoursAdminPage() {
    * */
   function venueBox(venue: VenueDto) {
     return (
-      <div className={styles.venue_box}>
+      <div className={styles.venue_box} key={venue.id}>
         <div className={styles.venue_header}>{venue.name}</div>
         <div className={styles.venue_content}>
           <div className={styles.input_row}>

@@ -1,8 +1,8 @@
 import i18next from 'i18next';
 import { CSSProperties } from 'react';
 import { UserDto } from '~/dto';
-import { Day } from './constants';
 import { KEY, KeyValues } from './i18n/constants';
+import { Day } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;

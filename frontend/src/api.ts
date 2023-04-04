@@ -89,9 +89,8 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(venue: Partial<VenueDto>): Promise<VenueDto> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: venue.id } });
+export async function putVenue(id: number, venue: Partial<VenueDto>): Promise<VenueDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
   return response.data;
 }

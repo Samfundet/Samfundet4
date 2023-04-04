@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { Link, Navbar } from '~/Components';
-import { KEY } from '~/i18n/constants';
 import { applets } from '~/Pages/AdminPage/applets';
+import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import styles from './AdminLayout.module.scss';
 
@@ -18,7 +18,7 @@ export function AdminLayout() {
 
   const appletShortcuts = applets.map((applet, index) => {
     // No default url, dont show in navmenu
-    if (applet.defaultUrl === undefined) return <></>;
+    if (applet.defaultUrl === undefined) return undefined;
 
     // Create panel item
     const selected = window.location.href.toLowerCase().indexOf(applet.defaultUrl) != -1;

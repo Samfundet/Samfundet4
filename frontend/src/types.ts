@@ -77,3 +77,8 @@ export type ColorValue = typeof COLORS[ColorKey];
 
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
+
+/** Days */
+export type Day = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
