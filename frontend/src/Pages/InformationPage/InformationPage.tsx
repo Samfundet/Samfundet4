@@ -1,29 +1,32 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
-import { Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { getTranslatedText } from '~/Pages/InformationPage/utils';
 import { ROUTES } from '~/routes';
 
+import { Icon } from '@iconify/react';
+import { useAuthContext } from '~/AuthContext';
+import { SamfMarkdown } from '~/Components/SamfMarkdown';
+import { PERM } from '~/permissions';
+import { dbT, hasPerm } from '~/utils';
 import styles from './InformationPage.module.scss';
 
 /**
- * Page to render all components for easy overview and debug purposes.
- * Useful when styling global themes.
+ * Renders information page using markdown
  */
 export function InformationPage() {
+  const navigate = useNavigate();
+
+  const { user } = useAuthContext();
   const [page, setPage] = useState<InformationPageDto>();
-  const { i18n } = useTranslation();
   const { slugField } = useParams();
 
-  // Stuff to do on first render.
+  // Fetch page data
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
@@ -34,8 +37,11 @@ export function InformationPage() {
     }
   }, [slugField]);
 
-  const text = getTranslatedText(page, i18n.language);
+  // Text and title
+  const text = dbT(page, 'text') ?? '';
+  const title = dbT(page, 'title') ?? '';
 
+  // Loading
   if (!page) {
     return (
       <Page>
@@ -46,14 +52,25 @@ export function InformationPage() {
     );
   }
 
+  // Editing
+  const editUrl = reverse({
+    pattern: ROUTES.frontend.admin_information_edit,
+    urlParams: { slugField: page?.slug_field },
+  });
+  const canEditPage = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE, obj: page?.slug_field });
+
   return (
     <div className={styles.wrapper}>
-      <Link
-        url={reverse({ pattern: ROUTES.frontend.information_page_edit, urlParams: { slugField: page?.slug_field } })}
-      >
-        {t(KEY.common_edit)}
-      </Link>
-      <ReactMarkdown className={styles.md}>{text || ''}</ReactMarkdown>
+      {canEditPage && (
+        <>
+          <Button rounded={true} theme="blue" onClick={() => navigate(editUrl)}>
+            <Icon icon="mdi:pencil" />
+            {`${t(KEY.common_edit)} ${t(KEY.information_page_short)}`}
+          </Button>
+          <br></br>
+        </>
+      )}
+      <SamfMarkdown>{`# ${title} \n ${text}`}</SamfMarkdown>
     </div>
   );
 }

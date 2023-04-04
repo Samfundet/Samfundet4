@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
   AdminPage,
@@ -31,6 +30,7 @@ import {
   InformationFormAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
+import { useGoatCounter } from '~/hooks';
 import { NavbarLayout } from './Components/Navbar';
 import { SultenNavbarLayout } from './Components/SultenNavbar';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
@@ -74,10 +74,11 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_events} element={<EventsAdminPage />} />
         <Route path={ROUTES.frontend.admin_events_create} element={<EventCreatorAdminPage />} />
         <Route path={ROUTES.frontend.admin_events_edit} element={<EventCreatorAdminPage />} />
-        {/* Info pages */}
+        {/* 
+          Info pages 
+          NOTE: edit/create uses custom views
+        */}
         <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
-        <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
         {/* Closed period */}
         <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
         <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />
@@ -86,10 +87,16 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
         <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
         {/* Saksdokumenter */}
+        <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
       </Route>
+      {/* 
+        Info pages
+        Custom layout for edit/create
+      */}
+      <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
       {/* 
             SULTEN ROUTES
       */}

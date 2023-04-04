@@ -97,6 +97,7 @@ export const KEY = {
   admin_information_edit_page: 'admin_information_edit_page',
   admin_information_update_page: 'admin_information_update_page',
   admin_information_confirm_delete: 'admin_information_confirm_delete',
+  admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
   admin_closed_period_edit_period: 'admin_closed_period_edit_period',
