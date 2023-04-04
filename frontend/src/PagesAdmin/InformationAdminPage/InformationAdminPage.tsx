@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteInformationPage, getInformationPages } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { deleteInformationPage, getInformationPages } from '~/api';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -50,7 +50,6 @@ export function InformationAdminPage() {
       </div>
     );
   }
-
   const tableColumns = [
     { content: t(KEY.name), sortable: true },
     { content: t(KEY.common_title), sortable: true },
@@ -58,22 +57,28 @@ export function InformationAdminPage() {
     { content: t(KEY.last_updated), sortable: true },
     '', // Buttons
   ];
+
   const data = informationPages.map(function (element) {
+    const pageUrl = reverse({
+      pattern: ROUTES.frontend.information_page_detail,
+      urlParams: { slugField: element.slug_field },
+    });
+
     return [
-      reverse({
-        pattern: ROUTES.frontend.information_page_detail,
-        urlParams: { slugField: element.slug_field },
-      }),
+      { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
       dbT(element, 'title'),
       'To be added',
       'To be added',
       {
         content: (
           <CrudButtons
+            onView={() => {
+              navigate(pageUrl);
+            }}
             onEdit={() => {
               navigate(
                 reverse({
-                  pattern: ROUTES.frontend.information_page_edit,
+                  pattern: ROUTES.frontend.admin_information_edit,
                   urlParams: { slugField: element.slug_field },
                 }),
               );

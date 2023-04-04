@@ -1,24 +1,24 @@
 export const ROUTES_FRONTEND = {
-  api_testing: '/api-testing/',
-  components: '/components/',
-  groups: '/groups/',
+  // Public pages
   home: '/',
+  groups: '/groups/',
   health: '/health/',
   about: '/about/',
   login: '/login/',
   signup: '/signup/',
   events: '/events/',
   event: '/events/:id/',
-  information_page_list: '/information-page/',
-  information_page_detail: '/information-page/:slugField/',
-  lyche: '/lyche/',
+  information_page_list: '/information/',
+  information_page_detail: '/information/:slugField/',
   saksdokumenter: '/saksdokumenter/',
-  information_page_edit: '/information-page/:slugField/edit/',
+  // Sulten
+  lyche: '/lyche/',
   sulten: '/lyche',
   sulten_menu: '/lyche/menu/',
   sulten_reservation: '/lyche/reservation/',
   sulten_about: '/lyche/about/',
   sulten_contact: 'lyche/contact/',
+  // Admin pages
   admin: '/admin/',
   admin_gangs: '/admin/gangs/',
   admin_gangs_create: '/admin/gangs/create/',
@@ -38,4 +38,7 @@ export const ROUTES_FRONTEND = {
   admin_saksdokumenter_create: '/admin/saksdokument/create/',
   admin_saksdokumenter_edit: '/admin/saksdokument/edit/:id/',
   route_overview: '/route/overview/',
+  // Development pages?
+  api_testing: '/api-testing/',
+  components: '/components/',
 } as const;
