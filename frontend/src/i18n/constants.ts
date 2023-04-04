@@ -26,6 +26,7 @@ export const KEY = {
   english: 'english',
   common_buy: 'common_buy',
   common_edit: 'common_edit',
+  common_show: 'common_show',
   common_login: 'common_login',
   common_logout: 'common_logout',
   common_password: 'common_password',

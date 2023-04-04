@@ -18,7 +18,7 @@ export function CrudButtons({ onView, onEdit, onDelete }: CrudButtonsProps) {
         <IconButton
           onClick={onView}
           color={COLORS.green}
-          title={t(KEY.common_edit)}
+          title={t(KEY.common_show)}
           icon="ic:baseline-remove-red-eye"
         />
       )}
