@@ -95,7 +95,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_information_edit_page]: 'Rediger side',
   [KEY.admin_information_update_page]: 'Oppdater side',
   [KEY.admin_information_confirm_delete]: 'Er du sikker du vil slette denne informasjonssiden?',
-  [KEY.admin_information_confirm_cancel]: 'Er du sikker du gå tilbake uten å lagre?',
+  [KEY.admin_information_confirm_cancel]: 'Er du sikker på at du vil gå tilbake uten å lagre?',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_closed_period_new_period]: 'Legg til ny periode',
   [KEY.admin_closed_period_edit_period]: 'Endre periode',
