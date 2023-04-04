@@ -22,6 +22,7 @@ export type SamfFormFieldType =
   | 'options'
   | 'image'
   | 'datetime'
+  | 'time'
   | 'upload-image'
   | 'upload-pdf';
 
@@ -61,6 +62,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   float: makeStandardInputFunction<string>('number'),
   integer: makeStandardInputFunction<string>('number'),
   datetime: makeStandardInputFunction<string>('datetime-local'),
+  time: makeStandardInputFunction<string>('time'),
   password: makeStandardInputFunction<string>('password'),
   // Custom input types
   'text-long': makeAreaInput,

@@ -39,8 +39,15 @@ export const applets: Applet[] = [
   },
   {
     title: 'Åpningstider',
+    perm: PERM.SAMFUNDET_CHANGE_VENUE,
+    icon: 'mdi:clock-time-eight-outline',
+    defaultUrl: ROUTES.frontend.admin_opening_hours,
+    options: [{ text: 'Rediger åpningstider', url: ROUTES.frontend.admin_opening_hours, type: TYPE.EDIT }],
+  },
+  {
+    title: 'Stengte perioder',
     perm: PERM.SAMFUNDET_ADD_CLOSEDPERIOD,
-    icon: 'ic:outline-access-time',
+    icon: 'solar:moon-sleep-bold',
     defaultUrl: ROUTES.frontend.admin_closed,
     options: [{ text: 'Endre stengte perioder', url: ROUTES.frontend.admin_closed, type: TYPE.EDIT }],
   },

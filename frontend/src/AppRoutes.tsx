@@ -28,6 +28,7 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  OpeningHoursAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -79,6 +80,8 @@ export function AppRoutes() {
           NOTE: edit/create uses custom views
         */}
         <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
+        {/* Opening hours */}
+        <Route path={ROUTES.frontend.admin_opening_hours} element={<OpeningHoursAdminPage />} />
         {/* Closed period */}
         <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
         <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />

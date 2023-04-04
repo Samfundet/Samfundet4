@@ -4,7 +4,7 @@ import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'time';
 
 type InputFieldProps<T> = {
   children?: Children;

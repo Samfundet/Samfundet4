@@ -102,6 +102,7 @@ export const KEY = {
   admin_closed_period_title: 'admin_closed_period_title',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
   admin_closed_period_edit_period: 'admin_closed_period_edit_period',
+  admin_opening_hours_hint: 'admin_opening_hours_hint',
   not_found_text: 'not_found_text',
   not_found_contact_prompt: 'not_found_contact_prompt',
   name: 'name',
