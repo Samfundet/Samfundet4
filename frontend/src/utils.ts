@@ -1,6 +1,8 @@
 import i18next from 'i18next';
 import { CSSProperties } from 'react';
 import { UserDto } from '~/dto';
+import { Day } from './constants';
+import { KEY, KeyValues } from './i18n/constants';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -108,4 +110,26 @@ export function dbT(
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];
   return !falsy.includes(value.toLowerCase());
+}
+
+/**
+ * Gets the translation key for a given day
+ */
+export function getDayKey(day: Day): KeyValues {
+  switch (day) {
+    case 'monday':
+      return KEY.day_monday;
+    case 'tuesday':
+      return KEY.day_tuesday;
+    case 'wednesday':
+      return KEY.day_wednesday;
+    case 'thursday':
+      return KEY.day_thursday;
+    case 'friday':
+      return KEY.day_friday;
+    case 'saturday':
+      return KEY.day_saturday;
+    case 'sunday':
+      return KEY.day_sunday;
+  }
 }

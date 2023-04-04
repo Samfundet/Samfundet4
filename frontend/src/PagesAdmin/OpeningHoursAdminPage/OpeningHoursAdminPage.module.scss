@@ -1,0 +1,66 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.header {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: .5em;
+  margin-top: 1em;
+}
+
+.subtitle {
+  color: $grey-2;
+  margin-bottom: 1.5em;
+}
+
+.venue_container {
+  @include flex-row;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.venue_box {
+  @include rounded;
+  @include shadow-light;
+  overflow: hidden;
+  min-width: 16em;
+  max-width: 16em;
+}
+
+.venue_header {
+  padding: .5em 1em;
+  background-color: $red-samf;
+  color: $white;
+}
+
+.venue_content {
+  padding: 1em;
+}
+
+.input_row {
+  @include flex-row;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  gap: .5em;
+}
+
+.day_row {
+  @include flex-row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.day_label {
+  color: $grey-1;
+}
+
+.day_edit {
+  @include flex-row;
+  gap: .5em;
+}
+
+.invalid {
+  border: 2px solid red;
+}
