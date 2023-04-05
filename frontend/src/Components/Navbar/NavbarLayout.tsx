@@ -4,11 +4,11 @@ import styles from './Navbar.module.scss';
 
 export function NavbarLayout() {
   return (
-    <div className={styles.navbar_layout_outer}>
+    <>
       <Navbar />
-      <div className={styles.navbar_layout_inner}>
+      <div className={styles.navbar_outlet}>
         <Outlet />
       </div>
-    </div>
+    </>
   );
 }

@@ -87,9 +87,9 @@ export function EventsList({ events }: EventsListProps) {
   }
 
   return (
-    <div>
+    <>
       {/* TODO make "tabs" component and cleanup local css */}
-      <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', marginTop: '2em' }}>
+      <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', marginTop: '1em' }}>
         {getButton('Dager', 'mdi:grid', () => setTableView(false), !tableView)}
         {getButton('Liste', 'material-symbols:view-list', () => setTableView(true), tableView)}
       </div>
@@ -112,6 +112,6 @@ export function EventsList({ events }: EventsListProps) {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
