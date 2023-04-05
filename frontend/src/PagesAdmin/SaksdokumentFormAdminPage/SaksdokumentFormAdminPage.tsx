@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
-import { getSaksdokument } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
-import { SaksdokumentDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getSaksdokument, postSaksdokument } from '~/api';
+import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -58,21 +58,16 @@ export function SaksdokumentFormAdminPage() {
     }
   }, [id]);
 
-  // function onSubmit(data: SaksdokumentDto) {
-  //   // Remove file from data to be updated, as it currently cannot be changed
-  //   id && delete data['file'];
-
-  //   (id ? putSaksdokument(id, data) : postSaksdokument(data))
-  //     .then(() => {
-  //       navigate(ROUTES.frontend.admin);
-  //     })
-  //     .catch((e) => {
-  //       console.error(e.response.data);
-  //       for (const err in e.response.data) {
-  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
-  //       }
-  //     });
-  // }
+  function handleOnSubmit(data: SaksdokumentDto) {
+    // Post new document
+    if (id === undefined) {
+      postSaksdokument(data).then(() => {
+        navigate(ROUTES.frontend.admin_saksdokumenter);
+      });
+    } else {
+      // TODO
+    }
+  }
 
   if (showSpinner) {
     return (
@@ -90,13 +85,7 @@ export function SaksdokumentFormAdminPage() {
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
       </h1>
       {/* TODO: fix */}
-      <SamfForm
-        initialData={document}
-        onSubmit={() => {
-          return;
-        }}
-        submitText={submitText}
-      >
+      <SamfForm initialData={document} onSubmit={handleOnSubmit} submitText={submitText}>
         <div className={styles.row}>
           <SamfFormField
             field="title_nb"
@@ -125,12 +114,8 @@ export function SaksdokumentFormAdminPage() {
             required={true}
             label={`${t(KEY.common_publication_date)}`}
           />
-          {/*
-          TODO: Add support for uploading files, not currently implemented
-          <SamfFormField type="file" name="file">
-            <p className={styles.labelText}>Document file *</p>
-          </SamfFormField> */}
         </div>
+        <SamfFormField type="upload-pdf" field="file" />
       </SamfForm>
     </Page>
   );

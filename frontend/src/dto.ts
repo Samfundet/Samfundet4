@@ -169,12 +169,13 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
-  id?: number;
+  id: number;
   title_nb?: string;
   title_en?: string;
   category?: string;
   publication_date?: string;
-  file?: string;
+  file?: string; // For posting to backend
+  url?: string; // Read only backend url
 };
 
 export type TextItemDto = {

@@ -25,7 +25,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_login]: 'Logg inn',
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_password]: 'passord',
-  [KEY.common_publication_date]: 'Publiserings dato',
+  [KEY.common_publication_date]: 'Publiseringsdato',
   [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
   [KEY.login_internal_login]: 'Logg inn som intern',
   [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',

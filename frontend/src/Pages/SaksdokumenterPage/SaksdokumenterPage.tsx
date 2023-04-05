@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SamfundetLogoSpinner } from '~/Components';
+import { Link, SamfundetLogoSpinner } from '~/Components';
 import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '~/Components/ExpandableList';
 import {
   getFormattedDate,
@@ -44,9 +44,9 @@ export function SaksdokumenterPage() {
           <p className={styles.date}>
             {saksdokument.publication_date && getFormattedDate(saksdokument.publication_date)}
           </p>
-          <a href={saksdokument.file} target="_blank" rel="noreferrer" className={styles.child}>
+          <Link url={saksdokument.url ?? ''} target="backend" className={styles.child}>
             {titleForSaksdokument(saksdokument)}
-          </a>
+          </Link>
         </Child>
       </a>
     ));

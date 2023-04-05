@@ -91,7 +91,7 @@ def seed():
                 )
             )
 
-        yield int(i / COUNT * 100), f"Created event '{title_nb}'"
+        yield int(i / COUNT * 100), 'Creating events'
 
     Event.objects.bulk_create(seed_events)
 

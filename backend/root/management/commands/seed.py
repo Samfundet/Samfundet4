@@ -29,7 +29,7 @@ def print_progress(
     bar = filled + padding
 
     if start_time:
-        suffix += f' ({time.time()-start_time:.2f}s)'
+        suffix += f' ({time.time() - start_time:.2f}s)'
     # Clear line (special character).
     print('\033[K', end='\r')
     # Print loading bar and prefix/suffix.
@@ -39,7 +39,7 @@ def print_progress(
 
 def run_seed_script(*, target: tuple, index: int, count: int):
     # Run specific seed script.
-    prefix = f"{index + 1}/{count} '{target[0]}'\t"
+    prefix = f'{index + 1}/{count}'
     generator = target[1]()
     start_time = time.time()
 
