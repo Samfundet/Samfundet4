@@ -3,15 +3,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
-import { getSaksdokument } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
-import { SaksdokumentDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getSaksdokument, postSaksdokument, putSaksdokument } from '~/api';
+import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { utcTimestampToLocal } from '~/utils';
 import styles from './SaksdokumentFormAdminPage.module.scss';
 
 export function SaksdokumentFormAdminPage() {
@@ -22,28 +23,14 @@ export function SaksdokumentFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
-  const [document, setDocument] = useState<Partial<SaksdokumentDto>>();
-  // Stuff to do on first render.
-  //TODO add permissions on render
-
-  // TODO get categories from API (this will not work)
-  const categoryOptions: DropDownOption<string>[] = [
-    { value: 'FS_REFERAT', label: 'FS_REFERAT' },
-    { value: 'ARSBERETNING', label: 'ARSBERETNING' },
-    { value: 'STYRET', label: 'STYRET' },
-    { value: 'RADET', label: 'RADET' },
-  ];
-  const defaultCategoryOption: DropDownOption<string> = {
-    value: document?.category ?? 'FS_REFERAT',
-    label: document?.category ?? 'FS_REFERAT',
-  };
+  const [saksdok, setSaksdok] = useState<SaksdokumentDto>();
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (id) {
       getSaksdokument(id)
         .then((data) => {
-          setDocument(data);
+          setSaksdok(data);
           setShowSpinner(false);
         })
         .catch((data) => {
@@ -58,21 +45,44 @@ export function SaksdokumentFormAdminPage() {
     }
   }, [id]);
 
-  // function onSubmit(data: SaksdokumentDto) {
-  //   // Remove file from data to be updated, as it currently cannot be changed
-  //   id && delete data['file'];
+  // Only set fields used in form
+  // (otherwise validation will not know which fields to check)
+  const initialData: Partial<SaksdokumentDto> = {
+    title_nb: saksdok?.title_nb,
+    title_en: saksdok?.title_en,
+    category: saksdok?.category,
+    // Must be locale string to be supported by html input
+    publication_date: utcTimestampToLocal(saksdok?.publication_date),
+  };
 
-  //   (id ? putSaksdokument(id, data) : postSaksdokument(data))
-  //     .then(() => {
-  //       navigate(ROUTES.frontend.admin);
-  //     })
-  //     .catch((e) => {
-  //       console.error(e.response.data);
-  //       for (const err in e.response.data) {
-  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
-  //       }
-  //     });
-  // }
+  // TODO get categories from API (this will not work)
+  const categoryOptions: DropDownOption<string>[] = [
+    { value: 'FS_REFERAT', label: 'FS_REFERAT' },
+    { value: 'ARSBERETNINGER', label: 'ARSBERETNINGER' },
+    { value: 'STYRET', label: 'STYRET' },
+    { value: 'RADET', label: 'RADET' },
+  ];
+  const defaultCategoryOption: DropDownOption<string> | undefined =
+    saksdok !== undefined
+      ? {
+          value: saksdok.category,
+          label: saksdok.category,
+        }
+      : undefined;
+
+  // Handle put/post to api
+  function handleOnSubmit(data: SaksdokumentDto) {
+    // Post new document
+    if (id === undefined) {
+      postSaksdokument(data).then(() => {
+        navigate(ROUTES.frontend.admin_saksdokumenter);
+      });
+    } else {
+      putSaksdokument(id, data).then(() => {
+        navigate(ROUTES.frontend.admin_saksdokumenter);
+      });
+    }
+  }
 
   if (showSpinner) {
     return (
@@ -89,14 +99,9 @@ export function SaksdokumentFormAdminPage() {
       <h1 className={styles.header}>
         {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
       </h1>
-      {/* TODO: fix */}
-      <SamfForm
-        initialData={document}
-        onSubmit={() => {
-          return;
-        }}
-        submitText={submitText}
-      >
+      {/* Document form */}
+      <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
+        {/* Name */}
         <div className={styles.row}>
           <SamfFormField
             field="title_nb"
@@ -111,6 +116,7 @@ export function SaksdokumentFormAdminPage() {
             label={`${t(KEY.english)} ${t(KEY.common_title)}`}
           />
         </div>
+        {/* Metadata */}
         <div className={styles.row}>
           <SamfFormField
             field="category"
@@ -125,12 +131,12 @@ export function SaksdokumentFormAdminPage() {
             required={true}
             label={`${t(KEY.common_publication_date)}`}
           />
-          {/*
-          TODO: Add support for uploading files, not currently implemented
-          <SamfFormField type="file" name="file">
-            <p className={styles.labelText}>Document file *</p>
-          </SamfFormField> */}
         </div>
+        {/* File upload */}
+        {id === undefined && <SamfFormField type="upload-pdf" field="file" />}
+        {id !== undefined && (
+          <div className={styles.cannot_reupload}>{t(KEY.admin_saksdokumenter_cannot_reupload)}</div>
+        )}
       </SamfForm>
     </Page>
   );
