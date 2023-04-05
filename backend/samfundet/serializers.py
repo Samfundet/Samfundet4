@@ -283,7 +283,7 @@ class SaksdokumentSerializer(serializers.ModelSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
     # Write only field for posting new document
-    file = serializers.FileField(write_only=True, required=True)
+    file = serializers.FileField(write_only=True, required=False)
 
     class Meta:
         model = Saksdokument

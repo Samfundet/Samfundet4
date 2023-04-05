@@ -133,3 +133,22 @@ export function getDayKey(day: Day): KeyValues {
       return KEY.day_sunday;
   }
 }
+
+/**
+ * Converts a UTC timestring from django to
+ * a local timestring suitable for html input elements
+ * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @returns timestamp in local format, eg. '2023-04-05T20:15'
+ */
+export function utcTimestampToLocal(time: string | undefined): string {
+  return new Date(time ?? '')
+    .toLocaleString('sv-SE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    .replace(' ', 'T');
+}
