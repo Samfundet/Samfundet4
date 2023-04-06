@@ -7,7 +7,7 @@ export const THEME = {
   LIGHT: 'theme-light',
 } as const;
 
-// Class added to body when mobile navigation is open
+/** Class added to body when mobile navigation is open. */
 export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
 
 export const MIRROR_CLASS = 'mirror-dimension';
