@@ -193,7 +193,7 @@ class IsClosedView(ListAPIView):
 class SaksdokumentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all()
+    queryset = Saksdokument.objects.all().order_by('-publication_date')
 
 
 class GangView(ModelViewSet):

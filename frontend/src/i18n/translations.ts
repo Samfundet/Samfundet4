@@ -129,6 +129,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.sulten_page_more_about_us]: 'Mer om oss',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
+  [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -244,6 +245,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_closed_period_edit_period]: 'Edit closed period',
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
+  [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
 
   // Sulten / Lyche:
   [KEY.sulten_page_see_menu]: 'See our menu',

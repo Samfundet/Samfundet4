@@ -46,7 +46,7 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
   }
 
   if (displayType == DATE) {
-    return <p className={className}>{date.toDateString()}</p>;
+    return <p className={className}>{date.toLocaleDateString()}</p>;
   }
 
   if (displayType == NICEDATE) {

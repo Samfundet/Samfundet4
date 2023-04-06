@@ -123,6 +123,7 @@ export const KEY = {
   admin_information_confirm_delete: 'admin_information_confirm_delete',
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
+  admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
 
   // No category:
   owner: 'owner',

@@ -271,8 +271,9 @@ export async function getSaksdokument(pk: string | number): Promise<Saksdokument
 
 export async function postSaksdokument(data: SaksdokumentDto): Promise<SaksdokumentDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
-  const response = await axios.post<SaksdokumentDto>(url, data, { withCredentials: true });
-
+  const response = await axios.postForm<SaksdokumentDto>(url, data, {
+    withCredentials: true,
+  });
   return response.data;
 }
 
