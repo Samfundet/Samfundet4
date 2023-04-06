@@ -18,27 +18,27 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
 
   const date = new Date(timestamp);
   const niceDays = [
-    t(KEY.day_sunday),
-    t(KEY.day_monday),
-    t(KEY.day_tuesday),
-    t(KEY.day_wednesday),
-    t(KEY.day_thursday),
-    t(KEY.day_friday),
-    t(KEY.day_saturday),
+    t(KEY.common_day_sunday),
+    t(KEY.common_day_monday),
+    t(KEY.common_day_tuesday),
+    t(KEY.common_day_wednesday),
+    t(KEY.common_day_thursday),
+    t(KEY.common_day_friday),
+    t(KEY.common_day_saturday),
   ];
   const niceMonths = [
-    t(KEY.month_january),
-    t(KEY.month_february),
-    t(KEY.month_march),
-    t(KEY.month_april),
-    t(KEY.month_may),
-    t(KEY.month_june),
-    t(KEY.month_july),
-    t(KEY.month_august),
-    t(KEY.month_september),
-    t(KEY.month_october),
-    t(KEY.month_november),
-    t(KEY.month_december),
+    t(KEY.common_month_january),
+    t(KEY.common_month_february),
+    t(KEY.common_month_march),
+    t(KEY.common_month_april),
+    t(KEY.common_month_may),
+    t(KEY.common_month_june),
+    t(KEY.common_month_july),
+    t(KEY.common_month_august),
+    t(KEY.common_month_september),
+    t(KEY.common_month_october),
+    t(KEY.common_month_november),
+    t(KEY.common_month_december),
   ];
 
   if (displayType == DATETIME) {

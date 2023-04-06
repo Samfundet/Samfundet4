@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getSaksdokumenter } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -42,7 +42,7 @@ export function SaksdokumentAdminPage() {
   const tableColumns = [
     { content: t(KEY.common_title), sortable: true },
     { content: 'Type', sortable: true },
-    { content: t(KEY.common_publication_date), sortable: true },
+    { content: t(KEY.saksdokumentpage_publication_date), sortable: true },
     '', // Buttons
   ];
 
@@ -56,7 +56,7 @@ export function SaksdokumentAdminPage() {
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_saksdokumenter_create)}>
-        {t(KEY.common_create)} {t(KEY.saksdokument)}
+        {t(KEY.common_create)} {t(KEY.admin_saksdokument)}
       </Button>
       <br></br>
       <Table

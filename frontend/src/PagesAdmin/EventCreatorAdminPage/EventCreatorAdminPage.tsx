@@ -242,6 +242,7 @@ export function EventCreatorAdminPage() {
         {currentFormTab.key !== createSteps[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
             {t(KEY.common_previous)}
+            {t('common.add')}
           </Button>
         ) : (
           <div></div>

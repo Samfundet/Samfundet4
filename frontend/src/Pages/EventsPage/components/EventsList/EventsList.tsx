@@ -24,7 +24,7 @@ export function EventsList({ events }: EventsListProps) {
     t(KEY.common_from),
     { content: t(KEY.common_to), sortable: true },
     { content: t(KEY.common_title), sortable: true },
-    { content: t(KEY.venue), sortable: true },
+    { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.category), sortable: true },
     t(KEY.common_buy),
   ];

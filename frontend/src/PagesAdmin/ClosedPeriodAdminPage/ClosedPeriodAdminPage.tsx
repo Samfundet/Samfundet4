@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -92,19 +92,19 @@ export function ClosedPeriodAdminPage() {
                         );
                       }}
                     >
-                      {t(KEY.edit)}
+                      {t(KEY.common_edit)}
                     </Button>
                     <Button
                       theme="samf"
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${element.message_no}`)) {
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}
                     >
-                      {t(KEY.delete)}
+                      {t(KEY.common_delete)}
                     </Button>{' '}
                   </div>
                 ),

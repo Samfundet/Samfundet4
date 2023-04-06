@@ -52,12 +52,12 @@ export function LoginPage() {
         )}
         <div className={styles.content_container}>
           <SamfForm onSubmit={handleLogin} submitText={t(KEY.common_login) ?? ''}>
-            <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
-            <SamfFormField field="name" type="text" label={t(KEY.login_email_placeholder) ?? ''} />
+            <h1 className={styles.header_text}>{t(KEY.loginpage_internal_login)}</h1>
+            <SamfFormField field="name" type="text" label={t(KEY.loginpage_email_placeholder) ?? ''} />
             <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
           </SamfForm>
           <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>
-            {t(KEY.login_forgotten_password)}
+            {t(KEY.loginpage_forgotten_password)}
           </Link>
         </div>
       </div>

@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
-import { getSaksdokument } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
-import { SaksdokumentDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getSaksdokument } from '~/api';
+import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -82,12 +82,12 @@ export function SaksdokumentFormAdminPage() {
     );
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.saksdokument)}`;
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`;
 
   return (
     <Page>
       <h1 className={styles.header}>
-        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
+        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.admin_saksdokument)}
       </h1>
       {/* TODO: fix */}
       <SamfForm
@@ -102,13 +102,13 @@ export function SaksdokumentFormAdminPage() {
             field="title_nb"
             type="text"
             required={true}
-            label={`${t(KEY.norwegian)} ${t(KEY.common_title)}`}
+            label={`${t(KEY.common_norwegian)} ${t(KEY.common_title)}`}
           />
           <SamfFormField
             field="title_en"
             type="text"
             required={true}
-            label={`${t(KEY.english)} ${t(KEY.common_title)}`}
+            label={`${t(KEY.common_english)} ${t(KEY.common_title)}`}
           />
         </div>
         <div className={styles.row}>
@@ -123,7 +123,7 @@ export function SaksdokumentFormAdminPage() {
             field="publication_date"
             type="datetime"
             required={true}
-            label={`${t(KEY.common_publication_date)}`}
+            label={`${t(KEY.saksdokumentpage_publication_date)}`}
           />
           {/*
           TODO: Add support for uploading files, not currently implemented
