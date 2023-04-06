@@ -55,8 +55,8 @@ export function EventsAdminPage() {
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.start_time), sortable: true },
     { content: t(KEY.category), sortable: true },
-    { content: t(KEY.organizer), sortable: true },
-    { content: t(KEY.venue), sortable: true },
+    { content: t(KEY.admin_organizer), sortable: true },
+    { content: t(KEY.common_venue), sortable: true },
     '', // Buttons
   ];
 
@@ -88,7 +88,7 @@ export function EventsAdminPage() {
             }}
             onDelete={() => {
               // TODO custom modal confirm
-              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title')}`)) {
+              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${dbT(event, 'title')}`)) {
                 // TODO toast component? A bit too easy to delete events
                 deleteSelectedEvent(event.id);
               }

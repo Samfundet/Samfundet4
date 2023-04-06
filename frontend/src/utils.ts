@@ -118,19 +118,19 @@ export function isTruthy(value = ''): boolean {
 export function getDayKey(day: Day): KeyValues {
   switch (day) {
     case 'monday':
-      return KEY.day_monday;
+      return KEY.common_day_monday;
     case 'tuesday':
-      return KEY.day_tuesday;
+      return KEY.common_day_tuesday;
     case 'wednesday':
-      return KEY.day_wednesday;
+      return KEY.common_day_wednesday;
     case 'thursday':
-      return KEY.day_thursday;
+      return KEY.common_day_thursday;
     case 'friday':
-      return KEY.day_friday;
+      return KEY.common_day_friday;
     case 'saturday':
-      return KEY.day_saturday;
+      return KEY.common_day_saturday;
     case 'sunday':
-      return KEY.day_sunday;
+      return KEY.common_day_sunday;
   }
 }
 
