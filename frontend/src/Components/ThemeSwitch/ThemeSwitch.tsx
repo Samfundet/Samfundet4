@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
-import { putUserPreference } from '~/api';
 import { useAuthContext } from '~/AuthContext';
-import { THEME } from '~/constants';
 import { useGlobalContext } from '~/GlobalContextProvider';
+import { putUserPreference } from '~/api';
+import { THEME } from '~/constants';
 import styles from './ThemeSwitch.module.scss';
 
 type ThemeSwitchProps = {
