@@ -36,7 +36,7 @@ export function Link({ underline, className, style, children, url, title, plain,
     else if (target === 'backend' && !isCmdClick) window.location.href = finalUrl;
     else if (target === 'email') window.location.href = url;
     // Open in new tab.
-    else window.open(url, '_blank');
+    else window.open(finalUrl, '_blank');
   }
   return (
     <a
