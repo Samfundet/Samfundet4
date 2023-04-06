@@ -188,7 +188,7 @@ export function Navbar() {
             {loginButton}
             {logoutButton}
           </div>
-          <HamburgerMenu />;
+          <HamburgerMenu />
         </div>
       </nav>
       {isMobileNavigation && mobileNavigation}
