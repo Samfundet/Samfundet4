@@ -78,13 +78,13 @@ export function Navbar() {
         {t(KEY.common_membership)}
       </a>
       <a href="#" className={styles.navbar_dropdown_link}>
-        {t(KEY.opening_hours)}
+        {t(KEY.common_opening_hours)}
       </a>
       <a href={ROUTES.other.foto_samfundet_no} className={styles.navbar_dropdown_link}>
-        {t(KEY.photos)}
+        {t(KEY.navbar_photos)}
       </a>
       <a href="#" className={styles.navbar_dropdown_link}>
-        {t(KEY.nybygg)}
+        {t(KEY.navbar_nybygg)}
       </a>
     </>
   );

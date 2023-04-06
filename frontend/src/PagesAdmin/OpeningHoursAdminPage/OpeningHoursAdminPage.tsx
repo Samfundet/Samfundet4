@@ -136,7 +136,7 @@ export function OpeningHoursAdminPage() {
 
   return (
     <Page>
-      <div className={styles.header}>{t(KEY.opening_hours)}</div>
+      <div className={styles.header}>{t(KEY.common_opening_hours)}</div>
       <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
       <div className={styles.venue_container}>{venues.map((venue) => venueBox(venue))}</div>
     </Page>

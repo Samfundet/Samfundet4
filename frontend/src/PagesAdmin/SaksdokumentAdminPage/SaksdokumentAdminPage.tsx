@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getSaksdokumenter } from '~/api';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, InputField, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { getSaksdokumenter } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
 import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -18,10 +19,10 @@ export function SaksdokumentAdminPage() {
 
   const [documents, setDocuments] = useState<SaksdokumentDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { t } = useTranslation();
 
-  // Stuff to do on first render.
-  // TODO add permissions on render
+  // Get documents
   useEffect(() => {
     getSaksdokumenter()
       .then((data) => {
@@ -31,6 +32,7 @@ export function SaksdokumentAdminPage() {
       .catch(console.error);
   }, []);
 
+  // Loading
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -39,12 +41,60 @@ export function SaksdokumentAdminPage() {
     );
   }
 
+  // Filtered
+  function filterDocuments(): SaksdokumentDto[] {
+    if (searchQuery === '') return documents;
+    // Get keywords separated by space
+    const keywords = searchQuery.split(' ');
+    // Filter by match all keywords
+    return documents.filter((doc) => {
+      for (const kw of keywords) {
+        if (doc.title_nb?.toLowerCase().indexOf(kw) == -1) return false;
+      }
+      return true;
+    });
+  }
+
   const tableColumns = [
     { content: t(KEY.common_title), sortable: true },
     { content: 'Type', sortable: true },
-    { content: t(KEY.common_publication_date), sortable: true },
+    { content: t(KEY.saksdokumentpage_publication_date), sortable: true },
     '', // Buttons
   ];
+
+  // Table row for a document
+  function documentTableRow(document: SaksdokumentDto) {
+    return [
+      dbT(document, 'title') as string,
+      document.category,
+      {
+        content: <TimeDisplay displayType="date" timestamp={document.publication_date ?? ''} />,
+        value: document.publication_date,
+      },
+      {
+        content: (
+          <CrudButtons
+            onView={
+              // Open document file if exists
+              document.url !== null
+                ? () => {
+                    window.open(BACKEND_DOMAIN + document.url, '_blank');
+                  }
+                : undefined
+            }
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_saksdokumenter_edit,
+                  urlParams: { id: document.id },
+                }),
+              );
+            }}
+          />
+        ),
+      },
+    ];
+  }
 
   // TODO ADD TRANSLATIONS pr element
   return (
@@ -56,33 +106,11 @@ export function SaksdokumentAdminPage() {
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_saksdokumenter_create)}>
-        {t(KEY.common_create)} {t(KEY.saksdokument)}
+        {t(KEY.common_create)} {t(KEY.admin_saksdokument)}
       </Button>
       <br></br>
-      <Table
-        columns={tableColumns}
-        data={documents.map(function (document) {
-          return [
-            dbT(document, 'title') as string,
-            document.category,
-            document.publication_date,
-            {
-              content: (
-                <CrudButtons
-                  onEdit={() => {
-                    navigate(
-                      reverse({
-                        pattern: ROUTES.frontend.admin_saksdokumenter_edit,
-                        urlParams: { id: document.id },
-                      }),
-                    );
-                  }}
-                />
-              ),
-            },
-          ];
-        })}
-      />
+      <InputField icon="mdi:search" onChange={setSearchQuery} />
+      <Table columns={tableColumns} data={filterDocuments().map((doc) => documentTableRow(doc))} />
     </Page>
   );
 }

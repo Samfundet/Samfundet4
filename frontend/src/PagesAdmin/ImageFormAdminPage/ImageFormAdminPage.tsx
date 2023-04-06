@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getImage, postImage } from '~/api';
 import { Page, SamfundetLogoSpinner } from '~/Components';
-import { ImagePostDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getImage, postImage } from '~/api';
+import { ImagePostDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -75,7 +75,7 @@ export function ImageFormAdminPage() {
         {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
       </h1>
       <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
-        <SamfFormField field="title" type="text" label={`${t(KEY.name)}`} />
+        <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
         {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
         <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
         {/* TODO create file picker input type */}

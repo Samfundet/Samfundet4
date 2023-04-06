@@ -1,8 +1,9 @@
 import itertools
 
 from django.contrib.auth import authenticate
-from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from django.core.files import File
+from django.core.files.images import ImageFile
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
@@ -279,10 +280,33 @@ class MenuSerializer(serializers.ModelSerializer):
 
 
 class SaksdokumentSerializer(serializers.ModelSerializer):
+    # Read only url file path used in frontend
+    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
+    # Write only field for posting new document
+    file = serializers.FileField(write_only=True, required=False)
 
     class Meta:
         model = Saksdokument
         fields = '__all__'
+
+    def get_url(self, instance: Saksdokument) -> str | None:
+        return instance.file.url if instance.file else None
+
+    def create(self, validated_data: dict) -> Event:
+        """
+        Uses the write_only file field to create new document file.
+        """
+        file = validated_data.pop('file')
+        # Ensure file name ends with .pdf
+        fname = validated_data['title_nb']
+        fname = f'{fname}.pdf' if not fname.lower().endswith('.pdf') else fname
+        # Save model
+        document = Saksdokument.objects.create(
+            file=File(file, name=fname),
+            **validated_data,
+        )
+        document.save()
+        return document
 
 
 class TableSerializer(serializers.ModelSerializer):

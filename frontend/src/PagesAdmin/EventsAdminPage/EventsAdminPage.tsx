@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteEvent, getEventsUpcomming } from '~/api';
 import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { deleteEvent, getEventsUpcomming } from '~/api';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -55,8 +55,8 @@ export function EventsAdminPage() {
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.start_time), sortable: true },
     { content: t(KEY.category), sortable: true },
-    { content: t(KEY.organizer), sortable: true },
-    { content: t(KEY.venue), sortable: true },
+    { content: t(KEY.admin_organizer), sortable: true },
+    { content: t(KEY.common_venue), sortable: true },
     '', // Buttons
   ];
 
@@ -80,7 +80,7 @@ export function EventsAdminPage() {
             }}
             onDelete={() => {
               // TODO custom modal confirm
-              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title')}`)) {
+              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${dbT(event, 'title')}`)) {
                 // TODO toast component? A bit too easy to delete events
                 deleteSelectedEvent(event.id);
               }
