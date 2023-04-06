@@ -58,7 +58,7 @@ export function SaksdokumentAdminPage() {
   const tableColumns = [
     { content: t(KEY.common_title), sortable: true },
     { content: 'Type', sortable: true },
-    { content: t(KEY.common_publication_date), sortable: true },
+    { content: t(KEY.saksdokumentpage_publication_date), sortable: true },
     '', // Buttons
   ];
 
@@ -106,7 +106,7 @@ export function SaksdokumentAdminPage() {
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_saksdokumenter_create)}>
-        {t(KEY.common_create)} {t(KEY.saksdokument)}
+        {t(KEY.common_create)} {t(KEY.admin_saksdokument)}
       </Button>
       <br></br>
       <InputField icon="mdi:search" onChange={setSearchQuery} />

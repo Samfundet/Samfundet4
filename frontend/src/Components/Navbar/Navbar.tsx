@@ -1,19 +1,19 @@
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
+import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink as Link, useLocation, useNavigate } from 'react-router-dom';
-import { logout } from '~/api';
-import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
 import { useAuthContext } from '~/AuthContext';
 import { Button, ThemeSwitch } from '~/Components';
+import { useGlobalContext } from '~/GlobalContextProvider';
+import { logout } from '~/api';
+import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
 import { THEME } from '~/constants';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useGlobalContext } from '~/GlobalContextProvider';
 import styles from './Navbar.module.scss';
-import { ReactNode, useEffect, useState } from 'react';
 
 const scrollDistanceForOpaque = 30;
 
@@ -91,13 +91,13 @@ export function Navbar() {
         {t(KEY.common_membership)}
       </a>
       <a href="#" className={styles.navbar_dropdown_link}>
-        {t(KEY.opening_hours)}
+        {t(KEY.common_opening_hours)}
       </a>
       <a href={ROUTES.other.foto_samfundet_no} className={styles.navbar_dropdown_link}>
-        {t(KEY.photos)}
+        {t(KEY.navbar_photos)}
       </a>
       <a href="#" className={styles.navbar_dropdown_link}>
-        {t(KEY.nybygg)}
+        {t(KEY.navbar_nybygg)}
       </a>
     </>
   );

@@ -92,12 +92,12 @@ export function SaksdokumentFormAdminPage() {
     );
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.saksdokument)}`;
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`;
 
   return (
     <Page>
       <h1 className={styles.header}>
-        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.saksdokument)}
+        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.admin_saksdokument)}
       </h1>
       {/* Document form */}
       <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
@@ -107,13 +107,13 @@ export function SaksdokumentFormAdminPage() {
             field="title_nb"
             type="text"
             required={true}
-            label={`${t(KEY.norwegian)} ${t(KEY.common_title)}`}
+            label={`${t(KEY.common_norwegian)} ${t(KEY.common_title)}`}
           />
           <SamfFormField
             field="title_en"
             type="text"
             required={true}
-            label={`${t(KEY.english)} ${t(KEY.common_title)}`}
+            label={`${t(KEY.common_english)} ${t(KEY.common_title)}`}
           />
         </div>
         {/* Metadata */}
@@ -129,7 +129,7 @@ export function SaksdokumentFormAdminPage() {
             field="publication_date"
             type="datetime"
             required={true}
-            label={`${t(KEY.common_publication_date)}`}
+            label={`${t(KEY.saksdokumentpage_publication_date)}`}
           />
         </div>
         {/* File upload */}
