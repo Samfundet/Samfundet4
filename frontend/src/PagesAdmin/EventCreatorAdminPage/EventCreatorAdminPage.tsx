@@ -5,13 +5,13 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
-import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { postEvent } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
+import { EventDto } from '~/dto';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
@@ -242,7 +242,6 @@ export function EventCreatorAdminPage() {
         {currentFormTab.key !== createSteps[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
             {t(KEY.common_previous)}
-            {t('common.add')}
           </Button>
         ) : (
           <div></div>
