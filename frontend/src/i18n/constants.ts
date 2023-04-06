@@ -119,8 +119,6 @@ export const KEY = {
   form_confirm: 'form_confirm',
   duration: 'duration',
   publication: 'publication',
-  see_more: 'see_more',
-  see_less: 'see_less',
   closed_period: 'closed_period',
   saksdokument: 'saksdokument',
   common_sulten: 'common_sulten',
