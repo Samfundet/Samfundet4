@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteEvent, getEventsUpcomming } from '~/api';
 import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { deleteEvent, getEventsUpcomming } from '~/api';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -70,6 +70,14 @@ export function EventsAdminPage() {
       {
         content: (
           <CrudButtons
+            onView={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.event,
+                  urlParams: { id: event.id },
+                }),
+              );
+            }}
             onEdit={() => {
               navigate(
                 reverse({

@@ -46,7 +46,7 @@ export type ObjectPermissionDto = {
 
 export type VenueDto = {
   id: number;
-  name?: string;
+  name: string;
   description?: string;
   floor?: number;
   last_renovated?: number;
