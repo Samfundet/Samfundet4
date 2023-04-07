@@ -119,7 +119,7 @@ class NonMemberEmailRegistration(models.Model):
     email = models.EmailField(blank=False, null=False, editable=False)
 
 
-# PriceGroup - Registration type
+# Data for registration ticket type
 class EventRegistration(models.Model):
     """
     Used for events with registration payment type
@@ -135,13 +135,14 @@ class EventRegistration(models.Model):
         return self.registered_users.count() + self.registered_emails.count()
 
 
-# PriceGroup - Custom type
-class EventPriceCustom(models.Model):
+# Custom ticket for "custom" event ticket type
+class EventCustomTicket(models.Model):
     """
     Used for events with custom price group.
     Stores name and price of each custom ticket type.
     """
-    name = models.CharField(max_length=140, blank=False, null=False)
+    name_nb = models.CharField(max_length=140, blank=False, null=False)
+    name_en = models.CharField(max_length=140, blank=False, null=False)
     price = models.PositiveIntegerField(blank=False, null=False)
 
 
@@ -205,9 +206,9 @@ class Event(models.Model):
     category = models.CharField(max_length=30, choices=Category.choices, blank=False, null=False, default=Category.OTHER)
 
     # Price groups
-    class PriceGroup(models.TextChoices):
+    class TicketType(models.TextChoices):
         """
-        Handles event payment type handling.
+        Handles event ticket type.
             Included/Free - simple info shown on event
             Billig - event connected to billig payment system
             Registration - connect event to registration model (påmelding)
@@ -219,14 +220,14 @@ class Event(models.Model):
         REGISTRATION = 'registration', _('Free with registration')
         CUSTOM = 'custom', _('Custom')
 
-    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, blank=False, null=False, default=PriceGroup.FREE)
+    ticket_type = models.CharField(max_length=30, choices=TicketType.choices, blank=False, null=False, default=TicketType.FREE)
     capacity = models.PositiveIntegerField(blank=False, null=False)
 
     # Registration data for events with registration price group
     registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
 
     # Custom tickets for events with custom price group
-    custom_tickets = models.ManyToManyField(EventPriceCustom, blank=True, null=True)
+    custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True, null=True)
 
     # TODO billig event foreign key handling
 
@@ -235,7 +236,7 @@ class Event(models.Model):
         """
         Total number of registrations made for registration type events.
         """
-        if self.price_group == Event.PriceGroup.REGISTRATION and self.registration:
+        if self.ticket_type == Event.TicketType.REGISTRATION and self.registration:
             return self.registration.count
         return 0
 

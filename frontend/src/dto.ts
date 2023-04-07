@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { HomePageElementVariation } from './types';
+import { EventAgeRestriction, EventStatus, EventTicketType, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -75,21 +75,18 @@ export type VenueDto = {
 //        Event         //
 // ==================== //
 
-export type EventPriceGroup = 'free' | 'included' | 'billig' | 'registration' | 'custom';
-export type EventAgeRestriction = null | 'eighteen' | 'twenty' | 'mixed';
-export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
-
 // Custom ticket type
 export type EventCustomTicketDto = {
   id: number;
-  name: string;
+  name_nb: string;
+  name_en: string;
   price: number;
-}
+};
 
 export type EventDto = {
   // Status of event
   status: EventStatus;
-  
+
   // Used to group recurring events together
   event_group: EventGroupDto;
 
@@ -105,23 +102,23 @@ export type EventDto = {
   location: string;
   category: string;
   host: string;
-  
+
   // Timestamps/duration
   image_url: string;
   start_dt: string;
   duration: number;
   end_dt: string;
   publish_dt: string;
-  
-  // Price type for event (billig, free, custom, registration etc.)
-  price_group: EventPriceGroup;
+
+  // Ticket type for event (billig, free, custom, registration etc.)
+  ticket_type: EventTicketType;
 
   // Custom tickets (only relevant for custom price group events)
-  custom_tickets: EventCustomTicketDto;
-  
+  custom_tickets: EventCustomTicketDto[];
+
   // Write only:
-  // Used to create new event with using id of existing image
-  image_id?: number;
+  // Used to create new event with using id of existing imagedto
+  image?: ImageDto;
 };
 
 export type EventGroupDto = {

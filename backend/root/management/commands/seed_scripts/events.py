@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from root.utils.samfundet_random import words
 from samfundet.models import Event, EventGroup, Venue, Image, EventRegistration, User, NonMemberEmailRegistration, \
-    EventPriceCustom
+    EventCustomTicket
 
 # Number of events
 COUNT = 300
@@ -35,14 +35,14 @@ CATEGORIES = [
     Event.Category.OTHER,
 ]
 
-# Price groups (weighted random)
+# Ticket groups (weighted random)
 # Reduces change of registration/custom types because
 # seeding these is much slower.
-PRICE_GROUPS = {
-    Event.PriceGroup.FREE: 0.4,
-    Event.PriceGroup.INCLUDED: 0.4,
-    Event.PriceGroup.REGISTRATION: 0.1,
-    Event.PriceGroup.CUSTOM: 0.1,
+TICKET_TYPES = {
+    Event.TicketType.FREE: 0.4,
+    Event.TicketType.INCLUDED: 0.4,
+    Event.TicketType.REGISTRATION: 0.1,
+    Event.TicketType.CUSTOM: 0.1,
 }
 
 # Age groups
@@ -57,11 +57,11 @@ VENUES = Venue.objects.all()
 IMAGES = Image.objects.all()
 
 
-def create_event_price_group(capacity) -> Tuple[str, dict]:
-    price_group = random.choices(list(PRICE_GROUPS.keys()), weights=list(PRICE_GROUPS.values()), k=1)[0]
-    price_group_data: dict = {}
+def create_event_ticket_type(capacity) -> Tuple[str, dict]:
+    ticket_type = random.choices(list(TICKET_TYPES.keys()), weights=list(TICKET_TYPES.values()), k=1)[0]
+    ticket_type_data: dict = {}
     # Registration type, register some number of users/emails
-    if price_group == Event.PriceGroup.REGISTRATION:
+    if ticket_type == Event.TicketType.REGISTRATION:
         reg = EventRegistration.objects.create()
         # Add users
         all_users = User.objects.all()
@@ -71,17 +71,23 @@ def create_event_price_group(capacity) -> Tuple[str, dict]:
         NonMemberEmailRegistration.objects.bulk_create(non_members)
         reg.registered_emails.add(*non_members)
         # Save
-        price_group_data = {'registration': reg}
+        ticket_type_data = {'registration': reg}
         reg.save()
 
-    return price_group, price_group_data
+    return ticket_type, ticket_type_data
 
 
-def dummy_metadata():
+def dummy_metadata() -> dict:
     title_nb, title_en = words(2, include_english=True)
+    dsc_short_nb, dsc_short_en = words(10, include_english=True)
+    dsc_long_nb, dsc_long_en = words(120, include_english=True)
     return {
         'title_nb': title_nb,
         'title_en': title_en,
+        'description_short_nb': dsc_short_nb,
+        'description_short_en': dsc_short_en,
+        'description_long_nb': dsc_long_nb,
+        'description_long_en': dsc_long_en,
         'duration': random.randint(0, 180),
         'location': random.choice(VENUES).name,
         'age_restriction': random.choice(AGE_GROUPS),
@@ -94,7 +100,7 @@ def dummy_metadata():
 def seed():
     Event.objects.all().delete()
     EventGroup.objects.all().delete()
-    EventPriceCustom.objects.all().delete()
+    EventCustomTicket.objects.all().delete()
     EventRegistration.objects.all().delete()
     yield 0, 'Deleted old events'
 
@@ -113,7 +119,7 @@ def seed():
         )
 
         # Create price group with relevant info
-        price_group, price_group_data = create_event_price_group(capacity)
+        ticket_type, ticket_type_data = create_event_ticket_type(capacity)
 
         # Small chance of recurring event
         if random.random() <= RECURRING_CHANCE:
@@ -126,11 +132,14 @@ def seed():
 
         # Custom price group type, add some number of custom ticket types
         custom_tickets = None
-        if price_group == Event.PriceGroup.CUSTOM:
-            custom_tickets = [EventPriceCustom.objects.create(
-                name=f'Type {i}',
-                price=random.randint(50, 200),
-            ) for i in range(0, random.randint(2, 4))]
+        if ticket_type == Event.TicketType.CUSTOM:
+            custom_tickets = [
+                EventCustomTicket.objects.create(
+                    name_nb=f'Billett {i + 1}',
+                    name_en=f'Ticket {i + 1}',
+                    price=random.randint(50, 200),
+                ) for i in range(0, random.randint(2, 4))
+            ]
 
         # Create event(s)
         for j in range(recurring):
@@ -150,13 +159,13 @@ def seed():
                 publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
                 event_group=group,
                 capacity=capacity,
-                price_group=price_group,
-                **price_group_data,
+                ticket_type=ticket_type,
+                **ticket_type_data,
             )
             unsaved_events.append(event)
 
             # Add custom ticket types
-            if price_group == Event.PriceGroup.CUSTOM:
+            if ticket_type == Event.TicketType.CUSTOM:
                 event.save()
                 unsaved_events.remove(event)
                 event.custom_tickets.add(*custom_tickets)

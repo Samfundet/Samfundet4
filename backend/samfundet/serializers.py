@@ -29,7 +29,7 @@ from .models import (
     FoodPreference,
     UserPreference,
     InformationPage,
-    EventPriceCustom,
+    EventCustomTicket,
 )
 
 
@@ -77,19 +77,19 @@ class ImageSerializer(serializers.ModelSerializer):
         return image.image.url if image.image else None
 
 
-class EventPriceCustomSerializer(serializers.ModelSerializer):
+class EventCustomTicketSerializer(serializers.ModelSerializer):
     """
     Custom ticket types for event
     """
 
     class Meta:
-        model = EventPriceCustom
+        model = EventCustomTicket
         fields = '__all__'
 
 
 class EventSerializer(serializers.ModelSerializer):
     # Nested objects
-    custom_tickets = EventPriceCustomSerializer(many=True, read_only=True)
+    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
 
     # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)

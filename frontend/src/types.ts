@@ -82,3 +82,10 @@ export type SetState<T> = Dispatch<SetStateAction<T>>;
 export type Day = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+/** Event types */
+export type EventTicketType = 'free' | 'included' | 'billig' | 'registration' | 'custom';
+export type EventAgeRestriction = null | 'eighteen' | 'twenty' | 'mixed';
+export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
+
+export const ALL_TICKET_TYPES: EventTicketType[] = ['free', 'included', 'billig', 'registration', 'custom'];

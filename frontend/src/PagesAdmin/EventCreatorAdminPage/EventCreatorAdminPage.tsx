@@ -1,4 +1,4 @@
-import { Button, ImageCard, Page, TimeDisplay } from '~/Components';
+import { Button, ImageCard, Page } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
@@ -17,6 +17,7 @@ import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import { dbT } from '~/utils';
 import styles from './EventCreatorAdminPage.module.scss';
+import { PaymentForm } from './components/PaymentForm';
 
 type EventCreatorStep = {
   key: string; // Unique key
@@ -85,15 +86,16 @@ export function EventCreatorAdminPage() {
       ),
     },
     // Payment options (not implemented yet)
-    /*
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
       title_en: 'Payment/registration',
-      partial: {},
-      layout: [],
+      template: (
+        <>
+          <PaymentForm event={event ?? {}} onChange={(partial) => setEvent({ ...event, ...partial })} />
+        </>
+      ),
     },
-    */
     // Graphics
     {
       key: 'graphics',
@@ -186,15 +188,25 @@ export function EventCreatorAdminPage() {
   const eventPreview: Children = (
     <div className={styles.preview}>
       <ImageCard
-        title={dbT(event, 'title')}
-        description={dbT(event, 'description_short')}
+        title={dbT(event, 'title') ?? ''}
+        description={dbT(event, 'description_short') ?? ''}
         imageUrl={BACKEND_DOMAIN + event?.image?.url}
+        date={event?.start_dt ?? ''}
       />
+      {/* Preview Info */}
       <div className={styles.previewText}>
-        <p>{event?.category}</p>
-        <TimeDisplay timestamp={event?.start_dt ?? ''} />
-        <p>{event?.duration}min</p>
-        <p>{t(KEY.organizer)}{event?.duration}min</p>
+        <span>
+          <b>{t(KEY.category)}:</b> {event?.category ?? t(KEY.common_missing)}
+        </span>
+        <span>
+          <strong>Varighet:</strong> {event?.duration ? `${event?.duration} min` : t(KEY.common_missing)}
+        </span>
+        <span>
+          <b>{t(KEY.admin_organizer)}:</b> {event?.host ?? t(KEY.common_missing)}
+        </span>
+        <span>
+          <b>{t(KEY.common_venue)}:</b> {event?.location ?? t(KEY.common_missing)}
+        </span>
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getEvent } from '~/api';
 import { SamfundetLogoSpinner } from '~/Components';
+import { getEvent } from '~/api';
 import { EventDto } from '~/dto';
 import { dbT } from '~/utils';
-import { EventTable } from './components/EventTable';
 import styles from './EventPage.module.scss';
+import { EventTable } from './components/EventTable';
 
 export function EventPage() {
   const { id } = useParams();
@@ -34,9 +34,7 @@ export function EventPage() {
       <div>
         <img id="banner-link"></img>
       </div>
-      <div className={styles.container_list}>
-        <EventTable event={event} />
-      </div>
+      <div className={styles.container_list}>{event && <EventTable event={event} />}</div>
       <div className={styles.description}>
         <p className={styles.text_title}> DESCRIPTION </p>
         <div className={styles.description}>

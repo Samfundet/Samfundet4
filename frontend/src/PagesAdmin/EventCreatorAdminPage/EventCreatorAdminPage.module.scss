@@ -84,11 +84,14 @@
 
 .preview {
   @include flex-row-center;
-  gap: 1em;
+  align-items: center;
+  gap: 2em;
 }
 
 .previewText {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 3.75em;
   gap: .5em;
 }

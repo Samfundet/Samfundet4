@@ -48,7 +48,7 @@ export function ImageQuery({ allImages, setImages }: ImageQueryProps) {
         onChange={handleSearchChanged}
         icon="mdi:search"
         placeholder={placeholder}
-        className={styles.element}
+        labelClassName={styles.element}
       />
     </div>
   );

@@ -54,7 +54,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       <InputField
         onChange={setSearch}
         placeholder={t(KEY.common_search)}
-        className={styles.searchBar}
+        labelClassName={styles.searchBar}
         icon="ic:baseline-search"
       />
       <Dropdown<VenueDto | undefined>
