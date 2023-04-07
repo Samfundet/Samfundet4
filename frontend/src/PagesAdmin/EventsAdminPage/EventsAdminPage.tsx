@@ -70,6 +70,14 @@ export function EventsAdminPage() {
       {
         content: (
           <CrudButtons
+            onView={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.event,
+                  urlParams: { id: event.id },
+                }),
+              );
+            }}
             onEdit={() => {
               navigate(
                 reverse({

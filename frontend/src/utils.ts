@@ -152,3 +152,52 @@ export function utcTimestampToLocal(time: string | undefined): string {
     })
     .replace(' ', 'T');
 }
+
+/**
+ * Generic query function for DTOs. Returns elements from array matching query.
+ * @param query String query to search with
+ * @param elements Array of DTO elements
+ * @param fields Fields in DTOs to search agains (eg. title_nb, title_en)
+ * @returns Array of DTO elements matching query
+ */
+export function queryDto<T extends Record<string, unknown>>(query: string, elements: T[], fields: string[]): T[] {
+  if (query === '') return elements;
+  // Split keywords
+  const keywords = query.toLowerCase().split(' ');
+  return elements.filter((element: T) => {
+    // Build combined string based on fields
+    let combinedString = '';
+    for (const field of fields) {
+      // Add string fields
+      if (typeof element[field] === 'string') {
+        combinedString += ` ${(element[field] as string).toLowerCase()}`;
+      } else {
+        console.warn(`queryDto tried to query field '${field}' which is not string type`);
+      }
+    }
+    // Return true if all keywords are included
+    return keywords.reduce((othersOK, keyword) => othersOK && combinedString.includes(keyword), true);
+  });
+}
+
+/**
+ * Custom DTO query where a function is used to convert element to searchable string
+ * @param query String query to search with
+ * @param elements Array of DTO elements
+ * @param toStringRepresentation Function that converts DTO to a searchable string
+ * @returns Array of DTO elements matching query
+ */
+export function queryDtoCustom<T extends Record<string, unknown>>(
+  query: string,
+  elements: T[],
+  toStringRepresentation: (v: T) => string,
+): T[] {
+  if (query === '') return elements;
+  const keywords = query.toLowerCase().split(' ');
+  return elements.filter((element: T) => {
+    // Build combined string based on fields
+    const combinedString = toStringRepresentation(element).toLowerCase();
+    // Return true if all keywords are included
+    return keywords.reduce((othersOK, keyword) => othersOK && combinedString.includes(keyword), true);
+  });
+}
