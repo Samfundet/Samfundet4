@@ -63,9 +63,9 @@ class EventRegistration(models.Model):
     Stores list of registered users and emails.
     """
     # Registered users
-    registered_users = models.ManyToManyField(User, blank=True, null=True)
+    registered_users = models.ManyToManyField(User, blank=True)
     # Registered emails (for those not logged in/not a member)
-    registered_emails = models.ManyToManyField(NonMemberEmailRegistration, blank=True, null=True)
+    registered_emails = models.ManyToManyField(NonMemberEmailRegistration, blank=True)
 
     @property
     def count(self) -> int:
@@ -230,7 +230,7 @@ class Event(models.Model):
     capacity = models.PositiveIntegerField(blank=False, null=False)
     ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices, blank=False, null=False, default=EventTicketType.FREE)
     registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
-    custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True, null=True)
+    custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
     # ======================== #
     #    Computed Properties   #
