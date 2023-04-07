@@ -2,12 +2,14 @@
 
 @import 'src/mixins';
 
-.page {
-  // Ensure full height even when no content in body.
-  min-height: calc(100vh - $navbar-height);
+$bottom-padding: 2em;
 
+.page {
   // Lift elements laying on the bottom of the page.
-  padding-bottom: 2em;
+  padding-bottom: $bottom-padding;
+
+  // Ensure full height even when no content in body.
+  min-height: calc(100vh - $navbar-height - $bottom-padding);
 
   // Limit max content size for large screens.
   max-width: $content-max-size;

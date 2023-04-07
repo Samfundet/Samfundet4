@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-import re
 import random
-from typing import TYPE_CHECKING
+import re
+import uuid
 from datetime import time, timedelta
+from typing import TYPE_CHECKING
 
-from guardian.shortcuts import assign_perm
-
+from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import AbstractUser
+from guardian.shortcuts import assign_perm
 
 from root.utils import permissions
 
@@ -59,7 +59,7 @@ class Tag(models.Model):
 class Image(models.Model):
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
-    image = models.ImageField(upload_to='images/', blank=True, null=False)
+    image = models.ImageField(upload_to='images/', blank=False, null=False)
 
     class Meta:
         verbose_name = 'Image'
@@ -91,6 +91,12 @@ class User(AbstractUser):
 
 
 class EventGroup(models.Model):
+    """
+    Used for recurring events
+    Connects multiple recurring events (e.g. the same concert two days in a row)
+    Enables frontend to know about recurring events and provide tools
+    for admins to edit both or links for users to see other times.
+    """
     name = models.CharField(max_length=140)
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -100,8 +106,47 @@ class EventGroup(models.Model):
         verbose_name_plural = 'EventGroups'
 
 
+class NonMemberEmailRegistration(models.Model):
+    """
+    Non-member registration for events
+    Uses a unique id to enable cancellation of registration
+    """
+    # Long unique identifier (used for email cancellation)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # Email of the registered user
+    # WARNING: sensitive data! Make sure this is not exposed
+    # through the API or otherwise
+    email = models.EmailField(blank=False, null=False, editable=False)
+
+
+# PriceGroup - Registration type
+class EventRegistration(models.Model):
+    """
+    Used for events with registration payment type
+    Stores list of registered users and emails.
+    """
+    # Registered users
+    registered_users = models.ManyToManyField(User, blank=True, null=True)
+    # Registered emails (for those not logged in/not a member)
+    registered_emails = models.ManyToManyField(NonMemberEmailRegistration, blank=True, null=True)
+
+    @property
+    def count(self) -> int:
+        return self.registered_users.count() + self.registered_emails.count()
+
+
+# PriceGroup - Custom type
+class EventPriceCustom(models.Model):
+    """
+    Used for events with custom price group.
+    Stores name and price of each custom ticket type.
+    """
+    name = models.CharField(max_length=140, blank=False, null=False)
+    price = models.PositiveIntegerField(blank=False, null=False)
+
+
 class Event(models.Model):
-    # General info
+    # General event info/metadata
     title_nb = models.CharField(max_length=140, blank=False, null=False)
     title_en = models.CharField(max_length=140, blank=False, null=False)
     description_long_nb = models.TextField(blank=False, null=False)
@@ -112,7 +157,7 @@ class Event(models.Model):
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
 
-    # Event group is used for events occurring multiple times (eg. a concert repeating twice)
+    # Event group is used for events occurring multiple times (e.g. a concert repeating twice)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
 
     # Timestamps
@@ -122,19 +167,34 @@ class Event(models.Model):
     duration = models.PositiveIntegerField(blank=False, null=False)
     publish_dt = models.DateTimeField(blank=False, null=False)
 
-    # Choice infos
-    class AgeGroup(models.TextChoices):
-        NO_RESTRICTION = None, _('Ingen aldersgrense')
-        AGE_18 = 'EIGHTEEN', _('18 år')
-        AGE_20 = 'TWENTY', _('20 år')
-        MIXED = 'MIXED', _('18 år (student), 20 år (ikke-student)')
+    # Age restriction
+    class AgeRestriction(models.TextChoices):
+        NO_RESTRICTION = 'none', _('Ingen aldersgrense')
+        AGE_18 = 'eighteen', _('18 år')
+        AGE_20 = 'twenty', _('20 år')
+        MIXED = 'mixed', _('18 år (student), 20 år (ikke-student)')
 
-    class StatusGroup(models.TextChoices):
+    age_restriction = models.CharField(max_length=30, choices=AgeRestriction.choices, blank=False, null=False)
+
+    # Event status
+    class Status(models.TextChoices):
+        """
+        Status for a given event. Deleted status
+        is used to hide event without actually deleting it
+        so that it can be restored if something wrong happens
+        """
         ACTIVE = 'active', _('Aktiv')
         ARCHIVED = 'archived', _('Arkivert')
-        CANCELED = 'canceled', _('Avlyst')
+        CANCELED = 'cancelled', _('Avlyst')
+        DELETED = 'deleted', _('Slettet')
 
+    status = models.CharField(max_length=30, choices=Status.choices, blank=False, null=False, default=Status.ACTIVE)
+
+    # Event category
     class Category(models.TextChoices):
+        """
+        Used for sorting, filtering and organizing stuff in frontend
+        """
         SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
         CONCERT = 'concert', _('Konsert')
         DEBATE = 'debate', _('Debatt')
@@ -142,20 +202,46 @@ class Event(models.Model):
         LECTURE = 'lecture', _('Kurs')
         OTHER = 'other', _('Annet')
 
-    status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
-    age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
-    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
+    category = models.CharField(max_length=30, choices=Category.choices, blank=False, null=False, default=Category.OTHER)
 
-    # Price
-    # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
+    # Price groups
     class PriceGroup(models.TextChoices):
-        INCLUDED = 'INCLUDED', _('Included with entrance')
-        FREE = 'FREE', _('Free')
-        BILLIG = 'BILLIG', _('Paid')
-        REGISTRATION = 'REGISTRATION', _('Free with registration')
+        """
+        Handles event payment type handling.
+            Included/Free - simple info shown on event
+            Billig - event connected to billig payment system
+            Registration - connect event to registration model (påmelding)
+            Custom - connect event to custom payment list (only used to show in frontend)
+        """
+        INCLUDED = 'included', _('Included with entrance')
+        FREE = 'free', _('Free')
+        BILLIG = 'billig', _('Paid')
+        REGISTRATION = 'registration', _('Free with registration')
+        CUSTOM = 'custom', _('Custom')
 
-    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
-    capacity = models.PositiveIntegerField(blank=True, null=True)
+    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, blank=False, null=False, default=PriceGroup.FREE)
+    capacity = models.PositiveIntegerField(blank=False, null=False)
+
+    # Registration data for events with registration price group
+    registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
+
+    # Custom tickets for events with custom price group
+    custom_tickets = models.ManyToManyField(EventPriceCustom, blank=True, null=True)
+
+    # TODO billig event foreign key handling
+
+    @property
+    def total_registrations(self) -> int:
+        """
+        Total number of registrations made for registration type events.
+        """
+        if self.price_group == Event.PriceGroup.REGISTRATION and self.registration:
+            return self.registration.count
+        return 0
+
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
 
     @property
     def end_dt(self) -> timezone.datetime:

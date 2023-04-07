@@ -29,6 +29,7 @@ from .models import (
     FoodPreference,
     UserPreference,
     InformationPage,
+    EventPriceCustom,
 )
 
 
@@ -76,18 +77,32 @@ class ImageSerializer(serializers.ModelSerializer):
         return image.image.url if image.image else None
 
 
+class EventPriceCustomSerializer(serializers.ModelSerializer):
+    """
+    Custom ticket types for event
+    """
+
+    class Meta:
+        model = EventPriceCustom
+        fields = '__all__'
+
+
 class EventSerializer(serializers.ModelSerializer):
+    # Nested objects
+    custom_tickets = EventPriceCustomSerializer(many=True, read_only=True)
+
     # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)
-    image_url = serializers.SerializerMethodField(method_name='get_image_url', read_only=True)
+    total_registrations = serializers.IntegerField(read_only=True)
+    image_url = serializers.CharField(read_only=True)
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Event
-        fields = '__all__'
-        read_only_fields = ['image']
+        # Registration object contains sensitive data!
+        exclude = ['image', 'registration', 'event_group']
 
     def create(self, validated_data: dict) -> Event:
         """
@@ -99,9 +114,6 @@ class EventSerializer(serializers.ModelSerializer):
         event = Event(**validated_data)
         event.save()
         return event
-
-    def get_image_url(self, event: Event) -> str:
-        return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):

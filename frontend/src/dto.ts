@@ -71,30 +71,57 @@ export type VenueDto = {
   closing_sunday?: string;
 };
 
+// ==================== //
+//        Event         //
+// ==================== //
+
+export type EventPriceGroup = 'free' | 'included' | 'billig' | 'registration' | 'custom';
+export type EventAgeRestriction = null | 'eighteen' | 'twenty' | 'mixed';
+export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
+
+// Custom ticket type
+export type EventCustomTicketDto = {
+  id: number;
+  name: string;
+  price: number;
+}
+
 export type EventDto = {
+  // Status of event
+  status: EventStatus;
+  
+  // Used to group recurring events together
+  event_group: EventGroupDto;
+
+  // General info
   id: number;
   title_nb: string;
   title_en: string;
-  start_dt: string;
-  duration: number;
-  end_dt: string;
   description_long_nb: string;
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
-  publish_dt: string;
-  host: string;
+  age_restriction: EventAgeRestriction;
   location: string;
-  // EVENT GROUP IS NOT THE EVENT TYPE/CATEGORY.
-  // Used to group multiple similar events together
-  event_group: EventGroupDto;
-  price_group: string;
-  status_group: string;
-  age_group: string;
-  codeword: string;
-  image_url: string;
   category: string;
-  image: ImageDto;
+  host: string;
+  
+  // Timestamps/duration
+  image_url: string;
+  start_dt: string;
+  duration: number;
+  end_dt: string;
+  publish_dt: string;
+  
+  // Price type for event (billig, free, custom, registration etc.)
+  price_group: EventPriceGroup;
+
+  // Custom tickets (only relevant for custom price group events)
+  custom_tickets: EventCustomTicketDto;
+  
+  // Write only:
+  // Used to create new event with using id of existing image
+  image_id?: number;
 };
 
 export type EventGroupDto = {
