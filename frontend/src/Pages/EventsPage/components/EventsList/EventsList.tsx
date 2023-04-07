@@ -51,7 +51,7 @@ export function EventsList({ events }: EventsListProps) {
           },
           event.location,
           event.category,
-          event.price_group,
+          event.ticket_type,
         ]);
       });
     });

@@ -1,23 +1,21 @@
-from guardian import models as guardian_models
-
 from django.contrib import admin
-from django.contrib.auth.models import Permission, Group
 from django.contrib.admin.models import LogEntry
-from django.contrib.sessions.models import Session
+from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+from guardian import models as guardian_models
 
 from root.custom_classes.admin_classes import (
     CustomGuardedUserAdmin,
     CustomGuardedGroupAdmin,
     CustomGuardedModelAdmin,
 )
-
-from .models import (
+from .models.event import (Event, EventGroup, EventRegistration)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Venue,
     Table,
     Image,
@@ -27,7 +25,6 @@ from .models import (
     GangType,
     TextItem,
     KeyValue,
-    EventGroup,
     ClosedPeriod,
     Saksdokument,
     FoodCategory,
@@ -77,7 +74,6 @@ class GroupAdmin(CustomGuardedGroupAdmin):
     list_select_related = True
 
     def members(self, obj: Group) -> int:
-
         n: int = obj.user_set.all().count()
         return n
 
@@ -190,17 +186,25 @@ class ProfileAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
+@admin.register(EventRegistration)
+class EventRegistrationAdmin(CustomGuardedModelAdmin):
+    list_display = ['id']
+    filter_horizontal = ['registered_users', 'registered_emails']
+
+
 @admin.register(Event)
 class EventAdmin(CustomGuardedModelAdmin):
     # ordering = []
+
     sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at']
     list_filter = ['event_group']
     list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
-    # filter_horizontal = []
+    # filter_horizontal = ['registration']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
+    readonly_fields = ['registration']
 
 
 @admin.register(Tag)
@@ -322,7 +326,6 @@ class MenuAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
     def menu_item_count(self, obj: Menu) -> int:
-
         n: int = obj.menu_items.all().count()
         return n
 

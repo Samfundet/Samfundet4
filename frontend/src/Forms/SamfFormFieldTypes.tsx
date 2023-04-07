@@ -87,7 +87,7 @@ function makeStandardInputFunction<U>(type: InputFieldType): GeneratorFunction {
         onChange={args.onChange}
         error={args.error}
         type={type}
-        className={styles.input_element}
+        inputClassName={styles.input_element}
       >
         {args.label}
       </InputField>

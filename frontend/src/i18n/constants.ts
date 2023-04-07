@@ -63,6 +63,7 @@ export const KEY = {
   common_create: 'common_create',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_message: 'common_message',
   common_english: 'common_english',
@@ -82,6 +83,14 @@ export const KEY = {
   common_opening_hours: 'common_opening_hours',
   common_about_samfundet: 'common_about_samfundet',
   common_back_to_samfundet: 'common_back_to_samfundet',
+
+  // Price groups
+  common_ticket_type_billig: 'common_ticket_type_billig',
+  common_ticket_type_free: 'common_ticket_type_free',
+  common_ticket_type_included: 'common_ticket_type_included',
+  common_ticket_type_custom: 'common_ticket_type_custom',
+  common_ticket_type_registration: 'common_ticket_type_registration',
+  common_ticket_type: 'common_ticket_type',
 
   // ==================== //
   //        Others        //

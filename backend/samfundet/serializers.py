@@ -7,12 +7,12 @@ from django.core.files.images import ImageFile
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
-from .models import (
+from .models.event import (Event, EventGroup, EventCustomTicket)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Table,
     Venue,
     Image,
@@ -22,7 +22,6 @@ from .models import (
     MenuItem,
     GangType,
     KeyValue,
-    EventGroup,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -76,18 +75,32 @@ class ImageSerializer(serializers.ModelSerializer):
         return image.image.url if image.image else None
 
 
+class EventCustomTicketSerializer(serializers.ModelSerializer):
+    """
+    Custom ticket types for event
+    """
+
+    class Meta:
+        model = EventCustomTicket
+        fields = '__all__'
+
+
 class EventSerializer(serializers.ModelSerializer):
+    # Nested objects
+    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+
     # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)
-    image_url = serializers.SerializerMethodField(method_name='get_image_url', read_only=True)
+    total_registrations = serializers.IntegerField(read_only=True)
+    image_url = serializers.CharField(read_only=True)
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Event
-        fields = '__all__'
-        read_only_fields = ['image']
+        # Registration object contains sensitive data!
+        exclude = ['image', 'registration', 'event_group']
 
     def create(self, validated_data: dict) -> Event:
         """
@@ -99,9 +112,6 @@ class EventSerializer(serializers.ModelSerializer):
         event = Event(**validated_data)
         event.save()
         return event
-
-    def get_image_url(self, event: Event) -> str:
-        return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):

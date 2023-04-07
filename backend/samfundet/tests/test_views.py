@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from django.contrib.auth.models import Permission
+from django.urls import reverse
 from rest_framework import status
 
-from django.urls import reverse
-from django.contrib.auth.models import Permission
-
 from root.utils import routes
-
-from samfundet.models import User, KeyValue, TextItem
+from samfundet.models.general import User, KeyValue, TextItem
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:

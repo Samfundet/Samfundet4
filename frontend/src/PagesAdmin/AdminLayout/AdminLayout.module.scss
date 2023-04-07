@@ -7,6 +7,7 @@ $panel-width: 13em;
 .wrapper {
   display: flex;
   flex-direction: row;
+  max-height: 100vh;
   height: 100vh;
 }
 
@@ -78,9 +79,10 @@ $panel-width: 13em;
 
 .content_wrapper {
   flex: 1;
-  height: 100%;
-  padding-top: $navbar-height;
+  height: calc(100vh - $navbar-height);
+  margin-top: $navbar-height;
   padding-left: calc($panel-width + 1em);
+  padding-right: 1em;
 
   @include for-mobile-only {
     padding-left: 0;

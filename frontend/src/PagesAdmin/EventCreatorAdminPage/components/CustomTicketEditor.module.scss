@@ -1,0 +1,36 @@
+
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.custom_ticket_container {
+  @include flex-row;
+  margin-top: 1em;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.custom_ticket {
+  display: flex;
+  flex-direction: column;
+  background-color: $red-samf;
+  border-radius: 0.5em;
+  padding: 1em;
+}
+
+.add_custom_ticket {
+  flex-basis: 100%;
+}
+
+.custom_ticket_input_label {
+  color: white;
+}
+
+.custom_ticket_input {
+  padding: .2em .5em;
+  border-radius: .2em;
+}
+
+.custom_ticket_delete_button {
+  margin-top: .5em;
+}

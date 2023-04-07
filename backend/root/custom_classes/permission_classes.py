@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from rest_framework.views import APIView
     from rest_framework.request import Request
     from django.db.models import Model, QuerySet
-    from samfundet.models import User
+    from samfundet.models.general import User
 
 
 class CustomDjangoObjectPermissions(DjangoObjectPermissions):

@@ -2,7 +2,7 @@ import i18next from 'i18next';
 import { CSSProperties } from 'react';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
-import { Day } from './types';
+import { Day, EventTicketType } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -131,6 +131,24 @@ export function getDayKey(day: Day): KeyValues {
       return KEY.common_day_saturday;
     case 'sunday':
       return KEY.common_day_sunday;
+  }
+}
+
+/**
+ * Gets the translation key for a given price group
+ */
+export function getTicketTypeKey(ticketType: EventTicketType): KeyValues {
+  switch (ticketType) {
+    case 'free':
+      return KEY.common_ticket_type_free;
+    case 'included':
+      return KEY.common_ticket_type_included;
+    case 'billig':
+      return KEY.common_ticket_type_billig;
+    case 'custom':
+      return KEY.common_ticket_type_custom;
+    case 'registration':
+      return KEY.common_ticket_type_registration;
   }
 }
 

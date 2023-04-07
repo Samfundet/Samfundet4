@@ -5,7 +5,7 @@ from django.core.files.images import ImageFile
 from django.db.models.deletion import ProtectedError
 
 from root.utils.samfundet_random import words
-from samfundet.models import Image, Tag
+from samfundet.models.general import Image, Tag
 
 # Number of images
 COUNT = 30

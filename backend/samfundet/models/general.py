@@ -1,17 +1,19 @@
+#
+# This file contains most of the django models used for Samf4
+#
+
 from __future__ import annotations
 
-import re
 import random
-from typing import TYPE_CHECKING
+import re
 from datetime import time, timedelta
+from typing import TYPE_CHECKING
 
-from guardian.shortcuts import assign_perm
-
-from django.db import models
-from django.utils import timezone
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils.translation import gettext as _
+from guardian.shortcuts import assign_perm
 
 from root.utils import permissions
 
@@ -59,7 +61,7 @@ class Tag(models.Model):
 class Image(models.Model):
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
-    image = models.ImageField(upload_to='images/', blank=True, null=False)
+    image = models.ImageField(upload_to='images/', blank=False, null=False)
 
     class Meta:
         verbose_name = 'Image'
@@ -88,82 +90,6 @@ class User(AbstractUser):
         has_global_perm = super().has_perm(perm=perm)
         has_object_perm = super().has_perm(perm=perm, obj=obj)
         return has_global_perm or has_object_perm
-
-
-class EventGroup(models.Model):
-    name = models.CharField(max_length=140)
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'EventGroup'
-        verbose_name_plural = 'EventGroups'
-
-
-class Event(models.Model):
-    # General info
-    title_nb = models.CharField(max_length=140, blank=False, null=False)
-    title_en = models.CharField(max_length=140, blank=False, null=False)
-    description_long_nb = models.TextField(blank=False, null=False)
-    description_long_en = models.TextField(blank=False, null=False)
-    description_short_nb = models.TextField(blank=False, null=False)
-    description_short_en = models.TextField(blank=False, null=False)
-    location = models.CharField(max_length=140, blank=False, null=False)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
-    host = models.CharField(max_length=140, blank=False, null=False)
-
-    # Event group is used for events occurring multiple times (eg. a concert repeating twice)
-    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
-
-    # Timestamps
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-    start_dt = models.DateTimeField(blank=False, null=False)
-    duration = models.PositiveIntegerField(blank=False, null=False)
-    publish_dt = models.DateTimeField(blank=False, null=False)
-
-    # Choice infos
-    class AgeGroup(models.TextChoices):
-        NO_RESTRICTION = None, _('Ingen aldersgrense')
-        AGE_18 = 'EIGHTEEN', _('18 år')
-        AGE_20 = 'TWENTY', _('20 år')
-        MIXED = 'MIXED', _('18 år (student), 20 år (ikke-student)')
-
-    class StatusGroup(models.TextChoices):
-        ACTIVE = 'active', _('Aktiv')
-        ARCHIVED = 'archived', _('Arkivert')
-        CANCELED = 'canceled', _('Avlyst')
-
-    class Category(models.TextChoices):
-        SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
-        CONCERT = 'concert', _('Konsert')
-        DEBATE = 'debate', _('Debatt')
-        QUIZ = 'quiz', _('Quiz')
-        LECTURE = 'lecture', _('Kurs')
-        OTHER = 'other', _('Annet')
-
-    status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
-    age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
-    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
-
-    # Price
-    # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
-    class PriceGroup(models.TextChoices):
-        INCLUDED = 'INCLUDED', _('Included with entrance')
-        FREE = 'FREE', _('Free')
-        BILLIG = 'BILLIG', _('Paid')
-        REGISTRATION = 'REGISTRATION', _('Free with registration')
-
-    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
-    capacity = models.PositiveIntegerField(blank=True, null=True)
-
-    @property
-    def end_dt(self) -> timezone.datetime:
-        return self.start_dt + timezone.timedelta(minutes=self.duration)
-
-    class Meta:
-        verbose_name = 'Event'
-        verbose_name_plural = 'Events'
 
 
 class Venue(models.Model):

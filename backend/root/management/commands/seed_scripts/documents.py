@@ -5,7 +5,7 @@ from django.core.files import File
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
-from samfundet.models import Saksdokument
+from samfundet.models.general import Saksdokument
 
 DAY_RANGE = 365 * 5
 CREATE_OFFSET = 30

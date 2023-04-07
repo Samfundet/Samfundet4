@@ -10,7 +10,7 @@ import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, getTicketTypeKey } from '~/utils';
 import styles from './EventsAdminPage.module.scss';
 
 export function EventsAdminPage() {
@@ -57,6 +57,7 @@ export function EventsAdminPage() {
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
     { content: t(KEY.common_venue), sortable: true },
+    { content: t(KEY.common_ticket_type), sortable: true },
     '', // Buttons
   ];
 
@@ -67,6 +68,7 @@ export function EventsAdminPage() {
       event.category,
       event.host,
       event.location,
+      t(getTicketTypeKey(event.ticket_type)),
       {
         content: (
           <CrudButtons

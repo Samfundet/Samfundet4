@@ -51,6 +51,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
+  [KEY.common_missing]: 'Mangler',
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_delete]: 'Slett',
   [KEY.common_contact]: 'Kontakt',
@@ -71,6 +72,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_opening_hours]: 'Åpningstider',
   [KEY.common_about_samfundet]: 'Om Samfundet',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
+
+  // Price groups
+  [KEY.common_ticket_type_billig]: 'Betalt',
+  [KEY.common_ticket_type_free]: 'Gratis',
+  [KEY.common_ticket_type_included]: 'Inkludert i inngang',
+  [KEY.common_ticket_type_custom]: 'Tilpasset',
+  [KEY.common_ticket_type_registration]: 'Påmelding',
+  [KEY.common_ticket_type]: 'Billett',
 
   // ==================== //
   //        Others        //
@@ -185,6 +194,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_search]: 'Search',
   [KEY.common_choose]: 'Choose',
+  [KEY.common_missing]: 'Missing',
   [KEY.common_delete]: 'Delete',
   [KEY.common_message]: 'Message',
   [KEY.common_whatsup]: "what's up?",
@@ -204,6 +214,14 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
+
+  // Price groups
+  [KEY.common_ticket_type_billig]: 'Paid',
+  [KEY.common_ticket_type_free]: 'Free',
+  [KEY.common_ticket_type_included]: 'Included with entrance',
+  [KEY.common_ticket_type_custom]: 'Custom',
+  [KEY.common_ticket_type_registration]: 'Registration',
+  [KEY.common_ticket_type]: 'Ticket',
 
   // ==================== //
   //        Others        //
