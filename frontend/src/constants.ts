@@ -16,7 +16,7 @@ export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
-export const THEME_KEY = 'theme';
+export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 

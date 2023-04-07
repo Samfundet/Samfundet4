@@ -130,18 +130,16 @@ Usage:
 }
 /* End: Spacing classes */
 
-
 /* Theme mixins */
-/* Use THEME constants */
+
 @mixin theme-dark {
-  body:global(.theme-dark) & {
+  :global([#{$theme-key}='#{$theme-dark}']) & {
     @content;
   }
 }
 
-
 @mixin theme-light {
-  body:global(.theme-light) & {
+  :global([#{$theme-key}='#{$theme-light}']) & {
     @content;
   }
 }
@@ -165,7 +163,7 @@ Usage:
 }
 
 @mixin rounded-light {
-  border-radius: .75em;
+  border-radius: 0.75em;
 }
 
 @mixin rounded-heavy {
@@ -177,5 +175,5 @@ Usage:
 }
 
 @mixin shadow-light {
-  box-shadow: 0 0 .5em .1em rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0.5em 0.1em rgba(0, 0, 0, 0.05);
 }
