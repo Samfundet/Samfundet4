@@ -4,8 +4,18 @@ from typing import Tuple
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
-from samfundet.models.event import Event, EventGroup, Image, EventRegistration, User, NonMemberEmailRegistration, \
-    EventCustomTicket, EventCategory, EventTicketType, EventAgeRestriction
+from samfundet.models.event import (
+    User,
+    Event,
+    Image,
+    EventGroup,
+    EventCategory,
+    EventTicketType,
+    EventRegistration,
+    EventCustomTicket,
+    EventAgeRestriction,
+    NonMemberEmailRegistration,
+)
 from samfundet.models.general import Venue
 
 # Number of events
