@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getGang } from '~/api';
 import { Page, SamfundetLogoSpinner } from '~/Components';
-import { GangDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getGang } from '~/api';
+import { GangDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -59,12 +59,12 @@ export function GangsFormAdminPage() {
     );
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.gang)}`;
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
 
   return (
     <Page>
       <h1 className={styles.header}>
-        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.gang)}
+        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.common_gang)}
       </h1>
       <SamfForm
         initialData={gang}
@@ -74,12 +74,12 @@ export function GangsFormAdminPage() {
         devMode={false}
       >
         <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={`${t(KEY.norwegian)} ${t(KEY.name)}`} />
-          <SamfFormField field="name_en" type="text" label={`${t(KEY.english)} ${t(KEY.name)}`} />
+          <SamfFormField field="name_nb" type="text" label={`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`} />
+          <SamfFormField field="name_en" type="text" label={`${t(KEY.common_english)} ${t(KEY.common_name)}`} />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="abbreviation" type="text" label={`${t(KEY.abbreviation)}`} />
-          <SamfFormField field="webpage" type="text" label={`${t(KEY.webpage)}`} />
+          <SamfFormField field="abbreviation" type="text" label={`${t(KEY.admin_gangsadminpage_abbreviation)}`} />
+          <SamfFormField field="webpage" type="text" label={`${t(KEY.admin_gangsadminpage_webpage)}`} />
         </div>
         {/* TODO fetch options */}
         {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}

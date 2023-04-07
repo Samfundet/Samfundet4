@@ -3,6 +3,6 @@
 .layout {
   display: flex;
   justify-content: center;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin: 1em auto;
+  width: $primary-content-width-wide;
 }

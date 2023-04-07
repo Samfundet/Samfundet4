@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getClosedPeriod } from '~/api';
 import { SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { ClosedPeriodDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getClosedPeriod } from '~/api';
+import { ClosedPeriodDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -63,8 +63,8 @@ export function ClosedPeriodFormAdminPage() {
     );
   }
 
-  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.opening_hours)}'`;
-  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.norwegian)})`;
+  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
+  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.common_norwegian)})`;
 
   return (
     <Page>
@@ -76,20 +76,24 @@ export function ClosedPeriodFormAdminPage() {
           <SamfFormField
             field="message_no"
             type="text-long"
-            label={`${labelMessage} (${KEY.norwegian})`}
+            label={`${labelMessage} (${KEY.common_norwegian})`}
           ></SamfFormField>
-          <SamfFormField field="message_en" type="text-long" label={`${labelMessage} (${KEY.english})`}></SamfFormField>
+          <SamfFormField
+            field="message_en"
+            type="text-long"
+            label={`${labelMessage} (${KEY.common_english})`}
+          ></SamfFormField>
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_no"
             type="text-long"
-            label={`${labelDescription} (${KEY.norwegian})`}
+            label={`${labelDescription} (${KEY.common_norwegian})`}
           ></SamfFormField>
           <SamfFormField
             field="description_en"
             type="text-long"
-            label={`${labelDescription} (${KEY.english})`}
+            label={`${labelDescription} (${KEY.common_english})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>

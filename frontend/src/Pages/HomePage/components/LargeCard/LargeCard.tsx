@@ -11,9 +11,11 @@ type LargeCardProps = {
 };
 
 export function LargeCard({ element }: LargeCardProps) {
+  const layoutStyle = styles.layout;
+
   if (!element) {
     return (
-      <div className={styles.layout}>
+      <div className={layoutStyle}>
         <ContentCard isSkeleton />
       </div>
     );
@@ -23,7 +25,7 @@ export function LargeCard({ element }: LargeCardProps) {
   const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
 
   return (
-    <div className={styles.layout}>
+    <div className={layoutStyle}>
       <ContentCard
         title={dbT(element, 'title')}
         description={dbT(element, 'description')}

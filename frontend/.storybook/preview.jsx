@@ -1,9 +1,13 @@
 import '~/global.scss';
 
-// Neccessary import for translations
-import '~/i18n/i18n';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { updateBodyThemeClass } from '~/GlobalContextProvider';
+import { THEME } from '~/constants';
+// Neccessary import for translations
+import '~/i18n/i18n';
+
+// console.log(GlobalContextProvider, AuthContextProvider);
 
 // Wrap your stories in the I18nextProvider component
 const WithI18next = (Story, context) => {
@@ -14,13 +18,41 @@ const WithI18next = (Story, context) => {
   // Set the new locale in i18n
   useEffect(() => {
     i18n.changeLanguage(locale);
-  }, [locale]);
+  }, [i18n, locale]);
+
+  return <Story />;
+};
+
+/**
+ * https://storybook.js.org/blog/how-to-add-a-theme-switcher-to-storybook/
+ */
+const WithTheme = (Story, context) => {
+  const theme = context.globals?.backgrounds?.value;
+
+  useEffect(() => {
+    updateBodyThemeClass(theme);
+  }, [theme]);
+
+  const isSideBySide = theme === 'side-by-side';
+
+  if (isSideBySide) {
+    return (
+      <body style={{ display: 'flex', justifyContent: 'center' }}>
+        <div data-theme={THEME.LIGHT} style={{ width: '100%', overflowX: 'scroll', padding: '5px' }}>
+          <Story key={THEME.LIGHT} />
+        </div>
+        <div data-theme={THEME.DARK} style={{ width: '100%', overflowX: 'scroll', padding: '5px' }}>
+          <Story key={THEME.DARK} />
+        </div>
+      </body>
+    );
+  }
 
   return <Story />;
 };
 
 // export decorators for storybook to wrap your stories in
-export const decorators = [WithI18next];
+export const decorators = [WithI18next, WithTheme];
 
 // Create a global variable called locale in storybook
 // and add a menu in the toolbar to change your locale
@@ -47,12 +79,21 @@ export const parameters = {
       date: /Date$/,
     },
   },
+
   backgrounds: {
-    default: 'light',
+    default: 'side-by-side',
     values: [
       {
         name: 'light',
-        value: '#fff',
+        value: THEME.LIGHT,
+      },
+      {
+        name: 'dark',
+        value: THEME.DARK,
+      },
+      {
+        name: 'Split view',
+        value: 'side-by-side',
       },
     ],
   },

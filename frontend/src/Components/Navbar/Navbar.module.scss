@@ -251,46 +251,6 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
 }
 
-/* Hamburger menu */
-#navbar_hamburger {
-  display: none;
-
-  @include for-tablet-down {
-    height: 69%;
-    width: 55px;
-    display: flex;
-    cursor: pointer;
-    justify-content: space-evenly;
-    flex-direction: column;
-  }
-
-  .navbar_hamburger_line {
-    background-color: $black;
-    width: 35px;
-    height: 4px;
-    border-radius: 10px;
-    transition: transform 400ms;
-
-    @include theme-dark {
-      background-color: $white;
-    }
-  }
-
-  &.open {
-    .navbar_hamburger_line.top {
-      transform: translateY(12px) rotate(-45deg);
-    }
-
-    .navbar_hamburger_line.middle {
-      opacity: 0;
-    }
-
-    .navbar_hamburger_line.bottom {
-      transform: translateY(-11px) rotate(45deg);
-    }
-  }
-}
-
 /* Transparent navbar (on top of page) */
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
@@ -301,9 +261,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     background: $navbar-bg-dark-transparent;
     color: white;
   }
-  .navbar_hamburger_line {
-    background-color: white;
-  }
+
   .navbar_link:hover {
     background: linear-gradient(
       to bottom,
