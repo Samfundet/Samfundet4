@@ -1,12 +1,11 @@
 from typing import Iterator, Any
-import pytest
 
+import pytest
+from django.test import Client
 from rest_framework.test import APIClient
 
-from django.test import Client
-
-from samfundet.models import User
 from samfundet.contants import DEV_PASSWORD
+from samfundet.models.general import User
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.

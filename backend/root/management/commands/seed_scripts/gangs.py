@@ -1,4 +1,4 @@
-from samfundet.models import GangType, Gang
+from samfundet.models.general import GangType, Gang
 
 # Template gangs for seeding
 GANGS = {

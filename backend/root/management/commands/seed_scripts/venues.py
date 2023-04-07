@@ -3,7 +3,7 @@ import random
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
-from samfundet.models import Venue
+from samfundet.models.general import Venue
 
 VENUES = [
     'Storsalen',

@@ -7,12 +7,12 @@ from django.core.files.images import ImageFile
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
-from .models import (
+from .models.event import (Event, EventGroup, EventCustomTicket)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Table,
     Venue,
     Image,
@@ -22,14 +22,12 @@ from .models import (
     MenuItem,
     GangType,
     KeyValue,
-    EventGroup,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
     FoodPreference,
     UserPreference,
     InformationPage,
-    EventCustomTicket,
 )
 
 

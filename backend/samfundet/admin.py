@@ -10,12 +10,12 @@ from root.custom_classes.admin_classes import (
     CustomGuardedGroupAdmin,
     CustomGuardedModelAdmin,
 )
-from .models import (
+from .models.event import (Event, EventGroup, EventRegistration)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Venue,
     Table,
     Image,
@@ -25,14 +25,12 @@ from .models import (
     GangType,
     TextItem,
     KeyValue,
-    EventGroup,
     ClosedPeriod,
     Saksdokument,
     FoodCategory,
     FoodPreference,
     UserPreference,
     InformationPage,
-    EventRegistration,
 )
 
 # Common fields:

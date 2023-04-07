@@ -4,8 +4,9 @@ from typing import Tuple
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
-from samfundet.models import Event, EventGroup, Venue, Image, EventRegistration, User, NonMemberEmailRegistration, \
-    EventCustomTicket
+from samfundet.models.event import Event, EventGroup, Image, EventRegistration, User, NonMemberEmailRegistration, \
+    EventCustomTicket, EventCategory, EventTicketType, EventAgeRestriction
+from samfundet.models.general import Venue
 
 # Number of events
 COUNT = 300
@@ -27,30 +28,30 @@ RECURRING_CHANCE = 0.1
 
 # Event categories to choose from
 CATEGORIES = [
-    Event.Category.SAMFUNDET_MEETING,
-    Event.Category.CONCERT,
-    Event.Category.DEBATE,
-    Event.Category.LECTURE,
-    Event.Category.QUIZ,
-    Event.Category.OTHER,
+    EventCategory.SAMFUNDET_MEETING,
+    EventCategory.CONCERT,
+    EventCategory.DEBATE,
+    EventCategory.LECTURE,
+    EventCategory.QUIZ,
+    EventCategory.OTHER,
 ]
 
 # Ticket groups (weighted random)
 # Reduces change of registration/custom types because
 # seeding these is much slower.
 TICKET_TYPES = {
-    Event.TicketType.FREE: 0.4,
-    Event.TicketType.INCLUDED: 0.4,
-    Event.TicketType.REGISTRATION: 0.1,
-    Event.TicketType.CUSTOM: 0.1,
+    EventTicketType.FREE: 0.4,
+    EventTicketType.INCLUDED: 0.4,
+    EventTicketType.REGISTRATION: 0.1,
+    EventTicketType.CUSTOM: 0.1,
 }
 
 # Age groups
 AGE_GROUPS = [
-    Event.AgeRestriction.NO_RESTRICTION,
-    Event.AgeRestriction.AGE_18,
-    Event.AgeRestriction.AGE_20,
-    Event.AgeRestriction.MIXED,
+    EventAgeRestriction.NO_RESTRICTION,
+    EventAgeRestriction.AGE_18,
+    EventAgeRestriction.AGE_20,
+    EventAgeRestriction.MIXED,
 ]
 
 VENUES = Venue.objects.all()
@@ -61,7 +62,7 @@ def create_event_ticket_type(capacity) -> Tuple[str, dict]:
     ticket_type = random.choices(list(TICKET_TYPES.keys()), weights=list(TICKET_TYPES.values()), k=1)[0]
     ticket_type_data: dict = {}
     # Registration type, register some number of users/emails
-    if ticket_type == Event.TicketType.REGISTRATION:
+    if ticket_type == EventTicketType.REGISTRATION:
         reg = EventRegistration.objects.create()
         # Add users
         all_users = User.objects.all()
@@ -132,7 +133,7 @@ def seed():
 
         # Custom price group type, add some number of custom ticket types
         custom_tickets = None
-        if ticket_type == Event.TicketType.CUSTOM:
+        if ticket_type == EventTicketType.CUSTOM:
             custom_tickets = [
                 EventCustomTicket.objects.create(
                     name_nb=f'Billett {i + 1}',
@@ -165,7 +166,7 @@ def seed():
             unsaved_events.append(event)
 
             # Add custom ticket types
-            if ticket_type == Event.TicketType.CUSTOM:
+            if ticket_type == EventTicketType.CUSTOM:
                 event.save()
                 unsaved_events.remove(event)
                 event.custom_tickets.add(*custom_tickets)

@@ -17,12 +17,12 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
-from .models import (
+from .models.event import (Event, EventGroup)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Table,
     Venue,
     Image,
@@ -32,7 +32,6 @@ from .models import (
     GangType,
     TextItem,
     KeyValue,
-    EventGroup,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -142,19 +141,6 @@ class EventsUpcomingView(APIView):
         events = event_query(request.query_params)
         events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         return Response(data=EventSerializer(events, many=True).data)
-
-
-class EventFormView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        data = {
-            'age_groups': Event.AgeGroup.choices,
-            'status_groups': Event.StatusGroup.choices,
-            'venues': [[v.name] for v in Venue.objects.all()],
-            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
-        }
-        return Response(data=data)
 
 
 class EventGroupView(ModelViewSet):

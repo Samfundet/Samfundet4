@@ -1,6 +1,6 @@
 from root.utils.samfundet_random import words
 
-from samfundet.models import InformationPage
+from samfundet.models.general import InformationPage
 
 COUNT = 10
 
