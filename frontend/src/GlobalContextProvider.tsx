@@ -5,6 +5,13 @@ import { useAuthContext } from '~/AuthContext';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, THEME_KEY, ThemeValue, XCSRFTOKEN } from '~/constants';
 import { Children, KeyValueMap, SetState } from '~/types';
 
+export function updateBodyThemeClass(theme: ThemeValue) {
+  // Set theme as data attr on body.
+  document.body.setAttribute(THEME_KEY, theme);
+  // Remember theme in localStorage between refreshes.
+  localStorage.setItem(THEME_KEY, theme);
+}
+
 /**
  * Define which values the global context can contain.
  */
@@ -44,9 +51,10 @@ export function useGlobalContext() {
 
 type GlobalContextProviderProps = {
   children: Children;
+  values?: Partial<GlobalContextProps>;
 };
 
-export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
+export function GlobalContextProvider({ children, values }: GlobalContextProviderProps) {
   // =================================== //
   //        Constants and states         //
   // =================================== //
@@ -112,15 +120,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   // Update body classes when theme changes.
   useEffect(() => {
-    if (theme === THEME.DARK) {
-      document.body.classList.add(THEME.DARK);
-      document.body.classList.remove(THEME.LIGHT);
-    } else if (theme === THEME.LIGHT) {
-      document.body.classList.add(THEME.LIGHT);
-      document.body.classList.remove(THEME.DARK);
-    }
-    // Remember theme in localStorage between refreshes.
-    localStorage.setItem(THEME_KEY, theme);
+    updateBodyThemeClass(theme);
   }, [theme]);
 
   // Update theme when user changes.
@@ -158,6 +158,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
+    ...values,
     theme,
     setTheme,
     switchTheme,
