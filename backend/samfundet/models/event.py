@@ -44,8 +44,11 @@ class EventGroup(models.Model):
 
 class NonMemberEmailRegistration(models.Model):
     """
-    Non-member registration for events
-    Uses a unique id to enable cancellation of registration
+    Non-member registration for events.
+    Uses a unique id to enable confirmation/cancellation of registration
+
+    With this we can create a link 'samfundet.no/confirm_registration?id=<UUID>'
+    that only the person who registered will know.
     """
     # Long unique identifier (used for email cancellation)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -54,7 +57,6 @@ class NonMemberEmailRegistration(models.Model):
     email = models.EmailField(blank=False, null=False, editable=False)
 
 
-# Data for registration ticket type
 class EventRegistration(models.Model):
     """
     Used for events with registration payment type
@@ -207,7 +209,6 @@ class Event(models.Model):
     location = models.CharField(max_length=140, blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
-    capacity = models.PositiveIntegerField(blank=False, null=False)
 
     age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
@@ -226,6 +227,7 @@ class Event(models.Model):
     #      Ticket Related      #
     # ======================== #
 
+    capacity = models.PositiveIntegerField(blank=False, null=False)
     ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices, blank=False, null=False, default=EventTicketType.FREE)
     registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True, null=True)
@@ -252,7 +254,7 @@ class Event(models.Model):
         return self.start_dt + timezone.timedelta(minutes=self.duration)
 
     # ======================== #
-    #     Helper Functions     #
+    #     Helper functions     #
     # ======================== #
 
     def get_or_create_registration(self) -> EventRegistration:
