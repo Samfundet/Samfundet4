@@ -27,7 +27,7 @@ const WithI18next = (Story, context) => {
  * https://storybook.js.org/blog/how-to-add-a-theme-switcher-to-storybook/
  */
 const WithTheme = (Story, context) => {
-  const theme = context.globals?.backgrounds?.value;
+  const theme = context.globals?.backgrounds?.value || 'side-by-side';
 
   useEffect(() => {
     updateBodyThemeClass(theme);
@@ -81,7 +81,6 @@ export const parameters = {
   },
 
   backgrounds: {
-    default: 'side-by-side',
     values: [
       {
         name: 'light',
