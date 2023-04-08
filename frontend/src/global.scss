@@ -22,7 +22,8 @@
   font: inherit;
 }
 
-b, strong {
+b,
+strong {
   font-weight: 700;
 }
 
@@ -176,3 +177,23 @@ input[type=text], textarea {
   }
 }
 */
+
+.trail {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  animation: dot 1s linear forwards;
+}
+
+@keyframes dot {
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

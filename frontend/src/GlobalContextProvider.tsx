@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken, getKeyValues } from '~/api';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
+import { getCsrfToken, getKeyValues } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, THEME_KEY, ThemeValue, XCSRFTOKEN } from '~/constants';
 import { Children, KeyValueMap, SetState } from '~/types';
 
@@ -67,6 +67,9 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
   const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
   const initialTheme = storedTheme || detectedTheme;
 
+  // Reference to <body> to create cursor trail.
+  const bodyRef = useRef(document.body);
+
   const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
 
   const [theme, setTheme] = useState<ThemeValue>(initialTheme);
@@ -129,6 +132,34 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
       setTheme(user.user_preference.theme);
     }
   }, [user]);
+
+  // Spawn trail behind cursor whenever it moves.
+  useEffect(() => {
+    const body = bodyRef.current;
+
+    function handleMouseMove(e: MouseEvent) {
+      // Create element, add class, position the element and add to body.
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('trail'); // global.scss
+      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
+      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
+      body.appendChild(sparkle);
+
+      // We need to clean all the elements the trail produces.
+      // If we don't do this, the <body> will be cluttered with thousands of elements.
+      // That would likely cause performance issues.
+      // This delay must be equal to or longer than the trail animation.
+      setTimeout(() => {
+        sparkle.remove();
+      }, 2000); // Remove the element after 1 second
+    }
+
+    body.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      body.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   // =================================== //
   //          Helper functions           //
