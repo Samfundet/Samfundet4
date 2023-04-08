@@ -34,7 +34,7 @@ export function SaksdokumentFormAdminPage() {
           setShowSpinner(false);
         })
         .catch((data) => {
-          console.log(data);
+          console.error(data);
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin);

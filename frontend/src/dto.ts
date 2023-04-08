@@ -132,9 +132,10 @@ export type ProfileDto = {
 };
 
 export type UserPreferenceDto = {
-  id?: number;
+  id: number;
   theme: ThemeValue;
   mirror_dimension: boolean;
+  cursor_trail: boolean;
 };
 
 export type InformationPageDto = {

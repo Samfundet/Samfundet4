@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
-import { getCsrfToken, getKeyValues } from '~/api';
+import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
 import { useMouseTrail, useTheme } from '~/hooks';
 import { Children, KeyValueMap, SetState } from '~/types';
@@ -23,6 +23,7 @@ type GlobalContextProps = {
   // Mouse trail
   isMouseTrail: boolean;
   setIsMouseTrail: SetState<boolean>;
+  toggleMouseTrail: () => boolean;
 
   // Navbar
   isMobileNavigation: boolean;
@@ -71,12 +72,18 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   const { user } = useAuthContext();
 
-  const [mirrorDimension, setMirrorDimension] = useState<boolean>(user?.user_preference.mirror_dimension ?? false);
-  const [isMouseTrail, setIsMouseTrail] = useMouseTrail(false); // TODO: UserPreference
+  const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
+  const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
   // =================================== //
   //               Effects               //
   // =================================== //
+
+  // Update preferences when user is loaded.
+  useEffect(() => {
+    if (!user) return;
+    setMirrorDimension(user.user_preference.mirror_dimension);
+  }, [user]);
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -122,6 +129,9 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
   function toggleMirrorDimension(): boolean {
     const toggledValue = !mirrorDimension;
     setMirrorDimension(toggledValue);
+    if (user) {
+      putUserPreference(user.user_preference.id, { mirror_dimension: toggledValue });
+    }
     return toggledValue;
   }
 
@@ -140,6 +150,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     setMirrorDimension,
     isMouseTrail: isMouseTrail,
     setIsMouseTrail: setIsMouseTrail,
+    toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
   };
