@@ -185,6 +185,7 @@ input[type=text], textarea {
   border-radius: 50%;
   background-color: white;
   animation: dot 1s linear forwards;
+  pointer-events: none;
 }
 
 @keyframes dot {
