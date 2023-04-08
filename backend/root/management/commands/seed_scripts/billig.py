@@ -117,14 +117,12 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
     # Insert events
     if not insert_db('billig.event', billig_events):
         yield 90, 'Failed to insert billig events'
-        print("FAILED FOR BEVENT")
         return
     yield 90, 'Added ticket groups'
 
     # Insert ticket groups
     if not insert_db('billig.ticket_group', billig_ticket_groups):
         yield 95, 'Failed to insert ticket groups'
-        print("FAILED FOR BEVENT")
         return
     yield 95, 'Added ticket groups'
 
