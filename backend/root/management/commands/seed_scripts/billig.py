@@ -11,7 +11,6 @@
 #
 
 import os
-import random
 import subprocess
 from typing import Tuple, Iterable, List
 
@@ -66,7 +65,7 @@ def insert_db(table_name: str, rows: List[dict]) -> bool:
     # Generate query values
     query_rows = []
     for row in rows:
-        vals = ", ".join([str(val) for val in row.values()])
+        vals = ', '.join([str(val) for val in row.values()])
         query_rows.append(f'({vals})')
 
     # Execute sql query
@@ -139,7 +138,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 def seed() -> Iterable[Tuple[int, str]]:
 
     # Create database and schema
-    yield 0, "Creating billig_dev database..."
+    yield 0, 'Creating billig_dev database...'
     ok, message = create_db()
     if not ok:
         # Failed to create DB

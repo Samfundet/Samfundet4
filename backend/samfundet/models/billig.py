@@ -99,7 +99,7 @@ class BilligEvent(models.Model):
             SELECT  {cls.QUERY_COLUMNS}
             FROM    {cls.QUERY_TABLE}
             WHERE
-                hidden = false AND 
+                hidden = false AND
                 sale_to >= {one_month_ago_str};
             """
         )
