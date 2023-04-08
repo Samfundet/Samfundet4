@@ -3,6 +3,8 @@ import { Dropdown, InputField, TextAreaField } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { InputFieldType } from '~/Components/InputField/InputField';
+import { InputFile } from '~/Components/InputFile';
+import { InputFileType } from '~/Components/InputFile/InputFile';
 import styles from './SamfForm.module.scss';
 
 // ================================== //
@@ -19,7 +21,10 @@ export type SamfFormFieldType =
   | 'number'
   | 'options'
   | 'image'
-  | 'datetime';
+  | 'datetime'
+  | 'time'
+  | 'upload-image'
+  | 'upload-pdf';
 
 /**
  * Arguments used to generate the input component.
@@ -57,11 +62,14 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   float: makeStandardInputFunction<string>('number'),
   integer: makeStandardInputFunction<string>('number'),
   datetime: makeStandardInputFunction<string>('datetime-local'),
+  time: makeStandardInputFunction<string>('time'),
   password: makeStandardInputFunction<string>('password'),
   // Custom input types
   'text-long': makeAreaInput,
   options: makeOptionsInput,
   image: makeImagePicker,
+  'upload-image': makeFilePickerFunction('image'),
+  'upload-pdf': makeFilePickerFunction('pdf'),
 };
 
 // ================================== //
@@ -79,7 +87,7 @@ function makeStandardInputFunction<U>(type: InputFieldType): GeneratorFunction {
         onChange={args.onChange}
         error={args.error}
         type={type}
-        className={styles.input_element}
+        inputClassName={styles.input_element}
       >
         {args.label}
       </InputField>
@@ -122,4 +130,19 @@ function makeOptionsInput(args: SamfFormFieldArgs) {
 // Image picker
 function makeImagePicker(args: SamfFormFieldArgs) {
   return <ImagePicker key={args.field} onSelected={args.onChange} />;
+}
+
+// File picker
+function makeFilePickerFunction(fileType: InputFileType) {
+  return function makeFilePicker(args: SamfFormFieldArgs) {
+    return (
+      <InputFile
+        fileType={fileType}
+        key={args.field}
+        label={args.label}
+        error={args.error}
+        onSelected={args.onChange}
+      />
+    );
+  };
 }

@@ -1,16 +1,18 @@
 @import 'src/constants';
 
+@import 'src/mixins';
+
 
 .imageContainer {
-  width: 100%;
-  height: 100%;
+  @include rounded;
+  @include shadow-light;
+  overflow: hidden;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  box-shadow: 3px 7px 6px $grey-2;
+  transition: 0.2s;
   &:hover {
-    transform: scale(1.05);
-    transition: 0.5s;
+    transform: scale(1.02);
   }
 }
 

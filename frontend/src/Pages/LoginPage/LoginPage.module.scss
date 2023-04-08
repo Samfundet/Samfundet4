@@ -2,16 +2,11 @@
 
 @import 'src/mixins';
 
-.container {
+.login_container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  align-content: stretch;
-  gap: 1em;
-  height: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
 }
 
 .content_container {
@@ -21,8 +16,8 @@
   flex-direction: column;
   box-sizing: border-box;
   max-width: 31em;
-  width: calc(100%);
-  margin: 0 1em;
+  width: 100%;
+  margin: 2em 1em;
   text-transform: uppercase;
 }
 

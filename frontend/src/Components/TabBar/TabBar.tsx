@@ -2,44 +2,51 @@ import classNames from 'classnames';
 import { ReactElement } from 'react';
 import styles from './TabBar.module.scss';
 
-export type Tab = {
+export type Tab<T = void> = {
   key: string | number;
   label: string | ReactElement;
+  value?: T;
 };
 
-export type TabBarProps = {
-  tabs: Tab[];
-  selected: Tab;
+export type TabBarProps<T = void> = {
+  tabs: Tab<T>[];
+  selected?: Tab<T>;
   vertical?: boolean;
   spaceBetween?: boolean;
   disabled?: boolean;
-  onSetTab?(tab: Tab): void;
+  compact?: boolean;
+  onSetTab?(tab: Tab<T>): void;
 };
 
-export function TabBar({
+export function TabBar<T = void>({
   tabs,
   selected,
   vertical = false,
   spaceBetween = false,
+  compact = false,
   onSetTab,
   disabled = false,
-}: TabBarProps) {
+}: TabBarProps<T>) {
   return (
     <div
       className={classNames(
         styles.tab_bar,
+        compact && styles.compact,
         vertical && styles.vertical,
         spaceBetween && styles.space_between,
         disabled && styles.disabled,
       )}
     >
-      {tabs.map((tab: Tab) => {
-        const isSelected = tab.key === selected.key;
+      {tabs.map((tab: Tab<T>) => {
+        const isSelected = selected !== undefined && tab.key === selected.key;
         return (
           <button
             className={classNames(styles.tab_button, isSelected && styles.selected)}
             disabled={disabled}
-            onClick={() => onSetTab?.(tab)}
+            onClick={(e) => {
+              e.preventDefault();
+              onSetTab?.(tab);
+            }}
             key={tab.key}
           >
             {tab.label}

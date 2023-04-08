@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button, ImageQuery, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useTranslation } from 'react-i18next';
+import { getImages } from '~/api';
+import { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './ImageAdminPage.module.scss';
-import { ImageDto } from '~/dto';
-import { getImages } from '~/api';
 import { AdminImage } from './components';
 
 export function ImageAdminPage() {
@@ -39,25 +39,21 @@ export function ImageAdminPage() {
   // TODO ADD TRANSLATIONS pr element
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_images_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_image_changelist}>
           View in backend
         </Link>
       </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
-        {t(KEY.admin_images_create)}
-      </Button>
-      <div className={styles.line} />
-      <ImageQuery allImages={allImages} setImages={setImages} />
-      <div className={styles.line} />
-      <h2 className={styles.subHeader}>{t(KEY.common_results)}</h2>
+      <div className={styles.action_row}>
+        <ImageQuery allImages={allImages} setImages={setImages} />
+        <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_images_create)}>
+          {t(KEY.admin_images_create)}
+        </Button>
+      </div>
       <div className={styles.imageContainer}>
-        {images.map(function (element, key) {
-          return <AdminImage key={key} image={element} className={styles.imageBox} />;
+        {images.map(function (element) {
+          return <AdminImage key={element.id} image={element} className={styles.imageBox} />;
         })}
       </div>
     </Page>

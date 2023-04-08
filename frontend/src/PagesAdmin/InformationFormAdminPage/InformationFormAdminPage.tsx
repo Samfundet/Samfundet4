@@ -1,44 +1,45 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Icon } from '@iconify/react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getInformationPage } from '~/api';
-import { Button, FormInputField, FormTextAreaField, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
+import { Button, SamfundetLogoSpinner } from '~/Components';
+import { SamfMarkdown } from '~/Components/SamfMarkdown';
+import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
+import { InformationPageDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { DTOToForm } from '~/utils';
 import styles from './InformationFormAdminPage.module.scss';
 
 export function InformationFormAdminPage() {
-  const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
-  const {
-    register,
-    // handleSubmit,
-    // setError,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm();
+  const languageTabs: Tab[] = [
+    { key: 'nb', label: 'Norsk' },
+    { key: 'en', label: 'Engelsk' },
+  ];
 
-  // If form has a slugfield, check if it exists, and then load that item.
+  // Form data
   const { slugField } = useParams();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [infoPage, setInfoPage] = useState<Partial<InformationPageDto>>({
+    title_nb: 'Ny informasjonsside',
+    text_nb: 'Skriv inn tekst på venstre side.',
+    title_en: 'New information page',
+    text_en: 'Write your text on the left side.',
+  });
+  const [languageTab, setLanguageTab] = useState<Tab>(languageTabs[0]);
 
-  // Stuff to do on first render.
-  //TODO add permissions on render
-
+  // Fetch data if edit mode
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    // TODO add fix on no slugfield on editpage
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => {
-          DTOToForm(data, setValue, []);
+          setInfoPage(data);
+          setShowSpinner(false);
         })
         .catch((data) => {
           // TODO add error pop up message?
@@ -46,10 +47,12 @@ export function InformationFormAdminPage() {
             navigate(ROUTES.frontend.admin_information);
           }
         });
+    } else {
+      setShowSpinner(false);
     }
-    setShowSpinner(false);
   }, [slugField]);
 
+  // Loading
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -58,115 +61,105 @@ export function InformationFormAdminPage() {
     );
   }
 
-  // function onSubmit(data: InformationPageDto) {
-  //   (slugField ? putInformationPage(slugField, data) : postInformationPage(data))
-  //     .then(() => {
-  //       navigate(
-  //         reverse({
-  //           pattern: ROUTES.frontend.information_page_detail,
-  //           urlParams: { slugField: slugField ? slugField : data.slug_field },
-  //         }),
-  //       );
-  //     })
-  //     .catch((e) => {
-  //       for (const err in e.response.data) {
-  //         setError(err, { type: 'custom', message: e.response.data[err][0] });
-  //       }
-  //     });
-  // }
+  // Handles changes of text area
+  function handleTextAreaChange(field: string) {
+    return (e?: ChangeEvent<HTMLTextAreaElement>) => {
+      const value = e?.currentTarget.value ?? '';
+      setInfoPage({
+        ...infoPage,
+        [field]: value,
+      });
+    };
+  }
+
+  // Handles changes of slug field/title
+  function handleTextFieldChange(field: string) {
+    return (e?: ChangeEvent<HTMLInputElement>) => {
+      const value = e?.currentTarget.value ?? '';
+      setInfoPage({
+        ...infoPage,
+        [field]: value,
+      });
+    };
+  }
+
+  function handleOnSubmit() {
+    if (slugField) {
+      // Update page
+      putInformationPage(slugField, infoPage);
+      navigate(ROUTES.frontend.admin_information);
+    } else {
+      // Post new page
+      const slug = infoPage.slug_field ?? '';
+      postInformationPage({
+        slug_field: slug,
+        ...infoPage,
+      })
+        .then(() => {
+          navigate(ROUTES.frontend.admin_information);
+        })
+        .catch(() => {
+          // TODO error handling
+        });
+    }
+  }
+
+  const disableSubmit = (infoPage.slug_field === undefined || infoPage.slug_field === '') && slugField === undefined;
+  const text_field = languageTab.key === 'nb' ? 'text_nb' : 'text_en';
+  const text_value = languageTab.key === 'nb' ? infoPage.text_nb : infoPage.text_en;
+
+  const title_field = languageTab.key === 'nb' ? 'title_nb' : 'title_en';
+  const title_value = languageTab.key === 'nb' ? infoPage.title_nb : infoPage.title_en;
 
   return (
-    <Page>
-      <Button
-        theme="outlined"
-        onClick={() => navigate(ROUTES.frontend.admin_information)}
-        className={styles.backButton}
-      >
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
-      <h1 className={styles.header}>
-        {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
-      </h1>
-      {/* TODO: fix */}
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      <form>
-        {!slugField && (
-          <div className={styles.inputGroup}>
-            <FormInputField
-              errors={errors}
-              className={styles.input}
-              name="slug_field"
-              register={register}
-              required={t(KEY.form_required)}
-            >
-              <p className={styles.labelText}>{t(KEY.name)}</p>
-            </FormInputField>
-          </div>
-        )}
-        <div className={styles.inputGroup}>
-          <h2 className={styles.inputGroupHeader}>{t(KEY.norwegian)}</h2>
-          <div className={styles.row}>
-            <div className={styles.col}>
-              <FormInputField
-                errors={errors}
-                className={styles.input}
-                name="title_nb"
-                register={register}
-                required={t(KEY.form_required)}
-              >
-                <p className={styles.labelText}>
-                  {t(KEY.norwegian)} {t(KEY.common_title)}
-                </p>
-              </FormInputField>
-              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_nb" register={register}>
-                <p className={styles.labelText}>
-                  {t(KEY.norwegian)} {t(KEY.content)}
-                </p>
-              </FormTextAreaField>
-            </div>
-            <div className={styles.col}>
-              <div className={styles.markdownField}>
-                <ReactMarkdown>{getValues('text_nb')}</ReactMarkdown>
-              </div>
-            </div>
-          </div>
+    <div className={styles.wrapper}>
+      {/* Header tools */}
+      <div className={styles.header_container}>
+        <div className={styles.logo_container}>
+          {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
         </div>
-        <div className={styles.inputGroup}>
-          <h2 className={styles.inputGroupHeader}>{t(KEY.english)}</h2>
-          <div className={styles.row}>
-            <div className={styles.col}>
-              <FormInputField
-                errors={errors}
-                className={styles.input}
-                name="title_en"
-                register={register}
-                required={t(KEY.form_required)}
-              >
-                <p className={styles.labelText}>
-                  {t(KEY.english)} {t(KEY.common_title)}
-                </p>
-              </FormInputField>
-              <FormTextAreaField errors={errors} className={styles.input} rows={10} name="text_en" register={register}>
-                <p className={styles.labelText}>
-                  {t(KEY.english)} {t(KEY.content)}
-                </p>
-              </FormTextAreaField>
-            </div>
-            <div className={styles.col}>
-              <div className={styles.markdownField}>
-                <ReactMarkdown>{getValues('text_en')}</ReactMarkdown>
-              </div>
-            </div>
-          </div>
+        <Button
+          rounded={true}
+          theme="white"
+          onClick={() => {
+            if (window.confirm(`${t(KEY.admin_information_confirm_cancel)}`)) {
+              navigate(ROUTES.frontend.admin_information);
+            }
+          }}
+        >
+          <Icon icon="mdi:close" />
+        </Button>
+      </div>
+
+      {/* Language tab */}
+      <div className={styles.tab_container}>
+        <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} compact={true} />
+      </div>
+
+      {/* Edit fields */}
+      <div className={styles.edit_container}>
+        <div className={styles.left_side}>
+          <input className={styles.title_input} onChange={handleTextFieldChange(title_field)} value={title_value} />
+          <textarea className={styles.text_area} onChange={handleTextAreaChange(text_field)} value={text_value} />
         </div>
-        <div className={styles.submitContainer}>
-          <Button theme={'success'} type="submit">
-            <p className={styles.submit}>
-              {slugField ? t(KEY.admin_information_update_page) : t(KEY.admin_information_create_page)}
-            </p>
-          </Button>
+        <div className={styles.preview}>
+          <SamfMarkdown>{`# ${title_value} \n ${text_value}`}</SamfMarkdown>
         </div>
-      </form>
-    </Page>
+      </div>
+
+      {/* Footer */}
+      <div className={styles.footer}>
+        {/* URL preview */}
+        <div className={styles.url_preview}>
+          samfundet.no/information-pages/
+          {slugField && slugField}
+          {!slugField && <input placeholder="samf-url" onChange={handleTextFieldChange('slug_field')} />}
+        </div>
+        {/* Save button */}
+        <Button theme="green" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
+          <div style={{ padding: '0 1em' }}>{t(KEY.common_save)}</div>
+        </Button>
+      </div>
+    </div>
   );
 }

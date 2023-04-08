@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { useAuthContext } from '~/AuthContext';
+import { useGlobalContext } from '~/GlobalContextProvider';
 import { getTextItem } from '~/api';
-import { desktopBpLower, mobileBpUpper } from './constants';
+import { Key, SetState } from '~/types';
+import { hasPerm, isTruthy } from '~/utils';
+import { THEME, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -139,4 +143,99 @@ export function usePrevious<T>(value: T): T | undefined {
     ref.current = value;
   }, [value]);
   return ref.current;
+}
+
+/**
+ * Shorthand to check if current user has a given permission.
+ */
+export function usePermission(permission: string, obj?: string | number): boolean {
+  const { user } = useAuthContext();
+  const hasPermission = hasPerm({ permission: permission, user: user, obj: obj });
+  return hasPermission;
+}
+
+/**
+ * Fetch a specific KeyValue from UserContext.
+ * If the value is meant to be a boolean, use `checkTruthy` and cast the returned value to boolean.
+ *
+ * Example:
+ * ```ts
+ *  const example = useKeyValue(KEY.EXAMPLE, true) as boolean;
+ * ```
+ */
+export function useKeyValue(key: Key, checkTruthy?: boolean): string | boolean | undefined {
+  const { keyValues } = useGlobalContext();
+  const keyValue = keyValues.get(key);
+  if (checkTruthy) {
+    return isTruthy(keyValue);
+  }
+  return keyValue;
+}
+
+export function useIsDarkTheme(): boolean {
+  const { theme } = useGlobalContext();
+  return theme === THEME.DARK;
+}
+
+export function useIsLightTheme(): boolean {
+  const { theme } = useGlobalContext();
+  return theme === THEME.LIGHT;
+}
+
+export function useMousePosition(): { x: number; y: number } {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    function handleMouseMove(e: MouseEvent) {
+      setPosition({ x: e.clientX, y: e.clientY });
+    }
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return position;
+}
+
+/**
+ * When used will spawn a trail behind the cursor.
+ */
+export function useMouseTrail(initial = false): [boolean, SetState<boolean>] {
+  const [isMouseTrail, setIsMouseTrail] = useState<boolean>(initial);
+
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+
+  // Spawn trail behind cursor whenever it moves.
+  useEffect(() => {
+    if (!isMouseTrail) return;
+
+    function handleMouseMove(e: MouseEvent) {
+      // Create element, add class, position the element and add to body.
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('trail'); // global.scss
+      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
+      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
+      container.appendChild(sparkle);
+
+      // We need to clean all the elements the trail produces.
+      // If we don't do this, the <body> will be cluttered with thousands of elements.
+      // That would likely cause performance issues.
+      // This delay must be equal to or longer than the trail animation.
+      setTimeout(() => {
+        sparkle.remove();
+      }, 2000); // Remove the element after 1 second
+    }
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [container, isMouseTrail]);
+
+  return [isMouseTrail, setIsMouseTrail];
 }

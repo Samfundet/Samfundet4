@@ -1,6 +1,8 @@
 import classNames from 'classnames';
-import { createContext, Dispatch, ReactElement, useEffect, useReducer } from 'react';
+import { createContext, Dispatch, ReactNode, useEffect, useReducer, useState } from 'react';
 import { Button } from '~/Components';
+import { usePermission } from '~/hooks';
+import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
 
 // ================================== //
@@ -21,6 +23,7 @@ type SamfFormState<T extends SamfFormModel> = {
   validity: Record<string, boolean>;
   errors: Record<string, string | boolean>;
   allFields: string[];
+  didSubmit: boolean;
 };
 
 // Shared samf form context (passed to children form fields)
@@ -34,12 +37,17 @@ export const SamfFormContext = createContext<SamfFormContextType<SamfFormModel>>
   dispatch: () => emptyState,
 });
 
+// Validation mode (when to show validation errors)
+type ValidationMode = 'submit' | 'change';
+
 // Samf form context for configs (currently only option to validate on init)
 type SamfFormConfigContext = {
   validateOnInit: boolean;
+  validateOn: ValidationMode;
 };
 export const SamfFormConfigContext = createContext<SamfFormConfigContext>({
   validateOnInit: false,
+  validateOn: 'change',
 });
 
 /**
@@ -50,8 +58,15 @@ export const SamfFormConfigContext = createContext<SamfFormConfigContext>({
  */
 function samfFormReducer<T extends SamfFormModel, U>(
   state: SamfFormState<T>,
-  action: SamfFormAction<U>,
+  action: SamfFormAction<U> | 'submit',
 ): SamfFormState<T> {
+  // Submit action
+  if (action === 'submit') {
+    return {
+      ...state,
+      didSubmit: true,
+    };
+  }
   // Change state of a field
   return {
     ...state,
@@ -75,19 +90,24 @@ function samfFormReducer<T extends SamfFormModel, U>(
 type SamfFormProps<T> = {
   initialData?: Partial<T>;
   validateOnInit?: boolean;
-  submitButton?: boolean | string;
+  validateOn?: ValidationMode;
+  submitText?: string;
+  noStyle?: boolean;
+  className?: string;
   onChange?<T>(data: Partial<T>): void;
   onValidityChanged?(valid: boolean): void;
   onSubmit?(data: Partial<T>): void;
-  children: ReactElement | ReactElement[];
-  // Deb/debug mode
-  devMode?: boolean;
+  children: ReactNode;
+  devMode?: boolean; // Dev/debug mode.
 };
 
 export function SamfForm<T>({
   initialData = {},
   validateOnInit = false,
-  submitButton = false,
+  validateOn = 'submit',
+  submitText,
+  noStyle,
+  className,
   onChange,
   onValidityChanged,
   onSubmit,
@@ -100,8 +120,15 @@ export function SamfForm<T>({
     validity: {},
     errors: {},
     allFields: Object.keys(initialData),
+    didSubmit: false,
   };
   const [state, dispatch] = useReducer(samfFormReducer, initialFormState);
+  const canDebug = usePermission(PERM.SAMFUNDET_DEBUG);
+  const [isDebugMode, setIsDebugMode] = useState(devMode);
+  const showDevMode = isDebugMode && canDebug;
+
+  // Animated wiggle on failed
+  const [animateError, setAnimateError] = useState<boolean>(false);
 
   // Calculate if entire form is valid
   let allValid = true;
@@ -114,7 +141,15 @@ export function SamfForm<T>({
   }
 
   // Submit values to parent
-  function handleOnClickSubmit() {
+  function handleOnClickSubmit(e?: React.MouseEvent<HTMLElement>) {
+    e?.preventDefault();
+    // If validate on submit and not all valid, set submit state
+    // to make fields show error and return
+    if (validateOn === 'submit' && !allValid) {
+      setAnimateError(true);
+      dispatch('submit');
+      return;
+    }
     onSubmit?.(state.values as T);
   }
 
@@ -133,7 +168,7 @@ export function SamfForm<T>({
   }, [state.errors]);
 
   // Debug preview, very useful to develop forms
-  const devModePreview = devMode && (
+  const devModePreview = showDevMode && (
     <div className={styles.debug_box}>
       <div className={styles.debug_column}>
         <h2 className={styles.debug_header}>Form State</h2>
@@ -162,13 +197,18 @@ export function SamfForm<T>({
     </div>
   );
 
+  // Disable submit button when validating on change
+  const disableSubmit = validateOn === 'change' && !allValid;
+
+  const formClass = noStyle ? className : classNames(styles.samf_form, animateError && styles.animate_error, className);
+
   // Render children with form context
   return (
     <SamfFormContext.Provider value={{ state, dispatch }}>
-      <SamfFormConfigContext.Provider value={{ validateOnInit }}>
-        <form className={styles.samf_form}>
+      <SamfFormConfigContext.Provider value={{ validateOnInit, validateOn }}>
+        <form className={formClass} onAnimationEnd={() => setAnimateError(false)}>
           {children}
-          {submitButton && (
+          {onSubmit !== undefined && (
             <div className={styles.submit_row}>
               <Button
                 preventDefault={true}
@@ -176,11 +216,19 @@ export function SamfForm<T>({
                 theme="green"
                 rounded={true}
                 onClick={handleOnClickSubmit}
-                disabled={!allValid}
+                disabled={disableSubmit}
               >
-                {submitButton !== true ? submitButton : 'Lagre'}
+                {submitText !== undefined ? submitText : 'Lagre'}
               </Button>
             </div>
+          )}
+          {canDebug && (
+            <>
+              <br></br>
+              <Button theme="samf" preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
+                Debug
+              </Button>
+            </>
           )}
         </form>
         {devModePreview}

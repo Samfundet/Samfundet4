@@ -1,0 +1,1 @@
+export { EventCarousel } from './EventCarousel';

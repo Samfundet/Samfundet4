@@ -18,15 +18,22 @@
   align-items: flex-end;
   justify-content: space-between;
   text-transform: uppercase;
-  margin: 1em;
-  .headerText {
-    font-size: 2em;
-    font-weight: 700;
+  flex-wrap: wrap;
+  margin-left: 1em;
+  margin-right: 2em;
+}
+
+.headerText {
+  font-size: 1.5em;
+  font-weight: 700;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  color: $red-samf;
+  display: none;
+
+  @include for-mobile-only {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 10px;
-    color: $red-samf;
   }
 }
 
@@ -53,6 +60,7 @@
   margin-top: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: stretch;
   flex-wrap: wrap;
+  gap: 1em;
 }

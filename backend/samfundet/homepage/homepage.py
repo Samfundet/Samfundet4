@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from django.utils import timezone
 
-from samfundet.models import Event
+from samfundet.models.event import Event, EventCategory, EventTicketType
 from samfundet.serializers import EventSerializer
 
 
@@ -78,7 +78,7 @@ def generate() -> list[dict]:
     elements.append(carousel(
         title_nb='Konserter',
         title_en='Concerts',
-        events=list(upcoming_events.filter(category=Event.Category.CONCERT)[:10]),
+        events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
     ))
 
     # Another highlight
@@ -91,7 +91,7 @@ def generate() -> list[dict]:
     elements.append(carousel(
         title_nb='Debatter',
         title_en='Debates',
-        events=list(upcoming_events.filter(category=Event.Category.DEBATE)[:10]),
+        events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
     ))
 
     # Courses
@@ -99,7 +99,16 @@ def generate() -> list[dict]:
         carousel(
             title_nb='Kurs og Forelesninger',
             title_en='Courses & Lectures',
-            events=list(upcoming_events.filter(category=Event.Category.LECTURE)[:10]),
+            events=list(upcoming_events.filter(category=EventCategory.LECTURE)[:10]),
+        )
+    )
+
+    # Free!
+    elements.append(
+        carousel(
+            title_nb='Gratisarrangementer',
+            title_en='Free events',
+            events=list(upcoming_events.filter(ticket_type__in=[EventTicketType.FREE, EventTicketType.INCLUDED])[:10]),
         )
     )
 
@@ -108,7 +117,7 @@ def generate() -> list[dict]:
         carousel(
             title_nb='Andre arrangementer',
             title_en='Other events',
-            events=list(upcoming_events.filter(category=Event.Category.OTHER)[:10]),
+            events=list(upcoming_events.filter(category=EventCategory.OTHER)[:10]),
         )
     )
 

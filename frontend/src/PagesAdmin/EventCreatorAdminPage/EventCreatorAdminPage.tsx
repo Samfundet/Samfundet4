@@ -1,22 +1,23 @@
-import { Button, ContentCard, Page, TimeDisplay } from '~/Components';
+import { Button, ImageCard, Page } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
-import { postEvent } from '~/api';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { EventDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { postEvent } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
+import { EventDto } from '~/dto';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { Children } from '~/types';
+import { dbT } from '~/utils';
 import styles from './EventCreatorAdminPage.module.scss';
+import { PaymentForm } from './components/PaymentForm';
 
 type EventCreatorStep = {
   key: string; // Unique key
@@ -27,7 +28,6 @@ type EventCreatorStep = {
 };
 
 export function EventCreatorAdminPage() {
-  const { i18n } = useTranslation();
   const [didSave, setDidSave] = useState(false);
   const [event, setEvent] = useState<Partial<EventDto>>();
 
@@ -56,8 +56,8 @@ export function EventCreatorAdminPage() {
             <SamfFormField field="title_en" type="text" label="Tittel (engelsk)" />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_short_nb" type="text-long" label="Kort beskrivelse (norsk)" />
-            <SamfFormField field="description_short_en" type="text-long" label="Kort beskrivelse (engelsk)" />
+            <SamfFormField field="description_short_nb" type="text" label="Kort beskrivelse (norsk)" />
+            <SamfFormField field="description_short_en" type="text" label="Kort beskrivelse (engelsk)" />
           </div>
           <div className={styles.input_row}>
             <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)" />
@@ -86,15 +86,16 @@ export function EventCreatorAdminPage() {
       ),
     },
     // Payment options (not implemented yet)
-    /*
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
       title_en: 'Payment/registration',
-      partial: {},
-      layout: [],
+      template: (
+        <>
+          <PaymentForm event={event ?? {}} onChange={(partial) => setEvent({ ...event, ...partial })} />
+        </>
+      ),
     },
-    */
     // Graphics
     {
       key: 'graphics',
@@ -160,7 +161,7 @@ export function EventCreatorAdminPage() {
           className={classNames(styles.tab_icon, valid && styles.done, error && styles.error)}
           width={24}
         />
-        <span>{dbT(step, 'title', i18n.language)}</span>
+        <span>{dbT(step, 'title')}</span>
       </div>
     );
     return { key: step.key, label: label };
@@ -185,15 +186,28 @@ export function EventCreatorAdminPage() {
 
   // Event preview on final step
   const eventPreview: Children = (
-    <div>
-      <ContentCard
-        title={dbT(event, 'title', i18n.language) ?? ''}
-        description={dbT(event, 'description_short', i18n.language) ?? ''}
-        imageUrl={event?.image?.url}
+    <div className={styles.preview}>
+      <ImageCard
+        title={dbT(event, 'title') ?? ''}
+        description={dbT(event, 'description_short') ?? ''}
+        imageUrl={BACKEND_DOMAIN + event?.image?.url}
+        date={event?.start_dt ?? ''}
       />
-      <p>{event?.category}</p>
-      <TimeDisplay timestamp={event?.start_dt ?? ''} />
-      <p>{event?.duration}min</p>
+      {/* Preview Info */}
+      <div className={styles.previewText}>
+        <span>
+          <b>{t(KEY.category)}:</b> {event?.category ?? t(KEY.common_missing)}
+        </span>
+        <span>
+          <strong>Varighet:</strong> {event?.duration ? `${event?.duration} min` : t(KEY.common_missing)}
+        </span>
+        <span>
+          <b>{t(KEY.admin_organizer)}:</b> {event?.host ?? t(KEY.common_missing)}
+        </span>
+        <span>
+          <b>{t(KEY.common_venue)}:</b> {event?.location ?? t(KEY.common_missing)}
+        </span>
+      </div>
     </div>
   );
 

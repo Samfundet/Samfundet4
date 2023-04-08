@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getGangList } from '~/api';
 import { ImageList } from '~/Components/ImageList';
 import { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
+import { getGangList } from '~/api';
 import { GangDto, GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
+import { dbT } from '~/utils';
 import styles from './GroupsPage.module.scss';
 
 /**
@@ -15,7 +15,7 @@ import styles from './GroupsPage.module.scss';
  * Such as Organizing, events, drift, then displaying all of these groups
  */
 export function GroupsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
   useEffect(() => {
@@ -28,12 +28,12 @@ export function GroupsPage() {
     <Page>
       <div className={styles.wrapper}>
         <div className={styles.description}>
-          <h1 className={styles.header}>{t(KEY.gangs_title)}</h1>
-          <p className={styles.description}>{t(KEY.gangs_text)}</p>
+          <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>
+          <p className={styles.description}>{t(KEY.groupspage_gangs_text)}</p>
         </div>
         {groups.map((element: GangTypeDto, key: number) => (
           <div key={key} className={styles.groups}>
-            <div className={styles.groupsTitle}>{dbT(element, 'title', i18n.language)}</div>
+            <div className={styles.groupsTitle}>{dbT(element, 'title')}</div>
             <ImageList
               textMaxLength={12}
               images={

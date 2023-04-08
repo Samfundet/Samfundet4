@@ -1,9 +1,11 @@
-import random
 import os
-from django.core.files.images import ImageFile
-from root.utils.samfundet_random import words
+import random
 
-from samfundet.models import Image, Tag
+from django.core.files.images import ImageFile
+from django.db.models.deletion import ProtectedError
+
+from root.utils.samfundet_random import words
+from samfundet.models.general import Image, Tag
 
 # Number of images
 COUNT = 30
@@ -12,7 +14,12 @@ COUNT = 30
 def seed():
     image_folder = os.path.join(os.path.dirname(__file__), 'seed_images')
     seed_images = os.listdir(image_folder)
-    Image.objects.all().delete()
+
+    try:
+        Image.objects.all().delete()
+    except ProtectedError:
+        print('Warning: failed to delete old images\n')
+
     Tag.objects.all().delete()
     yield 0, 'Deleted old images and tags'
 
@@ -26,7 +33,7 @@ def seed():
             title = words(random.randint(1, 2))
             image = Image.objects.create(title=title, image=random_image)
             image.tags.set(random.choices(Tag.objects.all().values_list(flat=True, ), k=random.randint(1, 4)))
-            yield int(i / COUNT * 100), f"Created image '{title}'"
+            yield int(i / COUNT * 100), 'Creating images'
 
     # Done!
-    yield 100, f'Created {Image.objects.all().count()} images)'
+    yield 100, f'Created {Image.objects.all().count()} images'

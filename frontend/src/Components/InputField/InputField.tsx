@@ -1,15 +1,13 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { ChangeEvent } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'time';
 
 type InputFieldProps<T> = {
   children?: Children;
-  className?: string;
   labelClassName?: string;
   inputClassName?: string;
   onChange?: (value: T) => void;
@@ -20,12 +18,10 @@ type InputFieldProps<T> = {
   error?: string | boolean;
   helpText?: string;
   icon?: string;
-  register?: UseFormRegisterReturn;
 };
 
 export function InputField<T>({
   children,
-  className,
   labelClassName,
   inputClassName,
   onChange,
@@ -36,7 +32,6 @@ export function InputField<T>({
   helpText,
   type = 'text',
   icon,
-  register,
 }: InputFieldProps<T>) {
   function handleChange(e?: ChangeEvent<HTMLInputElement>) {
     let value: string | number | undefined = e?.currentTarget.value ?? '';
@@ -50,7 +45,7 @@ export function InputField<T>({
     onChange?.(value as T);
   }
   return (
-    <label className={classNames(className, styles.label, disabled && styles.disabled_label, labelClassName)}>
+    <label className={classNames(styles.label, disabled && styles.disabled_label, labelClassName)}>
       {children}
       <input
         onChange={handleChange}
@@ -59,7 +54,6 @@ export function InputField<T>({
         disabled={disabled}
         type={type}
         value={value}
-        {...register}
       />
       {icon && (
         <div className={styles.icon_container}>

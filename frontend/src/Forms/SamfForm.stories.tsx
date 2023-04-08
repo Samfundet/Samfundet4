@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { AuthContextProvider } from '~/AuthContext';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { EventDto } from '~/dto';
 import { SamfForm } from './SamfForm';
@@ -11,7 +12,11 @@ export default {
 } as ComponentMeta<typeof SamfForm>;
 
 const Template: ComponentStory<typeof SamfForm> = function (args) {
-  return <SamfForm<EventDto> {...args} onSubmit={(v) => alert('Data that could be posted: ' + JSON.stringify(v))} />;
+  return (
+    <AuthContextProvider>
+      <SamfForm<EventDto> {...args} onSubmit={(v) => alert('Data that could be posted: ' + JSON.stringify(v))} />
+    </AuthContextProvider>
+  );
 };
 
 function validateShrimp(str: string) {
@@ -31,7 +36,7 @@ const options: DropDownOption<string>[] = [
 
 export const Basic = Template.bind({});
 Basic.args = {
-  submitButton: 'Lagre - Demo',
+  submitText: 'Lagre - Demo',
   devMode: true,
   children: (
     <>

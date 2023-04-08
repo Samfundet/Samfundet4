@@ -1,4 +1,5 @@
-import { Link } from '~/Components';
+import classNames from 'classnames';
+import { BACKEND_DOMAIN } from '~/constants';
 import { ImageDto } from '~/dto';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AdminImage.module.scss';
@@ -15,13 +16,14 @@ export function AdminImage({ image, className }: AdminImageProps) {
     })
     .toString();
   return (
-    <Link url="" className={className}>
-      <div className={styles.imageContainer} style={backgroundImageFromUrl(image.url)}>
-        <div className={styles.imageTitle}>
-          <p className={styles.text}>{image.title}</p>
-          <p className={styles.tags}>{TAGS}</p>
-        </div>
+    <div
+      className={classNames(styles.imageContainer, className)}
+      style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}
+    >
+      <div className={styles.imageTitle}>
+        <p className={styles.text}>{image.title}</p>
+        <p className={styles.tags}>{TAGS}</p>
       </div>
-    </Link>
+    </div>
   );
 }

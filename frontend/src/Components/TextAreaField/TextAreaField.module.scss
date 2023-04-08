@@ -2,6 +2,10 @@
 
 @import 'src/mixins';
 
+$focus-blur-color: $blue-medium;
+$focus-blur-radius: 10px;
+$focus-blur-spread: 2px;
+$error-color: red;
 
 .input_field {
   @include rounded;
@@ -11,13 +15,13 @@
   &:focus {
     outline: none;
     border: 1px solid $grey-4;
-    box-shadow: 0 0 25px 5px rgba(143, 181, 238, 0.391);
+    box-shadow: 0 0 $focus-blur-radius $focus-blur-spread $focus-blur-color;
     @include theme-dark {
       border-color: $grey-1;
     }
   }
   &.error {
-    border: 1px solid red;
+    border: 1px solid $error-color;
   }
 }
 
@@ -30,7 +34,7 @@
 
 .error_text {
   @include rounded;
-  background-color: red;
+  background-color: $error-color;
   color: $white;
   height: 1.5em;
   font-size: 0.75em;
@@ -45,7 +49,6 @@
   font-weight: 100;
   font-size: 1em;
 }
-
 
 .input_field:disabled {
   border: 1px solid transparent;

@@ -6,25 +6,27 @@ $mobile-width: $primary-content-width-mobile;
 $background-light: #b7afaf;
 $background-dark: #2e2b2b;
 
+// Must match the sizing of .container.
+.skeleton_wrapper {
+  width: $primary-content-width-wide;
+  height: 24em;
+  border-radius: 1em;
+
+  @include for-mobile-only {
+    width: $mobile-width;
+    height: 12em;
+  }
+}
 
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch;
-  gap: .25em;
   height: 24em;
-  width: $primary-content-width-wide;
-  overflow: visible;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  max-width: 100%;
+  width: 100%;
 
   @include for-mobile-only {
     width: $mobile-width;
     height: auto;
   }
-
 }
 
 .card {
@@ -34,7 +36,7 @@ $background-dark: #2e2b2b;
   border-radius: 1em;
   overflow: hidden;
   flex-basis: 100%;
-  transition: .2s;
+  transition: 0.2s;
   box-shadow: 0 0 15px 3px $black-t10;
 
   @include for-mobile-only {
@@ -44,14 +46,13 @@ $background-dark: #2e2b2b;
   @include theme-dark {
     background-color: $background-dark;
   }
-
 }
 
 .card_image {
   background-size: cover;
   background-position: center;
   border-radius: 1em 0 0 1em;
-  transition: .5s;
+  transition: 0.5s;
   flex-basis: 50%;
   height: 100%;
 
@@ -65,7 +66,6 @@ $background-dark: #2e2b2b;
     max-height: 12em;
     border-radius: 1em 1em 0 0;
   }
-
 }
 
 .card_info {
@@ -84,23 +84,22 @@ $background-dark: #2e2b2b;
     padding-left: 1.5em;
     padding-right: 1.5em;
   }
-
 }
 
 .info_header {
   color: white;
   font-size: 2em;
   font-weight: 700;
-  padding-bottom: .5em;
+  padding-bottom: 0.5em;
 
   @include for-mobile-only {
     font-size: 1.5em;
   }
-  
 }
 
 .info_description {
   color: $grey-1;
+
   @include theme-dark {
     color: $grey-3;
   }
@@ -115,11 +114,21 @@ $background-dark: #2e2b2b;
   @include for-mobile-only {
     margin-top: 1em;
   }
-
 }
 
 .button_content {
   display: flex;
   align-items: center;
-  gap: .5em;
+  gap: 0.5em;
+}
+
+.icon {
+  display: inline-block;
+  transition: 0.4s;
+}
+
+.btn:hover {
+  .icon {
+    transform: translateX(0.5em);
+  }
 }

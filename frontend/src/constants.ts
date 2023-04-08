@@ -7,14 +7,16 @@ export const THEME = {
   LIGHT: 'theme-light',
 } as const;
 
-// Class added to body when mobile navigation is open
+/** Class added to body when mobile navigation is open. */
 export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
+
+export const MIRROR_CLASS = 'mirror-dimension';
 
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
-export const THEME_KEY = 'theme';
+export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
@@ -28,6 +30,7 @@ export const desktopBpLower = 993;
 export const tabletBpUpper = 992;
 export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
+
 export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
 
 /**
@@ -35,4 +38,9 @@ export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
  */
 export const VENUE = {
   LYCHE: 'lyche',
+} as const;
+
+/** Keys of KeyValue object in backend. */
+export const KV = {
+  EXAMPLE: 'EXAMPLE',
 } as const;

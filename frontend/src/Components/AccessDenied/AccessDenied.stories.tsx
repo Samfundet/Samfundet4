@@ -1,5 +1,5 @@
-import { AccessDenied } from './AccessDenied';
 import { ComponentStory } from '@storybook/react';
+import { AccessDenied } from './AccessDenied';
 
 export default {
   title: 'Components/AccessDenied',
