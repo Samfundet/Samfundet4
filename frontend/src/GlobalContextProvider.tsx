@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
-import { getCsrfToken, getKeyValues } from '~/api';
+import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
 import { useMouseTrail, useTheme } from '~/hooks';
 import { Children, KeyValueMap, SetState } from '~/types';
@@ -129,6 +129,9 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
   function toggleMirrorDimension(): boolean {
     const toggledValue = !mirrorDimension;
     setMirrorDimension(toggledValue);
+    if (user) {
+      putUserPreference(user.user_preference.id, { mirror_dimension: toggledValue });
+    }
     return toggledValue;
   }
 

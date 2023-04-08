@@ -16,6 +16,12 @@ export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
  */
 export const MIRROR_CLASS = 'mirror-dimension';
 
+/**
+ *  Class name for the cursor trail effect.
+ * An equivalent should be found in global.scss.
+ */
+export const CURSOR_TRAIL_CLASS = 'trail';
+
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 

@@ -5,7 +5,7 @@ import { useAuthContext } from '~/AuthContext';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { getTextItem, putUserPreference } from '~/api';
 import { Key, SetState } from '~/types';
-import { hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
+import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import { THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
@@ -229,19 +229,15 @@ export function useMouseTrail(): UseMouseTrail {
     if (!isMouseTrail) return;
 
     function handleMouseMove(e: MouseEvent) {
-      // Create element, add class, position the element and add to body.
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('trail'); // global.scss
-      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
-      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
-      container.appendChild(sparkle);
+      const dot = createDot(e);
+      container.appendChild(dot);
 
       // We need to clean all the elements the trail produces.
       // If we don't do this, the <body> will be cluttered with thousands of elements.
       // That would likely cause performance issues.
       // This delay must be equal to or longer than the trail animation.
       setTimeout(() => {
-        sparkle.remove();
+        dot.remove();
       }, 2000); // Remove the element after 1 second
     }
 
