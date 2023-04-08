@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
 import { getCsrfToken, getKeyValues } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, THEME_KEY, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { useMouseTrail } from '~/hooks';
 import { Children, KeyValueMap, SetState } from '~/types';
 
 export function updateBodyThemeClass(theme: ThemeValue) {
@@ -21,6 +22,8 @@ type GlobalContextProps = {
   switchTheme: () => ThemeValue;
   mirrorDimension: boolean;
   setMirrorDimension: SetState<boolean>;
+  isMouseTrail: boolean;
+  setIsMouseTrail: SetState<boolean>;
   toggleMirrorDimension: () => boolean;
   isMobileNavigation: boolean;
   setIsMobileNavigation: SetState<boolean>;
@@ -51,10 +54,9 @@ export function useGlobalContext() {
 
 type GlobalContextProviderProps = {
   children: Children;
-  values?: Partial<GlobalContextProps>;
 };
 
-export function GlobalContextProvider({ children, values }: GlobalContextProviderProps) {
+export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
   // =================================== //
   //        Constants and states         //
   // =================================== //
@@ -67,9 +69,6 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
   const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
   const initialTheme = storedTheme || detectedTheme;
 
-  // Reference to <body> to create cursor trail.
-  const bodyRef = useRef(document.body);
-
   const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
 
   const [theme, setTheme] = useState<ThemeValue>(initialTheme);
@@ -80,6 +79,7 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
   const { user } = useAuthContext();
 
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(user?.user_preference.mirror_dimension ?? false);
+  const [isMouseTrail, setIsMouseTrail] = useMouseTrail(false); // TODO: UserPreference
 
   // =================================== //
   //               Effects               //
@@ -133,34 +133,6 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
     }
   }, [user]);
 
-  // Spawn trail behind cursor whenever it moves.
-  useEffect(() => {
-    const body = bodyRef.current;
-
-    function handleMouseMove(e: MouseEvent) {
-      // Create element, add class, position the element and add to body.
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('trail'); // global.scss
-      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
-      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
-      body.appendChild(sparkle);
-
-      // We need to clean all the elements the trail produces.
-      // If we don't do this, the <body> will be cluttered with thousands of elements.
-      // That would likely cause performance issues.
-      // This delay must be equal to or longer than the trail animation.
-      setTimeout(() => {
-        sparkle.remove();
-      }, 2000); // Remove the element after 1 second
-    }
-
-    body.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      body.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
   // =================================== //
   //          Helper functions           //
   // =================================== //
@@ -189,7 +161,6 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
-    ...values,
     theme,
     setTheme,
     switchTheme,
@@ -197,6 +168,8 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
     setIsMobileNavigation,
     mirrorDimension,
     setMirrorDimension,
+    isMouseTrail: isMouseTrail,
+    setIsMouseTrail: setIsMouseTrail,
     toggleMirrorDimension,
     keyValues,
   };

@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { getTextItem } from '~/api';
-import { Key } from '~/types';
+import { Key, SetState } from '~/types';
 import { hasPerm, isTruthy } from '~/utils';
 import { THEME, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
@@ -198,4 +198,44 @@ export function useMousePosition(): { x: number; y: number } {
   }, []);
 
   return position;
+}
+
+/**
+ * When used will spawn a trail behind the cursor.
+ */
+export function useMouseTrail(initial = false): [boolean, SetState<boolean>] {
+  const [isMouseTrail, setIsMouseTrail] = useState<boolean>(initial);
+
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+
+  // Spawn trail behind cursor whenever it moves.
+  useEffect(() => {
+    if (!isMouseTrail) return;
+
+    function handleMouseMove(e: MouseEvent) {
+      // Create element, add class, position the element and add to body.
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('trail'); // global.scss
+      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
+      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
+      container.appendChild(sparkle);
+
+      // We need to clean all the elements the trail produces.
+      // If we don't do this, the <body> will be cluttered with thousands of elements.
+      // That would likely cause performance issues.
+      // This delay must be equal to or longer than the trail animation.
+      setTimeout(() => {
+        sparkle.remove();
+      }, 2000); // Remove the element after 1 second
+    }
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [container, isMouseTrail]);
+
+  return [isMouseTrail, setIsMouseTrail];
 }
