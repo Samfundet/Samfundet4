@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
-import { runderode, splash } from '~/assets';
-import { Button, Carousel, ImageCard } from '~/Components';
+import { Button, Carousel } from '~/Components';
 import { Page } from '~/Components/Page';
+import { runderode, splash } from '~/assets';
 import { ROUTES } from '~/routes';
+import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
 
@@ -57,9 +58,14 @@ export function AboutPage() {
       </div>
       <h2 className={styles.header2}>Lokaler</h2>
 
-      <Carousel spacing={1.5}>
+      <Carousel spacing={1.5} header>
         {VENUES.images.map((image, idx) => {
-          return <ImageCard key={idx} title={image.name} imageUrl={image.src} />;
+          return (
+            <div key={idx}>
+              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)}></div>
+              <div className={styles.venue_name}>{image.name}</div>
+            </div>
+          );
         })}
       </Carousel>
 

@@ -32,7 +32,7 @@ export function ImageCard({
   children,
 }: ImageCardProps) {
   const containerStyle = classNames(styles.container, compact && styles.compact, className);
-  const cardStyle = styles.card;
+  const cardStyle = classNames(styles.card);
   const bottomLabelStyle = styles.bottom_label;
   const bottomDescriptionStyle = styles.bottom_description;
 
