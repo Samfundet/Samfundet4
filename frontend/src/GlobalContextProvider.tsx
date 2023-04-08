@@ -1,29 +1,34 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
-import { getCsrfToken, getKeyValues } from '~/api';
-import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, THEME_KEY, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
+import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { useMouseTrail, useTheme } from '~/hooks';
 import { Children, KeyValueMap, SetState } from '~/types';
-
-export function updateBodyThemeClass(theme: ThemeValue) {
-  // Set theme as data attr on body.
-  document.body.setAttribute(THEME_KEY, theme);
-  // Remember theme in localStorage between refreshes.
-  localStorage.setItem(THEME_KEY, theme);
-}
 
 /**
  * Define which values the global context can contain.
  */
 type GlobalContextProps = {
+  // Theme
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
+
+  // Mirror dimention
   mirrorDimension: boolean;
   setMirrorDimension: SetState<boolean>;
   toggleMirrorDimension: () => boolean;
+
+  // Mouse trail
+  isMouseTrail: boolean;
+  setIsMouseTrail: SetState<boolean>;
+  toggleMouseTrail: () => boolean;
+
+  // Navbar
   isMobileNavigation: boolean;
   setIsMobileNavigation: SetState<boolean>;
+
   keyValues: KeyValueMap;
 };
 
@@ -51,39 +56,34 @@ export function useGlobalContext() {
 
 type GlobalContextProviderProps = {
   children: Children;
-  values?: Partial<GlobalContextProps>;
 };
 
-export function GlobalContextProvider({ children, values }: GlobalContextProviderProps) {
+export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
   // =================================== //
   //        Constants and states         //
   // =================================== //
 
-  // Get theme from localStorage.
-  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
-
-  // Determine browser preference.
-  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
-  const initialTheme = storedTheme || detectedTheme;
-
-  // Reference to <body> to create cursor trail.
-  const bodyRef = useRef(document.body);
-
   const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
 
-  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+  const { theme, setTheme, switchTheme } = useTheme();
 
   // Determines if navbar for mobile is shown.
   const [isMobileNavigation, setIsMobileNavigation] = useState(false);
 
   const { user } = useAuthContext();
 
-  const [mirrorDimension, setMirrorDimension] = useState<boolean>(user?.user_preference.mirror_dimension ?? false);
+  const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
+  const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
   // =================================== //
   //               Effects               //
   // =================================== //
+
+  // Update preferences when user is loaded.
+  useEffect(() => {
+    if (!user) return;
+    setMirrorDimension(user.user_preference.mirror_dimension);
+  }, [user]);
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -121,65 +121,17 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
     }
   }, [mirrorDimension]);
 
-  // Update body classes when theme changes.
-  useEffect(() => {
-    updateBodyThemeClass(theme);
-  }, [theme]);
-
-  // Update theme when user changes.
-  useEffect(() => {
-    if (user?.user_preference.theme) {
-      setTheme(user.user_preference.theme);
-    }
-  }, [user]);
-
-  // Spawn trail behind cursor whenever it moves.
-  useEffect(() => {
-    const body = bodyRef.current;
-
-    function handleMouseMove(e: MouseEvent) {
-      // Create element, add class, position the element and add to body.
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('trail'); // global.scss
-      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
-      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
-      body.appendChild(sparkle);
-
-      // We need to clean all the elements the trail produces.
-      // If we don't do this, the <body> will be cluttered with thousands of elements.
-      // That would likely cause performance issues.
-      // This delay must be equal to or longer than the trail animation.
-      setTimeout(() => {
-        sparkle.remove();
-      }, 2000); // Remove the element after 1 second
-    }
-
-    body.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      body.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
   // =================================== //
   //          Helper functions           //
   // =================================== //
-
-  /** Simplified theme switching. Returns theme it switched to. */
-  function switchTheme(): ThemeValue {
-    if (theme === THEME.LIGHT) {
-      setTheme(THEME.DARK);
-      return THEME.DARK;
-    }
-
-    setTheme(THEME.LIGHT);
-    return THEME.LIGHT;
-  }
 
   /** Toggles mirrorDimension and returns the state it switched to. */
   function toggleMirrorDimension(): boolean {
     const toggledValue = !mirrorDimension;
     setMirrorDimension(toggledValue);
+    if (user) {
+      putUserPreference(user.user_preference.id, { mirror_dimension: toggledValue });
+    }
     return toggledValue;
   }
 
@@ -189,7 +141,6 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
-    ...values,
     theme,
     setTheme,
     switchTheme,
@@ -197,6 +148,9 @@ export function GlobalContextProvider({ children, values }: GlobalContextProvide
     setIsMobileNavigation,
     mirrorDimension,
     setMirrorDimension,
+    isMouseTrail: isMouseTrail,
+    setIsMouseTrail: setIsMouseTrail,
+    toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
   };

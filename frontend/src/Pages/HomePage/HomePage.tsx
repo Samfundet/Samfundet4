@@ -11,7 +11,7 @@ import styles from './HomePage.module.scss';
 export function HomePage() {
   const [elements, setHomeElements] = useState<HomePageElementDto[]>([]);
 
-  const { mirrorDimension, toggleMirrorDimension } = useGlobalContext();
+  const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -49,6 +49,7 @@ export function HomePage() {
 
         {/* Toggle mirror dimension, TODO: move to PreferencePage. */}
         <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />
+        <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
 
         {isLoading && skeleton}
 
