@@ -10,12 +10,21 @@ export const THEME = {
 /** Class added to body when mobile navigation is open. */
 export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
 
+/**
+ *  Class name for the mirror effect.
+ * An equivalent should be found in global.scss.
+ */
 export const MIRROR_CLASS = 'mirror-dimension';
 
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = typeof THEME[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
+
+/**
+ * The name/key of a valid data attribute in html to store the current theme value.
+ * An equivalent should be found in global.scss.
+ */
 export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
