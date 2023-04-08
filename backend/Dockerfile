@@ -10,6 +10,10 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PIPENV_VENV_IN_PROJECT=1
 
+# Dependency for billig development database
+RUN apt-get update
+RUN apt-get install sqlite3
+
 # Alias
 RUN echo 'alias la="ls -la"' >> ~/.bashrc
 

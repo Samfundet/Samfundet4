@@ -232,6 +232,9 @@ class Event(models.Model):
     registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
+    # Billig ID used as a foreign key to the billig database
+    billig_id = models.IntegerField(blank=True, null=True)
+
     # ======================== #
     #    Computed Properties   #
     # ======================== #
