@@ -135,7 +135,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
     yield 100, f'Created {len(billig_events)} billig events'
 
 
-# Main seed file
+# Main seed script entry point
 def seed() -> Iterable[Tuple[int, str]]:
 
     # Create database and schema

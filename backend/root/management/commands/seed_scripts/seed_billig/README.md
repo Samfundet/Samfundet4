@@ -1,43 +1,18 @@
-# Billig Development
+# Billig Development Database
 
 This folder contains files relating to emulating
 the billig system for local development.
 
-- `Dockerfile`: Runs billig development database using docker
 - `schema.sql`: Defines the database schema for billig_dev
-- `seed.py`: Seeds the billig database with dummy data
-- `create_billig.sh`: Script that creates the database & schema
+- `util.py`: Utility functions for seeding
+- `../billig.py`: The main seed script for billig_dev
 
-## Usage
+Since the billig database is separate from django (in production),
+we need to emulate it for development.
 
-### Docker (recommended)
+The seed script handles the creating of the sqlite3
+database using shell scripts, and seeds the tables
+directly using raw SQL queries.
 
-Run all docker files using docker-compose.
-Inside the root Samfundet4 directory (where `docker-compose.yml` is located), run:
 
-```bash 
-docker-compose up
-```
 
-Billig dev as well as the regular backend/frontend will start.
-
-### Locally without docker
-
-#### Creating the database
-
-Navigate to the `backend/billig_dev` directory and run:
-
-```bash 
-./create_billig.sh
-```
-
-In you're not permitted to do this,
-the file could not be marked as an executable. To fix, run:
-
-```bash 
-chmod +x ./create_billig.sh
-```
-
-Then try to run the shell script again.
-
-#### Seeding the database
