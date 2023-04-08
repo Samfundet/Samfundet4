@@ -7,6 +7,7 @@ from django.core.files.images import ImageFile
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
+from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -76,12 +77,37 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class EventCustomTicketSerializer(serializers.ModelSerializer):
-    """
-    Custom ticket types for event
-    """
 
     class Meta:
         model = EventCustomTicket
+        fields = '__all__'
+
+
+class BilligPriceGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BilligPriceGroup
+        fields = '__all__'
+
+
+class BilligTicketGroupSerializer(serializers.ModelSerializer):
+    # Almost sold out is public, used in frontend
+    is_almost_sold_out = serializers.BooleanField(read_only=True)
+
+    # Price groups in this ticket group
+    price_groups = BilligPriceGroupSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilligTicketGroup
+        # IMPORTANT: number of tickets and sold tickets should not be public!
+        exclude = ['num', 'num_sold']
+
+
+class BilligEventSerializer(serializers.ModelSerializer):
+    ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilligEvent
         fields = '__all__'
 
 
@@ -93,6 +119,9 @@ class EventSerializer(serializers.ModelSerializer):
     end_dt = serializers.DateTimeField(read_only=True)
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
+
+    # Billig event serializer
+    billig = serializers.SerializerMethodField(method_name='get_billig', read_only=True)
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
@@ -112,6 +141,19 @@ class EventSerializer(serializers.ModelSerializer):
         event = Event(**validated_data)
         event.save()
         return event
+
+    def get_billig(self, instance: Event) -> None | dict:
+        # Not a billig event, field is null
+        if instance.billig_id is None:
+            return None
+
+        # Get billig event from cirkus
+        billig_event = BilligEvent.get_by_id(instance.billig_id)
+        if billig_event is None:
+            return None
+
+        # Serialize it
+        return BilligEventSerializer(billig_event, many=False).data
 
 
 class EventGroupSerializer(serializers.ModelSerializer):

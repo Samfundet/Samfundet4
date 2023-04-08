@@ -93,6 +93,7 @@ def create_ticket_groups(event: dict) -> Tuple[List[dict], List[dict]]:
             'id': NEXT_TICKET_GROUP_ID,
             'event': event['id'],
             'name': f"'Billig - Ticket Group {NEXT_TICKET_GROUP_ID}'",
+            'ticket_limit': random.randint(1, 5),
             'num_sold': num_sold,
             'num': num,
         }

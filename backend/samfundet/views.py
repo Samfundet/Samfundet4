@@ -125,13 +125,15 @@ class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        events: dict = {}
-        for event in Event.objects.all().values():
-            _data_ = event['start_dt'].strftime('%Y-%m-%d')
-            events.setdefault(_data_, [])
-            events[_data_].append(event)
+        events_per_day: dict = {}
+        events = Event.objects.all()
+        serialized = EventSerializer(events, many=True).data
+        for event, serial in zip(events, serialized):
+            date = event.start_dt.strftime('%Y-%m-%d')
+            events_per_day.setdefault(date, [])
+            events_per_day[date].append(serial)
 
-        return Response(data=events)
+        return Response(data=events_per_day)
 
 
 class EventsUpcomingView(APIView):

@@ -23,6 +23,7 @@ CREATE TABLE [billig.ticket_group] (
     ticket_group int NOT NULL,
     event int NOT NULL,
     ticket_group_name varchar(140) NOT NULL,
+    ticket_limit int NOT NULL,
     num_sold int NOT NULL,
     num int NOT NULL,
     PRIMARY KEY (ticket_group),

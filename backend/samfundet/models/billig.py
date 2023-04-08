@@ -1,3 +1,4 @@
+from __future__ import annotations
 #
 # This file handles integration with database models in billig.
 # The data is collected from billig using raw SQL queries.
@@ -31,48 +32,47 @@
 # billig.theater
 
 from datetime import datetime, timedelta
+from typing import List
 
 from django.db import models
 from django.db.models import QuerySet
 
 # ======================== #
-#       Billig Event       #
+#   Billig Price Group     #
 # ======================== #
 
 
-class BilligEvent(models.Model):
+class BilligPriceGroup(models.Model):
     """
-    A billig event connected to information about ticket types
-    and sale periods. Paid events are connected to a billig event.
+    One price in a billig ticket group.
+    E.g.
+        TicketGroup: dinner & concert
+        PriceGroup: member / not a member
+
+    In most cases we only have one ticket group, and two price groups
+    for member/not a member, but sometimes billig is set up with more than this.
     """
 
     class Meta:
         managed = False
-        verbose_name = 'BilligEvent'
-        verbose_name_plural = 'BilligEvents'
+        verbose_name = 'BilligPriceGroup'
+        verbose_name_plural = 'BilligPriceGroups'
 
-    # Field 'id' is actually named 'event' in billig, but this is nicer
-    # Used as foreign key in billig_ticket_groups
+    # Field 'id' is actually named 'price_group' in billig, but this is nicer
     id = models.IntegerField(null=False, blank=False, primary_key=True)
 
-    # Field 'name' is actually 'event_name' in billig, but this is nicer
-    name = models.CharField(max_length=140, null=False, blank=False)
+    # The ticket group this price group is a part of
+    # Actually just named 'ticket_group' in billig
+    ticket_group_id = models.IntegerField(blank=False, null=False)
+
+    # Field 'name' is actually named 'price_group_name' in billig, but this is nicer
+    name = models.CharField(max_length=140, blank=False, null=False)
 
     # General info
-    sale_from = models.DateTimeField(blank=False, null=False)
-    sale_to = models.DateTimeField(blank=False, null=False)
-
-    # ======================== #
-    #       Utilities          #
-    # ======================== #
-
-    @property
-    def in_sale_period(self) -> bool:
-        return self.sale_from <= datetime.now() <= self.sale_to
-
-    @property
-    def ticket_groups(self) -> QuerySet:
-        return BilligTicketGroup.get_by_event_id(self.id)
+    can_be_put_on_card = models.BooleanField(blank=False, null=False)
+    membership_needed = models.BooleanField(blank=False, null=False)
+    netsale = models.BooleanField(blank=False, null=False)
+    price = models.IntegerField(blank=False, null=False)
 
     # ======================== #
     #         Queries          #
@@ -80,38 +80,27 @@ class BilligEvent(models.Model):
 
     # SQL data used for queries
     # These are the columns and table names in the billig db
-    QUERY_TABLE = 'billig.event'
+    QUERY_TABLE = '[billig.price_group]'
     QUERY_COLUMNS = """
-        event as id,
-        event_name as name,
-        sale_from,
-        sale_to
+        price_group as id,
+        ticket_group as ticket_group_id,
+        price_group_name as name,
+        membership_needed,
+        can_be_put_on_card,
+        netsale,
+        price
     """
 
     @classmethod
-    def get_relevant(cls) -> QuerySet:
-        # Exclude events which ended their sale more than a month ago
-        # There will be a lot of events here, so very slow to get all of them
-        one_month_ago = datetime.now() - timedelta(days=31)
-        one_month_ago_str = one_month_ago.strftime('%m.%d.%Y')
-        return cls.objects.raw(
-            f"""
-            SELECT  {cls.QUERY_COLUMNS}
-            FROM    {cls.QUERY_TABLE}
-            WHERE
-                hidden = false AND
-                sale_to >= {one_month_ago_str};
+    def get_by_ticket_group_id(cls, ticket_group_id: int) -> List[BilligPriceGroup]:
+        return list(
+            cls.objects.raw(
+                f"""
+                SELECT  {cls.QUERY_COLUMNS}
+                FROM    {cls.QUERY_TABLE}
+                WHERE   ticket_group = {int(ticket_group_id)};
             """
-        )
-
-    @classmethod
-    def get_by_id(cls, id: int) -> QuerySet:
-        return cls.objects.raw(
-            f"""
-            SELECT  {cls.QUERY_COLUMNS}
-            FROM    {cls.QUERY_TABLE}
-            WHERE   event = {int(id)};
-            """
+            )
         )
 
 
@@ -152,7 +141,7 @@ class BilligTicketGroup(models.Model):
     # ======================== #
 
     @property
-    def price_groups(self) -> QuerySet:
+    def price_groups(self) -> List[BilligPriceGroup]:
         return BilligPriceGroup.get_by_ticket_group_id(self.id)
 
     @property
@@ -174,7 +163,7 @@ class BilligTicketGroup(models.Model):
 
     # SQL data used for queries
     # These are the columns and table names in the billig db
-    QUERY_TABLE = 'billig.ticket_group'
+    QUERY_TABLE = '[billig.ticket_group]'
     QUERY_COLUMNS = """
         ticket_group as id,
         event as event_id,
@@ -185,52 +174,56 @@ class BilligTicketGroup(models.Model):
     """
 
     @classmethod
-    def get_by_event_id(cls, event_id: int) -> QuerySet:
-        return cls.objects.raw(
-            f"""
+    def get_by_event_id(cls, event_id: int) -> List[BilligTicketGroup]:
+        return list(
+            cls.objects.raw(
+                f"""
                 SELECT  {cls.QUERY_COLUMNS}
                 FROM    {cls.QUERY_TABLE}
                 WHERE   event_id = {int(event_id)};
             """
+            )
         )
 
 
 # ======================== #
-#   Billig Price Group     #
+#       Billig Event       #
 # ======================== #
 
 
-class BilligPriceGroup(models.Model):
+class BilligEvent(models.Model):
     """
-    One price in a billig ticket group.
-    E.g.
-        TicketGroup: dinner & concert
-        PriceGroup: member / not a member
-
-    In most cases we only have one ticket group, and two price groups
-    for member/not a member, but sometimes billig is set up with more than this.
+    A billig event connected to information about ticket types
+    and sale periods. Paid events are connected to a billig event.
     """
 
     class Meta:
         managed = False
-        verbose_name = 'BilligPriceGroup'
-        verbose_name_plural = 'BilligPriceGroups'
+        verbose_name = 'BilligEvent'
+        verbose_name_plural = 'BilligEvents'
 
-    # Field 'id' is actually named 'price_group' in billig, but this is nicer
+    # Field 'id' is actually named 'event' in billig, but this is nicer
+    # Used as foreign key in billig_ticket_groups
     id = models.IntegerField(null=False, blank=False, primary_key=True)
 
-    # The ticket group this price group is a part of
-    # Actually just named 'ticket_group' in billig
-    ticket_group_id = models.IntegerField(blank=False, null=False)
-
-    # Field 'name' is actually named 'price_group_name' in billig, but this is nicer
-    name = models.IntegerField(blank=False, null=False)
+    # Field 'name' is actually 'event_name' in billig, but this is nicer
+    name = models.CharField(max_length=140, null=False, blank=False)
 
     # General info
-    can_be_put_on_card = models.BooleanField(blank=False, null=False)
-    membership_needed = models.BooleanField(blank=False, null=False)
-    netsale = models.BooleanField(blank=False, null=False)
-    price = models.IntegerField(blank=False, null=False)
+    sale_from = models.DateTimeField(blank=False, null=False)
+    sale_to = models.DateTimeField(blank=False, null=False)
+
+    # ======================== #
+    #       Utilities          #
+    # ======================== #
+
+    @property
+    def in_sale_period(self) -> bool:
+        return self.sale_from <= datetime.now() <= self.sale_to
+
+    @property
+    def ticket_groups(self) -> List[BilligTicketGroup]:
+        return BilligTicketGroup.get_by_event_id(self.id)
 
     # ======================== #
     #         Queries          #
@@ -238,23 +231,40 @@ class BilligPriceGroup(models.Model):
 
     # SQL data used for queries
     # These are the columns and table names in the billig db
-    QUERY_TABLE = 'billig.price_group'
+    QUERY_TABLE = '[billig.event]'
     QUERY_COLUMNS = """
-        price_group as id,
-        ticket_group as ticket_group_id,
-        price_group_name as name,
-        membership_needed,
-        can_be_put_on_card,
-        netsale,
-        price
+        event as id,
+        event_name as name,
+        sale_from,
+        sale_to
     """
 
     @classmethod
-    def get_by_ticket_group_id(cls, ticket_group_id: int) -> QuerySet:
-        return cls.objects.raw(
-            f"""
-                    SELECT  {cls.QUERY_COLUMNS}
-                    FROM    {cls.QUERY_TABLE}
-                    WHERE   ticket_group = {int(ticket_group_id)};
-                """
+    def get_relevant(cls) -> List[BilligEvent]:
+        # Exclude events which ended their sale more than a month ago
+        # There will be a lot of events here, so very slow to get all of them
+        one_month_ago = datetime.now() - timedelta(days=31)
+        one_month_ago_str = one_month_ago.strftime('%m.%d.%Y')
+        return list(
+            cls.objects.raw(
+                f"""
+            SELECT  {cls.QUERY_COLUMNS}
+            FROM    {cls.QUERY_TABLE}
+            WHERE
+                hidden = false AND
+                sale_to >= {one_month_ago_str};
+            """
+            )
         )
+
+    @classmethod
+    def get_by_id(cls, id: int) -> BilligEvent | None:
+        events = list(
+            cls.objects.
+            raw(f"""
+            SELECT  {cls.QUERY_COLUMNS}
+            FROM    {cls.QUERY_TABLE}
+            WHERE   event = {int(id)};
+            """)
+        )
+        return events[0] if len(events) > 0 else None
