@@ -2,31 +2,32 @@ import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
 import { getCsrfToken, getKeyValues } from '~/api';
-import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, THEME, THEME_KEY, ThemeValue, XCSRFTOKEN } from '~/constants';
-import { useMouseTrail } from '~/hooks';
+import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { useMouseTrail, useTheme } from '~/hooks';
 import { Children, KeyValueMap, SetState } from '~/types';
-
-export function updateBodyThemeClass(theme: ThemeValue) {
-  // Set theme as data attr on body.
-  document.body.setAttribute(THEME_KEY, theme);
-  // Remember theme in localStorage between refreshes.
-  localStorage.setItem(THEME_KEY, theme);
-}
 
 /**
  * Define which values the global context can contain.
  */
 type GlobalContextProps = {
+  // Theme
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
+
+  // Mirror dimention
   mirrorDimension: boolean;
   setMirrorDimension: SetState<boolean>;
+  toggleMirrorDimension: () => boolean;
+
+  // Mouse trail
   isMouseTrail: boolean;
   setIsMouseTrail: SetState<boolean>;
-  toggleMirrorDimension: () => boolean;
+
+  // Navbar
   isMobileNavigation: boolean;
   setIsMobileNavigation: SetState<boolean>;
+
   keyValues: KeyValueMap;
 };
 
@@ -61,17 +62,9 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
   //        Constants and states         //
   // =================================== //
 
-  // Get theme from localStorage.
-  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
-
-  // Determine browser preference.
-  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
-  const initialTheme = storedTheme || detectedTheme;
-
   const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
 
-  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+  const { theme, setTheme, switchTheme } = useTheme();
 
   // Determines if navbar for mobile is shown.
   const [isMobileNavigation, setIsMobileNavigation] = useState(false);
@@ -121,32 +114,9 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     }
   }, [mirrorDimension]);
 
-  // Update body classes when theme changes.
-  useEffect(() => {
-    updateBodyThemeClass(theme);
-  }, [theme]);
-
-  // Update theme when user changes.
-  useEffect(() => {
-    if (user?.user_preference.theme) {
-      setTheme(user.user_preference.theme);
-    }
-  }, [user]);
-
   // =================================== //
   //          Helper functions           //
   // =================================== //
-
-  /** Simplified theme switching. Returns theme it switched to. */
-  function switchTheme(): ThemeValue {
-    if (theme === THEME.LIGHT) {
-      setTheme(THEME.DARK);
-      return THEME.DARK;
-    }
-
-    setTheme(THEME.LIGHT);
-    return THEME.LIGHT;
-  }
 
   /** Toggles mirrorDimension and returns the state it switched to. */
   function toggleMirrorDimension(): boolean {

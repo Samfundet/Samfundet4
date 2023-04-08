@@ -5,8 +5,8 @@ import { useAuthContext } from '~/AuthContext';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { getTextItem } from '~/api';
 import { Key, SetState } from '~/types';
-import { hasPerm, isTruthy } from '~/utils';
-import { THEME, desktopBpLower, mobileBpUpper } from './constants';
+import { hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
+import { THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -238,4 +238,54 @@ export function useMouseTrail(initial = false): [boolean, SetState<boolean>] {
   }, [container, isMouseTrail]);
 
   return [isMouseTrail, setIsMouseTrail];
+}
+
+/** Return type for hook useTheme. */
+type UseTheme = {
+  theme: ThemeValue;
+  setTheme: SetState<ThemeValue>;
+  switchTheme: () => ThemeValue;
+};
+
+/**
+ * Grouped functionality for theme.
+ * Only meant to be used in GlobalContextProvider.
+ */
+export function useTheme(): UseTheme {
+  const { user } = useAuthContext();
+
+  // Get theme from localStorage.
+  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
+
+  // Determine browser preference.
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
+  const initialTheme = storedTheme || detectedTheme;
+
+  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+
+  // Update body classes when theme changes.
+  useEffect(() => {
+    updateBodyThemeClass(theme);
+  }, [theme]);
+
+  // Update theme when user changes.
+  useEffect(() => {
+    if (user?.user_preference.theme) {
+      setTheme(user.user_preference.theme);
+    }
+  }, [user]);
+
+  /** Simplified theme switching. Returns theme it switched to. */
+  function switchTheme(): ThemeValue {
+    if (theme === THEME.LIGHT) {
+      setTheme(THEME.DARK);
+      return THEME.DARK;
+    }
+
+    setTheme(THEME.LIGHT);
+    return THEME.LIGHT;
+  }
+
+  return { theme, setTheme, switchTheme };
 }

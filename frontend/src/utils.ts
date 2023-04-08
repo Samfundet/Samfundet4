@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import { CSSProperties } from 'react';
+import { THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
 import { Day, EventTicketType } from './types';
@@ -218,4 +219,14 @@ export function queryDtoCustom<T extends Record<string, unknown>>(
     // Return true if all keywords are included
     return keywords.reduce((othersOK, keyword) => othersOK && combinedString.includes(keyword), true);
   });
+}
+
+/**
+ * Function to change the theme.
+ */
+export function updateBodyThemeClass(theme: ThemeValue): void {
+  // Set theme as data attr on body.
+  document.body.setAttribute(THEME_KEY, theme);
+  // Remember theme in localStorage between refreshes.
+  localStorage.setItem(THEME_KEY, theme);
 }
