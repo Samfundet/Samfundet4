@@ -23,6 +23,7 @@ type GlobalContextProps = {
   // Mouse trail
   isMouseTrail: boolean;
   setIsMouseTrail: SetState<boolean>;
+  toggleMouseTrail: () => boolean;
 
   // Navbar
   isMobileNavigation: boolean;
@@ -71,12 +72,18 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   const { user } = useAuthContext();
 
-  const [mirrorDimension, setMirrorDimension] = useState<boolean>(user?.user_preference.mirror_dimension ?? false);
-  const [isMouseTrail, setIsMouseTrail] = useMouseTrail(false); // TODO: UserPreference
+  const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
+  const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
   // =================================== //
   //               Effects               //
   // =================================== //
+
+  // Update preferences when user is loaded.
+  useEffect(() => {
+    if (!user) return;
+    setMirrorDimension(user.user_preference.mirror_dimension);
+  }, [user]);
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -140,6 +147,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
     setMirrorDimension,
     isMouseTrail: isMouseTrail,
     setIsMouseTrail: setIsMouseTrail,
+    toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
   };
