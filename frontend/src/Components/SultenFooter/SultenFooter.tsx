@@ -3,6 +3,8 @@ import { ROUTES } from '~/routes';
 import styles from './SultenFooter.module.scss';
 
 export function SultenFooter() {
+  const sultenMail = 'mailto:lyche@samfundet.no';
+
   return (
     <div className={styles.footer_container}>
       <h2 className={styles.header}>Lyche</h2>
@@ -15,11 +17,11 @@ export function SultenFooter() {
         </a>
       </div>
       <div className={styles.footer_item}>
-        <a href="mailto:lyche@samfundet.no">
+        <a href={`mailto:${sultenMail}`}>
           <Icon icon="material-symbols:mail" className={styles.icon}></Icon>
         </a>
-        <a className={styles.footer_link} href="mailto:lyche@samfundet.no">
-          lyche@samfundet.no
+        <a className={styles.footer_link} href={`mailto:${sultenMail}`}>
+          {sultenMail}
         </a>
       </div>
       <div className={styles.footer_item}>
