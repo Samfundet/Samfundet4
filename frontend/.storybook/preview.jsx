@@ -2,14 +2,11 @@ import '~/global.scss';
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { updateBodyThemeClass } from '~/GlobalContextProvider';
 import { THEME } from '~/constants';
-// Neccessary import for translations
-import '~/i18n/i18n';
+import { updateBodyThemeClass } from '~/utils';
 
-// console.log(GlobalContextProvider, AuthContextProvider);
+import '~/i18n/i18n'; // Neccessary import for translations.
 
-// Wrap your stories in the I18nextProvider component
 const WithI18next = (Story, context) => {
   const { locale } = context.globals;
   const { i18n } = useTranslation();
@@ -51,7 +48,7 @@ const WithTheme = (Story, context) => {
   return <Story />;
 };
 
-// export decorators for storybook to wrap your stories in
+// Export decorators for storybook to wrap your stories in.
 export const decorators = [WithI18next, WithTheme];
 
 // Create a global variable called locale in storybook
