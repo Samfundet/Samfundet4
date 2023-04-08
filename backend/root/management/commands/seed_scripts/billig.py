@@ -31,7 +31,6 @@ COUNT = 20
 DB_NAME = db.connections.databases['billig']['NAME']
 SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 
-
 # ======================== #
 #        Database          #
 # ======================== #
@@ -79,6 +78,7 @@ def insert_db(table_name: str, rows: List[dict]) -> bool:
 # ======================== #
 #         Seeding          #
 # ======================== #
+
 
 def seed_tables() -> Iterable[Tuple[int, str]]:
     # Database rows to seed (represented as dicts)

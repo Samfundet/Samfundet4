@@ -1,4 +1,3 @@
-
 import random
 from django.utils import timezone
 from typing import Tuple, List
@@ -61,15 +60,17 @@ def create_price_groups(ticket_group: dict) -> List[dict]:
     n_price_groups = random.randint(MIN_PRICE_GROUPS, MAX_PRICE_GROUPS)
     for _ in range(n_price_groups):
         NEXT_PRICE_GROUP_ID += 1
-        price_groups.append({
-            'id': NEXT_PRICE_GROUP_ID,
-            'ticket_group': ticket_group['id'],
-            'name': f"'Billig - Price Group {NEXT_PRICE_GROUP_ID}'",
-            'membership_needed': 'true' if random.randint(0, 1) == 0 else 'false',
-            'can_be_put_on_card': 'true' if random.randint(0, 10) != 0 else 'false',
-            'netsale': 'true' if random.randint(0, 10) != 0 else 'false',
-            'price': random.randint(50, 300),
-        })
+        price_groups.append(
+            {
+                'id': NEXT_PRICE_GROUP_ID,
+                'ticket_group': ticket_group['id'],
+                'name': f"'Billig - Price Group {NEXT_PRICE_GROUP_ID}'",
+                'membership_needed': 'true' if random.randint(0, 1) == 0 else 'false',
+                'can_be_put_on_card': 'true' if random.randint(0, 10) != 0 else 'false',
+                'netsale': 'true' if random.randint(0, 10) != 0 else 'false',
+                'price': random.randint(50, 300),
+            }
+        )
     return price_groups
 
 
