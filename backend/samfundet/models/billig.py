@@ -87,8 +87,6 @@ class BilligEvent(models.Model):
         sale_from,
         sale_to
     """
-    # Billig has a hidden column, don't include these
-    QUERY_CONDITION = ''
 
     @classmethod
     def get_relevant(cls) -> QuerySet:
