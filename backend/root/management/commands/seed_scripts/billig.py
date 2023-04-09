@@ -6,32 +6,33 @@
 # database simulating the real billig in prod (cirkus).
 #
 # The seed script generates the database and schema
-# in sqlite3 by running terminal commands, and seeds
-# the database with raw SQL queries.
+# in sqlite3 by running terminal commands, but seeds
+# the database with the django models as usual.
 #
 
 import os
 import subprocess
-from typing import Tuple, Iterable, List
+from typing import Tuple, Iterable
 
+from django.db import transaction
 from django.utils import timezone
 from django import db
 
+from samfundet.models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from samfundet.models.event import Event, EventTicketType
 
 from .seed_billig import util
 
-# Number of billig events to create
-# in addition to those connected to django events
-# with ticket type billig
+# Number of billig events to create in addition
+# to those connected to django events (ticket type billig)
 COUNT = 20
 
-# Get django database name from config (see dev.py)
+# Get django database name from config (see database setup in dev.py)
 DB_NAME = db.connections.databases['billig']['NAME']
 SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 
 # ======================== #
-#        Database          #
+#     Create Database      #
 # ======================== #
 
 
@@ -58,80 +59,64 @@ def create_db() -> Tuple[bool, str]:
     return True, 'Created database and schema'
 
 
-def insert_db(table_name: str, rows: List[dict]) -> bool:
-    """
-    Utility for inserting values into the database
-    """
-    # Generate query values
-    query_rows = []
-    for row in rows:
-        vals = ', '.join([str(val) for val in row.values()])
-        query_rows.append(f'({vals})')
-
-    # Execute sql query
-    query = f'INSERT INTO [{table_name}] VALUES {", ".join(query_rows)};'
-    ret = subprocess.run(f'echo "{query}" | sqlite3 "{DB_NAME}"', shell=True)
-    return ret.returncode == 0
-
-
 # ======================== #
 #         Seeding          #
 # ======================== #
 
 
 def seed_tables() -> Iterable[Tuple[int, str]]:
-    # Database rows to seed (represented as dicts)
-    billig_events: List[dict] = []
-    billig_ticket_groups: List[dict] = []
-    billig_price_groups: List[dict] = []
+
+    events, tickets, prices = [], [], []
 
     # Create a few billig events that are not used
-    billig_events.extend([util.create_billig_event() for _ in range(COUNT)])
-    yield 10, f'Created ${COUNT} unused billig events'
+    events.extend([util.create_event() for _ in range(COUNT)])
+    yield 10, f'Created {COUNT} unused billig events'
 
-    # Create billig events for events with billig ticket type
+    # Find django/samf4 events with billig ticket type
     events_with_billig = Event.objects.filter(ticket_type=EventTicketType.BILLIG)
-    for i, event in enumerate(list(events_with_billig)):
-        # Create billig event dict
-        billig_event = util.create_billig_event(
-            name=f'Billig - {event.title_nb}',
-            sale_from=event.start_dt - timezone.timedelta(days=-90),
-            sale_to=event.start_dt + timezone.timedelta(minutes=30),
-            hidden=False
-        )
-        billig_events.append(billig_event)
-        # Also set billig ID in django event
-        event.billig_id = billig_event['id']
-        event.save()
-        # Progress return for smooth loading bar
-        progress = 10 + int(i / len(events_with_billig) * 80)
-        yield progress, 'Connecting billig to existing events'
 
-    # Create ticket groups for events
-    for event in billig_events:
-        tickets, prices = util.create_ticket_groups(event)
-        billig_ticket_groups.extend(tickets)
-        billig_price_groups.extend(prices)
+    # Run atomic transaction. This prevents save() from running every
+    # iteration and is about 69 times faster (rough estimate)
+    with transaction.atomic():
+        for i, event in enumerate(list(events_with_billig)):
+            # Create billig event
+            billig_event = util.create_event(
+                name=f'Billig - {event.title_nb}',
+                sale_from=event.start_dt - timezone.timedelta(days=-90),
+                sale_to=event.start_dt + timezone.timedelta(minutes=30),
+                hidden=False
+            )
+            events.append(billig_event)
 
-    # Insert events
-    if not insert_db('billig.event', billig_events):
-        yield 90, 'Failed to insert billig events'
-        return
-    yield 90, 'Added ticket groups'
+            # Set billig ID in django event
+            # (This is not a real foreign key, see Event model)
+            event.billig_id = billig_event.id
+            event.save()
 
-    # Insert ticket groups
-    if not insert_db('billig.ticket_group', billig_ticket_groups):
-        yield 95, 'Failed to insert ticket groups'
-        return
-    yield 95, 'Added ticket groups'
+            # Progress return for an ultra smooth loading bar (up to 80%)
+            progress = 10 + int(i / len(events_with_billig) * 70)
+            yield progress, 'Connecting billig to existing events'
 
-    # Insert price groups
-    if not insert_db('billig.price_group', billig_price_groups):
-        yield 95, 'Failed to insert price groups'
-        return
+    # Saving must be done in this order because billig foreign keys
+    # depend on each other. All are done in bulk for speed.
+
+    # Save billig events
+    BilligEvent.objects.bulk_create(events)
+    yield 80, 'Saved events'
+
+    # Create and save ticket groups
+    for event in events:
+        tickets.extend(util.create_tickets(event))
+    BilligTicketGroup.objects.bulk_create(tickets)
+    yield 90, 'Saved tickets'
+
+    # Create and save price groups
+    for ticket in tickets:
+        prices.extend(util.create_prices(ticket))
+    BilligPriceGroup.objects.bulk_create(prices)
 
     # Done!
-    yield 100, f'Created {len(billig_events)} billig events'
+    yield 100, f'Created {len(events)} billig events'
 
 
 # Main seed script entry point
@@ -145,6 +130,6 @@ def seed() -> Iterable[Tuple[int, str]]:
         yield 0, message
         return
 
-    # Seed
+    # Seed billig database
     for percent, message in seed_tables():
         yield percent, message

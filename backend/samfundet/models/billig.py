@@ -61,8 +61,9 @@ class BilligEvent(models.Model):
     sale_to = models.DateTimeField(blank=False, null=False)
     hidden = models.BooleanField(blank=False, null=False)
 
-    # Due to the relation in BilligTicketGroup, this model also
-    # have a 'ticket_groups' field not defined here
+    # BilligEvent model instances will also have access
+    # to a list field 'ticket_groups' not defined here.
+    # See 'related_field' in BilligTicketGroup
 
     # ======================== #
     #       Utilities          #

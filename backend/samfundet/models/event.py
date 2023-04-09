@@ -279,7 +279,6 @@ class Event(models.Model):
             return None
         if hasattr(self, '_billig'):
             return self._billig
-        print("Warn: own fetch")
         self._billig = BilligEvent.objects.get(event=self.billig_id)
         return self._billig
 

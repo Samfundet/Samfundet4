@@ -1,7 +1,8 @@
 import random
-from typing import Any
 
 from django.utils import timezone
+
+from samfundet.models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 
 # ======================== #
 #  Billig Seed Utilities   #
@@ -20,21 +21,22 @@ MIN_TICKET_COUNT = 10
 MAX_TICKET_COUNT = 600
 
 # Global counters to make unique billig IDs
-# Could have used SQL auto key, but this is easier to seed foreign keys with pure SQL
+# Could have used auto primary key, but this
+# makes it easier to seed and name stuff
 NEXT_EVENT_ID = 0
 NEXT_TICKET_GROUP_ID = 0
 NEXT_PRICE_GROUP_ID = 0
 
 
-def create_billig_event(
+def create_event(
     name: str | None = None,
     sale_from: timezone.datetime | None = None,
     sale_to: timezone.datetime | None = None,
     hidden: bool | None = None,
-) -> dict[str, Any]:
+) -> BilligEvent:
     """
-    Utility for creating a dict representing a billig event.
-    This makes it much easier to use and convert to SQL queries later.
+    Utility for creating a BilligEvent with some default values.
+    Returns event without saving it!
     """
     global NEXT_EVENT_ID
     NEXT_EVENT_ID += 1
@@ -45,62 +47,67 @@ def create_billig_event(
     sale_to = sale_to or sale_from + timezone.timedelta(days=30)
     hidden = random.randint(0, 25) == 0 if hidden is None else hidden
 
-    return {
-        'id': NEXT_EVENT_ID,
-        'name': f"'{name}'",
-        'sale_from': f"'{sale_from.strftime('%d.%m.%Y')}'",
-        'sale_to': f"'{sale_to.strftime('%d.%m.%Y')}'",
-        'hidden': 'true' if hidden else 'false',
-    }
+    return BilligEvent(
+        id=NEXT_EVENT_ID,
+        event_name=name,
+        sale_from=sale_from,
+        sale_to=sale_to,
+        hidden=hidden,
+    )
 
 
-def create_price_groups(ticket_group: dict) -> list[dict[str, Any]]:
+def create_prices(ticket: BilligTicketGroup) -> list[BilligPriceGroup]:
+    """
+    Utility function to create prices for a ticket group.
+    Returns list of price groups without saving them.
+    """
     global NEXT_PRICE_GROUP_ID
 
-    price_groups: list[dict[str, Any]] = []
+    # Loop for some number of times
+    price_groups: list[BilligPriceGroup] = []
     n_price_groups = random.randint(MIN_PRICE_GROUPS, MAX_PRICE_GROUPS)
     for _ in range(n_price_groups):
+        # Create a price group
         NEXT_PRICE_GROUP_ID += 1
         price_groups.append(
-            {
-                'id': NEXT_PRICE_GROUP_ID,
-                'ticket_group': ticket_group['id'],
-                'name': f"'Billig - Price Group {NEXT_PRICE_GROUP_ID}'",
-                'membership_needed': 'true' if random.randint(0, 1) == 0 else 'false',
-                'can_be_put_on_card': 'true' if random.randint(0, 10) != 0 else 'false',
-                'netsale': 'true' if random.randint(0, 10) != 0 else 'false',
-                'price': random.randint(50, 300),
-            }
+            BilligPriceGroup(
+                id=NEXT_PRICE_GROUP_ID,
+                ticket_group=ticket,
+                name=f'Billig - Price Group {NEXT_PRICE_GROUP_ID}',
+                membership_needed=random.randint(0, 1) == 0,
+                can_be_put_on_card=random.randint(0, 10) != 0,
+                netsale=random.randint(0, 10) != 0,
+                price=random.randint(50, 300),
+            )
         )
+
     return price_groups
 
 
-def create_ticket_groups(event: dict) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def create_tickets(event: BilligEvent) -> list[BilligTicketGroup]:
     """
-    Utility function to create ticket and price group dicts for a billig event (dictionary)
-    Returns a tuple of (ticket_groups, price_groups).
+    Utility function to create tickets for an event
+    Returns list of tickets without saving them.
     """
-    global NEXT_TICKET_GROUP_ID, NEXT_PRICE_GROUP_ID
+    global NEXT_TICKET_GROUP_ID
 
     # Loop to create ticket groups
-    ticket_groups, price_groups = [], []
+    ticket_groups: list[BilligTicketGroup] = []
     n_ticket_groups = random.randint(MIN_TICKET_GROUPS, MAX_TICKET_GROUPS)
     for _ in range(n_ticket_groups):
-        # Create ticket group
+        # Create a ticket group
         NEXT_TICKET_GROUP_ID += 1
         num = random.randint(MIN_TICKET_COUNT, MAX_TICKET_COUNT)
         num_sold = int(num * random.random())
-        ticket_group = {
-            'id': NEXT_TICKET_GROUP_ID,
-            'event': event['id'],
-            'name': f"'Billig - Ticket Group {NEXT_TICKET_GROUP_ID}'",
-            'ticket_limit': random.randint(1, 5),
-            'num_sold': num_sold,
-            'num': num,
-        }
-        ticket_groups.append(ticket_group)
+        ticket_groups.append(
+            BilligTicketGroup(
+                id=NEXT_TICKET_GROUP_ID,
+                event=event,
+                name=f'Billig - Ticket Group {NEXT_TICKET_GROUP_ID}',
+                ticket_limit=random.randint(1, 5),
+                num_sold=num_sold,
+                num=num,
+            )
+        )
 
-        # Add price groups for this ticket group
-        price_groups.extend(create_price_groups(ticket_group))
-
-    return ticket_groups, price_groups
+    return ticket_groups

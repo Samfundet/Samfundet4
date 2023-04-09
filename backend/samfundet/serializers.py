@@ -113,38 +113,12 @@ class BilligEventSerializer(serializers.ModelSerializer):
 
 class EventListSerializer(serializers.ListSerializer):
     """
-    Speedup fetching of billig events for lists to serialize
+    Speedup fetching of billig events for lists serialization
     """
 
     def to_representation(self, events: list[Event]) -> list[str]:
-        # Fetch all billig events and related tickets/prices
-        # billig_ids = [e.billig_id for e in events if e.billig_id is not None]
-        # billig_events = BilligEvent.objects.filter(event__in=billig_ids)
-        # billig_events.prefetch_related('ticket_groups')
-        # print("Got billigs!", len(billig_events))
-        # for e in billig_events:
-        #     print("- TGS:", e.ticket_groups)
-        #
-        # links = BilligEvent._meta.get_fields()
-        # print("links:", links)
-        from django.db.models.fields.reverse_related import ManyToOneRel
-
-        # billig_events.prefetch_related('ticket_groups')
-        # billig_events.prefetch_related('')
-        # BilligEvent.fetch_related(billig_events, get_tickets=True, get_prices=True)
-
-        # Attach billig events to events
-        # for event in events:
-        #     for billig in billig_events:
-        #         if event.billig_id == billig.event:
-        #             event.billig = billig
-        #             break
-
+        # Use child event serializer as normal after prefetching billig for all events
         Event.prefetch_billig(events, tickets=True, prices=True)
-        for e in events:
-            if hasattr(e, '_billig'):
-                print("ok after")
-        # Use child event serializer as normal after fetching billig
         return [self.child.to_representation(e) for e in events]
 
 
@@ -153,7 +127,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         list_serializer_class = EventListSerializer
-        # Registration object contains sensitive data!
+        # Warning: registration object contains sensitive data, don't include it!
         exclude = ['image', 'registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
