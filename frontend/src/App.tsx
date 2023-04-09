@@ -29,7 +29,8 @@ export function App() {
           </Helmet>
         )}
         <AppRoutes />
-        <ToastContainer />
+        {/* Move down from navbar. */}
+        <ToastContainer style={{ marginTop: '45px' }} />
       </BrowserRouter>
     </HelmetProvider>
   );
