@@ -72,6 +72,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_opening_hours]: 'Åpningstider',
   [KEY.common_about_samfundet]: 'Om Samfundet',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
+  [KEY.common_delete_successful]: 'Slettingen var vellykket',
+  [KEY.common_update_successful]: 'Oppdateringen var vellykket',
+  [KEY.common_see_in_django_admin]: 'Se i django admin-panel',
+  [KEY.common_creation_successful]: 'Opprettelsen var vellykket',
+  [KEY.common_something_went_wrong]: 'Noe gikk galt',
 
   // Price groups
   [KEY.common_ticket_type_billig]: 'Betalt',
@@ -139,6 +144,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.sulten_page_more_about_us]: 'Mer om oss',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
+  [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -180,7 +186,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tags]: 'Tags',
   [KEY.common_menu]: 'Menu',
   [KEY.common_name]: 'Name',
-  [KEY.common_edit]: 'Edit',
   [KEY.common_next]: 'Next',
   [KEY.common_gang]: 'Group',
   [KEY.common_image]: 'Image',
@@ -214,6 +219,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
+  [KEY.common_delete_successful]: 'Deletion was successful',
+  [KEY.common_update_successful]: 'The update was successful',
+  [KEY.common_see_in_django_admin]: 'See in django admin-panel',
+  [KEY.common_creation_successful]: 'Successfully created',
+  [KEY.common_something_went_wrong]: 'Something went wrong',
 
   // Price groups
   [KEY.common_ticket_type_billig]: 'Paid',
@@ -264,6 +274,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
+  [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
 
   // Sulten / Lyche:
   [KEY.sulten_page_see_menu]: 'See our menu',

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { Link, SamfundetLogoSpinner } from '~/Components';
 import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '~/Components/ExpandableList';
 import {
@@ -11,27 +12,29 @@ import {
 } from '~/Components/ExpandableList/utils';
 import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
-import { LANGUAGES } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
+import { dbT } from '~/utils';
 import styles from './SaksdokumenterPage.module.scss';
 
 export function SaksdokumenterPage() {
   const [loading, setLoading] = useState(true);
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
-  const isNorwegian = i18n.language === LANGUAGES.NB;
 
   useEffect(() => {
-    getSaksdokumenter().then((data) => {
-      setSaksdokumenter(data);
-      setCategories([...new Set(data.map((saksdokument) => saksdokument.category))]);
-      setLoading(false);
-    });
+    getSaksdokumenter()
+      .then((data) => {
+        setSaksdokumenter(data);
+        setCategories([...new Set(data.map((saksdokument) => saksdokument.category))]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function titleForSaksdokument(saksdokument: SaksdokumentDto) {
-    return isNorwegian ? saksdokument.title_nb : saksdokument.title_en;
-  }
 
   function saksdokumentList(
     category: string | undefined,
@@ -45,7 +48,7 @@ export function SaksdokumenterPage() {
             {saksdokument.publication_date && getFormattedDate(saksdokument.publication_date)}
           </p>
           <Link url={saksdokument.url ?? ''} target="backend" className={styles.child}>
-            {titleForSaksdokument(saksdokument)}
+            {dbT(saksdokument, 'title')}
           </Link>
         </Child>
       </a>

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
+import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -20,10 +21,10 @@ import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
 
 type EventCreatorStep = {
-  key: string; // Unique key
-  title_nb: string; // Tab title norwegian
-  title_en: string; // Tab title english
-  customIcon?: string; // Custom icon in tab bar
+  key: string; // Unique key.
+  title_nb: string; // Tab title norwegian.
+  title_en: string; // Tab title english.
+  customIcon?: string; // Custom icon in tab bar.
   template: ReactElement;
 };
 
@@ -31,7 +32,7 @@ export function EventCreatorAdminPage() {
   const [didSave, setDidSave] = useState(false);
   const [event, setEvent] = useState<Partial<EventDto>>();
 
-  // TODO this is temporary and must be fetched from API when categories are implemented
+  // TODO this is temporary and must be fetched from API when categories are implemented.
   const eventCategoryOptions: DropDownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
@@ -44,7 +45,7 @@ export function EventCreatorAdminPage() {
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
 
   const createSteps: EventCreatorStep[] = [
-    // Name and text descriptions
+    // Name and text descriptions.
     {
       key: 'text',
       title_nb: 'Tittel/beskrivelse',
@@ -85,7 +86,7 @@ export function EventCreatorAdminPage() {
         </>
       ),
     },
-    // Payment options (not implemented yet)
+    // Payment options (not implemented yet).
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
@@ -96,14 +97,14 @@ export function EventCreatorAdminPage() {
         </>
       ),
     },
-    // Graphics
+    // Graphics.
     {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
       template: <SamfFormField field="image" type="image" />,
     },
-    // Summary
+    // Summary.
     {
       key: 'summary',
       title_nb: 'Oppsummering',
@@ -113,7 +114,7 @@ export function EventCreatorAdminPage() {
     },
   ];
 
-  // Editor state
+  // Editor state.
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
   // Ready to save?
@@ -129,10 +130,12 @@ export function EventCreatorAdminPage() {
     postEvent(event as EventDto)
       .then(() => {
         setDidSave(true);
+        toast.success(t(KEY.common_creation_successful));
       })
       .catch((error) => {
-        console.log(JSON.stringify(error.response.data));
-        console.log('FAIL: ' + JSON.stringify(error));
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(JSON.stringify(error.response.data));
+        console.error('FAIL: ' + JSON.stringify(error));
       });
   }
 

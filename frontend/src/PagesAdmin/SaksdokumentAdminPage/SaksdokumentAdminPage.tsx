@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, InputField, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
@@ -29,10 +30,14 @@ export function SaksdokumentAdminPage() {
         setDocuments(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Loading
+  // Loading.
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -44,9 +49,9 @@ export function SaksdokumentAdminPage() {
   // Filtered
   function filterDocuments(): SaksdokumentDto[] {
     if (searchQuery === '') return documents;
-    // Get keywords separated by space
+    // Get keywords separated by space.
     const keywords = searchQuery.split(' ');
-    // Filter by match all keywords
+    // Filter by match all keywords.
     return documents.filter((doc) => {
       for (const kw of keywords) {
         if (doc.title_nb?.toLowerCase().indexOf(kw) == -1) return false;

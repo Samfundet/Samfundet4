@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -23,7 +24,6 @@ export function ImageFormAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
-
   useEffect(() => {
     if (id) {
       getImage(id)
@@ -31,16 +31,18 @@ export function ImageFormAdminPage() {
           setImage(data);
           setShowSpinner(false);
         })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+        .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin_images);
           }
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
         });
     } else {
       setShowSpinner(false);
     }
-  }, [id, navigate, setImage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, setImage]);
 
   async function handleOnSubmit(data: ImagePostDto) {
     setShowSpinner(true);
@@ -52,10 +54,12 @@ export function ImageFormAdminPage() {
         .then(() => {
           // Success!
           navigate(ROUTES.frontend.admin_images);
+          toast.success(t(KEY.common_creation_successful));
         })
         .catch((err) => {
-          console.error(err);
           setShowSpinner(false);
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(err);
         });
     }
   }
@@ -83,7 +87,6 @@ export function ImageFormAdminPage() {
         <p>
           {JSON.stringify(image.file)}
           {image.file?.name}
-          {}
         </p>
       </SamfForm>
     </Page>

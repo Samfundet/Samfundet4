@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
@@ -34,7 +35,10 @@ export function GangsAdminPage() {
           value: data[0],
         });
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,7 +66,7 @@ export function GangsAdminPage() {
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.adminpage_gangs_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_gang_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
