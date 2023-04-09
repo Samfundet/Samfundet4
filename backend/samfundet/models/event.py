@@ -263,8 +263,8 @@ class Event(models.Model):
     #      Billig Helpers      #
     # ======================== #
 
-    @classmethod
-    def fetch_billig_events(cls, events: list[Event], tickets: bool = True, prices: bool = True) -> None:
+    @staticmethod
+    def fetch_billig_events(events: list[Event], tickets: bool = True, prices: bool = True) -> None:
         """
         Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig
 

@@ -104,9 +104,8 @@ class BilligEvent(models.Model):
         sale_to
     """
 
-    @classmethod
+    @staticmethod
     def fetch_related(
-        cls,
         events: list[BilligEvent],
         get_tickets: bool = True,
         get_prices: bool = True,
@@ -148,8 +147,8 @@ class BilligEvent(models.Model):
             )
         )
 
-    @classmethod
-    def get_by_id(cls, id: int) -> BilligEvent | None:
+    @staticmethod
+    def get_by_id(id: int) -> BilligEvent | None:
         events = BilligEvent.get_by_ids([id])
         return events[0] if len(events) > 0 else None
 
@@ -234,8 +233,8 @@ class BilligTicketGroup(models.Model):
             )
         )
 
-    @classmethod
-    def get_by_event_id(cls, event_id: int) -> BilligTicketGroup | None:
+    @staticmethod
+    def get_by_event_id(event_id: int) -> BilligTicketGroup | None:
         ticket_groups = BilligTicketGroup.get_by_event_ids([event_id])
         return ticket_groups[0] if len(ticket_groups) > 0 else None
 
@@ -307,7 +306,7 @@ class BilligPriceGroup(models.Model):
             )
         )
 
-    @classmethod
-    def get_by_ticket_group_id(cls, ticket_group_id: int) -> BilligPriceGroup | None:
+    @staticmethod
+    def get_by_ticket_group_id(ticket_group_id: int) -> BilligPriceGroup | None:
         price_groups = BilligPriceGroup.get_by_ticket_group_ids([ticket_group_id])
         return price_groups[0] if len(price_groups) > 0 else None
