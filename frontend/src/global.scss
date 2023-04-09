@@ -185,7 +185,7 @@ input[type=text], textarea {
   border-radius: 50%;
   background-color: white;
   animation: dot 1s linear forwards;
-  z-index: 100;
+  z-index: 2;
 
   // Trail causes laggy experience with horizontal scrolling etc because it blocks the cursor from elements behind it.
   // No pointer events fixes that issue.
