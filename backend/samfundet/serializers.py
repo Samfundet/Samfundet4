@@ -1,4 +1,5 @@
 import itertools
+from typing import List
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
@@ -111,25 +112,47 @@ class BilligEventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EventListSerializer(serializers.ListSerializer):
+    """
+    Speedup fetching of billig events for lists to serialize
+    """
+
+    def to_representation(self, events: List[Event]) -> List[str]:
+        # Fetch all billig events and related tickets/prices
+        billig_ids = [e.billig_id for e in events if e.billig_id is not None]
+        billig_events = BilligEvent.get_by_ids(billig_ids)
+        BilligEvent.fetch_related(billig_events, get_tickets=True, get_prices=True)
+
+        # Attach billig events to events
+        for event in events:
+            for billig in billig_events:
+                if event.billig_id == billig.id:
+                    event.billig = billig
+                    break
+
+        # Use child event serializer as normal after fetching billig
+        return [self.child.to_representation(e) for e in events]
+
+
 class EventSerializer(serializers.ModelSerializer):
-    # Nested objects
-    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Event
+        list_serializer_class = EventListSerializer
+        # Registration object contains sensitive data!
+        exclude = ['image', 'registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
 
-    # Billig event serializer
-    billig = serializers.SerializerMethodField(method_name='get_billig', read_only=True)
+    # Custom tickets/billig
+    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+    billig = BilligEventSerializer(read_only=True)
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
-
-    class Meta:
-        model = Event
-        # Registration object contains sensitive data!
-        exclude = ['image', 'registration', 'event_group']
 
     def create(self, validated_data: dict) -> Event:
         """
@@ -141,19 +164,6 @@ class EventSerializer(serializers.ModelSerializer):
         event = Event(**validated_data)
         event.save()
         return event
-
-    def get_billig(self, instance: Event) -> None | dict:
-        # Not a billig event, field is null
-        if instance.billig_id is None:
-            return None
-
-        # Get billig event from cirkus
-        billig_event = BilligEvent.get_by_id(instance.billig_id)
-        if billig_event is None:
-            return None
-
-        # Serialize it
-        return BilligEventSerializer(billig_event, many=False).data
 
 
 class EventGroupSerializer(serializers.ModelSerializer):

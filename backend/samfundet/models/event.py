@@ -13,6 +13,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from samfundet.models.billig import BilligEvent
 from samfundet.models.general import User, Image
 
 # ======================== #
@@ -233,7 +234,8 @@ class Event(models.Model):
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
     # Billig ID used as a foreign key to the billig database
-    billig_id = models.IntegerField(blank=True, null=True)
+    billig_id = models.IntegerField(BilligEvent, blank=True, null=True)
+    billig: BilligEvent | None = None
 
     # ======================== #
     #    Computed Properties   #

@@ -27,7 +27,7 @@ environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
 AUTH_USER_MODEL = 'samfundet.User'
 
-DATABASE_ROUTERS = ["samfundet.models.db_router.SamfundetDatabaseRouter"]
+DATABASE_ROUTERS = ['samfundet.models.db_router.SamfundetDatabaseRouter']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
