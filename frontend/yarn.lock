@@ -3500,7 +3500,7 @@
 
 "@types/react-modal@^3.13.1":
   version "3.13.1"
-  resolved "https://registry.npmjs.org/@types/react-modal/-/react-modal-3.13.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-3.13.1.tgz#5b9845c205fccc85d9a77966b6e16dc70a60825a"
   integrity sha512-iY/gPvTDIy6Z+37l+ibmrY+GTV4KQTHcCyR5FIytm182RQS69G5ps4PH2FxtC7bAQ2QRHXMevsBgck7IQruHNg==
   dependencies:
     "@types/react" "*"
