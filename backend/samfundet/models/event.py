@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import uuid
+from typing import List
 
 from django.db import models
 from django.utils import timezone
@@ -181,9 +182,10 @@ class Event(models.Model):
         to the event or who has registered (påmelding) for the event.
 
     Helper functions:
-        The event includes helper function for registering users/emails (påmelding)
-        while checking that capacity is not exceeded and that registration is possible
-
+        To makes common actions easier to do, e.g:
+            - Fetching billig events (single or batch of many)
+            - Registering users/emails (påmelding) while checking that capacity
+              is not exceeded and that registration is possible.
     """
 
     class Meta:
@@ -259,7 +261,45 @@ class Event(models.Model):
         return self.start_dt + timezone.timedelta(minutes=self.duration)
 
     # ======================== #
-    #     Helper functions     #
+    #      Billig Helpers      #
+    # ======================== #
+
+    @classmethod
+    def fetch_billig_events(cls, events: List[Event], tickets: bool = True, prices: bool = True) -> None:
+        """
+        Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig
+
+        Example:
+            Event.fetch_billig_events(your_events)
+            if your_events[0].billig:
+                print("Yay! Billig is fetched!")
+
+        Note that if you don't need billig for any logic you don't need to
+        do this because the serializer will fetch the data automatically.
+        """
+
+        # Fetch billig data
+        events_with_billig = [e for e in events if e.ticket_type == EventTicketType.BILLIG]
+        billig_ids = [int(e.billig_id) for e in events_with_billig if e.billig_id is not None]
+        billig_events = BilligEvent.get_by_ids(billig_ids)
+        BilligEvent.fetch_related(billig_events, get_tickets=tickets, get_prices=prices)
+
+        # Attach billig events to event objects
+        for event in events_with_billig:
+            for billig in billig_events:
+                if event.billig_id == billig.id:
+                    event.billig = billig
+                    break
+
+    def fetch_billig_event(self, tickets: bool = True, prices: bool = True) -> None:
+        """
+        Gets the billig event/ticket/prices for a single event and stores the billig event in event.billig
+        If you need the billig event for many events, use Event.fetch_billig_events instead (much faster).
+        """
+        Event.fetch_billig(events=[self], get_tickets=tickets, get_prices=prices)
+
+    # ======================== #
+    #   Registration Helpers   #
     # ======================== #
 
     def get_or_create_registration(self) -> EventRegistration:
