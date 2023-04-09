@@ -1,6 +1,7 @@
 import random
+from typing import Any
+
 from django.utils import timezone
-from typing import Tuple, List
 
 # ======================== #
 #  Billig Seed Utilities   #
@@ -30,7 +31,7 @@ def create_billig_event(
     sale_from: timezone.datetime | None = None,
     sale_to: timezone.datetime | None = None,
     hidden: bool | None = None,
-) -> dict:
+) -> dict[str, Any]:
     """
     Utility for creating a dict representing a billig event.
     This makes it much easier to use and convert to SQL queries later.
@@ -53,10 +54,10 @@ def create_billig_event(
     }
 
 
-def create_price_groups(ticket_group: dict) -> List[dict]:
+def create_price_groups(ticket_group: dict) -> list[dict[str, Any]]:
     global NEXT_PRICE_GROUP_ID
 
-    price_groups: List[dict] = []
+    price_groups: list[dict[str, Any]] = []
     n_price_groups = random.randint(MIN_PRICE_GROUPS, MAX_PRICE_GROUPS)
     for _ in range(n_price_groups):
         NEXT_PRICE_GROUP_ID += 1
@@ -74,7 +75,7 @@ def create_price_groups(ticket_group: dict) -> List[dict]:
     return price_groups
 
 
-def create_ticket_groups(event: dict) -> Tuple[List[dict], List[dict]]:
+def create_ticket_groups(event: dict) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """
     Utility function to create ticket and price group dicts for a billig event (dictionary)
     Returns a tuple of (ticket_groups, price_groups).

@@ -12,7 +12,7 @@ from __future__ import annotations
 # we can use them in the same way as our other models without
 # thinking about them being in a different database.
 #
-# At the time of writing, we currently we have read access
+# At the time of writing, we currently have read access
 # to the following tables in billig, although only some are used (*):
 #
 # public.kort
@@ -31,9 +31,7 @@ from __future__ import annotations
 # billig.ticket_seat
 # billig.theater
 
-from datetime import datetime, timedelta
-from typing import List
-
+from django.utils import timezone
 from django.db import models
 
 # ======================== #
@@ -64,7 +62,7 @@ class BilligEvent(models.Model):
     sale_to = models.DateTimeField(blank=False, null=False)
 
     # The fetched ticket groups for this model instance
-    ticket_groups: List[BilligTicketGroup] | None = None
+    ticket_groups: list[BilligTicketGroup] | None = None
 
     # ======================== #
     #       Utilities          #
@@ -72,13 +70,13 @@ class BilligEvent(models.Model):
 
     @property
     def in_sale_period(self) -> bool:
-        return self.sale_from <= datetime.now() <= self.sale_to
+        return self.sale_from <= timezone.datetime.now() <= self.sale_to
 
     # Attaches relevant tickets and prices from prefetched lists
     def set_tickets_from_prefetched(
         self,
-        ticket_groups: List[BilligTicketGroup],
-        price_groups: List[BilligPriceGroup],
+        ticket_groups: list[BilligTicketGroup],
+        price_groups: list[BilligPriceGroup],
     ) -> None:
         """
         Utility function to attach ticket groups and price groups to a billig event from prefetched lists.
@@ -109,7 +107,7 @@ class BilligEvent(models.Model):
     @classmethod
     def fetch_related(
         cls,
-        events: List[BilligEvent],
+        events: list[BilligEvent],
         get_tickets: bool = True,
         get_prices: bool = True,
     ) -> None:
@@ -121,10 +119,10 @@ class BilligEvent(models.Model):
             event.set_tickets_from_prefetched(tickets, prices)
 
     @classmethod
-    def get_relevant(cls) -> List[BilligEvent]:
+    def get_relevant(cls) -> list[BilligEvent]:
         # Exclude events which ended their sale more than a month ago
         # There will be a lot of events here, so very slow to get all of them
-        one_month_ago = datetime.now() - timedelta(days=31)
+        one_month_ago = timezone.datetime.now() - timezone.timedelta(days=31)
         one_month_ago_str = one_month_ago.strftime('%m.%d.%Y')
         return list(
             cls.objects.raw(
@@ -139,7 +137,7 @@ class BilligEvent(models.Model):
         )
 
     @classmethod
-    def get_by_ids(cls, ids: List[int]) -> List[BilligEvent]:
+    def get_by_ids(cls, ids: list[int]) -> list[BilligEvent]:
         return list(
             cls.objects.raw(
                 f"""
@@ -189,7 +187,7 @@ class BilligTicketGroup(models.Model):
     ticket_limit = models.PositiveIntegerField(blank=False, null=False)
 
     # The fetched price groups for some model instance
-    price_groups: List[BilligTicketGroup] | None = None
+    price_groups: list[BilligTicketGroup] | None = None
 
     # ======================== #
     #       Utilities          #
@@ -225,7 +223,7 @@ class BilligTicketGroup(models.Model):
     """
 
     @classmethod
-    def get_by_event_ids(cls, event_ids: List[int]) -> List[BilligTicketGroup]:
+    def get_by_event_ids(cls, event_ids: list[int]) -> list[BilligTicketGroup]:
         return list(
             cls.objects.raw(
                 f"""
@@ -297,7 +295,7 @@ class BilligPriceGroup(models.Model):
     """
 
     @classmethod
-    def get_by_ticket_group_ids(cls, ticket_group_ids: List[int]) -> List[BilligPriceGroup]:
+    def get_by_ticket_group_ids(cls, ticket_group_ids: list[int]) -> list[BilligPriceGroup]:
         ids_str = ', '.join([str(tid) for tid in ticket_group_ids])
         return list(
             cls.objects.raw(

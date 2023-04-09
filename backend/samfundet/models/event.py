@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 import uuid
-from typing import List
 
 from django.db import models
 from django.utils import timezone
@@ -236,7 +235,7 @@ class Event(models.Model):
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
     # Billig ID used as a foreign key to the billig database
-    billig_id = models.IntegerField(BilligEvent, blank=True, null=True)
+    billig_id = models.IntegerField(BilligEvent, blank=True, null=True, unique=True)
     billig: BilligEvent | None = None
 
     # ======================== #
@@ -265,14 +264,16 @@ class Event(models.Model):
     # ======================== #
 
     @classmethod
-    def fetch_billig_events(cls, events: List[Event], tickets: bool = True, prices: bool = True) -> None:
+    def fetch_billig_events(cls, events: list[Event], tickets: bool = True, prices: bool = True) -> None:
         """
         Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig
 
         Example:
+            ```python
             Event.fetch_billig_events(your_events)
             if your_events[0].billig:
                 print("Yay! Billig is fetched!")
+            ```
 
         Note that if you don't need billig for any logic you don't need to
         do this because the serializer will fetch the data automatically.

@@ -1,5 +1,4 @@
 import itertools
-from typing import List
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
@@ -117,7 +116,7 @@ class EventListSerializer(serializers.ListSerializer):
     Speedup fetching of billig events for lists to serialize
     """
 
-    def to_representation(self, events: List[Event]) -> List[str]:
+    def to_representation(self, events: list[Event]) -> list[str]:
         # Fetch all billig events and related tickets/prices
         billig_ids = [e.billig_id for e in events if e.billig_id is not None]
         billig_events = BilligEvent.get_by_ids(billig_ids)
