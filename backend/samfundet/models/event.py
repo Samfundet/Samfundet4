@@ -244,7 +244,7 @@ class Event(models.Model):
 
     # Billig ID used as a foreign key to the billig database
     # This cannot be a real foreign key because django currently does not support cross-db relationships
-    billig_id = models.IntegerField(BilligEvent, blank=True, null=True, unique=True)
+    billig_id = models.IntegerField(blank=True, null=True, unique=True)
 
     # ======================== #
     #    Computed Properties   #
