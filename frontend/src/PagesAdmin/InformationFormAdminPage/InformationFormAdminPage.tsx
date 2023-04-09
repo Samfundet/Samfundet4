@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
@@ -32,8 +33,7 @@ export function InformationFormAdminPage() {
   });
   const [languageTab, setLanguageTab] = useState<Tab>(languageTabs[0]);
 
-  // Fetch data if edit mode
-  /* eslint-disable react-hooks/exhaustive-deps */
+  // Fetch data if edit mode.
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
@@ -46,13 +46,16 @@ export function InformationFormAdminPage() {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin_information);
           }
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(data);
         });
     } else {
       setShowSpinner(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slugField]);
 
-  // Loading
+  // Loading.
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -61,7 +64,7 @@ export function InformationFormAdminPage() {
     );
   }
 
-  // Handles changes of text area
+  // Handles changes of text area.
   function handleTextAreaChange(field: string) {
     return (e?: ChangeEvent<HTMLTextAreaElement>) => {
       const value = e?.currentTarget.value ?? '';
@@ -72,7 +75,7 @@ export function InformationFormAdminPage() {
     };
   }
 
-  // Handles changes of slug field/title
+  // Handles changes of slug field/title.
   function handleTextFieldChange(field: string) {
     return (e?: ChangeEvent<HTMLInputElement>) => {
       const value = e?.currentTarget.value ?? '';
@@ -85,11 +88,18 @@ export function InformationFormAdminPage() {
 
   function handleOnSubmit() {
     if (slugField) {
-      // Update page
-      putInformationPage(slugField, infoPage);
+      // Update page.
+      putInformationPage(slugField, infoPage)
+        .then(() => {
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
       navigate(ROUTES.frontend.admin_information);
     } else {
-      // Post new page
+      // Post new page.
       const slug = infoPage.slug_field ?? '';
       postInformationPage({
         slug_field: slug,
@@ -97,9 +107,11 @@ export function InformationFormAdminPage() {
       })
         .then(() => {
           navigate(ROUTES.frontend.admin_information);
+          toast.success(t(KEY.common_creation_successful));
         })
-        .catch(() => {
-          // TODO error handling
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
         });
     }
   }

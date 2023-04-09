@@ -42,7 +42,7 @@ export function ImageAdminPage() {
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_images_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_image_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <div className={styles.action_row}>
