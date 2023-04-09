@@ -8,12 +8,14 @@
 from __future__ import annotations
 
 import uuid
+from typing import Any
 
 from django.db import models
+from django.db.models import Prefetch
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from samfundet.models.billig import BilligEvent
+from samfundet.models.billig import BilligEvent, BilligTicketGroup
 from samfundet.models.general import User, Image
 
 # ======================== #
@@ -182,7 +184,7 @@ class Event(models.Model):
 
     Helper functions:
         To makes common actions easier to do, e.g:
-            - Fetching billig events (single or batch of many)
+            - Prefetching many billig events (batch of many is faster)
             - Registering users/emails (påmelding) while checking that capacity
               is not exceeded and that registration is possible.
     """
@@ -190,6 +192,12 @@ class Event(models.Model):
     class Meta:
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
+
+    # Instances have a hidden _billig field used to store the fetched billig event.
+    # This is necessary because billig cannot be a real foreign key (see below)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._billig: BilligEvent | None = None
 
     # ======================== #
     #     General Metadata     #
@@ -235,8 +243,8 @@ class Event(models.Model):
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
     # Billig ID used as a foreign key to the billig database
+    # This cannot be a real foreign key because django currently does not support cross-db relationships
     billig_id = models.IntegerField(BilligEvent, blank=True, null=True, unique=True)
-    billig: BilligEvent | None = None
 
     # ======================== #
     #    Computed Properties   #
@@ -259,14 +267,31 @@ class Event(models.Model):
     def end_dt(self) -> timezone.datetime:
         return self.start_dt + timezone.timedelta(minutes=self.duration)
 
+    @property
+    def billig(self) -> BilligEvent | None:
+        """
+        Handles automatic fetching of billig event using the billig_id.
+
+        The private '_billig' is used to save the event and prevent repeated database queries to billig.
+        This field can also be set on many events at the same time by using prefetch_billig
+        """
+        if self.billig_id is None:
+            return None
+        if hasattr(self, '_billig'):
+            return self._billig
+        print("Warn: own fetch")
+        self._billig = BilligEvent.objects.get(event=self.billig_id)
+        return self._billig
+
     # ======================== #
-    #      Billig Helpers      #
+    #      Billig Helper       #
     # ======================== #
 
     @staticmethod
-    def fetch_billig_events(events: list[Event], tickets: bool = True, prices: bool = True) -> None:
+    def prefetch_billig(events: list[Event], tickets: bool = True, prices: bool = True) -> None:
         """
-        Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig
+        Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig.
+        This is much faster than getting each billig event in separate queries when using `event.billig`
 
         Example:
             ```python
@@ -279,25 +304,25 @@ class Event(models.Model):
         do this because the serializer will fetch the data automatically.
         """
 
-        # Fetch billig data
+        # Fetch billig events for all events with billig
         events_with_billig = [e for e in events if e.ticket_type == EventTicketType.BILLIG]
         billig_ids = [int(e.billig_id) for e in events_with_billig if e.billig_id is not None]
-        billig_events = BilligEvent.get_by_ids(billig_ids)
-        BilligEvent.fetch_related(billig_events, get_tickets=tickets, get_prices=prices)
+        billig_events = BilligEvent.objects.filter(id__in=billig_ids)
 
-        # Attach billig events to event objects
+        # Prefetch related tickets and prices to improve performance
+        if tickets and prices:
+            billig_events = billig_events.prefetch_related(Prefetch('ticket_groups', queryset=BilligTicketGroup.objects.prefetch_related('price_groups')))
+        elif tickets:
+            billig_events = billig_events.prefetch_related(Prefetch('ticket_groups', queryset=BilligTicketGroup.objects.all()))
+
+        # Attach billig events to event objects (set the private _billig field)
+        # This is neccessary because billig_id is not a real foreign key
+        # since cross-db relationships are not currently supported in django
         for event in events_with_billig:
             for billig in billig_events:
                 if event.billig_id == billig.id:
-                    event.billig = billig
+                    event._billig = billig
                     break
-
-    def fetch_billig_event(self, tickets: bool = True, prices: bool = True) -> None:
-        """
-        Gets the billig event/ticket/prices for a single event and stores the billig event in event.billig
-        If you need the billig event for many events, use Event.fetch_billig_events instead (much faster).
-        """
-        Event.fetch_billig(events=[self], get_tickets=tickets, get_prices=prices)
 
     # ======================== #
     #   Registration Helpers   #
