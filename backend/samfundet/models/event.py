@@ -11,7 +11,7 @@ import uuid
 from typing import Any
 
 from django.db import models
-from django.db.models import Prefetch
+from django.db.models import Prefetch, QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -287,7 +287,7 @@ class Event(models.Model):
     # ======================== #
 
     @staticmethod
-    def prefetch_billig(events: list[Event], tickets: bool = True, prices: bool = True) -> None:
+    def prefetch_billig(events: list[Event] | QuerySet[Event], tickets: bool = True, prices: bool = True) -> None:
         """
         Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig.
         This is much faster than getting each billig event in separate queries when using `event.billig`

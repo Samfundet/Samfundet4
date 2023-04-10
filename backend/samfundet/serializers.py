@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
+from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
@@ -116,9 +117,14 @@ class EventListSerializer(serializers.ListSerializer):
     Speedup fetching of billig events for lists serialization
     """
 
-    def to_representation(self, events: list[Event]) -> list[str]:
-        # Use child event serializer as normal after prefetching billig for all events
+    def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
+        # Prefetch related/billig for speed
+        if hasattr(events, 'prefetch_related'):
+            events.prefetch_related('custom_tickets')
+            events.prefetch_related('image')
         Event.prefetch_billig(events, tickets=True, prices=True)
+
+        # Use event serializer (child) as normal after
         return [self.child.to_representation(e) for e in events]
 
 
