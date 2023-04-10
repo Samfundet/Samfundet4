@@ -50,15 +50,11 @@
   padding: 0 7px 7px 7px;
   font-size: 1em;
   text-align: center;
-  display: none;
   overflow: hidden;
-  @include for-tablet-up {
-    padding: 0 7px 7px 7px;
-    font-size: 1em;
-    text-align: center;
-  }
-  @include for-mobile-up {
-    display: block;
+  display: block;
+
+  @include for-mobile-only {
+    display: none;
   }
 }
 
