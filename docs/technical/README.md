@@ -7,14 +7,14 @@
 
 ### Frontend
 
-- [Creating forms using SamfForm](/docs/technical/frontend/forms.md)
-- [React component conventions](/docs/technical/frontend/components.md)
+- [Creating react components (conventions)](/docs/technical/frontend/components.md)
+- [Input forms using SamfForm](/docs/technical/frontend/forms.md)
 
 ### Backend
 
-- [Billig (payment system) documentation](/docs/technical/backend/billig.md)
-- [Seed scripts documentation](/docs/technical/backend/seed.md)
+- [Billig (payment system)](/docs/technical/backend/billig.md)
+- [Seed scripts](/docs/technical/backend/seed.md)
 
 ### Pipelines & Deployment
 
-- [Pipeline documentation](/docs/technical/pipeline.md)
+- [Pipeline (mypy, eslint, tsc, ...)](/docs/technical/pipeline.md)
