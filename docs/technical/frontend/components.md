@@ -1,4 +1,4 @@
-[👈 back](/docs/README.md)
+[👈 back](/docs/technical/README.md)
 
 # Components
 
