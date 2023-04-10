@@ -4,9 +4,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
+from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
+from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -76,31 +78,93 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class EventCustomTicketSerializer(serializers.ModelSerializer):
-    """
-    Custom ticket types for event
-    """
 
     class Meta:
         model = EventCustomTicket
         fields = '__all__'
 
 
+class BilligPriceGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BilligPriceGroup
+        fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
+
+
+class BilligTicketGroupSerializer(serializers.ModelSerializer):
+    # These fields are calculated based on percentages sold and should be public
+    is_almost_sold_out = serializers.BooleanField(read_only=True)
+    is_sold_out = serializers.BooleanField(read_only=True)
+
+    # Price groups in this ticket group
+    price_groups = BilligPriceGroupSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilligTicketGroup
+        # The number of tickets and sold tickets should not be
+        # public, so don't add the 'num' and 'num_sold' fields here!
+        fields = [
+            'id',
+            'name',
+            'is_sold_out',
+            'is_almost_sold_out',
+            'ticket_limit',
+            'price_groups',
+        ]
+
+
+class BilligEventSerializer(serializers.ModelSerializer):
+    ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilligEvent
+        fields = [
+            'id',
+            'name',
+            'ticket_groups',
+            'sale_from',
+            'sale_to',
+            'in_sale_period',
+            'is_almost_sold_out',
+            'is_sold_out',
+        ]
+
+
+class EventListSerializer(serializers.ListSerializer):
+    """
+    Speedup fetching of billig events for lists serialization
+    """
+
+    def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
+        # Prefetch related/billig for speed
+        if hasattr(events, 'prefetch_related'):
+            events.prefetch_related('custom_tickets')
+            events.prefetch_related('image')
+        Event.prefetch_billig(events, tickets=True, prices=True)
+
+        # Use event serializer (child) as normal after
+        return [self.child.to_representation(e) for e in events]
+
+
 class EventSerializer(serializers.ModelSerializer):
-    # Nested objects
-    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Event
+        list_serializer_class = EventListSerializer
+        # Warning: registration object contains sensitive data, don't include it!
+        exclude = ['image', 'registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
 
+    # Custom tickets/billig
+    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+    billig = BilligEventSerializer(read_only=True)
+
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
-
-    class Meta:
-        model = Event
-        # Registration object contains sensitive data!
-        exclude = ['image', 'registration', 'event_group']
 
     def create(self, validated_data: dict) -> Event:
         """

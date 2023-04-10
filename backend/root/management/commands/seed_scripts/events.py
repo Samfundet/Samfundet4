@@ -48,12 +48,13 @@ CATEGORIES = [
 
 # Ticket groups (weighted random)
 # Reduces change of registration/custom types because
-# seeding these is much slower.
+# seeding these is much slower. Most events are billig!
 TICKET_TYPES = {
-    EventTicketType.FREE: 0.4,
-    EventTicketType.INCLUDED: 0.4,
-    EventTicketType.REGISTRATION: 0.1,
-    EventTicketType.CUSTOM: 0.1,
+    EventTicketType.BILLIG: 10,
+    EventTicketType.REGISTRATION: 1,
+    EventTicketType.INCLUDED: 5,
+    EventTicketType.CUSTOM: 1,
+    EventTicketType.FREE: 5,
 }
 
 # Age groups
