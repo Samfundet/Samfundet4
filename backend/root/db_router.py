@@ -40,6 +40,6 @@ class SamfundetDatabaseRouter:
         model_name: str | None = None,
         **hints: dict[str, Any],
     ) -> bool:
-        if model_name in [m.__name__ for m in BILLIG_MODELS]:
+        if model_name in [m._meta.model_name for m in BILLIG_MODELS]:
             return False
         return True
