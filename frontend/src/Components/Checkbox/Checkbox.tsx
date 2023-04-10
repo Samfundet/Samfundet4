@@ -23,7 +23,7 @@ export function Checkbox({ name, onClick, disabled, checked, alignment = 'left',
         disabled={disabled}
         checked={checked}
       />
-      <div className={styles.checkbox__box}></div>
+      <div className={disabled ? styles.checkbox__disabled : styles.checkbox__box}></div>
       {/* Denne diven styles i .scss fil for å representere en checkbox. Input tas i input elementet over */}
       {alignment == 'right' && label}
     </label>
