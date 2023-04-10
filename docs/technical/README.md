@@ -12,7 +12,7 @@
 
 ### Backend
 
-- [Billig (payment system) documentation](/docs/technical/billig.md)
+- [Billig (payment system) documentation](/docs/technical/backend/billig.md)
 - [Seed scripts documentation](/docs/technical/backend/seed.md)
 
 ### Pipelines & Deployment
