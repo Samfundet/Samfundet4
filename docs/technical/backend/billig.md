@@ -1,5 +1,7 @@
 # Billig Integration
 
+<img src="./billig_meme.png" />
+
 Billig is the ticket/payment system implemented by ITK.
 We need to integrate with this system on cirkus to support
 a payment form with tickets and showing ticket pdfs. 
