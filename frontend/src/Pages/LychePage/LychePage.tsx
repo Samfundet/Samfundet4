@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
@@ -15,7 +16,7 @@ import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from 
 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
   const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,14 +26,18 @@ export function LychePage() {
       .then((data) => {
         const lyche = data.find((venue) => venue.name?.toLowerCase() === VENUE.LYCHE);
         setLycheVenue(lyche);
+        setLoading(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
     setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
-    setLoading(false);
   }, [lycheVenue]);
 
   const openingHourRow = (days: string, open_hour: string | undefined, close_hour: string | undefined) => {

@@ -171,7 +171,6 @@ export async function putEvent(id: string | number, data: Partial<EventDto>): Pr
 export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
-
   return response;
 }
 

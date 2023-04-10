@@ -1,24 +1,34 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
 import { EventDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   useEffect(() => {
     if (id) {
-      getEvent(id).then((data) => {
-        setEvent(data);
-        setShowSpinner(false);
-      });
+      getEvent(id)
+        .then((data) => {
+          setEvent(data);
+          setShowSpinner(false);
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (showSpinner) {

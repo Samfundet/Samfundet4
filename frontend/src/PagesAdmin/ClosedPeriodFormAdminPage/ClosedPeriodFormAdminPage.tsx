@@ -1,6 +1,8 @@
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -25,24 +27,27 @@ export function ClosedPeriodFormAdminPage() {
   // Stuff to do on first render.
   //TODO add permissions on render
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // TODO add fix on no id on editpage
-    if (id) {
-      getClosedPeriod(id)
-        .then((data) => {
-          setClosedPeriod(data);
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_gangs);
-          }
-        });
-    } else {
+    if (id === undefined) {
       setShowSpinner(false);
+      return;
     }
+
+    getClosedPeriod(id)
+      .then((data) => {
+        setClosedPeriod(data);
+        setShowSpinner(false);
+      })
+      .catch((data: AxiosError) => {
+        // TODO add error pop up message?
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.admin_gangs);
+        }
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(data);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function handleOnSubmit(data: ClosedPeriodDto) {

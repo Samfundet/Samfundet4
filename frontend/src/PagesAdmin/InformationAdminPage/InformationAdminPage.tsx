@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
@@ -27,20 +28,28 @@ export function InformationAdminPage() {
         setInformationPages(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deletePage(slug_field: string | undefined) {
     if (!slug_field) return;
 
-    deleteInformationPage(slug_field).then(() => {
-      getInformationPages()
-        .then((data) => {
+    deleteInformationPage(slug_field)
+      .then(() => {
+        getInformationPages().then((data) => {
           setInformationPages(data);
           setShowSpinner(false);
-        })
-        .catch(console.error);
-    });
+        });
+        toast.success(t(KEY.common_delete_successful));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   if (showSpinner) {
@@ -100,7 +109,7 @@ export function InformationAdminPage() {
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_information_manage_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_informationpage_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
