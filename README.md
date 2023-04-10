@@ -4,10 +4,9 @@
 
 ## Documentation
 
--   **[Technical Documentation](/docs/technical/README.md)**
--   [React Component Conventions](/docs/components.md)
--   [Useful Commands](/docs/useful-commands.md)
--   [Work Methodology](/docs/work-methodology.md)
+- **[Technical Documentation](/docs/technical/README.md)**
+- [Work Methodology](/docs/work-methodology.md)
+- [Useful Commands](/docs/useful-commands.md)
 
 ## Installation
 
