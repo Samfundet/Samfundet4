@@ -27,6 +27,20 @@
   flex-shrink: 0;
   transition: background 0.15s, border-color 0.15s; /* Bakgrunn kommer gradvis inn. */
 }
+
+/* Her velges (og styles) det elementet med klassen .checkbox__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked". */
+.checkbox__input:checked + .checkbox__box {
+  background-color: $red-samf;
+  border-color: $red-samf;
+}
+
+/* Her velges (og styles) det elementet med psudoklassen .checkbox__box::after, som ligger rett etter elementet med klassen .checkbox__input:checked, når det sistnevte elementet er "checked". */
+.checkbox__input:checked + .checkbox__box::after {
+  content: '\2714'; /* ASCII "check"-symbol. */
+  color: $white; /* Fargen til symbolet. */
+}
+
+// disabled checkbox styling:
 .checkbox__disabled {
   width: 1em;
   height: 1em;
@@ -40,20 +54,8 @@
   flex-shrink: 0;
   background-color: $grey-3;
 }
-.checkbox__input + .checkbox__disabled::after {
-  content: '\2714'; /* ASCII "check"-symbol. */
-  color: $white; /* Fargen til symbolet. */
-  // transform: scale(1);
-}
-/* Her velges (og styles) det elementet med klassen .checkbox__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked". */
-.checkbox__input:checked + .checkbox__box {
-  background-color: $red-samf;
-  border-color: $red-samf;
-}
 
-/* Her velges (og styles) det elementet med psudoklassen .checkbox__box::after, som ligger rett etter elementet med klassen .checkbox__input:checked, når det sistnevte elementet er "checked". */
-.checkbox__input:checked + .checkbox__box::after {
-  content: '\2714'; /* ASCII "check"-symbol. */
-  color: $white; /* Fargen til symbolet. */
-  // transform: scale(1);
+.checkbox__input + .checkbox__disabled::after {
+  content: '\2714';
+  color: $white;
 }
