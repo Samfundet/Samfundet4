@@ -82,7 +82,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
             # Create billig event
             billig_event = util.create_event(
                 name=f'Billig - {event.title_nb}',
-                sale_from=event.start_dt - timezone.timedelta(days=-90),
+                sale_from=event.start_dt - timezone.timedelta(days=90),
                 sale_to=event.start_dt + timezone.timedelta(minutes=30),
                 hidden=False
             )
@@ -127,7 +127,7 @@ def seed() -> Iterable[Tuple[int, str]]:
     ok, message = create_db()
     if not ok:
         # Failed to create DB
-        yield 0, message
+        yield 100, message
         return
 
     # Seed billig database

@@ -88,20 +88,29 @@ class BilligPriceGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BilligPriceGroup
-        fields = '__all__'
+        fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
 
 
 class BilligTicketGroupSerializer(serializers.ModelSerializer):
-    # Almost sold out is public, used in frontend
+    # These fields are calculated based on percentages sold and should be public
     is_almost_sold_out = serializers.BooleanField(read_only=True)
+    is_sold_out = serializers.BooleanField(read_only=True)
 
     # Price groups in this ticket group
     price_groups = BilligPriceGroupSerializer(many=True, read_only=True)
 
     class Meta:
         model = BilligTicketGroup
-        # IMPORTANT: number of tickets and sold tickets should not be public!
-        exclude = ['num', 'num_sold']
+        # The number of tickets and sold tickets should not be
+        # public, so don't add the 'num' and 'num_sold' fields here!
+        fields = [
+            'id',
+            'name',
+            'is_sold_out',
+            'is_almost_sold_out',
+            'ticket_limit',
+            'price_groups',
+        ]
 
 
 class BilligEventSerializer(serializers.ModelSerializer):
@@ -109,7 +118,16 @@ class BilligEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BilligEvent
-        fields = '__all__'
+        fields = [
+            'id',
+            'name',
+            'ticket_groups',
+            'sale_from',
+            'sale_to',
+            'in_sale_period',
+            'is_almost_sold_out',
+            'is_sold_out',
+        ]
 
 
 class EventListSerializer(serializers.ListSerializer):

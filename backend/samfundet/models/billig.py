@@ -34,6 +34,10 @@ from django.db.models import QuerySet
 from django.utils import timezone
 from django.db import models
 
+# Percentage of tickets that must be sold
+# before the event/ticket is marked as almost sold out
+LIMIT_FOR_ALMOST_SOLD_OUT = 0.8
+
 # ======================== #
 #       Billig Event       #
 # ======================== #
@@ -56,7 +60,7 @@ class BilligEvent(models.Model):
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='event')
 
     # General info
-    event_name = models.CharField(max_length=140, null=False, blank=False)
+    name = models.CharField(max_length=140, null=False, blank=False, db_column='event_name')
     sale_from = models.DateTimeField(blank=False, null=False)
     sale_to = models.DateTimeField(blank=False, null=False)
     hidden = models.BooleanField(blank=False, null=False)
@@ -71,7 +75,17 @@ class BilligEvent(models.Model):
 
     @property
     def in_sale_period(self) -> bool:
-        return self.sale_from <= timezone.datetime.now() <= self.sale_to
+        return self.sale_from <= timezone.localtime() <= self.sale_to
+
+    @property
+    def is_sold_out(self) -> bool:
+        return all([ticket.is_sold_out for ticket in self.ticket_groups.all()])
+
+    @property
+    def is_almost_sold_out(self) -> bool:
+        total_tickets = sum([ticket.num for ticket in self.ticket_groups.all()])
+        total_sold = sum([ticket.num_sold for ticket in self.ticket_groups.all()])
+        return total_sold / total_tickets >= LIMIT_FOR_ALMOST_SOLD_OUT
 
     @staticmethod
     def get_relevant() -> QuerySet:
@@ -133,12 +147,8 @@ class BilligTicketGroup(models.Model):
 
     @property
     def is_almost_sold_out(self) -> bool:
-        """
-        Returns true if less than 20% of tickets are available
-        """
-        remain = self.num - self.num_sold
-        percent_left = remain / self.num
-        return percent_left < 0.2
+        percent_sold = self.num_sold / self.num
+        return percent_sold >= LIMIT_FOR_ALMOST_SOLD_OUT
 
 
 # ======================== #

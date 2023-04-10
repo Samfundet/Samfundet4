@@ -4,7 +4,7 @@
 #
 # All models use the default database except billig models
 #
-from typing import Any
+from typing import Any, Type
 
 from django.db import models
 from samfundet.models.billig import (
@@ -14,7 +14,7 @@ from samfundet.models.billig import (
 )
 
 # List of models routed to billig database
-BILLIG_MODELS = [
+BILLIG_MODELS: list[Type[models.Model]] = [
     BilligEvent,
     BilligTicketGroup,
     BilligPriceGroup,
@@ -23,12 +23,12 @@ BILLIG_MODELS = [
 
 class SamfundetDatabaseRouter:
 
-    def db_for_read(self, model: models.Model, **hints: dict[str, Any]) -> str | None:
+    def db_for_read(self, model: Type[models.Model], **hints: dict[str, Any]) -> str | None:
         if model in BILLIG_MODELS:
             return 'billig'
         return None
 
-    def db_for_write(self, model: models.Model, **hints: dict[str, Any]) -> str | None:
+    def db_for_write(self, model: Type[models.Model], **hints: dict[str, Any]) -> str | None:
         if model in BILLIG_MODELS:
             return 'billig'
         return None

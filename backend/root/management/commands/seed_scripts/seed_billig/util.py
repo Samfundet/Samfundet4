@@ -49,7 +49,7 @@ def create_event(
 
     return BilligEvent(
         id=NEXT_EVENT_ID,
-        event_name=name,
+        name=name,
         sale_from=sale_from,
         sale_to=sale_to,
         hidden=hidden,
