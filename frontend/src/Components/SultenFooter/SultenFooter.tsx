@@ -1,9 +1,12 @@
 import { Icon } from '@iconify/react';
+import { useKeyValue } from '~/hooks';
 import { ROUTES } from '~/routes';
 import styles from './SultenFooter.module.scss';
+import { KV } from '~/constants';
 
 export function SultenFooter() {
-  const sultenMail = 'mailto:lyche@samfundet.no';
+  const sultenMail = useKeyValue(KV.SULTEN_MAIL);
+  const sultenAdress = 'Elgsetergate 1';
 
   return (
     <div className={styles.footer_container}>
@@ -29,7 +32,7 @@ export function SultenFooter() {
           <Icon icon="mdi:address-marker-outline" className={styles.icon}></Icon>
         </a>
         <a className={styles.footer_link} href={ROUTES.other.maps_elgsetergate_1}>
-          Elgsetergate 1
+          {sultenAdress}
         </a>
       </div>
     </div>
