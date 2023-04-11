@@ -1,14 +1,6 @@
+[👈 back](/docs/technical/README.md)
 
-[👈 back](/docs/README.md)
-
-# Development Tips
-
-## Forms
-
-For all your form needs:
-[SamfForm documentation](/docs/technical/forms.md)
-
-## Seeding the database
+# Seeding
 
 Seed scripts are used to populate the database with dummy data for testing. Seed scripts are located in `root/management/commands/seed_scripts/`.
 

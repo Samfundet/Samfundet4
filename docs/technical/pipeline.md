@@ -1,4 +1,11 @@
 
+# Pipelines
+
+## Frontend
+*No docs yet*
+
+## Backend
+*No docs yet*
 
 ### Yapf
 Python formatter
@@ -14,3 +21,4 @@ Python formatter
 
 ### pylint
 Python linter
+

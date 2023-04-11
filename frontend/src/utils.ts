@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import { CSSProperties } from 'react';
+import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
 import { Day, EventTicketType } from './types';
@@ -218,4 +219,26 @@ export function queryDtoCustom<T extends Record<string, unknown>>(
     // Return true if all keywords are included
     return keywords.reduce((othersOK, keyword) => othersOK && combinedString.includes(keyword), true);
   });
+}
+
+/**
+ * Function to change the theme.
+ */
+export function updateBodyThemeClass(theme: ThemeValue): void {
+  // Set theme as data attr on body.
+  document.body.setAttribute(THEME_KEY, theme);
+  // Remember theme in localStorage between refreshes.
+  localStorage.setItem(THEME_KEY, theme);
+}
+
+/**
+ * Helper to create element, add class, position the element and add to body.
+ */
+export function createDot(e: MouseEvent): HTMLDivElement {
+  //
+  const dot = document.createElement('div');
+  dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
+  dot.style.left = e.clientX + window.pageXOffset + 'px';
+  dot.style.top = e.clientY + window.pageYOffset + 'px';
+  return dot;
 }

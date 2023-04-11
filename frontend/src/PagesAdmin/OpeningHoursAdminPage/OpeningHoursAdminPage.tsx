@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { Page } from '~/Components/Page';
 import { getVenues, putVenue } from '~/api';
 import { VenueDto } from '~/dto';
@@ -20,13 +21,19 @@ export function OpeningHoursAdminPage() {
 
   // Get venues
   useEffect(() => {
-    getVenues().then((venues) => {
-      venueRef.current = venues;
-      setVenues(venues);
-    });
+    getVenues()
+      .then((venues) => {
+        venueRef.current = venues;
+        setVenues(venues);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Save venue change
+  // Save venue change.
   function saveVenue(venue: VenueDto, field: keyof VenueDto) {
     // Get most recent edits if any
     const recent = venueRef.current.filter((v) => v.id === venue.id)[0];
@@ -34,26 +41,29 @@ export function OpeningHoursAdminPage() {
     putVenue(venue.id, {
       [field]: recent[field],
     })
-      // Success
+      // Success.
       .then(() => {
         setInvalid({
           ...invalid,
           [`${venue.id}_${field}`]: false,
         });
+        toast.success(t(KEY.common_update_successful));
       })
       // Failed
-      .catch(() => {
+      .catch((error) => {
         setInvalid({
           ...invalid,
           [`${venue.id}_${field}`]: true,
         });
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
       });
   }
 
-  // Update view model on field
+  // Update view model on field.
   function handleOnChange(venue: VenueDto, field: keyof VenueDto) {
     return (e: ChangeEvent<HTMLInputElement>) => {
-      // Calculate new venues
+      // Calculate new venues.
       const value = e.currentTarget.value;
       const newVenues = venues.map((v) => {
         if (v.id === venue.id) {
@@ -65,22 +75,22 @@ export function OpeningHoursAdminPage() {
         return v;
       });
 
-      // Update state and reference
+      // Update state and reference.
       setVenues(newVenues);
       venueRef.current = newVenues;
 
-      // Cancel old save timer if any
+      // Cancel old save timer if any.
       const timer_id = `${venue.id}_${field}`;
       if (saveTimer[timer_id] !== undefined) {
         clearTimeout(saveTimer[timer_id]);
       }
 
-      // Start a new save timer
+      // Start a new save timer.
       const timer = setTimeout(() => {
         saveVenue(venue, field);
       }, 1000);
 
-      // Store timeout to allow cancel
+      // Store timeout to allow cancel.
       setSaveTimer({
         ...saveTimer,
         [timer_id]: timer,
@@ -89,8 +99,8 @@ export function OpeningHoursAdminPage() {
   }
 
   /**
-   * Box for a single venue
-   * Shows open/close times for each day
+   * Box for a single venue.
+   * Shows open/close times for each day.
    * */
   function venueBox(venue: VenueDto) {
     return (

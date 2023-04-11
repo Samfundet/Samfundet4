@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { ImageList } from '~/Components/ImageList';
 import { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
@@ -19,9 +20,15 @@ export function GroupsPage() {
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
   useEffect(() => {
-    getGangList().then((data) => {
-      setGroups(data);
-    });
+    getGangList()
+      .then((data) => {
+        setGroups(data);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

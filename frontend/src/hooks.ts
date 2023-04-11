@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
 import { useGlobalContext } from '~/GlobalContextProvider';
-import { getTextItem } from '~/api';
+import { getTextItem, putUserPreference } from '~/api';
 import { Key, SetState } from '~/types';
-import { hasPerm, isTruthy } from '~/utils';
-import { THEME, desktopBpLower, mobileBpUpper } from './constants';
+import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
+import { THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -200,33 +200,44 @@ export function useMousePosition(): { x: number; y: number } {
   return position;
 }
 
+/** Return type for hook useMouseTrail. */
+type UseMouseTrail = {
+  isMouseTrail: boolean;
+  setIsMouseTrail: SetState<boolean>;
+  toggleMouseTrail: () => boolean;
+};
+
 /**
  * When used will spawn a trail behind the cursor.
+ * Currently only meant to be used in GlobalContextProvider.
  */
-export function useMouseTrail(initial = false): [boolean, SetState<boolean>] {
-  const [isMouseTrail, setIsMouseTrail] = useState<boolean>(initial);
+export function useMouseTrail(): UseMouseTrail {
+  const { user } = useAuthContext();
+
+  const [isMouseTrail, setIsMouseTrail] = useState<boolean>(false);
 
   const container = document.createElement('div');
   document.body.appendChild(container);
+
+  useEffect(() => {
+    if (!user) return;
+    setIsMouseTrail(user.user_preference.cursor_trail);
+  }, [user]);
 
   // Spawn trail behind cursor whenever it moves.
   useEffect(() => {
     if (!isMouseTrail) return;
 
     function handleMouseMove(e: MouseEvent) {
-      // Create element, add class, position the element and add to body.
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('trail'); // global.scss
-      sparkle.style.left = e.clientX + window.pageXOffset + 'px';
-      sparkle.style.top = e.clientY + window.pageYOffset + 'px';
-      container.appendChild(sparkle);
+      const dot = createDot(e);
+      container.appendChild(dot);
 
       // We need to clean all the elements the trail produces.
       // If we don't do this, the <body> will be cluttered with thousands of elements.
       // That would likely cause performance issues.
       // This delay must be equal to or longer than the trail animation.
       setTimeout(() => {
-        sparkle.remove();
+        dot.remove();
       }, 2000); // Remove the element after 1 second
     }
 
@@ -237,5 +248,65 @@ export function useMouseTrail(initial = false): [boolean, SetState<boolean>] {
     };
   }, [container, isMouseTrail]);
 
-  return [isMouseTrail, setIsMouseTrail];
+  /** Simplified theme switching. Returns theme it switched to. */
+  function toggleMouseTrail(): boolean {
+    const newIsCursorTrail = !isMouseTrail;
+
+    setIsMouseTrail(newIsCursorTrail);
+    if (user) {
+      putUserPreference(user.user_preference.id, { cursor_trail: newIsCursorTrail });
+    }
+    return newIsCursorTrail;
+  }
+
+  return { isMouseTrail, setIsMouseTrail, toggleMouseTrail };
+}
+
+/** Return type for hook useTheme. */
+type UseTheme = {
+  theme: ThemeValue;
+  setTheme: SetState<ThemeValue>;
+  switchTheme: () => ThemeValue;
+};
+
+/**
+ * Grouped functionality for theme.
+ * Only meant to be used in GlobalContextProvider.
+ */
+export function useTheme(): UseTheme {
+  const { user } = useAuthContext();
+
+  // Get theme from localStorage.
+  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
+
+  // Determine browser preference.
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
+  const initialTheme = storedTheme || detectedTheme;
+
+  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+
+  // Update body classes when theme changes.
+  useEffect(() => {
+    updateBodyThemeClass(theme);
+  }, [theme]);
+
+  // Update theme when user changes.
+  useEffect(() => {
+    if (user?.user_preference.theme) {
+      setTheme(user.user_preference.theme);
+    }
+  }, [user]);
+
+  /** Simplified theme switching. Returns theme it switched to. */
+  function switchTheme(): ThemeValue {
+    const themeToSet = theme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT;
+    setTheme(themeToSet);
+    if (user) {
+      putUserPreference(user.user_preference.id, { theme: themeToSet });
+    }
+    return themeToSet;
+  }
+
+  return { theme, setTheme, switchTheme };
 }

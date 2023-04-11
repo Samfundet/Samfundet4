@@ -10,6 +10,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
+import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { PERM } from '~/permissions';
@@ -31,8 +32,9 @@ export function InformationPage() {
     if (slugField) {
       getInformationPage(slugField)
         .then((data) => setPage(data))
-        .catch((data) => {
-          console.error(data);
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
         });
     }
   }, [slugField]);

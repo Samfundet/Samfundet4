@@ -20,6 +20,7 @@ export { ImageQuery } from './ImageQuery';
 export { InputField } from './InputField';
 export { Link } from './Link';
 export { List } from './List';
+export { Modal } from './Modal';
 export { Navbar } from './Navbar';
 export { OpeningHours } from './OpeningHours';
 export { Page } from './Page';

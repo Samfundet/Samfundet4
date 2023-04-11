@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Page } from '~/Components/Page';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -25,7 +26,6 @@ export function SaksdokumentFormAdminPage() {
   const { id } = useParams();
   const [saksdok, setSaksdok] = useState<SaksdokumentDto>();
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (id) {
       getSaksdokument(id)
@@ -34,19 +34,21 @@ export function SaksdokumentFormAdminPage() {
           setShowSpinner(false);
         })
         .catch((data) => {
-          console.log(data);
+          console.error(data);
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin);
           }
+          toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
       setShowSpinner(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Only set fields used in form
-  // (otherwise validation will not know which fields to check)
+  // (otherwise validation will not know which fields to check).
   const initialData: Partial<SaksdokumentDto> = {
     title_nb: saksdok?.title_nb,
     title_en: saksdok?.title_en,
@@ -55,7 +57,7 @@ export function SaksdokumentFormAdminPage() {
     publication_date: utcTimestampToLocal(saksdok?.publication_date),
   };
 
-  // TODO get categories from API (this will not work)
+  // TODO get categories from API (this will not work).
   const categoryOptions: DropDownOption<string>[] = [
     { value: 'FS_REFERAT', label: 'FS_REFERAT' },
     { value: 'ARSBERETNINGER', label: 'ARSBERETNINGER' },
@@ -70,17 +72,27 @@ export function SaksdokumentFormAdminPage() {
         }
       : undefined;
 
-  // Handle put/post to api
+  // Handle put/post to api.
   function handleOnSubmit(data: SaksdokumentDto) {
-    // Post new document
+    // Post new document.
     if (id === undefined) {
-      postSaksdokument(data).then(() => {
-        navigate(ROUTES.frontend.admin_saksdokumenter);
-      });
+      postSaksdokument(data)
+        .then(() => {
+          navigate(ROUTES.frontend.admin_saksdokumenter);
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     } else {
-      putSaksdokument(id, data).then(() => {
-        navigate(ROUTES.frontend.admin_saksdokumenter);
-      });
+      putSaksdokument(id, data)
+        .then(() => {
+          toast.success(t(KEY.common_update_successful));
+          navigate(ROUTES.frontend.admin_saksdokumenter);
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
   }
 

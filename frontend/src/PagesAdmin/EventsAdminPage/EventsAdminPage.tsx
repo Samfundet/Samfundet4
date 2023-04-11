@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
@@ -27,7 +28,10 @@ export function EventsAdminPage() {
         setAllEvents(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   // Stuff to do on first render.
@@ -35,12 +39,19 @@ export function EventsAdminPage() {
 
   useEffect(() => {
     getEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deleteSelectedEvent(id: number) {
-    deleteEvent(id).then(() => {
-      getEvents();
-    });
+    deleteEvent(id)
+      .then(() => {
+        getEvents();
+        toast.success(t(KEY.eventsadminpage_successful_delete_toast));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   if (showSpinner) {
@@ -105,10 +116,10 @@ export function EventsAdminPage() {
     <Page>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>
-          {t(KEY.common_edit)} {t(KEY.common_event)}
+          {t(KEY.common_edit)} {t(KEY.common_event).toLowerCase()}
         </h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
         <br></br>
         <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>

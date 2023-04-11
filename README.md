@@ -1,29 +1,21 @@
-# Samfundet
+# Samfundet4
 
-<br>
-<hr>
-
-**Table of Contents:**
-
--   [Documentation](#documentation)
--   [Install](#install)
--   [Task](#task)
-
-<hr>
-<br>
+<img src="./docs/splash.png"/>
 
 ## Documentation
 
-We have grouped documentation in [docs](/docs/README.md).
+- **[Technical Documentation](/docs/technical/README.md)**
+- [Work Methodology](/docs/work-methodology.md)
+- [Useful Commands](/docs/useful-commands.md)
 
-<br>
-<br>
+## Installation
 
-## Install
+We have a script that handles all installation for you. To run the script, a Github Personal Access Token (PAT) is required. 
+You can make one here https://github.com/settings/tokens/new. Tick scopes `repo`, `read:org` and `admin:public_key`), 
+then store the token somewhere safe (Github will never show it again).
 
-To run this script, a Github Personal Access Token (PAT) is required. You can make one here https://github.com/settings/tokens/new. Tick scopes `repo`, `read:org` and `admin:public_key`), then store the token somewhere safe (Github will never show it again).
-
-Copy these commands (press button on the right-hand side of the block) and run from the directory you would clone the project.
+Copy these commands (press button on the right-hand side of the block) 
+and run from the directory you would clone the project.
 
 ```sh
 # non-interactive

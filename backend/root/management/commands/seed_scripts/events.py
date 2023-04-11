@@ -1,6 +1,7 @@
 import random
 from typing import Tuple
 
+from django.db import transaction
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
@@ -48,12 +49,13 @@ CATEGORIES = [
 
 # Ticket groups (weighted random)
 # Reduces change of registration/custom types because
-# seeding these is much slower.
+# seeding these is much slower. Most events are billig!
 TICKET_TYPES = {
-    EventTicketType.FREE: 0.4,
-    EventTicketType.INCLUDED: 0.4,
-    EventTicketType.REGISTRATION: 0.1,
-    EventTicketType.CUSTOM: 0.1,
+    EventTicketType.BILLIG: 10,
+    EventTicketType.REGISTRATION: 1,
+    EventTicketType.INCLUDED: 5,
+    EventTicketType.CUSTOM: 1,
+    EventTicketType.FREE: 5,
 }
 
 # Age groups
@@ -108,15 +110,12 @@ def dummy_metadata() -> dict:
     }
 
 
-def seed():
+def do_seed():
     Event.objects.all().delete()
     EventGroup.objects.all().delete()
     EventCustomTicket.objects.all().delete()
     EventRegistration.objects.all().delete()
     yield 0, 'Deleted old events'
-
-    # Save events in bulk when possible to speed up seeding
-    unsaved_events = []
 
     n_recurring = 0
     for i in range(COUNT):
@@ -164,7 +163,7 @@ def seed():
 
             # Add event
             recurring_offset = timezone.timedelta(days=j * 7)
-            event = Event(
+            event = Event.objects.create(
                 **metadata_this,
                 start_dt=event_time + recurring_offset,
                 publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
@@ -173,16 +172,19 @@ def seed():
                 ticket_type=ticket_type,
                 **ticket_type_data,
             )
-            unsaved_events.append(event)
 
             # Add custom ticket types
             if ticket_type == EventTicketType.CUSTOM:
-                event.save()
-                unsaved_events.remove(event)
                 event.custom_tickets.add(*custom_tickets)
 
         yield int(i / COUNT * 100), 'Creating events'
 
     # Done!
-    Event.objects.bulk_create(unsaved_events)
     yield 100, f'Created {Event.objects.all().count()} events ({n_recurring} recurring)'
+
+
+def seed():
+    # Seed with transaction (much faster)
+    with transaction.atomic():
+        for seed in do_seed():
+            yield seed

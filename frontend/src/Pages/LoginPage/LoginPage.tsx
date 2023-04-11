@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -21,18 +22,19 @@ export function LoginPage() {
     login(formData['name'], formData['password'])
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
-          getUser()
-            .then((user) => {
-              setUser(user);
-            })
-            .catch();
+          getUser().then((user) => {
+            setUser(user);
+          });
+
           navigate(ROUTES.frontend.home);
         } else {
           setLoginFailed(true);
         }
       })
-      .catch(() => {
+      .catch((error) => {
         setLoginFailed(true);
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
       });
   }
 

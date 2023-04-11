@@ -63,12 +63,12 @@ export async function getHomeData(): Promise<HomePageElementDto[]> {
   return response.data;
 }
 
-export async function putUserPreference(data: Partial<UserPreferenceDto>): Promise<unknown> {
+export async function putUserPreference(id: string | number, data: Partial<UserPreferenceDto>): Promise<unknown> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__user_preference_detail,
-      urlParams: { pk: data.id },
+      urlParams: { pk: id },
     });
   const response = await axios.put<UserPreferenceDto>(url, data, { withCredentials: true });
 
@@ -89,7 +89,7 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(id: number, venue: Partial<VenueDto>): Promise<VenueDto> {
+export async function putVenue(id: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
   return response.data;
@@ -171,7 +171,6 @@ export async function putEvent(id: string | number, data: Partial<EventDto>): Pr
 export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
-
   return response;
 }
 

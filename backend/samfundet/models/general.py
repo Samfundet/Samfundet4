@@ -92,6 +92,54 @@ class User(AbstractUser):
         return has_global_perm or has_object_perm
 
 
+class UserPreference(models.Model):
+    """Group all preferences and config per user."""
+
+    class Theme(models.TextChoices):
+        """Same as in frontend"""
+
+        LIGHT = 'theme-light'
+        DARK = 'theme-dark'
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
+    mirror_dimension = models.BooleanField(default=False)
+    cursor_trail = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        verbose_name = 'UserPreference'
+        verbose_name_plural = 'UserPreferences'
+
+    def __str__(self) -> str:
+        return f'UserPreference ({self.user})'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    nickname = models.CharField(max_length=30, blank=True, null=True)
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
+
+    def __str__(self) -> str:
+        return f'Profile ({self.user})'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Additional operations on save."""
+        super().save(*args, **kwargs)
+
+        # Extend Profile to assign permission to whichever user is related to it.
+        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
+        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
+
+
 class Venue(models.Model):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
     description = models.TextField(blank=True, null=True)
@@ -148,53 +196,6 @@ class ClosedPeriod(models.Model):
 
     def __str__(self) -> str:
         return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
-
-
-class UserPreference(models.Model):
-    """Group all preferences and config per user."""
-
-    class Theme(models.TextChoices):
-        """Same as in frontend"""
-
-        LIGHT = 'theme-light'
-        DARK = 'theme-dark'
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
-    mirror_dimension = models.BooleanField(default=False)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'UserPreference'
-        verbose_name_plural = 'UserPreferences'
-
-    def __str__(self) -> str:
-        return f'UserPreference ({self.user})'
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    nickname = models.CharField(max_length=30, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
-
-    def __str__(self) -> str:
-        return f'Profile ({self.user})'
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Additional operations on save."""
-        super().save(*args, **kwargs)
-
-        # Extend Profile to assign permission to whichever user is related to it.
-        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
-        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
 # GANGS ###
