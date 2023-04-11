@@ -1,0 +1,1 @@
+export { SultenOutlet } from './SultenOutlet';
