@@ -19,8 +19,8 @@ def seed():
         # Make sure slug field is unique
         if slug_field in used_slug_fields:
             used_slug_fields[slug_field] += 1
-            title_nb = f'{title_nb}-{used_slug_fields[slug_field]}'
-            title_en = f'{title_en}-{used_slug_fields[slug_field]}'
+            title_nb = f'{title_nb} ({used_slug_fields[slug_field]})'
+            title_en = f'{title_en} ({used_slug_fields[slug_field]})'
             slug_field = f'{slug_field}-{used_slug_fields[slug_field]}'
         else:
             used_slug_fields[slug_field] = 1
