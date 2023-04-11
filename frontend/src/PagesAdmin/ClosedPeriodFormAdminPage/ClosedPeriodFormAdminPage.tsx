@@ -1,12 +1,14 @@
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getClosedPeriod } from '~/api';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { toast } from 'react-toastify';
+import { SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { ClosedPeriodDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getClosedPeriod } from '~/api';
+import { ClosedPeriodDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -25,24 +27,27 @@ export function ClosedPeriodFormAdminPage() {
   // Stuff to do on first render.
   //TODO add permissions on render
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // TODO add fix on no id on editpage
-    if (id) {
-      getClosedPeriod(id)
-        .then((data) => {
-          setClosedPeriod(data);
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_gangs);
-          }
-        });
-    } else {
+    if (id === undefined) {
       setShowSpinner(false);
+      return;
     }
+
+    getClosedPeriod(id)
+      .then((data) => {
+        setClosedPeriod(data);
+        setShowSpinner(false);
+      })
+      .catch((data: AxiosError) => {
+        // TODO add error pop up message?
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.admin_gangs);
+        }
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(data);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function handleOnSubmit(data: ClosedPeriodDto) {
@@ -63,14 +68,11 @@ export function ClosedPeriodFormAdminPage() {
     );
   }
 
-  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.opening_hours)}'`;
-  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.norwegian)})`;
+  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
+  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.common_norwegian)})`;
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_closed)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period)}
       </h1>
@@ -79,20 +81,24 @@ export function ClosedPeriodFormAdminPage() {
           <SamfFormField
             field="message_no"
             type="text-long"
-            label={`${labelMessage} (${KEY.norwegian})`}
+            label={`${labelMessage} (${KEY.common_norwegian})`}
           ></SamfFormField>
-          <SamfFormField field="message_en" type="text-long" label={`${labelMessage} (${KEY.english})`}></SamfFormField>
+          <SamfFormField
+            field="message_en"
+            type="text-long"
+            label={`${labelMessage} (${KEY.common_english})`}
+          ></SamfFormField>
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_no"
             type="text-long"
-            label={`${labelDescription} (${KEY.norwegian})`}
+            label={`${labelDescription} (${KEY.common_norwegian})`}
           ></SamfFormField>
           <SamfFormField
             field="description_en"
             type="text-long"
-            label={`${labelDescription} (${KEY.english})`}
+            label={`${labelDescription} (${KEY.common_english})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>

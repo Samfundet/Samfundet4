@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
@@ -15,7 +16,7 @@ import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from 
 
 export function LychePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
   const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,14 +26,18 @@ export function LychePage() {
       .then((data) => {
         const lyche = data.find((venue) => venue.name?.toLowerCase() === VENUE.LYCHE);
         setLycheVenue(lyche);
+        setLoading(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
     setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
-    setLoading(false);
   }, [lycheVenue]);
 
   const openingHourRow = (days: string, open_hour: string | undefined, close_hour: string | undefined) => {
@@ -46,23 +51,27 @@ export function LychePage() {
 
   const openingHours = !loading && (
     <div className={styles.opening_hour_container}>
-      <h2 className={styles.opening_hour_header}>{t(KEY.opening_hours)}</h2>
+      <h2 className={styles.opening_hour_header}>{t(KEY.common_opening_hours)}</h2>
 
       {/* Weekday hours */}
       {isConsistentWeekdayHours ? (
         <>
           {openingHourRow(
-            `${t(KEY.day_monday)}-${t(KEY.day_thursday)}`,
+            `${t(KEY.common_day_monday)}-${t(KEY.common_day_thursday)}`,
             lycheVenue?.opening_monday,
             lycheVenue?.closing_monday,
           )}
         </>
       ) : (
         <>
-          {openingHourRow(`${t(KEY.day_monday)}`, lycheVenue?.opening_monday, lycheVenue?.closing_monday)}
-          {openingHourRow(`${t(KEY.day_tuesday)}`, lycheVenue?.opening_tuesday, lycheVenue?.closing_tuesday)}
-          {openingHourRow(`${t(KEY.day_wednesday)}`, lycheVenue?.opening_wednesday, lycheVenue?.closing_wednesday)}
-          {openingHourRow(`${t(KEY.day_thursday)}`, lycheVenue?.opening_thursday, lycheVenue?.closing_thursday)}
+          {openingHourRow(`${t(KEY.common_day_monday)}`, lycheVenue?.opening_monday, lycheVenue?.closing_monday)}
+          {openingHourRow(`${t(KEY.common_day_tuesday)}`, lycheVenue?.opening_tuesday, lycheVenue?.closing_tuesday)}
+          {openingHourRow(
+            `${t(KEY.common_day_wednesday)}`,
+            lycheVenue?.opening_wednesday,
+            lycheVenue?.closing_wednesday,
+          )}
+          {openingHourRow(`${t(KEY.common_day_thursday)}`, lycheVenue?.opening_thursday, lycheVenue?.closing_thursday)}
         </>
       )}
 
@@ -70,20 +79,20 @@ export function LychePage() {
       {isConsistentWeekendHours ? (
         <>
           {openingHourRow(
-            `${t(KEY.day_friday)}-${t(KEY.day_saturday)}`,
+            `${t(KEY.common_day_friday)}-${t(KEY.common_day_saturday)}`,
             lycheVenue?.opening_friday,
             lycheVenue?.closing_friday,
           )}
         </>
       ) : (
         <>
-          {openingHourRow(`${t(KEY.day_friday)}`, lycheVenue?.opening_friday, lycheVenue?.closing_friday)}
-          {openingHourRow(`${t(KEY.day_saturday)}`, lycheVenue?.opening_saturday, lycheVenue?.closing_saturday)}
+          {openingHourRow(`${t(KEY.common_day_friday)}`, lycheVenue?.opening_friday, lycheVenue?.closing_friday)}
+          {openingHourRow(`${t(KEY.common_day_saturday)}`, lycheVenue?.opening_saturday, lycheVenue?.closing_saturday)}
         </>
       )}
 
       {/* Sunday hours */}
-      {openingHourRow(`${t(KEY.day_sunday)}`, lycheVenue?.opening_sunday, lycheVenue?.closing_sunday)}
+      {openingHourRow(`${t(KEY.common_day_sunday)}`, lycheVenue?.opening_sunday, lycheVenue?.closing_sunday)}
     </div>
   );
 

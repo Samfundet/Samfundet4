@@ -4,11 +4,10 @@ import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'time';
 
 type InputFieldProps<T> = {
   children?: Children;
-  className?: string;
   labelClassName?: string;
   inputClassName?: string;
   onChange?: (value: T) => void;
@@ -23,7 +22,6 @@ type InputFieldProps<T> = {
 
 export function InputField<T>({
   children,
-  className,
   labelClassName,
   inputClassName,
   onChange,
@@ -47,7 +45,7 @@ export function InputField<T>({
     onChange?.(value as T);
   }
   return (
-    <label className={classNames(className, styles.label, disabled && styles.disabled_label, labelClassName)}>
+    <label className={classNames(styles.label, disabled && styles.disabled_label, labelClassName)}>
       {children}
       <input
         onChange={handleChange}

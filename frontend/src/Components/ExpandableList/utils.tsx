@@ -4,18 +4,18 @@ import { KEY } from '~/i18n/constants';
 
 export function monthValueToString(month: number | '' | undefined) {
   const months = [
-    t(KEY.month_january),
-    t(KEY.month_february),
-    t(KEY.month_march),
-    t(KEY.month_april),
-    t(KEY.month_may),
-    t(KEY.month_june),
-    t(KEY.month_july),
-    t(KEY.month_august),
-    t(KEY.month_september),
-    t(KEY.month_october),
-    t(KEY.month_november),
-    t(KEY.month_december),
+    t(KEY.common_month_january),
+    t(KEY.common_month_february),
+    t(KEY.common_month_march),
+    t(KEY.common_month_april),
+    t(KEY.common_month_may),
+    t(KEY.common_month_june),
+    t(KEY.common_month_july),
+    t(KEY.common_month_august),
+    t(KEY.common_month_september),
+    t(KEY.common_month_october),
+    t(KEY.common_month_november),
+    t(KEY.common_month_december),
   ];
   return month ? months[month] : '-';
 }

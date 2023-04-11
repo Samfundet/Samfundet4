@@ -1,9 +1,7 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
-import { putUserPreference } from '~/api';
-import { useAuthContext } from '~/AuthContext';
-import { THEME } from '~/constants';
 import { useGlobalContext } from '~/GlobalContextProvider';
+import { useIsDarkTheme } from '~/hooks';
 import styles from './ThemeSwitch.module.scss';
 
 type ThemeSwitchProps = {
@@ -11,22 +9,15 @@ type ThemeSwitchProps = {
 };
 
 export function ThemeSwitch({ className }: ThemeSwitchProps) {
-  const { switchTheme, theme } = useGlobalContext();
-  const { user } = useAuthContext();
+  const { switchTheme } = useGlobalContext();
+  const isDarkTheme = useIsDarkTheme();
 
   const onIcon = <Icon icon="ph:moon-stars-thin" inline={true} width={24} className={styles.icon} />;
   const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24} className={styles.icon} />;
 
-  function switchThemeHandler() {
-    const switchedTo = switchTheme();
-    if (user) {
-      putUserPreference({ id: user?.user_preference.id, theme: switchedTo });
-    }
-  }
-
   return (
-    <div onClick={switchThemeHandler} className={classnames(styles.button, className)}>
-      {theme === THEME.DARK ? onIcon : offIcon}
+    <div onClick={switchTheme} className={classnames(styles.button, className)}>
+      {isDarkTheme ? onIcon : offIcon}
     </div>
   );
 }

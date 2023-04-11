@@ -126,15 +126,15 @@ Usage:
 /* End: Spacing classes */
 
 /* Theme mixins */
-/* Use THEME constants */
+
 @mixin theme-dark {
-  body:global(.theme-dark) & {
+  :global([#{$theme-key}='#{$theme-dark}']) & {
     @content;
   }
 }
 
 @mixin theme-light {
-  body:global(.theme-light) & {
+  :global([#{$theme-key}='#{$theme-light}']) & {
     @content;
   }
 }

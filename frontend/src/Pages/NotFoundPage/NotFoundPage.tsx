@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Button, Link } from '~/Components';
+import { NotFound } from '~/assets';
 import { SUPPORT_EMAIL } from '~/constants';
 import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
-import { NotFound } from '~/assets';
+import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
@@ -17,14 +18,14 @@ export function NotFoundPage() {
         rounded={true}
         theme="outlined"
         onClick={() => {
-          navigate('/');
+          navigate(ROUTES.frontend.home);
         }}
       >
-        <span className={styles.button_text}>{t(KEY.back_to_samfundet)}</span>
+        <span className={styles.button_text}>{t(KEY.common_back_to_samfundet)}</span>
       </Button>
       <br></br>
       <i className={styles.text}>
-        {t(KEY.not_found_contact_prompt)}{' '}
+        {t(KEY.notfoundpage_contact_prompt)}{' '}
         <Link url={`mailto:${SUPPORT_EMAIL}`} target="email">
           {t(KEY.common_contact_us).toLowerCase()}
         </Link>

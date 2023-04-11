@@ -1,6 +1,13 @@
 
+@import 'src/global.scss';
+
 .samf_form {
   width: 100%;
+  background-color: $grey-5;
+  border: 1px solid $grey-4;
+  box-shadow: 0 0 25px 5px $black-t10;
+  border-radius: 2em;
+  padding: 1.5em;
 }
 
 .input_element {
@@ -16,8 +23,23 @@
   margin-top: 1em;
 }
 
-// Debug styling
+// Shake animation on error
+@keyframes shake {
+  0% { transform: translateX(0); }
+ 15% { transform: translateX(8px); }
+ 40% { transform: translateX(-8px); }
+ 75% { transform: translateX(8px); }
+ 100% { transform: translateX(0); }
+}
 
+// Error class
+.animate_error {
+  animation-name: shake;
+  animation-duration: .4s;
+  animation-timing-function: ease-out;
+}
+
+// Debug styling
 .debug_box {
   padding: 1em;
   display: flex;

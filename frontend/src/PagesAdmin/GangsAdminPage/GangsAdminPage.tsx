@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getGangList } from '~/api';
+import { toast } from 'react-toastify';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
+import { getGangList } from '~/api';
 import { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -34,7 +35,10 @@ export function GangsAdminPage() {
           value: data[0],
         });
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,17 +63,14 @@ export function GangsAdminPage() {
   // TODO ADD TRANSLATIONS pr element
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_gangs_title)}</h1>
+        <h1 className={styles.header}>{t(KEY.adminpage_gangs_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_gang_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
-        {t(KEY.admin_gangs_create)}
+        {t(KEY.adminpage_gangs_create)}
       </Button>
 
       <br></br>
@@ -79,7 +80,12 @@ export function GangsAdminPage() {
       {currentGangType && (
         <>
           <Table
-            columns={[t(KEY.gang) ?? '', t(KEY.abbreviation) ?? '', t(KEY.webpage) ?? '', '']}
+            columns={[
+              t(KEY.common_gang) ?? '',
+              t(KEY.admin_gangsadminpage_abbreviation) ?? '',
+              t(KEY.admin_gangsadminpage_webpage) ?? '',
+              '',
+            ]}
             data={currentGangType.gangs.map(function (element2) {
               return [
                 dbT(element2, 'name'),

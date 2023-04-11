@@ -1,3 +1,7 @@
+#
+# This file contains most of the django models used for Samf4
+#
+
 from __future__ import annotations
 
 import random
@@ -8,7 +12,6 @@ from typing import TYPE_CHECKING
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext as _
 from guardian.shortcuts import assign_perm
 
@@ -58,7 +61,7 @@ class Tag(models.Model):
 class Image(models.Model):
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
-    image = models.ImageField(upload_to='images/', blank=True, null=False)
+    image = models.ImageField(upload_to='images/', blank=False, null=False)
 
     class Meta:
         verbose_name = 'Image'
@@ -89,80 +92,52 @@ class User(AbstractUser):
         return has_global_perm or has_object_perm
 
 
-class EventGroup(models.Model):
-    name = models.CharField(max_length=140)
+class UserPreference(models.Model):
+    """Group all preferences and config per user."""
+
+    class Theme(models.TextChoices):
+        """Same as in frontend"""
+
+        LIGHT = 'theme-light'
+        DARK = 'theme-dark'
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
+    mirror_dimension = models.BooleanField(default=False)
+    cursor_trail = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
-        verbose_name = 'EventGroup'
-        verbose_name_plural = 'EventGroups'
+        verbose_name = 'UserPreference'
+        verbose_name_plural = 'UserPreferences'
+
+    def __str__(self) -> str:
+        return f'UserPreference ({self.user})'
 
 
-class Event(models.Model):
-    # General info
-    title_nb = models.CharField(max_length=140, blank=False, null=False)
-    title_en = models.CharField(max_length=140, blank=False, null=False)
-    description_long_nb = models.TextField(blank=False, null=False)
-    description_long_en = models.TextField(blank=False, null=False)
-    description_short_nb = models.TextField(blank=False, null=False)
-    description_short_en = models.TextField(blank=False, null=False)
-    location = models.CharField(max_length=140, blank=False, null=False)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
-    host = models.CharField(max_length=140, blank=False, null=False)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    nickname = models.CharField(max_length=30, blank=True, null=True)
 
-    # Event group is used for events occurring multiple times (eg. a concert repeating twice)
-    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
-
-    # Timestamps
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-    start_dt = models.DateTimeField(blank=False, null=False)
-    duration = models.PositiveIntegerField(blank=False, null=False)
-    publish_dt = models.DateTimeField(blank=False, null=False)
-
-    # Choice infos
-    class AgeGroup(models.TextChoices):
-        NO_RESTRICTION = None, _('Ingen aldersgrense')
-        AGE_18 = 'EIGHTEEN', _('18 år')
-        AGE_20 = 'TWENTY', _('20 år')
-        MIXED = 'MIXED', _('18 år (student), 20 år (ikke-student)')
-
-    class StatusGroup(models.TextChoices):
-        ACTIVE = 'active', _('Aktiv')
-        ARCHIVED = 'archived', _('Arkivert')
-        CANCELED = 'canceled', _('Avlyst')
-
-    class Category(models.TextChoices):
-        SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
-        CONCERT = 'concert', _('Konsert')
-        DEBATE = 'debate', _('Debatt')
-        QUIZ = 'quiz', _('Quiz')
-        LECTURE = 'lecture', _('Kurs')
-        OTHER = 'other', _('Annet')
-
-    status_group = models.CharField(max_length=30, choices=StatusGroup.choices, blank=True, null=True)
-    age_group = models.CharField(max_length=30, choices=AgeGroup.choices, blank=True, null=True)
-    category = models.CharField(max_length=30, choices=Category.choices, null=False, default=Category.OTHER)
-
-    # Price
-    # TODO FIX PRICE CATEGORIES https://github.com/Samfundet/Samfundet4/issues/315
-    class PriceGroup(models.TextChoices):
-        INCLUDED = 'INCLUDED', _('Included with entrance')
-        FREE = 'FREE', _('Free')
-        BILLIG = 'BILLIG', _('Paid')
-        REGISTRATION = 'REGISTRATION', _('Free with registration')
-
-    price_group = models.CharField(max_length=30, choices=PriceGroup.choices, default=PriceGroup.FREE, blank=True, null=True)
-    capacity = models.PositiveIntegerField(blank=True, null=True)
-
-    @property
-    def end_dt(self) -> timezone.datetime:
-        return self.start_dt + timezone.timedelta(minutes=self.duration)
 
     class Meta:
-        verbose_name = 'Event'
-        verbose_name_plural = 'Events'
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
+
+    def __str__(self) -> str:
+        return f'Profile ({self.user})'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Additional operations on save."""
+        super().save(*args, **kwargs)
+
+        # Extend Profile to assign permission to whichever user is related to it.
+        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
+        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
 class Venue(models.Model):
@@ -204,9 +179,9 @@ class Venue(models.Model):
 
 class ClosedPeriod(models.Model):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
-    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
-
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
+
+    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
@@ -216,57 +191,11 @@ class ClosedPeriod(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
-        verbose_name = 'Stengt periode'
-        verbose_name_plural = 'Stengt perioder'
+        verbose_name = 'ClosedPeriod'
+        verbose_name_plural = 'ClosedPeriods'
 
     def __str__(self) -> str:
         return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
-
-
-class UserPreference(models.Model):
-    """Group all preferences and config per user."""
-
-    class Theme(models.TextChoices):
-        """Same as in frontend"""
-
-        LIGHT = 'theme-light'
-        DARK = 'theme-dark'
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'UserPreference'
-        verbose_name_plural = 'UserPreferences'
-
-    def __str__(self) -> str:
-        return f'UserPreference ({self.user})'
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    nickname = models.CharField(max_length=30, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
-
-    def __str__(self) -> str:
-        return f'Profile ({self.user})'
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Additional operations on save."""
-        super().save(*args, **kwargs)
-
-        # Extend Profile to assign permission to whichever user is related to it.
-        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
-        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
 # GANGS ###
@@ -367,6 +296,10 @@ class FoodPreference(models.Model):
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    class Meta:
+        verbose_name = 'FoodPreference'
+        verbose_name_plural = 'FoodPreferences'
+
     def __str__(self) -> str:
         return f'{self.name_nb}'
 
@@ -378,6 +311,10 @@ class FoodCategory(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        verbose_name = 'FoodCategory'
+        verbose_name_plural = 'FoodCategories'
 
     def __str__(self) -> str:
         return f'{self.name_nb}'
@@ -448,7 +385,7 @@ class Saksdokument(models.Model):
 
     class Meta:
         verbose_name = 'Saksdokument'
-        verbose_name_plural = 'Saksdokument'
+        verbose_name_plural = 'Saksdokumenter'
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
@@ -517,3 +454,43 @@ class TextItem(models.Model):
 
     def __str__(self) -> str:
         return f'{self.key}'
+
+
+class KeyValue(models.Model):
+    """
+    Model for environment variables in the database.
+    Should not be used for secrets.
+    Can be used to manage behaviour of the system on demand, such as feature toggling.
+    Solution is inspired by variables from Github Actions.
+    I.e. we do not want more fields on this model, CharField is sufficient, and is very flexible.
+
+    You may populate the field value with whatever is needed.
+    For boolean values, it's common to use e.g. `SOME_VAR=1` for `True`, or empty var for `False`.
+    This model has helper methods to check for boolean values.
+
+    All keys should be registered in 'samfundet.utils.key_values' for better overview and easy access backend.
+    """
+    key = models.CharField(max_length=60, blank=False, null=False, unique=True)
+    value = models.CharField(max_length=60, default='', blank=True, null=False)
+
+    # Keywords to annotate falsy values.
+    EMPTY = ''
+    FALSE = 'false'
+    NO = 'no'
+    ZERO = '0'
+    FALSY = [FALSE, NO, ZERO, EMPTY]
+
+    class Meta:
+        verbose_name = 'KeyValue'
+        verbose_name_plural = 'KeyValues'
+
+    def __str__(self) -> str:
+        return f'{self.key}={self.value}'
+
+    def is_true(self) -> bool:
+        """Check if value is truthy."""
+        return not self.is_false()
+
+    def is_false(self) -> bool:
+        """Check if value is falsy."""
+        return self.value.lower() in self.FALSY

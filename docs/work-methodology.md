@@ -1,4 +1,4 @@
-[👈 back](/docs/README.md)
+[👈 back](/README.md)
 
 # Work methodology
 

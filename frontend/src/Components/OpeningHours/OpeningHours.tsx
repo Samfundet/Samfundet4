@@ -18,7 +18,7 @@ export function OpeningHours({ venues }: OpeningHoursProps) {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
-      <h2>{t(KEY.opening_hours)}</h2>
+      <h2>{t(KEY.common_opening_hours)}</h2>
       <table className={styles.timeTable}>
         {venues.map(function (element, key) {
           return (

@@ -1,0 +1,1 @@
+export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';

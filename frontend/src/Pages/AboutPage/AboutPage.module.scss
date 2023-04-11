@@ -116,3 +116,24 @@
     height: 12em;
   }
 }
+
+.venue_bubble {
+  border-radius: 100%;
+  width: 12em;
+  height: 12em;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 0.5em 0 rgba($color: #000000, $alpha: 1);
+  transition: 0.2s;
+
+  &:hover {
+    filter: brightness(115%);
+    transform: scale(103%);
+  }
+}
+
+.venue_name {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;
+}

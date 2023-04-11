@@ -1,14 +1,13 @@
 from datetime import time
 
-from django.db import transaction
 from django.conf import settings
-from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.db import transaction
+from django.utils import timezone
 
 from root.constants import Environment
-
-from samfundet.models import (
+from samfundet.models.general import (
     Venue,
     InformationPage,
     ClosedPeriod,
@@ -34,7 +33,6 @@ class Command(BaseCommand):
 
         # All or nothing.
         with transaction.atomic():
-
             User.objects.create_superuser(
                 username='cypress_superuser',
                 password=PW,

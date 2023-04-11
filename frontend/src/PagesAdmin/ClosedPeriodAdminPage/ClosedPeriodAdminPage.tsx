@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteClosedPeriod, getClosedPeriods } from '~/api';
+import { toast } from 'react-toastify';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -17,27 +18,36 @@ export function ClosedPeriodAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  function getAllClosedPeriods() {
+  const getAllClosedPeriods = useCallback(() => {
     setShowSpinner(true);
     getClosedPeriods()
       .then((data) => {
         setClosedPeriods(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
-  }
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+  }, [t]);
 
   // Stuff to do on first render.
   // TODO add permissions on render
 
   useEffect(() => {
     getAllClosedPeriods();
-  }, []);
+  }, [getAllClosedPeriods]);
 
   function deleteSelectedEvent(id: number) {
-    deleteClosedPeriod(id).then(() => {
-      getAllClosedPeriods();
-    });
+    deleteClosedPeriod(id)
+      .then(() => {
+        getAllClosedPeriods();
+        toast.success(t(KEY.common_delete_successful));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   if (showSpinner) {
@@ -50,13 +60,10 @@ export function ClosedPeriodAdminPage() {
 
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_closed_period_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_closedperiod_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
@@ -95,19 +102,19 @@ export function ClosedPeriodAdminPage() {
                         );
                       }}
                     >
-                      {t(KEY.edit)}
+                      {t(KEY.common_edit)}
                     </Button>
                     <Button
                       theme="samf"
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${element.message_no}`)) {
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}
                     >
-                      {t(KEY.delete)}
+                      {t(KEY.common_delete)}
                     </Button>{' '}
                   </div>
                 ),

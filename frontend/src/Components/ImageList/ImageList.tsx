@@ -21,12 +21,15 @@ type ImageListProps = {
 };
 
 export function ImageList({ images, size, textClassName, textMaxLength }: ImageListProps) {
-  function getImageText(element: Record<string, string>) {
+  function getImageText(element: ImageProps) {
     const name = dbT(element, 'name');
-    if (textMaxLength && name && name.length > textMaxLength) {
+    const isLongerThanMax = textMaxLength && name && name.length > textMaxLength;
+
+    if (isLongerThanMax) {
       return element.short;
     }
-    return dbT(element, 'name');
+
+    return name;
   }
 
   return (

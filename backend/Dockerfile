@@ -10,6 +10,10 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PIPENV_VENV_IN_PROJECT=1
 
+# Dependency for billig development database
+RUN apt-get update
+RUN apt-get install sqlite3
+
 # Alias
 RUN echo 'alias la="ls -la"' >> ~/.bashrc
 
@@ -18,7 +22,7 @@ RUN echo 'alias migrate="pipenv run python /app/manage.py migrate"' >> ~/.bashrc
 RUN echo 'alias makemigrations="pipenv run python /app/manage.py makemigrations"' >> ~/.bashrc
 RUN echo 'alias seed="pipenv run python /app/manage.py seed"' >> ~/.bashrc
 RUN echo 'alias collectstatic="pipenv run python /app/manage.py collectstatic --noinput"' >> ~/.bashrc
-RUN echo 'alias pipeline="pipenv run ./run-pipeline.sh"' >> ~/.bashrc
+RUN echo 'alias pipeline="pipenv run /app/run-pipeline.sh"' >> ~/.bashrc
 
 # Make directories
 RUN mkdir /app

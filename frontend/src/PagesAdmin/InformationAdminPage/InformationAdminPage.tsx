@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { deleteInformationPage, getInformationPages } from '~/api';
+import { toast } from 'react-toastify';
 import { Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
+import { deleteInformationPage, getInformationPages } from '~/api';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -27,20 +28,28 @@ export function InformationAdminPage() {
         setInformationPages(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deletePage(slug_field: string | undefined) {
     if (!slug_field) return;
 
-    deleteInformationPage(slug_field).then(() => {
-      getInformationPages()
-        .then((data) => {
+    deleteInformationPage(slug_field)
+      .then(() => {
+        getInformationPages().then((data) => {
           setInformationPages(data);
           setShowSpinner(false);
-        })
-        .catch(console.error);
-    });
+        });
+        toast.success(t(KEY.common_delete_successful));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   if (showSpinner) {
@@ -50,30 +59,35 @@ export function InformationAdminPage() {
       </div>
     );
   }
-
   const tableColumns = [
-    { content: t(KEY.name), sortable: true },
+    { content: t(KEY.common_name), sortable: true },
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.owner), sortable: true },
     { content: t(KEY.last_updated), sortable: true },
     '', // Buttons
   ];
+
   const data = informationPages.map(function (element) {
+    const pageUrl = reverse({
+      pattern: ROUTES.frontend.information_page_detail,
+      urlParams: { slugField: element.slug_field },
+    });
+
     return [
-      reverse({
-        pattern: ROUTES.frontend.information_page_detail,
-        urlParams: { slugField: element.slug_field },
-      }),
+      { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
       dbT(element, 'title'),
       'To be added',
       'To be added',
       {
         content: (
           <CrudButtons
+            onView={() => {
+              navigate(pageUrl);
+            }}
             onEdit={() => {
               navigate(
                 reverse({
-                  pattern: ROUTES.frontend.information_page_edit,
+                  pattern: ROUTES.frontend.admin_information_edit,
                   urlParams: { slugField: element.slug_field },
                 }),
               );
@@ -92,13 +106,10 @@ export function InformationAdminPage() {
   // TODO ADD TRANSLATIONS pr element
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_information_manage_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_informationpage_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
