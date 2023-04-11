@@ -42,20 +42,12 @@
 
 // disabled checkbox styling:
 .checkbox__disabled {
-  width: 1em;
-  height: 1em;
+  @extend .checkbox__box;
   border: 2px solid $grey-3;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
-  margin-left: 10px;
-  flex-shrink: 0;
-  background-color: $grey-3;
+  cursor: not-allowed;
 }
 
-.checkbox__input + .checkbox__disabled::after {
-  content: '\2714';
-  color: $white;
+.checkbox__input:checked + .checkbox__disabled::after {
+  @extend .checkbox__disabled;
+  background-color: $grey-3;
 }
