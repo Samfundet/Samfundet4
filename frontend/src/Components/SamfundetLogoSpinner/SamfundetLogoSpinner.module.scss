@@ -51,22 +51,21 @@
   }
 }
 
-$ease-func: cubic-bezier(.75,-0.5,0,1.75);
 $ease-func: ease-out;
 $delay: 0.25s;
 $time: 1.75s;
 
 /* The element to apply the animation to */
 .spinning_logo {
-
-  color: lighten($grey-3, 25%);
+  /* stylelint-disable-next-line function-no-unknown */
+  color: lighten($grey-3, 1000%);
   max-width: 5em;
   max-height: 5em;
-
   opacity: 0;
   animation: spinner-appear-after-delay .5s 0.25s forwards;
 
   @include theme-dark {
+    /* stylelint-disable-next-line function-no-unknown */
     color: darken($grey-1, 25%);
   }
   
