@@ -42,11 +42,6 @@ Usage:
 }
 
 // Up:
-@mixin for-mobile-up {
-  @media (min-width: $mobile-bp-lower) {
-    @content;
-  }
-}
 
 @mixin for-tablet-up {
   @media (min-width: $tablet-bp-lower) {
