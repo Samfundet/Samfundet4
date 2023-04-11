@@ -58,7 +58,7 @@ $time: 1.75s;
 /* The element to apply the animation to */
 .spinning_logo {
   /* stylelint-disable-next-line function-no-unknown */
-  color: lighten($grey-3, 1000%);
+  color: lighten($grey-3, 25%);
   max-width: 5em;
   max-height: 5em;
   opacity: 0;
