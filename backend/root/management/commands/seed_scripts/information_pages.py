@@ -9,10 +9,23 @@ def seed():
     InformationPage.objects.all().delete()
     yield 0, 'Deleted old events'
 
+    used_slug_fields = {}
+
     for i in range(COUNT):
         # Event title and time
         title_nb, title_en = words(2, include_english=True)
         slug_field = title_nb.lower().replace(' ', '-')
+
+        # Make sure slug field is unique
+        if slug_field in used_slug_fields:
+            used_slug_fields[slug_field] += 1
+            title_nb = f'{title_nb} ({used_slug_fields[slug_field]})'
+            title_en = f'{title_en} ({used_slug_fields[slug_field]})'
+            slug_field = f'{slug_field}-{used_slug_fields[slug_field]}'
+        else:
+            used_slug_fields[slug_field] = 1
+
+        # Create info page
         InformationPage.objects.create(
             slug_field=slug_field,
             title_nb=title_nb,

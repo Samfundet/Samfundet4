@@ -34,13 +34,13 @@
   overflow: visible;
 
   &:first-child {
-    padding-left: $primary-content-wide-padding;
+    padding-left: max($primary-content-wide-padding, 50% - ($primary-content-width-wide / 2));
     @include for-mobile-only {
       padding-left: $primary-content-mobile-padding;
     }
   }
   &:last-child {
-    padding-right: $primary-content-wide-padding;
+    padding-right: max($primary-content-wide-padding, 50% - ($primary-content-width-wide / 2));
     @include for-mobile-only {
       padding-right: $primary-content-mobile-padding;
     }
@@ -90,15 +90,22 @@
   }
 }
 
+.headerWrapper {
+  text-align: center;
+}
+
 .header {
   font-size: 1.5em;
   font-weight: 700;
   text-align: left;
-  margin-left: $primary-content-wide-padding;
+  margin: 0 $primary-content-wide-padding;
   width: $primary-content-width-wide;
-  max-width: 100%;
+  max-width: $primary-content-width-wide-padded;
+  display: inline-block;
 
   @include for-mobile-only {
     width: $primary-content-width-mobile;
+    max-width: 100%;
+    margin-left: $primary-content-mobile-padding;
   }
 }

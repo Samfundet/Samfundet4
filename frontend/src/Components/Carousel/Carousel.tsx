@@ -22,7 +22,9 @@ export function Carousel({ children, className, header = <Skeleton width={'8em'}
 
   return (
     <div className={className}>
-      <div className={styles.header}>{header}</div>
+      <div className={styles.headerWrapper}>
+        <div className={styles.header}>{header}</div>
+      </div>
       <div>
         <div className={styles.navContainer}>
           <div className={classnames(styles.button, styles.left)}>{'<'}</div>
