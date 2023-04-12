@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
-import { Navbar } from './Navbar';
-import styles from './Navbar.module.scss';
+import { Navbar } from '~/Components/Navbar';
+import styles from './SamfOutlet.module.scss';
 
-export function NavbarLayout() {
+export function SamfOutlet() {
   return (
     <>
       <Navbar />
