@@ -40,7 +40,7 @@
     }
   }
   &:last-child {
-    padding-right: $primary-content-wide-padding;
+    padding-right: max($primary-content-wide-padding, 50% - ($primary-content-width-wide / 2));
     @include for-mobile-only {
       padding-right: $primary-content-mobile-padding;
     }
