@@ -25,7 +25,7 @@ https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 
 from django.test import TestCase
 
-TestCase.databases = {"default", "billig"}
+TestCase.databases = {'default', 'billig'}
 
 
 @pytest.fixture(autouse=True)
@@ -49,9 +49,9 @@ def fixture_db(db: Any) -> Any:
 
 
 @pytest.fixture(autouse=True)
-def fixture_db_billig() -> None:
+def fixture_db_billig() -> Iterator[None]:
     billig_seed.create_db()
-    yield True
+    yield None
 
 
 @pytest.fixture
@@ -117,7 +117,7 @@ def fixture_user(fixture_user_pw: str) -> Iterator[User]:
 def fixture_image() -> Iterator[Image]:
     path = BASE_DIR / 'samfundet' / 'tests' / 'test_image.jpg'
     with open(path, 'rb') as file:
-        img = Image.objects.create(title="Image", image=ImageFile(file, name='Image'))
+        img = Image.objects.create(title='Image', image=ImageFile(file, name='Image'))
     yield img
     img.delete()
 
@@ -125,7 +125,11 @@ def fixture_image() -> Iterator[Image]:
 @pytest.fixture
 def fixture_billig_event() -> Iterator[BilligEvent]:
     event = BilligEvent.objects.create(
-        id=69, name="Test Event", sale_from=timezone.datetime.now(), sale_to=timezone.datetime.now() + timezone.timedelta(days=1), hidden=False
+        id=69,
+        name='Test Event',
+        sale_from=timezone.datetime.now(),
+        sale_to=timezone.datetime.now() + timezone.timedelta(days=1),
+        hidden=False,
     )
     yield event
     event.delete()
@@ -134,20 +138,20 @@ def fixture_billig_event() -> Iterator[BilligEvent]:
 @pytest.fixture
 def fixture_event(fixture_image: Image) -> Iterator[Event]:
     event = Event.objects.create(
-        title_nb="Test Event",
-        title_en="Test Event",
+        title_nb='Test Event',
+        title_en='Test Event',
         start_dt=timezone.now(),
         publish_dt=timezone.now() - timezone.timedelta(hours=1),
         duration=60,
-        description_long_nb="",
-        description_long_en="",
-        description_short_nb="",
-        description_short_en="",
-        location="",
+        description_long_nb='',
+        description_long_en='',
+        description_short_nb='',
+        description_short_en='',
+        location='',
         image=fixture_image,
         age_restriction=EventAgeRestriction.AGE_18,
         capacity=100,
-        host="",
+        host='',
     )
     yield event
     event.delete()

@@ -8,7 +8,6 @@
 #
 
 import os
-import subprocess
 from typing import Tuple, Iterable
 
 import django
@@ -37,7 +36,7 @@ SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 def get_schema() -> str:
     # Generate schema (pass schema.sql to sqlite3)
     seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
-    with open(seed_schema, "r") as f:
+    with open(seed_schema, 'r') as f:
         schema = f.read()
     return schema
 
@@ -48,7 +47,7 @@ def create_db() -> Tuple[bool, str]:
     """
 
     schema = get_schema()
-    schema_queries = schema.split(";")
+    schema_queries = schema.split(';')
     with django.db.connections['billig'].cursor() as cursor:
         for query in schema_queries:
             cursor.execute(query)
