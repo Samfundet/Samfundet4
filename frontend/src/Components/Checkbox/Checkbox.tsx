@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import styles from './Checkbox.module.scss';
 
 type Alignment = 'left' | 'right';
@@ -23,7 +24,8 @@ export function Checkbox({ name, onClick, disabled, checked, alignment = 'left',
         disabled={disabled}
         checked={checked}
       />
-      <div className={disabled ? styles.checkbox__disabled : styles.checkbox__box}></div>
+      {/* <div className={disabled ? styles.checkbox__disabled : styles.checkbox__box}></div> */}
+      <div className={classNames(styles.checkbox__box, disabled && styles.checkbox__disabled)}></div>
       {/* Denne diven styles i .scss fil for å representere en checkbox. Input tas i input elementet over */}
       {alignment == 'right' && label}
     </label>
