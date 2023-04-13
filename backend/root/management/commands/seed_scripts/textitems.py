@@ -31,7 +31,7 @@ def seed():
         {
             'key': 'contact_us',
             'text_nb': 'Har du spørsmål eller ønsker å komme i kontakt med oss? Ikke nøl med å ta kontakt!',
-            'text_en': 'Do you have any questions or want to get in touch with us? Don\'t hesitate to contact us!',
+            'text_en': 'Do you have any questions or want to get in touch with us? Don"t hesitate to contact us!',
         },
     ]
 
