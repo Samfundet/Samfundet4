@@ -198,6 +198,7 @@ class Event(models.Model):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._billig: BilligEvent | None = None
+        self._billig_unset: bool = True
 
     # ======================== #
     #     General Metadata     #
@@ -275,11 +276,11 @@ class Event(models.Model):
         The private '_billig' is used to save the event and prevent repeated database queries to billig.
         This field can also be set on many events at the same time by using prefetch_billig
         """
+        if self._billig_unset:
+            self._billig = BilligEvent.objects.get(id=self.billig_id)
+            self._billig_unset = False
         if self.billig_id is None:
             return None
-        if hasattr(self, '_billig'):
-            return self._billig
-        self._billig = BilligEvent.objects.get(event=self.billig_id)
         return self._billig
 
     # ======================== #
@@ -320,6 +321,7 @@ class Event(models.Model):
         for event in events_with_billig:
             for billig in billig_events:
                 if event.billig_id == billig.id:
+                    event._billig_unset = False
                     event._billig = billig
                     break
 
