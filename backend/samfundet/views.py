@@ -329,4 +329,4 @@ class VenueDetail(APIView):
             serializer = VenueSerializer(venue)
             return Response(serializer.data)
         else:
-            return Response({'detail': f'Venue with name \'{venue_name}\' does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': f'Venue with name "{venue_name}" does not exist.'}, status=status.HTTP_404_NOT_FOUND)
