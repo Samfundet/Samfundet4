@@ -49,8 +49,9 @@ def create_db() -> Tuple[bool, str]:
     schema = get_schema()
     schema_queries = schema.split(';')
     with django.db.connections['billig'].cursor() as cursor:
-        for query in schema_queries:
-            cursor.execute(query)
+        with transaction.atomic():
+            for query in schema_queries:
+                cursor.execute(query)
 
     return True, 'Created database and schema'
 
@@ -117,6 +118,14 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 
 # Main seed script entry point
 def seed() -> Iterable[Tuple[int, str]]:
+
+    # Create database and schema
+    yield 0, 'Creating billig_dev database...'
+    ok, message = create_db()
+    if not ok:
+        # Failed to create DB
+        yield 100, message
+        return
 
     # Seed billig database
     for percent, message in seed_tables():
