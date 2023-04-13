@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Optional
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
@@ -317,13 +317,13 @@ class ProfileView(ModelViewSet):
 class VenueDetail(APIView):
     permission_classes = [AllowAny]
 
-    def get_object(self, venue_name):
+    def get_object(self, venue_name: str) -> Optional[Venue]:
         try:
             return Venue.objects.get(name=venue_name)
         except Venue.DoesNotExist:
             return None
 
-    def get(self, request, venue_name):
+    def get(self, request: Request, venue_name: str) -> Response:
         venue = self.get_object(venue_name)
         if venue:
             serializer = VenueSerializer(venue)
