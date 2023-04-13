@@ -14,6 +14,7 @@ import os
 import subprocess
 from typing import Tuple, Iterable
 
+import django
 from django.db import transaction
 from django.utils import timezone
 from django import db
@@ -36,25 +37,24 @@ SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 # ======================== #
 
 
+def get_schema() -> str:
+    # Generate schema (pass schema.sql to sqlite3)
+    seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
+    with open(seed_schema, "r") as f:
+        schema = f.read()
+    return schema
+
+
 def create_db() -> Tuple[bool, str]:
     """
     Creates a new sqlite3 database with schema using shell scripts
     """
-    # Verify that sqlite3 is installed
-    has_sqlite3 = subprocess.run('which sqlite3', stdout=subprocess.DEVNULL, shell=True)
-    if has_sqlite3.returncode != 0:
-        return False, 'Failed to seed billig - is sqlite3 installed?'
 
-    # Create database file (just touch file)
-    create_db = subprocess.run(f'touch {DB_NAME}', stdout=subprocess.DEVNULL, shell=True)
-    if create_db.returncode != 0:
-        return False, "Failed to seed billig, couldn't create db file"
-
-    # Generate schema (pass schema.sql to sqlite3)
-    seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
-    create_schema = subprocess.run(f'cat "{seed_schema}" | sqlite3 "{DB_NAME}"', stdout=subprocess.DEVNULL, shell=True)
-    if create_schema.returncode != 0:
-        return False, "Failed to seed billig, couldn't create schema"
+    schema = get_schema()
+    schema_queries = schema.split(";")
+    with django.db.connections['billig'].cursor() as cursor:
+        for query in schema_queries:
+            cursor.execute(query)
 
     return True, 'Created database and schema'
 
@@ -123,12 +123,12 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 def seed() -> Iterable[Tuple[int, str]]:
 
     # Create database and schema
-    yield 0, 'Creating billig_dev database...'
-    ok, message = create_db()
-    if not ok:
-        # Failed to create DB
-        yield 100, message
-        return
+    # yield 0, 'Creating billig_dev database...'
+    # ok, message = create_db()
+    # if not ok:
+    #     # Failed to create DB
+    #     yield 100, message
+    #     return
 
     # Seed billig database
     for percent, message in seed_tables():

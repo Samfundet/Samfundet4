@@ -197,7 +197,7 @@ class Event(models.Model):
     # This is necessary because billig cannot be a real foreign key (see below)
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self._billig: BilligEvent | None = None
+        self._billig: BilligEvent | None | str = 'unset'
 
     # ======================== #
     #     General Metadata     #
@@ -277,9 +277,8 @@ class Event(models.Model):
         """
         if self.billig_id is None:
             return None
-        if hasattr(self, '_billig'):
-            return self._billig
-        self._billig = BilligEvent.objects.get(event=self.billig_id)
+        if self._billig == 'unset':
+            self._billig = BilligEvent.objects.get(id=self.billig_id)
         return self._billig
 
     # ======================== #
