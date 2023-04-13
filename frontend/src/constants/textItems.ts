@@ -8,6 +8,7 @@
  */
 
 export const TextItem = {
+  // Sulten
   sulten_reservation_text: 'sulten_reservation_text',
   sulten_menu_text: 'sulten_menu_text',
   sulten_about_us_text: 'sulten_about_us_text',
