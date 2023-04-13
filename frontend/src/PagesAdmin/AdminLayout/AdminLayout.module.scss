@@ -29,6 +29,7 @@ $panel-width: 13em;
 
   @include theme-dark {
     background-color: $theme-dark-bg;
+    border-color: $black;
   }
 }
 
@@ -58,7 +59,7 @@ $panel-width: 13em;
   @include theme-dark {
     color: white;
     background-color: $grey-1;
-    border-color: $grey-1;
+    border-color: $black;
   }
   
   &:hover {
