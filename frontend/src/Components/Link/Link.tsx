@@ -31,7 +31,6 @@ export function Link({ underline, className, style, children, url, title, plain,
     event.stopPropagation();
 
     // Close mobile menu if originates from there
-    console.log('SET NO MOBILE NAV');
     setIsMobileNavigation(false);
 
     /** Detected desire to open the link in a new tab.
