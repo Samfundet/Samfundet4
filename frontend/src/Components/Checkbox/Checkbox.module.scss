@@ -35,20 +35,13 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
   border-color: $red-samf;
 }
 
-/* Her velges (og styles) det elementet med psudoklassen .checkbox__box::after, som ligger rett etter elementet med klassen .checkbox__input:checked, når det sistnevte elementet er "checked". */
 .checkbox__input:checked + .checkbox__box::after {
+  color: white;
   content: $checkmark;
-  color: $white; /* Fargen til symbolet. */
 }
 
-.checkbox__disabled {
+.checkbox__input:disabled + .checkbox__box {
   border-color: $grey-3;
   background-color: $grey-3;
   cursor: not-allowed;
-}
-
-.checkbox__input:checked + .checkbox__disabled::after {
-  @extend .checkbox__box;
-  @extend .checkbox__disabled;
-  content: $checkmark;
 }
