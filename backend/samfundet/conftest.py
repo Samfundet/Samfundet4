@@ -114,7 +114,7 @@ def fixture_user(fixture_user_pw: str) -> Iterator[User]:
 
 
 @pytest.fixture
-def fixture_image() -> Image:
+def fixture_image() -> Iterator[Image]:
     path = BASE_DIR / 'samfundet' / 'tests' / 'test_image.jpg'
     with open(path, 'rb') as file:
         img = Image.objects.create(title="Image", image=ImageFile(file, name='Image'))
@@ -123,7 +123,7 @@ def fixture_image() -> Image:
 
 
 @pytest.fixture
-def fixture_billig_event() -> BilligEvent:
+def fixture_billig_event() -> Iterator[BilligEvent]:
     event = BilligEvent.objects.create(
         id=69, name="Test Event", sale_from=timezone.datetime.now(), sale_to=timezone.datetime.now() + timezone.timedelta(days=1), hidden=False
     )
@@ -132,7 +132,7 @@ def fixture_billig_event() -> BilligEvent:
 
 
 @pytest.fixture
-def fixture_event(fixture_image: Image) -> Event:
+def fixture_event(fixture_image: Image) -> Iterator[Event]:
     event = Event.objects.create(
         title_nb="Test Event",
         title_en="Test Event",
@@ -154,7 +154,7 @@ def fixture_event(fixture_image: Image) -> Event:
 
 
 @pytest.fixture
-def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: BilligEvent) -> tuple[Event, BilligEvent]:
+def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: BilligEvent) -> Iterator[tuple[Event, BilligEvent]]:
     fixture_event.ticket_type = EventTicketType.BILLIG
     fixture_event.billig_id = fixture_billig_event.id
     fixture_event.save()
