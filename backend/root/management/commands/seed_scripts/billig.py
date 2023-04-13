@@ -5,9 +5,6 @@
 # is not managed by django, but uses a different sqlite3
 # database simulating the real billig in prod (cirkus).
 #
-# The seed script generates the database and schema
-# in sqlite3 by running terminal commands, but seeds
-# the database with the django models as usual.
 #
 
 import os
@@ -121,14 +118,6 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 
 # Main seed script entry point
 def seed() -> Iterable[Tuple[int, str]]:
-
-    # Create database and schema
-    # yield 0, 'Creating billig_dev database...'
-    # ok, message = create_db()
-    # if not ok:
-    #     # Failed to create DB
-    #     yield 100, message
-    #     return
 
     # Seed billig database
     for percent, message in seed_tables():
