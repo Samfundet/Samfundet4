@@ -1,21 +1,29 @@
 /* stylelint-disable declaration-no-important */
 @import 'src/constants';
 
+@import 'src/mixins';
+
 .button {
+  @include flex-row;
+  gap: 1em;
   border: none;
   cursor: pointer;
   border-radius: 0.25em;
   transition: 0.15s;
-  box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
+  justify-content: center;
 
   &:disabled {
+    opacity: 0.5;
+    background-color: $grey-3;
+    color: $grey-1;
     cursor: not-allowed;
   }
 
   &:hover:not([disabled]) {
     filter: brightness(120%);
     transition: 0.15s;
-    box-shadow: 1px 2px 8px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 2px 15px 3px rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -58,6 +66,39 @@
   }
 }
 
+.button_black {
+  background-color: $black;
+  color: white;
+  transition: 0.15s;
+
+  &:hover:not([disabled]) {
+    background-color: $grey-1;
+    transition: 0.15s;
+  }
+}
+
+.button_white {
+  background-color: $white;
+  color: black;
+  transition: 0.15s;
+
+  &:hover:not([disabled]) {
+    filter: brightness(85%);
+    transition: 0.15s;
+  }
+}
+
+.button_green {
+  background-color: $green;
+  color: white;
+  transition: 0.15s;
+
+  &:hover:not([disabled]) {
+    filter: brightness(110%);
+    transition: 0.15s;
+  }
+}
+
 .display_basic {
   padding: 10px 25px;
 }
@@ -69,4 +110,8 @@
 .display_block {
   padding: 10px 25px;
   width: 100%;
+}
+
+.rounded {
+  border-radius: 10000px;
 }

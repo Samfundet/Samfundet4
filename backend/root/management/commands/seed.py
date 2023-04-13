@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import math
+import time
 import types
 
 from django.conf import settings
@@ -17,12 +20,16 @@ def print_progress(
     progress: int,
     prefix: str = '',
     suffix: str = '',
+    start_time: float = None,
 ):
     # Calculate size of bar and padding.
     percent = min(1, max(0, progress / 100.0))
     filled = BAR * math.floor(percent * BAR_LENGTH)
     padding = ' ' * math.ceil((1 - percent) * BAR_LENGTH)
     bar = filled + padding
+
+    if start_time:
+        suffix += f' ({time.time() - start_time:.2f}s)'
     # Clear line (special character).
     print('\033[K', end='\r')
     # Print loading bar and prefix/suffix.
@@ -32,8 +39,9 @@ def print_progress(
 
 def run_seed_script(*, target: tuple, index: int, count: int):
     # Run specific seed script.
-    prefix = f"{index + 1}/{count} '{target[0]}'\t"
+    prefix = f'{index + 1}/{count}'
     generator = target[1]()
+    start_time = time.time()
 
     # Generator types print their progress throughout.
     if isinstance(generator, types.GeneratorType):
@@ -43,9 +51,9 @@ def run_seed_script(*, target: tuple, index: int, count: int):
         for step in generator:
             if isinstance(step, tuple):
                 progress, suffix = step
-                print_progress(progress=progress, prefix=prefix, suffix=suffix)
+                print_progress(progress=progress, prefix=prefix, suffix=suffix, start_time=start_time)
             elif type(step) in [int, float]:
-                print_progress(progress=step, prefix=prefix)
+                print_progress(progress=step, prefix=prefix, start_time=start_time)
             else:
                 raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', "
                                 'expected number type or tuple of (number, str)')
@@ -53,20 +61,19 @@ def run_seed_script(*, target: tuple, index: int, count: int):
         # Final output 100%.
         if isinstance(step, tuple):
             if step[0] < 100:
-                print_progress(progress=100, prefix=prefix, suffix='OK')
+                print_progress(progress=100, prefix=prefix, suffix='OK', start_time=start_time)
         elif step < 100:
-            print_progress(progress=100, prefix=prefix, suffix='OK')
+            print_progress(progress=100, prefix=prefix, suffix='OK', start_time=start_time)
 
         print()
     else:
-        print_progress(progress=100, prefix=prefix, suffix='OK')
+        print_progress(progress=100, prefix=prefix, suffix='OK', start_time=start_time)
 
 
 class Command(BaseCommand):
     help = 'Seed database for testing and development.'
 
     def add_arguments(self, parser):
-        # pylint: disable=positional-arguments
         parser.add_argument('target', type=str, nargs='?', default=None)
 
     def handle(self, *args, **options):

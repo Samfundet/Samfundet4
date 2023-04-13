@@ -5,14 +5,15 @@
 .queryBar {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1em;
   @include for-tablet-up {
     flex-direction: row;
   }
 }
 
-.element {
-  margin-top: 0.4em;
-  @include for-tablet-up {
-    margin-right: 0.4em;
-  }
+.searchBar {
+  flex-basis: 50%;
+  margin: 0;
 }
+

@@ -1,0 +1,35 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+
+.imageContainer {
+  @include rounded;
+  @include shadow-light;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: 0.2s;
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.imageTitle {
+  color: $white;
+  text-align: center;
+  min-height: 2em;
+  .text {
+    font-size: 1.2em;
+    padding: 0.2em;
+    background-color: $black;
+    text-decoration: none;
+  }
+  .tags {
+    font-size: 0.8em;
+    padding: 0.4em;
+    background-color: $black-t75;
+    text-decoration: none;
+  }
+}

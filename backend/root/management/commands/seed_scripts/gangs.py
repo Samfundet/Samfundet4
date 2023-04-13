@@ -1,4 +1,4 @@
-from samfundet.models import GangType, Gang
+from samfundet.models.general import GangType, Gang
 
 # Template gangs for seeding
 GANGS = {
@@ -52,6 +52,6 @@ def seed():
                 gang_type=gtype,
             )
 
-        yield 10 + i / len(GANGS.keys()) * 90, f"Created gangs for '{gang_type}'"
+        yield 10 + i / len(GANGS.keys()) * 90, 'Creating gangs'
 
     yield 100, f'Created {Gang.objects.all().count()} gangs'

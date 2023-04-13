@@ -5,10 +5,6 @@ from django.utils import timezone
 
 from django.contrib.auth.models import Permission
 from django.core.management.base import BaseCommand
-
-# pylint: disable=positional-arguments
-
-# pylint: disable=pointless-string-statement
 """
 NOTE: This command cannot run within docker container because the backend has no access to the frontend.
 Use on host machine.
@@ -59,7 +55,7 @@ NEWLINE = '\n'
 SEPARATOR = '#' * 60 + NEWLINE
 
 ### frontend ###
-OUTPUT_FRONTEND_FILE = '../frontend/src/permissions.ts'
+OUTPUT_FRONTEND_FILE = '../frontend/src/permissions/permissions.ts'
 
 ### backend ###
 DOCSTRING = '"""'

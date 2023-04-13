@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './TextAreaField.module.scss';
 
@@ -7,12 +8,13 @@ type TextAreaFieldProps = {
   className?: string;
   inputClassName?: string;
   labelClassName?: string;
-  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string) => void;
   placeholder?: string | null;
   rows?: number;
   cols?: number;
   value?: string;
-  error?: string;
+  error?: string | boolean;
+  disabled?: boolean;
 };
 
 export function TextAreaField({
@@ -26,21 +28,32 @@ export function TextAreaField({
   error,
   cols,
   rows = 10,
+  disabled = false,
 }: TextAreaFieldProps) {
+  function handleChange(e?: ChangeEvent<HTMLTextAreaElement>) {
+    const value = e?.currentTarget.value ?? '';
+    onChange?.(value);
+  }
+
+  const isErrorMsg = error && (error as string).length > 0;
+
   return (
-    <div className={className}>
-      <label className={classNames(styles.label, labelClassName)}>
-        {children}
-        <textarea
-          onChange={onChange}
-          className={classNames(styles.input_field, inputClassName, error && error.length > 0 && styles.error)}
-          placeholder={placeholder || ''}
-          rows={rows}
-          cols={cols}
-          value={value}
-        />
-      </label>
-      {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
-    </div>
+    <label className={classNames(className, styles.label, labelClassName)}>
+      {children}
+      <textarea
+        onChange={handleChange}
+        className={classNames(styles.input_field, inputClassName, error && styles.error)}
+        placeholder={placeholder || ''}
+        disabled={disabled}
+        rows={rows}
+        cols={cols}
+        value={value}
+      />
+      {isErrorMsg && (
+        <div className={styles.error_container}>
+          <div className={styles.error_text}>{error}</div>
+        </div>
+      )}
+    </label>
   );
 }

@@ -1,0 +1,139 @@
+@import 'src/constants';
+
+$default-spacing: .25em;
+$medium-spacing: 1em;
+
+/*
+  Defines the style of samf-markdown (info pages etc.)
+
+  Since these tags are global by default, must be wrapped in 
+  a samf_markdown custom class.
+*/
+/* stylelint-disable */
+.samf_markdown {  
+
+  // Headers
+  h1 {
+    font-size: 2em;
+    font-weight: 700;
+    margin-bottom: $default-spacing;
+    padding: 0;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: $default-spacing;
+    margin-top: $medium-spacing;
+  }
+
+  h3 {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin-bottom: $default-spacing;
+    margin-top: $medium-spacing;
+  }
+
+  h4 {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-bottom: $default-spacing;
+    margin-top: $medium-spacing;
+  }
+
+  h5 {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: $default-spacing;
+    margin-top: $medium-spacing;
+  }
+
+  h6 {
+    font-weight: 700;
+    margin-bottom: $default-spacing;
+    margin-top: $medium-spacing;
+  }
+
+  // Paragraphs
+  p {
+    margin-bottom: $medium-spacing;
+    margin-top: $medium-spacing;
+  }
+
+  // List
+  ul, ol {
+    margin-left: 1.5em;
+    margin-bottom: $medium-spacing;
+  }
+  li > p {
+    margin: 0;
+  }
+
+  // Horizontal line
+  hr {
+    margin-bottom: $medium-spacing;
+  }
+
+  // Text variations
+  strong {
+    font-weight: 700;
+  }
+  em {
+    font-style: italic;
+  }
+
+  // Quote
+  blockquote {
+    padding: .5em;
+    border-left: 1px solid $grey-3;
+    background-color: $grey-4;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    border-radius: 0 .3em .3em 0;
+    p {
+      margin: 0;
+    }
+  }
+  blockquote > blockquote {
+    background-color: $grey-5;
+    margin-right: 1em;
+  }
+  blockquote > blockquote > blockquote {
+    background-color: $white;
+  }
+
+  // Code
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    background-color: $grey-4;
+    border-radius: .2em;
+    padding: .2em .5em;
+    margin-bottom: $default-spacing;
+  }
+  // Code block
+  pre {
+    background-color: $grey-4;
+    border-radius: .5em;
+    padding: 1em;
+    code {
+      padding: 0;
+    }
+  }
+
+  // Links
+  a {
+    color: $red-samf;
+    &:hover {
+      filter: brightness(150%);
+    }
+  }
+
+  // Image
+  img {
+    max-height: 20em;
+    max-width: 20em;
+    background-size: cover;
+  }
+
+}
+/* stylelint-enable */

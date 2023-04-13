@@ -2,8 +2,8 @@ import random
 
 from django.utils import timezone
 
-from samfundet.models import Venue
 from root.utils.samfundet_random import words
+from samfundet.models.general import Venue
 
 VENUES = [
     'Storsalen',
@@ -32,6 +32,6 @@ def seed():
             handicapped_approved=random.randint(1, 3) != 1,
             responsible_crew=words(1)
         )
-        yield i / len(VENUES), f"Created venue '{name}'"
+        yield i / len(VENUES), 'Creating venues'
 
     yield 100, f'Created {len(Venue.objects.all())} venues'

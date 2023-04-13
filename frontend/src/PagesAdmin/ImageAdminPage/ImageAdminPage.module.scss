@@ -1,0 +1,70 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.wrapper {
+  margin: 1em 1em;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.subHeader {
+  font-weight: 600;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.headerContainer {
+  margin-bottom: 0.5em;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.backButton {
+  border-color: $grey-1;
+  padding: 0.5em 1.6em;
+  text-transform: uppercase;
+}
+
+.backButtonText {
+  margin: 0;
+  font-weight: 700;
+}
+
+.action_row {
+  @include flex-row;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 1em;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.imageBox {
+  overflow: hidden;
+  flex-basis: calc(25% - 1em);
+  min-height: 12em;
+  height: 12em;
+  box-sizing: inherit;
+  @include for-tablet-down {
+    flex-basis: calc(33.33% - 1em);
+  }
+}

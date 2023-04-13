@@ -1,59 +1,41 @@
 /* stylelint-disable selector-max-type */
 /* TODO: fix later */
 
-.container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #222222;
-}
+@import 'src/constants';
 
-.logo {
-  width: 30em;
-  margin-bottom: 1em;
-}
+@import 'src/mixins';
 
 .splash {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  min-height: 40vh;
+  max-height: 100vh;
   object-fit: cover;
+  position: relative;
+  left: 0;
+  top: -$navbar-height;
+  z-index: -1;
+
+  @include for-mobile-only {
+    min-height: 215px;
+  }
+}
+
+.splash_fade {
+  width: 100vw;
+  height: 250px;
   position: absolute;
   left: 0;
   top: 0;
-  filter: blur(5px);
-  z-index: -1;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(black, 0.6), transparent);
+
+  @include for-mobile-only {
+    height: 100px;
+  }
 }
 
 .content {
-  box-shadow: 2px 2px 10px 5px rgb(0 0 0 / 50%);
-  background-color: #eeeeee;
-  padding: 3em;
-  border-radius: 0.5em;
-}
-
-.homeText {
-  max-width: 40em;
-}
-
-a {
-  display: inline-block;
-  text-decoration: none;
-}
-
-.button {
-  display: block;
-  margin-top: 1em;
-  padding: 1em;
-  background-color: rgb(160 48 51);
-  color: white;
-  border-radius: 0.2em;
-
-  &:hover {
-    filter: brightness(110%);
-    transform: scale(1.01);
-    transition: 0.2s;
-  }
+  position: relative;
+  top: -$navbar-height;
+  // max-width: 100%; // QUESTION: Why is this needed?
 }

@@ -7,8 +7,6 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 # End: imports -----------------------------------------------------------------
 
-# pylint: disable=positional-arguments
-
 
 class Command(BaseCommand):
 
@@ -57,6 +55,6 @@ class Command(BaseCommand):
                 shutil.rmtree(pycache)
                 print(f'Removed {pycache}')
 
-            except Exception as _e:  # pylint: disable=broad-exception-raised # nosec try_except_pass # noqa: F841
+            except Exception as _e:
                 pass
                 # print(f'{app} failed. {_e}')
