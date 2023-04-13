@@ -89,6 +89,7 @@ type SamfFormFieldProps<U> = {
   type: SamfFormFieldType;
   required?: boolean;
   label?: string;
+  hidden?: boolean;
   validator?: (v: U) => string | boolean;
   // Dropdown
   options?: DropDownOption<U>[];
@@ -99,6 +100,7 @@ export function SamfFormField<U>({
   field,
   type,
   required = true,
+  hidden = false,
   label,
   options,
   defaultOption,
@@ -154,6 +156,14 @@ export function SamfFormField<U>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Change validity on requirement changed
+  // Set value in context on first render (not critical to run every dep change)
+  useEffect(() => {
+    handleOnChange(value, false);
+    // Handle on change depends on field type which should never change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [required]);
+
   // ================================== //
   //           Form Field UI            //
   // ================================== //
@@ -175,5 +185,10 @@ export function SamfFormField<U>({
     return generatorFunction?.(args) ?? <></>;
   }
 
-  return makeFormField();
+  return (
+    <>
+      {hidden && <div style={{ display: 'none' }}>{makeFormField()}</div>}
+      {!hidden && makeFormField()}
+    </>
+  );
 }

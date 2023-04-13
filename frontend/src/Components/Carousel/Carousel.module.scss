@@ -1,130 +1,111 @@
-/* stylelint-disable */
+@import 'src/constants';
 
-@import "src/constants";
+@import 'src/mixins';
 
-@import "src/mixins";
-
-
-.carousel {
+.scroller {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 100vw;
-  overflow: visible;
+  flex-direction: row;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
 
-  padding-bottom: 1em; 
-  padding-top: 1em; 
+  // For visibility above (shadows on content etc)
+  padding-top: 10px;
 
-  .header {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: left;
-    width: $primary-content-width-wide;
-    max-width: 100%;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 
-    @include for-mobile-only {
-      width: $primary-content-width-mobile;
-    }
-
+  // Don't snap on mobile? Not sure what's best
+  @include for-mobile-only {
+    scroll-snap-type: none;
   }
 
-  .container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.itemContainer {
+  scroll-snap-align: start;
+  scroll-snap-type: mandatory;
+  scroll-margin-left: $primary-content-wide-padding;
+  overflow: visible;
+
+  &:first-child {
+    padding-left: max($primary-content-wide-padding, 50% - ($primary-content-width-wide / 2));
+    @include for-mobile-only {
+      padding-left: $primary-content-mobile-padding;
+    }
+  }
+  &:last-child {
+    padding-right: max($primary-content-wide-padding, 50% - ($primary-content-width-wide / 2));
+    @include for-mobile-only {
+      padding-right: $primary-content-mobile-padding;
+    }
+  }
+  @include for-mobile-only {
+    /* stylelint-disable-next-line declaration-no-important */
+    scroll-snap-align: center !important;
+    scroll-margin-left: $primary-content-mobile-padding;
+    scroll-margin-right: $primary-content-mobile-padding;
+  }
+}
+
+.navContainer {
+  width: 0;
+  overflow: visible;
+
+  .button {
+    // Disabled for now
+    // display: flex;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 2em;
+    height: 2em;
+    background-color: #555555;
+    border-radius: 100%;
+    color: white;
+    position: relative;
+    top: calc(50% - 1em);
+    z-index: 10000;
+    transition: 0.2s;
+    cursor: pointer;
+
+    /* stylelint-disable-next-line selector-max-class, max-nesting-depth */
+    &.left {
+      left: 1em;
+    }
+    /* stylelint-disable-next-line selector-max-class, max-nesting-depth */
+    &.right {
+      right: 3em;
+    }
+
+    &:hover {
+      filter: brightness(110%);
+      transform: scale(1.05);
+    }
+  }
+}
+
+.headerWrapper {
+  text-align: center;
+}
+
+.header {
+  font-size: 1.5em;
+  font-weight: 700;
+  text-align: left;
+  margin: 0 $primary-content-wide-padding;
+  width: $primary-content-width-wide;
+  max-width: $primary-content-width-wide-padded;
+  display: inline-block;
+
+  @include for-mobile-only {
+    width: $primary-content-width-mobile;
     max-width: 100%;
-    overflow: visible;
-
-    .scroller {
-      display: flex;
-      flex-direction: row;
-      overflow-x: scroll;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-
-      // For visibility above (shadows on content etc)
-      padding-top: 10px;
-
-      /* Hide scrollbar for IE, Edge and Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-      
-      // Don't snap on mobile? Not sure what's best
-      @include for-mobile-only {
-        scroll-snap-type: none;
-      }
-
-      .itemContainer {
-        scroll-snap-align: start;
-        scroll-snap-type: mandatory;
-        scroll-margin-left: $primary-content-wide-padding;
-        overflow: visible;
-
-        &:first-child {
-          padding-left: $primary-content-wide-padding;
-          @include for-mobile-only {
-            padding-left: $primary-content-mobile-padding;
-          }
-        }
-        &:last-child {
-          padding-right: $primary-content-wide-padding;
-          @include for-mobile-only {
-            padding-right: $primary-content-mobile-padding;
-          }
-        }
-        @include for-mobile-only {
-          scroll-snap-align: center !important;
-          scroll-margin-left: $primary-content-mobile-padding;
-          scroll-margin-right: $primary-content-mobile-padding;
-        }
-
-      }
-      
-    }
-
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .scroller::-webkit-scrollbar {
-      display: none;
-    }
-
-    .navContainer {
-      width: 0;
-      overflow: visible;
-
-      .button {
-        // Disabled for now
-        // display: flex;
-        display: none;
-
-        justify-content: center;
-        align-items: center;
-
-        width: 2em;
-        height: 2em;
-        background-color: #555;
-        border-radius: 100%;
-        color: white;
-
-        position: relative;
-        top: calc(50% - 1em);
-        z-index: 10000;
-
-        transition: 0.2s;
-        cursor: pointer;
-
-        &.left {
-          left: 1em;
-        }
-        &.right {
-          right: 3em;
-        }
-
-        &:hover {
-          filter: brightness(110%);
-          transform: scale(1.05);
-        }
-      }
-    }
+    margin-left: $primary-content-mobile-padding;
   }
 }

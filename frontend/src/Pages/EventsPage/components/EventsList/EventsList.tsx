@@ -24,7 +24,7 @@ export function EventsList({ events }: EventsListProps) {
     t(KEY.common_from),
     { content: t(KEY.common_to), sortable: true },
     { content: t(KEY.common_title), sortable: true },
-    { content: t(KEY.venue), sortable: true },
+    { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.category), sortable: true },
     t(KEY.common_buy),
   ];
@@ -51,7 +51,7 @@ export function EventsList({ events }: EventsListProps) {
           },
           event.location,
           event.category,
-          event.price_group,
+          event.ticket_type,
         ]);
       });
     });
@@ -87,9 +87,9 @@ export function EventsList({ events }: EventsListProps) {
   }
 
   return (
-    <div>
+    <>
       {/* TODO make "tabs" component and cleanup local css */}
-      <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', marginTop: '2em' }}>
+      <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', marginTop: '1em' }}>
         {getButton('Dager', 'mdi:grid', () => setTableView(false), !tableView)}
         {getButton('Liste', 'material-symbols:view-list', () => setTableView(true), tableView)}
       </div>
@@ -112,6 +112,6 @@ export function EventsList({ events }: EventsListProps) {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }

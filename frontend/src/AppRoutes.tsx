@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import { useGoatCounter } from '~/hooks';
 import {
   AboutPage,
   AdminPage,
@@ -29,10 +28,12 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  OpeningHoursAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
-import { NavbarLayout } from './Components/Navbar';
-import { SultenNavbarLayout } from './Components/SultenNavbar';
+import { useGoatCounter } from '~/hooks';
+import { SamfOutlet } from './Components/SamfOutlet';
+import { SultenOutlet } from './Components/SultenOutlet';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
@@ -43,10 +44,10 @@ export function AppRoutes() {
 
   return (
     <Routes>
-      {/* 
+      <Route element={<SamfOutlet />}>
+        {/* 
           PUBLIC ROUTES
       */}
-      <Route element={<NavbarLayout />}>
         <Route path={ROUTES.frontend.home} element={<HomePage />} />
         <Route path={ROUTES.frontend.about} element={<AboutPage />} />
         <Route path={ROUTES.frontend.health} element={<HealthPage />} />
@@ -74,10 +75,13 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_events} element={<EventsAdminPage />} />
         <Route path={ROUTES.frontend.admin_events_create} element={<EventCreatorAdminPage />} />
         <Route path={ROUTES.frontend.admin_events_edit} element={<EventCreatorAdminPage />} />
-        {/* Info pages */}
+        {/* 
+          Info pages 
+          NOTE: edit/create uses custom views
+        */}
         <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
-        <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+        {/* Opening hours */}
+        <Route path={ROUTES.frontend.admin_opening_hours} element={<OpeningHoursAdminPage />} />
         {/* Closed period */}
         <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
         <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />
@@ -86,14 +90,20 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
         <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
         {/* Saksdokumenter */}
+        <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
       </Route>
+      {/* 
+        Info pages
+        Custom layout for edit/create
+      */}
+      <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
+      <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
       {/* 
             SULTEN ROUTES
       */}
-      <Route element={<SultenNavbarLayout />}>
+      <Route element={<SultenOutlet />}>
         <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
       </Route>
       {/* 

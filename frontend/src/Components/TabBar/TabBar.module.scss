@@ -7,8 +7,8 @@
   @include flex-row;
   overflow-x: auto;
   background-color: $background-secondary;
-  padding: .4em;
-  gap: .75em;
+  padding: 0.4em;
+  gap: 0.75em;
 
   &.vertical {
     flex-direction: column;
@@ -34,29 +34,45 @@
   @include rounded-full;
   @include flex-row-center;
   background-color: transparent;
-  padding: .8em 1.25em;
-  transition: .2s;
+  padding: 0.8em 1.25em;
+  transition: 0.2s;
   cursor: pointer;
   outline: none;
   border: none;
 
+  /* stylelint-disable-next-line max-nesting-depth */
+  @include theme-dark {
+    color: white;
+  }
+
   &.selected {
-    @include shadow-light;
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
     background-color: $background-primary;
     color: black;
 
     /* stylelint-disable-next-line max-nesting-depth */
     @include theme-dark {
+      box-shadow: 0 0 1em 0 rgba(255, 255, 255, 0.3);
       background-color: black;
       color: white;
     }
   }
 
-  &:not(.selected):hover {
-    color: $blue;
-  }
-
   &.disabled {
     color: $grey-1;
+  }
+}
+
+.compact {
+  .tab_button {
+    padding: 0.4em 0.75em;
+  }
+}
+
+.tab_button:not(.selected):hover {
+  background-color: white;
+
+  @include theme-dark {
+    background-color: $grey-2;
   }
 }

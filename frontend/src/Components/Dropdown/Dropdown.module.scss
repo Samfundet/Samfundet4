@@ -2,8 +2,8 @@
 
 @import 'src/mixins';
 
+// label som wrapper
 .select_wrapper {
-  //label som wrapper
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -17,18 +17,31 @@
   padding: 1em 1em;
   color: $black;
   cursor: pointer;
-  border: 0;
-  outline: none;
   padding-right: 3em;
+  margin-top: 0.5em;
+  border: 0.1px solid transparent; // Prevents buggy spacing when border is sat on hover.
+
+  // TODO: what is this for?
+  overflow-y: auto;
+
+  // TODO: what are these for?
   appearance: none; //appearance "none" i flere browsere
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
-  overflow-y: auto;
-  margin-top: 0.5em;
 
-  &:hover {
-    filter: brightness(110%);
+  @include theme-light {
+    &:hover {
+      border: 0.1px solid $blue;
+    }
+  }
+
+  @include theme-dark {
+    color: white;
+    background-color: $grey-0;
+    &:hover {
+      filter: brightness(115%);
+    }
   }
 }
 

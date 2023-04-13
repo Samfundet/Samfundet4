@@ -14,7 +14,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from root.constants import XCSRFTOKEN
 
@@ -25,12 +25,12 @@ from .utils import (
 
 from .homepage import homepage
 
-from .models import (
+from .models.event import (Event, EventGroup)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Table,
     Venue,
     Image,
@@ -39,7 +39,7 @@ from .models import (
     MenuItem,
     GangType,
     TextItem,
-    EventGroup,
+    KeyValue,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -61,6 +61,7 @@ from .serializers import (
     ProfileSerializer,
     BookingSerializer,
     TextItemSerializer,
+    KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
@@ -90,10 +91,19 @@ class HomePageView(APIView):
 
 
 # Localized text storage
-class TextItemView(ModelViewSet):
+class TextItemView(ReadOnlyModelViewSet):
+    """All CRUD operations can be performed in the admin panel instead."""
     permission_classes = [AllowAny]
     serializer_class = TextItemSerializer
     queryset = TextItem.objects.all()
+
+
+class KeyValueView(ReadOnlyModelViewSet):
+    """All CRUD operations can be performed in the admin panel instead."""
+    permission_classes = [AllowAny]
+    serializer_class = KeyValueSerializer
+    queryset = KeyValue.objects.all()
+    lookup_field = 'key'
 
 
 # Images
@@ -144,7 +154,18 @@ class EventPerDayView(APIView):
             events.setdefault(_data_, [])
             events[_data_].append(event)
 
-        return Response(data=events)
+        # Fetch and serialize events
+        events = events_query
+        serialized = EventSerializer(events, many=True).data
+
+        # Organize in date dictionary
+        events_per_day: dict = {}
+        for event, serial in zip(events, serialized):
+            date = event.start_dt.strftime('%Y-%m-%d')
+            events_per_day.setdefault(date, [])
+            events_per_day[date].append(serial)
+
+        return Response(data=events_per_day)
 
 
 class EventsUpcomingView(APIView):
@@ -154,19 +175,6 @@ class EventsUpcomingView(APIView):
         events = event_query(request.query_params)
         events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         return Response(data=EventSerializer(events, many=True).data)
-
-
-class EventFormView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        data = {
-            'age_groups': Event.AgeGroup.choices,
-            'status_groups': Event.StatusGroup.choices,
-            'venues': [[v.name] for v in Venue.objects.all()],
-            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
-        }
-        return Response(data=data)
 
 
 class EventGroupView(ModelViewSet):
@@ -205,7 +213,7 @@ class IsClosedView(ListAPIView):
 class SaksdokumentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all()
+    queryset = Saksdokument.objects.all().order_by('-publication_date')
 
 
 class GangView(ModelViewSet):

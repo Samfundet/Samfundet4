@@ -77,10 +77,10 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
         <div className={styles.top_row}>
           <div className={styles.upload_button}>
             <Icon icon={icons[fileType] ?? ''} />
-            {t(KEY.choose_a_file)}
+            {t(KEY.inputfile_choose_a_file)}
           </div>
           {fileType === 'image' && (
-            <span className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</span>
+            <span className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</span>
           )}
         </div>
 
@@ -89,7 +89,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
           {/* PDF shows additional information */}
           {fileType === 'pdf' && (
             <div className={styles.preview_meta}>
-              <p className={styles.title}>{selectedFile?.name ?? t(KEY.no_file_selected)}</p>
+              <p className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</p>
               <p>
                 <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
               </p>

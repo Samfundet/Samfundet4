@@ -10,11 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { EventOptionsDto, VenueDto } from '~/dto';
 import { Params } from '~/named-urls';
 import { FilterRow } from '~/Pages/EventsPage/components/FilterRow';
+import { toast } from 'react-toastify';
 
 const urlArgs: Params = {};
 
 export function EventsPage() {
-  const { t } = useTranslation<string>();
+  const { t } = useTranslation();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
@@ -35,7 +36,12 @@ export function EventsPage() {
 
   useEffect(() => {
     getEventsPerDay().then((data) => {
-      setEvents(data);
+      setEvents(data)
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps;
     });
 
     getVenues().then((data) => {

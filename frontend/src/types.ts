@@ -1,4 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { KV } from '~/constants';
 /** Module for global generic types. */
 
 /** Type for home page element. */
@@ -6,6 +7,12 @@ export type HomePageElementVariation = 'carousel' | 'large-card';
 
 /** Type for html button types. */
 export type ButtonType = 'submit' | 'reset' | 'button';
+
+/** Map of KeyValues from backend. */
+export type KeyValueMap = Map<string, string>;
+
+/** Type for the constant of KeyValue keys in the database. */
+export type Key = typeof KV[keyof typeof KV];
 
 /** Synonym for ReactNode, but easier to remember. */
 export type Children = ReactNode;
@@ -70,3 +77,15 @@ export type ColorValue = typeof COLORS[ColorKey];
 
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
+
+/** Days */
+export type Day = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+/** Event types */
+export type EventTicketType = 'free' | 'included' | 'billig' | 'registration' | 'custom';
+export type EventAgeRestriction = null | 'eighteen' | 'twenty' | 'mixed';
+export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
+
+export const ALL_TICKET_TYPES: EventTicketType[] = ['free', 'included', 'billig', 'registration', 'custom'];

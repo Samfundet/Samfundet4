@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getImages } from '~/api';
 import { Button, ImageQuery, Link, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
+import { getImages } from '~/api';
 import { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { AdminImage } from './components';
 import styles from './ImageAdminPage.module.scss';
+import { AdminImage } from './components';
 
 export function ImageAdminPage() {
   const navigate = useNavigate();
@@ -42,18 +42,18 @@ export function ImageAdminPage() {
       <div className={styles.headerContainer}>
         <h1 className={styles.header}>{t(KEY.admin_images_title)}</h1>
         <Link target="backend" url={ROUTES.backend.admin__samfundet_image_changelist}>
-          View in backend
+          {t(KEY.common_see_in_django_admin)}
         </Link>
       </div>
       <div className={styles.action_row}>
+        <ImageQuery allImages={allImages} setImages={setImages} />
         <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_images_create)}>
           {t(KEY.admin_images_create)}
         </Button>
-        <ImageQuery allImages={allImages} setImages={setImages} />
       </div>
       <div className={styles.imageContainer}>
-        {images.map(function (element, key) {
-          return <AdminImage key={key} image={element} className={styles.imageBox} />;
+        {images.map(function (element) {
+          return <AdminImage key={element.id} image={element} className={styles.imageBox} />;
         })}
       </div>
     </Page>

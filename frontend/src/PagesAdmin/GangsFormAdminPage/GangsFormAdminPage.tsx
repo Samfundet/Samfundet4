@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getGang } from '~/api';
+import { toast } from 'react-toastify';
 import { Page, SamfundetLogoSpinner } from '~/Components';
-import { GangDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { getGang } from '~/api';
+import { GangDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -22,7 +23,6 @@ export function GangsFormAdminPage() {
 
   //TODO add permissions on render
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (id) {
       getGang(id)
@@ -31,14 +31,15 @@ export function GangsFormAdminPage() {
           setShowSpinner(false);
         })
         .catch((data) => {
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin_gangs);
           }
+          toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
       setShowSpinner(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function handleOnSubmit(data: GangDto) {
@@ -59,12 +60,12 @@ export function GangsFormAdminPage() {
     );
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.gang)}`;
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
 
   return (
     <Page>
       <h1 className={styles.header}>
-        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.gang)}
+        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.common_gang)}
       </h1>
       <SamfForm
         initialData={gang}
@@ -74,12 +75,12 @@ export function GangsFormAdminPage() {
         devMode={false}
       >
         <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={`${t(KEY.norwegian)} ${t(KEY.name)}`} />
-          <SamfFormField field="name_en" type="text" label={`${t(KEY.english)} ${t(KEY.name)}`} />
+          <SamfFormField field="name_nb" type="text" label={`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`} />
+          <SamfFormField field="name_en" type="text" label={`${t(KEY.common_english)} ${t(KEY.common_name)}`} />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="abbreviation" type="text" label={`${t(KEY.abbreviation)}`} />
-          <SamfFormField field="webpage" type="text" label={`${t(KEY.webpage)}`} />
+          <SamfFormField field="abbreviation" type="text" label={`${t(KEY.admin_gangsadminpage_abbreviation)}`} />
+          <SamfFormField field="webpage" type="text" label={`${t(KEY.admin_gangsadminpage_webpage)}`} />
         </div>
         {/* TODO fetch options */}
         {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}

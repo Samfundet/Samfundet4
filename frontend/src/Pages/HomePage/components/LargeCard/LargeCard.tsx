@@ -4,21 +4,35 @@ import { HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import styles from './LargeCard.module.scss';
 
 type LargeCardProps = {
-  element: HomePageElementDto;
+  element?: HomePageElementDto;
 };
 
 export function LargeCard({ element }: LargeCardProps) {
-  const event = element.events[0];
+  const layoutStyle = styles.layout;
+
+  if (!element) {
+    return (
+      <div className={layoutStyle}>
+        <ContentCard isSkeleton />
+      </div>
+    );
+  }
+
+  const event = element?.events[0];
   const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
+
   return (
-    <ContentCard
-      title={dbT(element, 'title')}
-      description={dbT(element, 'description')}
-      imageUrl={BACKEND_DOMAIN + event.image_url}
-      url={url}
-      buttonText=""
-    />
+    <div className={layoutStyle}>
+      <ContentCard
+        title={dbT(element, 'title')}
+        description={dbT(element, 'description')}
+        imageUrl={BACKEND_DOMAIN + event.image_url}
+        url={url}
+        buttonText=""
+      />
+    </div>
   );
 }

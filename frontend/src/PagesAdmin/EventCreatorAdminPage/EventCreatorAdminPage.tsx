@@ -1,28 +1,30 @@
-import { Button, ContentCard, Page, TimeDisplay } from '~/Components';
+import { Button, ImageCard, Page } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
-import { postEvent } from '~/api';
+import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { postEvent } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
+import { EventDto } from '~/dto';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import { dbT } from '~/utils';
 import styles from './EventCreatorAdminPage.module.scss';
+import { PaymentForm } from './components/PaymentForm';
 
 type EventCreatorStep = {
-  key: string; // Unique key
-  title_nb: string; // Tab title norwegian
-  title_en: string; // Tab title english
-  customIcon?: string; // Custom icon in tab bar
+  key: string; // Unique key.
+  title_nb: string; // Tab title norwegian.
+  title_en: string; // Tab title english.
+  customIcon?: string; // Custom icon in tab bar.
   template: ReactElement;
 };
 
@@ -30,7 +32,7 @@ export function EventCreatorAdminPage() {
   const [didSave, setDidSave] = useState(false);
   const [event, setEvent] = useState<Partial<EventDto>>();
 
-  // TODO this is temporary and must be fetched from API when categories are implemented
+  // TODO this is temporary and must be fetched from API when categories are implemented.
   const eventCategoryOptions: DropDownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
@@ -43,7 +45,7 @@ export function EventCreatorAdminPage() {
   const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
 
   const createSteps: EventCreatorStep[] = [
-    // Name and text descriptions
+    // Name and text descriptions.
     {
       key: 'text',
       title_nb: 'Tittel/beskrivelse',
@@ -55,8 +57,8 @@ export function EventCreatorAdminPage() {
             <SamfFormField field="title_en" type="text" label="Tittel (engelsk)" />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_short_nb" type="text-long" label="Kort beskrivelse (norsk)" />
-            <SamfFormField field="description_short_en" type="text-long" label="Kort beskrivelse (engelsk)" />
+            <SamfFormField field="description_short_nb" type="text" label="Kort beskrivelse (norsk)" />
+            <SamfFormField field="description_short_en" type="text" label="Kort beskrivelse (engelsk)" />
           </div>
           <div className={styles.input_row}>
             <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)" />
@@ -84,24 +86,25 @@ export function EventCreatorAdminPage() {
         </>
       ),
     },
-    // Payment options (not implemented yet)
-    /*
+    // Payment options (not implemented yet).
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
       title_en: 'Payment/registration',
-      partial: {},
-      layout: [],
+      template: (
+        <>
+          <PaymentForm event={event ?? {}} onChange={(partial) => setEvent({ ...event, ...partial })} />
+        </>
+      ),
     },
-    */
-    // Graphics
+    // Graphics.
     {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
       template: <SamfFormField field="image" type="image" />,
     },
-    // Summary
+    // Summary.
     {
       key: 'summary',
       title_nb: 'Oppsummering',
@@ -111,7 +114,7 @@ export function EventCreatorAdminPage() {
     },
   ];
 
-  // Editor state
+  // Editor state.
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
   // Ready to save?
@@ -127,10 +130,12 @@ export function EventCreatorAdminPage() {
     postEvent(event as EventDto)
       .then(() => {
         setDidSave(true);
+        toast.success(t(KEY.common_creation_successful));
       })
       .catch((error) => {
-        console.log(JSON.stringify(error.response.data));
-        console.log('FAIL: ' + JSON.stringify(error));
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(JSON.stringify(error.response.data));
+        console.error('FAIL: ' + JSON.stringify(error));
       });
   }
 
@@ -184,16 +189,28 @@ export function EventCreatorAdminPage() {
 
   // Event preview on final step
   const eventPreview: Children = (
-    <div>
-      <ContentCard
-        title={dbT(event, 'title')}
-        description={dbT(event, 'description_short')}
+    <div className={styles.preview}>
+      <ImageCard
+        title={dbT(event, 'title') ?? ''}
+        description={dbT(event, 'description_short') ?? ''}
         imageUrl={BACKEND_DOMAIN + event?.image?.url}
+        date={event?.start_dt ?? ''}
       />
-      <p>{event?.category}</p>
-      <p>{event?.image?.url}</p>
-      <TimeDisplay timestamp={event?.start_dt ?? ''} />
-      <p>{event?.duration}min</p>
+      {/* Preview Info */}
+      <div className={styles.previewText}>
+        <span>
+          <b>{t(KEY.category)}:</b> {event?.category ?? t(KEY.common_missing)}
+        </span>
+        <span>
+          <strong>Varighet:</strong> {event?.duration ? `${event?.duration} min` : t(KEY.common_missing)}
+        </span>
+        <span>
+          <b>{t(KEY.admin_organizer)}:</b> {event?.host ?? t(KEY.common_missing)}
+        </span>
+        <span>
+          <b>{t(KEY.common_venue)}:</b> {event?.location ?? t(KEY.common_missing)}
+        </span>
+      </div>
     </div>
   );
 

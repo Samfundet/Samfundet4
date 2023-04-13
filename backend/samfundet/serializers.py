@@ -1,17 +1,20 @@
 import itertools
 
 from django.contrib.auth import authenticate
-from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from django.core.files import File
+from django.core.files.images import ImageFile
+from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
-from .models import (
+from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
+from .models.event import (Event, EventGroup, EventCustomTicket)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Table,
     Venue,
     Image,
@@ -20,7 +23,7 @@ from .models import (
     TextItem,
     MenuItem,
     GangType,
-    EventGroup,
+    KeyValue,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -74,18 +77,94 @@ class ImageSerializer(serializers.ModelSerializer):
         return image.image.url if image.image else None
 
 
-class EventSerializer(serializers.ModelSerializer):
-    # Read only properties (computed property, foreign model).
-    end_dt = serializers.DateTimeField(read_only=True)
-    image_url = serializers.SerializerMethodField(method_name='get_image_url', read_only=True)
+class EventCustomTicketSerializer(serializers.ModelSerializer):
 
-    # For post/put (change image by id).
-    image_id = serializers.IntegerField(write_only=True)
+    class Meta:
+        model = EventCustomTicket
+        fields = '__all__'
+
+
+class BilligPriceGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BilligPriceGroup
+        fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
+
+
+class BilligTicketGroupSerializer(serializers.ModelSerializer):
+    # These fields are calculated based on percentages sold and should be public
+    is_almost_sold_out = serializers.BooleanField(read_only=True)
+    is_sold_out = serializers.BooleanField(read_only=True)
+
+    # Price groups in this ticket group
+    price_groups = BilligPriceGroupSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilligTicketGroup
+        # The number of tickets and sold tickets should not be
+        # public, so don't add the 'num' and 'num_sold' fields here!
+        fields = [
+            'id',
+            'name',
+            'is_sold_out',
+            'is_almost_sold_out',
+            'ticket_limit',
+            'price_groups',
+        ]
+
+
+class BilligEventSerializer(serializers.ModelSerializer):
+    ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilligEvent
+        fields = [
+            'id',
+            'name',
+            'ticket_groups',
+            'sale_from',
+            'sale_to',
+            'in_sale_period',
+            'is_almost_sold_out',
+            'is_sold_out',
+        ]
+
+
+class EventListSerializer(serializers.ListSerializer):
+    """
+    Speedup fetching of billig events for lists serialization
+    """
+
+    def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
+        # Prefetch related/billig for speed
+        if hasattr(events, 'prefetch_related'):
+            events.prefetch_related('custom_tickets')
+            events.prefetch_related('image')
+        Event.prefetch_billig(events, tickets=True, prices=True)
+
+        # Use event serializer (child) as normal after
+        return [self.child.to_representation(e) for e in events]
+
+
+class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = '__all__'
-        read_only_fields = ['image']
+        list_serializer_class = EventListSerializer
+        # Warning: registration object contains sensitive data, don't include it!
+        exclude = ['image', 'registration', 'event_group', 'billig_id']
+
+    # Read only properties (computed property, foreign model).
+    end_dt = serializers.DateTimeField(read_only=True)
+    total_registrations = serializers.IntegerField(read_only=True)
+    image_url = serializers.CharField(read_only=True)
+
+    # Custom tickets/billig
+    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+    billig = BilligEventSerializer(read_only=True)
+
+    # For post/put (change image by id).
+    image_id = serializers.IntegerField(write_only=True)
 
     def create(self, validated_data: dict) -> Event:
         """
@@ -97,9 +176,6 @@ class EventSerializer(serializers.ModelSerializer):
         event = Event(**validated_data)
         event.save()
         return event
-
-    def get_image_url(self, event: Event) -> str:
-        return event.image.image.url if event.image else None
 
 
 class EventGroupSerializer(serializers.ModelSerializer):
@@ -278,10 +354,33 @@ class MenuSerializer(serializers.ModelSerializer):
 
 
 class SaksdokumentSerializer(serializers.ModelSerializer):
+    # Read only url file path used in frontend
+    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
+    # Write only field for posting new document
+    file = serializers.FileField(write_only=True, required=False)
 
     class Meta:
         model = Saksdokument
         fields = '__all__'
+
+    def get_url(self, instance: Saksdokument) -> str | None:
+        return instance.file.url if instance.file else None
+
+    def create(self, validated_data: dict) -> Event:
+        """
+        Uses the write_only file field to create new document file.
+        """
+        file = validated_data.pop('file')
+        # Ensure file name ends with .pdf
+        fname = validated_data['title_nb']
+        fname = f'{fname}.pdf' if not fname.lower().endswith('.pdf') else fname
+        # Save model
+        document = Saksdokument.objects.create(
+            file=File(file, name=fname),
+            **validated_data,
+        )
+        document.save()
+        return document
 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -305,4 +404,11 @@ class TextItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TextItem
+        fields = '__all__'
+
+
+class KeyValueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = KeyValue
         fields = '__all__'

@@ -92,6 +92,8 @@ type SamfFormProps<T> = {
   validateOnInit?: boolean;
   validateOn?: ValidationMode;
   submitText?: string;
+  noStyle?: boolean;
+  className?: string;
   onChange?<T>(data: Partial<T>): void;
   onValidityChanged?(valid: boolean): void;
   onSubmit?(data: Partial<T>): void;
@@ -104,6 +106,8 @@ export function SamfForm<T>({
   validateOnInit = false,
   validateOn = 'submit',
   submitText,
+  noStyle,
+  className,
   onChange,
   onValidityChanged,
   onSubmit,
@@ -196,14 +200,13 @@ export function SamfForm<T>({
   // Disable submit button when validating on change
   const disableSubmit = validateOn === 'change' && !allValid;
 
+  const formClass = noStyle ? className : classNames(styles.samf_form, animateError && styles.animate_error, className);
+
   // Render children with form context
   return (
     <SamfFormContext.Provider value={{ state, dispatch }}>
       <SamfFormConfigContext.Provider value={{ validateOnInit, validateOn }}>
-        <form
-          className={classNames(styles.samf_form, animateError && styles.animate_error)}
-          onAnimationEnd={() => setAnimateError(false)}
-        >
+        <form className={formClass} onAnimationEnd={() => setAnimateError(false)}>
           {children}
           {onSubmit !== undefined && (
             <div className={styles.submit_row}>
@@ -222,7 +225,7 @@ export function SamfForm<T>({
           {canDebug && (
             <>
               <br></br>
-              <Button theme="blue" preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
+              <Button theme="samf" preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
                 Debug
               </Button>
             </>

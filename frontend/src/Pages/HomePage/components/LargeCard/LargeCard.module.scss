@@ -1,0 +1,15 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.layout {
+  display: flex;
+  justify-content: center;
+  margin: 1em auto;
+  width: $primary-content-width-wide;
+  max-width: $primary-content-width-wide-padded;
+
+  @include for-mobile-only {
+    max-width: 100%;
+  }
+}
