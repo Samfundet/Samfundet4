@@ -7,6 +7,7 @@ from . import (
     billig,
     menu,
     documents,
+    textitems,
     example,
 )
 
@@ -26,6 +27,7 @@ SEED_SCRIPTS = [
     ('menu', menu.seed),
     ('documents', documents.seed),
     ('information_page', information_pages.seed),
+    ('textitems', textitems.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
