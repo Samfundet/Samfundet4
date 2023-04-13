@@ -312,3 +312,21 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+class VenueDetail(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, venue_name):
+        try:
+            return Venue.objects.get(name=venue_name)
+        except Venue.DoesNotExist:
+            return None
+
+    def get(self, request, venue_name):
+        venue = self.get_object(venue_name)
+        if venue:
+            serializer = VenueSerializer(venue)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": f"Venue with name '{venue_name}' does not exist."}, status=status.HTTP_404_NOT_FOUND)

@@ -42,4 +42,5 @@ urlpatterns = [
     path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
     path('home/', views.HomePageView().as_view(), name='home'),
+    path('api/venue/<str:venue_name>/', views.VenueDetail.as_view(), name='venue_detail_api'),
 ]
