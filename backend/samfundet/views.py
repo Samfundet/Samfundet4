@@ -163,6 +163,7 @@ class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+    lookup_field = 'name'
 
 
 class ClosedPeriodView(ModelViewSet):
@@ -312,21 +313,3 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-
-
-class VenueDetail(APIView):
-    permission_classes = [AllowAny]
-
-    def get_object(self, venue_name: str) -> Optional[Venue]:
-        try:
-            return Venue.objects.get(name=venue_name)
-        except Venue.DoesNotExist:
-            return None
-
-    def get(self, request: Request, venue_name: str) -> Response:
-        venue = self.get_object(venue_name)
-        if venue:
-            serializer = VenueSerializer(venue)
-            return Response(serializer.data)
-        else:
-            return Response({'detail': f'Venue with name "{venue_name}" does not exist.'}, status=status.HTTP_404_NOT_FOUND)
