@@ -108,10 +108,11 @@
   padding-top: .25em;
 }
 
+/* stylelint-disable-next-line selector-max-class */
 .venue.hover .venue_image {
   filter: brightness(120%);
   transform: scale(1.05);
-  border: 3px solid $blue;
+  box-shadow: 0 0 8px 4px $blue;
 }
 
 .button_row {

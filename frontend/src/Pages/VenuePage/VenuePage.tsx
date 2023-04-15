@@ -12,7 +12,7 @@ import { VENUES } from './data';
 
 export function VenuePage() {
   const { t } = useTranslation();
-  const [hoverKey, setHoverKey] = useState<string | undefined>(undefined);
+  const [highlightKey, setHighlight] = useState<string | undefined>(undefined);
 
   function openVenue(key?: string) {
     if (key !== undefined) {
@@ -26,7 +26,7 @@ export function VenuePage() {
 
       <div className={styles.container}>
         <div className={styles.map_container}>
-          <DynamicBuildingMap hoverKey={hoverKey} onSetHover={setHoverKey} onClickedVenue={openVenue} />
+          <DynamicBuildingMap highlightKey={highlightKey} onSetHighlight={setHighlight} onClickedVenue={openVenue} />
         </div>
         <div className={styles.venues}>
           {VENUES.map((image, idx) => {
@@ -34,14 +34,14 @@ export function VenuePage() {
             return (
               <div
                 key={idx}
-                className={classNames(styles.venue, hoverKey === key && styles.hover)}
+                className={classNames(styles.venue, highlightKey === key && styles.hover)}
                 onClick={() => openVenue(key)}
               >
                 <div
                   className={styles.venue_image}
                   style={backgroundImageFromUrl(image.src)}
-                  onMouseEnter={() => setHoverKey(key)}
-                  onMouseLeave={() => setHoverKey(undefined)}
+                  onMouseEnter={() => setHighlight(key)}
+                  onMouseLeave={() => setHighlight(undefined)}
                 ></div>
                 <div className={styles.venue_name}>{image.name}</div>
               </div>
