@@ -1,0 +1,118 @@
+/* stylelint-disable declaration-no-important */
+/* stylelint-disable max-nesting-depth */
+/* stylelint-disable selector-max-class */
+/* stylelint-disable no-descending-specificity */
+
+// Common
+.venue {
+  pointer-events: all !important;
+  &:hover, &.highlight {
+    .body {
+      filter: url('#filter');
+    }
+  }
+}
+
+.body, .label {
+  transition: .3s !important;
+  transition-timing-function: ease-in-out;
+}
+
+.label {
+  pointer-events: none !important;
+}
+
+.body {
+  pointer-events: all !important;
+  cursor: pointer;
+}
+
+.hidden {
+  opacity: 0 !important;
+  .body, .label {
+    opacity: 0 !important;
+  }
+}
+
+// Storsalen
+@keyframes storsalen-anim {
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-120px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.storsalen {
+  // Uses the highlight class to trigger similar effects from
+  // outside the component without actually hovering
+  &:hover, &.highlight {
+    .body {
+      animation: storsalen-anim;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      transition: .2s;
+    }
+    .label {
+      transform: translateY(-50px);
+    }
+  }
+}
+
+// Vertical stack to the south (slides out)
+.klubben, .edgar, .lyche, .strossa {
+  &:hover, &.highlight {
+    .body {
+      transform: translate(-250px, 150px);
+    }
+    .label {
+      transform: translate(-150px, 80px);
+    }
+  }
+}
+
+// Rundhallen
+.rundhallen {
+  &:hover, &.highlight {
+    .body {
+      transform: translate(-200px, 220px);
+    }
+    .label {
+      transform: translate(-120px, 120px);
+    }
+  }
+}
+
+// Bodegaen
+.bodegaen {
+  &:hover, &.highlight {
+    .body, .label {
+      transform: translate(0, 200px);
+    }
+  }
+}
+
+// Selskapssiden and knaus
+.selskapssiden, .knaus {
+  &:hover, &.highlight {
+    .body {
+      transform: translate(0, -200px);
+    }
+    .label {
+      transform: translate(0, -100px);
+    }
+  }
+}
+
+// Daglighallen
+.daglighallen {
+  &:hover, &.highlight {
+    .body, .label {
+      transform: translate(200px, 50px);
+    }
+  }
+}

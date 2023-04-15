@@ -80,6 +80,9 @@ export function Navbar() {
       <a href="#" className={styles.navbar_dropdown_link}>
         {t(KEY.common_opening_hours)}
       </a>
+      <Link url={ROUTES.frontend.venues} className={styles.navbar_dropdown_link}>
+        {t(KEY.common_venues)}
+      </Link>
       <a href={ROUTES.other.foto_samfundet_no} className={styles.navbar_dropdown_link}>
         {t(KEY.navbar_photos)}
       </a>
