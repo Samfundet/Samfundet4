@@ -58,6 +58,7 @@ export const KEY = {
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
+  common_venues: 'common_venues',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
   common_create: 'common_create',
@@ -109,6 +110,9 @@ export const KEY = {
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
+
+  // Venue Page
+  venuepage_title: 'venuepage_title',
 
   // Navbar
   navbar_photos: 'navbar_photos',
