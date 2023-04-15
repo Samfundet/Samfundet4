@@ -7,9 +7,9 @@ import { ReactComponent as Map } from './map.svg';
 // ===================================== //
 
 // SVG attributes in use (need to know these to restore initial states)
-type AllowedAttributes = 'style' | 'transform' | 'filter';
+type AllowedAttributes = 'style';
 type AttributeMap = Partial<Record<AllowedAttributes, string>>;
-const allAllowedAttributes: AllowedAttributes[] = ['style', 'transform', 'filter'];
+const allAllowedAttributes: AllowedAttributes[] = ['style'];
 
 // Definition of block config (changes applied on hover)
 type BlockConfig = {
@@ -26,8 +26,8 @@ type BlockConfig = {
 const defaultAttributeValue: AttributeMap = {
   style: 'pointer-events: all; cursor: pointer; transition: .3s; transition-function: ease-in-out;',
   // Not used right now, but might be nice
-  transform: '',
-  filter: '',
+  // transform: '',
+  // filter: '',
 };
 
 const styleHide = 'opacity: 0;';
