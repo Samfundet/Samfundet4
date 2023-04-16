@@ -105,7 +105,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 .dropdown_container {
   position: absolute;
   pointer-events: none;
-  transition: .2s;
+  transition: .15s;
   top: 100%;
   z-index: 1;
   width: 100%;
@@ -139,6 +139,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   text-transform: uppercase;
   transition: .1s;
   color: $black;
+  cursor: pointer;
 
   @include theme-dark {
     color: $white;

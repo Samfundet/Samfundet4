@@ -2,10 +2,6 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-<<<<<<< HEAD
-=======
-import { Button } from '~/Components';
->>>>>>> master
 import { DynamicBuildingMap } from '~/Components/DynamicBuildingMap';
 import { Page } from '~/Components/Page';
 import { KEY } from '~/i18n/constants';
@@ -51,13 +47,6 @@ export function VenuePage() {
           })}
         </div>
       </div>
-<<<<<<< HEAD
-=======
-
-      <div className={styles.button_row}>
-        <Button theme="outlined">NYBYGG</Button>
-      </div>
->>>>>>> master
     </Page>
   );
 }
