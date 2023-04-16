@@ -14,10 +14,21 @@ export type LinkProps = {
   title?: string;
   plain?: boolean;
   target?: 'frontend' | 'backend' | 'external' | 'email';
+  onClick?: () => void;
   children?: Children;
 };
 
-export function Link({ underline, className, style, children, url, title, plain, target = 'frontend' }: LinkProps) {
+export function Link({
+  underline,
+  className,
+  style,
+  children,
+  url,
+  title,
+  plain,
+  target = 'frontend',
+  onClick,
+}: LinkProps) {
   const navigate = useNavigate();
   const { setIsMobileNavigation } = useGlobalContext();
   const finalUrl = target === 'backend' ? BACKEND_DOMAIN + url : url;
@@ -47,6 +58,9 @@ export function Link({ underline, className, style, children, url, title, plain,
     else if (target === 'email') window.location.href = url;
     // Open in new tab.
     else window.open(finalUrl, '_blank');
+
+    // External callback can add additional functionality on click
+    onClick?.();
   }
   return (
     <a

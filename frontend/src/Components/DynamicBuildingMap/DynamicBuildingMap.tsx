@@ -125,7 +125,7 @@ export function DynamicBuildingMap({
     <div ref={containerRef} style={containerStyle}>
       {LoadedSvgMap !== undefined && (
         <>
-          <LoadedSvgMap style={{ pointerEvents: 'none', overflow: 'visible' }} />
+          <LoadedSvgMap style={{ pointerEvents: 'none', overflow: 'visible' }} className={styles.svg} />
           <SvgParentContext.Provider value={containerRef.current}>
             {/* Round bois */}
             {bindVenue('storsalen')}
