@@ -71,7 +71,11 @@ export function Navbar() {
 
   const infoLinks = (
     <>
-      <Link url={ROUTES.frontend.about} className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
+      <Link
+        url={ROUTES.frontend.about}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.common_about_samfundet)}
       </Link>
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
@@ -83,7 +87,7 @@ export function Navbar() {
       <Link
         url={ROUTES.frontend.venues}
         className={styles.navbar_dropdown_link}
-        onClick={() => setExpandedDropdown('')}
+        onAfterClick={() => setExpandedDropdown('')}
       >
         {t(KEY.navbar_map)}
       </Link>

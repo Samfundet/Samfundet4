@@ -68,6 +68,7 @@ export function NavbarItem({ label, route, expandedDropdown, setExpandedDropdown
           />
         )}
       </Link>
+      {/* On desktop the menu is always in the DOM to enable smooth animation slide in */}
       {(isDesktop || isSelected) && <div className={dropdownClasses}>{dropdownLinks}</div>}
     </div>
   );

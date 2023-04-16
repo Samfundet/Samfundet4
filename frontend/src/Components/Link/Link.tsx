@@ -14,7 +14,7 @@ export type LinkProps = {
   title?: string;
   plain?: boolean;
   target?: 'frontend' | 'backend' | 'external' | 'email';
-  onClick?: () => void;
+  onAfterClick?: () => void;
   children?: Children;
 };
 
@@ -27,7 +27,7 @@ export function Link({
   title,
   plain,
   target = 'frontend',
-  onClick,
+  onAfterClick,
 }: LinkProps) {
   const navigate = useNavigate();
   const { setIsMobileNavigation } = useGlobalContext();
@@ -60,7 +60,7 @@ export function Link({
     else window.open(finalUrl, '_blank');
 
     // External callback can add additional functionality on click
-    onClick?.();
+    onAfterClick?.();
   }
   return (
     <a

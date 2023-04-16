@@ -119,6 +119,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   transform: scaleY(0);
   transform-origin: 50% 0%;
   opacity: 0;
+  border-radius: 0 0 .5em .5em;
 
   @include theme-dark {
     background-color: $navbar-dropdown-bg-dark;
@@ -178,6 +179,15 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     display: none;
   }
 
+  // This ensures navbar dropdown shadow does not lie
+  // on top of the navbar item
+  &.selected {
+    background-color: $navbar-bg;
+    @include theme-dark {
+      background-color: $navbar-bg-dark;
+    }
+  }
+  
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
