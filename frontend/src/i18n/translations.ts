@@ -29,6 +29,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_month_november]: 'November',
   [KEY.common_month_december]: 'Desember',
 
+  // Date related
+  [KEY.common_today]: 'Idag',
+  [KEY.common_tomorrow]: 'Imorgen',
+
+  // Other common
   [KEY.common_to]: 'Til',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_from]: 'Fra',
@@ -181,6 +186,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_month_october]: 'October',
   [KEY.common_month_november]: 'November',
   [KEY.common_month_december]: 'December',
+
+  // Date related
+  [KEY.common_today]: 'Today',
+  [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
   [KEY.common_to]: 'To',

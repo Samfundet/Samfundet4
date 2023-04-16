@@ -19,6 +19,13 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type HomePageDto = {
+  // Array of events used for splash
+  splash: EventDto[];
+  // Home page elements (carousel, cards etc.)
+  elements: HomePageElementDto[];
+};
+
 export type HomePageElementDto = {
   variation: HomePageElementVariation;
   title_nb: string;

@@ -6,7 +6,7 @@ import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
-import { hasPerm } from '~/utils';
+import { dbT, hasPerm } from '~/utils';
 import styles from './EventCarousel.module.scss';
 
 type EventCarouselProps = {
@@ -41,15 +41,18 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
           urlParams: { objectId: event.id },
         });
         const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: event.id });
+        const event_title = dbT(event, 'title') ?? '';
+        const event_short_dsc = dbT(event, 'description_short') ?? '';
 
         return (
           <ImageCard
             className={styles.image_card}
             key={event.id}
-            title={event.title_en}
+            title={event_title}
+            subtitle={event.location}
             date={event.start_dt}
             imageUrl={BACKEND_DOMAIN + event.image_url}
-            description=""
+            description={event_short_dsc}
             url={url}
           >
             <div className={styles.button_bar}>

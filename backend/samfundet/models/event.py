@@ -276,6 +276,8 @@ class Event(models.Model):
         The private '_billig' is used to save the event and prevent repeated database queries to billig.
         This field can also be set on many events at the same time by using prefetch_billig
         """
+        if self.ticket_type != EventTicketType.BILLIG:
+            return None
         if self._billig_unset:
             self._billig = BilligEvent.objects.get(id=self.billig_id)
             self._billig_unset = False

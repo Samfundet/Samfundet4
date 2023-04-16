@@ -8,6 +8,7 @@ from . import (
     menu,
     documents,
     example,
+    samf3
 )
 
 # Insert seed scripts here (in order of priority)
@@ -29,4 +30,9 @@ SEED_SCRIPTS = [
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
+]
+
+# These are not run by default (only when seeded specifically)
+OPTIONAL_SEED_SCRIPTS = [
+    ('samf3', samf3.seed),
 ]

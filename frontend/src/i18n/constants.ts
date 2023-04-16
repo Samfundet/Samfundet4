@@ -40,6 +40,10 @@ export const KEY = {
   common_month_november: 'common_month_november',
   common_month_december: 'common_month_december',
 
+  // Date related
+  common_today: 'common_today',
+  common_tomorrow: 'common_tomorrow',
+
   // No category:
   common_to: 'common_to',
   common_buy: 'common_buy',

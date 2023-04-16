@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand
 
 from root.constants import Environment
 # Import list of all seed scripts.
-from root.management.commands.seed_scripts import SEED_SCRIPTS
+from root.management.commands.seed_scripts import SEED_SCRIPTS, OPTIONAL_SEED_SCRIPTS
 
 BAR = '█'
 BAR_LENGTH = 20
@@ -99,10 +99,21 @@ class Command(BaseCommand):
                 )
         else:
             # Find the specific seed script based on target name.
-            keys = [seed_target[0] for seed_target in SEED_SCRIPTS]
-            if options['target'] in keys:
+            all_scripts = SEED_SCRIPTS + OPTIONAL_SEED_SCRIPTS
+            keys = [seed_target[0] for seed_target in all_scripts]
+
+            # Allow endings with and without 's', e.g. events and event
+            target = options['target']
+            if target not in keys:
+                if target.endswith('s'):
+                    target = target[0:-1]
+                else:
+                    target = target + 's'
+
+            # Check if target matches
+            if target in keys:
                 # Run the seed script.
-                target = SEED_SCRIPTS[keys.index(options['target'])]
+                target = all_scripts[keys.index(target)]
                 run_seed_script(
                     target=target,
                     index=0,
@@ -111,7 +122,8 @@ class Command(BaseCommand):
             else:
                 # Script not found.
                 print(f"\nUnknown target '{options['target']}'.")
-                print(f" - Available seed scripts: {', '.join(keys)}")
+                script_list = '\n - '.join(keys)
+                print(f"Available seed scripts: \n - {script_list}")
                 print('\nIf you added a new seed script, remember to register it in /seed_scripts/__init__.py!')
                 return
 
