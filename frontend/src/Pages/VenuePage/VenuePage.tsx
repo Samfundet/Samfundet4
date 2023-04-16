@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button } from '~/Components';
 import { DynamicBuildingMap } from '~/Components/DynamicBuildingMap';
 import { Page } from '~/Components/Page';
 import { KEY } from '~/i18n/constants';
@@ -21,11 +20,10 @@ export function VenuePage() {
   }
 
   return (
-    <Page>
-      <h1 className={styles.header}>{t(KEY.venuepage_title)}</h1>
-
+    <Page className={styles.page}>
       <div className={styles.container}>
         <div className={styles.map_container}>
+          <h1 className={styles.header}>{t(KEY.venuepage_title)}</h1>
           <DynamicBuildingMap highlightKey={highlightKey} onSetHighlight={setHighlight} onClickedVenue={openVenue} />
         </div>
         <div className={styles.venues}>
@@ -48,10 +46,6 @@ export function VenuePage() {
             );
           })}
         </div>
-      </div>
-
-      <div className={styles.button_row}>
-        <Button theme="outlined">NYBYGG</Button>
       </div>
     </Page>
   );

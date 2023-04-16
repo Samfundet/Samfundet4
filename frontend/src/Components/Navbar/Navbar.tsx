@@ -71,22 +71,34 @@ export function Navbar() {
 
   const infoLinks = (
     <>
-      <Link url={ROUTES.frontend.about} className={styles.navbar_dropdown_link}>
+      <Link
+        url={ROUTES.frontend.about}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.common_about_samfundet)}
       </Link>
-      <a href="#" className={styles.navbar_dropdown_link}>
+      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_membership)}
       </a>
-      <a href="#" className={styles.navbar_dropdown_link}>
+      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_opening_hours)}
       </a>
-      <Link url={ROUTES.frontend.venues} className={styles.navbar_dropdown_link}>
-        {t(KEY.common_venues)}
+      <Link
+        url={ROUTES.frontend.venues}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.navbar_map)}
       </Link>
-      <a href={ROUTES.other.foto_samfundet_no} className={styles.navbar_dropdown_link}>
+      <a
+        href={ROUTES.other.foto_samfundet_no}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.navbar_photos)}
       </a>
-      <a href="#" className={styles.navbar_dropdown_link}>
+      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.navbar_nybygg)}
       </a>
     </>

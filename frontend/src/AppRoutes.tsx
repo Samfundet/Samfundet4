@@ -48,7 +48,7 @@ export function AppRoutes() {
       <Route element={<SamfOutlet />}>
         {/* 
           PUBLIC ROUTES
-      */}
+        */}
         <Route path={ROUTES.frontend.home} element={<HomePage />} />
         <Route path={ROUTES.frontend.about} element={<AboutPage />} />
         <Route path={ROUTES.frontend.venues} element={<VenuePage />} />

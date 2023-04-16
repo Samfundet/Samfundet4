@@ -117,6 +117,7 @@ export const KEY = {
   // Navbar
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
+  navbar_map: 'navbar_map',
 
   // Sulten / Lyche:
   sulten_page_see_menu: 'sulten_page_see_menu',

@@ -111,6 +111,11 @@ export const nb: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiserings dato',
 
+  // Navbar
+  [KEY.navbar_photos]: 'Foto',
+  [KEY.navbar_nybygg]: 'Nybygg',
+  [KEY.navbar_map]: 'Kart og lokaler',
+
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -135,8 +140,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.start_time]: 'Starttid',
   [KEY.last_updated]: 'Sist oppdatert',
   [KEY.form_confirm]: 'Er du sikker på at du vil',
-  [KEY.navbar_photos]: 'Foto',
-  [KEY.navbar_nybygg]: 'Nybygg',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -265,6 +268,7 @@ export const en: Record<KeyValues, string> = {
   // Navbar:
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
+  [KEY.navbar_map]: 'Map and venues',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
