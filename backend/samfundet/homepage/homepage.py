@@ -149,7 +149,4 @@ def generate() -> dict[str, Any]:
     except IndexError:
         pass
 
-    return {
-        'splash': splash,
-        'elements': [el.to_dict() for el in elements]
-    }
+    return {'splash': splash, 'elements': [el.to_dict() for el in elements]}
