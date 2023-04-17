@@ -56,14 +56,16 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             url={url}
           >
             <div className={styles.button_bar}>
-              {canChangeEvent && <IconButton icon="mdi:pen" url={editUrl} title="Edit" color={COLORS.blue} />}
+              {canChangeEvent && (
+                <IconButton icon="mdi:pencil" url={editUrl} title="Edit" color={COLORS.blue} border="solid white 1px" />
+              )}
               {isStaff && canChangeEvent && (
                 <IconButton
                   icon="vscode-icons:file-type-django"
                   title="Backend details"
                   target="backend"
                   color={COLORS.white}
-                  border="solid green 1px"
+                  border="solid #444 1px"
                   url={detailurl}
                 />
               )}

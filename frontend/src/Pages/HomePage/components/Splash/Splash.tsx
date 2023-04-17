@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import styles from '../../HomePage.module.scss';
@@ -22,16 +22,18 @@ export function Splash({ events }: SplashProps) {
 
   const slideTimeout = useRef<NodeJS.Timeout>();
 
-  function startSlideTimer() {
+  const startSlideTimer = useCallback(() => {
     // Cancel previous if any
     if (slideTimeout.current != undefined) {
       clearTimeout(slideTimeout.current);
     }
     // Start new timeout
-    slideTimeout.current = setTimeout(() => {
-      setIsAnimating(true);
-    }, SLIDE_FREQUENCY);
-  }
+    if (events && events.length > 1) {
+      slideTimeout.current = setTimeout(() => {
+        setIsAnimating(true);
+      }, SLIDE_FREQUENCY);
+    }
+  }, [events, setIsAnimating]);
 
   function nextSplash() {
     setIsAnimating(false);
@@ -42,7 +44,7 @@ export function Splash({ events }: SplashProps) {
   // Start timer when events change
   useEffect(() => {
     startSlideTimer();
-  }, [events]);
+  }, [events, startSlideTimer]);
 
   return (
     <div className={styles.splash_container}>
