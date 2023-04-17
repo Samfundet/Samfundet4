@@ -43,6 +43,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
   [KEY.common_venue]: 'Lokale',
+  [KEY.common_venues]: 'Lokaler',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
   [KEY.common_event]: 'Arrangement',
@@ -100,12 +101,20 @@ export const nb: Record<KeyValues, string> = {
     'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
   [KEY.groupspage_gangs_title]: 'Gjengene på Samfundet',
 
+  // Venue Page
+  [KEY.venuepage_title]: 'Kart og lokaler',
+
   // AdminPage:
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiserings dato',
+
+  // Navbar
+  [KEY.navbar_photos]: 'Foto',
+  [KEY.navbar_nybygg]: 'Nybygg',
+  [KEY.navbar_map]: 'Kart og lokaler',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -131,8 +140,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.start_time]: 'Starttid',
   [KEY.last_updated]: 'Sist oppdatert',
   [KEY.form_confirm]: 'Er du sikker på at du vil',
-  [KEY.navbar_photos]: 'Foto',
-  [KEY.navbar_nybygg]: 'Nybygg',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -190,6 +197,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_gang]: 'Group',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
+  [KEY.common_venues]: 'Venues',
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
@@ -247,6 +255,9 @@ export const en: Record<KeyValues, string> = {
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
   [KEY.groupspage_gangs_title]: 'The groups at Samfundet',
 
+  // Venue Page
+  [KEY.venuepage_title]: 'Map and Venues',
+
   // GangsAdminPage:
   [KEY.admin_gangsadminpage_webpage]: 'Webpage',
   [KEY.admin_gangsadminpage_abbreviation]: 'Abbreviation',
@@ -257,6 +268,7 @@ export const en: Record<KeyValues, string> = {
   // Navbar:
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
+  [KEY.navbar_map]: 'Map and venues',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
