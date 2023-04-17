@@ -63,10 +63,10 @@ export function ImageCard({
     <div className={containerStyle}>
       <div className={styles.top_label}>
         <div className={styles.subtitle}>{subtitle}</div>
-        <div className={styles.date_label}>{date && <TimeDisplay timestamp={date} displayType="event" />}</div>
+        <div className={styles.date_label}>{date && <TimeDisplay timestamp={date} displayType="event-datetime" />}</div>
       </div>
 
-      <Link url={url} className={classNames(cardStyle, styles.default_image)} style={backgroundImageFromUrl(imageUrl)}>
+      <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         {children}
       </Link>
 

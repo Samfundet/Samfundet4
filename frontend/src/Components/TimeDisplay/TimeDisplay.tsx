@@ -2,7 +2,7 @@ import { format, isToday, isTomorrow } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
-type TimeDisplayType = 'datetime' | 'date' | 'nice-date' | 'time' | 'event';
+type TimeDisplayType = 'datetime' | 'date' | 'nice-date' | 'time' | 'event-date' | 'event-datetime';
 
 type TimeDisplayProps = {
   timestamp: string | Date;
@@ -10,7 +10,7 @@ type TimeDisplayProps = {
   className?: string;
 };
 
-export function TimeDisplay({ timestamp, className, displayType }: TimeDisplayProps) {
+export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: TimeDisplayProps) {
   const { t } = useTranslation();
 
   const date = new Date(timestamp);
@@ -39,16 +39,16 @@ export function TimeDisplay({ timestamp, className, displayType }: TimeDisplayPr
   ];
 
   function getEventString() {
-    const time = date.toLocaleTimeString('no-NO', { timeStyle: 'short' });
+    const time = displayType === 'event-datetime' ? date.toLocaleTimeString('no-NO', { timeStyle: 'short' }) : '';
     // Today
     if (isToday(date)) {
-      return `${t(KEY.common_today)}, ${time}`;
+      return `${t(KEY.common_today)}${time}`;
     }
     // Tomorrow
     if (isTomorrow(date)) {
-      return `${t(KEY.common_today)}, ${time}`;
+      return `${t(KEY.common_today)}${time}`;
     }
-    return format(date, 'd. MMM, H:mm');
+    return `${format(date, 'd. MMM')}${time}`;
   }
   function getString() {
     switch (displayType) {
@@ -60,7 +60,8 @@ export function TimeDisplay({ timestamp, className, displayType }: TimeDisplayPr
         return `${niceDays[date.getDay()]} ${date.getDate()}. ${niceMonths[date.getMonth()]}`;
       case 'time':
         return date.toTimeString().slice(0, 5);
-      case 'event':
+      case 'event-date':
+      case 'event-datetime':
         return getEventString();
     }
   }

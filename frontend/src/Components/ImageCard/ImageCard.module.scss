@@ -21,7 +21,6 @@ $description-color: #aaaaaa;
 
   @include for-mobile-only {
     max-width: $mobile-width;
-    height: 13em;
   }
 }
 
@@ -33,12 +32,9 @@ $description-color: #aaaaaa;
   background-size: cover;
   background-position: center;
   min-height: 11em;
+  max-height: 11em;
   height: 11em;
   cursor: pointer;
-}
-
-.default_image {
-  background-image: url('~/assets/banner-sample-2.jpeg');
 }
 
 .top_label, .bottom_label, .bottom_description {
@@ -89,6 +85,7 @@ $description-color: #aaaaaa;
   transition: 0.2s;
   transform: translateY(1em);
   max-height: 3.5em;
+  overflow: hidden;
 
   @include for-mobile-only {
     display: none;
@@ -96,12 +93,13 @@ $description-color: #aaaaaa;
 }
 
 .compact {
-  height: 9em;
-  width: 12em;
+  width: 14em;
 }
 
-.compact .bottom_description {
-  display: none;
+.compact .card {
+  min-height: 8em;
+  max-height: 8em;
+  height: 8em;
 }
 
 .compact .date_label {
@@ -127,5 +125,15 @@ $description-color: #aaaaaa;
   .bottom_description {
     transform: none;
     opacity: 1;
+  }
+}
+
+// Compact doesn't show description on hover
+.compact:hover {
+  .title {
+    opacity: 1;
+  }
+  .bottom_description {
+    opacity: 0;
   }
 }
