@@ -39,7 +39,8 @@ def download_image(image_dict, save_path) -> bool:
     try:
         img_url = image_samf3_url(image_dict)
         with urlopen(img_url) as uo:
-            assert uo.status == 200
+            if not uo.status == 200:
+                return False
             with open(save_path, 'wb') as new_img:
                 new_img.write(uo.read())
                 new_img.flush()
