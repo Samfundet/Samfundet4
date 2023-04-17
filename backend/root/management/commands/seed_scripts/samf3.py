@@ -11,7 +11,8 @@ from django.utils import dateparse
 from samfundet.models.event import Event, EventAgeRestriction, EventCategory, EventTicketType, EventStatus
 from samfundet.models.general import Image
 
-BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3', 'images')
+BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3')
+BASE_IMAGE_PATH = os.path.join(BASE_IMAGE_PATH, 'images')
 
 # Maps old samf categories to new samf4 categories
 SAMF3_CATEGORIES = {

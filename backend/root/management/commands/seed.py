@@ -123,7 +123,7 @@ class Command(BaseCommand):
                 # Script not found.
                 print(f"\nUnknown target '{options['target']}'.")
                 script_list = '\n - '.join(keys)
-                print(f"Available seed scripts: \n - {script_list}")
+                print(f'Available seed scripts: \n - {script_list}')
                 print('\nIf you added a new seed script, remember to register it in /seed_scripts/__init__.py!')
                 return
 

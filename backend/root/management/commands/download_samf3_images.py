@@ -17,13 +17,13 @@ BASE_IMAGE_PATH = 'https://www.samfundet.no/upload/images/image_files'
 # We can convert these in this way: 12345 => /000/012/345
 def convert_id_to_samf3_partition(img_id: str) -> str:
     pad_len = 9 - len(img_id)
-    padded = "0" * pad_len + img_id
+    padded = '0' * pad_len + img_id
     return f'{padded[0:3]}/{padded[3:6]}/{padded[6:9]}'
 
 
 def image_samf3_url(row) -> str:
     id_path = convert_id_to_samf3_partition(row['id'])
-    safe_name = urllib.parse.quote(row["image_file_file_name"])
+    safe_name = urllib.parse.quote(row['image_file_file_name'])
     return f'{BASE_IMAGE_PATH}/{id_path}/large/{safe_name}?'
 
 
@@ -46,7 +46,7 @@ def download_image(image_dict, save_path) -> bool:
                 new_img.flush()
         return True
     except Exception as e:
-        print('Failed for', image_dict['id'], 'error:', e)
+        print(f"Failed for {image_dict['id']}, error: {e}")
         return False
 
 
@@ -61,7 +61,8 @@ class Command(BaseCommand):
             print("Detected production environment! Cancelled script. You're welcome.")
             return
 
-        root_path = os.path.join(os.path.dirname(__file__), 'seed_scripts', 'seed_samf3')
+        root_path = os.path.join(os.path.dirname(__file__), 'seed_scripts')
+        root_path = os.path.join(root_path, 'seed_samf3')
         image_csv_path = os.path.join(root_path, 'samf3_images.csv')
         event_csv_path = os.path.join(root_path, 'samf3_events.csv')
         save_root_path = os.path.join(root_path, 'images')
@@ -72,7 +73,7 @@ class Command(BaseCommand):
             print("Samf3 CSVs couldn't be found. Get them and place it in the /seed_samf3/ folder!")
             exit(-1)
 
-        print("Parsing CSV...")
+        print('Parsing CSV...')
         downloaded = 0
         images_to_download = []
         with open(event_csv_path, 'r') as event_csv:
