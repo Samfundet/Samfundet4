@@ -12,6 +12,7 @@ from root.constants import Environment
 
 BASE_IMAGE_PATH = 'https://www.samfundet.no/upload/images/image_files'
 
+
 # Samf3 uses /class/partition/id urls for images
 # We can convert these in this way: 12345 => /000/012/345
 def convert_id_to_samf3_partition(img_id: str) -> str:
@@ -30,6 +31,7 @@ def image_to_fname(image_dict) -> str:
     name = image_dict['image_file_file_name']
     img_id = image_dict['id']
     return f'{img_id}_{name}'
+
 
 # Parse image
 # Paths in samf3 are '/upload/:class/:attachment/:id_partition/:style/:filename'

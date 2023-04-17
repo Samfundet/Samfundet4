@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-import random
+from typing import Any
 
 from django.utils import timezone
 
@@ -52,7 +52,7 @@ def carousel(title_nb: str, title_en: str, events: list[Event]) -> HomePageEleme
     )
 
 
-def generate() -> list[dict]:
+def generate() -> dict[str, Any]:
     elements: list[HomePageElement] = []
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
 
@@ -61,7 +61,7 @@ def generate() -> list[dict]:
     try:
         splash_events = list(upcoming_events[0:min(3, len(upcoming_events))])
         splash = EventSerializer(splash_events, many=True).data
-    except:
+    except IndexError:
         splash = []
         pass
 
@@ -72,7 +72,7 @@ def generate() -> list[dict]:
             title_en="What's happening?",
             events=list(upcoming_events[:10]),
         ))
-    except:
+    except IndexError:
         pass
 
     # Another highlight
@@ -81,7 +81,7 @@ def generate() -> list[dict]:
         splash_event2: Event = upcoming_events.last()
         if splash_event2:
             elements.append(large_card(splash_event2))
-    except:
+    except IndexError:
         pass
 
     # Concerts
@@ -91,7 +91,7 @@ def generate() -> list[dict]:
             title_en='Concerts',
             events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
         ))
-    except:
+    except IndexError:
         pass
 
     # Another highlight
@@ -100,7 +100,7 @@ def generate() -> list[dict]:
         splash_event3: Event = upcoming_events[2]
         if splash_event3:
             elements.append(large_card(splash_event3))
-    except:
+    except IndexError:
         pass
 
     # Debates
@@ -110,7 +110,7 @@ def generate() -> list[dict]:
             title_en='Debates',
             events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
         ))
-    except:
+    except IndexError:
         pass
 
     # Courses
@@ -122,7 +122,7 @@ def generate() -> list[dict]:
                 events=list(upcoming_events.filter(category=EventCategory.LECTURE)[:10]),
             )
         )
-    except:
+    except IndexError:
         pass
 
     # Free!
@@ -134,7 +134,7 @@ def generate() -> list[dict]:
                 events=list(upcoming_events.filter(ticket_type__in=[EventTicketType.FREE, EventTicketType.INCLUDED])[:10]),
             )
         )
-    except:
+    except IndexError:
         pass
 
     # Other
@@ -146,7 +146,7 @@ def generate() -> list[dict]:
                 events=list(upcoming_events.filter(category=EventCategory.OTHER)[:10]),
             )
         )
-    except:
+    except IndexError:
         pass
 
     return {

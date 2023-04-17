@@ -8,7 +8,7 @@ from . import (
     menu,
     documents,
     example,
-    samf3
+    samf3,
 )
 
 # Insert seed scripts here (in order of priority)

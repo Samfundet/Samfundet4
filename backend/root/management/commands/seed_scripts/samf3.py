@@ -1,21 +1,15 @@
 import csv
 import multiprocessing
 import os.path
-import urllib.parse
-from urllib.request import urlopen
-import requests
-
 from typing import Iterator
 
 from django.core.files.images import ImageFile
-from django.core.files.temp import NamedTemporaryFile
 from django.db import transaction
 from django.utils.timezone import make_aware
+from django.utils import dateparse
 
 from samfundet.models.event import Event, EventAgeRestriction, EventCategory, EventTicketType, EventStatus
 from samfundet.models.general import Image
-
-from django.utils import timezone, dateparse
 
 BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3', 'images')
 
