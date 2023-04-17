@@ -39,17 +39,23 @@ export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: 
   ];
 
   function getEventString() {
-    const time = displayType === 'event-datetime' ? date.toLocaleTimeString('no-NO', { timeStyle: 'short' }) : '';
+    // Time string
+    let timeStr = '';
+    if (displayType === 'event-datetime') {
+      timeStr = `, ${date.toLocaleTimeString('no-NO', { timeStyle: 'short' })}`;
+    }
     // Today
     if (isToday(date)) {
-      return `${t(KEY.common_today)}${time}`;
+      return `${t(KEY.common_today)}${timeStr}`;
     }
     // Tomorrow
     if (isTomorrow(date)) {
-      return `${t(KEY.common_today)}${time}`;
+      return `${t(KEY.common_today)}${timeStr}`;
     }
-    return `${format(date, 'd. MMM')}${time}`;
+    // Default
+    return `${format(date, 'd. MMM')}${timeStr}`;
   }
+
   function getString() {
     switch (displayType) {
       case 'datetime':

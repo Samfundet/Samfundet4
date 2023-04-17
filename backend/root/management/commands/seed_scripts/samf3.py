@@ -37,6 +37,8 @@ SAMF3_CATEGORIES = {
     'meeting': EventCategory.OTHER,
     'excenteraften': EventCategory.OTHER,
     'show': EventCategory.OTHER,
+    'uka_event': EventCategory.OTHER,
+    'football_match': EventCategory.OTHER,
 }
 
 
@@ -115,7 +117,7 @@ def seed() -> Iterator[tuple[int, str]]:
 
     # Read files
     chunk_size = 30
-    max_events = 300
+    max_events = 30000
     with open(event_path, 'r') as event_file:
         with open(image_path, 'r') as image_file:
             events = list(reversed(list(csv.DictReader(event_file))))
