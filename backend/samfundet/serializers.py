@@ -220,7 +220,7 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, attrs: dict) -> dict:
         # Inherited function.
         # Take username and password from request.
-        username = attrs.get('username').lower()
+        username = attrs.get('username')
         password = attrs.get('password')
 
         if username and password:

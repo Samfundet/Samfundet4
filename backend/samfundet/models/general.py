@@ -71,8 +71,26 @@ class Image(models.Model):
         return f'{self.title}'
 
 
+class UsernameField(models.CharField):
+    def to_python(self, value: str) -> str:
+        return super().to_python(value.lower())
+
+
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    username = UsernameField(
+        _("username"),
+        max_length=150,
+        unique=True,
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
+        validators=[AbstractUser.username_validator],
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
+    )
 
     class Meta:
         permissions = [
@@ -90,10 +108,6 @@ class User(AbstractUser):
         has_global_perm = super().has_perm(perm=perm)
         has_object_perm = super().has_perm(perm=perm, obj=obj)
         return has_global_perm or has_object_perm
-
-    def save(self, *args, **kwargs):
-        self.username = self.username.lower()
-        super(User, self).save(*args, **kwargs)
 
 
 class UserPreference(models.Model):
