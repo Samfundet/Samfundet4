@@ -58,6 +58,7 @@ export const KEY = {
   common_gang: 'common_gang',
   common_next: 'common_next',
   common_event: 'common_event',
+  common_events: 'common_events',
   common_login: 'common_login',
   common_image: 'common_image',
   common_title: 'common_title',
