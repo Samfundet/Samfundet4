@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Link, TimeDisplay } from '~/Components';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, TableRow } from '~/Components/Table';
+import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -20,10 +21,10 @@ export function EventsList({ events }: EventsListProps) {
   const [tableView, setTableView] = useState(false);
 
   const eventColumns = [
+    { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.common_date), sortable: true },
     t(KEY.common_from),
-    { content: t(KEY.common_to), sortable: true },
-    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.common_to) },
     { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.category), sortable: true },
     t(KEY.common_buy),
@@ -36,9 +37,6 @@ export function EventsList({ events }: EventsListProps) {
     Object.keys(events).forEach((date: string) => {
       events[date].forEach((event: EventDto) => {
         rows.push([
-          { content: <TimeDisplay timestamp={date} displayType="event" />, value: new Date(date) },
-          { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(date) },
-          { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
           {
             content: (
               <Link
@@ -48,7 +46,14 @@ export function EventsList({ events }: EventsListProps) {
                 {dbT(event, 'title')}
               </Link>
             ),
+            value: dbT(event, 'title') ?? '',
           },
+          {
+            content: <TimeDisplay timestamp={event.start_dt} displayType="event-date" />,
+            value: new Date(event.start_dt),
+          },
+          { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(date) },
+          { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
           event.location,
           event.category,
           event.ticket_type,
@@ -62,15 +67,16 @@ export function EventsList({ events }: EventsListProps) {
   function getEventCards(date: string): ReactNode[] {
     return events[date].map((event: EventDto, key: number) => {
       return (
-        <div className={styles.event_container} key={key}>
-          <ImageCard
-            key={key}
-            compact={true}
-            date={event.start_dt.toString()}
-            title={dbT(event, 'title')}
-            url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
-          />
-        </div>
+        <ImageCard
+          key={key}
+          date={event.start_dt.toString()}
+          imageUrl={BACKEND_DOMAIN + event.image_url}
+          title={dbT(event, 'title') ?? ''}
+          subtitle={event.location}
+          description={dbT(event, 'description_short') ?? ''}
+          compact={true}
+          url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+        />
       );
     });
   }

@@ -12,9 +12,7 @@ $description-color: #aaaaaa;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: stretch;
   gap: 0.25em;
-  height: 16em;
   width: 20em;
   overflow: visible;
 
@@ -23,7 +21,6 @@ $description-color: #aaaaaa;
 
   @include for-mobile-only {
     max-width: $mobile-width;
-    height: 13em;
   }
 }
 
@@ -34,33 +31,44 @@ $description-color: #aaaaaa;
   box-shadow: 0 0 5px 3px $black-t10;
   background-size: cover;
   background-position: center;
+  min-height: 11em;
+  max-height: 11em;
+  height: 11em;
   cursor: pointer;
 }
 
-.default_image {
-  background-image: url('~/assets/banner-sample-2.jpeg');
+.top_label, .bottom_label, .bottom_description {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
+
+.top_label {
+  min-height: 1em;
+  max-height: 1em;
 }
 
 .bottom_label {
+  opacity: 1;
+  align-items: flex-start;
   font-weight: 700;
-  padding-left: 0.4em;
-  padding-right: 0.4em;
-  display: flex;
-  justify-content: space-between;
-  white-space: nowrap;
+  height: 0;
+  overflow: visible;
 }
 
-.bottom_description {
-  color: $description-color;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  opacity: 0;
-  transition: 0.2s;
-  transform: translateY(1em);
+.title {
+  font-weight: 700;
+  word-break: break-word;
+  opacity: 1;
+  transition: .2s;
+}
 
-  @include for-mobile-only {
-    display: none;
-  }
+.subtitle {
+  font-style: italic;
+  color: $date-label-color;
 }
 
 .date_label {
@@ -68,13 +76,30 @@ $description-color: #aaaaaa;
   color: $date-label-color;
 }
 
-.compact {
-  height: 9em;
-  width: 12em;
+.bottom_description {
+  align-items: flex-start;
+  color: $description-color;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  opacity: 0;
+  transition: 0.2s;
+  transform: translateY(1em);
+  max-height: 3.5em;
+  overflow: hidden;
+
+  @include for-mobile-only {
+    display: none;
+  }
 }
 
-.compact .bottom_description {
-  display: none;
+.compact {
+  width: 14em;
+}
+
+.compact .card {
+  min-height: 8em;
+  max-height: 8em;
+  height: 8em;
 }
 
 .compact .date_label {
@@ -94,8 +119,21 @@ $description-color: #aaaaaa;
     transform: translateY(-3px);
     box-shadow: 0 3px 8px 2px $black-t25;
   }
+  .title {
+    opacity: 0;
+  }
   .bottom_description {
-    opacity: 1;
     transform: none;
+    opacity: 1;
+  }
+}
+
+// Compact doesn't show description on hover
+.compact:hover {
+  .title {
+    opacity: 1;
+  }
+  .bottom_description {
+    opacity: 0;
   }
 }

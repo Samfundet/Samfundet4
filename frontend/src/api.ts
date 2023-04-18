@@ -7,7 +7,7 @@ import {
   FoodPreferenceDto,
   GangDto,
   GangTypeDto,
-  HomePageElementDto,
+  HomePageDto,
   ImageDto,
   ImagePostDto,
   InformationPageDto,
@@ -56,9 +56,9 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function getHomeData(): Promise<HomePageElementDto[]> {
+export async function getHomeData(): Promise<HomePageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
-  const response = await axios.get<HomePageElementDto[]>(url, { withCredentials: true });
+  const response = await axios.get<HomePageDto>(url, { withCredentials: true });
 
   return response.data;
 }

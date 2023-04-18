@@ -138,8 +138,9 @@ class EventListSerializer(serializers.ListSerializer):
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
         if hasattr(events, 'prefetch_related'):
-            events.prefetch_related('custom_tickets')
-            events.prefetch_related('image')
+            events = events.prefetch_related('custom_tickets')
+            events = events.prefetch_related('image')
+
         Event.prefetch_billig(events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
