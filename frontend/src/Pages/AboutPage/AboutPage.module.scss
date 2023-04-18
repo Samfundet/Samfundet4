@@ -9,7 +9,7 @@
 }
 
 .uka_isfit {
-  border: 1px solid #eeeeee;
+  border: 1px solid $grey-4;
   padding: 1em;
   border-radius: 0.3em;
   flex: 1;
@@ -18,11 +18,10 @@
 }
 
 .other_info {
-  border: 1px solid #eeeeee;
+  border: 1px solid $grey-4;
   padding: 1em;
   border-radius: 0.3em;
-  margin-top: 0.1em;
-  //margin: 0.5em;
+  margin: 0.5em;
   box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
@@ -90,6 +89,7 @@
   flex-direction: column;
   max-width: $desktop-bp-upper;
   justify-content: center;
+
   flex-wrap: wrap;
 
   @include for-tablet-up {
@@ -105,7 +105,7 @@
 
 .image_box {
   box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #eeeeee;
+  border: 1px solid $grey-4;
   background-color: $green;
   border-radius: 0.3em;
   color: white;
