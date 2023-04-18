@@ -14,6 +14,7 @@ import styles from './SamfForm.module.scss';
 // SamfFormField types (used to defined field UI in <SamfFormField type=XXX>)
 export type SamfFormFieldType =
   | 'text'
+  | 'email'
   | 'text-long'
   | 'password'
   | 'float'
