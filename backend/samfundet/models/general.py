@@ -91,6 +91,10 @@ class User(AbstractUser):
         has_object_perm = super().has_perm(perm=perm, obj=obj)
         return has_global_perm or has_object_perm
 
+    def save(self, *args, **kwargs):
+        self.username = self.username.lower()
+        super(User, self).save(*args, **kwargs)
+
 
 class UserPreference(models.Model):
     """Group all preferences and config per user."""

@@ -127,7 +127,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'root.wsgi.application'
 
 AUTHENTICATION_BACKENDS = [
-    'samfundet.backends.CaseInsensitiveModelBackend',
+    'django.contrib.auth.backends.ModelBackend',  # default
 ]
 
 # Password validation
