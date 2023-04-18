@@ -8,8 +8,8 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
 
 
 @keyframes anim-in {
-  0% { transform: translateY(-1em)}
-  100% { transform: translateY(0)}
+  0% { transform: translateY(-1em); }
+  100% { transform: translateY(0); }
 }
 
 .header_row {
@@ -20,7 +20,7 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
   animation-timing-function: ease-out;
   animation-duration: 0.3s;
   // Display
-  position: fixed;  
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
