@@ -72,6 +72,7 @@ class Image(models.Model):
 
 
 class UsernameField(models.CharField):
+
     def to_python(self, value: str) -> str:
         return super().to_python(value.lower())
 
@@ -83,9 +84,7 @@ class User(AbstractUser):
         _("username"),
         max_length=150,
         unique=True,
-        help_text=_(
-            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-        ),
+        help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
         validators=[AbstractUser.username_validator],
         error_messages={
             "unique": _("A user with that username already exists."),
