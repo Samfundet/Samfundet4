@@ -1,8 +1,9 @@
 from dataclasses import dataclass
+from typing import Any
 
 from django.utils import timezone
 
-from samfundet.models import Event
+from samfundet.models.event import Event, EventCategory, EventTicketType
 from samfundet.serializers import EventSerializer
 
 
@@ -51,65 +52,101 @@ def carousel(title_nb: str, title_en: str, events: list[Event]) -> HomePageEleme
     )
 
 
-def generate() -> list[dict]:
+def generate() -> dict[str, Any]:
     elements: list[HomePageElement] = []
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
 
-    # Splash event
+    # Splash events
     # TODO we should make a datamodel for this
-    splash_event: Event = upcoming_events.first()
-    if splash_event:
-        elements.append(large_card(splash_event))
+    try:
+        splash_events = list(upcoming_events[0:min(3, len(upcoming_events))])
+        splash = EventSerializer(splash_events, many=True).data
+    except IndexError:
+        splash = []
+        pass
 
     # Upcoming events
-    elements.append(carousel(
-        title_nb='Arrangementer',
-        title_en='Events',
-        events=list(upcoming_events[:10]),
-    ))
+    try:
+        elements.append(carousel(
+            title_nb='Hva skjer?',
+            title_en="What's happening?",
+            events=list(upcoming_events[:10]),
+        ))
+    except IndexError:
+        pass
 
     # Another highlight
     # TODO we should make a datamodel for this
-    splash_event2: Event = upcoming_events.last()
-    if splash_event2:
-        elements.append(large_card(splash_event2))
+    try:
+        splash_event2: Event = upcoming_events.last()
+        if splash_event2:
+            elements.append(large_card(splash_event2))
+    except IndexError:
+        pass
 
     # Concerts
-    elements.append(carousel(
-        title_nb='Konserter',
-        title_en='Concerts',
-        events=list(upcoming_events.filter(category=Event.Category.CONCERT)[:10]),
-    ))
+    try:
+        elements.append(carousel(
+            title_nb='Konserter',
+            title_en='Concerts',
+            events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
+        ))
+    except IndexError:
+        pass
 
     # Another highlight
     # TODO we should make a datamodel for this
-    splash_event3: Event = upcoming_events[2]
-    if splash_event3:
-        elements.append(large_card(splash_event3))
+    try:
+        splash_event3: Event = upcoming_events[2]
+        if splash_event3:
+            elements.append(large_card(splash_event3))
+    except IndexError:
+        pass
 
     # Debates
-    elements.append(carousel(
-        title_nb='Debatter',
-        title_en='Debates',
-        events=list(upcoming_events.filter(category=Event.Category.DEBATE)[:10]),
-    ))
+    try:
+        elements.append(carousel(
+            title_nb='Debatter',
+            title_en='Debates',
+            events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
+        ))
+    except IndexError:
+        pass
 
     # Courses
-    elements.append(
-        carousel(
-            title_nb='Kurs og Forelesninger',
-            title_en='Courses & Lectures',
-            events=list(upcoming_events.filter(category=Event.Category.LECTURE)[:10]),
+    try:
+        elements.append(
+            carousel(
+                title_nb='Kurs og Forelesninger',
+                title_en='Courses & Lectures',
+                events=list(upcoming_events.filter(category=EventCategory.LECTURE)[:10]),
+            )
         )
-    )
+    except IndexError:
+        pass
+
+    # Free!
+    try:
+        elements.append(
+            carousel(
+                title_nb='Gratisarrangementer',
+                title_en='Free events',
+                events=list(upcoming_events.filter(ticket_type__in=[EventTicketType.FREE, EventTicketType.INCLUDED])[:10]),
+            )
+        )
+    except IndexError:
+        pass
 
     # Other
-    elements.append(
-        carousel(
-            title_nb='Andre arrangementer',
-            title_en='Other events',
-            events=list(upcoming_events.filter(category=Event.Category.OTHER)[:10]),
+    try:
+        elements.append(
+            carousel(
+                title_nb='Andre arrangementer',
+                title_en='Other events',
+                events=list(upcoming_events.filter(category=EventCategory.OTHER)[:10]),
+            )
         )
-    )
+    except IndexError:
+        pass
 
-    return [el.to_dict() for el in elements]
+    return {'splash': splash, 'elements': [el.to_dict() for el in elements]}

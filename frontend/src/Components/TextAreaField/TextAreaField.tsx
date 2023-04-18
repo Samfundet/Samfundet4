@@ -34,7 +34,9 @@ export function TextAreaField({
     const value = e?.currentTarget.value ?? '';
     onChange?.(value);
   }
+
   const isErrorMsg = error && (error as string).length > 0;
+
   return (
     <label className={classNames(className, styles.label, labelClassName)}>
       {children}

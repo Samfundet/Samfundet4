@@ -1,1 +1,0 @@
-export { InformationFormPage } from './InformationFormPage';

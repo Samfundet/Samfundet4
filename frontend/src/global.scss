@@ -22,6 +22,15 @@
   font: inherit;
 }
 
+b,
+strong {
+  font-weight: 700;
+}
+
+i {
+  font-style: italic;
+}
+
 // Make media responsive.
 img,
 picture,
@@ -50,9 +59,14 @@ body {
   height: 100%;
   background-color: $theme-light-bg;
 
-  // Disable scrolling when mobile navbar is open
+  // Disable scrolling when mobile navbar is open.
   &.mobile-navigation-open {
     overflow: hidden;
+  }
+
+  // See constants MIRROR_CLASS.
+  &.mirror-dimension {
+    transform: scaleX(-1);
   }
 }
 
@@ -71,14 +85,6 @@ a {
   }
 }
 
-form {
-  background-color: $grey-5;
-  border: 1px solid $grey-4;
-  box-shadow: 0 0 25px 5px $black-t10;
-  border-radius: 2em;
-  padding: 1.5em;
-}
-
 label {
   display: flex;
   flex-direction: column;
@@ -92,7 +98,7 @@ label {
 // Use names from constant THEME.
 
 // THEME.DARK
-.theme-dark {
+[#{$theme-key}='#{$theme-dark}'] {
   background-color: $theme-dark-bg;
   color: $theme-dark-color;
 
@@ -171,3 +177,28 @@ input[type=text], textarea {
   }
 }
 */
+
+.trail {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  animation: dot 1s linear forwards;
+  z-index: 2;
+
+  // Trail causes laggy experience with horizontal scrolling etc because it blocks the cursor from elements behind it.
+  // No pointer events fixes that issue.
+  pointer-events: none;
+}
+
+@keyframes dot {
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

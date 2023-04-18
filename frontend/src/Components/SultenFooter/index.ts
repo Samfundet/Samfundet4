@@ -1,0 +1,1 @@
+export { SultenFooter } from './SultenFooter';

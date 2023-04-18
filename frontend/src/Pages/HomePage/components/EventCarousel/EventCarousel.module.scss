@@ -1,7 +1,11 @@
+.wrapper {
+  margin: 2rem auto;
+}
+
 .button_bar {
   padding: 10px;
   visibility: hidden;
-  justify-content: end;
+  justify-content: flex-end;
   display: flex;
   gap: 5px;
 }

@@ -1,0 +1,51 @@
+/* stylelint-disable selector-max-class */
+/* stylelint-disable max-nesting-depth */
+@import 'src/mixins';
+
+@import 'src/constants';
+
+/* Hamburger menu */
+#navbar_hamburger {
+  display: none;
+
+  @include for-tablet-down {
+    height: 69%;
+    width: 55px;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+}
+
+.open {
+  .navbar_hamburger_line.top {
+    transform: translateY(12px) rotate(-45deg);
+  }
+
+  .navbar_hamburger_line.middle {
+    opacity: 0;
+  }
+
+  .navbar_hamburger_line.bottom {
+    transform: translateY(-11px) rotate(45deg);
+  }
+}
+
+.navbar_hamburger_line {
+  background-color: $black;
+  width: 35px;
+  height: 4px;
+  border-radius: 10px;
+  transition: transform 400ms;
+
+  @include theme-dark {
+    background-color: $white;
+  }
+}
+
+.transparent_background {
+  .navbar_hamburger_line {
+    background-color: white;
+  }
+}

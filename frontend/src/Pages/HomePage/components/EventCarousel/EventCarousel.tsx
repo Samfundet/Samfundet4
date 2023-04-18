@@ -6,19 +6,33 @@ import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
-import { hasPerm } from '~/utils';
+import { dbT, hasPerm } from '~/utils';
 import styles from './EventCarousel.module.scss';
 
 type EventCarouselProps = {
-  element: HomePageElementDto;
+  skeletonCount?: number;
+  element?: HomePageElementDto;
 };
 
-export function EventCarousel({ element }: EventCarouselProps) {
+const spacing = 1.5;
+
+export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps) {
   const { user } = useAuthContext();
   const isStaff = user?.is_staff;
+  const wrapperClass = styles.wrapper;
+
+  if (!element) {
+    return (
+      <Carousel className={wrapperClass} spacing={spacing}>
+        {Array.from({ length: skeletonCount }).map((_, i) => (
+          <ImageCard key={i} isSkeleton />
+        ))}
+      </Carousel>
+    );
+  }
 
   return (
-    <Carousel header={element.title_nb} spacing={1.5}>
+    <Carousel className={wrapperClass} header={element.title_nb} spacing={spacing}>
       {element.events.map((event: EventDto) => {
         const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
         const editUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } });
@@ -27,25 +41,31 @@ export function EventCarousel({ element }: EventCarouselProps) {
           urlParams: { objectId: event.id },
         });
         const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: event.id });
+        const event_title = dbT(event, 'title') ?? '';
+        const event_short_dsc = dbT(event, 'description_short') ?? '';
 
         return (
           <ImageCard
             className={styles.image_card}
             key={event.id}
-            title={event.title_en}
+            title={event_title}
+            subtitle={event.location}
             date={event.start_dt}
             imageUrl={BACKEND_DOMAIN + event.image_url}
+            description={event_short_dsc}
             url={url}
           >
             <div className={styles.button_bar}>
-              {canChangeEvent && <IconButton icon="mdi:pen" url={editUrl} title="Edit" color={COLORS.blue} />}
+              {canChangeEvent && (
+                <IconButton icon="mdi:pencil" url={editUrl} title="Edit" color={COLORS.blue} border="solid white 1px" />
+              )}
               {isStaff && canChangeEvent && (
                 <IconButton
                   icon="vscode-icons:file-type-django"
                   title="Backend details"
                   target="backend"
                   color={COLORS.white}
-                  border="solid green 1px"
+                  border="solid #444 1px"
                   url={detailurl}
                 />
               )}

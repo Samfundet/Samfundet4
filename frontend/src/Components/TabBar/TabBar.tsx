@@ -14,6 +14,7 @@ export type TabBarProps<T = void> = {
   vertical?: boolean;
   spaceBetween?: boolean;
   disabled?: boolean;
+  compact?: boolean;
   onSetTab?(tab: Tab<T>): void;
 };
 
@@ -22,6 +23,7 @@ export function TabBar<T = void>({
   selected,
   vertical = false,
   spaceBetween = false,
+  compact = false,
   onSetTab,
   disabled = false,
 }: TabBarProps<T>) {
@@ -29,6 +31,7 @@ export function TabBar<T = void>({
     <div
       className={classNames(
         styles.tab_bar,
+        compact && styles.compact,
         vertical && styles.vertical,
         spaceBetween && styles.space_between,
         disabled && styles.disabled,
@@ -40,7 +43,10 @@ export function TabBar<T = void>({
           <button
             className={classNames(styles.tab_button, isSelected && styles.selected)}
             disabled={disabled}
-            onClick={() => onSetTab?.(tab)}
+            onClick={(e) => {
+              e.preventDefault();
+              onSetTab?.(tab);
+            }}
             key={tab.key}
           >
             {tab.label}

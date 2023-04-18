@@ -25,13 +25,7 @@
 }
 
 .form_container {
-  @include rounded-heavy;
-  background-color: $background-secondary;
-  padding: 2em;
-  flex: 1;
-  @include theme-dark {
-    background-color: $grey-1;
-  }
+  width: 100%;
 }
 
 .tab_label {
@@ -88,3 +82,16 @@
   color: $green;
 }
 
+.preview {
+  @include flex-row-center;
+  align-items: center;
+  gap: 2em;
+}
+
+.previewText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 3.75em;
+  gap: .5em;
+}

@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getGangList } from '~/api';
+import { toast } from 'react-toastify';
 import { ImageList } from '~/Components/ImageList';
 import { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
+import { getGangList } from '~/api';
 import { GangDto, GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
@@ -19,17 +20,23 @@ export function GroupsPage() {
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
   useEffect(() => {
-    getGangList().then((data) => {
-      setGroups(data);
-    });
+    getGangList()
+      .then((data) => {
+        setGroups(data);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Page>
       <div className={styles.wrapper}>
         <div className={styles.description}>
-          <h1 className={styles.header}>{t(KEY.gangs_title)}</h1>
-          <p className={styles.description}>{t(KEY.gangs_text)}</p>
+          <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>
+          <p className={styles.description}>{t(KEY.groupspage_gangs_text)}</p>
         </div>
         {groups.map((element: GangTypeDto, key: number) => (
           <div key={key} className={styles.groups}>

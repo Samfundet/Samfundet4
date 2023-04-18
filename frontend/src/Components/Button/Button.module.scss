@@ -3,7 +3,6 @@
 
 @import 'src/mixins';
 
-
 .button {
   @include flex-row;
   gap: 1em;
@@ -13,7 +12,7 @@
   transition: 0.15s;
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
   justify-content: center;
-  
+
   &:disabled {
     opacity: 0.5;
     background-color: $grey-3;
@@ -116,5 +115,3 @@
 .rounded {
   border-radius: 10000px;
 }
-
-

@@ -1,6 +1,9 @@
 import i18next from 'i18next';
 import { CSSProperties } from 'react';
+import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
+import { KEY, KeyValues } from './i18n/constants';
+import { Day, EventTicketType } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -102,4 +105,140 @@ export function dbT(
   // Instead of failing silently, page will fail to load. Fallback to empty string.
   // throw Error(`Object ${model} does not have the any of the fields '${field}' or '${fieldName}'`);
   return undefined;
+}
+
+/** Helper to determine if a KeyValue is truthy. */
+export function isTruthy(value = ''): boolean {
+  const falsy = ['', 'no', 'zero', '0'];
+  return !falsy.includes(value.toLowerCase());
+}
+
+/**
+ * Gets the translation key for a given day
+ */
+export function getDayKey(day: Day): KeyValues {
+  switch (day) {
+    case 'monday':
+      return KEY.common_day_monday;
+    case 'tuesday':
+      return KEY.common_day_tuesday;
+    case 'wednesday':
+      return KEY.common_day_wednesday;
+    case 'thursday':
+      return KEY.common_day_thursday;
+    case 'friday':
+      return KEY.common_day_friday;
+    case 'saturday':
+      return KEY.common_day_saturday;
+    case 'sunday':
+      return KEY.common_day_sunday;
+  }
+}
+
+/**
+ * Gets the translation key for a given price group
+ */
+export function getTicketTypeKey(ticketType: EventTicketType): KeyValues {
+  switch (ticketType) {
+    case 'free':
+      return KEY.common_ticket_type_free;
+    case 'included':
+      return KEY.common_ticket_type_included;
+    case 'billig':
+      return KEY.common_ticket_type_billig;
+    case 'custom':
+      return KEY.common_ticket_type_custom;
+    case 'registration':
+      return KEY.common_ticket_type_registration;
+  }
+}
+
+/**
+ * Converts a UTC timestring from django to
+ * a local timestring suitable for html input elements
+ * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @returns timestamp in local format, eg. '2023-04-05T20:15'
+ */
+export function utcTimestampToLocal(time: string | undefined): string {
+  return new Date(time ?? '')
+    .toLocaleString('sv-SE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    .replace(' ', 'T');
+}
+
+/**
+ * Generic query function for DTOs. Returns elements from array matching query.
+ * @param query String query to search with
+ * @param elements Array of DTO elements
+ * @param fields Fields in DTOs to search agains (eg. title_nb, title_en)
+ * @returns Array of DTO elements matching query
+ */
+export function queryDto<T extends Record<string, unknown>>(query: string, elements: T[], fields: string[]): T[] {
+  if (query === '') return elements;
+  // Split keywords
+  const keywords = query.toLowerCase().split(' ');
+  return elements.filter((element: T) => {
+    // Build combined string based on fields
+    let combinedString = '';
+    for (const field of fields) {
+      // Add string fields
+      if (typeof element[field] === 'string') {
+        combinedString += ` ${(element[field] as string).toLowerCase()}`;
+      } else {
+        console.warn(`queryDto tried to query field '${field}' which is not string type`);
+      }
+    }
+    // Return true if all keywords are included
+    return keywords.reduce((othersOK, keyword) => othersOK && combinedString.includes(keyword), true);
+  });
+}
+
+/**
+ * Custom DTO query where a function is used to convert element to searchable string
+ * @param query String query to search with
+ * @param elements Array of DTO elements
+ * @param toStringRepresentation Function that converts DTO to a searchable string
+ * @returns Array of DTO elements matching query
+ */
+export function queryDtoCustom<T extends Record<string, unknown>>(
+  query: string,
+  elements: T[],
+  toStringRepresentation: (v: T) => string,
+): T[] {
+  if (query === '') return elements;
+  const keywords = query.toLowerCase().split(' ');
+  return elements.filter((element: T) => {
+    // Build combined string based on fields
+    const combinedString = toStringRepresentation(element).toLowerCase();
+    // Return true if all keywords are included
+    return keywords.reduce((othersOK, keyword) => othersOK && combinedString.includes(keyword), true);
+  });
+}
+
+/**
+ * Function to change the theme.
+ */
+export function updateBodyThemeClass(theme: ThemeValue): void {
+  // Set theme as data attr on body.
+  document.body.setAttribute(THEME_KEY, theme);
+  // Remember theme in localStorage between refreshes.
+  localStorage.setItem(THEME_KEY, theme);
+}
+
+/**
+ * Helper to create element, add class, position the element and add to body.
+ */
+export function createDot(e: MouseEvent): HTMLDivElement {
+  //
+  const dot = document.createElement('div');
+  dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
+  dot.style.left = e.clientX + window.pageXOffset + 'px';
+  dot.style.top = e.clientY + window.pageYOffset + 'px';
+  return dot;
 }

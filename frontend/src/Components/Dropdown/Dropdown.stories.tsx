@@ -24,7 +24,21 @@ Basic.args = {
 };
 export const Many = Template.bind({});
 Many.args = {
-  options: Array(22).map((v) => {
-    return { label: `alternative ${v}`, value: v };
-  }),
+  options: [
+    { label: 'alternativ 1', value: 1 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+    { label: 'alternativ 2', value: 2 },
+  ],
 };

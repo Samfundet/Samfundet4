@@ -22,6 +22,7 @@ export type SamfFormFieldType =
   | 'options'
   | 'image'
   | 'datetime'
+  | 'time'
   | 'upload-image'
   | 'upload-pdf';
 
@@ -61,6 +62,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   float: makeStandardInputFunction<string>('number'),
   integer: makeStandardInputFunction<string>('number'),
   datetime: makeStandardInputFunction<string>('datetime-local'),
+  time: makeStandardInputFunction<string>('time'),
   password: makeStandardInputFunction<string>('password'),
   // Custom input types
   'text-long': makeAreaInput,
@@ -85,7 +87,7 @@ function makeStandardInputFunction<U>(type: InputFieldType): GeneratorFunction {
         onChange={args.onChange}
         error={args.error}
         type={type}
-        className={styles.input_element}
+        inputClassName={styles.input_element}
       >
         {args.label}
       </InputField>
@@ -133,6 +135,14 @@ function makeImagePicker(args: SamfFormFieldArgs) {
 // File picker
 function makeFilePickerFunction(fileType: InputFileType) {
   return function makeFilePicker(args: SamfFormFieldArgs) {
-    return <InputFile fileType={fileType} key={args.field} label={args.label} onSelected={args.onChange} />;
+    return (
+      <InputFile
+        fileType={fileType}
+        key={args.field}
+        label={args.label}
+        error={args.error}
+        onSelected={args.onChange}
+      />
+    );
   };
 }

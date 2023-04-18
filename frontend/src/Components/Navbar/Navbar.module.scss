@@ -13,29 +13,24 @@ $navbar-bg: rgba(255, 255, 255, 255);
 $navbar-bg-transparent: rgba(255, 255, 255, 0);
 $navbar-bg-dark: rgba(0, 0, 0, 255);
 $navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
+$navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
+$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
 
 // Link
+$navbar-link-blur-light-bg: rgba(255, 255, 255, 0.4);
+$navbar-link-blur-dark-bg: rgba(0, 0, 0, 0.4);
 $navbar-link-light-hover-gradient-top: #f4f4f4;
+$navbar-dropdown-link-light-hover: #202020;
+$navbar-dropdown-link-dark-hover: #f4f4f4;
 $navbar-link-light-hover-gradient-bottom: #ffffff;
 $navbar-link-dark-hover-gradient-top: #151515;
 $navbar-link-dark-hover-gradient-bottom: #000000;
 $navbar-link-transparent-hover-gradient-top: rgba(255, 255, 255, 0.1);
 $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 
-/* Outer container in navbar layout */
-.navbar_layout_outer {
-  min-height: 100%;
-  max-height: 100%;
-  height: 100%;
-}
-
 /* Inner container with padding */
-.navbar_layout_inner {
+.navbar_outlet {
   padding-top: $navbar-height;
-  min-height: 100%;
-  max-height: 100%;
-  height: 100%;
-  width: 100%;
 }
 
 /* Content padding */
@@ -50,8 +45,9 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg;
-  color: black;
-  transition: 0.3s;
+  color: $black;
+  transition: 0.2s;
+  transition-timing-function: ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,6 +70,94 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: 100%;
 }
 
+.navbar_item {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.navbar_mobile_item {
+  position: relative;
+}
+
+.mobile_dropdown_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes anim-dropdown {
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  100% {
+    max-height: 20em;
+    opacity: 1;
+  }
+}
+
+.dropdown_container {
+  position: absolute;
+  pointer-events: none;
+  transition: .15s;
+  top: 100%;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: $navbar-dropdown-bg;
+  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  opacity: 0;
+  border-radius: 0 0 .5em .5em;
+
+  @include theme-dark {
+    background-color: $navbar-dropdown-bg-dark;
+    color: $white;
+  }
+}
+
+.dropdown_open {
+  pointer-events: all;
+  overflow: visible;
+  transform: scaleY(1);
+  opacity: 1;
+}
+
+.navbar_dropdown_link {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: .1s;
+  color: $black;
+  cursor: pointer;
+
+  @include theme-dark {
+    color: $white;
+  }
+
+  &:hover {
+    background: $navbar-dropdown-link-light-hover;
+    color: white;
+    text-decoration: none;
+
+    @include theme-dark {
+      background: $navbar-dropdown-link-dark-hover;
+      color: black;
+    }
+  }
+}
+
 /* Desktop navigation items */
 .navbar_link {
   color: inherit;
@@ -89,11 +173,21 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   text-align: center;
   justify-content: center;
   background: transparent;
+  z-index: 2;
 
   @include for-tablet-down {
     display: none;
   }
 
+  // This ensures navbar dropdown shadow does not lie
+  // on top of the navbar item
+  &.selected {
+    background-color: $navbar-bg;
+    @include theme-dark {
+      background-color: $navbar-bg-dark;
+    }
+  }
+  
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
@@ -112,10 +206,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
       color: #eeeeee;
     }
   }
+
 }
 
 /* Samf logo */
-#navbar_logo {
+.navbar_logo {
   display: flex;
   text-decoration: none;
   margin: 0 1rem;
@@ -183,46 +278,6 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
 }
 
-/* Hamburger menu */
-#navbar_hamburger {
-  display: none;
-
-  @include for-tablet-down {
-    height: 69%;
-    width: 55px;
-    display: flex;
-    cursor: pointer;
-    justify-content: space-evenly;
-    flex-direction: column;
-  }
-
-  .navbar_hamburger_line {
-    background-color: $black;
-    width: 35px;
-    height: 4px;
-    border-radius: 10px;
-    transition: transform 400ms;
-
-    @include theme-dark {
-      background-color: $white;
-    }
-  }
-
-  &.open {
-    .navbar_hamburger_line.top {
-      transform: translateY(12px) rotate(-45deg);
-    }
-
-    .navbar_hamburger_line.middle {
-      opacity: 0;
-    }
-
-    .navbar_hamburger_line.bottom {
-      transform: translateY(-11px) rotate(45deg);
-    }
-  }
-}
-
 /* Transparent navbar (on top of page) */
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
@@ -233,9 +288,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
     background: $navbar-bg-dark-transparent;
     color: white;
   }
-  .navbar_hamburger_line {
-    background-color: white;
-  }
+
   .navbar_link:hover {
     background: linear-gradient(
       to bottom,
@@ -287,6 +340,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
+  display: flex;
 }
 
 .mobile_widgets {
@@ -305,4 +359,25 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   max-width: 150px;
   overflow: visible;
   white-space: nowrap;
+}
+
+.chevron {
+  transition: transform .2s;
+}
+
+.chevron.flip {
+  transform: scaleY(-1);
+}
+
+// When this dropdown menu item is open and navbar is transparent
+// we add backdrop filter to the dropdown itself as well
+.selected  {
+  background-color: $navbar-bg;
+  color: $black;
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
+    color: $white;
+  }
+
 }
