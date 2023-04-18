@@ -40,6 +40,10 @@ export const KEY = {
   common_month_november: 'common_month_november',
   common_month_december: 'common_month_december',
 
+  // Date related
+  common_today: 'common_today',
+  common_tomorrow: 'common_tomorrow',
+
   // No category:
   common_to: 'common_to',
   common_buy: 'common_buy',
@@ -54,10 +58,12 @@ export const KEY = {
   common_gang: 'common_gang',
   common_next: 'common_next',
   common_event: 'common_event',
+  common_events: 'common_events',
   common_login: 'common_login',
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
+  common_venues: 'common_venues',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
   common_create: 'common_create',
@@ -110,9 +116,13 @@ export const KEY = {
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
 
+  // Venue Page
+  venuepage_title: 'venuepage_title',
+
   // Navbar
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
+  navbar_map: 'navbar_map',
 
   // Sulten / Lyche:
   sulten_page_see_menu: 'sulten_page_see_menu',

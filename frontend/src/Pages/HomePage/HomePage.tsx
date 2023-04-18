@@ -5,14 +5,14 @@ import { ToggleSwitch } from '~/Components';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
-import splash from '~/assets/banner-sample.jpg';
-import { HomePageElementDto } from '~/dto';
+import { HomePageDto, HomePageElementDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
+import { Splash } from './components/Splash/Splash';
 
 export function HomePage() {
-  const [elements, setHomeElements] = useState<HomePageElementDto[]>([]);
+  const [homePage, setHomePage] = useState<HomePageDto>();
   const { t } = useTranslation();
 
   const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
@@ -20,8 +20,8 @@ export function HomePage() {
 
   useEffect(() => {
     getHomeData()
-      .then((elements: HomePageElementDto[]) => {
-        setHomeElements(elements);
+      .then((page: HomePageDto) => {
+        setHomePage(page);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -32,13 +32,15 @@ export function HomePage() {
 
   function renderElement(key: number, element: HomePageElementDto): Children {
     switch (element.variation) {
-      case 'carousel':
-        return <EventCarousel key={key} element={element} />;
+      case 'carousel': {
+        if (element.events.length > 0) return <EventCarousel key={key} element={element} />;
+        return <div key={key}></div>;
+      }
       case 'large-card':
         return <LargeCard key={key} element={element} />;
     }
     console.error(`Unknown home page element kind '${element.variation}'`);
-    return <></>;
+    return <div key={key}></div>;
   }
 
   const skeleton = (
@@ -49,21 +51,19 @@ export function HomePage() {
   );
 
   return (
-    <>
-      <img src={splash} alt="Splash" className={styles.splash} />
-      <div className={styles.splash_fade}></div>
+    <div>
+      <Splash events={homePage?.splash} />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
+        {isLoading && skeleton}
+
+        {/* Render elements for frontpage. */}
+        {homePage?.elements.map((el, index) => renderElement(index, el))}
 
         {/* Toggle mirror dimension, TODO: move to PreferencePage. */}
         <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />
         <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
-
-        {isLoading && skeleton}
-
-        {/* Render elements for frontpage. */}
-        {elements.map((el: HomePageElementDto, index) => renderElement(index, el))}
       </div>
-    </>
+    </div>
   );
 }

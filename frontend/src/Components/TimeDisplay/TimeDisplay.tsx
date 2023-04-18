@@ -1,19 +1,16 @@
+import { format, isToday, isTomorrow } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
+type TimeDisplayType = 'datetime' | 'date' | 'nice-date' | 'time' | 'event-date' | 'event-datetime';
+
 type TimeDisplayProps = {
   timestamp: string | Date;
-  displayType?: string;
+  displayType?: TimeDisplayType;
   className?: string;
 };
 
-const DATETIME = 'datetime';
-const DATE = 'date';
-const NICEDATE = 'nice-date';
-const TIME = 'time';
-const EVENT = 'event';
-
-export function TimeDisplay({ timestamp, className, displayType = DATETIME }: TimeDisplayProps) {
+export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: TimeDisplayProps) {
   const { t } = useTranslation();
 
   const date = new Date(timestamp);
@@ -41,30 +38,39 @@ export function TimeDisplay({ timestamp, className, displayType = DATETIME }: Ti
     t(KEY.common_month_december),
   ];
 
-  if (displayType == DATETIME) {
-    return <p className={className}> {date.toLocaleString()}</p>;
+  function getEventString() {
+    // Time string
+    let timeStr = '';
+    if (displayType === 'event-datetime') {
+      timeStr = `, ${date.toLocaleTimeString('no-NO', { timeStyle: 'short' })}`;
+    }
+    // Today
+    if (isToday(date)) {
+      return `${t(KEY.common_today)}${timeStr}`;
+    }
+    // Tomorrow
+    if (isTomorrow(date)) {
+      return `${t(KEY.common_today)}${timeStr}`;
+    }
+    // Default
+    return `${format(date, 'd. MMM')}${timeStr}`;
   }
 
-  if (displayType == DATE) {
-    return <p className={className}>{date.toLocaleDateString()}</p>;
+  function getString() {
+    switch (displayType) {
+      case 'datetime':
+        return date.toLocaleString();
+      case 'date':
+        return date.toLocaleDateString();
+      case 'nice-date':
+        return `${niceDays[date.getDay()]} ${date.getDate()}. ${niceMonths[date.getMonth()]}`;
+      case 'time':
+        return date.toTimeString().slice(0, 5);
+      case 'event-date':
+      case 'event-datetime':
+        return getEventString();
+    }
   }
 
-  if (displayType == NICEDATE) {
-    return (
-      <p className={className}>
-        {niceDays[date.getDay()]} {date.getDate()}. {niceMonths[date.getMonth()]}
-      </p>
-    );
-  }
-
-  if (displayType == EVENT) {
-    const options = { dateStyle: 'short' as const, timeStyle: 'short' as const };
-    return <p className={className}>{date.toLocaleString('no-NO', options)}</p>;
-  }
-
-  if (displayType == TIME) {
-    return <p className={className}>{date.toTimeString().slice(0, 5)}</p>;
-  }
-
-  return <p className={className}></p>;
+  return <p className={className}>{getString()}</p>;
 }

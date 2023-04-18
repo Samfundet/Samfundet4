@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
 import { getEventsPerDay } from '~/api';
 import { KEY } from '~/i18n/constants';
 import styles from './EventsPage.module.scss';
@@ -34,9 +33,5 @@ export function EventsPage() {
     );
   }
 
-  return (
-    <Page>
-      <EventsList events={events} />
-    </Page>
-  );
+  return <EventsList events={events} />;
 }
