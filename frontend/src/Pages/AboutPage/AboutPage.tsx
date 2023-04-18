@@ -82,53 +82,57 @@ export function AboutPage() {
               og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i
               Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.
             </p>
-            <Button className={styles.button} theme="secondary" onClick={() => navigate(ROUTES.frontend.groups)}>
-              GJENGENE PÅ SAMFUNDET
-            </Button>
-            <Button className={styles.button} theme="secondary">
-              OPPTAK
-            </Button>
+            <div className={styles.buttonTable}>
+              <Button className={styles.tableButton} theme="basic" onClick={() => navigate(ROUTES.frontend.groups)}>
+                GJENGENE PÅ SAMFUNDET
+              </Button>
+              <Button className={styles.tableButton} theme="basic">
+                OPPTAK
+              </Button>
+            </div>
           </div>
         </div>
         <div className={styles.col}>
-          <div className={styles.box2}>
-            <h3 className={styles.header3}>UKA & ISFiT</h3>
+          <div className={styles.uka_isfit}>
+            <h3 className={styles.header_col}>UKA & ISFiT</h3>
             <p className={styles.text}>
               Annenhvert år arrangeres Norges største kulturfestival UKA og verdens største internasjonale tematiske
               studentfestival under Studentersamfundets paraply.
             </p>
-            <Button className={styles.button} theme="samf">
-              UKA
-            </Button>
-            <Button className={styles.button} theme="blue">
-              ISFiT
-            </Button>
+            <div className={styles.buttonTable}>
+              <Button className={styles.tableButton} theme="samf">
+                UKA
+              </Button>
+              <Button className={styles.tableButton} theme="blue">
+                ISFiT
+              </Button>
+            </div>
           </div>
           <div className={styles.other_info}>
-            <h3 className={styles.other_info_header}>Annen Info</h3>
+            <h3 className={styles.header_col}>Annen Info</h3>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Aldersgrenser
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Booking
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Quiz
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Leie og tjenester
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Presse
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Filmklubb
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Personvern
               </Button>
-              <Button className={styles.tableButton} theme="outlined">
+              <Button className={styles.tableButton} theme="basic">
                 Tilrettelegning
               </Button>
             </div>
