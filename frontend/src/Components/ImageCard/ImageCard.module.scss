@@ -94,12 +94,22 @@ $description-color: #aaaaaa;
 
 .compact {
   width: 14em;
+  @include for-mobile-only {
+    width: $mobile-width;
+  }
 }
 
 .compact .card {
   min-height: 8em;
   max-height: 8em;
   height: 8em;
+
+  @include for-mobile-only {
+    margin-top: 1em;
+    min-height: 12em;
+    max-height: 12em;
+    height: 12em;
+  }
 }
 
 .compact .date_label {
