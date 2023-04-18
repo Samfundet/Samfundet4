@@ -19,7 +19,7 @@
   object-fit: cover;
   overflow: hidden;
   flex-direction: column-reverse;
-  align-items: end;
+  align-items: flex-end;
   @include for-mobile-down {
     align-items: center;
   }

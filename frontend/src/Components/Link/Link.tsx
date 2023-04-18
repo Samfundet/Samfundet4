@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGlobalContext } from '~/GlobalContextProvider';
 import { BACKEND_DOMAIN } from '~/constants';
 import { Children } from '~/types';
 import styles from './Link.module.scss';
@@ -13,12 +14,23 @@ export type LinkProps = {
   title?: string;
   plain?: boolean;
   target?: 'frontend' | 'backend' | 'external' | 'email';
+  onAfterClick?: () => void;
   children?: Children;
 };
 
-export function Link({ underline, className, style, children, url, title, plain, target = 'frontend' }: LinkProps) {
+export function Link({
+  underline,
+  className,
+  style,
+  children,
+  url,
+  title,
+  plain,
+  target = 'frontend',
+  onAfterClick,
+}: LinkProps) {
   const navigate = useNavigate();
-
+  const { setIsMobileNavigation } = useGlobalContext();
   const finalUrl = target === 'backend' ? BACKEND_DOMAIN + url : url;
 
   function handleClick(event: React.MouseEvent) {
@@ -28,6 +40,9 @@ export function Link({ underline, className, style, children, url, title, plain,
     // Even though nested <a> tags are illegal, they might occur.
     // To prevent multiple link clicks on overlaying elements, stop propagation upwards.
     event.stopPropagation();
+
+    // Close mobile menu if originates from there
+    setIsMobileNavigation(false);
 
     /** Detected desire to open the link in a new tab.
      * True if ctrl or cmd click.
@@ -43,13 +58,16 @@ export function Link({ underline, className, style, children, url, title, plain,
     else if (target === 'email') window.location.href = url;
     // Open in new tab.
     else window.open(finalUrl, '_blank');
+
+    // External callback can add additional functionality on click
+    onAfterClick?.();
   }
   return (
     <a
       className={classNames(className, !plain && styles.link, underline && styles.underline)}
       title={title}
       style={style}
-      onClick={(e) => handleClick(e)}
+      onClick={handleClick}
       href={finalUrl}
     >
       {children}

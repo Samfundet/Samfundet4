@@ -34,6 +34,7 @@ import {
 import { useGoatCounter } from '~/hooks';
 import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
+import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
@@ -47,9 +48,10 @@ export function AppRoutes() {
       <Route element={<SamfOutlet />}>
         {/* 
           PUBLIC ROUTES
-      */}
+        */}
         <Route path={ROUTES.frontend.home} element={<HomePage />} />
         <Route path={ROUTES.frontend.about} element={<AboutPage />} />
+        <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
         <Route path={ROUTES.frontend.health} element={<HealthPage />} />
         <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
         <Route path={ROUTES.frontend.login} element={<LoginPage />} />

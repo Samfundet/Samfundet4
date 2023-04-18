@@ -6,6 +6,7 @@ export const ROUTES_FRONTEND = {
   groups: '/groups/',
   health: '/health/',
   about: '/about/',
+  venues: '/venues/',
   login: '/login/',
   signup: '/signup/',
   events: '/events/',

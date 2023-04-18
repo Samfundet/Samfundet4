@@ -2,9 +2,9 @@ import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink as Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
-import { Button, ThemeSwitch } from '~/Components';
+import { Button, Link, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
 import { useGlobalContext } from '~/GlobalContextProvider';
@@ -63,7 +63,7 @@ export function Navbar() {
   const profileButton = (
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person"></Icon>
-      <Link to={ROUTES.frontend.admin} className={styles.profile_text}>
+      <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
       </Link>
     </div>
@@ -71,19 +71,34 @@ export function Navbar() {
 
   const infoLinks = (
     <>
-      <Link to={ROUTES.frontend.about} className={styles.navbar_dropdown_link}>
+      <Link
+        url={ROUTES.frontend.about}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.common_about_samfundet)}
       </Link>
-      <a href="#" className={styles.navbar_dropdown_link}>
+      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_membership)}
       </a>
-      <a href="#" className={styles.navbar_dropdown_link}>
+      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_opening_hours)}
       </a>
-      <a href={ROUTES.other.foto_samfundet_no} className={styles.navbar_dropdown_link}>
+      <Link
+        url={ROUTES.frontend.venues}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.navbar_map)}
+      </Link>
+      <a
+        href={ROUTES.other.foto_samfundet_no}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.navbar_photos)}
       </a>
-      <a href="#" className={styles.navbar_dropdown_link}>
+      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.navbar_nybygg)}
       </a>
     </>
@@ -159,15 +174,17 @@ export function Navbar() {
     <>
       <nav id={styles.mobile_popup_container}>
         {navbarHeaders}
+
         <div className={styles.mobile_widgets}>
           {languageButton}
           <div className={styles.mobile_user}>
-            {user && profileButton}
             {loginButton}
             {logoutButton}
           </div>
           <ThemeSwitch />
         </div>
+        <br></br>
+        {user && profileButton}
       </nav>
     </>
   );
@@ -176,7 +193,7 @@ export function Navbar() {
     <>
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
-          <Link to={ROUTES.frontend.home} id={styles.navbar_logo}>
+          <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
             <img src={navbarLogo} id={styles.navbar_logo_img} />
           </Link>
           {isDesktop && navbarHeaders}
@@ -188,7 +205,7 @@ export function Navbar() {
             {loginButton}
             {logoutButton}
           </div>
-          <HamburgerMenu />
+          <HamburgerMenu transparentBackground={isTransparentNavbar} />
         </div>
       </nav>
       {isMobileNavigation && mobileNavigation}
