@@ -30,8 +30,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_month_december]: 'Desember',
 
   // Date related
-  [KEY.common_today]: 'Idag',
-  [KEY.common_tomorrow]: 'Imorgen',
+  [KEY.common_today]: 'I dag',
+  [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
   [KEY.common_to]: 'Til',
