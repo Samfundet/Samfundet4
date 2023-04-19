@@ -4,6 +4,12 @@ import django.contrib.auth.validators
 from django.db import migrations
 import samfundet.models.general
 
+def lowercase_usernames(apps, schema_editor):
+    User = apps.get_model('samfundet', 'User')
+    for user in User.objects.all():
+        if user.username != user.username.lower():
+            user.username = user.username.lower()
+            user.save()
 
 class Migration(migrations.Migration):
 
@@ -12,6 +18,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(lowercase_usernames),
         migrations.AlterField(
             model_name='user',
             name='username',
