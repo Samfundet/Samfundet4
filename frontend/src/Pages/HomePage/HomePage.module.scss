@@ -6,28 +6,22 @@
 @import 'src/mixins';
 
 .splash_container {
-  max-width: 100%;
-  min-width: 100%;
   width: 100vw;
-  height: 100vh;
-  max-height: 45vw;
+  height: 25vw;
+  min-height: 35vh;
   top: -$navbar-height;
   position: relative;
   overflow: hidden;
-}
-
-.splash {
-  max-width: 100%;
-  min-width: 100%;
-  width: 100vw;
-  height: 100vh;
-  max-height: 45vw;
-  object-fit: cover;
-  position: absolute;
 
   @include for-mobile-only {
     min-height: 215px;
   }
+}
+
+.splash {
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
 }
 
 .splash_second {
@@ -92,5 +86,4 @@
 .content {
   position: relative;
   top: -$navbar-height;
-  // max-width: 100%; // QUESTION: Why is this needed?
 }
