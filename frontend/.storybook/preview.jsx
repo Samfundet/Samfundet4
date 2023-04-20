@@ -53,13 +53,13 @@ const WithTheme = (Story, context) => {
 
 function WithContext(Story) {
   return (
-    <BrowserRouter>
-      <AuthContextProvider>
-        <GlobalContextProvider>
+    <AuthContextProvider enabled={false}>
+      <GlobalContextProvider enabled={false}>
+        <BrowserRouter>
           <Story />
-        </GlobalContextProvider>
-      </AuthContextProvider>
-    </BrowserRouter>
+        </BrowserRouter>
+      </GlobalContextProvider>
+    </AuthContextProvider>
   );
 }
 
