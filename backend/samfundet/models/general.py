@@ -297,13 +297,13 @@ class Reservation(models.Model):
     date = models.DateField(blank=True, null=False, verbose_name='Dato')
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, default='Lyche', verbose_name='Sted')
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
 
     class Occasion(models.TextChoices):
         DRINK = 'DRINK', _('Drikke')
-        EAT = 'EAT', _('Spise')
+        FOOD = 'FOOD', _('Mat')
 
-    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.EAT)
+    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
     additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
     internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
