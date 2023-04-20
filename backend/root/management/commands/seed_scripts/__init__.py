@@ -4,8 +4,11 @@ from . import (
     information_pages,
     venues,
     events,
+    billig,
     menu,
+    documents,
     example,
+    samf3,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -20,9 +23,16 @@ SEED_SCRIPTS = [
     ('gang', gangs.seed),
     ('venue', venues.seed),
     ('event', events.seed),
+    ('billig', billig.seed),
     ('menu', menu.seed),
+    ('documents', documents.seed),
     ('information_page', information_pages.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
+]
+
+# These are not run by default (only when seeded specifically)
+OPTIONAL_SEED_SCRIPTS = [
+    ('samf3', samf3.seed),
 ]

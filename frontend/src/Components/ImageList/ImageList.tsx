@@ -1,31 +1,45 @@
+import classNames from 'classnames';
+import { dbT } from '~/utils';
 import { Image } from '../Image';
 import styles from './ImageList.module.scss';
 
-type Image = {
+export type ImageProps = {
   src: string;
   url?: string;
-  title?: string;
+  name?: string;
+  name_nb?: string;
+  name_en?: string;
+  short?: string;
+  alt?: string;
 };
 
 type ImageListProps = {
-  images: Image[];
+  images: ImageProps[];
   size?: number;
+  textClassName?: string;
+  textMaxLength?: number;
 };
 
-/**
- * images: Array of image objects
- * {title: String title of image, src: source of image, url: redirection of image}
- * TODO May need to add validation if image exists
- */
-export function ImageList({ images, size }: ImageListProps) {
+export function ImageList({ images, size, textClassName, textMaxLength }: ImageListProps) {
+  function getImageText(element: ImageProps) {
+    const name = dbT(element, 'name');
+    const isLongerThanMax = textMaxLength && name && name.length > textMaxLength;
+
+    if (isLongerThanMax) {
+      return element.short;
+    }
+
+    return name;
+  }
+
   return (
     <div className={styles.container}>
       {images.map((element, key) => (
         <a key={key} className={styles.imageBox} href={element.url}>
           <div className={styles.imageMask} style={{ width: size, height: size }}>
-            <Image src={element.src} className={styles.image} />
+            <Image src={element.src} className={styles.image} alt={element.alt} />
           </div>
-          <p className={styles.label}>{element.title}</p>
+          <p className={classNames(styles.label, textClassName)}>{getImageText(element)}</p>
         </a>
       ))}
     </div>

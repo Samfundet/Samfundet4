@@ -13,20 +13,35 @@
 }
 
 .header {
-  text-align: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
   text-transform: uppercase;
-  .headerText {
-    margin-bottom: 0.2em;
-    font-size: 2em;
-    font-weight: 700;
+  flex-wrap: wrap;
+  margin-left: 1em;
+  margin-right: 2em;
+}
+
+.headerText {
+  font-size: 1.5em;
+  font-weight: 700;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  color: $red-samf;
+  display: none;
+
+  @include for-mobile-only {
+    display: flex;
   }
 }
 
 .wisewords {
-  color: $grey-1;
+  color: inherit;
   font-weight: 600;
   font-size: medium;
+  opacity: 0.5;
 }
 
 .faq_button {
@@ -37,8 +52,7 @@
   .faq_text {
     margin: 0;
     font-size: .9em;
-    color: $black;
-
+    color: inherit;
   }
 }
 
@@ -46,6 +60,7 @@
   margin-top: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: stretch;
   flex-wrap: wrap;
+  gap: 1em;
 }

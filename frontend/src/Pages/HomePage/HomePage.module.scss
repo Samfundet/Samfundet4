@@ -1,59 +1,96 @@
 /* stylelint-disable selector-max-type */
 /* TODO: fix later */
 
-.container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #222222;
-}
+@import 'src/constants';
 
-.logo {
-  width: 30em;
-  margin-bottom: 1em;
+@import 'src/mixins';
+
+.splash_container {
+  max-width: 100%;
+  min-width: 100%;
+  width: 100vw;
+  height: 100vh;
+  max-height: 45vw;
+  top: -$navbar-height;
+  position: relative;
+  overflow: hidden;
 }
 
 .splash {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  width: 100vw;
+  height: 100vh;
+  max-height: 45vw;
   object-fit: cover;
+  position: absolute;
+
+  @include for-mobile-only {
+    min-height: 215px;
+  }
+}
+
+.splash_second {
+  z-index: -1;
+  display: none;
+}
+
+@keyframes splash-slide-in {
+  0% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes splash-slide-out {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+}
+
+.splash_slide_in {
+  animation-name: splash-slide-in;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  transform-origin: center;
+  display: block;
+}
+
+.splash_slide_out {
+  animation-name: splash-slide-out;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.splash_fade {
+  width: 100vw;
+  height: 250px;
   position: absolute;
   left: 0;
   top: 0;
-  filter: blur(5px);
-  z-index: -1;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(black, 0.6), transparent);
+
+  @include for-mobile-only {
+    height: 100px;
+  }
 }
 
 .content {
-  box-shadow: 2px 2px 10px 5px rgb(0 0 0 / 50%);
-  background-color: #eeeeee;
-  padding: 3em;
-  border-radius: 0.5em;
-}
-
-.homeText {
-  max-width: 40em;
-}
-
-a {
-  display: inline-block;
-  text-decoration: none;
-}
-
-.button {
-  display: block;
-  margin-top: 1em;
-  padding: 1em;
-  background-color: rgb(160 48 51);
-  color: white;
-  border-radius: 0.2em;
-
-  &:hover {
-    filter: brightness(110%);
-    transform: scale(1.01);
-    transition: 0.2s;
-  }
+  position: relative;
+  top: -$navbar-height;
+  // max-width: 100%; // QUESTION: Why is this needed?
 }

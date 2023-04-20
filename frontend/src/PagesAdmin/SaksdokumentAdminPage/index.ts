@@ -1,0 +1,1 @@
+export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';

@@ -7,6 +7,9 @@
 .description {
   text-align: center;
   justify-content: center;
+  font-weight: 100;
+  font-size: 1.1em;
+  margin: 1.5em;
 }
 
 .groups {
@@ -15,7 +18,7 @@
   box-shadow: none;
   border-radius: 0.5em;
   overflow: hidden;
-  margin: .5em;
+  margin: 1em;
   padding: 1em;
 }
 
@@ -25,6 +28,16 @@
   width: 100%;
   font-weight: '700';
   text-transform: uppercase;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
+.imageListText {
+  font-size: 1em;
+  font-weight: '800';
+}
+
+.header {
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-bottom: 0.3em;
+}

@@ -1,4 +1,5 @@
 import { ThemeValue } from '~/constants';
+import { EventAgeRestriction, EventStatus, EventTicketType, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -18,6 +19,22 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type HomePageDto = {
+  // Array of events used for splash
+  splash: EventDto[];
+  // Home page elements (carousel, cards etc.)
+  elements: HomePageElementDto[];
+};
+
+export type HomePageElementDto = {
+  variation: HomePageElementVariation;
+  title_nb: string;
+  title_en: string;
+  description_nb?: string;
+  description_no?: string;
+  events: EventDto[];
+};
+
 export type GroupDto = {
   id: number;
   name: string;
@@ -35,8 +52,8 @@ export type ObjectPermissionDto = {
 };
 
 export type VenueDto = {
-  id?: number;
-  name?: string;
+  id: number;
+  name: string;
   description?: string;
   floor?: number;
   last_renovated?: number;
@@ -61,26 +78,54 @@ export type VenueDto = {
   closing_sunday?: string;
 };
 
+// ==================== //
+//        Event         //
+// ==================== //
+
+// Custom ticket type
+export type EventCustomTicketDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  price: number;
+};
+
 export type EventDto = {
+  // Status of event
+  status: EventStatus;
+
+  // Used to group recurring events together
+  event_group: EventGroupDto;
+
+  // General info
   id: number;
   title_nb: string;
   title_en: string;
-  start_dt: Date;
-  duration: number;
-  end_dt?: Date;
   description_long_nb: string;
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
-  publish_dt: Date;
-  host: string;
+  age_restriction: EventAgeRestriction;
   location: string;
-  event_group: EventGroupDto;
-  price_group: string;
-  status_group: string;
-  age_group: string;
-  codeword: string;
-  banner_image: string;
+  category: string;
+  host: string;
+
+  // Timestamps/duration
+  image_url: string;
+  start_dt: string;
+  duration: number;
+  end_dt: string;
+  publish_dt: string;
+
+  // Ticket type for event (billig, free, custom, registration etc.)
+  ticket_type: EventTicketType;
+
+  // Custom tickets (only relevant for custom price group events)
+  custom_tickets: EventCustomTicketDto[];
+
+  // Write only:
+  // Used to create new event with using id of existing imagedto
+  image?: ImageDto;
 };
 
 export type EventGroupDto = {
@@ -94,12 +139,14 @@ export type ProfileDto = {
 };
 
 export type UserPreferenceDto = {
-  id?: number;
-  theme?: ThemeValue;
+  id: number;
+  theme: ThemeValue;
+  mirror_dimension: boolean;
+  cursor_trail: boolean;
 };
 
 export type InformationPageDto = {
-  slug_field?: string;
+  slug_field: string;
 
   title_nb?: string;
   text_nb?: string;
@@ -154,11 +201,19 @@ export type MenuDto = {
 };
 
 export type SaksdokumentDto = {
-  title_nb?: string;
-  title_en?: string;
-  category?: string;
-  publication_date?: Date;
-  file?: string;
+  id: number;
+  title_nb: string;
+  title_en: string;
+  category: string;
+  publication_date: string;
+  file?: string; // For posting to backend
+  url?: string; // Read only backend url
+};
+
+export type TextItemDto = {
+  key: string;
+  text_en: string;
+  text_nb: string;
 };
 
 export type BookingDto = {
@@ -190,6 +245,16 @@ export type GangTypeDto = {
   gangs: GangDto[];
 };
 
+export type ClosedPeriodDto = {
+  id: number;
+  message_no: string;
+  description_no: string;
+  message_en: string;
+  description_en: string;
+  start_dt: Date;
+  end_dt: Date;
+};
+
 export type TagDto = {
   id: number;
   name: string;
@@ -199,6 +264,20 @@ export type TagDto = {
 export type ImageDto = {
   id: number;
   title: string;
-  image: string;
+  url: string;
   tags: TagDto[];
+};
+
+export type ImagePostDto = ImageDto & {
+  tag_string: string;
+  file: File;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Tuple = [any, any];
+
+export type KeyValueDto = {
+  id: number;
+  key: string;
+  value: string;
 };

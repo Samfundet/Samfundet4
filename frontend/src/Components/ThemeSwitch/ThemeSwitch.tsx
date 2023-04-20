@@ -1,35 +1,23 @@
 import { Icon } from '@iconify/react';
-import { putUserPreference } from '~/api';
-import { useAuthContext } from '~/AuthContext';
-import { ToggleSwitch } from '~/Components';
-import { THEME } from '~/constants';
+import classnames from 'classnames';
 import { useGlobalContext } from '~/GlobalContextProvider';
+import { useIsDarkTheme } from '~/hooks';
+import styles from './ThemeSwitch.module.scss';
 
 type ThemeSwitchProps = {
   className?: string;
 };
 
 export function ThemeSwitch({ className }: ThemeSwitchProps) {
-  const { switchTheme, theme } = useGlobalContext();
-  const { user } = useAuthContext();
+  const { switchTheme } = useGlobalContext();
+  const isDarkTheme = useIsDarkTheme();
 
-  const onIcon = <Icon icon="fluent-emoji:new-moon-face" inline={true} width={24} />;
-  const offIcon = <Icon icon="fluent-emoji:sun-with-face" inline={true} width={24} />;
-
-  function switchThemeHandler() {
-    const switchedTo = switchTheme();
-    if (user) {
-      putUserPreference({ id: user?.user_preference.id, theme: switchedTo });
-    }
-  }
+  const onIcon = <Icon icon="ph:moon-stars-thin" inline={true} width={24} className={styles.icon} />;
+  const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24} className={styles.icon} />;
 
   return (
-    <ToggleSwitch
-      checked={theme === THEME.DARK}
-      className={className}
-      onIcon={onIcon}
-      offIcon={offIcon}
-      onChange={switchThemeHandler}
-    />
+    <div onClick={switchTheme} className={classnames(styles.button, className)}>
+      {isDarkTheme ? onIcon : offIcon}
+    </div>
   );
 }

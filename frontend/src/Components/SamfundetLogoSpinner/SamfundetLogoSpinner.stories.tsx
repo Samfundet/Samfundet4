@@ -1,4 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { AuthContextProvider } from '~/AuthContext';
+import { GlobalContextProvider } from '~/GlobalContextProvider';
 import { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
 
 // Local component config.
@@ -10,7 +12,11 @@ export default {
 const Template: ComponentStory<typeof SamfundetLogoSpinner> = function () {
   return (
     <div style={{ margin: '50px' }}>
-      <SamfundetLogoSpinner />
+      <AuthContextProvider>
+        <GlobalContextProvider>
+          <SamfundetLogoSpinner />
+        </GlobalContextProvider>
+      </AuthContextProvider>
     </div>
   );
 };

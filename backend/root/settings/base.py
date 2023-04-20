@@ -27,10 +27,7 @@ environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
 AUTH_USER_MODEL = 'samfundet.User'
 
-### Print variables ###
-print(f'=== {BASE_DIR=}')  # noqa: T201
-print(f"=== {os.environ['DJANGO_SETTINGS_MODULE']=}")  # noqa: T201
-### End: Print variables ###
+DATABASE_ROUTERS = ['root.db_router.SamfundetDatabaseRouter']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -169,7 +166,10 @@ INSTALLED_APPS += [
 # https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES':
         [
             # 'rest_framework.permissions.IsAuthenticated',
@@ -196,13 +196,8 @@ INSTALLED_APPS += [
 
 ################## LOGGING ##################
 
-# pylint: disable=wrong-import-position,wrong-import-order
-import logging.config  # noqa: E402
-
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
 from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
-
-# pylint: enable=wrong-import-position,wrong-import-order
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
@@ -303,11 +298,20 @@ LOGGING = {
         },
 }
 
-logging.config.dictConfig(LOGGING)
-
 # Quick fix for avoiding concurrency issues related to db access
 # Note: this might not be an ideal solution. See these links for information
 # https://docs.djangoproject.com/en/1.10/topics/db/transactions/#django.db.transaction.on_commit
 # https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2
 ATOMIC_REQUESTS = True
 APPEND_SLASH = True
+
+# ======================== #
+#         Email            #
+# ======================== #
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')

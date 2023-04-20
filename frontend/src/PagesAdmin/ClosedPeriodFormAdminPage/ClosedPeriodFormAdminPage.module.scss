@@ -1,0 +1,42 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.wrapper {
+  margin: 1em 1em;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}
+
+.backButton {
+  border-color: $grey-1;
+  padding: 0.5em 1.6em;
+  text-transform: uppercase;
+}
+
+.backButtonText {
+  margin: 0;
+  font-weight: 700;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  margin-top: .5em;
+  gap: 1.5em;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+

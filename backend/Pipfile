@@ -20,9 +20,6 @@ django-admin-autocomplete-filter = "*"
 
 [dev-packages]
 yapf = "*"
-pylint = "*"
-pylint-django = "*"
-pylint-quotes = "*"
 mypy = "*"
 bandit = "*"
 pillow = "*"
@@ -31,6 +28,7 @@ flake8-annotations = "*"
 flake8-keyword-arguments = "*"
 flake8-print = "*"
 flake8-quotes = "*"
+requests = "*"
 
 [requires]
 python_version = "3.11.0" # from .python-version

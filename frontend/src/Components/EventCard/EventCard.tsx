@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay, Button, Link } from '~/Components';
+import { Button, Link, TimeDisplay } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import styles from './EventCard.module.scss';
 

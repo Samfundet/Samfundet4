@@ -40,29 +40,31 @@
   font-weight: 700;
 }
 
-.line {
-  margin-top: 1.5em;
-  margin-bottom: 1.5em;
-  background-color: $grey-3;
-  height: 1.5px;
+.action_row {
+  @include flex-row;
+  flex-wrap: wrap;
+  gap: 1em;
 }
 
 .imageContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 1em;
   @include for-tablet-up {
     flex-direction: row;
   }
 }
 
 .imageBox {
-  flex-basis: 1;
+  overflow: hidden;
+  flex-basis: calc(25% - 1em);
+  min-height: 12em;
+  height: 12em;
   box-sizing: inherit;
-  min-height: 300px;
-  margin: .5em;
-  @include for-tablet-up {
+  @include for-tablet-down {
     flex-basis: calc(33.33% - 1em);
   }
 }

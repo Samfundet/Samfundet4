@@ -1,61 +1,68 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner, FormInputField } from '~/Components';
-import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Page, SamfundetLogoSpinner } from '~/Components';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
+import { getImage, postImage } from '~/api';
+import { ImagePostDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './ImageFormAdminPage.module.scss';
-import { getImage, postImage, putImage } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { useForm } from 'react-hook-form';
-import { DTOToForm } from '~/utils';
 
 export function ImageFormAdminPage() {
   const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    setValue,
-    formState: { errors },
-  } = useForm();
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
 
+  const [showSpinner, setShowSpinner] = useState<boolean>(id !== undefined);
+  const [image, setImage] = useState<Partial<ImagePostDto>>({});
+
   // Stuff to do on first render.
   //TODO add permissions on render
-
   useEffect(() => {
     if (id) {
       getImage(id)
         .then((data) => {
-          DTOToForm(data, setValue, []);
+          setImage(data);
+          setShowSpinner(false);
         })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+        .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.admin_images);
           }
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
+    } else {
+      setShowSpinner(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, setImage]);
+
+  async function handleOnSubmit(data: ImagePostDto) {
+    setShowSpinner(true);
+    if (id !== undefined) {
+      // TODO patch
+      setShowSpinner(false);
+    } else {
+      postImage(data)
+        .then(() => {
+          // Success!
+          navigate(ROUTES.frontend.admin_images);
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch((err) => {
+          setShowSpinner(false);
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(err);
         });
     }
-    setShowSpinner(false);
-  }, [id, getImage, navigate, setValue]);
-
-  const onSubmit = (data) => {
-    (id ? putImage(id, data) : postImage(data))
-      .then(() => {
-        navigate(ROUTES.frontend.admin_images);
-      })
-      .catch((e) => {
-        for (const err in e.response.data) {
-          setError(err, { type: 'custom', message: e.response.data[err][0] });
-        }
-      });
-  };
+  }
 
   if (showSpinner) {
     return (
@@ -65,48 +72,23 @@ export function ImageFormAdminPage() {
     );
   }
 
+  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_image)}`;
   return (
     <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin_images)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
       <h1 className={styles.header}>
         {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.seperator}>Info</div>
-        <FormInputField
-          errors={errors}
-          className={styles.input}
-          name="title"
-          required={t(KEY.form_required)}
-          register={register}
-        >
-          <p className={styles.labelText}>{t(KEY.name)}</p>
-        </FormInputField>
-        <FormInputField
-          errors={errors}
-          className={styles.input}
-          name="tags"
-          helpText="Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'"
-          register={register}
-        >
-          <p className={styles.labelText}>{t(KEY.common_tags)}</p>
-        </FormInputField>
-        <div className={styles.seperator}>{t(KEY.common_image)}</div>
-        <FormInputField className={styles.input} errors={errors} name="image" type="file" register={register}>
-          <p className={styles.labelText}>
-            {t(KEY.common_choose)} {t(KEY.common_image)}
-          </p>
-        </FormInputField>
-        <div className={styles.submitContainer}>
-          <Button theme={'success'} type="submit">
-            <p className={styles.submit}>
-              {id ? t(KEY.common_save) : t(KEY.common_create)} {t(KEY.gang)}
-            </p>
-          </Button>
-        </div>
-      </form>
+      <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
+        <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
+        {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
+        <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
+        {/* TODO create file picker input type */}
+        <SamfFormField field="file" type="upload-image" label={`${t(KEY.common_choose)} ${t(KEY.common_image)}`} />
+        <p>
+          {JSON.stringify(image.file)}
+          {image.file?.name}
+        </p>
+      </SamfForm>
     </Page>
   );
 }

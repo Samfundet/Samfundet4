@@ -2,9 +2,6 @@
 
 @import 'src/constants';
 
-.wrapper {
-  margin: 1em 1em;
-}
 
 .spinner {
   display: flex;
@@ -30,79 +27,19 @@
   margin-top: 0.5em;
 }
 
-.labelText {
-  font-weight: 100;
-  font-size: 1.1em;
-  margin-bottom: 0.2em;
-}
-
-.inputGroup {
-  border-top: 0.15em solid $grey-2;
-  margin-top: 1em;
-  padding-top: 1em;
-  padding-bottom: 1em;
-}
-
-.input {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-}
-
-.select {
-  width: 100%;
-}
-
-.inputGroupHeader {
-  font-weight: 700;
-  font-size: 2em;
-  margin-bottom: 1em;
-  margin-top: 0.5em;
-}
-
-.submit {
-  margin: 0;
-  font-weight: 700;
-  font-size: 1.5em;
-}
-
-.submitContainer {
-  display: flex;
-  justify-content: center;
-  margin: 2em;
-}
-
-.markdownField {
-  border: 1px solid $grey-2;
-  border-radius: 2px;
-  height: 100%;
-  margin: 1em;
-  padding: 2em;
-}
-
 .row {
   flex: 1;
   display: flex;
   flex-direction: row;
+  gap: .5em;
   @include for-tablet-down {
     flex-direction: column;
   }
 }
 
-.col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5em;
+.cannot_reupload {
+  color: $grey-2;
+  text-align: right;
+  padding-top: 1em;
+  font-style: italic;
 }
-
-.seperator {
-  text-align: center;
-  background-color: $red-samf;
-  font-size: 1em;
-  font-weight: 700;
-  padding: 0.2em;
-  margin-left: 1em;
-  margin-right: 1em;
-  color: $white;
-}
-

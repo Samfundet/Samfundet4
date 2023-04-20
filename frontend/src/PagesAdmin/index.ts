@@ -1,9 +1,12 @@
+export { ClosedPeriodAdminPage } from './ClosedPeriodAdminPage';
+export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';
+export { EventCreatorAdminPage } from './EventCreatorAdminPage';
+export { EventsAdminPage } from './EventsAdminPage';
 export { GangsAdminPage } from './GangsAdminPage';
 export { GangsFormAdminPage } from './GangsFormAdminPage';
-export { EventsAdminPage } from './EventsAdminPage';
-export { EventFormAdminPage } from './EventFormAdminPage';
-export { InformationAdminPage } from './InformationAdminPage';
-export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { ImageAdminPage } from './ImageAdminPage';
 export { ImageFormAdminPage } from './ImageFormAdminPage';
+export { InformationAdminPage } from './InformationAdminPage';
+export { InformationFormAdminPage } from './InformationFormAdminPage';
+export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
