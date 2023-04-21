@@ -306,6 +306,33 @@ class Table(models.Model):
         return f'{self.name_nb}'
 
 
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
+    email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
+    phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
+    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
+    end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
+
+    class Occasion(models.TextChoices):
+        DRINK = 'DRINK', _('Drikke')
+        FOOD = 'FOOD', _('Mat')
+
+    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.FOOD)
+    guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
+    additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
+    internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
+
+    class Meta:
+        verbose_name = 'Reservation'
+        verbose_name_plural = 'Reservations'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
 class FoodPreference(models.Model):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
