@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { InformationPageDto } from '~/dto';
@@ -12,6 +11,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InformationAdminPage.module.scss';
 
 export function InformationAdminPage() {
@@ -52,13 +52,6 @@ export function InformationAdminPage() {
       });
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
     { content: t(KEY.common_title), sortable: true },
@@ -103,21 +96,19 @@ export function InformationAdminPage() {
     ];
   });
 
-  // TODO ADD TRANSLATIONS pr element
+  const title = t(KEY.admin_information_manage_title);
+  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const header = (
+    <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+      {t(KEY.common_create)} {t(KEY.information_page_short)}
+    </Button>
+  );
+
   return (
-    <Page>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_information_manage_title)}</h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_informationpage_changelist}>
-          {t(KEY.common_see_in_django_admin)}
-        </Link>
-      </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
-        {t(KEY.common_create)} {t(KEY.information_page_short)}
-      </Button>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <div className={styles.tableContainer}>
         <Table columns={tableColumns} data={data} />
       </div>
-    </Page>
+    </AdminPageLayout>
   );
 }

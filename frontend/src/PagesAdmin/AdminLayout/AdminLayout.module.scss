@@ -2,7 +2,8 @@
 
 @import 'src/mixins';
 
-$panel-width: 13em;
+$panel-width: 14em;
+$panel-dark-bg: #333;
 
 .wrapper {
   display: flex;
@@ -28,7 +29,7 @@ $panel-width: 13em;
   }
 
   @include theme-dark {
-    background-color: $theme-dark-bg;
+    background-color: $panel-dark-bg;
     border-color: $black;
   }
 }
@@ -36,34 +37,50 @@ $panel-width: 13em;
 .panel_header {
   @include flex-row;
   font-weight: 700;
-  background-color: $red-samf;
-  margin-bottom: 1em;
-  color: white;
-  padding: 1em;
+  font-size: 1.25em;
+  padding: 0.75em;
+  padding-top: 0.5em;
+  margin-top: 0.25em;
   gap: .5em;
+
+  @include theme-dark {
+    border-color: $grey-1;
+  }
+  
+}
+
+.category_header {
+  font-weight: 700;
+  padding-left: 1.25em;
+  padding-bottom: 0.5em;
 }
 
 .panel_item {
-  @include shadow-light;
   @include flex-row;
   text-align: right;
   gap: 1em;
-  background-color: white;
-  border-bottom: 1px solid $grey-4;
-  border-top: 1px solid $grey-4;
-  padding: .5em 1em;
+  padding: .5em .5em;
+  padding-left: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
   cursor: pointer;
   transition: .2s;
-  color: black;
+  color: $grey-1;
+  text-decoration: none;
+  border-radius: .5em;
+  white-space: nowrap;
 
   @include theme-dark {
-    color: white;
-    background-color: $grey-1;
-    border-color: $black;
+    color: $grey-4;
   }
   
   &:hover {
-    color: $blue;
+    text-decoration: none;
+    background-color: $grey-4;
+
+    @include theme-dark {
+      background-color: $grey-1;
+    }
   }
 }
 
@@ -74,6 +91,7 @@ $panel-width: 13em;
     background-color: $blue;
   }
   &:hover {
+    background-color: $blue;
     color: white;
   }
 }
@@ -82,11 +100,13 @@ $panel-width: 13em;
   flex: 1;
   height: calc(100vh - $navbar-height);
   margin-top: $navbar-height;
-  padding-left: calc($panel-width + 1em);
-  padding-right: 1em;
-
+  margin-left: calc($panel-width);
+  max-width: calc(100vw - $panel-width);
+  width: calc(100vw - $panel-width);  
+  
   @include for-mobile-only {
-    padding-left: 0;
+    width: auto;
+    margin-left: 0;
   }
 
 }

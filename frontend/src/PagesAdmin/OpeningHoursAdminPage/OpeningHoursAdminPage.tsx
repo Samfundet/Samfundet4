@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Page } from '~/Components/Page';
 import { getVenues, putVenue } from '~/api';
 import { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS } from '~/types';
 import { getDayKey } from '~/utils';
+import { AdminPage } from '../AdminPageLayout';
 import styles from './OpeningHoursAdminPage.module.scss';
 
 export function OpeningHoursAdminPage() {
@@ -15,6 +15,7 @@ export function OpeningHoursAdminPage() {
   const [venues, setVenues] = useState<VenueDto[]>([]);
   const [saveTimer, setSaveTimer] = useState<Record<string, NodeJS.Timeout>>({});
   const [invalid, setInvalid] = useState<Record<string, boolean>>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // We need a reference to read changed state inside timeout
   const venueRef = useRef(venues);
@@ -25,10 +26,12 @@ export function OpeningHoursAdminPage() {
       .then((venues) => {
         venueRef.current = venues;
         setVenues(venues);
+        setIsLoading(false);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
+        setIsLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -144,11 +147,13 @@ export function OpeningHoursAdminPage() {
     );
   }
 
+  const header = (
+    <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
+  );
+
   return (
-    <Page>
-      <div className={styles.header}>{t(KEY.common_opening_hours)}</div>
-      <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
+    <AdminPage title={t(KEY.common_opening_hours)} header={header} loading={isLoading}>
       <div className={styles.venue_container}>{venues.map((venue) => venueBox(venue))}</div>
-    </Page>
+    </AdminPage>
   );
 }

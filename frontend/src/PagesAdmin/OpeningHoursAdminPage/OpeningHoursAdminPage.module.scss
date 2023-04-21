@@ -2,27 +2,21 @@
 
 @import 'src/constants';
 
-.header {
-  font-size: 2em;
-  font-weight: 700;
-  margin-bottom: .5em;
-  margin-top: .5em;
-}
-
 .subtitle {
   color: $grey-2;
-  margin-bottom: 1.5em;
 }
 
 .venue_container {
   @include flex-row;
   flex-wrap: wrap;
+  padding-top: 1em;
   gap: 1em;
 }
 
 .venue_box {
-  @include rounded;
   @include shadow-light;
+  border-radius: .4em;
+  border: 1px solid $grey-3;
   overflow: hidden;
   min-width: 16em;
   max-width: 16em;
@@ -30,7 +24,9 @@
 
 .venue_header {
   padding: .5em 1em;
-  background-color: $red-samf;
+  background-color: $blue;
+  font-size: 1.25em;
+  font-weight: 700;
   color: $white;
 }
 
