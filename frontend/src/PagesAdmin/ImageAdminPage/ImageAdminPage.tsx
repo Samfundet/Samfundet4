@@ -37,15 +37,21 @@ export function ImageAdminPage() {
     </Button>
   );
 
+  // Limit maximum number of rendered images
+  // TODO pagination & lazy load
+  const displayImages = images.slice(0, Math.min(images.length, 64));
+
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <div className={styles.action_row}>
         <ImageQuery allImages={allImages} setImages={setImages} />
       </div>
       <div className={styles.imageContainer}>
-        {images.map(function (element) {
+        {displayImages.map(function (element) {
           return <AdminImage key={element.id} image={element} className={styles.imageBox} />;
         })}
+        {/* TODO pagination or translation */}
+        {images.length > displayImages.length && <i>And {images.length - displayImages.length} more...</i>}
       </div>
     </AdminPageLayout>
   );
