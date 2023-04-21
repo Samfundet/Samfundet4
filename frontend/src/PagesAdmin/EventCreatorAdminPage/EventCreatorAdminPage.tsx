@@ -83,11 +83,12 @@ export function EventCreatorAdminPage() {
             <SamfFormField field="category" type="options" label="Kategori" options={eventCategoryOptions} />
             <SamfFormField field="host" type="text" label="Arrangør" />
             <SamfFormField field="location" type="text" label="Lokale" />
+            <SamfFormField field="capacity" type="number" label="Kapasitet" />
           </div>
         </>
       ),
     },
-    // Payment options (not implemented yet).
+    // Payment options (WIP)
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
