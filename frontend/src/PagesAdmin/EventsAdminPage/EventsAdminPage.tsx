@@ -109,7 +109,7 @@ export function EventsAdminPage() {
   const header = (
     <>
       <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
-        {t(KEY.common_create)} {t(KEY.common_event)}
+        {t(KEY.common_create)} {t(KEY.common_events)}
       </Button>
     </>
   );

@@ -31,7 +31,7 @@ $header-bg-dark: #222;
 .title_row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1em;
+  margin-bottom: 1.25em;
   gap: 1em;
 }
 
@@ -57,4 +57,5 @@ $header-bg-dark: #222;
   overflow-y: auto;
   padding: 1em $page-padding;
   padding-bottom: 5em;
+  padding-top: 1.5em;
 }

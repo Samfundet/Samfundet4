@@ -1,4 +1,4 @@
-import { Button, ImageCard, Page } from '~/Components';
+import { Button, ImageCard } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
@@ -17,6 +17,7 @@ import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
 
@@ -275,11 +276,10 @@ export function EventCreatorAdminPage() {
       </div>
     </>
   );
-
+  
+  const title = `${t(KEY.common_create)} ${t(KEY.common_event)}`;
   return (
-    <Page>
-      <div className={styles.header}>Opprett Arrangement</div>
-      <div className={styles.outer_container}>
+    <AdminPageLayout title={title}>
         <TabBar
           tabs={formTabs}
           selected={currentFormTab}
@@ -288,6 +288,7 @@ export function EventCreatorAdminPage() {
           spaceBetween={true}
           disabled={didSave}
         />
+        <br></br>
         <div className={styles.form_container}>
           {/* Render form */}
           {!didSave && (
@@ -307,7 +308,6 @@ export function EventCreatorAdminPage() {
             </>
           )}
         </div>
-      </div>
-    </Page>
+    </AdminPageLayout>
   );
 }

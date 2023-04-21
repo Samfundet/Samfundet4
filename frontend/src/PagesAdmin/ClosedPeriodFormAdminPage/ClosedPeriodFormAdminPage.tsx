@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
@@ -12,6 +11,7 @@ import { ClosedPeriodDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
 export function ClosedPeriodFormAdminPage() {
@@ -70,12 +70,10 @@ export function ClosedPeriodFormAdminPage() {
 
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.common_norwegian)})`;
+  const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
   return (
-    <Page>
-      <h1 className={styles.header}>
-        {id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period)}
-      </h1>
+    <AdminPageLayout title={title}>
       <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
         <div className={styles.row}>
           <SamfFormField
@@ -106,6 +104,6 @@ export function ClosedPeriodFormAdminPage() {
           <SamfFormField field="end_dt" type="datetime" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
       </SamfForm>
-    </Page>
+    </AdminPageLayout>
   );
 }
