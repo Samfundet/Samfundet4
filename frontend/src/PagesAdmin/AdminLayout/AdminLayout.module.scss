@@ -3,7 +3,10 @@
 @import 'src/mixins';
 
 $panel-width: 14em;
-$panel-dark-bg: #333;
+$panel-light-bg: #f6f6f6;
+$panel-light-bg-hover: #e8e8e8;
+$panel-light-border: #d7d7d7;
+$panel-dark-bg: #333333;
 
 .wrapper {
   display: flex;
@@ -17,8 +20,8 @@ $panel-dark-bg: #333;
   height: calc(100% - $navbar-height);
   min-width: $panel-width;
   max-width: $panel-width;
-  background-color: $white;
-  border-right: 1px solid $grey-4;
+  background-color: $panel-light-bg;
+  border-right: 1px solid $panel-light-border;
   display: flex;
   flex-direction: column;
   margin-top: $navbar-height;
@@ -76,7 +79,7 @@ $panel-dark-bg: #333;
   
   &:hover {
     text-decoration: none;
-    background-color: $grey-4;
+    background-color: $panel-light-bg-hover;
 
     @include theme-dark {
       background-color: $grey-1;

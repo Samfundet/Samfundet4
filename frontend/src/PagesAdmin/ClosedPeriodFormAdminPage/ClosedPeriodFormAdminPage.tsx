@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
@@ -60,20 +59,12 @@ export function ClosedPeriodFormAdminPage() {
     console.log(JSON.stringify(data));
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.common_norwegian)})`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
   return (
-    <AdminPageLayout title={title}>
+    <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
         <div className={styles.row}>
           <SamfFormField

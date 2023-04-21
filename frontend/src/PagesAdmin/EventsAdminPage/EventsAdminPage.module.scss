@@ -2,9 +2,19 @@
 
 @import 'src/constants';
 
+.carousel {
+  padding-bottom: 2em;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.carousel_item:first-child {
+  padding-left: 0;
+}
+
 .tableContainer {
-  margin-top: 2em;
-  border-radius: .5em;
+  margin-top: 1em;
+  border-radius: .2em;
   overflow-x: scroll;
 }
 

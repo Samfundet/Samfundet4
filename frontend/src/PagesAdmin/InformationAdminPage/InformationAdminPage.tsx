@@ -12,7 +12,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import styles from './InformationAdminPage.module.scss';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
@@ -106,9 +105,7 @@ export function InformationAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <div className={styles.tableContainer}>
-        <Table columns={tableColumns} data={data} />
-      </div>
+      <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );
 }

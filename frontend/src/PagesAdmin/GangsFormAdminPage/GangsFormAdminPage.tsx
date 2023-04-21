@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
@@ -53,19 +52,11 @@ export function GangsFormAdminPage() {
     console.log(JSON.stringify(data));
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
   const title = id ? t(KEY.common_edit) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
 
   return (
-    <AdminPageLayout title={title}>
+    <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm
         initialData={gang}
         onSubmit={handleOnSubmit}

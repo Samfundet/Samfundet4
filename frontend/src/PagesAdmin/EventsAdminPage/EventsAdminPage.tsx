@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, EventQuery, TimeDisplay } from '~/Components';
+import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -116,6 +117,27 @@ export function EventsAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Carousel
+        spacing={2}
+        header=""
+        className={styles.carousel}
+        itemContainerClass={styles.carousel_item}
+      >
+        {allEvents.slice(0, Math.min(allEvents.length, 10)).map((event) => {
+          {
+            /* TODO add edit/open links */
+          }
+          return (
+            <ImageCard
+              title={dbT(event, 'title')}
+              date={event.start_dt}
+              subtitle=""
+              imageUrl={BACKEND_DOMAIN + event.image_url}
+              compact={true}
+            />
+          );
+        })}
+      </Carousel>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
         <Table columns={tableColumns} data={data} />
