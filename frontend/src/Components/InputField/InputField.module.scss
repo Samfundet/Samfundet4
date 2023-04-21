@@ -12,6 +12,7 @@ $error-color: red;
   @include rounded;
   padding: 1em 1em;
   border: 1px solid transparent;
+  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
   outline: none;
   &:focus {
     outline: none;
