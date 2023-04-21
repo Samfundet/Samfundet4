@@ -115,7 +115,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
   // SaksdokumentPage:
-  [KEY.saksdokumentpage_publication_date]: 'Publiserings dato',
+  [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
   // Navbar
   [KEY.navbar_photos]: 'Foto',

@@ -111,7 +111,9 @@ export function EventCreatorAdminPage() {
       title_nb: 'Oppsummering',
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
-      template: <SamfFormField field="publish_dt" type="datetime" label="Publiseringsdato" />,
+      template: (
+        <SamfFormField field="publish_dt" type="datetime" label={t(KEY.saksdokumentpage_publication_date) ?? ''} />
+      ),
     },
   ];
 
