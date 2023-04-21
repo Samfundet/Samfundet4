@@ -11,13 +11,23 @@ export default {
 } as ComponentMeta<typeof Carousel>;
 
 const Template: ComponentStory<typeof Carousel> = function (args) {
-  const itemTemplate = <div style={{ width: '400px', height: '250px', background: '#aaa', borderRadius: '1em' }}></div>;
-  return <Carousel {...args}>{[...Array(100)].map(() => itemTemplate)}</Carousel>;
+  return (
+    <Carousel {...args}>
+      {[...Array(100)].map((_, i) => (
+        <div key={i} style={{ width: '400px', height: '250px', background: '#aaa', borderRadius: '1em' }}></div>
+      ))}
+    </Carousel>
+  );
 };
 
 const TemplateSmall: ComponentStory<typeof Carousel> = function (args) {
-  const itemTemplate = <div style={{ width: '50px', height: '50px', background: '#aaa', borderRadius: '1em' }}></div>;
-  return <Carousel {...args}>{[...Array(100)].map(() => itemTemplate)}</Carousel>;
+  return (
+    <Carousel {...args}>
+      {[...Array(100)].map((_, i) => (
+        <div key={i} style={{ width: '50px', height: '50px', background: '#aaa', borderRadius: '1em' }}></div>
+      ))}
+    </Carousel>
+  );
 };
 
 export const Basic = Template.bind({});
