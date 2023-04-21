@@ -1,4 +1,4 @@
-import { default as classNames, default as classnames } from 'classnames';
+import classNames from 'classnames';
 import { ReactNode } from 'react';
 import { Skeleton } from '~/Components/Skeleton';
 import { Children } from '~/types';
@@ -38,14 +38,14 @@ export function Carousel({
       )}
       <div>
         <div className={styles.navContainer}>
-          <div className={classnames(styles.button, styles.left)}>{'<'}</div>
+          <div className={classNames(styles.button, styles.left)}>{'<'}</div>
         </div>
-        <div className={classnames(styles.navButton, styles.left)}></div>
+        <div className={classNames(styles.navButton, styles.left)}></div>
         <div className={styles.scroller} style={{ gap: (spacing ? spacing : 0.2) + 'em' }}>
           {wrappedChildren}
         </div>
         <div className={styles.navContainer}>
-          <div className={classnames(styles.button, styles.right)}>{'>'}</div>
+          <div className={classNames(styles.button, styles.right)}>{'>'}</div>
         </div>
       </div>
     </div>

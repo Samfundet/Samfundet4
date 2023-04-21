@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
@@ -15,7 +16,8 @@ import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { Children } from '~/types';
+import { ROUTES } from '~/routes';
+import { Children, EventAgeRestriction } from '~/types';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
@@ -30,13 +32,19 @@ type EventCreatorStep = {
 };
 
 export function EventCreatorAdminPage() {
-  const [didSave, setDidSave] = useState(false);
+  const navigate = useNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
 
-  // TODO this is temporary and must be fetched from API when categories are implemented.
+  // TODO these are temporary and must be fetched from API when implemented.
   const eventCategoryOptions: DropDownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
+  ];
+  const ageLimitOptions: DropDownOption<EventAgeRestriction>[] = [
+    { value: 'none', label: 'Ingen' },
+    { value: 'eighteen', label: '18 år' },
+    { value: 'twenty', label: '20 år' },
+    { value: 'mixed', label: '18 år (student), 20 år (ikke student)' },
   ];
 
   // ================================== //
@@ -95,6 +103,7 @@ export function EventCreatorAdminPage() {
       title_en: 'Payment/registration',
       template: (
         <>
+          <SamfFormField field="age_restriction" type="options" label="Aldersgrense" options={ageLimitOptions} />
           <PaymentForm event={event ?? {}} onChange={(partial) => setEvent({ ...event, ...partial })} />
         </>
       ),
@@ -133,7 +142,7 @@ export function EventCreatorAdminPage() {
   function trySave() {
     postEvent(event as EventDto)
       .then(() => {
-        setDidSave(true);
+        navigate(ROUTES.frontend.admin_events);
         toast.success(t(KEY.common_creation_successful));
       })
       .catch((error) => {
@@ -151,8 +160,8 @@ export function EventCreatorAdminPage() {
     // Check step status to get icon and colors
     const custom = step.customIcon !== undefined;
     let icon = step.customIcon || 'material-symbols:circle-outline';
-    const valid = completedSteps[step.key] === true && !custom && !didSave;
-    const visited = visitedTabs[step.key] === true && !custom && !didSave;
+    const valid = completedSteps[step.key] === true && !custom;
+    const visited = visitedTabs[step.key] === true && !custom;
     const error = !valid && visited && !custom;
     if (valid) {
       icon = 'material-symbols:check-circle';
@@ -289,27 +298,12 @@ export function EventCreatorAdminPage() {
         onSetTab={setTabAndVisit}
         vertical={false}
         spaceBetween={true}
-        disabled={didSave}
       />
       <br></br>
       <div className={styles.form_container}>
         {/* Render form */}
-        {!didSave && (
-          <>
-            {allForms}
-            {navigationButtons}
-          </>
-        )}
-        {/* Show saved notice */}
-        {didSave && (
-          <>
-            {eventPreview}
-            <div className={styles.done_row}>
-              <h1>Lagret</h1>
-              <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon} />
-            </div>
-          </>
-        )}
+        {allForms}
+        {navigationButtons}
       </div>
     </AdminPageLayout>
   );
