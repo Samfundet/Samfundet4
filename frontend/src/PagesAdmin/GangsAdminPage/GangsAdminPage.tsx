@@ -51,27 +51,29 @@ export function GangsAdminPage() {
 
   const currentGangType = currentGangTypeTab?.value;
 
-  const tableData = currentGangType && currentGangType.gangs.map(function (element2) {
-    return [
-      dbT(element2, 'name'),
-      element2.abbreviation,
-      element2.webpage,
-      {
-        content: (
-          <CrudButtons
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_gangs_edit,
-                  urlParams: { id: element2.id },
-                }),
-              );
-            }}
-          />
-        ),
-      },
-    ];
-  })
+  const tableData =
+    currentGangType &&
+    currentGangType.gangs.map(function (element2) {
+      return [
+        dbT(element2, 'name'),
+        element2.abbreviation,
+        element2.webpage,
+        {
+          content: (
+            <CrudButtons
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_gangs_edit,
+                    urlParams: { id: element2.id },
+                  }),
+                );
+              }}
+            />
+          ),
+        },
+      ];
+    });
 
   const title = t(KEY.adminpage_gangs_title);
   const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
@@ -80,7 +82,7 @@ export function GangsAdminPage() {
       {t(KEY.adminpage_gangs_create)}
     </Button>
   );
-  
+
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab}></TabBar>

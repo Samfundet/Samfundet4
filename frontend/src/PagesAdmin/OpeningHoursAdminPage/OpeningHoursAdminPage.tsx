@@ -147,9 +147,7 @@ export function OpeningHoursAdminPage() {
     );
   }
 
-  const header = (
-    <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
-  );
+  const header = <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>;
 
   return (
     <AdminPage title={t(KEY.common_opening_hours)} header={header} loading={isLoading}>

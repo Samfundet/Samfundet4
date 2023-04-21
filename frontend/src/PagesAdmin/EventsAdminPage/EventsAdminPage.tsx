@@ -117,18 +117,14 @@ export function EventsAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <Carousel
-        spacing={2}
-        header=""
-        className={styles.carousel}
-        itemContainerClass={styles.carousel_item}
-      >
+      <Carousel spacing={2} header="" className={styles.carousel} itemContainerClass={styles.carousel_item}>
         {allEvents.slice(0, Math.min(allEvents.length, 10)).map((event) => {
           {
             /* TODO add edit/open links */
           }
           return (
             <ImageCard
+              key={event.id}
               title={dbT(event, 'title')}
               date={event.start_dt}
               subtitle=""

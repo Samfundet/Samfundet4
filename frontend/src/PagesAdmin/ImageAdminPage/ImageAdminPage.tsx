@@ -36,7 +36,7 @@ export function ImageAdminPage() {
       {t(KEY.admin_images_create)}
     </Button>
   );
-  
+
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <div className={styles.action_row}>

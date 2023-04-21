@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '~/AuthContext';
 import { ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
@@ -9,7 +8,6 @@ import { WISEWORDS } from './data';
 
 export function AdminPage() {
   const { user } = useAuthContext();
-  const { t } = useTranslation();
 
   const randomWisewordIndex = Math.floor(Math.random() * WISEWORDS.length);
   const WISEWORD = WISEWORDS[randomWisewordIndex];
@@ -20,15 +18,13 @@ export function AdminPage() {
     <Page>
       <div className={styles.container}>
         <div className={styles.header}>
-            <Icon icon="mdi:person" />
-            {user?.username} 
-            {user?.last_name} 
+          <Icon icon="mdi:person" />
+          {user?.username}
+          {user?.last_name}
         </div>
         <p className={styles.wisewords}>{WISEWORD}</p>
         {/* TODO make proper personal landing page with preferences etc */}
-        <div className={styles.preferences_header}>
-          Preferences
-        </div>
+        <div className={styles.preferences_header}>Preferences</div>
         <div className={styles.preference_row}>
           <div className={styles.label}>Mirror Dimension</div>
           <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />

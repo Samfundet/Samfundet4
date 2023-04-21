@@ -276,38 +276,38 @@ export function EventCreatorAdminPage() {
       </div>
     </>
   );
-  
+
   const title = `${t(KEY.common_create)} ${t(KEY.common_event)}`;
   return (
     <AdminPageLayout title={title}>
-        <TabBar
-          tabs={formTabs}
-          selected={currentFormTab}
-          onSetTab={setTabAndVisit}
-          vertical={false}
-          spaceBetween={true}
-          disabled={didSave}
-        />
-        <br></br>
-        <div className={styles.form_container}>
-          {/* Render form */}
-          {!didSave && (
-            <>
-              {allForms}
-              {navigationButtons}
-            </>
-          )}
-          {/* Show saved notice */}
-          {didSave && (
-            <>
-              {eventPreview}
-              <div className={styles.done_row}>
-                <h1>Lagret</h1>
-                <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon} />
-              </div>
-            </>
-          )}
-        </div>
+      <TabBar
+        tabs={formTabs}
+        selected={currentFormTab}
+        onSetTab={setTabAndVisit}
+        vertical={false}
+        spaceBetween={true}
+        disabled={didSave}
+      />
+      <br></br>
+      <div className={styles.form_container}>
+        {/* Render form */}
+        {!didSave && (
+          <>
+            {allForms}
+            {navigationButtons}
+          </>
+        )}
+        {/* Show saved notice */}
+        {didSave && (
+          <>
+            {eventPreview}
+            <div className={styles.done_row}>
+              <h1>Lagret</h1>
+              <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon} />
+            </div>
+          </>
+        )}
+      </div>
     </AdminPageLayout>
   );
 }

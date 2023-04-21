@@ -54,7 +54,7 @@ export function HomePage() {
         {isLoading && skeleton}
 
         {/* Render elements for frontpage. */}
-        {homePage?.elements.map((el, index) => renderElement(index, el))}>
+        {homePage?.elements.map((el, index) => renderElement(index, el))}
       </div>
     </div>
   );

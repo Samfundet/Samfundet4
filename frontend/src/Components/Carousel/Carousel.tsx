@@ -13,7 +13,14 @@ type CarouselProps = {
   headerClass?: string;
 };
 
-export function Carousel({ children, className, itemContainerClass, headerClass, header = <Skeleton width={'8em'} />, spacing }: CarouselProps) {
+export function Carousel({
+  children,
+  className,
+  itemContainerClass,
+  headerClass,
+  header = <Skeleton width={'8em'} />,
+  spacing,
+}: CarouselProps) {
   const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
       <div className={classNames(styles.itemContainer, itemContainerClass)} key={idx}>

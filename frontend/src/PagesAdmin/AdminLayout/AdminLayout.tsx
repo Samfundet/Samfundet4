@@ -2,7 +2,6 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
 import { Link, Navbar } from '~/Components';
 import { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
@@ -17,7 +16,6 @@ import styles from './AdminLayout.module.scss';
  * @returns Layout with outlet
  */
 export function AdminLayout() {
-  const { user } = useAuthContext();
   const { t } = useTranslation();
 
   function makeAppletShortcut(applet: Applet, index: number) {

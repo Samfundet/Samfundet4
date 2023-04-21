@@ -105,12 +105,11 @@ $panel-dark-bg: #333333;
   margin-top: $navbar-height;
   margin-left: calc($panel-width);
   max-width: calc(100vw - $panel-width);
-  width: calc(100vw - $panel-width);  
+  width: calc(100vw - $panel-width);
   
   @include for-mobile-only {
     width: auto;
     max-width: 100%;
     margin-left: 0;
   }
-
 }
