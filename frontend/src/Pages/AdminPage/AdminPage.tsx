@@ -1,47 +1,38 @@
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '~/AuthContext';
-import { Button } from '~/Components';
-import { AdminBox } from '~/Components/AdminBox';
+import { ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
-import { KEY } from '~/i18n/constants';
-import { hasPerm } from '~/utils';
+import { useGlobalContext } from '~/GlobalContextProvider';
 import styles from './AdminPage.module.scss';
-import { applets } from './applets';
 import { WISEWORDS } from './data';
 
 export function AdminPage() {
   const { user } = useAuthContext();
-  const { t } = useTranslation();
 
   const randomWisewordIndex = Math.floor(Math.random() * WISEWORDS.length);
   const WISEWORD = WISEWORDS[randomWisewordIndex];
 
+  const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
+
   return (
     <Page>
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.headerText}>
-            <Icon icon="ph:gear-fill" width={28} />
-            {t(KEY.control_panel_title)}
-          </h1>
-          <p className={styles.wisewords}>{WISEWORD}</p>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <Icon icon="mdi:person" />
+          {user?.username}
+          {user?.last_name}
         </div>
-
-        <Button theme="outlined" rounded={true} className={styles.faq_button}>
-          <p className={styles.faq_text}>{t(KEY.control_panel_faq)}</p>
-        </Button>
-      </div>
-
-      <div className={styles.applets}>
-        {applets.map((element, key) => {
-          const hasPermOrPermNotNeeded = !element.perm || hasPerm({ user: user, permission: element.perm });
-          return (
-            hasPermOrPermNotNeeded && (
-              <AdminBox key={key} title={element.title} icon={element.icon} options={element.options} />
-            )
-          );
-        })}
+        <p className={styles.wisewords}>{WISEWORD}</p>
+        {/* TODO make proper personal landing page with preferences etc */}
+        <div className={styles.preferences_header}>Preferences</div>
+        <div className={styles.preference_row}>
+          <div className={styles.label}>Mirror Dimension</div>
+          <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />
+        </div>
+        <div className={styles.preference_row}>
+          <div className={styles.label}>Mouse Trail</div>
+          <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
+        </div>
       </div>
     </Page>
   );

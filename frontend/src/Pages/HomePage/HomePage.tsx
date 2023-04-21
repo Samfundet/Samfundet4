@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { ToggleSwitch } from '~/Components';
-import { useGlobalContext } from '~/GlobalContextProvider';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
 import { HomePageDto, HomePageElementDto } from '~/dto';
@@ -14,8 +12,6 @@ import { Splash } from './components/Splash/Splash';
 export function HomePage() {
   const [homePage, setHomePage] = useState<HomePageDto>();
   const { t } = useTranslation();
-
-  const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -59,10 +55,6 @@ export function HomePage() {
 
         {/* Render elements for frontpage. */}
         {homePage?.elements.map((el, index) => renderElement(index, el))}
-
-        {/* Toggle mirror dimension, TODO: move to PreferencePage. */}
-        <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />
-        <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
       </div>
     </div>
   );

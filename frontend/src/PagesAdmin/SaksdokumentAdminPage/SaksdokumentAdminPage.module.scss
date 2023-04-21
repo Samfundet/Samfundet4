@@ -2,49 +2,6 @@
 
 @import 'src/constants';
 
-.wrapper {
-  margin: 1em 1em;
-}
-
-.header {
-  font-weight: 700;
-  font-size: 2em;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-
-.headerContainer {
-  margin-bottom: 0.5em;
-}
-
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
-}
-
-.backButton {
-  border-color: $grey-1;
-  padding: 0.5em 1.6em;
-  text-transform: uppercase;
-}
-
-.backButtonText {
-  margin: 0;
-  font-weight: 700;
-}
-
-.applets {
-  margin-top: 1em;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.gangTypeHeader {
-  font-weight: 600;
-  font-size: 1.4em;
-  margin-bottom: 0.4em;
-  margin-top: 0.5em;
+.table_container {
+  margin-top: 1.5em;
 }

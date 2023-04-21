@@ -141,6 +141,7 @@ export const KEY = {
   admin_closed_period_title: 'admin_closed_period_title',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',
+  admin_events_recently_edited: 'admin_events_recently_edited',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
   admin_information_manage_title: 'admin_information_manage_title',
   admin_closed_period_edit_period: 'admin_closed_period_edit_period',

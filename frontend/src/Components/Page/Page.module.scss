@@ -3,6 +3,7 @@
 @import 'src/mixins';
 
 $bottom-padding: 2em;
+$side-padding: 1em;
 
 .page {
   // Lift elements laying on the bottom of the page.
@@ -16,6 +17,9 @@ $bottom-padding: 2em;
 
   // Center all content.
   margin: auto;
+
+  @include for-mobile-only {
+    width: calc(100% - $side-padding * 2);
+  }
 }
 
-// TODO ADD MOBILE PADDING

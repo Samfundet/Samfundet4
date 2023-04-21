@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import { default as classNames, default as classnames } from 'classnames';
 import { ReactNode } from 'react';
 import { Skeleton } from '~/Components/Skeleton';
 import { Children } from '~/types';
@@ -9,12 +9,21 @@ type CarouselProps = {
   header?: ReactNode;
   spacing?: number;
   className?: string;
+  itemContainerClass?: string;
+  headerClass?: string;
 };
 
-export function Carousel({ children, className, header = <Skeleton width={'8em'} />, spacing }: CarouselProps) {
+export function Carousel({
+  children,
+  className,
+  itemContainerClass,
+  headerClass,
+  header = <Skeleton width={'8em'} />,
+  spacing,
+}: CarouselProps) {
   const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
-      <div className={styles.itemContainer} key={idx}>
+      <div className={classNames(styles.itemContainer, itemContainerClass)} key={idx}>
         {child}
       </div>
     );
@@ -22,9 +31,11 @@ export function Carousel({ children, className, header = <Skeleton width={'8em'}
 
   return (
     <div className={className}>
-      <div className={styles.headerWrapper}>
-        <div className={styles.header}>{header}</div>
-      </div>
+      {header !== '' && (
+        <div className={styles.headerWrapper}>
+          <div className={classNames(styles.header, headerClass)}>{header}</div>
+        </div>
+      )}
       <div>
         <div className={styles.navContainer}>
           <div className={classnames(styles.button, styles.left)}>{'<'}</div>

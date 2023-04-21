@@ -115,7 +115,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
   // SaksdokumentPage:
-  [KEY.saksdokumentpage_publication_date]: 'Publiserings dato',
+  [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
   // Navbar
   [KEY.navbar_photos]: 'Foto',
@@ -130,6 +130,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
+  [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
   [KEY.admin_information_manage_title]: 'Administrer sider',
   [KEY.admin_closed_period_new_period]: 'Legg til ny periode',
@@ -295,6 +296,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',
+  [KEY.admin_events_recently_edited]: 'Recently edited',
   [KEY.admin_information_manage_title]: 'Administrate pages',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
   [KEY.admin_closed_period_edit_period]: 'Edit closed period',

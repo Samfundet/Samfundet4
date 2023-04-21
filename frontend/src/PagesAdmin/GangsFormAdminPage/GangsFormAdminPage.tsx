@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
@@ -10,6 +9,7 @@ import { GangDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
 
 export function GangsFormAdminPage() {
@@ -52,21 +52,11 @@ export function GangsFormAdminPage() {
     console.log(JSON.stringify(data));
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
+  const title = id ? t(KEY.common_edit) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
 
   return (
-    <Page>
-      <h1 className={styles.header}>
-        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.common_gang)}
-      </h1>
+    <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm
         initialData={gang}
         onSubmit={handleOnSubmit}
@@ -86,6 +76,6 @@ export function GangsFormAdminPage() {
         {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}
         {/* <SamfFormField field="info_page" type="options" label={`${t(KEY.information_page)}`} /> */}
       </SamfForm>
-    </Page>
+    </AdminPageLayout>
   );
 }

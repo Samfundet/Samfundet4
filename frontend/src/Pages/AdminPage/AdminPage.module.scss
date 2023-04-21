@@ -2,39 +2,18 @@
 
 @import 'src/constants';
 
-.wrapper {
-  margin: 1em 1em;
-}
-
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
+.container {
+  padding-top: 2em;
 }
 
 .header {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  text-transform: uppercase;
-  flex-wrap: wrap;
-  margin-left: 1em;
-  margin-right: 2em;
-}
-
-.headerText {
+  align-items: center;
+  text-transform: capitalize;
+  margin-bottom: .5em;
   font-size: 1.5em;
   font-weight: 700;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 10px;
-  color: $red-samf;
-  display: none;
-
-  @include for-mobile-only {
-    display: flex;
-  }
+  gap: .5em;
 }
 
 .wisewords {
@@ -44,23 +23,19 @@
   opacity: 0.5;
 }
 
-.faq_button {
-  border-color: $grey-1;
-  padding: 0.3em 0.8em;
-  text-transform: uppercase;
-  margin-top: 1em;
-  .faq_text {
-    margin: 0;
-    font-size: .9em;
-    color: inherit;
-  }
+.preferences_header {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 1.5em;
+  font-weight: 700;
 }
 
-.applets {
-  margin-top: 1em;
+.preference_row {
   display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-  flex-wrap: wrap;
-  gap: 1em;
+  align-items: center;
+  gap: .5em;
+}
+
+.label {
+  width: 15em;
 }

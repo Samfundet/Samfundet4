@@ -10,3 +10,4 @@ export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
+export { AdminPage } from './AdminPageLayout';

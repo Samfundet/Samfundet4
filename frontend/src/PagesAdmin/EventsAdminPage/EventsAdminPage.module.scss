@@ -2,39 +2,19 @@
 
 @import 'src/constants';
 
-.wrapper {
-  margin: 1em 1em;
+.carousel {
+  padding-bottom: 2em;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
-}
-
-.header {
-  font-weight: 700;
-  font-size: 2em;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-
-.headerContainer {
-  margin-bottom: 0.5em;
-}
-
-.backButton {
-  border-color: $grey-1;
-  padding: 0.5em 1.6em;
-  text-transform: uppercase;
-}
-
-.backButtonText {
-  margin: 0;
-  font-weight: 700;
+.carousel_item:first-child {
+  padding-left: 0;
 }
 
 .tableContainer {
-  margin-top: 2em;
+  margin-top: 1em;
+  border-radius: .2em;
+  overflow-x: scroll;
 }
 

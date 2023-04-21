@@ -1,4 +1,4 @@
-import { Button, ImageCard, Page } from '~/Components';
+import { Button, ImageCard } from '~/Components';
 
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
@@ -17,6 +17,7 @@ import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
 
@@ -110,7 +111,9 @@ export function EventCreatorAdminPage() {
       title_nb: 'Oppsummering',
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
-      template: <SamfFormField field="publish_dt" type="datetime" label="Publiseringsdato" />,
+      template: (
+        <SamfFormField field="publish_dt" type="datetime" label={t(KEY.saksdokumentpage_publication_date) ?? ''} />
+      ),
     },
   ];
 
@@ -276,38 +279,37 @@ export function EventCreatorAdminPage() {
     </>
   );
 
+  const title = `${t(KEY.common_create)} ${t(KEY.common_event)}`;
   return (
-    <Page>
-      <div className={styles.header}>Opprett Arrangement</div>
-      <div className={styles.outer_container}>
-        <TabBar
-          tabs={formTabs}
-          selected={currentFormTab}
-          onSetTab={setTabAndVisit}
-          vertical={false}
-          spaceBetween={true}
-          disabled={didSave}
-        />
-        <div className={styles.form_container}>
-          {/* Render form */}
-          {!didSave && (
-            <>
-              {allForms}
-              {navigationButtons}
-            </>
-          )}
-          {/* Show saved notice */}
-          {didSave && (
-            <>
-              {eventPreview}
-              <div className={styles.done_row}>
-                <h1>Lagret</h1>
-                <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon} />
-              </div>
-            </>
-          )}
-        </div>
+    <AdminPageLayout title={title}>
+      <TabBar
+        tabs={formTabs}
+        selected={currentFormTab}
+        onSetTab={setTabAndVisit}
+        vertical={false}
+        spaceBetween={true}
+        disabled={didSave}
+      />
+      <br></br>
+      <div className={styles.form_container}>
+        {/* Render form */}
+        {!didSave && (
+          <>
+            {allForms}
+            {navigationButtons}
+          </>
+        )}
+        {/* Show saved notice */}
+        {didSave && (
+          <>
+            {eventPreview}
+            <div className={styles.done_row}>
+              <h1>Lagret</h1>
+              <Icon icon="material-symbols:check-circle" width={24} className={styles.done_icon} />
+            </div>
+          </>
+        )}
       </div>
-    </Page>
+    </AdminPageLayout>
   );
 }
