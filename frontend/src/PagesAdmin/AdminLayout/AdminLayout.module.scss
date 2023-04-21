@@ -106,6 +106,7 @@ $panel-dark-bg: #333;
   
   @include for-mobile-only {
     width: auto;
+    max-width: 100%;
     margin-left: 0;
   }
 

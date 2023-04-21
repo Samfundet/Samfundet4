@@ -99,7 +99,7 @@ export function InformationAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
       {t(KEY.common_create)} {t(KEY.information_page_short)}
     </Button>
   );

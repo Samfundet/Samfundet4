@@ -5,23 +5,6 @@
 $page-padding: 2em;
 $header-bg-dark: #222;
 
-@keyframes title-anim {
-  0% {
-    transform: translateX(-5px);
-  }  
-  100% {
-    transform: translateX(0px);
-  }  
-}
-
-@keyframes header-anim {
-  0% {
-    transform: translateX(5px);
-  }  
-  100% {
-    transform: translateX(0px);
-  }  
-}
 
 .page {
   display: flex;
@@ -48,10 +31,6 @@ $header-bg-dark: #222;
 .title_row {
   display: flex;
   justify-content: space-between;
-  animation-name: title-anim;
-  animation-duration: .3s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
   margin-bottom: 1em;
   gap: 1em;
 }
@@ -65,10 +44,6 @@ $header-bg-dark: #222;
   display: flex;
   flex-direction: row;
   padding-bottom: 1.5em;
-  animation-name: header-anim;
-  animation-duration: .3s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
   gap: 1em;
 }
 
@@ -82,5 +57,4 @@ $header-bg-dark: #222;
   overflow-y: auto;
   padding: 1em $page-padding;
   padding-bottom: 5em;
-  overflow-x: hidden;
 }

@@ -51,7 +51,7 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
       {t(KEY.admin_closed_period_new_period)}
     </Button>
   );

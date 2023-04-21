@@ -51,7 +51,7 @@ export function AdminLayout() {
           {/* Index */}
           <Link className={classNames(styles.panel_item, selectedIndex && styles.selected)} url={ROUTES_FRONTEND.admin}>
             <Icon icon="mdi:person" />
-            Profil
+            Profil {/* TODO translate */}
           </Link>
           <br></br>
           {/* Applets */}

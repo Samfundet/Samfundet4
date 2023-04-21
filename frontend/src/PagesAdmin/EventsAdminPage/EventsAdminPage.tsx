@@ -108,7 +108,7 @@ export function EventsAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+      <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
         {t(KEY.common_create)} {t(KEY.common_event)}
       </Button>
     </>
