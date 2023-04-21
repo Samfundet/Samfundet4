@@ -71,8 +71,25 @@ class Image(models.Model):
         return f'{self.title}'
 
 
+class UsernameField(models.CharField):
+
+    def to_python(self, value: str) -> str:
+        return super().to_python(value.lower())
+
+
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    username = UsernameField(
+        _('username'),
+        max_length=150,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[AbstractUser.username_validator],
+        error_messages={
+            'unique': _('A user with that username already exists.'),
+        },
+    )
 
     class Meta:
         permissions = [
@@ -287,6 +304,33 @@ class Table(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name_nb}'
+
+
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
+    email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
+    phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
+    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
+    end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
+
+    class Occasion(models.TextChoices):
+        DRINK = 'DRINK', _('Drikke')
+        FOOD = 'FOOD', _('Mat')
+
+    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.FOOD)
+    guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
+    additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
+    internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
+
+    class Meta:
+        verbose_name = 'Reservation'
+        verbose_name_plural = 'Reservations'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
 
 
 class FoodPreference(models.Model):
