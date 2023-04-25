@@ -486,6 +486,30 @@ class Booking(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+class Infobox(models.Model):
+    titel_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks titel (norsk)")
+    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (norsk)")
+
+    titel_en = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
+
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name="Infoboks hexcolor eller css color-constant")
+    url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Infoboks bilde")
+
+
+    class Meta:
+        verbose_name = 'Infoboks'
+        verbose_name_plural = 'Infobokser'
+        
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
+    
+    def __str__(self) -> str:
+        return f'{self.titel_nb}'
+
+
 
 class TextItem(models.Model):
     key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
