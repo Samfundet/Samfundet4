@@ -85,7 +85,7 @@ export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', '
 
 /** Event types */
 export type EventTicketType = 'free' | 'included' | 'billig' | 'registration' | 'custom';
-export type EventAgeRestriction = null | 'eighteen' | 'twenty' | 'mixed';
+export type EventAgeRestriction = 'none' | 'eighteen' | 'twenty' | 'mixed';
 export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
 
 export const ALL_TICKET_TYPES: EventTicketType[] = ['free', 'included', 'billig', 'registration', 'custom'];

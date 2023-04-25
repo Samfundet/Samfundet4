@@ -225,7 +225,7 @@ export function SamfForm<T>({
           {canDebug && (
             <>
               <br></br>
-              <Button theme="samf" preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
+              <Button preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
                 Debug
               </Button>
             </>

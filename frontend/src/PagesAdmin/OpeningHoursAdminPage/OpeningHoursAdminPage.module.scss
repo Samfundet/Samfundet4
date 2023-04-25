@@ -2,16 +2,13 @@
 
 @import 'src/constants';
 
-.header {
-  font-size: 2em;
-  font-weight: 700;
-  margin-bottom: .5em;
-  margin-top: .5em;
-}
+$header-border: #f1f1f1;
+$header-border-dark: #000000;
+
+$bg-dark: #272727;
 
 .subtitle {
   color: $grey-2;
-  margin-bottom: 1.5em;
 }
 
 .venue_container {
@@ -21,17 +18,31 @@
 }
 
 .venue_box {
-  @include rounded;
-  @include shadow-light;
+  border-radius: .4em;
+  background-color: $white;
+  border: 1px solid $grey-4;
   overflow: hidden;
   min-width: 16em;
   max-width: 16em;
+
+  @include theme-dark {
+    border-color: $black;
+    background-color: $bg-dark;
+    color: $white;
+  }
 }
 
 .venue_header {
-  padding: .5em 1em;
-  background-color: $red-samf;
-  color: $white;
+  padding: .5em .75em;
+  border-bottom: 1px solid $header-border;
+  font-size: 1.25em;
+  font-weight: 700;
+  color: $black;
+
+  @include theme-dark {
+    border-color: $header-border-dark;
+    color: white;
+  }
 }
 
 .venue_content {
@@ -54,6 +65,9 @@
 
 .day_label {
   color: $grey-1;
+  @include theme-dark {
+    color: $grey-4;
+  }
 }
 
 .day_edit {

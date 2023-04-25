@@ -15,6 +15,7 @@ $navbar-bg-dark: black;
 $navbar-bg-dark-transparent: transparent;
 $navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
 $navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
+$navbar-dropdown-border-radius: 0 0 0.5em 0.5em;
 
 // Link
 $navbar-link-blur-light-bg: rgba(255, 255, 255, 0.4);
@@ -119,7 +120,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   transform: scaleY(0);
   transform-origin: 50% 0%;
   opacity: 0;
-  border-radius: 0 0 0.5em 0.5em;
+  border-radius: $navbar-dropdown-border-radius;
 
   @include theme-dark {
     background-color: $navbar-dropdown-bg-dark;
@@ -144,6 +145,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
   @include theme-dark {
     color: $white;
+  }
+
+  &:last-child {
+    border-radius: $navbar-dropdown-border-radius;
   }
 
   &:hover {
