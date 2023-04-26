@@ -487,10 +487,10 @@ class Booking(models.Model):
         super().save(*args, **kwargs)
 
 class Infobox(models.Model):
-    titel_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks titel (norsk)")
+    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks titel (norsk)")
     text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (norsk)")
 
-    titel_en = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
     text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
 
     color = models.CharField(max_length=15, blank=False, null=False, verbose_name="Infoboks hexcolor eller css color-constant")
