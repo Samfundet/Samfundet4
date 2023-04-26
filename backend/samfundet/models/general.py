@@ -507,7 +507,7 @@ class Infobox(models.Model):
         return self.image.image.url
     
     def __str__(self) -> str:
-        return f'{self.titel_nb}'
+        return f'{self.title_nb}'
 
 
 
