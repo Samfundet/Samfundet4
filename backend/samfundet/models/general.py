@@ -486,6 +486,7 @@ class Booking(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+
 class Infobox(models.Model):
     title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks titel (norsk)")
     text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (norsk)")
@@ -500,13 +501,14 @@ class Infobox(models.Model):
     class Meta:
         verbose_name = 'Infoboks'
         verbose_name_plural = 'Infobokser'
-        
+
     @property
     def image_url(self) -> str:
         return self.image.image.url
-  
+
     def __str__(self) -> str:
         return f'{self.title_nb}'
+
 
 class TextItem(models.Model):
     key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
