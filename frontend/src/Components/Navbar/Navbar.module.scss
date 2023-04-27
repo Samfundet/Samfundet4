@@ -142,7 +142,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   transition: 0.1s;
   color: $black;
   cursor: pointer;
-
   @include theme-dark {
     color: $white;
   }
@@ -338,18 +337,27 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
     color: white;
   }
 }
+/*A way to make the "Information" text look more centered*/
+#mobile_popup_container > .navbar_mobile_item:nth-child(2) {
+  margin-left: 18px; /*offsets the text by 18px, the size of the chevron-icon*/
+}
 
 /* Navbar link mobile */
 .popup_link_mobile {
   color: inherit;
   font-size: 1.5em;
-  margin-bottom: 0.25em;
+  margin-bottom: 1em;
   align-items: center;
   text-decoration: none;
   text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
   display: flex;
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    text-decoration: none;
+    transform: scale(1.05);
+  }
 }
 
 .mobile_widgets {
@@ -372,6 +380,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
 .chevron {
   transition: transform 0.2s;
+  // display: none;
 }
 
 .chevron.flip {
