@@ -56,7 +56,9 @@ export function Navbar() {
   }, [isMobileNavigation, isDesktop]);
 
   const languageButton = (
-    <img src={otherFlag} className={styles.language_flag} onClick={() => i18n.changeLanguage(otherLanguage)} />
+    <button className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
+      <img src={otherFlag} className={styles.language_flag} />
+    </button>
   );
 
   // Return profile button for navbar if logged in.
