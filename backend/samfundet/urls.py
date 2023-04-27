@@ -26,6 +26,7 @@ router.register('food-category', views.FoodCategoryView, 'food_category')
 router.register('booking', views.BookingView, 'booking')
 router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
+router.register('infobox', views.Infobox, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
 
 app_name = 'samfundet'

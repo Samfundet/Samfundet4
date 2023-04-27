@@ -26,6 +26,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Infobox,
     Profile,
     Booking,
     MenuItem,
@@ -50,6 +51,7 @@ from .serializers import (
     VenueSerializer,
     LoginSerializer,
     GroupSerializer,
+    InfoboxSerializer,
     ProfileSerializer,
     BookingSerializer,
     TextItemSerializer,
@@ -201,6 +203,11 @@ class GangTypeView(ModelViewSet):
 class InformationPageView(ModelViewSet):
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
+
+
+class InfoboxView(ModelViewSet):
+    serializer_class = InfoboxSerializer
+    queryset = Infobox.objects.all()
 
 
 # =============================== #
