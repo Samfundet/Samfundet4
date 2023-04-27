@@ -421,6 +421,7 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     # autocomplete_fields = []
     # list_select_related = True
 
+
 @admin.register(Infobox)
 class InfoboxAdmin(CustomGuardedModelAdmin):
     # ordering = []
@@ -431,6 +432,7 @@ class InfoboxAdmin(CustomGuardedModelAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+
 
 @admin.register(TextItem)
 class TextItemAdmin(CustomGuardedModelAdmin):

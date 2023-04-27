@@ -497,7 +497,6 @@ class Infobox(models.Model):
     url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Infoboks bilde")
 
-
     class Meta:
         verbose_name = 'Infoboks'
         verbose_name_plural = 'Infobokser'
@@ -505,11 +504,9 @@ class Infobox(models.Model):
     @property
     def image_url(self) -> str:
         return self.image.image.url
-    
+  
     def __str__(self) -> str:
         return f'{self.title_nb}'
-
-
 
 class TextItem(models.Model):
     key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
