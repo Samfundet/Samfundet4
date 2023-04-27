@@ -55,17 +55,12 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
-  [KEY.common_password]: 'passord',
-  [KEY.login_forgotten_password]: 'Glemt passordet ditt?',
-  [KEY.login_internal_login]: 'Logg inn som intern',
-  [KEY.login_email_placeholder]: 'E-post eller medlemsnummer',
   [KEY.footer_sponsors]: 'Sponsorer',
   [KEY.footer_contact]: 'Lurer du på noe? Kontakt oss',
   [KEY.footer_cookies1]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no.',
   [KEY.footer_cookies2]: 'Les mer om cookies her.',
   [KEY.footer_festivals]: 'Festivaler',
   [KEY.common_title]: 'Tittel',
-  [KEY.common_text]: 'Tekst',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
   [KEY.common_missing]: 'Mangler',
@@ -169,8 +164,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
-  common_short: '',
-  common_long: '',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -337,10 +330,4 @@ export const en: Record<KeyValues, string> = {
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
   [KEY.inputfile_no_file_selected]: 'No file selected',
-  common_short: '',
-  common_long: '',
-  login_forgotten_password: '',
-  login_internal_login: '',
-  login_email_placeholder: '',
-  common_text: '',
 };
