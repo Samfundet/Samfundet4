@@ -488,15 +488,15 @@ class Booking(models.Model):
 
 
 class Infobox(models.Model):
-    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks titel (norsk)")
-    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (norsk)")
+    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
+    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
 
-    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
-    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name="Infoboks tekst (engelsk)")
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
 
-    color = models.CharField(max_length=15, blank=False, null=False, verbose_name="Infoboks hexcolor eller css color-constant")
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Infoboks hexcolor eller css color-constant')
     url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Infoboks bilde")
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Infoboks bilde')
 
     class Meta:
         verbose_name = 'Infoboks'
