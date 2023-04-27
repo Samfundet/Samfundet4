@@ -1,0 +1,26 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 1em;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.imageBox {
+  overflow: hidden;
+  flex-basis: calc(25% - 1em);
+  min-height: 12em;
+  height: 12em;
+  box-sizing: inherit;
+  @include for-tablet-down {
+    flex-basis: calc(33.33% - 1em);
+  }
+}

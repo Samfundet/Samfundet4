@@ -1,23 +1,28 @@
 @import 'src/mixins';
 
+@import 'src/constants';
+
 .box {
-  border: 1px solid $grey-2;
-  box-shadow: 3px 1px 3px 1px $grey-2;
+  border: 1px solid $grey-4;
+  box-shadow: 3px 1px 10px 1px $black-t10;
   border-radius: 0.3em;
 }
 
-.box2 {
-  border: 1px solid $grey-2;
+.uka_isfit {
+  border: 1px solid $grey-4;
   padding: 1em;
-  border-radius: 0.1em;
+  border-radius: 0.3em;
+  flex: 1;
+  margin: 0.5em;
+  box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
 .other_info {
-  border: 1px solid $grey-2;
-  // background-color: $grey-4;
+  border: 1px solid $grey-4;
   padding: 1em;
-  border-radius: 0.1em;
-  margin-top: 0.1em;
+  border-radius: 0.3em;
+  margin: 0.5em;
+  box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
 .header {
@@ -29,12 +34,11 @@
 .header2 {
   font-weight: 700;
   font-size: 2.5em;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
+  margin-top: 1em;
   text-align: center;
 }
 
-.other_info_header {
+.header_col {
   font-weight: 700;
   font-size: 1.5em;
   margin-bottom: 0.5em;
@@ -85,22 +89,30 @@
   flex-direction: column;
   max-width: $desktop-bp-upper;
   justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
 
   @include for-tablet-up {
     flex-direction: row;
-    align-items: flex-start;
   }
 }
 
 .col {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .image_box {
+  box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
+  border: 1px solid $grey-4;
   background-color: $green;
-  border-radius: 0.1em;
+  border-radius: 0.3em;
   color: white;
+  margin: 0.5em;
+
+  @include for-tablet-up {
+    flex-basis: 55%;
+  }
 }
 
 .splash {
@@ -113,4 +125,25 @@
     width: 100%;
     height: 12em;
   }
+}
+
+.venue_bubble {
+  border-radius: 100%;
+  width: 12em;
+  height: 12em;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 0.5em 0 rgba($color: #000000, $alpha: 1);
+  transition: 0.2s;
+
+  &:hover {
+    filter: brightness(115%);
+    transform: scale(103%);
+  }
+}
+
+.venue_name {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;
 }

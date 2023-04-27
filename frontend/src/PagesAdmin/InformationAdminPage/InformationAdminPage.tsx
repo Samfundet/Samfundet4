@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
-import styles from './InformationAdminPage.module.scss';
-import { InformationPageDto } from '~/dto';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Button, Link } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
-import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
+import { InformationPageDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { dbT } from '~/i18n/i18n';
+import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function InformationAdminPage() {
   const navigate = useNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -26,96 +27,85 @@ export function InformationAdminPage() {
         setInformationPages(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function deletePage(slug_field: string) {
-    deleteInformationPage(slug_field).then((response) => {
-      console.log(response);
-      getInformationPages()
-        .then((data) => {
+  function deletePage(slug_field: string | undefined) {
+    if (!slug_field) return;
+
+    deleteInformationPage(slug_field)
+      .then(() => {
+        getInformationPages().then((data) => {
           setInformationPages(data);
           setShowSpinner(false);
-        })
-        .catch(console.error);
-    });
+        });
+        toast.success(t(KEY.common_delete_successful));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-  // TODO ADD TRANSLATIONS pr element
+  const tableColumns = [
+    { content: t(KEY.common_name), sortable: true },
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.owner), sortable: true },
+    { content: t(KEY.last_updated), sortable: true },
+    '', // Buttons
+  ];
+
+  const data = informationPages.map(function (element) {
+    const pageUrl = reverse({
+      pattern: ROUTES.frontend.information_page_detail,
+      urlParams: { slugField: element.slug_field },
+    });
+
+    return [
+      { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
+      dbT(element, 'title'),
+      'To be added',
+      'To be added',
+      {
+        content: (
+          <CrudButtons
+            onView={() => {
+              navigate(pageUrl);
+            }}
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_information_edit,
+                  urlParams: { slugField: element.slug_field },
+                }),
+              );
+            }}
+            onDelete={() => {
+              if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
+                deletePage(element.slug_field);
+              }
+            }}
+          />
+        ),
+      },
+    ];
+  });
+
+  const title = t(KEY.admin_information_manage_title);
+  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const header = (
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+      {t(KEY.common_create)} {t(KEY.information_page_short)}
+    </Button>
+  );
+
   return (
-    <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_information_manage_title)}</h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_informationpage_changelist}>
-          View in backend
-        </Link>
-      </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
-        {t(KEY.common_create)} {t(KEY.information_page_short)}
-      </Button>
-      <div className={styles.tableContainer}>
-        <Table
-          columns={[t(KEY.name), t(KEY.common_title), t(KEY.owner), t(KEY.last_updated), '']}
-          data={informationPages.map(function (element) {
-            return [
-              new AlphabeticTableCell(
-                (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.information_page_detail,
-                      urlParams: { slugField: element.slug_field },
-                    })}
-                  >
-                    {element.slug_field}
-                  </Link>
-                ),
-              ),
-              new AlphabeticTableCell(dbT(element, 'title', i18n.language)),
-              new AlphabeticTableCell('To be added'),
-              new AlphabeticTableCell('To be added'),
-              {
-                children: (
-                  <div>
-                    <Button
-                      theme="blue"
-                      onClick={() => {
-                        navigate(
-                          reverse({
-                            pattern: ROUTES.frontend.information_page_edit,
-                            urlParams: { slugField: element.slug_field },
-                          }),
-                        );
-                      }}
-                    >
-                      {t(KEY.edit)}
-                    </Button>
-                    <Button
-                      theme="samf"
-                      onClick={() => {
-                        if (window.confirm(t(KEY.admin_information_confirm_delete))) {
-                          deletePage(element.slug_field);
-                        }
-                      }}
-                    >
-                      {t(KEY.delete)}
-                    </Button>{' '}
-                  </div>
-                ),
-              } as ITableCell,
-            ];
-          })}
-        />
-      </div>
-    </Page>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Table columns={tableColumns} data={data} />
+    </AdminPageLayout>
   );
 }

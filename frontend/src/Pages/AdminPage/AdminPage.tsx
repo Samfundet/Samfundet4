@@ -1,34 +1,38 @@
-import { hasPerm } from '~/utils';
-import { Button } from '~/Components';
-import { Page } from '~/Components/Page';
+import { Icon } from '@iconify/react';
 import { useAuthContext } from '~/AuthContext';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { applets } from './applets';
+import { ToggleSwitch } from '~/Components';
+import { Page } from '~/Components/Page';
+import { useGlobalContext } from '~/GlobalContextProvider';
 import styles from './AdminPage.module.scss';
-import { AdminBox } from '~/Components/AdminBox';
 import { WISEWORDS } from './data';
 
 export function AdminPage() {
   const { user } = useAuthContext();
-  const { t } = useTranslation();
-  const WISEWORD = WISEWORDS[Math.floor(Math.random() * WISEWORDS.length)];
+
+  const randomWisewordIndex = Math.floor(Math.random() * WISEWORDS.length);
+  const WISEWORD = WISEWORDS[randomWisewordIndex];
+
+  const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
 
   return (
     <Page>
-      <div className={styles.header}>
-        <h1 className={styles.headerText}>{t(KEY.control_panel_title)}</h1>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <Icon icon="mdi:person" />
+          {user?.username}
+          {user?.last_name}
+        </div>
         <p className={styles.wisewords}>{WISEWORD}</p>
-        <Button theme="outlined" className={styles.faq_button}>
-          <p className={styles.faq_text}>{t(KEY.control_panel_faq)}</p>
-        </Button>
-      </div>
-      <div className={styles.applets}>
-        {applets.map(function (element, key) {
-          if (element.perm == null || hasPerm({ user: user, permission: element.perm })) {
-            return <AdminBox key={key} title={element.title} options={element.options} />;
-          }
-        })}
+        {/* TODO make proper personal landing page with preferences etc */}
+        <div className={styles.preferences_header}>Preferences</div>
+        <div className={styles.preference_row}>
+          <div className={styles.label}>Mirror Dimension</div>
+          <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />
+        </div>
+        <div className={styles.preference_row}>
+          <div className={styles.label}>Mouse Trail</div>
+          <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
+        </div>
       </div>
     </Page>
   );

@@ -1,0 +1,149 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+$mobile-width: $primary-content-width-mobile;
+$date-label-color: #888888;
+$card-background: #222222;
+$description-color: #aaaaaa;
+// TODO color variables
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25em;
+  width: 20em;
+  overflow: visible;
+
+  // For transform overflow
+  padding-top: 3px;
+
+  @include for-mobile-only {
+    max-width: $mobile-width;
+  }
+}
+
+.card {
+  border-radius: 1em;
+  flex-basis: 100%;
+  transition: 0.2s;
+  box-shadow: 0 0 5px 3px $black-t10;
+  background-size: cover;
+  background-position: center;
+  min-height: 11em;
+  max-height: 11em;
+  height: 11em;
+  cursor: pointer;
+}
+
+.top_label, .bottom_label, .bottom_description {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
+
+.top_label {
+  min-height: 1em;
+  max-height: 1em;
+}
+
+.bottom_label {
+  opacity: 1;
+  align-items: flex-start;
+  font-weight: 700;
+  height: 0;
+  overflow: visible;
+}
+
+.title {
+  font-weight: 700;
+  word-break: break-word;
+  opacity: 1;
+  transition: .2s;
+}
+
+.subtitle {
+  font-style: italic;
+  color: $date-label-color;
+}
+
+.date_label {
+  font-weight: 400;
+  color: $date-label-color;
+}
+
+.bottom_description {
+  align-items: flex-start;
+  color: $description-color;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  opacity: 0;
+  transition: 0.2s;
+  transform: translateY(1em);
+  max-height: 3.5em;
+  overflow: hidden;
+
+  @include for-mobile-only {
+    display: none;
+  }
+}
+
+.compact {
+  width: 14em;
+  @include for-mobile-only {
+    width: $mobile-width;
+  }
+}
+
+.compact .card {
+  min-height: 8em;
+  max-height: 8em;
+  height: 8em;
+
+  @include for-mobile-only {
+    margin-top: 1em;
+    min-height: 12em;
+    max-height: 12em;
+    height: 12em;
+  }
+}
+
+.compact .date_label {
+  display: none;
+}
+
+.edit_button {
+  visibility: hidden;
+}
+
+// Styling to container and children when it is hovered.
+.container:hover {
+  .edit_button {
+    visibility: visible;
+  }
+  .card {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 8px 2px $black-t25;
+  }
+  .title {
+    opacity: 0;
+  }
+  .bottom_description {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+// Compact doesn't show description on hover
+.compact:hover {
+  .title {
+    opacity: 1;
+  }
+  .bottom_description {
+    opacity: 0;
+  }
+}

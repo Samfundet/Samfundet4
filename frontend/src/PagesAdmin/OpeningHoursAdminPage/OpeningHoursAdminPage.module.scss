@@ -1,0 +1,80 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+$header-border: #f1f1f1;
+$header-border-dark: #000000;
+
+$bg-dark: #272727;
+
+.subtitle {
+  color: $grey-2;
+}
+
+.venue_container {
+  @include flex-row;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.venue_box {
+  border-radius: .4em;
+  background-color: $white;
+  border: 1px solid $grey-4;
+  overflow: hidden;
+  min-width: 16em;
+  max-width: 16em;
+
+  @include theme-dark {
+    border-color: $black;
+    background-color: $bg-dark;
+    color: $white;
+  }
+}
+
+.venue_header {
+  padding: .5em .75em;
+  border-bottom: 1px solid $header-border;
+  font-size: 1.25em;
+  font-weight: 700;
+  color: $black;
+
+  @include theme-dark {
+    border-color: $header-border-dark;
+    color: white;
+  }
+}
+
+.venue_content {
+  padding: 1em;
+}
+
+.input_row {
+  @include flex-row;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  gap: .5em;
+}
+
+.day_row {
+  @include flex-row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.day_label {
+  color: $grey-1;
+  @include theme-dark {
+    color: $grey-4;
+  }
+}
+
+.day_edit {
+  @include flex-row;
+  gap: .5em;
+}
+
+.invalid {
+  border: 2px solid red;
+}

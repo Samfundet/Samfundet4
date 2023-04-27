@@ -1,21 +1,92 @@
 @import 'src/constants';
 
+@import 'src/mixins';
+
+$focus-blur-color-dark: rgba(80, 150, 255, 0.391);
+$focus-blur-color: $blue-medium;
+$focus-blur-radius: 10px;
+$focus-blur-spread: 2px;
+$error-color: red;
+
 .input_field {
-  padding: 8px;
-  display: block;
-  outline: 1px solid $grey-2;
-  border: none;
-  width: 100%;
-  border-radius: 3px;
+  @include rounded;
+  padding: 1em 1em;
+  border: 1px solid transparent;
+  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
+  outline: none;
   &:focus {
-    outline: 1px solid $grey-1;
+    outline: none;
+    border: 1px solid $grey-4;
+    box-shadow: 0 0 $focus-blur-radius $focus-blur-spread $focus-blur-color;
+    @include theme-dark {
+      border-color: $grey-1;
+      box-shadow: 0 0 $focus-blur-radius $focus-blur-spread $focus-blur-color-dark;
+    }
+  }
+  &.error {
+    border: 1px solid $error-color;
+  }
+  @include theme-dark {
+    color: white;
+    background-color: $grey-0;
+    &:hover {
+      filter: brightness(115%);
+    }
   }
 }
 
-.errors {
-  outline: 2px solid $red;
+.label {
+  width: 100%;
 }
 
-.errors_text {
-  color: $red;
+.errors {
+  border: 1px solid $error-color;
+}
+
+.error_container {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0.5em;
+  max-height: 0;
+}
+
+.error_text {
+  @include rounded;
+  background-color: $error-color;
+  color: $white;
+  height: 1.5em;
+  font-size: 0.75em;
+  line-height: 1.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+  transform: translateY(-0.75em);
+}
+
+.helpText {
+  color: $grey-2;
+  font-weight: 100;
+  font-size: 1em;
+}
+
+.input_field:disabled {
+  border: 1px solid transparent;
+}
+
+.disabled_label {
+  opacity: 0.25;
+}
+
+.icon_container {
+  position: relative;
+  max-height: 0;
+  max-width: 0;
+  top: -2.4em;
+  left: calc(100% - 2.5em);
+  margin-right: 0.2em;
+}
+
+.field_icon {
+  width: 1.5em;
+  height: 1.5em;
+  opacity: 0.4;
 }

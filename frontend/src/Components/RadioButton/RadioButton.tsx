@@ -1,4 +1,6 @@
+import classNames from 'classnames';
 import { Children } from '~/types';
+import styles from './RadioButton.module.scss';
 
 type RadioButtonProps = {
   name?: string;
@@ -24,8 +26,9 @@ export function RadioButton({
   children,
 }: RadioButtonProps) {
   return (
-    <label>
+    <label className={styles.radioButton}>
       <input
+        className={classNames(styles.radioButton_input, className)}
         type="radio"
         name={name}
         value={value}
@@ -34,8 +37,8 @@ export function RadioButton({
         defaultValue={defaultValue}
         checked={checked}
         disabled={disabled}
-        className={className}
       />
+      <div className={styles.circle}></div>
       {children}
     </label>
   );

@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
-import styles from './GangsAdminPage.module.scss';
-import { GangTypeDto } from '~/dto';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Button } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { Table } from '~/Components/Table';
 import { getGangList } from '~/api';
-import { Table, AlphabeticTableCell, ITableCell } from '~/Components/Table';
+import { GangTypeDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { dbT } from '~/i18n/i18n';
+import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
   const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
+  const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -25,80 +28,78 @@ export function GangsAdminPage() {
       .then((data) => {
         setGangs(data);
         setShowSpinner(false);
+        setGangTypeTab({
+          key: data[0].id,
+          label: dbT(data[0], 'title') ?? '?',
+          value: data[0],
+        });
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-  // TODO ADD TRANSLATIONS pr element
-  return (
-    <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
-      </Button>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_gangs_title)}</h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_gang_changelist}>
-          View in backend
-        </Link>
-      </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
-        {t(KEY.admin_gangs_create)}
-      </Button>
-      {gangTypes.map(function (element, key) {
-        return (
-          <div key={key}>
-            <h2 className={styles.gangTypeHeader}>{dbT(element, 'title', i18n.language)}</h2>
-            <Table
-              columns={[t(KEY.gang), t(KEY.abbreviation), t(KEY.webpage), '']}
-              data={element.gangs.map(function (element2) {
-                return [
-                  new AlphabeticTableCell(
-                    (
-                      <Link
-                        url={
-                          element2.info_page &&
-                          reverse({
-                            pattern: ROUTES.frontend.information_page_detail,
-                            urlParams: { slugField: element2.info_page },
-                          })
-                        }
-                      >
-                        {dbT(element2, 'name', i18n.language)}
-                      </Link>
-                    ),
-                  ),
-                  new AlphabeticTableCell(element2.abbreviation),
-                  new AlphabeticTableCell(element2.webpage),
-                  {
-                    children: (
-                      <Button
-                        onClick={() =>
-                          navigate(
-                            reverse({
-                              pattern: ROUTES.frontend.admin_gangs_edit,
-                              urlParams: { id: element2.id },
-                            }),
-                          )
-                        }
-                        theme="blue"
-                      >
-                        Rediger gjeng
-                      </Button>
-                    ),
-                  } as ITableCell,
-                ];
-              })}
+  const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
+    return {
+      key: gangType.id,
+      label: dbT(gangType, 'title') ?? '?',
+      value: gangType,
+    };
+  });
+
+  const currentGangType = currentGangTypeTab?.value;
+
+  const tableData =
+    currentGangType &&
+    currentGangType.gangs.map(function (element2) {
+      return [
+        dbT(element2, 'name'),
+        element2.abbreviation,
+        element2.webpage,
+        {
+          content: (
+            <CrudButtons
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_gangs_edit,
+                    urlParams: { id: element2.id },
+                  }),
+                );
+              }}
             />
-          </div>
-        );
-      })}
-    </Page>
+          ),
+        },
+      ];
+    });
+
+  const title = t(KEY.adminpage_gangs_title);
+  const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
+  const header = (
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
+      {t(KEY.adminpage_gangs_create)}
+    </Button>
+  );
+
+  return (
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab}></TabBar>
+      <br></br>
+      {currentGangType && (
+        <>
+          <Table
+            columns={[
+              t(KEY.common_gang) ?? '',
+              t(KEY.admin_gangsadminpage_abbreviation) ?? '',
+              t(KEY.admin_gangsadminpage_webpage) ?? '',
+              '',
+            ]}
+            data={tableData ?? []}
+          />
+        </>
+      )}
+    </AdminPageLayout>
   );
 }

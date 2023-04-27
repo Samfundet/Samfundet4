@@ -2,50 +2,40 @@
 
 @import 'src/constants';
 
-.wrapper {
-  margin: 1em 1em;
-}
-
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
+.container {
+  padding-top: 2em;
 }
 
 .header {
-  text-align: center;
-  justify-content: center;
-  text-transform: uppercase;
-  .headerText {
-    margin-bottom: 0.2em;
-    font-size: 2em;
-    font-weight: 700;
-  }
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+  margin-bottom: .5em;
+  font-size: 1.5em;
+  font-weight: 700;
+  gap: .5em;
 }
 
 .wisewords {
-  color: $grey-1;
+  color: inherit;
   font-weight: 600;
   font-size: medium;
+  opacity: 0.5;
 }
 
-.faq_button {
-  border-color: $grey-1;
-  padding: 0.3em 0.8em;
-  text-transform: uppercase;
-  margin-top: 1em;
-  .faq_text {
-    margin: 0;
-    font-size: .9em;
-    color: $black;
-
-  }
+.preferences_header {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 1.5em;
+  font-weight: 700;
 }
 
-.applets {
-  margin-top: 1em;
+.preference_row {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: .5em;
+}
+
+.label {
+  width: 15em;
 }

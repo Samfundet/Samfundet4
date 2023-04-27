@@ -1,18 +1,24 @@
-import { TimeDuration } from '../TimeDuration';
-import styles from './OpeningHours.module.scss';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-import { VenueDto } from '~/dto';
+import { TimeDuration } from '../TimeDuration';
+import styles from './OpeningHours.module.scss';
+
+type FakeVenue = {
+  name: string;
+  url: string;
+  start: string;
+  end: string;
+};
 
 type OpeningHoursProps = {
-  venues: VenueDto[];
+  venues: FakeVenue[];
 };
 
 export function OpeningHours({ venues }: OpeningHoursProps) {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
-      <h2>{t(KEY.opening_hours)}</h2>
+      <h2>{t(KEY.common_opening_hours)}</h2>
       <table className={styles.timeTable}>
         {venues.map(function (element, key) {
           return (

@@ -1,8 +1,10 @@
 # imports
+
 import os
 
 from root.constants import Environment
-from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import # noqa: F403
+from .base import *  # noqa: F403
+
 # End: imports -----------------------------------------------------
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'backend']
@@ -18,6 +20,7 @@ ENV = Environment.DEV
 ### CORS ###
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://localhost:6006',
 ]
 # https://testdriven.io/blog/django-spa-auth/#frontend-served-separately-cross-domain
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
@@ -25,7 +28,7 @@ CORS_ALLOW_CREDENTIALS = True
 ### End: CORS ###
 
 # Bypass authentication for testing purposes. Only applies when ENV==DEVELOPMENT.
-BYPASS_AUTHENTICATION = os.environ.get('BYPASS_AUTHENTICATION') == 'True'
+BYPASS_AUTHENTICATION = os.environ.get('BYPASS_AUTHENTICATION') == 'yes'
 if BYPASS_AUTHENTICATION:
     # We know REST_FRAMEWORK and other variables are available from star import.
     REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = ['rest_framework.permissions.AllowAny']  # noqa: F405
@@ -51,13 +54,41 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = True
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
-# Database
+# ======================== #
+#        Database          #
+# ======================== #
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+# Default database
+DOCKER_DB_NAME = 'docker.db.sqlite3'
+LOCAL_DB_NAME = 'db.sqlite3'
+DB_NAME = DOCKER_DB_NAME if IS_DOCKER else LOCAL_DB_NAME  # noqa: F405
+
+# Billig
+BILLIG_DOCKER_DB_NAME = 'docker.billig.db.sqlite3'
+BILLIG_LOCAL_DB_NAME = 'billig.db.sqlite3'
+BILLIG_DB_NAME = BILLIG_DOCKER_DB_NAME if IS_DOCKER else BILLIG_LOCAL_DB_NAME  # noqa: F405
+
 DATABASES = {
-    'default':
-        {
-            'ENGINE': 'django.db.backends.sqlite3',
-            # We know BASE_DIR and other variables are available from star import.
-            'NAME': BASE_DIR / 'database' / 'db.sqlite3',  # noqa: F405
-        }
+    # Default database for all django models
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'database' / DB_NAME,  # noqa: F405
+    },
+    # Database emulating billig
+    'billig': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,  # noqa: F405
+    }
+}
+
+# ======================== #
+#         Logging          #
+# ======================== #
+
+# Clean console logging in development (pretty stack trace)
+LOGGING['loggers'][''] = {  # type: ignore[index] # noqa: 405
+    'handlers': ['console'],
+    'level': 'DEBUG',
+    'propagate': True,
 }

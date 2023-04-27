@@ -11,8 +11,6 @@ from django.core import management
 from django.utils import timezone
 from django.core.management.base import BaseCommand
 
-# pylint: disable=positional-arguments
-
 
 def to_camel_case(snake_str: str) -> str:
     components = snake_str.split('_')
@@ -22,7 +20,6 @@ def to_camel_case(snake_str: str) -> str:
 
 
 class Colorize:
-    # pylint: disable=all
     GREEN = '\033[92m'
     RED = '\033[91m'
     _ENDC = '\033[0m'
@@ -71,7 +68,6 @@ OUTPUT_FRONTEND_FILE = '../frontend/src/routes/backend.ts'
 ### backend ###
 DOCSTRING = '"""'
 YAPF_DISABLE = '# yapf: disable'
-PYLINT_DISABLE_INVALID_NAME = '# pylint: disable=invalid-name'
 OUTPUT_BACKEND_FILE = 'root/utils/routes.py'
 
 ENTRY_MSG = f"""
@@ -142,7 +138,6 @@ class Command(BaseCommand):
                 # backend
                 backend_file.write(YAPF_DISABLE)
                 backend_file.write(NEWLINE)
-                backend_file.write(PYLINT_DISABLE_INVALID_NAME)
                 backend_file.write(ENTRY_MSG)
                 backend_file.write(NEWLINE)
                 backend_file.write(SEPARATOR)

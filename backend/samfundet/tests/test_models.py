@@ -1,15 +1,13 @@
 from datetime import datetime, timedelta
 
 import pytest
-
 from django.core.exceptions import ValidationError
 
-from samfundet.models import Booking
+from samfundet.models.general import Booking
 
 
-def test_booking_duration_constraint_less_than_2_hours(db):
-    # pylint: disable=unused-argument # magic fixture 'db' for database access.
-
+@pytest.mark.django_db
+def test_booking_duration_constraint_less_than_2_hours():
     from_dt = datetime(hour=20, day=2, month=12, year=2022)
     one_hour = timedelta(hours=1)
     three_hours = timedelta(hours=3)

@@ -1,17 +1,23 @@
+from django.test.client import Client
+from django.urls import reverse
 from guardian.shortcuts import assign_perm
 from rest_framework.status import is_success, is_redirect, HTTP_403_FORBIDDEN
 
-from django.urls import reverse
-from django.test.client import Client
-
-from samfundet.models import User
-
 from root.utils import routes, permissions
+from samfundet.models.general import User
 
 ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__index,
     routes.admin__samfundet_user_add,
     routes.admin__samfundet_user_changelist,
+    routes.admin__samfundet_tag_add,
+    routes.admin__samfundet_tag_changelist,
+    routes.admin__samfundet_image_add,
+    routes.admin__samfundet_image_changelist,
+    routes.admin__samfundet_closedperiod_add,
+    routes.admin__samfundet_closedperiod_changelist,
+    routes.admin__samfundet_foodpreference_add,
+    routes.admin__samfundet_foodpreference_changelist,
     routes.admin__admin_logentry_add,
     routes.admin__admin_logentry_changelist,
     routes.admin__auth_group_add,
@@ -34,16 +40,28 @@ ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__samfundet_gangtype_changelist,
     routes.admin__samfundet_informationpage_add,
     routes.admin__samfundet_informationpage_changelist,
+    routes.admin__samfundet_foodcategory_add,
+    routes.admin__samfundet_foodcategory_changelist,
     routes.admin__samfundet_profile_add,
     routes.admin__samfundet_profile_changelist,
     routes.admin__samfundet_userpreference_add,
     routes.admin__samfundet_userpreference_changelist,
     routes.admin__samfundet_venue_add,
     routes.admin__samfundet_venue_changelist,
+    routes.admin__samfundet_menuitem_add,
+    routes.admin__samfundet_menuitem_changelist,
+    routes.admin__samfundet_menu_add,
+    routes.admin__samfundet_menu_changelist,
     routes.admin__samfundet_table_add,
     routes.admin__samfundet_table_changelist,
     routes.admin__samfundet_booking_add,
     routes.admin__samfundet_booking_changelist,
+    routes.admin__samfundet_saksdokument_add,
+    routes.admin__samfundet_saksdokument_changelist,
+    routes.admin__samfundet_textitem_add,
+    routes.admin__samfundet_textitem_changelist,
+    routes.admin__samfundet_keyvalue_add,
+    routes.admin__samfundet_keyvalue_changelist,
     routes.admin__sessions_session_add,
     routes.admin__sessions_session_changelist,
 ]

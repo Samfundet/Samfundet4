@@ -1,17 +1,35 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken } from '~/api';
 import { useAuthContext } from '~/AuthContext';
-import { THEME, ThemeValue, THEME_KEY, XCSRFTOKEN } from '~/constants';
-import { Children, SetState } from '~/types';
+import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
+import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { useMouseTrail, useTheme } from '~/hooks';
+import { Children, KeyValueMap, SetState } from '~/types';
 
 /**
  * Define which values the global context can contain.
  */
 type GlobalContextProps = {
+  // Theme
   theme: ThemeValue;
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
+
+  // Mirror dimention
+  mirrorDimension: boolean;
+  setMirrorDimension: SetState<boolean>;
+  toggleMirrorDimension: () => boolean;
+
+  // Mouse trail
+  isMouseTrail: boolean;
+  setIsMouseTrail: SetState<boolean>;
+  toggleMouseTrail: () => boolean;
+
+  // Navbar
+  isMobileNavigation: boolean;
+  setIsMobileNavigation: SetState<boolean>;
+
+  keyValues: KeyValueMap;
 };
 
 /**
@@ -37,66 +55,109 @@ export function useGlobalContext() {
 // ====================================================================================================================
 
 type GlobalContextProviderProps = {
+  enabled?: boolean; // Enable/disable all side-effects, useful when used in Storybook.
   children: Children;
 };
 
-export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
-  // Get theme from localStorage.
-  const storedTheme = (localStorage.getItem(THEME_KEY) as ThemeValue) || undefined;
-  // Detect browser preference.
-  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const detectedTheme = prefersDarkTheme ? THEME.DARK : THEME.LIGHT;
-  const initialTheme = storedTheme || detectedTheme;
+export function GlobalContextProvider({ children, enabled = true }: GlobalContextProviderProps) {
+  // =================================== //
+  //        Constants and states         //
+  // =================================== //
 
-  const [theme, setTheme] = useState<ThemeValue>(initialTheme);
+  const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
+
+  const { theme, setTheme, switchTheme } = useTheme();
+
+  // Determines if navbar for mobile is shown.
+  const [isMobileNavigation, setIsMobileNavigation] = useState(false);
+
   const { user } = useAuthContext();
+
+  const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
+  const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
+
+  // =================================== //
+  //               Effects               //
+  // =================================== //
+
+  // Update preferences when user is loaded.
+  useEffect(() => {
+    if (!user || !enabled) return;
+    setMirrorDimension(user.user_preference.mirror_dimension);
+  }, [user, enabled]);
 
   // Stuff to do on first render.
   useEffect(() => {
+    if (!enabled) return;
+
     // Fetch and set fresh csrf token for future requests.
     getCsrfToken()
       .then((token) => {
+        // Update axios globally with new token.
         axios.defaults.headers.common[XCSRFTOKEN] = token;
       })
       .catch(console.error);
-  }, []);
 
-  /** Simplified theme switching. Returns theme it switched to. */
-  function switchTheme(): ThemeValue {
-    if (theme === THEME.LIGHT) {
-      setTheme(THEME.DARK);
-      return THEME.DARK;
+    // Load keyValues.
+    getKeyValues().then((response) => {
+      // Transform KeyValue[] response to Map of [key,value] entries.
+      const keyValueMap = new Map(response.data.map((kv) => [kv.key, kv.value ?? '']));
+      setKeyValues(keyValueMap);
+    });
+  }, [enabled]);
+
+  // Update body classes when mobile navigation opens/closes.
+  useEffect(() => {
+    if (!enabled) return;
+    if (isMobileNavigation) {
+      document.body.classList.add(MOBILE_NAVIGATION_OPEN);
     } else {
-      setTheme(THEME.LIGHT);
-      return THEME.LIGHT;
+      document.body.classList.remove(MOBILE_NAVIGATION_OPEN);
     }
+  }, [isMobileNavigation, enabled]);
+
+  // Update body classes when mirrorDimension is toggled.
+  useEffect(() => {
+    if (!enabled) return;
+    if (mirrorDimension) {
+      document.body.classList.add(MIRROR_CLASS);
+    } else {
+      document.body.classList.remove(MIRROR_CLASS);
+    }
+  }, [mirrorDimension, enabled]);
+
+  // =================================== //
+  //          Helper functions           //
+  // =================================== //
+
+  /** Toggles mirrorDimension and returns the state it switched to. */
+  function toggleMirrorDimension(): boolean {
+    const toggledValue = !mirrorDimension;
+    setMirrorDimension(toggledValue);
+    if (user) {
+      putUserPreference(user.user_preference.id, { mirror_dimension: toggledValue });
+    }
+    return toggledValue;
   }
 
-  // Update body classes when theme changes.
-  useEffect(() => {
-    if (theme === THEME.DARK) {
-      document.body.classList.add(THEME.DARK);
-      document.body.classList.remove(THEME.LIGHT);
-    } else if (theme === THEME.LIGHT) {
-      document.body.classList.add(THEME.LIGHT);
-      document.body.classList.remove(THEME.DARK);
-    }
-    // Remember theme in localStorage between refreshes.
-    localStorage.setItem(THEME_KEY, theme);
-  }, [theme]);
-
-  // Update theme when user changes.
-  useEffect(() => {
-    if (user?.user_preference.theme) {
-      setTheme(user?.user_preference.theme);
-    }
-  }, [user]);
+  // =================================== //
+  //    Finalize context with values     //
+  // =================================== //
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
-    theme: theme,
-    setTheme: setTheme,
-    switchTheme: switchTheme,
+    theme,
+    setTheme,
+    switchTheme,
+    isMobileNavigation,
+    setIsMobileNavigation,
+    mirrorDimension,
+    setMirrorDimension,
+    isMouseTrail: isMouseTrail,
+    setIsMouseTrail: setIsMouseTrail,
+    toggleMouseTrail,
+    toggleMirrorDimension,
+    keyValues,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
