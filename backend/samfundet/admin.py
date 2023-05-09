@@ -21,6 +21,7 @@ from .models.general import (
     Image,
     Profile,
     Booking,
+    Infobox,
     MenuItem,
     GangType,
     TextItem,
@@ -419,6 +420,18 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     # list_select_related = True
+
+
+@admin.register(Infobox)
+class InfoboxAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_nb']
+    # list_filter = []
+    list_display = ['id', '__str__', 'title_nb']
+    search_fields = ['id', 'title_nb']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
 
 
 @admin.register(TextItem)
