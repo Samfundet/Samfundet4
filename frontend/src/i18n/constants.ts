@@ -115,6 +115,7 @@ export const KEY = {
   loginpage_internal_login: 'loginpage_internal_login',
   loginpage_email_placeholder: 'loginpage_email_placeholder',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
+  loginpage_register: 'loginpage_register',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',

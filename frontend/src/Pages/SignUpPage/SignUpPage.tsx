@@ -60,15 +60,21 @@ export function SignUpPage() {
         )}
         <div className={styles.content_container}>
           <SamfForm onSubmit={handleRegistration} submitText={t(KEY.common_register) ?? ''}>
-            <h1 className={styles.header_text}>{t(KEY.loginpage_internal_login)}</h1>
-            <SamfFormField field="username" type="text" label={t(KEY.loginpage_email_placeholder) ?? ''} />
-            <SamfFormField field="firstname" type="text" label={t(KEY.common_firstname) ?? ''} />
-            <SamfFormField field="lastname" type="text" label={t(KEY.common_lastname) ?? ''} />
-            <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
+            <h1 className={styles.header_text}>{t(KEY.loginpage_register)}</h1>
             <SamfFormField
+              required={true}
+              field="username"
+              type="text"
+              label={t(KEY.loginpage_email_placeholder) ?? ''}
+            />
+            <SamfFormField required={true} field="firstname" type="text" label={t(KEY.common_firstname) ?? ''} />
+            <SamfFormField required={true} field="lastname" type="text" label={t(KEY.common_lastname) ?? ''} />
+            <SamfFormField required={true} field="password" type="password" label={t(KEY.common_password) ?? ''} />
+            <SamfFormField
+              required={true}
               field="password_repeat"
               type="password"
-              label={t(KEY.common_repeat) + t(KEY.common_password) ?? ''}
+              label={t(KEY.common_repeat) + ' ' + t(KEY.common_password) ?? ''}
             />
           </SamfForm>
         </div>

@@ -58,7 +58,10 @@ export function LoginPage() {
             <SamfFormField field="name" type="text" label={t(KEY.loginpage_email_placeholder) ?? ''} />
             <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
           </SamfForm>
-          <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>
+          <Link to={ROUTES.frontend.signup} className={styles.link}>
+            {t(KEY.loginpage_register)}
+          </Link>
+          <Link to={ROUTES.frontend.signup} className={styles.link}>
             {t(KEY.loginpage_forgotten_password)}
           </Link>
         </div>

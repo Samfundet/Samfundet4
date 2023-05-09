@@ -105,6 +105,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
   [KEY.loginpage_email_placeholder]: 'E-post eller medlemsnummer',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
+  [KEY.loginpage_register]: 'Lag bruker',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
@@ -268,6 +269,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_email_placeholder]: 'Email or membership ID',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_register]: 'Create user',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
