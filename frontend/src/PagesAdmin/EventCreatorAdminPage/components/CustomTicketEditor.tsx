@@ -1,7 +1,11 @@
 import { Icon } from '@iconify/react';
 import { useEffect } from 'react';
-import { Button, InputField } from '~/Components';
+import { useTranslation } from 'react-i18next';
+import { Button, IconButton, InputField } from '~/Components';
+import { Table, TableRow } from '~/Components/Table';
 import { EventCustomTicketDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { COLORS } from '~/types';
 import styles from './CustomTicketEditor.module.scss';
 
 type PaymentFormProps = {
@@ -10,7 +14,7 @@ type PaymentFormProps = {
 };
 
 export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: PaymentFormProps) {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   // Add default custom ticket
   useEffect(() => {
@@ -47,54 +51,68 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
   }
 
   /** UI for a custom ticket */
-  function customTicket(custom_ticket: EventCustomTicketDto) {
-    return (
-      <div className={styles.custom_ticket} key={custom_ticket.id}>
-        <InputField<string>
-          inputClassName={styles.custom_ticket_input}
-          labelClassName={styles.custom_ticket_input_label}
-          value={custom_ticket.name_nb}
-          onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
-        >
-          Navn (norsk)
-        </InputField>
-        <InputField<string>
-          inputClassName={styles.custom_ticket_input}
-          labelClassName={styles.custom_ticket_input_label}
-          value={custom_ticket.name_en}
-          onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
-        >
-          Navn (engelsk)
-        </InputField>
-        <InputField<number>
-          inputClassName={styles.custom_ticket_input}
-          labelClassName={styles.custom_ticket_input_label}
-          value={custom_ticket.price?.toString()}
-          type="number"
-          onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
-        >
-          Pris
-        </InputField>
-        {/* Delete button (only if at least one ticket) */}
-        {customTickets.length > 1 && (
-          <Button
-            theme="white"
-            preventDefault={true}
-            display="pill"
-            className={styles.custom_ticket_delete_button}
-            onClick={() => removeTicket(custom_ticket)}
-          >
-            Slett <Icon icon="mdi:close"></Icon>
-          </Button>
-        )}
-      </div>
-    );
+  function ticketRow(custom_ticket: EventCustomTicketDto): TableRow {
+    const deleteButton =
+      customTickets.length > 1
+        ? {
+            content: (
+              <IconButton
+                color={COLORS.red}
+                onClick={() => removeTicket(custom_ticket)}
+                title=""
+                icon="mdi:bin"
+                className={styles.delete_button}
+              />
+            ),
+          }
+        : {};
+    return [
+      {
+        content: (
+          <InputField<string>
+            inputClassName={styles.custom_ticket_input}
+            labelClassName={styles.custom_ticket_input_label}
+            value={custom_ticket.name_nb}
+            onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
+          />
+        ),
+      },
+      {
+        content: (
+          <InputField<string>
+            inputClassName={styles.custom_ticket_input}
+            labelClassName={styles.custom_ticket_input_label}
+            value={custom_ticket.name_en}
+            onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
+          />
+        ),
+      },
+      {
+        content: (
+          <InputField<number>
+            inputClassName={styles.custom_ticket_input}
+            labelClassName={styles.custom_ticket_input_label}
+            value={custom_ticket.price?.toString()}
+            type="number"
+            onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
+          />
+        ),
+      },
+      deleteButton,
+    ];
   }
+
+  const tableColumns = [
+    `${t(KEY.common_name)} (${t(KEY.common_english)})`,
+    `${t(KEY.common_name)} (${t(KEY.common_norwegian)})`,
+    'Pris',
+    '',
+  ];
 
   return (
     <>
       <div className={styles.custom_ticket_container}>
-        {customTickets.map((custom_ticket) => customTicket(custom_ticket))}
+        <Table columns={tableColumns} data={customTickets.map((ticket) => ticketRow(ticket))} />
         <div className={styles.add_custom_ticket}>
           <Button rounded={true} theme="green" preventDefault={true} onClick={newTicket}>
             Legg til billett

@@ -25,6 +25,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    Reservation,
     ClosedPeriod,
     Saksdokument,
     FoodCategory,
@@ -307,6 +308,19 @@ class TableAdmin(CustomGuardedModelAdmin):
     # list_filter = []
     list_display = ['id', '__str__', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Reservation)
+class ReservationAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name', 'email', 'phonenumber']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name', 'email', 'phonenumber']
+    search_fields = ['id', 'name', 'email', 'phonenumber']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []

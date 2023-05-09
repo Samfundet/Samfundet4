@@ -54,9 +54,3 @@ export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
 export const VENUE = {
   LYCHE: 'lyche',
 } as const;
-
-/** Keys of KeyValue object in backend. */
-export const KV = {
-  // Sulten
-  SULTEN_MAIL: 'SULTEN_MAIL',
-} as const;

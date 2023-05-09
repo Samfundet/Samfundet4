@@ -3,12 +3,10 @@
 @import 'src/constants';
 
 .tab_bar {
-  @include rounded-full;
   @include flex-row;
   overflow-x: auto;
-  background-color: $background-secondary;
-  padding: 0.4em;
-  gap: 0.75em;
+  background-color: $white;
+  border: 1px solid $grey-4;
 
   &.vertical {
     flex-direction: column;
@@ -31,7 +29,6 @@
 }
 
 .tab_button {
-  @include rounded-full;
   @include flex-row-center;
   background-color: transparent;
   padding: 0.8em 1.25em;
@@ -39,6 +36,7 @@
   cursor: pointer;
   outline: none;
   border: none;
+  border-bottom: 3px solid transparent;
 
   /* stylelint-disable-next-line max-nesting-depth */
   @include theme-dark {
@@ -46,14 +44,13 @@
   }
 
   &.selected {
-    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid $blue;
     background-color: $background-primary;
-    color: black;
+    color: $blue;
 
     /* stylelint-disable-next-line max-nesting-depth */
     @include theme-dark {
-      box-shadow: 0 0 1em 0 rgba(255, 255, 255, 0.3);
-      background-color: black;
+      background-color: $grey-2;
       color: white;
     }
   }
@@ -70,9 +67,10 @@
 }
 
 .tab_button:not(.selected):hover {
-  background-color: white;
+  background-color: $white;
+  color: $blue;
 
   @include theme-dark {
-    background-color: $grey-2;
+    background-color: $grey-0;
   }
 }

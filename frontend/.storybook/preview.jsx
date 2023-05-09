@@ -2,6 +2,9 @@ import '~/global.scss';
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthContextProvider } from '~/AuthContext';
+import { GlobalContextProvider } from '~/GlobalContextProvider';
 import { THEME } from '~/constants';
 import { updateBodyThemeClass } from '~/utils';
 
@@ -48,8 +51,20 @@ const WithTheme = (Story, context) => {
   return <Story />;
 };
 
+function WithContext(Story) {
+  return (
+    <AuthContextProvider enabled={false}>
+      <GlobalContextProvider enabled={false}>
+        <BrowserRouter>
+          <Story />
+        </BrowserRouter>
+      </GlobalContextProvider>
+    </AuthContextProvider>
+  );
+}
+
 // Export decorators for storybook to wrap your stories in.
-export const decorators = [WithI18next, WithTheme];
+export const decorators = [WithContext, WithI18next, WithTheme];
 
 // Create a global variable called locale in storybook
 // and add a menu in the toolbar to change your locale
