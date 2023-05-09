@@ -71,6 +71,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   image: makeImagePicker,
   'upload-image': makeFilePickerFunction('image'),
   'upload-pdf': makeFilePickerFunction('pdf'),
+  email: makeStandardInputFunction<string>('email'),
 };
 
 // ================================== //

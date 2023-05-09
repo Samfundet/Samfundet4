@@ -238,6 +238,7 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+
 class RegisterSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:
@@ -276,7 +277,8 @@ class RegisterSerializer(serializers.Serializer):
         # It will be used in the view.
         attrs['user'] = user
         return attrs
-    
+
+
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
