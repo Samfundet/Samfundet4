@@ -6,7 +6,7 @@
   @include flex-row;
   overflow-x: auto;
   background-color: $white;
-  border: 1px solid $grey-4;
+  border: 1px solid $grey-3;
 
   &.vertical {
     flex-direction: column;
@@ -34,7 +34,6 @@
   padding: 0.8em 1.25em;
   transition: 0.2s;
   cursor: pointer;
-  outline: none;
   border: none;
   border-bottom: 3px solid transparent;
 
@@ -50,6 +49,7 @@
 
     /* stylelint-disable-next-line max-nesting-depth */
     @include theme-dark {
+      border-bottom: 3px solid $white;
       background-color: $grey-2;
       color: white;
     }
@@ -66,11 +66,23 @@
   }
 }
 
+$outline-width: 2px;
+
+.tab_button:focus-visible {
+  outline: $blue $outline-width solid;
+  outline-offset: -$outline-width;
+  @include theme-dark {
+    outline-color: $white;
+  }
+}
+
 .tab_button:not(.selected):hover {
-  background-color: $white;
-  color: $blue;
+  // color: $blue;
+  /* stylelint-disable-next-line function-no-unknown */
+  background-color: lighten($color: $blue, $amount: 40%);
 
   @include theme-dark {
+    color: $white;
     background-color: $grey-0;
   }
 }
