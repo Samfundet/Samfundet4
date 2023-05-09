@@ -312,3 +312,30 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class AssignGroupView(APIView):
+    """ 
+     Assigns a user to a group.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({"error": "Username and group_name fields are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        group, created = Group.objects.get_or_create(name=group_name)
+        user.groups.add(group)
+        user.save()
+
+        return Response({"message": f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)

@@ -56,6 +56,17 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
+export async function assignUserToGroup(username: string, group_name: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__add_group_to_user;
+  const payload = {
+    username,
+    group_name,
+  };
+  const response = await axios.post(url, payload, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getHomeData(): Promise<HomePageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
   const response = await axios.get<HomePageDto>(url, { withCredentials: true });
