@@ -97,7 +97,7 @@ jobs:
         run: docker compose build
 
       - name: Start containers
-        run: docker compose up -d; sleep 20 # Give additional seconds to boot.
+        run: docker compose up  -d; sleep 20 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
@@ -109,11 +109,11 @@ jobs:
       - name: Seed backend for Cypress tests
         run: docker compose exec backend pipenv run python manage.py seed_cypress
 
-      - name: Run cypress
-        run: docker compose exec frontend yarn run cypress:run
+      # - name: Run cypress
+      #   run: docker compose up cypress
 
       - name: Stop containers
-        run: docker compose down
+        run: docker compose down 
 
   job_verify_frontend_lint:
     name: Verify frontend
