@@ -316,14 +316,14 @@ class ProfileView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class AssignGroupView(APIView):
-    """ 
+    """
      Assigns a user to a group.
     """
 
     # TODO Add functionality so that users can only assign themselves to groups they are a part of / are parent to.
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request) -> Response:
         username = request.data.get('username')
         group_name = request.data.get('group_name')
 
@@ -335,7 +335,7 @@ class AssignGroupView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        try: 
+        try:
             group = Group.objects.get(name=group_name)
         except Group.DoesNotExist:
             return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
