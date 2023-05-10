@@ -64,7 +64,7 @@ export async function assignUserToGroup(username: string, group_name: string): P
   };
   const response = await axios.post(url, payload, { withCredentials: true });
 
-  return response.data;
+  return response;
 }
 
 export async function getHomeData(): Promise<HomePageDto> {
