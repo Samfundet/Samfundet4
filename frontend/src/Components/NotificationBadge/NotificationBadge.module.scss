@@ -1,0 +1,17 @@
+@import 'src/constants';
+
+.wrapper {
+  // Needed in order to position the badge.
+  position: relative;
+}
+
+.badge {
+  bottom: 15px;
+  left: 15px;
+  border-radius: 1000px;
+  background-color: red;
+  padding: 0 5px;
+  min-width: 1em;
+  position: absolute;
+  color: white;
+}
