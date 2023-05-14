@@ -281,3 +281,12 @@ export type KeyValueDto = {
   key: string;
   value: string;
 };
+
+export type NotificationDto = {
+  id: number;
+  slug: string;
+  actor: string;
+  verb: string;
+  recipient: string;
+  // TODO: There are more fields than this.
+};
