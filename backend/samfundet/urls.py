@@ -42,5 +42,5 @@ urlpatterns = [
     path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
     path('home/', views.HomePageView().as_view(), name='home'),
-    path('add_group_to_user/', views.AssignGroupView.as_view(), name='add_group_to_user'),
+    path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
 ]
