@@ -4,26 +4,37 @@
 
 from __future__ import annotations
 
-import random
 import re
-from datetime import time, timedelta
+import random
 from typing import TYPE_CHECKING
+from datetime import time, timedelta
+
+from notifications.base.models import AbstractNotification
 
 from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import gettext as _
 from guardian.shortcuts import assign_perm
+from django.utils.translation import gettext as _
 
 from root.utils import permissions
+
+from .utils.fields import LowerCaseField
 
 if TYPE_CHECKING:
     from typing import Any, Optional
     from django.db.models import Model
 
 
+class Notification(AbstractNotification):
+
+    class Meta(AbstractNotification.Meta):
+        abstract = False
+
+
 class Tag(models.Model):
     # TODO make name case-insensitive
+    # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
@@ -71,16 +82,10 @@ class Image(models.Model):
         return f'{self.title}'
 
 
-class UsernameField(models.CharField):
-
-    def to_python(self, value: str) -> str:
-        return super().to_python(value.lower())
-
-
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
-    username = UsernameField(
+    username = LowerCaseField(
         _('username'),
         max_length=150,
         unique=True,
