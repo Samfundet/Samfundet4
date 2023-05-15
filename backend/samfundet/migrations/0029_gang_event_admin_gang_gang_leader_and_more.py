@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('samfundet', '0027_infobox'),
+        ('samfundet', '0028_notification'),
     ]
 
     operations = [
