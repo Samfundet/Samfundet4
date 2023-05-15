@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from django.urls import reverse
 from rest_framework import status
 
@@ -188,3 +188,74 @@ class TestTextItemView:
         assert put_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
         assert patch_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
         assert delete_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+class TestAssignGroupView:
+
+    def test_assign_group(self, fixture_rest_client: APIClient, fixture_superuser: User, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert group in fixture_user.groups.all()
+
+    def test_remove_group(self, fixture_rest_client: APIClient, fixture_superuser: User, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        fixture_user.groups.add(group)
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.delete(path=url, data=data)
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert group not in fixture_user.groups.all()
+
+    def test_assign_group_not_possible(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_remove_group_not_possible(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        fixture_user.groups.add(group)
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_assign_group_not_found(self, fixture_rest_client: APIClient, fixture_superuser: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        url = reverse(routes.samfundet__assign_group)
+        data = {'group_name': 'test_group', 'username': 'test_user'}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_404_NOT_FOUND

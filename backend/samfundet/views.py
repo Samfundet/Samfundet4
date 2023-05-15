@@ -320,7 +320,6 @@ class AssignGroupView(APIView):
      Assigns a user to a group.
     """
 
-    # TODO Add functionality so that users can only assign themselves to groups they are a part of / are parent to.
     permission_classes = [IsAuthenticated]
 
     def post(self, request: Request) -> Response:
@@ -339,7 +338,34 @@ class AssignGroupView(APIView):
             group = Group.objects.get(name=group_name)
         except Group.DoesNotExist:
             return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
-        user.groups.add(group)
-        user.save()
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.add(group)
+        else:
+            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
+
+    def delete(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.remove(group)
+        else:
+            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)

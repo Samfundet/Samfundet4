@@ -11,11 +11,11 @@ from datetime import time, timedelta
 
 from notifications.base.models import AbstractNotification
 
+from django.contrib.auth.models import AbstractUser, Group
+from django.core.exceptions import ValidationError
 from django.db import models
 from guardian.shortcuts import assign_perm
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
 
@@ -222,6 +222,9 @@ class ClosedPeriod(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
+    """
+    Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
+    """
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
@@ -239,7 +242,7 @@ class GangType(models.Model):
 class Gang(models.Model):
     name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
-    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
+    abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
@@ -248,6 +251,15 @@ class Gang(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # Gang related permission groups
+    gang_leader = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
+    event_admin = models.OneToOneField(
+        Group, related_name='gang_as_event_admin', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
+    recruitment_admin = models.OneToOneField(
+        Group, related_name='gang_as_recruitment_admin', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     class Meta:
         verbose_name = 'Gang'

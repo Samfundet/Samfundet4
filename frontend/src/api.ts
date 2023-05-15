@@ -58,7 +58,7 @@ export async function getUser(): Promise<UserDto> {
 }
 
 export async function assignUserToGroup(username: string, group_name: string): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__add_group_to_user;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__assign_group;
   const payload = {
     username,
     group_name,

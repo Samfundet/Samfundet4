@@ -1,4 +1,5 @@
 import {
+  assignUserToGroup,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
@@ -55,6 +56,13 @@ export function ApiTestingPage() {
         theme="samf"
         className={styles.btn}
         onClick={() => getInformationPage('test').then(console.log).catch(console.error)}
+      >
+        getInformationPage
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => assignUserToGroup('testuser', 'testgroup').then(console.log).catch(console.error)}
       >
         getInformationPage
       </Button>
