@@ -377,9 +377,7 @@ export async function getImage(id: string | number): Promise<ImageDto> {
 
 export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
-  const response = await axios.postForm<ImageDto>(url, data, {
-    withCredentials: true,
-  });
+  const response = await axios.postForm<ImageDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
@@ -406,7 +404,7 @@ type AllNotificationsResponse = {
 };
 export function getAllNotifications(): Promise<AxiosResponse<AllNotificationsResponse>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_all_notification_list;
-  const response = axios.get<AllNotificationsResponse>(url);
+  const response = axios.get<AllNotificationsResponse>(url, { withCredentials: true });
   return response;
 }
 
@@ -416,13 +414,13 @@ type UnreadNotificationsResponse = {
 };
 export function getUnreadNotifications(): Promise<AxiosResponse<UnreadNotificationsResponse>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_unread_notification_list;
-  const response = axios.get<UnreadNotificationsResponse>(url);
+  const response = axios.get<UnreadNotificationsResponse>(url, { withCredentials: true });
   return response;
 }
 
 export function markAllAsRead(): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.notifications__mark_all_as_read;
-  const response = axios.get(url);
+  const response = axios.get(url, { withCredentials: true });
   return response;
 }
 
@@ -433,7 +431,7 @@ export function markAsRead(slug: string): Promise<AxiosResponse> {
       pattern: ROUTES.backend.notifications__mark_as_read,
       urlParams: { slug },
     });
-  const response = axios.get(url);
+  const response = axios.get(url, { withCredentials: true });
   return response;
 }
 
@@ -444,7 +442,7 @@ export function markAsUnread(slug: string): Promise<AxiosResponse> {
       pattern: ROUTES.backend.notifications__mark_as_unread,
       urlParams: { slug },
     });
-  const response = axios.get(url);
+  const response = axios.get(url, { withCredentials: true });
   return response;
 }
 
@@ -455,6 +453,6 @@ export function deleteNotification(slug: string): Promise<AxiosResponse> {
       pattern: ROUTES.backend.notifications__delete,
       urlParams: { slug },
     });
-  const response = axios.get(url);
+  const response = axios.get(url, { withCredentials: true });
   return response;
 }

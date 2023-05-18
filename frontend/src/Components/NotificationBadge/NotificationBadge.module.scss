@@ -1,17 +1,23 @@
 @import 'src/constants';
 
 .wrapper {
-  // Needed in order to position the badge.
-  position: relative;
+  position: relative; // Needed in order to position the badge.
+  cursor: pointer;
 }
 
 .badge {
-  bottom: 15px;
-  left: 15px;
+  bottom: 12px;
+  left: 14px;
   border-radius: 1000px;
   background-color: red;
   padding: 0 5px;
-  min-width: 1em;
+  min-width: 1.2em;
   position: absolute;
-  color: white;
+  color: $white;
+}
+
+.icon {
+  &:hover {
+    scale: 1.1;
+  }
 }
