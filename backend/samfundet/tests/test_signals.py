@@ -51,18 +51,17 @@ class TestEditorPermissions:
         fixture_gang: Gang,
     ):
         ### Arrange ###
-        # Event, Gang and User creation can be handled by setup fixture.
 
         ### Act ###
         fixture_gang.event_admin = fixture_group
         fixture_gang.save()
         fixture_event.editors.add(fixture_gang)
         fixture_event.save()
-        user_perms = get_perms(fixture_gang.event_admin, fixture_event)
+        editor_perms = get_perms(fixture_gang.event_admin, fixture_event)
 
         ### Assert ###
-        assert 'change_event' in user_perms
-        assert 'delete_event' in user_perms
+        assert 'change_event' in editor_perms
+        assert 'delete_event' in editor_perms
 
     def test_update_editor_permissions_remove(
         self,
@@ -76,8 +75,45 @@ class TestEditorPermissions:
         fixture_gang.event_admin = fixture_group
         fixture_gang.save()
         fixture_event.editors.remove(fixture_gang)
-        user_perms = get_perms(fixture_gang.event_admin, fixture_event)
+        editor_perms = get_perms(fixture_gang.event_admin, fixture_event)
 
         ### Assert ###
-        assert 'change_event' not in user_perms
-        assert 'delete_event' not in user_perms
+        assert 'change_event' not in editor_perms
+        assert 'delete_event' not in editor_perms
+
+    def test_group_leader_permissions_add(
+        self,
+        fixture_event: Event,
+        fixture_group: Group,
+        fixture_gang: Gang,
+    ):
+        ### Arrange ###
+
+        ### Act ###
+        fixture_gang.gang_leader = fixture_group
+        fixture_gang.save()
+        fixture_event.editors.add(fixture_gang)
+        fixture_event.save()
+        editor_perms = get_perms(fixture_gang.gang_leader, fixture_event)
+
+        ### Assert ###
+        assert 'change_event' in editor_perms
+        assert 'delete_event' in editor_perms
+
+    def test_group_leader_permissions_remove(
+        self,
+        fixture_event: Event,
+        fixture_group: Group,
+        fixture_gang: Gang,
+    ):
+        ### Arrange ###
+
+        ### Act ###
+        fixture_gang.gang_leader = fixture_group
+        fixture_gang.save()
+        fixture_event.editors.remove(fixture_gang)
+        editor_perms = get_perms(fixture_gang.gang_leader, fixture_event)
+
+        ### Assert ###
+        assert 'change_event' not in editor_perms
+        assert 'delete_event' not in editor_perms

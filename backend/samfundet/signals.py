@@ -35,17 +35,20 @@ def update_editor_permissions(
     **kwargs: dict,
 ) -> None:
     if action in ['post_add', 'post_remove', 'post_clear']:
-        current_editors = set(instance.editors.all())
+        current_editors: set[Gang] = set(instance.editors.all())
 
         # In the case of a removal or clear, the related objects have already been removed by the time the
         # signal handler is called, so we can calculate the set of removed objects by subtracting the current
         # set of related objects from the set of all related object primary keys.
         if action in ['post_remove', 'post_clear']:
-            removed_gangs = set(model.objects.filter(pk__in=pk_set)) - current_editors
+            removed_gangs: set[Gang] = set(model.objects.filter(pk__in=pk_set)) - current_editors
             for gang in removed_gangs:
                 if gang.event_admin:
                     remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin, obj=instance)
                     remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin, obj=instance)
+                if gang.gang_leader:
+                    remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader, obj=instance)
+                    remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader, obj=instance)
 
         # In the case of an add, the related objects have already been added by the time the signal handler is called.
         if action == 'post_add':
@@ -53,3 +56,6 @@ def update_editor_permissions(
                 if gang.event_admin:
                     assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin, obj=instance)
                     assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin, obj=instance)
+                if gang.gang_leader:
+                    assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader, obj=instance)
+                    assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader, obj=instance)
