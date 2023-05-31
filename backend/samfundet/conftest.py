@@ -6,12 +6,13 @@ from django.core.files.images import ImageFile
 from django.utils import timezone
 from django.test import Client
 from rest_framework.test import APIClient
+from django.contrib.auth.models import Group
 
 from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.general import User, Image
+from samfundet.models.general import User, Image, Gang
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -163,3 +164,17 @@ def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: Billig
     fixture_event.billig_id = fixture_billig_event.id
     fixture_event.save()
     yield fixture_event, fixture_billig_event
+
+
+@pytest.fixture
+def fixture_group() -> Iterator[Group]:
+    group = Group.objects.create(name='testgroup')
+    yield group
+    group.delete()
+
+
+@pytest.fixture
+def fixture_gang() -> Iterator[Gang]:
+    gang = Gang.objects.create(name_nb='testgang')
+    yield gang
+    gang.delete()

@@ -5,6 +5,8 @@ from django.db.models.signals import post_save, m2m_changed
 
 from guardian.shortcuts import assign_perm, remove_perm
 
+from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
+
 from .models import UserPreference, Profile, User, Event, Gang
 
 
@@ -23,7 +25,15 @@ def create_profile(sender: User, instance: User, created: bool, **kwargs: Any) -
 
 
 @receiver(m2m_changed, sender=Event.editors.through)
-def update_editor_permissions(sender: User, instance: Event, action: str, reverse: bool, model: Gang, pk_set: set[int], **kwargs: dict) -> None:
+def update_editor_permissions(
+    sender: User,
+    instance: Event,
+    action: str,
+    reverse: bool,
+    model: Gang,
+    pk_set: set[int],
+    **kwargs: dict,
+) -> None:
     if action in ['post_add', 'post_remove', 'post_clear']:
         current_editors = set(instance.editors.all())
 
@@ -34,12 +44,12 @@ def update_editor_permissions(sender: User, instance: Event, action: str, revers
             removed_gangs = set(model.objects.filter(pk__in=pk_set)) - current_editors
             for gang in removed_gangs:
                 if gang.event_admin:
-                    remove_perm(perm='change_event', user_or_group=gang.event_admin, obj=instance)
-                    remove_perm(perm='delete_event', user_or_group=gang.event_admin, obj=instance)
+                    remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin, obj=instance)
+                    remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin, obj=instance)
 
         # In the case of an add, the related objects have already been added by the time the signal handler is called.
         if action == 'post_add':
             for gang in current_editors:
                 if gang.event_admin:
-                    assign_perm(perm='change_event', user_or_group=gang.event_admin, obj=instance)
-                    assign_perm(perm='delete_event', user_or_group=gang.event_admin, obj=instance)
+                    assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin, obj=instance)
+                    assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin, obj=instance)
