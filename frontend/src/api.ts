@@ -15,6 +15,7 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  RecruitmentDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -454,5 +455,23 @@ export function deleteNotification(slug: string): Promise<AxiosResponse> {
       urlParams: { slug },
     });
   const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+// ############################################################
+//                       Recruitment
+// ############################################################
+
+export async function getAllRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function createNewRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.admin__samfundet_recruitment_add;
+  const response = await axios.post(url, recruitmentData, { withCredentials: true });
+
   return response;
 }

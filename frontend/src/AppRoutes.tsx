@@ -29,6 +29,7 @@ import {
   InformationAdminPage,
   InformationFormAdminPage,
   OpeningHoursAdminPage,
+  RecruitmentAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -95,6 +96,8 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+        {/* Recruitment */}
+        <Route path={ROUTES.frontend.admin_recruitment} element={<RecruitmentAdminPage />} />
       </Route>
       {/* 
         Info pages

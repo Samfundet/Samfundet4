@@ -131,6 +131,10 @@ export const KEY = {
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
+  // Recruitment
+  recruitment_duration: 'recruitment_duration',
+  recruitment_organization: 'recruitment_organization',
+
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',

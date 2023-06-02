@@ -15,7 +15,8 @@ class Recruitment(models.Model):
         ('uka', 'UKA'),
     )
 
-    name = models.CharField(max_length=100, help_text='Name of the recruitment')
+    name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
+    name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
     actual_application_deadline = models.DateTimeField(
         help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'

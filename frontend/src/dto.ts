@@ -290,3 +290,15 @@ export type NotificationDto = {
   recipient: string;
   // TODO: There are more fields than this.
 };
+
+export type RecruitmentDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  visible_from: string;
+  actual_application_deadline: string;
+  shown_application_deadline: string;
+  reprioritization_deadline_for_applicant: string;
+  reprioritization_deadline_for_groups: string;
+  organization: 'samfundet' | 'isfit' | 'uka';
+};

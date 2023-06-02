@@ -52,6 +52,8 @@ export const ROUTES_FRONTEND = {
   admin_saksdokumenter: '/admin/saksdokument/',
   admin_saksdokumenter_create: '/admin/saksdokument/create/',
   admin_saksdokumenter_edit: '/admin/saksdokument/edit/:id/',
+  // Recruitment
+  admin_recruitment: '/admin/recruitment/',
   // ==================== //
   //      Development     //
   // ==================== //
