@@ -292,7 +292,7 @@ export type NotificationDto = {
 };
 
 export type RecruitmentDto = {
-  id: number;
+  id: string | undefined;
   name_nb: string;
   name_en: string;
   visible_from: string;

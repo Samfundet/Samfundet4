@@ -469,9 +469,24 @@ export async function getAllRecruitments(): Promise<AxiosResponse<RecruitmentDto
   return response;
 }
 
-export async function createNewRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.admin__samfundet_recruitment_add;
+export async function getRecruitment(id: string): Promise<AxiosResponse<RecruitmentDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
   const response = await axios.post(url, recruitmentData, { withCredentials: true });
 
+  return response;
+}
+
+export async function putRecruitment(id: string, recruitment: Partial<RecruitmentDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
+  const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
   return response;
 }

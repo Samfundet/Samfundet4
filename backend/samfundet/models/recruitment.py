@@ -25,6 +25,3 @@ class Recruitment(models.Model):
     reprioritization_deadline_for_applicant = models.DateTimeField(help_text='Before allocation meeting')
     reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
     organization = models.CharField(max_length=10, choices=ORGANIZATION_CHOICES, help_text='Organization')
-
-    class Meta:
-        unique_together = ('organization', )

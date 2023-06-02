@@ -1,0 +1,117 @@
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { SamfundetLogoSpinner } from '~/Components';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
+import { getRecruitment, postRecruitment, putRecruitment } from '~/api';
+import { RecruitmentDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import { utcTimestampToLocal } from '~/utils';
+import styles from './RecruitmentFormAdminPage.module.scss';
+
+export function RecruitmentFormAdminPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  // Form data
+  const { id } = useParams();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>({
+    name_nb: 'Nytt opptak',
+    name_en: 'New recruitment',
+  });
+
+  const organizationOptions: DropDownOption<string>[] = [
+    { value: 'samfundet', label: 'Samfundet' },
+    { value: 'uka', label: 'UKA' },
+    { value: 'isfit', label: 'ISFiT' },
+  ];
+
+  // Fetch data if edit mode.
+  useEffect(() => {
+    if (id) {
+      getRecruitment(id)
+        .then((data) => {
+          setRecruitment(data.data);
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          // TODO add error pop up message?
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.admin_recruitment);
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(data);
+        });
+    } else {
+      setShowSpinner(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const initialData: Partial<RecruitmentDto> = {
+    name_nb: recruitment?.name_nb,
+    name_en: recruitment?.name_en,
+    visible_from: utcTimestampToLocal(recruitment?.visible_from),
+    actual_application_deadline: utcTimestampToLocal(recruitment?.actual_application_deadline),
+    shown_application_deadline: utcTimestampToLocal(recruitment?.shown_application_deadline),
+    reprioritization_deadline_for_applicant: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_applicant),
+    reprioritization_deadline_for_groups: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_groups),
+    organization: recruitment?.organization,
+  };
+
+  // Loading.
+  if (showSpinner) {
+    return (
+      <div className={styles.spinner}>
+        <SamfundetLogoSpinner />
+      </div>
+    );
+  }
+
+  function handleOnSubmit(data: RecruitmentDto) {
+    if (id) {
+      // Update page.
+      putRecruitment(id, data)
+        .then(() => {
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
+      navigate(ROUTES.frontend.admin_information);
+    } else {
+      // Post new page.
+      postRecruitment(data)
+        .then(() => {
+          navigate(ROUTES.frontend.admin_recruitment);
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
+    }
+  }
+
+  return (
+    <div className={styles.wrapper}>
+      <SamfForm<RecruitmentDto> onSubmit={handleOnSubmit} initialData={initialData} submitText="submit">
+        <SamfFormField field="name_nb" type="text" label={'placeholder'} />
+        <SamfFormField field="name_en" type="text" label={'placeholder'} />
+        <SamfFormField field="visible_from" type="datetime" label={'placeholder'} />
+        <SamfFormField field="actual_application_deadline" type="datetime" label={'placeholder'} />
+        <SamfFormField field="shown_application_deadline" type="datetime" label={'placeholder'} />
+        <SamfFormField field="reprioritization_deadline_for_applicant" type="datetime" label={'placeholder'} />
+        <SamfFormField field="reprioritization_deadline_for_groups" type="datetime" label={'placeholder'} />
+        <SamfFormField field="organization" type="options" label={'placeholder'} options={organizationOptions} />
+      </SamfForm>
+    </div>
+  );
+}

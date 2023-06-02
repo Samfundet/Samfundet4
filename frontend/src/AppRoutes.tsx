@@ -37,6 +37,7 @@ import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
+import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
 
@@ -98,6 +99,8 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
         {/* Recruitment */}
         <Route path={ROUTES.frontend.admin_recruitment} element={<RecruitmentAdminPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_create} element={<RecruitmentFormAdminPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_edit} element={<RecruitmentFormAdminPage />} />
       </Route>
       {/* 
         Info pages

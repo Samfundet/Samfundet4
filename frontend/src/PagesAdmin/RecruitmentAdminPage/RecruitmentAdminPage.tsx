@@ -61,8 +61,8 @@ export function RecruitmentAdminPage() {
             onEdit={() => {
               navigate(
                 reverse({
-                  pattern: ROUTES.frontend.admin_information_edit,
-                  urlParams: { slugField: element.id },
+                  pattern: ROUTES.frontend.admin_recruitment_edit,
+                  urlParams: { id: element.id },
                 }),
               );
             }}
@@ -75,7 +75,7 @@ export function RecruitmentAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_recruitment_create)}>
       {t(KEY.common_create)} {t(KEY.information_page_short)}
     </Button>
   );
