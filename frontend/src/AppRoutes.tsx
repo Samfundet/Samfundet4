@@ -14,6 +14,7 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
+  RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
 } from '~/Pages';
@@ -65,6 +66,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.event} element={<EventPage />} />
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
+        <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
       </Route>
       {/* 
             ADMIN ROUTES

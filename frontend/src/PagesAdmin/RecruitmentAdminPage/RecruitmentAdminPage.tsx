@@ -43,20 +43,18 @@ export function RecruitmentAdminPage() {
   ];
 
   const data = recruitments.map(function (element) {
-    const pageUrl = reverse({
-      pattern: ROUTES.frontend.information_page_detail,
-      urlParams: { slugField: element.id },
-    });
-
     return [
-      { content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>, value: pageUrl },
+      {
+        content: <Link url={ROUTES.frontend.recruitment}>{dbT(element, 'name')}</Link>,
+        value: ROUTES.frontend.recruitment,
+      },
       element.organization,
       `${getFormattedDate(element.visible_from)}-${getFormattedDate(element.reprioritization_deadline_for_groups)}`,
       {
         content: (
           <CrudButtons
             onView={() => {
-              navigate(pageUrl);
+              navigate(ROUTES.frontend.recruitment);
             }}
             onEdit={() => {
               navigate(
@@ -72,12 +70,14 @@ export function RecruitmentAdminPage() {
     ];
   });
 
-  const title = t(KEY.admin_information_manage_title);
-  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const title = t(KEY.recruitment_administrate);
+  const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_recruitment_create)}>
-      {t(KEY.common_create)} {t(KEY.information_page_short)}
-    </Button>
+    <>
+      <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_recruitment_create)}>
+        {t(KEY.common_create)} {t(KEY.common_recruitment)}
+      </Button>
+    </>
   );
 
   return (

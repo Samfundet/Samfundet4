@@ -27,9 +27,9 @@ export function RecruitmentFormAdminPage() {
   });
 
   const organizationOptions: DropDownOption<string>[] = [
-    { value: 'samfundet', label: 'Samfundet' },
-    { value: 'uka', label: 'UKA' },
-    { value: 'isfit', label: 'ISFiT' },
+    { value: 'samfundet', label: 'samfundet' },
+    { value: 'uka', label: 'uka' },
+    { value: 'isfit', label: 'isfit' },
   ];
 
   // Fetch data if edit mode.
@@ -65,6 +65,8 @@ export function RecruitmentFormAdminPage() {
     organization: recruitment?.organization,
   };
 
+  const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
+
   // Loading.
   if (showSpinner) {
     return (
@@ -85,7 +87,7 @@ export function RecruitmentFormAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         });
-      navigate(ROUTES.frontend.admin_information);
+      navigate(ROUTES.frontend.admin_recruitment);
     } else {
       // Post new page.
       postRecruitment(data)
@@ -100,17 +102,39 @@ export function RecruitmentFormAdminPage() {
     }
   }
 
+  // TODO: Add validation for the dates
   return (
     <div className={styles.wrapper}>
-      <SamfForm<RecruitmentDto> onSubmit={handleOnSubmit} initialData={initialData} submitText="submit">
-        <SamfFormField field="name_nb" type="text" label={'placeholder'} />
-        <SamfFormField field="name_en" type="text" label={'placeholder'} />
-        <SamfFormField field="visible_from" type="datetime" label={'placeholder'} />
-        <SamfFormField field="actual_application_deadline" type="datetime" label={'placeholder'} />
-        <SamfFormField field="shown_application_deadline" type="datetime" label={'placeholder'} />
-        <SamfFormField field="reprioritization_deadline_for_applicant" type="datetime" label={'placeholder'} />
-        <SamfFormField field="reprioritization_deadline_for_groups" type="datetime" label={'placeholder'} />
-        <SamfFormField field="organization" type="options" label={'placeholder'} options={organizationOptions} />
+      <SamfForm<RecruitmentDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
+        <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
+        <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
+        <SamfFormField field="visible_from" type="datetime" label={t(KEY.recruitment_visible_from) ?? ''} />
+        <SamfFormField
+          field="actual_application_deadline"
+          type="datetime"
+          label={t(KEY.actual_application_deadlin) ?? ''}
+        />
+        <SamfFormField
+          field="shown_application_deadline"
+          type="datetime"
+          label={t(KEY.shown_application_deadline) ?? ''}
+        />
+        <SamfFormField
+          field="reprioritization_deadline_for_applicant"
+          type="datetime"
+          label={t(KEY.reprioritization_deadline_for_applicant) ?? ''}
+        />
+        <SamfFormField
+          field="reprioritization_deadline_for_groups"
+          type="datetime"
+          label={t(KEY.reprioritization_deadline_for_groups) ?? ''}
+        />
+        <SamfFormField
+          field="organization"
+          type="options"
+          label={t(KEY.recruitment_organization) ?? ''}
+          options={organizationOptions}
+        />
       </SamfForm>
     </div>
   );

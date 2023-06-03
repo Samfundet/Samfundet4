@@ -71,6 +71,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_required]: 'Påkrevd',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_norwegian]: 'Norsk',
+  [KEY.common_recruitment]: 'Opptak',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
@@ -125,7 +126,13 @@ export const nb: Record<KeyValues, string> = {
 
   // Recruitment
   [KEY.recruitment_duration]: 'Varighet',
+  [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
+  [KEY.shown_application_deadline]: 'Vist søknadsfrist',
+  [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
+  [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.recruitment_administrate]: 'Administrate recruitement',
+  [KEY.reprioritization_deadline_for_applicant]: 'Omprioriterinsfrist',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -241,6 +248,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_description]: 'Description',
   [KEY.common_information]: 'Information',
+  [KEY.common_recruitment]: 'Recruitement',
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'About Samfundet',
@@ -291,6 +299,12 @@ export const en: Record<KeyValues, string> = {
   // Recruitment
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_organization]: 'Organization',
+  [KEY.recruitment_visible_from]: 'Visible from',
+  [KEY.actual_application_deadlin]: 'Actual deadline',
+  [KEY.shown_application_deadline]: 'Displayed deadline',
+  [KEY.recruitment_administrate]: 'Administrate recruitement',
+  [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
+  [KEY.reprioritization_deadline_for_groups]: 'Group Reprioritization deadline',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
