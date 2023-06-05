@@ -11,7 +11,7 @@ from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.general import User, Image
+from samfundet.models.general import User, Image, InformationPage
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -163,3 +163,10 @@ def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: Billig
     fixture_event.billig_id = fixture_billig_event.id
     fixture_event.save()
     yield fixture_event, fixture_billig_event
+
+
+@pytest.fixture
+def fixture_informationpage() -> Iterator[InformationPage]:
+    informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
+    yield informationpage
+    informationpage.delete()
