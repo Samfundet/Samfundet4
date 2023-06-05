@@ -4,26 +4,37 @@
 
 from __future__ import annotations
 
-import random
 import re
-from datetime import time, timedelta
+import random
 from typing import TYPE_CHECKING
+from datetime import time, timedelta
 
-from django.contrib.auth.models import AbstractUser
+from notifications.base.models import AbstractNotification
+
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import gettext as _
 from guardian.shortcuts import assign_perm
+from django.utils.translation import gettext as _
 
 from root.utils import permissions
+
+from .utils.fields import LowerCaseField
 
 if TYPE_CHECKING:
     from typing import Any, Optional
     from django.db.models import Model
 
 
+class Notification(AbstractNotification):
+
+    class Meta(AbstractNotification.Meta):
+        abstract = False
+
+
 class Tag(models.Model):
     # TODO make name case-insensitive
+    # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
@@ -71,16 +82,10 @@ class Image(models.Model):
         return f'{self.title}'
 
 
-class UsernameField(models.CharField):
-
-    def to_python(self, value: str) -> str:
-        return super().to_python(value.lower())
-
-
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
-    username = UsernameField(
+    username = LowerCaseField(
         _('username'),
         max_length=150,
         unique=True,
@@ -217,6 +222,9 @@ class ClosedPeriod(models.Model):
 
 # GANGS ###
 class GangType(models.Model):
+    """
+    Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
+    """
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
@@ -234,7 +242,7 @@ class GangType(models.Model):
 class Gang(models.Model):
     name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
-    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
+    abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
@@ -243,6 +251,15 @@ class Gang(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # Gang related permission groups
+    gang_leader = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
+    event_admin = models.OneToOneField(
+        Group, related_name='gang_as_event_admin', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
+    recruitment_admin = models.OneToOneField(
+        Group, related_name='gang_as_recruitment_admin', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     class Meta:
         verbose_name = 'Gang'
@@ -255,7 +272,7 @@ class Gang(models.Model):
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=False,
+        blank=True,
         null=False,
         unique=True,
         primary_key=True,
@@ -485,6 +502,29 @@ class Booking(models.Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class Infobox(models.Model):
+    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
+    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
+
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Infoboks hexcolor eller css color-constant')
+    url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Infoboks bilde')
+
+    class Meta:
+        verbose_name = 'Infoboks'
+        verbose_name_plural = 'Infobokser'
+
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
+
+    def __str__(self) -> str:
+        return f'{self.title_nb}'
 
 
 class TextItem(models.Model):

@@ -192,7 +192,16 @@ AUTHENTICATION_BACKENDS += [
 INSTALLED_APPS += [
     'admin_auto_filters',
 ]
+
 ### End: admin_auto_filters ###
+
+### django-notifications-hq ###
+# https://pypi.org/project/django-notifications-hq/
+INSTALLED_APPS += [
+    'notifications',
+]
+NOTIFICATIONS_NOTIFICATION_MODEL = 'samfundet.Notification'
+### End: django-notifications-hq ###
 
 ################## LOGGING ##################
 

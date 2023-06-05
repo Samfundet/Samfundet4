@@ -47,6 +47,7 @@ export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 
 export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
+export const CYPRESS_BACKEND_DOMAIN = import.meta.env.VITE_CYPRESS_BACKEND_DOMAIN;
 
 /**
  * Venues

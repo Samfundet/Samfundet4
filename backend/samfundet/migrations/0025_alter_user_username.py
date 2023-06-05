@@ -4,6 +4,7 @@ import django.contrib.auth.validators
 from django.db import migrations
 import samfundet.models.general
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -14,6 +15,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='username',
-            field=samfundet.models.general.UsernameField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username'),
+            field=samfundet.models.general.LowerCaseField(
+                error_messages={'unique': 'A user with that username already exists.'},
+                help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
+                max_length=150,
+                unique=True,
+                validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
+                verbose_name='username'
+            ),
         ),
     ]

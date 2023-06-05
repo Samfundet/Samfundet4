@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -200,6 +200,7 @@ class GangTypeView(ModelViewSet):
 
 
 class InformationPageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
@@ -332,3 +333,60 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class AssignGroupView(APIView):
+    """
+     Assigns a user to a group.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.add(group)
+        else:
+            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
+
+    def delete(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.remove(group)
+        else:
+            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)

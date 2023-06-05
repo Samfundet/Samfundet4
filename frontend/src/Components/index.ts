@@ -22,6 +22,7 @@ export { Link } from './Link';
 export { List } from './List';
 export { Modal } from './Modal';
 export { Navbar } from './Navbar';
+export { NotificationBadge } from './NotificationBadge';
 export { OpeningHours } from './OpeningHours';
 export { Page } from './Page';
 export { PermissionRoute } from './PermissionRoute';
