@@ -77,6 +77,7 @@ export const KEY = {
   common_contact: 'common_contact',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
+  common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
   common_volunteer: 'common_volunteer',
@@ -141,6 +142,8 @@ export const KEY = {
   actual_application_deadlin: 'actual_application_deadline',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
+  recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
 
   // Admin:
   admin_organizer: 'admin_organizer',

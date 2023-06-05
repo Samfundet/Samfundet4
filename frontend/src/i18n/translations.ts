@@ -69,6 +69,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
+  [KEY.common_overview]: 'Oversikt',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_norwegian]: 'Norsk',
   [KEY.common_recruitment]: 'Opptak',
@@ -133,6 +134,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
+  [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
+  [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -238,6 +241,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_english]: 'English',
   [KEY.common_contact]: 'Contact',
   [KEY.common_password]: 'password',
+  [KEY.common_overview]: 'Oversikt',
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
@@ -305,6 +309,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_administrate]: 'Administrate recruitment',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
+  [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
+  [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
