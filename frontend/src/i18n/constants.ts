@@ -134,6 +134,7 @@ export const KEY = {
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
   // Recruitment
+  recruitment_position: 'recruitment_position',
   recruitment_duration: 'recruitment_duration',
   recruitment_organization: 'recruitment_organization',
   recruitment_visible_from: 'recruitment_visible_from',

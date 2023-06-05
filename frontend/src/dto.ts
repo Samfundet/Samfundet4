@@ -318,7 +318,7 @@ export type RecruitmentPositionDto = {
   default_admission_letter_nb: string;
   default_admission_letter_en: string;
 
-  gang: GangDto;
+  gang: string;
   recruitment: RecruitmentDto;
 
   tags: string;

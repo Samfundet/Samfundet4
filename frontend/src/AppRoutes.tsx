@@ -31,6 +31,7 @@ import {
   InformationFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
@@ -105,6 +106,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_recruitment_create} element={<RecruitmentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_recruitment_edit} element={<RecruitmentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_recruitment_gang_overview} element={<RecruitmentGangOverviewPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_gang_position_overview} element={<RecruitmentGangAdminPage />} />
       </Route>
       {/* 
         Info pages

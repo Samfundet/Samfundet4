@@ -126,6 +126,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.navbar_nybygg]: 'Nybygg',
 
   // Recruitment
+  [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
@@ -301,6 +302,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.navbar_map]: 'Map and venues',
 
   // Recruitment
+  [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_organization]: 'Organization',
   [KEY.recruitment_visible_from]: 'Visible from',
