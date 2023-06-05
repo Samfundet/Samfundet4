@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -6,20 +6,26 @@ import { useAuthContext } from '~/AuthContext';
 import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getUser, login } from '~/api';
+import { getUser, register } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './LoginPage.module.scss';
+import styles from './SignUpPage.module.scss';
 
-export function LoginPage() {
+export function SignUpPage() {
   const { t } = useTranslation();
   const [loginFailed, setLoginFailed] = useState(false);
-  const { setUser } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
 
-  function handleLogin(formData: Record<string, string>) {
-    login(formData['name'], formData['password'])
+  useEffect(() => {
+    if (user !== undefined) {
+      navigate(ROUTES.frontend.home);
+    }
+  }, [user]);
+
+  function handleRegistration(formData: Record<string, string>) {
+    register(formData['username'], formData['firstname'], formData['lastname'], formData['password'])
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser().then((user) => {
@@ -53,17 +59,24 @@ export function LoginPage() {
           ></Alert>
         )}
         <div className={styles.content_container}>
-          <SamfForm onSubmit={handleLogin} submitText={t(KEY.common_login) ?? ''}>
-            <h1 className={styles.header_text}>{t(KEY.loginpage_internal_login)}</h1>
-            <SamfFormField field="name" type="text" label={t(KEY.loginpage_email_placeholder) ?? ''} />
-            <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
+          <SamfForm onSubmit={handleRegistration} submitText={t(KEY.common_register) ?? ''}>
+            <h1 className={styles.header_text}>{t(KEY.loginpage_register)}</h1>
+            <SamfFormField
+              required={true}
+              field="username"
+              type="text"
+              label={t(KEY.loginpage_email_placeholder) ?? ''}
+            />
+            <SamfFormField required={true} field="firstname" type="text" label={t(KEY.common_firstname) ?? ''} />
+            <SamfFormField required={true} field="lastname" type="text" label={t(KEY.common_lastname) ?? ''} />
+            <SamfFormField required={true} field="password" type="password" label={t(KEY.common_password) ?? ''} />
+            <SamfFormField
+              required={true}
+              field="password_repeat"
+              type="password"
+              label={t(KEY.common_repeat) + ' ' + t(KEY.common_password) ?? ''}
+            />
           </SamfForm>
-          <Link to={ROUTES.frontend.signup} className={styles.link}>
-            {t(KEY.loginpage_register)}
-          </Link>
-          <Link to={ROUTES.frontend.signup} className={styles.link}>
-            {t(KEY.loginpage_forgotten_password)}
-          </Link>
         </div>
       </div>
     </Page>

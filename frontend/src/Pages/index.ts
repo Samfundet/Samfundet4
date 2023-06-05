@@ -14,3 +14,4 @@ export { LychePage } from './LychePage';
 export { NotFoundPage } from './NotFoundPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';
+export { SignUpPage } from './SignUpPage';

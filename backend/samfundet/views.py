@@ -52,6 +52,7 @@ from .serializers import (
     GroupSerializer,
     ProfileSerializer,
     BookingSerializer,
+    RegisterSerializer,
     TextItemSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
@@ -274,6 +275,25 @@ class LogoutView(APIView):
 
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+
+@method_decorator(csrf_protect, 'dispatch')
+class RegisterView(APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request=request, user=user)
+        new_csrf_token = get_token(request=request)
+
+        return Response(
+            status=status.HTTP_202_ACCEPTED,
+            data=new_csrf_token,
+            headers={XCSRFTOKEN: new_csrf_token},
+        )
 
 
 class UserView(APIView):
