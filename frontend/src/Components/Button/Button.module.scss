@@ -1,14 +1,22 @@
 /* stylelint-disable declaration-no-important */
 @import 'src/constants';
 
+@import 'src/mixins';
+
 .button {
+  @include flex-row;
+  gap: 1em;
   border: none;
   cursor: pointer;
   border-radius: 0.25em;
   transition: 0.15s;
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
+  justify-content: center;
 
   &:disabled {
+    opacity: 0.5;
+    background-color: $grey-3;
+    color: $grey-1;
     cursor: not-allowed;
   }
 
@@ -106,4 +114,15 @@
 
 .rounded {
   border-radius: 10000px;
+}
+
+.pure {
+  background-color: transparent;
+  color: inherit;
+  border-width: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
 }

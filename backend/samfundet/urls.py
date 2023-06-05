@@ -1,9 +1,9 @@
 # imports
+from django.urls import path, include
 from rest_framework import routers
 
-from django.urls import path, include
-
 from . import views
+
 # End: imports -----------------------------------------------------------------
 
 router = routers.DefaultRouter()
@@ -26,6 +26,7 @@ router.register('food-category', views.FoodCategoryView, 'food_category')
 router.register('booking', views.BookingView, 'booking')
 router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
+router.register('key-value', views.KeyValueView, 'key_value')
 
 app_name = 'samfundet'
 
@@ -39,8 +40,7 @@ urlpatterns = [
     path('users/', views.AllUsersView.as_view(), name='users'),
     path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
-    path('events/form/', views.EventFormView.as_view(), name='eventsform'),
-    path('gangs/form/', views.GangFormView.as_view(), name='gangform'),
-    path('saksdokument/form/', views.SaksdokumentFormView.as_view(), name='saksdokumentform'),
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
+    path('home/', views.HomePageView().as_view(), name='home'),
+    path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
 ]

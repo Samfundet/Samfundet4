@@ -42,11 +42,6 @@ Usage:
 }
 
 // Up:
-@mixin for-mobile-up {
-  @media (min-width: $mobile-bp-lower) {
-    @content;
-  }
-}
 
 @mixin for-tablet-up {
   @media (min-width: $tablet-bp-lower) {
@@ -130,18 +125,50 @@ Usage:
 }
 /* End: Spacing classes */
 
-
 /* Theme mixins */
-/* Use THEME constants */
+
 @mixin theme-dark {
-  body:global(.theme-dark) & {
+  :global([#{$theme-key}='#{$theme-dark}']) & {
     @content;
   }
 }
 
-
 @mixin theme-light {
-  body:global(.theme-light) & {
+  :global([#{$theme-key}='#{$theme-light}']) & {
     @content;
   }
+}
+
+/* Utility mixins */
+
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-row-center {
+  @include flex-row;
+  justify-content: center;
+}
+
+@mixin rounded {
+  border-radius: 1em;
+}
+
+@mixin rounded-light {
+  border-radius: 0.75em;
+}
+
+@mixin rounded-heavy {
+  border-radius: 1.5em;
+}
+
+@mixin rounded-full {
+  border-radius: 1000000px;
+}
+
+@mixin shadow-light {
+  box-shadow: 0 0 0.5em 0.1em rgba(0, 0, 0, 0.05);
 }

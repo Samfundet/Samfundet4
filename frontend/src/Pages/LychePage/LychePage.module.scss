@@ -1,23 +1,74 @@
+@import 'src/constants';
+
 @import 'src/mixins';
 
-// Make a grid with 3 columns where items are centered and aligned.
-// Items fills each column before wrapping onto another.
-.wrapper {
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
-  align-content: center;
-  gap: 10px;
-  margin: 20px auto;
-
-  @include for-tablet-up {
-    width: 90vw;
-    height: 70vh;
+.content_container {
+  flex-direction: row;
+  background-color: $black;
+  z-index: 10;
+  @include for-mobile-down {
+    padding: 0%;
   }
 }
 
-// Each button takes less than 1/3 of parent to create columns.
-.btn {
-  width: 30%;
-  height: fit-content;
+.image_container {
+  width: 100vw;
+  height: 100vh;
+  z-index: 30;
+  display: flex;
+  object-fit: cover;
+  overflow: hidden;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  @include for-mobile-down {
+    align-items: center;
+  }
+}
+
+.background_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 30;
+  overflow: hidden;
+  position: absolute;
+}
+
+.card_container {
+  padding-top: 1.5em;
+}
+
+.opening_hour_container {
+  width: 20em;
+  gap: 0.8em;
+  max-width: calc(100% - 2em);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $grey-3;
+  border-radius: 0.5em;
+  padding: 0.5em 1.5em;
+  z-index: 35;
+  background-color: $black;
+  margin-right: 2em;
+  margin-bottom: 2em;
+  @include for-mobile-down {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+}
+
+.opening_hour_header {
+  color: $orange-light;
+}
+
+.hour_item_container {
+  color: $white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hour_item {
+  color: $white;
+  display: inline-block;
 }

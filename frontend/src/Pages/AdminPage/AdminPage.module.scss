@@ -2,32 +2,18 @@
 
 @import 'src/constants';
 
-.wrapper {
-  margin: 1em 1em;
-}
-
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
+.container {
+  padding-top: 2em;
 }
 
 .header {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  text-transform: uppercase;
-  margin: 1em;
-  .headerText {
-    font-size: 2em;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 10px;
-    color: $red-samf;
-  }
+  align-items: center;
+  text-transform: capitalize;
+  margin-bottom: .5em;
+  font-size: 1.5em;
+  font-weight: 700;
+  gap: .5em;
 }
 
 .wisewords {
@@ -37,22 +23,19 @@
   opacity: 0.5;
 }
 
-.faq_button {
-  border-color: $grey-1;
-  padding: 0.3em 0.8em;
-  text-transform: uppercase;
-  margin-top: 1em;
-  .faq_text {
-    margin: 0;
-    font-size: .9em;
-    color: inherit;
-  }
+.preferences_header {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 1.5em;
+  font-weight: 700;
 }
 
-.applets {
-  margin-top: 1em;
+.preference_row {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: .5em;
+}
+
+.label {
+  width: 15em;
 }

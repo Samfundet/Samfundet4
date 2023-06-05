@@ -1,8 +1,11 @@
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
-import { Alert, Button, InputField } from '~/Components';
+import { Alert, Page } from '~/Components';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, login } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -11,69 +14,55 @@ import styles from './LoginPage.module.scss';
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
   const { setUser } = useAuthContext();
   const navigate = useNavigate();
 
-  function handleLogin(event: SyntheticEvent) {
-    event.preventDefault();
-    login(name, password)
+  function handleLogin(formData: Record<string, string>) {
+    login(formData['name'], formData['password'])
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
-          getUser()
-            .then((user) => {
-              setUser(user);
-            })
-            .catch();
+          getUser().then((user) => {
+            setUser(user);
+          });
+
           navigate(ROUTES.frontend.home);
         } else {
           setLoginFailed(true);
         }
       })
-      .catch(() => {
+      .catch((error) => {
         setLoginFailed(true);
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
       });
   }
 
   return (
-    <div className={styles.container}>
-      {loginFailed && (
-        <Alert
-          message="Login failed"
-          type="error"
-          align="center"
-          closable={true}
-          onClose={() => {
-            setLoginFailed(false);
-          }}
-        ></Alert>
-      )}
-      <div className={styles.content_container}>
-        <h1 className={styles.header_text}>{t(KEY.login_internal_login)}</h1>
-        <form onSubmit={handleLogin}>
-          <InputField
-            className={styles.input_field}
-            placeholder={t(KEY.login_email_placeholder)}
-            onChange={(e) => setName(e ? e.currentTarget.value : '')}
-            value={name}
-          />
-          <InputField
-            className={styles.input_field}
-            placeholder={t(KEY.common_password)}
-            type="password"
-            onChange={(e) => setPassword(e?.currentTarget.value || '')}
-            value={password}
-          />
-          <Button className={styles.login_button} theme="samf" type="submit">
-            {t(KEY.common_login)}
-          </Button>
-        </form>
-        <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>
-          {t(KEY.login_forgotten_password)}
-        </Link>
+    <Page>
+      <div className={styles.login_container}>
+        {loginFailed && (
+          <Alert
+            message="Login failed"
+            type="error"
+            align="center"
+            closable={true}
+            onClose={() => {
+              setLoginFailed(false);
+            }}
+          ></Alert>
+        )}
+        <div className={styles.content_container}>
+          <SamfForm onSubmit={handleLogin} submitText={t(KEY.common_login) ?? ''}>
+            <h1 className={styles.header_text}>{t(KEY.loginpage_internal_login)}</h1>
+            <SamfFormField field="name" type="text" label={t(KEY.loginpage_email_placeholder) ?? ''} />
+            <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
+          </SamfForm>
+          <Link to={ROUTES.frontend.signup} className={styles.forgotten_password}>
+            {t(KEY.loginpage_forgotten_password)}
+          </Link>
+        </div>
       </div>
-    </div>
+    </Page>
   );
 }

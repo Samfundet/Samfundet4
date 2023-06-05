@@ -1,26 +1,27 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-type types = 'text' | 'number' | 'email' | 'password';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'time';
 
-type InputFieldProps = {
+type InputFieldProps<T> = {
   children?: Children;
-  className?: string;
   labelClassName?: string;
   inputClassName?: string;
-  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: T) => void;
   placeholder?: string | null;
-  type?: types;
+  type?: InputFieldType;
   disabled?: boolean;
   value?: string;
-  error?: string;
+  error?: string | boolean;
   helpText?: string;
+  icon?: string;
 };
 
-export function InputField({
+export function InputField<T>({
   children,
-  className,
   labelClassName,
   inputClassName,
   onChange,
@@ -30,23 +31,41 @@ export function InputField({
   error,
   helpText,
   type = 'text',
-}: InputFieldProps) {
+  icon,
+}: InputFieldProps<T>) {
+  function handleChange(e?: ChangeEvent<HTMLInputElement>) {
+    let value: string | number | undefined = e?.currentTarget.value ?? '';
+    if (type === 'number') {
+      if (value.length > 0) {
+        value = Number.parseFloat(value as string);
+      } else {
+        value = undefined;
+      }
+    }
+    onChange?.(value as T);
+  }
   return (
-    <div className={className}>
-      <label className={classNames(styles.label, labelClassName)}>
-        {children}
-        <input
-          onChange={onChange}
-          className={classNames(styles.input_field, inputClassName, error && error.length > 0 && styles.error)}
-          placeholder={placeholder || ''}
-          disabled={disabled}
-          type={type}
-          value={value}
-        />
-        {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}
-        {helpText && <p className={styles.helpText}>{helpText}</p>}
-      </label>
+    <label className={classNames(styles.label, disabled && styles.disabled_label, labelClassName)}>
+      {children}
+      <input
+        onChange={handleChange}
+        className={classNames(styles.input_field, inputClassName, error && styles.error)}
+        placeholder={placeholder || ''}
+        disabled={disabled}
+        type={type}
+        value={value}
+      />
+      {icon && (
+        <div className={styles.icon_container}>
+          <Icon icon={icon} width={24} className={styles.field_icon} />
+        </div>
+      )}
+      {error && (error as string).length > 0 && (
+        <div className={styles.error_container}>
+          <div className={styles.error_text}>{error}</div>
+        </div>
+      )}
       {helpText && <p className={styles.helpText}>{helpText}</p>}
-    </div>
+    </label>
   );
 }

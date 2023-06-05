@@ -24,16 +24,63 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
+                (
+                    'is_superuser',
+                    models.BooleanField(
+                        default=False,
+                        help_text='Designates that this user has all permissions without explicitly assigning them.',
+                        verbose_name='superuser status'
+                    )
+                ),
+                (
+                    'username',
+                    models.CharField(
+                        error_messages={'unique': 'A user with that username already exists.'},
+                        help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
+                        max_length=150,
+                        unique=True,
+                        validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
+                        verbose_name='username'
+                    )
+                ),
                 ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
                 ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
                 ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
+                (
+                    'is_staff',
+                    models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')
+                ),
+                (
+                    'is_active',
+                    models.BooleanField(
+                        default=True,
+                        help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.',
+                        verbose_name='active'
+                    )
+                ),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    'groups',
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+                        related_name='user_set',
+                        related_query_name='user',
+                        to='auth.group',
+                        verbose_name='groups'
+                    )
+                ),
+                (
+                    'user_permissions',
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text='Specific permissions for this user.',
+                        related_name='user_set',
+                        related_query_name='user',
+                        to='auth.permission',
+                        verbose_name='user permissions'
+                    )
+                ),
             ],
             options={
                 'verbose_name': 'user',
@@ -103,7 +150,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='InformationPage',
             fields=[
-                ('slug_field', models.SlugField(help_text='Primary key, this field will identify the object and be used in the URL.', max_length=64, primary_key=True, serialize=False, unique=True)),
+                (
+                    'slug_field',
+                    models.SlugField(
+                        help_text='Primary key, this field will identify the object and be used in the URL.',
+                        max_length=64,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True
+                    )
+                ),
                 ('title_no', models.CharField(blank=True, max_length=64, null=True, verbose_name='Tittel (norsk)')),
                 ('text_no', models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')),
                 ('title_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Tittel (engelsk)')),
@@ -121,7 +177,17 @@ class Migration(migrations.Migration):
                 ('title_no', models.CharField(blank=True, max_length=80, null=True, verbose_name='Tittel (Norsk)')),
                 ('title_en', models.CharField(blank=True, max_length=80, null=True, verbose_name='Tittel (Engelsk)')),
                 ('publication_date', models.DateTimeField(blank=True, null=True)),
-                ('category', models.CharField(choices=[('FS_REFERAT', 'FS-Referat'), ('STYRET', 'Styret'), ('RADET', 'Rådet'), ('ARSBERETNINGER', 'Årsberetninger, regnskap og budsjettkunngjøringer')], default='FS_REFERAT', max_length=25)),
+                (
+                    'category',
+                    models.CharField(
+                        choices=[
+                            ('FS_REFERAT', 'FS-Referat'), ('STYRET', 'Styret'), ('RADET', 'Rådet'),
+                            ('ARSBERETNINGER', 'Årsberetninger, regnskap og budsjettkunngjøringer')
+                        ],
+                        default='FS_REFERAT',
+                        max_length=25
+                    )
+                ),
                 ('file', models.FileField(blank=True, null=True, upload_to='uploads/saksdokument/')),
             ],
             options={
@@ -165,7 +231,10 @@ class Migration(migrations.Migration):
             name='UserPreference',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('theme', models.CharField(blank=True, choices=[('theme-light', 'Light'), ('theme-dark', 'Dark')], default='theme-light', max_length=30, null=True)),
+                (
+                    'theme',
+                    models.CharField(blank=True, choices=[('theme-light', 'Light'), ('theme-dark', 'Dark')], default='theme-light', max_length=30, null=True)
+                ),
                 ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -244,8 +313,23 @@ class Migration(migrations.Migration):
                 ('abbreviation', models.CharField(blank=True, max_length=64, null=True, verbose_name='Forkortelse')),
                 ('webpage', models.URLField(blank=True, null=True, verbose_name='Nettside')),
                 ('logo', models.ImageField(blank=True, null=True, upload_to='ganglogos/', verbose_name='Logo')),
-                ('gang_type', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gangs', to='samfundet.gangtype', verbose_name='Gruppetype')),
-                ('info_page', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='samfundet.informationpage', verbose_name='Infoside')),
+                (
+                    'gang_type',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='gangs',
+                        to='samfundet.gangtype',
+                        verbose_name='Gruppetype'
+                    )
+                ),
+                (
+                    'info_page',
+                    models.ForeignKey(
+                        blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='samfundet.informationpage', verbose_name='Infoside'
+                    )
+                ),
             ],
             options={
                 'verbose_name': 'Gang',
@@ -269,9 +353,31 @@ class Migration(migrations.Migration):
                 ('publish_dt', models.DateTimeField(blank=True, null=True)),
                 ('host', models.CharField(blank=True, max_length=140, null=True)),
                 ('banner_image', models.ImageField(blank=True, null=True, upload_to='events/', verbose_name='Banner')),
-                ('status_group', models.CharField(blank=True, choices=[('active', 'Aktiv'), ('archived', 'Arkivert'), ('canceled', 'Avlyst')], max_length=30, null=True)),
-                ('age_group', models.CharField(blank=True, choices=[('None', 'Ingen aldersgrense'), ('EIGHTEEN', '18 år'), ('TWENTY', '20 år'), ('MIXED', '18 år (student), 20 år (ikke-student)')], max_length=30, null=True)),
-                ('price_group', models.CharField(blank=True, choices=[('INCLUDED', 'Included with entrance'), ('FREE', 'Free'), ('BILLIG', 'Paid'), ('REGISTRATION', 'Free with registration')], default='FREE', max_length=30, null=True)),
+                (
+                    'status_group',
+                    models.CharField(blank=True, choices=[('active', 'Aktiv'), ('archived', 'Arkivert'), ('canceled', 'Avlyst')], max_length=30, null=True)
+                ),
+                (
+                    'age_group',
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ('None', 'Ingen aldersgrense'), ('EIGHTEEN', '18 år'), ('TWENTY', '20 år'), ('MIXED', '18 år (student), 20 år (ikke-student)')
+                        ],
+                        max_length=30,
+                        null=True
+                    )
+                ),
+                (
+                    'price_group',
+                    models.CharField(
+                        blank=True,
+                        choices=[('INCLUDED', 'Included with entrance'), ('FREE', 'Free'), ('BILLIG', 'Paid'), ('REGISTRATION', 'Free with registration')],
+                        default='FREE',
+                        max_length=30,
+                        null=True
+                    )
+                ),
                 ('capacity', models.PositiveIntegerField(blank=True, null=True)),
                 ('event_group', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.eventgroup')),
             ],

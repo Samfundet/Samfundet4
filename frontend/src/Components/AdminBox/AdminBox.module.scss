@@ -2,43 +2,41 @@
 
 @import 'src/mixins';
 
-$background-color-dark: #1f1f1f;
+$background-color-dark: #161616;
+$top-dark: #0d0c0c;
 
 .applet {
   color: $black;
   background-color: white;
   text-align: center;
-  margin: 1.3em 1em;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.05);
-  border-radius: .75em;
-  width: 100%;
-  max-width: 360px;
+  border-radius: 0.75em;
+  flex-basis: calc(33% - 1em);
   overflow: hidden;
 
   @include for-tablet-only {
-    max-width: 600px;
+    flex-basis: calc(50% - 1em);
   }
-  
+
   @include for-mobile-only {
-    max-width: 600px;
+    flex-basis: 100%;
   }
 
   @include theme-dark {
     background-color: $background-color-dark;
     color: $white;
   }
-
 }
 
 .top {
   width: 100%;
   padding: 12px;
   padding-left: 18px;
-  padding-bottom: .75em;
+  padding-bottom: 0.75em;
   background-color: $grey-5;
 
   @include theme-dark {
-    background-color: $grey-1;
+    background-color: $top-dark;
   }
 }
 
@@ -99,7 +97,8 @@ $background-color-dark: #1f1f1f;
   flex: 1;
 }
 
-.KILROY { // TODO Could be expanded to add more pictures
+.KILROY {
+  // TODO Could be expanded to add more pictures
   background-image: url('~/assets/kilroy.png');
   background-size: cover;
   background-position: center;

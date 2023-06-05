@@ -1,0 +1,115 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+$panel-width: 14em;
+$panel-light-bg: #f6f6f6;
+$panel-light-bg-hover: #e8e8e8;
+$panel-light-border: #d7d7d7;
+$panel-dark-bg: #333333;
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  max-height: 100vh;
+  height: 100vh;
+}
+
+.panel {
+  position: fixed;
+  height: calc(100% - $navbar-height);
+  min-width: $panel-width;
+  max-width: $panel-width;
+  background-color: $panel-light-bg;
+  border-right: 1px solid $panel-light-border;
+  display: flex;
+  flex-direction: column;
+  margin-top: $navbar-height;
+  gap: .2em;
+
+  @include for-mobile-only {
+    display: none;
+  }
+
+  @include theme-dark {
+    background-color: $panel-dark-bg;
+    border-color: $black;
+  }
+}
+
+.panel_header {
+  @include flex-row;
+  font-weight: 700;
+  font-size: 1.25em;
+  padding: 0.75em;
+  padding-top: 0.5em;
+  margin-top: 0.25em;
+  gap: .5em;
+
+  @include theme-dark {
+    border-color: $grey-1;
+  }
+  
+}
+
+.category_header {
+  font-weight: 700;
+  padding-left: 1.25em;
+  padding-bottom: 0.5em;
+}
+
+.panel_item {
+  @include flex-row;
+  text-align: right;
+  gap: 1em;
+  padding: .5em .5em;
+  padding-left: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  cursor: pointer;
+  transition: .2s;
+  color: $grey-1;
+  text-decoration: none;
+  border-radius: .5em;
+  white-space: nowrap;
+
+  @include theme-dark {
+    color: $grey-4;
+  }
+  
+  &:hover {
+    text-decoration: none;
+    background-color: $panel-light-bg-hover;
+
+    @include theme-dark {
+      background-color: $grey-1;
+    }
+  }
+}
+
+.selected {
+  background-color: $blue;
+  color: white;
+  @include theme-dark {
+    background-color: $blue;
+  }
+  &:hover {
+    background-color: $blue;
+    color: white;
+  }
+}
+
+.content_wrapper {
+  flex: 1;
+  height: calc(100vh - $navbar-height);
+  margin-top: $navbar-height;
+  margin-left: calc($panel-width);
+  max-width: calc(100vw - $panel-width);
+  width: calc(100vw - $panel-width);
+  
+  @include for-mobile-only {
+    width: auto;
+    max-width: 100%;
+    margin-left: 0;
+  }
+}

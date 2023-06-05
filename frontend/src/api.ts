@@ -2,16 +2,19 @@ import axios, { AxiosResponse } from 'axios';
 import {
   ClosedPeriodDto,
   EventDto,
-  EventFormDto,
   EventGroupDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
   GangTypeDto,
+  HomePageDto,
   ImageDto,
+  ImagePostDto,
   InformationPageDto,
+  KeyValueDto,
   MenuDto,
   MenuItemDto,
+  NotificationDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -54,12 +57,30 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function putUserPreference(data: Partial<UserPreferenceDto>): Promise<unknown> {
+export async function assignUserToGroup(username: string, group_name: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__assign_group;
+  const payload = {
+    username,
+    group_name,
+  };
+  const response = await axios.post(url, payload, { withCredentials: true });
+
+  return response;
+}
+
+export async function getHomeData(): Promise<HomePageDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
+  const response = await axios.get<HomePageDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function putUserPreference(id: string | number, data: Partial<UserPreferenceDto>): Promise<unknown> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__user_preference_detail,
-      urlParams: { pk: data.id },
+      urlParams: { pk: id },
     });
   const response = await axios.put<UserPreferenceDto>(url, data, { withCredentials: true });
 
@@ -67,7 +88,7 @@ export async function putUserPreference(data: Partial<UserPreferenceDto>): Promi
 }
 
 export async function getVenues(): Promise<VenueDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_list;
   const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -80,8 +101,14 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
+export async function putVenue(id: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
+  const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
+  return response.data;
+}
+
 export async function getInformationPages(): Promise<InformationPageDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
   const response = await axios.get<InformationPageDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -104,7 +131,7 @@ export async function deleteInformationPage(slug_field: string): Promise<AxiosRe
 }
 
 export async function postInformationPage(data: InformationPageDto): Promise<InformationPageDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
   const response = await axios.post<InformationPageDto>(url, data, { withCredentials: true });
   return response.data;
 }
@@ -120,31 +147,31 @@ export async function putInformationPage(
 }
 
 export async function getEventsPerDay(): Promise<EventDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsperday });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsperday;
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getEventsUpcomming(): Promise<EventDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsupcomming });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getEvents(): Promise<EventDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function postEvent(data: EventDto): Promise<EventDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_list });
-  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
-
-  return response.data;
+export async function postEvent(data: EventDto): Promise<AxiosResponse<EventDto>> {
+  const transformed = { ...data, image_id: data.image?.id };
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
+  const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
+  return response;
 }
 
 export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
@@ -156,15 +183,7 @@ export async function putEvent(id: string | number, data: Partial<EventDto>): Pr
 export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
-
   return response;
-}
-
-export async function getEventForm(): Promise<AxiosResponse<EventFormDto>> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventsform });
-  const response = await axios.get<AxiosResponse<EventFormDto>>(url, { withCredentials: true });
-
-  return response.data;
 }
 
 export async function getEvent(pk: string | number): Promise<EventDto> {
@@ -175,14 +194,14 @@ export async function getEvent(pk: string | number): Promise<EventDto> {
 }
 
 export async function getEventGroups(): Promise<EventGroupDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__eventgroups_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventgroups_list;
   const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function getMenus(): Promise<MenuDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_list;
   const response = await axios.get<MenuDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -196,7 +215,7 @@ export async function getMenu(pk: string | number): Promise<MenuDto> {
 }
 
 export async function getMenuItems(): Promise<MenuItemDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
   const response = await axios.get<MenuItemDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -211,7 +230,7 @@ export async function getMenuItem(pk: string | number): Promise<MenuItemDto> {
 }
 
 export async function getFoodPreferences(): Promise<FoodPreferenceDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
   const response = await axios.get<FoodPreferenceDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -226,7 +245,7 @@ export async function getFoodPreference(pk: string | number): Promise<FoodPrefer
 }
 
 export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
   const response = await axios.get<FoodCategoryDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -247,7 +266,7 @@ export async function getTextItem(pk: string): Promise<TextItemDto> {
 }
 
 export async function getSaksdokumenter(): Promise<SaksdokumentDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
   const response = await axios.get<SaksdokumentDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -261,17 +280,11 @@ export async function getSaksdokument(pk: string | number): Promise<Saksdokument
   return response.data;
 }
 
-export async function getSaksdokumentForm(): Promise<AxiosResponse<{ categories: Array<Array<string>> }>> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokumentform });
-  const response = await axios.get<{ categories: Array<Array<string>> }>(url, { withCredentials: true });
-
-  return response;
-}
-
 export async function postSaksdokument(data: SaksdokumentDto): Promise<SaksdokumentDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_list });
-  const response = await axios.post<SaksdokumentDto>(url, data, { withCredentials: true });
-
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
+  const response = await axios.postForm<SaksdokumentDto>(url, data, {
+    withCredentials: true,
+  });
   return response.data;
 }
 
@@ -283,7 +296,7 @@ export async function putSaksdokument(id: string | number, data: Partial<Saksdok
 }
 
 export async function getGangList(): Promise<GangTypeDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangsorganized_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -305,7 +318,7 @@ export async function getGangs(): Promise<GangDto[]> {
 }
 
 export async function postGang(data: GangDto): Promise<GangDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangs_list;
   const response = await axios.post<GangDto>(url, data, { withCredentials: true });
 
   return response.data;
@@ -317,15 +330,8 @@ export async function putGang(id: string | number, data: Partial<GangDto>): Prom
   return response;
 }
 
-export async function getGangForm(): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangform });
-  const response = await axios.get<AxiosResponse>(url, { withCredentials: true });
-
-  return response.data;
-}
-
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
   return response.data;
 }
@@ -345,7 +351,7 @@ export async function putClosedPeriod(id: string | number, data: Partial<ClosedP
 }
 
 export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
   return response.data;
 }
@@ -358,7 +364,7 @@ export async function deleteClosedPeriod(id: string | number): Promise<AxiosResp
 }
 
 export async function getImages(): Promise<ImageDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
   const response = await axios.get<ImageDto[]>(url, { withCredentials: true });
   return response.data;
 }
@@ -369,14 +375,84 @@ export async function getImage(id: string | number): Promise<ImageDto> {
   return response.data;
 }
 
-export async function postImage(data: ImageDto): Promise<ImageDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_list });
-  const response = await axios.post<ImageDto>(url, data, { withCredentials: true });
+export async function postImage(data: ImagePostDto): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
+  const response = await axios.postForm<ImageDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
 export async function putImage(id: string | number, data: Partial<ImageDto>): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+/** Fetch all KeyValues from backend. */
+export function getKeyValues(): Promise<AxiosResponse<KeyValueDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__key_value_list;
+  const response = axios.get<KeyValueDto[]>(url);
+  return response;
+}
+
+// ############################################################
+//                       Notifications
+// ############################################################
+
+type AllNotificationsResponse = {
+  all_count: number;
+  all_list: NotificationDto[];
+};
+export function getAllNotifications(): Promise<AxiosResponse<AllNotificationsResponse>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_all_notification_list;
+  const response = axios.get<AllNotificationsResponse>(url, { withCredentials: true });
+  return response;
+}
+
+type UnreadNotificationsResponse = {
+  unread_count: number;
+  unread_list: NotificationDto[];
+};
+export function getUnreadNotifications(): Promise<AxiosResponse<UnreadNotificationsResponse>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_unread_notification_list;
+  const response = axios.get<UnreadNotificationsResponse>(url, { withCredentials: true });
+  return response;
+}
+
+export function markAllAsRead(): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__mark_all_as_read;
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+export function markAsRead(slug: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.notifications__mark_as_read,
+      urlParams: { slug },
+    });
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+export function markAsUnread(slug: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.notifications__mark_as_unread,
+      urlParams: { slug },
+    });
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+export function deleteNotification(slug: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.notifications__delete,
+      urlParams: { slug },
+    });
+  const response = axios.get(url, { withCredentials: true });
   return response;
 }

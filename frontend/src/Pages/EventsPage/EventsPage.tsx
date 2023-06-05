@@ -1,19 +1,28 @@
 import { useEffect, useState } from 'react';
-import { EventsList } from './components/EventsList';
-import { getEventsPerDay } from '~/api';
-import { Page } from '~/Components/Page';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
+import { getEventsPerDay } from '~/api';
+import { KEY } from '~/i18n/constants';
 import styles from './EventsPage.module.scss';
+import { EventsList } from './components/EventsList';
 
 export function EventsPage() {
+  const { t } = useTranslation();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   useEffect(() => {
-    getEventsPerDay().then((data) => {
-      setEvents(data);
-      setShowSpinner(false);
-    });
+    getEventsPerDay()
+      .then((data) => {
+        setEvents(data);
+        setShowSpinner(false);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (showSpinner) {
@@ -24,9 +33,5 @@ export function EventsPage() {
     );
   }
 
-  return (
-    <Page>
-      <EventsList events={events} />
-    </Page>
-  );
+  return <EventsList events={events} />;
 }

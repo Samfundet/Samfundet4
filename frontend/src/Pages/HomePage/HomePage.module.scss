@@ -5,49 +5,84 @@
 
 @import 'src/mixins';
 
-
-.container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 100vw;
-  margin: 0;
-}
-
-.logo {
-  width: 30em;
-  margin-bottom: 1em;
+.splash_container {
+  max-width: 100%;
+  min-width: 100%;
+  width: 100vw;
+  height: 100vh;
+  max-height: 45vw;
+  top: -$navbar-height;
+  position: relative;
+  overflow: hidden;
 }
 
 .splash {
+  max-width: 100%;
+  min-width: 100%;
   width: 100vw;
-  min-height: 60vh;
-  max-height: 100vh;
+  height: 100vh;
+  max-height: 45vw;
   object-fit: cover;
-  position: relative;
-  left: 0;
-  top: -$navbar-height;
-  z-index: -1;
+  position: absolute;
 
   @include for-mobile-only {
     min-height: 215px;
   }
+}
 
+.splash_second {
+  z-index: -1;
+  display: none;
+}
 
+@keyframes splash-slide-in {
+  0% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes splash-slide-out {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+}
+
+.splash_slide_in {
+  animation-name: splash-slide-in;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  transform-origin: center;
+  display: block;
+}
+
+.splash_slide_out {
+  animation-name: splash-slide-out;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
 }
 
 .splash_fade {
   width: 100vw;
-  height: 300px;
+  height: 250px;
   position: absolute;
   left: 0;
   top: 0;
   z-index: 1;
-  background: linear-gradient(
-    to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)
-  );
+  background: linear-gradient(to bottom, rgba(black, 0.6), transparent);
 
   @include for-mobile-only {
     height: 100px;
@@ -57,49 +92,5 @@
 .content {
   position: relative;
   top: -$navbar-height;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  max-width: 100%;
-}
-
-.inner_content {
-  width: 100%;
-  max-width: 800px;
-}
-
-.header {
-  font-size: 2em;
-  font-weight: 700;
-  text-align: center;
-  padding-top: 30px;
-}
-
-.button_row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.text {
-  text-align: left;
-  margin-top: 50px;
-}
-
-.button {
-  display: block;
-  margin-top: 1em;
-  padding: 1em;
-  background-color: rgb(160 48 51);
-  color: white;
-  border-radius: 0.2em;
-
-  &:hover {
-    filter: brightness(110%);
-    transform: scale(1.01);
-    transition: 0.2s;
-  }
+  // max-width: 100%; // QUESTION: Why is this needed?
 }

@@ -1,79 +1,60 @@
-import { reverse } from '~/named-urls';
 import { useEffect, useState } from 'react';
-import { getEventsUpcomming } from '~/api';
-import splash from '~/assets/banner-sample.jpg';
-import { Carousel } from '~/Components/Carousel';
-import { ContentCard } from '~/Components/ContentCard';
-import { ImageCard } from '~/Components/ImageCard';
-import { SplashHeaderBox } from '~/Components/SplashHeaderBox';
-import { EventDto } from '~/dto';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
+import { getHomeData } from '~/api';
+import { HomePageDto, HomePageElementDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
-import { ROUTES } from '~/routes';
+import { Splash } from './components/Splash/Splash';
 
 export function HomePage() {
-  const [events, setEvents] = useState<EventDto[]>([]);
+  const [homePage, setHomePage] = useState<HomePageDto>();
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getEventsUpcomming().then((events: EventDto[]) => {
-      setEvents(events);
-    });
-  }, []);
+    getHomeData()
+      .then((page: HomePageDto) => {
+        setHomePage(page);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+  }, [t]);
 
-  function eventCategories(): string[] {
-    return Array.from(new Set(events.map((e) => e.category)));
+  function renderElement(key: number, element: HomePageElementDto): Children {
+    switch (element.variation) {
+      case 'carousel': {
+        if (element.events.length > 0) return <EventCarousel key={key} element={element} />;
+        return <div key={key}></div>;
+      }
+      case 'large-card':
+        return <LargeCard key={key} element={element} />;
+    }
+    console.error(`Unknown home page element kind '${element.variation}'`);
+    return <div key={key}></div>;
   }
 
-  function eventsByCategory(category: string): Children[] {
-    const filteredEvents = events.filter((e) => e.category === category);
-    return filteredEvents.map((event) => {
-      const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
-      return (
-        <ImageCard key={event.id} title={event.title_en} date={event.start_dt} imageUrl={event.image_url} url={url} />
-      );
-    });
-  }
+  const skeleton = (
+    <>
+      <LargeCard />
+      <EventCarousel skeletonCount={6} />
+    </>
+  );
 
   return (
-    <div className={styles.container}>
-      <img src={splash} alt="Splash" className={styles.splash} />
-      <div className={styles.splash_fade}></div>
+    <div>
+      <Splash events={homePage?.splash} />
       <div className={styles.content}>
-        <SplashHeaderBox />
+        {/*<SplashHeaderBox />*/}
+        {isLoading && skeleton}
 
-        <div style={{ height: '1em' }} />
-
-        {eventCategories().map((category: string) => (
-          <Carousel key={category} header={category} spacing={1.5}>
-            {eventsByCategory(category)}
-          </Carousel>
-        ))}
-
-        {/* Below is just demo stuff until API integration is fully done */}
-
-        <ContentCard />
-
-        {['Testarr'].map((name) => (
-          <Carousel header={name} spacing={1.5} key={name}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} title={'Kultur ' + num} />
-            ))}
-          </Carousel>
-        ))}
-
-        <ContentCard />
-
-        {['Andre arrangementer', 'Flere arrangementer'].map((name) => (
-          <Carousel header={name} spacing={1.5} key={name}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <ImageCard key={num} title={'Annet ' + num} />
-            ))}
-          </Carousel>
-        ))}
-
-        <ContentCard />
-
-        <div className={styles.inner_content}></div>
+        {/* Render elements for frontpage. */}
+        {homePage?.elements.map((el, index) => renderElement(index, el))}
       </div>
     </div>
   );

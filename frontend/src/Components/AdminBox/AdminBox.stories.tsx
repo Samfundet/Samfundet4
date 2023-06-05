@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BrowserRouter } from 'react-router-dom';
 import { AdminBox } from './AdminBox';
 
 // Local component config.
@@ -9,11 +8,7 @@ export default {
 } as ComponentMeta<typeof AdminBox>;
 
 const Template: ComponentStory<typeof AdminBox> = function (args) {
-  return (
-    <BrowserRouter>
-      <AdminBox {...args} />
-    </BrowserRouter>
-  );
+  return <AdminBox {...args} />;
 };
 
 export const Basic = Template.bind({});
@@ -38,7 +33,7 @@ Info.args = {
   icon: 'material-symbols:help-outline-sharp',
   options: [
     {
-      text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjenglederen din for å få tilgang.',
+      text: 'Har du ikke tilgang til en tjeneste du burde hatt tilgang til? Spør gjengsjefen din for å få tilgang.',
       url: '',
       type: 'INFO',
     },

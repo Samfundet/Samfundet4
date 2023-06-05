@@ -1,4 +1,5 @@
 import {
+  assignUserToGroup,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
@@ -7,9 +8,7 @@ import {
   getVenues,
   login,
   logout,
-  putUserPreference,
 } from '~/api';
-import { useAuthContext } from '~/AuthContext';
 import { Button } from '~/Components';
 
 import styles from './ApiTestingPage.module.scss';
@@ -19,7 +18,6 @@ import styles from './ApiTestingPage.module.scss';
  * Useful when styling global themes.
  */
 export function ApiTestingPage() {
-  const { user } = useAuthContext();
   return (
     <div className={styles.wrapper}>
       <Button theme="samf" className={styles.btn} onClick={() => getCsrfToken().then(console.log).catch(console.error)}>
@@ -38,11 +36,7 @@ export function ApiTestingPage() {
       <Button theme="samf" className={styles.btn} onClick={() => getUser().then(console.log).catch(console.error)}>
         getUser
       </Button>
-      <Button
-        theme="samf"
-        className={styles.btn}
-        onClick={() => putUserPreference({ id: user?.user_preference.id }).then(console.log).catch(console.error)}
-      >
+      <Button theme="samf" className={styles.btn}>
         putUserPreference
       </Button>
       <Button theme="samf" className={styles.btn} onClick={() => getVenues().then(console.log).catch(console.error)}>
@@ -62,6 +56,13 @@ export function ApiTestingPage() {
         theme="samf"
         className={styles.btn}
         onClick={() => getInformationPage('test').then(console.log).catch(console.error)}
+      >
+        getInformationPage
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => assignUserToGroup('testuser', 'testgroup').then(console.log).catch(console.error)}
       >
         getInformationPage
       </Button>

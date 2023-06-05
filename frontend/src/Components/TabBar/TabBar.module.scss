@@ -1,0 +1,88 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.tab_bar {
+  @include flex-row;
+  overflow-x: auto;
+  background-color: $white;
+  border: 1px solid $grey-3;
+
+  &.vertical {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    @include rounded-heavy;
+  }
+
+  &.space_between {
+    justify-content: space-between;
+  }
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  @include theme-dark {
+    background-color: $grey-1;
+  }
+}
+
+.tab_button {
+  @include flex-row-center;
+  background-color: transparent;
+  padding: 0.8em 1.25em;
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+
+  /* stylelint-disable-next-line max-nesting-depth */
+  @include theme-dark {
+    color: white;
+  }
+
+  &.selected {
+    border-bottom: 3px solid $blue;
+    background-color: $background-primary;
+    color: $blue;
+
+    /* stylelint-disable-next-line max-nesting-depth */
+    @include theme-dark {
+      border-bottom: 3px solid $white;
+      background-color: $grey-2;
+      color: white;
+    }
+  }
+
+  &.disabled {
+    color: $grey-1;
+  }
+}
+
+.compact {
+  .tab_button {
+    padding: 0.4em 0.75em;
+  }
+}
+
+$outline-width: 2px;
+
+.tab_button:focus-visible {
+  outline: $blue $outline-width solid;
+  outline-offset: -$outline-width;
+  @include theme-dark {
+    outline-color: $white;
+  }
+}
+
+.tab_button:not(.selected):hover {
+  // color: $blue;
+  /* stylelint-disable-next-line function-no-unknown */
+  background-color: lighten($color: $blue, $amount: 40%);
+
+  @include theme-dark {
+    color: $white;
+    background-color: $grey-0;
+  }
+}

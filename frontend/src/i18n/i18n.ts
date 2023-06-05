@@ -10,12 +10,7 @@ export const resources = {
   [LANGUAGES.EN]: { [defaultNS]: en },
 };
 
-export function dbT(model: Record<string, unknown> | undefined, field: string, language: string): unknown {
-  if (model === undefined) return undefined;
-  return model[field + '_' + language];
-}
-
-const devSetting = process.env.NODE_ENV === 'development' ? true : false;
+const devSetting = process.env.NODE_ENV === 'development';
 
 use(initReactI18next).init({
   lng: LANGUAGES.NB,

@@ -1,0 +1,123 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.infobox_wrap,
+.no_img_infobox_wrap {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1em;
+  box-shadow: 0 0 15px 3px $black-t10;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.no_img_infobox_wrap {
+  align-items: center;
+  justify-content: center;
+}
+
+.infobox_txt_wrap {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  @include for-tablet-up {
+    height: 200px;
+    width: 50%;
+    margin: 0;
+  }
+  @include for-mobile-only {
+    overflow: hidden;
+  }
+}
+
+.no_img_infobox_txt_wrap {
+  padding: 10px;
+  height: fit-content;
+  color: white;
+}
+
+.with_url,
+.with_url:hover {
+  text-decoration: none;
+}
+
+.infobox_paragraph {
+  padding: 0 7px 7px 7px;
+  font-size: 1em;
+  text-align: center;
+  overflow: hidden;
+  display: block;
+
+  @include for-mobile-only {
+    display: none;
+  }
+}
+
+.no_img_infobox_paragraph {
+  display: block;
+  padding: 0 7px 7px 7px;
+  font-size: 1em;
+  overflow: hidden;
+  text-align: center;
+}
+
+.infobox_h1,
+.no_url_h1 {
+  font-size: 2em;
+  font-weight: 700;
+  padding: 0 7px 7px 7px;
+  text-align: center;
+}
+
+.infobox_h1:hover {
+  text-decoration: underline;
+}
+
+.no_url_h1:hover {
+  text-decoration: none;
+}
+
+.img_wrap {
+  height: 90px;
+  width: 100%;
+  overflow: hidden;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  @include for-tablet-up {
+    height: 200px;
+    width: 50%;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 1em;
+  }
+}
+
+.infobox_img {
+  height: 100px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.7s ease-in-out;
+  @include for-tablet-up {
+    height: 200px;
+  }
+}
+
+.infobox_img:hover {
+  transform: scale(1.1);
+}
+
+.infobox_img_noURL {
+  height: 100px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  @include for-tablet-up {
+    height: 200px;
+  }
+}

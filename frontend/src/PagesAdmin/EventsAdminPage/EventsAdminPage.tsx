@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
-import { Button, EventQuery, Link, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
-import { AlphabeticTableCell, ITableCell, Table } from '~/Components/Table';
+import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/i18n/i18n';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT, getTicketTypeKey } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
 
 export function EventsAdminPage() {
@@ -26,7 +29,10 @@ export function EventsAdminPage() {
         setAllEvents(data);
         setShowSpinner(false);
       })
-      .catch(console.error);
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   // Stuff to do on first render.
@@ -34,94 +40,104 @@ export function EventsAdminPage() {
 
   useEffect(() => {
     getEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deleteSelectedEvent(id: number) {
-    deleteEvent(id).then(() => {
-      getEvents();
-    });
+    deleteEvent(id)
+      .then(() => {
+        getEvents();
+        toast.success(t(KEY.eventsadminpage_successful_delete_toast));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  const tableColumns = [
+    { content: t(KEY.common_title), sortable: true },
+    { content: t(KEY.start_time), sortable: true },
+    { content: t(KEY.category), sortable: true },
+    { content: t(KEY.admin_organizer), sortable: true },
+    { content: t(KEY.common_venue), sortable: true },
+    { content: t(KEY.common_ticket_type), sortable: true },
+    '', // Buttons
+  ];
 
-  const data = events.map(function (event) {
+  const data = events.map(function (event: EventDto) {
     return [
-      new AlphabeticTableCell(
-        // <Link
-        //   url={reverse({
-        //     pattern: ROUTES.frontend.event,
-        //     urlParams: { id: event.id },
-        //   })}
-        // >
-        //   {dbT(event, 'title', i18n.language) as string}
-        // </Link>
-        dbT(event, 'title', i18n.language) as string,
-      ),
-      // new AlphabeticTableCell(<TimeDisplay timestamp={event.start_dt} />),
-      new AlphabeticTableCell(event.start_dt.toLocaleString()),
-      new AlphabeticTableCell(event.event_group.name),
-      new AlphabeticTableCell(event.host),
-      new AlphabeticTableCell(event.location),
+      dbT(event, 'title', i18n.language) as string,
+      { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
+      event.category,
+      event.host,
+      event.location,
+      t(getTicketTypeKey(event.ticket_type)),
       {
-        children: (
-          <div>
-            <Button
-              theme="blue"
-              display="block"
-              onClick={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.admin_events_edit,
-                    urlParams: { id: event.id },
-                  }),
-                );
-              }}
-            >
-              {t(KEY.edit)}
-            </Button>
-            <Button
-              theme="samf"
-              display="block"
-              onClick={() => {
-                if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.delete)} ${dbT(event, 'title', i18n.language)}`)) {
-                  deleteSelectedEvent(event.id);
-                }
-              }}
-            >
-              {t(KEY.delete)}
-            </Button>{' '}
-          </div>
+        content: (
+          <CrudButtons
+            onView={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.event,
+                  urlParams: { id: event.id },
+                }),
+              );
+            }}
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_events_edit,
+                  urlParams: { id: event.id },
+                }),
+              );
+            }}
+            onDelete={() => {
+              // TODO custom modal confirm
+              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${dbT(event, 'title')}`)) {
+                // TODO toast component? A bit too easy to delete events
+                deleteSelectedEvent(event.id);
+              }
+            }}
+          />
         ),
-      } as ITableCell,
+      },
     ];
   });
 
-  return (
-    <Page>
-      <Button theme="outlined" onClick={() => navigate(ROUTES.frontend.admin)} className={styles.backButton}>
-        <p className={styles.backButtonText}>{t(KEY.back)}</p>
+  const title = `${t(KEY.common_edit)} ${t(KEY.common_event).toLowerCase()}`;
+  const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
+  const header = (
+    <>
+      <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+        {t(KEY.common_create)} {t(KEY.common_events)}
       </Button>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>
-          {t(KEY.edit)} {t(KEY.event)}
-        </h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
-          View in backend
-        </Link>
-      </div>
+    </>
+  );
+
+  return (
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Carousel spacing={2} header="" className={styles.carousel} itemContainerClass={styles.carousel_item}>
+        {allEvents.slice(0, Math.min(allEvents.length, 10)).map((event) => {
+          {
+            /* TODO add edit/open links */
+          }
+          return (
+            <ImageCard
+              key={event.id}
+              title={dbT(event, 'title')}
+              date={event.start_dt}
+              subtitle=""
+              imageUrl={BACKEND_DOMAIN + event.image_url}
+              compact={true}
+            />
+          );
+        })}
+      </Carousel>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
-        <Table
-          columns={[t(KEY.common_title), t(KEY.start_time), t(KEY.event_type), t(KEY.organizer), t(KEY.venue), '']}
-          data={data}
-        />
+        <Table columns={tableColumns} data={data} />
       </div>
-    </Page>
+    </AdminPageLayout>
   );
 }

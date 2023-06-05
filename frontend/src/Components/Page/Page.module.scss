@@ -2,22 +2,24 @@
 
 @import 'src/mixins';
 
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
-  align-content: stretch;
-  min-width: 100%;
-  min-height: calc(100vh - 200px);
+$bottom-padding: 2em;
+$side-padding: 1em;
+
+.page {
+  // Lift elements laying on the bottom of the page.
+  padding-bottom: $bottom-padding;
+
+  // Ensure full height even when no content in body.
+  min-height: calc(100vh - $navbar-height - $bottom-padding);
+
+  // Limit max content size for large screens.
+  max-width: $content-max-size;
+
+  // Center all content.
+  margin: auto;
+
+  @include for-mobile-only {
+    width: calc(100% - $side-padding * 2);
+  }
 }
 
-.content {
-  flex: 1;
-  max-width: $content-max-size;
-  width: 100%;
-  padding: 0.5em;
-  padding-top: 1em;
-  margin: 0 auto;
-}
-// TODO ADD MOBILE PADDING

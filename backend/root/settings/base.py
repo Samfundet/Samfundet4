@@ -27,6 +27,8 @@ environ.Env.read_env(env_file=BASE_DIR / '.env', overwrite=False)
 
 AUTH_USER_MODEL = 'samfundet.User'
 
+DATABASE_ROUTERS = ['root.db_router.SamfundetDatabaseRouter']
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS: list[str] = []
@@ -190,7 +192,16 @@ AUTHENTICATION_BACKENDS += [
 INSTALLED_APPS += [
     'admin_auto_filters',
 ]
+
 ### End: admin_auto_filters ###
+
+### django-notifications-hq ###
+# https://pypi.org/project/django-notifications-hq/
+INSTALLED_APPS += [
+    'notifications',
+]
+NOTIFICATIONS_NOTIFICATION_MODEL = 'samfundet.Notification'
+### End: django-notifications-hq ###
 
 ################## LOGGING ##################
 
@@ -302,3 +313,14 @@ LOGGING = {
 # https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2
 ATOMIC_REQUESTS = True
 APPEND_SLASH = True
+
+# ======================== #
+#         Email            #
+# ======================== #
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')

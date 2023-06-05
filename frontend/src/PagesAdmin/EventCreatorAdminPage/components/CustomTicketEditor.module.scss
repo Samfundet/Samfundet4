@@ -1,0 +1,23 @@
+
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.custom_ticket_container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5em;
+  gap: 1.5em;
+}
+
+.add_custom_ticket {
+  flex-basis: 100%;
+}
+
+.custom_ticket_input {
+  border: 1px solid $grey-4;
+}
+
+.delete_button {
+  margin-bottom: .25em;
+}

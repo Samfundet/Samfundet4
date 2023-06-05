@@ -1,35 +1,51 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
+import { ReactNode } from 'react';
+import { Skeleton } from '~/Components/Skeleton';
 import { Children } from '~/types';
 import styles from './Carousel.module.scss';
 
 type CarouselProps = {
   children: Array<Children>;
-  header?: string;
+  header?: ReactNode;
   spacing?: number;
+  className?: string;
+  itemContainerClass?: string;
+  headerClass?: string;
 };
 
-export function Carousel({ children, header, spacing }: CarouselProps) {
+export function Carousel({
+  children,
+  className,
+  itemContainerClass,
+  headerClass,
+  header = <Skeleton width={'8em'} />,
+  spacing,
+}: CarouselProps) {
   const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
-      <div className={styles.itemContainer} key={idx}>
+      <div className={classNames(styles.itemContainer, itemContainerClass)} key={idx}>
         {child}
       </div>
     );
   });
 
   return (
-    <div className={styles.carousel}>
-      {header && <div className={styles.header}>{header}</div>}
-      <div className={styles.container}>
-        <div className={styles.navContainer}>
-          <div className={classnames(styles.button, styles.left)}>{'<'}</div>
+    <div className={className}>
+      {header !== '' && (
+        <div className={styles.headerWrapper}>
+          <div className={classNames(styles.header, headerClass)}>{header}</div>
         </div>
-        <div className={classnames(styles.navButton, styles.left)}></div>
+      )}
+      <div>
+        <div className={styles.navContainer}>
+          <div className={classNames(styles.button, styles.left)}>{'<'}</div>
+        </div>
+        <div className={classNames(styles.navButton, styles.left)}></div>
         <div className={styles.scroller} style={{ gap: (spacing ? spacing : 0.2) + 'em' }}>
           {wrappedChildren}
         </div>
         <div className={styles.navContainer}>
-          <div className={classnames(styles.button, styles.right)}>{'>'}</div>
+          <div className={classNames(styles.button, styles.right)}>{'>'}</div>
         </div>
       </div>
     </div>

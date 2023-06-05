@@ -1,40 +1,37 @@
 from typing import Type
 
+from django.contrib.auth import login, logout
+from django.contrib.auth.models import Group
 from django.db.models import QuerySet
+from django.middleware.csrf import get_token
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
-from rest_framework.generics import ListAPIView
-
-from django.utils import timezone
-from django.contrib.auth import login, logout
-from django.middleware.csrf import get_token
-from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from root.constants import XCSRFTOKEN
-
-from .utils import event_query
-
-from .models import (
+from .homepage import homepage
+from .models.event import (Event, EventGroup)
+from .models.general import (
     Tag,
     User,
     Menu,
     Gang,
-    Event,
     Table,
-    Image,
     Venue,
+    Image,
     Profile,
     Booking,
     MenuItem,
     GangType,
     TextItem,
-    EventGroup,
+    KeyValue,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -44,16 +41,19 @@ from .models import (
 )
 from .serializers import (
     TagSerializer,
-    ImageSerializer,
     GangSerializer,
     MenuSerializer,
+    UserSerializer,
+    ImageSerializer,
     EventSerializer,
     TableSerializer,
     VenueSerializer,
     LoginSerializer,
+    GroupSerializer,
     ProfileSerializer,
     BookingSerializer,
     TextItemSerializer,
+    KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
@@ -63,15 +63,57 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    UserSerializer,
-    GroupSerializer,
 )
+from .utils import event_query
+
+# =============================== #
+#          Home Page              #
+# =============================== #
 
 
-class TextItemView(ModelViewSet):
+class HomePageView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        return Response(data=homepage.generate())
+
+
+# =============================== #
+#            Utility              #
+# =============================== #
+
+
+# Localized text storage
+class TextItemView(ReadOnlyModelViewSet):
+    """All CRUD operations can be performed in the admin panel instead."""
     permission_classes = [AllowAny]
     serializer_class = TextItemSerializer
     queryset = TextItem.objects.all()
+
+
+class KeyValueView(ReadOnlyModelViewSet):
+    """All CRUD operations can be performed in the admin panel instead."""
+    permission_classes = [AllowAny]
+    serializer_class = KeyValueSerializer
+    queryset = KeyValue.objects.all()
+    lookup_field = 'key'
+
+
+# Images
+class ImageView(ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all().order_by('-pk')
+
+
+# Image tags
+class TagView(ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+
+
+# =============================== #
+#           Events                #
+# =============================== #
 
 
 class EventView(ModelViewSet):
@@ -83,13 +125,18 @@ class EventView(ModelViewSet):
 class EventPerDayView(APIView):
 
     def get(self, request: Request) -> Response:
-        events: dict = {}
-        for event in Event.objects.all().values():
-            _data_ = event['start_dt'].strftime('%Y-%m-%d')
-            events.setdefault(_data_, [])
-            events[_data_].append(event)
+        # Fetch and serialize events
+        events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
+        serialized = EventSerializer(events, many=True).data
 
-        return Response(data=events)
+        # Organize in date dictionary
+        events_per_day: dict = {}
+        for event, serial in zip(events, serialized):
+            date = event.start_dt.strftime('%Y-%m-%d')
+            events_per_day.setdefault(date, [])
+            events_per_day[date].append(serial)
+
+        return Response(data=events_per_day)
 
 
 class EventsUpcomingView(APIView):
@@ -101,20 +148,19 @@ class EventsUpcomingView(APIView):
         return Response(data=EventSerializer(events, many=True).data)
 
 
-class EventFormView(APIView):
-    permission_classes = [AllowAny]
+class EventGroupView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = EventGroupSerializer
+    queryset = EventGroup.objects.all()
 
-    def get(self, request: Request) -> Response:
-        data = {
-            'age_groups': Event.AgeGroup.choices,
-            'status_groups': Event.StatusGroup.choices,
-            'venues': [[v.name] for v in Venue.objects.all()],
-            'event_groups': [[e.id, e.name] for e in EventGroup.objects.all()]
-        }
-        return Response(data=data)
+
+# =============================== #
+#            General              #
+# =============================== #
 
 
 class VenueView(ModelViewSet):
+    permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
 
@@ -133,6 +179,68 @@ class IsClosedView(ListAPIView):
             start_dt__lte=timezone.now(),
             end_dt__gte=timezone.now(),
         )
+
+
+class SaksdokumentView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = SaksdokumentSerializer
+    queryset = Saksdokument.objects.all().order_by('-publication_date')
+
+
+class GangView(ModelViewSet):
+    serializer_class = GangSerializer
+    queryset = Gang.objects.all()
+
+
+class GangTypeView(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = GangTypeSerializer
+    queryset = GangType.objects.all()
+
+
+class InformationPageView(ModelViewSet):
+    serializer_class = InformationPageSerializer
+    queryset = InformationPage.objects.all()
+
+
+# =============================== #
+#            Sulten               #
+# =============================== #
+
+
+class MenuView(ModelViewSet):
+    serializer_class = MenuSerializer
+    queryset = Menu.objects.all()
+
+
+class MenuItemView(ModelViewSet):
+    serializer_class = MenuItemSerializer
+    queryset = MenuItem.objects.all()
+
+
+class FoodCategoryView(ModelViewSet):
+    serializer_class = FoodCategorySerializer
+    queryset = FoodCategory.objects.all()
+
+
+class FoodPreferenceView(ModelViewSet):
+    serializer_class = FoodPreferenceSerializer
+    queryset = FoodPreference.objects.all()
+
+
+class TableView(ModelViewSet):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+
+
+class BookingView(ModelViewSet):
+    serializer_class = BookingSerializer
+    queryset = Booking.objects.all()
+
+
+# =============================== #
+#          Auth/Login             #
+# =============================== #
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -261,37 +369,58 @@ class FoodCategoryView(ModelViewSet):
 class FoodPreferenceView(ModelViewSet):
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class AssignGroupView(APIView):
+    """
+     Assigns a user to a group.
+    """
 
+    permission_classes = [IsAuthenticated]
 
-class SaksdokumentView(ModelViewSet):
-    permission_classes = [AllowAny]
-    serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all()
+    def post(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
 
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-class SaksdokumentFormView(APIView):
-    permission_classes = [AllowAny]
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-    def get(self, request: Request) -> Response:
-        data = {'categories': Saksdokument.SaksdokumentCategory.choices}
-        return Response(data=data)
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.add(group)
+        else:
+            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
 
-class TableView(ModelViewSet):
-    serializer_class = TableSerializer
-    queryset = Table.objects.all()
+        return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
 
+    def delete(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
 
-class BookingView(ModelViewSet):
-    serializer_class = BookingSerializer
-    queryset = Booking.objects.all()
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-class TagView(ModelViewSet):
-    serializer_class = TagSerializer
-    queryset = Tag.objects.all()
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.remove(group)
+        else:
+            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
 
-class ImageView(ModelViewSet):
-    serializer_class = ImageSerializer
-    queryset = Image.objects.all()
+        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
