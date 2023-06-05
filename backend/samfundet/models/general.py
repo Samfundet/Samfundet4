@@ -221,6 +221,17 @@ class ClosedPeriod(models.Model):
 
 
 # GANGS ###
+class Organization(models.Model):
+    """
+    Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
+    """
+    name = models.CharField(max_length=32, blank=False, null=False)
+
+    class Meta:
+        verbose_name = 'Organization'
+        verbose_name_plural = 'Organizations'
+
+
 class GangType(models.Model):
     """
     Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
@@ -244,6 +255,15 @@ class Gang(models.Model):
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
+
+    organization = models.ForeignKey(
+        to=Organization,
+        related_name='gangs',
+        verbose_name='Organisasjon',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
