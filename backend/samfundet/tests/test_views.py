@@ -5,9 +5,10 @@ from typing import TYPE_CHECKING
 from django.contrib.auth.models import Permission, Group
 from django.urls import reverse
 from rest_framework import status
+from guardian.shortcuts import assign_perm
 
 from root.utils import routes
-from samfundet.models.general import User, KeyValue, TextItem
+from samfundet.models.general import User, KeyValue, TextItem, InformationPage, Event
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
@@ -97,7 +98,7 @@ def test_get_event(fixture_rest_client: APIClient, fixture_user: User, fixture_e
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse('samfundet:events-detail', kwargs={'pk': fixture_event.id})
     response = fixture_rest_client.get(path=url)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
     assert response.data['title_nb'] == fixture_event.title_nb
 
 
@@ -106,7 +107,7 @@ def test_get_events(fixture_rest_client: APIClient, fixture_user: User, fixture_
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse('samfundet:events-list')
     response = fixture_rest_client.get(path=url)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
     exists = False
     for event in response.data:
         if event['id'] == fixture_event.id:
@@ -122,13 +123,13 @@ def test_create_event(fixture_rest_client: APIClient, fixture_user: User):
     url = reverse('samfundet:events-list')
     data = {'title_nb': 'lol', 'title_en': 'lol', 'start_dt': '2023-02-15T01:01:00+01:00', 'duration': 10}
     response = fixture_rest_client.post(path=url, data=data)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assign_perm('samfundet.add_event', fixture_user)
     # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.post(path=url, data=data)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
 
 
 def test_delete_event(fixture_rest_client: APIClient, fixture_user: User, fixture_event: Event):
@@ -136,13 +137,13 @@ def test_delete_event(fixture_rest_client: APIClient, fixture_user: User, fixtur
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse('samfundet:events-detail', kwargs={'pk': fixture_event.id})
     response = fixture_rest_client.delete(path=url)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assign_perm('samfundet.delete_event', fixture_user)
     # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.delete(path=url)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
 
 
 def test_put_event(fixture_rest_client: APIClient, fixture_user: User, fixture_event: Event):
@@ -151,14 +152,14 @@ def test_put_event(fixture_rest_client: APIClient, fixture_user: User, fixture_e
     url = reverse('samfundet:events-detail', kwargs={'pk': fixture_event.id})
     data = {'title_nb': 'lol'}
     response = fixture_rest_client.put(path=url, data=data)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assign_perm('samfundet.change_event', fixture_user)
     # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.put(path=url, data=data)
     print(response.data)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
     assert response.data['title_nb'] == data['title_nb']
 
 
@@ -166,7 +167,7 @@ def test_get_informationpage(fixture_rest_client: APIClient, fixture_information
     # Test for fetching single information page
     url = reverse('samfundet:information-detail', kwargs={'pk': fixture_informationpage.slug_field})
     response = fixture_rest_client.get(path=url)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
     assert response.data['slug_field'] == fixture_informationpage.slug_field
 
 
@@ -174,7 +175,7 @@ def test_get_informationpages(fixture_rest_client: APIClient, fixture_informatio
     # Test for fetching multiple informationpages
     url = reverse('samfundet:information-list')
     response = fixture_rest_client.get(path=url)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
     exists = False
     for event in response.data:
         if event['slug_field'] == fixture_informationpage.slug_field:
@@ -189,13 +190,13 @@ def test_create_informationpage(fixture_rest_client: APIClient, fixture_user: Us
     url = reverse('samfundet:information-list')
     data = {'slug_field': 'lol', 'title_en': 'lol'}
     response = fixture_rest_client.post(path=url, data=data)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assign_perm('samfundet.add_informationpage', fixture_user)
     # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.post(path=url, data=data)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
 
 
 def test_delete_informationpage(fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
@@ -203,13 +204,13 @@ def test_delete_informationpage(fixture_rest_client: APIClient, fixture_user: Us
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse('samfundet:information-detail', kwargs={'pk': fixture_informationpage.slug_field})
     response = fixture_rest_client.delete(path=url)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assign_perm('samfundet.delete_informationpage', fixture_user)
     # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.delete(path=url)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
 
 
 def test_put_informationpage(fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
@@ -218,13 +219,13 @@ def test_put_informationpage(fixture_rest_client: APIClient, fixture_user: User,
     url = reverse('samfundet:information-detail', kwargs={'pk': fixture_informationpage.slug_field})
     data = {'title_nb': 'lol'}
     response = fixture_rest_client.put(path=url, data=data)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assign_perm('samfundet.change_informationpage', fixture_user)
     # After giving perm, cache needs to be deleted to be refreshed
     del fixture_user._user_perm_cache
     del fixture_user._perm_cache
     response = fixture_rest_client.put(path=url, data=data)
-    assert is_success(code=response.status_code)
+    assert status.is_success(code=response.status_code)
     assert response.data['title_nb'] == data['title_nb']
 
 
