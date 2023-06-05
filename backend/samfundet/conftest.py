@@ -164,7 +164,8 @@ def fixture_informationpage(db) -> Iterator[InformationPage]:  # type: ignore[no
     )
     yield informationpage
     informationpage.delete()
-    
+
+
 @pytest.fixture
 def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: BilligEvent) -> Iterator[tuple[Event, BilligEvent]]:
     fixture_event.ticket_type = EventTicketType.BILLIG

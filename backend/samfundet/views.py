@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -369,6 +369,8 @@ class FoodCategoryView(ModelViewSet):
 class FoodPreferenceView(ModelViewSet):
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
+
+
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class AssignGroupView(APIView):
     """
