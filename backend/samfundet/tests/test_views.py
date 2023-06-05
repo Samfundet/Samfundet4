@@ -8,7 +8,8 @@ from rest_framework import status
 from guardian.shortcuts import assign_perm
 
 from root.utils import routes
-from samfundet.models.general import User, KeyValue, TextItem, InformationPage, Event
+from samfundet.models.general import User, KeyValue, TextItem, InformationPage
+from samfundet.models.event import Event
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:

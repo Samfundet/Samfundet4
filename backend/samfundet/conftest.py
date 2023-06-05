@@ -11,7 +11,7 @@ from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.general import User, Image
+from samfundet.models.general import User, Image, InformationPage
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
