@@ -3,6 +3,7 @@ import {
   getCsrfToken,
   getInformationPage,
   getInformationPages,
+  getRecruitmentPositions,
   getUser,
   getVenue,
   getVenues,
@@ -65,6 +66,13 @@ export function ApiTestingPage() {
         onClick={() => assignUserToGroup('testuser', 'testgroup').then(console.log).catch(console.error)}
       >
         getInformationPage
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentPositions('1').then(console.log).catch(console.error)}
+      >
+        get Rec pos
       </Button>
     </div>
   );

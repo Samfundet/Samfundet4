@@ -11,7 +11,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import Recruitment
+from .models.recruitment import (Recruitment, RecruitmentPosition)
 from .models.general import (
     Tag,
     User,
@@ -471,6 +471,20 @@ class RecruitmentAdmin(admin.ModelAdmin):
         'reprioritization_deadline_for_groups', 'organization'
     ]
     list_display_links = ['visible_from']
+    list_select_related = True
+
+
+@admin.register(RecruitmentPosition)
+class RecruitmentPositionAdmin(admin.ModelAdmin):
+    sortable_by = [
+        'name_nb',
+        'is_funksjonaer_position',
+        'gang',
+        'id',
+    ]
+    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    filter_horizontal = ['interviewers']
     list_select_related = True
 
 

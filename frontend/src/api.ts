@@ -16,6 +16,7 @@ import {
   MenuItemDto,
   NotificationDto,
   RecruitmentDto,
+  RecruitmentPositionDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -488,5 +489,12 @@ export async function putRecruitment(id: string, recruitment: Partial<Recruitmen
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
   const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
+  return response;
+}
+
+export async function getRecruitmentPositions(recruitmentId: string): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
+  const url = `${BACKEND_DOMAIN}/recruitment-positions/?recruitment=${recruitmentId}`;
+  const response = await axios.get(url, { withCredentials: true });
+
   return response;
 }

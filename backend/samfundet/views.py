@@ -18,7 +18,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
-from .models.recruitment import (Recruitment)
+from .models.recruitment import (Recruitment, RecruitmentPosition)
 from .models.general import (
     Tag,
     User,
@@ -65,6 +65,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentPositionSerializer,
 )
 from .utils import event_query
 
@@ -384,3 +385,20 @@ class RecruitmentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentPosition.objects.filter(recruitment=recruitment)
+        else:
+            return None

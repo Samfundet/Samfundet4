@@ -44,4 +44,5 @@ urlpatterns = [
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
+    path('recruitment-positions/', views.RecruitmentPositionView.as_view(), name='recruitment_positions'),
 ]
