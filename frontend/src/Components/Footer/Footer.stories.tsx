@@ -5,11 +5,10 @@ import { Footer } from './Footer';
 export default {
   title: 'Components/Footer',
   component: Footer,
-  args: {},
 } as ComponentMeta<typeof Footer>;
 
 const Template: ComponentStory<typeof Footer> = function (args) {
-  return <Footer {...args} />;
+  return <Footer />;
 };
 
 export const Basic = Template.bind({});

@@ -103,7 +103,6 @@ export const KEY = {
   common_sponsor: 'common_sponsors',
   common_here: 'common_here',
 
-
   // Price groups
   common_ticket_type_billig: 'common_ticket_type_billig',
   common_ticket_type_free: 'common_ticket_type_free',

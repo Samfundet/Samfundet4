@@ -1,4 +1,5 @@
 @import 'src/constants';
+
 @import 'src/mixins';
 
 .footer_container {
@@ -16,7 +17,6 @@
 .main_row {
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
   align-items: start;
   width: 100%;

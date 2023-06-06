@@ -1,35 +1,22 @@
-import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { Button, Link, NotificationBadge, ThemeSwitch, Image, SamfundetLogo } from '~/Components';
-import { useGlobalContext } from '~/GlobalContextProvider';
-import { logout } from '~/api';
+import { Link, Image } from '~/Components';
 import {
   facebookLogo,
   instagramLogo,
   isfit,
   kulturromSponsor,
   reitanSponsor,
-  samfundetLogo,
   snapchatLogo,
   tikTokLogo,
   trondhemSponsor,
-  uka,
   ukaWhite,
 } from '~/assets';
-import { useDesktop, useIsDarkTheme, useScrollY } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
-import { KEY, LANGUAGES } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
+import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';
 
 export function Footer() {
-  const isDarkTheme = useIsDarkTheme();
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className={styles.footer_container}>
