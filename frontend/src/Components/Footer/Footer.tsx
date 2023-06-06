@@ -33,8 +33,8 @@ export function Footer() {
 
   return (
     <div className={styles.footer_container}>
-      <div className={styles.item_row}>
-        <div className={styles.parts}>
+      <div className={styles.row}>
+        <div className={styles.col}>
           <div className={styles.column}>
             <h1 className={styles.header}>{t(KEY.common_contact)}</h1>
             <div>
@@ -45,107 +45,61 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className={classNames(styles.parts, styles.column)}>
-          <div className={styles.colab_item}>
-            <h1 className={styles.header}>Sponsors:</h1>
-            <div className={styles.image_row}>
-              <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-                <Image src={trondhemSponsor} height={64}></Image>
-              </Link>
-              <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-                <Image src={kulturromSponsor} height={64}></Image>
-              </Link>
-              <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-                <Image src={reitanSponsor} height={64}></Image>
-              </Link>
-            </div>
-          </div>
-          <div className={styles.media_container}>
-            <Link target="external" url="https://www.facebook.com/samfundet">
-              <Image src={facebookLogo} width={40}></Image>
+        <div className={classNames(styles.col_2, styles.column)}>
+          <h1 className={styles.header}>{t(KEY.common_sponsor)}</h1>
+          <div className={styles.row}>
+            <Link className={styles.sponsor_logo} target="external" url="https://www.trondheim.kommune.no/">
+              <Image src={trondhemSponsor} height={48}></Image>
             </Link>
-            <Link target="external" url="https://www.instagram.com/samfundet/">
-              <Image src={instagramLogo} width={40}></Image>
+            <Link className={styles.sponsor_logo} target="external" url="https://kulturrom.no/">
+              <Image src={kulturromSponsor} height={48}></Image>
             </Link>
-            <Link target="external" url="https://www.tiktok.com/@samfundet">
-              <Image src={tikTokLogo} width={40}></Image>
-            </Link>
-            <Link target="external" url="https://www.snapchat.com/add/samfundet">
-              <Image src={snapchatLogo} width={40}></Image>
+            <Link className={styles.sponsor_logo} target="external" url="https://reitan.no/no">
+              <Image src={reitanSponsor} height={48}></Image>
             </Link>
           </div>
         </div>
-        <div className={styles.parts}>
+        <div className={styles.col}>
           <div className={styles.colum}>
-            <div className={styles.colab_item}>
-              <h1 className={styles.header}>Festivals:</h1>
-              <div className={styles.image_row}>
-                <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-                  <Image src={ukaWhite} height={64}></Image>
-                </Link>
-                <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-                  <Image src={isfit} height={64}></Image>
-                </Link>
-              </div>
+            <h1 className={styles.header}>{t(KEY.common_festivals)}</h1>
+            <div className={styles.row}>
+              <Link className={styles.sponsor_logo} target="external" url="https://www.uka.no/">
+                <Image src={ukaWhite} height={48}></Image>
+              </Link>
+              <Link className={styles.sponsor_logo} target="external" url="https://www.isfit.org/">
+                <Image src={isfit} height={48}></Image>
+              </Link>
             </div>
           </div>
         </div>
       </div>
+      <div className={styles.row}>
+        <Link target="external" url="https://www.facebook.com/samfundet">
+          <Image src={facebookLogo} width={40}></Image>
+        </Link>
+        <Link target="external" url="https://www.instagram.com/samfundet/">
+          <Image src={instagramLogo} width={40}></Image>
+        </Link>
+        <Link target="external" url="https://www.tiktok.com/@samfundet">
+          <Image src={tikTokLogo} width={40}></Image>
+        </Link>
+        <Link target="external" url="https://www.snapchat.com/add/samfundet">
+          <Image src={snapchatLogo} width={40}></Image>
+        </Link>
+      </div>
       <div className={styles.cookies}>
-        <p>Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies her. </p>
+        <p>
+          {t(KEY.we_use_cookies)}
+          <Link
+            style={{ color: 'white' }}
+            className={styles.sponsor_logo}
+            target="external"
+            url="https://www.whatarecookies.com/"
+          >
+            {t(KEY.common_here)}
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
-
-/**
- * 
- * 
- *       <div className={styles.general}>
-        <SamfundetLogo className={styles.samfLogo} />
-          <div className={styles.center_container}>
-            <SamfundetLogo className={styles.samfLogo} />
-            <div className={styles.media_container}>
-            <Link target="external" url="https://www.facebook.com/samfundet">
-              <Image src={facebookLogo} width={40}></Image>
-            </Link>
-            <Link target="external" url="https://www.instagram.com/samfundet/">
-              <Image src={instagramLogo} width={40}></Image>
-            </Link>
-            <Link target="external" url="https://www.tiktok.com/@samfundet">
-              <Image src={tikTokLogo} width={40}></Image>
-            </Link>
-            <Link target="external" url="https://www.snapchat.com/add/samfundet">
-              <Image src={snapchatLogo} width={40}></Image>
-            </Link>
-          </div>
-        </div>
-      </div>
-*       <div className={styles.colab}>
-        <div className={styles.colab_item}>
-          <h1>Sponsors:</h1>
-          <div className={styles.image_row}>
-            <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-              <Image src={trondhemSponsor} height={64}></Image>
-            </Link>
-            <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-              <Image src={kulturromSponsor} height={64}></Image>
-            </Link>
-            <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-              <Image src={reitanSponsor} height={64}></Image>
-            </Link>
-          </div>
-        </div>
-        <div className={styles.colab_item}>
-          <h1>Festivals:</h1>
-          <div className={styles.image_row}>
-            <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-              <Image src={uka} height={64}></Image>
-            </Link>
-            <Link className={styles.sponsor_logo} target="external" url="https://www.facebook.com/samfundet">
-              <Image src={isfit} height={64}></Image>
-            </Link>
-          </div>
-        </div>
-      </div>
- */

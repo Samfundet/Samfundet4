@@ -99,6 +99,10 @@ export const KEY = {
   common_creation_successful: 'common_creation_successful',
   common_see_in_django_admin: 'common_see_in_django_admin',
   common_something_went_wrong: 'common_something_went_wrong',
+  common_festivals: 'common_festivals',
+  common_sponsor: 'common_sponsors',
+  common_here: 'common_here',
+
 
   // Price groups
   common_ticket_type_billig: 'common_ticket_type_billig',
@@ -172,6 +176,7 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  we_use_cookies: 'we_use_cookies',
 } as const;
 
 /**
