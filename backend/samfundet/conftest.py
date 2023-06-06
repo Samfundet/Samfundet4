@@ -193,6 +193,7 @@ def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitm
     recruitment.delete()
 
 
+@pytest.fixture
 def fixture_informationpage() -> Iterator[InformationPage]:
     informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
     yield informationpage
