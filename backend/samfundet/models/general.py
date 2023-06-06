@@ -231,6 +231,9 @@ class Organization(models.Model):
         verbose_name = 'Organization'
         verbose_name_plural = 'Organizations'
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class GangType(models.Model):
     """

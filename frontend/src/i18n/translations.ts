@@ -128,7 +128,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
-  [KEY.recruitment_administrate]: 'Administrate recruitment',
+  [KEY.recruitment_administrate]: 'Administrer opptak',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
