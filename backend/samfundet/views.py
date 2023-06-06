@@ -32,6 +32,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -57,6 +58,7 @@ from .serializers import (
     KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    BlogPostSerializer,
     EventGroupSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
@@ -203,6 +205,12 @@ class InformationPageView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
+
+
+class BlogPostView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    serializer_class = InformationPageSerializer
+    queryset = BlogPost.objects.all()
 
 
 # =============================== #
