@@ -168,6 +168,7 @@ class TestInformationPagesView:
 
         assert data['title_nb'] == put_data['title_nb']
 
+
 class TestBlogPostView:
 
     def test_get_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
@@ -180,7 +181,7 @@ class TestBlogPostView:
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
-        assert data['id'] ==  fixture_blogpost.id
+        assert data['id'] == fixture_blogpost.id
 
     def test_get_blogposts(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
         ### Arrange ###
@@ -192,14 +193,14 @@ class TestBlogPostView:
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
-        assert data[0]['id'] ==  fixture_blogpost.id
+        assert data[0]['id'] == fixture_blogpost.id
 
     def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__blog_list)
 
-        post_data = {'title_nb': 'lol', 'title_en': 'lol', 'image':fixture_image.id}
+        post_data = {'title_nb': 'lol', 'title_en': 'lol', 'image': fixture_image.id}
         response: Response = fixture_rest_client.post(path=url, data=post_data)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -242,6 +243,7 @@ class TestBlogPostView:
         data = response.json()
 
         assert data['title_nb'] == put_data['title_nb']
+
 
 class TestKeyValueView:
 

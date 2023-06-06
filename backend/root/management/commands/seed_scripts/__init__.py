@@ -9,6 +9,7 @@ from . import (
     documents,
     example,
     samf3,
+    blogposts,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -27,6 +28,7 @@ SEED_SCRIPTS = [
     ('menu', menu.seed),
     ('documents', documents.seed),
     ('information_page', information_pages.seed),
+    ('blogposts', blogposts.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),

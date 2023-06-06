@@ -307,7 +307,7 @@ class BlogPost(models.Model):
 
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
 
-    publish = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -318,7 +318,7 @@ class BlogPost(models.Model):
         verbose_name_plural = 'Blogg posts'
 
     def __str__(self) -> str:
-        return f'{self.slug_field}'
+        return f'{self.title_nb} {self.published_at}'
 
 
 class Table(models.Model):
