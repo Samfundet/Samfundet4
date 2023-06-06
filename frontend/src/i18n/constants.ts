@@ -60,6 +60,10 @@ export const KEY = {
   common_event: 'common_event',
   common_events: 'common_events',
   common_login: 'common_login',
+  common_register: 'common_register',
+  common_firstname: 'common_firstname',
+  common_lastname: 'common_lastname',
+  common_repeat: 'common_repeat',
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
@@ -116,6 +120,7 @@ export const KEY = {
   loginpage_internal_login: 'loginpage_internal_login',
   loginpage_email_placeholder: 'loginpage_email_placeholder',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
+  loginpage_register: 'loginpage_register',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',

@@ -52,6 +52,23 @@ export async function logout(): Promise<AxiosResponse> {
   return response;
 }
 
+export async function register(
+  username: string,
+  firstname: string,
+  lastname: string,
+  password: string,
+): Promise<number> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__register;
+  const data = { username, firstname, lastname, password };
+  const response = await axios.post(url, data, { withCredentials: true });
+
+  // Django rotates csrftoken after login, set new token received.
+  const new_token = response.data;
+  axios.defaults.headers.common['X-CSRFToken'] = new_token;
+
+  return response.status;
+}
+
 export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });

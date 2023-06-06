@@ -14,6 +14,7 @@ import styles from './SamfForm.module.scss';
 // SamfFormField types (used to defined field UI in <SamfFormField type=XXX>)
 export type SamfFormFieldType =
   | 'text'
+  | 'email'
   | 'text-long'
   | 'password'
   | 'checkbox'
@@ -72,6 +73,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   'upload-image': makeFilePickerFunction('image'),
   'upload-pdf': makeFilePickerFunction('pdf'),
   checkbox: makeCheckboxInput,
+  email: makeStandardInputFunction<string>('email'),
 };
 
 // ================================== //

@@ -231,6 +231,9 @@ class Organization(models.Model):
         verbose_name = 'Organization'
         verbose_name_plural = 'Organizations'
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class GangType(models.Model):
     """
@@ -292,7 +295,7 @@ class Gang(models.Model):
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=False,
+        blank=True,
         null=False,
         unique=True,
         primary_key=True,

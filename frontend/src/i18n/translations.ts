@@ -50,6 +50,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
+  [KEY.common_register]: 'Registrer',
+  [KEY.common_firstname]: 'Fornavn',
+  [KEY.common_lastname]: 'Etternavn',
+  [KEY.common_repeat]: 'Repeter',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_venues]: 'Lokaler',
   [KEY.common_events]: 'Arrangementer',
@@ -106,6 +110,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
   [KEY.loginpage_email_placeholder]: 'E-post eller medlemsnummer',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
+  [KEY.loginpage_register]: 'Lag bruker',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
@@ -134,7 +139,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_funksjonaer]: 'Funksjonær',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
-  [KEY.recruitment_administrate]: 'Administrate recruitment',
+  [KEY.recruitment_administrate]: 'Administrer opptak',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
@@ -234,6 +239,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_events]: 'Events',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_register]: 'Register',
+  [KEY.common_firstname]: 'First name',
+  [KEY.common_lastname]: 'Last name',
+  [KEY.common_repeat]: 'Repeat',
   [KEY.common_create]: 'Create',
   [KEY.common_delete]: 'Delete',
   [KEY.common_logout]: 'Log out',
@@ -287,6 +296,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_email_placeholder]: 'Email or membership ID',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_register]: 'Create user',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
