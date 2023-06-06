@@ -14,6 +14,7 @@ export const ROUTES_FRONTEND = {
   information_page_list: '/information/',
   information_page_detail: '/information/:slugField/',
   saksdokumenter: '/saksdokumenter/',
+  recruitment: '/recruitment/',
   // ==================== //
   //        Sulten        //
   // ==================== //
@@ -52,6 +53,11 @@ export const ROUTES_FRONTEND = {
   admin_saksdokumenter: '/admin/saksdokument/',
   admin_saksdokumenter_create: '/admin/saksdokument/create/',
   admin_saksdokumenter_edit: '/admin/saksdokument/edit/:id/',
+  // Recruitment
+  admin_recruitment: '/admin/recruitment/',
+  admin_recruitment_create: '/admin/recruitment/create/',
+  admin_recruitment_edit: '/admin/recruitment/edit/:id',
+
   // ==================== //
   //      Development     //
   // ==================== //

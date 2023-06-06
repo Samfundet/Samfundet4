@@ -48,7 +48,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
   [KEY.common_venue]: 'Lokale',
-  [KEY.common_venues]: 'Lokaler',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
   [KEY.common_register]: 'Registrer',
@@ -56,6 +55,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_lastname]: 'Etternavn',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_event]: 'Arrangement',
+  [KEY.common_venues]: 'Lokaler',
   [KEY.common_events]: 'Arrangementer',
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
@@ -75,6 +75,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_required]: 'Påkrevd',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_norwegian]: 'Norsk',
+  [KEY.common_recruitment]: 'Opptak',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
@@ -91,12 +92,12 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
 
   // Price groups
-  [KEY.common_ticket_type_billig]: 'Betalt',
-  [KEY.common_ticket_type_free]: 'Gratis',
-  [KEY.common_ticket_type_included]: 'Inkludert i inngang',
-  [KEY.common_ticket_type_custom]: 'Tilpasset',
-  [KEY.common_ticket_type_registration]: 'Påmelding',
   [KEY.common_ticket_type]: 'Billett',
+  [KEY.common_ticket_type_free]: 'Gratis',
+  [KEY.common_ticket_type_custom]: 'Tilpasset',
+  [KEY.common_ticket_type_billig]: 'Betalt',
+  [KEY.common_ticket_type_included]: 'Inkludert i inngang',
+  [KEY.common_ticket_type_registration]: 'Påmelding',
 
   // ==================== //
   //        Others        //
@@ -124,9 +125,19 @@ export const nb: Record<KeyValues, string> = {
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
   // Navbar
+  [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
-  [KEY.navbar_map]: 'Kart og lokaler',
+
+  // Recruitment
+  [KEY.recruitment_duration]: 'Varighet',
+  [KEY.recruitment_visible_from]: 'Synlig fra',
+  [KEY.recruitment_organization]: 'Organisasjon',
+  [KEY.recruitment_administrate]: 'Administrer opptak',
+  [KEY.shown_application_deadline]: 'Vist søknadsfrist',
+  [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
+  [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -246,6 +257,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_description]: 'Description',
   [KEY.common_information]: 'Information',
+  [KEY.common_recruitment]: 'Recruitment',
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'About Samfundet',
@@ -293,6 +305,16 @@ export const en: Record<KeyValues, string> = {
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+
+  // Recruitment
+  [KEY.recruitment_duration]: 'Duration',
+  [KEY.recruitment_organization]: 'Organization',
+  [KEY.recruitment_visible_from]: 'Visible from',
+  [KEY.actual_application_deadlin]: 'Actual deadline',
+  [KEY.shown_application_deadline]: 'Displayed deadline',
+  [KEY.recruitment_administrate]: 'Administrate recruitment',
+  [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
+  [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
