@@ -1,0 +1,89 @@
+@import 'src/constants';
+@import 'src/mixins';
+
+.footer_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  width: 100%;
+  background-color: $red-samf;
+  gap: 0.5rem;
+  padding: 1em;
+}
+
+.item_row {
+  display: flex;
+  flex-direction: row;
+  color: $white;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.parts {
+  flex:1;
+}
+
+.header {
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 0.2em;
+  color: white;
+  font-size: 1.4em;
+}
+
+.colab {
+  color: $grey-2;
+  font-size: 1.2em;
+  font-weight: 100;
+  text-align: center;
+  border-top: 1px solid $grey-4;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%
+}
+
+.colab_item {
+  flex:1;
+}
+.image_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.sponsor_logo {
+  margin: 1em;
+}
+
+.samfLogo {
+  width: 3em;
+}
+
+.media_container {
+  display: flex;
+  flex-direction: row;
+}
+
+.contact_container {
+
+}
+
+.mediaLogo {
+  width: 3em;
+}
+
+.cookies {
+  font-size: 0.75em;
+  color: $grey-5;
+  font-weight: 100;
+}
