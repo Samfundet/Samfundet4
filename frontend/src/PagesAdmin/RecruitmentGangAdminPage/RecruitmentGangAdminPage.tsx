@@ -63,7 +63,17 @@ export function RecruitmentGangAdminPage() {
     <Button
       theme="success"
       rounded={true}
-      onClick={() => navigate(ROUTES.frontend.admin_recruitment_gang_position_create)}
+      onClick={() =>
+        navigate(
+          reverse({
+            pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
+            urlParams: {
+              gangId: gangId,
+              recruitmentId: recruitmentId,
+            },
+          }),
+        )
+      }
     >
       {t(KEY.common_create)} {t(KEY.recruitment_position)}
     </Button>

@@ -139,6 +139,7 @@ export const KEY = {
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_duration: 'recruitment_duration',
+  recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_organization: 'recruitment_organization',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',

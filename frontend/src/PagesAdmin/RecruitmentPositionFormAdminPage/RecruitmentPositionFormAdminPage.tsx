@@ -58,16 +58,16 @@ export function RecruitmentPositionFormAdminPage() {
 
     default_admission_letter_nb: position?.default_admission_letter_nb,
     default_admission_letter_en: position?.default_admission_letter_en,
+    is_funksjonaer_position: position?.is_funksjonaer_position || false,
 
     tags: position?.tags,
     // TODO: Add necessary fields to form.
-    // is_funksjonaer_position: position?.is_funksjonaer_position,
     // gang: gangId,
     // recruitment: recruitmentId,
     // interviewers: position?.interviewers,
   };
 
-  const submitText = positionId ? t(KEY.common_save) : t(KEY.recruitment_position);
+  const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
 
   // Loading.
   if (showSpinner) {
@@ -79,13 +79,12 @@ export function RecruitmentPositionFormAdminPage() {
   }
 
   function handleOnSubmit(data: RecruitmentPositionDto) {
+    const updatedPosition = data;
+    updatedPosition.gang = gangId;
+    updatedPosition.recruitment = recruitmentId;
+    updatedPosition.interviewers = [];
     if (positionId) {
       // Update page.
-      const updatedPosition = data;
-      updatedPosition.gang = gangId;
-      updatedPosition.is_funksjonaer_position = false;
-      updatedPosition.recruitment = recruitmentId;
-      updatedPosition.interviewers = [];
 
       putRecruitmentPosition(positionId, updatedPosition)
         .then(() => {
@@ -98,7 +97,7 @@ export function RecruitmentPositionFormAdminPage() {
         });
     } else {
       // Post new page.
-      postRecruitmentPosition(data)
+      postRecruitmentPosition(updatedPosition)
         .then(() => {
           navigate(ROUTES.frontend.admin_recruitment);
           toast.success(t(KEY.common_creation_successful));
@@ -141,13 +140,9 @@ export function RecruitmentPositionFormAdminPage() {
             label={t(KEY.common_long_description) + ' ' + t(KEY.common_english)}
           />
         </div>
-        {/* <div className={styles.row}>
-          <SamfFormField
-            field="is_funksjonaer_position"
-            type="checkbox"
-            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
-          />
-        </div> */}
+        <div className={styles.row}>
+          <SamfFormField field="is_funksjonaer_position" type="checkbox" label={t(KEY.recruitment_funksjonaer) + '?'} />
+        </div>
         <div className={styles.row}>
           <SamfFormField
             field="default_admission_letter_nb"
