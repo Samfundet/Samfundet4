@@ -305,7 +305,7 @@ class BlogPost(models.Model):
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
     text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
 
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
 
     publish = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)

@@ -8,7 +8,7 @@ from rest_framework import status
 from guardian.shortcuts import assign_perm
 
 from root.utils import routes, permissions
-from samfundet.models.general import User, KeyValue, TextItem, InformationPage
+from samfundet.models.general import User, KeyValue, TextItem, InformationPage, BlogPost, Image
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
@@ -168,6 +168,80 @@ class TestInformationPagesView:
 
         assert data['title_nb'] == put_data['title_nb']
 
+class TestBlogPostView:
+
+    def test_get_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        ### Arrange ###
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['id'] ==  fixture_blogpost.id
+
+    def test_get_blogposts(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        ### Arrange ###
+        url = reverse(routes.samfundet__blog_list)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['id'] ==  fixture_blogpost.id
+
+    def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_list)
+
+        post_data = {'title_nb': 'lol', 'title_en': 'lol', 'image':fixture_image.id}
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_BLOGPOST, fixture_user)
+
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+        assert data['title_nb'] == post_data['title_nb']
+
+    def test_delete_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_BLOGPOST, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert status.is_success(code=response.status_code)
+
+    def test_put_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+        put_data = {'title_nb': 'Samfundet blir gult!'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+        assign_perm(permissions.SAMFUNDET_CHANGE_BLOGPOST, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+
+        assert data['title_nb'] == put_data['title_nb']
 
 class TestKeyValueView:
 

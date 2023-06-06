@@ -209,7 +209,7 @@ class InformationPageView(ModelViewSet):
 
 class BlogPostView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
-    serializer_class = InformationPageSerializer
+    serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.all()
 
 
