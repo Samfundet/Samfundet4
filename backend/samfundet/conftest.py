@@ -11,8 +11,8 @@ from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.general import User, Image, Organization
 from samfundet.models.recruitment import Recruitment
+from samfundet.models.general import User, Image, InformationPage, Organization
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -183,11 +183,17 @@ def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitm
         name_nb='Test Recruitment NB',
         name_en='Test Recruitment EN',
         visible_from=now,
-        actual_application_deadline=now + 3*one_hour,
+        actual_application_deadline=now + 3 * one_hour,
         shown_application_deadline=now + one_hour,
-        reprioritization_deadline_for_applicant=now + 4*one_hour,
-        reprioritization_deadline_for_groups=now + 6*one_hour,
+        reprioritization_deadline_for_applicant=now + 4 * one_hour,
+        reprioritization_deadline_for_groups=now + 6 * one_hour,
         organization=fixture_organization,
     )
     yield recruitment
     recruitment.delete()
+
+
+def fixture_informationpage() -> Iterator[InformationPage]:
+    informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
+    yield informationpage
+    informationpage.delete()

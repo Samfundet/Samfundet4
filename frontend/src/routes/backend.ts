@@ -369,6 +369,7 @@ export const ROUTES_BACKEND = {
   samfundet__api_root: '/api/',
   samfundet__csrf: '/csrf/',
   samfundet__login: '/login/',
+  samfundet__register: '/register/',
   samfundet__logout: '/logout/',
   samfundet__user: '/user/',
   samfundet__groups: '/groups/',

@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -53,6 +53,7 @@ from .serializers import (
     GroupSerializer,
     ProfileSerializer,
     BookingSerializer,
+    RegisterSerializer,
     TextItemSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
@@ -201,6 +202,7 @@ class GangTypeView(ModelViewSet):
 
 
 class InformationPageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
@@ -275,6 +277,25 @@ class LogoutView(APIView):
 
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+
+@method_decorator(csrf_protect, 'dispatch')
+class RegisterView(APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request=request, user=user)
+        new_csrf_token = get_token(request=request)
+
+        return Response(
+            status=status.HTTP_202_ACCEPTED,
+            data=new_csrf_token,
+            headers={XCSRFTOKEN: new_csrf_token},
+        )
 
 
 class UserView(APIView):

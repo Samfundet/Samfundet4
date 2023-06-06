@@ -17,6 +17,7 @@ import {
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
+  SignUpPage,
 } from '~/Pages';
 import {
   ClosedPeriodAdminPage,
@@ -58,6 +59,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.health} element={<HealthPage />} />
         <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
         <Route path={ROUTES.frontend.login} element={<LoginPage />} />
+        <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
         <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
         <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
         <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
