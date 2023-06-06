@@ -33,43 +33,39 @@ export function Footer() {
 
   return (
     <div className={styles.footer_container}>
-      <div className={styles.row}>
-        <div className={styles.col}>
-          <div className={styles.column}>
-            <h1 className={styles.header}>{t(KEY.common_contact)}</h1>
-            <div>
-              <p>© Studentersamfundet i Trondhjem 2023</p>
-              <p>Org.nr: 970 088 466</p>
-              <p>Elgeseter gate 1</p>
-              <p>7030</p>
-            </div>
+      <div className={styles.main_row}>
+        <div className={classNames(styles.col, styles.column)}>
+          <h1 className={styles.header}>{t(KEY.common_contact)}</h1>
+          <div>
+            <p>© Studentersamfundet i Trondhjem 2023</p>
+            <p>Org.nr: 970 088 466</p>
+            <p>Elgeseter gate 1</p>
+            <p>7030</p>
           </div>
         </div>
         <div className={classNames(styles.col_2, styles.column)}>
           <h1 className={styles.header}>{t(KEY.common_sponsor)}</h1>
-          <div className={styles.row}>
+          <div className={styles.row_collapse}>
             <Link className={styles.sponsor_logo} target="external" url="https://www.trondheim.kommune.no/">
-              <Image src={trondhemSponsor} height={48}></Image>
+              <Image src={trondhemSponsor} className={styles.images}></Image>
             </Link>
             <Link className={styles.sponsor_logo} target="external" url="https://kulturrom.no/">
-              <Image src={kulturromSponsor} height={48}></Image>
+              <Image src={kulturromSponsor} className={styles.images}></Image>
             </Link>
             <Link className={styles.sponsor_logo} target="external" url="https://reitan.no/no">
-              <Image src={reitanSponsor} height={48}></Image>
+              <Image src={reitanSponsor} className={styles.images}></Image>
             </Link>
           </div>
         </div>
-        <div className={styles.col}>
-          <div className={styles.colum}>
-            <h1 className={styles.header}>{t(KEY.common_festivals)}</h1>
-            <div className={styles.row}>
-              <Link className={styles.sponsor_logo} target="external" url="https://www.uka.no/">
-                <Image src={ukaWhite} height={48}></Image>
-              </Link>
-              <Link className={styles.sponsor_logo} target="external" url="https://www.isfit.org/">
-                <Image src={isfit} height={48}></Image>
-              </Link>
-            </div>
+        <div className={classNames(styles.col, styles.column)}>
+          <h1 className={styles.header}>{t(KEY.common_festivals)}</h1>
+          <div className={styles.row}>
+            <Link target="external" url="https://www.uka.no/">
+              <Image src={ukaWhite} className={styles.images}></Image>
+            </Link>
+            <Link target="external" url="https://www.isfit.org/">
+              <Image src={isfit} className={styles.images}></Image>
+            </Link>
           </div>
         </div>
       </div>
@@ -89,13 +85,8 @@ export function Footer() {
       </div>
       <div className={styles.cookies}>
         <p>
-          {t(KEY.we_use_cookies)}
-          <Link
-            style={{ color: 'white' }}
-            className={styles.sponsor_logo}
-            target="external"
-            url="https://www.whatarecookies.com/"
-          >
+          {t(KEY.we_use_cookies)}{' '}
+          <Link style={{ color: 'white' }} target="external" url="https://www.whatarecookies.com/">
             {t(KEY.common_here)}
           </Link>
         </p>
