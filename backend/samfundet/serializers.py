@@ -25,6 +25,7 @@ from .models.general import (
     MenuItem,
     GangType,
     KeyValue,
+    Organization,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -343,6 +344,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # GANGS ###
+class OrganizationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organization
+        fields = '__all__'
+
+
 class GangSerializer(serializers.ModelSerializer):
 
     class Meta:

@@ -33,6 +33,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    Organization,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -61,6 +62,7 @@ from .serializers import (
     EventGroupSerializer,
     RecruitmentSerializer,
     SaksdokumentSerializer,
+    OrganizationSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
     FoodPreferenceSerializer,
@@ -188,7 +190,13 @@ class IsClosedView(ListAPIView):
 class SaksdokumentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all().order_by('-publication_date')
+    queryset = Saksdokument.objects.all()
+
+
+class OrganizationView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = OrganizationSerializer
+    queryset = Organization.objects.all()
 
 
 class GangView(ModelViewSet):

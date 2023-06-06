@@ -15,6 +15,7 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OrganizationDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   SaksdokumentDto,
@@ -312,6 +313,13 @@ export async function putSaksdokument(id: string | number, data: Partial<Saksdok
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
   const response = await axios.put<SaksdokumentDto>(url, data, { withCredentials: true });
   return response;
+}
+
+export async function getOrganizations(): Promise<OrganizationDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__organizations_list;
+  const response = await axios.get<OrganizationDto[]>(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function getGangList(): Promise<GangTypeDto[]> {

@@ -227,6 +227,11 @@ export type BookingDto = {
   from_to?: Date;
 };
 
+export type OrganizationDto = {
+  id: number;
+  name: string;
+};
+
 export type GangDto = {
   id: number;
   name_nb: string;

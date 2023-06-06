@@ -29,6 +29,7 @@ router.register('textitem', views.TextItemView, 'text_item')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
+router.register('organizations', views.OrganizationView, 'organizations')
 
 app_name = 'samfundet'
 

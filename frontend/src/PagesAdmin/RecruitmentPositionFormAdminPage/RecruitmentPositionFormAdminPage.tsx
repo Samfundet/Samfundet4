@@ -9,6 +9,7 @@ import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition
 import { RecruitmentPositionDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
 
@@ -89,7 +90,12 @@ export function RecruitmentPositionFormAdminPage() {
       putRecruitmentPosition(positionId, updatedPosition)
         .then(() => {
           toast.success(t(KEY.common_update_successful));
-          navigate(ROUTES.frontend.admin_recruitment);
+          navigate(
+            reverse({
+              pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+              urlParams: { recruitmentId: recruitmentId, gangId: gangId },
+            }),
+          );
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
@@ -99,7 +105,12 @@ export function RecruitmentPositionFormAdminPage() {
       // Post new page.
       postRecruitmentPosition(updatedPosition)
         .then(() => {
-          navigate(ROUTES.frontend.admin_recruitment);
+          navigate(
+            reverse({
+              pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+              urlParams: { recruitmentId: recruitmentId, gangId: gangId },
+            }),
+          );
           toast.success(t(KEY.common_creation_successful));
         })
         .catch((error) => {
