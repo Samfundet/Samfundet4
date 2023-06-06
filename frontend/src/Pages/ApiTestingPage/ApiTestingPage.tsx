@@ -3,6 +3,7 @@ import {
   getCsrfToken,
   getInformationPage,
   getInformationPages,
+  getRecruitmentPosition,
   getRecruitmentPositions,
   getUser,
   getVenue,
@@ -71,6 +72,13 @@ export function ApiTestingPage() {
         theme="samf"
         className={styles.btn}
         onClick={() => getRecruitmentPositions('1').then(console.log).catch(console.error)}
+      >
+        get Rec pos
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentPosition('1').then(console.log).catch(console.error)}
       >
         get Rec pos
       </Button>

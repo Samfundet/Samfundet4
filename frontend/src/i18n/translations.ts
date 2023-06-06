@@ -81,6 +81,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_reservations]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
   [KEY.common_about_samfundet]: 'Om Samfundet',
+  [KEY.common_long_description]: 'Lang beskrivelse',
+  [KEY.common_short_description]: 'Kort beskrivelse',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
   [KEY.common_delete_successful]: 'Slettingen var vellykket',
   [KEY.common_update_successful]: 'Oppdateringen var vellykket',
@@ -126,6 +128,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.navbar_nybygg]: 'Nybygg',
 
   // Recruitment
+  [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_visible_from]: 'Synlig fra',
@@ -134,6 +137,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.recrutment_default_admission_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
@@ -257,6 +261,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'About Samfundet',
+  [KEY.common_long_description]: 'Long description',
+  [KEY.common_short_description]: 'Short description',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
   [KEY.common_delete_successful]: 'Deletion was successful',
   [KEY.common_update_successful]: 'The update was successful',
@@ -302,6 +308,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.navbar_map]: 'Map and venues',
 
   // Recruitment
+  [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_organization]: 'Organization',
@@ -309,6 +316,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.actual_application_deadlin]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
   [KEY.recruitment_administrate]: 'Administrate recruitment',
+  [KEY.recrutment_default_admission_letter]: 'Default admission letter',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',

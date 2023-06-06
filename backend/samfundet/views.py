@@ -388,7 +388,14 @@ class RecruitmentView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentPositionView(ListAPIView):
+class RecruitmentPositionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 

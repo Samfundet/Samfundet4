@@ -28,6 +28,7 @@ router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('recruitment', views.RecruitmentView, 'recruitment')
+router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 
 app_name = 'samfundet'
 
@@ -44,5 +45,5 @@ urlpatterns = [
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
-    path('recruitment-positions/', views.RecruitmentPositionView.as_view(), name='recruitment_positions'),
+    path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
 ]

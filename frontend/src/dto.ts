@@ -304,6 +304,7 @@ export type RecruitmentDto = {
 };
 
 export type RecruitmentPositionDto = {
+  id: string;
   name_nb: string;
   name_en: string;
 
@@ -319,7 +320,7 @@ export type RecruitmentPositionDto = {
   default_admission_letter_en: string;
 
   gang: string;
-  recruitment: RecruitmentDto;
+  recruitment: string;
 
   tags: string;
 

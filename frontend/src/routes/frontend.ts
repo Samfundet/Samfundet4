@@ -59,6 +59,8 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_edit: '/admin/recruitment/edit/:id',
   admin_recruitment_gang_overview: '/admin/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_position_overview: '/admin/recruitment/:recruitmentId/gang/:gangId',
+  admin_recruitment_gang_position_create: '/admin/recruitment/:recruitmentId/gang/:gangId/create/',
+  admin_recruitment_gang_position_edit: '/admin/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
 
   // ==================== //
   //      Development     //

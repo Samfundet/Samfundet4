@@ -28,7 +28,7 @@ export function RecruitmentGangAdminPage() {
       });
   }, [recruitmentId, gangId]);
 
-  const tableColumns = [{ content: t(KEY.common_gang), sortable: true }];
+  const tableColumns = [{ content: t(KEY.recruitment_position), sortable: true }];
 
   const data = recruitmentPositions.map(function (recruitmentPosition) {
     return [
@@ -42,8 +42,12 @@ export function RecruitmentGangAdminPage() {
             onEdit={() => {
               navigate(
                 reverse({
-                  pattern: ROUTES.frontend.health,
-                  urlParams: {},
+                  pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
+                  urlParams: {
+                    gangId: gangId,
+                    recruitmentId: recruitmentId,
+                    positionId: recruitmentPosition.id,
+                  },
                 }),
               );
             }}
@@ -56,7 +60,11 @@ export function RecruitmentGangAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+    <Button
+      theme="success"
+      rounded={true}
+      onClick={() => navigate(ROUTES.frontend.admin_recruitment_gang_position_create)}
+    >
       {t(KEY.common_create)} {t(KEY.recruitment_position)}
     </Button>
   );

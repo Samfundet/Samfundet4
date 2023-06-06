@@ -498,3 +498,30 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
 
   return response;
 }
+
+export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPositionDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_position_list;
+  const response = await axios.post(url, recruitmentPosition, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentPosition(
+  positionId: string,
+  recruitment: Partial<RecruitmentPositionDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
+  const response = await axios.put<RecruitmentPositionDto>(url, recruitment, { withCredentials: true });
+  return response;
+}
