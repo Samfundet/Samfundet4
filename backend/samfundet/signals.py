@@ -43,19 +43,19 @@ def update_editor_permissions(
         if action in ['post_remove', 'post_clear']:
             removed_gangs: set[Gang] = set(model.objects.filter(pk__in=pk_set)) - current_editors
             for gang in removed_gangs:
-                if gang.event_admin:
-                    remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin, obj=instance)
-                    remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin, obj=instance)
-                if gang.gang_leader:
-                    remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader, obj=instance)
-                    remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader, obj=instance)
+                if gang.event_admin_group:
+                    remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin_group, obj=instance)
+                    remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin_group, obj=instance)
+                if gang.gang_leader_group:
+                    remove_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
+                    remove_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
 
         # In the case of an add, the related objects have already been added by the time the signal handler is called.
         if action == 'post_add':
             for gang in current_editors:
-                if gang.event_admin:
-                    assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin, obj=instance)
-                    assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin, obj=instance)
-                if gang.gang_leader:
-                    assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader, obj=instance)
-                    assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader, obj=instance)
+                if gang.event_admin_group:
+                    assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.event_admin_group, obj=instance)
+                    assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.event_admin_group, obj=instance)
+                if gang.gang_leader_group:
+                    assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
+                    assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)

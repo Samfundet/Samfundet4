@@ -53,11 +53,11 @@ class TestEditorPermissions:
         ### Arrange ###
 
         ### Act ###
-        fixture_gang.event_admin = fixture_group
+        fixture_gang.event_admin_group = fixture_group
         fixture_gang.save()
         fixture_event.editors.add(fixture_gang)
         fixture_event.save()
-        editor_perms = get_perms(fixture_gang.event_admin, fixture_event)
+        editor_perms = get_perms(fixture_gang.event_admin_group, fixture_event)
 
         ### Assert ###
         assert 'change_event' in editor_perms
@@ -72,10 +72,10 @@ class TestEditorPermissions:
         ### Arrange ###
 
         ### Act ###
-        fixture_gang.event_admin = fixture_group
+        fixture_gang.event_admin_group = fixture_group
         fixture_gang.save()
         fixture_event.editors.remove(fixture_gang)
-        editor_perms = get_perms(fixture_gang.event_admin, fixture_event)
+        editor_perms = get_perms(fixture_gang.event_admin_group, fixture_event)
 
         ### Assert ###
         assert 'change_event' not in editor_perms
@@ -90,11 +90,11 @@ class TestEditorPermissions:
         ### Arrange ###
 
         ### Act ###
-        fixture_gang.gang_leader = fixture_group
+        fixture_gang.gang_leader_group = fixture_group
         fixture_gang.save()
         fixture_event.editors.add(fixture_gang)
         fixture_event.save()
-        editor_perms = get_perms(fixture_gang.gang_leader, fixture_event)
+        editor_perms = get_perms(fixture_gang.gang_leader_group, fixture_event)
 
         ### Assert ###
         assert 'change_event' in editor_perms
@@ -109,10 +109,10 @@ class TestEditorPermissions:
         ### Arrange ###
 
         ### Act ###
-        fixture_gang.gang_leader = fixture_group
+        fixture_gang.gang_leader_group = fixture_group
         fixture_gang.save()
         fixture_event.editors.remove(fixture_gang)
-        editor_perms = get_perms(fixture_gang.gang_leader, fixture_event)
+        editor_perms = get_perms(fixture_gang.gang_leader_group, fixture_event)
 
         ### Assert ###
         assert 'change_event' not in editor_perms
