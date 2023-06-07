@@ -28,6 +28,7 @@ router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('infobox', views.InfoboxView, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
+router.register('recruitment', views.RecruitmentView, 'recruitment')
 
 app_name = 'samfundet'
 
@@ -35,6 +36,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('csrf/', views.CsrfView.as_view(), name='csrf'),
     path('login/', views.LoginView.as_view(), name='login'),
+    path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
@@ -43,4 +45,5 @@ urlpatterns = [
     path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
     path('home/', views.HomePageView().as_view(), name='home'),
+    path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
 ]

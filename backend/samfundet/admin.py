@@ -11,6 +11,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
+from .models.recruitment import Recruitment
 from .models.general import (
     Tag,
     User,
@@ -26,6 +27,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    Organization,
     Reservation,
     ClosedPeriod,
     Saksdokument,
@@ -452,6 +454,32 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
     sortable_by = ['key']
     list_display = ['id', 'key', 'value']
     search_fields = ['id', 'key', 'value']
+
+
+@admin.register(Recruitment)
+class RecruitmentAdmin(admin.ModelAdmin):
+    sortable_by = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    list_display = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    search_fields = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    list_display_links = ['visible_from']
+    list_select_related = True
+
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name']
+    search_fields = ['id', 'name']
+    list_select_related = True
 
 
 ### End: Our models ###

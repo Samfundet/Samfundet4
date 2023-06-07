@@ -14,6 +14,8 @@ import {
   KeyValueDto,
   MenuDto,
   MenuItemDto,
+  NotificationDto,
+  RecruitmentDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -49,11 +51,39 @@ export async function logout(): Promise<AxiosResponse> {
   return response;
 }
 
+export async function register(
+  username: string,
+  firstname: string,
+  lastname: string,
+  password: string,
+): Promise<number> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__register;
+  const data = { username, firstname, lastname, password };
+  const response = await axios.post(url, data, { withCredentials: true });
+
+  // Django rotates csrftoken after login, set new token received.
+  const new_token = response.data;
+  axios.defaults.headers.common['X-CSRFToken'] = new_token;
+
+  return response.status;
+}
+
 export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function assignUserToGroup(username: string, group_name: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__assign_group;
+  const payload = {
+    username,
+    group_name,
+  };
+  const response = await axios.post(url, payload, { withCredentials: true });
+
+  return response;
 }
 
 export async function getHomeData(): Promise<HomePageDto> {
@@ -365,9 +395,7 @@ export async function getImage(id: string | number): Promise<ImageDto> {
 
 export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
-  const response = await axios.postForm<ImageDto>(url, data, {
-    withCredentials: true,
-  });
+  const response = await axios.postForm<ImageDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
@@ -381,5 +409,101 @@ export async function putImage(id: string | number, data: Partial<ImageDto>): Pr
 export function getKeyValues(): Promise<AxiosResponse<KeyValueDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__key_value_list;
   const response = axios.get<KeyValueDto[]>(url);
+  return response;
+}
+
+// ############################################################
+//                       Notifications
+// ############################################################
+
+type AllNotificationsResponse = {
+  all_count: number;
+  all_list: NotificationDto[];
+};
+export function getAllNotifications(): Promise<AxiosResponse<AllNotificationsResponse>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_all_notification_list;
+  const response = axios.get<AllNotificationsResponse>(url, { withCredentials: true });
+  return response;
+}
+
+type UnreadNotificationsResponse = {
+  unread_count: number;
+  unread_list: NotificationDto[];
+};
+export function getUnreadNotifications(): Promise<AxiosResponse<UnreadNotificationsResponse>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_unread_notification_list;
+  const response = axios.get<UnreadNotificationsResponse>(url, { withCredentials: true });
+  return response;
+}
+
+export function markAllAsRead(): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__mark_all_as_read;
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+export function markAsRead(slug: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.notifications__mark_as_read,
+      urlParams: { slug },
+    });
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+export function markAsUnread(slug: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.notifications__mark_as_unread,
+      urlParams: { slug },
+    });
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+export function deleteNotification(slug: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.notifications__delete,
+      urlParams: { slug },
+    });
+  const response = axios.get(url, { withCredentials: true });
+  return response;
+}
+
+// ############################################################
+//                       Recruitment
+// ############################################################
+
+export async function getAllRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitment(id: string): Promise<AxiosResponse<RecruitmentDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
+  const response = await axios.post(url, recruitmentData, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitment(id: string, recruitment: Partial<RecruitmentDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
+  const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
   return response;
 }

@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,6 +18,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
+from .models.recruitment import (Recruitment)
 from .models.general import (
     Tag,
     User,
@@ -54,11 +55,13 @@ from .serializers import (
     InfoboxSerializer,
     ProfileSerializer,
     BookingSerializer,
+    RegisterSerializer,
     TextItemSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
     EventGroupSerializer,
+    RecruitmentSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
@@ -201,6 +204,7 @@ class GangTypeView(ModelViewSet):
 
 
 class InformationPageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
@@ -282,6 +286,25 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+@method_decorator(csrf_protect, 'dispatch')
+class RegisterView(APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request=request, user=user)
+        new_csrf_token = get_token(request=request)
+
+        return Response(
+            status=status.HTTP_202_ACCEPTED,
+            data=new_csrf_token,
+            headers={XCSRFTOKEN: new_csrf_token},
+        )
+
+
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -319,3 +342,73 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class AssignGroupView(APIView):
+    """
+     Assigns a user to a group.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.add(group)
+        else:
+            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
+
+    def delete(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.remove(group)
+        else:
+            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentView(ModelViewSet):
+    # TODO: Verify that object is valid (that the times make sense)
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentSerializer
+    queryset = Recruitment.objects.all()
