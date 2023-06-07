@@ -6,6 +6,7 @@ export { Carousel } from './Carousel';
 export { Checkbox } from './Checkbox';
 export { ColorDisplay } from './ColorDisplay';
 export { ContentCard } from './ContentCard';
+export { CrudButtons } from './CrudButtons';
 export { Dropdown } from './Dropdown';
 export { Error } from './Error';
 export { EventCard } from './EventCard';

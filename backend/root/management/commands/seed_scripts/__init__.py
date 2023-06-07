@@ -2,6 +2,7 @@ from . import (
     images,
     gangs,
     information_pages,
+    oganizations,
     venues,
     events,
     billig,
@@ -27,6 +28,7 @@ SEED_SCRIPTS = [
     ('menu', menu.seed),
     ('documents', documents.seed),
     ('information_page', information_pages.seed),
+    ('organization', oganizations.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),

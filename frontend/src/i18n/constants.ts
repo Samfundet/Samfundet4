@@ -90,6 +90,7 @@ export const KEY = {
   common_membership: 'common_membership',
   common_information: 'common_information',
   common_description: 'common_description',
+  common_recruitment: 'common_recruitment',
   common_reservations: 'common_reservations',
   common_opening_hours: 'common_opening_hours',
   common_about_samfundet: 'common_about_samfundet',
@@ -138,6 +139,16 @@ export const KEY = {
   sulten_page_about_us: 'sulten_page_about_us',
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
+
+  // Recruitment
+  recruitment_duration: 'recruitment_duration',
+  recruitment_organization: 'recruitment_organization',
+  recruitment_visible_from: 'recruitment_visible_from',
+  recruitment_administrate: 'recruitment_administrate',
+  shown_application_deadline: 'shown_application_deadline',
+  actual_application_deadlin: 'actual_application_deadline',
+  reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
 
   // Admin:
   admin_organizer: 'admin_organizer',

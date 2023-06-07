@@ -56,6 +56,13 @@ export const appletCategories: AppletCategory[] = [
         icon: 'mdi:people-group',
         url: ROUTES.frontend.admin_gangs,
       },
+      {
+        title_nb: 'Opptak',
+        title_en: 'Recruitment',
+        perm: PERM.SAMFUNDET_ADD_RECRUITMENT,
+        icon: 'mdi:person-search',
+        url: ROUTES.frontend.admin_recruitment,
+      },
     ],
   },
 ];
