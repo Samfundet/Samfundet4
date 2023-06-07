@@ -205,7 +205,7 @@ class EventAdmin(CustomGuardedModelAdmin):
     list_filter = ['event_group']
     list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
-    # filter_horizontal = ['registration']
+    filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
