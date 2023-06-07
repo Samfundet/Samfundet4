@@ -25,6 +25,7 @@ from .models.general import (
     MenuItem,
     GangType,
     KeyValue,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -362,6 +363,13 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
+        fields = '__all__'
+
+
+class BlogPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogPost
         fields = '__all__'
 
 
