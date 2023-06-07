@@ -1,17 +1,8 @@
 import { default as classNames } from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Link, Image } from '~/Components';
-import {
-  facebookLogo,
-  instagramLogo,
-  isfit,
-  kulturromSponsor,
-  reitanSponsor,
-  snapchatLogo,
-  tikTokLogo,
-  trondhemSponsor,
-  ukaWhite,
-} from '~/assets';
+import { Icon } from '@iconify/react';
+import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
 import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';
 
@@ -58,16 +49,16 @@ export function Footer() {
       </div>
       <div className={styles.row}>
         <Link target="external" url="https://www.facebook.com/samfundet">
-          <Image src={facebookLogo} width={40}></Image>
+          <Icon className={styles.icon} color="white" icon="bi:facebook" width={40} />
         </Link>
         <Link target="external" url="https://www.instagram.com/samfundet/">
-          <Image src={instagramLogo} width={40}></Image>
+          <Icon className={styles.icon} color="white" icon="bi:instagram" width={40} />
         </Link>
         <Link target="external" url="https://www.tiktok.com/@samfundet">
-          <Image src={tikTokLogo} width={40}></Image>
+          <Icon className={styles.icon} color="white" icon="bi:tiktok" width={40} />
         </Link>
         <Link target="external" url="https://www.snapchat.com/add/samfundet">
-          <Image src={snapchatLogo} width={40}></Image>
+          <Icon className={styles.icon} color="white" icon="bi:snapchat" width={40} />
         </Link>
       </div>
       <div className={styles.cookies}>
