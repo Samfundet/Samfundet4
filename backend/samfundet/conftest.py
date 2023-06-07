@@ -11,7 +11,8 @@ from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.general import User, Image, InformationPage, BlogPost
+from samfundet.models.recruitment import Recruitment
+from samfundet.models.general import User, Image, InformationPage, Organization, BlogPost
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -163,6 +164,33 @@ def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: Billig
     fixture_event.billig_id = fixture_billig_event.id
     fixture_event.save()
     yield fixture_event, fixture_billig_event
+
+
+@pytest.fixture
+def fixture_organization() -> Iterator[Organization]:
+    organization = Organization.objects.create(name='Samfundet')
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
+def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitment]:
+    now = timezone.now()
+    one_hour = timezone.timedelta(hours=1)
+
+    # Create a recruitment instance with valid data
+    recruitment = Recruitment.objects.create(
+        name_nb='Test Recruitment NB',
+        name_en='Test Recruitment EN',
+        visible_from=now,
+        actual_application_deadline=now + 3 * one_hour,
+        shown_application_deadline=now + one_hour,
+        reprioritization_deadline_for_applicant=now + 4 * one_hour,
+        reprioritization_deadline_for_groups=now + 6 * one_hour,
+        organization=fixture_organization,
+    )
+    yield recruitment
+    recruitment.delete()
 
 
 @pytest.fixture

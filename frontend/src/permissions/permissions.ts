@@ -164,6 +164,11 @@ export const SAMFUNDET_CHANGE_PROFILE = 'samfundet.change_profile';
 export const SAMFUNDET_DELETE_PROFILE = 'samfundet.delete_profile';
 export const SAMFUNDET_VIEW_PROFILE = 'samfundet.view_profile';
 
+export const SAMFUNDET_ADD_RECRUITMENT = 'samfundet.add_recruitment';
+export const SAMFUNDET_CHANGE_RECRUITMENT = 'samfundet.change_recruitment';
+export const SAMFUNDET_DELETE_RECRUITMENT = 'samfundet.delete_recruitment';
+export const SAMFUNDET_VIEW_RECRUITMENT = 'samfundet.view_recruitment';
+
 export const SAMFUNDET_ADD_RESERVATION = 'samfundet.add_reservation';
 export const SAMFUNDET_CHANGE_RESERVATION = 'samfundet.change_reservation';
 export const SAMFUNDET_DELETE_RESERVATION = 'samfundet.delete_reservation';

@@ -14,6 +14,7 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
+  RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
@@ -30,6 +31,7 @@ import {
   InformationAdminPage,
   InformationFormAdminPage,
   OpeningHoursAdminPage,
+  RecruitmentAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -37,6 +39,7 @@ import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
+import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
 
@@ -65,6 +68,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.event} element={<EventPage />} />
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
+        <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
       </Route>
       {/* 
             ADMIN ROUTES
@@ -97,6 +101,10 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+        {/* Recruitment */}
+        <Route path={ROUTES.frontend.admin_recruitment} element={<RecruitmentAdminPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_create} element={<RecruitmentFormAdminPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_edit} element={<RecruitmentFormAdminPage />} />
       </Route>
       {/* 
         Info pages

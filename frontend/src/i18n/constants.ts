@@ -90,6 +90,7 @@ export const KEY = {
   common_membership: 'common_membership',
   common_information: 'common_information',
   common_description: 'common_description',
+  common_recruitment: 'common_recruitment',
   common_reservations: 'common_reservations',
   common_opening_hours: 'common_opening_hours',
   common_about_samfundet: 'common_about_samfundet',
@@ -99,6 +100,9 @@ export const KEY = {
   common_creation_successful: 'common_creation_successful',
   common_see_in_django_admin: 'common_see_in_django_admin',
   common_something_went_wrong: 'common_something_went_wrong',
+  common_festivals: 'common_festivals',
+  common_sponsor: 'common_sponsors',
+  common_here: 'common_here',
 
   // Price groups
   common_ticket_type_billig: 'common_ticket_type_billig',
@@ -136,6 +140,16 @@ export const KEY = {
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
+  // Recruitment
+  recruitment_duration: 'recruitment_duration',
+  recruitment_organization: 'recruitment_organization',
+  recruitment_visible_from: 'recruitment_visible_from',
+  recruitment_administrate: 'recruitment_administrate',
+  shown_application_deadline: 'shown_application_deadline',
+  actual_application_deadlin: 'actual_application_deadline',
+  reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
+
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',
@@ -172,6 +186,7 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  we_use_cookies: 'we_use_cookies',
 } as const;
 
 /**

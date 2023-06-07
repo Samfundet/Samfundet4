@@ -28,6 +28,7 @@ router.register('booking', views.BookingView, 'booking')
 router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('key-value', views.KeyValueView, 'key_value')
+router.register('recruitment', views.RecruitmentView, 'recruitment')
 
 app_name = 'samfundet'
 

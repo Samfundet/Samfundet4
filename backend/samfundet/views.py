@@ -18,6 +18,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
+from .models.recruitment import (Recruitment)
 from .models.general import (
     Tag,
     User,
@@ -60,6 +61,7 @@ from .serializers import (
     GangTypeSerializer,
     BlogPostSerializer,
     EventGroupSerializer,
+    RecruitmentSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
@@ -398,3 +400,16 @@ class AssignGroupView(APIView):
             return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentView(ModelViewSet):
+    # TODO: Verify that object is valid (that the times make sense)
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentSerializer
+    queryset = Recruitment.objects.all()

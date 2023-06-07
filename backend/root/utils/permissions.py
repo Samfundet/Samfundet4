@@ -163,6 +163,11 @@ SAMFUNDET_CHANGE_PROFILE = 'samfundet.change_profile'
 SAMFUNDET_DELETE_PROFILE = 'samfundet.delete_profile'
 SAMFUNDET_VIEW_PROFILE = 'samfundet.view_profile'
 
+SAMFUNDET_ADD_RECRUITMENT = 'samfundet.add_recruitment'
+SAMFUNDET_CHANGE_RECRUITMENT = 'samfundet.change_recruitment'
+SAMFUNDET_DELETE_RECRUITMENT = 'samfundet.delete_recruitment'
+SAMFUNDET_VIEW_RECRUITMENT = 'samfundet.view_recruitment'
+
 SAMFUNDET_ADD_RESERVATION = 'samfundet.add_reservation'
 SAMFUNDET_CHANGE_RESERVATION = 'samfundet.change_reservation'
 SAMFUNDET_DELETE_RESERVATION = 'samfundet.delete_reservation'
