@@ -90,7 +90,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'Se i django admin-panel',
   [KEY.common_creation_successful]: 'Opprettelsen var vellykket',
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
-
+  [KEY.common_sponsor]: 'Sponsorer',
+  [KEY.common_festivals]: 'Festivaler',
+  [KEY.common_here]: 'her',
   // Price groups
   [KEY.common_ticket_type]: 'Billett',
   [KEY.common_ticket_type_free]: 'Gratis',
@@ -176,6 +178,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+  [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -267,6 +270,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'See in django admin-panel',
   [KEY.common_creation_successful]: 'Successfully created',
   [KEY.common_something_went_wrong]: 'Something went wrong',
+  [KEY.common_sponsor]: 'Sponsors',
+  [KEY.common_festivals]: 'Festivals',
+  [KEY.common_here]: 'here',
 
   // Price groups
   [KEY.common_ticket_type_billig]: 'Paid',
@@ -355,4 +361,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
   [KEY.inputfile_no_file_selected]: 'No file selected',
+  [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
 };
