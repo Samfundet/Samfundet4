@@ -27,6 +27,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    BlogPost,
     Organization,
     Reservation,
     ClosedPeriod,
@@ -300,6 +301,19 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
     search_fields = ['slug_field', 'title_nb', 'title_en']
     # filter_horizontal = []
     list_display_links = ['__str__', 'slug_field']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_nb', 'title_en', 'created_at', 'updated_at']
+    # list_filter = []
+    list_display = ['__str__', 'id', 'created_at', 'updated_at']
+    search_fields = ['id', 'title_nb', 'title_en', 'text_en', 'text_nb']
+    # filter_horizontal = []
+    list_display_links = ['__str__', 'id']
     # autocomplete_fields = []
     list_select_related = True
 

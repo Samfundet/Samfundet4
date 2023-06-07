@@ -12,7 +12,7 @@ from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment
-from samfundet.models.general import User, Image, InformationPage, Organization
+from samfundet.models.general import User, Image, InformationPage, Organization, BlogPost
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -198,3 +198,16 @@ def fixture_informationpage() -> Iterator[InformationPage]:
     informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
     yield informationpage
     informationpage.delete()
+
+
+@pytest.fixture
+def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
+    blogpost = BlogPost.objects.create(
+        title_nb='Tittel',
+        title_en='Title',
+        text_nb='halla verden',
+        text_en='hellow world uWu',
+        image=fixture_image,
+    )
+    yield blogpost
+    blogpost.delete()
