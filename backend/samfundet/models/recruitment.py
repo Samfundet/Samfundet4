@@ -82,4 +82,4 @@ class RecruitmentPosition(models.Model):
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', null=True, blank=True, related_name='intervjues')
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviews')

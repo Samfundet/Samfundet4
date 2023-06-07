@@ -266,7 +266,6 @@ class Gang(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        unique=True,
     )
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')

@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Generator
 
 from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition
