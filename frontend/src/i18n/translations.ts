@@ -48,10 +48,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
   [KEY.common_venue]: 'Lokale',
-  [KEY.common_venues]: 'Lokaler',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
+  [KEY.common_register]: 'Registrer',
+  [KEY.common_firstname]: 'Fornavn',
+  [KEY.common_lastname]: 'Etternavn',
+  [KEY.common_repeat]: 'Repeter',
   [KEY.common_event]: 'Arrangement',
+  [KEY.common_venues]: 'Lokaler',
   [KEY.common_events]: 'Arrangementer',
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
@@ -71,6 +75,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_required]: 'Påkrevd',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_norwegian]: 'Norsk',
+  [KEY.common_recruitment]: 'Opptak',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
@@ -85,14 +90,16 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'Se i django admin-panel',
   [KEY.common_creation_successful]: 'Opprettelsen var vellykket',
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
-
+  [KEY.common_sponsor]: 'Sponsorer',
+  [KEY.common_festivals]: 'Festivaler',
+  [KEY.common_here]: 'her',
   // Price groups
-  [KEY.common_ticket_type_billig]: 'Betalt',
-  [KEY.common_ticket_type_free]: 'Gratis',
-  [KEY.common_ticket_type_included]: 'Inkludert i inngang',
-  [KEY.common_ticket_type_custom]: 'Tilpasset',
-  [KEY.common_ticket_type_registration]: 'Påmelding',
   [KEY.common_ticket_type]: 'Billett',
+  [KEY.common_ticket_type_free]: 'Gratis',
+  [KEY.common_ticket_type_custom]: 'Tilpasset',
+  [KEY.common_ticket_type_billig]: 'Betalt',
+  [KEY.common_ticket_type_included]: 'Inkludert i inngang',
+  [KEY.common_ticket_type_registration]: 'Påmelding',
 
   // ==================== //
   //        Others        //
@@ -102,6 +109,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
   [KEY.loginpage_email_placeholder]: 'E-post eller medlemsnummer',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
+  [KEY.loginpage_register]: 'Lag bruker',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
@@ -119,9 +127,19 @@ export const nb: Record<KeyValues, string> = {
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
   // Navbar
+  [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
-  [KEY.navbar_map]: 'Kart og lokaler',
+
+  // Recruitment
+  [KEY.recruitment_duration]: 'Varighet',
+  [KEY.recruitment_visible_from]: 'Synlig fra',
+  [KEY.recruitment_organization]: 'Organisasjon',
+  [KEY.recruitment_administrate]: 'Administrer opptak',
+  [KEY.shown_application_deadline]: 'Vist søknadsfrist',
+  [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
+  [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -160,6 +178,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+  [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -214,6 +233,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_events]: 'Events',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_register]: 'Register',
+  [KEY.common_firstname]: 'First name',
+  [KEY.common_lastname]: 'Last name',
+  [KEY.common_repeat]: 'Repeat',
   [KEY.common_create]: 'Create',
   [KEY.common_delete]: 'Delete',
   [KEY.common_logout]: 'Log out',
@@ -237,6 +260,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_description]: 'Description',
   [KEY.common_information]: 'Information',
+  [KEY.common_recruitment]: 'Recruitment',
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'About Samfundet',
@@ -246,6 +270,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'See in django admin-panel',
   [KEY.common_creation_successful]: 'Successfully created',
   [KEY.common_something_went_wrong]: 'Something went wrong',
+  [KEY.common_sponsor]: 'Sponsors',
+  [KEY.common_festivals]: 'Festivals',
+  [KEY.common_here]: 'here',
 
   // Price groups
   [KEY.common_ticket_type_billig]: 'Paid',
@@ -263,6 +290,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_email_placeholder]: 'Email or membership ID',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_register]: 'Create user',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
@@ -283,6 +311,16 @@ export const en: Record<KeyValues, string> = {
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+
+  // Recruitment
+  [KEY.recruitment_duration]: 'Duration',
+  [KEY.recruitment_organization]: 'Organization',
+  [KEY.recruitment_visible_from]: 'Visible from',
+  [KEY.actual_application_deadlin]: 'Actual deadline',
+  [KEY.shown_application_deadline]: 'Displayed deadline',
+  [KEY.recruitment_administrate]: 'Administrate recruitment',
+  [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
+  [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
@@ -323,4 +361,5 @@ export const en: Record<KeyValues, string> = {
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
   [KEY.inputfile_no_file_selected]: 'No file selected',
+  [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
 };

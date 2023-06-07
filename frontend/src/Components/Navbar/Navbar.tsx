@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
-import { Button, Link, ThemeSwitch } from '~/Components';
+import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
 import { useGlobalContext } from '~/GlobalContextProvider';
@@ -20,7 +20,7 @@ const scrollDistanceForOpaque = 30;
 
 export function Navbar() {
   const isDarkTheme = useIsDarkTheme();
-  const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
+  const { isMobileNavigation, setIsMobileNavigation, notifications } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
@@ -171,7 +171,7 @@ export function Navbar() {
     </Button>
   );
 
-  // Show mobile popup for navigation
+  // Show mobile popup for navigation.
   const mobileNavigation = (
     <>
       <nav id={styles.mobile_popup_container}>
@@ -203,6 +203,7 @@ export function Navbar() {
             {user && profileButton}
 
             <ThemeSwitch />
+            <NotificationBadge number={notifications.length || undefined} onClick={() => console.log(1)} />
             {languageButton}
             {loginButton}
             {logoutButton}

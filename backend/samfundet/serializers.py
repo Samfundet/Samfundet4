@@ -9,6 +9,7 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
+from .models.recruitment import (Recruitment)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -24,6 +25,7 @@ from .models.general import (
     MenuItem,
     GangType,
     KeyValue,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -239,6 +241,46 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 
+class RegisterSerializer(serializers.Serializer):
+    """
+    This serializer defines two fields for authentication:
+      * email
+      * firstname
+      * lastname
+      * password
+    """
+    username = serializers.EmailField(label='Username', write_only=True)
+    firstname = serializers.CharField(label='First name', write_only=True)
+    lastname = serializers.CharField(label='Last name', write_only=True)
+    password = serializers.CharField(
+        label='Password',
+        # This will be used when the DRF browsable API is enabled.
+        style={'input_type': 'password'},
+        trim_whitespace=False,
+        write_only=True
+    )
+
+    def validate(self, attrs: dict) -> dict:
+        # Inherited function.
+        # Take username and password from request.
+        username = attrs.get('username')
+        firstname = attrs.get('firstname')
+        lastname = attrs.get('lastname')
+        password = attrs.get('password')
+
+        if username and password:
+            # Try to authenticate the user using Django auth framework.
+            user = User.objects.create_user(first_name=firstname, last_name=lastname, username=username, password=password)
+            user = authenticate(request=self.context.get('request'), username=username, password=password)
+        else:
+            msg = 'Both "username" and "password" are required.'
+            raise serializers.ValidationError(msg, code='authorization')
+        # We have a valid user, put it in the serializer's validated_data.
+        # It will be used in the view.
+        attrs['user'] = user
+        return attrs
+
+
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -321,6 +363,13 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
+        fields = '__all__'
+
+
+class BlogPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogPost
         fields = '__all__'
 
 
@@ -412,4 +461,16 @@ class KeyValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KeyValue
+        fields = '__all__'
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+class RecruitmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recruitment
         fields = '__all__'

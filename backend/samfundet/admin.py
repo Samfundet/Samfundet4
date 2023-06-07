@@ -11,6 +11,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
+from .models.recruitment import Recruitment
 from .models.general import (
     Tag,
     User,
@@ -26,6 +27,8 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    BlogPost,
+    Organization,
     Reservation,
     ClosedPeriod,
     Saksdokument,
@@ -302,6 +305,19 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
+@admin.register(BlogPost)
+class BlogPostAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_nb', 'title_en', 'created_at', 'updated_at']
+    # list_filter = []
+    list_display = ['__str__', 'id', 'created_at', 'updated_at']
+    search_fields = ['id', 'title_nb', 'title_en', 'text_en', 'text_nb']
+    # filter_horizontal = []
+    list_display_links = ['__str__', 'id']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
 @admin.register(Table)
 class TableAdmin(CustomGuardedModelAdmin):
     # ordering = []
@@ -452,6 +468,32 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
     sortable_by = ['key']
     list_display = ['id', 'key', 'value']
     search_fields = ['id', 'key', 'value']
+
+
+@admin.register(Recruitment)
+class RecruitmentAdmin(admin.ModelAdmin):
+    sortable_by = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    list_display = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    search_fields = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    list_display_links = ['visible_from']
+    list_select_related = True
+
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name']
+    search_fields = ['id', 'name']
+    list_select_related = True
 
 
 ### End: Our models ###

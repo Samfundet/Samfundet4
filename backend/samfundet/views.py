@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,6 +18,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
+from .models.recruitment import (Recruitment)
 from .models.general import (
     Tag,
     User,
@@ -32,6 +33,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -52,11 +54,14 @@ from .serializers import (
     GroupSerializer,
     ProfileSerializer,
     BookingSerializer,
+    RegisterSerializer,
     TextItemSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    BlogPostSerializer,
     EventGroupSerializer,
+    RecruitmentSerializer,
     SaksdokumentSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
@@ -199,8 +204,15 @@ class GangTypeView(ModelViewSet):
 
 
 class InformationPageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
+
+
+class BlogPostView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    serializer_class = BlogPostSerializer
+    queryset = BlogPost.objects.all()
 
 
 # =============================== #
@@ -273,6 +285,25 @@ class LogoutView(APIView):
 
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+
+@method_decorator(csrf_protect, 'dispatch')
+class RegisterView(APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request=request, user=user)
+        new_csrf_token = get_token(request=request)
+
+        return Response(
+            status=status.HTTP_202_ACCEPTED,
+            data=new_csrf_token,
+            headers={XCSRFTOKEN: new_csrf_token},
+        )
 
 
 class UserView(APIView):
@@ -369,3 +400,16 @@ class AssignGroupView(APIView):
             return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentView(ModelViewSet):
+    # TODO: Verify that object is valid (that the times make sense)
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentSerializer
+    queryset = Recruitment.objects.all()

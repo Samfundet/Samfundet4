@@ -221,6 +221,20 @@ class ClosedPeriod(models.Model):
 
 
 # GANGS ###
+class Organization(models.Model):
+    """
+    Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
+    """
+    name = models.CharField(max_length=32, blank=False, null=False)
+
+    class Meta:
+        verbose_name = 'Organization'
+        verbose_name_plural = 'Organizations'
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class GangType(models.Model):
     """
     Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
@@ -244,6 +258,15 @@ class Gang(models.Model):
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
+
+    organization = models.ForeignKey(
+        to=Organization,
+        related_name='gangs',
+        verbose_name='Organisasjon',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
@@ -272,7 +295,7 @@ class Gang(models.Model):
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=False,
+        blank=True,
         null=False,
         unique=True,
         primary_key=True,
@@ -296,6 +319,29 @@ class InformationPage(models.Model):
 
     def __str__(self) -> str:
         return f'{self.slug_field}'
+
+
+class BlogPost(models.Model):
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
+
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
+    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
+
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
+
+    published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # TODO Find usage for owner field
+
+    class Meta:
+        verbose_name = 'Blog post'
+        verbose_name_plural = 'Blogg posts'
+
+    def __str__(self) -> str:
+        return f'{self.title_nb} {self.published_at}'
 
 
 class Table(models.Model):
