@@ -202,6 +202,12 @@ def fixture_informationpage() -> Iterator[InformationPage]:
 
 @pytest.fixture
 def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
-    blogpost = BlogPost.objects.create(title_nb='Tittel', title_en='Title', text_nb='halla verden', text_en='hellow world uWu', image=fixture_image)
+    blogpost = BlogPost.objects.create(
+        title_nb='Tittel',
+        title_en='Title',
+        text_nb='halla verden',
+        text_en='hellow world uWu',
+        image=fixture_image,
+    )
     yield blogpost
     blogpost.delete()
