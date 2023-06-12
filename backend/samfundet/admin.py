@@ -27,6 +27,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    BlogPost,
     Organization,
     Reservation,
     ClosedPeriod,
@@ -204,7 +205,7 @@ class EventAdmin(CustomGuardedModelAdmin):
     list_filter = ['event_group']
     list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
-    # filter_horizontal = ['registration']
+    filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
@@ -300,6 +301,19 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
     search_fields = ['slug_field', 'title_nb', 'title_en']
     # filter_horizontal = []
     list_display_links = ['__str__', 'slug_field']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_nb', 'title_en', 'created_at', 'updated_at']
+    # list_filter = []
+    list_display = ['__str__', 'id', 'created_at', 'updated_at']
+    search_fields = ['id', 'title_nb', 'title_en', 'text_en', 'text_nb']
+    # filter_horizontal = []
+    list_display_links = ['__str__', 'id']
     # autocomplete_fields = []
     list_select_related = True
 

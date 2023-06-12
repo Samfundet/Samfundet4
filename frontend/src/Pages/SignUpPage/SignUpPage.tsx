@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Page } from '~/Components';
@@ -22,7 +22,7 @@ export function SignUpPage() {
     if (user !== undefined) {
       navigate(ROUTES.frontend.home);
     }
-  }, [user]);
+  }, [user, navigate]);
 
   function handleRegistration(formData: Record<string, string>) {
     register(formData['username'], formData['firstname'], formData['lastname'], formData['password'])

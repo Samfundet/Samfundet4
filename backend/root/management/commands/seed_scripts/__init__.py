@@ -12,6 +12,7 @@ from . import (
     samf3,
     recruitment,
     recruitment_position
+    blogposts,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -30,6 +31,7 @@ SEED_SCRIPTS = [
     ('menu', menu.seed),
     ('documents', documents.seed),
     ('information_page', information_pages.seed),
+    ('blogposts', blogposts.seed),
     ('organization', oganizations.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),

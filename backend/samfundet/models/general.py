@@ -276,12 +276,12 @@ class Gang(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # Gang related permission groups
-    gang_leader = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
-    event_admin = models.OneToOneField(
-        Group, related_name='gang_as_event_admin', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
+    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
+    event_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
     )
-    recruitment_admin = models.OneToOneField(
-        Group, related_name='gang_as_recruitment_admin', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
+    recruitment_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
     )
 
     class Meta:
@@ -319,6 +319,29 @@ class InformationPage(models.Model):
 
     def __str__(self) -> str:
         return f'{self.slug_field}'
+
+
+class BlogPost(models.Model):
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
+
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
+    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
+
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
+
+    published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # TODO Find usage for owner field
+
+    class Meta:
+        verbose_name = 'Blog post'
+        verbose_name_plural = 'Blogg posts'
+
+    def __str__(self) -> str:
+        return f'{self.title_nb} {self.published_at}'
 
 
 class Table(models.Model):
