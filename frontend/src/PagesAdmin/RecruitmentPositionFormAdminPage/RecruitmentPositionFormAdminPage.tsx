@@ -81,8 +81,8 @@ export function RecruitmentPositionFormAdminPage() {
 
   function handleOnSubmit(data: RecruitmentPositionDto) {
     const updatedPosition = data;
-    updatedPosition.gang = gangId;
-    updatedPosition.recruitment = recruitmentId;
+    updatedPosition.gang = gangId ?? '';
+    updatedPosition.recruitment = recruitmentId ?? '';
     updatedPosition.interviewers = [];
     if (positionId) {
       // Update page.

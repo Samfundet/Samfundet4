@@ -11,7 +11,7 @@ from . import (
     example,
     samf3,
     recruitment,
-    recruitment_position
+    recruitment_position,
     blogposts,
 )
 

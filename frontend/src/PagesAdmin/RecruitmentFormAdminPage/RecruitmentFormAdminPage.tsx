@@ -21,7 +21,7 @@ export function RecruitmentFormAdminPage() {
   // Form data
   const { id } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<string>[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
   const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>({
     name_nb: 'Nytt opptak',
     name_en: 'New recruitment',
