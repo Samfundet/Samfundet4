@@ -10,6 +10,8 @@ from . import (
     documents,
     example,
     samf3,
+    recruitment,
+    recruitment_position,
     blogposts,
 )
 
@@ -31,6 +33,9 @@ SEED_SCRIPTS = [
     ('information_page', information_pages.seed),
     ('blogposts', blogposts.seed),
     ('organization', oganizations.seed),
+    ('recruitment', recruitment.seed),
+    ('recruitment_position', recruitment_position.seed),
+
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]

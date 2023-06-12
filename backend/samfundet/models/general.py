@@ -225,7 +225,7 @@ class Organization(models.Model):
     """
     Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
     """
-    name = models.CharField(max_length=32, blank=False, null=False)
+    name = models.CharField(max_length=32, blank=False, null=False, unique=True)
 
     class Meta:
         verbose_name = 'Organization'

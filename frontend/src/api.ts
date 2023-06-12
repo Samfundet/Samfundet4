@@ -15,7 +15,9 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OrganizationDto,
   RecruitmentDto,
+  RecruitmentPositionDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -313,6 +315,13 @@ export async function putSaksdokument(id: string | number, data: Partial<Saksdok
   return response;
 }
 
+export async function getOrganizations(): Promise<OrganizationDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__organizations_list;
+  const response = await axios.get<OrganizationDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getGangList(): Promise<GangTypeDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
@@ -505,5 +514,39 @@ export async function putRecruitment(id: string, recruitment: Partial<Recruitmen
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
   const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
+  return response;
+}
+
+export async function getRecruitmentPositions(recruitmentId: string): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
+  const url = `${BACKEND_DOMAIN}/recruitment-positions/?recruitment=${recruitmentId}`;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPositionDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_position_list;
+  const response = await axios.post(url, recruitmentPosition, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentPosition(
+  positionId: string,
+  recruitment: Partial<RecruitmentPositionDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
+  const response = await axios.put<RecruitmentPositionDto>(url, recruitment, { withCredentials: true });
   return response;
 }

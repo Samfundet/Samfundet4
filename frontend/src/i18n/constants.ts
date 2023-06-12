@@ -81,6 +81,7 @@ export const KEY = {
   common_contact: 'common_contact',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
+  common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
   common_volunteer: 'common_volunteer',
@@ -94,6 +95,8 @@ export const KEY = {
   common_reservations: 'common_reservations',
   common_opening_hours: 'common_opening_hours',
   common_about_samfundet: 'common_about_samfundet',
+  common_long_description: 'common_long_description',
+  common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
   common_delete_successful: 'common_delete_successful',
   common_update_successful: 'common_update_successful',
@@ -141,14 +144,20 @@ export const KEY = {
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
   // Recruitment
+  recruitment_tags: 'recruitment_tags',
+  recruitment_position: 'recruitment_position',
   recruitment_duration: 'recruitment_duration',
+  recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_organization: 'recruitment_organization',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   shown_application_deadline: 'shown_application_deadline',
   actual_application_deadlin: 'actual_application_deadline',
+  recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
+  recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
 
   // Admin:
   admin_organizer: 'admin_organizer',

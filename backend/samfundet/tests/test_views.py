@@ -8,6 +8,7 @@ from rest_framework import status
 from guardian.shortcuts import assign_perm
 
 from root.utils import routes, permissions
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition
 from samfundet.models.general import User, KeyValue, TextItem, InformationPage, BlogPost, Image
 from samfundet.serializers import UserSerializer
 
@@ -91,6 +92,54 @@ def test_get_groups(fixture_rest_client: APIClient, fixture_user: User):
 
     ### Assert ###
     assert status.is_success(code=response.status_code)
+
+
+def test_get_recruitments(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment: Recruitment):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_list)
+
+    ### Act ###
+    response = fixture_rest_client.get(url)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment.name_nb
+
+
+def test_get_recruitment_positions(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment_position: RecruitmentPosition):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_position_list)
+
+    ### Act ###
+    response = fixture_rest_client.get(url)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
+
+
+def test_recruitment_positions_per_recruitment(
+    fixture_rest_client: APIClient,
+    fixture_superuser: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_positions)
+    recruitment = fixture_recruitment
+
+    ### Act ###
+    response: Response = fixture_rest_client.get(path=f'{url}?recruitment={recruitment.id}')
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
 
 
 class TestInformationPagesView:

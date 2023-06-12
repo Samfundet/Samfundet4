@@ -227,6 +227,11 @@ export type BookingDto = {
   from_to?: Date;
 };
 
+export type OrganizationDto = {
+  id: number;
+  name: string;
+};
+
 export type GangDto = {
   id: number;
   name_nb: string;
@@ -301,4 +306,28 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: 'samfundet' | 'isfit' | 'uka';
+};
+
+export type RecruitmentPositionDto = {
+  id: string;
+  name_nb: string;
+  name_en: string;
+
+  short_description_nb: string;
+  short_description_en: string;
+
+  long_description_nb: string;
+  long_description_en: string;
+
+  is_funksjonaer_position: boolean;
+
+  default_admission_letter_nb: string;
+  default_admission_letter_en: string;
+
+  gang: string;
+  recruitment: string;
+
+  tags: string;
+
+  interviewers: UserDto[];
 };

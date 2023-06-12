@@ -6,8 +6,8 @@ import { SamfundetLogoSpinner } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitment, postRecruitment, putRecruitment } from '~/api';
-import { RecruitmentDto } from '~/dto';
+import { getOrganizations, getRecruitment, postRecruitment, putRecruitment } from '~/api';
+import { OrganizationDto, RecruitmentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,16 +21,22 @@ export function RecruitmentFormAdminPage() {
   // Form data
   const { id } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
   const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>({
     name_nb: 'Nytt opptak',
     name_en: 'New recruitment',
   });
 
-  const organizationOptions: DropDownOption<string>[] = [
-    { value: 'samfundet', label: 'samfundet' },
-    { value: 'uka', label: 'uka' },
-    { value: 'isfit', label: 'isfit' },
-  ];
+  useEffect(() => {
+    // Fetch organizations.
+    getOrganizations().then((data) => {
+      const organizations = data.map((organization: OrganizationDto) => ({
+        label: organization.name,
+        value: organization.id,
+      }));
+      setOrganizationOptions(organizations);
+    });
+  }, []);
 
   // Fetch data if edit mode.
   useEffect(() => {

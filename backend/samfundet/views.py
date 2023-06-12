@@ -18,7 +18,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
-from .models.recruitment import (Recruitment)
+from .models.recruitment import (Recruitment, RecruitmentPosition)
 from .models.general import (
     Tag,
     User,
@@ -33,6 +33,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    Organization,
     BlogPost,
     FoodCategory,
     Saksdokument,
@@ -63,11 +64,13 @@ from .serializers import (
     EventGroupSerializer,
     RecruitmentSerializer,
     SaksdokumentSerializer,
+    OrganizationSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentPositionSerializer,
 )
 from .utils import event_query
 
@@ -189,7 +192,13 @@ class IsClosedView(ListAPIView):
 class SaksdokumentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all().order_by('-publication_date')
+    queryset = Saksdokument.objects.all()
+
+
+class OrganizationView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = OrganizationSerializer
+    queryset = Organization.objects.all()
 
 
 class GangView(ModelViewSet):
@@ -413,3 +422,27 @@ class RecruitmentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerRecruitmentView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentPosition.objects.filter(recruitment=recruitment)
+        else:
+            return None

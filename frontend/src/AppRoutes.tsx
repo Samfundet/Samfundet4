@@ -32,6 +32,9 @@ import {
   InformationFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentGangAdminPage,
+  RecruitmentGangOverviewPage,
+  RecruitmentPositionFormAdminPage,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -105,6 +108,16 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.admin_recruitment} element={<RecruitmentAdminPage />} />
         <Route path={ROUTES.frontend.admin_recruitment_create} element={<RecruitmentFormAdminPage />} />
         <Route path={ROUTES.frontend.admin_recruitment_edit} element={<RecruitmentFormAdminPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_gang_overview} element={<RecruitmentGangOverviewPage />} />
+        <Route path={ROUTES.frontend.admin_recruitment_gang_position_overview} element={<RecruitmentGangAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_create}
+          element={<RecruitmentPositionFormAdminPage />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_edit}
+          element={<RecruitmentPositionFormAdminPage />}
+        />
       </Route>
       {/* 
         Info pages
