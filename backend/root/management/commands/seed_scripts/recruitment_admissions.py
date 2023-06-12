@@ -1,8 +1,7 @@
 from random import randint
 
-from django.contrib.auth.models import User
-
 from samfundet.models.recruitment import RecruitmentAdmission, RecruitmentPosition
+from samfundet.models.general import User
 
 # Some example data to use for the new RecruitmentAdmission instances
 ADMISSION_DATA = {

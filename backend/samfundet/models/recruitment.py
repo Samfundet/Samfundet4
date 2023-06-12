@@ -52,6 +52,9 @@ class Recruitment(models.Model):
 
         super().clean()
 
+    def __str__(self) -> str:
+        return f'Recruitment: {self.name_en} at {self.organization}'
+
 
 class RecruitmentPosition(models.Model):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
@@ -84,6 +87,9 @@ class RecruitmentPosition(models.Model):
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviews')
 
+    def __str__(self) -> str:
+        return f'Position: {self.name_en} in {self.recruitment}'
+
 
 class RecruitmentAdmission(models.Model):
     admission_text = models.TextField(help_text='Admission text for the admission')
@@ -115,3 +121,6 @@ class RecruitmentAdmission(models.Model):
     recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
+
+    def __str__(self) -> str:
+        return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
