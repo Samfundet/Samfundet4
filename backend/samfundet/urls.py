@@ -28,9 +28,13 @@ router.register('booking', views.BookingView, 'booking')
 router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('key-value', views.KeyValueView, 'key_value')
+router.register('organizations', views.OrganizationView, 'organizations')
+
+########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
-router.register('organizations', views.OrganizationView, 'organizations')
+router.register('recruitment-admisisons-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
+router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
 
 app_name = 'samfundet'
 
@@ -48,5 +52,7 @@ urlpatterns = [
     path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
+
+    ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
 ]

@@ -83,3 +83,43 @@ class RecruitmentPosition(models.Model):
 
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviews')
+
+
+class RecruitmentAdmission(models.Model):
+    admission_text = models.TextField(help_text='Admission text for the admission')
+    recruitment_position = models.ForeignKey(
+        RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
+    )
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
+    applicant_priority = models.IntegerField(help_text='The priority of the admission')
+
+    interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
+    interview_location = models.CharField(max_length=100, help_text='The location of the interview', null=True, blank=True)
+
+    PRIORITY_CHOICES = [
+        (0, 'Not Set'),
+        (1, 'Not Wanted'),
+        (2, 'Wanted'),
+        (3, 'Reserve'),
+    ]
+
+    STATUS_CHOICES = [
+        (0, 'Nothing'),
+        (1, 'Called and Accepted'),
+        (2, 'Called and Rejected'),
+        (3, 'Automatic Rejection'),
+    ]
+
+    # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
+    recruiter_priority = models.IntegerField(
+        choices=PRIORITY_CHOICES,
+        default=0,
+        help_text='The priority of the admission'
+    )
+
+    recruiter_status = models.IntegerField(
+        choices=STATUS_CHOICES,
+        default=0,
+        help_text='The status of the admission'
+    )

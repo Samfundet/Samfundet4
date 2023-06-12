@@ -11,7 +11,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (Recruitment, RecruitmentPosition)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
 from .models.general import (
     Tag,
     User,
@@ -499,6 +499,35 @@ class RecruitmentPositionAdmin(admin.ModelAdmin):
     list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
     search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
     filter_horizontal = ['interviewers']
+    list_select_related = True
+
+
+@admin.register(RecruitmentAdmission)
+class RecruitmentAdmissionAdmin(admin.ModelAdmin):
+    sortable_by = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    list_display = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    search_fields = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
     list_select_related = True
 
 
