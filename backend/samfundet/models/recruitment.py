@@ -112,14 +112,6 @@ class RecruitmentAdmission(models.Model):
     ]
 
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
-    recruiter_priority = models.IntegerField(
-        choices=PRIORITY_CHOICES,
-        default=0,
-        help_text='The priority of the admission'
-    )
+    recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
 
-    recruiter_status = models.IntegerField(
-        choices=STATUS_CHOICES,
-        default=0,
-        help_text='The status of the admission'
-    )
+    recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
