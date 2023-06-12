@@ -13,7 +13,7 @@ from . import (
     recruitment,
     recruitment_position,
     blogposts,
-    recruitment_admissions
+    recruitment_admissions,
 )
 
 # Insert seed scripts here (in order of priority)

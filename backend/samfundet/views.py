@@ -460,6 +460,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForApplicantSerializer
 
+    # TODO: Should in theory not matter, but would be nice to filter recruitment
     def get_queryset(self) -> Response:
         """
         This view should return a list of alxl the recruitments
@@ -471,6 +472,8 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForGangSerializer
+
+    # TODO: User should only be able to edit the fields that are allowed
 
     def list(self, request: Request) -> Response:
         """
