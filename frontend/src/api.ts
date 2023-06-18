@@ -551,8 +551,12 @@ export async function putRecruitmentPosition(
   return response;
 }
 
-export async function getRecruitmentAdmissionsForApplicant(): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list;
+export async function getRecruitmentAdmissionsForApplicant(recruitmentId: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list +
+    '?recruitment=' +
+    recruitmentId;
   const response = await axios.get(url, { withCredentials: true });
 
   return response;

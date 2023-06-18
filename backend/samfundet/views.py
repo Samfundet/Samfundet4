@@ -460,13 +460,27 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForApplicantSerializer
 
-    # TODO: Should in theory not matter, but would be nice to filter recruitment
-    def get_queryset(self) -> Response:
+    def list(self, request: Request) -> Response:
         """
-        This view should return a list of alxl the recruitments
-        for the currently authenticated user.
+        Returns a list of all the recruitments for the specified gang.
         """
-        return RecruitmentAdmission.objects.filter(user=self.request.user)
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        admissions = RecruitmentAdmission.objects.filter(
+            recruitment=recruitment,
+            user=request.user,
+        )
+
+        # check permissions for each admission
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+
+        serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
 
 
 class RecruitmentAdmissionForGangView(ModelViewSet):

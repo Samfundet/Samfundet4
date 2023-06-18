@@ -88,7 +88,7 @@ export function ApiTestingPage() {
       <Button
         theme="samf"
         className={styles.btn}
-        onClick={() => getRecruitmentAdmissionsForApplicant().then(console.log).catch(console.error)}
+        onClick={() => getRecruitmentAdmissionsForApplicant('1').then(console.log).catch(console.error)}
       >
         get Rec admissions for user
       </Button>
