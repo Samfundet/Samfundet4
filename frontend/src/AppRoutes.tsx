@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate, Outlet } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
@@ -46,29 +46,39 @@ import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage'
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
 import { PERM } from './permissions';
-import { usePermission } from '~/hooks';
 import { useAuthContext } from './AuthContext';
 import { UserDto } from './dto';
 import { hasPerm } from './utils';
+import { ElementType } from 'react';
 
-type ProtectedRouteProps = {
-  permissions?: string[] | null;
-  requiresAuth?: boolean;
-  redirectPath?: string;
-  Component: Element;
-};
+/**
+ * Router component, to be used inside element of a route, and page that is requested
+ * Allows for setting up routes that requires authentication, permissions, and staff
+ * @param {ElementType} Page - The page to be rendered
+ * @param {UserDto | undefined} user - the current user, undefined if not logged in
+ * @param {string[] | undefined} permissions - list of permissions needed to access page, undefined if not needed
+ * @param {string} redirectPath - redirect to specific page if wanted
+ * @param {boolean} requiresStaff: - if staff permissions are required for page
+ */
 
-const ProtectedRoute = ({
-  permissions = null,
-  redirectPath = ROUTES.frontend.home,
-  Component,
-}: ProtectedRouteProps) => {
-  const { user } = useAuthContext();
+const ProtectedRoute = (
+  Page: ElementType,
+  user?: UserDto | undefined,
+  permissions?: string[] | undefined,
+  redirectPath: string = ROUTES.frontend.home,
+  requiresStaff = true,
+) => {
+  // const { user } = useAuthContext(); // test for if this is the best level for fetching user
   console.log(user);
+
   if (!user) {
     // All Protected routes need a user, redirects to login
+    //
     //TODO improve to keep attempted route
     return <Navigate to={ROUTES.frontend.login} replace />;
+  }
+  if (requiresStaff && !user?.is_staff) {
+    return <Navigate to={redirectPath} replace />;
   }
   if (permissions) {
     for (const permission of permissions) {
@@ -82,14 +92,14 @@ const ProtectedRoute = ({
   }
   console.log(permissions);
   console.log(user.permissions);
-  return <Component />;
+  return <Page />;
 };
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
   useGoatCounter();
   const { user } = useAuthContext();
-  const isStaff = user?.is_staff;
+  //const isStaff = user?.is_staff;
 
   return (
     <Routes>
@@ -117,20 +127,20 @@ export function AppRoutes() {
       {/* 
             ADMIN ROUTES
       */}
-      <Route element={<ProtectedRoute Component={AdminLayout} />}>
-        <Route path={ROUTES.frontend.admin} element={<ProtectedRoute Component={AdminPage} />} />
+      <Route element={<ProtectedRoute Page={AdminLayout} />}>
+        <Route path={ROUTES.frontend.admin} element={<ProtectedRoute user={user} Page={AdminPage} />} />
         {/* Gangs */}
         <Route
           path={ROUTES.frontend.admin_gangs}
-          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_GANG]} Component={GangsAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_GANG]} user={user} Page={GangsAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_gangs_create}
-          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_GANG]} Component={GangsFormAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_GANG]} user={user} Page={GangsFormAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_gangs_edit}
-          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_GANG]} Component={GangsFormAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_GANG]} user={user} Page={GangsFormAdminPage} />}
         />
         {/* Events */}
         <Route path={ROUTES.frontend.admin_events} element={<EventsAdminPage />} />
