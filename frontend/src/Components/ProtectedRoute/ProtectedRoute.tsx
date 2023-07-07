@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
 import { hasPerm } from '~/utils';
 import { ROUTES } from '~/routes';
@@ -28,10 +28,11 @@ export function ProtectedRoute({
   redirectPath = ROUTES.frontend.home, // TODO ADD 403?
   requiresStaff = false,
 }: ProtectedRouteProps) {
+  const location = useLocation();
   const { user } = useAuthContext(); //TODO ADD LOADER FOR AUTHCONTEXT
 
   if (!user) {
-    return <Navigate to={ROUTES.frontend.login} replace />;
+    return <Navigate to={ROUTES.frontend.login} replace state={{ from: location }} />;
   }
   if (requiresStaff && !user?.is_staff) {
     return <Navigate to={redirectPath} replace />;
