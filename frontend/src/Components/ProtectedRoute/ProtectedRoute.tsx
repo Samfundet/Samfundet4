@@ -1,0 +1,47 @@
+import { Navigate } from 'react-router-dom';
+import { useAuthContext } from '~/AuthContext';
+import { hasPerm } from '~/utils';
+import { ROUTES } from '~/routes';
+import { PERM } from '~/permissions';
+import { ElementType } from 'react';
+
+type ProtectedRouteProps = {
+  Page: ElementType;
+  perms?: string[] | undefined;
+  redirectPath?: string;
+  requiresStaff?: boolean;
+};
+
+/**
+ * Router component, to be used inside element of a route, and page that is requested
+ * Allows for setting up routes that requires authentication, permissions, and staff
+ * @param {ElementType} Page - The page to be rendered
+ * @param {UserDto | undefined} user - the current user, undefined if not logged in
+ * @param {string[] | undefined} perms - list of permissions needed to access page, undefined if not needed
+ * @param {string} redirectPath - redirect to specific page if wanted
+ * @param {boolean} requiresStaff: - if staff permissions are required for page
+ */
+
+export function ProtectedRoute({
+  Page,
+  perms,
+  redirectPath = ROUTES.frontend.home, // TODO ADD 403?
+  requiresStaff = false,
+}: ProtectedRouteProps) {
+  const { user } = useAuthContext(); //TODO ADD LOADER FOR AUTHCONTEXT
+
+  if (!user) {
+    return <Navigate to={ROUTES.frontend.login} replace />;
+  }
+  if (requiresStaff && !user?.is_staff) {
+    return <Navigate to={redirectPath} replace />;
+  }
+  if (perms) {
+    for (const permission of perms) {
+      if (!hasPerm({ permission: permission, user: user })) {
+        return <Navigate to={redirectPath} replace />;
+      }
+    }
+  }
+  return <Page />;
+}
