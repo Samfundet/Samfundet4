@@ -94,15 +94,18 @@ export function AppRoutes() {
         />
         <Route
           path={ROUTES.frontend.admin_gangs_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
         />
         {/* Events */}
         <Route
           path={ROUTES.frontend.admin_events}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
         />
-        <Route path={ROUTES.frontend.admin_events_create} element={<EventCreatorAdminPage />} />
-        <Route path={ROUTES.frontend.admin_events_edit} element={<EventCreatorAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_events_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
+        />
+        <Route path={ROUTES.frontend.admin_events_edit} element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />} />
         {/* 
           Info pages 
           NOTE: edit/create uses custom views
