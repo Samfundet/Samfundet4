@@ -90,10 +90,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   position: relative;
 }
 
-.dropdown_container_left .dropdown_container {
-  right: 0;
-}
-
 .mobile_dropdown_container {
   width: 100%;
   display: flex;
@@ -137,6 +133,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
     background-color: $navbar-dropdown-bg-dark;
     color: $white;
   }
+}
+
+.dropdown_container_left .dropdown_container {
+  right: 0;
 }
 
 .dropdown_open {
