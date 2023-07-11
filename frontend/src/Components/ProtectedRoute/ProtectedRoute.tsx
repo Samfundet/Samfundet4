@@ -35,7 +35,7 @@ export function ProtectedRoute({
     return <Navigate to={ROUTES.frontend.login} replace state={{ from: location }} />;
   }
   if (requiresStaff && !user?.is_staff) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={redirectPath} replace />; // Replace replace current navigation head instead of pushing it
   }
   if (perms) {
     for (const permission of perms) {
