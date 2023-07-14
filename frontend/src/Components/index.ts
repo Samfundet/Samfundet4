@@ -49,3 +49,4 @@ export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
 export { Footer } from './Footer';
+export { ProtectedRoute } from './ProtectedRoute';

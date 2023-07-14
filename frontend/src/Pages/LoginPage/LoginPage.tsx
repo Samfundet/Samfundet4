@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, login } from '~/api';
+
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -15,8 +16,14 @@ import styles from './LoginPage.module.scss';
 export function LoginPage() {
   const { t } = useTranslation();
   const [loginFailed, setLoginFailed] = useState(false);
-  const { setUser } = useAuthContext();
+  const location = useLocation();
+  const { from } = location.state || {};
+  const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate(typeof from === 'undefined' ? ROUTES.frontend.home : from.pathname);
+  }, [user]);
 
   function handleLogin(formData: Record<string, string>) {
     login(formData['name'], formData['password'])
@@ -26,7 +33,7 @@ export function LoginPage() {
             setUser(user);
           });
 
-          navigate(ROUTES.frontend.home);
+          navigate(typeof from === 'undefined' ? ROUTES.frontend.home : from.pathname);
         } else {
           setLoginFailed(true);
         }
