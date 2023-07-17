@@ -96,6 +96,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_festivals]: 'Festivaler',
   [KEY.common_here]: 'her',
+  [KEY.common_more_info]: 'Mer info',
   // Price groups
   [KEY.common_ticket_type]: 'Billett',
   [KEY.common_ticket_type_free]: 'Gratis',
@@ -285,6 +286,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_sponsor]: 'Sponsors',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_here]: 'here',
+  [KEY.common_more_info]: 'More info',
 
   // Price groups
   [KEY.common_ticket_type_billig]: 'Paid',

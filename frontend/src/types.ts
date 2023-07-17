@@ -89,3 +89,4 @@ export type EventAgeRestriction = 'none' | 'eighteen' | 'twenty' | 'mixed';
 export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
 
 export const ALL_TICKET_TYPES: EventTicketType[] = ['free', 'included', 'billig', 'registration', 'custom'];
+export const PAID_TICKET_TYPES: EventTicketType[] = ['billig', 'custom', 'registration'];

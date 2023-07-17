@@ -106,6 +106,7 @@ export const KEY = {
   common_festivals: 'common_festivals',
   common_sponsor: 'common_sponsors',
   common_here: 'common_here',
+  common_more_info: 'common_more_info',
 
   // Price groups
   common_ticket_type_billig: 'common_ticket_type_billig',
