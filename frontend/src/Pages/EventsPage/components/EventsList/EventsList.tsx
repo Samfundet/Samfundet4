@@ -97,10 +97,8 @@ export function EventsList({ events }: EventsListProps) {
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (
       <Button rounded={true} onClick={func} theme={chosen ? 'blue' : 'secondary'}>
-        <span style={{ display: 'flex', gap: '1em' }}>
-          {title}
-          <Icon icon={icon} />
-        </span>
+        {title}
+        <Icon icon={icon} />
       </Button>
     );
   }
