@@ -32,15 +32,16 @@ export function Splash({ events, showInfo }: SplashProps) {
 
   const description = events ? dbT(events[index], 'description_short') : '';
 
-  const ticketButton =
-    events && PAID_TICKET_TYPES.includes(events[index].ticket_type) ? (
-      <Button theme={'samf'} className={styles.ticket_button}>
-        <Icon icon="ph:ticket-bold" />
-        {`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`}
-      </Button>
-    ) : (
-      <></>
-    );
+  const isPaid = events && PAID_TICKET_TYPES.includes(events[index].ticket_type);
+
+  const ticketButton = isPaid ? (
+    <Button theme={'samf'} className={styles.ticket_button}>
+      <Icon icon="ph:ticket-bold" />
+      {`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`}
+    </Button>
+  ) : (
+    <></>
+  );
 
   const infoButton = events && (
     <Button

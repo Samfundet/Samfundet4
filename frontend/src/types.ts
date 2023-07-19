@@ -84,9 +84,28 @@ export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'f
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 /** Event types */
-export type EventTicketType = 'free' | 'included' | 'billig' | 'registration' | 'custom';
 export type EventAgeRestriction = 'none' | 'eighteen' | 'twenty' | 'mixed';
 export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
 
-export const ALL_TICKET_TYPES: EventTicketType[] = ['free', 'included', 'billig', 'registration', 'custom'];
-export const PAID_TICKET_TYPES: EventTicketType[] = ['billig', 'custom', 'registration'];
+export const EventTicketType = {
+  FREE: 'free',
+  INCLUDED: 'included',
+  BILLIG: 'billig',
+  REGISTRATION: 'registration',
+  CUSTOM: 'custom',
+} as const;
+
+export type EventTicketTypeValue = typeof EventTicketType[keyof typeof EventTicketType];
+
+export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
+  EventTicketType.FREE,
+  EventTicketType.INCLUDED,
+  EventTicketType.BILLIG,
+  EventTicketType.REGISTRATION,
+  EventTicketType.CUSTOM,
+];
+export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
+  EventTicketType.BILLIG,
+  EventTicketType.REGISTRATION,
+  EventTicketType.CUSTOM,
+];
