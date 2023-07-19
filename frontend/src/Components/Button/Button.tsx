@@ -1,6 +1,7 @@
 import { default as classNames, default as classnames } from 'classnames';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
+import { Link } from 'react-router-dom';
 
 type ButtonTheme =
   | 'basic'
@@ -21,6 +22,7 @@ type ButtonProps = {
   display?: ButtonDisplay;
   type?: ButtonType;
   rounded?: boolean;
+  link?: string;
   className?: string;
   disabled?: boolean;
   children?: Children;
@@ -52,6 +54,7 @@ export function Button({
   theme = 'basic',
   display = 'basic',
   rounded = false,
+  link,
   onClick,
   disabled,
   className,
@@ -77,9 +80,15 @@ export function Button({
 
   return (
     <>
-      <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
-        {children}
-      </button>
+      {link ? (
+        <Link to={link} onClick={handleOnClick} className={classNames}>
+          {children}
+        </Link>
+      ) : (
+        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
+          {children}
+        </button>
+      )}
     </>
   );
 }

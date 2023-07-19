@@ -13,6 +13,11 @@
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
   justify-content: center;
 
+  // Remove underline when button is a link
+  &, &:hover {
+    text-decoration: none;
+  }
+
   &:disabled {
     opacity: 0.5;
     background-color: $grey-3;
