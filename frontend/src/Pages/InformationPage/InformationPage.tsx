@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { PERM } from '~/permissions';
-import { dbT, hasPerm } from '~/utils';
+import { dbT, hasPerm, toTitleCase } from '~/utils';
 import styles from './InformationPage.module.scss';
 
 /**
@@ -67,7 +67,7 @@ export function InformationPage() {
         <>
           <Button rounded={true} theme="blue" onClick={() => navigate(editUrl)}>
             <Icon icon="mdi:pencil" />
-            {`${t(KEY.common_edit)} ${t(KEY.information_page_short)}`}
+            {toTitleCase(`${t(KEY.common_edit)} ${t(KEY.information_page_short)}`)}
           </Button>
           <br></br>
         </>

@@ -18,7 +18,7 @@ import { usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { Children, EventAgeRestriction } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, toTitleCase } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
@@ -289,7 +289,7 @@ export function EventCreatorAdminPage() {
     </>
   );
 
-  const title = `${t(KEY.common_create)} ${t(KEY.common_event)}`;
+  const title = toTitleCase(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
   return (
     <AdminPageLayout title={title}>
       <TabBar

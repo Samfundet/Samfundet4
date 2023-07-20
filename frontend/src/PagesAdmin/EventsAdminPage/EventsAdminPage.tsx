@@ -11,7 +11,7 @@ import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, getTicketTypeKey } from '~/utils';
+import { dbT, getTicketTypeKey, toTitleCase } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
 
@@ -94,7 +94,8 @@ export function EventsAdminPage() {
             }}
             onDelete={() => {
               // TODO custom modal confirm
-              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${dbT(event, 'title')}`)) {
+              const msg = toTitleCase(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
+              if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
                 // TODO toast component? A bit too easy to delete events
                 deleteSelectedEvent(event.id);
               }
@@ -105,12 +106,12 @@ export function EventsAdminPage() {
     ];
   });
 
-  const title = `${t(KEY.common_edit)} ${t(KEY.common_event).toLowerCase()}`;
+  const title = toTitleCase(`${t(KEY.common_edit)} ${t(KEY.common_event)}`);
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>
       <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
-        {t(KEY.common_create)} {t(KEY.common_events)}
+        {toTitleCase(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
       </Button>
     </>
   );

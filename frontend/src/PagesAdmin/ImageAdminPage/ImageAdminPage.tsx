@@ -9,6 +9,7 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
+import { toTitleCase } from '~/utils';
 
 export function ImageAdminPage() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export function ImageAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
     <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_images_create)}>
-      {t(KEY.admin_images_create)}
+      {toTitleCase(t(KEY.admin_images_create))}
     </Button>
   );
 

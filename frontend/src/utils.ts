@@ -242,3 +242,14 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   dot.style.top = e.clientY + window.pageYOffset + 'px';
   return dot;
 }
+
+/**
+ * Converts a string to use 'title case'.
+ * Example: 'lorem ipsum Dolor' becomes 'Lorem ipsum dolor'
+ */
+export function toTitleCase(s: string): string {
+  if (s.length === 1) {
+    return s.toUpperCase();
+  }
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}

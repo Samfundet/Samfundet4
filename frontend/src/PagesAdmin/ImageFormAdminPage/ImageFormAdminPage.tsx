@@ -10,6 +10,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { toTitleCase } from '~/utils';
 
 export function ImageFormAdminPage() {
   const navigate = useNavigate();
@@ -63,8 +64,8 @@ export function ImageFormAdminPage() {
     }
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_image)}`;
-  const title = id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create);
+  const submitText = id ? t(KEY.common_save) : toTitleCase(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
+  const title = id ? toTitleCase(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
@@ -73,7 +74,11 @@ export function ImageFormAdminPage() {
         {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
         <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
         {/* TODO create file picker input type */}
-        <SamfFormField field="file" type="upload-image" label={`${t(KEY.common_choose)} ${t(KEY.common_image)}`} />
+        <SamfFormField
+          field="file"
+          type="upload-image"
+          label={toTitleCase(`${t(KEY.common_choose)} ${t(KEY.common_image)}`)}
+        />
         <p>
           {JSON.stringify(image.file)}
           {image.file?.name}
