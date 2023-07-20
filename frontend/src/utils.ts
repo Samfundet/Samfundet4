@@ -248,7 +248,7 @@ export function createDot(e: MouseEvent): HTMLDivElement {
  * Example: 'lorem ipsum Dolor' becomes 'Lorem ipsum dolor'
  */
 export function toTitleCase(s: string): string {
-  if (s.length === 1) {
+  if (s.length < 2) {
     return s.toUpperCase();
   }
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
