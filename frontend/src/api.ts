@@ -550,3 +550,10 @@ export async function putRecruitmentPosition(
   const response = await axios.put<RecruitmentPositionDto>(url, recruitment, { withCredentials: true });
   return response;
 }
+
+export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_positions;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
