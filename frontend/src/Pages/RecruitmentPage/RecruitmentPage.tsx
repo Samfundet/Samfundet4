@@ -29,15 +29,15 @@ export function RecruitmentPage() {
     if (!gangTypes) return null;
 
     return gangTypes.map((type) => (
-      <ExpandableHeader key={type.id} label={dbT(type, 'title')}>
+      <ExpandableHeader key={type.id} label={dbT(type, 'title')} className={styles.type_header}>
         {type.gangs.map((gang) => (
-          <ExpandableHeader key={gang.id} label={dbT(gang, 'name')}>
+          <ExpandableHeader key={gang.id} label={dbT(gang, 'name')} className={styles.gang_header}>
             {recruitmentPositions
               ?.filter((pos) => pos.gang == `${gang.id}`)
               .map((pos) => (
-                <div key={pos.id} className={styles.recruitment_position}>
-                  <p className={styles.recruitment_position_title}>{dbT(pos, 'name')}</p>
-                  <p className={styles.recruitment_position_description}>{dbT(pos, 'short_description')}</p>
+                <div className={styles.position_item} key={pos.id}>
+                  <a className={styles.position_name}>{dbT(pos, 'name')}</a>
+                  <a className={styles.position_short_desc}>{dbT(pos, 'short_description')}</a>
                 </div>
               ))}
           </ExpandableHeader>

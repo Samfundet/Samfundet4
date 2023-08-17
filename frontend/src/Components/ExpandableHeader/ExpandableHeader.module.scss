@@ -1,5 +1,9 @@
 @import 'src/constants';
 
+.container {
+  width: 100%;
+}
+
 .extendable_header_wrapper {
   display: flex;
   flex-direction: row;
@@ -12,7 +16,6 @@
   cursor: pointer;
   border: 0;
   outline: none;
-  margin: 5px;
   text-align: left;
 }
 
