@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ExpandableHeader, Page, Video } from '~/Components';
+import { ExpandableHeader, Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { dbT } from '~/utils';
@@ -33,7 +33,13 @@ export function RecruitmentPage() {
             const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang == `${gang.id}`);
             if (filteredPositions && filteredPositions.length > 0) {
               return (
-                <ExpandableHeader key={gang.id} label={dbT(gang, 'name')} className={styles.gang_header}>
+                <ExpandableHeader
+                  showByDefault={true}
+                  key={gang.id}
+                  label={dbT(gang, 'name')}
+                  className={styles.gang_header}
+                  theme="child"
+                >
                   {filteredPositions.map((pos) => (
                     <div className={styles.position_item} key={pos.id}>
                       <a className={styles.position_name}>{dbT(pos, 'name')}</a>
@@ -48,7 +54,12 @@ export function RecruitmentPage() {
           .filter(Boolean);
         if (filteredGangs.length > 0) {
           return (
-            <ExpandableHeader key={type.id} label={dbT(type, 'title')} className={styles.type_header}>
+            <ExpandableHeader
+              showByDefault={true}
+              key={type.id}
+              label={dbT(type, 'title')}
+              className={styles.type_header}
+            >
               {filteredGangs}
             </ExpandableHeader>
           );
@@ -62,7 +73,7 @@ export function RecruitmentPage() {
     <Page>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        {loading ? <div>Loading...</div> : renderGangTypes()}
+        {loading ? <SamfundetLogoSpinner /> : renderGangTypes()}
       </div>
     </Page>
   );
