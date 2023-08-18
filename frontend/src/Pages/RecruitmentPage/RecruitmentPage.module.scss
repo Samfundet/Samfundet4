@@ -14,33 +14,3 @@
   padding-bottom: 0;
   aspect-ratio: 16/9;
 }
-
-.type_header {
-  width: 100%;
-}
-
-.gang_header {
-  border-bottom: 1px solid $grey-1;
-  background-color: $blue-deep;
-}
-
-.position_item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1em;
-  width: 100%;
-  background-color: $white;
-  color: $black;
-  padding: 1em;
-  border-bottom: 1px solid $grey-3;
-}
-
-.position_name {
-  flex: 1;
-}
-
-.position_short_desc {
-  flex: 1;
-}

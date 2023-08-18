@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ExpandableHeader, Page, SamfundetLogoSpinner, Video } from '~/Components';
+import { Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { dbT } from '~/utils';
+import { GangTypeContainer } from './Components/intex';
 import styles from './RecruitmentPage.module.scss';
 
 export function RecruitmentPage() {
@@ -23,57 +23,15 @@ export function RecruitmentPage() {
       });
   }, []);
 
-  const renderGangTypes = () => {
-    if (!gangTypes) return null;
-
-    return gangTypes
-      .map((type) => {
-        const filteredGangs = type.gangs
-          .map((gang) => {
-            const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang == `${gang.id}`);
-            if (filteredPositions && filteredPositions.length > 0) {
-              return (
-                <ExpandableHeader
-                  showByDefault={true}
-                  key={gang.id}
-                  label={dbT(gang, 'name')}
-                  className={styles.gang_header}
-                  theme="child"
-                >
-                  {filteredPositions.map((pos) => (
-                    <div className={styles.position_item} key={pos.id}>
-                      <a className={styles.position_name}>{dbT(pos, 'name')}</a>
-                      <a className={styles.position_short_desc}>{dbT(pos, 'short_description')}</a>
-                    </div>
-                  ))}
-                </ExpandableHeader>
-              );
-            }
-            return null;
-          })
-          .filter(Boolean);
-        if (filteredGangs.length > 0) {
-          return (
-            <ExpandableHeader
-              showByDefault={true}
-              key={type.id}
-              label={dbT(type, 'title')}
-              className={styles.type_header}
-            >
-              {filteredGangs}
-            </ExpandableHeader>
-          );
-        }
-        return null;
-      })
-      .filter(Boolean);
-  };
-
   return (
     <Page>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        {loading ? <SamfundetLogoSpinner /> : renderGangTypes()}
+        {loading ? (
+          <SamfundetLogoSpinner />
+        ) : (
+          <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
+        )}
       </div>
     </Page>
   );
