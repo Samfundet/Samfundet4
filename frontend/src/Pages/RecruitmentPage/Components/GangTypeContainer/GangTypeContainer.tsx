@@ -1,5 +1,5 @@
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { GangPosition } from '../intex';
+import { GangPosition } from '..';
 
 type GangTypeProps = {
   gangTypes?: GangTypeDto[];

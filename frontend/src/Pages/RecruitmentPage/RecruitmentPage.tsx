@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { GangTypeContainer } from './Components/intex';
+import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
 export function RecruitmentPage() {
