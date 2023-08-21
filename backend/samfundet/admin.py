@@ -471,7 +471,7 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 
 
 @admin.register(Recruitment)
-class RecruitmentAdmin(admin.ModelAdmin):
+class RecruitmentAdmin(CustomGuardedModelAdmin):
     sortable_by = [
         'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups', 'organization'
@@ -489,7 +489,7 @@ class RecruitmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(RecruitmentPosition)
-class RecruitmentPositionAdmin(admin.ModelAdmin):
+class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
     sortable_by = [
         'name_nb',
         'is_funksjonaer_position',
@@ -503,7 +503,7 @@ class RecruitmentPositionAdmin(admin.ModelAdmin):
 
 
 @admin.register(RecruitmentAdmission)
-class RecruitmentAdmissionAdmin(admin.ModelAdmin):
+class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
     sortable_by = [
         'id',
         'recruitment_position',
@@ -532,7 +532,7 @@ class RecruitmentAdmissionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'name']
     list_display = ['id', 'name']
     search_fields = ['id', 'name']

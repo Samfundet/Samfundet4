@@ -331,3 +331,15 @@ export type RecruitmentPositionDto = {
 
   interviewers: UserDto[];
 };
+
+export type RecruitmentAdmissionDto = {
+  admission_text: string;
+  recruitment_position: number;
+  recruitment: number;
+  user: number;
+  priority: number;
+  interview_time?: string;
+  interview_location?: string;
+  recruiter_priority?: number;
+  recruiter_status?: string;
+};

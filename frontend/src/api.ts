@@ -16,6 +16,7 @@ import {
   MenuItemDto,
   NotificationDto,
   OrganizationDto,
+  RecruitmentAdmissionDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   SaksdokumentDto,
@@ -551,7 +552,9 @@ export async function putRecruitmentPosition(
   return response;
 }
 
-export async function getRecruitmentAdmissionsForApplicant(recruitmentId: string): Promise<AxiosResponse> {
+export async function getRecruitmentAdmissionsForApplicant(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
   const url =
     BACKEND_DOMAIN +
     ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list +
@@ -562,7 +565,10 @@ export async function getRecruitmentAdmissionsForApplicant(recruitmentId: string
   return response;
 }
 
-export async function getRecruitmentAdmissionsForGang(gangId: string, recruitmentId: string): Promise<AxiosResponse> {
+export async function getRecruitmentAdmissionsForGang(
+  gangId: string,
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
   const url =
     BACKEND_DOMAIN +
     ROUTES.backend.samfundet__recruitment_admissions_for_gang_list +
