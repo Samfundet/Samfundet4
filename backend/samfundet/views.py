@@ -515,3 +515,14 @@ class RecruitmentAdmissionForGangView(ModelViewSet):
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
+
+
+class ActiveRecruitmentPositionsView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Returns all active recruitment positions.
+        """
+        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())

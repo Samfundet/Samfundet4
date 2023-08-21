@@ -23,6 +23,9 @@ class Recruitment(models.Model):
     reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
+    def is_active(self) -> bool:
+        return self.visible_from < timezone.now() < self.actual_application_deadline
+
     def clean(self) -> None:
         # All times should be in the future
         now = timezone.now()

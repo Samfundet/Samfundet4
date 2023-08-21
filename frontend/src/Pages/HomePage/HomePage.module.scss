@@ -89,6 +89,50 @@
   }
 }
 
+.splash_info_wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+  height: 12rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent);
+  padding-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.5rem;
+
+  @include for-mobile-down {
+    display: none;
+  }
+}
+
+.splash_info {
+  width: 1500px;
+  margin: 0 auto;
+  max-width: calc(100vw - 5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.splash_buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ticket_button {
+  font-weight: 500;
+}
+
+.splash_description {
+  color: $white;
+  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
+  width: 650px;
+  max-width: 100%;
+}
+
 .content {
   position: relative;
   top: -$navbar-height;

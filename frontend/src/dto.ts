@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestriction, EventStatus, EventTicketType, HomePageElementVariation } from './types';
+import { EventAgeRestriction, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -118,7 +118,7 @@ export type EventDto = {
   publish_dt: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
-  ticket_type: EventTicketType;
+  ticket_type: EventTicketTypeValue;
 
   // Custom tickets (only relevant for custom price group events)
   custom_tickets: EventCustomTicketDto[];

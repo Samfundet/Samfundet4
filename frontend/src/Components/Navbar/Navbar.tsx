@@ -62,7 +62,7 @@ export function Navbar() {
   );
 
   // Return profile button for navbar if logged in.
-  const profileButton = (
+  const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person"></Icon>
       <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
@@ -107,7 +107,7 @@ export function Navbar() {
   );
 
   const navbarHeaders = (
-    <>
+    <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
@@ -130,10 +130,50 @@ export function Navbar() {
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
-        route={ROUTES.frontend.health}
+        route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
       />
+    </div>
+  );
+
+  const userDropdownLinks = (
+    <>
+      <Link url={ROUTES.frontend.admin} className={styles.navbar_dropdown_link}>
+        <Icon icon="material-symbols:settings" />
+        {t(KEY.control_panel_title)}
+      </Link>
+      <button
+        type="button"
+        className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
+        onClick={(e) => {
+          e.preventDefault();
+          setExpandedDropdown('');
+          logout()
+            .then((response) => {
+              response.status === STATUS.HTTP_200_OK && setUser(undefined);
+            })
+            .catch(console.error);
+
+          setIsMobileNavigation(false);
+        }}
+      >
+        <Icon icon="material-symbols:logout" />
+        {t(KEY.common_logout)}
+      </button>
     </>
+  );
+
+  const profileButton = user && (
+    <div className={classNames(styles.navbar_profile_button, styles.profile_text, styles.dropdown_container_left)}>
+      <NavbarItem
+        setExpandedDropdown={setExpandedDropdown}
+        expandedDropdown={expandedDropdown}
+        route={'#'}
+        label={user.username}
+        icon="material-symbols:person"
+        dropdownLinks={userDropdownLinks}
+      />
+    </div>
   );
 
   const isLightLoginButton = isDarkTheme || (isTransparentNavbar && !isMobileNavigation);
@@ -186,7 +226,7 @@ export function Navbar() {
           <ThemeSwitch />
         </div>
         <br></br>
-        {user && profileButton}
+        {user && mobileProfileButton}
       </nav>
     </>
   );
@@ -200,13 +240,11 @@ export function Navbar() {
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
-            {user && profileButton}
-
             <ThemeSwitch />
             <NotificationBadge number={notifications.length || undefined} onClick={() => console.log(1)} />
             {languageButton}
             {loginButton}
-            {logoutButton}
+            {profileButton}
           </div>
           <HamburgerMenu transparentBackground={isTransparentNavbar} />
         </div>

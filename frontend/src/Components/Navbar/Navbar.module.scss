@@ -10,9 +10,9 @@
 
 // Background
 $navbar-bg: white;
-$navbar-bg-transparent: transparent;
+$navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, .3) 0%, transparent);
 $navbar-bg-dark: black;
-$navbar-bg-dark-transparent: transparent;
+$navbar-bg-dark-transparent: $navbar-bg-transparent;
 $navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
 $navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
 $navbar-dropdown-border-radius: 0 0 0.5em 0.5em;
@@ -78,6 +78,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   position: relative;
 }
 
+.navbar_item_icon {
+  margin-right: 0.25rem;
+}
+
 .hidden {
   display: none;
 }
@@ -108,8 +112,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   pointer-events: none;
   transition: 0.15s;
   top: 100%;
+  min-width: 130%;
   z-index: 1;
-  width: 100%;
   display: flex;
   flex-direction: column;
   background-color: $navbar-dropdown-bg;
@@ -120,12 +124,19 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   transform: scaleY(0);
   transform-origin: 50% 0%;
   opacity: 0;
-  border-radius: $navbar-dropdown-border-radius;
+
+  @include for-desktop-up {
+    border-radius: $navbar-dropdown-border-radius;
+  }
 
   @include theme-dark {
     background-color: $navbar-dropdown-bg-dark;
     color: $white;
   }
+}
+
+.dropdown_container_left .dropdown_container {
+  right: 0;
 }
 
 .dropdown_open {
@@ -135,34 +146,55 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   opacity: 1;
 }
 
-.navbar_dropdown_link {
+.navbar_dropdown_link, .navbar_logout_button {
   padding: 0.5rem 1rem;
   text-decoration: none;
-  text-transform: uppercase;
   transition: 0.1s;
   color: $black;
   cursor: pointer;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+
   @include theme-dark {
     color: $white;
   }
 
   &:last-child {
-    border-radius: $navbar-dropdown-border-radius;
+    @include for-desktop-up {
+      border-radius: $navbar-dropdown-border-radius;
+    }
   }
 
   &:hover {
     background: $navbar-dropdown-link-light-hover;
-    color: white;
+    color: $white;
     text-decoration: none;
 
     @include theme-dark {
       background: $navbar-dropdown-link-dark-hover;
-      color: black;
+      color: $black;
     }
   }
 }
 
 /* Desktop navigation items */
+.navbar_main_links {
+  display: flex;
+  height: 100%;
+  margin-right: auto;
+  font-size: 14px;
+}
+
+.navbar_main_links_mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .navbar_link {
   color: inherit;
   display: flex;
@@ -171,13 +203,13 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   padding: 0 1rem;
   height: 100%;
   cursor: pointer;
-  text-transform: uppercase;
   transition: 0.1s;
   flex: 1;
   text-align: center;
   justify-content: center;
   background: transparent;
   z-index: 2;
+  font-size: inherit;
 
   @include for-tablet-down {
     display: none;
@@ -234,6 +266,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   margin-right: 24px;
   margin-left: 24px;
   gap: 15px;
+  height: 100%;
+
   @include for-tablet-down {
     display: none;
   }
@@ -270,6 +304,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   border-bottom: 1px solid transparent;
   gap: 5px;
 
+  @include for-desktop-up {
+    height: 100%;
+  }
+
   .profile_icon {
     width: 16px;
     height: 16px;
@@ -277,7 +315,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
   .profile_text {
     text-decoration: none;
-    text-transform: capitalize;
     color: inherit;
   }
 
@@ -290,11 +327,11 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
   box-shadow: none;
-  color: white;
+  color: $white;
 
   @include theme-dark {
     background: $navbar-bg-dark-transparent;
-    color: white;
+    color: $white;
   }
 
   .navbar_link:hover {
@@ -322,7 +359,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   width: 100vw;
   height: calc(100vh - 60px);
   min-height: 400px;
-  background: white;
+  background: $white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -334,7 +371,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
   @include theme-dark {
     background: $navbar-bg-dark;
-    color: white;
+    color: $white;
   }
 }
 
@@ -351,7 +388,6 @@ offsets the text by 18px, the size of the chevron-icon */
   margin-bottom: 1em;
   align-items: center;
   text-decoration: none;
-  text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
   display: flex;

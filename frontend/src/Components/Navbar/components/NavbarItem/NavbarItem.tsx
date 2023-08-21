@@ -9,6 +9,7 @@ import styles from '../../Navbar.module.scss';
 type NavbarItemProps = {
   route: string;
   label: string;
+  icon?: string;
   dropdownLinks?: Children;
   expandedDropdown?: string;
   setExpandedDropdown: SetState<string>;
@@ -16,7 +17,14 @@ type NavbarItemProps = {
 
 const iconDown = 'carbon:chevron-down';
 
-export function NavbarItem({ label, route, expandedDropdown, setExpandedDropdown, dropdownLinks }: NavbarItemProps) {
+export function NavbarItem({
+  label,
+  route,
+  icon,
+  expandedDropdown,
+  setExpandedDropdown,
+  dropdownLinks,
+}: NavbarItemProps) {
   const { setIsMobileNavigation } = useGlobalContext();
   const isDesktop = useDesktop();
   const isSelected = expandedDropdown === label;
@@ -56,6 +64,7 @@ export function NavbarItem({ label, route, expandedDropdown, setExpandedDropdown
   return (
     <div className={itemClasses} ref={clickOutsideRef}>
       <Link to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile} onClick={handleClick}>
+        {icon && <Icon icon={icon} className={styles.navbar_item_icon} />}
         {label}
         {dropdownLinks && (
           <Icon
