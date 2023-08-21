@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestriction, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import { EventAgeRestriction, EventStatus, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -118,7 +118,7 @@ export type EventDto = {
   publish_dt: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
-  ticket_type: EventTicketTypeValue;
+  ticket_type: EventTicketType;
 
   // Custom tickets (only relevant for custom price group events)
   custom_tickets: EventCustomTicketDto[];
@@ -334,7 +334,7 @@ export type RecruitmentPositionDto = {
 
 export type RecruitmentAdmissionDto = {
   admission_text: string;
-  recruitment_position: number;
+  recruitment_position?: number;
   recruitment: number;
   user: number;
   priority: number;
