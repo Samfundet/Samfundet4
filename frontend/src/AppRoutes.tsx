@@ -45,6 +45,9 @@ import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { ROUTES } from './routes';
+import { PERM } from './permissions';
+import { ProtectedRoute } from './Components';
+import { SAMFUNDET_CHANGE_CLOSEDPERIOD } from './permissions/permissions';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -76,55 +79,129 @@ export function AppRoutes() {
       {/* 
             ADMIN ROUTES
       */}
-      <Route element={<AdminLayout />}>
-        <Route path={ROUTES.frontend.admin} element={<AdminPage />} />
+      <Route element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}>
+        <Route
+          path={ROUTES.frontend.admin}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
+        />
         {/* Gangs */}
-        <Route path={ROUTES.frontend.admin_gangs} element={<GangsAdminPage />} />
-        <Route path={ROUTES.frontend.admin_gangs_create} element={<GangsFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_gangs_edit} element={<GangsFormAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_gangs}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={GangsAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_gangs_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_gangs_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
+        />
         {/* Events */}
-        <Route path={ROUTES.frontend.admin_events} element={<EventsAdminPage />} />
-        <Route path={ROUTES.frontend.admin_events_create} element={<EventCreatorAdminPage />} />
-        <Route path={ROUTES.frontend.admin_events_edit} element={<EventCreatorAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_events}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_events_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_events_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />}
+        />
         {/* 
           Info pages 
           NOTE: edit/create uses custom views
         */}
-        <Route path={ROUTES.frontend.admin_information} element={<InformationAdminPage />} />
-        {/* Opening hours */}
-        <Route path={ROUTES.frontend.admin_opening_hours} element={<OpeningHoursAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_information}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]} Page={InformationAdminPage} />}
+        />
+        {/* Opening hours, TODO ADD OPENING HOURS PERMISSIONS*/}
+        <Route
+          path={ROUTES.frontend.admin_opening_hours}
+          element={<ProtectedRoute perms={[]} Page={OpeningHoursAdminPage} />}
+        />
         {/* Closed period */}
-        <Route path={ROUTES.frontend.admin_closed} element={<ClosedPeriodAdminPage />} />
-        <Route path={ROUTES.frontend.admin_closed_create} element={<ClosedPeriodFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_closed_edit} element={<ClosedPeriodFormAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_closed}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_CLOSEDPERIOD]} Page={ClosedPeriodAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_closed_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_closed_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
+        />
         {/* Images */}
-        <Route path={ROUTES.frontend.admin_images} element={<ImageAdminPage />} />
-        <Route path={ROUTES.frontend.admin_images_create} element={<ImageFormAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_images}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_IMAGE]} Page={ImageAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_images_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_IMAGE]} Page={ImageFormAdminPage} />}
+        />
         {/* Saksdokumenter */}
-        <Route path={ROUTES.frontend.admin_saksdokumenter} element={<SaksdokumentAdminPage />} />
-        <Route path={ROUTES.frontend.admin_saksdokumenter_create} element={<SaksdokumentFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_saksdokumenter_edit} element={<SaksdokumentFormAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_saksdokumenter}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]} Page={SaksdokumentAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_saksdokumenter_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_saksdokumenter_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
+        />
         {/* Recruitment */}
-        <Route path={ROUTES.frontend.admin_recruitment} element={<RecruitmentAdminPage />} />
-        <Route path={ROUTES.frontend.admin_recruitment_create} element={<RecruitmentFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_recruitment_edit} element={<RecruitmentFormAdminPage />} />
-        <Route path={ROUTES.frontend.admin_recruitment_gang_overview} element={<RecruitmentGangOverviewPage />} />
-        <Route path={ROUTES.frontend.admin_recruitment_gang_position_overview} element={<RecruitmentGangAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_recruitment}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+        />
+        {/* TODO ADD PERMISSIONS */}
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_overview}
+          element={<ProtectedRoute perms={[]} Page={RecruitmentGangOverviewPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_overview}
+          element={<ProtectedRoute perms={[]} Page={RecruitmentGangAdminPage} />}
+        />
+
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_create}
-          element={<RecruitmentPositionFormAdminPage />}
+          element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_edit}
-          element={<RecruitmentPositionFormAdminPage />}
+          element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
         />
-      </Route>
-      {/* 
+        {/* 
         Info pages
         Custom layout for edit/create
       */}
-      <Route path={ROUTES.frontend.admin_information_create} element={<InformationFormAdminPage />} />
-      <Route path={ROUTES.frontend.admin_information_edit} element={<InformationFormAdminPage />} />
+        <Route
+          path={ROUTES.frontend.admin_information_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_information_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
+        />
+      </Route>
       {/* 
             SULTEN ROUTES
       */}

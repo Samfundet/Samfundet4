@@ -48,7 +48,7 @@ export function HomePage() {
 
   return (
     <div>
-      <Splash events={homePage?.splash} />
+      <Splash events={homePage?.splash} showInfo={true} />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
         {isLoading && skeleton}

@@ -84,7 +84,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_description]: 'Beskrivelse',
   [KEY.common_reservations]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
-  [KEY.common_about_samfundet]: 'Om Samfundet',
+  [KEY.common_about_samfundet]: 'Generelt',
   [KEY.common_long_description]: 'Lang beskrivelse',
   [KEY.common_short_description]: 'Kort beskrivelse',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
@@ -96,6 +96,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_festivals]: 'Festivaler',
   [KEY.common_here]: 'her',
+  [KEY.common_more_info]: 'Mer info',
   // Price groups
   [KEY.common_ticket_type]: 'Billett',
   [KEY.common_ticket_type_free]: 'Gratis',
@@ -273,7 +274,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_recruitment]: 'Recruitment',
   [KEY.common_reservations]: 'Reservations',
   [KEY.common_opening_hours]: 'Opening hours',
-  [KEY.common_about_samfundet]: 'About Samfundet',
+  [KEY.common_about_samfundet]: 'General',
   [KEY.common_long_description]: 'Long description',
   [KEY.common_short_description]: 'Short description',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
@@ -285,6 +286,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_sponsor]: 'Sponsors',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_here]: 'here',
+  [KEY.common_more_info]: 'More info',
 
   // Price groups
   [KEY.common_ticket_type_billig]: 'Paid',
