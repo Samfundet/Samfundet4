@@ -26,6 +26,7 @@ $panel-dark-bg: #333333;
   flex-direction: column;
   margin-top: $navbar-height;
   gap: .2em;
+  overflow-y: scroll;
 
   @include for-mobile-only {
     display: none;

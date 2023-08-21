@@ -16,6 +16,7 @@ import {
   MenuItemDto,
   NotificationDto,
   OrganizationDto,
+  RecruitmentAdmissionDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   SaksdokumentDto,
@@ -517,7 +518,12 @@ export async function putRecruitment(id: string, recruitment: Partial<Recruitmen
 }
 
 export async function getRecruitmentPositions(recruitmentId: string): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
-  const url = `${BACKEND_DOMAIN}/recruitment-positions/?recruitment=${recruitmentId}`;
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_positions,
+      queryParams: { recruitment: recruitmentId },
+    });
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
@@ -547,6 +553,38 @@ export async function putRecruitmentPosition(
     BACKEND_DOMAIN +
     reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
   const response = await axios.put<RecruitmentPositionDto>(url, recruitment, { withCredentials: true });
+  return response;
+}
+
+export async function getRecruitmentAdmissionsForApplicant(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentAdmissionsForGang(
+  gangId: string,
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_gang_list,
+      queryParams: {
+        gang: gangId,
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
   return response;
 }
 

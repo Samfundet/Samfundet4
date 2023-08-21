@@ -13,6 +13,7 @@ from . import (
     recruitment,
     recruitment_position,
     blogposts,
+    recruitment_admissions,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -35,6 +36,7 @@ SEED_SCRIPTS = [
     ('organization', oganizations.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
+    ('recruitment_admissions', recruitment_admissions.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
