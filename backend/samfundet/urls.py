@@ -28,6 +28,7 @@ router.register('booking', views.BookingView, 'booking')
 router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('key-value', views.KeyValueView, 'key_value')
+
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('organizations', views.OrganizationView, 'organizations')
@@ -49,4 +50,5 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
+    path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
 ]

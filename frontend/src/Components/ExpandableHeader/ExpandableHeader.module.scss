@@ -1,5 +1,20 @@
 @import 'src/constants';
 
+.container {
+  width: 100%;
+  border: 1px solid $grey-3;
+  overflow: hidden;
+}
+
+.parent {
+  border-radius: 0.7em;
+}
+
+.child {
+  border-radius: 0;
+  border: 0;
+}
+
 .extendable_header_wrapper {
   display: flex;
   flex-direction: row;
@@ -12,7 +27,6 @@
   cursor: pointer;
   border: 0;
   outline: none;
-  margin: 5px;
   text-align: left;
 }
 

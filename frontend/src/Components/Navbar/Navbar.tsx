@@ -130,7 +130,7 @@ export function Navbar() {
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
-        route={ROUTES.frontend.health}
+        route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
       />
     </div>
