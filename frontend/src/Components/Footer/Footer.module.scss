@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   width: 100%;
   @include for-mobile-only {
     align-items: center;
