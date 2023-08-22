@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { Command } from 'cmdk';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CustomNavigateProps, useCustomNavigate, useIsMetaKeyDown } from '~/hooks';
+import { CustomNavigateProps, useCustomNavigate, useIsMetaKeyDown, useTheme } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import './CommandMenu.scss';
@@ -19,15 +19,12 @@ export function CommandMenu({ openKey = 'k' }: CommandMenuProps) {
   const container = useRef(null);
   const navigate = useCustomNavigate();
   const isDown = useIsMetaKeyDown();
+  const { switchTheme } = useTheme();
 
   const hasAdminPerms = true;
 
   const adminPanelUrl = ROUTES.backend.admin__index;
   const eventsUrl = ROUTES.frontend.events;
-  const lycheUrl = ROUTES.frontend.lyche;
-  const recruitmentUrl = ROUTES.frontend.recruitment;
-  const controlPanelUrl = ROUTES.frontend.admin;
-  const homeUrl = ROUTES.frontend.home;
 
   function cmdNavigate(props: CustomNavigateProps) {
     navigate({ ...props, isMetaDown: isDown });
@@ -37,7 +34,8 @@ export function CommandMenu({ openKey = 'k' }: CommandMenuProps) {
   // Toggle the menu when ⌘K is pressed.
   useEffect(() => {
     function down(e: KeyboardEvent) {
-      if (e.key === openKey && (e.metaKey || e.ctrlKey)) {
+      const isCmdKClick = e.key === openKey && (e.metaKey || e.ctrlKey);
+      if (isCmdKClick) {
         e.preventDefault();
         setOpen((open) => !open);
         setSearch('');
@@ -68,38 +66,58 @@ export function CommandMenu({ openKey = 'k' }: CommandMenuProps) {
 
           {/* Group: Shortcuts */}
           <Command.Group heading={t(KEY.command_menu_group_shortcuts)}>
-            <Command.Item onSelect={() => cmdNavigate({ url: lycheUrl, linkTarget: 'frontend' })}>
-              <Icon width={24} icon="material-symbols:settings" />
+            <Command.Item
+              value="lyche-restaurant"
+              onSelect={() => cmdNavigate({ url: ROUTES.frontend.lyche, linkTarget: 'frontend' })}
+            >
+              <Icon width={24} icon="ph:hamburger-fill" />
               {t(KEY.command_menu_shortcut_lyche)}
               <Shortcut keys={['g', 'l']} />
             </Command.Item>
-
             <Command.Item onSelect={() => cmdNavigate({ url: eventsUrl, linkTarget: 'frontend' })}>
-              <Icon width={24} icon="tabler:arrows-transfer-down" />
+              <Icon width={24} icon="tabler:building-circus" />
               {t(KEY.command_menu_shortcut_events)}
               <Shortcut keys={['g', 'e']} />
             </Command.Item>
-
-            <Command.Item onSelect={() => cmdNavigate({ url: recruitmentUrl, linkTarget: 'frontend' })}>
+            <Command.Item onSelect={() => cmdNavigate({ url: ROUTES.frontend.recruitment, linkTarget: 'frontend' })}>
               <Icon width={24} icon="fluent:organization-48-filled" />
               {t(KEY.command_menu_shortcut_recruitment)}
               <Shortcut keys={['g', 'r']} />
             </Command.Item>
-
-            <Command.Item onSelect={() => cmdNavigate({ url: homeUrl, linkTarget: 'frontend' })}>
+            <Command.Item onSelect={() => cmdNavigate({ url: ROUTES.frontend.home, linkTarget: 'frontend' })}>
               <Icon width={24} icon="material-symbols:home" />
               {t(KEY.command_menu_shortcut_home)}
-              <Shortcut keys={['g', 'r']} />
+              <Shortcut keys={['g', 'h']} />
             </Command.Item>
-
+            <Command.Item
+              onSelect={() =>
+                cmdNavigate({
+                  url: ROUTES.frontend.admin_events_create,
+                  linkTarget: 'frontend',
+                })
+              }
+            >
+              <Icon width={24} icon="mdi:plus" />
+              {t(KEY.command_menu_shortcut_create_event)}
+            </Command.Item>
+            <Command.Item
+              onSelect={() =>
+                cmdNavigate({
+                  url: ROUTES.frontend.venues,
+                  linkTarget: 'frontend',
+                })
+              }
+            >
+              <Icon width={24} icon="mdi:map" />
+              {t(KEY.command_menu_shortcut_venues)}
+            </Command.Item>
             {hasAdminPerms && (
-              <Command.Item onSelect={() => cmdNavigate({ url: controlPanelUrl, linkTarget: 'frontend' })}>
-                <Icon width={24} icon="mdi:shield" />
+              <Command.Item onSelect={() => cmdNavigate({ url: ROUTES.frontend.admin, linkTarget: 'frontend' })}>
+                <Icon width={24} icon="material-symbols:settings" />
                 {t(KEY.command_menu_shortcut_control_panel)}
                 <Shortcut keys={['g', 'c']} />
               </Command.Item>
             )}
-
             {hasAdminPerms && (
               <Command.Item onSelect={() => cmdNavigate({ url: adminPanelUrl, linkTarget: 'backend' })}>
                 <Icon width={24} icon="mdi:shield" />
@@ -107,7 +125,35 @@ export function CommandMenu({ openKey = 'k' }: CommandMenuProps) {
                 <Shortcut keys={['g', 'a']} />
               </Command.Item>
             )}
+            {hasAdminPerms && (
+              <Command.Item onSelect={() => cmdNavigate({ url: ROUTES.frontend.admin_closed, linkTarget: 'frontend' })}>
+                <Icon width={24} icon="mdi:clock-time-eight-outline" />
+                {t(KEY.command_menu_shortcut_opening_hours)}
+              </Command.Item>
+            )}
+            {hasAdminPerms && (
+              <Command.Item onSelect={() => cmdNavigate({ url: ROUTES.frontend.admin_closed, linkTarget: 'frontend' })}>
+                <Icon width={24} icon="solar:moon-sleep-bold" />
+                {t(KEY.command_menu_shortcut_closed)}
+              </Command.Item>
+            )}
           </Command.Group>
+
+          {/* Group: Actions */}
+          <Command.Group heading={t(KEY.command_menu_group_actions)}>
+            <Command.Item
+              onSelect={() => {
+                switchTheme();
+                setOpen(false);
+              }}
+            >
+              <Icon width={24} icon="mdi:theme-light-dark" />
+              {t(KEY.command_menu_action_change_theme)}
+              <Shortcut keys={['g', 'a']} />
+            </Command.Item>
+          </Command.Group>
+
+          {/* End: Command.List */}
         </Command.List>
       </Command.Dialog>
     </>
