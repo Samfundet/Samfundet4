@@ -38,16 +38,15 @@ import {
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
+import { ProtectedRoute } from './Components';
 import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
-import { ROUTES } from './routes';
 import { PERM } from './permissions';
-import { ProtectedRoute } from './Components';
-import { SAMFUNDET_CHANGE_CLOSEDPERIOD } from './permissions/permissions';
+import { ROUTES } from './routes';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().

@@ -1,0 +1,204 @@
+/* stylelint-disable selector-max-compound-selectors */
+/* stylelint-disable selector-max-combinators */
+/* stylelint-disable max-nesting-depth */
+@import 'src/constants';
+
+@import 'src/mixins';
+
+$max-width: 700px;
+$bg: $red-samf;
+$border-radius: 8px;
+$padding: 8px;
+$default-font-size: 18px;
+
+// Command.Dialog:
+$dialog-overlay: rgba(/* */ $color: black, $alpha: 40%);
+
+// Command.Input:
+$input-selection-color: $red-light;
+$input-bg: inherit;
+$input-font-size: $default-font-size;
+$input-placeholder-color: $white;
+
+// Command.Item:
+$item-height: 48px;
+$item-selected-bg: $red-light;
+$item-active-bg: $red;
+$item-selected-color: black;
+$item-border-radius: 8px;
+$item-font-size: $default-font-size;
+
+// Command.Group:
+$group-heading-color: $white;
+$group-heading-font-size: $item-font-size - 2px;
+
+// Command.List:
+$cmdk-list-height: nil; // Optional.
+
+// Command.Separator:
+$separator-color: $red-light;
+
+// Command.Empty:
+$empty-font-size: $default-font-size;
+
+.command-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  ::selection {
+    background: $red-light;
+    color: white;
+  }
+
+  [cmdk-dialog] {
+    padding-top: 15vh;
+    width: 100vw;
+    height: 100vh;
+    background-color: $dialog-overlay;
+  }
+
+  [cmdk-root] {
+    max-width: $max-width;
+    width: 100%;
+    margin: auto;
+    padding: $padding;
+    background: $bg;
+    border-radius: $border-radius;
+    overflow: hidden;
+    // font-family: var(--font-sans);
+    // border: 1px solid var(--gray6);
+    box-shadow: 0 16px 70px rgb(0 0 0 / 40%);
+    transition: transform 100ms ease;
+    color: white;
+  }
+
+  [cmdk-input] {
+    // font-family: var(--font-sans);
+    border: none;
+    width: 100%;
+    font-size: $input-font-size;
+    padding: 8px 8px 16px;
+    outline: none;
+    background: $input-bg;
+    color: white;
+    border-bottom: 1px solid white;
+    margin-bottom: 16px;
+    border-radius: 0;
+
+    &::placeholder {
+      color: $input-placeholder-color;
+    }
+  }
+
+  [cmdk-item] {
+    content-visibility: auto;
+    cursor: pointer;
+    height: $item-height;
+    border-radius: $item-border-radius;
+    font-size: $item-font-size;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+    // color: gray;
+    user-select: none;
+    will-change: background, color;
+    transition: all 150ms ease;
+    transition-property: none;
+
+    &[data-selected='true'] {
+      background: $item-selected-bg;
+      color: $item-selected-color;
+    }
+
+    // &[data-disabled='true'] {
+    &[aria-disabled='true'] {
+      // color: var(--gray8);
+      color: $turquoise-deep;
+      cursor: not-allowed;
+    }
+
+    &:active {
+      transition-property: background;
+      background: $item-active-bg;
+    }
+
+    // Targets all Command.Item after the first one.
+    & + [cmdk-item] {
+      margin-top: 4px;
+    }
+
+    /* stylelint-disable-next-line selector-max-type */
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  [cmdk-list] {
+    // height: min(330px, calc(var(--cmdk-list-height)));
+    height: min(330px, $cmdk-list-height);
+    max-height: 400px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    transition: 100ms ease;
+    transition-property: height;
+  }
+
+  .command-menu__shortcut {
+    display: flex;
+    margin-left: auto;
+    gap: 8px;
+
+    /* stylelint-disable-next-line selector-max-type */
+    kbd {
+      // font-family: var(--font-sans);
+      font-size: 12px;
+      min-width: 20px;
+      padding: 4px;
+      height: 20px;
+      border-radius: 4px;
+      color: black;
+      background: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+  }
+
+  [cmdk-separator] {
+    height: 1px;
+    width: 100%;
+    background: $separator-color;
+    // background: var(--gray5);
+    margin: 4px 0;
+  }
+
+  /* stylelint-disable-next-line selector-max-universal */
+  *:not([hidden]) + [cmdk-group] {
+    margin-top: 8px;
+  }
+
+  [cmdk-group-heading] {
+    user-select: none;
+    font-size: $group-heading-font-size;
+    color: $group-heading-color;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  [cmdk-empty] {
+    font-size: $empty-font-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    white-space: pre-wrap;
+    // color: gray;
+  }
+}

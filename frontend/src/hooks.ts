@@ -1,12 +1,13 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { getTextItem, putUserPreference } from '~/api';
 import { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
-import { THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import { LinkTarget } from './Components/Link/Link';
+import { BACKEND_DOMAIN, THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -337,4 +338,83 @@ export function useClickOutside<T extends Node>(
     };
   }, [ref, event, callback]);
   return ref;
+}
+
+export type CustomNavigateProps = {
+  isMetaDown?: boolean;
+  event?: React.MouseEvent;
+  url: string;
+  linkTarget: LinkTarget;
+};
+
+export type CustomNavigateFn = (props: CustomNavigateProps) => void;
+
+/**
+ * Custom navigation hook to correctly navigate in different environments.
+ * This is the function our <Link> component uses.
+ */
+export function useCustomNavigate(): CustomNavigateFn {
+  const navigate = useNavigate();
+  const { setIsMobileNavigation } = useGlobalContext();
+
+  function handleClick({ event, isMetaDown, url, linkTarget }: CustomNavigateProps) {
+    const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
+
+    // Stop default <a> tag onClick handling. We want custom behaviour depending on the target.
+    event?.preventDefault();
+
+    // Even though nested <a> tags are illegal, they might occur.
+    // To prevent multiple link clicks on overlaying elements, stop propagation upwards.
+    event?.stopPropagation();
+
+    // Close mobile menu if originates from there.
+    setIsMobileNavigation(false);
+
+    /** Detected desire to open the link in a new tab.
+     * True if ctrl or cmd click.
+     */
+    const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
+
+    // React navigation.
+    if (linkTarget === 'frontend' && !isCmdClick) {
+      navigate(finalUrl);
+    }
+    // Normal change of href to trigger reload.
+    else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
+    else if (linkTarget === 'email') window.location.href = finalUrl;
+    // Open in new tab.
+    else window.open(finalUrl, '_blank');
+  }
+
+  return handleClick;
+}
+
+/**
+ * Track if ctrl or cmd is pressed down.
+ */
+export function useIsMetaKeyDown(): boolean {
+  const [isDown, setIsDown] = useState(false);
+
+  // Toggle the menu when ⌘K is pressed.
+  useEffect(() => {
+    function down(e: KeyboardEvent) {
+      if (e.metaKey || e.ctrlKey) {
+        setIsDown(true);
+      }
+    }
+    function up(e: KeyboardEvent) {
+      if (e.key === 'Meta' || e.ctrlKey) {
+        setIsDown(false);
+      }
+    }
+
+    document.addEventListener('keydown', down);
+    document.addEventListener('keyup', up);
+    return () => {
+      document.removeEventListener('keydown', down);
+      document.removeEventListener('keyup', up);
+    };
+  }, []);
+
+  return isDown;
 }
