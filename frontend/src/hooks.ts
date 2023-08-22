@@ -301,7 +301,8 @@ export function useTheme(): UseTheme {
 
   /** Simplified theme switching. Returns theme it switched to. */
   function switchTheme(): ThemeValue {
-    const themeToSet = theme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT;
+    const isLightTheme = theme === THEME.LIGHT;
+    const themeToSet = isLightTheme ? THEME.DARK : THEME.LIGHT;
     setTheme(themeToSet);
     if (user) {
       putUserPreference(user.user_preference.id, { theme: themeToSet });
