@@ -7,6 +7,7 @@
 - **[Technical Documentation](/docs/technical/README.md)**
 - [Work Methodology](/docs/work-methodology.md)
 - [Useful Commands](/docs/useful-commands.md)
+- [Technologies used on Samf4 🤖](/docs/technical/Samf4Tech.md)
 
 ## Installation
 
