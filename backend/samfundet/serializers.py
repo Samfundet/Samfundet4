@@ -19,6 +19,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Infobox,
     Booking,
     Profile,
     TextItem,
@@ -462,6 +463,13 @@ class TextItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TextItem
+        fields = '__all__'
+
+
+class InfoboxSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Infobox
         fields = '__all__'
 
 
