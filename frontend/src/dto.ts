@@ -333,10 +333,11 @@ export type RecruitmentPositionDto = {
 };
 
 export type RecruitmentAdmissionDto = {
+  id: number;
   admission_text: string;
   recruitment_position: number;
   recruitment: number;
-  user: number;
+  user: UserDto;
   priority: number;
   interview_time?: string;
   interview_location?: string;
