@@ -6,13 +6,14 @@ from django.core.files.images import ImageFile
 from django.utils import timezone
 from django.test import Client
 from rest_framework.test import APIClient
+from django.contrib.auth.models import Group
 
 from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.recruitment import Recruitment
-from samfundet.models.general import User, Image, InformationPage, Organization, BlogPost
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition
+from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -167,8 +168,27 @@ def fixture_event_with_billig(fixture_event: Event, fixture_billig_event: Billig
 
 
 @pytest.fixture
+def fixture_group() -> Iterator[Group]:
+    group = Group.objects.create(name='testgroup')
+    yield group
+    group.delete()
+
+
+@pytest.fixture
 def fixture_organization() -> Iterator[Organization]:
     organization = Organization.objects.create(name='Samfundet')
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
+def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
+    organization = Gang.objects.create(
+        name_nb='Gang',
+        name_en='Gang',
+        abbreviation='G',
+        organization=fixture_organization,
+    )
     yield organization
     organization.delete()
 
@@ -191,6 +211,26 @@ def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitm
     )
     yield recruitment
     recruitment.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang: Gang) -> Iterator[Recruitment]:
+    recruitment_position = RecruitmentPosition.objects.create(
+        name_nb='Position NB',
+        name_en='Position EN',
+        short_description_nb='Short Description NB',
+        short_description_en='Short Description EN',
+        long_description_nb='Long Description NB',
+        long_description_en='Long Description EN',
+        is_funksjonaer_position=False,
+        default_admission_letter_nb='Default Admission Letter NB',
+        default_admission_letter_en='Default Admission Letter EN',
+        tags='tag1,tag2',
+        gang=fixture_gang,
+        recruitment=fixture_recruitment
+    )
+    yield recruitment_position
+    recruitment_position.delete()
 
 
 @pytest.fixture

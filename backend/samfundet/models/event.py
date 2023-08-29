@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import User, Image
+from samfundet.models.general import User, Image, Gang
 
 # ======================== #
 #      Event Group         #
@@ -220,6 +220,7 @@ class Event(models.Model):
     location = models.CharField(max_length=140, blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
+    editors = models.ManyToManyField(Gang, blank=True)
 
     age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)

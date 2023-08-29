@@ -225,7 +225,7 @@ class Organization(models.Model):
     """
     Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
     """
-    name = models.CharField(max_length=32, blank=False, null=False)
+    name = models.CharField(max_length=32, blank=False, null=False, unique=True)
 
     class Meta:
         verbose_name = 'Organization'
@@ -276,12 +276,12 @@ class Gang(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # Gang related permission groups
-    gang_leader = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
-    event_admin = models.OneToOneField(
-        Group, related_name='gang_as_event_admin', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
+    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
+    event_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
     )
-    recruitment_admin = models.OneToOneField(
-        Group, related_name='gang_as_recruitment_admin', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
+    recruitment_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
     )
 
     class Meta:

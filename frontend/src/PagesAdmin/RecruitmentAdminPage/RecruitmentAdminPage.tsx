@@ -42,9 +42,13 @@ export function RecruitmentAdminPage() {
   ];
 
   const data = recruitments.map(function (element) {
+    const pageUrl = reverse({
+      pattern: ROUTES.frontend.admin_recruitment_gang_overview,
+      urlParams: { recruitmentId: element.id },
+    });
     return [
       {
-        content: <Link url={ROUTES.frontend.recruitment}>{dbT(element, 'name')}</Link>,
+        content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>,
         value: ROUTES.frontend.recruitment,
       },
       element.organization,

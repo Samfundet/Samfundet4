@@ -40,13 +40,14 @@ export const KEY = {
   common_month_november: 'common_month_november',
   common_month_december: 'common_month_december',
 
-  // Date related
+  // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
 
   // No category:
   common_to: 'common_to',
   common_buy: 'common_buy',
+  common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
   common_from: 'common_from',
@@ -58,15 +59,12 @@ export const KEY = {
   common_gang: 'common_gang',
   common_next: 'common_next',
   common_event: 'common_event',
-  common_events: 'common_events',
   common_login: 'common_login',
-  common_register: 'common_register',
-  common_firstname: 'common_firstname',
-  common_lastname: 'common_lastname',
-  common_repeat: 'common_repeat',
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
+  common_events: 'common_events',
+  common_repeat: 'common_repeat',
   common_venues: 'common_venues',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
@@ -79,10 +77,17 @@ export const KEY = {
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
   common_contact: 'common_contact',
+  common_sponsor: 'common_sponsors',
+  common_lastname: 'common_lastname',
+  common_register: 'common_register',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
+  common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
+  common_festivals: 'common_festivals',
+  common_more_info: 'common_more_info',
+  common_firstname: 'common_firstname',
   common_volunteer: 'common_volunteer',
   common_norwegian: 'common_norwegian',
   common_contact_us: 'common_contact_us',
@@ -94,45 +99,44 @@ export const KEY = {
   common_reservations: 'common_reservations',
   common_opening_hours: 'common_opening_hours',
   common_about_samfundet: 'common_about_samfundet',
+  common_long_description: 'common_long_description',
+  common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
   common_delete_successful: 'common_delete_successful',
   common_update_successful: 'common_update_successful',
   common_creation_successful: 'common_creation_successful',
   common_see_in_django_admin: 'common_see_in_django_admin',
   common_something_went_wrong: 'common_something_went_wrong',
-  common_festivals: 'common_festivals',
-  common_sponsor: 'common_sponsors',
-  common_here: 'common_here',
 
-  // Price groups
-  common_ticket_type_billig: 'common_ticket_type_billig',
-  common_ticket_type_free: 'common_ticket_type_free',
-  common_ticket_type_included: 'common_ticket_type_included',
-  common_ticket_type_custom: 'common_ticket_type_custom',
-  common_ticket_type_registration: 'common_ticket_type_registration',
+  // Price groups:
   common_ticket_type: 'common_ticket_type',
+  common_ticket_type_free: 'common_ticket_type_free',
+  common_ticket_type_custom: 'common_ticket_type_custom',
+  common_ticket_type_billig: 'common_ticket_type_billig',
+  common_ticket_type_included: 'common_ticket_type_included',
+  common_ticket_type_registration: 'common_ticket_type_registration',
 
   // ==================== //
   //        Others        //
   // ==================== //
 
   // LoginPage:
+  loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
   loginpage_email_placeholder: 'loginpage_email_placeholder',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
-  loginpage_register: 'loginpage_register',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
 
-  // Venue Page
+  // Venue Page:
   venuepage_title: 'venuepage_title',
 
-  // Navbar
+  // Navbar:
+  navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
-  navbar_map: 'navbar_map',
 
   // Sulten / Lyche:
   sulten_page_see_menu: 'sulten_page_see_menu',
@@ -140,15 +144,21 @@ export const KEY = {
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
-  // Recruitment
+  // Recruitment:
+  recruitment_tags: 'recruitment_tags',
+  recruitment_position: 'recruitment_position',
   recruitment_duration: 'recruitment_duration',
+  recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_organization: 'recruitment_organization',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   shown_application_deadline: 'shown_application_deadline',
   actual_application_deadlin: 'actual_application_deadline',
+  recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
+  recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
 
   // Admin:
   admin_organizer: 'admin_organizer',
@@ -170,6 +180,25 @@ export const KEY = {
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
 
+  // CommandMenu:
+  command_menu_label: 'command_menu_label',
+  command_menu_no_results: 'command_menu_no_results',
+  command_menu_shortcut_home: 'command_menu_shortcut_home',
+  command_menu_group_actions: 'command_menu_group_actions',
+  command_menu_shortcut_admin: 'command_menu_shortcut_admin',
+  command_menu_shortcut_lyche: 'command_menu_shortcut_lyche',
+  command_menu_shortcut_closed: 'command_menu_shortcut_closed',
+  command_menu_group_shortcuts: 'command_menu_group_shortcuts',
+  command_menu_shortcut_events: 'command_menu_shortcut_events',
+  command_menu_shortcut_venues: 'command_menu_shortcut_venues',
+  command_menu_input_placeholder: 'command_menu_input_placeholder',
+  command_menu_action_change_theme: 'command_menu_action_change_theme',
+  command_menu_shortcut_recruitment: 'command_menu_shortcut_recruitment',
+  command_menu_shortcut_create_event: 'command_menu_shortcut_create_event',
+  command_menu_shortcut_opening_hours: 'command_menu_shortcut_opening_hours',
+  command_menu_shortcut_control_panel: 'command_menu_shortcut_control_panel',
+  command_menu_shortcut_about_samfundet: 'command_menu_shortcut_about_samfundet',
+
   // No category:
   owner: 'owner',
   end_time: 'end_time',
@@ -178,6 +207,7 @@ export const KEY = {
   start_time: 'start_time',
   last_updated: 'last_updated',
   form_confirm: 'form_confirm',
+  we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
   control_panel_title: 'control_panel_title',
   information_page_short: 'information_page_short',
@@ -186,12 +216,11 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
-  we_use_cookies: 'we_use_cookies',
 } as const;
 
 /**
- * Types used for type-proofing translations
- * Reveals errors in translations.ts if some keys are not translated
+ * Types used for type-proofing translations.
+ * Reveals errors in translations.ts if some keys are not translated.
  */
 export type KeyKeys = keyof typeof KEY;
 export type KeyValues = typeof KEY[KeyKeys];

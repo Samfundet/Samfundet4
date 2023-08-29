@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestriction, EventStatus, EventTicketType, HomePageElementVariation } from './types';
+import { EventAgeRestriction, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -118,7 +118,7 @@ export type EventDto = {
   publish_dt: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
-  ticket_type: EventTicketType;
+  ticket_type: EventTicketTypeValue;
 
   // Custom tickets (only relevant for custom price group events)
   custom_tickets: EventCustomTicketDto[];
@@ -227,6 +227,11 @@ export type BookingDto = {
   from_to?: Date;
 };
 
+export type OrganizationDto = {
+  id: number;
+  name: string;
+};
+
 export type GangDto = {
   id: number;
   name_nb: string;
@@ -301,4 +306,40 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: 'samfundet' | 'isfit' | 'uka';
+};
+
+export type RecruitmentPositionDto = {
+  id: string;
+  name_nb: string;
+  name_en: string;
+
+  short_description_nb: string;
+  short_description_en: string;
+
+  long_description_nb: string;
+  long_description_en: string;
+
+  is_funksjonaer_position: boolean;
+
+  default_admission_letter_nb: string;
+  default_admission_letter_en: string;
+
+  gang: string;
+  recruitment: string;
+
+  tags: string;
+
+  interviewers: UserDto[];
+};
+
+export type RecruitmentAdmissionDto = {
+  admission_text: string;
+  recruitment_position: number;
+  recruitment: number;
+  user: number;
+  priority: number;
+  interview_time?: string;
+  interview_location?: string;
+  recruiter_priority?: number;
+  recruiter_status?: string;
 };

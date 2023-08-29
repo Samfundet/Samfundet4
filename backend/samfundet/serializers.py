@@ -9,7 +9,7 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (Recruitment)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -26,6 +26,7 @@ from .models.general import (
     MenuItem,
     GangType,
     KeyValue,
+    Organization,
     BlogPost,
     FoodCategory,
     Saksdokument,
@@ -345,6 +346,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # GANGS ###
+class OrganizationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organization
+        fields = '__all__'
+
+
 class GangSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -481,4 +489,32 @@ class RecruitmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recruitment
+        fields = '__all__'
+
+
+class RecruitmentPositionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentPosition
+        fields = '__all__'
+
+
+class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = [
+            'admission_text',
+            'recruitment_position',
+            'user',
+            'applicant_priority',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentAdmission
         fields = '__all__'

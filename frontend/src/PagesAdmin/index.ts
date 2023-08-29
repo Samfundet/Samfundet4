@@ -11,4 +11,7 @@ export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
 export { RecruitmentAdminPage } from './RecruitmentAdminPage';
+export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';
+export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
+export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

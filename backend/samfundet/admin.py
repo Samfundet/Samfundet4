@@ -11,7 +11,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import Recruitment
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
 from .models.general import (
     Tag,
     User,
@@ -205,7 +205,7 @@ class EventAdmin(CustomGuardedModelAdmin):
     list_filter = ['event_group']
     list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
-    # filter_horizontal = ['registration']
+    filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
@@ -471,7 +471,7 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 
 
 @admin.register(Recruitment)
-class RecruitmentAdmin(admin.ModelAdmin):
+class RecruitmentAdmin(CustomGuardedModelAdmin):
     sortable_by = [
         'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups', 'organization'
@@ -488,8 +488,51 @@ class RecruitmentAdmin(admin.ModelAdmin):
     list_select_related = True
 
 
+@admin.register(RecruitmentPosition)
+class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
+    sortable_by = [
+        'name_nb',
+        'is_funksjonaer_position',
+        'gang',
+        'id',
+    ]
+    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    filter_horizontal = ['interviewers']
+    list_select_related = True
+
+
+@admin.register(RecruitmentAdmission)
+class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
+    sortable_by = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    list_display = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    search_fields = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    list_select_related = True
+
+
 @admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(CustomGuardedModelAdmin):
     sortable_by = ['id', 'name']
     list_display = ['id', 'name']
     search_fields = ['id', 'name']

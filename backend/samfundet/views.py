@@ -4,9 +4,11 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.middleware.csrf import get_token
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
@@ -18,7 +20,11 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
-from .models.recruitment import (Recruitment)
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+)
 from .models.general import (
     Tag,
     User,
@@ -34,6 +40,7 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
+    Organization,
     BlogPost,
     FoodCategory,
     Saksdokument,
@@ -65,11 +72,15 @@ from .serializers import (
     EventGroupSerializer,
     RecruitmentSerializer,
     SaksdokumentSerializer,
+    OrganizationSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentPositionSerializer,
+    RecruitmentAdmissionForGangSerializer,
+    RecruitmentAdmissionForApplicantSerializer,
 )
 from .utils import event_query
 
@@ -191,7 +202,13 @@ class IsClosedView(ListAPIView):
 class SaksdokumentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all().order_by('-publication_date')
+    queryset = Saksdokument.objects.all()
+
+
+class OrganizationView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = OrganizationSerializer
+    queryset = Organization.objects.all()
 
 
 class GangView(ModelViewSet):
@@ -421,3 +438,99 @@ class RecruitmentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerRecruitmentView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentPosition.objects.filter(recruitment=recruitment)
+        else:
+            return None
+
+
+class RecruitmentAdmissionForApplicantView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAdmissionForApplicantSerializer
+
+    def list(self, request: Request) -> Response:
+        """
+        Returns a list of all the recruitments for the specified gang.
+        """
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        admissions = RecruitmentAdmission.objects.filter(
+            recruitment=recruitment,
+            user=request.user,
+        )
+
+        # check permissions for each admission
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+
+        serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
+class RecruitmentAdmissionForGangView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+
+    # TODO: User should only be able to edit the fields that are allowed
+
+    def list(self, request: Request) -> Response:
+        """
+        Returns a list of all the recruitments for the specified gang.
+        """
+        gang_id = request.query_params.get('gang')
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not gang_id:
+            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        gang = get_object_or_404(Gang, id=gang_id)
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        admissions = RecruitmentAdmission.objects.filter(
+            recruitment_position__gang=gang,
+            recruitment=recruitment  # only include admissions related to the specified recruitment
+        )
+
+        # check permissions for each admission
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+
+        serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
+class ActiveRecruitmentPositionsView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Returns all active recruitment positions.
+        """
+        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
