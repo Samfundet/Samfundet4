@@ -14,7 +14,7 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
-  RecruitmentApplicationFormPage,
+  RecruitmentAdmissionFormPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -75,7 +75,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
-        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
       </Route>
       {/* 
             ADMIN ROUTES

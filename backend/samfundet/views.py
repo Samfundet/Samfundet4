@@ -459,6 +459,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForApplicantSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     def list(self, request: Request) -> Response:
         """

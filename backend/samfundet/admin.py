@@ -488,6 +488,13 @@ class RecruitmentAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
+class RecruitmentAdmissionInline(admin.TabularInline):  # you can also use admin.StackedInline
+    model = RecruitmentAdmission
+    extra = 0  # Number of empty forms displayed
+    readonly_fields = ['admission_text', 'user', 'applicant_priority']  # make these fields read-only
+    # Add more fields here as needed
+
+
 @admin.register(RecruitmentPosition)
 class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
     sortable_by = [
@@ -496,10 +503,16 @@ class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
     search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
     filter_horizontal = ['interviewers']
     list_select_related = True
+
+    inlines = [RecruitmentAdmissionInline]
+
+    def admissions_count(self, obj: RecruitmentPosition) -> int:
+        count = obj.admissions.all().count()
+        return count
 
 
 @admin.register(RecruitmentAdmission)

@@ -1,1 +1,0 @@
-export { RecruitmentApplicationFormPage } from './RecruitmentApplicationFormPage';
