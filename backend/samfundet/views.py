@@ -232,8 +232,8 @@ class InfoboxView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InfoboxSerializer
     queryset = Infobox.objects.all()
-    
-    
+
+
 class BlogPostView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = BlogPostSerializer
