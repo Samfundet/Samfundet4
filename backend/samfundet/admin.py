@@ -488,11 +488,11 @@ class RecruitmentAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
-class RecruitmentAdmissionInline(admin.TabularInline):  # you can also use admin.StackedInline
+class RecruitmentAdmissionInline(admin.TabularInline):
     model = RecruitmentAdmission
-    extra = 0  # Number of empty forms displayed
-    readonly_fields = ['admission_text', 'user', 'applicant_priority']  # make these fields read-only
-    # Add more fields here as needed
+    extra = 0
+    readonly_fields = ['admission_text', 'user', 'applicant_priority']
+    fields = ['admission_text', 'user', 'applicant_priority']
 
 
 @admin.register(RecruitmentPosition)
