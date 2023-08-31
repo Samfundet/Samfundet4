@@ -33,6 +33,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Infobox,
     Profile,
     Booking,
     MenuItem,
@@ -59,6 +60,7 @@ from .serializers import (
     VenueSerializer,
     LoginSerializer,
     GroupSerializer,
+    InfoboxSerializer,
     ProfileSerializer,
     BookingSerializer,
     RegisterSerializer,
@@ -224,6 +226,12 @@ class InformationPageView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
+
+
+class InfoboxView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    serializer_class = InfoboxSerializer
+    queryset = Infobox.objects.all()
 
 
 class BlogPostView(ModelViewSet):

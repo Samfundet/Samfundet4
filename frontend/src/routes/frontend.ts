@@ -28,40 +28,40 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   //      Admin pages     //
   // ==================== //
-  admin: '/admin/',
-  // Gangs
-  admin_gangs: '/admin/gangs/',
-  admin_gangs_create: '/admin/gangs/create/',
-  admin_gangs_edit: '/admin/gangs/edit/:id/',
-  // Events
-  admin_events: '/admin/events/',
-  admin_events_create: '/admin/events/create/',
-  admin_events_edit: '/admin/events/edit/:id/',
-  // Info pages
-  admin_information: '/admin/information/',
-  admin_information_create: '/admin/information/create/',
-  admin_information_edit: '/admin/information/edit/:slugField/',
-  // Opening hours
-  admin_opening_hours: '/admin/opening_hours/',
-  // Closed periods
-  admin_closed: '/admin/closed/',
-  admin_closed_create: '/admin/closed/create/',
-  admin_closed_edit: '/admin/closed/edit/:id/',
-  // Images
-  admin_images: '/admin/images/',
-  admin_images_create: '/admin/images/create/',
-  // Documents
-  admin_saksdokumenter: '/admin/saksdokument/',
-  admin_saksdokumenter_create: '/admin/saksdokument/create/',
-  admin_saksdokumenter_edit: '/admin/saksdokument/edit/:id/',
-  // Recruitment
-  admin_recruitment: '/admin/recruitment/',
-  admin_recruitment_create: '/admin/recruitment/create/',
-  admin_recruitment_edit: '/admin/recruitment/edit/:id',
-  admin_recruitment_gang_overview: '/admin/recruitment/:recruitmentId/gang-overview/',
-  admin_recruitment_gang_position_overview: '/admin/recruitment/:recruitmentId/gang/:gangId',
-  admin_recruitment_gang_position_create: '/admin/recruitment/:recruitmentId/gang/:gangId/create/',
-  admin_recruitment_gang_position_edit: '/admin/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
+  admin: '/control-panel/',
+  // Gangs:
+  admin_gangs: '/control-panel/gangs/',
+  admin_gangs_create: '/control-panel/gangs/create/',
+  admin_gangs_edit: '/control-panel/gangs/edit/:id/',
+  // Events:
+  admin_events: '/control-panel/events/',
+  admin_events_edit: '/control-panel/events/edit/:id/',
+  admin_events_create: '/control-panel/events/create/',
+  // Info pages:
+  admin_information: '/control-panel/information/',
+  admin_information_edit: '/control-panel/information/edit/:slugField/',
+  admin_information_create: '/control-panel/information/create/',
+  // Opening hours:
+  admin_opening_hours: '/control-panel/opening_hours/',
+  // Closed periods:
+  admin_closed: '/control-panel/closed/',
+  admin_closed_create: '/control-panel/closed/create/',
+  admin_closed_edit: '/control-panel/closed/edit/:id/',
+  // Images:
+  admin_images: '/control-panel/images/',
+  admin_images_create: '/control-panel/images/create/',
+  // Documents:
+  admin_saksdokumenter: '/control-panel/saksdokument/',
+  admin_saksdokumenter_create: '/control-panel/saksdokument/create/',
+  admin_saksdokumenter_edit: '/control-panel/saksdokument/edit/:id/',
+  // Recruitment:
+  admin_recruitment: '/control-panel/recruitment/',
+  admin_recruitment_edit: '/control-panel/recruitment/edit/:id',
+  admin_recruitment_create: '/control-panel/recruitment/create/',
+  admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
+  admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
+  admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
+  admin_recruitment_gang_position_edit: '/control-panel/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
 
   // ==================== //
   //      Development     //

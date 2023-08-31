@@ -6,6 +6,7 @@ import { AppRoutes } from '~/AppRoutes';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // Neccessary import for translations.
+import { CommandMenu } from './Components/CommandMenu';
 import './i18n/i18n';
 
 export function App() {
@@ -29,6 +30,7 @@ export function App() {
           </Helmet>
         )}
         <AppRoutes />
+        <CommandMenu />
         {/* Move down from navbar. */}
         <ToastContainer style={{ marginTop: '45px' }} />
       </BrowserRouter>
