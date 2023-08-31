@@ -5,9 +5,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
 from django.db.models import QuerySet
-from django.shortcuts import get_object_or_404
 from guardian.models import GroupObjectPermission, UserObjectPermission
-from requests import Response
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
@@ -513,12 +511,11 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
-        recruitment_position = validated_data.get('recruitment_position')
-        recruitment = recruitment_position.recruitment  # Assuming recruitment is a field in recruitment_position model
-        user = self.context['request'].user  # Get user from context
-        applicant_priority = 1  # Or fetch this from elsewhere if needed
+        recruitment_position = validated_data['recruitment_position']
+        recruitment = recruitment_position.recruitment
+        user = self.context['request'].user
+        applicant_priority = 1
 
-        # Manually creating an instance of the RecruitmentAdmission model
         recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
