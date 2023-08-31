@@ -14,7 +14,6 @@ import styles from './RecruitmentAdmissionFormPage.module.scss';
 
 export function RecruitmentAdmissionFormPage() {
   const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
