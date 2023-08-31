@@ -342,5 +342,5 @@ export type RecruitmentAdmissionDto = {
   interview_time?: string;
   interview_location?: string;
   recruiter_priority?: number;
-  recruiter_status?: string;
+  recruiter_status?: number;
 };

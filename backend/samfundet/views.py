@@ -438,6 +438,12 @@ class RecruitmentPositionView(ModelViewSet):
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentAdmissionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
@@ -486,6 +492,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     # TODO: User should only be able to edit the fields that are allowed
 
