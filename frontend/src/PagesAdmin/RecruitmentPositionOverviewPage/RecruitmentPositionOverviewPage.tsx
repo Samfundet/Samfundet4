@@ -88,7 +88,7 @@ export function RecruitmentPositionOverviewPage() {
           </Link>
         ),
       },
-      { content: admission.priority },
+      { content: admission.applicant_priority },
       {
         content: (
           <InputField
