@@ -13,4 +13,5 @@ export const TextItem = {
   sulten_menu_text: 'sulten_menu_text',
   sulten_about_us_text: 'sulten_about_us_text',
   sulten_contact_text: 'sulten_contact_text',
+  sulten_about_page_text: 'sulten_about_page_text',
 } as const;

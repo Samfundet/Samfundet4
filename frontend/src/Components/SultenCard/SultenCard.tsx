@@ -11,6 +11,7 @@ type SultenCardProps = {
   imageAlignment?: 'left' | 'right';
   onButtonClick?: () => void;
   link?: string;
+  smallCard?: boolean;
 };
 
 export function SultenCard({
@@ -22,18 +23,19 @@ export function SultenCard({
   onButtonClick,
   link,
   imageAlignment = 'left',
+  smallCard = false,
 }: SultenCardProps) {
   const alignImageLeft = imageAlignment === 'left';
   const isMobile = useMobile();
 
   // position image to the left, or top if mobile
   const leftAlignedImage = (alignImageLeft || isMobile) && (
-    <img src={image} alt={imageAlt} className={styles.card_image}></img>
+    <img src={image} alt={imageAlt} className={smallCard ? styles.smallcard_image : styles.card_image}></img>
   );
 
   // position image to the right, not at the bottom if mobile
   const rightAlignedImage = !alignImageLeft && !isMobile && (
-    <img src={image} alt={imageAlt} className={styles.card_image}></img>
+    <img src={image} alt={imageAlt} className={smallCard ? styles.smallcard_image : styles.card_image}></img>
   );
 
   const cardButton = buttonText && (
@@ -43,9 +45,9 @@ export function SultenCard({
   );
 
   return (
-    <div className={styles.container}>
+    <div className={smallCard ? styles.smallcard_container : styles.container}>
       {leftAlignedImage}
-      <div className={styles.text_container}>
+      <div className={smallCard ? styles.smallcard_text_container : styles.text_container}>
         <h2 className={styles.card_header}>{header}</h2>
         <p className={styles.card_text}>{text}</p>
         {cardButton}

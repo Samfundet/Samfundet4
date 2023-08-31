@@ -47,6 +47,7 @@ import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage'
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+import { LycheAboutPage } from './Pages/LycheAboutPage/LycheAboutPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -206,6 +207,7 @@ export function AppRoutes() {
       */}
       <Route element={<SultenOutlet />}>
         <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
+        <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
       </Route>
       {/* 
             404 NOT FOUND
