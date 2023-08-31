@@ -1,5 +1,4 @@
 from typing import Type
-
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -446,6 +445,7 @@ class RecruitmentPositionView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentAdmissionView(ModelViewSet):
