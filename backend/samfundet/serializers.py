@@ -504,14 +504,16 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'interview_location',
         ]
 
+
 class ApplicantInfoSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email']
 
+
 class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
-    user = ApplicantInfoSerializer(read_only = True)
+    user = ApplicantInfoSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
