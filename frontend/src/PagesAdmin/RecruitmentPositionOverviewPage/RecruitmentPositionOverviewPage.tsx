@@ -2,13 +2,44 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { RecruitmentAdmissionDto } from '~/dto';
-import { getRecruitmentAdmissionsForGang } from '~/api';
+import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
 import { KEY } from '~/i18n/constants';
-import { Button, Link } from '~/Components';
+import { Button, Dropdown, InputField, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ROUTES } from '~/routes';
 import { reverse } from '~/named-urls';
+import { utcTimestampToLocal } from '~/utils';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+
+// TODO: Fetch from backend
+const priorityOptions: DropDownOption<number>[] = [
+  { label: 'Not Set', value: 0 },
+  { label: 'Not Wanted', value: 1 },
+  { label: 'Wanted', value: 2 },
+  { label: 'Reserve', value: 3 },
+];
+
+const statusOptions: DropDownOption<number>[] = [
+  { label: 'Nothing', value: 0 },
+  { label: 'Called and accepted', value: 1 },
+  { label: 'Called and rejected', value: 2 },
+  { label: 'Automatic rejection', value: 3 },
+];
+
+function immutableSet(
+  list: RecruitmentAdmissionDto[],
+  oldValue: RecruitmentAdmissionDto,
+  newValue: RecruitmentAdmissionDto,
+) {
+  return list.map((element: RecruitmentAdmissionDto) => {
+    if (element.id === oldValue.id) {
+      return newValue;
+    } else {
+      return element;
+    }
+  });
+}
 
 export function RecruitmentPositionOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -58,10 +89,57 @@ export function RecruitmentPositionOverviewPage() {
         ),
       },
       { content: admission.priority },
-      { content: admission.interview_time },
-      { content: admission.interview_location },
-      { content: admission.recruiter_priority },
-      { content: admission.recruiter_status },
+      {
+        content: (
+          <InputField
+            value={admission.interview_time ? utcTimestampToLocal(admission.interview_time) : ''}
+            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onChange={(value: string) => {
+              const newAdmission = { ...admission, interview_time: value.toString() };
+              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
+            }}
+            type="datetime-local"
+          />
+        ),
+      },
+      {
+        content: (
+          <InputField
+            value={admission.interview_location ?? ''}
+            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onChange={(value: string) => {
+              const newAdmission = { ...admission, interview_location: value.toString() };
+              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
+            }}
+          />
+        ),
+      },
+      {
+        content: (
+          <Dropdown
+            initialValue={admission.recruiter_priority}
+            options={priorityOptions}
+            onChange={(value) => {
+              const newAdmission = { ...admission, recruiter_priority: value };
+              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
+              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+            }}
+          />
+        ),
+      },
+      {
+        content: (
+          <Dropdown
+            initialValue={admission.recruiter_status}
+            options={statusOptions}
+            onChange={(value) => {
+              const newAdmission = { ...admission, recruiter_status: value };
+              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
+              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+            }}
+          />
+        ),
+      },
     ];
   });
   const title = t(KEY.admin_information_manage_title);
