@@ -42,7 +42,7 @@ export function LycheAboutPage() {
       smallCard={true}
     />
   );
-
+  //bilder fra foto?
   return (
     <SultenPage>
       <div className={styles.card_container}>
