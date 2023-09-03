@@ -2,9 +2,10 @@
 
 ## For backend actions:
 
-All commands are has to be run inside a shell in a container:
+All commands has to be run inside a shell in a container.
 ```bash
 docker compose exec backend bash
+#Command to open container in a shell
 ```
 🐳To escape the container: 
 ```bash
