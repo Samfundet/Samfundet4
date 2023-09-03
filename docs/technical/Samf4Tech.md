@@ -64,7 +64,7 @@ For frontend development, we use Node.js as a JavaScript runtime, and we rely on
 
 We use Yarn specifically for managing [Storybook](https://storybook.js.org/) and [Cypress](https://www.cypress.io/). Storybook is a tool for developing frontend components in isolation and Cypress is a tool for testing frontend components. 
 
-To develop on the Samfundet4 project locally you will need to install all package managers and dependencies mentioned further down, but you should use Docker. In [Useful commands](/docs/useful-commands.md) you will find documentation on commands to install dependencies localy.
+To develop on the Samfundet4 project locally you will need to install all package managers and dependencies, but you should use Docker. In [Useful commands](/docs/useful-commands.md) you will find documentation on commands to install dependencies localy.
  
 ### Formatters and linters 📜
 To make the code we write on the project high quality, have a standardised format and generally readable we use the formatters and linters. This is very useful when writing code as a team. The main purpos for this section is so that you will have some idea of why you code might not pass some tests on GitHub.
