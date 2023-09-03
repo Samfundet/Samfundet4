@@ -1,4 +1,29 @@
-# Useful Docker aliases
+# Useful project spesific Docker actions
+### For frontend actions
+All commands has to be run inside a shell in a container.
+```bash
+docker compose exec frontend bash
+#Command to open the frontend container in a shell
+```
+🐳To escape the container: 
+```bash
+exit
+```
+🐳Eslint check
+```bash
+yarn run eslint:check
+#runs eslint, like in GitHub Actions pipeline, but in Docker
+```
+🐳Stylelint check
+```bash
+yarn run stylelint:check
+#runs stylelint, like in GitHub Actions pipeline, but in Docker
+```
+🐳TypeScript Compiler check
+```bash
+yarn run tsc:check
+#runs TypeScript Compiler check, like in GitHub Actions pipeline, but in Docker
+```
 
 ## For backend actions:
 
@@ -6,10 +31,6 @@ All commands has to be run inside a shell in a container.
 ```bash
 docker compose exec backend bash
 #Command to open container in a shell
-```
-🐳To escape the container: 
-```bash
-exit
 ```
 ### Aliases
 

@@ -44,7 +44,6 @@ We also use [PostCSS](https://postcss.org/), this is a tool that you will find i
 
 
 ## Developing Samfundet4 👩‍💻
-
 ### Virtual environment and Docker 
 #### WSL 🪟🐧
 On windows machines samfundet4 has to be run in Windows Subsystem for Linux (WSL). It is not needed on a Mac because macOS is based on Unix, which is similar to Linux. The reason why we develop on Linux architecture is because of how the project will be hosted when live. 
@@ -67,7 +66,7 @@ We use Yarn specifically for managing [Storybook](https://storybook.js.org/) and
 To develop on the Samfundet4 project locally you will need to install all package managers and dependencies, but you should use Docker. In [Useful commands](/docs/useful-commands.md) you will find documentation on commands to install dependencies localy.
  
 ### Formatters and linters 📜
-To make the code we write on the project high quality, have a standardised format and generally readable we use the formatters and linters. This is very useful when writing code as a team. The main purpos for this section is so that you will have some idea of why you code might not pass some tests on GitHub.
+To make the code we write on the project high quality, have a standardised format and generally readable we use the formatters and linters. This is very useful when writing code as a team. The main purpos for this section is so that you will have some idea of why you code might not pass some tests on GitHub when you push your code and make a pull-request(PR).
 #### Frontend 🎨🧭
 For frontend we use the formatter Prettier, which formats the code in a standardised way. 
 Linters are software that analyses code to detect errors, bugs or stylistic inconsistency. Hence we use linter as tools to write better, more high quality code. In frontend we use ESlint for React and stylelint for CSS/SASS. 
@@ -76,21 +75,15 @@ To use our code format and linting rules you have to configure a JSON file local
 
 When installing the project for the first time you will have the option to install Prettier and ESlint in VSCode. Stylelint is easily found in VSCode extensions. 
 
-<!-- X_X_X_X legg til link for forklaring av hvordan å kjøe pipline i Docker  -->
-When you push code to the main branch it will be checked automatically (by [GitHub Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions)) to chech if it follows the formatting and linting rules we use. It is also useful to know that these checks can be run in Docker or locally by commands in the terminal, which are found in [Useful commands](/docs/useful-commands.md). If you want you can also read the [prettier](https://prettier.io/), [eslint](https://eslint.org/) or [stylelint](https://stylelint.io/) documentation, but this might not be necessary. These tools will give you indication of why your code breaks the rules, and you can see how your code should be written by hovering over the indications.
+When you push code to the main branch it will be checked automatically (by [GitHub Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions)) to chech if it follows the formatting and linting rules we use. It is also useful to know that these checks can be run locally by commands in the terminal, which are found in [Useful commands](/docs/useful-commands.md), but it it might be more convenient to run them inside the [frontend docker container in a Bash terminal.](/docs/docker-project-specific-commands.md)
+
+If you want you can also read the [prettier](https://prettier.io/), [eslint](https://eslint.org/) or [stylelint](https://stylelint.io/) documentation, but this might not be necessary. These tools will give you indication of why your code breaks the rules, and you can see how your code should be written by hovering over the indications.
 
 #### Backend ⚙️
 In backend we use the Python formatter [yapf](https://pypi.org/project/yapf/) because it is a formatter that offers multiple populare Python formats and standards. The format is configured in a Python file in backend. 
-For linting we use [flake8](https://flake8.pycqa.org/en/latest/) and [pylint](https://pypi.org/project/pylint/). They have similar functions, but flake8 has some more functionality. These tools are especially helpful because they can highlight code errors and can make suggestions for better code. 
+For linting we use [flake8](https://flake8.pycqa.org/en/latest/) and [pylint](https://pypi.org/project/pylint/). They have similar functions, but flake8 has some more functionality. These tools are especially helpful because they can highlight code errors and can make suggestions for better code. You can run the backend GitHub Actions checks in Docker, [read more here.](/docs/docker-project-specific-commands.md). We use a tool called [Bandit](https://bandit.readthedocs.io/en/latest/), which is a linter that detects secuity issues in Python code. We also aim to make our Pytho code more strictly type, which is why we use [mypy](https://mypy.readthedocs.io/en/stable/index.html).
 
 # Summation
 In summary, Samfundet4 employs Django for the backend, Django REST Framework for APIs, React with TypeScript for the frontend, Sass for styling, and Docker for a consistent development environment. Various package managers and formatters/linters are used to ensure code quality and consistency throughout the project. Before starting your Samfundet4 journey you need to check out the[Work Methodology](/docs/work-methodology.md) and the [Technical Documentation](/docs/technical/README.md).
 
-<!-- LEGG til mer videre om f.eks pipeline ???
-- [MyPy](https://pypi.org/project/mypy/)??
- 
-Andre pipeline checks...
-- TypeScript compiler check
-- .
-- mer kommer?. -->
 
