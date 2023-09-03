@@ -11,6 +11,7 @@ docker compose exec backend bash
 ```bash
 exit
 ```
+### Aliases
 
 🐳The ```migrate``` alias will apply any pending database migrations to update the database schema according to the changes defined in Django. 
 ```bash
