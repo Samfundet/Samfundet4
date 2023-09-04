@@ -1,4 +1,6 @@
+from django.urls import reverse
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
@@ -489,10 +491,22 @@ class RecruitmentAdmin(CustomGuardedModelAdmin):
 
 
 class RecruitmentAdmissionInline(admin.TabularInline):
+    """
+    Inline admin interface for RecruitmentAdmission.
+    
+    Displays a link to the detailed admin page of each admission along with its user and applicant priority.
+    """
     model = RecruitmentAdmission
     extra = 0
-    readonly_fields = ['admission_text', 'user', 'applicant_priority']
-    fields = ['admission_text', 'user', 'applicant_priority']
+    readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
+    fields = ['linked_admission_text', 'user', 'applicant_priority']
+
+    def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
+        """
+        Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
+        """
+        url = reverse("admin:samfundet_recruitmentadmission_change", args=[obj.pk])
+        return mark_safe('<a href="{}">{}</a>'.format(url, obj.admission_text))
 
 
 @admin.register(RecruitmentPosition)
