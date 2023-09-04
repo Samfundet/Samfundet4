@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django.contrib import admin
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
@@ -506,7 +506,7 @@ class RecruitmentAdmissionInline(admin.TabularInline):
         Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
         """
         url = reverse("admin:samfundet_recruitmentadmission_change", args=[obj.pk])
-        return mark_safe('<a href="{}">{}</a>'.format(url, obj.admission_text))
+        return format_html('<a href="{}">{}</a>', url, obj.admission_text)
 
 
 @admin.register(RecruitmentPosition)
