@@ -493,7 +493,7 @@ class RecruitmentAdmin(CustomGuardedModelAdmin):
 class RecruitmentAdmissionInline(admin.TabularInline):
     """
     Inline admin interface for RecruitmentAdmission.
-    
+
     Displays a link to the detailed admin page of each admission along with its user and applicant priority.
     """
     model = RecruitmentAdmission
@@ -505,8 +505,8 @@ class RecruitmentAdmissionInline(admin.TabularInline):
         """
         Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
         """
-        url = reverse("admin:samfundet_recruitmentadmission_change", args=[obj.pk])
-        return format_html('<a href="{}">{}</a>', url, obj.admission_text)
+        url = reverse('admin:samfundet_recruitmentadmission_change', args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url=url, obj=obj.admission_text)
 
 
 @admin.register(RecruitmentPosition)
