@@ -57,6 +57,7 @@ export const ROUTES_FRONTEND = {
   admin_recruitment: '/control-panel/recruitment/',
   admin_recruitment_edit: '/control-panel/recruitment/edit/:id',
   admin_recruitment_create: '/control-panel/recruitment/create/',
+  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-admissions/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',

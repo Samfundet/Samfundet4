@@ -35,6 +35,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
+  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -169,6 +170,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_users_without_interview}
+          element={<RecruitmentUsersWithoutInterview />}
         />
         {/* TODO ADD PERMISSIONS */}
         <Route

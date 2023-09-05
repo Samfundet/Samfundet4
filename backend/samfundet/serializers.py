@@ -492,6 +492,25 @@ class RecruitmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserForRecruitmentSerializer(serializers.ModelSerializer):
+    recruitment_admission_ids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'recruitment_admission_ids',  # Add this to the fields list
+        ]
+
+    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
+
+
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
 
     class Meta:
