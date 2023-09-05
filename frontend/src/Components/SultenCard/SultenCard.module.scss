@@ -2,8 +2,6 @@
 
 @import 'src/mixins';
 
-// when picking small card
-
 .container {
   display: flex;
   background-color: $black;
@@ -22,7 +20,10 @@
   justify-content: center;
   align-items: center;
   gap: 1em;
-  padding-bottom: 2em;
+  padding-bottom: 1em;
+  @include for-mobile-down {
+    flex-direction: column;
+  }
 }
 
 .card_image {
@@ -49,6 +50,8 @@
   @include for-mobile-down {
     width: 100%;
     display: block;
+    height: 5em;
+    object-position: center;
   }
 }
 

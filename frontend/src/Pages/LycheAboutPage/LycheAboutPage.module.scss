@@ -1,18 +1,17 @@
-.card_container {
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.container {
   width: 100%;
   height: 100%;
-  margin-top: 5em;
+  margin: $sulten-navbar-height/2 0 $sulten-navbar-height/2 0; //this looked the best
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 10;
+  @include for-mobile-down {
+    margin-top: $sulten-navbar-height;
+  }
 }
-// .smallcard_container {
-//   display: flex;
-//   background-color: red;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: center;
-//   gap: 1em;
-//   padding-bottom: 2em;
-// }
