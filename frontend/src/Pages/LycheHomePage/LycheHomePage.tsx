@@ -10,10 +10,10 @@ import { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './LychePage.module.scss';
+import styles from './LycheHomePage.module.scss';
 import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
 
-export function LychePage() {
+export function LycheHomePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const { t } = useTranslation();
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);

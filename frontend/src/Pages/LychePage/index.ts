@@ -1,1 +1,0 @@
-export { LychePage } from './LychePage';

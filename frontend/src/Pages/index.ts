@@ -10,7 +10,7 @@ export { HomePage } from './HomePage';
 export { InformationListPage } from './InformationListPage';
 export { InformationPage } from './InformationPage';
 export { LoginPage } from './LoginPage';
-export { LychePage } from './LychePage';
+export { LycheHomePage } from './LycheHomePage';
 export { NotFoundPage } from './NotFoundPage';
 export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
