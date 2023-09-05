@@ -6,6 +6,7 @@ from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from guardian import models as guardian_models
+from root.utils.routes import admin__samfundet_recruitmentadmission_change
 
 from root.custom_classes.admin_classes import (
     CustomGuardedUserAdmin,
@@ -505,8 +506,8 @@ class RecruitmentAdmissionInline(admin.TabularInline):
         """
         Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
         """
-        url = reverse('admin:samfundet_recruitmentadmission_change', args=[obj.pk])
-        return format_html('<a href="{}">{}</a>', url=url, obj=obj.admission_text)
+        url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
+        return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
 
 
 @admin.register(RecruitmentPosition)

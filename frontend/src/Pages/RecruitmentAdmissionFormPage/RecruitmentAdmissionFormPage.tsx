@@ -18,9 +18,7 @@ export function RecruitmentAdmissionFormPage() {
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [loading, setLoading] = useState(true);
-  const { positionID } = useParams();
-
-  const { id } = useParams();
+  const { positionID, id } = useParams();
 
   useEffect(() => {
     getRecruitmentPosition('1').then((res) => {
