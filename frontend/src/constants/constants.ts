@@ -47,16 +47,11 @@ export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 
 export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
+export const CYPRESS_BACKEND_DOMAIN = import.meta.env.VITE_CYPRESS_BACKEND_DOMAIN;
 
 /**
  * Venues
  */
 export const VENUE = {
   LYCHE: 'lyche',
-} as const;
-
-/** Keys of KeyValue object in backend. */
-export const KV = {
-  // Sulten
-  SULTEN_MAIL: 'SULTEN_MAIL',
 } as const;

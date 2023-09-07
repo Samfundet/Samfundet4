@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BrowserRouter } from 'react-router-dom';
 import { Link } from './Link';
 
 // Local component config.
@@ -9,11 +8,7 @@ export default {
 } as ComponentMeta<typeof Link>;
 
 const Template: ComponentStory<typeof Link> = function (args) {
-  return (
-    <BrowserRouter>
-      <Link {...args}></Link>
-    </BrowserRouter>
-  );
+  return <Link {...args}></Link>;
 };
 
 export const Default = Template.bind({});

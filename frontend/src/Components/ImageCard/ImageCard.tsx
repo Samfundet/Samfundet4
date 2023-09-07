@@ -10,6 +10,7 @@ import styles from './ImageCard.module.scss';
 type ImageCardProps = {
   className?: string;
   title?: ReactNode;
+  subtitle?: ReactNode;
   description?: ReactNode;
   date?: string | Date;
   url?: string;
@@ -23,6 +24,7 @@ type ImageCardProps = {
 export function ImageCard({
   className,
   title = <Skeleton width={'8em'} />,
+  subtitle = <Skeleton width={'4em'} />,
   description = <Skeleton width={'100%'} />,
   date,
   url = '#',
@@ -59,13 +61,17 @@ export function ImageCard({
 
   return (
     <div className={containerStyle}>
-      <Link url={url} className={classNames(cardStyle, styles.default_image)} style={backgroundImageFromUrl(imageUrl)}>
+      <div className={styles.top_label}>
+        <div className={styles.subtitle}>{subtitle}</div>
+        <div className={styles.date_label}>{date && <TimeDisplay timestamp={date} displayType="event-datetime" />}</div>
+      </div>
+
+      <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         {children}
       </Link>
 
       <div className={bottomLabelStyle}>
-        <div>{title}</div>
-        <div className={styles.date_label}>{date && <TimeDisplay timestamp={date} displayType="event" />}</div>
+        <div className={styles.title}>{title}</div>
       </div>
 
       <div className={bottomDescriptionStyle}>

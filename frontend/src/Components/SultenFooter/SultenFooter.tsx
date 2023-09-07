@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
+import { KV } from '~/constants';
 import { useKeyValue } from '~/hooks';
 import { ROUTES } from '~/routes';
 import styles from './SultenFooter.module.scss';
-import { KV } from '~/constants';
 
 export function SultenFooter() {
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);

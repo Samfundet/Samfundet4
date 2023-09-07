@@ -92,10 +92,11 @@
 
 .headerWrapper {
   text-align: center;
+  overflow: hidden;
 }
 
 .header {
-  font-size: 1.5em;
+  font-size: 1.75em;
   font-weight: 700;
   text-align: left;
   margin: 0 $primary-content-wide-padding;

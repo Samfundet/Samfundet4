@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
-import { Page } from '~/Components/Page';
+import { Button } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
 
 export function ClosedPeriodAdminPage() {
@@ -50,25 +50,20 @@ export function ClosedPeriodAdminPage() {
       });
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  const header = (
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
+      {t(KEY.admin_closed_period_new_period)}
+    </Button>
+  );
+  const backendUrl = ROUTES.backend.admin__samfundet_closedperiod_changelist;
 
   return (
-    <Page>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_closed_period_title)}</h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_closedperiod_changelist}>
-          {t(KEY.common_see_in_django_admin)}
-        </Link>
-      </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
-        {t(KEY.admin_closed_period_new_period)}
-      </Button>
+    <AdminPageLayout
+      title={t(KEY.admin_closed_period_title)}
+      header={header}
+      backendUrl={backendUrl}
+      loading={showSpinner}
+    >
       <div className={styles.tableContainer}>
         <Table
           columns={[
@@ -123,6 +118,6 @@ export function ClosedPeriodAdminPage() {
           })}
         />
       </div>
-    </Page>
+    </AdminPageLayout>
   );
 }

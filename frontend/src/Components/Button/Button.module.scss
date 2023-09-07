@@ -5,13 +5,18 @@
 
 .button {
   @include flex-row;
-  gap: 1em;
+  gap: 0.5rem;
   border: none;
   cursor: pointer;
   border-radius: 0.25em;
   transition: 0.15s;
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
   justify-content: center;
+
+  // Remove underline when button is a link
+  &, &:hover {
+    text-decoration: none;
+  }
 
   &:disabled {
     opacity: 0.5;
@@ -114,4 +119,15 @@
 
 .rounded {
   border-radius: 10000px;
+}
+
+.pure {
+  background-color: transparent;
+  color: inherit;
+  border-width: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
 }

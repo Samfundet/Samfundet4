@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from django.urls import reverse
 from rest_framework import status
+from guardian.shortcuts import assign_perm
 
-from root.utils import routes
-from samfundet.models.general import User, KeyValue, TextItem
+from root.utils import routes, permissions
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition
+from samfundet.models.general import User, KeyValue, TextItem, InformationPage, BlogPost, Image
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
@@ -90,6 +92,206 @@ def test_get_groups(fixture_rest_client: APIClient, fixture_user: User):
 
     ### Assert ###
     assert status.is_success(code=response.status_code)
+
+
+def test_get_recruitments(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment: Recruitment):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_list)
+
+    ### Act ###
+    response = fixture_rest_client.get(url)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment.name_nb
+
+
+def test_get_recruitment_positions(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment_position: RecruitmentPosition):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_position_list)
+
+    ### Act ###
+    response = fixture_rest_client.get(url)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
+
+
+def test_recruitment_positions_per_recruitment(
+    fixture_rest_client: APIClient,
+    fixture_superuser: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_positions)
+    recruitment = fixture_recruitment
+
+    ### Act ###
+    response: Response = fixture_rest_client.get(path=f'{url}?recruitment={recruitment.id}')
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
+
+
+class TestInformationPagesView:
+
+    def test_get_informationpage(self, fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+        ### Arrange ###
+        url = reverse(routes.samfundet__information_detail, kwargs={'pk': fixture_informationpage.slug_field})
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['slug_field'] == fixture_informationpage.slug_field
+
+    def test_get_informationpages(self, fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+        ### Arrange ###
+        url = reverse(routes.samfundet__information_list)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['slug_field'] == fixture_informationpage.slug_field
+
+    def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__information_list)
+
+        post_data = {'slug_field': 'lol', 'title_en': 'lol'}
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_INFORMATIONPAGE, fixture_user)
+
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+        assert data['slug_field'] == post_data['slug_field']
+
+    def test_delete_informationpage(self, fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__information_detail, kwargs={'pk': fixture_informationpage.slug_field})
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_INFORMATIONPAGE, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert status.is_success(code=response.status_code)
+
+    def test_put_informationpage(self, fixture_rest_client: APIClient, fixture_user: User, fixture_informationpage: InformationPage):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__information_detail, kwargs={'pk': fixture_informationpage.slug_field})
+        put_data = {'title_nb': 'lol'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+        assign_perm(permissions.SAMFUNDET_CHANGE_INFORMATIONPAGE, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+
+        assert data['title_nb'] == put_data['title_nb']
+
+
+class TestBlogPostView:
+
+    def test_get_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        ### Arrange ###
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['id'] == fixture_blogpost.id
+
+    def test_get_blogposts(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        ### Arrange ###
+        url = reverse(routes.samfundet__blog_list)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['id'] == fixture_blogpost.id
+
+    def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_list)
+
+        post_data = {'title_nb': 'lol', 'title_en': 'lol', 'image': fixture_image.id}
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_BLOGPOST, fixture_user)
+
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+        assert data['title_nb'] == post_data['title_nb']
+
+    def test_delete_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_BLOGPOST, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert status.is_success(code=response.status_code)
+
+    def test_put_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_blogpost: BlogPost):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+        put_data = {'title_nb': 'Samfundet blir gult!'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+        assign_perm(permissions.SAMFUNDET_CHANGE_BLOGPOST, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+
+        assert data['title_nb'] == put_data['title_nb']
 
 
 class TestKeyValueView:
@@ -188,3 +390,74 @@ class TestTextItemView:
         assert put_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
         assert patch_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
         assert delete_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+class TestAssignGroupView:
+
+    def test_assign_group(self, fixture_rest_client: APIClient, fixture_superuser: User, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert group in fixture_user.groups.all()
+
+    def test_remove_group(self, fixture_rest_client: APIClient, fixture_superuser: User, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        fixture_user.groups.add(group)
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.delete(path=url, data=data)
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert group not in fixture_user.groups.all()
+
+    def test_assign_group_not_possible(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_remove_group_not_possible(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__assign_group)
+        group = Group.objects.create(name='test_group')
+        fixture_user.groups.add(group)
+        data = {'group_name': group.name, 'username': fixture_user.username}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_assign_group_not_found(self, fixture_rest_client: APIClient, fixture_superuser: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+        url = reverse(routes.samfundet__assign_group)
+        data = {'group_name': 'test_group', 'username': 'test_user'}
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=data)
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_404_NOT_FOUND

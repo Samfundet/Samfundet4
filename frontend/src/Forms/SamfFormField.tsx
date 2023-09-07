@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { KEY } from '~/i18n/constants';
 import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
 import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
 
@@ -108,6 +110,7 @@ export function SamfFormField<U>({
 }: SamfFormFieldProps<U>) {
   // Validate on init context
   const { validateOnInit, validateOn } = useContext(SamfFormConfigContext);
+  const { t } = useTranslation();
 
   // Value state (from context hook)
   const { value, error, didSubmit, setValue } = useSamfForm<U>(field, required, validator);
@@ -170,12 +173,13 @@ export function SamfFormField<U>({
 
   // Generate UI based on type
   function makeFormField() {
+    const errorMessage = error == true ? t(KEY.common_required) : false;
     const args: SamfFormFieldArgs = {
       // Standard args
       field: field,
       value: value,
       onChange: handleOnChange,
-      error: showError ? error : false,
+      error: showError ? errorMessage : false,
       label: label,
       // Options args
       options: options,

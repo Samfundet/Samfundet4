@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Page } from '~/Components/Page';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
 import { getGangList } from '~/api';
@@ -13,7 +12,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './GangsAdminPage.module.scss';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
@@ -42,14 +41,6 @@ export function GangsAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
     return {
       key: gangType.id,
@@ -60,23 +51,42 @@ export function GangsAdminPage() {
 
   const currentGangType = currentGangTypeTab?.value;
 
-  // TODO ADD TRANSLATIONS pr element
-  return (
-    <Page>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.adminpage_gangs_title)}</h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_gang_changelist}>
-          {t(KEY.common_see_in_django_admin)}
-        </Link>
-      </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
-        {t(KEY.adminpage_gangs_create)}
-      </Button>
+  const tableData =
+    currentGangType &&
+    currentGangType.gangs.map(function (element2) {
+      return [
+        dbT(element2, 'name'),
+        element2.abbreviation,
+        element2.webpage,
+        {
+          content: (
+            <CrudButtons
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_gangs_edit,
+                    urlParams: { id: element2.id },
+                  }),
+                );
+              }}
+            />
+          ),
+        },
+      ];
+    });
 
-      <br></br>
+  const title = t(KEY.adminpage_gangs_title);
+  const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
+  const header = (
+    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
+      {t(KEY.adminpage_gangs_create)}
+    </Button>
+  );
+
+  return (
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab}></TabBar>
       <br></br>
-
       {currentGangType && (
         <>
           <Table
@@ -86,30 +96,10 @@ export function GangsAdminPage() {
               t(KEY.admin_gangsadminpage_webpage) ?? '',
               '',
             ]}
-            data={currentGangType.gangs.map(function (element2) {
-              return [
-                dbT(element2, 'name'),
-                element2.abbreviation,
-                element2.webpage,
-                {
-                  content: (
-                    <CrudButtons
-                      onEdit={() => {
-                        navigate(
-                          reverse({
-                            pattern: ROUTES.frontend.admin_gangs_edit,
-                            urlParams: { id: element2.id },
-                          }),
-                        );
-                      }}
-                    />
-                  ),
-                },
-              ];
-            })}
+            data={tableData ?? []}
           />
         </>
       )}
-    </Page>
+    </AdminPageLayout>
   );
 }

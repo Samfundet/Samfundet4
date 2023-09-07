@@ -11,6 +11,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
 from .models.general import (
     Tag,
     User,
@@ -21,10 +22,14 @@ from .models.general import (
     Image,
     Profile,
     Booking,
+    Infobox,
     MenuItem,
     GangType,
     TextItem,
     KeyValue,
+    BlogPost,
+    Organization,
+    Reservation,
     ClosedPeriod,
     Saksdokument,
     FoodCategory,
@@ -200,7 +205,7 @@ class EventAdmin(CustomGuardedModelAdmin):
     list_filter = ['event_group']
     list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
-    # filter_horizontal = ['registration']
+    filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
@@ -300,6 +305,19 @@ class InformationPageAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
+@admin.register(BlogPost)
+class BlogPostAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_nb', 'title_en', 'created_at', 'updated_at']
+    # list_filter = []
+    list_display = ['__str__', 'id', 'created_at', 'updated_at']
+    search_fields = ['id', 'title_nb', 'title_en', 'text_en', 'text_nb']
+    # filter_horizontal = []
+    list_display_links = ['__str__', 'id']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
 @admin.register(Table)
 class TableAdmin(CustomGuardedModelAdmin):
     # ordering = []
@@ -307,6 +325,19 @@ class TableAdmin(CustomGuardedModelAdmin):
     # list_filter = []
     list_display = ['id', '__str__', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'name_en']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Reservation)
+class ReservationAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name', 'email', 'phonenumber']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name', 'email', 'phonenumber']
+    search_fields = ['id', 'name', 'email', 'phonenumber']
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
@@ -407,6 +438,18 @@ class ClosedPeriodAdmin(CustomGuardedModelAdmin):
     # list_select_related = True
 
 
+@admin.register(Infobox)
+class InfoboxAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'title_nb']
+    # list_filter = []
+    list_display = ['id', '__str__', 'title_nb']
+    search_fields = ['id', 'title_nb']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+
+
 @admin.register(TextItem)
 class TextItemAdmin(CustomGuardedModelAdmin):
     # ordering = []
@@ -425,6 +468,75 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
     sortable_by = ['key']
     list_display = ['id', 'key', 'value']
     search_fields = ['id', 'key', 'value']
+
+
+@admin.register(Recruitment)
+class RecruitmentAdmin(CustomGuardedModelAdmin):
+    sortable_by = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    list_display = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    search_fields = [
+        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups', 'organization'
+    ]
+    list_display_links = ['visible_from']
+    list_select_related = True
+
+
+@admin.register(RecruitmentPosition)
+class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
+    sortable_by = [
+        'name_nb',
+        'is_funksjonaer_position',
+        'gang',
+        'id',
+    ]
+    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    filter_horizontal = ['interviewers']
+    list_select_related = True
+
+
+@admin.register(RecruitmentAdmission)
+class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
+    sortable_by = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    list_display = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    search_fields = [
+        'id',
+        'recruitment_position',
+        'recruitment',
+        'interview_time',
+        'interview_location',
+        'user',
+    ]
+    list_select_related = True
+
+
+@admin.register(Organization)
+class OrganizationAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name']
+    search_fields = ['id', 'name']
+    list_select_related = True
 
 
 ### End: Our models ###
