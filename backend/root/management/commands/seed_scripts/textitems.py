@@ -38,7 +38,7 @@ def seed():
     TextItem.objects.all().delete()
     yield 0, 'Deleted old textitems'
 
-    for item in text_items:
+    for i, item in enumerate(text_items):
         text_item, created = TextItem.objects.get_or_create(key=item['key'], text_nb=item['text_nb'], text_en=item['text_en'])
         if created:
-            yield (100 * (text_items.index(item) + 1) // len(text_items), f'Created {len(TextItem.objects.all())} textitems')
+            yield (100 * (i + 1) // len(text_items), f'Created {len(TextItem.objects.all())} textitems')
