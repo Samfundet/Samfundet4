@@ -4,26 +4,37 @@
 
 from __future__ import annotations
 
-import random
 import re
-from datetime import time, timedelta
+import random
 from typing import TYPE_CHECKING
+from datetime import time, timedelta
 
-from django.contrib.auth.models import AbstractUser
+from notifications.base.models import AbstractNotification
+
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import gettext as _
 from guardian.shortcuts import assign_perm
+from django.utils.translation import gettext as _
 
 from root.utils import permissions
+
+from .utils.fields import LowerCaseField
 
 if TYPE_CHECKING:
     from typing import Any, Optional
     from django.db.models import Model
 
 
+class Notification(AbstractNotification):
+
+    class Meta(AbstractNotification.Meta):
+        abstract = False
+
+
 class Tag(models.Model):
     # TODO make name case-insensitive
+    # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
@@ -73,6 +84,17 @@ class Image(models.Model):
 
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    username = LowerCaseField(
+        _('username'),
+        max_length=150,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[AbstractUser.username_validator],
+        error_messages={
+            'unique': _('A user with that username already exists.'),
+        },
+    )
 
     class Meta:
         permissions = [
@@ -199,7 +221,24 @@ class ClosedPeriod(models.Model):
 
 
 # GANGS ###
+class Organization(models.Model):
+    """
+    Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
+    """
+    name = models.CharField(max_length=32, blank=False, null=False, unique=True)
+
+    class Meta:
+        verbose_name = 'Organization'
+        verbose_name_plural = 'Organizations'
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class GangType(models.Model):
+    """
+    Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
+    """
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
@@ -217,8 +256,17 @@ class GangType(models.Model):
 class Gang(models.Model):
     name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
-    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
+    abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
+
+    organization = models.ForeignKey(
+        to=Organization,
+        related_name='gangs',
+        verbose_name='Organisasjon',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
@@ -226,6 +274,15 @@ class Gang(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # Gang related permission groups
+    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
+    event_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
+    recruitment_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     class Meta:
         verbose_name = 'Gang'
@@ -238,7 +295,7 @@ class Gang(models.Model):
 class InformationPage(models.Model):
     slug_field = models.SlugField(
         max_length=64,
-        blank=False,
+        blank=True,
         null=False,
         unique=True,
         primary_key=True,
@@ -264,6 +321,29 @@ class InformationPage(models.Model):
         return f'{self.slug_field}'
 
 
+class BlogPost(models.Model):
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
+
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
+    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
+
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
+
+    published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # TODO Find usage for owner field
+
+    class Meta:
+        verbose_name = 'Blog post'
+        verbose_name_plural = 'Blogg posts'
+
+    def __str__(self) -> str:
+        return f'{self.title_nb} {self.published_at}'
+
+
 class Table(models.Model):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
@@ -287,6 +367,33 @@ class Table(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name_nb}'
+
+
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
+    email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
+    phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
+    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
+    end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
+
+    class Occasion(models.TextChoices):
+        DRINK = 'DRINK', _('Drikke')
+        FOOD = 'FOOD', _('Mat')
+
+    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.FOOD)
+    guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
+    additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
+    internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
+
+    class Meta:
+        verbose_name = 'Reservation'
+        verbose_name_plural = 'Reservations'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
 
 
 class FoodPreference(models.Model):
@@ -441,6 +548,29 @@ class Booking(models.Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class Infobox(models.Model):
+    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
+    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
+
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Infoboks hexcolor eller css color-constant')
+    url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Infoboks bilde')
+
+    class Meta:
+        verbose_name = 'Infoboks'
+        verbose_name_plural = 'Infobokser'
+
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
+
+    def __str__(self) -> str:
+        return f'{self.title_nb}'
 
 
 class TextItem(models.Model):

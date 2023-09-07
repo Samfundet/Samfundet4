@@ -8,18 +8,21 @@
   border-radius: 0.3em;
 }
 
-.box2 {
-  border: 1px solid $grey-2;
+.uka_isfit {
+  border: 1px solid $grey-4;
   padding: 1em;
-  border-radius: 0.1em;
+  border-radius: 0.3em;
+  flex: 1;
+  margin: 0.5em;
+  box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
 .other_info {
-  border: 1px solid $grey-2;
-  // background-color: $grey-4;
+  border: 1px solid $grey-4;
   padding: 1em;
-  border-radius: 0.1em;
-  margin-top: 0.1em;
+  border-radius: 0.3em;
+  margin: 0.5em;
+  box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
 .header {
@@ -35,7 +38,7 @@
   text-align: center;
 }
 
-.other_info_header {
+.header_col {
   font-weight: 700;
   font-size: 1.5em;
   margin-bottom: 0.5em;
@@ -76,7 +79,6 @@
 
 .textBox {
   padding: 1.5em;
-  padding-left: 3em;
 }
 
 .row {
@@ -87,22 +89,30 @@
   flex-direction: column;
   max-width: $desktop-bp-upper;
   justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
 
   @include for-tablet-up {
     flex-direction: row;
-    align-items: flex-start;
   }
 }
 
 .col {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .image_box {
+  box-shadow: 3px 1px 10px 1px rgba(0, 0, 0, 0.1);
+  border: 1px solid $grey-4;
   background-color: $green;
-  border-radius: 0.1em;
+  border-radius: 0.3em;
   color: white;
+  margin: 0.5em;
+
+  @include for-tablet-up {
+    flex-basis: 55%;
+  }
 }
 
 .splash {

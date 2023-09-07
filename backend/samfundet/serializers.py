@@ -9,6 +9,7 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -18,12 +19,15 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Infobox,
     Booking,
     Profile,
     TextItem,
     MenuItem,
     GangType,
     KeyValue,
+    Organization,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -138,8 +142,9 @@ class EventListSerializer(serializers.ListSerializer):
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
         if hasattr(events, 'prefetch_related'):
-            events.prefetch_related('custom_tickets')
-            events.prefetch_related('image')
+            events = events.prefetch_related('custom_tickets')
+            events = events.prefetch_related('image')
+
         Event.prefetch_billig(events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
@@ -238,6 +243,46 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 
+class RegisterSerializer(serializers.Serializer):
+    """
+    This serializer defines two fields for authentication:
+      * email
+      * firstname
+      * lastname
+      * password
+    """
+    username = serializers.EmailField(label='Username', write_only=True)
+    firstname = serializers.CharField(label='First name', write_only=True)
+    lastname = serializers.CharField(label='Last name', write_only=True)
+    password = serializers.CharField(
+        label='Password',
+        # This will be used when the DRF browsable API is enabled.
+        style={'input_type': 'password'},
+        trim_whitespace=False,
+        write_only=True
+    )
+
+    def validate(self, attrs: dict) -> dict:
+        # Inherited function.
+        # Take username and password from request.
+        username = attrs.get('username')
+        firstname = attrs.get('firstname')
+        lastname = attrs.get('lastname')
+        password = attrs.get('password')
+
+        if username and password:
+            # Try to authenticate the user using Django auth framework.
+            user = User.objects.create_user(first_name=firstname, last_name=lastname, username=username, password=password)
+            user = authenticate(request=self.context.get('request'), username=username, password=password)
+        else:
+            msg = 'Both "username" and "password" are required.'
+            raise serializers.ValidationError(msg, code='authorization')
+        # We have a valid user, put it in the serializer's validated_data.
+        # It will be used in the view.
+        attrs['user'] = user
+        return attrs
+
+
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -301,6 +346,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # GANGS ###
+class OrganizationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organization
+        fields = '__all__'
+
+
 class GangSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -320,6 +372,13 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
+        fields = '__all__'
+
+
+class BlogPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogPost
         fields = '__all__'
 
 
@@ -407,8 +466,55 @@ class TextItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class InfoboxSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Infobox
+        fields = '__all__'
+
+
 class KeyValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KeyValue
+        fields = '__all__'
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+class RecruitmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recruitment
+        fields = '__all__'
+
+
+class RecruitmentPositionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentPosition
+        fields = '__all__'
+
+
+class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = [
+            'admission_text',
+            'recruitment_position',
+            'user',
+            'applicant_priority',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentAdmission
         fields = '__all__'

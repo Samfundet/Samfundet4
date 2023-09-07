@@ -9,22 +9,25 @@
 @import 'src/constants';
 
 // Background
-$navbar-bg: rgba(255, 255, 255, 255);
-$navbar-bg-transparent: rgba(255, 255, 255, 0);
-$navbar-bg-dark: rgba(0, 0, 0, 255);
-$navbar-bg-dark-transparent: rgba(0, 0, 0, 0);
+$navbar-bg: white;
+$navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, .3) 0%, transparent);
+$navbar-bg-dark: black;
+$navbar-bg-dark-transparent: $navbar-bg-transparent;
 $navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
 $navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
+$navbar-dropdown-border-radius: 0 0 0.5em 0.5em;
 
 // Link
+$navbar-link-blur-light-bg: rgba(255, 255, 255, 0.4);
+$navbar-link-blur-dark-bg: rgba(0, 0, 0, 0.4);
 $navbar-link-light-hover-gradient-top: #f4f4f4;
-$navbar-dropdown-link-light-hover: #151515;
+$navbar-dropdown-link-light-hover: #202020;
 $navbar-dropdown-link-dark-hover: #f4f4f4;
 $navbar-link-light-hover-gradient-bottom: #ffffff;
 $navbar-link-dark-hover-gradient-top: #151515;
 $navbar-link-dark-hover-gradient-bottom: #000000;
 $navbar-link-transparent-hover-gradient-top: rgba(255, 255, 255, 0.1);
-$navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
+$navbar-link-transparent-hover-gradient-bottom: transparent;
 
 /* Inner container with padding */
 .navbar_outlet {
@@ -44,7 +47,8 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   height: $navbar-height;
   background: $navbar-bg;
   color: $black;
-  transition: 0.3s;
+  transition: 0.2s;
+  transition-timing-function: ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,6 +78,10 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   position: relative;
 }
 
+.navbar_item_icon {
+  margin-right: 0.25rem;
+}
+
 .hidden {
   display: none;
 }
@@ -88,52 +96,105 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   flex-direction: column;
 }
 
+@keyframes anim-dropdown {
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  100% {
+    max-height: 20em;
+    opacity: 1;
+  }
+}
+
 .dropdown_container {
-  display: none;
   position: absolute;
+  pointer-events: none;
+  transition: 0.15s;
   top: 100%;
+  min-width: 130%;
   z-index: 1;
-  width: 100%;
+  display: flex;
   flex-direction: column;
-  background: $navbar-dropdown-bg;
-  backdrop-filter: blur(10px);
+  background-color: $navbar-dropdown-bg;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  opacity: 0;
+
+  @include for-desktop-up {
+    border-radius: $navbar-dropdown-border-radius;
+  }
 
   @include theme-dark {
-    background: $navbar-dropdown-bg-dark;
+    background-color: $navbar-dropdown-bg-dark;
     color: $white;
   }
 }
 
-.dropdown_open,
-.dropdown_container:hover,
-.navbar_dropdown_item:hover .dropdown_container {
-  display: flex;
+.dropdown_container_left .dropdown_container {
+  right: 0;
 }
 
-.navbar_dropdown_link {
+.dropdown_open {
+  pointer-events: all;
+  overflow: visible;
+  transform: scaleY(1);
+  opacity: 1;
+}
+
+.navbar_dropdown_link, .navbar_logout_button {
   padding: 0.5rem 1rem;
   text-decoration: none;
-  text-transform: uppercase;
+  transition: 0.1s;
   color: $black;
+  cursor: pointer;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
 
   @include theme-dark {
     color: $white;
+  }
+
+  &:last-child {
+    @include for-desktop-up {
+      border-radius: $navbar-dropdown-border-radius;
+    }
   }
 
   &:hover {
     background: $navbar-dropdown-link-light-hover;
-    color: white;
+    color: $white;
     text-decoration: none;
 
     @include theme-dark {
       background: $navbar-dropdown-link-dark-hover;
-      color: black;
+      color: $black;
     }
   }
 }
 
 /* Desktop navigation items */
+.navbar_main_links {
+  display: flex;
+  height: 100%;
+  margin-right: auto;
+  font-size: 14px;
+}
+
+.navbar_main_links_mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .navbar_link {
   color: inherit;
   display: flex;
@@ -142,15 +203,25 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   padding: 0 1rem;
   height: 100%;
   cursor: pointer;
-  text-transform: uppercase;
   transition: 0.1s;
   flex: 1;
   text-align: center;
   justify-content: center;
+  background: transparent;
   z-index: 2;
+  font-size: inherit;
 
   @include for-tablet-down {
     display: none;
+  }
+
+  // This ensures navbar dropdown shadow does not lie
+  // on top of the navbar item
+  &.selected {
+    background-color: $navbar-bg;
+    @include theme-dark {
+      background-color: $navbar-bg-dark;
+    }
   }
 
   /* Link hover for regular navbar */
@@ -173,17 +244,8 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
 }
 
-/* Set background color to ensure box-shadow from dropdown menus comes beneath entire menu */
-#navbar_container:not(.transparent_navbar) .navbar_link:not(:hover) {
-  background: $navbar-bg;
-
-  @include theme-dark {
-    background: $navbar-bg-dark;
-  }
-}
-
 /* Samf logo */
-#navbar_logo {
+.navbar_logo {
   display: flex;
   text-decoration: none;
   margin: 0 1rem;
@@ -204,6 +266,8 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   margin-right: 24px;
   margin-left: 24px;
   gap: 15px;
+  height: 100%;
+
   @include for-tablet-down {
     display: none;
   }
@@ -222,6 +286,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   }
 }
 
+.language_flag_button {
+  background-color: transparent;
+  border-color: transparent;
+}
+
 /* Container for profile */
 .navbar_profile_button {
   display: flex;
@@ -235,6 +304,10 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   border-bottom: 1px solid transparent;
   gap: 5px;
 
+  @include for-desktop-up {
+    height: 100%;
+  }
+
   .profile_icon {
     width: 16px;
     height: 16px;
@@ -242,7 +315,6 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 
   .profile_text {
     text-decoration: none;
-    text-transform: capitalize;
     color: inherit;
   }
 
@@ -255,11 +327,11 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 #navbar_container.transparent_navbar {
   background: $navbar-bg-transparent;
   box-shadow: none;
-  color: white;
+  color: $white;
 
   @include theme-dark {
     background: $navbar-bg-dark-transparent;
-    color: white;
+    color: $white;
   }
 
   .navbar_link:hover {
@@ -287,7 +359,7 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   width: 100vw;
   height: calc(100vh - 60px);
   min-height: 400px;
-  background: white;
+  background: $white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -299,21 +371,31 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
 
   @include theme-dark {
     background: $navbar-bg-dark;
-    color: white;
+    color: $white;
   }
+}
+
+/* A way to make the "Information" text look more centered 
+offsets the text by 18px, the size of the chevron-icon */
+#mobile_popup_container > .navbar_mobile_item:nth-child(2) {
+  margin-left: 18px;
 }
 
 /* Navbar link mobile */
 .popup_link_mobile {
   color: inherit;
   font-size: 1.5em;
-  margin-bottom: 0.25em;
+  margin-bottom: 1em;
   align-items: center;
   text-decoration: none;
-  text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
   display: flex;
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    text-decoration: none;
+    transform: scale(1.05);
+  }
 }
 
 .mobile_widgets {
@@ -332,4 +414,25 @@ $navbar-link-transparent-hover-gradient-bottom: rgba(255, 255, 255, 0);
   max-width: 150px;
   overflow: visible;
   white-space: nowrap;
+}
+
+.chevron {
+  transition: transform 0.2s;
+  // display: none;
+}
+
+.chevron.flip {
+  transform: scaleY(-1);
+}
+
+// When this dropdown menu item is open and navbar is transparent
+// we add backdrop filter to the dropdown itself as well
+.selected {
+  background-color: $navbar-bg;
+  color: $black;
+
+  @include theme-dark {
+    background: $navbar-bg-dark;
+    color: $white;
+  }
 }

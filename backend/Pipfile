@@ -17,6 +17,7 @@ pillow = "*"
 debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
+django-notifications-hq = "*"
 
 [dev-packages]
 yapf = "*"
@@ -28,6 +29,7 @@ flake8-annotations = "*"
 flake8-keyword-arguments = "*"
 flake8-print = "*"
 flake8-quotes = "*"
+requests = "*"
 
 [requires]
 python_version = "3.11.0" # from .python-version

@@ -4,12 +4,14 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.middleware.csrf import get_token
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,6 +20,11 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from root.constants import XCSRFTOKEN
 from .homepage import homepage
 from .models.event import (Event, EventGroup)
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+)
 from .models.general import (
     Tag,
     User,
@@ -26,12 +33,15 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Infobox,
     Profile,
     Booking,
     MenuItem,
     GangType,
     TextItem,
     KeyValue,
+    Organization,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -50,19 +60,27 @@ from .serializers import (
     VenueSerializer,
     LoginSerializer,
     GroupSerializer,
+    InfoboxSerializer,
     ProfileSerializer,
     BookingSerializer,
+    RegisterSerializer,
     TextItemSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
+    BlogPostSerializer,
     EventGroupSerializer,
+    RecruitmentSerializer,
     SaksdokumentSerializer,
+    OrganizationSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentPositionSerializer,
+    RecruitmentAdmissionForGangSerializer,
+    RecruitmentAdmissionForApplicantSerializer,
 )
 from .utils import event_query
 
@@ -184,7 +202,13 @@ class IsClosedView(ListAPIView):
 class SaksdokumentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all().order_by('-publication_date')
+    queryset = Saksdokument.objects.all()
+
+
+class OrganizationView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = OrganizationSerializer
+    queryset = Organization.objects.all()
 
 
 class GangView(ModelViewSet):
@@ -199,8 +223,21 @@ class GangTypeView(ModelViewSet):
 
 
 class InformationPageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
+
+
+class InfoboxView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    serializer_class = InfoboxSerializer
+    queryset = Infobox.objects.all()
+
+
+class BlogPostView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    serializer_class = BlogPostSerializer
+    queryset = BlogPost.objects.all()
 
 
 # =============================== #
@@ -275,6 +312,25 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+@method_decorator(csrf_protect, 'dispatch')
+class RegisterView(APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = [AllowAny]
+
+    def post(self, request: Request) -> Response:
+        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request=request, user=user)
+        new_csrf_token = get_token(request=request)
+
+        return Response(
+            status=status.HTTP_202_ACCEPTED,
+            data=new_csrf_token,
+            headers={XCSRFTOKEN: new_csrf_token},
+        )
+
+
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -312,3 +368,169 @@ class UserPreferenceView(ModelViewSet):
 class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class AssignGroupView(APIView):
+    """
+     Assigns a user to a group.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.add(group)
+        else:
+            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
+
+    def delete(self, request: Request) -> Response:
+        username = request.data.get('username')
+        group_name = request.data.get('group_name')
+
+        if not username or not group_name:
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.has_perm('auth.change_group', group):
+            user.groups.remove(group)
+        else:
+            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentView(ModelViewSet):
+    # TODO: Verify that object is valid (that the times make sense)
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentSerializer
+    queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerRecruitmentView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentPosition.objects.filter(recruitment=recruitment)
+        else:
+            return None
+
+
+class RecruitmentAdmissionForApplicantView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAdmissionForApplicantSerializer
+
+    def list(self, request: Request) -> Response:
+        """
+        Returns a list of all the recruitments for the specified gang.
+        """
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        admissions = RecruitmentAdmission.objects.filter(
+            recruitment=recruitment,
+            user=request.user,
+        )
+
+        # check permissions for each admission
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+
+        serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
+class RecruitmentAdmissionForGangView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+
+    # TODO: User should only be able to edit the fields that are allowed
+
+    def list(self, request: Request) -> Response:
+        """
+        Returns a list of all the recruitments for the specified gang.
+        """
+        gang_id = request.query_params.get('gang')
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not gang_id:
+            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        gang = get_object_or_404(Gang, id=gang_id)
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        admissions = RecruitmentAdmission.objects.filter(
+            recruitment_position__gang=gang,
+            recruitment=recruitment  # only include admissions related to the specified recruitment
+        )
+
+        # check permissions for each admission
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+
+        serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
+class ActiveRecruitmentPositionsView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Returns all active recruitment positions.
+        """
+        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())

@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import User, Image
+from samfundet.models.general import User, Image, Gang
 
 # ======================== #
 #      Event Group         #
@@ -198,6 +198,7 @@ class Event(models.Model):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._billig: BilligEvent | None = None
+        self._billig_unset: bool = True
 
     # ======================== #
     #     General Metadata     #
@@ -219,6 +220,7 @@ class Event(models.Model):
     location = models.CharField(max_length=140, blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
+    editors = models.ManyToManyField(Gang, blank=True)
 
     age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
@@ -275,11 +277,13 @@ class Event(models.Model):
         The private '_billig' is used to save the event and prevent repeated database queries to billig.
         This field can also be set on many events at the same time by using prefetch_billig
         """
+        if self.ticket_type != EventTicketType.BILLIG:
+            return None
+        if self._billig_unset:
+            self._billig = BilligEvent.objects.get(id=self.billig_id)
+            self._billig_unset = False
         if self.billig_id is None:
             return None
-        if hasattr(self, '_billig'):
-            return self._billig
-        self._billig = BilligEvent.objects.get(event=self.billig_id)
         return self._billig
 
     # ======================== #
@@ -320,6 +324,7 @@ class Event(models.Model):
         for event in events_with_billig:
             for billig in billig_events:
                 if event.billig_id == billig.id:
+                    event._billig_unset = False
                     event._billig = billig
                     break
 

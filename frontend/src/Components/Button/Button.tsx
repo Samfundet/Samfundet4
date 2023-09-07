@@ -1,8 +1,19 @@
 import { default as classNames, default as classnames } from 'classnames';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
+import { Link } from 'react-router-dom';
 
-type ButtonTheme = 'basic' | 'samf' | 'secondary' | 'success' | 'outlined' | 'blue' | 'black' | 'white' | 'green';
+type ButtonTheme =
+  | 'basic'
+  | 'samf'
+  | 'secondary'
+  | 'success'
+  | 'outlined'
+  | 'blue'
+  | 'black'
+  | 'white'
+  | 'green'
+  | 'pure';
 type ButtonDisplay = 'basic' | 'pill' | 'block';
 
 type ButtonProps = {
@@ -11,6 +22,7 @@ type ButtonProps = {
   display?: ButtonDisplay;
   type?: ButtonType;
   rounded?: boolean;
+  link?: string;
   className?: string;
   disabled?: boolean;
   children?: Children;
@@ -20,6 +32,7 @@ type ButtonProps = {
 
 const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
   basic: styles.button_basic,
+  pure: styles.pure,
   samf: styles.button_samf,
   secondary: styles.button_secondary,
   success: styles.button_success,
@@ -41,17 +54,20 @@ export function Button({
   theme = 'basic',
   display = 'basic',
   rounded = false,
+  link,
   onClick,
   disabled,
   className,
   children,
   preventDefault = false,
 }: ButtonProps) {
+  const isPure = theme === 'pure';
+
   const classNames = classnames(
-    styles.button,
+    !isPure && styles.button,
     mapThemeToStyle[theme],
-    mapDisplayToStyle[display],
-    rounded ? styles.rounded : '',
+    !isPure && mapDisplayToStyle[display],
+    rounded && styles.rounded,
     className,
   );
 
@@ -64,9 +80,15 @@ export function Button({
 
   return (
     <>
-      <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
-        {children}
-      </button>
+      {link ? (
+        <Link to={link} onClick={handleOnClick} className={classNames}>
+          {children}
+        </Link>
+      ) : (
+        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
+          {children}
+        </button>
+      )}
     </>
   );
 }

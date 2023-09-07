@@ -5,9 +5,12 @@
     for all fields used by the billig models (see queries in samfundet/models/billig.py).
 */
 
+/* Drop Tables */
+DROP TABLE IF EXISTS [billig.price_group];
+DROP TABLE IF EXISTS [billig.ticket_group];
+DROP TABLE IF EXISTS [billig.event];
 
 /* Billig Event */
-DROP TABLE IF EXISTS [billig.event];
 CREATE TABLE [billig.event] (
     event int NOT NULL,
     event_name varchar(140) NOT NULL,
@@ -18,7 +21,6 @@ CREATE TABLE [billig.event] (
 );
 
 /* Ticket Group */
-DROP TABLE IF EXISTS [billig.ticket_group];
 CREATE TABLE [billig.ticket_group] (
     ticket_group int NOT NULL,
     event int NOT NULL,
@@ -31,7 +33,6 @@ CREATE TABLE [billig.ticket_group] (
 );
 
 /* Price Group */
-DROP TABLE IF EXISTS [billig.price_group];
 CREATE TABLE [billig.price_group] (
     price_group int NOT NULL,
     ticket_group int NOT NULL,

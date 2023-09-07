@@ -1,0 +1,90 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.footer_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  width: 100%;
+  background-color: $red-samf;
+  gap: 0.5rem;
+  padding: 1em;
+}
+
+.main_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  @include for-mobile-only {
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
+.row_collapse {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  @include for-mobile-only {
+    flex-direction: column;
+  }
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.images {
+  width: auto;
+  height: 1.2em;
+  margin: 0.2em;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.col {
+  flex: 1;
+}
+
+.col_2 {
+  flex: 2;
+}
+
+.header {
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 0.3em;
+  color: white;
+  font-size: 1.5em;
+  font-weight: 100;
+}
+
+.sponsor_logo {
+  margin: 1em;
+}
+
+.icon {
+  margin: 0.5em;
+}
+
+.cookies {
+  font-size: 0.75em;
+  color: $grey-5;
+  font-weight: 100;
+}
