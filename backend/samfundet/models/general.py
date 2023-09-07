@@ -16,7 +16,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from guardian.shortcuts import assign_perm
 from django.utils.translation import gettext as _
-from django.utils.text import slugify
 
 from root.utils import permissions
 
