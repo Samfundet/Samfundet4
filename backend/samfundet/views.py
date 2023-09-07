@@ -1,4 +1,4 @@
-from typing import Type, Optional
+from typing import Type
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
