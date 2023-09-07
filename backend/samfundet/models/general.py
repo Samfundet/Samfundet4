@@ -22,7 +22,7 @@ from root.utils import permissions
 from .utils.fields import LowerCaseField
 
 if TYPE_CHECKING:
-    from typing import Any, Optional
+    from typing import Any
     from django.db.models import Model
 
 
