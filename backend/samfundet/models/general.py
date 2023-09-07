@@ -16,6 +16,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from guardian.shortcuts import assign_perm
 from django.utils.translation import gettext as _
+from django.utils.text import slugify
 
 from root.utils import permissions
 
@@ -164,6 +165,7 @@ class Profile(models.Model):
 
 class Venue(models.Model):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
+    slug = models.SlugField(unique=True, null=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)
