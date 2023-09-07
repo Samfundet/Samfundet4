@@ -2,10 +2,11 @@ from typing import Type, Optional
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
-from django.db.models import QuerySet
+from django.db.models import QuerySet, CharField, SlugField
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.text import slugify
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from guardian.shortcuts import get_objects_for_user
@@ -181,7 +182,12 @@ class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
-    lookup_field = 'name'
+    name = CharField(max_length=200)
+    slug = SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class ClosedPeriodView(ModelViewSet):
