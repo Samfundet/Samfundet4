@@ -47,7 +47,7 @@ export function SultenCard({
   return (
     <div className={smallCard ? styles.smallcard_container : styles.container}>
       {leftAlignedImage}
-      <div className={smallCard ? styles.smallcard_text_container : styles.text_container}>
+      <div className={styles.text_container}>
         <h2 className={styles.card_header}>{header}</h2>
         <p className={styles.card_text}>{text}</p>
         {cardButton}
