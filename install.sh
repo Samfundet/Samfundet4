@@ -2,6 +2,8 @@
 
 BOT="[samf-bot]"
 
+# "$?" references return code from last command.
+
 ### Imports ###
 echo ; echo ; echo ; echo "================================================================================================================"
 [ -f bash_utils.sh ] && echo "$BOT: Don't mind me, I'm just sourcing 'bash_utils.sh'" && . bash_utils.sh
@@ -29,7 +31,7 @@ echo
 echo "  If you know that you have already configured what is asked of you, "
 echo "   you may skip the step (no need to remember, I will mention it again)."
 echo
-if [ $X_INTERACTIVE == "y" ]; then
+if [ "$X_INTERACTIVE" == "y" ]; then
     echo "  I will prompt for permission before performing any action,"
     echo "   although most of them are neccessary to complete the script."
     echo
@@ -50,10 +52,10 @@ do_action "\"I understand\"" "echo '$BOT: Here we go!'; sleep 1;" "y" || eval "e
 # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
 echo ; echo ; echo ; echo "================================================================================================================"
 if [ $IS_UBUNTU == 0 ]; then
-    do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update -y ; sudo apt upgrade -y ; sudo apt install -y build-essential procps curl file git ssh" $X_INTERACTIVE
+    do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update -y ; sudo apt upgrade -y ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
 elif [ $IS_MAC == 0 ]; then
-    do_action "$BOT: Attempt to install requirements (curl, git)" "brew install git curl" $X_INTERACTIVE
-    do_action "$BOT: Install xcode-select" "xcode-select --install" $X_INTERACTIVE
+    do_action "$BOT: Attempt to install requirements (curl, git)" "brew install git curl" "$X_INTERACTIVE"
+    do_action "$BOT: Install xcode-select" "xcode-select --install" "$X_INTERACTIVE"
 fi
 
 # Fail if missing requirements.
@@ -67,23 +69,24 @@ require "ps" # procps
 
 ### brew ###
 # Install brew if it doesn't exist.
-if [ ! `which brew` ]; then
+if [ ! "$(which brew)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     echo "Homebrew is a packet manager such as 'apt' for Linux."
-    do_action "$BOT: Install Homebrew (required)?" "" $X_INTERACTIVE
-    if [ $? == 0 ]; then
+    do_action "$BOT: Install Homebrew (required)?" "" "$X_INTERACTIVE"
+    if [ "$?" == 0 ]; then
         # Non-X_INTERACTIVE install.
         NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         # Update PATH and current shell.
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
+        # Must be wrapped by single quotes.
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     fi
 fi
 
 # Update and upgrade brew if it exists.
 echo ; echo ; echo ; echo "================================================================================================================"
-do_action "$BOT: Update and upgrade Homebrew (required)?" "" $X_INTERACTIVE
-if [ $? == 0 ] && [ `which brew` ]; then
+do_action "$BOT: Update and upgrade Homebrew (required)?" "" "$X_INTERACTIVE"
+if [ "$?" == 0 ] && [ "$(which brew)" ]; then
     # Update brew.
     echo "Updating and upgrading brew:"
     brew update && brew upgrade && brew upgrade --cask
@@ -93,11 +96,11 @@ fi
 
 
 ### docker ###
-if [[ ! `docker compose` ]]; then
+if [[ ! "$(docker compose)" ]]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install docker (required)?" "" $X_INTERACTIVE
-        if [ $? == 0 ]; then
+        do_action "$BOT: Install docker (required)?" "" "$X_INTERACTIVE"
+        if [ "$?" == 0 ]; then
             # https://docs.docker.com/engine/install/ubuntu/
             sudo apt-get remove docker docker-engine docker.io containerd runc
             sudo apt-get update
@@ -111,16 +114,16 @@ if [[ ! `docker compose` ]]; then
             sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
         fi
     elif [ $IS_MAC == 0 ]; then
-        do_action "$BOT: Install docker (required)?" "brew install docker docker-compose; mkdir -p ~/.docker/cli-plugins; ln -sfn /usr/local/opt/docker-compose/bin/docker-compose ~/.docker/cli-plugins/docker-compose" $X_INTERACTIVE
+        do_action "$BOT: Install docker (required)?" "brew install docker docker-compose; mkdir -p ~/.docker/cli-plugins; ln -sfn /usr/local/opt/docker-compose/bin/docker-compose ~/.docker/cli-plugins/docker-compose" "$X_INTERACTIVE"
     fi
 fi
 
 ### colima ###
 # Replacement for docker-desktop. Only needed for MacOS.
 # https://github.com/abiosoft/colima
-if [ ! `which colima` ] && [ $IS_MAC == 0 ]; then
+if [ ! "$(which colima)" ] && [ $IS_MAC == 0 ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install colima (required unless you have docker-desktop)?" "brew install colima && colima start" $X_INTERACTIVE
+    do_action "$BOT: Install colima (required unless you have docker-desktop)?" "brew install colima && colima start" "$X_INTERACTIVE"
 fi
 
 
@@ -130,34 +133,36 @@ fi
 
 
 ### jq ###
-if [ ! `which jq` ]; then
+if [ ! "$(which jq)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
+    echo "Json parser."
+    echo "Used to parse extensions.json for VSCode setup."
     if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install jq (required)?" "sudo apt install -y jq" $X_INTERACTIVE
+        do_action "$BOT: Install jq (optional)?" "sudo apt install -y jq" "$X_INTERACTIVE"
     elif [ $IS_MAC == 0 ]; then
-        do_action "$BOT: Install jq (required)?" "brew install jq" $X_INTERACTIVE
+        do_action "$BOT: Install jq (optional)?" "brew install jq" "$X_INTERACTIVE"
     fi
 fi
 
 
 ### postgresql ###
-if [ ! `which psql` ]; then
+if [ ! "$(which psql)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install postgresql (required)?" "sudo apt install -y postgresql libpq-dev && sudo service postgresql restart" $X_INTERACTIVE
+        do_action "$BOT: Install postgresql (required)?" "sudo apt install -y postgresql libpq-dev && sudo service postgresql restart" "$X_INTERACTIVE"
     elif [ $IS_MAC == 0 ]; then
-        do_action "$BOT: Install postgresql (required)?" "brew install postgresql && brew services restart postgresql" $X_INTERACTIVE
+        do_action "$BOT: Install postgresql (required)?" "brew install postgresql && brew services restart postgresql" "$X_INTERACTIVE"
     fi
 fi
 
 
 ### pyenv ###
-if [ ! `which pyenv` ]; then
+if [ ! "$(which pyenv)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     # do_action "$BOT: Install pyenv (required)?" "brew install pyenv ; echo 'export PYENV_ROOT=~/.pyenv' >> ~/.bash_profile && echo 'export PATH=~/.pyenv/bin:$PATH' >> ~/.bash_profile ; echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval '$(pyenv init -)'\nfi' >> ~/.bash_profile ; . ~/.bash_profile" $X_INTERACTIVE
     # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
-    do_action "$BOT: Install pyenv (required)?" "" $X_INTERACTIVE
-    if [ $? == 0 ] ; then # If 'yes'.
+    do_action "$BOT: Install pyenv (required)?" "" "$X_INTERACTIVE"
+    if [ "$?" == 0 ] ; then # If 'yes'.
         # Install pyenv dependencies to OS.
         if [ $IS_UBUNTU ] ; then
             sudo apt install -y make build-essential libssl-dev zlib1g-dev \
@@ -169,6 +174,7 @@ if [ ! `which pyenv` ]; then
 
         # Install pyenv.
         brew install pyenv
+        # Must be wrapped by single quotes.
         echo 'export PYENV_ROOT=~/.pyenv' >> ~/.bash_profile
         echo 'export PATH=~/.pyenv/bin:$PATH' >> ~/.bash_profile
         echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
@@ -178,9 +184,9 @@ fi
 
 
 ### github-cli ###
-if [ ! `which gh` ]; then
+if [ ! "$(which gh)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install github-cli (gh) (required)?" "brew install gh" $X_INTERACTIVE
+    do_action "$BOT: Install github-cli (gh) (required)?" "brew install gh" "$X_INTERACTIVE"
 fi
 
 
@@ -213,13 +219,13 @@ fi
 
 
 ### Setup project ###
-if [ `which gh` ]; then
+if [ "$(which gh)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     echo "Make a PAT (Personal Access Token) here: https://github.com/settings/tokens/new"
     echo "Select scopes (repo, read:org, admin:public_key)."
     echo "This token is important. Store it someplace safe, preferably a password manager (github will never show it again)."
     echo
-    do_action "$BOT: I have created (or already have) a PAT." "" $X_INTERACTIVE
+    do_action "$BOT: I have created (or already have) a PAT." "" "$X_INTERACTIVE"
 
     # Get email.
     # echo ; echo ; echo ; echo "================================================================================================================"
@@ -228,9 +234,9 @@ if [ `which gh` ]; then
     # Create ssh key.
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Do you wish to create a new ssh key?" "" "y"
-    if [ $? == 0 ]; then
+    if [ "$?" == 0 ]; then
         get_var_with_confirm "EMAIL" "Email at github.com: "
-        ssh-keygen -t ed25519 -C $EMAIL
+        ssh-keygen -t ed25519 -C "$EMAIL"
     fi
 
     # Get private ssh key to use further.
@@ -251,19 +257,19 @@ if [ `which gh` ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     echo "You should skip if you have done this step before."
     do_action "$BOT: Add an ssh key to ~/.ssh/config with host (github.com)?" "echo 'I have listed the content in ~/.ssh for you:'; ls -lad ~/.ssh/*" "y"
-    if [ $? == 0 ]; then
+    if [ "$?" == 0 ]; then
         get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-        echo $'\nHost github.com\n\tPreferredauthentications publickey\n\tIdentityFile '$KEY_PRIV >> ~/.ssh/config
+        echo $'\nHost github.com\n\tPreferredauthentications publickey\n\tIdentityFile '"$KEY_PRIV" >> ~/.ssh/config
     fi
 
     # Start ssh-agent.
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Start ssh-agent (required)?" "echo 'I have listed the content in ~/.ssh for you:'; ls -lad ~/.ssh/*" "y"
-    if [ $? == 0 ]; then
+    if [ "$?" == 0 ]; then
         get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
         # chmod 600 $KEY_PRIV # Only accessible to you.
         eval "$(ssh-agent -s)" # Start ssh-agent.
-        ssh-add $KEY_PRIV # Add key to ssh-agent session.
+        ssh-add "$KEY_PRIV" # Add key to ssh-agent session.
         # echo $'\neval "$(ssh-agent -s)" # Start ssh-agent.\nssh-add '$KEY_PRIV$' # Add key to ssh-agent session.\n' >> ~/.bash_profile
         # . ~/.bash_profile
     fi
@@ -272,20 +278,22 @@ fi
 
 # Clone project.
 echo ; echo ; echo ; echo "================================================================================================================"
-do_action "$BOT: Clone repo git@github.com:Samfundet/Samfundet4.git?" "git clone git@github.com:Samfundet/Samfundet4.git" $X_INTERACTIVE
+do_action "$BOT: Clone repo git@github.com:Samfundet/Samfundet4.git?" "git clone git@github.com:Samfundet/Samfundet4.git" "$X_INTERACTIVE"
 
 ### Setup project if cloned. ###
-if [ `ls Samfundet4/README.md` ] ; then # Simple check if an arbitrary file exists.
+if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file exists.
     # Some extra steps.
-    cd Samfundet4
+    cd Samfundet4 || exit
     cp .env.example .env
     cp backend/.env.example backend/.env
     cp backend/.docker.example.env backend/.docker.env
+    cp frontend/.env.local.example frontend/.env.local
+    cp frontend/.env.docker.example frontend/.env.docker
     cp .vscode/settings.default.json .vscode/settings.json
 
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Do you wish to configure VSCode?" "" $X_INTERACTIVE
-    if [ $? == 0 ] ; then
+    do_action "$BOT: Do you wish to configure VSCode?" "" "$X_INTERACTIVE"
+    if [ "$?" == 0 ] ; then
         echo "VSCode setup (requires that you cloned the project):"
         echo
         echo "1. Open VSCode"
@@ -293,11 +301,11 @@ if [ `ls Samfundet4/README.md` ] ; then # Simple check if an arbitrary file exis
         echo "3. Type 'install code'"
         echo "4. Select the alternative 'Shell Command: Install 'code' command in PATH' "
         echo
-        do_action "$BOT: When this is finished, confirm to continue..." "" $X_INTERACTIVE
+        do_action "$BOT: When this is finished, confirm to continue..." "" "$X_INTERACTIVE"
 
         # Install default extensions.
         echo ; echo ; echo ; echo "================================================================================================================"
-        do_action "$BOT: Install default vscode extensions from .vscode/extensions.json?" "install_extensions .vscode/extensions.json" $X_INTERACTIVE
+        do_action "$BOT: Install default vscode extensions from .vscode/extensions.json?" "install_extensions .vscode/extensions.json" "$X_INTERACTIVE"
 
         # Install recommended extensions.
         # echo ; echo ; echo ; echo "================================================================================================================"
@@ -307,17 +315,16 @@ if [ `ls Samfundet4/README.md` ] ; then # Simple check if an arbitrary file exis
 
     # Install python virtual environment with dependencies.
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install virtual python environment (pyenv, pipenv)?" "pyenv install ; python -m pip install pipenv ; PIPENV_VENV_IN_PROJECT=1 python -m pipenv install --python `cat backend/.python-version`" $X_INTERACTIVE
+    do_action "$BOT: Install virtual python environment (pyenv, pipenv)?" "pyenv install ; python -m pip install pipenv ; PIPENV_VENV_IN_PROJECT=1 python -m pipenv install --python $(cat backend/.python-version)" "$X_INTERACTIVE"
 
     # Build project.
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Build project?" "" $X_INTERACTIVE
-    if [ $? == 0 ]; then
+    do_action "$BOT: Build project?" "" "$X_INTERACTIVE"
+    if [ "$?" == 0 ]; then
         if [ $IS_UBUNTU == 0 ]; then
             sudo docker compose build
         elif [ $IS_MAC == 0 ]; then
-            # Mac doesn't need to use sudo.
-            docker compose build
+            docker compose build # Mac doesn't need to use sudo.
         fi
     fi
 fi
@@ -351,7 +358,7 @@ echo
 echo "NOTE: See Dockerfile for more useful commands."
 echo
 do_action "$BOT: I can also start the project if you'd like" "" "y"
-if [ $? == 0 ]; then
+if [ "$?" == 0 ]; then
     if [ $IS_UBUNTU == 0 ]; then
         sudo docker compose up
     elif [ $IS_MAC == 0 ]; then
