@@ -181,6 +181,7 @@ class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+    lookup_field = 'slug'
 
 
 class ClosedPeriodView(ModelViewSet):
