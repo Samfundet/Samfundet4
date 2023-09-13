@@ -19,7 +19,7 @@ from django.utils.translation import gettext as _
 
 from root.utils import permissions
 
-from .utils.fields import LowerCaseField
+from .utils.fields import LowerCaseField, PhoneNumberField
 
 if TYPE_CHECKING:
     from typing import Any, Optional
@@ -95,6 +95,16 @@ class User(AbstractUser):
             'unique': _('A user with that username already exists.'),
         },
     )
+    phone_number = PhoneNumberField(
+        _('phone_number'),
+        blank=False, 
+        null=False,
+        unique=True, 
+        editable=True,         
+        error_messages={
+            'unique': _('A user with that username already exists.'),
+        })
+    
 
     class Meta:
         permissions = [
