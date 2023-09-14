@@ -324,7 +324,6 @@ class RegisterView(APIView):
     def post(self, request: Request) -> Response:
         serializer = RegisterSerializer(data=self.request.data,
                                         context={'request': self.request})
-        print(self.request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request=request, user=user)

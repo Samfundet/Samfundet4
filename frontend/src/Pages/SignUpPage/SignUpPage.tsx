@@ -25,7 +25,14 @@ export function SignUpPage() {
   }, [user, navigate]);
 
   function handleRegistration(formData: Record<string, string>) {
-    register(formData['username'], formData['email'], formData['phone_number'], formData['firstname'], formData['lastname'], formData['password'])
+    register(
+      formData['username'],
+      formData['email'],
+      formData['phone_number'],
+      formData['firstname'],
+      formData['lastname'],
+      formData['password'],
+    )
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser().then((user) => {

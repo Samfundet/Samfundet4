@@ -2,7 +2,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
 import { hasPerm } from '~/utils';
 import { ROUTES } from '~/routes';
-import { PERM } from '~/permissions';
 import { ElementType } from 'react';
 
 type ProtectedRouteProps = {

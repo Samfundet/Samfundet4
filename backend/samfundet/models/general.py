@@ -107,14 +107,12 @@ class User(AbstractUser):
         null=False,
         editable=True,
     )
-    email = models.EmailField(_('email'),
-                              blank=False,
-                              null=False,
-                              unique=True,
-                              error_messages={
-                                  'unique':
-                                  _('A user with that email already exists.'),
-                              })
+    email = models.EmailField(
+        _('email'),
+        blank=False,
+        null=False,
+        unique=True,
+    )
 
     class Meta:
         permissions = [

@@ -271,7 +271,8 @@ class RegisterSerializer(serializers.Serializer):
     phone_number = serializers.RegexField(
         label='Phonenumber',
         regex=r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$',
-        write_only=True)
+        write_only=True,
+    )
     firstname = serializers.CharField(label='First name', write_only=True)
     lastname = serializers.CharField(label='Last name', write_only=True)
     password = serializers.CharField(
