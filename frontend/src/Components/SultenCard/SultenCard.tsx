@@ -9,6 +9,9 @@ type SultenCardProps = {
   text?: string;
   buttonText?: string;
   imageAlignment?: 'left' | 'right';
+
+  leftAlignImg?: boolean;
+
   onButtonClick?: () => void;
   link?: string;
   smallCard?: boolean;

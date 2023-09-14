@@ -3,71 +3,68 @@
 @import 'src/mixins';
 
 .container {
-  display: flex;
+  @include flex-row;
   background-color: $black;
+  border-radius: 0.5em;
+  gap: 1em;
+
   @include for-mobile-down {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
+    @include flex-column;
     padding-bottom: 2em;
   }
 }
 
 .smallcard_container {
-  display: flex;
+  @include flex-row-center;
   background-color: $black;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  border-radius: 0.5em;
   gap: 1em;
-  padding-bottom: 1em;
+
   @include for-mobile-down {
-    flex-direction: column;
+    @include flex-column;
   }
 }
 
 .card_image {
   height: 30em;
   object-position: top;
+  object-fit: cover;
   width: 50%;
+  flex: 1;
   display: inline-block;
   border-radius: 0.5em;
-  object-fit: cover;
+
   @include for-mobile-down {
     width: 100%;
     display: block;
+    max-height: 15em;
   }
 }
 
 .smallcard_image {
   height: 15em;
-  object-position: top;
   width: 25%;
   display: inline-block;
+  flex: 1;
   border-radius: 0.5em;
+  object-position: top;
   object-fit: cover;
-  padding: 0;
+
   @include for-mobile-down {
     width: 100%;
+    max-height: 10em;
     display: block;
-    height: 5em;
     object-position: center;
   }
 }
 
 .text_container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  @include flex-column-center;
+  flex: 1;
   text-align: center;
-  gap: 1em;
-  width: 50%;
-  padding: 0 4rem;
+
   @include for-mobile-down {
     width: 100%;
-    padding: 0 1rem;
   }
 }
 
@@ -83,4 +80,5 @@
 
 .card_button {
   width: fit-content;
+  margin: 1.5em;
 }
