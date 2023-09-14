@@ -80,6 +80,8 @@ export const KEY = {
   common_sponsor: 'common_sponsors',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
+  common_email: 'common_email',
+  common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',

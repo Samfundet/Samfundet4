@@ -25,7 +25,7 @@ export function SignUpPage() {
   }, [user, navigate]);
 
   function handleRegistration(formData: Record<string, string>) {
-    register(formData['username'], formData['firstname'], formData['lastname'], formData['password'])
+    register(formData['username'], formData['email'], formData['phone_number'], formData['firstname'], formData['lastname'], formData['password'])
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser().then((user) => {
@@ -49,7 +49,7 @@ export function SignUpPage() {
       <div className={styles.login_container}>
         {loginFailed && (
           <Alert
-            message="Login failed"
+            message="Register failed"
             type="error"
             align="center"
             closable={true}
@@ -67,6 +67,8 @@ export function SignUpPage() {
               type="text"
               label={t(KEY.loginpage_email_placeholder) ?? ''}
             />
+            <SamfFormField required={true} field="email" type="email" label={t(KEY.common_email) ?? ''} />
+            <SamfFormField required={true} field="phone_number" type="text" label={t(KEY.common_phonenumber) ?? ''} />
             <SamfFormField required={true} field="firstname" type="text" label={t(KEY.common_firstname) ?? ''} />
             <SamfFormField required={true} field="lastname" type="text" label={t(KEY.common_lastname) ?? ''} />
             <SamfFormField required={true} field="password" type="password" label={t(KEY.common_password) ?? ''} />
