@@ -7,6 +7,7 @@ from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
+from .models.utils.fields import SerializerPhoneNumberField
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
@@ -246,12 +247,16 @@ class LoginSerializer(serializers.Serializer):
 class RegisterSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:
+      * username
       * email
+      * phone_number
       * firstname
       * lastname
       * password
     """
-    username = serializers.EmailField(label='Username', write_only=True)
+    username = serializers.CharField(label='Username', write_only=True)
+    email = serializers.EmailField(label='Email', write_only=True)
+    phone_number = SerializerPhoneNumberField(label='Phone Number', write_only=True)
     firstname = serializers.CharField(label='First name', write_only=True)
     lastname = serializers.CharField(label='Last name', write_only=True)
     password = serializers.CharField(

@@ -64,7 +64,6 @@ class UserAdmin(CustomGuardedUserAdmin):
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
-
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
         n: int = obj.groups.all().count()
