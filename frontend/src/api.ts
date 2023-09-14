@@ -78,6 +78,12 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
+export async function getUsers(): Promise<UserDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+  const response = await axios.get<UserDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function assignUserToGroup(username: string, group_name: string): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__assign_group;
   const payload = {

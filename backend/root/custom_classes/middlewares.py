@@ -41,3 +41,13 @@ class RequestLogMiddleware:
         """Log unhandled exceptions."""
 
         LOG.error('Unhandled exception while processing request', exc_info=exception)
+
+
+class ImpersonateUserMiddleware:
+
+    def __init__(self, get_response) -> None:  # type: ignore # noqa: ANN001 # Uknown type # type: ignore
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        print("YEEEET DUDE")
+        return self.get_response(request)

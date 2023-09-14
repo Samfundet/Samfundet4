@@ -28,6 +28,7 @@ export const ROUTES_FRONTEND = {
   //      Admin pages     //
   // ==================== //
   admin: '/control-panel/',
+  admin_impersonate: '/impersonate/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',

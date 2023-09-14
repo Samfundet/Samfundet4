@@ -48,6 +48,7 @@ import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
 import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
+import {ImpersonateUserAdminPage} from "~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage";
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -80,6 +81,11 @@ export function AppRoutes() {
             ADMIN ROUTES
       */}
       <Route element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}>
+        {/* TODO PERMISSION FOR IMPERSONATE */}
+        <Route
+          path={ROUTES.frontend.admin_impersonate}
+          element={<ProtectedRoute perms={[]} Page={ImpersonateUserAdminPage} />}
+        />
         <Route
           path={ROUTES.frontend.admin}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
