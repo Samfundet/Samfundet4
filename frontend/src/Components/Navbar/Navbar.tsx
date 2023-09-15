@@ -8,12 +8,13 @@ import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
 import { useGlobalContext } from '~/GlobalContextProvider';
-import { logout } from '~/api';
+import { impersonateUser, logout } from '~/api';
 import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
 import { useDesktop, useIsDarkTheme, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { useCookies } from 'react-cookie';
 import styles from './Navbar.module.scss';
 
 const scrollDistanceForOpaque = 30;
@@ -25,6 +26,7 @@ export function Navbar() {
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   // Each NavbarItem can have a dropdown menu.
   // We want only one of them to be extended at any time, therefore this parent component
@@ -136,12 +138,30 @@ export function Navbar() {
     </div>
   );
 
+  const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
   const userDropdownLinks = (
     <>
       <Link url={ROUTES.frontend.admin} className={styles.navbar_dropdown_link}>
         <Icon icon="material-symbols:settings" />
         {t(KEY.control_panel_title)}
       </Link>
+      {isImpersonate && (
+        <button
+          type="button"
+          className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
+          onClick={() => {
+            impersonateUser(undefined)
+              .then((response) => {
+                window.location.reload();
+              })
+              .catch(console.error);
+            setIsMobileNavigation(false);
+          }}
+        >
+          <Icon icon="ri:spy-fill" />
+          Stop Agent Mode
+        </button>
+      )}
       <button
         type="button"
         className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
@@ -170,7 +190,7 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={'#'}
         label={user.username}
-        icon="material-symbols:person"
+        icon={isImpersonate ? 'mdi:eye' : 'material-symbols:person'}
         dropdownLinks={userDropdownLinks}
       />
     </div>

@@ -283,11 +283,13 @@ class LoginView(APIView):
         login(request=request, user=user)
         new_csrf_token = get_token(request=request)
 
-        return Response(
+        response = Response(
             status=status.HTTP_202_ACCEPTED,
             data=new_csrf_token,
             headers={XCSRFTOKEN: new_csrf_token},
         )
+        response.requested_impersonate_user = None
+        return response
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -300,7 +302,9 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+        response = Response(status=status.HTTP_200_OK)
+        response.requested_impersonate_user = None
+        return response
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -339,9 +343,8 @@ class ImpersonateView(APIView):
     permission_classes = [IsAuthenticated]  # TODO authentication check
 
     def post(self, request: Request) -> Response:
-        user_id = int(request.data.get('user_id')) if hasattr(request, 'user_id') else None
         response = Response(status=200)
-        response.requested_impersonate_user = user_id
+        response.requested_impersonate_user = request.data.get('user_id', None)
         return response
 
 

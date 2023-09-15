@@ -1,6 +1,7 @@
 import logging
 import secrets
 from contextvars import ContextVar
+from tokenize import Token
 
 from django.http import HttpRequest, HttpResponse
 
@@ -56,14 +57,22 @@ class ImpersonateUserMiddleware:
             impersonate = request.get_signed_cookie('impersonated_user_id', default=None)
             if impersonate is not None:
                 from samfundet.models import User
+                from django.middleware.csrf import get_token
                 request.user = User.objects.get(id=int(impersonate))
-                print("EYOO DUDE YOURE NOT YOURSELF")
+                request._force_auth_user = request.user
+                request._force_auth_token = get_token(request.user)
+                print(f"EYOO DUDE YOURE NOT YOURSELF '{request.user.username}'")
         except:
             pass
 
         response = self.get_response(request)
 
         if hasattr(response, 'requested_impersonate_user'):
-            response.set_signed_cookie('impersonated_user_id', request.user.id)
+            impersonate_user_id = response.requested_impersonate_user
+            if impersonate_user_id is not None:
+                response.set_signed_cookie('impersonated_user_id', impersonate_user_id)
+                print(f"Now impersonating {impersonate_user_id}")
+            else:
+                response.delete_cookie('impersonated_user_id')
 
         return response
