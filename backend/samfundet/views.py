@@ -335,6 +335,16 @@ class AllUsersView(ListAPIView):
     queryset = User.objects.all()
 
 
+class ImpersonateView(APIView):
+    permission_classes = [IsAuthenticated]  # TODO authentication check
+
+    def post(self, request: Request) -> Response:
+        user_id = int(request.data.get('user_id')) if hasattr(request, 'user_id') else None
+        response = Response(status=200)
+        response.requested_impersonate_user = user_id
+        return response
+
+
 class AllGroupsView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = GroupSerializer

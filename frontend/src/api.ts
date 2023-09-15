@@ -78,6 +78,12 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
+export async function impersonateUser(user: UserDto): Promise<boolean> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
+  const response = await axios.post(url, { user_id: user.id }, { withCredentials: true });
+  return response.status == 200;
+}
+
 export async function getUsers(): Promise<UserDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });

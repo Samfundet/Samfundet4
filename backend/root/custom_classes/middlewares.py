@@ -4,6 +4,8 @@ from contextvars import ContextVar
 
 from django.http import HttpRequest, HttpResponse
 
+
+
 LOG = logging.getLogger(__name__)
 
 # This token can be imported anywhere to retrieve the values.
@@ -49,5 +51,19 @@ class ImpersonateUserMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        print("YEEEET DUDE")
-        return self.get_response(request)
+
+        try:
+            impersonate = request.get_signed_cookie('impersonated_user_id', default=None)
+            if impersonate is not None:
+                from samfundet.models import User
+                request.user = User.objects.get(id=int(impersonate))
+                print("EYOO DUDE YOURE NOT YOURSELF")
+        except:
+            pass
+
+        response = self.get_response(request)
+
+        if hasattr(response, 'requested_impersonate_user'):
+            response.set_signed_cookie('impersonated_user_id', request.user.id)
+
+        return response

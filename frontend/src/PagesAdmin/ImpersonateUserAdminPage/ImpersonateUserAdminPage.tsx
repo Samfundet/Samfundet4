@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { EventDto, UserDto } from '~/dto';
-import { getUser, getUsers } from '~/api';
+import { getUser, getUsers, impersonateUser } from '~/api';
 import styles from './ImpersonateUserAdminPage.module.scss';
 import { Table } from '~/Components/Table';
 import secretAgent from '~/assets/memes/secret-service.gif';
@@ -11,6 +11,7 @@ import bondmusic from '~/assets/memes/jamesbond.mp3';
 import { Icon } from '@iconify/react';
 import { InputField } from '~/Components';
 import { queryDto } from '~/utils';
+import { useAuthContext } from '~/AuthContext';
 
 export function ImpersonateUserAdminPage() {
   const [query, setQuery] = useState<string>('');
@@ -39,6 +40,22 @@ export function ImpersonateUserAdminPage() {
     return `${user.first_name} ${user.last_name}`;
   }
 
+  const auth = useAuthContext();
+  function impersonate(user: UserDto) {
+    impersonateUser(user)
+      .then((ok) => {
+        if (ok) {
+          getUser()
+            .then((user) => auth.setUser(user))
+            .catch(console.error);
+          alert('nice, middleware is good, TODO proper handling in frontend');
+        }
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
+  }
+
   return (
     <>
       <div className={styles.root}>
@@ -55,10 +72,10 @@ export function ImpersonateUserAdminPage() {
           <InputField<string> inputClassName={styles.inputClass} placeholder={'Search...'} onChange={setQuery} />
           <div className={styles.userList}>
             {displayUsers.map((u) => (
-              <div className={styles.userItem}>
+              <button className={styles.userItem} onClick={() => impersonate(u)}>
                 <span>{verboseUserName(u)}</span>
                 <span className={styles.email}>{u.email}</span>
-              </div>
+              </button>
             ))}
           </div>
         </div>
