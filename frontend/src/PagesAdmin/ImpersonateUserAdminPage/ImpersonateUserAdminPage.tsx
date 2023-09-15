@@ -44,12 +44,7 @@ export function ImpersonateUserAdminPage() {
   function impersonate(user: UserDto) {
     impersonateUser(user)
       .then((ok) => {
-        if (ok) {
-          getUser()
-            .then((user) => auth.setUser(user))
-            .catch(console.error);
-          alert('nice, middleware is good, TODO proper handling in frontend');
-        }
+        window.location.reload();
       })
       .catch((err) => {
         alert(JSON.stringify(err));
@@ -72,7 +67,7 @@ export function ImpersonateUserAdminPage() {
           <InputField<string> inputClassName={styles.inputClass} placeholder={'Search...'} onChange={setQuery} />
           <div className={styles.userList}>
             {displayUsers.map((u) => (
-              <button className={styles.userItem} onClick={() => impersonate(u)}>
+              <button className={styles.userItem} onClick={() => impersonate(u)} key={u.id}>
                 <span>{verboseUserName(u)}</span>
                 <span className={styles.email}>{u.email}</span>
               </button>

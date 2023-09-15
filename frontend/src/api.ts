@@ -78,9 +78,9 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function impersonateUser(user: UserDto): Promise<boolean> {
+export async function impersonateUser(user?: UserDto): Promise<boolean> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
-  const response = await axios.post(url, { user_id: user.id }, { withCredentials: true });
+  const response = await axios.post(url, { user_id: user?.id }, { withCredentials: true });
   return response.status == 200;
 }
 

@@ -1,10 +1,12 @@
 import { Icon } from '@iconify/react';
 import { useAuthContext } from '~/AuthContext';
-import { ToggleSwitch } from '~/Components';
+import { Button, ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
+import { ROUTES } from '~/routes';
+import { Link } from 'react-router-dom';
 
 export function AdminPage() {
   const { user } = useAuthContext();
@@ -33,6 +35,11 @@ export function AdminPage() {
           <div className={styles.label}>Mouse Trail</div>
           <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
         </div>
+        <br />
+        <br />
+        <Link to={ROUTES.frontend.admin_impersonate}>
+          <Button>Stjel Identitet</Button>
+        </Link>
       </div>
     </Page>
   );
