@@ -588,6 +588,20 @@ export async function getRecruitmentAdmissionsForGang(
   return response;
 }
 
+export async function putRecruitmentAdmissionForGang(
+  admissionId: string,
+  admission: Partial<RecruitmentAdmissionDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_gang_detail,
+      urlParams: { pk: admissionId },
+    });
+  const response = await axios.put<RecruitmentAdmissionDto>(url, admission, { withCredentials: true });
+  return response;
+}
+
 export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_positions;
   const response = await axios.get(url, { withCredentials: true });

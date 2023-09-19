@@ -1,5 +1,4 @@
 from typing import Type
-
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -181,6 +180,7 @@ class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+    lookup_field = 'slug'
 
 
 class ClosedPeriodView(ModelViewSet):
@@ -448,6 +448,13 @@ class RecruitmentPositionView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentAdmissionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
@@ -495,6 +502,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     # TODO: User should only be able to edit the fields that are allowed
 

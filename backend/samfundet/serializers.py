@@ -529,7 +529,15 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         return recruitment_admission
 
 
+class ApplicantInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email']
+
+
 class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+    user = ApplicantInfoSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
