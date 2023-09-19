@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { RecruitmentAdmissionDto } from '~/dto';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
-import { KEY } from '~/i18n/constants';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
-import { Table } from '~/Components/Table';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { ROUTES } from '~/routes';
-import { reverse } from '~/named-urls';
-import { utcTimestampToLocal } from '~/utils';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { Table } from '~/Components/Table';
+import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
+import { RecruitmentAdmissionDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { utcTimestampToLocal } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
@@ -55,7 +55,7 @@ export function RecruitmentPositionOverviewPage() {
       getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
-            (recruitmentApplicant) => recruitmentApplicant.recruitment_position.toString() == positionId,
+            (recruitmentApplicant) => recruitmentApplicant.recruitment_position?.toString() == positionId,
           ),
         );
         setShowSpinner(false);

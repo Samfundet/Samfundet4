@@ -335,7 +335,7 @@ export type RecruitmentPositionDto = {
 export type RecruitmentAdmissionDto = {
   id: number;
   admission_text: string;
-  recruitment_position: number;
+  recruitment_position?: number;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;

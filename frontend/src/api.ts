@@ -608,3 +608,18 @@ export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<Rec
 
   return response;
 }
+
+export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
+    });
+  const data = {
+    admission_text: admission.admission_text,
+    recruitment_position: admission.recruitment_position,
+  };
+  const response = await axios.post(url, data, { withCredentials: true });
+
+  return response;
+}
