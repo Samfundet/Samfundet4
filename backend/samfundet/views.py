@@ -476,18 +476,16 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
         by filtering against a `recruitment` query parameter in the URL.
         """
         recruitment = self.request.query_params.get('recruitment', None)
-        if recruitment is not None:
-            # Users who have admissions for the given recruitment
-            users_with_admissions = User.objects.filter(admissions__recruitment=recruitment)
-
-            # Exclude users who have any admissions for the given recruitment that have an interview_time
-            users_without_interviews = users_with_admissions.annotate(num_interviews=Count('admissions__interview_time')
-                                                                     ).filter(admissions__recruitment=recruitment, num_interviews=0)
-
-            return users_without_interviews
-
-        else:
+        if recruitment is None:
             return User.objects.none()  # Return an empty queryset instead of None
+
+        # Users who have admissions for the given recruitment
+        users_with_admissions = User.objects.filter(admissions__recruitment=recruitment)
+        # Exclude users who have any admissions for the given recruitment that have an interview_time
+        users_without_interviews = (
+            users_with_admissions.annotate(num_interviews=Count('admissions__interview_time')).filter(admissions__recruitment=recruitment, num_interviews=0)
+        )
+        return users_without_interviews
 
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
