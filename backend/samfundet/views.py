@@ -1,6 +1,6 @@
 from typing import Type
 
-from django.db.models import Count
+from django.db.models import Count, Case, When
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -487,12 +487,10 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
         if recruitment is None:
             return User.objects.none()  # Return an empty queryset instead of None
 
-        # Users who have admissions for the given recruitment
-        users_with_admissions = User.objects.filter(admissions__recruitment=recruitment)
         # Exclude users who have any admissions for the given recruitment that have an interview_time
-        users_without_interviews = (
-            users_with_admissions.annotate(num_interviews=Count('admissions__interview_time')).filter(admissions__recruitment=recruitment, num_interviews=0)
-        )
+        users_without_interviews = User.objects.filter(admissions__recruitment=recruitment).annotate(
+            num_interviews=Count(Case(When(admissions__recruitment=recruitment, then='admissions__interview_time'), default=None, output_field=None))
+        ).filter(num_interviews=0)
         return users_without_interviews
 
 
