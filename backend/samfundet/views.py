@@ -183,6 +183,7 @@ class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+    lookup_field = 'slug'
 
 
 class ClosedPeriodView(ModelViewSet):
@@ -450,6 +451,13 @@ class RecruitmentPositionView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentAdmissionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
@@ -491,6 +499,7 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForApplicantSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     def list(self, request: Request) -> Response:
         """
@@ -518,6 +527,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     # TODO: User should only be able to edit the fields that are allowed
 

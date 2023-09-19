@@ -31,8 +31,14 @@ export function RecruitmentGangAdminPage() {
   const tableColumns = [{ content: t(KEY.recruitment_position), sortable: true }];
 
   const data = recruitmentPositions.map(function (recruitmentPosition) {
+    const pageUrl = reverse({
+      pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
+      urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },
+    });
     return [
-      { content: <Link url={ROUTES.frontend.health}>{dbT(recruitmentPosition, 'name')}</Link> },
+      {
+        content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
+      },
       {
         content: (
           <CrudButtons

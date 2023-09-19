@@ -525,14 +525,38 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
-            'user',
-            'applicant_priority',
             'interview_time',
             'interview_location',
         ]
 
+    def create(self, validated_data: dict) -> RecruitmentAdmission:
+        recruitment_position = validated_data['recruitment_position']
+        recruitment = recruitment_position.recruitment
+        user = self.context['request'].user
+        applicant_priority = 1
+
+        recruitment_admission = RecruitmentAdmission.objects.create(
+            admission_text=validated_data.get('admission_text'),
+            recruitment_position=recruitment_position,
+            recruitment=recruitment,
+            user=user,
+            applicant_priority=applicant_priority,
+            interview_time=validated_data.get('interview_time'),
+            interview_location=validated_data.get('interview_location')
+        )
+
+        return recruitment_admission
+
+
+class ApplicantInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email']
+
 
 class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+    user = ApplicantInfoSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
