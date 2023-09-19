@@ -118,12 +118,14 @@ class KeyValueView(ReadOnlyModelViewSet):
 
 # Images
 class ImageView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = ImageSerializer
     queryset = Image.objects.all().order_by('-pk')
 
 
 # Image tags
 class TagView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
 
@@ -134,6 +136,7 @@ class TagView(ModelViewSet):
 
 
 class EventView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -166,7 +169,7 @@ class EventsUpcomingView(APIView):
 
 
 class EventGroupView(ModelViewSet):
-    http_method_names = ['get']
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
 
@@ -177,13 +180,14 @@ class EventGroupView(ModelViewSet):
 
 
 class VenueView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
     lookup_field = 'slug'
 
 
 class ClosedPeriodView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = ClosedPeriodSerializer
     queryset = ClosedPeriod.objects.all()
 
@@ -200,24 +204,25 @@ class IsClosedView(ListAPIView):
 
 
 class SaksdokumentView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = SaksdokumentSerializer
     queryset = Saksdokument.objects.all()
 
 
 class OrganizationView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
 
 
 class GangView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = GangSerializer
     queryset = Gang.objects.all()
 
 
 class GangTypeView(ModelViewSet):
-    http_method_names = ['get']
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
 
@@ -246,31 +251,37 @@ class BlogPostView(ModelViewSet):
 
 
 class MenuView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = MenuSerializer
     queryset = Menu.objects.all()
 
 
 class MenuItemView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = MenuItemSerializer
     queryset = MenuItem.objects.all()
 
 
 class FoodCategoryView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = FoodCategorySerializer
     queryset = FoodCategory.objects.all()
 
 
 class FoodPreferenceView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
 
 
 class TableView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = TableSerializer
     queryset = Table.objects.all()
 
 
 class BookingView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = BookingSerializer
     queryset = Booking.objects.all()
 
@@ -339,13 +350,13 @@ class UserView(APIView):
 
 
 class AllUsersView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
 
 class AllGroupsView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
@@ -366,6 +377,7 @@ class UserPreferenceView(ModelViewSet):
 
 
 class ProfileView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
@@ -376,7 +388,7 @@ class AssignGroupView(APIView):
      Assigns a user to a group.
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
 
     def post(self, request: Request) -> Response:
         username = request.data.get('username')
