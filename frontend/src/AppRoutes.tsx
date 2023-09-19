@@ -12,6 +12,7 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
+  LycheAboutPage,
   LycheHomePage,
   NotFoundPage,
   RecruitmentPage,
@@ -47,7 +48,6 @@ import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage'
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
-import { LycheAboutPage } from './Pages/LycheAboutPage/LycheAboutPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
