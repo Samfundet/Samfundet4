@@ -9,6 +9,9 @@
   border-radius: 0.5em;
   transition: 0.2s;
   padding: 1.5em;
+  @include theme-dark{
+    background-color: $grey-0;
+  }
 }
 
 .error {
@@ -43,9 +46,16 @@
   &:hover {
     cursor: pointer;
     background-color: $white;
+    @include theme-dark{
+      background-color: $grey-2;
+    }
   }
   &:active {
     filter: brightness(90%);
+  }
+  @include theme-dark{
+    background-color: $grey-1;
+
   }
 }
 
@@ -53,6 +63,9 @@
   height: 8em;
   min-width: 6em;
   background: white;
+  @include theme-dark{
+    background-color: $grey-0;
+  }
 }
 
 .preview_image {

@@ -1,5 +1,6 @@
 from typing import Type
 
+from django.db.models import Count, Case, When
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -78,6 +79,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
@@ -181,6 +183,7 @@ class VenueView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+    lookup_field = 'slug'
 
 
 class ClosedPeriodView(ModelViewSet):
@@ -448,6 +451,13 @@ class RecruitmentPositionView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentAdmissionView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
@@ -464,9 +474,30 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
             return None
 
 
+class ApplicantsWithoutInterviewsView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserForRecruitmentSerializer
+
+    def get_queryset(self) -> QuerySet[User]:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is None:
+            return User.objects.none()  # Return an empty queryset instead of None
+
+        # Exclude users who have any admissions for the given recruitment that have an interview_time
+        users_without_interviews = User.objects.filter(admissions__recruitment=recruitment).annotate(
+            num_interviews=Count(Case(When(admissions__recruitment=recruitment, then='admissions__interview_time'), default=None, output_field=None))
+        ).filter(num_interviews=0)
+        return users_without_interviews
+
+
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForApplicantSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     def list(self, request: Request) -> Response:
         """
@@ -494,6 +525,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
 
     # TODO: User should only be able to edit the fields that are allowed
 
