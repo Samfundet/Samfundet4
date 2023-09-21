@@ -25,6 +25,8 @@ export function ProtectedRoute({
   requiresStaff = false,
 }: ProtectedRouteProps) {
   return <Page />;
+
+  // TODO: fix
   // const location = useLocation();
   // const { user } = useAuthContext(); //TODO ADD LOADER FOR AUTHCONTEXT
 
@@ -41,4 +43,5 @@ export function ProtectedRoute({
   //     }
   //   }
   // }
+  // return <Page />;
 }

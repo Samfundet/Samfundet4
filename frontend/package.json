@@ -7,6 +7,7 @@
     "start:docker": "vite serve",
     "dev": "yarn run start",
     "build": "vite build",
+    "ci": "yarn install --frozen-lockfile",
     "preview": "vite preview",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public --quiet",
     "storybook-dev": "start-storybook -p 6006 -s public",
