@@ -144,9 +144,12 @@ export const KEY = {
   navbar_nybygg: 'navbar_nybygg',
 
   // Sulten / Lyche:
+  sulten_lyche_goal: 'sulten_lyche_goal',
+  sulten_what_is_lyche: 'sulten_what_is_lyche',
   sulten_page_see_menu: 'sulten_page_see_menu',
   sulten_page_about_us: 'sulten_page_about_us',
   sulten_page_book_table: 'sulten_page_book_table',
+  sulten_lyche_about_menu: 'sulten_lyche_about_menu',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
   // Recruitment:
