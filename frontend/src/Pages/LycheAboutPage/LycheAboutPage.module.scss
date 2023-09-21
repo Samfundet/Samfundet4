@@ -5,12 +5,13 @@
 .container {
   width: 100%;
   height: 100%;
-  margin: $sulten-navbar-height/2 0 $sulten-navbar-height/2 0; //this looked the best
+  margin: $sulten-navbar-height/4 0 $sulten-navbar-height/4 0; //this looked the best
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 10;
+  @include flex-column-center;
   @include for-mobile-down {
     margin-top: $sulten-navbar-height;
   }
