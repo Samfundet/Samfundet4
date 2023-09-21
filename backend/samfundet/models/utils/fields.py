@@ -15,8 +15,7 @@ class PhoneNumberField(models.CharField):
         kwargs["max_length"] = 15
         self.validators = [
             RegexValidator(
-                regex=
-                '^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$ ',
+                regex='^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$ ',
                 message='Enter a valid phonenumber',
             ),
         ]

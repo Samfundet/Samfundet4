@@ -144,8 +144,7 @@ class EventPerDayView(APIView):
 
     def get(self, request: Request) -> Response:
         # Fetch and serialize events
-        events = Event.objects.filter(
-            start_dt__gt=timezone.now()).order_by('start_dt')
+        events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         serialized = EventSerializer(events, many=True).data
 
         # Organize in date dictionary
@@ -163,8 +162,7 @@ class EventsUpcomingView(APIView):
 
     def get(self, request: Request) -> Response:
         events = event_query(request.query_params)
-        events = events.filter(
-            start_dt__gt=timezone.now()).order_by('start_dt')
+        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         return Response(data=EventSerializer(events, many=True).data)
 
 
@@ -289,8 +287,7 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
-        serializer = LoginSerializer(data=self.request.data,
-                                     context={'request': self.request})
+        serializer = LoginSerializer(data=self.request.data, context={'request': self.request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request=request, user=user)
@@ -322,8 +319,7 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
-        serializer = RegisterSerializer(data=self.request.data,
-                                        context={'request': self.request})
+        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request=request, user=user)
@@ -388,70 +384,48 @@ class AssignGroupView(APIView):
         group_name = request.data.get('group_name')
 
         if not username or not group_name:
-            return Response(
-                {'error': 'Username and group_name fields are required.'},
-                status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return Response({'error': 'User not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         try:
             group = Group.objects.get(name=group_name)
         except Group.DoesNotExist:
-            return Response({'error': 'Group not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         if request.user.has_perm('auth.change_group', group):
             user.groups.add(group)
         else:
-            return Response(
-                {
-                    'error':
-                    'You do not have permission to add users to this group.'
-                },
-                status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
 
-        return Response(
-            {'message': f"User '{username}' added to group '{group_name}'."},
-            status=status.HTTP_200_OK)
+        return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
 
     def delete(self, request: Request) -> Response:
         username = request.data.get('username')
         group_name = request.data.get('group_name')
 
         if not username or not group_name:
-            return Response(
-                {'error': 'Username and group_name fields are required.'},
-                status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return Response({'error': 'User not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         try:
             group = Group.objects.get(name=group_name)
         except Group.DoesNotExist:
-            return Response({'error': 'Group not found.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         if request.user.has_perm('auth.change_group', group):
             user.groups.remove(group)
         else:
-            return Response(
-                {
-                    'error':
-                    'You do not have permission to remove users from this group.'
-                },
-                status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
 
-        return Response(
-            {'message': f"User '{username}' removed from '{group_name}'."},
-            status=status.HTTP_200_OK)
+        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
 
 
 # =============================== #
@@ -502,8 +476,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         recruitment_id = request.query_params.get('recruitment')
 
         if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
@@ -513,9 +486,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         )
 
         # check permissions for each admission
-        admissions = get_objects_for_user(user=request.user,
-                                          perms=['view_recruitmentadmission'],
-                                          klass=admissions)
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
@@ -535,26 +506,21 @@ class RecruitmentAdmissionForGangView(ModelViewSet):
         recruitment_id = request.query_params.get('recruitment')
 
         if not gang_id:
-            return Response({'error': 'A gang parameter is required'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         gang = get_object_or_404(Gang, id=gang_id)
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
         admissions = RecruitmentAdmission.objects.filter(
             recruitment_position__gang=gang,
-            recruitment=
-            recruitment  # only include admissions related to the specified recruitment
+            recruitment=recruitment  # only include admissions related to the specified recruitment
         )
 
         # check permissions for each admission
-        admissions = get_objects_for_user(user=request.user,
-                                          perms=['view_recruitmentadmission'],
-                                          klass=admissions)
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
@@ -568,6 +534,4 @@ class ActiveRecruitmentPositionsView(ListAPIView):
         """
         Returns all active recruitment positions.
         """
-        return RecruitmentPosition.objects.filter(
-            recruitment__visible_from__lte=timezone.now(),
-            recruitment__actual_application_deadline__gte=timezone.now())
+        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
