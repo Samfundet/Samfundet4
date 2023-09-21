@@ -7,7 +7,7 @@ export default {
   component: Footer,
 } as ComponentMeta<typeof Footer>;
 
-const Template: ComponentStory<typeof Footer> = function (args) {
+const Template: ComponentStory<typeof Footer> = function () {
   return <Footer />;
 };
 

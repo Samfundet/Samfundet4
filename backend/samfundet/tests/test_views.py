@@ -27,18 +27,22 @@ def test_csrf(fixture_rest_client: APIClient):
     assert status.is_success(code=response.status_code)
 
 
-def test_login_logout(
+def test_login(
     fixture_rest_client: APIClient,
     fixture_user: User,
     fixture_user_pw: str,
 ):
-    # Login
     url = reverse(routes.samfundet__login)
     data = {'username': fixture_user.username, 'password': fixture_user_pw}
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert status.is_success(code=response.status_code)
 
-    # Logout
+
+def test_logout(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+):
+    fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(routes.samfundet__logout)
     response: Response = fixture_rest_client.post(path=url)
     assert status.is_success(code=response.status_code)

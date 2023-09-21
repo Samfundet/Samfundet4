@@ -4,9 +4,9 @@ import logging
 
 from django.http import HttpRequest
 
-from .middlewares import request_contextvar
+from root.constants import request_contextvar
 
-LOG = logging.getLogger(__name__)
+LOG = logging.getLogger('root.custom_classes')
 
 
 class RequestContextFilter(logging.Filter):
