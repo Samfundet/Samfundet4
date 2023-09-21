@@ -1,9 +1,5 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { hasPerm } from '~/utils';
-import { ROUTES } from '~/routes';
-import { PERM } from '~/permissions';
 import { ElementType } from 'react';
+import { ROUTES } from '~/routes';
 
 type ProtectedRouteProps = {
   Page: ElementType;
@@ -28,21 +24,21 @@ export function ProtectedRoute({
   redirectPath = ROUTES.frontend.home, // TODO ADD 403?
   requiresStaff = false,
 }: ProtectedRouteProps) {
-  const location = useLocation();
-  const { user } = useAuthContext(); //TODO ADD LOADER FOR AUTHCONTEXT
-
-  if (!user) {
-    return <Navigate to={ROUTES.frontend.login} replace state={{ from: location }} />;
-  }
-  if (requiresStaff && !user?.is_staff) {
-    return <Navigate to={redirectPath} replace />; // Replace replace current navigation head instead of pushing it
-  }
-  if (perms) {
-    for (const permission of perms) {
-      if (!hasPerm({ permission: permission, user: user })) {
-        return <Navigate to={redirectPath} replace />;
-      }
-    }
-  }
   return <Page />;
+  // const location = useLocation();
+  // const { user } = useAuthContext(); //TODO ADD LOADER FOR AUTHCONTEXT
+
+  // if (!user) {
+  //   return <Navigate to={ROUTES.frontend.login} replace state={{ from: location }} />;
+  // }
+  // if (requiresStaff && !user?.is_staff) {
+  //   return <Navigate to={redirectPath} replace />; // Replace replace current navigation head instead of pushing it
+  // }
+  // if (perms) {
+  //   for (const permission of perms) {
+  //     if (!hasPerm({ permission: permission, user: user })) {
+  //       return <Navigate to={redirectPath} replace />;
+  //     }
+  //   }
+  // }
 }
