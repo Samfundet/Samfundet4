@@ -1,5 +1,6 @@
 import {
   assignUserToGroup,
+  getApplicantsWithoutInterviews,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
@@ -99,6 +100,13 @@ export function ApiTestingPage() {
         onClick={() => getRecruitmentAdmissionsForGang('1', '1').then(console.log).catch(console.error)}
       >
         get Rec admissions for gang
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getApplicantsWithoutInterviews('1').then(console.log).catch(console.error)}
+      >
+        get users without interviews
       </Button>
     </div>
   );

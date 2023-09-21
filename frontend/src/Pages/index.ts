@@ -13,6 +13,7 @@ export { LoginPage } from './LoginPage';
 export { LycheAboutPage } from './LycheAboutPage';
 export { LycheHomePage } from './LycheHomePage';
 export { NotFoundPage } from './NotFoundPage';
+export { RecruitmentAdmissionFormPage } from './RecruitmentAdmissionFormPage';
 export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';

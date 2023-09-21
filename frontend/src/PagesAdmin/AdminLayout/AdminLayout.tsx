@@ -1,3 +1,4 @@
+import React from 'react';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -55,10 +56,10 @@ export function AdminLayout() {
           {/* Applets */}
           {appletCategories.map((category) => {
             return (
-              <>
+              <React.Fragment key={category.title_en}>
                 <div className={styles.category_header}>{dbT(category, 'title')}</div>
                 {category.applets.map((applet, index) => makeAppletShortcut(applet, index))}
-              </>
+              </React.Fragment>
             );
           })}
           <br></br>
