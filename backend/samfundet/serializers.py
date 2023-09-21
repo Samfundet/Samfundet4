@@ -257,7 +257,7 @@ class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(label='Email', write_only=True)
     phone_number = serializers.RegexField(
         label='Phonenumber',
-        regex=r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$',
+        regex=r'^([\+]?[(]?[0-9]{3}[)]?[-\s\.]?)?[0-9]{3}[-\s\.]?[0-9]{4,6}$',
         write_only=True,
     )
     firstname = serializers.CharField(label='First name', write_only=True)
