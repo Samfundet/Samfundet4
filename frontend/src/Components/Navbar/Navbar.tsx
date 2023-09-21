@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '~/AuthContext';
@@ -14,7 +15,6 @@ import { useDesktop, useIsDarkTheme, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { useCookies } from 'react-cookie';
 import styles from './Navbar.module.scss';
 
 const scrollDistanceForOpaque = 30;
@@ -26,6 +26,7 @@ export function Navbar() {
   const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [cookies, setCookie, removeCookie] = useCookies();
 
   // Each NavbarItem can have a dropdown menu.
@@ -138,7 +139,9 @@ export function Navbar() {
     </div>
   );
 
+  /* eslint-disable-next-line no-prototype-builtins */
   const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
+
   const userDropdownLinks = (
     <>
       <Link url={ROUTES.frontend.admin} className={styles.navbar_dropdown_link}>
@@ -151,7 +154,7 @@ export function Navbar() {
           className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
           onClick={() => {
             impersonateUser(undefined)
-              .then((response) => {
+              .then(() => {
                 window.location.reload();
               })
               .catch(console.error);

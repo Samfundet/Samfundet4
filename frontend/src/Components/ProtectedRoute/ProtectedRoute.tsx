@@ -18,6 +18,8 @@ type ProtectedRouteProps = {
  * @param {boolean} requiresStaff: - if staff permissions are required for page
  */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export function ProtectedRoute({
   Page,
   perms,

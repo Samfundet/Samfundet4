@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Page } from '~/Components';
@@ -23,7 +23,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (user) navigate(typeof from === 'undefined' ? ROUTES.frontend.home : from.pathname);
-  }, [user]);
+  }, [user, from, navigate]);
 
   function handleLogin(formData: Record<string, string>) {
     login(formData['name'], formData['password'])

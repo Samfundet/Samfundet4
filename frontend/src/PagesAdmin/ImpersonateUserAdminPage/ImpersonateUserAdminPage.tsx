@@ -1,17 +1,11 @@
-import { useEffect, useState } from 'react';
-import { EventDto, UserDto } from '~/dto';
-import { getUser, getUsers, impersonateUser } from '~/api';
-import styles from './ImpersonateUserAdminPage.module.scss';
-import { Table } from '~/Components/Table';
-import secretAgent from '~/assets/memes/secret-service.gif';
-import bond1 from '~/assets/memes/bond1.gif';
-import bond2 from '~/assets/memes/bond2.gif';
-import bond3 from '~/assets/memes/bond3.gif';
-import bondmusic from '~/assets/memes/jamesbond.mp3';
 import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
 import { InputField } from '~/Components';
+import { getUsers, impersonateUser } from '~/api';
+import bondmusic from '~/assets/memes/jamesbond.mp3';
+import { UserDto } from '~/dto';
 import { queryDto } from '~/utils';
-import { useAuthContext } from '~/AuthContext';
+import styles from './ImpersonateUserAdminPage.module.scss';
 
 export function ImpersonateUserAdminPage() {
   const [query, setQuery] = useState<string>('');
@@ -28,7 +22,7 @@ export function ImpersonateUserAdminPage() {
   }, []);
 
   if (error) {
-    return <b>You've been a bad bad boy</b>;
+    return <b>You&apos;ve been a bad bad boy</b>;
   }
 
   const displayUsers = queryDto(query, users, ['username', 'first_name', 'last_name', 'email']).slice(0, 10);
@@ -40,10 +34,9 @@ export function ImpersonateUserAdminPage() {
     return `${user.first_name} ${user.last_name}`;
   }
 
-  const auth = useAuthContext();
   function impersonate(user: UserDto) {
     impersonateUser(user)
-      .then((ok) => {
+      .then(() => {
         window.location.reload();
       })
       .catch((err) => {
