@@ -64,7 +64,7 @@ class ImpersonateUserMiddleware:
             impersonated_user = User.objects.get(id=int(impersonate))
             request.user = impersonated_user
             request._force_auth_user = impersonated_user
-            request._force_auth_token = get_token(impersonated_user)
+            request._force_auth_token = get_token(request)
             LOG.info(f"EYOO DUDE YOUR'E NOT YOURSELF '{impersonated_user.username}'")
         ### End: Handle impersonation after response ###
 
