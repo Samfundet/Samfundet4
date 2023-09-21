@@ -403,6 +403,8 @@ export const ROUTES_BACKEND = {
   samfundet__table_detail: '/api/table/:pk/',
   samfundet__text_item_list: '/api/textitem/',
   samfundet__text_item_detail: '/api/textitem/:pk/',
+  samfundet__infobox_list: '/api/infobox/',
+  samfundet__infobox_detail: '/api/infobox/:pk/',
   samfundet__key_value_list: '/api/key-value/',
   samfundet__key_value_detail: '/api/key-value/:key/',
   samfundet__organizations_list: '/api/organizations/',
@@ -431,6 +433,7 @@ export const ROUTES_BACKEND = {
   samfundet__assign_group: '/assign_group/',
   samfundet__recruitment_positions: '/recruitment-positions/',
   samfundet__active_recruitment_positions: '/active-recruitment-positions/',
+  samfundet__applicants_without_interviews: '/applicants-without-interviews/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;

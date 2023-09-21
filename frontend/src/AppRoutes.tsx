@@ -12,8 +12,10 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
-  LychePage,
+  LycheAboutPage,
+  LycheHomePage,
   NotFoundPage,
+  RecruitmentAdmissionFormPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -35,6 +37,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
+  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -76,6 +79,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
       </Route>
       {/* 
             ADMIN ROUTES
@@ -177,6 +181,10 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
         />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_users_without_interview}
+          element={<RecruitmentUsersWithoutInterview />}
+        />
         {/* TODO ADD PERMISSIONS */}
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_overview}
@@ -216,7 +224,8 @@ export function AppRoutes() {
             SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
-        <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
+        <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
+        <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
       </Route>
       {/* 
             404 NOT FOUND

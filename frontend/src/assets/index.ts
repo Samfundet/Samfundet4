@@ -14,6 +14,9 @@ export { default as sulten_chef } from './sulten_chef.jpg';
 export { default as sulten_crowded } from './sulten_crowded.jpg';
 export { default as sulten_delivery } from './sulten_delivery.jpg';
 export { default as sulten_inside } from './sulten_inside.jpg';
+export { default as soup } from './diggf5675.jpg';
+export { default as burger } from './diggf4353.jpg';
+export { default as dessert } from './diggf5743.jpg';
 export { default as profileIcon } from './user.png';
 
 // Medias

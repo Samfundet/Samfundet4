@@ -492,6 +492,25 @@ class RecruitmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserForRecruitmentSerializer(serializers.ModelSerializer):
+    recruitment_admission_ids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'recruitment_admission_ids',  # Add this to the fields list
+        ]
+
+    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
+
+
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -506,11 +525,27 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
-            'user',
-            'applicant_priority',
             'interview_time',
             'interview_location',
         ]
+
+    def create(self, validated_data: dict) -> RecruitmentAdmission:
+        recruitment_position = validated_data['recruitment_position']
+        recruitment = recruitment_position.recruitment
+        user = self.context['request'].user
+        applicant_priority = 1
+
+        recruitment_admission = RecruitmentAdmission.objects.create(
+            admission_text=validated_data.get('admission_text'),
+            recruitment_position=recruitment_position,
+            recruitment=recruitment,
+            user=user,
+            applicant_priority=applicant_priority,
+            interview_time=validated_data.get('interview_time'),
+            interview_location=validated_data.get('interview_location')
+        )
+
+        return recruitment_admission
 
 
 class ApplicantInfoSerializer(serializers.ModelSerializer):
