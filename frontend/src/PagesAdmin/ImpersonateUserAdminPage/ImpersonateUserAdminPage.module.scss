@@ -1,4 +1,4 @@
-@import "src/constants";
+@import 'src/constants';
 
 .root {
   background-image: url('~/assets/memes/bond2.gif');
@@ -31,19 +31,20 @@
     transform: scale(0.5);
   }
   10% {
-     transform: scale(1);
+    transform: scale(1);
   }
   20% {
     transform: scale(0.5);
   }
 }
+
 .title {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   font-size: 2em;
-  font-weight: bold;
+  font-weight: 700;
   color: white;
 }
 
@@ -73,7 +74,7 @@
   background-color: $grey-4;
   cursor: pointer;
   border-radius: 5px;
-  transition: .2s;
+  transition: 0.2s;
   display: flex;
   flex-direction: column;
   width: 250px;
