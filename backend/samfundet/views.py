@@ -388,7 +388,7 @@ class AssignGroupView(APIView):
      Assigns a user to a group.
     """
 
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request: Request) -> Response:
         username = request.data.get('username')
