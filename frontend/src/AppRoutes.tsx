@@ -14,6 +14,7 @@ import {
   LoginPage,
   LychePage,
   NotFoundPage,
+  RecruitmentAdmissionFormPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -35,6 +36,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
+  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
 import { useGoatCounter } from '~/hooks';
@@ -47,6 +49,7 @@ import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage'
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -74,6 +77,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
       </Route>
       {/* 
             ADMIN ROUTES
@@ -170,6 +174,10 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
         />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_users_without_interview}
+          element={<RecruitmentUsersWithoutInterview />}
+        />
         {/* TODO ADD PERMISSIONS */}
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_overview}
@@ -183,6 +191,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_create}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
+          element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_edit}
