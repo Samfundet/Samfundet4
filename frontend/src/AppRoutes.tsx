@@ -12,7 +12,8 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
-  LychePage,
+  LycheAboutPage,
+  LycheHomePage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
   RecruitmentPage,
@@ -217,7 +218,8 @@ export function AppRoutes() {
             SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
-        <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
+        <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
+        <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
       </Route>
       {/* 
             404 NOT FOUND
