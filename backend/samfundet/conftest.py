@@ -254,11 +254,8 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(
-    fixture_user: User,
-    fixture_recruitment_position: RecruitmentPosition,
-    fixture_recruitment: Recruitment
-) -> Iterator[RecruitmentAdmission]:
+def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
+                                  fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
     admission = RecruitmentAdmission.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,
@@ -270,4 +267,3 @@ def fixture_recruitment_admission(
     )
     yield admission
     admission.delete()
-
