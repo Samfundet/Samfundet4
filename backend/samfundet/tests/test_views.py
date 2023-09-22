@@ -4,11 +4,12 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import Permission, Group
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from guardian.shortcuts import assign_perm
 
 from root.utils import routes, permissions
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.general import User, KeyValue, TextItem, InformationPage, BlogPost, Image
 from samfundet.serializers import UserSerializer
 
@@ -92,54 +93,6 @@ def test_get_groups(fixture_rest_client: APIClient, fixture_user: User):
 
     ### Assert ###
     assert status.is_success(code=response.status_code)
-
-
-def test_get_recruitments(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment: Recruitment):
-    ### Arrange ###
-    fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__recruitment_list)
-
-    ### Act ###
-    response = fixture_rest_client.get(url)
-
-    ### Assert ###
-    assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
-    assert response.data[0]['name_nb'] == fixture_recruitment.name_nb
-
-
-def test_get_recruitment_positions(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment_position: RecruitmentPosition):
-    ### Arrange ###
-    fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__recruitment_position_list)
-
-    ### Act ###
-    response = fixture_rest_client.get(url)
-
-    ### Assert ###
-    assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
-    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
-
-
-def test_recruitment_positions_per_recruitment(
-    fixture_rest_client: APIClient,
-    fixture_superuser: User,
-    fixture_recruitment: Recruitment,
-    fixture_recruitment_position: RecruitmentPosition,
-):
-    ### Arrange ###
-    fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__recruitment_positions)
-    recruitment = fixture_recruitment
-
-    ### Act ###
-    response: Response = fixture_rest_client.get(path=f'{url}?recruitment={recruitment.id}')
-
-    ### Assert ###
-    assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
-    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
 
 
 class TestInformationPagesView:
@@ -461,3 +414,114 @@ class TestAssignGroupView:
 
         ### Assert ###
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+def test_get_recruitments(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment: Recruitment):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_list)
+
+    ### Act ###
+    response = fixture_rest_client.get(url)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment.name_nb
+
+
+def test_get_recruitment_positions(fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment_position: RecruitmentPosition):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_position_list)
+
+    ### Act ###
+    response = fixture_rest_client.get(url)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
+
+
+def test_recruitment_positions_per_recruitment(
+    fixture_rest_client: APIClient,
+    fixture_superuser: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_positions)
+
+    ### Act ###
+    response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment_position.name_nb
+
+
+def test_get_applicants_without_interviews(
+    fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment: Recruitment, fixture_user: User,
+    fixture_recruitment_admission: RecruitmentAdmission
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__applicants_without_interviews)
+
+    ### Act ###
+    response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['id'] == fixture_user.id
+    assert response.data[0]['first_name'] == fixture_user.first_name
+    assert response.data[0]['last_name'] == fixture_user.last_name
+    assert response.data[0]['email'] == fixture_user.email
+
+
+def test_get_applicants_without_interviews_when_interview_is_set(
+    fixture_rest_client: APIClient, fixture_superuser: User, fixture_recruitment: Recruitment, fixture_user: User,
+    fixture_recruitment_admission: RecruitmentAdmission
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__applicants_without_interviews)
+
+    # Setting the interview time for the user's admission
+    fixture_recruitment_admission.interview_time = timezone.now() + timezone.timedelta(hours=1)
+    fixture_recruitment_admission.save()
+
+    ### Act ###
+    response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 0
+
+
+def test_recruitment_admission_for_applicant(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment: Recruitment
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse(routes.samfundet__recruitment_admissions_for_applicant_list)
+
+    ### Act ###
+    response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    # Assert the returned data based on the logic in the view
+    assert len(response.data) == 1
+    assert response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text
+    assert response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id
+    assert response.data[0]['interview_location'] == fixture_recruitment_admission.interview_location
