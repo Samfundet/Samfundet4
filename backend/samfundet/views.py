@@ -529,6 +529,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         Returns a list of all the recruitments for the specified gang.
         """
         recruitment_id = request.query_params.get('recruitment')
+        user_id = request.query_params.get('user_id')
 
         if not recruitment_id:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -540,8 +541,11 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
             user=request.user,
         )
 
-        # check permissions for each admission
-        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+        if user_id:
+            # TODO: Add permissions
+            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user_id=user_id)
+        else:
+            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user=request.user)
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
