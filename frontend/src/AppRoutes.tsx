@@ -12,7 +12,8 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
-  LychePage,
+  LycheAboutPage,
+  LycheHomePage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
   RecruitmentPage,
@@ -39,6 +40,7 @@ import {
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
+import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
 import { ProtectedRoute } from './Components';
 import { SamfOutlet } from './Components/SamfOutlet';
@@ -46,10 +48,10 @@ import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
+import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
-import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -83,6 +85,11 @@ export function AppRoutes() {
             ADMIN ROUTES
       */}
       <Route element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}>
+        {/* TODO PERMISSION FOR IMPERSONATE */}
+        <Route
+          path={ROUTES.frontend.admin_impersonate}
+          element={<ProtectedRoute perms={[]} Page={ImpersonateUserAdminPage} />}
+        />
         <Route
           path={ROUTES.frontend.admin}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
@@ -217,7 +224,8 @@ export function AppRoutes() {
             SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
-        <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
+        <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
+        <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
       </Route>
       {/* 
             404 NOT FOUND

@@ -3,7 +3,6 @@
 @import 'src/constants';
 
 $navbar-bg: #000000;
-$navbar-height: 100px;
 
 .parent_container {
   display: flex;
@@ -66,7 +65,7 @@ $navbar-height: 100px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: $navbar-height;
+  height: $sulten-navbar-height;
   margin-top: 0.6em;
   transition: 0.5s;
   cursor: pointer;

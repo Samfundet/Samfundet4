@@ -425,6 +425,7 @@ export const ROUTES_BACKEND = {
   samfundet__user: '/user/',
   samfundet__groups: '/groups/',
   samfundet__users: '/users/',
+  samfundet__impersonate: '/impersonate/',
   samfundet__eventsperday: '/events-per-day/',
   samfundet__eventsupcomming: '/events-upcomming/',
   samfundet__isclosed: '/isclosed/',

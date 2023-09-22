@@ -18,9 +18,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from root.constants import XCSRFTOKEN
+from root.constants import (
+    XCSRFTOKEN,
+    AUTH_BACKEND,
+    REQUESTED_IMPERSONATE_USER,
+)
+
 from .homepage import homepage
-from .models.event import (Event, EventGroup)
+from .models.event import Event, EventGroup
 from .models.recruitment import (
     Recruitment,
     RecruitmentPosition,
@@ -292,14 +297,19 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=self.request.data, context={'request': self.request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        login(request=request, user=user)
+        login(request=request, user=user, backend=AUTH_BACKEND)
         new_csrf_token = get_token(request=request)
 
-        return Response(
+        response = Response(
             status=status.HTTP_202_ACCEPTED,
             data=new_csrf_token,
             headers={XCSRFTOKEN: new_csrf_token},
         )
+
+        # Reset impersonation after login.
+        setattr(response, REQUESTED_IMPERSONATE_USER, None)  # noqa: FKA01
+
+        return response
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -312,7 +322,12 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+        response = Response(status=status.HTTP_200_OK)
+
+        # Reset impersonation after logout.
+        setattr(response, REQUESTED_IMPERSONATE_USER, None)  # noqa: FKA01
+
+        return response
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -324,7 +339,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        login(request=request, user=user)
+        login(request=request, user=user, backend=AUTH_BACKEND)
         new_csrf_token = get_token(request=request)
 
         return Response(
@@ -345,6 +360,16 @@ class AllUsersView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+
+class ImpersonateView(APIView):
+    permission_classes = [IsAuthenticated]  # TODO: Permission check.
+
+    def post(self, request: Request) -> Response:
+        response = Response(status=200)
+        user_id = request.data.get('user_id', None)
+        setattr(response, REQUESTED_IMPERSONATE_USER, user_id)  # noqa: FKA01
+        return response
 
 
 class AllGroupsView(ListAPIView):
