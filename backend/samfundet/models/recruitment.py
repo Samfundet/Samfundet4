@@ -94,6 +94,24 @@ class RecruitmentPosition(models.Model):
         return f'Position: {self.name_en} in {self.recruitment}'
 
 
+class InterviewRoom(models.Model):
+    name = models.CharField(max_length=255, help_text='Name of the room')
+    location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
+    start_time = models.DateTimeField(help_text='Start time of availability')
+    end_time = models.DateTimeField(help_text='End time of availability')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='rooms')
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that booked the room', related_name='rooms', blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def clean(self) -> None:
+        if self.start_time > self.end_time:
+            raise ValidationError('Start time should be before end time')
+
+        super().clean()
+
+
 class RecruitmentAdmission(models.Model):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
@@ -104,7 +122,10 @@ class RecruitmentAdmission(models.Model):
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
 
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
-    interview_location = models.CharField(max_length=100, help_text='The location of the interview', null=True, blank=True)
+    interview_location = models.CharField(max_length=100, help_text='Where the intevjuee should wait', null=True, blank=True)
+    room = models.ForeignKey(
+        InterviewRoom, on_delete=models.SET_NULL, null=True, blank=True, help_text='Room where the interview is held', related_name='interviews'
+    )
 
     PRIORITY_CHOICES = [
         (0, 'Not Set'),
