@@ -1,7 +1,8 @@
-import { Button, InputField, ProgressBar, RadioButton } from '~/Components';
+import { Button, Countdown, InputField, ProgressBar, RadioButton } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
+import { norwegianFlag } from '~/assets';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -53,6 +54,13 @@ export function ComponentPage() {
       <div>
         <h2>ProgressBar:</h2>
         <ProgressBar value={75} max={100} />
+      </div>
+      <div>
+        <h2>
+          <Countdown targetDate={new Date(new Date().getTime() + 60 * 60 * 24 * 1000)} theme="blur">
+            <img src={norwegianFlag}></img>
+          </Countdown>
+        </h2>
       </div>
     </div>
   );
