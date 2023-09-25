@@ -124,7 +124,12 @@ class RecruitmentAdmission(models.Model):
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
     interview_location = models.CharField(max_length=100, help_text='Where the intevjuee should wait', null=True, blank=True)
     room = models.ForeignKey(
-        InterviewRoom, on_delete=models.SET_NULL, null=True, blank=True, help_text='Room where the interview is held', related_name='interviews'
+        InterviewRoom,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text='Room where the interview is held',
+        related_name='interviews',
     )
 
     PRIORITY_CHOICES = [
