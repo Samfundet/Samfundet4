@@ -30,6 +30,7 @@ from .models.recruitment import (
     Recruitment,
     RecruitmentPosition,
     RecruitmentAdmission,
+    InterviewRoom,
 )
 from .models.general import (
     Tag,
@@ -81,6 +82,7 @@ from .serializers import (
     OrganizationSerializer,
     FoodCategorySerializer,
     ClosedPeriodSerializer,
+    InterviewRoomSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
@@ -595,3 +597,18 @@ class ActiveRecruitmentPositionsView(ListAPIView):
         Returns all active recruitment positions.
         """
         return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
+
+
+class InterviewRoomView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = InterviewRoomSerializer
+    queryset = InterviewRoom.objects.all()
+
+    def list(self, request: Request) -> Response:
+        recruitment = request.query_params.get('recruitment')
+        if not recruitment:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        filtered_rooms = InterviewRoom.objects.filter(recruitment__id=recruitment)
+        serialized_rooms = self.get_serializer(filtered_rooms, many=True)
+        return Response(serialized_rooms.data)
