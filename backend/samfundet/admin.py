@@ -1,9 +1,12 @@
+from django.urls import reverse
 from django.contrib import admin
+from django.utils.html import format_html
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from guardian import models as guardian_models
+from root.utils.routes import admin__samfundet_recruitmentadmission_change
 
 from root.custom_classes.admin_classes import (
     CustomGuardedUserAdmin,
@@ -11,7 +14,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
 from .models.general import (
     Tag,
     User,
@@ -488,6 +491,25 @@ class RecruitmentAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
+class RecruitmentAdmissionInline(admin.TabularInline):
+    """
+    Inline admin interface for RecruitmentAdmission.
+
+    Displays a link to the detailed admin page of each admission along with its user and applicant priority.
+    """
+    model = RecruitmentAdmission
+    extra = 0
+    readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
+    fields = ['linked_admission_text', 'user', 'applicant_priority']
+
+    def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
+        """
+        Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
+        """
+        url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
+        return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
+
+
 @admin.register(RecruitmentPosition)
 class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
     sortable_by = [
@@ -496,10 +518,16 @@ class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
     search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
     filter_horizontal = ['interviewers']
     list_select_related = True
+
+    inlines = [RecruitmentAdmissionInline]
+
+    def admissions_count(self, obj: RecruitmentPosition) -> int:
+        count = obj.admissions.all().count()
+        return count
 
 
 @admin.register(RecruitmentAdmission)
@@ -537,6 +565,15 @@ class OrganizationAdmin(CustomGuardedModelAdmin):
     list_display = ['id', 'name']
     search_fields = ['id', 'name']
     list_select_related = True
+
+
+@admin.register(InterviewRoom)
+class InterviewRoomAdmin(CustomGuardedModelAdmin):
+    list_filter = ['name', 'location', 'recruitment', 'gang', 'start_time', 'end_time']
+    list_display = ['name', 'location', 'recruitment', 'gang', 'start_time', 'end_time']
+    search_fields = ['name', 'location', 'recruitment__name', 'gang__name']
+    list_display_links = ['name', 'location']
+    list_select_related = ['recruitment', 'gang']
 
 
 ### End: Our models ###
