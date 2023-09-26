@@ -529,26 +529,12 @@ class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
         count = obj.admissions.all().count()
         return count
 
+
 @admin.register(RecruitmentApplicant)
 class RecruitmentApplicantAdmin(CustomGuardedModelAdmin):
-    sortable_by = [
-        'id',
-        'first_name',
-        'last_name',
-        'email'
-    ]
-    list_display = [
-        'id',
-        'first_name',
-        'last_name',
-        'email'
-    ]
-    search_fields = [
-        'id',
-        'first_name',
-        'last_name',
-        'email'
-    ]
+    sortable_by = ['id', 'first_name', 'last_name', 'email']
+    list_display = ['id', 'first_name', 'last_name', 'email']
+    search_fields = ['id', 'first_name', 'last_name', 'email']
     list_select_related = True
 
 

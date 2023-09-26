@@ -508,7 +508,7 @@ def test_get_applicants_without_interviews_when_interview_is_set(
 
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
+    assert len(response.data) == 0
 
 
 def test_recruitment_admission_for_applicant(

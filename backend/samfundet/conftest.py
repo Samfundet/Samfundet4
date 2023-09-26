@@ -108,8 +108,8 @@ def fixture_user_pw() -> Iterator[str]:
 def fixture_user(fixture_user_pw: str) -> Iterator[User]:
     user = User.objects.create_user(
         username='user',
-        first_name="first",
-        last_name="last",
+        first_name='first',
+        last_name='last',
         email='user@test.com',
         password=fixture_user_pw,
     )
@@ -254,13 +254,13 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
     yield blogpost
     blogpost.delete()
 
+
 @pytest.fixture
 def fixture_applicant(fixture_user: User) -> Iterator[RecruitmentApplicant]:
-    applicant = RecruitmentApplicant.objects.create(
-        user=fixture_user,
-    )
+    applicant = RecruitmentApplicant.objects.create(user=fixture_user, )
     yield applicant
     applicant.delete()
+
 
 @pytest.fixture
 def fixture_recruitment_admission(fixture_applicant: RecruitmentApplicant, fixture_recruitment_position: RecruitmentPosition,

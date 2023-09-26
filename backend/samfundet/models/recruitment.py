@@ -111,20 +111,21 @@ class InterviewRoom(models.Model):
 
         super().clean()
 
+
 class RecruitmentApplicant(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.SET_NULL, related_name='applicant')
-    
+
     def name(self) -> str:
-        return  f"{self.user.first_name} {self.user.last_name}" if self.user else "Redacted"
+        return f'{self.user.first_name} {self.user.last_name}' if self.user else 'Redacted'
 
     def first_name(self) -> str:
-        return  f"{self.user.first_name}" if self.user else "Redacted"
+        return f'{self.user.first_name}' if self.user else 'Redacted'
 
     def last_name(self) -> str:
-        return  f"{self.user.last_name}" if self.user else "Redacted"
+        return f'{self.user.last_name}' if self.user else 'Redacted'
 
     def email(self) -> str:
-        return  self.user.email if self.user else "redacted@samfundet.no"
+        return self.user.email if self.user else 'redacted@samfundet.no'
 
     def __str__(self) -> str:
         return self.name()
