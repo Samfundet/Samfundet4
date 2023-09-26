@@ -111,6 +111,7 @@ class User(AbstractUser):
     class Meta:
         permissions = [
             ('debug', 'Can view debug mode'),
+            ('impersonate', 'Can impersonate users'),
         ]
 
     def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
@@ -124,6 +125,16 @@ class User(AbstractUser):
         has_global_perm = super().has_perm(perm=perm)
         has_object_perm = super().has_perm(perm=perm, obj=obj)
         return has_global_perm or has_object_perm
+
+    @property
+    def is_impersonated(self) -> bool:
+        return self._impersonated_by is not None
+
+    @property
+    def impersonated_by(self) -> User:
+        if not self.is_impersonated:
+            raise Exception('Real user not available unless currently impersonated.')
+        return self._impersonated_by
 
 
 class UserPreference(models.Model):

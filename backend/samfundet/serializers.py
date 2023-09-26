@@ -9,7 +9,7 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -572,4 +572,11 @@ class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecruitmentAdmission
+        fields = '__all__'
+
+
+class InterviewRoomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InterviewRoom
         fields = '__all__'
