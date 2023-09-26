@@ -12,7 +12,7 @@ from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission, RecruitmentApplicant
 from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost
 
 import root.management.commands.seed_scripts.billig as billig_seed
@@ -108,6 +108,8 @@ def fixture_user_pw() -> Iterator[str]:
 def fixture_user(fixture_user_pw: str) -> Iterator[User]:
     user = User.objects.create_user(
         username='user',
+        first_name="first",
+        last_name="last",
         email='user@test.com',
         password=fixture_user_pw,
     )
@@ -252,15 +254,22 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
     yield blogpost
     blogpost.delete()
 
+@pytest.fixture
+def fixture_applicant(fixture_user: User) -> Iterator[RecruitmentApplicant]:
+    applicant = RecruitmentApplicant.objects.create(
+        user=fixture_user,
+    )
+    yield applicant
+    applicant.delete()
 
 @pytest.fixture
-def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
+def fixture_recruitment_admission(fixture_applicant: RecruitmentApplicant, fixture_recruitment_position: RecruitmentPosition,
                                   fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
     admission = RecruitmentAdmission.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
-        user=fixture_user,
+        applicant=fixture_applicant,
         applicant_priority=1,
         recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
         recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],

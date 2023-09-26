@@ -30,6 +30,7 @@ from .models.recruitment import (
     Recruitment,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentApplicant,
     InterviewRoom,
 )
 from .models.general import (
@@ -426,7 +427,7 @@ class AssignGroupView(APIView):
 
         if not username or not group_name:
             return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
@@ -517,19 +518,20 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserForRecruitmentSerializer
 
-    def get_queryset(self) -> QuerySet[User]:
+    def get_queryset(self) -> QuerySet[RecruitmentApplicant]:
         """
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
         """
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is None:
-            return User.objects.none()  # Return an empty queryset instead of None
+            return RecruitmentApplicant.objects.none()  # Return an empty queryset instead of None
 
         # Exclude users who have any admissions for the given recruitment that have an interview_time
-        users_without_interviews = User.objects.filter(admissions__recruitment=recruitment).annotate(
-            num_interviews=Count(Case(When(admissions__recruitment=recruitment, then='admissions__interview_time'), default=None, output_field=None))
-        ).filter(num_interviews=0)
+        users_without_interviews = RecruitmentApplicant.objects.filter(admissions__recruitment=recruitment)
+        #.annotate(
+        #    num_interviews=Count(Case(When(admissions__recruitment=recruitment, then='admissions__interview_time'), default=None, output_field=None))
+        #).filter(num_interviews=0)
         return users_without_interviews
 
 
@@ -552,14 +554,14 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 
         admissions = RecruitmentAdmission.objects.filter(
             recruitment=recruitment,
-            user=request.user,
+            applicant__user=request.user,
         )
 
         if user_id:
             # TODO: Add permissions
-            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user_id=user_id)
+            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, applicant__user_id=user_id)
         else:
-            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user=request.user)
+            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, applicant__user=request.user)
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)

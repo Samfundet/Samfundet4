@@ -341,12 +341,20 @@ export type RecruitmentPositionDto = {
   interviewers: UserDto[];
 };
 
+export type RecruitmentApplicantDto = {
+  id: number;
+  name: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
 export type RecruitmentAdmissionDto = {
   id: number;
   admission_text: string;
   recruitment_position?: number;
   recruitment: number;
-  user: UserDto;
+  applicant: RecruitmentApplicantDto;
   applicant_priority: number;
   interview_time?: string;
   interview_location?: string;

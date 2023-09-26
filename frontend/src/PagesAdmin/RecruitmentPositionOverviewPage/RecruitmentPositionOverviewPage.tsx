@@ -75,7 +75,7 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <Link
-            key={admission.user.id}
+            key={admission.applicant.id}
             target={'backend'}
             url={reverse({
               pattern: ROUTES.backend.admin__samfundet_recruitmentadmission_change,
@@ -84,7 +84,7 @@ export function RecruitmentPositionOverviewPage() {
               },
             })}
           >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
+            {`${admission.applicant.first_name} ${admission.applicant.last_name}`}
           </Link>
         ),
       },

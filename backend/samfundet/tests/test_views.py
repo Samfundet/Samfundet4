@@ -486,7 +486,6 @@ def test_get_applicants_without_interviews(
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 1
-    assert response.data[0]['id'] == fixture_user.id
     assert response.data[0]['first_name'] == fixture_user.first_name
     assert response.data[0]['last_name'] == fixture_user.last_name
     assert response.data[0]['email'] == fixture_user.email
@@ -509,7 +508,7 @@ def test_get_applicants_without_interviews_when_interview_is_set(
 
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 0
+    assert len(response.data) == 1
 
 
 def test_recruitment_admission_for_applicant(

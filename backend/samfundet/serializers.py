@@ -9,7 +9,7 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentApplicant, RecruitmentAdmission, InterviewRoom)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -494,22 +494,29 @@ class RecruitmentSerializer(serializers.ModelSerializer):
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
-
+    first_name = serializers.SerializerMethodField(method_name='first_name', read_only=True)
+    last_name = serializers.SerializerMethodField(method_name='last_name', read_only=True)
+    email = serializers.SerializerMethodField(method_name='email', read_only=True)
     class Meta:
-        model = User
+        model = RecruitmentApplicant
         fields = [
             'id',
             'first_name',
             'last_name',
-            'username',
             'email',
             'recruitment_admission_ids',  # Add this to the fields list
         ]
 
-    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
+    def get_recruitment_admission_ids(self, obj: RecruitmentApplicant) -> list[int]:
         """Return list of recruitment admission IDs for the user."""
-        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
-
+        return RecruitmentAdmission.objects.filter(applicant__user=obj.user).values_list('id', flat=True)
+        
+    def first_name(self, obj: RecruitmentApplicant) -> str:
+        return obj.first_name()
+    def last_name(self, obj: RecruitmentApplicant) -> str:
+        return obj.last_name()
+    def email(self, obj: RecruitmentApplicant) -> str:
+        return obj.email()
 
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
 
@@ -532,14 +539,13 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict) -> RecruitmentAdmission:
         recruitment_position = validated_data['recruitment_position']
         recruitment = recruitment_position.recruitment
-        user = self.context['request'].user
+        applicant = RecruitmentApplicant.get_or_create(user=self.context['request'].user)
         applicant_priority = 1
-
         recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
-            user=user,
+            applicant=applicant,
             applicant_priority=applicant_priority,
             interview_time=validated_data.get('interview_time'),
             interview_location=validated_data.get('interview_location')
@@ -549,14 +555,21 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
 
 
 class ApplicantInfoSerializer(serializers.ModelSerializer):
-
+    first_name = serializers.SerializerMethodField(method_name='first_name', read_only=True)
+    last_name = serializers.SerializerMethodField(method_name='last_name', read_only=True)
+    email = serializers.SerializerMethodField(method_name='email', read_only=True)
     class Meta:
-        model = User
-        fields = ['id', 'first_name', 'last_name', 'email']
+        model = RecruitmentApplicant
+        fields = ['id', 'name', 'first_name', 'last_name', 'email']
 
-
+    def first_name(self, obj: RecruitmentApplicant) -> str:
+        return obj.first_name()
+    def last_name(self, obj: RecruitmentApplicant) -> str:
+        return obj.last_name()
+    def email(self, obj: RecruitmentApplicant) -> str:
+        return obj.email()
 class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
-    user = ApplicantInfoSerializer(read_only=True)
+    applicant = ApplicantInfoSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission

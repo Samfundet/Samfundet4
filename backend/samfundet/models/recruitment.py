@@ -111,6 +111,24 @@ class InterviewRoom(models.Model):
 
         super().clean()
 
+class RecruitmentApplicant(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.SET_NULL, related_name='applicant')
+    
+    def name(self) -> str:
+        return  f"{self.user.first_name} {self.user.last_name}" if self.user else "Redacted"
+
+    def first_name(self) -> str:
+        return  f"{self.user.first_name}" if self.user else "Redacted"
+
+    def last_name(self) -> str:
+        return  f"{self.user.last_name}" if self.user else "Redacted"
+
+    def email(self) -> str:
+        return  self.user.email if self.user else "redacted@samfundet.no"
+
+    def __str__(self) -> str:
+        return self.name()
+
 
 class RecruitmentAdmission(models.Model):
     admission_text = models.TextField(help_text='Admission text for the admission')
@@ -118,7 +136,7 @@ class RecruitmentAdmission(models.Model):
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
     )
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
+    applicant = models.ForeignKey(RecruitmentApplicant, null=True, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
 
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)

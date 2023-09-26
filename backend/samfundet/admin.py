@@ -14,7 +14,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
+from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, RecruitmentApplicant, InterviewRoom)
 from .models.general import (
     Tag,
     User,
@@ -499,8 +499,8 @@ class RecruitmentAdmissionInline(admin.TabularInline):
     """
     model = RecruitmentAdmission
     extra = 0
-    readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
-    fields = ['linked_admission_text', 'user', 'applicant_priority']
+    readonly_fields = ['linked_admission_text', 'applicant', 'applicant_priority']
+    fields = ['linked_admission_text', 'applicant', 'applicant_priority']
 
     def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
         """
@@ -529,6 +529,28 @@ class RecruitmentPositionAdmin(CustomGuardedModelAdmin):
         count = obj.admissions.all().count()
         return count
 
+@admin.register(RecruitmentApplicant)
+class RecruitmentApplicantAdmin(CustomGuardedModelAdmin):
+    sortable_by = [
+        'id',
+        'first_name',
+        'last_name',
+        'email'
+    ]
+    list_display = [
+        'id',
+        'first_name',
+        'last_name',
+        'email'
+    ]
+    search_fields = [
+        'id',
+        'first_name',
+        'last_name',
+        'email'
+    ]
+    list_select_related = True
+
 
 @admin.register(RecruitmentAdmission)
 class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
@@ -538,7 +560,7 @@ class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
         'recruitment',
         'interview_time',
         'interview_location',
-        'user',
+        'applicant',
     ]
     list_display = [
         'id',
@@ -546,7 +568,7 @@ class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
         'recruitment',
         'interview_time',
         'interview_location',
-        'user',
+        'applicant',
     ]
     search_fields = [
         'id',
