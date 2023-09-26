@@ -130,6 +130,9 @@ class RecruitmentApplicant(models.Model):
     def __str__(self) -> str:
         return self.name()
 
+    class Meta:
+        verbose_name = 'Applicant'
+        verbose_name_plural = 'Applicants'
 
 class RecruitmentAdmission(models.Model):
     admission_text = models.TextField(help_text='Admission text for the admission')
