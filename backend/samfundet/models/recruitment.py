@@ -112,6 +112,11 @@ class InterviewRoom(models.Model):
         super().clean()
 
 
+class InterviewNotes(models.Model):
+    notes = models.TextField(help_text='Notes for the interview')
+    timestamp = models.DateTimeField(help_text='Timestamp of the notes')
+
+
 class RecruitmentAdmission(models.Model):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
@@ -150,6 +155,8 @@ class RecruitmentAdmission(models.Model):
     recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
+
+    interview_notes = models.ManyToManyField(InterviewNotes, help_text='Notes for the interview', blank=True)
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'

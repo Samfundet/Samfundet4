@@ -14,7 +14,13 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    InterviewRoom,
+    InterviewNotes,
+)
 from .models.general import (
     Tag,
     User,
@@ -574,6 +580,14 @@ class InterviewRoomAdmin(CustomGuardedModelAdmin):
     search_fields = ['name', 'location', 'recruitment__name', 'gang__name']
     list_display_links = ['name', 'location']
     list_select_related = ['recruitment', 'gang']
+
+
+@admin.register(InterviewNotes)
+class InterviewNotesAdmin(CustomGuardedModelAdmin):
+    list_filter = ['id', 'notes']
+    list_display = ['id', 'notes']
+    search_fields = ['id', 'notes']
+    list_display_links = ['id', 'notes']
 
 
 ### End: Our models ###
