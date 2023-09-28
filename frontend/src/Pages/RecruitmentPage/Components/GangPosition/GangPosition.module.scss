@@ -20,14 +20,14 @@
 }
 
 .gang_header {
-  background-color: $theme_dark_color;
-  color: black;
+  background-color: $red_samf;
+  color: white;
   font-size: 17px;
   font-weight: 400;
 }
 
 .gang_header:hover{
-  background-color: $theme_dark_color;
+  background-color: $red_samf_hover;
 }
 
 .position_item {
@@ -42,16 +42,27 @@
 }
 
 .position_item:hover{
-  background-color: $grey_4;
+  background-color: $red_samf-faded;
 }
 
 .position_name {
   flex: 1;
-  color: black;
+  color: $red_samf;
   padding: 1em;
-  justify-content: space-evenly;
+  font-weight: 600;
 }
 
 .position_name:hover {
   text-decoration: none;
 }
+
+.position_short_desc{
+  flex: 1;
+  color: $black;
+  padding: 1em;
+}
+
+.position_short_desc:hover{
+  text-decoration: none;
+}
+

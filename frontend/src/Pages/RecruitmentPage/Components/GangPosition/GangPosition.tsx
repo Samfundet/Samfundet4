@@ -17,7 +17,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
       if (filteredPositions && filteredPositions.length > 0) {
         return (
           <ExpandableHeader
-            showByDefault={false}
+            showByDefault={true}
             key={gang.id}
             label={dbT(gang, 'name')}
             className={styles.gang_header}
@@ -39,7 +39,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                     pattern: ROUTES.frontend.recruitment_application,
                     urlParams: { positionID: pos.id, gangID: gang.id },
                   })}
-                  className={styles.position_name}
+                  className={styles.position_short_desc}
                 >
                   {dbT(pos, 'short_description')}
                 </Link>

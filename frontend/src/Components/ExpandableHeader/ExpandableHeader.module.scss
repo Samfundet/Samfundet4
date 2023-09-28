@@ -2,14 +2,14 @@
 
 .container {
   width: 100%;
-  border: 1px solid $grey-3;
+  border: 2px solid $grey-3;
   overflow: hidden;
 }
 
 .parent {
   border-radius: 10px;
   border-color: $grey_3;
-  background-color: $grey_4;
+  background-color: $grey_5;
 }
 
 .child {
@@ -26,13 +26,17 @@
   align-items: center;
   font-size: 20px;
   font-weight: 400;
-  background: $grey_4;
+  background: $grey_5;
   padding: 0.5em 1.5em 0.5em 1em;
   color: $black;
   cursor: pointer;
   border: 0;
   outline: none;
   text-align: left;
+}
+
+.extendable_header_wrapper:hover{
+  background-color: #dbdbdb;
 }
 
 .extendable_header_title {
