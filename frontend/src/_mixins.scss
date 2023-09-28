@@ -173,6 +173,18 @@ Usage:
   box-shadow: 0 0 0.5em 0.1em rgba(0, 0, 0, 0.05);
 }
 
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-column-center {
+  @include flex-column;
+  justify-content: center;
+}
+
 @mixin icon-white {
   color: $white;
   z-index: 1;

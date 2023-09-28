@@ -19,6 +19,15 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type RecruitmentUserDto = {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  recruitment_admission_ids?: string[];
+};
+
 export type HomePageDto = {
   // Array of events used for splash
   splash: EventDto[];
@@ -335,7 +344,7 @@ export type RecruitmentPositionDto = {
 export type RecruitmentAdmissionDto = {
   id: number;
   admission_text: string;
-  recruitment_position: number;
+  recruitment_position?: number;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;

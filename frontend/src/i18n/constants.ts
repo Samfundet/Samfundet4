@@ -58,6 +58,7 @@ export const KEY = {
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_next: 'common_next',
+  common_send: 'common_send',
   common_event: 'common_event',
   common_login: 'common_login',
   common_image: 'common_image',
@@ -79,6 +80,7 @@ export const KEY = {
   common_whatsup: 'common_whatsup',
   common_contact: 'common_contact',
   common_sponsor: 'common_sponsors',
+  common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
   common_password: 'common_password',
@@ -140,9 +142,12 @@ export const KEY = {
   navbar_nybygg: 'navbar_nybygg',
 
   // Sulten / Lyche:
+  sulten_lyche_goal: 'sulten_lyche_goal',
+  sulten_what_is_lyche: 'sulten_what_is_lyche',
   sulten_page_see_menu: 'sulten_page_see_menu',
   sulten_page_about_us: 'sulten_page_about_us',
   sulten_page_book_table: 'sulten_page_book_table',
+  sulten_lyche_about_menu: 'sulten_lyche_about_menu',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
 
   // Recruitment:
@@ -155,12 +160,14 @@ export const KEY = {
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
   recruitment_duration: 'recruitment_duration',
+  recruitment_admission: 'recruitment_admission',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_organization: 'recruitment_organization',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   shown_application_deadline: 'shown_application_deadline',
   actual_application_deadlin: 'actual_application_deadline',
+  recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
