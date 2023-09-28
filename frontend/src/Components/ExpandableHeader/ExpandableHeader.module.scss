@@ -7,12 +7,16 @@
 }
 
 .parent {
-  border-radius: 0.7em;
+  border-radius: 10px;
+  border-color: $grey_3;
+  background-color: $grey_4;
 }
 
 .child {
-  border-radius: 0;
-  border: 0;
+  border: 1px solid $grey-3;
+  border-radius: 10px;
+  margin: 10px;
+  width: auto;
 }
 
 .extendable_header_wrapper {
@@ -20,10 +24,11 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 1rem;
-  background: $red-samf;
-  padding: 0.5em 1.5em 0.5em 0.5em;
-  color: $white;
+  font-size: 20px;
+  font-weight: 400;
+  background: $grey_4;
+  padding: 0.5em 1.5em 0.5em 1em;
+  color: $black;
   cursor: pointer;
   border: 0;
   outline: none;
@@ -32,13 +37,13 @@
 
 .extendable_header_title {
   display: block;
-  flex-basis: 75%;
+  flex-basis: 95%;
   padding: 0;
   margin: 0;
 }
 
 .expandable_header_arrow {
-  flex-basis: 25%;
+  flex-basis: 5%;
   height: 35px;
   width: 35px;
   pointer-events: none;
@@ -46,7 +51,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: $white;
+  font-size: medium;
+  font-weight: 400;
 }
 
 .expandable_header_arrow.open {

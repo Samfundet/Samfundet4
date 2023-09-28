@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2em;
+  gap: 1em;
 }
 
 .video {
@@ -20,8 +20,14 @@
 }
 
 .gang_header {
-  border-bottom: 1px solid $grey-3;
-  background-color: $blue-deep;
+  background-color: $theme_dark_color;
+  color: black;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.gang_header:hover{
+  background-color: $theme_dark_color;
 }
 
 .position_item {
@@ -29,18 +35,23 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 1em;
   width: 100%;
   background-color: $white;
   color: $black;
-  padding: 1em;
-  border-bottom: 1px solid $grey-3;
+  border-top: 1px solid $grey-3;
+}
+
+.position_item:hover{
+  background-color: $grey_4;
 }
 
 .position_name {
   flex: 1;
+  color: black;
+  padding: 1em;
+  justify-content: space-evenly;
 }
 
-.position_short_desc {
-  flex: 1;
+.position_name:hover {
+  text-decoration: none;
 }
