@@ -156,7 +156,7 @@ class RecruitmentAdmission(models.Model):
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
 
-    interview_notes = models.ManyToManyField(InterviewNotes, help_text='Notes for the interview', blank=True)
+    interview_notes = models.ForeignKey(InterviewNotes, on_delete=models.SET_NULL, help_text='Notes for the interview', blank=True, null=True)
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
