@@ -172,3 +172,18 @@ Usage:
 @mixin shadow-light {
   box-shadow: 0 0 0.5em 0.1em rgba(0, 0, 0, 0.05);
 }
+
+@mixin icon-white {
+  color: $white;
+  z-index: 1;
+}
+
+@mixin icon-gray {
+  color: $grey-3;
+  z-index: 1;
+}
+
+@mixin icon-black {
+  color: $black;
+  z-index: 1;
+}
