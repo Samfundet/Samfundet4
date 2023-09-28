@@ -512,7 +512,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
-
+    gang = GangSerializer(read_only=True)
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'

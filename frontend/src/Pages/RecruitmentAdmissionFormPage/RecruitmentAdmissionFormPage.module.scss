@@ -1,3 +1,21 @@
+@import 'src/constants';
 .container {
   display: flex;
+  flex-direction: column;
+  padding: 2em;
+}
+.header {
+  font-weight: 700;
+  font-size: 2em;
+}
+.subheader {
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+.text {
+  margin-bottom: 1em;
+}
+.formContainer {
+  background-color: $red-samf;
 }
