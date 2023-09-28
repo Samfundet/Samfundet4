@@ -208,12 +208,15 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
+  [KEY.sulten_lyche_goal]: 'Lyches mål',
   [KEY.control_panel_title]: 'Kontrollpanel',
+  [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
   [KEY.sulten_page_about_us]: 'Om Lyche',
   [KEY.information_page_short]: 'Side',
   [KEY.sulten_page_book_table]: 'Bestill bord',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
+  [KEY.sulten_lyche_about_menu]: 'Om menyen',
   [KEY.sulten_page_more_about_us]: 'Mer om oss',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
@@ -421,9 +424,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
 
   // Sulten / Lyche:
+  [KEY.sulten_lyche_goal]: 'Lyches goal',
+  [KEY.sulten_what_is_lyche]: 'What is Lyche?',
   [KEY.sulten_page_see_menu]: 'See our menu',
   [KEY.sulten_page_about_us]: 'About Lyche',
   [KEY.sulten_page_book_table]: 'Book table',
+  [KEY.sulten_lyche_about_menu]: 'About the menu',
   [KEY.sulten_page_more_about_us]: 'More about us',
 
   // No category:
