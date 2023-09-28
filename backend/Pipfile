@@ -42,7 +42,6 @@ debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
 django-notifications-hq = "*"
-pytz = "*"
 
 [dev-packages]
 yapf = "*"
