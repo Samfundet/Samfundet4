@@ -8,7 +8,7 @@ ADMISSION_DATA = {
     'admission_text': 'This is the admission text',
     'applicant_priority': 0,
     'recruiter_priority': 0,
-    'recruiter_status': 0
+    'recruiter_status': 0,
 }
 
 

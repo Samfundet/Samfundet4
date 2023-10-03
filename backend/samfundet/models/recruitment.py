@@ -88,7 +88,7 @@ class RecruitmentPosition(models.Model):
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviews')
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
@@ -158,4 +158,3 @@ class Interview(models.Model):
         related_name='interviews',
     )
     notes = models.TextField(help_text='Notes for the interview')
-
