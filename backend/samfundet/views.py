@@ -26,7 +26,13 @@ from root.constants import (
 
 from .homepage import homepage
 from .models.event import Event, EventGroup
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom, InterviewNotes)
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    InterviewRoom,
+    Interview,
+)
 from .models.general import (
     Tag,
     User,
@@ -70,7 +76,7 @@ from .serializers import (
     KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
-    InterviewNotesSerializer,
+    InterviewSerializer,
     BlogPostSerializer,
     EventGroupSerializer,
     RecruitmentSerializer,
@@ -622,7 +628,7 @@ class InterviewRoomView(ModelViewSet):
         return Response(serialized_rooms.data)
 
 
-class InterviewNotesView(ModelViewSet):
+class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
-    serializer_class = InterviewNotesSerializer
-    queryset = InterviewNotes.objects.all()
+    serializer_class = InterviewSerializer
+    queryset = Interview.objects.all()

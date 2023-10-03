@@ -19,7 +19,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     InterviewRoom,
-    InterviewNotes,
+    Interview,
 )
 from .models.general import (
     Tag,
@@ -542,24 +542,18 @@ class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
         'id',
         'recruitment_position',
         'recruitment',
-        'interview_time',
-        'interview_location',
         'user',
     ]
     list_display = [
         'id',
         'recruitment_position',
         'recruitment',
-        'interview_time',
-        'interview_location',
         'user',
     ]
     search_fields = [
         'id',
         'recruitment_position',
         'recruitment',
-        'interview_time',
-        'interview_location',
         'user',
     ]
     list_select_related = True
@@ -582,8 +576,8 @@ class InterviewRoomAdmin(CustomGuardedModelAdmin):
     list_select_related = ['recruitment', 'gang']
 
 
-@admin.register(InterviewNotes)
-class InterviewNotesAdmin(CustomGuardedModelAdmin):
+@admin.register(Interview)
+class InterviewAdmin(CustomGuardedModelAdmin):
     list_filter = ['id', 'notes']
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']

@@ -14,7 +14,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     InterviewRoom,
-    InterviewNotes,
+    Interview,
 )
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
@@ -531,8 +531,6 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
-            'interview_time',
-            'interview_location',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
@@ -547,8 +545,6 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             recruitment=recruitment,
             user=user,
             applicant_priority=applicant_priority,
-            interview_time=validated_data.get('interview_time'),
-            interview_location=validated_data.get('interview_location')
         )
 
         return recruitment_admission
@@ -576,8 +572,8 @@ class InterviewRoomSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class InterviewNotesSerializer(serializers.ModelSerializer):
+class InterviewSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = InterviewNotes
+        model = Interview
         fields = '__all__'

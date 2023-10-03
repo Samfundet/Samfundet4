@@ -528,4 +528,3 @@ def test_recruitment_admission_for_applicant(
     assert len(response.data) == 1
     assert response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text
     assert response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id
-    assert response.data[0]['interview_location'] == fixture_recruitment_admission.interview_location

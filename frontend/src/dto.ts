@@ -348,8 +348,6 @@ export type RecruitmentAdmissionDto = {
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  interview_time?: string;
-  interview_location?: string;
   recruiter_priority?: number;
   recruiter_status?: number;
 };

@@ -7,8 +7,6 @@ from samfundet.models.general import User
 ADMISSION_DATA = {
     'admission_text': 'This is the admission text',
     'applicant_priority': 0,
-    'interview_time': None,
-    'interview_location': None,
     'recruiter_priority': 0,
     'recruiter_status': 0
 }

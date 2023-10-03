@@ -112,11 +112,6 @@ class InterviewRoom(models.Model):
         super().clean()
 
 
-class InterviewNotes(models.Model):
-    notes = models.TextField(help_text='Notes for the interview')
-    timestamp = models.DateTimeField(help_text='Timestamp of the notes')
-
-
 class RecruitmentAdmission(models.Model):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
@@ -125,17 +120,6 @@ class RecruitmentAdmission(models.Model):
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
-
-    interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
-    interview_location = models.CharField(max_length=100, help_text='Where the intevjuee should wait', null=True, blank=True)
-    room = models.ForeignKey(
-        InterviewRoom,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        help_text='Room where the interview is held',
-        related_name='interviews',
-    )
 
     PRIORITY_CHOICES = [
         (0, 'Not Set'),
@@ -156,7 +140,22 @@ class RecruitmentAdmission(models.Model):
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
 
-    interview_notes = models.ForeignKey(InterviewNotes, on_delete=models.SET_NULL, help_text='Notes for the interview', blank=True, null=True)
-
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
+
+
+class Interview(models.Model):
+    admissions = models.ForeignKey(
+        RecruitmentAdmission, on_delete=models.CASCADE, help_text='The admission that is being interviewed', related_name='interviews'
+    )
+    interview_time = models.DateTimeField(help_text='The time of the interview')
+    room = models.ForeignKey(
+        InterviewRoom,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text='Room where the interview is held',
+        related_name='interviews',
+    )
+    notes = models.TextField(help_text='Notes for the interview')
+

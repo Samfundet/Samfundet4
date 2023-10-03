@@ -37,7 +37,7 @@ router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-admisisons-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
 router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
-router.register('interview-notes', views.InterviewNotesView, 'interview_notes')
+router.register('interview', views.InterviewView, 'interview')
 
 app_name = 'samfundet'
 
