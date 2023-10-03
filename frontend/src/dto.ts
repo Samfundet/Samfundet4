@@ -341,8 +341,17 @@ export type RecruitmentPositionDto = {
   interviewers: UserDto[];
 };
 
+export type InterviewDto = {
+  id: number;
+  interview_time: string;
+  interview_location: string;
+  room: string;
+  notes: string;
+};
+
 export type RecruitmentAdmissionDto = {
   id: number;
+  interview: InterviewDto;
   admission_text: string;
   recruitment_position?: number;
   recruitment: number;

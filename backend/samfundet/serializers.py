@@ -557,14 +557,6 @@ class ApplicantInfoSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email']
 
 
-class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
-    user = ApplicantInfoSerializer(read_only=True)
-
-    class Meta:
-        model = RecruitmentAdmission
-        fields = '__all__'
-
-
 class InterviewRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -576,4 +568,13 @@ class InterviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Interview
+        fields = '__all__'
+
+
+class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+    user = ApplicantInfoSerializer(read_only=True)
+    interview = InterviewSerializer(many=True, read_only=False)
+
+    class Meta:
+        model = RecruitmentAdmission
         fields = '__all__'
