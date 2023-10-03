@@ -12,6 +12,7 @@
   min-width: 100vw;
   min-height: calc(100vh - 200px);
   z-index: 10;
+  padding-top: $sulten-navbar-height;
   @include for-mobile-down {
     flex-direction: column;
     padding: 0%;

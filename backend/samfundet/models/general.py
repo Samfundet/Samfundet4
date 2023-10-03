@@ -449,6 +449,9 @@ class MenuItem(models.Model):
     price = models.PositiveSmallIntegerField(blank=True, null=True)
     price_member = models.PositiveSmallIntegerField(blank=True, null=True)
 
+    recommendations_nb = models.CharField(max_length=64, blank=True, null=True)
+    recommendations_en = models.CharField(max_length=64, blank=True, null=True)
+
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
 
     food_preferences = models.ManyToManyField(FoodPreference, blank=True)
