@@ -573,8 +573,19 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
     user = ApplicantInfoSerializer(read_only=True)
-    interview = InterviewSerializer(many=True, read_only=False)
+    interview = InterviewSerializer(read_only=False)
 
     class Meta:
         model = RecruitmentAdmission
         fields = '__all__'
+
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+        interview_data = validated_data.pop('interview', {})
+
+        interview_instance = instance.interview
+        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
+        interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interview_instance.save()
+
+        # Update other fields of RecruitmentAdmission instance
+        return super(RecruitmentAdmissionForGangSerializer, self).update(instance, validated_data)

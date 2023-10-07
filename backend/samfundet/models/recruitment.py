@@ -84,6 +84,8 @@ class RecruitmentPosition(models.Model):
         blank=True,
     )
 
+    shared_interview_positions = models.ManyToManyField("self", symmetrical=True, blank=True, help_text="Positions with shared interview")
+
     # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
@@ -163,3 +165,23 @@ class RecruitmentAdmission(models.Model):
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        """
+        If the admission is saved without an interview, try to find an interview from a shared position.
+        """
+        if not self.interview:
+            # Check if there is already an interview for the same user in shared positions
+            shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
+            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
+                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+
+            if shared_interview:
+                self.interview = shared_interview.interview
+            else:
+                # Create a new interview instance if needed
+                new_interview = Interview()
+                new_interview.save()
+                self.interview = new_interview
+
+        super(RecruitmentAdmission, self).save(*args, **kwargs)
