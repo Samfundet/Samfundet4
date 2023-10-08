@@ -3,9 +3,8 @@
 @import 'src/constants';
 
 $mobile-width: $primary-content-width-mobile;
-$date-label-color: #888888;
-$card-background: #222222;
-$description-color: #aaaaaa;
+$card-border-radius: 1em;
+$subtitle-max-height: 1rem;
 // TODO color variables
 
 .container {
@@ -25,8 +24,7 @@ $description-color: #aaaaaa;
 }
 
 .card {
-  border-radius: 1em;
-  flex-basis: 100%;
+  border-radius: $card-border-radius;
   transition: 0.2s;
   box-shadow: 0 0 5px 3px $black-t10;
   background-size: cover;
@@ -37,55 +35,58 @@ $description-color: #aaaaaa;
   cursor: pointer;
 }
 
-.top_label, .bottom_label, .bottom_description {
+.card_inner {
+  border-radius: $card-border-radius;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.54) 80%, rgba(0, 0, 0, 0.6) 100%);
+  flex-basis: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: flex-end;
-  padding-left: 0.4em;
-  padding-right: 0.4em;
+  flex-direction: column;
+  padding: 0.75rem;
 }
 
-.top_label {
-  min-height: 1em;
-  max-height: 1em;
-}
-
-.bottom_label {
-  opacity: 1;
-  align-items: flex-start;
-  font-weight: 700;
-  height: 0;
-  overflow: visible;
+.card_content {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
 }
 
 .title {
   font-weight: 700;
+  font-size: 1.25rem;
   word-break: break-word;
-  opacity: 1;
   transition: .2s;
+  color: $white;
 }
 
 .subtitle {
-  font-style: italic;
-  color: $date-label-color;
+  transition: .1s;
+  color: $grey-5;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  font-weight: 700;
+  font-size: 0.8rem;
+  max-height: $subtitle-max-height;
 }
 
 .date_label {
   font-weight: 400;
-  color: $date-label-color;
+  color: $grey-4;
 }
 
 .bottom_description {
-  align-items: flex-start;
-  color: $description-color;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: $grey-4;
   opacity: 0;
   transition: 0.2s;
-  transform: translateY(1em);
-  max-height: 3.5em;
   overflow: hidden;
+  max-height: 0;
 
   @include for-mobile-only {
     display: none;
@@ -128,22 +129,31 @@ $description-color: #aaaaaa;
   .card {
     transform: translateY(-3px);
     box-shadow: 0 3px 8px 2px $black-t25;
+    text-decoration: none;
   }
-  .title {
-    opacity: 0;
+  .subtitle {
+    @include for-tablet-up {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+  .card_content {
+    transform: none;
   }
   .bottom_description {
-    transform: none;
     opacity: 1;
+    max-height: 3.5em;
   }
 }
 
 // Compact doesn't show description on hover
 .compact:hover {
-  .title {
+  .subtitle {
     opacity: 1;
+    max-height: $subtitle-max-height;
   }
   .bottom_description {
     opacity: 0;
+    max-height: 0;
   }
 }
