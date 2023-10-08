@@ -131,8 +131,8 @@ $subtitle-max-height: 1rem;
     box-shadow: 0 3px 8px 2px $black-t25;
     text-decoration: none;
   }
-  .subtitle {
-    @include for-tablet-up {
+  @include for-tablet-up {
+    .subtitle {
       max-height: 0;
       opacity: 0;
     }
