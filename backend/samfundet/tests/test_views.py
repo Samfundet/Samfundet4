@@ -148,8 +148,7 @@ class TestInformationPagesView:
         assert status.is_success(code=response.status_code)
         assert data[0]["slug_field"] == fixture_informationpage.slug_field
 
-    def test_create_informationpage(self, fixture_rest_client: APIClient,
-                                    fixture_user: User):
+    def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__information_list)
@@ -224,8 +223,7 @@ class TestBlogPostView:
         fixture_blogpost: BlogPost,
     ):
         ### Arrange ###
-        url = reverse(routes.samfundet__blog_detail,
-                      kwargs={"pk": fixture_blogpost.id})
+        url = reverse(routes.samfundet__blog_detail, kwargs={"pk": fixture_blogpost.id})
 
         ### Act ###
         response: Response = fixture_rest_client.get(path=url)
@@ -252,17 +250,12 @@ class TestBlogPostView:
         assert status.is_success(code=response.status_code)
         assert data[0]["id"] == fixture_blogpost.id
 
-    def test_create_blogpost(self, fixture_rest_client: APIClient,
-                             fixture_user: User, fixture_image: Image):
+    def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__blog_list)
 
-        post_data = {
-            "title_nb": "lol",
-            "title_en": "lol",
-            "image": fixture_image.id
-        }
+        post_data = {"title_nb": "lol", "title_en": "lol", "image": fixture_image.id}
         response: Response = fixture_rest_client.post(path=url, data=post_data)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -283,8 +276,7 @@ class TestBlogPostView:
         fixture_blogpost: BlogPost,
     ):
         fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(routes.samfundet__blog_detail,
-                      kwargs={"pk": fixture_blogpost.id})
+        url = reverse(routes.samfundet__blog_detail, kwargs={"pk": fixture_blogpost.id})
         response: Response = fixture_rest_client.delete(path=url)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -302,8 +294,7 @@ class TestBlogPostView:
         fixture_blogpost: BlogPost,
     ):
         fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(routes.samfundet__blog_detail,
-                      kwargs={"pk": fixture_blogpost.id})
+        url = reverse(routes.samfundet__blog_detail, kwargs={"pk": fixture_blogpost.id})
         put_data = {"title_nb": "Samfundet blir gult!"}
         response: Response = fixture_rest_client.put(path=url, data=put_data)
         assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -321,12 +312,10 @@ class TestBlogPostView:
 
 class TestKeyValueView:
 
-    def test_anyone_can_retrieve_keyvalues(self,
-                                           fixture_rest_client: APIClient):
+    def test_anyone_can_retrieve_keyvalues(self, fixture_rest_client: APIClient):
         ### Arrange ###
         keyvalue = KeyValue.objects.create(key="FOO", value="bar")
-        url = reverse(routes.samfundet__key_value_detail,
-                      kwargs={"key": keyvalue.key})
+        url = reverse(routes.samfundet__key_value_detail, kwargs={"key": keyvalue.key})
 
         ### Act ###
         response: Response = fixture_rest_client.get(path=url)
@@ -351,14 +340,12 @@ class TestKeyValueView:
         assert status.is_success(code=response.status_code)
         assert any([kv["id"] == keyvalue.id for kv in data])
 
-    def test_crud_not_possible(self, fixture_rest_client: APIClient,
-                               fixture_superuser: User):
+    def test_crud_not_possible(self, fixture_rest_client: APIClient, fixture_superuser: User):
         """Not even superuser can do anything."""
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_superuser)
         create_url = reverse(routes.samfundet__key_value_list)
-        detail_url = reverse(routes.samfundet__key_value_detail,
-                             kwargs={"key": "FOO"})
+        detail_url = reverse(routes.samfundet__key_value_detail, kwargs={"key": "FOO"})
 
         ### Act ###
         create_response: Response = fixture_rest_client.post(path=create_url)
@@ -375,12 +362,10 @@ class TestKeyValueView:
 
 class TestTextItemView:
 
-    def test_anyone_can_retrieve_textitems(self,
-                                           fixture_rest_client: APIClient):
+    def test_anyone_can_retrieve_textitems(self, fixture_rest_client: APIClient):
         ### Arrange ###
         textitem = TextItem.objects.create(key="FOO")
-        url = reverse(routes.samfundet__text_item_detail,
-                      kwargs={"pk": textitem.key})
+        url = reverse(routes.samfundet__text_item_detail, kwargs={"pk": textitem.key})
 
         ### Act ###
         response: Response = fixture_rest_client.get(path=url)
@@ -403,14 +388,12 @@ class TestTextItemView:
         assert status.is_success(code=response.status_code)
         assert any([kv["key"] == textitem.key for kv in data])
 
-    def test_crud_not_possible(self, fixture_rest_client: APIClient,
-                               fixture_superuser: User):
+    def test_crud_not_possible(self, fixture_rest_client: APIClient, fixture_superuser: User):
         """Not even superuser can do anything."""
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_superuser)
         create_url = reverse(routes.samfundet__text_item_list)
-        detail_url = reverse(routes.samfundet__text_item_detail,
-                             kwargs={"pk": "FOO"})
+        detail_url = reverse(routes.samfundet__text_item_detail, kwargs={"pk": "FOO"})
 
         ### Act ###
         create_response: Response = fixture_rest_client.post(path=create_url)
@@ -466,8 +449,7 @@ class TestAssignGroupView:
         assert status.is_success(code=response.status_code)
         assert group not in fixture_user.groups.all()
 
-    def test_assign_group_not_possible(self, fixture_rest_client: APIClient,
-                                       fixture_user: User):
+    def test_assign_group_not_possible(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__assign_group)
@@ -480,8 +462,7 @@ class TestAssignGroupView:
         ### Assert ###
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_remove_group_not_possible(self, fixture_rest_client: APIClient,
-                                       fixture_user: User):
+    def test_remove_group_not_possible(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__assign_group)
@@ -495,8 +476,7 @@ class TestAssignGroupView:
         ### Assert ###
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_assign_group_not_found(self, fixture_rest_client: APIClient,
-                                    fixture_superuser: User):
+    def test_assign_group_not_found(self, fixture_rest_client: APIClient, fixture_superuser: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_superuser)
         url = reverse(routes.samfundet__assign_group)
@@ -561,8 +541,7 @@ def test_recruitment_positions_per_recruitment(
     url = reverse(routes.samfundet__recruitment_positions)
 
     ### Act ###
-    response: Response = fixture_rest_client.get(
-        path=url, data={"recruitment": fixture_recruitment.id})
+    response: Response = fixture_rest_client.get(path=url, data={"recruitment": fixture_recruitment.id})
 
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
@@ -582,8 +561,7 @@ def test_get_applicants_without_interviews(
     url = reverse(routes.samfundet__applicants_without_interviews)
 
     ### Act ###
-    response: Response = fixture_rest_client.get(
-        path=url, data={"recruitment": fixture_recruitment.id})
+    response: Response = fixture_rest_client.get(path=url, data={"recruitment": fixture_recruitment.id})
 
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
@@ -609,8 +587,7 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     fixture_recruitment_admission.save()
 
     ### Act ###
-    response: Response = fixture_rest_client.get(
-        path=url, data={"recruitment": fixture_recruitment.id})
+    response: Response = fixture_rest_client.get(path=url, data={"recruitment": fixture_recruitment.id})
 
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
@@ -628,14 +605,11 @@ def test_recruitment_admission_for_applicant(
     url = reverse(routes.samfundet__recruitment_admissions_for_applicant_list)
 
     ### Act ###
-    response: Response = fixture_rest_client.get(
-        path=url, data={"recruitment": fixture_recruitment.id})
+    response: Response = fixture_rest_client.get(path=url, data={"recruitment": fixture_recruitment.id})
 
     ### Assert ###
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 1
-    assert (response.data[0]["admission_text"] ==
-            fixture_recruitment_admission.admission_text)
-    assert (response.data[0]["recruitment_position"] ==
-            fixture_recruitment_admission.recruitment_position.id)
+    assert (response.data[0]["admission_text"] == fixture_recruitment_admission.admission_text)
+    assert (response.data[0]["recruitment_position"] == fixture_recruitment_admission.recruitment_position.id)
