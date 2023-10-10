@@ -9,6 +9,21 @@
     width: 100%;
   }
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.textcontainer {
+  flex: 5;
+}
+
+.otherposition {
+  flex: 1;
+  padding: 2em;
+}
+
 .header {
   font-weight: 700;
   font-size: 2em;

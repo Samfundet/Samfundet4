@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link } from '~/Components';
+import { Page, SamfundetLogoSpinner, Link, CrudButtons } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentAdmission } from '~/api';
@@ -64,27 +64,34 @@ export function RecruitmentAdmissionFormPage() {
   return (
     <Page>
       <div className={styles.container}>
-        
-        <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
-        <h2 className={styles.subheader}>
-          {t(KEY.recruitment_volunteerfor)}{' '}
-          <i>
-            {recruitmentPosition?.is_funksjonaer_position
-              ? t(KEY.recruitment_funksjonaer)
-              : t(KEY.recruitment_gangmember)}
-          </i>{' '}
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.information_page_detail,
-              urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
-            })}
-          >
-            {dbT(recruitmentPosition?.gang, 'name')}
-          </Link>
-        </h2>
-        <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
-        <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
-        <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
+        <div className={styles.row}>
+          <div className={styles.textcontainer}>
+            <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
+            <h2 className={styles.subheader}>
+              {t(KEY.recruitment_volunteerfor)}{' '}
+              <i>
+                {recruitmentPosition?.is_funksjonaer_position
+                  ? t(KEY.recruitment_funksjonaer)
+                  : t(KEY.recruitment_gangmember)}
+              </i>{' '}
+              <Link
+                url={reverse({
+                  pattern: ROUTES.frontend.information_page_detail,
+                  urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
+                })}
+              >
+                {dbT(recruitmentPosition?.gang, 'name')}
+              </Link>
+            </h2>
+            <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
+            <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
+            <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
+          </div>
+          
+          <div className={styles.otherpositions}>
+            <h2 className={styles.subheader}>{t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}</h2>
+          </div>
+        </div>
         <SamfForm onSubmit={handleOnSubmit} submitText={submitText} validateOnInit={id !== undefined} devMode={false}>
           <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
           <SamfFormField field="admission_text" type="text-long" />{' '}
