@@ -164,7 +164,6 @@ class FieldTrackerMixin(Model):
         return instance
 
 
-
 class FullCleanSaveMixin(Model):
     """Mixin to call full_clean() before save()."""
 
@@ -174,4 +173,3 @@ class FullCleanSaveMixin(Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
-
