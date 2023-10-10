@@ -1,0 +1,76 @@
+@import 'src/constants';
+
+.lyche_menu {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.lyche_header_border_top {
+  height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  align-content: center;
+}
+
+.lyche_menu_border {
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  width: calc(100% - 64px);
+}
+
+.lyche_menu_inner_border {
+  margin-right: 14px;
+  margin-left: 14px;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  padding-top: 3em;
+}
+
+.lyche_header_border_bottom {
+  height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  align-content: center;
+}
+
+.corner_right {
+  width: 32px;
+  height: 32px;
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  transform: translateX(-16px);
+}
+
+.corner_left {
+  width: 32px;
+  height: 32px;
+  border: 1px solid white;
+  align-items: center;
+  transform: translateX(16px);
+}
+
+.middle {
+  flex: 1;
+  height: 16px;
+  border: 1px solid white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  margin: 5px;
+  background-color: white;
+}
+
+
+
