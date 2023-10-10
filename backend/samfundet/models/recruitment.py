@@ -85,7 +85,7 @@ class RecruitmentPosition(FullCleanSaveMixin):
         blank=True,
     )
 
-    shared_interview_positions = models.ManyToManyField("self", symmetrical=True, blank=True, help_text="Positions with shared interview")
+    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True, help_text='Positions with shared interview')
 
     # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')

@@ -196,7 +196,7 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
 @pytest.fixture
 def fixture_text_item() -> Iterator[TextItem]:
     text_item = TextItem.objects.create(
-        key="foo",
+        key='foo',
         text_nb='foo',
         text_en='foo',
     )

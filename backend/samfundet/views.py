@@ -534,8 +534,9 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             default=None,
             output_field=None,
         )
-        users_without_interviews = User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)
-                                                                                                    ).filter(num_interviews=0)
+        users_without_interviews = (
+            User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
+        )
         return users_without_interviews
 
 
