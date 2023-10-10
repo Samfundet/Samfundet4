@@ -2,35 +2,70 @@
 
 @import 'src/constants';
 
-.outerContainer {
+.container {
+  margin: $sulten-navbar-height/2 0 $sulten-navbar-height/2 0;
   width: 100%;
   height: 100%;
-  // @include flex-row-center;
-}
-.innerContainer {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-  // @include flex-row-center;
+  @include flex-column-center;
 }
 
 .contactContainer {
-  width: 50vw;
+  width: 75vw;
   height: 75vh;
-  background-color: green;
+  @include flex-row-center;
+  gap: 4rem;
+  overflow: hidden;
+  color: $white;
 
-  // @include flex-columns-center;
+  @include for-mobile-down {
+    @include flex-column-center;
+    margin: $sulten-navbar-height/2 0 $sulten-navbar-height/2 0;
+    height: 50%;
+    width: 100%;
+    gap: 1em;
+  }
 }
+
+.lycheContactText {
+  width: 100%;
+  text-align: center;
+}
+
+.textContainer {
+  width: 50%;
+  height: 100%;
+  @include flex-column-center;
+  gap: 1rem;
+  @include for-mobile-down {
+    width: 100%;
+  }
+}
+
+.lycheMapContainer {
+  width: 50%;
+  height: 75%;
+  overflow: hidden;
+  border-radius: 1.5em;
+  @include for-mobile-down {
+    width: 100%;
+    height: 60vh;
+  }
+}
+
+.lycheStreet {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
 .contactAddress {
-  @include flex-row-center;
+  color: #fbb040;
 }
-.contactEmail {
-  @include flex-row-center;
-}
-.contactSocials {
+
+.lycheSocialsContainer {
   @include flex-row-center;
 }
 
 .icon {
-  @include icon-white;
+  margin: 0.5rem;
 }
