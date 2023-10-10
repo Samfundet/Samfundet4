@@ -8,8 +8,7 @@ from django.utils import timezone
 
 from django.db import models
 
-from backend.root.utils.mixins import FullCleanSaveMixin
-
+from root.utils.mixins import FullCleanSaveMixin
 from .general import Organization, User, Gang
 
 

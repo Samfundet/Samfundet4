@@ -16,8 +16,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from guardian.shortcuts import assign_perm
 from django.utils.translation import gettext as _
-from backend.root.utils.mixins import FullCleanSaveMixin
 
+from root.utils.mixins import FullCleanSaveMixin
 from root.utils import permissions
 
 from .utils.fields import LowerCaseField
