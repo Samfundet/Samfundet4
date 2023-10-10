@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link, CrudButtons } from '~/Components';
+import { Page, SamfundetLogoSpinner, Link, CrudButtons, Button } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitmentPosition, postRecruitmentAdmission } from '~/api';
+import { getRecruitmentPosition, postRecruitmentAdmission, getRecruitmentPositionsGang } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -18,15 +18,25 @@ export function RecruitmentAdmissionFormPage() {
   const { t } = useTranslation();
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
+  const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
+
   const [loading, setLoading] = useState(true);
   const { positionID, id } = useParams();
 
   useEffect(() => {
-    getRecruitmentPosition('1').then((res) => {
+    getRecruitmentPosition(positionID as string).then((res) => {
       setRecruitmentPosition(res.data);
       setLoading(false);
     });
-  }, []);
+  }, [positionID]);
+
+  useEffect(() => {
+    getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
+      (res) => {
+        setRecruitmentPositionsForGang(res.data);
+      },
+    );
+  }, [recruitmentPosition]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
     data.recruitment_position = positionID ? +positionID : 1;
@@ -87,9 +97,32 @@ export function RecruitmentAdmissionFormPage() {
             <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
-          
+
           <div className={styles.otherpositions}>
-            <h2 className={styles.subheader}>{t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}</h2>
+            <h2 className={styles.subheader}>
+              {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
+            </h2>
+            {recruitmentPositionsForGang?.map((pos, index) => {
+              if (pos.id !== recruitmentPosition?.id) {
+                return (
+                  <Button
+                    key={index}
+                    display="pill"
+                    theme="outlined"
+                    onClick={() => {
+                      navigate(
+                        reverse({
+                          pattern: ROUTES.frontend.recruitment_application,
+                          urlParams: { positionID: pos.id, gangID: pos.gang.id },
+                        }),
+                      );
+                    }}
+                  >
+                    {dbT(pos, 'name')}
+                  </Button>
+                );
+              }
+            })}
           </div>
         </div>
         <SamfForm onSubmit={handleOnSubmit} submitText={submitText} validateOnInit={id !== undefined} devMode={false}>
