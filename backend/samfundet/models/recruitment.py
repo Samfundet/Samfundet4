@@ -26,7 +26,7 @@ class Recruitment(models.Model):
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
-    def save(self) -> None:
+    def save(self, *args: tuple, **kwargs: dict) -> None:
         # All times should be in the future
         now = timezone.now()
         if any(
@@ -53,7 +53,7 @@ class Recruitment(models.Model):
         if self.reprioritization_deadline_for_applicant > self.reprioritization_deadline_for_groups:
             raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
 
-        super().clean()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
