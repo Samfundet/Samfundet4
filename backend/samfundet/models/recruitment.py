@@ -8,10 +8,12 @@ from django.utils import timezone
 
 from django.db import models
 
+from backend.root.utils.mixins import FullCleanSaveMixin
+
 from .general import Organization, User, Gang
 
 
-class Recruitment(models.Model):
+class Recruitment(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
@@ -26,7 +28,7 @@ class Recruitment(models.Model):
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
-    def save(self, *args: tuple, **kwargs: dict) -> None:
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
         # All times should be in the future
         now = timezone.now()
         if any(
@@ -53,13 +55,13 @@ class Recruitment(models.Model):
         if self.reprioritization_deadline_for_applicant > self.reprioritization_deadline_for_groups:
             raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
 
-        super().save(*args, **kwargs)
+        super().clean()
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
 
 
-class RecruitmentPosition(models.Model):
+class RecruitmentPosition(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
@@ -96,7 +98,7 @@ class RecruitmentPosition(models.Model):
         return f'Position: {self.name_en} in {self.recruitment}'
 
 
-class InterviewRoom(models.Model):
+class InterviewRoom(FullCleanSaveMixin):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
@@ -114,7 +116,7 @@ class InterviewRoom(models.Model):
         super().clean()
 
 
-class Interview(models.Model):
+class Interview(FullCleanSaveMixin):
     # User visible fields
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
     interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
@@ -131,7 +133,7 @@ class Interview(models.Model):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-class RecruitmentAdmission(models.Model):
+class RecruitmentAdmission(FullCleanSaveMixin):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
@@ -180,8 +182,6 @@ class RecruitmentAdmission(models.Model):
                 self.interview = shared_interview.interview
             else:
                 # Create a new interview instance if needed
-                new_interview = Interview()
-                new_interview.save()
-                self.interview = new_interview
+                self.interview = Interview.objects.create()
 
         super(RecruitmentAdmission, self).save(*args, **kwargs)

@@ -162,3 +162,16 @@ class FieldTrackerMixin(Model):
         setattr(instance, instance._FTM_LOADED_FIELDS_NAME, loaded_fields)  # noqa: FKA01
 
         return instance
+
+
+
+class FullCleanSaveMixin(Model):
+    """Mixin to call full_clean() before save()."""
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)
+
