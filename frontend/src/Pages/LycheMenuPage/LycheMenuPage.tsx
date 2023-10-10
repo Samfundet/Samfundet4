@@ -26,7 +26,9 @@ export function LycheMenuPage() {
 
       <MenuItem
         dishTitle="LYCHEBURGER"
-        dishDescription="Okse og n’duja kjøtt, servert med løkkompott, bacon, tomater, aioli, cheddar, salat og potet på siden. Burgeren kan serveres med glutenfritt brød, og kan serveres uten ost og pistou (melkeallergi)"
+        dishDescription="Okse og n’duja kjøtt, servert med løkkompott, bacon,
+         tomater, aioli, cheddar, salat og potet på siden.
+          Burgeren kan serveres med glutenfritt brød, og kan serveres uten ost og pistou (melkeallergi)"
         allergens="Allergener: Egg, sennep, sulfitt. Det er svinekjøtt i selve burgerkaken. "
         recommendations="Baren anbefaler: Hacienda lopez De Haro (rød)"
         price="129,- / 154,-"
