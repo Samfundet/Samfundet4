@@ -1,0 +1,44 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.inputTime {
+  display: flex;
+  align-items: left;
+}
+
+.number {
+  /*Husk å gi classenavn*/
+  width: 2em;
+  height: 1.5em;
+  border: none;
+  box-sizing: border-box;
+  padding: auto 5px;
+  text-align: center;
+  border: 2px solid $grey-4;
+  @include theme-dark {
+    border: 2px solid $grey-2;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.inputTime,
+.number {
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+input:focus {
+  outline: 3px hidden var(--active);
+  box-shadow: 0 0 2px 2px #999999;
+}
