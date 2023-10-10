@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Page, SamfundetLogoSpinner } from '~/Components';
+import { reverse } from '~/named-urls';
+import { Page, SamfundetLogoSpinner, Link } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentAdmission } from '~/api';
@@ -63,6 +64,7 @@ export function RecruitmentAdmissionFormPage() {
   return (
     <Page>
       <div className={styles.container}>
+        
         <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
         <h2 className={styles.subheader}>
           {t(KEY.recruitment_volunteerfor)}{' '}
@@ -71,13 +73,21 @@ export function RecruitmentAdmissionFormPage() {
               ? t(KEY.recruitment_funksjonaer)
               : t(KEY.recruitment_gangmember)}
           </i>{' '}
-          {dbT(recruitmentPosition?.gang, 'name')}
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.information_page_detail,
+              urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
+            })}
+          >
+            {dbT(recruitmentPosition?.gang, 'name')}
+          </Link>
         </h2>
         <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
         <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
         <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
         <SamfForm onSubmit={handleOnSubmit} submitText={submitText} validateOnInit={id !== undefined} devMode={false}>
-          <SamfFormField field="admission_text" type="text-long" label={`${t(KEY.recruitment_admission)}`} />{' '}
+          <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
+          <SamfFormField field="admission_text" type="text-long" />{' '}
         </SamfForm>
       </div>
     </Page>

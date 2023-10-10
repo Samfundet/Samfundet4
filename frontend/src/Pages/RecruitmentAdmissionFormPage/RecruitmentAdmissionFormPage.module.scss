@@ -1,8 +1,13 @@
 @import 'src/constants';
+@import 'src/mixins';
+
 .container {
   display: flex;
   flex-direction: column;
   padding: 2em;
+  @mixin for-tablet-only {
+    width: 100%;
+  }
 }
 .header {
   font-weight: 700;
@@ -14,8 +19,11 @@
   margin-bottom: 0.5em;
 }
 .text {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
 .formContainer {
   background-color: $red-samf;
+}
+.formLabel {
+  margin-bottom: 0.5em;
 }
