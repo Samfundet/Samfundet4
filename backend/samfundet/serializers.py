@@ -588,4 +588,4 @@ class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
-        return super(RecruitmentAdmissionForGangSerializer, self).update(instance, validated_data)
+        return super().update(instance, validated_data)

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import Permission, Group
+from django.utils import timezone
 from django.urls import reverse
 from rest_framework import status
 from guardian.shortcuts import assign_perm
@@ -362,10 +363,9 @@ class TestKeyValueView:
 
 class TestTextItemView:
 
-    def test_anyone_can_retrieve_textitems(self, fixture_rest_client: APIClient):
+    def test_anyone_can_retrieve_textitems(self, fixture_rest_client: APIClient, fixture_text_item: TextItem):
         ### Arrange ###
-        textitem = TextItem.objects.create(key="FOO")
-        url = reverse(routes.samfundet__text_item_detail, kwargs={"pk": textitem.key})
+        url = reverse(routes.samfundet__text_item_detail, kwargs={"pk": fixture_text_item.key})
 
         ### Act ###
         response: Response = fixture_rest_client.get(path=url)
@@ -373,11 +373,10 @@ class TestTextItemView:
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
-        assert data["key"] == textitem.key
+        assert data["key"] == fixture_text_item.key
 
-    def test_anyone_can_list_textitems(self, fixture_rest_client: APIClient):
+    def test_anyone_can_list_textitems(self, fixture_rest_client: APIClient, fixture_text_item: TextItem):
         ### Arrange ###
-        textitem = TextItem.objects.create(key="FOO")
         url = reverse(routes.samfundet__text_item_list)
 
         ### Act ###
@@ -386,7 +385,7 @@ class TestTextItemView:
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
-        assert any([kv["key"] == textitem.key for kv in data])
+        assert any([kv["key"] == fixture_text_item.key for kv in data])
 
     def test_crud_not_possible(self, fixture_rest_client: APIClient, fixture_superuser: User):
         """Not even superuser can do anything."""
@@ -584,6 +583,8 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     url = reverse(routes.samfundet__applicants_without_interviews)
 
     # Setting the interview time for the user's admission
+    fixture_recruitment_admission.interview.interview_time = timezone.now()
+    fixture_recruitment_admission.interview.save()
     fixture_recruitment_admission.save()
 
     ### Act ###

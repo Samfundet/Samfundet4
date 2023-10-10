@@ -529,15 +529,13 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             return User.objects.none()  # Return an empty queryset instead of None
 
         # Exclude users who have any admissions for the given recruitment that have an interview_time
-        users_without_interviews = User.objects.filter(admissions__recruitment=recruitment).annotate(
-            num_interviews=Count(
-                Case(
-                    When(admissions__recruitment=recruitment, then='admissions__interview__interview_time'),
-                    default=None,
-                    output_field=None,
-                )
-            )
-        ).filter(num_interviews=0)
+        interview_times_for_recruitment = Case(
+            When(admissions__recruitment=recruitment, then='admissions__interview__interview_time'),
+            default=None,
+            output_field=None,
+        )
+        users_without_interviews = User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)
+                                                                                                    ).filter(num_interviews=0)
         return users_without_interviews
 
 
