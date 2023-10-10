@@ -47,6 +47,7 @@ import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
+import { InterviewNotesPage } from './PagesAdmin/InterviewNotesAdminPage';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
@@ -184,6 +185,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment_users_without_interview}
           element={<RecruitmentUsersWithoutInterview />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interviewNotes}
+          element={<InterviewNotesPage />}
         />
         {/* TODO ADD PERMISSIONS */}
         <Route
