@@ -1,16 +1,14 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { Button } from '~/Components/Button';
 import { Children } from '~/types';
 import styles from './Countdown.module.scss';
 
 interface CountdownProps {
   targetDate: Date;
-  theme: 'button' | 'blur';
   children?: Children;
 }
 
-export function Countdown({ targetDate, theme, children }: CountdownProps) {
+export function Countdown({ targetDate, children }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
 
@@ -45,15 +43,11 @@ export function Countdown({ targetDate, theme, children }: CountdownProps) {
   if (isTimeOut) return <>{children}</>;
 
   return (
-    <div className={classNames(styles.countdown, theme)}>
-      {theme === 'button' ? (
-        <Button className={styles.countdown_button}>{timeLeft}</Button>
-      ) : (
-        <>
-          <div className={styles.countdown_time}>{timeLeft}</div>
-          <div className={styles.countdown_blur}>{children}</div>
-        </>
-      )}
+    <div className={classNames(styles.countdown)}>
+      <>
+        <div className={styles.countdown_time}>{timeLeft}</div>
+        <div className={styles.countdown_blur}>{children}</div>
+      </>
     </div>
   );
 }
