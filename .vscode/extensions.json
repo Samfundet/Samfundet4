@@ -11,6 +11,7 @@
     "ms-python.vscode-pylance",
     "editorconfig.editorconfig",
     "yzhang.markdown-all-in-one",
-    "visualstudioexptteam.vscodeintellicode"
+    "visualstudioexptteam.vscodeintellicode",
+    "hediet.vscode-drawio"
   ]
 }
