@@ -18,7 +18,7 @@ export function InterviewNotesPage() {
     }
   }
 
-  function handleTextarea(e) {
+  function handleTextarea(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setText(e.target.value);
   }
 
