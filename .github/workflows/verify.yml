@@ -52,25 +52,26 @@ jobs:
       - name: Check yapf
         run: python -m pipenv run yapf --parallel --recursive --diff .
 
+      # TODO: broken test - https://github.com/Samfundet/Samfundet4/issues/730
       - name: Verify migrations
+        # python -m pipenv run migrations:verify
         run: |
-          python -m pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
-          python -m pipenv run python manage.py migrate --verbosity 2
+          python -m pipenv run migrations:apply
 
       - name: Run tests
-        run: python -m pipenv run pytest
+        run: python -m pipenv run pytest:run
 
       - name: Run bandit
-        run: python -m pipenv run bandit --recursive --ini .bandit .
+        run: python -m pipenv run bandit:run
 
       - name: Run flake8
-        run: python -m pipenv run flake8 --config=.flake8 .
+        run: python -m pipenv run flake8:run
 
       - name: Run mypy
-        run: python -m pipenv run mypy --config-file mypy.ini .
+        run: python -m pipenv run mypy:run
 
       - name: Run seeds
-        run: python -m pipenv run python manage.py seed
+        run: python -m pipenv run seed:run
 
   job_verify_docker:
     name: Verify docker
@@ -113,7 +114,7 @@ jobs:
       #   run: docker compose up cypress
 
       - name: Stop containers
-        run: docker compose down 
+        run: docker compose down
 
   job_verify_frontend_lint:
     name: Verify frontend
