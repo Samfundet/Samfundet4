@@ -24,10 +24,16 @@
   color: white;
   font-size: 17px;
   font-weight: 400;
+  @include theme-dark{
+    background-color: $red_samf;
+  }
 }
 
 .gang_header:hover{
   background-color: $red_samf_hover;
+  @include theme-dark{
+    background-color: $red_samf_hover;
+  }
 }
 
 .position_item {
@@ -39,10 +45,17 @@
   background-color: $white;
   color: $black;
   border-top: 1px solid $grey-3;
+  @include theme-dark{
+    background-color: $grey-3;
+    border-top: 1px solid $grey-2;
+  }
 }
 
 .position_item:hover{
   background-color: $red_samf-faded;
+  @include theme-dark{
+    background-color: #af8b8c;
+  }
 }
 
 .position_name {
@@ -50,6 +63,9 @@
   color: $red_samf;
   padding: 1em;
   font-weight: 600;
+  @include theme-dark{
+    color: #ffdbe0;
+  }
 }
 
 .position_name:hover {
@@ -60,6 +76,9 @@
   flex: 1;
   color: $black;
   padding: 1em;
+  @include theme-dark{
+    color: $grey-4;
+  }
 }
 
 .position_short_desc:hover{
