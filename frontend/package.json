@@ -9,6 +9,8 @@
     "build": "vite build",
     "ci": "yarn install --frozen-lockfile",
     "preview": "vite preview",
+    "upgrade": "yarn run upgrade",
+    "outdated": "yarn run outdated",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public --quiet",
     "storybook-dev": "start-storybook -p 6006 -s public",
     "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -s public",
