@@ -13,7 +13,7 @@ from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost
+from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -191,6 +191,17 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
     )
     yield organization
     organization.delete()
+
+
+@pytest.fixture
+def fixture_text_item() -> Iterator[TextItem]:
+    text_item = TextItem.objects.create(
+        key='foo',
+        text_nb='foo',
+        text_en='foo',
+    )
+    yield text_item
+    text_item.delete()
 
 
 @pytest.fixture
