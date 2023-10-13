@@ -75,7 +75,7 @@
     "cypress": "^12",
     "cypress-vite": "^1",
     "eslint": "^8",
-    "eslint-config-prettier": "^8",
+    "eslint-config-prettier": "^9",
     "eslint-plugin-import": "^2",
     "eslint-plugin-prettier": "^5",
     "eslint-plugin-react": "^7",
