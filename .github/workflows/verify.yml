@@ -95,20 +95,19 @@ jobs:
           echo VITE_CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
 
       - name: Build images
-        run: docker compose build
+        run: docker compose build backend frontend
 
       - name: Start containers
-        run: docker compose up  -d; sleep 20 # Give additional seconds to boot.
+        run: docker compose up backend frontend -d; sleep 20 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
         run: |
           docker compose exec backend echo 
           docker compose exec frontend echo
-          docker compose exec storybook echo
 
-      - name: Seed backend for Cypress tests
-        run: docker compose exec backend pipenv run python manage.py seed_cypress
+      # - name: Seed backend for Cypress tests
+      #   run: docker compose exec backend pipenv run python manage.py seed_cypress
 
       # - name: Run cypress
       #   run: docker compose up cypress
