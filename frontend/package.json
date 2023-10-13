@@ -30,7 +30,7 @@
     "axios": "^1",
     "classnames": "^2",
     "cmdk": "^0",
-    "cypress-fail-on-console-error": "^4",
+    "cypress-fail-on-console-error": "^5",
     "date-fns": "^2",
     "i18next": "^23",
     "i18next-browser-languagedetector": "^7",
