@@ -4,17 +4,18 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
 
 export function InterviewNotesPage() {
+  //TODO: interview notes from backen
   const [editingMode, setEditingMode] = useState(false);
-  const [text, setText] = useState('Notater fra intervjuet her...'); //place the text from the backend here.
-  const posid = 1; //place id for the person applying here.
+  const [text, setText] = useState('Notater fra intervjuet her...'); //TODO: place the text from the backend here.
+  const posid = 1; //TODO: get the posid from the backend.
 
   function handleOnClick() {
     if (editingMode) {
       setEditingMode(false);
-      //Save the text in the textbox and send it to the backend.
+      //TODO: Save the text in the textbox and send it to the backend.
     } else {
       setEditingMode(true);
-      //Get the text from the backend, and place it in the textbox.
+      //TODO: Get the text from the backend, and place it in the textbox.
     }
   }
 
