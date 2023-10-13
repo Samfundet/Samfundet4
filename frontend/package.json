@@ -71,7 +71,7 @@
     "@typescript-eslint/parser": "^5",
     "@vitejs/plugin-react": "^2",
     "babel-plugin-named-exports-order": "^0",
-    "chromatic": "^6",
+    "chromatic": "^7",
     "cypress": "^12",
     "cypress-vite": "^1",
     "eslint": "^8",
