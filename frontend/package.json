@@ -48,7 +48,7 @@
     "react-router-dom": "^6",
     "react-toastify": "^9",
     "require-from-string": "^2",
-    "vite-plugin-svgr": "^2",
+    "vite-plugin-svgr": "^4",
     "web-vitals": "^3"
   },
   "devDependencies": {
@@ -69,7 +69,7 @@
     "@types/react-modal": "^3",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "@vitejs/plugin-react": "^2",
+    "@vitejs/plugin-react": "^4",
     "babel-plugin-named-exports-order": "^0",
     "chromatic": "^7",
     "cypress": "^12",
@@ -95,7 +95,7 @@
     "stylelint-prettier": "^4",
     "stylelint-scss": "^5",
     "typescript": "^5",
-    "vite": "^3",
+    "vite": "^4",
     "webpack": "^5"
   },
   "browserslist": [
