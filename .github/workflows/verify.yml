@@ -54,8 +54,8 @@ jobs:
 
       # TODO: broken test - https://github.com/Samfundet/Samfundet4/issues/730
       - name: Verify migrations
-        # python -m pipenv run migrations:verify
         run: |
+          python -m pipenv run migrations:verify
           python -m pipenv run migrations:apply
 
       - name: Run tests
@@ -95,19 +95,20 @@ jobs:
           echo VITE_CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
 
       - name: Build images
-        run: docker compose build backend frontend
+        run: docker compose build backend frontend storybook
 
       - name: Start containers
-        run: docker compose up backend frontend -d; sleep 20 # Give additional seconds to boot.
+        run: docker compose up backend frontend storybook -d; sleep 20 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
         run: |
           docker compose exec backend echo 
           docker compose exec frontend echo
+          docker compose exec storybook echo
 
-      # - name: Seed backend for Cypress tests
-      #   run: docker compose exec backend pipenv run python manage.py seed_cypress
+      - name: Seed backend for Cypress tests
+        run: docker compose exec backend pipenv run python manage.py seed_cypress
 
       # - name: Run cypress
       #   run: docker compose up cypress
