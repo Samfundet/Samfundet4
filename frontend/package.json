@@ -11,10 +11,10 @@
     "preview": "vite preview",
     "upgrade": "yarn upgrade",
     "outdated": "yarn outdated",
-    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public --quiet",
-    "storybook-dev": "start-storybook -p 6006 -s public",
-    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -s public",
-    "build-storybook-dev": "build-storybook -s public",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006 -s public --quiet",
+    "storybook-dev": "storybook dev -p 6006 -s public",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider storybook build -s public",
+    "build-storybook-dev": "storybook build -s public",
     "cypress:open": "cypress open",
     "cypress:run": "yarn run cypress run",
     "eslint:check": "eslint --config .eslintrc.js src",
@@ -53,15 +53,13 @@
   },
   "devDependencies": {
     "@iconify/react": "^4",
-    "@storybook/addon-actions": "^6",
-    "@storybook/addon-essentials": "^6",
-    "@storybook/addon-interactions": "^6",
-    "@storybook/addon-links": "^6",
-    "@storybook/builder-vite": "^0",
-    "@storybook/manager-webpack5": "^6",
-    "@storybook/node-logger": "^6",
-    "@storybook/preset-create-react-app": "^4",
-    "@storybook/react": "^6",
+    "@storybook/addon-actions": "^7",
+    "@storybook/addon-essentials": "^7",
+    "@storybook/addon-interactions": "^7",
+    "@storybook/addon-links": "^7",
+    "@storybook/node-logger": "^7",
+    "@storybook/react": "^7",
+    "@storybook/react-vite": "^7",
     "@storybook/testing-library": "^0",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -86,6 +84,7 @@
     "react-i18next": "^13",
     "react-scripts": "^5",
     "sass": "^1",
+    "storybook": "^7",
     "stylelint": "^15",
     "stylelint-config-prettier": "^9",
     "stylelint-config-prettier-scss": "^1",
@@ -110,5 +109,6 @@
   "bugs": {
     "url": "https://github.com/Samfundet/Samfundet4/issues"
   },
-  "_id": "frontend@0.1.0"
+  "_id": "frontend@0.1.0",
+  "packageManager": "yarn@3.6.4"
 }
