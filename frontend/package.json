@@ -10,7 +10,7 @@
     "ci": "yarn install --immutable",
     "preview": "vite preview",
     "upgrade": "yarn upgrade",
-    "outdated": "yarn outdated",
+    "outdated": "yarn upgrade-interactive",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006 --quiet",
     "storybook-dev": "storybook dev -p 6006",
     "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider storybook build",
