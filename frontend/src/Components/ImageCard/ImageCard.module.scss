@@ -6,6 +6,7 @@ $mobile-width: $primary-content-width-mobile;
 $card-border-radius: 1em;
 $subtitle-max-height: 1rem;
 $card-gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.54) 80%, rgba(0, 0, 0, 0.6) 100%);
+$card-text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 // TODO color variables
 
 .container {
@@ -88,6 +89,7 @@ $card-gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 
   transition: 0.2s;
   overflow: hidden;
   max-height: 0;
+  text-shadow: $card-text-shadow;
 
   @include for-mobile-only {
     display: none;
