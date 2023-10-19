@@ -12,7 +12,7 @@ export type ButtonType = 'submit' | 'reset' | 'button';
 export type KeyValueMap = Map<string, string>;
 
 /** Type for the constant of KeyValue keys in the database. */
-export type Key = typeof KV[keyof typeof KV];
+export type Key = (typeof KV)[keyof typeof KV];
 
 /** Synonym for ReactNode, but easier to remember. */
 export type Children = ReactNode;
@@ -73,7 +73,7 @@ export const COLORS = {
 
 export type Color = typeof COLORS;
 export type ColorKey = keyof Color;
-export type ColorValue = typeof COLORS[ColorKey];
+export type ColorValue = (typeof COLORS)[ColorKey];
 
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
@@ -95,7 +95,7 @@ export const EventTicketType = {
   CUSTOM: 'custom',
 } as const;
 
-export type EventTicketTypeValue = typeof EventTicketType[keyof typeof EventTicketType];
+export type EventTicketTypeValue = (typeof EventTicketType)[keyof typeof EventTicketType];
 
 export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.FREE,

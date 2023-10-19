@@ -99,6 +99,7 @@ type SamfFormProps<T> = {
   onSubmit?(data: Partial<T>): void;
   children: ReactNode;
   devMode?: boolean; // Dev/debug mode.
+  isDisabled?: boolean; // If true, disables submit button
 };
 
 export function SamfForm<T>({
@@ -113,6 +114,7 @@ export function SamfForm<T>({
   onSubmit,
   children,
   devMode = false,
+  isDisabled = false,
 }: SamfFormProps<T>) {
   // Initial state and reducer (a custom state manager)
   const initialFormState: SamfFormState<Partial<T>> = {
@@ -198,7 +200,7 @@ export function SamfForm<T>({
   );
 
   // Disable submit button when validating on change
-  const disableSubmit = validateOn === 'change' && !allValid;
+  const disableSubmit = isDisabled || (validateOn === 'change' && !allValid);
 
   const formClass = noStyle ? className : classNames(styles.samf_form, animateError && styles.animate_error, className);
 
