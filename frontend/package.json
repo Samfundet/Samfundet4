@@ -9,6 +9,8 @@
     "build": "vite build",
     "ci": "yarn install --frozen-lockfile",
     "preview": "vite preview",
+    "upgrade": "yarn run upgrade",
+    "outdated": "yarn run outdated",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006 -s public --quiet",
     "storybook-dev": "start-storybook -p 6006 -s public",
     "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -s public",
@@ -101,18 +103,9 @@
     "vite": "^3.2.0",
     "webpack": "^5.76.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    "defaults"
+  ],
   "main": "src/index.tsx",
   "license": "MIT",
   "repository": {

@@ -41,23 +41,27 @@ def seed():
 
     total_recruitments = len(recruitments) * len(organizations)
     created_recruitments = 0
+    recruitment_objects = []
 
     for org_name in organizations:
         org = Organization.objects.get(name=org_name)
         for recruitment_data in recruitments:
-            Recruitment.objects.get_or_create(
+            recruitment_instance = Recruitment(
                 name_nb=recruitment_data['name_nb'],
                 name_en=recruitment_data['name_en'],
                 organization=org,
-                defaults={
-                    'visible_from': recruitment_data['visible_from'],
-                    'shown_application_deadline': recruitment_data['shown_application_deadline'],
-                    'actual_application_deadline': recruitment_data['actual_application_deadline'],
-                    'reprioritization_deadline_for_applicant': recruitment_data['reprioritization_deadline_for_applicant'],
-                    'reprioritization_deadline_for_groups': recruitment_data['reprioritization_deadline_for_groups'],
-                }
+                visible_from=recruitment_data['visible_from'],
+                shown_application_deadline=recruitment_data['shown_application_deadline'],
+                actual_application_deadline=recruitment_data['actual_application_deadline'],
+                reprioritization_deadline_for_applicant=recruitment_data['reprioritization_deadline_for_applicant'],
+                reprioritization_deadline_for_groups=recruitment_data['reprioritization_deadline_for_groups']
             )
+            recruitment_objects.append(recruitment_instance)
+
             created_recruitments += 1
             yield (created_recruitments / total_recruitments) * 100, 'recruitment'
+
+    # Using bulk_create to add all recruitment instances to the database
+    Recruitment.objects.bulk_create(recruitment_objects)
 
     yield 100, f'Created {created_recruitments} recruitments'
