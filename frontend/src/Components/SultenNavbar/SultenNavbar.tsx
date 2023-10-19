@@ -8,6 +8,7 @@ import { useDesktop } from '~/hooks';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './SultenNavbar.module.scss';
+import { SamfundetLogo } from '~/Components';
 
 export function SultenNavbar() {
   const { t, i18n } = useTranslation();
@@ -27,6 +28,10 @@ export function SultenNavbar() {
 
   const leftItems = (
     <>
+      <Link to={ROUTES.frontend.home} onClick={() => setMobileNavigation(false)} className={itemStyling}>
+        <SamfundetLogo className={styles.samfundet_logo} />
+      </Link>
+
       <Link to={ROUTES.frontend.sulten_reservation} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_reservations)}
       </Link>
@@ -89,7 +94,7 @@ export function SultenNavbar() {
   const navbarHeaders = (
     <div className={styles.parent_container}>
       <div className={styles.navbar_menu}>
-        {isDesktop && <div></div>}
+        {/* {isDesktop && <div></div>} */}
         {hamburgerMenu}
         {isDesktop && leftItems}
         <img
@@ -98,11 +103,12 @@ export function SultenNavbar() {
             navigate(ROUTES.frontend.sulten);
             setMobileNavigation(false);
           }}
-          className={styles.logo}
+          className={styles.sulten_logo}
         ></img>
         {isDesktop && rightItems}
         {calendarIcon}
         {isDesktop && languageFlag}
+        {/* {isDesktop && <div></div>} */}
       </div>
       {showMobileNavigation && navigationPopup}
     </div>
