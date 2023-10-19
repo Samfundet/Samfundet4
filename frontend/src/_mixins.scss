@@ -185,17 +185,3 @@ Usage:
   justify-content: center;
 }
 
-@mixin icon-white {
-  color: $white;
-  z-index: 1;
-}
-
-@mixin icon-gray {
-  color: $grey-3;
-  z-index: 1;
-}
-
-@mixin icon-black {
-  color: $black;
-  z-index: 1;
-}
