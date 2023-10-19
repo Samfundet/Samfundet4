@@ -3,7 +3,7 @@
 @import 'src/constants';
 
 .container {
-  margin: $sulten-navbar-height/2 0 $sulten-navbar-height/2 0;
+  margin: calc($sulten-navbar-height/2 0 $sulten-navbar-height/2 0);
   width: 100%;
   height: 100%;
   @include flex-column-center;
@@ -19,7 +19,7 @@
 
   @include for-mobile-down {
     @include flex-column-center;
-    margin: $sulten-navbar-height/2 0 $sulten-navbar-height/2 0;
+    margin: calc($sulten-navbar-height/2 0 $sulten-navbar-height/2 0);
     height: 50%;
     width: 100%;
     gap: 1em;
@@ -59,7 +59,7 @@
 }
 
 .contactAddress {
-  color: #fbb040;
+  color: $sulten-orange;
 }
 
 .lycheSocialsContainer {
