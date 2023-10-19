@@ -187,7 +187,7 @@ export function AppRoutes() {
           element={<RecruitmentUsersWithoutInterview />}
         />
         <Route
-          path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interviewNotes}
+          path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
           element={<InterviewNotesPage />}
         />
         {/* TODO ADD PERMISSIONS */}
