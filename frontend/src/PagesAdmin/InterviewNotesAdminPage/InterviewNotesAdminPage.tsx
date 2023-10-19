@@ -1,43 +1,44 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components';
+import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
+import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
 
 export function InterviewNotesPage() {
-  //TODO: interview notes from backen
+  //TODO: interview notes from backend
   const [editingMode, setEditingMode] = useState(false);
   const [text, setText] = useState('Notater fra intervjuet her...'); //TODO: place the text from the backend here.
   const posid = 1; //TODO: get the posid from the backend.
+  const { t } = useTranslation();
 
   function handleOnClick() {
-    if (editingMode) {
-      setEditingMode(false);
-      //TODO: Save the text in the textbox and send it to the backend.
-    } else {
-      setEditingMode(true);
-      //TODO: Get the text from the backend, and place it in the textbox.
-    }
+    //TODO: Save the text in the textbox and send it to the backend
+    editingMode ? setEditingMode(false) : setEditingMode(true);
   }
 
-  function handleTextarea(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setText(e.target.value);
+  function handleTextarea(value: string) {
+    setText(value);
   }
+
+  //TODO: make handleSave function to save the text in the textbox and send it to the backend
 
   return (
-    <AdminPageLayout title="Interview Notes">
+    <AdminPageLayout title={t(KEY.recruitment_interview_notes)}>
       <div className={styles.container}>
-        <label htmlFor="INotes">Interview Notes for nummer {posid}</label>
+        <label htmlFor="INotes">
+          {t(KEY.recruitment_applicant)} {posid}
+        </label>
         {editingMode ? (
-          <textarea id="INotes" name="INotes" className={styles.textbox} value={text} onChange={handleTextarea}>
-            {text}
-          </textarea>
+          <TextAreaField value={text} onChange={handleTextarea}></TextAreaField>
         ) : (
           <div className={styles.textbox}>
             <p>{text}</p>
           </div>
         )}
         <Button theme="samf" rounded={true} className={styles.button} onClick={handleOnClick}>
-          {editingMode ? 'Save' : 'Edit'}
+          {editingMode ? t(KEY.common_save) : t(KEY.common_edit)}
         </Button>
       </div>
     </AdminPageLayout>
