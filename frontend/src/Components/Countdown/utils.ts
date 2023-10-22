@@ -1,6 +1,6 @@
 import { DAY_MILLIS, HOUR_MILLIS, MINUTE_MILLIS, SECOND_MILLIS } from '~/constants';
 
-export const calculateTimeLeft = (targetDate: Date): string => {
+export function calculateTimeLeft(targetDate: Date): string {
   const now = new Date();
   const difference = targetDate.getTime() - now.getTime();
 
@@ -16,9 +16,9 @@ export const calculateTimeLeft = (targetDate: Date): string => {
   if (difference < 10 * MINUTE_MILLIS) return `${minutes}m ${seconds}s`;
   if (difference < 60 * MINUTE_MILLIS) return `${minutes}m`;
   return `${hours}h ${minutes}m`;
-};
+}
 
-export const hasReachedTargetDate = (targetDate: Date): boolean => {
+export function hasReachedTargetDate(targetDate: Date): boolean {
   const now = new Date();
   return now.getTime() >= targetDate.getTime();
-};
+}
