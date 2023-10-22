@@ -14,7 +14,13 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission)
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    InterviewRoom,
+    Interview,
+)
 from .models.general import (
     Tag,
     User,
@@ -536,24 +542,18 @@ class RecruitmentAdmissionAdmin(CustomGuardedModelAdmin):
         'id',
         'recruitment_position',
         'recruitment',
-        'interview_time',
-        'interview_location',
         'user',
     ]
     list_display = [
         'id',
         'recruitment_position',
         'recruitment',
-        'interview_time',
-        'interview_location',
         'user',
     ]
     search_fields = [
         'id',
         'recruitment_position',
         'recruitment',
-        'interview_time',
-        'interview_location',
         'user',
     ]
     list_select_related = True
@@ -565,6 +565,23 @@ class OrganizationAdmin(CustomGuardedModelAdmin):
     list_display = ['id', 'name']
     search_fields = ['id', 'name']
     list_select_related = True
+
+
+@admin.register(InterviewRoom)
+class InterviewRoomAdmin(CustomGuardedModelAdmin):
+    list_filter = ['name', 'location', 'recruitment', 'gang', 'start_time', 'end_time']
+    list_display = ['name', 'location', 'recruitment', 'gang', 'start_time', 'end_time']
+    search_fields = ['name', 'location', 'recruitment__name', 'gang__name']
+    list_display_links = ['name', 'location']
+    list_select_related = ['recruitment', 'gang']
+
+
+@admin.register(Interview)
+class InterviewAdmin(CustomGuardedModelAdmin):
+    list_filter = ['id', 'notes']
+    list_display = ['id', 'notes']
+    search_fields = ['id', 'notes']
+    list_display_links = ['id', 'notes']
 
 
 ### End: Our models ###
