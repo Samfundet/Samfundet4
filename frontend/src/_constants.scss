@@ -2,6 +2,9 @@
 // When adding new colors, types.ts must be updated to reflect all colors
 $red-samf: #a03033;
 $red-samf-faded: #fac7c8;
+$red-lighter: #fff2f0;
+$red-light: #ffcfca;
+$red: #dc1010;
 $blue: #337ab7;
 $blue-lighter: #e3f2ff;
 $blue-light: #c4dbf3;
@@ -25,9 +28,6 @@ $green-lighter: #f6ffed;
 $green-light: #b7eb8f;
 $orange-ligher: #fffbe6;
 $orange-light: #ffe99e;
-$red-lighter: #fff2f0;
-$red-light: #ffcfca;
-$red: #dc1010;
 $sulten-orange: #fbb042;
 
 // Transparent colors
@@ -64,6 +64,7 @@ $content-padding: calc((100vw - 1200px) / 2);
 
 // Navbar size
 $navbar-height: 60px;
+$sulten-navbar-height: 100px;
 
 // Content size
 $primary-content-wide-padding: 2.5rem;

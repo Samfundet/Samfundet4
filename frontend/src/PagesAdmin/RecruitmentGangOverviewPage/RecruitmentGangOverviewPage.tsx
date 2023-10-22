@@ -44,7 +44,11 @@ export function RecruitmentGangOverviewPage() {
       <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
         {t(KEY.common_overview)}
       </Button>
-      <Button theme="blue" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+      <Button
+        theme="blue"
+        rounded={true}
+        onClick={() => navigate(ROUTES.frontend.admin_recruitment_users_without_interview)}
+      >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
       <Button theme="white" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>

@@ -1,8 +1,11 @@
 import {
   assignUserToGroup,
+  getApplicantsWithoutInterviews,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
+  getRecruitmentAdmissionsForApplicant,
+  getRecruitmentAdmissionsForGang,
   getRecruitmentPosition,
   getRecruitmentPositions,
   getUser,
@@ -81,6 +84,29 @@ export function ApiTestingPage() {
         onClick={() => getRecruitmentPosition('1').then(console.log).catch(console.error)}
       >
         get Rec pos
+      </Button>
+
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentAdmissionsForApplicant('1').then(console.log).catch(console.error)}
+      >
+        get Rec admissions for user
+      </Button>
+
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentAdmissionsForGang('1', '1').then(console.log).catch(console.error)}
+      >
+        get Rec admissions for gang
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getApplicantsWithoutInterviews('1').then(console.log).catch(console.error)}
+      >
+        get users without interviews
       </Button>
     </div>
   );

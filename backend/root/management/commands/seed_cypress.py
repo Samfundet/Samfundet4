@@ -58,6 +58,7 @@ class Command(BaseCommand):
 
             Venue.objects.create(
                 name='Cypress Area',
+                slug='cypress-area',
                 description='Some description',
                 floor=1,
                 last_renovated=timezone.now(),

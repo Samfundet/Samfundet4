@@ -8,11 +8,13 @@ from . import (
     billig,
     menu,
     documents,
+    textitems,
     example,
     samf3,
     recruitment,
     recruitment_position,
     blogposts,
+    recruitment_admissions,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -31,10 +33,12 @@ SEED_SCRIPTS = [
     ('menu', menu.seed),
     ('documents', documents.seed),
     ('information_page', information_pages.seed),
+    ('textitems', textitems.seed),
     ('blogposts', blogposts.seed),
     ('organization', oganizations.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
+    ('recruitment_admissions', recruitment_admissions.seed),
 
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),

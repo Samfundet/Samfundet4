@@ -16,4 +16,10 @@ const Template: ComponentStory<typeof SultenCard> = function (args) {
 };
 
 export const Basic = Template.bind({});
-Basic.args = { image: front_lyche, header: 'Sulten', text: 'Sulten er en god ting', buttonText: 'Trykk her' };
+Basic.args = {
+  image: front_lyche,
+  header: 'Sulten',
+  text: 'Sulten er en god ting',
+  buttonText: 'Trykk her',
+  smallCard: false,
+};
