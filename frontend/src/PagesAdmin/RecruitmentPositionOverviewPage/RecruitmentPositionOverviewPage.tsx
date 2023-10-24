@@ -92,10 +92,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <InputField
-            value={admission.interview_time ? utcTimestampToLocal(admission.interview_time) : ''}
+            value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
-              const newAdmission = { ...admission, interview_time: value.toString() };
+              const updatedInterview = { ...admission.interview, interview_time: value.toString() };
+              const newAdmission = { ...admission, interview: updatedInterview };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
             }}
             type="datetime-local"
@@ -105,10 +106,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <InputField
-            value={admission.interview_location ?? ''}
+            value={admission.interview.interview_location ?? ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
-              const newAdmission = { ...admission, interview_location: value.toString() };
+              const updatedInterview = { ...admission.interview, interview_location: value.toString() };
+              const newAdmission = { ...admission, interview: updatedInterview };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
             }}
           />
