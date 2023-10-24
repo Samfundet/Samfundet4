@@ -17,4 +17,5 @@ export const TextItem = {
   sulten_what_is_lyche_text: 'sulten_what_is_lyche_text',
   sulten_lyche_goal_text: 'sulten_lyche_goal_text',
   sulten_lyche_about_menu_text: 'sulten_lyche_about_menu_text',
+  sulten_contact_page_text: 'sulten_contact_page_text',
 } as const;
