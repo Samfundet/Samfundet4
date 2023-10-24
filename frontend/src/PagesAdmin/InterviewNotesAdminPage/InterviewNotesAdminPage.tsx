@@ -10,16 +10,14 @@ export function InterviewNotesPage() {
   //TODO: interview notes from backend
   const [editingMode, setEditingMode] = useState(false);
   const [text, setText] = useState('Notater fra intervjuet her...'); //TODO: place the text from the backend here.
-  const posid = 1; //TODO: get the posid from the backend.
+  const posId = 1; //TODO: get the posId from the backend.
   const { t } = useTranslation();
 
-  function handleOnClick() {
-    //TODO: Save the text in the textbox and send it to the backend
-    editingMode ? setEditingMode(false) : setEditingMode(true);
-  }
-
-  function handleTextarea(value: string) {
-    setText(value);
+  function handleEditSave() {
+    if (editingMode) {
+      //TODO: save the text in the textbox and send it to the backend
+    }
+    setEditingMode(!editingMode);
   }
 
   //TODO: make handleSave function to save the text in the textbox and send it to the backend
@@ -28,16 +26,10 @@ export function InterviewNotesPage() {
     <AdminPageLayout title={t(KEY.recruitment_interview_notes)}>
       <div className={styles.container}>
         <label htmlFor="INotes">
-          {t(KEY.recruitment_applicant)} {posid}
+          {t(KEY.recruitment_applicant)} {posId}
         </label>
-        {editingMode ? (
-          <TextAreaField value={text} onChange={handleTextarea}></TextAreaField>
-        ) : (
-          <div className={styles.textbox}>
-            <p>{text}</p>
-          </div>
-        )}
-        <Button theme="samf" rounded={true} className={styles.button} onClick={handleOnClick}>
+        <TextAreaField value={text} onChange={setText} disabled={!editingMode}></TextAreaField>
+        <Button theme="samf" rounded={true} className={styles.button} onClick={handleEditSave}>
           {editingMode ? t(KEY.common_save) : t(KEY.common_edit)}
         </Button>
       </div>
