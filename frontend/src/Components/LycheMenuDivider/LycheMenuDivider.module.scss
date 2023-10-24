@@ -1,3 +1,5 @@
+@import 'src/constants';
+
 .lyche_menu_divider {
   display: flex;
   flex-direction: row;
@@ -18,7 +20,7 @@
 }
 
 .lyche_menu_divider_title {
-  font-family: 'LemonMilkLight', sans-serif;
+  font-family: $lyche-title-font;
   font-size: 1.25em;
   color: white;
   text-transform: uppercase;
