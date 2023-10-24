@@ -1,0 +1,35 @@
+.lyche_menu_divider {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3em;
+  margin-top: 2em;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.lyche_menu_divider_left {
+  background-image: url('~/assets/lyche/menu-detail-left.png');
+  height: 17px;
+  width: 128px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.lyche_menu_divider_title {
+  font-family: 'LemonMilkLight', sans-serif;
+  font-size: 1.25em;
+  color: white;
+  text-transform: uppercase;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.lyche_menu_divider_right {
+  background-image: url('~/assets/lyche/menu-detail-right.png');
+  height: 17px;
+  width: 128px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
