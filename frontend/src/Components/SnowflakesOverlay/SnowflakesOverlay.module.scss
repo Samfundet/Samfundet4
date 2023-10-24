@@ -1,11 +1,9 @@
 .snowflake {
   position: fixed;
-  top: -10%;
   z-index: 9999;
   user-select: none;
   cursor: default;
   animation-name: snowflakes-fall, snowflakes-shake;
-  animation-duration: 10s, 3s;
   animation-timing-function: linear, ease-in-out;
   animation-iteration-count: infinite, infinite;
   animation-play-state: running, running;
@@ -55,25 +53,28 @@
   }
 }
 
-$snowflake-data: (
-  (0, 1%, 0s, 0s),
-  (1, 10%, 1s, 1s),
-  (2, 20%, 6s, 0.5s),
-  (3, 30%, 4s, 2s),
-  (4, 40%, 2s, 2s),
-  (5, 50%, 8s, 3s),
-  (6, 60%, 6s, 2s),
-  (7, 70%, 2.5s, 1s),
-  (8, 80%, 1s, 0s),
-  (9, 90%, 3s, 1.5s),
-  (10, 25%, 2s, 0s),
-  (11, 65%, 4s, 2.5s)
-);
+@for $i from 1 through 48 {
+  .snowflake:nth-of-type(#{$i}) {
+    left: #{random(100)} + '%';
+    top: calc(-10% - #{random(10)}) + '%';
+    animation-duration:
+      #{10 + random(5)}s,
+      #{2.5 + random(2)}s;
+    animation-delay:
+      #{($i * 0.2) + random(5)} + 's',
+      #{random(4)} + 's';
 
-@each $index, $left, $delay1, $delay2 in $snowflake-data {
-  .snowflake:nth-of-type(#{$index}) {
-    left: $left;
-    -webkit-animation-delay: $delay1, $delay2;
-    animation-delay: $delay1, $delay2;
+    @keyframes snowflakes-shake-#{$i} {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(#{40 + random(40)}px);
+      }
+    }
+    animation-name:
+      snowflakes-fall,
+      snowflakes-shake-#{$i};
   }
 }

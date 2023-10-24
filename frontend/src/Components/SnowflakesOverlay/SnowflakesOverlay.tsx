@@ -7,14 +7,20 @@ type SnowflakesOverlayProps = {
 const SNOWFLAKE_SYMBOLS = ['❅', '❆', '❅', '❆', '❅', '❆', '❅', '❆', '❅', '❆', '❅', '❆'];
 
 export function SnowflakesOverlay({ intensity = 'low' }: SnowflakesOverlayProps) {
-  // increase the number of snowflakes based on intensity
   let snowflakes = SNOWFLAKE_SYMBOLS;
-  if (intensity === 'medium') {
-    snowflakes = [...snowflakes, ...snowflakes];
-  } else if (intensity === 'high') {
-    snowflakes = [...snowflakes, ...snowflakes, ...snowflakes];
-  } else if (intensity === 'extreme') {
-    snowflakes = [...snowflakes, ...snowflakes, ...snowflakes, ...snowflakes];
+
+  switch (intensity) {
+    case 'medium':
+      snowflakes = [...snowflakes, ...SNOWFLAKE_SYMBOLS];
+      break;
+    case 'high':
+      snowflakes = [...snowflakes, ...SNOWFLAKE_SYMBOLS, ...SNOWFLAKE_SYMBOLS];
+      break;
+    case 'extreme':
+      snowflakes = [...snowflakes, ...SNOWFLAKE_SYMBOLS, ...SNOWFLAKE_SYMBOLS, ...SNOWFLAKE_SYMBOLS];
+      break;
+    default:
+      break;
   }
 
   return (
