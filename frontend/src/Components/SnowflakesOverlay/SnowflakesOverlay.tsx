@@ -1,7 +1,7 @@
 import styles from './SnowflakesOverlay.module.scss';
 
 type SnowflakesOverlayProps = {
-  intensity: 'low' | 'medium' | 'high' | 'extreme';
+  intensity?: 'low' | 'medium' | 'high' | 'extreme';
 };
 
 const SNOWFLAKE_SYMBOLS = ['❅', '❆', '❅', '❆', '❅', '❆', '❅', '❆', '❅', '❆', '❅', '❆'];
