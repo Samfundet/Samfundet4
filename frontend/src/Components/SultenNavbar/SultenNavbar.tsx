@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { SamfundetLogo } from '~/Components';
 import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
 import { useDesktop } from '~/hooks';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './SultenNavbar.module.scss';
-import { SamfundetLogo } from '~/Components';
 
 export function SultenNavbar() {
   const { t, i18n } = useTranslation();
@@ -94,7 +94,6 @@ export function SultenNavbar() {
   const navbarHeaders = (
     <div className={styles.parent_container}>
       <div className={styles.navbar_menu}>
-        {/* {isDesktop && <div></div>} */}
         {hamburgerMenu}
         {isDesktop && leftItems}
         <img
@@ -108,7 +107,6 @@ export function SultenNavbar() {
         {isDesktop && rightItems}
         {calendarIcon}
         {isDesktop && languageFlag}
-        {/* {isDesktop && <div></div>} */}
       </div>
       {showMobileNavigation && navigationPopup}
     </div>
