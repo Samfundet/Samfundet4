@@ -11,12 +11,16 @@
   margin-right: 10px;
 }
 
-.lyche_menu_divider_left {
-  background-image: url('~/assets/lyche/menu-detail-left.png');
+.lyche_menu_divider_props {
   height: 17px;
   width: 128px;
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+.lyche_menu_divider_left {
+  @extend .lyche_menu_divider_props;
+  background-image: $Lyche-menu-divider-left;
 }
 
 .lyche_menu_divider_title {
@@ -26,12 +30,10 @@
   text-transform: uppercase;
   margin-left: 0.5em;
   margin-right: 0.5em;
+  white-space: nowrap;
 }
 
 .lyche_menu_divider_right {
-  background-image: url('~/assets/lyche/menu-detail-right.png');
-  height: 17px;
-  width: 128px;
-  background-size: contain;
-  background-repeat: no-repeat;
+  @extend .lyche_menu_divider_props;
+  background-image: $Lyche-menu-divider-right;
 }
