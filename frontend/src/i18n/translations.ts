@@ -159,6 +159,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_admission_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.recruitment_norwegian_applicants_only]: 'Kun norske søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
@@ -385,6 +386,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
+  [KEY.recruitment_norwegian_applicants_only]: 'Norwegian applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
 
   // Admin:

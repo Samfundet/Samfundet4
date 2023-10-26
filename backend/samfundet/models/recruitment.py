@@ -65,15 +65,17 @@ class RecruitmentPosition(FullCleanSaveMixin):
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
     short_description_nb = models.CharField(max_length=100, help_text='Short description of the position')
-    short_description_en = models.CharField(max_length=100, help_text='Short description of the position')
+    short_description_en = models.CharField(max_length=100, help_text='Short description of the position', null=True, blank=True)
 
     long_description_nb = models.TextField(help_text='Long description of the position')
-    long_description_en = models.TextField(help_text='Long description of the position')
+    long_description_en = models.TextField(help_text='Long description of the position', null=True, blank=True)
 
     is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
 
     default_admission_letter_nb = models.TextField(help_text='Default admission letter for the position')
-    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position')
+    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position', null=True, blank=True)
+
+    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for norwegian applicants?', default=False)
 
     gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting')
     recruitment = models.ForeignKey(
@@ -95,6 +97,14 @@ class RecruitmentPosition(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
+
+    def save(self, *args, **kwargs):
+        if self.norwegian_applicants_only:
+            self.name_en = "No english applicants"
+            self.short_description_en = "No english applicants"
+            self.long_description_en = "No english applicants"
+            self.default_admission_letter_en = "No english applicants"
+        super(RecruitmentPosition, self).save(*args, **kwargs)
 
 
 class InterviewRoom(FullCleanSaveMixin):
