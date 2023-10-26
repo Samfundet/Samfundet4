@@ -8,10 +8,11 @@ from django.utils import timezone
 
 from django.db import models
 
+from root.utils.mixins import FullCleanSaveMixin
 from .general import Organization, User, Gang
 
 
-class Recruitment(models.Model):
+class Recruitment(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
@@ -26,7 +27,7 @@ class Recruitment(models.Model):
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
-    def clean(self) -> None:
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
         # All times should be in the future
         now = timezone.now()
         if any(
@@ -59,7 +60,7 @@ class Recruitment(models.Model):
         return f'Recruitment: {self.name_en} at {self.organization}'
 
 
-class RecruitmentPosition(models.Model):
+class RecruitmentPosition(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
@@ -84,17 +85,54 @@ class RecruitmentPosition(models.Model):
         blank=True,
     )
 
+    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True, help_text='Positions with shared interview')
+
     # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviews')
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
 
-class RecruitmentAdmission(models.Model):
+class InterviewRoom(FullCleanSaveMixin):
+    name = models.CharField(max_length=255, help_text='Name of the room')
+    location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
+    start_time = models.DateTimeField(help_text='Start time of availability')
+    end_time = models.DateTimeField(help_text='End time of availability')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='rooms')
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that booked the room', related_name='rooms', blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def clean(self) -> None:
+        if self.start_time > self.end_time:
+            raise ValidationError('Start time should be before end time')
+
+        super().clean()
+
+
+class Interview(FullCleanSaveMixin):
+    # User visible fields
+    interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
+    interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
+
+    # Admin visible fields
+    room = models.ForeignKey(
+        InterviewRoom,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text='Room where the interview is held',
+        related_name='interviews',
+    )
+    notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
+
+
+class RecruitmentAdmission(FullCleanSaveMixin):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
@@ -103,8 +141,9 @@ class RecruitmentAdmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
 
-    interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
-    interview_location = models.CharField(max_length=100, help_text='The location of the interview', null=True, blank=True)
+    interview = models.ForeignKey(
+        Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
+    )
 
     PRIORITY_CHOICES = [
         (0, 'Not Set'),
@@ -127,3 +166,21 @@ class RecruitmentAdmission(models.Model):
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        """
+        If the admission is saved without an interview, try to find an interview from a shared position.
+        """
+        if not self.interview:
+            # Check if there is already an interview for the same user in shared positions
+            shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
+            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
+                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+
+            if shared_interview:
+                self.interview = shared_interview.interview
+            else:
+                # Create a new interview instance if needed
+                self.interview = Interview.objects.create()
+
+        super(RecruitmentAdmission, self).save(*args, **kwargs)

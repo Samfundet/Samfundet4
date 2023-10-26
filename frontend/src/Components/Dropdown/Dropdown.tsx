@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import { ChangeEvent } from 'react';
-import { ReactElement } from 'react-markdown/lib/react-markdown';
+import { ChangeEvent, ReactElement } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropDownOption<T> = {
@@ -12,6 +11,7 @@ export type DropDownOption<T> = {
 type DropdownProps<T> = {
   className?: string;
   defaultValue?: DropDownOption<T>;
+  initialValue?: T;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
   disabled?: boolean;
@@ -22,6 +22,7 @@ type DropdownProps<T> = {
 export function Dropdown<T>({
   options = [],
   defaultValue,
+  initialValue,
   onChange,
   className,
   label,
@@ -50,9 +51,9 @@ export function Dropdown<T>({
         className={classNames(styles.samf_select, error && styles.error)}
         onChange={handleChange}
         disabled={disabled}
-        defaultValue={-1}
+        defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option selected value={-1}></option>}
+        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
         {options.map((opt, index) => {
           return (
             <option value={index} key={index}>

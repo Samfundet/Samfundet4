@@ -12,8 +12,11 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
-  LychePage,
+  LycheAboutPage,
+  LycheContactPage,
+  LycheHomePage,
   NotFoundPage,
+  RecruitmentAdmissionFormPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -35,8 +38,10 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
+  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
 } from '~/PagesAdmin';
+import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
 import { ProtectedRoute } from './Components';
 import { SamfOutlet } from './Components/SamfOutlet';
@@ -44,6 +49,7 @@ import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
+import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
@@ -74,11 +80,17 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
       </Route>
       {/* 
             ADMIN ROUTES
       */}
       <Route element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}>
+        {/* TODO PERMISSION FOR IMPERSONATE */}
+        <Route
+          path={ROUTES.frontend.admin_impersonate}
+          element={<ProtectedRoute perms={[]} Page={ImpersonateUserAdminPage} />}
+        />
         <Route
           path={ROUTES.frontend.admin}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
@@ -170,6 +182,10 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
         />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_users_without_interview}
+          element={<RecruitmentUsersWithoutInterview />}
+        />
         {/* TODO ADD PERMISSIONS */}
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_overview}
@@ -183,6 +199,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_create}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
+          element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_edit}
@@ -205,8 +225,11 @@ export function AppRoutes() {
             SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
-        <Route path={ROUTES.frontend.sulten} element={<LychePage />} />
+        <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
+        <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
+        <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
       </Route>
+
       {/* 
             404 NOT FOUND
       */}

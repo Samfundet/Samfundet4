@@ -12,8 +12,8 @@ from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -194,6 +194,17 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
 
 
 @pytest.fixture
+def fixture_text_item() -> Iterator[TextItem]:
+    text_item = TextItem.objects.create(
+        key='foo',
+        text_nb='foo',
+        text_en='foo',
+    )
+    yield text_item
+    text_item.delete()
+
+
+@pytest.fixture
 def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitment]:
     now = timezone.now()
     one_hour = timezone.timedelta(hours=1)
@@ -251,3 +262,19 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
     )
     yield blogpost
     blogpost.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
+                                  fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
+    admission = RecruitmentAdmission.objects.create(
+        admission_text='Test admission text',
+        recruitment_position=fixture_recruitment_position,
+        recruitment=fixture_recruitment,
+        user=fixture_user,
+        applicant_priority=1,
+        recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
+        recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],
+    )
+    yield admission
+    admission.delete()
