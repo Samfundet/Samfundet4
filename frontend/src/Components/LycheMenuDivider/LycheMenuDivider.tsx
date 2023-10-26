@@ -1,8 +1,8 @@
 import styles from './LycheMenuDivider.module.scss';
 
-type LycheMenuDividerProps = {
+interface LycheMenuDividerProps {
   title: string;
-};
+}
 
 export function LycheMenuDivider({ title }: LycheMenuDividerProps) {
   return (
