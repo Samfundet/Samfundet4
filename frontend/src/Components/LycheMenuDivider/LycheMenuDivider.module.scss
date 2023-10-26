@@ -11,7 +11,7 @@
   margin-right: 10px;
 }
 
-.lyche_menu_divider_props {
+.lyche_menu_divider_img {
   height: 17px;
   width: 128px;
   background-size: contain;
@@ -19,8 +19,8 @@
 }
 
 .lyche_menu_divider_left {
-  @extend .lyche_menu_divider_props;
-  background-image: $Lyche-menu-divider-left;
+  @extend .lyche_menu_divider_img;
+  background-image: $lyche-menu-divider-left;
 }
 
 .lyche_menu_divider_title {
@@ -34,6 +34,6 @@
 }
 
 .lyche_menu_divider_right {
-  @extend .lyche_menu_divider_props;
-  background-image: $Lyche-menu-divider-right;
+  @extend .lyche_menu_divider_img;
+  background-image: $lyche-menu-divider-right;
 }
