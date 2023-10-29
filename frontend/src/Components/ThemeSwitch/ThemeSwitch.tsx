@@ -16,8 +16,8 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24} className={styles.icon} />;
 
   return (
-    <div onClick={switchTheme} className={classnames(styles.button, className)}>
+    <button tabIndex={0} onClick={switchTheme} className={classnames(styles.button, className)}>
       {isDarkTheme ? onIcon : offIcon}
-    </div>
+    </button>
   );
 }
