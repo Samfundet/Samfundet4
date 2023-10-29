@@ -1,4 +1,9 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
 .container {
+  color: $black;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -9,6 +14,11 @@
   transition: 0.2s;
   padding: 20px;
   margin: 10px;
+
+  @include theme-dark {
+    background-color: $black;
+    color: $theme-dark-color;
+  }
 }
 
 .button {
