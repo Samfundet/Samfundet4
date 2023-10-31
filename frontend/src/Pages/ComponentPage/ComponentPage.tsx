@@ -1,4 +1,5 @@
 import { Button, Countdown, InputField, ProgressBar, RadioButton } from '~/Components';
+import { DayColumn } from '~/Components/Calendar/DayColumn/DayColumn';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -11,6 +12,27 @@ import styles from './ComponentPage.module.scss';
  * Page to render all components for easy overview and debug purposes.
  * Useful when styling global themes.
  */
+
+const baseDate = new Date('2023-11-01T00:00:00Z'); // Set a base date
+
+const events = [
+  {
+    start: new Date(baseDate.getTime() + 2 * 60 * 60 * 1000),
+    end: new Date(baseDate.getTime() + 6 * 60 * 60 * 1000),
+    title: 'Sleep',
+  },
+  {
+    start: new Date(baseDate.getTime() + 3 * 60 * 60 * 1000),
+    end: new Date(baseDate.getTime() + 6 * 60 * 60 * 1000),
+    title: 'Sleep',
+  },
+  {
+    start: new Date(baseDate.getTime() + 10 * 60 * 60 * 1000),
+    end: new Date(baseDate.getTime() + 12 * 60 * 60 * 1000 + 15 * 60 * 1000),
+    title: 'Meeting',
+  },
+];
+
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
@@ -64,6 +86,13 @@ export function ComponentPage() {
             <img src={norwegianFlag}></img>
           </Countdown>
         </h2>
+      </div>
+      <div>
+        <h2>Calendar:</h2>
+        <p>See Calendar component in Components folder</p>
+        <div>
+          <DayColumn events={events} />
+        </div>
       </div>
     </div>
   );
