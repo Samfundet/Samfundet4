@@ -18,7 +18,9 @@ name = "pypi"
 "pipenv:rm" = "pipenv --rm" # Completely remove virtual environment.
 "pipenv:shell" = "pipenv shell" # Opens a shell within the virtual environment.
 "mypy:run" = "pipenv run mypy --config-file mypy.ini ."
+"migrations:make" = "pipenv run python manage.py makemigrations --noinput"
 "migrations:verify" = "pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2"
+"migrations:apply" = "pipenv run python manage.py migrate"
 "bandit:run" = "pipenv run bandit --recursive --ini .bandit ."
 "flake8:run" = "pipenv run flake8 --config=.flake8 ."
 "yapf:diff" = "pipenv run yapf --parallel --recursive --diff ." # Dry-run yapf on all files in the project.
