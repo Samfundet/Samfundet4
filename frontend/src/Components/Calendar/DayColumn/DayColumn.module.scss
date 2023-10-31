@@ -14,6 +14,7 @@
     align-items: center;
     grid-column: 1;
     background-color: white;
+    grid-row: span 12;
   }
 
   .event {
@@ -23,8 +24,8 @@
   }
 
   .blank {
+    background-color: white;
     grid-column-start: 2;
     grid-column-end: -1;
-    background-color: white;
   }
 }

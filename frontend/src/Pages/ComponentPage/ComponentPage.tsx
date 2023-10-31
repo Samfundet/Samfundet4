@@ -32,13 +32,18 @@ const events = [
     title: 'Sleep',
   },
   {
-    start: new Date(baseDate.getTime() + 8 * HOUR_MILLIS),
-    end: new Date(baseDate.getTime() + 10 * HOUR_MILLIS),
+    start: new Date(baseDate.getTime() + 9 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 11 * HOUR_MILLIS),
     title: 'Meeting',
   },
   {
     start: new Date(baseDate.getTime() + 10 * HOUR_MILLIS),
     end: new Date(baseDate.getTime() + 12 * HOUR_MILLIS),
+    title: 'Meeting',
+  },
+  {
+    start: new Date(baseDate.getTime() + 18 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 22 * HOUR_MILLIS),
     title: 'Meeting',
   },
 ];

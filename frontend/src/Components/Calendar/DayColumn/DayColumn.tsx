@@ -10,52 +10,64 @@ type DayCalendarProps = {
   events: Event[];
 };
 
+const HOURS_IN_DAY = Array.from({ length: 24 });
+
 function getIntervalFromDate(date: Date): number {
   const hour = date.getUTCHours();
   const minute = date.getUTCMinutes();
   return hour * 12 + Math.floor(minute / 5);
 }
 
-function getOverlaps(event: Event, events: Event[]): number {
-  let overlapCount = 0;
-  for (const otherEvent of events) {
-    if (otherEvent !== event) {
-      const otherStart = getIntervalFromDate(otherEvent.start);
-      const otherEnd = getIntervalFromDate(otherEvent.end);
-      const currentStart = getIntervalFromDate(event.start);
-      const currentEnd = getIntervalFromDate(event.end);
-      if (
-        (currentStart >= otherStart && currentStart < otherEnd) ||
-        (currentEnd > otherStart && currentEnd <= otherEnd) ||
-        (currentStart <= otherStart && currentEnd >= otherEnd)
-      ) {
-        overlapCount++;
-      }
-    }
-  }
-  return overlapCount;
+function overlaps(event1: Event, event2: Event): boolean {
+  const start1 = getIntervalFromDate(event1.start);
+  const end1 = getIntervalFromDate(event1.end);
+  const start2 = getIntervalFromDate(event2.start);
+  const end2 = getIntervalFromDate(event2.end);
+
+  return (start1 >= start2 && start1 < end2) || (end1 > start2 && end1 <= end2) || (start1 <= start2 && end1 >= end2);
 }
 
-function getMaxSimultaneousOverlap(event: Event, sortedEvents: Event[], index: number): number {
+function getOverlaps(event: Event, events: Event[]): number {
+  return events.filter((otherEvent) => otherEvent !== event && overlaps(event, otherEvent)).length;
+}
+
+function getMaxSimultaneousOverlap(event: Event, sortedEvents: Event[], uptoIndex: number): number {
   const startInterval = getIntervalFromDate(event.start);
   const endInterval = getIntervalFromDate(event.end);
-  let maxSimultaneousOverlap = 0;
+  let maxOverlap = 0;
 
   for (let minute = startInterval; minute < endInterval; minute++) {
     let currentOverlap = 0;
-    for (let i = 0; i < index; i++) {
+    for (let i = 0; i < uptoIndex; i++) {
       const otherStart = getIntervalFromDate(sortedEvents[i].start);
       const otherEnd = getIntervalFromDate(sortedEvents[i].end);
       if (minute >= otherStart && minute < otherEnd) {
         currentOverlap += 1;
       }
     }
-    if (currentOverlap > maxSimultaneousOverlap) {
-      maxSimultaneousOverlap = currentOverlap;
-    }
+    maxOverlap = Math.max(maxOverlap, currentOverlap);
   }
+  return maxOverlap;
+}
 
-  return maxSimultaneousOverlap;
+function EventBlock({ event, index, sortedEvents }: { event: Event; index: number; sortedEvents: Event[] }) {
+  const startInterval = getIntervalFromDate(event.start);
+  const endInterval = getIntervalFromDate(event.end);
+  const span = endInterval - startInterval;
+  const maxSimultaneousOverlap = getMaxSimultaneousOverlap(event, sortedEvents, index);
+
+  return (
+    <div
+      key={index}
+      className={styles.event}
+      style={{
+        gridRow: `${startInterval + 1} / span ${span}`,
+        gridColumn: 2 + maxSimultaneousOverlap,
+      }}
+    >
+      {event.title}
+    </div>
+  );
 }
 
 function processEvents(events: Event[]) {
@@ -69,11 +81,9 @@ function processEvents(events: Event[]) {
   return { sortedEvents, maxOverlap };
 }
 
-const HOURS_IN_DAY = Array.from({ length: 24 });
-
 function HourColumn({ hour }: { hour: number }) {
   return (
-    <div key={hour} className={styles.hour} style={{ gridRow: `span 12` }}>
+    <div key={hour} className={styles.hour}>
       {hour}:00
     </div>
   );
@@ -86,44 +96,8 @@ function BlankHourBackground({ hour }: { hour: number }) {
       className={styles.blank}
       style={{
         gridRow: `${hour * 12 + 1} / span 12`,
-        gridColumn: 2,
-        gridColumnEnd: -1,
       }}
     ></div>
-  );
-}
-
-function EventBlock({ event, index, sortedEvents }: { event: Event; index: number; sortedEvents: Event[] }) {
-  const startInterval = getIntervalFromDate(event.start);
-  const endInterval = getIntervalFromDate(event.end);
-  const span = endInterval - startInterval;
-  let maxSimultaneousOverlap = 0;
-
-  for (let minute = startInterval; minute < endInterval; minute++) {
-    let currentOverlap = 0;
-    for (let i = 0; i < index; i++) {
-      const otherStart = getIntervalFromDate(sortedEvents[i].start);
-      const otherEnd = getIntervalFromDate(sortedEvents[i].end);
-      if (minute >= otherStart && minute < otherEnd) {
-        currentOverlap += 1;
-      }
-    }
-    if (currentOverlap > maxSimultaneousOverlap) {
-      maxSimultaneousOverlap = currentOverlap;
-    }
-  }
-
-  return (
-    <div
-      key={index}
-      className={styles.event}
-      style={{
-        gridRow: `${startInterval + 1} / span ${span}`,
-        gridColumn: 2 + maxSimultaneousOverlap,
-      }}
-    >
-      {event.title}
-    </div>
   );
 }
 
