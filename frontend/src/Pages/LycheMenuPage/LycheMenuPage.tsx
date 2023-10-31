@@ -9,7 +9,7 @@ export function LycheMenuPage() {
         dishDescription="Serveres med en skål aioli på siden."
         allergens="Allergener: Gluten (hvete), sulfitt og egg (aioli)"
         price="19,- / 29,-"
-      ></MenuItem>
+      />
 
       <br></br>
       <br></br>
@@ -19,7 +19,7 @@ export function LycheMenuPage() {
         dishDescription="Lychebrød med rødbethummus, ruccula, mango og pistou. "
         allergens="Allergener: Gluten (hvete), melk (pistou), sesam (hummus). Kan inneholde spor av peanøtter: hummus"
         price="40,- / 49,-"
-      ></MenuItem>
+      />
 
       <br></br>
       <br></br>
@@ -32,7 +32,7 @@ export function LycheMenuPage() {
         allergens="Allergener: Egg, sennep, sulfitt. Det er svinekjøtt i selve burgerkaken. "
         recommendations="Baren anbefaler: Hacienda lopez De Haro (rød)"
         price="129,- / 154,-"
-      ></MenuItem>
+      />
 
       <br></br>
 
@@ -42,7 +42,7 @@ export function LycheMenuPage() {
         allergens="Allergener: Melk og gluten"
         recommendations="Baren anbefaler: jue de vie"
         price="99,- / 119,-"
-      ></MenuItem>
+      />
     </SultenPage>
   );
 }
