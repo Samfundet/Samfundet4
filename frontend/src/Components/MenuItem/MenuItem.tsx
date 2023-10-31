@@ -17,9 +17,9 @@ export function MenuItem({ dishTitle, dishDescription, allergens, recommendation
       </div>
       <div className={styles.item_description}> {dishDescription} </div>
       <br></br>
-      {allergens ? <div className={styles.item_allergens}> {allergens} </div> : <div></div>}
+      {allergens && <div className={styles.item_allergens}> {allergens} </div>}
       <br></br>
-      {recommendations ? <div className={styles.item_recommendations}> {recommendations} </div> : <div></div>}
+      {recommendations && <div className={styles.item_recommendations}> {recommendations} </div>}
     </div>
   );
 }
