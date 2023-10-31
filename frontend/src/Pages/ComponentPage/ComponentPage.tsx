@@ -23,7 +23,7 @@ const events = [
   },
   {
     start: new Date(baseDate.getTime() + 3 * HOUR_MILLIS + 30 * MINUTE_MILLIS),
-    end: new Date(baseDate.getTime() + 6 * HOUR_MILLIS + 15 * MINUTE_MILLIS),
+    end: new Date(baseDate.getTime() + 12 * HOUR_MILLIS + 15 * MINUTE_MILLIS),
     title: 'Sleep',
   },
   {
@@ -32,8 +32,8 @@ const events = [
     title: 'Sleep',
   },
   {
-    start: new Date(baseDate.getTime() + 10 * HOUR_MILLIS),
-    end: new Date(baseDate.getTime() + 12 * HOUR_MILLIS),
+    start: new Date(baseDate.getTime() + 8 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 10 * HOUR_MILLIS),
     title: 'Meeting',
   },
   {

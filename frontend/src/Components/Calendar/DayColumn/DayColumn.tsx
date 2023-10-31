@@ -36,10 +36,34 @@ function getOverlaps(event: Event, events: Event[]): number {
   return overlapCount;
 }
 
+function getMaxSimultaneousOverlap(event: Event, sortedEvents: Event[], index: number): number {
+  const startInterval = getIntervalFromDate(event.start);
+  const endInterval = getIntervalFromDate(event.end);
+  let maxSimultaneousOverlap = 0;
+
+  for (let minute = startInterval; minute < endInterval; minute++) {
+    let currentOverlap = 0;
+    for (let i = 0; i < index; i++) {
+      const otherStart = getIntervalFromDate(sortedEvents[i].start);
+      const otherEnd = getIntervalFromDate(sortedEvents[i].end);
+      if (minute >= otherStart && minute < otherEnd) {
+        currentOverlap += 1;
+      }
+    }
+    if (currentOverlap > maxSimultaneousOverlap) {
+      maxSimultaneousOverlap = currentOverlap;
+    }
+  }
+
+  return maxSimultaneousOverlap;
+}
+
 function processEvents(events: Event[]) {
   const sortedEvents = [...events].sort((a, b) => getOverlaps(a, events) - getOverlaps(b, events));
-  const maxOverlap = sortedEvents.reduce((acc, event) => {
-    return Math.max(acc, getOverlaps(event, events));
+
+  const maxOverlap = sortedEvents.reduce((acc, event, index) => {
+    const overlapForEvent = getMaxSimultaneousOverlap(event, sortedEvents, index);
+    return Math.max(acc, overlapForEvent);
   }, 0);
 
   return { sortedEvents, maxOverlap };
