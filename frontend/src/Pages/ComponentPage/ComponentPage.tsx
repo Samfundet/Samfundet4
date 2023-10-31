@@ -1,7 +1,10 @@
-import { Button, InputField, ProgressBar, RadioButton } from '~/Components';
+import { Button, Countdown, InputField, ProgressBar, RadioButton } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
+import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
+import { norwegianFlag } from '~/assets';
+import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -53,6 +56,14 @@ export function ComponentPage() {
       <div>
         <h2>ProgressBar:</h2>
         <ProgressBar value={75} max={100} />
+      </div>
+      <div>
+        <SnowflakesOverlay />
+        <h2>
+          <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
+            <img src={norwegianFlag}></img>
+          </Countdown>
+        </h2>
       </div>
     </div>
   );

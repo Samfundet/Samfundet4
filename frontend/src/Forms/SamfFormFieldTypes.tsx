@@ -1,4 +1,4 @@
-import { ReactElement } from 'react-markdown/lib/react-markdown';
+import { ReactElement } from 'react';
 import { Checkbox, Dropdown, InputField, TextAreaField } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
