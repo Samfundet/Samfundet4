@@ -1,0 +1,38 @@
+.countdown {
+  position: relative;
+  display: inline-block;
+}
+
+.countdown_button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.countdown_blur {
+  filter: blur(5px);
+  background-color: rgba(33, 33, 33, 0.6);
+  text-align: center;
+  font-size: 20px;
+  display: inline-block;
+  z-index: 1000;
+}
+
+.countdown_time {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: calc(6px + 30%);
+  z-index: 5;
+  color: ivory;
+}

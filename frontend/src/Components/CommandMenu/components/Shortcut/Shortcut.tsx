@@ -9,11 +9,5 @@ type ShortcutProps = {
 export function Shortcut({ keys }: ShortcutProps) {
   if (!keys) return null;
 
-  return (
-    <div className="command-menu__shortcut">
-      {keys?.map((item, i) => (
-        <kbd key={i}>{item}</kbd>
-      ))}
-    </div>
-  );
+  return <div className="command-menu__shortcut">{keys?.map((item, i) => <kbd key={i}>{item}</kbd>)}</div>;
 }
