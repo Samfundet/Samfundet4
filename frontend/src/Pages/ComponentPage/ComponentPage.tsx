@@ -5,7 +5,7 @@ import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { norwegianFlag } from '~/assets';
-import { HOUR_MILLIS } from '~/constants';
+import { HOUR_MILLIS, MINUTE_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -17,18 +17,28 @@ const baseDate = new Date('2023-11-01T00:00:00Z'); // Set a base date
 
 const events = [
   {
-    start: new Date(baseDate.getTime() + 2 * 60 * 60 * 1000),
-    end: new Date(baseDate.getTime() + 6 * 60 * 60 * 1000),
+    start: new Date(baseDate.getTime() + 2 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 6 * HOUR_MILLIS),
     title: 'Sleep',
   },
   {
-    start: new Date(baseDate.getTime() + 3 * 60 * 60 * 1000),
-    end: new Date(baseDate.getTime() + 6 * 60 * 60 * 1000),
+    start: new Date(baseDate.getTime() + 3 * HOUR_MILLIS + 30 * MINUTE_MILLIS),
+    end: new Date(baseDate.getTime() + 6 * HOUR_MILLIS + 15 * MINUTE_MILLIS),
     title: 'Sleep',
   },
   {
-    start: new Date(baseDate.getTime() + 10 * 60 * 60 * 1000),
-    end: new Date(baseDate.getTime() + 12 * 60 * 60 * 1000 + 15 * 60 * 1000),
+    start: new Date(baseDate.getTime() + 3 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 14 * HOUR_MILLIS),
+    title: 'Sleep',
+  },
+  {
+    start: new Date(baseDate.getTime() + 10 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 12 * HOUR_MILLIS),
+    title: 'Meeting',
+  },
+  {
+    start: new Date(baseDate.getTime() + 10 * HOUR_MILLIS),
+    end: new Date(baseDate.getTime() + 12 * HOUR_MILLIS),
     title: 'Meeting',
   },
 ];
