@@ -100,10 +100,10 @@ class RecruitmentPosition(FullCleanSaveMixin):
 
     def save(self, *args, **kwargs):
         if self.norwegian_applicants_only:
-            self.name_en = "No english applicants"
-            self.short_description_en = "No english applicants"
-            self.long_description_en = "No english applicants"
-            self.default_admission_letter_en = "No english applicants"
+            self.name_en = 'No english applicants'
+            self.short_description_en = 'No english applicants'
+            self.long_description_en = 'No english applicants'
+            self.default_admission_letter_en = 'No english applicants'
         super(RecruitmentPosition, self).save(*args, **kwargs)
 
 
