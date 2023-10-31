@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { RecruitmentAdmissionDto } from '~/dto';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
-import { KEY } from '~/i18n/constants';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
-import { Table } from '~/Components/Table';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { ROUTES } from '~/routes';
-import { reverse } from '~/named-urls';
-import { utcTimestampToLocal } from '~/utils';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { Table } from '~/Components/Table';
+import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
+import { RecruitmentAdmissionDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { utcTimestampToLocal } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
@@ -55,7 +55,7 @@ export function RecruitmentPositionOverviewPage() {
       getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
-            (recruitmentApplicant) => recruitmentApplicant.recruitment_position.toString() == positionId,
+            (recruitmentApplicant) => recruitmentApplicant.recruitment_position?.toString() == positionId,
           ),
         );
         setShowSpinner(false);
@@ -92,10 +92,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <InputField
-            value={admission.interview_time ? utcTimestampToLocal(admission.interview_time) : ''}
+            value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
-              const newAdmission = { ...admission, interview_time: value.toString() };
+              const updatedInterview = { ...admission.interview, interview_time: value.toString() };
+              const newAdmission = { ...admission, interview: updatedInterview };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
             }}
             type="datetime-local"
@@ -105,10 +106,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <InputField
-            value={admission.interview_location ?? ''}
+            value={admission.interview.interview_location ?? ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
-              const newAdmission = { ...admission, interview_location: value.toString() };
+              const updatedInterview = { ...admission.interview, interview_location: value.toString() };
+              const newAdmission = { ...admission, interview: updatedInterview };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
             }}
           />

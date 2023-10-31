@@ -1,4 +1,4 @@
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import Markdown from 'react-markdown';
 import styles from './SamfMarkdown.module.scss';
 
 type SamfMarkdownProps = {
@@ -9,7 +9,7 @@ type SamfMarkdownProps = {
 export function SamfMarkdown({ children = '' }: SamfMarkdownProps) {
   return (
     <div className={styles.samf_markdown}>
-      <ReactMarkdown>{children}</ReactMarkdown>
+      <Markdown>{children}</Markdown>
     </div>
   );
 }
