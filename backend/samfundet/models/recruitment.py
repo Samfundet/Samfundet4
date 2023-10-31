@@ -98,7 +98,7 @@ class RecruitmentPosition(FullCleanSaveMixin):
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
             self.name_en = 'No english applicants'
             self.short_description_en = 'No english applicants'
