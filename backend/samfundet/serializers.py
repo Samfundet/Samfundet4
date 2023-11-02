@@ -9,7 +9,13 @@ from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
 
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    InterviewRoom,
+    Interview,
+)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -525,8 +531,6 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
-            'interview_time',
-            'interview_location',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
@@ -541,8 +545,6 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             recruitment=recruitment,
             user=user,
             applicant_priority=applicant_priority,
-            interview_time=validated_data.get('interview_time'),
-            interview_location=validated_data.get('interview_location')
         )
 
         return recruitment_admission
@@ -555,16 +557,35 @@ class ApplicantInfoSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email']
 
 
-class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
-    user = ApplicantInfoSerializer(read_only=True)
-
-    class Meta:
-        model = RecruitmentAdmission
-        fields = '__all__'
-
-
 class InterviewRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InterviewRoom
         fields = '__all__'
+
+
+class InterviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Interview
+        fields = '__all__'
+
+
+class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+    user = ApplicantInfoSerializer(read_only=True)
+    interview = InterviewSerializer(read_only=False)
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = '__all__'
+
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+        interview_data = validated_data.pop('interview', {})
+
+        interview_instance = instance.interview
+        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
+        interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interview_instance.save()
+
+        # Update other fields of RecruitmentAdmission instance
+        return super().update(instance, validated_data)

@@ -13,6 +13,7 @@ import {
   InformationPage,
   LoginPage,
   LycheAboutPage,
+  LycheContactPage,
   LycheHomePage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
@@ -47,6 +48,7 @@ import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
+import { InterviewNotesPage } from './PagesAdmin/InterviewNotesAdminPage';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
@@ -185,6 +187,10 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_users_without_interview}
           element={<RecruitmentUsersWithoutInterview />}
         />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
+          element={<InterviewNotesPage />}
+        />
         {/* TODO ADD PERMISSIONS */}
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_overview}
@@ -226,7 +232,9 @@ export function AppRoutes() {
       <Route element={<SultenOutlet />}>
         <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
+        <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
       </Route>
+
       {/* 
             404 NOT FOUND
       */}
