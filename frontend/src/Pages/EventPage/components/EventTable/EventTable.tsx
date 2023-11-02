@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay, TimeDuration } from '~/Components';
 import { EventDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { dbT, getTicketTypeKey } from '~/utils';
 import styles from './EventTable.module.scss';
 
@@ -15,7 +16,7 @@ export function EventTable({ event }: EventTableProps) {
     if (event.ticket_type !== 'custom') {
       return (
         <tr>
-          <td className={styles.table_element_left}> BILLETT </td>
+          <td className={styles.table_element_left}> {t(KEY.common_ticket_type).toUpperCase()} </td>
           <td className={styles.table_element_right}> {t(getTicketTypeKey(event.ticket_type))} </td>
         </tr>
       );
@@ -36,33 +37,61 @@ export function EventTable({ event }: EventTableProps) {
     );
   }
 
+  function ageLimitType() {
+    if (event.age_restriction == 'none') {
+      return (
+        <tr>
+          <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
+          <td className={styles.table_element_right}> {t(KEY.none)} </td>
+        </tr>
+      );
+    } else if (event.age_restriction == 'eighteen') {
+      return (
+        <tr>
+          <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
+          <td className={styles.table_element_right}> {t(KEY.eighteen)} </td>
+        </tr>
+      );
+    } else if (event.age_restriction == 'twenty') {
+      return (
+        <tr>
+          <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
+          <td className={styles.table_element_right}> {t(KEY.twenty)} </td>
+        </tr>
+      );
+    }
+    return (
+      <tr>
+        <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
+        <td className={styles.table_element_right}> {t(KEY.mix)} </td>
+      </tr>
+    );
+  }
+
   return (
     <table className={styles.table_container}>
       <tr>
-        <td className={styles.table_element_left}> LOKALE </td>
+        <td className={styles.table_element_left}> {t(KEY.common_venue).toUpperCase()} </td>
         <td className={styles.table_element_right}> {event.location} </td>
       </tr>
       <tr>
-        <td className={styles.table_element_left}> ARRANGØR </td>
+        <td className={styles.table_element_left}> {t(KEY.admin_organizer).toUpperCase()} </td>
         <td className={styles.table_element_right}> {event.host} </td>
       </tr>
       <tr>
-        <td className={styles.table_element_left}> DATO </td>
+        <td className={styles.table_element_left}> {t(KEY.common_date).toUpperCase()} </td>
         <td className={styles.table_element_right}>
           <TimeDisplay timestamp={event.start_dt} displayType="nice-date" />
         </td>
       </tr>
       <tr>
-        <td className={styles.table_element_left}> TID </td>
+        <td className={styles.table_element_left}> {t(KEY.common_time).toUpperCase()} </td>
         <td className={styles.table_element_right}>
           <TimeDuration start={event.start_dt} end={event.end_dt} />
         </td>
       </tr>
       {ticketType()}
-      <tr>
-        <td className={styles.table_element_left}> ALDERSGRENSE </td>
-        <td className={styles.table_element_right}> {event?.age_restriction} </td>
-      </tr>
+      {ageLimitType()}
     </table>
   );
 }

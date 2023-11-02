@@ -47,6 +47,7 @@ export const KEY = {
   // No category:
   common_to: 'common_to',
   common_buy: 'common_buy',
+  common_time: 'common_time',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
@@ -54,7 +55,9 @@ export const KEY = {
   common_date: 'common_date',
   common_show: 'common_show',
   common_menu: 'common_menu',
+  common_table: 'common_table',
   common_edit: 'common_edit',
+  common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_next: 'common_next',
@@ -88,6 +91,7 @@ export const KEY = {
   common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
+  common_age_limit: 'common_age_limit',
   common_festivals: 'common_festivals',
   common_more_info: 'common_more_info',
   common_firstname: 'common_firstname',
@@ -133,6 +137,12 @@ export const KEY = {
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
+
+  // EventPageAge:
+  eighteen: 'eighteen',
+  twenty: 'twenty',
+  none: 'none',
+  mix: 'mix',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
@@ -239,7 +249,7 @@ export const KEY = {
  * Reveals errors in translations.ts if some keys are not translated.
  */
 export type KeyKeys = keyof typeof KEY;
-export type KeyValues = (typeof KEY)[KeyKeys];
+export type KeyValues = typeof KEY[KeyKeys];
 
 export const LANGUAGES = {
   NB: 'nb',
@@ -247,4 +257,4 @@ export const LANGUAGES = {
 } as const;
 
 export type LanguageKey = keyof typeof LANGUAGES;
-export type LanguageValue = (typeof LANGUAGES)[LanguageKey];
+export type LanguageValue = typeof LANGUAGES[LanguageKey];

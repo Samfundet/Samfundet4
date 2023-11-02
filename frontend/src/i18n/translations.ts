@@ -5,7 +5,6 @@ export const nb: Record<KeyValues, string> = {
   // ==================== //
   //        Common        //
   // ==================== //
-
   // Days:
   [KEY.common_day_monday]: 'Mandag',
   [KEY.common_day_tuesday]: 'Tirsdag',
@@ -36,6 +35,7 @@ export const nb: Record<KeyValues, string> = {
   // Other common
   [KEY.common_to]: 'Til',
   [KEY.common_buy]: 'Kjøp',
+  [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
@@ -47,6 +47,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_edit]: 'Rediger',
+  [KEY.common_table]: 'Tabell',
+  [KEY.common_card]: 'Kort',
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
   [KEY.common_venue]: 'Lokale',
@@ -77,6 +79,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_required]: 'Påkrevd',
   [KEY.common_overview]: 'Oversikt',
   [KEY.common_volunteer]: 'Opptak',
+  [KEY.common_age_limit]: 'Aldersgrense',
   [KEY.common_festivals]: 'Festivaler',
   [KEY.common_more_info]: 'Mer info',
   [KEY.common_norwegian]: 'Norsk',
@@ -111,7 +114,6 @@ export const nb: Record<KeyValues, string> = {
   // ==================== //
   //        Others        //
   // ==================== //
-
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
@@ -123,6 +125,12 @@ export const nb: Record<KeyValues, string> = {
   [KEY.groupspage_gangs_text]:
     'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
   [KEY.groupspage_gangs_title]: 'Gjengene på Samfundet',
+
+  // EventPageAge:
+  [KEY.eighteen]: '18 år',
+  [KEY.twenty]: '20 år',
+  [KEY.none]: 'Ingen',
+  [KEY.mix]: 'Mikset',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -230,7 +238,6 @@ export const en: Record<KeyValues, string> = {
   // ==================== //
   //        Common        //
   // ==================== //
-
   // Days:
   [KEY.common_day_monday]: 'Monday',
   [KEY.common_day_tuesday]: 'Tuesday',
@@ -261,6 +268,7 @@ export const en: Record<KeyValues, string> = {
   // No category:
   [KEY.common_to]: 'To',
   [KEY.common_buy]: 'Buy',
+  [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
@@ -268,6 +276,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_send]: 'Send',
   [KEY.common_edit]: 'Edit',
   [KEY.common_show]: 'Show',
+  [KEY.common_table]: 'Table',
+  [KEY.common_card]: 'Cards',
   [KEY.common_tags]: 'Tags',
   [KEY.common_menu]: 'Menu',
   [KEY.common_name]: 'Name',
@@ -301,6 +311,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
+  [KEY.common_age_limit]: 'Age Limit',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_more_info]: 'More info',
   [KEY.common_firstname]: 'First name',
@@ -336,7 +347,6 @@ export const en: Record<KeyValues, string> = {
   // ==================== //
   //        Others        //
   // ==================== //
-
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
   [KEY.loginpage_internal_login]: 'Log in as internal',
@@ -348,6 +358,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.groupspage_gangs_text]:
     'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
   [KEY.groupspage_gangs_title]: 'The groups at Samfundet',
+
+  // EventPageAge:
+  [KEY.eighteen]: '18 years',
+  [KEY.twenty]: '20 years',
+  [KEY.none]: 'None',
+  [KEY.mix]: 'Mixed',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
