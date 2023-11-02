@@ -46,8 +46,8 @@
   color: $black;
   border-top: 1px solid $grey-3;
   @include theme-dark{
-    background-color: $grey-3;
-    border-top: 1px solid $grey-2;
+    background-color: transparent;
+    border-top: 2px solid $grey-2;
   }
 }
 
@@ -62,9 +62,9 @@
   flex: 1;
   color: $red_samf;
   padding: 1em;
-  font-weight: 600;
+  font-weight: 400;
   @include theme-dark{
-    color: #ffdbe0;
+    color: white;
   }
 }
 
