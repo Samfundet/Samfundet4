@@ -263,7 +263,7 @@ class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(label='Email', write_only=True)
     phone_number = serializers.RegexField(
         label='Phonenumber',
-        regex=,
+        regex=phoneNumberRegex,
         write_only=True,
     )
     firstname = serializers.CharField(label='First name', write_only=True)
