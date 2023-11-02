@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './InputTime.module.scss';
 
 type InputTimeProps = {
@@ -10,36 +10,42 @@ type InputTimeProps = {
   value?: string;
 };
 
-export function InputTime({ onChange, onBlur, placeholder, value }: InputTimeProps) {
+export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
 
+  useEffect(() => {
+    if (value) {
+      const [parsedHour, parsedMinute] = value.split(':');
+      setHour(parsedHour);
+      setMinute(parsedMinute);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    const formattedTime = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+    onChange?.(formattedTime);
+  }, [hour, minute, onChange]);
+
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const inputName = e.target.getAttribute('name');
-    const inputTime = e.target.value;
-    // Remove non-numeric characters
     let numericValue = e.target.value.replace(/[^0-9]/g, '');
-
     const parsedValue = parseInt(numericValue, 10);
 
     if (inputName === 'hour') {
-      if (!isNaN(parsedValue) && parsedValue >= 0) {
-        numericValue = Math.min(23, parsedValue).toString();
-      } else {
-        numericValue = '';
-      }
+      numericValue = !isNaN(parsedValue) && parsedValue >= 0 ? Math.min(23, parsedValue).toString() : '';
       setHour(numericValue);
+      onChange?.(numericValue.padStart(2, '0') + ':' + minute.padStart(2, '0'));
     } else if (inputName === 'minute') {
-      if (!isNaN(parsedValue) && parsedValue >= 0) {
-        numericValue = Math.min(59, parsedValue).toString();
-      } else {
-        numericValue = '';
-      }
+      numericValue = !isNaN(parsedValue) && parsedValue >= 0 ? Math.min(59, parsedValue).toString() : '';
       setMinute(numericValue);
+      onChange?.(hour.padStart(2, '0') + ':' + numericValue.padStart(2, '0'));
     }
+  }
 
-    onChange?.(`${hour}:${minute}`);
-    onChange?.(inputTime);
+  function handleBlur() {
+    const formattedTime = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+    onBlur?.(formattedTime);
   }
 
   return (
@@ -49,20 +55,18 @@ export function InputTime({ onChange, onBlur, placeholder, value }: InputTimePro
           type="text"
           className={styles.number}
           name="hour"
-          placeholder={placeholder || '12'}
           value={hour}
           onChange={handleChange}
-          onBlur={() => onBlur?.(hour)}
+          onBlur={handleBlur}
         />
         <p>:</p>
         <input
           type="text"
           className={styles.number}
           name="minute"
-          placeholder={placeholder || '00'}
           value={minute}
           onChange={handleChange}
-          onBlur={() => onBlur?.(minute)}
+          onBlur={handleBlur}
         />
       </div>
       <div className={styles.error}></div>

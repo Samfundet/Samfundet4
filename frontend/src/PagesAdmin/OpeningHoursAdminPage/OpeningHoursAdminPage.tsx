@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { getVenues, putVenue } from '~/api';
@@ -9,6 +9,7 @@ import { ALL_DAYS } from '~/types';
 import { getDayKey } from '~/utils';
 import { AdminPage } from '../AdminPageLayout';
 import styles from './OpeningHoursAdminPage.module.scss';
+import { InputTime } from '~/Components';
 
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
@@ -37,12 +38,13 @@ export function OpeningHoursAdminPage() {
   }, []);
 
   // Save venue change.
-  function saveVenue(venue: VenueDto, field: keyof VenueDto) {
+  function saveVenue(venue: VenueDto, field: keyof VenueDto, value: string) {
     // Get most recent edits if any
-    const recent = venueRef.current.filter((v) => v.id === venue.id)[0];
+    const updatedVenues = venues.map((v) => (v.id === venue.id ? { ...v, [field]: value } : v));
+    venueRef.current = updatedVenues;
     // Send field change to backend
-    putVenue(venue.id, {
-      [field]: recent[field],
+    putVenue(venue.slug, {
+      [field]: value,
     })
       // Success.
       .then(() => {
@@ -65,9 +67,8 @@ export function OpeningHoursAdminPage() {
 
   // Update view model on field.
   function handleOnChange(venue: VenueDto, field: keyof VenueDto) {
-    return (e: ChangeEvent<HTMLInputElement>) => {
+    return (value: string) => {
       // Calculate new venues.
-      const value = e.currentTarget.value;
       const newVenues = venues.map((v) => {
         if (v.id === venue.id) {
           return {
@@ -90,7 +91,7 @@ export function OpeningHoursAdminPage() {
 
       // Start a new save timer.
       const timer = setTimeout(() => {
-        saveVenue(venue, field);
+        saveVenue(venue, field, value);
       }, 1000);
 
       // Store timeout to allow cancel.
@@ -122,21 +123,19 @@ export function OpeningHoursAdminPage() {
                 <div key={day} className={styles.day_row}>
                   <div className={styles.day_label}>{t(getDayKey(day))}</div>
                   <div className={styles.day_edit}>
-                    <input
-                      type="time"
+                    <InputTime
                       value={venue[openField]}
-                      onChange={handleOnChange(venue, openField)}
-                      onBlur={() => saveVenue(venue, openField)}
+                      onChange={() => handleOnChange(venue, openField)}
+                      onBlur={(formattedTime) => saveVenue(venue, openField, formattedTime)}
                       className={classNames(invalidOpen && styles.invalid)}
-                    />
-                    -
-                    <input
-                      type="time"
+                    ></InputTime>
+                    <p>-</p>
+                    <InputTime
                       value={venue[closeField]}
-                      onChange={handleOnChange(venue, closeField)}
-                      onBlur={() => saveVenue(venue, closeField)}
+                      onChange={() => handleOnChange(venue, closeField)}
+                      onBlur={(formattedTime) => saveVenue(venue, closeField, formattedTime)}
                       className={classNames(invalidClose && styles.invalid)}
-                    />
+                    ></InputTime>
                   </div>
                 </div>
               );
