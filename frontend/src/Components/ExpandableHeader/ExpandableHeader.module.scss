@@ -15,6 +15,7 @@
   border-radius: 10px;
   border-color: $grey_3;
   background-color: $grey_5;
+
   @include theme-dark{
     background-color: transparent;
     border-color: $grey-0;
@@ -26,6 +27,7 @@
   border-radius: 10px;
   margin: 10px;
   width: auto;
+
   @include theme-dark{
     border-color: $grey-1;
   }
@@ -45,6 +47,7 @@
   border: 0;
   outline: none;
   text-align: left;
+
   @include theme-dark{
     background-color: transparent;
     color: white;
@@ -53,6 +56,7 @@
 
 .extendable_header_wrapper:hover{
   background-color: #dbdbdb;
+  
   @include theme-dark{
     background-color: $grey-0;
   }
