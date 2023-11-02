@@ -38,32 +38,19 @@ export function EventTable({ event }: EventTableProps) {
   }
 
   function ageLimitType() {
-    if (event.age_restriction == 'none') {
-      return (
-        <tr>
-          <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
-          <td className={styles.table_element_right}> {t(KEY.none)} </td>
-        </tr>
-      );
-    } else if (event.age_restriction == 'eighteen') {
-      return (
-        <tr>
-          <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
-          <td className={styles.table_element_right}> {t(KEY.eighteen)} </td>
-        </tr>
-      );
-    } else if (event.age_restriction == 'twenty') {
-      return (
-        <tr>
-          <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
-          <td className={styles.table_element_right}> {t(KEY.twenty)} </td>
-        </tr>
-      );
-    }
+    const ageRestrictions = {
+      none: KEY.none,
+      eighteen: KEY.eighteen,
+      twenty: KEY.twenty,
+      mixed: KEY.mix,
+    };
+
+    const ageRestrictionKey = ageRestrictions[event.age_restriction];
+
     return (
       <tr>
-        <td className={styles.table_element_left}> {t(KEY.common_age_limit).toUpperCase()} </td>
-        <td className={styles.table_element_right}> {t(KEY.mix)} </td>
+        <td className={styles.table_element_left}>{t(KEY.common_age_limit).toUpperCase()}</td>
+        <td className={styles.table_element_right}>{t(ageRestrictionKey)}</td>
       </tr>
     );
   }
