@@ -1,0 +1,7 @@
+@import 'src/constants';
+
+.weekCalendar {
+  display: grid;
+  grid-template-columns: repeat(7, calc(100% / 7));
+  grid-template-rows: 1;
+}

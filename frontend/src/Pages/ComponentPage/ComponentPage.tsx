@@ -1,5 +1,6 @@
 import { Button, Countdown, InputField, ProgressBar, RadioButton } from '~/Components';
 import { DayColumn } from '~/Components/Calendar/DayColumn/DayColumn';
+import { WeekCalendar } from '~/Components/Calendar/WeekCalendar';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -103,10 +104,15 @@ export function ComponentPage() {
         </h2>
       </div>
       <div>
-        <h2>Calendar:</h2>
-        <p>See Calendar component in Components folder</p>
+        <h2>DayColumn:</h2>
         <div>
           <DayColumn events={events} />
+        </div>
+      </div>
+      <div>
+        <h2>DayColumn:</h2>
+        <div style={{ width: '100%' }}>
+          <WeekCalendar events={events} />
         </div>
       </div>
     </div>

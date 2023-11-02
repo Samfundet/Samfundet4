@@ -1,13 +1,9 @@
+import { CalendarEvent } from '../utils';
 import styles from './DayColumn.module.scss';
 
-type Event = {
-  start: Date;
-  end: Date;
-  title: string;
-};
-
 type DayCalendarProps = {
-  events: Event[];
+  events: CalendarEvent[];
+  showHours?: boolean;
 };
 
 const HOURS_IN_DAY = Array.from({ length: 24 });
@@ -18,7 +14,7 @@ function getIntervalFromDate(date: Date): number {
   return hour * 12 + Math.floor(minute / 5);
 }
 
-function overlaps(event1: Event, event2: Event): boolean {
+function overlaps(event1: CalendarEvent, event2: CalendarEvent): boolean {
   const start1 = getIntervalFromDate(event1.start);
   const end1 = getIntervalFromDate(event1.end);
   const start2 = getIntervalFromDate(event2.start);
@@ -27,11 +23,11 @@ function overlaps(event1: Event, event2: Event): boolean {
   return (start1 >= start2 && start1 < end2) || (end1 > start2 && end1 <= end2) || (start1 <= start2 && end1 >= end2);
 }
 
-function getOverlaps(event: Event, events: Event[]): number {
+function getOverlaps(event: CalendarEvent, events: CalendarEvent[]): number {
   return events.filter((otherEvent) => otherEvent !== event && overlaps(event, otherEvent)).length;
 }
 
-function getMaxSimultaneousOverlap(event: Event, sortedEvents: Event[], uptoIndex: number): number {
+function getMaxSimultaneousOverlap(event: CalendarEvent, sortedEvents: CalendarEvent[], uptoIndex: number): number {
   const startInterval = getIntervalFromDate(event.start);
   const endInterval = getIntervalFromDate(event.end);
   let maxOverlap = 0;
@@ -50,7 +46,15 @@ function getMaxSimultaneousOverlap(event: Event, sortedEvents: Event[], uptoInde
   return maxOverlap;
 }
 
-function EventBlock({ event, index, sortedEvents }: { event: Event; index: number; sortedEvents: Event[] }) {
+function EventBlock({
+  event,
+  index,
+  sortedEvents,
+}: {
+  event: CalendarEvent;
+  index: number;
+  sortedEvents: CalendarEvent[];
+}) {
   const startInterval = getIntervalFromDate(event.start);
   const endInterval = getIntervalFromDate(event.end);
   const span = endInterval - startInterval;
@@ -70,7 +74,7 @@ function EventBlock({ event, index, sortedEvents }: { event: Event; index: numbe
   );
 }
 
-function processEvents(events: Event[]) {
+function processEvents(events: CalendarEvent[]) {
   const sortedEvents = [...events].sort((a, b) => getOverlaps(a, events) - getOverlaps(b, events));
 
   const maxOverlap = sortedEvents.reduce((acc, event, index) => {
@@ -101,7 +105,7 @@ function BlankHourBackground({ hour }: { hour: number }) {
   );
 }
 
-export function DayColumn({ events }: DayCalendarProps) {
+export function DayColumn({ events, showHours = true }: DayCalendarProps) {
   const { sortedEvents, maxOverlap } = processEvents(events);
   const columnStyles = Array(maxOverlap + 1)
     .fill('1fr')
