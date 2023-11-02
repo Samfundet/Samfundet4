@@ -32,4 +32,4 @@ AUTH_BACKEND = 'django.contrib.auth.middleware.AuthenticationMiddleware'
 
 # Phone number regex
 
-phoneNumberRegex = phoneNumberRegex
+phoneNumberRegex = r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$'
