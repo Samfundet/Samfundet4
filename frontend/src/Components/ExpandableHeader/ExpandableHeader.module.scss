@@ -1,4 +1,5 @@
 @import 'src/constants';
+
 @import 'src/mixins';
 
 
@@ -6,6 +7,7 @@
   width: 100%;
   border: 2px solid $grey-3;
   overflow: hidden;
+
   @include theme-dark{
     border: 1px solid $grey-0;
   }
@@ -56,7 +58,7 @@
 
 .extendable_header_wrapper:hover{
   background-color: #dbdbdb;
-  
+
   @include theme-dark{
     background-color: $grey-0;
   }
