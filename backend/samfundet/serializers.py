@@ -7,7 +7,7 @@ from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
-
+from root.constants import phoneNumberRegex
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from .models.recruitment import (Recruitment, RecruitmentPosition, RecruitmentAdmission, InterviewRoom)
 from .models.event import (Event, EventGroup, EventCustomTicket)
@@ -257,7 +257,7 @@ class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(label='Email', write_only=True)
     phone_number = serializers.RegexField(
         label='Phonenumber',
-        regex=r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$',
+        regex=,
         write_only=True,
     )
     firstname = serializers.CharField(label='First name', write_only=True)

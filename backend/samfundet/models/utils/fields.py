@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from typing import Any
+from root.constants import phoneNumberRegex
 
 
 class LowerCaseField(models.CharField):
@@ -15,7 +16,7 @@ class PhoneNumberField(models.CharField):
         kwargs['max_length'] = 15
         self.validators = [
             RegexValidator(
-                regex=r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$',
+                regex=phoneNumberRegex,
                 message='Enter a valid phonenumber',
             ),
         ]

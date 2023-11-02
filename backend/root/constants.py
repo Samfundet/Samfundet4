@@ -29,3 +29,7 @@ REQUESTED_IMPERSONATE_USER = 'requested_impersonate_user'
 request_contextvar: ContextVar[HttpRequest] = ContextVar('request_contextvar', default=None)
 
 AUTH_BACKEND = 'django.contrib.auth.middleware.AuthenticationMiddleware'
+
+# Phone number regex
+
+phoneNumberRegex = phoneNumberRegex
