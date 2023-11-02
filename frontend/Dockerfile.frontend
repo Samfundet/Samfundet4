@@ -8,7 +8,6 @@ COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn/ /app/.yarn/
 
 # Require up to date package.json and yarn.lock, fail otherwise.
-# RUN --mount=type=cache,target=/app/.yarn/cache yarn install --immutable
 RUN yarn install --immutable
 
 # Copy remaining files
