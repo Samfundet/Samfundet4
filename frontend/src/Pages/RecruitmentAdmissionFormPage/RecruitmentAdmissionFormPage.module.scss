@@ -1,4 +1,5 @@
 @import 'src/constants';
+
 @import 'src/mixins';
 
 .container {
@@ -28,17 +29,21 @@
   font-weight: 700;
   font-size: 2em;
 }
+
 .subheader {
   font-weight: 700;
   font-size: 1.5em;
   margin-bottom: 0.5em;
 }
+
 .text {
   margin-bottom: 2em;
 }
+
 .formContainer {
   background-color: $red-samf;
 }
+
 .formLabel {
   margin-bottom: 0.5em;
 }

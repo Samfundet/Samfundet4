@@ -514,6 +514,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
         else:
             return None
 
+
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerGangView(ListAPIView):
     permission_classes = [AllowAny]
@@ -530,6 +531,8 @@ class RecruitmentPositionsPerGangView(ListAPIView):
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         else:
             return None
+
+
 class ApplicantsWithoutInterviewsView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserForRecruitmentSerializer

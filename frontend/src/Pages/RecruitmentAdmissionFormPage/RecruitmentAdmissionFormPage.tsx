@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link, CrudButtons, Button } from '~/Components';
+import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentAdmission, getRecruitmentPositionsGang } from '~/api';
