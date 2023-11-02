@@ -249,7 +249,7 @@ export const KEY = {
  * Reveals errors in translations.ts if some keys are not translated.
  */
 export type KeyKeys = keyof typeof KEY;
-export type KeyValues = typeof KEY[KeyKeys];
+export type KeyValues = (typeof KEY)[KeyKeys];
 
 export const LANGUAGES = {
   NB: 'nb',
@@ -257,4 +257,4 @@ export const LANGUAGES = {
 } as const;
 
 export type LanguageKey = keyof typeof LANGUAGES;
-export type LanguageValue = typeof LANGUAGES[LanguageKey];
+export type LanguageValue = (typeof LANGUAGES)[LanguageKey];
