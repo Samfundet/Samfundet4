@@ -31,10 +31,10 @@
     "no-unknown-animations": true,
     "property-no-unknown": true,
     "selector-pseudo-class-no-unknown": [
-        true, 
-        {
-            "ignorePseudoClasses": ["global"]
-        }
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
     ],
     "selector-pseudo-element-no-unknown": true,
     "selector-type-no-unknown": true,
@@ -136,41 +136,27 @@
     ],
     "comment-empty-line-before": null,
     "comment-whitespace-inside": "always",
-    "color-hex-case": "lower",
     "function-comma-newline-after": null,
     "function-comma-newline-before": null,
-    "function-comma-space-after": "always",
-    "function-comma-space-before": "never",
     "function-max-empty-lines": null,
     "function-parentheses-newline-inside": null,
     "function-parentheses-space-inside": null,
     "function-whitespace-after": null,
     "number-leading-zero": null,
-    "number-no-trailing-zeros": true,
-    "string-quotes": "single",
-    "unit-case": "lower",
     "value-list-comma-newline-after": null,
     "value-list-comma-newline-before": null,
     "value-list-comma-space-after": null,
     "value-list-comma-space-before": null,
-    "value-list-max-empty-lines": 0,
-    "property-case": "lower",
-    "declaration-bang-space-after": "never",
-    "declaration-bang-space-before": "always",
     "declaration-colon-newline-after": null,
-    "declaration-colon-space-after": "always",
-    "declaration-colon-space-before": "never",
     "declaration-empty-line-before": [
       "never",
       {
         "ignore": ["after-comment"]
       }
     ],
-    "declaration-block-semicolon-newline-after": "always",
     "declaration-block-semicolon-newline-before": null,
     "declaration-block-semicolon-space-after": null,
     "declaration-block-semicolon-space-before": null,
-    "declaration-block-trailing-semicolon": "always",
     "block-closing-brace-empty-line-before": null,
     "block-closing-brace-newline-after": null,
     "block-closing-brace-newline-before": null,

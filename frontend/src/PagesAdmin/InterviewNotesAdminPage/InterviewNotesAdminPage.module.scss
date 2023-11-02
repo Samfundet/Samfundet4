@@ -1,0 +1,28 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.container {
+  color: $black;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: auto;
+  background-color: white;
+  font-family: inherit;
+  border-radius: 10px;
+  transition: 0.2s;
+  padding: 20px;
+  margin: 10px;
+
+  @include theme-dark {
+    background-color: $black;
+    color: $theme-dark-color;
+  }
+}
+
+.button {
+  width: 150px;
+  margin: 0 auto;
+  margin-top: 10px;
+}

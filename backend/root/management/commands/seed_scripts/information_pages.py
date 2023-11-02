@@ -1,3 +1,5 @@
+from django.utils.text import slugify
+
 from root.utils.samfundet_random import words
 
 from samfundet.models.general import InformationPage
@@ -14,7 +16,7 @@ def seed():
     for i in range(COUNT):
         # Event title and time
         title_nb, title_en = words(2, include_english=True)
-        slug_field = title_nb.lower().replace(' ', '-')
+        slug_field = slugify(title_nb)
 
         # Make sure slug field is unique
         if slug_field in used_slug_fields:

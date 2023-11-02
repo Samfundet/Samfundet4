@@ -49,3 +49,11 @@
     text-decoration: underline;
   }
 }
+
+.login_failed_comment {
+  color: $red;
+  text-align: center;
+  margin-top: 0.6em;
+  font-size: 0.9em;
+  font-weight: 700;
+}

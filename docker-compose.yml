@@ -2,7 +2,6 @@ version: '3.9'
 
 ### Services ###
 services:
-
   ### Backend Django ###
   backend:
     build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
@@ -51,7 +50,7 @@ services:
       - CYPRESS_baseUrl=http://frontend:3000
     volumes:
       - ./frontend/cypress:/frontend/cypress
-    command: "yarn run cypress:run"
+    command: 'yarn run cypress:run'
 
   ## Storybook React ###
   storybook:
@@ -87,5 +86,3 @@ services:
 
       -------------------------------------------------------------------------------
       "'
-
-
