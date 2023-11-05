@@ -31,7 +31,7 @@ export function ApiTestingPage() {
       <Button
         theme="samf"
         className={styles.btn}
-        onClick={() => login('emilte', 'Django123').then(console.log).catch(console.error)}
+        onClick={() => login('admin', 'password').then(console.log).catch(console.error)}
       >
         login
       </Button>
