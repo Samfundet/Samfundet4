@@ -345,7 +345,7 @@ export type CustomNavigateProps = {
   isMetaDown?: boolean;
   event?: React.MouseEvent;
   url: string;
-  linkTarget: LinkTarget;
+  linkTarget?: LinkTarget;
 };
 
 export type CustomNavigateFn = (props: CustomNavigateProps) => void;
@@ -358,7 +358,7 @@ export function useCustomNavigate(): CustomNavigateFn {
   const navigate = useNavigate();
   const { setIsMobileNavigation } = useGlobalContext();
 
-  function handleClick({ event, isMetaDown, url, linkTarget }: CustomNavigateProps) {
+  function handleClick({ event, isMetaDown, url, linkTarget = 'frontend' }: CustomNavigateProps) {
     const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
 
     // Stop default <a> tag onClick handling. We want custom behaviour depending on the target.
