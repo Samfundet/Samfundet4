@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { SamfundetLogo } from '~/Components';
 import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
 import { useDesktop } from '~/hooks';
 import { KEY, LANGUAGES } from '~/i18n/constants';
@@ -27,6 +28,10 @@ export function SultenNavbar() {
 
   const leftItems = (
     <>
+      <Link to={ROUTES.frontend.home} onClick={() => setMobileNavigation(false)} className={itemStyling}>
+        <SamfundetLogo className={styles.samfundet_logo} />
+      </Link>
+
       <Link to={ROUTES.frontend.sulten_reservation} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_reservations)}
       </Link>
@@ -89,7 +94,6 @@ export function SultenNavbar() {
   const navbarHeaders = (
     <div className={styles.parent_container}>
       <div className={styles.navbar_menu}>
-        {isDesktop && <div></div>}
         {hamburgerMenu}
         {isDesktop && leftItems}
         <img
@@ -98,7 +102,7 @@ export function SultenNavbar() {
             navigate(ROUTES.frontend.sulten);
             setMobileNavigation(false);
           }}
-          className={styles.logo}
+          className={styles.sulten_logo}
         ></img>
         {isDesktop && rightItems}
         {calendarIcon}
