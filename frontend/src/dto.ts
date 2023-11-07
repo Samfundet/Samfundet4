@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestriction, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -114,7 +114,7 @@ export type EventDto = {
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
-  age_restriction: EventAgeRestriction;
+  age_restriction: EventAgeRestrictionValue;
   location: string;
   category: string;
   host: string;

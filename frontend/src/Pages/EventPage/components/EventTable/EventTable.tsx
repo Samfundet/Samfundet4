@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay, TimeDuration } from '~/Components';
 import { EventDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
+import { KEY, KeyValues } from '~/i18n/constants';
+import { EventAgeRestriction, EventAgeRestrictionValue } from '~/types';
 import { dbT, getTicketTypeKey } from '~/utils';
 import styles from './EventTable.module.scss';
 
@@ -38,11 +39,11 @@ export function EventTable({ event }: EventTableProps) {
   }
 
   function ageLimitType() {
-    const ageRestrictions = {
-      none: KEY.none,
-      eighteen: KEY.eighteen,
-      twenty: KEY.twenty,
-      mixed: KEY.mix,
+    const ageRestrictions: Record<EventAgeRestrictionValue, KeyValues> = {
+      [EventAgeRestriction.NONE]: KEY.none,
+      [EventAgeRestriction.EIGHTEEN]: KEY.eighteen,
+      [EventAgeRestriction.TWENTY]: KEY.twenty,
+      [EventAgeRestriction.MIXED]: KEY.mix,
     };
 
     const ageRestrictionKey = ageRestrictions[event.age_restriction];
