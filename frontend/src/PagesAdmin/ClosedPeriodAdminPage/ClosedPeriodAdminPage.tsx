@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { Table } from '~/Components/Table';
@@ -13,7 +12,6 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
 
 export function ClosedPeriodAdminPage() {
-  const navigate = useNavigate();
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -51,7 +49,7 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_closed_create)}>
+    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
       {t(KEY.admin_closed_period_new_period)}
     </Button>
   );
@@ -88,14 +86,10 @@ export function ClosedPeriodAdminPage() {
                       theme="blue"
                       display="block"
                       className={styles.smallButtons}
-                      onClick={() => {
-                        navigate(
-                          reverse({
-                            pattern: ROUTES.frontend.admin_closed_edit,
-                            urlParams: { id: element.id },
-                          }),
-                        );
-                      }}
+                      link={reverse({
+                        pattern: ROUTES.frontend.admin_closed_edit,
+                        urlParams: { id: element.id },
+                      })}
                     >
                       {t(KEY.common_edit)}
                     </Button>

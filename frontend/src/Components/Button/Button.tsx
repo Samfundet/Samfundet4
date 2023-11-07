@@ -25,6 +25,7 @@ type ButtonProps = {
   link?: string;
   className?: string;
   disabled?: boolean;
+  tabIndex?: number;
   children?: Children;
   preventDefault?: boolean;
   onClick?: () => void;
@@ -60,6 +61,7 @@ export function Button({
   className,
   children,
   preventDefault = false,
+  ...props
 }: ButtonProps) {
   const isPure = theme === 'pure';
 
@@ -81,11 +83,11 @@ export function Button({
   return (
     <>
       {link ? (
-        <Link to={link} onClick={handleOnClick} className={classNames}>
+        <Link to={link} onClick={handleOnClick} className={classNames} {...props}>
           {children}
         </Link>
       ) : (
-        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames}>
+        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames} {...props}>
           {children}
         </button>
       )}
