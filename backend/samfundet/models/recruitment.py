@@ -28,7 +28,7 @@ class Recruitment(FullCleanSaveMixin):
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
-        # All times should be in the future
+        # All times should be in the future.
         now = timezone.now()
         if any(
             [
@@ -38,20 +38,16 @@ class Recruitment(FullCleanSaveMixin):
         ):
             raise ValidationError('All times should be in the future')
 
-        # Deadline should be after visible from
-        if self.visible_from > self.actual_application_deadline:
-            raise ValidationError('Application deadline should be after visible from')
+        if self.actual_application_deadline < self.visible_from:
+            raise ValidationError('Visible from should be before application deadline')
 
-        # Shown deadline should be before the actual deadline
-        if self.shown_application_deadline > self.actual_application_deadline:
+        if self.actual_application_deadline < self.shown_application_deadline:
             raise ValidationError('Shown application deadline should be before the actual application deadline')
 
-        # Actual deadline should be before reprioritization deadline for applicants
-        if self.actual_application_deadline > self.reprioritization_deadline_for_applicant:
+        if self.reprioritization_deadline_for_applicant < self.actual_application_deadline:
             raise ValidationError('Actual application deadline should be before reprioritization deadline for applicants')
 
-        # Reprioritization deadline for applicants should be before reprioritization deadline for groups
-        if self.reprioritization_deadline_for_applicant > self.reprioritization_deadline_for_groups:
+        if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
             raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
 
         super().clean()
