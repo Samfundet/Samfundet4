@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { NotFound } from '~/assets';
 import { SUPPORT_EMAIL } from '~/constants';
@@ -9,18 +8,11 @@ import styles from './NotFoundPage.module.scss';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   return (
     <div className={styles.container}>
       <img src={NotFound} className={styles.image} />
       <br></br>
-      <Button
-        rounded={true}
-        theme="outlined"
-        onClick={() => {
-          navigate(ROUTES.frontend.home);
-        }}
-      >
+      <Button rounded={true} theme="outlined" link={ROUTES.frontend.home}>
         <span className={styles.button_text}>{t(KEY.common_back_to_samfundet)}</span>
       </Button>
       <br></br>
