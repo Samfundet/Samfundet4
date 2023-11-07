@@ -1,6 +1,7 @@
 export { AboutPage } from './AboutPage';
 export { AdminPage } from './AdminPage';
 export { ApiTestingPage } from './ApiTestingPage';
+export { ApplicantApplicationOverviewPage } from './ApplicantApplicationOverviewPage';
 export { ComponentPage } from './ComponentPage';
 export { EventPage } from './EventPage';
 export { EventsPage } from './EventsPage';
@@ -10,8 +11,8 @@ export { HomePage } from './HomePage';
 export { InformationListPage } from './InformationListPage';
 export { InformationPage } from './InformationPage';
 export { LoginPage } from './LoginPage';
-export { LycheContactPage } from './LycheContactPage';
 export { LycheAboutPage } from './LycheAboutPage';
+export { LycheContactPage } from './LycheContactPage';
 export { LycheHomePage } from './LycheHomePage';
 export { NotFoundPage } from './NotFoundPage';
 export { RecruitmentAdmissionFormPage } from './RecruitmentAdmissionFormPage';

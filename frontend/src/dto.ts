@@ -305,6 +305,10 @@ export type NotificationDto = {
   // TODO: There are more fields than this.
 };
 
+// ############################################################
+//                       Recruitment
+// ############################################################
+
 export type RecruitmentDto = {
   id: string | undefined;
   name_nb: string;

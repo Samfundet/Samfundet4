@@ -524,13 +524,27 @@ class RecruitmentPositionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Interview
+        fields = [
+            'id',
+            'interview_time',
+            'interview_location',
+        ]
+
+
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+    interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
         fields = [
             'admission_text',
             'recruitment_position',
+            'applicant_priority',
+            'interview',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:

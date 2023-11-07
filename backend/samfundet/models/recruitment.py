@@ -160,7 +160,7 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     ]
 
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
-    recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
+    recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, help_text='The priority of the admission', default=1)
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
 
@@ -171,6 +171,11 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         """
         If the admission is saved without an interview, try to find an interview from a shared position.
         """
+        if not self.applicant_priority:
+            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
+            # Set the applicant_priority to the number of applications + 1 (for the current application)
+            self.applicant_priority = current_applications_count + 1
+
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
