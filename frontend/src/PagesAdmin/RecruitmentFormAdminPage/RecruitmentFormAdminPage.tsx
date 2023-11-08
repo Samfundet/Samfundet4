@@ -69,6 +69,7 @@ export function RecruitmentFormAdminPage() {
     reprioritization_deadline_for_applicant: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_applicant),
     reprioritization_deadline_for_groups: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_groups),
     organization: recruitment?.organization,
+    max_applications_per_user: recruitment?.max_applications_per_user,
   };
 
   const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
@@ -149,6 +150,13 @@ export function RecruitmentFormAdminPage() {
             type="options"
             label={t(KEY.recruitment_organization) ?? ''}
             options={organizationOptions}
+          />
+        </div>
+        <div className={styles.row}>
+          <SamfFormField
+            field="max_applications_per_user"
+            type="number"
+            label={t(KEY.recruitment_max_applications_per_user) ?? ''}
           />
         </div>
       </SamfForm>

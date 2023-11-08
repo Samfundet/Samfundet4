@@ -24,6 +24,8 @@ class Recruitment(FullCleanSaveMixin):
     reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
+    max_applications_per_user = models.IntegerField(blank=True, null=True, help_text='Max number of applications per user')
+
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
