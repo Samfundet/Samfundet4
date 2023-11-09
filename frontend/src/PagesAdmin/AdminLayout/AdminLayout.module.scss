@@ -2,7 +2,7 @@
 
 @import 'src/mixins';
 
-$panel-width: 14em;
+$panel-width: 15em;
 $panel-light-bg: #f6f6f6;
 $panel-light-bg-hover: #e8e8e8;
 $panel-light-border: #d7d7d7;
@@ -26,7 +26,7 @@ $panel-dark-bg: #333333;
   flex-direction: column;
   margin-top: $navbar-height;
   gap: .2em;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   @include for-mobile-only {
     display: none;
@@ -89,13 +89,13 @@ $panel-dark-bg: #333333;
 }
 
 .selected {
-  background-color: $blue;
+  background-color: $red-samf;
   color: white;
   @include theme-dark {
-    background-color: $blue;
+    background-color: $red-samf;
   }
   &:hover {
-    background-color: $blue;
+    background-color: $red-samf;
     color: white;
   }
 }
