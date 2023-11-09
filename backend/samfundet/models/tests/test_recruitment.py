@@ -16,7 +16,7 @@ datetime_fields_expecting_error = [
 
 @pytest.fixture
 def fixture_org():
-    org = Organization.objects.create(name=f'Samf')
+    org = Organization.objects.create(name='Samf')
     yield org
     org.delete()
 
