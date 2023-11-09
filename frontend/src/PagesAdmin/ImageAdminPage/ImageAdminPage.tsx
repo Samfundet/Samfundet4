@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { Button, ImageQuery } from '~/Components';
 import { getImages } from '~/api';
 import { ImageDto } from '~/dto';
@@ -11,7 +10,6 @@ import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
 
 export function ImageAdminPage() {
-  const navigate = useNavigate();
   const [images, setImages] = useState<ImageDto[]>([]);
   const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -32,7 +30,7 @@ export function ImageAdminPage() {
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_images_create)}>
+    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_images_create}>
       {t(KEY.admin_images_create)}
     </Button>
   );

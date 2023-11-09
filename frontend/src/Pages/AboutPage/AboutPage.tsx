@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { useNavigate } from 'react-router-dom';
 import { Button, Carousel } from '~/Components';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
@@ -9,7 +8,6 @@ import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
 
 export function AboutPage() {
-  const navigate = useNavigate();
   return (
     <Page>
       <div className={styles.row}>
@@ -89,7 +87,7 @@ export function AboutPage() {
               Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.
             </p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic" onClick={() => navigate(ROUTES.frontend.groups)}>
+              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.groups}>
                 GJENGENE PÅ SAMFUNDET
               </Button>
               <Button className={styles.tableButton} theme="basic">

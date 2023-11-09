@@ -35,49 +35,36 @@ export function ImageCard({
 }: ImageCardProps) {
   const containerStyle = classNames(styles.container, compact && styles.compact, className);
   const cardStyle = classNames(styles.card);
-  const bottomLabelStyle = styles.bottom_label;
   const bottomDescriptionStyle = styles.bottom_description;
 
   if (isSkeleton) {
     return (
       <div className={containerStyle}>
         <Skeleton className={cardStyle} borderRadius={'1em'} height={compact ? '7.3em' : '13em'} />
-
-        <div className={bottomLabelStyle}>
-          <div style={{ width: '40%' }}>
-            <Skeleton />
-          </div>
-          <div style={{ width: '40%' }}>
-            <Skeleton />
-          </div>
-        </div>
-
-        <div className={bottomDescriptionStyle}>
-          <div style={{ width: '100%' }}>{!compact && <Skeleton />}</div>
-        </div>
       </div>
     );
   }
 
   return (
     <div className={containerStyle}>
-      <div className={styles.top_label}>
-        <div className={styles.subtitle}>{subtitle}</div>
-        <div className={styles.date_label}>{date && <TimeDisplay timestamp={date} displayType="event-datetime" />}</div>
-      </div>
-
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
-        {children}
+        <div className={styles.card_inner}>
+          <div>{children}</div>
+
+          <div className={styles.card_content}>
+            <div className={styles.title}>{title}</div>
+
+            <div className={styles.subtitle}>
+              {subtitle}
+              <div className={styles.date_label}>
+                {date && <TimeDisplay timestamp={date} displayType="event-datetime" />}
+              </div>
+            </div>
+
+            <div className={bottomDescriptionStyle}>{description}</div>
+          </div>
+        </div>
       </Link>
-
-      <div className={bottomLabelStyle}>
-        <div className={styles.title}>{title}</div>
-      </div>
-
-      <div className={bottomDescriptionStyle}>
-        {description}
-        &nbsp;
-      </div>
     </div>
   );
 }
