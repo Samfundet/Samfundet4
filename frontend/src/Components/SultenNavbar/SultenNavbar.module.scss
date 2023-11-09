@@ -2,7 +2,7 @@
 
 @import 'src/constants';
 
-$navbar-bg: #000000;
+// $navbar-bg: #000000;
 
 .parent_container {
   display: flex;
@@ -17,10 +17,17 @@ $navbar-bg: #000000;
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 100px;
+  height: $sulten-navbar-height;
   transition: 0.2s;
-  background: linear-gradient(to bottom, black, transparent);
+  background-image: linear-gradient($black 0%, $black-t90 25%, $black-t75 50%, $black-t50 100%);
   z-index: 100;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 2px 2px $black-t25;
+}
+
+.container_shrink {
+  @extend .container;
+  height: 80px;
 }
 
 .navbar_menu {
@@ -40,14 +47,25 @@ $navbar-bg: #000000;
 .item {
   z-index: 100;
   color: $white;
+  text-transform: uppercase;
+  font-weight: 600;
   text-decoration: none;
+  transition: 0.2s ease-in-out;
   &:hover {
     text-decoration: none;
+    transform: scale(1.1);
+    text-shadow: 0 0 8px $grey-4;
   }
 }
 
 .language_flag {
   width: 2em;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    // text-decoration: none;
+    transform: scale(1.1);
+    // text-shadow: 0 0 8px $grey-4;
+  }
 }
 
 .mobile_item {
@@ -60,19 +78,32 @@ $navbar-bg: #000000;
   }
 }
 
-.sulten_logo {
+.sulten_logo_big {
   max-width: 12.5em;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: $sulten-navbar-height;
+  height: 80px;
   margin-top: 0.6em;
-  transition: 0.5s;
   cursor: pointer;
+  transition: 0.5s ease-in-out;
+  &:hover {
+    // text-decoration: none;
+    transform: scale(1.1);
+  }
 }
 
-.samfundet_logo{
+.sulten_logo_small {
+  @extend .sulten_logo_big;
+  transform: scale(0.7);
+  &:hover {
+    transform: scale(0.8);
+  }
+}
+
+.samfundet_logo {
   max-width: 2em;
+  max-height: 2em;
 }
 
 .hamburger {

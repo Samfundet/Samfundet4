@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { SamfundetLogo } from '~/Components';
 import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
-import { useDesktop } from '~/hooks';
+import { useDesktop, useScrollY } from '~/hooks';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './SultenNavbar.module.scss';
+
+const scrollDistanceForSmallLogo = 50;
 
 export function SultenNavbar() {
   const { t, i18n } = useTranslation();
@@ -16,6 +18,7 @@ export function SultenNavbar() {
   const [showMobileNavigation, setMobileNavigation] = useState(false);
   const isNorwegian = i18n.language == LANGUAGES.NB;
   const navigate = useNavigate();
+  const scrollY = useScrollY();
 
   const changeLanguage = () => {
     isNorwegian ? i18n.changeLanguage(LANGUAGES.EN) : i18n.changeLanguage(LANGUAGES.NB);
@@ -25,6 +28,8 @@ export function SultenNavbar() {
     [styles.item]: isDesktop,
     [styles.mobile_item]: !isDesktop,
   });
+
+  const isScrolledNavbar = scrollY > scrollDistanceForSmallLogo;
 
   const leftItems = (
     <>
@@ -102,7 +107,7 @@ export function SultenNavbar() {
             navigate(ROUTES.frontend.sulten);
             setMobileNavigation(false);
           }}
-          className={styles.sulten_logo}
+          className={isScrolledNavbar ? styles.sulten_logo_small : styles.sulten_logo_big}
         ></img>
         {isDesktop && rightItems}
         {calendarIcon}
@@ -112,5 +117,5 @@ export function SultenNavbar() {
     </div>
   );
 
-  return <div className={styles.container}>{navbarHeaders}</div>;
+  return <div className={isScrolledNavbar ? styles.container_shrink : styles.container}>{navbarHeaders}</div>;
 }
