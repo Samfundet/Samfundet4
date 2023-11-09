@@ -1,0 +1,80 @@
+.snowflake {
+  position: fixed;
+  z-index: 9999;
+  user-select: none;
+  cursor: default;
+  animation-name: snowflakes-fall, snowflakes-shake;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-play-state: running, running;
+  color: #ffffff;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px #000000;
+}
+
+@-webkit-keyframes snowflakes-fall {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@-webkit-keyframes snowflakes-shake {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  50% {
+    -webkit-transform: translateX(80px);
+    transform: translateX(80px);
+  }
+}
+
+@keyframes snowflakes-fall {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes snowflakes-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(80px);
+  }
+}
+
+@for $i from 1 through 48 {
+  .snowflake:nth-of-type(#{$i}) {
+    left: #{random(100)} + '%';
+    top: calc(-10% - #{random(10)}) + '%';
+    animation-duration:
+      #{10 + random(5)}s,
+      #{2.5 + random(2)}s;
+    animation-delay:
+      #{($i * 0.2) + random(5)} + 's',
+      #{random(4)} + 's';
+
+    @keyframes snowflakes-shake-#{$i} {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(#{40 + random(40)}px);
+      }
+    }
+    animation-name:
+      snowflakes-fall,
+      snowflakes-shake-#{$i};
+  }
+}
