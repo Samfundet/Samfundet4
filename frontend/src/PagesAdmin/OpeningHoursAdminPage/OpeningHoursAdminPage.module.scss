@@ -74,7 +74,3 @@ $bg-dark: #272727;
   @include flex-row;
   gap: 0.5em;
 }
-
-.invalid {
-  border: 2px solid red;
-}
