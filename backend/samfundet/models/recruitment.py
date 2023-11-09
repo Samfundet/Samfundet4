@@ -169,6 +169,24 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
+    def clean(self) -> None:
+        # if the user has already applied to the recruitment cancel the application.
+        for admission in self.recruitment_position.admissions.all():
+            if admission.user == self.user:
+                raise ValidationError('User has already applied to this recruitment position')
+
+        # if the user has already applied to the max amount of recruitments cancel the application.
+        user_aplications_count = 0
+        for admission in self.recruitment.admissions.all():
+            if admission.user == self.user:
+                user_aplications_count += 1
+        max_applications_per_user = self.recruitment.max_applications_per_user
+        if max_applications_per_user is not None:
+            if user_aplications_count >= max_applications_per_user:
+                raise ValidationError('User has already applied to the max amount of recruitments')
+        
+        return super().clean()
+
     def save(self, *args: tuple, **kwargs: dict) -> None:
         """
         If the admission is saved without an interview, try to find an interview from a shared position.
