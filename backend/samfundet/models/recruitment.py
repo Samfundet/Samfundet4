@@ -30,6 +30,17 @@ class Recruitment(FullCleanSaveMixin):
     def clean(self, *args: tuple, **kwargs: dict) -> None:
         super().clean()
 
+        if not all(
+            [
+                self.visible_from,
+                self.actual_application_deadline,
+                self.shown_application_deadline,
+                self.reprioritization_deadline_for_applicant,
+                self.reprioritization_deadline_for_groups,
+            ]
+        ):
+            raise ValidationError('Missing datetime')
+
         # All times should be in the future.
         now = timezone.now()
         if any(
