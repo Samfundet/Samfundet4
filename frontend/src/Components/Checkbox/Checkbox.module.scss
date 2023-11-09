@@ -4,6 +4,7 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
 
 /* Label wraper i checkbox.tsx. */
 .checkbox {
+  position: relative;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
