@@ -21,7 +21,7 @@ def fixture_org():
     org.delete()
 
 
-FUTURE_DAYS = 2
+FUTURE_DAYS = 20
 
 
 def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> Recruitment:
@@ -52,18 +52,18 @@ class TestRecruitmentClean:
 
     def test_visible_from_before_application_deadline(self, fixture_org):
         error_msg = 'Visible from should be before application deadline'
-        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 1)
+        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError, match=error_msg):
             _create_recruitment_with_dt(overrides={'visible_from': future_more})
 
     def test_application_deadline_before_reprioritization_deadline(self, fixture_org):
         error_msg = 'Actual application deadline should be before reprioritization deadline for applicants'
-        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 1)
+        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError, match=error_msg):
             _create_recruitment_with_dt(overrides={'actual_application_deadline': future_more})
 
     def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_groups(self, fixture_org):
         error_msg = 'Reprioritization deadline for applicants should be before reprioritization deadline for groups'
-        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 1)
+        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError, match=error_msg):
             _create_recruitment_with_dt(overrides={'reprioritization_deadline_for_applicant': future_more})
