@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGangs } from '~/api';
@@ -13,7 +13,6 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentGangOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
-  const navigate = useNavigate();
   const [allGangs, setAllGangs] = useState<GangDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -41,17 +40,13 @@ export function RecruitmentGangOverviewPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>
-      <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.common_overview)}
       </Button>
-      <Button
-        theme="blue"
-        rounded={true}
-        onClick={() => navigate(ROUTES.frontend.admin_recruitment_users_without_interview)}
-      >
+      <Button theme="blue" rounded={true} link={ROUTES.frontend.admin_recruitment_users_without_interview}>
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-      <Button theme="white" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
+      <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.recruitment_show_unprocessed_applicants)}
       </Button>
     </>
