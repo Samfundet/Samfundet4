@@ -6,7 +6,6 @@ type InputTimeProps = {
   disabled?: boolean;
   onChange?: (value: string) => void;
   onBlur?: (value: string) => void;
-  placeholder?: string | null;
   value?: string;
 };
 
@@ -48,6 +47,10 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
     onBlur?.(formattedTime);
   }
 
+  function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
+    e.target.value = '';
+  }
+
   return (
     <div className={styles.inputTime_wrap}>
       <div className={styles.inputTime}>
@@ -58,6 +61,7 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
           value={hour}
           onChange={handleChange}
           onBlur={handleBlur}
+          onFocus={handleFocus}
         />
         <p>:</p>
         <input
@@ -67,6 +71,7 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
           value={minute}
           onChange={handleChange}
           onBlur={handleBlur}
+          onFocus={handleFocus}
         />
       </div>
       <div className={styles.error}></div>
