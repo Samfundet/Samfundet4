@@ -9,7 +9,8 @@
 
 ; Same as yapf.
 max-line-length = 160
-require-plugins = flake8-print, flake8-keyword-arguments, flake8-quotes, flake8-annotations
+require-plugins = flake8-print, flake8-quotes, flake8-annotations
+; require-plugins = flake8-print, flake8-keyword-arguments, flake8-quotes, flake8-annotations
 
 # Ignore specific errors in specific modules/files (glob pattern).
 # Format: <some/*/glob/**/pattern.txt>:<error>
@@ -56,5 +57,5 @@ extend-ignore=
 ; https://lintlyci.github.io/Flake8Rules/
 
 
-[flake8-keyword-arguments]
-max-pos-args = 0
+; [flake8-keyword-arguments]
+; max-pos-args = 0
