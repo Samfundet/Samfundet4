@@ -16,18 +16,18 @@
   text-align: center;
   border: 2px solid $grey-4;
   @include theme-dark {
-    border: 2px solid $grey-2;
+    border-color: $grey-2;
   }
 }
 
-/* Chrome, Safari, Edge, Opera*/
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+/* Chrome, Safari, Edge, Opera */
+.number::-webkit-outer-spin-button,
+.number::-webkit-inner-spin-button {
   appearance: none;
 }
 
 /* Firefox */
-input[type='number'] {
+.number[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -37,7 +37,7 @@ input[type='number'] {
   font-size: 1em;
 }
 
-input:focus {
+.number:focus {
   outline: 3px hidden var(--active);
   box-shadow: 0 0 2px 2px #999999;
 }
