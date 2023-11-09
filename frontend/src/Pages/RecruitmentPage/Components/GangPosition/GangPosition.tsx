@@ -43,7 +43,6 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                 >
                   {dbT(pos, 'short_description')}
                 </Link>
-                {/*<a className={styles.position_short_desc}>{dbT(pos, 'short_description')}</a>*/}
               </div>
             ))}
           </ExpandableHeader>
