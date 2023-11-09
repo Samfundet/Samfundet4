@@ -16,7 +16,7 @@ type AdminPageLayoutProps = {
  */
 export function AdminPageLayout({ title, backendUrl, header, loading, children }: AdminPageLayoutProps) {
   return (
-    <div className={styles.page}>
+    <>
       <div className={styles.header}>
         <div className={styles.title_row}>
           <div className={styles.title}>{title}</div>
@@ -41,6 +41,6 @@ export function AdminPageLayout({ title, backendUrl, header, loading, children }
         )}
         {!loading && children}
       </div>
-    </div>
+    </>
   );
 }

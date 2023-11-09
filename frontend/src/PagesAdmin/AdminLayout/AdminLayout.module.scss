@@ -13,6 +13,7 @@ $panel-dark-bg: #333333;
   flex-direction: row;
   max-height: 100vh;
   height: 100vh;
+  margin-top: $navbar-height;
 }
 
 .panel {
@@ -24,7 +25,6 @@ $panel-dark-bg: #333333;
   border-right: 1px solid $panel-light-border;
   display: flex;
   flex-direction: column;
-  margin-top: $navbar-height;
   gap: .2em;
   overflow-y: auto;
 
@@ -103,7 +103,6 @@ $panel-dark-bg: #333333;
 .content_wrapper {
   flex: 1;
   height: calc(100vh - $navbar-height);
-  margin-top: $navbar-height;
   margin-left: calc($panel-width);
   max-width: calc(100vw - $panel-width);
   width: calc(100vw - $panel-width);
