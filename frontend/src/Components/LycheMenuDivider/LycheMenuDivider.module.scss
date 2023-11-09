@@ -1,0 +1,39 @@
+@import 'src/constants';
+
+.lyche_menu_divider {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3em;
+  margin-top: 2em;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.lyche_menu_divider_img {
+  height: 17px;
+  width: 128px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.lyche_menu_divider_left {
+  @extend .lyche_menu_divider_img;
+  background-image: $lyche-menu-divider-left;
+}
+
+.lyche_menu_divider_title {
+  font-family: $lyche-title-font;
+  font-size: 1.25em;
+  color: white;
+  text-transform: uppercase;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  white-space: nowrap;
+}
+
+.lyche_menu_divider_right {
+  @extend .lyche_menu_divider_img;
+  background-image: $lyche-menu-divider-right;
+}

@@ -12,6 +12,12 @@
   background-color: $red-samf;
   gap: 0.5rem;
   padding: 1em;
+  
+  @include theme-dark {
+    /* stylelint-disable-next-line function-no-unknown */
+    background-color: darken($red-samf, 35%);
+
+  }
 }
 
 .main_row {
