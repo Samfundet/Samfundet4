@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { SamfundetLogo } from '~/Components';
@@ -30,6 +30,14 @@ export function SultenNavbar() {
   });
 
   const isScrolledNavbar = scrollY > scrollDistanceForSmallLogo;
+
+  useEffect(() => {
+    if (showMobileNavigation) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [showMobileNavigation]);
 
   const leftItems = (
     <>
@@ -107,7 +115,7 @@ export function SultenNavbar() {
             navigate(ROUTES.frontend.sulten);
             setMobileNavigation(false);
           }}
-          className={isScrolledNavbar ? styles.sulten_logo_small : styles.sulten_logo_big}
+          className={isScrolledNavbar || !isDesktop ? styles.sulten_logo_small : styles.sulten_logo_big}
         ></img>
         {isDesktop && rightItems}
         {calendarIcon}
@@ -117,5 +125,7 @@ export function SultenNavbar() {
     </div>
   );
 
-  return <div className={isScrolledNavbar ? styles.container_shrink : styles.container}>{navbarHeaders}</div>;
+  return (
+    <div className={isScrolledNavbar || !isDesktop ? styles.container_shrink : styles.container}>{navbarHeaders}</div>
+  );
 }
