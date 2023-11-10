@@ -2,14 +2,14 @@
 
 @import 'src/mixins';
 
-.content_container {
-  flex-direction: row;
-  background-color: $black;
-  z-index: 10;
-  @include for-mobile-down {
-    padding: 0%;
-  }
-}
+// .content_container {
+//   flex-direction: row;
+//   background-color: $black;
+//   z-index: 10;
+//   @include for-mobile-down {
+//     padding: 0%;
+//   }
+// }
 
 .image_container {
   width: 100%;
