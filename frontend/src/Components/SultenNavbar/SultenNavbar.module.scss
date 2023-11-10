@@ -2,8 +2,6 @@
 
 @import 'src/constants';
 
-// $navbar-bg: #000000;
-
 .parent_container {
   display: flex;
   width: 100%;
@@ -18,11 +16,11 @@
   justify-content: center;
   width: 100vw;
   height: $sulten-navbar-height;
-  transition: 0.2s;
   background-image: linear-gradient($black 0%, $black-t90 25%, $black-t75 50%, $black-t50 100%);
   z-index: 100;
   backdrop-filter: blur(16px);
   box-shadow: 0 2px 2px $black-t25;
+  transition: 0.5s ease-in-out;
 }
 
 .container_shrink {
@@ -62,9 +60,7 @@
   width: 2em;
   transition: 0.2s ease-in-out;
   &:hover {
-    // text-decoration: none;
     transform: scale(1.1);
-    // text-shadow: 0 0 8px $grey-4;
   }
 }
 
@@ -83,12 +79,11 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: 80px;
+  height: 90px;
   margin-top: 0.6em;
   cursor: pointer;
   transition: 0.5s ease-in-out;
   &:hover {
-    // text-decoration: none;
     transform: scale(1.1);
   }
 }
