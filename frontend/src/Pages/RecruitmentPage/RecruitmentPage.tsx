@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import { ROUTES } from '~/routes';
 import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
@@ -56,7 +57,7 @@ export function RecruitmentPage() {
             <br />
             For mer informasjon om samfundets gjenger{' '}
             <strong>
-              <a className={styles.link} href="https://samfundet.no/kontaktinfo">
+              <a className={styles.link} href={ROUTES.other.samfundet_kontaktinfo}>
                 Klikk her.
               </a>
             </strong>
