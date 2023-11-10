@@ -23,7 +23,7 @@
   background-color: black;
   flex: 1;
   max-width: $content-max-size;
-  width: 100vw;
+  width: 100%;
   padding: 0 0.5em;
   z-index: 10;
   @include for-mobile-down {
