@@ -160,10 +160,12 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_admission_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.recruitment_admission_already_applied]: 'Har allerede søkt',
   [KEY.recruitment_max_applications_per_user]: 'Maks antall søknader per bruker',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recruitment_admission_max_applications_per_user]: 'Maks antall søknader per bruker',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -386,10 +388,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_admission_letter]: 'Default admission letter',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
+  [KEY.recruitment_admission_already_applied]: 'Already applied',
   [KEY.recruitment_max_applications_per_user]: 'Max number of applications per user',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
+  [KEY.recruitment_admission_max_applications_per_user]: 'Max number of applications per user',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',

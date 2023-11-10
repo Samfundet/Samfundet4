@@ -172,10 +172,12 @@ export const KEY = {
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  recruitment_admission_already_applied: 'recruitment_admission_already_applied',
   recruitment_max_applications_per_user: 'recruitment_max_applications_per_user',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
+  recruitment_admission_max_applications_per_user: 'recruitment_admission_max_applications_per_user',
 
   // Admin:
   admin_organizer: 'admin_organizer',
