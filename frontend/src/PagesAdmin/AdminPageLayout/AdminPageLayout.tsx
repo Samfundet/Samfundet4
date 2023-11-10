@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { IconButton, SamfundetLogoSpinner } from '~/Components';
 import { COLORS } from '~/types';
 import styles from './AdminPageLayout.module.scss';
@@ -15,6 +15,11 @@ type AdminPageLayoutProps = {
  * Simple wrapper for admin pages to keep them consistent.
  */
 export function AdminPageLayout({ title, backendUrl, header, loading, children }: AdminPageLayoutProps) {
+  useEffect(() => {
+    // Scroll to top on page change
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <div className={styles.header}>
