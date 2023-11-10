@@ -3,10 +3,10 @@
 @import 'src/mixins';
 
 .container {
-  animation: gradient 10s ease-in-out infinite;
+  animation: gradient 15s ease-in-out infinite;
   background-size: 400% 400%;
-  background-image: radial-gradient(circle at 10% 10%, rgba(15, 15, 15, 1) 10%, rgba(25, 25, 25, 0.9) 30%),
-    radial-gradient(circle at 20% 90%, rgba(20, 20, 20, 1), rgba(0, 0, 0, 0.9) 75%),
+  background-image: radial-gradient(circle at 10% 10%, rgba(15, 15, 15, 1) 10%, rgba(25, 25, 25, 0.9) 75%),
+    radial-gradient(circle at 20% 90%, rgba(15, 15, 15, 1), rgba(0, 0, 0, 0.9) 75%),
     radial-gradient(circle at center, rgba(15, 15, 15, 1) 50%, rgba(0, 0, 0, 0.9) 75%),
     radial-gradient(circle at 90% 75%, rgba(20, 20, 20, 1) 10%, rgba(15, 15, 15, 0.9) 40%);
   display: flex;
@@ -25,33 +25,20 @@
 }
 
 @keyframes gradient {
-  0% {
-    background-position: 51% 0%;
+  0%,
+  100% {
+    background-position: 50% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
   }
   50% {
     background-position: 50% 100%;
   }
-  100% {
-    background-position: 51% 0%;
+  75% {
+    background-position: 0% 50%;
   }
 }
-// @keyframes gradient {
-//   0% {
-//     background-position: 25% 0%;
-//   }
-//   25% {
-//     background-position: 51% 0%;
-//   }
-//   50% {
-//     background-position: 50% 100%;
-//   }
-//   75% {
-//     background-position: 51% 0%;
-//   }
-//   100% {
-//     background-position: 25% 0%;
-//   }
-// }
 
 .content {
   flex: 1;
