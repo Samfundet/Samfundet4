@@ -4,7 +4,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from samfundet.models.general import Booking, Organization
+from samfundet.models.general import Booking
 from samfundet.models.recruitment import Recruitment
 
 
