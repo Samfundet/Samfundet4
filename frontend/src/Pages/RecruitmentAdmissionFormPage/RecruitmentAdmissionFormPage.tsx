@@ -45,7 +45,8 @@ export function RecruitmentAdmissionFormPage() {
       }); // TODO: Add error handling
     } else {
       setLoading(false);
-      // Paramater positionID is not set, redirect or somthing...
+      // Paramater positionID is not set.
+      // TODO: redirect or somthing...
     }
   }, [positionID]);
 
@@ -63,10 +64,12 @@ export function RecruitmentAdmissionFormPage() {
     }
 
     // if the user has already applied to the max amount of recruitments cancel the application.
-    const max_admitions: number = recruitment.max_applications_per_user;
-    if (admissions.length >= max_admitions) {
-      toast.error(t(KEY.recruitment_admission_max_applications_per_user));
-      return;
+    if (recruitment.max_applications_per_user) {
+      const max_admitions: number = recruitment.max_applications_per_user;
+      if (admissions.length >= max_admitions) {
+        toast.error(t(KEY.recruitment_admission_max_applications_per_user));
+        return;
+      }
     }
 
     data.recruitment_position = positionID ? +positionID : 1;
@@ -76,7 +79,6 @@ export function RecruitmentAdmissionFormPage() {
         toast.success(t(KEY.common_creation_successful));
       })
       .catch(() => {
-        console.error('Error creating recruitment admission');
         toast.error(t(KEY.common_something_went_wrong));
       });
   }
