@@ -84,7 +84,6 @@ export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'f
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 /** Event types */
-//export type EventAgeRestriction = 'none' | 'eighteen' | 'twenty' | 'mixed';
 export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
 
 export const EventAgeRestriction = {

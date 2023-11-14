@@ -15,7 +15,7 @@ import { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { Children, EventAgeRestriction } from '~/types';
+import { Children, EventAgeRestrictionValue } from '~/types';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
@@ -38,7 +38,7 @@ export function EventCreatorAdminPage() {
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
   ];
-  const ageLimitOptions: DropDownOption<EventAgeRestriction>[] = [
+  const ageLimitOptions: DropDownOption<EventAgeRestrictionValue>[] = [
     { value: 'none', label: 'Ingen' },
     { value: 'eighteen', label: '18 år' },
     { value: 'twenty', label: '20 år' },
