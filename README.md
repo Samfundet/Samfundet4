@@ -9,6 +9,7 @@
 - [Useful Commands](/docs/useful-commands.md)
 - [Technologies used on Samf4 🤖](/docs/technical/Samf4Tech.md)
 - [Useful Docker aliases](/docs/docker-project-specific-commands.md)
+
 ## Installation
 
 We have a script that handles all installation for you. To run the script, a Github Personal Access Token (PAT) is required.
