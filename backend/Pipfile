@@ -58,4 +58,4 @@ flake8-quotes = "*"
 requests = "*"
 
 [requires]
-python_version = "3.11.0" # from .python-version
+python_version = "3.11.2"
