@@ -1,0 +1,26 @@
+$back-button-width: 5rem;
+
+.container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.back_button {
+  max-width: $back-button-width;
+}
+
+.top_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.empty_div {
+  width: $back-button-width;
+}

@@ -1,11 +1,11 @@
 #
 # This file contains models spesific to the recruitment system
 #
-
 from __future__ import annotations
+import uuid
+
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-
 from django.db import models
 
 from root.utils.mixins import FullCleanSaveMixin
@@ -133,6 +133,8 @@ class Interview(FullCleanSaveMixin):
 
 
 class RecruitmentAdmission(FullCleanSaveMixin):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'

@@ -32,10 +32,11 @@ type TableProps = {
   // Data can either be a table cell with separated value and content, or just the raw value
   // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
+  defaultSortColumn?: number;
 };
 
-export function Table({ className, columns, data }: TableProps) {
-  const [sortColumn, setSortColumn] = useState(-1);
+export function Table({ className, columns, data, defaultSortColumn }: TableProps) {
+  const [sortColumn, setSortColumn] = useState(defaultSortColumn || -1);
   const [sortInverse, setSortInverse] = useState(false);
 
   function sort(column: number) {
