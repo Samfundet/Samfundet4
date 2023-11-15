@@ -26,12 +26,14 @@ def seed():
         for recruitment_index, recruitment in enumerate(recruitments):
             for i in range(2):  # Create 2 instances for each gang and recruitment
                 position_data = POSITION_DATA.copy()
-                position_data.update({
-                    'name_nb': f'Stilling {i}',
-                    'name_en': f'Position {i}',
-                    'gang': gang,
-                    'recruitment': recruitment,
-                })
+                position_data.update(
+                    {
+                        'name_nb': f'{gang.abbreviation} stilling {i}',
+                        'name_en': f'{gang.abbreviation} position {i}',
+                        'gang': gang,
+                        'recruitment': recruitment,
+                    }
+                )
                 position, created = RecruitmentPosition.objects.get_or_create(**position_data)
 
                 if created:
