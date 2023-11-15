@@ -61,7 +61,7 @@ export function ApplicantApplicationOverviewPage() {
     { sortable: false, content: 'Recruitment Position' },
     { sortable: false, content: 'Interview Date' },
     { sortable: false, content: 'Interview Location' },
-    { sortable: false, content: 'Applicant Priority' },
+    { sortable: true, content: 'Applicant Priority' },
     { sortable: false, content: '' },
   ];
 
