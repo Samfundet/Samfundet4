@@ -28,12 +28,12 @@ RUN echo 'alias pipeline="pipenv run /app/run-pipeline.sh"' >> ~/.bashrc
 RUN mkdir /app
 WORKDIR /app
 
-# Copy dependencies
-COPY Pipfile Pipfile.lock ./
-
-# Install virtual environment.
+# Prepare virtual environment.
 RUN mkdir .venv
 RUN python -m pip install pipenv
+
+# Install dependecies
+COPY Pipfile Pipfile.lock ./
 RUN python -m pipenv install --dev --deploy
 
 # Copy remaining
