@@ -1,5 +1,5 @@
 # Use same version as defined in .python-version.
-FROM python:3.11.0-slim-bullseye
+FROM python:3.11.2-slim-bullseye
 
 EXPOSE 8000
 EXPOSE 5678
