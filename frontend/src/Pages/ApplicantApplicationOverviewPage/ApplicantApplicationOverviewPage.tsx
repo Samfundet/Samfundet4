@@ -17,23 +17,29 @@ export function ApplicantApplicationOverviewPage() {
   const { t } = useTranslation();
 
   function handleChangePriority(id: number, direction: 'up' | 'down') {
-    const index = admissions.findIndex((admission) => admission.id === id);
-    if (index < 0) return; // ID not found
-
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= admissions.length) return;
-
     const newAdmissions = [...admissions];
-    const temp = newAdmissions[index].applicant_priority;
+    const index = newAdmissions.findIndex((admission) => admission.id === id);
+    const directionIncrement = direction === 'up' ? -1 : 1;
+    if (newAdmissions[index].applicant_priority === 1 && direction === 'up') return;
+    if (newAdmissions[index].applicant_priority === newAdmissions.length && direction === 'down') return;
+    const targetIndex = newAdmissions.findIndex(
+      (admission) => admission.applicant_priority === newAdmissions[index].applicant_priority + directionIncrement,
+    );
 
-    // Swap priorities
-    newAdmissions[index].applicant_priority = newAdmissions[targetIndex].applicant_priority;
-    newAdmissions[targetIndex].applicant_priority = temp;
+    const old_priority = newAdmissions[index].applicant_priority;
+    const new_priority = newAdmissions[targetIndex].applicant_priority;
 
-    // Update database
+    console.log('old priority', old_priority);
+    console.log('new priority', new_priority);
+
+    newAdmissions[index].applicant_priority = new_priority;
+    newAdmissions[targetIndex].applicant_priority = old_priority;
+
+    // TODO: Make this a single API call
     putRecruitmentAdmission(newAdmissions[index]);
-    putRecruitmentAdmission(newAdmissions[targetIndex]);
-    setAdmissions(newAdmissions);
+    putRecruitmentAdmission(newAdmissions[targetIndex]).then(() => {
+      setAdmissions(newAdmissions);
+    });
   }
 
   function upDownArrow(id: number) {
