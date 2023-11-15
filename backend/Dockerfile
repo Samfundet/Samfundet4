@@ -14,6 +14,11 @@ ENV PIPENV_VENV_IN_PROJECT=1
 RUN apt-get update
 RUN apt-get install sqlite3
 
+# Install psycopg-dependencies
+RUN apt-get install gcc -y
+RUN apt-get install libpq-dev -y
+RUN export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
+
 # Alias
 RUN echo 'alias la="ls -la"' >> ~/.bashrc
 

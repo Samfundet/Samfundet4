@@ -6,7 +6,6 @@ name = "pypi"
 [scripts]
 # See '/docs/pipenv.md'.
 # Doesn't work for powershell.
-
 "pipenv:install" = "pipenv install"
 "pipenv:update" = "pipenv update"
 "pipenv:sync" = "bash -c \"pipenv clean; pipenv sync --dev\""
@@ -44,6 +43,7 @@ debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
 django-notifications-hq = "*"
+psycopg = {extras = ["c"], version = "*"}
 
 [dev-packages]
 yapf = "*"
