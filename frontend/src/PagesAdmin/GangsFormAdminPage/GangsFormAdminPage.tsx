@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
 import { GangDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -14,7 +15,7 @@ import styles from './GangsFormAdminPage.module.scss';
 import { toTitleCase } from '~/utils';
 
 export function GangsFormAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
@@ -33,7 +34,7 @@ export function GangsFormAdminPage() {
         })
         .catch((data) => {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_gangs);
+            navigate({ url: ROUTES.frontend.admin_gangs });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });

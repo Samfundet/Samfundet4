@@ -1,12 +1,9 @@
 @import 'src/constants';
 
-.button {
+.wrapper {
   cursor: pointer;
-  transition: 0.1s;
-  &:hover {
-    .icon {
-      transform: scale(1.1);
-      transform-origin: 50% 50%;
-    }
-  }
+}
+
+.icon:hover {
+  scale: 1.1;
 }

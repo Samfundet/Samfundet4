@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getImage, postImage } from '~/api';
 import { ImagePostDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -13,7 +14,7 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { toTitleCase } from '~/utils';
 
 export function ImageFormAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   // If form has a id, check if it exists, and then load that item.
@@ -33,7 +34,7 @@ export function ImageFormAdminPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_images);
+            navigate({ url: ROUTES.frontend.admin_images });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
@@ -53,7 +54,7 @@ export function ImageFormAdminPage() {
       postImage(data)
         .then(() => {
           // Success!
-          navigate(ROUTES.frontend.admin_images);
+          navigate({ url: ROUTES.frontend.admin_images });
           toast.success(t(KEY.common_creation_successful));
         })
         .catch((err) => {
