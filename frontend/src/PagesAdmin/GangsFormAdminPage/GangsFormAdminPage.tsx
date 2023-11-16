@@ -84,7 +84,11 @@ export function GangsFormAdminPage() {
             type="text"
             label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_abbreviation)}`)}
           />
-          <SamfFormField field="webpage" type="text" label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_webpage)}`)} />
+          <SamfFormField
+            field="webpage"
+            type="text"
+            label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_webpage)}`)}
+          />
         </div>
         {/* TODO fetch options */}
         {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}
