@@ -111,12 +111,12 @@ export function RecruitmentAdmissionFormPage() {
                     display="pill"
                     theme="outlined"
                     onClick={() => {
-                      navigate(
-                        reverse({
+                      navigate({
+                        url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
                           urlParams: { positionID: pos.id, gangID: pos.gang.id },
                         }),
-                      );
+                      });
                     }}
                   >
                     {dbT(pos, 'name')}

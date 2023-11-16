@@ -13,7 +13,7 @@ type GangItemProps = {
 export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
-      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id == gang.id);
+      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);
       if (filteredPositions && filteredPositions.length > 0) {
         return (
           <ExpandableHeader
