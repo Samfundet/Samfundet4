@@ -4,7 +4,7 @@ import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './InputField.module.scss';
 
-export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'time';
+export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'date' | 'time';
 
 type InputFieldProps<T> = {
   children?: Children;
@@ -19,6 +19,8 @@ type InputFieldProps<T> = {
   error?: string | boolean;
   helpText?: string;
   icon?: string;
+  minDate?: string;
+  maxDate?: string;
 };
 
 export function InputField<T>({
@@ -34,6 +36,8 @@ export function InputField<T>({
   helpText,
   type = 'text',
   icon,
+  minDate,
+  maxDate,
 }: InputFieldProps<T>) {
   function preprocessValue(e?: ChangeEvent<HTMLInputElement>) {
     let value: string | number | undefined = e?.currentTarget.value ?? '';
@@ -57,6 +61,8 @@ export function InputField<T>({
         disabled={disabled}
         type={type}
         value={value}
+        max={maxDate}
+        min={minDate}
       />
       {icon && (
         <div className={styles.icon_container}>
