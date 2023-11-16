@@ -29,7 +29,7 @@ export function RecruitmentAdmissionFormPage() {
   }, []);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    data.recruitment_position = positionID ? +positionID : 1;
+    data.recruitment_position.id = positionID ? positionID : '1';
     postRecruitmentAdmission(data)
       .then(() => {
         navigate({ url: ROUTES.frontend.home });

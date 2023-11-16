@@ -35,8 +35,8 @@ type TableProps = {
   defaultSortColumn?: number;
 };
 
-export function Table({ className, columns, data, defaultSortColumn }: TableProps) {
-  const [sortColumn, setSortColumn] = useState(defaultSortColumn || -1);
+export function Table({ className, columns, data, defaultSortColumn = -1 }: TableProps) {
+  const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
 
   function sort(column: number) {

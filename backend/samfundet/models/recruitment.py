@@ -7,6 +7,7 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db import models
+from samfundet.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 
 from root.utils.mixins import FullCleanSaveMixin
 from .general import Organization, User, Gang
@@ -147,24 +148,9 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
-    PRIORITY_CHOICES = [
-        (0, 'Not Set'),
-        (1, 'Not Wanted'),
-        (2, 'Wanted'),
-        (3, 'Reserve'),
-    ]
+    recruiter_priority = models.IntegerField(choices=RecruitmentPriorityChoices.choices, help_text='The priority of the admission', default=1)
 
-    STATUS_CHOICES = [
-        (0, 'Nothing'),
-        (1, 'Called and Accepted'),
-        (2, 'Called and Rejected'),
-        (3, 'Automatic Rejection'),
-    ]
-
-    # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
-    recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, help_text='The priority of the admission', default=1)
-
-    recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
+    recruiter_status = models.IntegerField(choices=RecruitmentStatusChoices.choices, default=0, help_text='The status of the admission')
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
