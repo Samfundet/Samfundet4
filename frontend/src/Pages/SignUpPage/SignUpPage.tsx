@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
 import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, register } from '~/api';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -16,11 +16,11 @@ export function SignUpPage() {
   const { t } = useTranslation();
   const [loginFailed, setLoginFailed] = useState(false);
   const { user, setUser } = useAuthContext();
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
 
   useEffect(() => {
     if (user !== undefined) {
-      navigate(ROUTES.frontend.home);
+      navigate({ url: ROUTES.frontend.home });
     }
   }, [user, navigate]);
 
@@ -39,7 +39,7 @@ export function SignUpPage() {
             setUser(user);
           });
 
-          navigate(ROUTES.frontend.home);
+          navigate({ url: ROUTES.frontend.home });
         } else {
           setLoginFailed(true);
         }

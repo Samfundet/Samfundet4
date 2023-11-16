@@ -9,8 +9,8 @@
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
 
-  // For visibility above (shadows on content etc)
-  padding-top: 10px;
+  // For visibility (shadows on content etc)
+  padding: 10px 0;
 
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none; /* IE and Edge */

@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { InformationPageDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function InformationAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -74,15 +74,15 @@ export function InformationAdminPage() {
         content: (
           <CrudButtons
             onView={() => {
-              navigate(pageUrl);
+              navigate({ url: pageUrl });
             }}
             onEdit={() => {
-              navigate(
-                reverse({
+              navigate({
+                url: reverse({
                   pattern: ROUTES.frontend.admin_information_edit,
                   urlParams: { slugField: element.slug_field },
                 }),
-              );
+              });
             }}
             onDelete={() => {
               if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
@@ -98,8 +98,8 @@ export function InformationAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
-      {t(KEY.common_create)} {t(KEY.information_page_short)}
+    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
     </Button>
   );
 

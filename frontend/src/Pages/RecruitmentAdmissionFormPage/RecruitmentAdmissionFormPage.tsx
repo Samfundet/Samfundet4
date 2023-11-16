@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentAdmission } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
 
 export function RecruitmentAdmissionFormPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
@@ -31,7 +32,7 @@ export function RecruitmentAdmissionFormPage() {
     data.recruitment_position = positionID ? +positionID : 1;
     postRecruitmentAdmission(data)
       .then(() => {
-        navigate(ROUTES.frontend.home);
+        navigate({ url: ROUTES.frontend.home });
         toast.success(t(KEY.common_creation_successful));
       })
       .catch(() => {
