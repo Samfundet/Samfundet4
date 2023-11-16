@@ -12,7 +12,7 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
-import { toTitleCase } from '~/utils';
+import { lowerCapitalize } from '~/utils';
 
 export function GangsFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -70,21 +70,21 @@ export function GangsFormAdminPage() {
           <SamfFormField
             field="name_nb"
             type="text"
-            label={toTitleCase(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}
+            label={lowerCapitalize(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}
           />
           <SamfFormField
             field="name_en"
             type="text"
-            label={toTitleCase(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}
+            label={lowerCapitalize(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}
           />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="abbreviation"
             type="text"
-            label={toTitleCase(`${t(KEY.admin_gangsadminpage_abbreviation)}`)}
+            label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_abbreviation)}`)}
           />
-          <SamfFormField field="webpage" type="text" label={toTitleCase(`${t(KEY.admin_gangsadminpage_webpage)}`)} />
+          <SamfFormField field="webpage" type="text" label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_webpage)}`)} />
         </div>
         {/* TODO fetch options */}
         {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}

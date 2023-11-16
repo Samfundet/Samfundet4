@@ -11,7 +11,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { toTitleCase } from '~/utils';
+import { lowerCapitalize } from '~/utils';
 
 export function ImageFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -65,8 +65,8 @@ export function ImageFormAdminPage() {
     }
   }
 
-  const submitText = id ? t(KEY.common_save) : toTitleCase(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
-  const title = id ? toTitleCase(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
+  const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
+  const title = id ? lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
@@ -78,7 +78,7 @@ export function ImageFormAdminPage() {
         <SamfFormField
           field="file"
           type="upload-image"
-          label={toTitleCase(`${t(KEY.common_choose)} ${t(KEY.common_image)}`)}
+          label={lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_image)}`)}
         />
         <p>
           {JSON.stringify(image.file)}

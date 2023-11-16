@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import styles from '../../HomePage.module.scss';
-import { dbT, toTitleCase } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { Button } from '~/Components';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -37,7 +37,7 @@ export function Splash({ events, showInfo }: SplashProps) {
   const ticketButton = isPaid ? (
     <Button theme={'samf'} className={styles.ticket_button}>
       <Icon icon="ph:ticket-bold" />
-      {toTitleCase(`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`)}
+      {lowerCapitalize(`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`)}
     </Button>
   ) : (
     <></>

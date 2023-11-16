@@ -8,7 +8,7 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
-import { toTitleCase } from '~/utils';
+import { lowerCapitalize } from '~/utils';
 
 export function ImageAdminPage() {
   const [images, setImages] = useState<ImageDto[]>([]);
@@ -32,7 +32,7 @@ export function ImageAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
     <Button theme="success" rounded={true} link={ROUTES.frontend.admin_images_create}>
-      {toTitleCase(t(KEY.admin_images_create))}
+      {lowerCapitalize(t(KEY.admin_images_create))}
     </Button>
   );
 
