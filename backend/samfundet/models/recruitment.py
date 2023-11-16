@@ -148,9 +148,13 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
-    recruiter_priority = models.IntegerField(choices=RecruitmentPriorityChoices.choices, help_text='The priority of the admission', default=1)
+    recruiter_priority = models.IntegerField(
+        choices=RecruitmentPriorityChoices.choices, help_text='The priority of the admission', default=RecruitmentPriorityChoices.NOT_SET
+    )
 
-    recruiter_status = models.IntegerField(choices=RecruitmentStatusChoices.choices, default=0, help_text='The status of the admission')
+    recruiter_status = models.IntegerField(
+        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
+    )
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
