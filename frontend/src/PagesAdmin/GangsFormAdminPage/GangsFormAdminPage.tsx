@@ -54,8 +54,8 @@ export function GangsFormAdminPage() {
     console.log(JSON.stringify(data));
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
-  const title = id ? t(KEY.common_edit) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
+  const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
+  const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
