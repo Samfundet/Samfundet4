@@ -18,7 +18,7 @@
   color: $black;
   cursor: pointer;
   padding-right: 3em;
-  margin-top: 0.5em;
+  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
   border: 0.1px solid transparent; // Prevents buggy spacing when border is sat on hover.
 
   // TODO: what is this for?

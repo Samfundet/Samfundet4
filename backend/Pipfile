@@ -3,6 +3,32 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+# See '/docs/pipenv.md'.
+# Doesn't work for powershell.
+
+"pipenv:install" = "pipenv install"
+"pipenv:update" = "pipenv update"
+"pipenv:sync" = "bash -c \"pipenv clean; pipenv sync --dev\""
+"pipenv:docker-install-dev" = "pipenv install --deploy --ignore-pipfile --dev" # 'deploy' means abort if outdated lock file. 'ignore-pipfile' means only install using the lock file. 'dev' means install dev dependencies.
+"pipenv:docker-install-prod" = "pipenv install --deploy --ignore-pipfile" # 'deploy' means abort if outdated lock file. 'ignore-pipfile' means only install using the lock file.
+"pipenv:outdated" = "pipenv update --outdated" # Show outdated dependencies.
+"pipenv:graph" = "pipenv graph" # Show dependency graph.
+"pipenv:where" = "pipenv --where" # Show location of virtual environment.
+"pipenv:rm" = "pipenv --rm" # Completely remove virtual environment.
+"pipenv:shell" = "pipenv shell" # Opens a shell within the virtual environment.
+"mypy:run" = "pipenv run mypy --config-file mypy.ini ."
+"migrations:make" = "pipenv run python manage.py makemigrations --noinput"
+"migrations:verify" = "pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2"
+"migrations:apply" = "pipenv run python manage.py migrate"
+"bandit:run" = "pipenv run bandit --recursive --ini .bandit ."
+"flake8:run" = "pipenv run flake8 --config=.flake8 ."
+"yapf:diff" = "pipenv run yapf --parallel --recursive --diff ." # Dry-run yapf on all files in the project.
+"yapf:apply" = "pipenv run yapf --parallel --recursive -i ." # Applies yapf to all files in the project.
+"pytest:run" = "pipenv run pytest"
+"pipeline:run" = "bash -c \"pipenv run mypy:run && pipenv run yapf:diff && pipenv run migrations:verify && pipenv run bandit:run && pipenv run flake8:run && pipenv run pytest:run\""
+"seed:run" = "pipenv run python manage.py seed"
+
 [packages]
 django = "*"
 pytest = "*"
@@ -17,6 +43,7 @@ pillow = "*"
 debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
+django-notifications-hq = "*"
 
 [dev-packages]
 yapf = "*"
@@ -25,7 +52,7 @@ bandit = "*"
 pillow = "*"
 flake8 = "~=5.0"
 flake8-annotations = "*"
-flake8-keyword-arguments = "*"
+# flake8-keyword-arguments = "*"
 flake8-print = "*"
 flake8-quotes = "*"
 requests = "*"

@@ -59,10 +59,8 @@ export function ContentCard({
           {buttonText && (
             <div className={styles.info_bottom_row}>
               <Button className={styles.btn} rounded={true} theme="black" onClick={() => followLink(url ?? '#')}>
-                <div className={styles.button_content}>
-                  <span>{buttonText}</span>
-                  <Icon className={styles.icon} icon="mdi:arrow-right" width={18} />
-                </div>
+                {buttonText}
+                <Icon className={styles.icon} icon="mdi:arrow-right" width={18} />
               </Button>
             </div>
           )}

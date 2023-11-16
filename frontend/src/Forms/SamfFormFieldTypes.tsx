@@ -1,5 +1,5 @@
-import { ReactElement } from 'react-markdown/lib/react-markdown';
-import { Dropdown, InputField, TextAreaField } from '~/Components';
+import { ReactElement } from 'react';
+import { Checkbox, Dropdown, InputField, TextAreaField } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { InputFieldType } from '~/Components/InputField/InputField';
@@ -14,8 +14,10 @@ import styles from './SamfForm.module.scss';
 // SamfFormField types (used to defined field UI in <SamfFormField type=XXX>)
 export type SamfFormFieldType =
   | 'text'
+  | 'email'
   | 'text-long'
   | 'password'
+  | 'checkbox'
   | 'float'
   | 'integer'
   | 'number'
@@ -70,6 +72,8 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   image: makeImagePicker,
   'upload-image': makeFilePickerFunction('image'),
   'upload-pdf': makeFilePickerFunction('pdf'),
+  checkbox: makeCheckboxInput,
+  email: makeStandardInputFunction<string>('email'),
 };
 
 // ================================== //
@@ -145,4 +149,19 @@ function makeFilePickerFunction(fileType: InputFileType) {
       />
     );
   };
+}
+
+// Checkbox
+function makeCheckboxInput(args: SamfFormFieldArgs) {
+  const safeVal = args.value === undefined ? false : (args.value as boolean);
+  return (
+    <Checkbox
+      key={args.field}
+      checked={safeVal}
+      label={args.label}
+      className={styles.input_element}
+      onChange={args.onChange}
+      error={args.error}
+    ></Checkbox>
+  );
 }

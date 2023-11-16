@@ -10,11 +10,12 @@
 
 // Background
 $navbar-bg: white;
-$navbar-bg-transparent: transparent;
+$navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, .3) 0%, transparent);
 $navbar-bg-dark: black;
-$navbar-bg-dark-transparent: transparent;
+$navbar-bg-dark-transparent: $navbar-bg-transparent;
 $navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
 $navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
+$navbar-dropdown-border-radius: 0 0 0.5em 0.5em;
 
 // Link
 $navbar-link-blur-light-bg: rgba(255, 255, 255, 0.4);
@@ -73,6 +74,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   position: relative;
 }
 
+.navbar_item_icon {
+  margin-right: 0.25rem;
+}
+
 .hidden {
   display: none;
 }
@@ -103,8 +108,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   pointer-events: none;
   transition: 0.15s;
   top: 100%;
+  min-width: 130%;
   z-index: 1;
-  width: 100%;
   display: flex;
   flex-direction: column;
   background-color: $navbar-dropdown-bg-dark;
@@ -117,6 +122,14 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   transform-origin: 50% 0%;
   opacity: 0;
   border-radius: 0 0 0.5em 0.5em;
+
+  @include for-desktop-up {
+    border-radius: $navbar-dropdown-border-radius;
+  }
+}
+
+.dropdown_container_left .dropdown_container {
+  right: 0;
 }
 
 .dropdown_open {
@@ -126,22 +139,50 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   opacity: 1;
 }
 
-.navbar_dropdown_link {
+.navbar_dropdown_link, .navbar_logout_button {
   padding: 0.5rem 1rem;
   text-decoration: none;
-  text-transform: uppercase;
   transition: 0.1s;
   color: $white;
   cursor: pointer;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+
+  @include theme-dark {
+    color: $white;
+  }
+
+  &:last-child {
+    @include for-desktop-up {
+      border-radius: $navbar-dropdown-border-radius;
+    }
+  }
 
   &:hover {
     background: $navbar-dropdown-link-dark-hover;
-    color: black;
+    color: $black;
     text-decoration: none;
   }
 }
 
 /* Desktop navigation items */
+.navbar_main_links {
+  display: flex;
+  height: 100%;
+  margin-right: auto;
+  font-size: 14px;
+}
+
+.navbar_main_links_mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .navbar_link {
   color: inherit;
   display: flex;
@@ -150,13 +191,13 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   padding: 0 1rem;
   height: 100%;
   cursor: pointer;
-  text-transform: uppercase;
   transition: 0.1s;
   flex: 1;
   text-align: center;
   justify-content: center;
   background: transparent;
   z-index: 2;
+  font-size: inherit;
 
   @include for-tablet-down {
     display: none;
@@ -202,6 +243,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   margin-right: 24px;
   margin-left: 24px;
   gap: 15px;
+  height: 100%;
+
   @include for-tablet-down {
     display: none;
   }
@@ -220,6 +263,11 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   }
 }
 
+.language_flag_button {
+  background-color: transparent;
+  border-color: transparent;
+}
+
 /* Container for profile */
 .navbar_profile_button {
   display: flex;
@@ -233,6 +281,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   border-bottom: 1px solid transparent;
   gap: 5px;
 
+  @include for-desktop-up {
+    height: 100%;
+  }
+
   .profile_icon {
     width: 16px;
     height: 16px;
@@ -240,7 +292,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
   .profile_text {
     text-decoration: none;
-    text-transform: capitalize;
     color: inherit;
   }
 
@@ -293,17 +344,27 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
 }
 
+/* A way to make the "Information" text look more centered
+offsets the text by 18px, the size of the chevron-icon */
+#mobile_popup_container > .navbar_mobile_item:nth-child(2) {
+  margin-left: 18px;
+}
+
 /* Navbar link mobile */
 .popup_link_mobile {
   color: inherit;
   font-size: 1.5em;
-  margin-bottom: 0.25em;
+  margin-bottom: 1em;
   align-items: center;
   text-decoration: none;
-  text-transform: uppercase;
   padding: 0 1rem;
   cursor: pointer;
   display: flex;
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    text-decoration: none;
+    transform: scale(1.05);
+  }
 }
 
 .mobile_widgets {

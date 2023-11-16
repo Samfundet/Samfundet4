@@ -4,8 +4,21 @@
 # This is required for registering user model in auth
 from .general import (
     User,
+    Gang,
+    Image,
     Profile,
     UserPreference,
 )
 
-__all__ = ['User', 'Profile', 'UserPreference']
+from .event import (
+    Event,
+)
+
+__all__ = [
+    'User',
+    'Gang',
+    'Event',
+    'Image',
+    'Profile',
+    'UserPreference',
+]

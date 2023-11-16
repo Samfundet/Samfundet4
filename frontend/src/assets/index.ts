@@ -14,8 +14,26 @@ export { default as sulten_chef } from './sulten_chef.jpg';
 export { default as sulten_crowded } from './sulten_crowded.jpg';
 export { default as sulten_delivery } from './sulten_delivery.jpg';
 export { default as sulten_inside } from './sulten_inside.jpg';
+export { default as soup } from './diggf5675.jpg';
+export { default as burger } from './diggf4353.jpg';
+export { default as dessert } from './diggf5743.jpg';
 export { default as profileIcon } from './user.png';
 
+// Medias
+export { default as tikTokLogo } from './tiktok_logo.png';
+export { default as facebookLogo } from './facebook_logo.png';
+export { default as instagramLogo } from './instagram_logo.png';
+export { default as snapchatLogo } from './snapchat_logo.png';
+
+// Sponsors
+export { default as reitanSponsor } from './reitan_sponsor.png';
+export { default as kulturromSponsor } from './kulturrom_sponsor.png';
+export { default as trondhemSponsor } from './trondheim_sponsor.png';
+
+// Festivals
+export { default as uka } from './uka.png';
+export { default as ukaWhite } from './uka_white.png';
+export { default as isfit } from './isfit.png';
 // Venues
 export { default as bodegaen } from './venues/bodegaen.jpg';
 export { default as daglighallen } from './venues/daglighallen.jpg';

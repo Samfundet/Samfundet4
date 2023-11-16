@@ -1,3 +1,4 @@
+export { AdminPage } from './AdminPageLayout';
 export { ClosedPeriodAdminPage } from './ClosedPeriodAdminPage';
 export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';
 export { EventCreatorAdminPage } from './EventCreatorAdminPage';
@@ -8,5 +9,11 @@ export { ImageAdminPage } from './ImageAdminPage';
 export { ImageFormAdminPage } from './ImageFormAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
+export { InterviewNotesPage } from './InterviewNotesAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
+export { RecruitmentAdminPage } from './RecruitmentAdminPage';
+export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';
+export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
+export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
+export { RecruitmentUsersWithoutInterview } from './RecruitmentUsersWithoutInterview';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

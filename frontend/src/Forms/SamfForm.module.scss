@@ -1,12 +1,13 @@
 
 @import 'src/global.scss';
 
+$form-bg: #eeeeee;
+
 .samf_form {
   width: 100%;
-  background-color: $grey-5;
-  border: 1px solid $grey-4;
-  box-shadow: 0 0 25px 5px $black-t10;
-  border-radius: 2em;
+  background-color: $form-bg;
+  border: 1px solid #dddddd;
+  border-radius: 1em;
   padding: 1.5em;
 }
 

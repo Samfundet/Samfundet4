@@ -95,6 +95,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'root.custom_classes.middlewares.ImpersonateUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -192,7 +193,16 @@ AUTHENTICATION_BACKENDS += [
 INSTALLED_APPS += [
     'admin_auto_filters',
 ]
+
 ### End: admin_auto_filters ###
+
+### django-notifications-hq ###
+# https://pypi.org/project/django-notifications-hq/
+INSTALLED_APPS += [
+    'notifications',
+]
+NOTIFICATIONS_NOTIFICATION_MODEL = 'samfundet.Notification'
+### End: django-notifications-hq ###
 
 ################## LOGGING ##################
 

@@ -23,7 +23,7 @@ export const MIRROR_CLASS = 'mirror-dimension';
 export const CURSOR_TRAIL_CLASS = 'trail';
 
 export type ThemeKey = keyof typeof THEME;
-export type ThemeValue = typeof THEME[ThemeKey];
+export type ThemeValue = (typeof THEME)[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
 
@@ -47,6 +47,7 @@ export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 
 export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
+export const CYPRESS_BACKEND_DOMAIN = import.meta.env.VITE_CYPRESS_BACKEND_DOMAIN;
 
 /**
  * Venues
@@ -54,3 +55,8 @@ export const BACKEND_DOMAIN = import.meta.env.VITE_BACKEND_DOMAIN;
 export const VENUE = {
   LYCHE: 'lyche',
 } as const;
+
+export const SECOND_MILLIS = 1000;
+export const MINUTE_MILLIS = 60 * SECOND_MILLIS;
+export const HOUR_MILLIS = 60 * MINUTE_MILLIS;
+export const DAY_MILLIS = 24 * HOUR_MILLIS;

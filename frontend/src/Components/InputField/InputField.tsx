@@ -11,6 +11,7 @@ type InputFieldProps<T> = {
   labelClassName?: string;
   inputClassName?: string;
   onChange?: (value: T) => void;
+  onBlur?: (value: T) => void;
   placeholder?: string | null;
   type?: InputFieldType;
   disabled?: boolean;
@@ -25,6 +26,7 @@ export function InputField<T>({
   labelClassName,
   inputClassName,
   onChange,
+  onBlur,
   placeholder,
   disabled,
   value,
@@ -33,7 +35,7 @@ export function InputField<T>({
   type = 'text',
   icon,
 }: InputFieldProps<T>) {
-  function handleChange(e?: ChangeEvent<HTMLInputElement>) {
+  function preprocessValue(e?: ChangeEvent<HTMLInputElement>) {
     let value: string | number | undefined = e?.currentTarget.value ?? '';
     if (type === 'number') {
       if (value.length > 0) {
@@ -42,13 +44,14 @@ export function InputField<T>({
         value = undefined;
       }
     }
-    onChange?.(value as T);
+    return value as T;
   }
   return (
     <label className={classNames(styles.label, disabled && styles.disabled_label, labelClassName)}>
       {children}
       <input
-        onChange={handleChange}
+        onChange={(e) => onChange?.(preprocessValue(e))}
+        onBlur={(e) => onBlur?.(preprocessValue(e))}
         className={classNames(styles.input_field, inputClassName, error && styles.error)}
         placeholder={placeholder || ''}
         disabled={disabled}

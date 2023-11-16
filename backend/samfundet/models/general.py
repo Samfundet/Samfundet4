@@ -4,26 +4,38 @@
 
 from __future__ import annotations
 
-import random
 import re
-from datetime import time, timedelta
+import random
 from typing import TYPE_CHECKING
+from datetime import time, timedelta
 
-from django.contrib.auth.models import AbstractUser
+from notifications.base.models import AbstractNotification
+
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import gettext as _
 from guardian.shortcuts import assign_perm
+from django.utils.translation import gettext as _
 
+from root.utils.mixins import FullCleanSaveMixin
 from root.utils import permissions
+
+from .utils.fields import LowerCaseField
 
 if TYPE_CHECKING:
     from typing import Any, Optional
     from django.db.models import Model
 
 
-class Tag(models.Model):
+class Notification(AbstractNotification):
+
+    class Meta(AbstractNotification.Meta):
+        abstract = False
+
+
+class Tag(FullCleanSaveMixin):
     # TODO make name case-insensitive
+    # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
@@ -58,7 +70,7 @@ class Tag(models.Model):
         super().save(*args, **kwargs)
 
 
-class Image(models.Model):
+class Image(FullCleanSaveMixin):
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
     image = models.ImageField(upload_to='images/', blank=False, null=False)
@@ -74,9 +86,21 @@ class Image(models.Model):
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    username = LowerCaseField(
+        _('username'),
+        max_length=150,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[AbstractUser.username_validator],
+        error_messages={
+            'unique': _('A user with that username already exists.'),
+        },
+    )
+
     class Meta:
         permissions = [
             ('debug', 'Can view debug mode'),
+            ('impersonate', 'Can impersonate users'),
         ]
 
     def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
@@ -91,8 +115,18 @@ class User(AbstractUser):
         has_object_perm = super().has_perm(perm=perm, obj=obj)
         return has_global_perm or has_object_perm
 
+    @property
+    def is_impersonated(self) -> bool:
+        return self._impersonated_by is not None
 
-class UserPreference(models.Model):
+    @property
+    def impersonated_by(self) -> User:
+        if not self.is_impersonated:
+            raise Exception('Real user not available unless currently impersonated.')
+        return self._impersonated_by
+
+
+class UserPreference(FullCleanSaveMixin):
     """Group all preferences and config per user."""
 
     class Theme(models.TextChoices):
@@ -117,7 +151,7 @@ class UserPreference(models.Model):
         return f'UserPreference ({self.user})'
 
 
-class Profile(models.Model):
+class Profile(FullCleanSaveMixin):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(max_length=30, blank=True, null=True)
 
@@ -140,8 +174,9 @@ class Profile(models.Model):
         assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
-class Venue(models.Model):
+class Venue(FullCleanSaveMixin):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
+    slug = models.SlugField(unique=True, null=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)
@@ -177,7 +212,7 @@ class Venue(models.Model):
         return f'{self.name}'
 
 
-class ClosedPeriod(models.Model):
+class ClosedPeriod(FullCleanSaveMixin):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
 
@@ -199,7 +234,24 @@ class ClosedPeriod(models.Model):
 
 
 # GANGS ###
-class GangType(models.Model):
+class Organization(FullCleanSaveMixin):
+    """
+    Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
+    """
+    name = models.CharField(max_length=32, blank=False, null=False, unique=True)
+
+    class Meta:
+        verbose_name = 'Organization'
+        verbose_name_plural = 'Organizations'
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class GangType(FullCleanSaveMixin):
+    """
+    Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
+    """
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
@@ -214,11 +266,20 @@ class GangType(models.Model):
         return f'{self.title_nb}'
 
 
-class Gang(models.Model):
+class Gang(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
-    abbreviation = models.CharField(max_length=64, blank=True, null=True, verbose_name='Forkortelse')
+    abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
     webpage = models.URLField(verbose_name='Nettside', blank=True, null=True)
+
+    organization = models.ForeignKey(
+        to=Organization,
+        related_name='gangs',
+        verbose_name='Organisasjon',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
@@ -226,6 +287,15 @@ class Gang(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # Gang related permission groups
+    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
+    event_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
+    recruitment_admin_group = models.OneToOneField(
+        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     class Meta:
         verbose_name = 'Gang'
@@ -235,10 +305,10 @@ class Gang(models.Model):
         return f'{self.gang_type} - {self.name_nb}'
 
 
-class InformationPage(models.Model):
+class InformationPage(FullCleanSaveMixin):
     slug_field = models.SlugField(
         max_length=64,
-        blank=False,
+        blank=True,
         null=False,
         unique=True,
         primary_key=True,
@@ -264,7 +334,30 @@ class InformationPage(models.Model):
         return f'{self.slug_field}'
 
 
-class Table(models.Model):
+class BlogPost(FullCleanSaveMixin):
+    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
+
+    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
+    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
+
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
+
+    published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    # TODO Find usage for owner field
+
+    class Meta:
+        verbose_name = 'Blog post'
+        verbose_name_plural = 'Blogg posts'
+
+    def __str__(self) -> str:
+        return f'{self.title_nb} {self.published_at}'
+
+
+class Table(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -289,7 +382,34 @@ class Table(models.Model):
         return f'{self.name_nb}'
 
 
-class FoodPreference(models.Model):
+class Reservation(FullCleanSaveMixin):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
+    email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
+    phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
+    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
+    end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
+
+    class Occasion(models.TextChoices):
+        DRINK = 'DRINK', _('Drikke')
+        FOOD = 'FOOD', _('Mat')
+
+    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.FOOD)
+    guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
+    additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
+    internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
+
+    class Meta:
+        verbose_name = 'Reservation'
+        verbose_name_plural = 'Reservations'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
+class FoodPreference(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
 
@@ -304,7 +424,7 @@ class FoodPreference(models.Model):
         return f'{self.name_nb}'
 
 
-class FoodCategory(models.Model):
+class FoodCategory(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
@@ -320,7 +440,7 @@ class FoodCategory(models.Model):
         return f'{self.name_nb}'
 
 
-class MenuItem(models.Model):
+class MenuItem(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -346,7 +466,7 @@ class MenuItem(models.Model):
         return f'{self.name_nb}'
 
 
-class Menu(models.Model):
+class Menu(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -366,7 +486,7 @@ class Menu(models.Model):
         return f'{self.name_nb}'
 
 
-class Saksdokument(models.Model):
+class Saksdokument(FullCleanSaveMixin):
     title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
@@ -391,7 +511,7 @@ class Saksdokument(models.Model):
         return f'{self.title_nb}'
 
 
-class Booking(models.Model):
+class Booking(FullCleanSaveMixin):
     name = models.CharField(max_length=64, blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     from_dt = models.DateTimeField(blank=True, null=True)
@@ -443,7 +563,30 @@ class Booking(models.Model):
         super().save(*args, **kwargs)
 
 
-class TextItem(models.Model):
+class Infobox(FullCleanSaveMixin):
+    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
+    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
+
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Infoboks hexcolor eller css color-constant')
+    url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Infoboks bilde')
+
+    class Meta:
+        verbose_name = 'Infoboks'
+        verbose_name_plural = 'Infobokser'
+
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
+
+    def __str__(self) -> str:
+        return f'{self.title_nb}'
+
+
+class TextItem(FullCleanSaveMixin):
     key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
     text_nb = models.TextField()
     text_en = models.TextField()
@@ -456,7 +599,7 @@ class TextItem(models.Model):
         return f'{self.key}'
 
 
-class KeyValue(models.Model):
+class KeyValue(FullCleanSaveMixin):
     """
     Model for environment variables in the database.
     Should not be used for secrets.

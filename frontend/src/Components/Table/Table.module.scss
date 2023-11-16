@@ -4,131 +4,100 @@
 
 /* stylelint-disable selector-max-combinators, selector-max-compound-selectors, selector-max-type, max-nesting-depth */
 
-$thead-bg: #dcdcdc;
-$thead-bg-hover: #dfdfdf;
-// dark
-$thead-bg-dark: #333333;
-$thead-bg-hover-dark: #444444;
+// Backgrounds
+$table-bg: #ffffff;
+$table-bg-dark: #2f2f2f;
+$table-bg-hover: #f8f8f8;
+$table-bg-hover-dark: #393939;
 
-$tr-odd-bg: #f5f5f5;
-$tr-even-bg: #fdfdfd;
-// dark
-$tr-odd-bg-dark: $theme-dark-bg;
-$tr-even-bg-dark: $theme-dark-bg;
+// Borders
+$thead-border-color: #f3f3f3;
+$thead-border-color-dark: #101010;
+$tr-border-color: #f5f5f5;
+$tr-border-color-dark: #262626;
+$td-border-color: #f8f8f8;
+$td-border-color-dark: #2a2a2a;
 
-$th-border-color: #cdcdcd;
-$tr-border-color: #eaeaea;
-$tr-hover-color: #eaeaea;
-// dark
-$th-border-color-dark: #555555;
-$tr-border-color-dark: #555555;
-$tr-hover-color-dark: #333333;
+// Font
+$table-font-color: #3a3a3a;
+$table-font-color-dark: #d7d7d7;
 
-$sort-icon-bg: #eeeeee;
+// Sort icon
+$sort-icon-bg: #efefef;
+$sort-icon-bg-dark: #282828;
 $sort-icon-color: #222222;
-// dark
-$sort-icon-bg: #aaaaaa;
-$sort-icon-color: #222222;
-
-$table-font-color-head: #222222;
-$table-font-color: #555555;
-// dark
-$table-font-color-head-dark: #eeeeee;
-$table-font-color-dark: $theme-dark-color;
+$sort-icon-color-dark: #bbbbbb;
 
 .table_samf {
-  // table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  overflow: hidden;
-  box-shadow: 0 0 10px 3px rgba(black, 0.05);
-  border-radius: 4px;
+  background-color: $table-bg;
+  color: $table-font-color;
+  border-radius: .25em;
+
+  @include theme-dark {
+    background-color: $table-bg-dark;
+    color: $table-font-color-dark;
+  }
 }
 
 thead {
-  background-color: $thead-bg;
-  border-bottom: 1px solid $tr-border-color;
+  border-bottom: 1px solid $thead-border-color;
 
   @include theme-dark {
-    background-color: $thead-bg-dark;
-    border-bottom: 1px solid $tr-border-color-dark;
+    border-color: $thead-border-color-dark;
   }
 }
 
 tbody {
   tr {
     border-bottom: 1px solid $tr-border-color;
-  }
-  tr:nth-child(even) {
-    background-color: $tr-even-bg;
-  }
-  tr:nth-child(odd) {
-    background-color: $tr-odd-bg;
-  }
-  tr:hover {
-    background-color: $tr-hover-color;
+
+    @include theme-dark {
+      border-color: $tr-border-color-dark;
+    }
   }
 
-  @include theme-dark {
-    tr {
-      border-bottom: 1px solid $tr-border-color-dark;
-    }
-    tr:nth-child(even) {
-      background-color: $tr-even-bg-dark;
-    }
-    tr:nth-child(odd) {
-      background-color: $tr-odd-bg-dark;
-    }
-    tr:hover {
-      background-color: $tr-hover-color-dark;
+  tr:hover {
+    background-color: $table-bg-hover;
+
+    @include theme-dark {
+      background-color: $table-bg-hover-dark;
     }
   }
+
 }
 
-th,
 td {
-  padding: 0.2em 0.75em;
+  padding: 0.5em 1em;
   color: $table-font-color;
   font-size: 1em;
-  border-right: 1px solid $tr-border-color;
-  border-left: 1px solid $tr-border-color;
 
   @include theme-dark {
     color: $table-font-color-dark;
-    border-right: 1px solid $tr-border-color-dark;
-    border-left: 1px solid $tr-border-color-dark;
+    border-right: 1px solid $td-border-color-dark;
+    border-left: 1px solid $td-border-color-dark;
   }
 }
 
 th {
-  padding: 0.4em 0.75em;
-  border: 1px solid $th-border-color;
-  font-weight: 500;
-  color: $table-font-color-head;
+  padding: 1em 0.75em;
+  font-size: 1.1em;
+  font-weight: 600;
 
-  @include theme-dark {
-    border: 1px solid $th-border-color-dark;
-    color: $table-font-color-head-dark;
+  &:hover {
+    background-color: $table-bg-hover;
+
+    @include theme-dark {
+      background-color: $table-bg-hover-dark;
+    }
   }
-}
-
-th:hover,
-td:hover {
-  filter: brightness(103%);
 }
 
 .sortable_th {
   cursor: pointer;
   transition: 0.2s;
-  &:hover {
-    background-color: $thead-bg-hover;
-    box-shadow: 0 0 5px 2px rgba(black, 0.03);
-
-    @include theme-dark {
-      background-color: $thead-bg-hover-dark;
-    }
-  }
 }
 
 .sort_icons {
@@ -137,14 +106,21 @@ td:hover {
   justify-content: center;
   align-items: center;
   float: right;
+
   .icon {
     background-color: transparent;
     padding: 2px;
     border-radius: 4px;
   }
+
   .active_icon {
     background-color: $sort-icon-bg;
     color: $sort-icon-color;
+
+    @include theme-dark {
+      background-color: $sort-icon-bg-dark;
+      color: $sort-icon-color-dark;
+    }
   }
 }
 

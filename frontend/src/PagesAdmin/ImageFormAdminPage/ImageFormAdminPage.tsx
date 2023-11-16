@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getImage, postImage } from '~/api';
 import { ImagePostDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './ImageFormAdminPage.module.scss';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function ImageFormAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   // If form has a id, check if it exists, and then load that item.
@@ -33,7 +33,7 @@ export function ImageFormAdminPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_images);
+            navigate({ url: ROUTES.frontend.admin_images });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
@@ -53,7 +53,7 @@ export function ImageFormAdminPage() {
       postImage(data)
         .then(() => {
           // Success!
-          navigate(ROUTES.frontend.admin_images);
+          navigate({ url: ROUTES.frontend.admin_images });
           toast.success(t(KEY.common_creation_successful));
         })
         .catch((err) => {
@@ -64,20 +64,11 @@ export function ImageFormAdminPage() {
     }
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_image)}`;
+  const title = id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create);
+
   return (
-    <Page>
-      <h1 className={styles.header}>
-        {id ? `${t(KEY.common_edit)} ${t(KEY.common_image)}` : t(KEY.admin_images_create)}
-      </h1>
+    <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
         <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
         {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
@@ -89,6 +80,6 @@ export function ImageFormAdminPage() {
           {image.file?.name}
         </p>
       </SamfForm>
-    </Page>
+    </AdminPageLayout>
   );
 }
