@@ -1,5 +1,5 @@
 # Use same version as defined in .python-version.
-FROM python:3.11.0-slim-bullseye
+FROM python:3.11.2-slim-bullseye
 
 EXPOSE 8000
 EXPOSE 5678
@@ -13,6 +13,11 @@ ENV PIPENV_VENV_IN_PROJECT=1
 # Dependency for billig development database
 RUN apt-get update
 RUN apt-get install sqlite3
+
+# Install psycopg-dependencies
+RUN apt-get install gcc -y
+RUN apt-get install libpq-dev -y
+RUN export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
 
 # Alias
 RUN echo 'alias la="ls -la"' >> ~/.bashrc
@@ -28,12 +33,12 @@ RUN echo 'alias pipeline="pipenv run /app/run-pipeline.sh"' >> ~/.bashrc
 RUN mkdir /app
 WORKDIR /app
 
-# Copy dependencies
-COPY Pipfile Pipfile.lock ./
-
-# Install virtual environment.
+# Prepare virtual environment.
 RUN mkdir .venv
 RUN python -m pip install pipenv
+
+# Install dependecies
+COPY Pipfile Pipfile.lock ./
 RUN python -m pipenv install --dev --deploy
 
 # Copy remaining
