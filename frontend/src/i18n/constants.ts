@@ -181,6 +181,7 @@ export const KEY = {
   admin_saksdokument: 'admin_saksdokument',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
+  admin_steal_identity: 'admin_steal_identity',
   adminpage_gangs_title: 'admin_gangs_title',
   adminpage_gangs_create: 'admin_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
