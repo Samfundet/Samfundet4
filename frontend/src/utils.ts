@@ -242,3 +242,14 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   dot.style.top = e.clientY + window.pageYOffset + 'px';
   return dot;
 }
+
+/**
+ * Lowercases the string, then capitalizes the first word.
+ * Example: 'lorem ipsum Dolor' becomes 'Lorem ipsum dolor'
+ */
+export function lowerCapitalize(s: string): string {
+  if (s.length < 2) {
+    return s.toUpperCase();
+  }
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}

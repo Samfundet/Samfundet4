@@ -1,12 +1,13 @@
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -14,7 +15,7 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
 export function ClosedPeriodFormAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -41,7 +42,7 @@ export function ClosedPeriodFormAdminPage() {
       .catch((data: AxiosError) => {
         // TODO add error pop up message?
         if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate(ROUTES.frontend.admin_gangs);
+          navigate({ url: ROUTES.frontend.admin_gangs });
         }
         toast.error(t(KEY.common_something_went_wrong));
         console.error(data);

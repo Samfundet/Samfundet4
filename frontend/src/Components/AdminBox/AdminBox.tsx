@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useNavigate } from 'react-router-dom';
 import { Options, TYPE } from '~/Components/AdminBox/types';
 import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
@@ -27,8 +26,6 @@ type AdminBoxProps = {
     TYPE.KILROY: Our demigod of shrimp heaven and hell
 */
 export function AdminBox({ title, icon, options }: AdminBoxProps) {
-  const navigate = useNavigate();
-
   return (
     <div className={classNames(styles.applet)}>
       <div className={styles.top}>
@@ -41,20 +38,20 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
         {options.map(function (element, key) {
           if (element.type == TYPE.ADD) {
             return (
-              <Button key={key} theme="success" onClick={() => navigate(element.url)} className={styles.button}>
+              <Button key={key} theme="success" link={element.url} className={styles.button}>
                 {' '}
                 {element.text}
               </Button>
             );
           } else if (element.type == TYPE.MANAGE) {
             return (
-              <Button key={key} theme="outlined" onClick={() => navigate(element.url)} className={styles.button}>
+              <Button key={key} theme="outlined" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
           } else if (element.type == TYPE.EDIT) {
             return (
-              <Button key={key} theme="blue" onClick={() => navigate(element.url)} className={styles.button}>
+              <Button key={key} theme="blue" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );

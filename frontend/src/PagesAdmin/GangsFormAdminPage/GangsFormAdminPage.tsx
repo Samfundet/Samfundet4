@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
 import { GangDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
+import { lowerCapitalize } from '~/utils';
 
 export function GangsFormAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
@@ -32,7 +34,7 @@ export function GangsFormAdminPage() {
         })
         .catch((data) => {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_gangs);
+            navigate({ url: ROUTES.frontend.admin_gangs });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
@@ -52,8 +54,8 @@ export function GangsFormAdminPage() {
     console.log(JSON.stringify(data));
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
-  const title = id ? t(KEY.common_edit) : `${t(KEY.common_create)} ${t(KEY.common_gang)}`;
+  const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
+  const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
@@ -65,12 +67,28 @@ export function GangsFormAdminPage() {
         devMode={false}
       >
         <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`} />
-          <SamfFormField field="name_en" type="text" label={`${t(KEY.common_english)} ${t(KEY.common_name)}`} />
+          <SamfFormField
+            field="name_nb"
+            type="text"
+            label={lowerCapitalize(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}
+          />
+          <SamfFormField
+            field="name_en"
+            type="text"
+            label={lowerCapitalize(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="abbreviation" type="text" label={`${t(KEY.admin_gangsadminpage_abbreviation)}`} />
-          <SamfFormField field="webpage" type="text" label={`${t(KEY.admin_gangsadminpage_webpage)}`} />
+          <SamfFormField
+            field="abbreviation"
+            type="text"
+            label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_abbreviation)}`)}
+          />
+          <SamfFormField
+            field="webpage"
+            type="text"
+            label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_webpage)}`)}
+          />
         </div>
         {/* TODO fetch options */}
         {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}
