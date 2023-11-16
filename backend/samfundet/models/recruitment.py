@@ -75,7 +75,7 @@ class RecruitmentPosition(FullCleanSaveMixin):
     default_admission_letter_nb = models.TextField(help_text='Default admission letter for the position')
     default_admission_letter_en = models.TextField(help_text='Default admission letter for the position', null=True, blank=True)
 
-    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for norwegian applicants?', default=False)
+    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
     gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting')
     recruitment = models.ForeignKey(
@@ -100,8 +100,8 @@ class RecruitmentPosition(FullCleanSaveMixin):
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
-            self.name_en = 'No english applicants'
-            self.short_description_en = 'No english applicants'
+            self.name_en = 'Norwegian speaking applicants only'
+            self.short_description_en = 'This position only admits Norwegian speaking applicants'
             self.long_description_en = 'No english applicants'
             self.default_admission_letter_en = 'No english applicants'
         super(RecruitmentPosition, self).save(*args, **kwargs)
