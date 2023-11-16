@@ -22,22 +22,36 @@ export function RecruitmentAdmissionFormPage() {
   const { positionID, id } = useParams();
 
   useEffect(() => {
-    getRecruitmentPosition('1').then((res) => {
-      setRecruitmentPosition(res.data);
+    if (positionID && !isNaN(Number(positionID))) {
+      getRecruitmentPosition(positionID)
+        .then((res) => {
+          setRecruitmentPosition(res.data);
+          setLoading(false);
+        })
+        .catch(() => {
+          // Handle the case where the positionID is invalid or the request fails
+          toast.error(t(KEY.common_something_went_wrong));
+          navigate({ url: ROUTES.frontend.home });
+        });
+    } else {
       setLoading(false);
-    });
-  }, []);
+    }
+  }, [positionID, navigate, t]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    data.recruitment_position.id = positionID ? positionID : '1';
-    postRecruitmentAdmission(data)
-      .then(() => {
-        navigate({ url: ROUTES.frontend.home });
-        toast.success(t(KEY.common_creation_successful));
-      })
-      .catch(() => {
-        toast.error(t(KEY.common_something_went_wrong));
-      });
+    if (positionID && !isNaN(Number(positionID))) {
+      data.recruitment_position.id = positionID;
+      postRecruitmentAdmission(data)
+        .then(() => {
+          navigate({ url: ROUTES.frontend.home });
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    } else {
+      toast.error(t(KEY.common_something_went_wrong));
+    }
   }
 
   if (loading) {

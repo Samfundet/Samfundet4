@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.test import Client
 from rest_framework.test import APIClient
 from django.contrib.auth.models import Group
+from samfundet.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 
 from root.settings import BASE_DIR
 from samfundet.contants import DEV_PASSWORD
@@ -273,8 +274,8 @@ def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_positi
         recruitment=fixture_recruitment,
         user=fixture_user,
         applicant_priority=1,
-        recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
-        recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET
     )
     yield admission
     admission.delete()
