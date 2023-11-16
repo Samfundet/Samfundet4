@@ -26,10 +26,11 @@ COOKIE_IMPERSONATED_USER_ID = 'impersonated_user_id'
 REQUESTED_IMPERSONATE_USER = 'requested_impersonate_user'
 
 # This token can be imported anywhere to retrieve the values.
-request_contextvar: ContextVar[HttpRequest] = ContextVar('request_contextvar', default=None)
+request_contextvar: ContextVar[HttpRequest] = ContextVar('request_contextvar',
+                                                         default=None)
 
 AUTH_BACKEND = 'django.contrib.auth.middleware.AuthenticationMiddleware'
 
 # Phone number regex
 
-phoneNumberRegex = r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$'
+PHONE_NUMBER_REGEX = r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$'
