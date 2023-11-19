@@ -13,3 +13,6 @@ __pycache__
 
 # Script for debugging purposes.
 root/scripts/testing.py
+
+# File to trigger restart of Apache server in production environment.
+reload
