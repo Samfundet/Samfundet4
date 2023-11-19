@@ -13,6 +13,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './InformationFormAdminPage.module.scss';
+import { lowerCapitalize } from '~/utils';
 
 export function InformationFormAdminPage() {
   const { t } = useTranslation();
@@ -129,7 +130,7 @@ export function InformationFormAdminPage() {
       {/* Header tools */}
       <div className={styles.header_container}>
         <div className={styles.logo_container}>
-          {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
+          {slugField ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
         </div>
         <Button
           rounded={true}
