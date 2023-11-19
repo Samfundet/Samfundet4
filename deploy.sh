@@ -11,8 +11,9 @@ git pull
 ##################################
 
 cd backend || exit
-pipenv run python manage.py migrate
-pipenv run python manage.py collectstatic --noinput
+pipenv run pipenv:sync-prod
+pipenv run migrations:apply
+pipenv run static:collect
 touch reload
 cd ..
 
