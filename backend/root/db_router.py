@@ -1,9 +1,7 @@
-#
-# Handles routing for databases
-# (which database should be used for which model)
-#
-# All models use the default database except billig models
-#
+"""
+Handles routing for databases (which database should be used for which model).
+All models use the default database except billig models.
+"""
 from typing import Any, Type
 
 from django.db import models
@@ -13,7 +11,7 @@ from samfundet.models.billig import (
     BilligTicketGroup,
 )
 
-# List of models routed to billig database
+# List of models routed to billig database.
 BILLIG_MODELS: list[Type[models.Model]] = [
     BilligEvent,
     BilligTicketGroup,
