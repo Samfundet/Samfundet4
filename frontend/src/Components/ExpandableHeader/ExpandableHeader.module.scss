@@ -19,8 +19,8 @@
   background-color: $grey_5;
 
   @include theme-dark{
-    background-color: transparent;
-    border-color: $grey-0;
+    background-color: #2a0000;
+    border: 2px solid $black_t75;
   }
 }
 
@@ -51,7 +51,7 @@
   text-align: left;
 
   @include theme-dark{
-    background-color: transparent;
+    background-color: #2a0000;
     color: white;
   }
 }
@@ -60,7 +60,7 @@
   background-color: #dbdbdb;
 
   @include theme-dark{
-    background-color: $grey-0;
+    background-color: #1c0000;
   }
 }
 

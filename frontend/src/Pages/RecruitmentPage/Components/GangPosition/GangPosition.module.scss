@@ -25,14 +25,14 @@
   font-size: 17px;
   font-weight: 400;
   @include theme-dark{
-    background-color: $red_samf;
+    background-color: #7a0000;
   }
 }
 
 .gang_header:hover{
   background-color: $red_samf_hover;
   @include theme-dark{
-    background-color: $red_samf_hover;
+    background-color: #590000;
   }
 }
 
