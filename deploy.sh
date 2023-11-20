@@ -31,7 +31,7 @@ git pull -f origin master
 ##################################
 
 cd frontend || exit
-yarnpkg run ci
+yarnpkg run ci:debian
 yarnpkg run build
 cd ..
 
