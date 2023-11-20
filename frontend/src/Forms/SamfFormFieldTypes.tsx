@@ -162,6 +162,6 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
       className={styles.input_element}
       onChange={args.onChange}
       error={args.error}
-    ></Checkbox>
+    />
   );
 }

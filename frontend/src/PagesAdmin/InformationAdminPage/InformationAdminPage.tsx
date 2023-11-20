@@ -10,7 +10,7 @@ import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function InformationAdminPage() {
@@ -99,7 +99,7 @@ export function InformationAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
-      {t(KEY.common_create)} {t(KEY.information_page_short)}
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
     </Button>
   );
 
