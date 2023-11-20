@@ -23,15 +23,16 @@ exec 1> "$filename" 2>&1
 set -ex
 
 # Fetch latest changes.
-git pull
+# -f: force pull, overwrite local changes.
+git pull -f origin master
 
 ##################################
 #            Frontend            #
 ##################################
 
 cd frontend || exit
-yarn run ci
-yarn run build
+yarnpkg run ci
+yarnpkg run build
 cd ..
 
 ##################################
@@ -42,5 +43,5 @@ cd backend || exit
 pipenv run pipenv:sync-prod
 pipenv run migrations:apply
 pipenv run static:collect
-touch reload # Trigger restart of Apache server.
+touch reload # Trigger restart of uwsgi server.
 cd ..
