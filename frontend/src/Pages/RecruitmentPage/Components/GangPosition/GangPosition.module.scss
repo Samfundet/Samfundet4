@@ -25,14 +25,14 @@
   font-size: 17px;
   font-weight: 400;
   @include theme-dark{
-    background-color: #7a0000;
+    background-color: #590000;
   }
 }
 
 .gang_header:hover{
   background-color: $red_samf_hover;
   @include theme-dark{
-    background-color: #590000;
+    background-color: #400000;
   }
 }
 
@@ -44,23 +44,23 @@
   width: 100%;
   background-color: $white;
   color: $black;
-  border-top: 1px solid $grey-3;
+  border-top: 1px solid $grey-5;
   @include theme-dark{
     background-color: transparent;
-    border-top: 2px solid $grey-2;
+    border-top: 1px solid #300e10;
   }
 }
 
 .position_item:hover{
-  background-color: $red_samf-faded;
+  background-color: $grey-5;
   @include theme-dark{
-    background-color: #af8b8c;
+    background-color: #300e10;
   }
 }
 
 .position_name {
   flex: 1;
-  color: $red_samf;
+  color: black;
   padding: 1em;
   font-weight: 400;
   @include theme-dark{

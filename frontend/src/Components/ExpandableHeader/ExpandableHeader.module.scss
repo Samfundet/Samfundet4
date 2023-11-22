@@ -15,23 +15,23 @@
 
 .parent {
   border-radius: 10px;
-  border-color: $grey_3;
-  background-color: $grey_5;
+  border-color: $grey-4;
+  background-color: $grey_4;
 
   @include theme-dark{
-    background-color: #2a0000;
-    border: 2px solid $black_t75;
+    background-color: #1d0809;
+    border-color: transparent;
   }
 }
 
 .child {
-  border: 1px solid $grey-3;
+  border: 1px solid transparent;
   border-radius: 10px;
   margin: 10px;
   width: auto;
 
   @include theme-dark{
-    border-color: $grey-1;
+    border-color: transparent;
   }
 }
 
@@ -42,7 +42,7 @@
   align-items: center;
   font-size: 20px;
   font-weight: 400;
-  background: $grey_5;
+  background: $grey_4;
   padding: 0.5em 1.5em 0.5em 1em;
   color: $black;
   cursor: pointer;
@@ -51,7 +51,7 @@
   text-align: left;
 
   @include theme-dark{
-    background-color: #2a0000;
+    background-color: #1d0809;
     color: white;
   }
 }
@@ -60,7 +60,7 @@
   background-color: #dbdbdb;
 
   @include theme-dark{
-    background-color: #1c0000;
+    background-color: #1d0809;
   }
 }
 
