@@ -3,6 +3,9 @@
 .button {
   cursor: pointer;
   transition: 0.1s;
+  color: white;
+  background: none;
+  border: none;
   &:hover {
     .icon {
       transform: scale(1.1);

@@ -114,6 +114,7 @@ export const nb: Record<KeyValues, string> = {
 
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
+  [KEY.loginpage_login_failed]: 'Innlogging feilet',
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
   [KEY.loginpage_email_placeholder]: 'E-post eller medlemsnummer',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
@@ -144,6 +145,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_applicant]: 'Søker',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
+  [KEY.recruitment_interview_notes]: 'Intervju notater',
   [KEY.recruitment_priority]: 'Søkers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
@@ -340,6 +342,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_email_placeholder]: 'Email or membership ID',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_login_failed]: 'Login failed',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
@@ -367,6 +370,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_applicant]: 'Applicant',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
+  [KEY.recruitment_interview_notes]: 'Interview notes',
   [KEY.recruitment_priority]: 'Søkers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',

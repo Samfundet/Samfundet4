@@ -28,4 +28,4 @@ REQUESTED_IMPERSONATE_USER = 'requested_impersonate_user'
 # This token can be imported anywhere to retrieve the values.
 request_contextvar: ContextVar[HttpRequest] = ContextVar('request_contextvar', default=None)
 
-AUTH_BACKEND = 'django.contrib.auth.middleware.AuthenticationMiddleware'
+AUTH_BACKEND = 'django.contrib.auth.backends.ModelBackend'

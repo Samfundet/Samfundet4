@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
@@ -45,7 +45,6 @@ export function RecruitmentPositionOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
   const gangId = useParams().gangId;
   const positionId = useParams().positionId;
-  const navigate = useNavigate();
   const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -92,10 +91,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <InputField
-            value={admission.interview_time ? utcTimestampToLocal(admission.interview_time) : ''}
+            value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
-              const newAdmission = { ...admission, interview_time: value.toString() };
+              const updatedInterview = { ...admission.interview, interview_time: value.toString() };
+              const newAdmission = { ...admission, interview: updatedInterview };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
             }}
             type="datetime-local"
@@ -105,10 +105,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <InputField
-            value={admission.interview_location ?? ''}
+            value={admission.interview.interview_location ?? ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
-              const newAdmission = { ...admission, interview_location: value.toString() };
+              const updatedInterview = { ...admission.interview, interview_location: value.toString() };
+              const newAdmission = { ...admission, interview: updatedInterview };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
             }}
           />
@@ -154,17 +155,13 @@ export function RecruitmentPositionOverviewPage() {
     <Button
       theme="success"
       rounded={true}
-      onClick={() =>
-        navigate(
-          reverse({
-            pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
-            urlParams: {
-              gangId: gangId,
-              recruitmentId: recruitmentId,
-            },
-          }),
-        )
-      }
+      link={reverse({
+        pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+        urlParams: {
+          gangId: gangId,
+          recruitmentId: recruitmentId,
+        },
+      })}
     >
       {t(KEY.common_go_back)}
     </Button>

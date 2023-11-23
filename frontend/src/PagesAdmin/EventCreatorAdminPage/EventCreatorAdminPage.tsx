@@ -3,9 +3,7 @@ import { Button, ImageCard } from '~/Components';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import { useState } from 'react';
-import { ReactElement } from 'react-markdown/lib/react-markdown';
-import { useNavigate } from 'react-router-dom';
+import { ReactElement, useState } from 'react';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
@@ -14,7 +12,7 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
-import { usePrevious } from '~/hooks';
+import { useCustomNavigate, usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { Children, EventAgeRestriction } from '~/types';
@@ -32,7 +30,7 @@ type EventCreatorStep = {
 };
 
 export function EventCreatorAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
 
   // TODO these are temporary and must be fetched from API when implemented.
@@ -142,7 +140,7 @@ export function EventCreatorAdminPage() {
   function trySave() {
     postEvent(event as EventDto)
       .then(() => {
-        navigate(ROUTES.frontend.admin_events);
+        navigate({ url: ROUTES.frontend.admin_events });
         toast.success(t(KEY.common_creation_successful));
       })
       .catch((error) => {
