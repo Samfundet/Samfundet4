@@ -1,44 +1,21 @@
 {
-  "editor.formatOnSave": true,
-  // Hide import regions automatically, e.g. (.js)
+  // These settings are not required for the project.
+
+  // Hide import regions automatically, e.g. (.js).
   "editor.foldingImportsByDefault": true,
+
   // Automatically set filetype when opening a new file.
   // This setting determines new filetype based on the current focused file.
   "files.defaultLanguage": "${activeEditorLanguage}",
-  // Change layout of the upper title
+
+  // Change layout of the upper title.
   "window.title": "🦐 ${activeEditorShort}${separator}${rootName}",
-  "[typescript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[python]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": false
-    }
+
+  // Change layout of editor.
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#fff",
+    "titleBar.activeBackground": "#a03033",
+    "titleBar.inactiveBackground": "#a03033",
+    "editorCursor.foreground": "#ff2222"
   }
 }

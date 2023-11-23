@@ -1,5 +1,7 @@
 {
   "recommendations": [
+    "eeyore.yapf",
+    "ms-python.flake8",
     "eamodio.gitlens",
     "mikestead.dotenv",
     "ms-python.python",
@@ -12,6 +14,10 @@
     "editorconfig.editorconfig",
     "yzhang.markdown-all-in-one",
     "visualstudioexptteam.vscodeintellicode",
-    "hediet.vscode-drawio"
+    "hediet.vscode-drawio",
+    "stylelint.vscode-stylelint",
+    "ms-python.mypy-type-checker",
+    "rvest.vs-code-prettier-eslint",
+    "visualstudioexptteam.vscodeintellicode"
   ]
 }
