@@ -172,6 +172,7 @@ export const KEY = {
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
