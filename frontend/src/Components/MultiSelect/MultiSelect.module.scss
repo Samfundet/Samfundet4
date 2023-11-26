@@ -2,64 +2,29 @@
 
 @import 'src/mixins';
 
-// label som wrapper
-.select_wrapper {
+.row {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-content: center;
+  gap: 10px;
+  flex: 1;
+
+  @include for-mobile-down {
+    flex-direction: column;
+  }
 }
 
-.samf_select {
+.col {
+  flex-grow: 1;
+  min-height: 300px;
+  padding: 7px;
+  background-color: #dddddd;
   @include rounded;
-  display: flex;
-  font-size: 1em;
-  padding: 1em 1em;
-  color: $black;
-  cursor: pointer;
-  padding-right: 3em;
-  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
-  border: 0.1px solid transparent; // Prevents buggy spacing when border is sat on hover.
-
-  // TODO: what is this for?
-  overflow-y: auto;
-
-  // TODO: what are these for?
-  appearance: none; //appearance "none" i flere browsere
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-
-  @include theme-light {
-    &:hover {
-      border: 0.1px solid $blue;
-    }
-  }
-
+  
   @include theme-dark {
-    color: white;
-    background-color: $grey-0;
-    &:hover {
-      filter: brightness(115%);
-    }
+    background-color: $grey-3;
+
   }
 }
 
-.error {
-  border: 1px solid $red;
-}
-
-.arrow_container {
-  position: relative;
-  max-height: 0;
-  max-width: 0;
-  top: -2.4em;
-  left: calc(100% - 2em);
-  margin-right: 0.2em;
-  pointer-events: none;
-}
-
-.arrow {
-  width: 1.5em;
-  height: 1.5em;
+.item {
+  margin-bottom: 5px;
 }
