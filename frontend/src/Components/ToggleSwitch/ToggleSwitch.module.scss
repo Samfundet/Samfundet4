@@ -8,13 +8,20 @@
   box-sizing: border-box;
 }
 
-$switch-width: 60px;
-$switch-height: 30px;
+$switch-width: 2.5rem;
+$switch-height: 1.5rem;
+
 $switch-color: $grey-2;
 $switch-color-checked: $red-samf;
+$focus-box-shadow: 0 0 0 2px rgba($switch-color-checked, 0.5);
 $toggle-transition: 0.2s ease;
-$ball-size: 25px;
 $ball-color: $white;
+$ball-size: calc($switch-height - (0.125rem * 2));
+$track-padding: calc(($switch-height - $ball-size) / 2);
+
+.label {
+  margin-bottom: 0; // TODO: Can be removed once label's margin-bottom is removed from global.scss
+}
 
 .toggle_switch {
   opacity: 0;
@@ -22,23 +29,14 @@ $ball-color: $white;
   cursor: pointer;
 }
 
-.label {
+.track {
   cursor: pointer;
   width: $switch-width;
   height: $switch-height;
-  display: flex;
   background-color: $switch-color;
-  border-radius: 50px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px;
+  border-radius: $switch-height;
   position: relative;
   transition: background-color $toggle-transition;
-}
-
-// Styling on label when toggle_switch is checked.
-.label:has(.toggle_switch:checked) {
-  background-color: $switch-color-checked;
 }
 
 .ball {
@@ -46,21 +44,26 @@ $ball-color: $white;
   height: $ball-size;
   background-color: $ball-color;
   position: absolute;
-  top: calc(($switch-height - $ball-size) / 2); // Align center vertically.
-  left: 2px;
+  top: $track-padding;
+  left: $track-padding;
   border-radius: 50%;
   transition: transform $toggle-transition;
 }
 
-// Styling on ball when toggle_switch is checked.
-.toggle_switch:checked ~ .ball {
-  transform: translateX(30px); // Move all the way to the end.
+// Styling on track when toggle_switch is checked.
+.toggle_switch:checked + .track {
+  background-color: $switch-color-checked;
+
+  /* stylelint-disable-next-line */
+  .ball {
+    transform: translateX($switch-width - $ball-size - ($track-padding * 2));
+  }
 }
 
-.off_icon {
-  margin-left: -2px;
+.toggle_switch:focus + .track {
+  box-shadow: $focus-box-shadow;
 }
 
-.on_icon {
-  margin-right: -2px;
+.toggle_switch:disabled + .track {
+  cursor: not-allowed;
 }
