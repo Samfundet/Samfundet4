@@ -1,20 +1,9 @@
-import { default as classNames, default as classnames } from 'classnames';
+import { default as classnames } from 'classnames';
 import { Link } from 'react-router-dom';
 import { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
-
-type ButtonTheme =
-  | 'basic'
-  | 'samf'
-  | 'secondary'
-  | 'success'
-  | 'outlined'
-  | 'blue'
-  | 'black'
-  | 'white'
-  | 'green'
-  | 'pure';
-type ButtonDisplay = 'basic' | 'pill' | 'block';
+import { ButtonDisplay, ButtonTheme } from './types';
+import { displayToStyleMap, themeToStyleMap } from './utils';
 
 type ButtonProps = {
   name?: string;
@@ -29,25 +18,6 @@ type ButtonProps = {
   children?: Children;
   preventDefault?: boolean;
   onClick?: () => void;
-};
-
-const mapThemeToStyle: { [theme in ButtonTheme]: string } = {
-  basic: styles.button_basic,
-  pure: styles.pure,
-  samf: styles.button_samf,
-  secondary: styles.button_secondary,
-  success: styles.button_success,
-  outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.
-  blue: styles.button_blue,
-  black: styles.button_black,
-  white: styles.button_white,
-  green: styles.button_green,
-};
-
-const mapDisplayToStyle: { [display in ButtonDisplay]: string } = {
-  basic: styles.display_basic,
-  pill: styles.display_pill,
-  block: styles.display_block,
 };
 
 export function Button({
@@ -67,8 +37,8 @@ export function Button({
 
   const classNames = classnames(
     !isPure && styles.button,
-    mapThemeToStyle[theme],
-    !isPure && mapDisplayToStyle[display],
+    themeToStyleMap[theme],
+    !isPure && displayToStyleMap[display],
     rounded && styles.rounded,
     className,
   );

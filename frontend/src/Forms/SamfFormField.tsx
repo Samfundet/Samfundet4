@@ -96,6 +96,7 @@ type SamfFormFieldProps<U> = {
   // Dropdown
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;
+  onChange?: (value: U) => void;
 };
 
 export function SamfFormField<U>({
@@ -107,6 +108,7 @@ export function SamfFormField<U>({
   options,
   defaultOption,
   validator,
+  onChange,
 }: SamfFormFieldProps<U>) {
   // Validate on init context
   const { validateOnInit, validateOn } = useContext(SamfFormConfigContext);
@@ -134,6 +136,7 @@ export function SamfFormField<U>({
     if (validateOn === 'change' && initialUpdate !== true) {
       setShowError(true);
     }
+    onChange && onChange(newValue as U);
   }
 
   // Enable show error for validate on submit
