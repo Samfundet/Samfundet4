@@ -95,7 +95,7 @@
     "stylelint-prettier": "^4.0.2",
     "stylelint-scss": "^5.2.1",
     "typescript": "^5.2.2",
-    "vite": "^4.4.11",
+    "vite": "^4.4.12",
     "webpack": "^5.89.0"
   },
   "browserslist": [
