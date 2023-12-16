@@ -6,6 +6,7 @@ import { InputFieldType } from '~/Components/InputField/InputField';
 import { InputFile } from '~/Components/InputFile';
 import { InputFileType } from '~/Components/InputFile/InputFile';
 import styles from './SamfForm.module.scss';
+import { Timespan } from '~/Components/Timespan';
 
 // ================================== //
 //         Form Field Types           //
@@ -26,7 +27,8 @@ export type SamfFormFieldType =
   | 'datetime'
   | 'time'
   | 'upload-image'
-  | 'upload-pdf';
+  | 'upload-pdf'
+  | 'timespan';
 
 /**
  * Arguments used to generate the input component.
@@ -74,6 +76,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   'upload-pdf': makeFilePickerFunction('pdf'),
   checkbox: makeCheckboxInput,
   email: makeStandardInputFunction<string>('email'),
+  timespan: makeTimespan,
 };
 
 // ================================== //
@@ -134,6 +137,11 @@ function makeOptionsInput(args: SamfFormFieldArgs) {
 // Image picker
 function makeImagePicker(args: SamfFormFieldArgs) {
   return <ImagePicker key={args.field} onSelected={args.onChange} />;
+}
+
+// Image picker
+function makeTimespan(args: SamfFormFieldArgs) {
+  return <Timespan key={args.field} onChange={args.onChange}/>
 }
 
 // File picker

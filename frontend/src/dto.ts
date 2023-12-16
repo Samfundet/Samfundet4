@@ -360,3 +360,9 @@ export type RecruitmentAdmissionDto = {
   recruiter_priority?: number;
   recruiter_status?: number;
 };
+
+export type TimespanDto = {
+  date?: string;
+  start?: string;
+  end?: string;
+}

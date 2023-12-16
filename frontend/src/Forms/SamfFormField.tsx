@@ -60,7 +60,7 @@ function castNumber(value: string, int: boolean): number | undefined {
  * @param validator Optional additional validator function for the field
  * @returns hook for value, state and setValue
  */
-function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
+export function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
   // Get the context provided by SamfForm
   const { state, dispatch } = useContext(SamfFormContext);
   if (state === undefined || dispatch === undefined) {
@@ -196,3 +196,4 @@ export function SamfFormField<U>({
     </>
   );
 }
+
