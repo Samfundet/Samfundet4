@@ -166,6 +166,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_admission_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
@@ -175,6 +176,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_saksdokument]: 'Saksdokument',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt Bilde',
+  [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
@@ -399,6 +401,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
+  [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
 
   // Admin:
@@ -406,6 +409,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_saksdokument]: 'case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
+  [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',

@@ -47,7 +47,7 @@ export function Checkbox({
         name={name}
         onClick={handleChange}
         disabled={disabled}
-        checked={checked}
+        checked={isChecked}
       />
       <div className={styles.checkbox__box}></div>
       {alignment == 'right' && label}

@@ -24,6 +24,7 @@ export function RecruitmentPositionFormAdminPage() {
     name_nb: 'Ny stilling',
     name_en: 'New position',
   });
+  const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
 
   // Fetch data if edit mode.
   useEffect(() => {
@@ -56,6 +57,8 @@ export function RecruitmentPositionFormAdminPage() {
 
     long_description_nb: position?.long_description_nb,
     long_description_en: position?.long_description_en,
+
+    norwegian_applicants_only: position?.norwegian_applicants_only || false,
 
     default_admission_letter_nb: position?.default_admission_letter_nb,
     default_admission_letter_en: position?.default_admission_letter_en,
@@ -129,12 +132,24 @@ export function RecruitmentPositionFormAdminPage() {
         </div>
         <div className={styles.row}>
           <SamfFormField
+            field="norwegian_applicants_only"
+            type="checkbox"
+            label={t(KEY.recruitment_norwegian_applicants_only) + '?'}
+            onChange={(value: boolean) => {
+              setNorwegianApplicantsOnly(value);
+            }}
+          />
+        </div>
+        <div className={styles.row}>
+          <SamfFormField
             field="short_description_nb"
             type="text"
             label={t(KEY.common_short_description) + ' ' + t(KEY.common_norwegian)}
           />
           <SamfFormField
             field="short_description_en"
+            hidden={norwegianApplicantsOnly}
+            required={!norwegianApplicantsOnly}
             type="text"
             label={t(KEY.common_short_description) + ' ' + t(KEY.common_english)}
           />
@@ -148,6 +163,8 @@ export function RecruitmentPositionFormAdminPage() {
           <SamfFormField
             field="long_description_en"
             type="text-long"
+            hidden={norwegianApplicantsOnly}
+            required={!norwegianApplicantsOnly}
             label={t(KEY.common_long_description) + ' ' + t(KEY.common_english)}
           />
         </div>
@@ -164,6 +181,8 @@ export function RecruitmentPositionFormAdminPage() {
             field="default_admission_letter_en"
             type="text-long"
             label={t(KEY.recrutment_default_admission_letter) + ' ' + t(KEY.common_english)}
+            hidden={norwegianApplicantsOnly}
+            required={!norwegianApplicantsOnly}
           />
         </div>
         <div className={styles.row}>

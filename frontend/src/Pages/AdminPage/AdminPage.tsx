@@ -7,8 +7,11 @@ import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
 import { ROUTES } from '~/routes';
 import { Link } from 'react-router-dom';
+import { KEY } from '~/i18n/constants';
+import { useTranslation } from 'react-i18next';
 
 export function AdminPage() {
+  const { t } = useTranslation();
   const { user } = useAuthContext();
 
   const randomWisewordIndex = Math.floor(Math.random() * WISEWORDS.length);
@@ -38,7 +41,7 @@ export function AdminPage() {
         <br />
         <br />
         <Link to={ROUTES.frontend.admin_impersonate}>
-          <Button>Stjel Identitet</Button>
+          <Button>{t(KEY.admin_steal_identity)}</Button>
         </Link>
       </div>
     </Page>
