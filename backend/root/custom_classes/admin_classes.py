@@ -46,7 +46,7 @@ def get_obj_link(obj: Any) -> str | None:
     if obj:
         href = get_admin_url(obj=obj)
 
-        return mark_safe(f'<a href="{href}">{obj}</a>') # nosec: B308, B703
+        return f'<a href="{href}">{obj}</a>'  # nosec: B308, B703
     return None
 
 
