@@ -66,6 +66,7 @@ admin.site.unregister(Group)
 # Just for testing TODO remove when done
 admin.site.register(OccupiedTimeslots)
 
+
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
     sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
