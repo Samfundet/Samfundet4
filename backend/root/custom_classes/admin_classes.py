@@ -7,7 +7,6 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
 from django.db.models import QuerySet
-from django.utils.safestring import mark_safe
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 from admin_auto_filters.filters import AutocompleteFilter
