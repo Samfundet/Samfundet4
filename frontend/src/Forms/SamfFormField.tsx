@@ -88,6 +88,7 @@ export function useSamfForm<U>(field: string, required: boolean, validator?: (v:
 type SamfFormFieldProps<U> = {
   // General
   field: string;
+  fields?: string[];
   type: SamfFormFieldType;
   required?: boolean;
   label?: string;
@@ -100,6 +101,7 @@ type SamfFormFieldProps<U> = {
 
 export function SamfFormField<U>({
   field,
+  fields,
   type,
   required = true,
   hidden = false,
@@ -177,6 +179,7 @@ export function SamfFormField<U>({
     const args: SamfFormFieldArgs = {
       // Standard args
       field: field,
+      fields: fields,
       value: value,
       onChange: handleOnChange,
       error: showError ? errorMessage : false,

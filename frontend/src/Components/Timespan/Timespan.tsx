@@ -13,16 +13,13 @@ export type TimespanTypes = 'date';
 
 interface TimespanProps {
   type: TimespanTypes;
-  start_field: string;
-  start_value: string;
-  end_field: string;
-  end_value: string;
+  start_field?: string;
+  start_value?: string;
+  end_field?: string;
+  end_value?: string;
 }
 
-
-
-
-export function Timespan({ start_field, end_field, start_value, end_value }: TimespanProps) {
+export function Timespan({ start_field = 'start_dt', end_field = 'end_dt' }: TimespanProps) {
   const { state, dispatch } = useContext(SamfFormContext);
 
   const { t } = useTranslation();
@@ -36,7 +33,9 @@ export function Timespan({ start_field, end_field, start_value, end_value }: Tim
 
   useEffect(() => {
     let start = new Date(startDate + ' ' + startTime);
-    let end = new Date(startDate + ' ' + startTime);
+    let end = new Date(startDate + ' ' + endTime);
+    console.log(start);
+    console.log(end);
     if (start) {
       setStart(start.toString());
     }
@@ -46,9 +45,12 @@ export function Timespan({ start_field, end_field, start_value, end_value }: Tim
   }, [startDate, endDate, startTime, endTime]);
 
   useEffect(() => {
+    console.log("startval "+ start);
+    console.log("endval "+ end);
     if (state === undefined || dispatch === undefined) {
       return;
     }
+    
     dispatch?.({
       field: start_field,
       value: start,

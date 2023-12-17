@@ -39,6 +39,7 @@ export type SamfFormFieldType =
 export type SamfFormFieldArgs = {
   // Shared args for all input types
   field: string; // Field name
+  fields?: string[];
   value: unknown; // Current value of field
   onChange(value: unknown): void; // Callback to change field
   error: string | boolean; // True or string message if error, false or undefined if OK
@@ -141,7 +142,7 @@ function makeImagePicker(args: SamfFormFieldArgs) {
 
 // Image picker
 function makeTimespan(args: SamfFormFieldArgs) {
-  return <Timespan key={args.field} onChange={args.onChange}/>
+  return <Timespan key={args.field} start_field={args.fields[0]} end_field={args.fields[1]} />
 }
 
 // File picker

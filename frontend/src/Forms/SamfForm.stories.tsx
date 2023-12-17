@@ -49,6 +49,7 @@ Basic.args = {
         <SamfFormField field="category" type="options" label="Dropdown input" options={options} />
       </div>
       <SamfFormField field="description_long_nb" type="text-long" label="Lang tekst input" />
+      <SamfFormField field="" fields={['start', 'end']} type="timespan" />
     </>
   ),
 };
