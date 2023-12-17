@@ -37,7 +37,7 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    OccupiedTimeslots,
+    Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
 )
@@ -96,7 +96,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    OccupiedTimeslotsSerializer,
+    OccupiedtimeslotSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
@@ -685,15 +685,15 @@ class InterviewView(ModelViewSet):
     queryset = Interview.objects.all()
 
 
-class OccupiedTimeslotsView(ListCreateAPIView):
-    model = OccupiedTimeslots
-    serializer_class = OccupiedTimeslotsSerializer
+class OccupiedtimeslotView(ListCreateAPIView):
+    model = Occupiedtimeslot
+    serializer_class = OccupiedtimeslotSerializer
 
-    def get_queryset(self) -> QuerySet[OccupiedTimeslots]:
+    def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
         recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
-        return OccupiedTimeslots.objects.filter(recruitment=recruitment, user=self.request.user.id)
+        return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
 
-    def create(self, request) -> QuerySet[OccupiedTimeslots]:
+    def create(self, request: Request) -> Response:
         for p in request.data:
             p['user'] = request.user.id
         # TODO Could maybe need a check for saving own, not allowing to save others to themselves

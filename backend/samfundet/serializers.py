@@ -15,7 +15,7 @@ from .models.recruitment import (
     RecruitmentAdmission,
     InterviewRoom,
     Interview,
-    OccupiedTimeslots,
+    Occupiedtimeslot,
 )
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
@@ -551,15 +551,15 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         return recruitment_admission
 
 
-class OccupiedTimeslotsSerializer(serializers.ModelSerializer):
+class OccupiedtimeslotSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = OccupiedTimeslots
+        model = Occupiedtimeslot
         fields = '__all__'
 
 
 class ApplicantInfoSerializer(serializers.ModelSerializer):
-    occupied_timeslots = OccupiedTimeslotsSerializer(many=True)
+    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
 
     class Meta:
         model = User

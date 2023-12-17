@@ -20,7 +20,7 @@ from .models.recruitment import (
     RecruitmentAdmission,
     InterviewRoom,
     Interview,
-    OccupiedTimeslots,
+    Occupiedtimeslot,
 )
 from .models.general import (
     Tag,
@@ -64,7 +64,7 @@ from .models.general import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(OccupiedTimeslots)
+admin.site.register(Occupiedtimeslot)
 
 
 @admin.register(User)
