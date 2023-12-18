@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { useIsDarkTheme } from '~/hooks';
 import styles from './ThemeSwitch.module.scss';
+import { Button } from '~/Components';
 
 type ThemeSwitchProps = {
   className?: string;
@@ -16,8 +17,8 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   const offIcon = <Icon icon="ph:sun-thin" inline={true} width={24} className={styles.icon} />;
 
   return (
-    <button tabIndex={0} onClick={switchTheme} className={classnames(styles.button, className)}>
+    <Button tabIndex={0} onClick={switchTheme} theme="pure" className={classnames(styles.wrapper, className)}>
       {isDarkTheme ? onIcon : offIcon}
-    </button>
+    </Button>
   );
 }

@@ -1,21 +1,23 @@
 import { Icon } from '@iconify/react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import { InformationPageDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './InformationFormAdminPage.module.scss';
+import { lowerCapitalize } from '~/utils';
 
 export function InformationFormAdminPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
 
   const languageTabs: Tab[] = [
     { key: 'nb', label: 'Norsk' },
@@ -44,7 +46,7 @@ export function InformationFormAdminPage() {
         .catch((data) => {
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_information);
+            navigate({ url: ROUTES.frontend.admin_information });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(data);
@@ -97,7 +99,7 @@ export function InformationFormAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         });
-      navigate(ROUTES.frontend.admin_information);
+      navigate({ url: ROUTES.frontend.admin_information });
     } else {
       // Post new page.
       const slug = infoPage.slug_field ?? '';
@@ -106,7 +108,7 @@ export function InformationFormAdminPage() {
         ...infoPage,
       })
         .then(() => {
-          navigate(ROUTES.frontend.admin_information);
+          navigate({ url: ROUTES.frontend.admin_information });
           toast.success(t(KEY.common_creation_successful));
         })
         .catch((error) => {
@@ -128,14 +130,14 @@ export function InformationFormAdminPage() {
       {/* Header tools */}
       <div className={styles.header_container}>
         <div className={styles.logo_container}>
-          {slugField ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.information_page_short)}
+          {slugField ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
         </div>
         <Button
           rounded={true}
           theme="white"
           onClick={() => {
             if (window.confirm(`${t(KEY.admin_information_confirm_cancel)}`)) {
-              navigate(ROUTES.frontend.admin_information);
+              navigate({ url: ROUTES.frontend.admin_information });
             }
           }}
         >

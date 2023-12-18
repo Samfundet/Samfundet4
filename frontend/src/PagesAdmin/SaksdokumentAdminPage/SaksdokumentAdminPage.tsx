@@ -11,7 +11,7 @@ import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SaksdokumentAdminPage.module.scss';
 
@@ -95,8 +95,8 @@ export function SaksdokumentAdminPage() {
   const title = t(KEY.admin_saksdokumenter_title);
   const backendUrl = ROUTES.backend.admin__samfundet_saksdokument_changelist;
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_saksdokumenter_create)}>
-      {t(KEY.common_create)} {t(KEY.admin_saksdokument)}
+    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_saksdokumenter_create}>
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`)}
     </Button>
   );
 
