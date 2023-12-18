@@ -62,4 +62,5 @@ urlpatterns = [
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
+    path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots')
 ]

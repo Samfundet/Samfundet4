@@ -201,3 +201,21 @@ class RecruitmentAdmission(FullCleanSaveMixin):
                 self.interview = Interview.objects.create()
 
         super().save(*args, **kwargs)
+
+
+class Occupiedtimeslot(FullCleanSaveMixin):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        help_text='Occupied timeslots for user',
+        related_name='occupied_timeslots',
+    )
+    # Mostly only used for deletion, and anonymization.
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Occupied timeslots for the users for this recruitment')
+
+    # Start and end time of availability
+    start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
+    end_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
