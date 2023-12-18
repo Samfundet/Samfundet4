@@ -1,0 +1,12 @@
+@import 'src/constants';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: .2em;
+}
+
+.occupied_line {
+  display: flex;
+  flex-direction: row;
+}

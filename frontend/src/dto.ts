@@ -19,6 +19,14 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type OccupiedTimeSlotDto = {
+  id?: number;
+  user?: number;
+  recruitment: number;
+  start_dt: string;
+  end_dt: string;
+};
+
 export type RecruitmentUserDto = {
   id: number;
   username: string;
@@ -27,6 +35,8 @@ export type RecruitmentUserDto = {
   email: string;
   recruitment_admission_ids?: string[];
 };
+
+
 
 export type HomePageDto = {
   // Array of events used for splash
