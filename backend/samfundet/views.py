@@ -19,7 +19,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
@@ -37,6 +37,7 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
+    Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
 )
@@ -95,6 +96,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    OccupiedtimeslotSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
@@ -699,3 +701,24 @@ class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
+
+
+class OccupiedtimeslotView(ListCreateAPIView):
+    model = Occupiedtimeslot
+    serializer_class = OccupiedtimeslotSerializer
+
+    def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
+        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
+        return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
+
+    def create(self, request: Request) -> Response:
+        for p in request.data:
+            p['user'] = request.user.id
+        # TODO Could maybe need a check for saving own, not allowing to save others to themselves
+        serializer = self.get_serializer(data=request.data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
