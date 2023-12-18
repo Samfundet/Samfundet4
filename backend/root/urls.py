@@ -14,6 +14,6 @@ urlpatterns = [
     path('', include('samfundet.urls')),  # Put last.
 ]
 
-# Setup static access and media upload
+# Setup static access and media upload.
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

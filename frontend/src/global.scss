@@ -100,8 +100,11 @@ label {
 
 // THEME.DARK
 [#{$theme-key}='#{$theme-dark}'] {
-  background-color: $theme-dark-bg;
   color: $theme-dark-color;
+  /* stylelint-disable-next-line function-no-unknown */
+  background: linear-gradient(180deg, darken($red-samf, 21%) 0%, darken($red-samf, 35%) 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
   form {
     background-color: $form-bg-dark;

@@ -6,10 +6,10 @@ name = "pypi"
 [scripts]
 # See '/docs/pipenv.md'.
 # Doesn't work for powershell.
-
 "pipenv:install" = "pipenv install"
 "pipenv:update" = "pipenv update"
 "pipenv:sync" = "bash -c \"pipenv clean; pipenv sync --dev\""
+"pipenv:sync-prod" = "pipenv sync"
 "pipenv:docker-install-dev" = "pipenv install --deploy --ignore-pipfile --dev" # 'deploy' means abort if outdated lock file. 'ignore-pipfile' means only install using the lock file. 'dev' means install dev dependencies.
 "pipenv:docker-install-prod" = "pipenv install --deploy --ignore-pipfile" # 'deploy' means abort if outdated lock file. 'ignore-pipfile' means only install using the lock file.
 "pipenv:outdated" = "pipenv update --outdated" # Show outdated dependencies.
@@ -21,6 +21,7 @@ name = "pypi"
 "migrations:make" = "pipenv run python manage.py makemigrations --noinput"
 "migrations:verify" = "pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2"
 "migrations:apply" = "pipenv run python manage.py migrate"
+"static:collect" = "pipenv run python manage.py collectstatic --noinput"
 "bandit:run" = "pipenv run bandit --recursive --ini .bandit ."
 "flake8:run" = "pipenv run flake8 --config=.flake8 ."
 "yapf:diff" = "pipenv run yapf --parallel --recursive --diff ." # Dry-run yapf on all files in the project.
@@ -44,6 +45,7 @@ debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
 django-notifications-hq = "*"
+psycopg = {extras = ["c"], version = "*"}
 
 [dev-packages]
 yapf = "*"
@@ -52,10 +54,10 @@ bandit = "*"
 pillow = "*"
 flake8 = "~=5.0"
 flake8-annotations = "*"
-flake8-keyword-arguments = "*"
+# flake8-keyword-arguments = "*"
 flake8-print = "*"
 flake8-quotes = "*"
 requests = "*"
 
 [requires]
-python_version = "3.11.0" # from .python-version
+python_version = "3.11.2" # from .python-version
