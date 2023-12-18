@@ -7,7 +7,8 @@
   max-width: 600px;
   margin: 0 auto;
   color: white;
-
+  margin-bottom: 2em;
+  font-family: 'Lora', sans-serif;
 }
 
 .item_name {
@@ -26,21 +27,16 @@
   font-size: .75em;
   margin-left: 20px;
   margin-top: .25em;
-  font-family: 'Lora', sans-serif;
-  color: white;
 }
 
 .item_description {
   color: dimgray;
-  font-family: 'Lora', sans-serif;
 }
 
 .item_allergens {
   color: dimgray;
-  font-family: 'Lora', sans-serif;
 }
 
 .item_recommendations {
   color: dimgray;
-  font-family: 'Lora', sans-serif;
 }
