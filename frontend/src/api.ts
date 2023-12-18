@@ -541,6 +541,21 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
   return response;
 }
 
+export async function getRecruitmentPositionsGang(
+  recruitmentId: string,
+  gangId: number | undefined,
+): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_positions_gang,
+      queryParams: { recruitment: recruitmentId, gang: gangId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
   const url =
     BACKEND_DOMAIN +
