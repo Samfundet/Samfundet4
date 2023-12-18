@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Seed database for testing and development.'
 
     def handle(self, *args, **options):
-        print(f"Checking if seed is neccessary...")
+        print('Checking if seed is neccessary...')
 
         # Avoid running seed in production.
         if settings.ENV == Environment.PROD:
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         has_recruitment = Recruitment.objects.all().exists()
 
         if not all([has_venues, has_images, has_event, has_recruitment]):
-            print(f"Seeding since it seems like db is empty (probably).")
+            print('Seeding since it seems like db is empty (probably).')
             management.call_command('seed')
         else:
-            print("Seed was (probably) not neccessary.")
+            print('Seed was (probably) not neccessary.')
