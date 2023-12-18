@@ -1,0 +1,30 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+
+  @include for-mobile-down {
+    flex-direction: column;
+  }
+}
+
+.col {
+  flex-grow: 1;
+  min-height: 300px;
+  padding: 7px;
+  background-color: #dddddd;
+  @include rounded;
+  
+  @include theme-dark {
+    background-color: $grey-3;
+
+  }
+}
+
+.item {
+  margin-bottom: 5px;
+}

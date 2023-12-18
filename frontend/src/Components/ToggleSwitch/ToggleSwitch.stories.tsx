@@ -16,6 +16,3 @@ Basic.args = {};
 
 export const Disabled = Template.bind({});
 Disabled.args = { disabled: true };
-
-export const WithIcons = Template.bind({});
-WithIcons.args = { offIcon: '0', onIcon: '1' };

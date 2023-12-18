@@ -12,7 +12,7 @@ type InputFieldProps<T> = {
   inputClassName?: string;
   onChange?: (value: T) => void;
   onBlur?: (value: T) => void;
-  placeholder?: string | null;
+  placeholder?: string;
   type?: InputFieldType;
   disabled?: boolean;
   value?: string;
@@ -27,7 +27,7 @@ export function InputField<T>({
   inputClassName,
   onChange,
   onBlur,
-  placeholder,
+  placeholder = '',
   disabled,
   value,
   error,
@@ -53,7 +53,7 @@ export function InputField<T>({
         onChange={(e) => onChange?.(preprocessValue(e))}
         onBlur={(e) => onBlur?.(preprocessValue(e))}
         className={classNames(styles.input_field, inputClassName, error && styles.error)}
-        placeholder={placeholder || ''}
+        placeholder={placeholder}
         disabled={disabled}
         type={type}
         value={value}
