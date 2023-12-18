@@ -561,6 +561,24 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
             return None
 
 
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerGangView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        gang = self.request.query_params.get('gang', None)
+        if recruitment is not None and gang is not None:
+            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
+        else:
+            return None
+
+
 class ApplicantsWithoutInterviewsView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserForRecruitmentSerializer
