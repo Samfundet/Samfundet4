@@ -224,6 +224,11 @@ export const KEY = {
   command_menu_shortcut_control_panel: 'command_menu_shortcut_control_panel',
   command_menu_shortcut_about_samfundet: 'command_menu_shortcut_about_samfundet',
 
+  // Occupied Recruitment
+  occupied_help_text: 'occupied_help_text',
+  occupied_title: 'occupied_title',
+  occupied_show: 'occupied_show',
+
   // No category:
   owner: 'owner',
   end_time: 'end_time',

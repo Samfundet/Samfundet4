@@ -36,8 +36,6 @@ export type RecruitmentUserDto = {
   recruitment_admission_ids?: string[];
 };
 
-
-
 export type HomePageDto = {
   // Array of events used for splash
   splash: EventDto[];

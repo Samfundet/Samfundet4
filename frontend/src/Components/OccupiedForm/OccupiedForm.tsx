@@ -9,7 +9,7 @@ import { InputField } from '../InputField';
 import { Button } from '../Button';
 import { COLORS } from '~/types';
 import { IconButton } from '../IconButton';
-import { Icon } from '@iconify/react';
+
 type OccupiedFormProps = {
   recruitmentId: number;
 };
@@ -28,6 +28,10 @@ function OccupiedLine({ timeslot, onChange, onDelete, index }: OccupiedLineProps
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');
 
+  const [dateError, setDateError] = useState<string>('');
+  const [startTimeError, setStartTimeError] = useState<string>('');
+  const [endTimeError, setEndTimeError] = useState<string>('');
+
   useEffect(() => {
     const startDt = new Date(timeslot.start_dt);
     const endDt = new Date(timeslot.end_dt);
@@ -40,6 +44,9 @@ function OccupiedLine({ timeslot, onChange, onDelete, index }: OccupiedLineProps
   }, []);
 
   useEffect(() => {
+    setDateError(date.length === 0 ? t(KEY.common_required) : '');
+    setEndTimeError(endTime.length === 0 ? t(KEY.common_required) : '');
+    setStartTimeError(startTime.length === 0 ? t(KEY.common_required) : '');
     if (date.length > 0 && endTime.length > 0 && startTime.length > 0) {
       const startDt = new Date(date + ' ' + startTime);
       const endDt = new Date(date + ' ' + endTime);
@@ -57,9 +64,9 @@ function OccupiedLine({ timeslot, onChange, onDelete, index }: OccupiedLineProps
   return (
     <div>
       <div className={styles.row}>
-        <InputField type="date" value={date} onChange={setDate} />
-        <InputField type="time" value={startTime} onChange={setStartTime} />
-        <InputField type="time" value={endTime} onChange={setEndTime} />
+        <InputField type="date" value={date} onChange={setDate} error={dateError} />
+        <InputField type="time" value={startTime} onChange={setStartTime} error={startTimeError} />
+        <InputField type="time" value={endTime} onChange={setEndTime} error={endTimeError} />
         <div>
           <IconButton onClick={() => onDelete(index)} color={COLORS.red} title={t(KEY.common_delete)} icon="mdi:bin" />
         </div>
@@ -98,7 +105,6 @@ export function OccupiedForm({ recruitmentId = 1 }: OccupiedFormProps) {
   }
 
   function deleteTimeslot(key: number) {
-    console.log(key);
     setOccupiedTimeslots(occupiedTimeslots.filter((element: OccupiedTimeSlotDto, index: number) => key !== index));
   }
 
@@ -119,15 +125,12 @@ export function OccupiedForm({ recruitmentId = 1 }: OccupiedFormProps) {
         console.error(error);
       });
   }
-  useEffect(() => {
-    console.log(occupiedTimeslots);
-  }, [occupiedTimeslots]);
 
   return (
     <div className={styles.container}>
       <div>
-        <h3 className={styles.occupiedHeader}>Tilgjenglighet</h3>
-        <small className={styles.occupiedText}>Vennligst anngi tider du er utilgjengelig</small>
+        <h3 className={styles.occupiedHeader}>{t(KEY.occupied_title)}</h3>
+        <small className={styles.occupiedText}>{t(KEY.occupied_help_text)}</small>
       </div>
       <div className={styles.formContainer}>
         {occupiedTimeslots?.map((element, index) => (
@@ -144,10 +147,8 @@ export function OccupiedForm({ recruitmentId = 1 }: OccupiedFormProps) {
         <Button display="block" theme="green" onClick={() => sendTimeslots()}>
           {t(KEY.common_save)}
         </Button>
-        <div>
-          <Button theme="blue" onClick={() => createTimeSlot()}>
-            <Icon icon="mdi:plus" />
-          </Button>
+        <div className={styles.add}>
+          <IconButton title="add" icon="mdi:plus" color="blue" onClick={() => createTimeSlot()} />
         </div>
       </div>
     </div>

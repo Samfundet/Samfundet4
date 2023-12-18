@@ -210,6 +210,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
+  // Occupied Recruitment
+  [KEY.occupied_title]: 'Tilgjenglighet',
+  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_show]: 'Sett din tilgjengelighet',
+
   // No category:
   [KEY.owner]: 'Eier',
   [KEY.end_time]: 'Sluttid',
@@ -455,6 +460,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.sulten_page_book_table]: 'Book table',
   [KEY.sulten_lyche_about_menu]: 'About the menu',
   [KEY.sulten_page_more_about_us]: 'More about us',
+
+  // Occupied Recruitment
+  [KEY.occupied_title]: 'Availability',
+  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_show]: 'Set your availability',
 
   // No category:
   [KEY.owner]: 'Owner',
