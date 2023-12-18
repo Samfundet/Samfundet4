@@ -8,6 +8,7 @@
     "dev": "yarn run start",
     "build": "vite build",
     "ci": "yarn install --immutable",
+    "ci:debian": "yarnpkg install --immutable",
     "preview": "vite preview",
     "upgrade": "yarn upgrade",
     "outdated": "yarn upgrade-interactive",
