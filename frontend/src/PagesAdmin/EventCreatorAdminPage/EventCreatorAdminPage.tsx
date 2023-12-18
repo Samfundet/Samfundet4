@@ -1,5 +1,4 @@
 import { Button, ImageCard } from '~/Components';
-
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
@@ -16,7 +15,7 @@ import { useCustomNavigate, usePrevious } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { Children, EventAgeRestrictionValue } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
@@ -287,7 +286,7 @@ export function EventCreatorAdminPage() {
     </>
   );
 
-  const title = `${t(KEY.common_create)} ${t(KEY.common_event)}`;
+  const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
   return (
     <AdminPageLayout title={title}>
       <TabBar

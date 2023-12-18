@@ -57,8 +57,7 @@ $time: 1.75s;
 
 /* The element to apply the animation to */
 .spinning_logo {
-  /* stylelint-disable-next-line function-no-unknown */
-  color: lighten($grey-3, 25%);
+  color: $grey-3;
   max-width: 5em;
   max-height: 5em;
   opacity: 0;
@@ -66,7 +65,7 @@ $time: 1.75s;
 
   @include theme-dark {
     /* stylelint-disable-next-line function-no-unknown */
-    color: darken($grey-1, 25%);
+    color: $black-t90;
   }
   
   // These aren't actually global in the context of the module parent class.
