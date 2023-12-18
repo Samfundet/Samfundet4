@@ -330,6 +330,8 @@ export type RecruitmentPositionDto = {
 
   is_funksjonaer_position: boolean;
 
+  norwegian_applicants_only: boolean;
+
   default_admission_letter_nb: string;
   default_admission_letter_en: string;
 

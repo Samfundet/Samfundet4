@@ -7,7 +7,6 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
 from django.db.models import QuerySet
-from django.utils.safestring import mark_safe
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 from admin_auto_filters.filters import AutocompleteFilter
@@ -45,7 +44,8 @@ def get_obj_link(obj: Any) -> str | None:
     """
     if obj:
         href = get_admin_url(obj=obj)
-        return mark_safe(f'<a href="{href}">{obj}</a>')  # nosec mark_safe
+
+        return f'<a href="{href}">{obj}</a>'  # nosec: B308, B703
     return None
 
 
