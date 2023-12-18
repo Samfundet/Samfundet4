@@ -30,25 +30,26 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
     const inputName = e.target.getAttribute('name');
     let numericValue = e.target.value.replace(/[^0-9]/g, '');
     const parsedValue = parseInt(numericValue, 10);
-
     if (inputName === 'hour') {
-      numericValue = !isNaN(parsedValue) && parsedValue >= 0 ? Math.min(23, parsedValue).toString() : '';
-      setHour(numericValue);
-      onChange?.(numericValue.padStart(2, '0') + ':' + minute.padStart(2, '0'));
+      numericValue = parsedValue > 23 ? '23' : e.target.value;
+      // Regex for 00-23, allowing for values without 0 padding
+      if (/^(2[0-3]|[0-1]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
+        setHour(numericValue);
+        onChange?.(numericValue.padStart(2, '0') + ':' + minute.padStart(2, '0'));
+      }
     } else if (inputName === 'minute') {
-      numericValue = !isNaN(parsedValue) && parsedValue >= 0 ? Math.min(59, parsedValue).toString() : '';
-      setMinute(numericValue);
-      onChange?.(hour.padStart(2, '0') + ':' + numericValue.padStart(2, '0'));
+      numericValue = parsedValue > 59 ? '59' : e.target.value;
+      // Regex for 00-59, allowing for values without 0 padding
+      if (/^([0-5]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
+        setMinute(numericValue);
+        onChange?.(hour.padStart(2, '0') + ':' + numericValue.padStart(2, '0'));
+      }
     }
   }
 
   function handleBlur() {
     const formattedTime = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
     onBlur?.(formattedTime);
-  }
-
-  function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
-    e.target.value = '';
   }
 
   return (
@@ -61,7 +62,6 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
           value={hour}
           onChange={handleChange}
           onBlur={handleBlur}
-          onFocus={handleFocus}
         />
         <p>:</p>
         <input
@@ -71,7 +71,6 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
           value={minute}
           onChange={handleChange}
           onBlur={handleBlur}
-          onFocus={handleFocus}
         />
       </div>
       <div className={styles.error}></div>
