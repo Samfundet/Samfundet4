@@ -1,0 +1,46 @@
+@import 'src/constants';
+
+.menu_item {
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  color: white;
+
+}
+
+.item_name {
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 1.25em;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-family: 'LemonMilkLight', sans-serif;
+}
+
+.item_price {
+  font-size: .75em;
+  margin-left: 20px;
+  margin-top: .25em;
+  font-family: 'Lora', sans-serif;
+  color: white;
+}
+
+.item_description {
+  color: dimgray;
+  font-family: 'Lora', sans-serif;
+}
+
+.item_allergens {
+  color: dimgray;
+  font-family: 'Lora', sans-serif;
+}
+
+.item_recommendations {
+  color: dimgray;
+  font-family: 'Lora', sans-serif;
+}

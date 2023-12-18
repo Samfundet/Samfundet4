@@ -6,14 +6,6 @@ $page-padding: 2em;
 $header-bg-dark: #222222;
 
 
-.page {
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-  max-width: 100%;
-  margin-bottom: 0;
-}
-
 .header {
   padding-top: 1em;
   padding-left: $page-padding;
