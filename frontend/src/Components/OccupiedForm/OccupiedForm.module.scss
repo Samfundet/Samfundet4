@@ -1,12 +1,28 @@
 @import 'src/constants';
-
+@import 'src/mixins';
 .container {
   display: flex;
   flex-direction: column;
   gap: .2em;
+  padding: 0.5em;
+
 }
 
-.occupied_line {
+
+.formContainer {
+}
+
+.occupiedHeader {
+  font-weight: 700;
+}
+
+.occupiedText {
+  font-size: 0.8em;
+}
+
+.row {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

@@ -557,7 +557,7 @@ export async function getRecruitmentPositionsGang(
   return response;
 }
 
-export async function getOccupiedTimeslots(recruitmentId: string): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -569,6 +569,15 @@ export async function getOccupiedTimeslots(recruitmentId: string): Promise<Axios
   return response;
 }
 
+export async function postOccupiedTimeslots(
+  timeslots: OccupiedTimeSlotDto[],
+): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
+  console.log(timeslots);
+  const response = await axios.post(url, timeslots, { withCredentials: true });
+
+  return response;
+}
 
 export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
   const url =

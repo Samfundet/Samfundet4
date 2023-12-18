@@ -3,22 +3,25 @@ import { OccupiedTimeSlotDto } from '~/dto';
 import styles from './OccupiedForm.module.scss';
 import { KEY } from '~/i18n/constants';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots } from '~/api';
+import { getOccupiedTimeslots, postOccupiedTimeslots } from '~/api';
 import { useTranslation } from 'react-i18next';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
 import { InputField } from '../InputField';
+import { Button } from '../Button';
+import { COLORS } from '~/types';
+import { IconButton } from '../IconButton';
+import { Icon } from '@iconify/react';
 type OccupiedFormProps = {
-  recruitmentId: string;
+  recruitmentId: number;
 };
 
 type OccupiedLineProps = {
   timeslot: OccupiedTimeSlotDto;
   onChange: (key: number, newTimeslot: OccupiedTimeSlotDto) => void;
+  onDelete: (key: number) => void;
   index: number;
 };
 
-function OccupiedLine({ timeslot, onChange, index }: OccupiedLineProps) {
+function OccupiedLine({ timeslot, onChange, onDelete, index }: OccupiedLineProps) {
   const { t } = useTranslation();
 
   const [date, setDate] = useState<string>('');
@@ -27,12 +30,12 @@ function OccupiedLine({ timeslot, onChange, index }: OccupiedLineProps) {
 
   useEffect(() => {
     const startDt = new Date(timeslot.start_dt);
-    const endDt = new Date(timeslot.start_dt);
+    const endDt = new Date(timeslot.end_dt);
     if (!isNaN(startDt.getTime())) {
       setDate(startDt.toISOString().substring(0, 10));
-      setStartTime(startDt.toLocaleTimeString('no-NO'));
+      setStartTime(startDt.toLocaleTimeString('no-NO').substring(0, 5));
     }
-    if (!isNaN(startDt.getTime())) setEndTime(endDt.toLocaleTimeString('no-NO'));
+    if (!isNaN(startDt.getTime())) setEndTime(endDt.toLocaleTimeString('no-NO').substring(0, 5));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,15 +56,18 @@ function OccupiedLine({ timeslot, onChange, index }: OccupiedLineProps) {
 
   return (
     <div>
-      <div className={styles.occupied_line}>
-        <InputField type="date" value={date} onChange={setDate}> {t(KEY.common_date)} </InputField>
+      <div className={styles.row}>
+        <InputField type="date" value={date} onChange={setDate} />
         <InputField type="time" value={startTime} onChange={setStartTime} />
         <InputField type="time" value={endTime} onChange={setEndTime} />
+        <div>
+          <IconButton onClick={() => onDelete(index)} color={COLORS.red} title={t(KEY.common_delete)} icon="mdi:bin" />
+        </div>
       </div>
     </div>
   );
 }
-export function OccupiedForm({ recruitmentId = '1' }: OccupiedFormProps) {
+export function OccupiedForm({ recruitmentId = 1 }: OccupiedFormProps) {
   const { t } = useTranslation();
   const [occupiedTimeslots, setOccupiedTimeslots] = useState<OccupiedTimeSlotDto[]>([]);
 
@@ -80,7 +86,6 @@ export function OccupiedForm({ recruitmentId = '1' }: OccupiedFormProps) {
   }, [recruitmentId]);
 
   function updateTimeslots(key: number, newTimeslot: OccupiedTimeSlotDto) {
-    console.log(key);
     setOccupiedTimeslots(
       occupiedTimeslots.map((element: OccupiedTimeSlotDto, index: number) => {
         if (key === index) {
@@ -92,15 +97,59 @@ export function OccupiedForm({ recruitmentId = '1' }: OccupiedFormProps) {
     );
   }
 
+  function deleteTimeslot(key: number) {
+    console.log(key);
+    setOccupiedTimeslots(occupiedTimeslots.filter((element: OccupiedTimeSlotDto, index: number) => key !== index));
+  }
+
+  function createTimeSlot() {
+    setOccupiedTimeslots([...occupiedTimeslots, {} as OccupiedTimeSlotDto]);
+  }
+
+  function sendTimeslots() {
+    postOccupiedTimeslots(
+      occupiedTimeslots.map((element) => {
+        return { ...element, recruitment: recruitmentId };
+      }),
+    )
+      .then((res) => {
+        setOccupiedTimeslots(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
   useEffect(() => {
     console.log(occupiedTimeslots);
   }, [occupiedTimeslots]);
 
   return (
-    <div>
-      {occupiedTimeslots?.map((element, index) => (
-        <OccupiedLine timeslot={element} index={index} key={index} onChange={updateTimeslots} />
-      ))}
+    <div className={styles.container}>
+      <div>
+        <h3 className={styles.occupiedHeader}>Tilgjenglighet</h3>
+        <small className={styles.occupiedText}>Vennligst anngi tider du er utilgjengelig</small>
+      </div>
+      <div className={styles.formContainer}>
+        {occupiedTimeslots?.map((element, index) => (
+          <OccupiedLine
+            timeslot={element}
+            index={index}
+            key={index}
+            onDelete={deleteTimeslot}
+            onChange={updateTimeslots}
+          />
+        ))}
+      </div>
+      <div className={styles.row}>
+        <Button display="block" theme="green" onClick={() => sendTimeslots()}>
+          {t(KEY.common_save)}
+        </Button>
+        <div>
+          <Button theme="blue" onClick={() => createTimeSlot()}>
+            <Icon icon="mdi:plus" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
