@@ -3,6 +3,7 @@ from typing import Iterator, Any
 import pytest
 from django.core.files.images import ImageFile
 
+from datetime import time, date
 from django.utils import timezone
 from django.test import Client
 from rest_framework.test import APIClient
@@ -13,7 +14,7 @@ from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
+from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue, Table, Reservation
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -64,6 +65,16 @@ def fixture_rest_client() -> APIClient:
 @pytest.fixture
 def fixture_django_client() -> Client:
     yield Client()
+
+
+@pytest.fixture()
+def fixture_date_monday() -> date:
+    yield date(day=25, year=2023, month=12)  # monday
+
+
+@pytest.fixture()
+def fixture_date_tuesday() -> date:
+    yield date(day=26, year=2023, month=12)  # tusday
 
 
 @pytest.fixture
@@ -278,3 +289,44 @@ def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_positi
     )
     yield admission
     admission.delete()
+
+
+@pytest.fixture
+def fixture_venue() -> Iterator[Venue]:
+    venue = Venue.objects.create(
+        name='venue',
+        slug='venue',
+        description='Some description',
+        floor=1,
+        last_renovated=timezone.now(),
+        handicapped_approved=True,
+        responsible_crew='Cypress team',
+        opening_monday=time(hour=8),
+        closing_monday=time(hour=14),
+        opening_tuesday=time(hour=8),
+        closing_tuesday=time(hour=14),
+    )
+
+    yield venue
+    venue.delete()
+
+
+@pytest.fixture
+def fixture_table(fixture_venue: Venue) -> Iterator[Table]:
+    table = Table.objects.create(name_nb="table 1", description_nb="table", name_en="table 1", description_en="table", seating=4, venue=fixture_venue)
+    yield table
+    table.delete()
+
+
+@pytest.fixture
+def fixture_reservation(fixture_venue: Venue, fixture_table: Table, fixture_date_monday: date) -> Iterator[Reservation]:
+    reserevation = Reservation.objects.create(
+        venue=fixture_venue,
+        table=fixture_table,
+        guest_count=4,
+        start_time=time(hour=8),
+        end_time=time(hour=8),
+        reserevation_date=fixture_date_monday,
+    )
+    yield reserevation
+    reserevation.delete()

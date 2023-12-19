@@ -476,7 +476,7 @@ class Reservation(FullCleanSaveMixin):
                             break
                     # If time next occupancy is in future, drop and set available table,
                     # also tests for a buffer for an hour, to see if table is available for the next hour
-                    if (time.time()) < table_times[0][0] and (time + timezone.timedelta(hours=1)).time() < table_times[0][0]:
+                    if (time.time()) < table_times[0][0] and not (time + timezone.timedelta(hours=1)).time() < table_times[0][0]:
                         # if there is no reservation at the moment, is available for booking
                         available = True
                         break
