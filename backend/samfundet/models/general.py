@@ -8,7 +8,6 @@ import re
 import random
 from typing import TYPE_CHECKING
 from django.utils import timezone
-from django.utils.dateparse import parse_datetime
 from datetime import time, timedelta
 
 from notifications.base.models import AbstractNotification
@@ -16,7 +15,6 @@ from notifications.base.models import AbstractNotification
 from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
 from guardian.shortcuts import assign_perm
 from django.utils.translation import gettext as _
 
