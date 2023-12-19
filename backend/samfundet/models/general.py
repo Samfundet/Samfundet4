@@ -222,8 +222,7 @@ class Venue(FullCleanSaveMixin):
         verbose_name_plural = 'Venues'
 
     def get_opening_hours_date(self, selected_date: date | None = None) -> tuple[time, time]:
-        if not selected_date:
-            selected_date = timezone.now().date()
+        selected_date = selected_date or timezone.now().date()
         fields = [
             (self.opening_monday, self.closing_monday),
             (self.opening_tuesday, self.closing_tuesday),
