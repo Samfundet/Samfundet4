@@ -438,7 +438,7 @@ class Reservation(FullCleanSaveMixin):
             Based on the amount of seating and the date
         """
         # Fetch tables that fits size criteria
-        tables = Table.objects.filter(venue=venue, seating__gte=seating).values_list('id')
+        tables = Table.objects.filter(venue=venue, seating__gte=seating)
         # fetch all reservations for those tables for that date
         reserved_tables = Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time',
                                                                                                                   'end_time').order_by('start_time')
@@ -449,16 +449,16 @@ class Reservation(FullCleanSaveMixin):
         end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
 
         # Transform each occupied table to stacks of their reservations
-        occupied_table_times: dict[int, tuple[time, time]] = {}
+        occupied_table_times: dict[int, list[tuple[time, time]]] = {}
         for tr in reserved_tables:
             if tr['table'] not in occupied_table_times.keys():
-                occupied_table_times[tr['table']] = list()
+                occupied_table_times[tr['table']] = []
             occupied_table_times[tr['table']].append((tr['start_time'], tr['end_time']))
 
         # Checks if list of occupied tables are shorter than available tables
         safe = len(occupied_table_times) < len(tables)
 
-        available_hours = list()
+        available_hours: list[str] = []
 
         while (time < end_time):
             available = False
