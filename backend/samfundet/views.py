@@ -9,7 +9,6 @@ from django.db.models import Count, Case, When, QuerySet
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
-from django.utils.dateparse import parse_datetime
 from django.utils.decorators import method_decorator
 
 from django.contrib.auth.models import Group
@@ -318,8 +317,7 @@ class ReservationCheckAvailabilityView(APIView):
     def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            reservation_dt = parse_datetime(serializer.validated_data['date'])
-            if reservation_dt.date() <= timezone.now().date():
+            if serializer.validated_data['reservation_date'] <= timezone.now().date():
                 return Response(
                     {
                         'error_nb': 'Reservasjoner må dessverre opprettes minst én dag i forveien.',
@@ -328,7 +326,11 @@ class ReservationCheckAvailabilityView(APIView):
                     status=status.HTTP_406_NOT_ACCEPTABLE
                 )
             venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
-            available_tables = Reservation.fetch_available_times_for_date(venue=venue, seating=serializer.validated_data['guest_count'], date=reservation_dt)
+            available_tables = Reservation.fetch_available_times_for_date(
+                venue=venue,
+                seating=serializer.validated_data['guest_count'],
+                date=serializer.validated_data['date'],
+            )
             return Response(available_tables, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

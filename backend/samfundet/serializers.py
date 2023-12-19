@@ -506,7 +506,7 @@ class ReservationCheckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reservation
-        fields = ['guest_count', 'occasion', 'date']
+        fields = ['guest_count', 'occasion', 'reservation_date']
 
 
 class BookingSerializer(serializers.ModelSerializer):

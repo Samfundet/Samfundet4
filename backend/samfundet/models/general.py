@@ -8,7 +8,7 @@ import re
 import random
 from typing import TYPE_CHECKING
 from django.utils import timezone
-from datetime import time, timedelta
+from datetime import datetime, date, time, timedelta
 
 from notifications.base.models import AbstractNotification
 
@@ -221,7 +221,9 @@ class Venue(FullCleanSaveMixin):
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
 
-    def get_opening_hours_date(self, date=timezone.now()):
+    def get_opening_hours_date(self, selected_date: date = None) -> dict[str, time]:
+        if not selected_date:
+            selected_date = timezone.now().date()
         fields = [
             {
                 'opening': self.opening_monday,
@@ -252,7 +254,7 @@ class Venue(FullCleanSaveMixin):
                 'closing': self.closing_sunday
             },
         ]
-        return fields[date.weekday()]
+        return fields[selected_date.weekday()]
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -434,7 +436,7 @@ class Reservation(FullCleanSaveMixin):
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
     phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
 
-    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+    reservation_date = models.DateField(blank=True, null=False, verbose_name='Dato')
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
@@ -452,7 +454,7 @@ class Reservation(FullCleanSaveMixin):
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Bord')
 
-    def fetch_available_times_for_date(venue, seating, date) -> list[str]:
+    def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
         """
             Method for returning available reservation times for a venue
             Based on the amount of seating and the date
@@ -460,15 +462,16 @@ class Reservation(FullCleanSaveMixin):
         # Fetch tables that fits size criteria
         tables = Table.objects.filter(venue=venue, seating__gte=seating).values_list('id')
         # fetch all reservations for those tables for that date
-        reserved_tables = Reservation.objects.filter(venue=venue, date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+        reserved_tables = Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time',
+                                                                                                                  'end_time').order_by('start_time')
 
         # fetch opening hours for the date
         open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
-        time = date.replace(minute=open_hours['opening'].minute, hour=open_hours['opening'].hour)
-        end_time = date.replace(minute=open_hours['closing'].minute, hour=open_hours['closing'].hour) - timezone.timedelta(hours=1)
+        time = datetime.combine(date, open_hours['opening'])
+        end_time = datetime.combine(date, open_hours['closing']) - timezone.timedelta(hours=1)
 
         # Transform each occupied table to stacks of their reservations
-        occupied_table_times = dict()
+        occupied_table_times: dict[int, tuple[time, time]] = {}
         for tr in reserved_tables:
             if tr['table'] not in occupied_table_times.keys():
                 occupied_table_times[tr['table']] = list()
@@ -495,7 +498,7 @@ class Reservation(FullCleanSaveMixin):
                             break
                     # If time next occupancy is in future, drop and set available table,
                     # also tests for a buffer for an hour, to see if table is available for the next hour
-                    if (time.time()) < table_times[0][0] and (time + timezone.timedelta(hours=1)) < table_times[0][0]:
+                    if (time.time()) < table_times[0][0] and (time + timezone.timedelta(hours=1)).time() < table_times[0][0]:
                         # if there is no reservation at the moment, is available for booking
                         available = True
                         break
@@ -514,10 +517,6 @@ class Reservation(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'{self.name}'
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        self.full_clean()
-        super().save(*args, **kwargs)
 
 
 class FoodPreference(FullCleanSaveMixin):
