@@ -30,11 +30,17 @@ class TestReservation:
         self,
         fixture_venue: Venue,
         fixture_date_tuesday: date,
+        fixture_table: Table,
     ):
         full_date = Reservation.fetch_available_times_for_date(venue=fixture_venue.id, date=fixture_date_tuesday, seating=3)
         assert len(full_date) > 0
 
-    def test_check_empty(self, fixture_venue: Venue, fixture_date_monday: date):
+    def test_check_empty(
+        self,
+        fixture_venue: Venue,
+        fixture_date_monday: date,
+        fixture_table: Table,
+    ):
         full_date = Reservation.fetch_available_times_for_date(venue=fixture_venue.id, date=fixture_date_monday, seating=100)
         assert len(full_date) == 0
 
@@ -44,6 +50,7 @@ class TestReservation:
         fixture_venue: Venue,
         fixture_date_monday: date,
         fixture_date_tuesday: date,
+        fixture_table: Table,
     ):
         full_date = Reservation.fetch_available_times_for_date(venue=fixture_venue.id, date=fixture_date_tuesday, seating=3)
         occupied_date = Reservation.fetch_available_times_for_date(venue=fixture_venue.id, date=fixture_date_monday, seating=3)

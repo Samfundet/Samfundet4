@@ -445,7 +445,7 @@ class Reservation(FullCleanSaveMixin):
 
         # fetch opening hours for the date
         open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
-        time = datetime.combine(date, open_hours[0])
+        c_time = datetime.combine(date, open_hours[0])
         end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
 
         # Transform each occupied table to stacks of their reservations
@@ -459,34 +459,34 @@ class Reservation(FullCleanSaveMixin):
         safe = (len(occupied_table_times) < len(tables) or len(reserved_tables) == 0)
 
         available_hours: list[str] = []
+        if (len(tables) > 0):
+            while (c_time <= end_time):
+                available = False
+                # If there are still occupied tables for time
+                if not safe:
+                    # Loop through tables and reservation
+                    for key, table_times in occupied_table_times.items():
+                        # If top of stack is over, remove it
 
-        while (time < end_time):
-            available = False
-            # If there are still occupied tables for time
-            if not safe:
-                # Loop through tables and reservation
-                for key, table_times in occupied_table_times.items():
-                    # If top of stack is over, remove it
-
-                    if (time.time()) >= table_times[0][1]:  # If greater than end remove element
-                        occupied_table_times[key].pop(0)
-                        # if the reservations for a table is empty, drop checking for availability
-                        if len(occupied_table_times[key]) == 0:
-                            safe = True
+                        if (c_time.time()) >= table_times[0][1]:  # If greater than end remove element
+                            occupied_table_times[key].pop(0)
+                            # if the reservations for a table is empty, drop checking for availability
+                            if len(occupied_table_times[key]) == 0:
+                                safe = True
+                                break
+                        # If time next occupancy is in future, drop and set available table,
+                        # also tests for a buffer for an hour, to see if table is available for the next hour
+                        if (c_time.time()) < table_times[0][0] and (c_time + timezone.timedelta(hours=1)).time() < table_times[0][0]:
+                            # if there is no reservation at the moment, is available for booking
+                            available = True
                             break
-                    # If time next occupancy is in future, drop and set available table,
-                    # also tests for a buffer for an hour, to see if table is available for the next hour
-                    if (time.time()) < table_times[0][0] and (time + timezone.timedelta(hours=1)).time() < table_times[0][0]:
-                        # if there is no reservation at the moment, is available for booking
-                        available = True
-                        break
-            # If available or safe, add available hour
-            if safe or available:
-                available_hours.append(time.strftime('%H:%M'))
+                # If available or safe, add available hour
+                if safe or available:
+                    available_hours.append(c_time.strftime('%H:%M'))
 
-            # iterate to next half hour
-            time = (time + timezone.timedelta(minutes=30))
-            time = time + (timezone.datetime.min - time) % timedelta(minutes=30)
+                # iterate to next half hour
+                c_time = (c_time + timezone.timedelta(minutes=30))
+                c_time = c_time + (timezone.datetime.min - c_time) % timedelta(minutes=30)
         return available_hours
 
     class Meta:

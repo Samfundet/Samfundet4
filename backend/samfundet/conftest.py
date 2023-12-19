@@ -3,7 +3,7 @@ from typing import Iterator, Any
 import pytest
 from django.core.files.images import ImageFile
 
-from datetime import time, date
+from datetime import time, datetime
 from django.utils import timezone
 from django.test import Client
 from rest_framework.test import APIClient
@@ -68,13 +68,13 @@ def fixture_django_client() -> Client:
 
 
 @pytest.fixture()
-def fixture_date_monday() -> date:
-    yield date(day=25, year=2023, month=12)  # monday
+def fixture_date_monday() -> Iterator[datetime]:
+    yield datetime(day=25, year=2023, month=12)  # monday
 
 
 @pytest.fixture()
-def fixture_date_tuesday() -> date:
-    yield date(day=26, year=2023, month=12)  # tusday
+def fixture_date_tuesday() -> Iterator[datetime]:
+    yield datetime(day=26, year=2023, month=12)  # tusday
 
 
 @pytest.fixture
@@ -313,13 +313,20 @@ def fixture_venue() -> Iterator[Venue]:
 
 @pytest.fixture
 def fixture_table(fixture_venue: Venue) -> Iterator[Table]:
-    table = Table.objects.create(name_nb="table 1", description_nb="table", name_en="table 1", description_en="table", seating=4, venue=fixture_venue)
+    table = Table.objects.create(
+        name_nb='table 1',
+        description_nb='table',
+        name_en='table 1',
+        description_en='table',
+        seating=4,
+        venue=fixture_venue,
+    )
     yield table
     table.delete()
 
 
 @pytest.fixture
-def fixture_reservation(fixture_venue: Venue, fixture_table: Table, fixture_date_monday: date) -> Iterator[Reservation]:
+def fixture_reservation(fixture_venue: Venue, fixture_table: Table, fixture_date_monday: datetime) -> Iterator[Reservation]:
     reservation = Reservation.objects.create(
         venue=fixture_venue,
         table=fixture_table,
