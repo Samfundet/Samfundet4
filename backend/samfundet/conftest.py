@@ -320,13 +320,13 @@ def fixture_table(fixture_venue: Venue) -> Iterator[Table]:
 
 @pytest.fixture
 def fixture_reservation(fixture_venue: Venue, fixture_table: Table, fixture_date_monday: date) -> Iterator[Reservation]:
-    reserevation = Reservation.objects.create(
+    reservation = Reservation.objects.create(
         venue=fixture_venue,
         table=fixture_table,
         guest_count=4,
-        start_time=time(hour=8),
-        end_time=time(hour=8),
-        reserevation_date=fixture_date_monday,
+        start_time=time(hour=10),
+        end_time=time(hour=11),
+        reservation_date=fixture_date_monday,
     )
-    yield reserevation
-    reserevation.delete()
+    yield reservation
+    reservation.delete()
