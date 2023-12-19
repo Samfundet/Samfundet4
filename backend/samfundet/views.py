@@ -319,7 +319,8 @@ class ReservationCheckAvailabilityView(APIView):
     def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            reservation_dt = parse_datetime(serializer.data['start_dt'])
+            reservation_dt = parse_datetime(serializer.data['date'])
+
             if reservation_dt.date() <= timezone.now().date():
                 return Response(
                     {
@@ -329,9 +330,9 @@ class ReservationCheckAvailabilityView(APIView):
                     status=status.HTTP_406_NOT_ACCEPTABLE
                 )
 
-            venue = self.request.query_params.get('venue', 8)
-            available_tables = Table.fetch_available_tables(venue, serializer.data['guest_count'], reservation_dt)
-            return Response(TableSerializer(available_tables, many=True).data, status=status.HTTP_200_OK)
+            venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
+            available_tables = Reservation.fetch_available_times_for_date(venue, serializer.data['guest_count'], reservation_dt)
+            return Response(available_tables, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -8,6 +8,7 @@ import re
 import random
 from typing import TYPE_CHECKING
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from datetime import time, timedelta
 
 from notifications.base.models import AbstractNotification
@@ -222,6 +223,39 @@ class Venue(FullCleanSaveMixin):
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
 
+    def get_opening_hours_date(self, date=timezone.now()):
+        fields = [
+            {
+                'opening': self.opening_monday,
+                'closing': self.closing_monday
+            },
+            {
+                'opening': self.opening_tuesday,
+                'closing': self.closing_tuesday
+            },
+            {
+                'opening': self.opening_wednesday,
+                'closing': self.closing_wednesday
+            },
+            {
+                'opening': self.opening_thursday,
+                'closing': self.closing_thursday
+            },
+            {
+                'opening': self.opening_friday,
+                'closing': self.closing_friday
+            },
+            {
+                'opening': self.opening_saturday,
+                'closing': self.closing_saturday
+            },
+            {
+                'opening': self.opening_sunday,
+                'closing': self.closing_sunday
+            },
+        ]
+        return fields[date.weekday()]
+
     def __str__(self) -> str:
         return f'{self.name}'
 
@@ -395,24 +429,17 @@ class Table(FullCleanSaveMixin):
     def __str__(self) -> str:
         return f'{self.name_nb}'
 
-    def fetch_available_tables(venue, seating, start_dt):
-        # added buffer space since datetime includes dynamic secounds nativly
-        reserved_tables = Reservation.objects.filter(
-            venue=venue, start_dt__lte=(start_dt + timezone.timedelta(minutes=1)), end_dt__gte=(start_dt - timezone.timedelta(minutes=1))
-        ).values_list('table')
-        return Table.objects.filter(Q(seating__gte=seating) & Q(venue=venue) & ~Q(id__in=reserved_tables))
-
-    def any_available_tables(venue, seating, start_dt):
-        return len(Table.fetch_available_tables(venue, seating, start_dt)) > 0
-
 
 class Reservation(FullCleanSaveMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
     phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
-    start_dt = models.DateTimeField(blank=False, null=False, verbose_name='Starttid')
-    end_dt = models.DateTimeField(blank=False, null=False, verbose_name='Sluttid')
+
+    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
+    end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
+
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
 
     class Occasion(models.TextChoices):
@@ -427,12 +454,72 @@ class Reservation(FullCleanSaveMixin):
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Bord')
 
+    def fetch_available_times_for_date(venue, seating, date) -> list[str]:
+        """
+            Method for returning available reservation times for a venue
+            Based on the amount of seating and the date
+        """
+        # Fetch tables that fits size criteria
+        tables = Table.objects.filter(venue=venue, seating__gte=seating).values_list('id')
+        # fetch all reservations for those tables for that date
+        reserved_tables = Reservation.objects.filter(venue=venue, date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+
+        # fetch opening hours for the date
+        open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
+        time = date.replace(minute=open_hours['opening'].minute, hour=open_hours['opening'].hour)
+        end_time = date.replace(minute=open_hours['closing'].minute, hour=open_hours['closing'].hour) - timezone.timedelta(hours=1)
+
+        # Transform each occupied table to stacks of their reservations
+        occupied_table_times = dict()
+        for tr in reserved_tables:
+            if tr['table'] not in occupied_table_times.keys():
+                occupied_table_times[tr['table']] = list()
+            occupied_table_times[tr['table']].append((tr['start_time'], tr['end_time']))
+
+        # Checks if list of occupied tables are shorter than available tables
+        safe = len(occupied_table_times) < len(tables)
+
+        available_hours = list()
+
+        while (time < end_time):
+            available = False
+            # If there are still occupied tables for time
+            if not safe:
+                # Loop through tables and reservation
+                for key, table_times in occupied_table_times.items():
+                    # If top of stack is over, remove it
+
+                    if (time.time()) >= table_times[0][1]:  # If greater than end remove element
+                        occupied_table_times[key].pop(0)
+                        # if the reservations for a table is empty, drop checking for availability
+                        if len(occupied_table_times[key]) == 0:
+                            safe = True
+                            break
+                    # If time next occupancy is in future, drop and set available table,
+                    # also tests for a buffer for an hour, to see if table is available for the next hour
+                    if (time.time()) < table_times[0][0] and (time + timezone.timedelta(hours=1)) < table_times[0][0]:
+                        # if there is no reservation at the moment, is available for booking
+                        available = True
+                        break
+            # If available or safe, add available hour
+            if safe or available:
+                available_hours.append(time.strftime('%H:%M'))
+
+            # iterate to next half hour
+            time = (time + timezone.timedelta(minutes=30))
+            time = time + (timezone.datetime.min - time) % timedelta(minutes=30)
+        return available_hours
+
     class Meta:
         verbose_name = 'Reservation'
         verbose_name_plural = 'Reservations'
 
     def __str__(self) -> str:
         return f'{self.name}'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class FoodPreference(FullCleanSaveMixin):
