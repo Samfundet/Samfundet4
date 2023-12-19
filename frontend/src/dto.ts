@@ -340,7 +340,7 @@ export type RecruitmentPositionDto = {
 
   tags: string;
 
-  interviewers: UserDto[];
+  interviewers?: UserDto[];
 };
 
 export type InterviewDto = {
