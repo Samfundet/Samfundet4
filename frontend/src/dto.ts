@@ -209,7 +209,7 @@ export type MenuDto = {
   menu_items?: MenuItemDto[];
 };
 
-export type ReservationFormDto = {
+export type ReservationDto = {
   name?: string;
   email?: string;
   phonenumber?: string;
@@ -219,6 +219,8 @@ export type ReservationFormDto = {
   venue: number;
   start_dt: Date;
   occasion: string;
+  // Maybe ignore and use different dto?
+  // internal_message?: string;
 };
 
 export type SaksdokumentDto = {
