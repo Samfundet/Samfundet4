@@ -14,6 +14,7 @@ import {
   LoginPage,
   LycheAboutPage,
   LycheContactPage,
+  LycheReservationPage,
   LycheHomePage,
   LycheMenuPage,
   NotFoundPage,
@@ -235,6 +236,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
         <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />
         <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
+        <Route path={ROUTES.frontend.sulten_reservation} element={<LycheReservationPage />} />
       </Route>
 
       {/* 
