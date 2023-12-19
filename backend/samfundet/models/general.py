@@ -221,38 +221,17 @@ class Venue(FullCleanSaveMixin):
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
 
-    def get_opening_hours_date(self, selected_date: date = None):
+    def get_opening_hours_date(self, selected_date: date | None = None) -> tuple[time, time]:
         if not selected_date:
             selected_date = timezone.now().date()
         fields = [
-            {
-                'opening': self.opening_monday,
-                'closing': self.closing_monday
-            },
-            {
-                'opening': self.opening_tuesday,
-                'closing': self.closing_tuesday
-            },
-            {
-                'opening': self.opening_wednesday,
-                'closing': self.closing_wednesday
-            },
-            {
-                'opening': self.opening_thursday,
-                'closing': self.closing_thursday
-            },
-            {
-                'opening': self.opening_friday,
-                'closing': self.closing_friday
-            },
-            {
-                'opening': self.opening_saturday,
-                'closing': self.closing_saturday
-            },
-            {
-                'opening': self.opening_sunday,
-                'closing': self.closing_sunday
-            },
+            (self.opening_monday, self.closing_monday),
+            (self.opening_tuesday, self.closing_tuesday),
+            (self.opening_wednesday, self.closing_wednesday),
+            (self.opening_thursday, self.closing_thursday),
+            (self.opening_friday, self.closing_friday),
+            (self.opening_saturday, self.closing_saturday),
+            (self.opening_sunday, self.closing_sunday),
         ]
         return fields[selected_date.weekday()]
 
@@ -440,7 +419,7 @@ class Reservation(FullCleanSaveMixin):
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
 
     class Occasion(models.TextChoices):
         DRINK = 'DRINK', _('Drikke')
@@ -452,7 +431,7 @@ class Reservation(FullCleanSaveMixin):
     internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
 
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
-    table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Bord')
+    table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
 
     def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
         """
@@ -467,8 +446,8 @@ class Reservation(FullCleanSaveMixin):
 
         # fetch opening hours for the date
         open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
-        time = datetime.combine(date, open_hours['opening'])
-        end_time = datetime.combine(date, open_hours['closing']) - timezone.timedelta(hours=1)
+        time = datetime.combine(date, open_hours[0])
+        end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
 
         # Transform each occupied table to stacks of their reservations
         occupied_table_times: dict[int, tuple[time, time]] = {}
