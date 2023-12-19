@@ -252,7 +252,7 @@ class LoginSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.Serializer):
     """
-    This serializer defines two fields for authentication:
+    This serializer defines following fields for registration
       * username
       * email
       * phone_number
