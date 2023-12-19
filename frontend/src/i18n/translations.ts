@@ -162,6 +162,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_otherpositions]: 'Andre verv i',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
+  [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_administrate]: 'Administrer opptak',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
@@ -389,6 +390,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_admission]: 'Admission',
   [KEY.recruitment_funksjonaer]: 'Functionary',
+  [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_gangmember]: 'Gangmember',
   [KEY.recruitment_applyfor]: 'Apply for this position',
   [KEY.recruitment_applyforhelp]:

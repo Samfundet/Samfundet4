@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Checkbox, Dropdown, InputField, TextAreaField } from '~/Components';
+import { Checkbox, Dropdown, InputField, MultiSelect, TextAreaField } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { InputFieldType } from '~/Components/InputField/InputField';
@@ -26,6 +26,7 @@ export type SamfFormFieldType =
   | 'datetime'
   | 'time'
   | 'upload-image'
+  | 'multi-select'
   | 'upload-pdf';
 
 /**
@@ -44,6 +45,7 @@ export type SamfFormFieldArgs = {
 
   // Custom args for options type
   defaultOption?: DropDownOption<unknown>;
+  defaultOptions?: DropDownOption<unknown>[];
   options?: DropDownOption<unknown>[];
 };
 
@@ -74,6 +76,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   'upload-pdf': makeFilePickerFunction('pdf'),
   checkbox: makeCheckboxInput,
   email: makeStandardInputFunction<string>('email'),
+  'multi-select': makeMultiSelectInput,
 };
 
 // ================================== //
@@ -162,6 +165,19 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
       className={styles.input_element}
       onChange={args.onChange}
       error={args.error}
+    />
+  );
+}
+
+// Multi select
+function makeMultiSelectInput(args: SamfFormFieldArgs) {
+  return (
+    <MultiSelect
+      key={args.field}
+      options={args.options}
+      onChange={args.onChange}
+      label={args.label}
+      selected={args.defaultOptions}
     />
   );
 }

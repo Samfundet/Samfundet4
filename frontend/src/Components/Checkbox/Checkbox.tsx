@@ -45,7 +45,7 @@ export function Checkbox({
         className={classNames(styles.checkbox__input, className)}
         type="checkbox"
         name={name}
-        onClick={handleChange}
+        onChange={handleChange}
         disabled={disabled}
         checked={isChecked}
       />

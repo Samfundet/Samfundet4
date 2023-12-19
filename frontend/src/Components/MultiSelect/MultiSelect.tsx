@@ -67,6 +67,7 @@ export function MultiSelect<T>({
           <InputField<string> placeholder={'Search...'} onChange={(e) => setSearchUnselected(e)} />
           {filteredOptions.map((item, i) => (
             <Button
+              type="button"
               className={styles.item}
               key={`${i}-${item.value}`}
               display="block"
@@ -77,7 +78,7 @@ export function MultiSelect<T>({
             </Button>
           ))}
           {filteredOptions.length > 0 && (
-            <Button theme="blue" onClick={() => setSelected(options)}>
+            <Button theme="blue" onClick={() => setSelected(options)} type="button">
               {selectAllBtnTxt}
             </Button>
           )}
@@ -88,6 +89,7 @@ export function MultiSelect<T>({
           <InputField<string> placeholder={'Search...'} onChange={(e) => setSearchSelected(e)} />
           {filteredSelected.map((item, i) => (
             <Button
+              type="button"
               className={styles.item}
               key={`${i}-${item.value}`}
               display="block"
@@ -98,7 +100,7 @@ export function MultiSelect<T>({
             </Button>
           ))}
           {filteredSelected.length > 0 && (
-            <Button theme="blue" onClick={() => setSelected([])}>
+            <Button type="button" theme="blue" onClick={() => setSelected([])}>
               {unselectAllBtnTxt}
             </Button>
           )}

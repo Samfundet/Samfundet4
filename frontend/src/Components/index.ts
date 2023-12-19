@@ -24,6 +24,7 @@ export { InputField } from './InputField';
 export { Link } from './Link';
 export { List } from './List';
 export { Modal } from './Modal';
+export { MultiSelect } from './MultiSelect';
 export { Navbar } from './Navbar';
 export { NotificationBadge } from './NotificationBadge';
 export { OpeningHours } from './OpeningHours';

@@ -96,7 +96,8 @@ type SamfFormFieldProps<U> = {
   // Dropdown
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;
-  onChange?: (value: U) => void;
+  defaultOptions?: DropDownOption<U>[];
+  onChange?: (v: U) => void;
 };
 
 export function SamfFormField<U>({
@@ -107,6 +108,7 @@ export function SamfFormField<U>({
   label,
   options,
   defaultOption,
+  defaultOptions,
   validator,
   onChange,
 }: SamfFormFieldProps<U>) {
@@ -123,6 +125,7 @@ export function SamfFormField<U>({
 
   // Handles all change events
   function handleOnChange(newValue: unknown, initialUpdate?: boolean) {
+    onChange && onChange(newValue as U);
     // Cast types (eg number inputs might initially be strings)
     if (type === 'number' || type === 'float') {
       newValue = castNumber(newValue as string, false);
@@ -187,6 +190,7 @@ export function SamfFormField<U>({
       // Options args
       options: options,
       defaultOption: defaultOption,
+      defaultOptions: defaultOptions,
     };
     const generatorFunction = SamfFormFieldTypeMap[type];
     return generatorFunction?.(args) ?? <></>;
