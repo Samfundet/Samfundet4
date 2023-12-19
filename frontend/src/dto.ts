@@ -209,6 +209,18 @@ export type MenuDto = {
   menu_items?: MenuItemDto[];
 };
 
+export type ReservationFormDto = {
+  name?: string;
+  email?: string;
+  phonenumber?: string;
+  end_dt?: Date;
+  additional_info?: string;
+  // Needed for first part
+  venue: number;
+  start_dt: Date;
+  occasion: string;
+};
+
 export type SaksdokumentDto = {
   id: number;
   title_nb: string;
