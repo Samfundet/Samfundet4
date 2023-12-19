@@ -329,7 +329,7 @@ class ReservationCheckAvailabilityView(APIView):
             available_tables = Reservation.fetch_available_times_for_date(
                 venue=venue,
                 seating=serializer.validated_data['guest_count'],
-                date=serializer.validated_data['date'],
+                date=serializer.validated_data['reservation_date'],
             )
             return Response(available_tables, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

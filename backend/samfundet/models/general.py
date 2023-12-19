@@ -221,9 +221,7 @@ class Venue(FullCleanSaveMixin):
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
 
-    def get_opening_hours_date(self, selected_date: date = None) -> dict[str, time]:
-        if not selected_date:
-            selected_date = timezone.now().date()
+    def get_opening_hours_date(self, date=timezone.now()):
         fields = [
             {
                 'opening': self.opening_monday,
