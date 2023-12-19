@@ -7,6 +7,7 @@ from __future__ import annotations
 import re
 import random
 from typing import TYPE_CHECKING
+from django.utils import timezone
 from datetime import time, timedelta
 
 from notifications.base.models import AbstractNotification
@@ -14,6 +15,7 @@ from notifications.base.models import AbstractNotification
 from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from guardian.shortcuts import assign_perm
 from django.utils.translation import gettext as _
 
@@ -380,6 +382,14 @@ class Table(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'{self.name_nb}'
+    
+    def fetch_available_tables(venue, seating, start_dt):
+        # added buffer space since datetime includes dynamic secounds nativly
+        reserved_tables = Reservation.objects.filter(venue=venue, start_dt__lte = (start_dt+timezone.timedelta(minutes=1)), end_dt__gte = (start_dt-timezone.timedelta(minutes=1))).values_list('table')
+        return Table.objects.filter(Q(seating__gte=seating) & Q(venue=venue) & ~Q(id__in=   reserved_tables))
+    
+    def any_available_tables(venue, seating, start_dt):
+        return len(Table.fetch_available_tables(venue, seating, start_dt)) > 0
 
 
 class Reservation(FullCleanSaveMixin):
@@ -387,9 +397,8 @@ class Reservation(FullCleanSaveMixin):
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
     phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
-    date = models.DateField(blank=True, null=False, verbose_name='Dato')
-    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
-    end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
+    start_dt = models.DateTimeField(blank=False, null=False, verbose_name='Starttid')
+    end_dt = models.DateTimeField(blank=False, null=False, verbose_name='Sluttid')
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
 
     class Occasion(models.TextChoices):
@@ -401,6 +410,8 @@ class Reservation(FullCleanSaveMixin):
     additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
     internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
 
+    # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Bord')
     class Meta:
         verbose_name = 'Reservation'
         verbose_name_plural = 'Reservations'
