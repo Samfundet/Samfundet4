@@ -60,7 +60,7 @@ urlpatterns = [
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
 
     ########## Lyche ##########
-    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name= 'check_reservation'),
+    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
 
     ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
