@@ -213,11 +213,13 @@ export type ReservationDto = {
   name?: string;
   email?: string;
   phonenumber?: string;
-  end_dt?: Date;
   additional_info?: string;
+  start_time: string;
+  end_time?: string;
   // Needed for first part
   venue: number;
-  start_dt: Date;
+  reservation_date: Date;
+  guest_count: number;
   occasion: string;
   // Maybe ignore and use different dto?
   // internal_message?: string;
