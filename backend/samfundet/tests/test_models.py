@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 
 import pytest
-from datetime import date
 from django.core.exceptions import ValidationError
 
-from samfundet.models.general import Booking, Table, Venue, Reservation
+from samfundet.models.general import Booking
 
 
 @pytest.mark.django_db
