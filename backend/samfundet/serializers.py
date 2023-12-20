@@ -549,6 +549,7 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
         recruitment_position = validated_data['recruitment_position']
+        # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
         applicant_priority = 1

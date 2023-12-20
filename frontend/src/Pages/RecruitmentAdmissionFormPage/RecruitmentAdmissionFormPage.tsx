@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { all } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -18,7 +19,6 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
-import axios from 'axios';
 
 export function RecruitmentAdmissionFormPage() {
   const navigate = useCustomNavigate();
@@ -30,21 +30,19 @@ export function RecruitmentAdmissionFormPage() {
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
 
   const [loading, setLoading] = useState(true);
-  const { positionID, id } = useParams();
+  const { positionID } = useParams();
 
   useEffect(() => {
-    axios
-      .all([
-        getRecruitmentPosition(positionID as string).then((res) => {
-          setRecruitmentPosition(res.data);
-        }),
-        getRecruitmentAdmissionForApplicant(positionID as string).then((res) => {
-          setRecruitmentAdmission(res.data);
-        }),
-      ])
-      .then(() => {
-        setLoading(false);
-      });
+    all([
+      getRecruitmentPosition(positionID as string).then((res) => {
+        setRecruitmentPosition(res.data);
+      }),
+      getRecruitmentAdmissionForApplicant(positionID as string).then((res) => {
+        setRecruitmentAdmission(res.data);
+      }),
+    ]).then(() => {
+      setLoading(false);
+    });
   }, [positionID]);
 
   useEffect(() => {
@@ -143,10 +141,10 @@ export function RecruitmentAdmissionFormPage() {
           </div>
         </div>
         <SamfForm
-          initialData={recruitmentAdmission}
+          initialData={{ admission_text: recruitmentAdmission?.admission_text }}
           onSubmit={handleOnSubmit}
           submitText={submitText}
-          validateOnInit={id !== undefined}
+          validateOnInit={true}
           devMode={false}
         >
           <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
