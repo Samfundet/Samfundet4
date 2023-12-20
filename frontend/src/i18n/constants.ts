@@ -85,6 +85,8 @@ export const KEY = {
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
+  common_email: 'common_email',
+  common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
@@ -128,7 +130,7 @@ export const KEY = {
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
-  loginpage_email_placeholder: 'loginpage_email_placeholder',
+  loginpage_username: 'loginpage_username',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
   loginpage_login_failed: 'loginpage_login_failed',
 
