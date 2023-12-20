@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 from samfundet.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 
 from root.settings import BASE_DIR
-from samfundet.contants import DEV_PASSWORD
+from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission

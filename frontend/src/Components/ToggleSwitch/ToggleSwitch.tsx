@@ -1,16 +1,13 @@
-import { ReactNode } from 'react';
 import styles from './ToggleSwitch.module.scss';
 
 type ToggleSwitchProps = {
   className?: string;
   checked?: boolean;
-  offIcon?: ReactNode;
-  onIcon?: ReactNode;
   disabled?: boolean;
   onChange?: () => void;
 };
 
-export function ToggleSwitch({ className, checked, onChange, disabled, offIcon, onIcon }: ToggleSwitchProps) {
+export function ToggleSwitch({ className, checked, onChange, disabled }: ToggleSwitchProps) {
   return (
     <div className={className}>
       <label className={styles.label}>
@@ -21,9 +18,9 @@ export function ToggleSwitch({ className, checked, onChange, disabled, offIcon, 
           disabled={disabled}
           onChange={onChange}
         />
-        <span className={styles.off_icon}>{offIcon}</span>
-        <span className={styles.on_icon}>{onIcon}</span>
-        <span className={styles.ball} />
+        <span className={styles.track}>
+          <span className={styles.ball} />
+        </span>
       </label>
     </div>
   );

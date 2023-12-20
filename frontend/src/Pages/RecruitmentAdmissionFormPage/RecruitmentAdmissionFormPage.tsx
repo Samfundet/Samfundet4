@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Page, SamfundetLogoSpinner } from '~/Components';
+import { reverse } from '~/named-urls';
+import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitmentPosition, postRecruitmentAdmission } from '~/api';
+import { getRecruitmentPosition, postRecruitmentAdmission, getRecruitmentPositionsGang } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,25 +19,25 @@ export function RecruitmentAdmissionFormPage() {
   const { t } = useTranslation();
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
+  const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
+
   const [loading, setLoading] = useState(true);
   const { positionID, id } = useParams();
 
   useEffect(() => {
-    if (positionID && !isNaN(Number(positionID))) {
-      getRecruitmentPosition(positionID)
-        .then((res) => {
-          setRecruitmentPosition(res.data);
-          setLoading(false);
-        })
-        .catch(() => {
-          // Handle the case where the positionID is invalid or the request fails
-          toast.error(t(KEY.common_something_went_wrong));
-          navigate({ url: ROUTES.frontend.home });
-        });
-    } else {
+    getRecruitmentPosition(positionID as string).then((res) => {
+      setRecruitmentPosition(res.data);
       setLoading(false);
-    }
-  }, [positionID, navigate, t]);
+    });
+  }, [positionID]);
+
+  useEffect(() => {
+    getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
+      (res) => {
+        setRecruitmentPositionsForGang(res.data);
+      },
+    );
+  }, [recruitmentPosition]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
     if (positionID && !isNaN(Number(positionID))) {
@@ -78,14 +79,60 @@ export function RecruitmentAdmissionFormPage() {
   return (
     <Page>
       <div className={styles.container}>
-        <h1>{dbT(recruitmentPosition, 'name')}</h1>
-        <p>{dbT(recruitmentPosition, 'long_description')}</p>
+        <div className={styles.row}>
+          <div className={styles.textcontainer}>
+            <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
+            <h2 className={styles.subheader}>
+              {t(KEY.recruitment_volunteerfor)}{' '}
+              <i>
+                {recruitmentPosition?.is_funksjonaer_position
+                  ? t(KEY.recruitment_funksjonaer)
+                  : t(KEY.recruitment_gangmember)}
+              </i>{' '}
+              <Link
+                url={reverse({
+                  pattern: ROUTES.frontend.information_page_detail,
+                  urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
+                })}
+              >
+                {dbT(recruitmentPosition?.gang, 'name')}
+              </Link>
+            </h2>
+            <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
+            <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
+            <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
+          </div>
+
+          <div className={styles.otherpositions}>
+            <h2 className={styles.subheader}>
+              {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
+            </h2>
+            {recruitmentPositionsForGang?.map((pos, index) => {
+              if (pos.id !== recruitmentPosition?.id) {
+                return (
+                  <Button
+                    key={index}
+                    display="pill"
+                    theme="outlined"
+                    onClick={() => {
+                      navigate({
+                        url: reverse({
+                          pattern: ROUTES.frontend.recruitment_application,
+                          urlParams: { positionID: pos.id, gangID: pos.gang.id },
+                        }),
+                      });
+                    }}
+                  >
+                    {dbT(pos, 'name')}
+                  </Button>
+                );
+              }
+            })}
+          </div>
+        </div>
         <SamfForm onSubmit={handleOnSubmit} submitText={submitText} validateOnInit={id !== undefined} devMode={false}>
-          <SamfFormField
-            field="admission_text"
-            type="text-long"
-            label={`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`}
-          />{' '}
+          <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
+          <SamfFormField field="admission_text" type="text-long" />{' '}
         </SamfForm>
       </div>
     </Page>

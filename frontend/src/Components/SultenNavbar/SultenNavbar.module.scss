@@ -60,7 +60,7 @@ $navbar-bg: #000000;
   }
 }
 
-.logo {
+.sulten_logo {
   max-width: 12.5em;
   background-size: contain;
   background-repeat: no-repeat;
@@ -69,6 +69,10 @@ $navbar-bg: #000000;
   margin-top: 0.6em;
   transition: 0.5s;
   cursor: pointer;
+}
+
+.samfundet_logo{
+  max-width: 2em;
 }
 
 .hamburger {

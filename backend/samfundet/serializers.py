@@ -7,7 +7,7 @@ from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
-
+from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from .models.recruitment import (
     Recruitment,
@@ -15,6 +15,7 @@ from .models.recruitment import (
     RecruitmentAdmission,
     InterviewRoom,
     Interview,
+    Occupiedtimeslot,
 )
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
@@ -251,13 +252,21 @@ class LoginSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.Serializer):
     """
-    This serializer defines two fields for authentication:
+    This serializer defines following fields for registration
+      * username
       * email
+      * phone_number
       * firstname
       * lastname
       * password
     """
-    username = serializers.EmailField(label='Username', write_only=True)
+    username = serializers.CharField(label='Username', write_only=True)
+    email = serializers.EmailField(label='Email', write_only=True)
+    phone_number = serializers.RegexField(
+        label='Phonenumber',
+        regex=PHONE_NUMBER_REGEX,
+        write_only=True,
+    )
     firstname = serializers.CharField(label='First name', write_only=True)
     lastname = serializers.CharField(label='Last name', write_only=True)
     password = serializers.CharField(
@@ -272,13 +281,17 @@ class RegisterSerializer(serializers.Serializer):
         # Inherited function.
         # Take username and password from request.
         username = attrs.get('username')
+        email = attrs.get('email')
+        phone_number = attrs.get('phone_number')
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
-            user = User.objects.create_user(first_name=firstname, last_name=lastname, username=username, password=password)
+            user = User.objects.create_user(
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+            )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
             msg = 'Both "username" and "password" are required.'
@@ -518,6 +531,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
+    gang = GangSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentPosition
@@ -586,11 +600,19 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         return recruitment_admission
 
 
+class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Occupiedtimeslot
+        fields = '__all__'
+
+
 class ApplicantInfoSerializer(serializers.ModelSerializer):
+    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email']
+        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
 
 
 class InterviewRoomSerializer(serializers.ModelSerializer):
