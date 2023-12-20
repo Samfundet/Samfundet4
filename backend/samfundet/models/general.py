@@ -20,7 +20,7 @@ from django.utils.translation import gettext as _
 from root.utils.mixins import FullCleanSaveMixin
 from root.utils import permissions
 
-from .utils.fields import LowerCaseField
+from .utils.fields import LowerCaseField, PhoneNumberField
 
 if TYPE_CHECKING:
     from typing import Any, Optional
@@ -95,6 +95,18 @@ class User(AbstractUser):
         error_messages={
             'unique': _('A user with that username already exists.'),
         },
+    )
+    phone_number = PhoneNumberField(
+        _('phone_number'),
+        blank=False,
+        null=False,
+        editable=True,
+    )
+    email = models.EmailField(
+        _('email'),
+        blank=False,
+        null=False,
+        unique=True,
     )
 
     class Meta:

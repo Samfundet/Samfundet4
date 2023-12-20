@@ -72,6 +72,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_lastname]: 'Etternavn',
+  [KEY.common_email]: 'Email',
+  [KEY.common_phonenumber]: 'Phonenumber',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
   [KEY.common_about_us]: 'Om oss',
@@ -118,7 +120,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
-  [KEY.loginpage_email_placeholder]: 'E-post eller medlemsnummer',
+  [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
   // GroupsPage:
@@ -307,6 +309,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_profile]: 'Profile',
   [KEY.common_contact]: 'Contact',
   [KEY.common_register]: 'Register',
+  [KEY.common_email]: 'Email',
+  [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
   [KEY.common_overview]: 'Oversikt',
@@ -352,7 +356,7 @@ export const en: Record<KeyValues, string> = {
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
   [KEY.loginpage_internal_login]: 'Log in as internal',
-  [KEY.loginpage_email_placeholder]: 'Email or membership ID',
+  [KEY.loginpage_username]: 'Username',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
   [KEY.loginpage_login_failed]: 'Login failed',
 
