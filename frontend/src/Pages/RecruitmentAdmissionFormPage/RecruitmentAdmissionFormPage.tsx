@@ -6,13 +6,19 @@ import { reverse } from '~/named-urls';
 import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitmentPosition, postRecruitmentAdmission, getRecruitmentPositionsGang } from '~/api';
+import {
+  getRecruitmentPosition,
+  getRecruitmentAdmissionForApplicant,
+  postRecruitmentAdmission,
+  getRecruitmentPositionsGang,
+} from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
+import axios from 'axios';
 
 export function RecruitmentAdmissionFormPage() {
   const navigate = useCustomNavigate();
@@ -21,14 +27,24 @@ export function RecruitmentAdmissionFormPage() {
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
 
+  const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
+
   const [loading, setLoading] = useState(true);
   const { positionID, id } = useParams();
 
   useEffect(() => {
-    getRecruitmentPosition(positionID as string).then((res) => {
-      setRecruitmentPosition(res.data);
-      setLoading(false);
-    });
+    axios
+      .all([
+        getRecruitmentPosition(positionID as string).then((res) => {
+          setRecruitmentPosition(res.data);
+        }),
+        getRecruitmentAdmissionForApplicant(positionID as string).then((res) => {
+          setRecruitmentAdmission(res.data);
+        }),
+      ])
+      .then(() => {
+        setLoading(false);
+      });
   }, [positionID]);
 
   useEffect(() => {
@@ -126,7 +142,13 @@ export function RecruitmentAdmissionFormPage() {
             })}
           </div>
         </div>
-        <SamfForm onSubmit={handleOnSubmit} submitText={submitText} validateOnInit={id !== undefined} devMode={false}>
+        <SamfForm
+          initialData={recruitmentAdmission}
+          onSubmit={handleOnSubmit}
+          submitText={submitText}
+          validateOnInit={id !== undefined}
+          devMode={false}
+        >
           <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
           <SamfFormField field="admission_text" type="text-long" />{' '}
         </SamfForm>
