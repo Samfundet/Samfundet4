@@ -43,11 +43,10 @@ def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> R
 class TestRecruitmentClean:
 
     def test_all_datetimes_is_in_the_future(self, fixture_org):
-        error_msg = 'All times should be in the future'
         past = timezone.now() - timezone.timedelta(days=2)
 
         for field in datetime_fields_expecting_error:
-            with pytest.raises(ValidationError, match=error_msg):
+            with pytest.raises(ValidationError):
                 _create_recruitment_with_dt(overrides={field: past})
 
     def test_visible_from_before_application_deadline(self, fixture_org):

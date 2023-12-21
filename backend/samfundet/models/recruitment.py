@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from django.core.exceptions import ValidationError
-from django.utils import timezone, dateparse
+from django.utils import timezone
 from django.db import models
 
 from root.utils.mixins import FullCleanSaveMixin
@@ -41,7 +41,7 @@ class Recruitment(FullCleanSaveMixin):
             'reprioritization_deadline_for_groups',
         ]:
             if getattr(self, field) < now:
-                errors.setdefault(field, []).append(f'Time should be in the future')
+                errors.setdefault(field, []).append('Time should be in the future')
 
         if self.actual_application_deadline < self.visible_from:
             errors.setdefault('actual_application_deadline', []).append('Shown application deadline should be after visible')
