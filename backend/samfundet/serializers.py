@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
+from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
@@ -509,6 +510,14 @@ class RecruitmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recruitment
         fields = '__all__'
+
+    def validate(self, attrs: dict) -> dict:
+        instance = Recruitment(**attrs)
+        try:
+            instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.args[0])
+        return attrs
 
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):

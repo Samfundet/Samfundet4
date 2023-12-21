@@ -524,10 +524,18 @@ class AssignGroupView(APIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentView(ModelViewSet):
-    # TODO: Verify that object is valid (that the times make sense)
-    permission_classes = [AllowAny]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+    def create(self, request: Request) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
