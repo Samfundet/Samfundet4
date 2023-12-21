@@ -3,40 +3,6 @@
 @import 'src/constants';
 
 
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
-}
-
-.backButton {
-  border-color: $grey-1;
-  padding: 0.5em 1.6em;
-  text-transform: uppercase;
-}
-
-.backButtonText {
-  margin: 0;
-  font-weight: 700;
-}
-
-.header {
-  font-weight: 700;
-  font-size: 2.5em;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
-
-.row {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  gap: .5em;
-  @include for-tablet-down {
-    flex-direction: column;
-  }
-}
-
 .cannot_reupload {
   color: $grey-2;
   text-align: right;

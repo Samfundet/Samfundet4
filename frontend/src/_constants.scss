@@ -1,7 +1,11 @@
 // Colors:
 // When adding new colors, types.ts must be updated to reflect all colors
 $red-samf: #a03033;
+$red_samf_hover: #732225;
 $red-samf-faded: #fac7c8;
+$red-lighter: #fff2f0;
+$red-light: #ffcfca;
+$red: #dc1010;
 $blue: #337ab7;
 $blue-lighter: #e3f2ff;
 $blue-light: #c4dbf3;
@@ -25,9 +29,6 @@ $green-lighter: #f6ffed;
 $green-light: #b7eb8f;
 $orange-ligher: #fffbe6;
 $orange-light: #ffe99e;
-$red-lighter: #fff2f0;
-$red-light: #ffcfca;
-$red: #dc1010;
 $sulten-orange: #fbb042;
 
 // Transparent colors
@@ -60,9 +61,11 @@ $tablet-bp-upper: 992px;
 $tablet-bp-lower: 769px;
 $mobile-bp-upper: 768px;
 $content-max-size: 1200px;
+$content-padding: calc((100vw - 1200px) / 2);
 
 // Navbar size
 $navbar-height: 60px;
+$sulten-navbar-height: 100px;
 
 // Content size
 $primary-content-wide-padding: 2.5rem;
@@ -75,3 +78,12 @@ $primary-content-width-mobile: calc(100vw - 2em);
 $theme-key: 'data-theme'; // Must match THEME_KEY
 $theme-dark: 'theme-dark'; // Must match THEME.DARK
 $theme-light: 'theme-light'; // Must match THEM.LIGHT
+
+//Lyche
+$lyche-title-font:'LemonMilkLight', sans-serif;
+
+//Assets
+$lyche-menu-divider-left: url('~/assets/lyche/menu-detail-left.png');
+$lyche-menu-divider-right: url('~/assets/lyche/menu-detail-right.png');
+
+

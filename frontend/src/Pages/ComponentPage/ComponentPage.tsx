@@ -1,7 +1,11 @@
-import { Button, InputField, ProgressBar, RadioButton } from '~/Components';
+import { Button, Countdown, InputField, ProgressBar, RadioButton } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
+import { MultiSelect } from '~/Components/MultiSelect';
+import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
+import { norwegianFlag } from '~/assets';
+import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -11,6 +15,50 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
+      <MultiSelect
+        options={[
+          {
+            label: '1',
+            value: 1,
+          },
+          {
+            label: '2',
+            value: 2,
+          },
+          {
+            label: '3',
+            value: 3,
+          },
+          {
+            label: '4',
+            value: 4,
+          },
+          {
+            label: '5',
+            value: 5,
+          },
+          {
+            label: '6',
+            value: 6,
+          },
+          {
+            label: '7',
+            value: 7,
+          },
+          {
+            label: '8',
+            value: 8,
+          },
+          {
+            label: '9',
+            value: 9,
+          },
+        ]}
+      />
+      <br />
+      <br />
+      <br />
+      <br />
       <h1>Components:</h1>
       <div>
         <h2>Buttons:</h2>
@@ -53,6 +101,14 @@ export function ComponentPage() {
       <div>
         <h2>ProgressBar:</h2>
         <ProgressBar value={75} max={100} />
+      </div>
+      <div>
+        <SnowflakesOverlay />
+        <h2>
+          <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
+            <img src={norwegianFlag}></img>
+          </Countdown>
+        </h2>
       </div>
     </div>
   );

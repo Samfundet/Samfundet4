@@ -2,15 +2,11 @@
 
 .container {
   overflow: hidden;
-  padding-bottom: 56.25%;
-  position: relative;
-  height: 0;
+  width: 100%;
 }
 
 .frame {
-  left: 0;
-  top: 0;
-  height: 100%;
+  aspect-ratio: 16 / 9;
   width: 100%;
   position: absolute;
 }

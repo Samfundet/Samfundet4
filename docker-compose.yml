@@ -2,7 +2,6 @@ version: '3.9'
 
 ### Services ###
 services:
-
   ### Backend Django ###
   backend:
     build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
@@ -21,7 +20,9 @@ services:
   ### Frontend React ###
   # Mount sync on OSX Docker VM is really slow on some systems. Perhaps run on host machine instead.
   frontend:
-    build: ./frontend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
     image: samfundet-frontend
     volumes:
       - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
@@ -33,6 +34,23 @@ services:
     ports:
       - '3000:3000'
     command: yarn start:docker --host 0.0.0.0 --port 3000
+
+  cypress:
+    depends_on:
+      - frontend
+      - backend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.cypress
+    # platform: linux/arm64/v8
+    env_file:
+      - ./frontend/.env.docker # Environment for frontend docker
+    environment:
+      - IS_DOCKER=YES
+      - CYPRESS_baseUrl=http://frontend:3000
+    volumes:
+      - ./frontend/cypress:/frontend/cypress
+    command: 'yarn run cypress:run'
 
   ## Storybook React ###
   storybook:
@@ -68,5 +86,3 @@ services:
 
       -------------------------------------------------------------------------------
       "'
-
-

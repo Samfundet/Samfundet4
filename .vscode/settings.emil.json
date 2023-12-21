@@ -1,29 +1,56 @@
 {
-  "files.autoSave": "onFocusChange",
+  // ================================
+  //              Editor
+  // ================================
   "editor.formatOnSave": true,
-  "eslint.workingDirectories": ["frontend"],
-  "python.linting.mypyEnabled": true,
-  "python.linting.mypyArgs": ["--config-file", "backend/mypy.ini", "--no-pretty"],
+  "files.autoSave": "onFocusChange",
+  "diffEditor.codeLens": true,
   "window.title": "🟥 ${activeEditorShort}${separator}${rootName}",
-  "python.linting.enabled": true,
-  "python.linting.flake8Enabled": true,
-  "python.linting.flake8Args": ["--config", "backend/.flake8"],
-  "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
-  "python.formatting.provider": "yapf",
-  "python.envFile": "backend/.env",
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#fff",
     "titleBar.activeBackground": "#a03033",
     "titleBar.inactiveBackground": "#a03033",
     "editorCursor.foreground": "#ff2222"
   },
-  "python.testing.unittestEnabled": false,
+  "workbench.iconTheme": "atom-icons",
+  "workbench.colorTheme": "Atom One Dark",
+  "workbench.tree.indent": 20,
+
+  // ================================
+  //              Backend
+  // ================================
+  // yapf (formatter)
+  "yapf.importStrategy": "fromEnvironment",
+  "yapf.args": ["--style", "backend/.style.yapf"],
+  // mypy (type checker, linter)
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
+  // flake8 (linter)
+  "flake8.importStrategy": "fromEnvironment",
+  "flake8.args": ["--config", "backend/.flake8"],
+  // pytest
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
+  // Other
+  "python.envFile": "backend/.env",
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    },
+    "editor.defaultFormatter": "eeyore.yapf"
+  },
+
+  // ================================
+  //             Frontend
+  // ================================
   "eslint.enable": true,
   "eslint.format.enable": true,
-  "diffEditor.codeLens": true,
+  "html.format.enable": false,
   "prettier.configPath": "frontend/.prettierrc.js",
   "prettier.ignorePath": "frontend/.prettierignore",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.workingDirectories": ["frontend"],
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
@@ -34,7 +61,7 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll": true,
+      "source.fixAll": false,
       "source.organizeImports": true
     }
   },
@@ -52,20 +79,21 @@
       "source.organizeImports": true
     }
   },
-  "[python]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": false
-    }
+  "[scss]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
-  // "[scss]": {
-  //   "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  // },
+  "[css]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
   "css.validate": true,
   "less.validate": true,
   "scss.validate": true,
   "stylelint.configFile": "frontend/.stylelintrc",
   "stylelint.enable": true,
   "stylelint.validate": ["css", "scss"],
+
+  // ================================
+  //             Other
+  // ================================
   "svg.preview.background": "editor"
 }

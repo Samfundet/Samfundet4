@@ -7,8 +7,16 @@ from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 from rest_framework import serializers
-
+from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
+from .models.recruitment import (
+    Recruitment,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    InterviewRoom,
+    Interview,
+    Occupiedtimeslot,
+)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
@@ -18,12 +26,15 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Infobox,
     Booking,
     Profile,
     TextItem,
     MenuItem,
     GangType,
     KeyValue,
+    Organization,
+    BlogPost,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -138,8 +149,9 @@ class EventListSerializer(serializers.ListSerializer):
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
         if hasattr(events, 'prefetch_related'):
-            events.prefetch_related('custom_tickets')
-            events.prefetch_related('image')
+            events = events.prefetch_related('custom_tickets')
+            events = events.prefetch_related('image')
+
         Event.prefetch_billig(events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
@@ -238,6 +250,58 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 
+class RegisterSerializer(serializers.Serializer):
+    """
+    This serializer defines following fields for registration
+      * username
+      * email
+      * phone_number
+      * firstname
+      * lastname
+      * password
+    """
+    username = serializers.CharField(label='Username', write_only=True)
+    email = serializers.EmailField(label='Email', write_only=True)
+    phone_number = serializers.RegexField(
+        label='Phonenumber',
+        regex=PHONE_NUMBER_REGEX,
+        write_only=True,
+    )
+    firstname = serializers.CharField(label='First name', write_only=True)
+    lastname = serializers.CharField(label='Last name', write_only=True)
+    password = serializers.CharField(
+        label='Password',
+        # This will be used when the DRF browsable API is enabled.
+        style={'input_type': 'password'},
+        trim_whitespace=False,
+        write_only=True
+    )
+
+    def validate(self, attrs: dict) -> dict:
+        # Inherited function.
+        # Take username and password from request.
+        username = attrs.get('username')
+        email = attrs.get('email')
+        phone_number = attrs.get('phone_number')
+        firstname = attrs.get('firstname')
+        lastname = attrs.get('lastname')
+        password = attrs.get('password')
+
+        if username and password:
+            # Try to authenticate the user using Django auth framework.
+            user = User.objects.create_user(
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+            )
+            user = authenticate(request=self.context.get('request'), username=username, password=password)
+        else:
+            msg = 'Both "username" and "password" are required.'
+            raise serializers.ValidationError(msg, code='authorization')
+        # We have a valid user, put it in the serializer's validated_data.
+        # It will be used in the view.
+        attrs['user'] = user
+        return attrs
+
+
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -301,6 +365,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # GANGS ###
+class OrganizationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organization
+        fields = '__all__'
+
+
 class GangSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -320,6 +391,13 @@ class InformationPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationPage
+        fields = '__all__'
+
+
+class BlogPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogPost
         fields = '__all__'
 
 
@@ -407,8 +485,129 @@ class TextItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class InfoboxSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Infobox
+        fields = '__all__'
+
+
 class KeyValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KeyValue
         fields = '__all__'
+
+
+# =============================== #
+#            Recruitment          #
+# =============================== #
+
+
+class RecruitmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recruitment
+        fields = '__all__'
+
+
+class UserForRecruitmentSerializer(serializers.ModelSerializer):
+    recruitment_admission_ids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'recruitment_admission_ids',  # Add this to the fields list
+        ]
+
+    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
+
+
+class RecruitmentPositionSerializer(serializers.ModelSerializer):
+    gang = GangSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentPosition
+        fields = '__all__'
+
+
+class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = [
+            'admission_text',
+            'recruitment_position',
+        ]
+
+    def create(self, validated_data: dict) -> RecruitmentAdmission:
+        recruitment_position = validated_data['recruitment_position']
+        recruitment = recruitment_position.recruitment
+        user = self.context['request'].user
+        applicant_priority = 1
+
+        recruitment_admission = RecruitmentAdmission.objects.create(
+            admission_text=validated_data.get('admission_text'),
+            recruitment_position=recruitment_position,
+            recruitment=recruitment,
+            user=user,
+            applicant_priority=applicant_priority,
+        )
+
+        return recruitment_admission
+
+
+class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Occupiedtimeslot
+        fields = '__all__'
+
+
+class ApplicantInfoSerializer(serializers.ModelSerializer):
+    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
+
+
+class InterviewRoomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InterviewRoom
+        fields = '__all__'
+
+
+class InterviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Interview
+        fields = '__all__'
+
+
+class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+    user = ApplicantInfoSerializer(read_only=True)
+    interview = InterviewSerializer(read_only=False)
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = '__all__'
+
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+        interview_data = validated_data.pop('interview', {})
+
+        interview_instance = instance.interview
+        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
+        interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interview_instance.save()
+
+        # Update other fields of RecruitmentAdmission instance
+        return super().update(instance, validated_data)

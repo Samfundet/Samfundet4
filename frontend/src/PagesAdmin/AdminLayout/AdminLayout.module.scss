@@ -2,13 +2,22 @@
 
 @import 'src/mixins';
 
-$panel-width: 13em;
+$panel-width: 15em;
+$panel-light-bg: #f6f6f6;
+$panel-light-bg-hover: #e8e8e8;
+$panel-light-border: #d7d7d7;
+$panel-dark-bg: #333333;
 
 .wrapper {
   display: flex;
   flex-direction: row;
   max-height: 100vh;
   height: 100vh;
+  margin-top: $navbar-height;
+
+  @include for-mobile-down {
+    flex-direction: column;
+  }
 }
 
 .panel {
@@ -16,64 +25,135 @@ $panel-width: 13em;
   height: calc(100% - $navbar-height);
   min-width: $panel-width;
   max-width: $panel-width;
-  background-color: $white;
-  border-right: 1px solid $grey-4;
+  background-color: $panel-light-bg;
+  border-right: 1px solid $panel-light-border;
   display: flex;
   flex-direction: column;
-  margin-top: $navbar-height;
   gap: .2em;
+  overflow-y: auto;
+  z-index: 10;
+  opacity: 1;
+  transition: transform 0.2s ease-in-out;
 
   @include for-mobile-only {
-    display: none;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: initial;
   }
 
   @include theme-dark {
-    background-color: $theme-dark-bg;
+    background-color: $panel-dark-bg;
     border-color: $black;
   }
+}
+
+.mobile_panel_closed {
+  transform: translateX(-100%);
+}
+
+.mobile_header {
+  padding: 1rem;
+}
+
+.mobile_panel_close_btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  padding: 0.5rem;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  color: $grey-1;
+
+  &:hover {
+    color: $black;
+  }
+
+  @include theme-dark {
+    color: $grey-3;
+
+    &:hover {
+      color: $grey-4;
+    }
+  }
+}
+
+.mobile_backdrop {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+
+.mobile_backdrop_open {
+  opacity: 1;
+  pointer-events: initial;
 }
 
 .panel_header {
   @include flex-row;
   font-weight: 700;
-  background-color: $red-samf;
-  margin-bottom: 1em;
-  color: white;
-  padding: 1em;
+  font-size: 1.25em;
+  padding: 0.75em;
+  padding-top: 0.5em;
+  margin-top: 0.25em;
   gap: .5em;
+
+  @include theme-dark {
+    border-color: $grey-1;
+  }
+}
+
+.category_header {
+  font-weight: 700;
+  padding-left: 1.25em;
+  padding-bottom: 0.5em;
 }
 
 .panel_item {
-  @include shadow-light;
   @include flex-row;
   text-align: right;
   gap: 1em;
-  background-color: white;
-  border-bottom: 1px solid $grey-4;
-  border-top: 1px solid $grey-4;
-  padding: .5em 1em;
+  padding: .5em .5em;
+  padding-left: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
   cursor: pointer;
   transition: .2s;
-  color: black;
+  color: $grey-1;
+  text-decoration: none;
+  border-radius: .5em;
+  white-space: nowrap;
 
   @include theme-dark {
-    color: white;
-    background-color: $grey-1;
-    border-color: $black;
+    color: $grey-4;
   }
-  
+
   &:hover {
-    color: $blue;
+    text-decoration: none;
+    background-color: $panel-light-bg-hover;
+
+    @include theme-dark {
+      background-color: $grey-1;
+    }
   }
 }
 
 .selected {
-  background-color: $blue;
+  background-color: $red-samf;
   color: white;
   @include theme-dark {
-    background-color: $blue;
+    background-color: $red-samf;
   }
+
   &:hover {
+    background-color: $red-samf;
     color: white;
   }
 }
@@ -81,12 +161,13 @@ $panel-width: 13em;
 .content_wrapper {
   flex: 1;
   height: calc(100vh - $navbar-height);
-  margin-top: $navbar-height;
-  padding-left: calc($panel-width + 1em);
-  padding-right: 1em;
+  margin-left: calc($panel-width);
+  max-width: calc(100vw - $panel-width);
+  width: calc(100vw - $panel-width);
 
   @include for-mobile-only {
-    padding-left: 0;
+    width: auto;
+    max-width: 100%;
+    margin-left: 0;
   }
-
 }

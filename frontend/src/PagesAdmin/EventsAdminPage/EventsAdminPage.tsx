@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, EventQuery, Link, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
+import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, getTicketTypeKey } from '~/utils';
+import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
 
 export function EventsAdminPage() {
@@ -54,14 +55,6 @@ export function EventsAdminPage() {
       });
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const tableColumns = [
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.start_time), sortable: true },
@@ -101,7 +94,8 @@ export function EventsAdminPage() {
             }}
             onDelete={() => {
               // TODO custom modal confirm
-              if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${dbT(event, 'title')}`)) {
+              const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
+              if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
                 // TODO toast component? A bit too easy to delete events
                 deleteSelectedEvent(event.id);
               }
@@ -112,24 +106,39 @@ export function EventsAdminPage() {
     ];
   });
 
+  const title = lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_event)}`);
+  const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
+  const header = (
+    <>
+      <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
+      </Button>
+    </>
+  );
+
   return (
-    <Page>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>
-          {t(KEY.common_edit)} {t(KEY.common_event).toLowerCase()}
-        </h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_event_changelist}>
-          {t(KEY.common_see_in_django_admin)}
-        </Link>
-        <br></br>
-        <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
-          {t(KEY.common_create)} {t(KEY.common_event)}
-        </Button>
-      </div>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Carousel spacing={2} header="" className={styles.carousel} itemContainerClass={styles.carousel_item}>
+        {allEvents.slice(0, Math.min(allEvents.length, 10)).map((event) => {
+          {
+            /* TODO add edit/open links */
+          }
+          return (
+            <ImageCard
+              key={event.id}
+              title={dbT(event, 'title')}
+              date={event.start_dt}
+              subtitle=""
+              imageUrl={BACKEND_DOMAIN + event.image_url}
+              compact={true}
+            />
+          );
+        })}
+      </Carousel>
       <EventQuery allEvents={allEvents} setEvents={setEvents} />
       <div className={styles.tableContainer}>
         <Table columns={tableColumns} data={data} />
       </div>
-    </Page>
+    </AdminPageLayout>
   );
 }

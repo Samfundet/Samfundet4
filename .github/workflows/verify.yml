@@ -38,7 +38,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11.0' # From file: '.python-version'
+          python-version: '3.11.2' # From file: '.python-version'
 
       - name: Install dependencies
         run: |
@@ -52,25 +52,26 @@ jobs:
       - name: Check yapf
         run: python -m pipenv run yapf --parallel --recursive --diff .
 
+      # TODO: broken test - https://github.com/Samfundet/Samfundet4/issues/730
       - name: Verify migrations
         run: |
-          python -m pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
-          python -m pipenv run python manage.py migrate --verbosity 2
+          python -m pipenv run migrations:verify
+          python -m pipenv run migrations:apply
 
       - name: Run tests
-        run: python -m pipenv run pytest
+        run: python -m pipenv run pytest:run
 
       - name: Run bandit
-        run: python -m pipenv run bandit --recursive --ini .bandit .
+        run: python -m pipenv run bandit:run
 
       - name: Run flake8
-        run: python -m pipenv run flake8 --config=.flake8 .
+        run: python -m pipenv run flake8:run
 
       - name: Run mypy
-        run: python -m pipenv run mypy --config-file mypy.ini .
+        run: python -m pipenv run mypy:run
 
       - name: Run seeds
-        run: python -m pipenv run python manage.py seed
+        run: python -m pipenv run seed:run
 
   job_verify_docker:
     name: Verify docker
@@ -87,16 +88,17 @@ jobs:
           echo SECRET_KEY=NOT_SET >> backend/.docker.env
           echo DJANGO_SETTINGS_MODULE=root.settings >> backend/.docker.env
           echo DOMAIN=* >> backend/.docker.env
-          touch frontend/.docker.env
+          touch frontend/.env.docker
           echo VITE_GOATCOUNTER_CODE=samfundet-dev >> frontend/.env.docker
           echo VITE_BACKEND_DOMAIN=http://backend:8000 >> frontend/.env.docker
-          echo CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
+          echo VITE_CYPRESS_BACKEND_DOMAIN=http://backend:8000 >> frontend/.env.docker
+          echo VITE_CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
 
       - name: Build images
-        run: docker compose build
+        run: docker compose build backend frontend storybook
 
       - name: Start containers
-        run: docker compose up -d; sleep 20 # Give additional seconds to boot.
+        run: docker compose up backend frontend storybook -d; sleep 20 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
@@ -109,27 +111,10 @@ jobs:
         run: docker compose exec backend pipenv run python manage.py seed_cypress
 
       # - name: Run cypress
-      # run: docker compose exec frontend yarn run cypress:run
+      #   run: docker compose up cypress
 
       - name: Stop containers
         run: docker compose down
-
-  # job_verify_cypress:
-  #   # https://github.com/marketplace/actions/cypress-io
-  #   name: Verify Cypress
-  #   if: ${{ !github.event.pull_request.draft }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Run cypress
-  #       uses: cypress-io/github-action@v4.2.0
-  #       with:
-  #         working-directory: ./frontend
-  #         browser: chrome
-  #         build: yarn run build
-  #         start: yarn start
 
   job_verify_frontend_lint:
     name: Verify frontend

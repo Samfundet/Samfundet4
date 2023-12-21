@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SamfundetLogoSpinner } from '~/Components';
 
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { Page } from '~/Components/Page';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getSaksdokument, postSaksdokument, putSaksdokument } from '~/api';
@@ -13,7 +11,8 @@ import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { utcTimestampToLocal } from '~/utils';
+import { lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SaksdokumentFormAdminPage.module.scss';
 
 export function SaksdokumentFormAdminPage() {
@@ -96,21 +95,10 @@ export function SaksdokumentFormAdminPage() {
     }
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`;
-
+  const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
+  const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   return (
-    <Page>
-      <h1 className={styles.header}>
-        {id ? t(KEY.common_edit) : t(KEY.common_create)} {t(KEY.admin_saksdokument)}
-      </h1>
+    <AdminPageLayout title={title} loading={showSpinner}>
       {/* Document form */}
       <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
         {/* Name */}
@@ -150,6 +138,6 @@ export function SaksdokumentFormAdminPage() {
           <div className={styles.cannot_reupload}>{t(KEY.admin_saksdokumenter_cannot_reupload)}</div>
         )}
       </SamfForm>
-    </Page>
+    </AdminPageLayout>
   );
 }

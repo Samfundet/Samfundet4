@@ -21,19 +21,22 @@ export function useAuthContext() {
 }
 
 type AuthContextProviderProps = {
+  enabled?: boolean; // Enable/disable all side-effects, useful when used in Storybook.
   children: Children;
 };
 
-export function AuthContextProvider({ children }: AuthContextProviderProps) {
+export function AuthContextProvider({ children, enabled = true }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDto>();
 
   // Stuff to do on first render.
   useEffect(() => {
+    if (!enabled) return;
+
     // Always attempt to load user on first render.
     getUser()
       .then((user) => setUser(user))
       .catch(console.error);
-  }, []);
+  }, [enabled]);
 
   const contextValue: AuthContextProps = {
     user: user,

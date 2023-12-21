@@ -1,7 +1,13 @@
 import {
+  assignUserToGroup,
+  getApplicantsWithoutInterviews,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
+  getRecruitmentAdmissionsForApplicant,
+  getRecruitmentAdmissionsForGang,
+  getRecruitmentPosition,
+  getRecruitmentPositions,
   getUser,
   getVenue,
   getVenues,
@@ -25,7 +31,7 @@ export function ApiTestingPage() {
       <Button
         theme="samf"
         className={styles.btn}
-        onClick={() => login('emilte', 'Django123').then(console.log).catch(console.error)}
+        onClick={() => login('admin', 'Django123').then(console.log).catch(console.error)}
       >
         login
       </Button>
@@ -57,6 +63,50 @@ export function ApiTestingPage() {
         onClick={() => getInformationPage('test').then(console.log).catch(console.error)}
       >
         getInformationPage
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => assignUserToGroup('testuser', 'testgroup').then(console.log).catch(console.error)}
+      >
+        getInformationPage
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentPositions('1').then(console.log).catch(console.error)}
+      >
+        get Rec pos
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentPosition('1').then(console.log).catch(console.error)}
+      >
+        get Rec pos
+      </Button>
+
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentAdmissionsForApplicant('1').then(console.log).catch(console.error)}
+      >
+        get Rec admissions for user
+      </Button>
+
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getRecruitmentAdmissionsForGang('1', '1').then(console.log).catch(console.error)}
+      >
+        get Rec admissions for gang
+      </Button>
+      <Button
+        theme="samf"
+        className={styles.btn}
+        onClick={() => getApplicantsWithoutInterviews('1').then(console.log).catch(console.error)}
+      >
+        get users without interviews
       </Button>
     </div>
   );

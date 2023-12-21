@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketType } from './types';
+import { Day, EventTicketTypeValue, EventTicketType } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -138,17 +138,17 @@ export function getDayKey(day: Day): KeyValues {
 /**
  * Gets the translation key for a given price group
  */
-export function getTicketTypeKey(ticketType: EventTicketType): KeyValues {
+export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
   switch (ticketType) {
-    case 'free':
+    case EventTicketType.FREE:
       return KEY.common_ticket_type_free;
-    case 'included':
+    case EventTicketType.INCLUDED:
       return KEY.common_ticket_type_included;
-    case 'billig':
+    case EventTicketType.BILLIG:
       return KEY.common_ticket_type_billig;
-    case 'custom':
+    case EventTicketType.CUSTOM:
       return KEY.common_ticket_type_custom;
-    case 'registration':
+    case EventTicketType.REGISTRATION:
       return KEY.common_ticket_type_registration;
   }
 }
@@ -241,4 +241,15 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   dot.style.left = e.clientX + window.pageXOffset + 'px';
   dot.style.top = e.clientY + window.pageYOffset + 'px';
   return dot;
+}
+
+/**
+ * Lowercases the string, then capitalizes the first word.
+ * Example: 'lorem ipsum Dolor' becomes 'Lorem ipsum dolor'
+ */
+export function lowerCapitalize(s: string): string {
+  if (s.length < 2) {
+    return s.toUpperCase();
+  }
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }

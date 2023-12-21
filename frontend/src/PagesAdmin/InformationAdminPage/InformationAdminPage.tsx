@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, SamfundetLogoSpinner } from '~/Components';
+import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Page } from '~/Components/Page';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
 import { InformationPageDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
-import styles from './InformationAdminPage.module.scss';
+import { dbT, lowerCapitalize } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function InformationAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -52,13 +51,6 @@ export function InformationAdminPage() {
       });
   }
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
     { content: t(KEY.common_title), sortable: true },
@@ -82,15 +74,15 @@ export function InformationAdminPage() {
         content: (
           <CrudButtons
             onView={() => {
-              navigate(pageUrl);
+              navigate({ url: pageUrl });
             }}
             onEdit={() => {
-              navigate(
-                reverse({
+              navigate({
+                url: reverse({
                   pattern: ROUTES.frontend.admin_information_edit,
                   urlParams: { slugField: element.slug_field },
                 }),
-              );
+              });
             }}
             onDelete={() => {
               if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
@@ -103,21 +95,17 @@ export function InformationAdminPage() {
     ];
   });
 
-  // TODO ADD TRANSLATIONS pr element
+  const title = t(KEY.admin_information_manage_title);
+  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const header = (
+    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
+    </Button>
+  );
+
   return (
-    <Page>
-      <div className={styles.headerContainer}>
-        <h1 className={styles.header}>{t(KEY.admin_information_manage_title)}</h1>
-        <Link target="backend" url={ROUTES.backend.admin__samfundet_informationpage_changelist}>
-          {t(KEY.common_see_in_django_admin)}
-        </Link>
-      </div>
-      <Button theme="success" onClick={() => navigate(ROUTES.frontend.admin_information_create)}>
-        {t(KEY.common_create)} {t(KEY.information_page_short)}
-      </Button>
-      <div className={styles.tableContainer}>
-        <Table columns={tableColumns} data={data} />
-      </div>
-    </Page>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Table columns={tableColumns} data={data} />
+    </AdminPageLayout>
   );
 }

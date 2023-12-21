@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { EventsList } from './components/EventsList';
-import { getEventsFilter, getEventsPerDay, getVenues, optionsEvents } from '~/api';
-import { Page } from '~/Components/Page';
-import { Button, InputField, RadioButton, SamfundetLogoSpinner } from '~/Components';
 
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { SamfundetLogoSpinner } from '~/Components';
+import { getEventsPerDay } from '~/api';
+import { KEY } from '~/i18n/constants';
+import { EventsList } from './components/EventsList';
 import styles from './EventsPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +24,7 @@ export function EventsPage() {
   const [venues, setVenues] = useState<VenueDto[]>([]);
   const [filterToggle, setFilterToggle] = useState<boolean>(false);
   const [eventsOptions, setEventsOption] = useState<EventOptionsDto | null>(null);
+  
   const handleClick = () => {
     if (search == '') {
       delete urlArgs['search'];
@@ -66,82 +69,5 @@ export function EventsPage() {
     );
   }
 
-  const searchBar = (
-    <div className={styles.center}>
-      <InputField
-        type="text"
-        key={'search'}
-        onChange={(e) => {
-          setSearch(e?.currentTarget.value || '');
-        }}
-        value={search}
-        placeholder={t(KEY.search_all)}
-      />
-    </div>
-  );
-
-  const selectVenues = (
-    <div>
-      <div className={styles.colour_label}>
-        <label className={styles.center}>{t(KEY.select_event)}</label>
-      </div>
-      <div className={styles.filterColumn}>
-        <label className={styles.container} key={t(KEY.all)}>
-          <RadioButton name="venues" value={'all'} defaultChecked={true} onChange={() => delete urlArgs['location']} />
-          {t(KEY.all)}
-        </label>
-
-        {venues.map((venue) => (
-          <label className={styles.container} key={venue.name || ''}>
-            <RadioButton name="venues" value={venue.name || ''} onChange={() => (urlArgs['location'] = venue.name)} />
-            {venue.name || ''}
-          </label>
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <Page>
-      <Button onClick={handleFilterToggle}>Filter</Button>
-
-      {filterToggle ? (
-        <div>
-          {searchBar}
-          {selectVenues}
-
-          {eventsOptions && (
-            <>
-              <FilterRow
-                label={t(KEY.event_category)}
-                name={'category'}
-                property={eventsOptions.actions.POST.category.choices}
-                urlArgs={urlArgs}
-              />
-
-              <FilterRow
-                label={t(KEY.choose_age)}
-                name={'age_group'}
-                property={eventsOptions.actions.POST.age_group.choices}
-                urlArgs={urlArgs}
-              />
-              <FilterRow
-                label={t(KEY.choose_status)}
-                name={'status_group'}
-                property={eventsOptions.actions.POST.status_group.choices}
-                urlArgs={urlArgs}
-              />
-            </>
-          )}
-
-          <div className={styles.center}>
-            <Button className={styles.buttonClass} onClick={handleClick}>
-              {t(KEY.common_search)}
-            </Button>
-          </div>
-        </div>
-      ) : null}
-      <EventsList events={events} />
-    </Page>
-  );
+  return <EventsList events={events} />;
 }

@@ -33,18 +33,14 @@ GANGS = {
 
 
 def seed():
-    Gang.objects.all().delete()
-    GangType.objects.all().delete()
-    yield 10, 'Deleted old gangs'
-
     # Create gang types
     for i, gang_type in enumerate(GANGS):
-        gtype = GangType.objects.create(title_nb=gang_type)
+        gtype, created = GangType.objects.get_or_create(title_nb=gang_type)
 
         # Create gangs
         for gang in GANGS[gang_type]:
             name, abbr = gang
-            Gang.objects.create(
+            Gang.objects.get_or_create(
                 name_nb=name,
                 name_en=name,
                 abbreviation=abbr,

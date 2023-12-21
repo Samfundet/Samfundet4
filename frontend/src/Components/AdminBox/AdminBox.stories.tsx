@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { BrowserRouter } from 'react-router-dom';
 import { AdminBox } from './AdminBox';
 
 // Local component config.
@@ -9,11 +8,7 @@ export default {
 } as ComponentMeta<typeof AdminBox>;
 
 const Template: ComponentStory<typeof AdminBox> = function (args) {
-  return (
-    <BrowserRouter>
-      <AdminBox {...args} />
-    </BrowserRouter>
-  );
+  return <AdminBox {...args} />;
 };
 
 export const Basic = Template.bind({});

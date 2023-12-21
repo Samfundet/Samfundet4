@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthContext } from '~/AuthContext';
-import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
+import { getAllNotifications, getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
 import { useMouseTrail, useTheme } from '~/hooks';
 import { Children, KeyValueMap, SetState } from '~/types';
+import { NotificationDto } from './dto';
 
 /**
  * Define which values the global context can contain.
@@ -30,6 +31,7 @@ type GlobalContextProps = {
   setIsMobileNavigation: SetState<boolean>;
 
   keyValues: KeyValueMap;
+  notifications: NotificationDto[];
 };
 
 /**
@@ -55,15 +57,17 @@ export function useGlobalContext() {
 // ====================================================================================================================
 
 type GlobalContextProviderProps = {
+  enabled?: boolean; // Enable/disable all side-effects, useful when used in Storybook.
   children: Children;
 };
 
-export function GlobalContextProvider({ children }: GlobalContextProviderProps) {
+export function GlobalContextProvider({ children, enabled = true }: GlobalContextProviderProps) {
   // =================================== //
   //        Constants and states         //
   // =================================== //
 
   const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
+  const [notifications, setNotifications] = useState<NotificationDto[]>([]);
 
   const { theme, setTheme, switchTheme } = useTheme();
 
@@ -81,12 +85,14 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   // Update preferences when user is loaded.
   useEffect(() => {
-    if (!user) return;
+    if (!user || !enabled) return;
     setMirrorDimension(user.user_preference.mirror_dimension);
-  }, [user]);
+  }, [user, enabled]);
 
   // Stuff to do on first render.
   useEffect(() => {
+    if (!enabled) return;
+
     // Fetch and set fresh csrf token for future requests.
     getCsrfToken()
       .then((token) => {
@@ -101,25 +107,32 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
       const keyValueMap = new Map(response.data.map((kv) => [kv.key, kv.value ?? '']));
       setKeyValues(keyValueMap);
     });
-  }, []);
+
+    // Load notifications.
+    getAllNotifications().then((response) => {
+      setNotifications(response.data.all_list);
+    });
+  }, [enabled]);
 
   // Update body classes when mobile navigation opens/closes.
   useEffect(() => {
+    if (!enabled) return;
     if (isMobileNavigation) {
       document.body.classList.add(MOBILE_NAVIGATION_OPEN);
     } else {
       document.body.classList.remove(MOBILE_NAVIGATION_OPEN);
     }
-  }, [isMobileNavigation]);
+  }, [isMobileNavigation, enabled]);
 
   // Update body classes when mirrorDimension is toggled.
   useEffect(() => {
+    if (!enabled) return;
     if (mirrorDimension) {
       document.body.classList.add(MIRROR_CLASS);
     } else {
       document.body.classList.remove(MIRROR_CLASS);
     }
-  }, [mirrorDimension]);
+  }, [mirrorDimension, enabled]);
 
   // =================================== //
   //          Helper functions           //
@@ -141,6 +154,7 @@ export function GlobalContextProvider({ children }: GlobalContextProviderProps) 
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
+    notifications,
     theme,
     setTheme,
     switchTheme,

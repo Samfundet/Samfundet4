@@ -2,7 +2,6 @@ from __future__ import annotations
 from django.http import QueryDict
 from django.db.models import Q, CharField, TextField
 from django.db.models.query import QuerySet
-from django.http import QueryDict
 
 from .models.event import (
     Event,
