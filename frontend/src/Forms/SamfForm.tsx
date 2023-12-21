@@ -50,11 +50,6 @@ export const SamfFormConfigContext = createContext<SamfFormConfigContext>({
   validateOn: 'change',
 });
 
-export type externalErrorType = {
-  field: string;
-  errors: string | string[];
-};
-
 /**
  * Handles form event from children input components
  * @param state Current state
@@ -116,7 +111,7 @@ type SamfFormProps<T> = {
   onSubmit?(data: Partial<T>): void;
   children: ReactNode;
   devMode?: boolean; // Dev/debug mode.
-  externalErrors?: externalErrorType[];
+  externalErrors?: object;
   isDisabled?: boolean; // If true, disables submit button
 };
 
