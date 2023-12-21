@@ -141,9 +141,7 @@ export function SamfFormField<U>({
 
   // Enable show error for validate on submit
   useEffect(() => {
-    if (didSubmit) {
-      setShowError(true);
-    }
+    setShowError(true);
   }, [didSubmit]);
 
   // Validate again whenever validateOnInit is turned on
@@ -176,7 +174,7 @@ export function SamfFormField<U>({
 
   // Generate UI based on type
   function makeFormField() {
-    const errorMessage = error == true ? t(KEY.common_required) : false;
+    const errorMessage = error ? (required && !value ? t(KEY.common_required) : error) : false;
     const args: SamfFormFieldArgs = {
       // Standard args
       field: field,

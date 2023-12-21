@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { SamfForm } from '~/Forms/SamfForm';
+import { SamfForm, externalErrorType } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, getRecruitment, postRecruitment, putRecruitment } from '~/api';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
@@ -22,6 +22,7 @@ export function RecruitmentFormAdminPage() {
   const { id } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
+  const [externalErrors, setExternalErrors] = useState<externalErrorType>([]);
   const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>({
     name_nb: 'Nytt opptak',
     name_en: 'New recruitment',
@@ -83,6 +84,7 @@ export function RecruitmentFormAdminPage() {
   }
 
   function handleOnSubmit(data: RecruitmentDto) {
+    setExternalErrors([]);
     if (id) {
       // Update page.
       putRecruitment(id, data)
@@ -91,7 +93,7 @@ export function RecruitmentFormAdminPage() {
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
+          setExternalErrors(error.response.data);
         });
       navigate(ROUTES.frontend.admin_recruitment);
     } else {
@@ -103,7 +105,9 @@ export function RecruitmentFormAdminPage() {
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
+          setExternalErrors(error.response.data);
+          console.error(typeof error.response.data);
+          console.error(error.response.data);
         });
     }
   }
@@ -111,7 +115,7 @@ export function RecruitmentFormAdminPage() {
   // TODO: Add validation for the dates
   return (
     <div className={styles.wrapper}>
-      <SamfForm<RecruitmentDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
+      <SamfForm<RecruitmentDto> externalErrors={externalErrors} onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
           <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
           <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
