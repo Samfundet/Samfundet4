@@ -631,11 +631,11 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
             # TODO: Add permissions
             admission = RecruitmentAdmission.objects.filter(recruitment_position=pk, user_id=user_id).first()
         serializer = self.get_serializer(admission)
-        return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request: Request) -> Response:
         """
-        Returns a list of all the admissions for an user for a specified recruitment
+        Returns a list of all the admissions for a user for a specified recruitment
         """
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')

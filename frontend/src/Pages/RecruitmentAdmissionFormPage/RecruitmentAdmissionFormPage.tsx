@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { all } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -33,7 +32,7 @@ export function RecruitmentAdmissionFormPage() {
   const { positionID } = useParams();
 
   useEffect(() => {
-    all([
+    Promise.all([
       getRecruitmentPosition(positionID as string).then((res) => {
         setRecruitmentPosition(res.data);
       }),
