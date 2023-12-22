@@ -434,36 +434,61 @@ class Reservation(FullCleanSaveMixin):
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
 
-    def clean(self) -> None:
-        errors: dict[str, list[ValidationError]] = defaultdict(list)
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        if not self.table:
+            self.table = Reservation.find_available_table(self.venue, self.guest_count, self.reservation_date, self.start_time, self.end_time)
+        super().save(*args, **kwargs)
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
+
+        super().clean()
+
+        errors: dict[str, ValidationError] = {}
+
         if not self.end_time:
             self.end_time = (datetime.combine(self.reservation_date, self.start_time) + timedelta(hours=1)).time()
 
         if self.end_time < self.start_time:
-            errors['end_time'].append('Time should be in the future')
+            errors.setdefault('end_time', []).append('Time should be in the future')
 
-        if not self.check_time():
-            errors['start_time'].append('There are no available tables for this date')
+        if not Reservation.check_time(self.venue, self.guest_count, self.reservation_date, self.start_time, self.end_time):
+            errors.setdefault('start_time', []).append('There are no available tables for this date')
 
         raise ValidationError(errors)
 
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        self.full_clean()
-        super().save(*args, **kwargs)
+    def check_time(
+        venue: int,
+        guest_count: int,
+        reservation_date: date,
+        start_time: time,
+        end_time: time,
+    ) -> bool:
+        return Reservation.find_available_table(
+            venue,
+            guest_count,
+            reservation_date,
+            start_time,
+            end_time,
+        ) is not None
 
-    def check_time(self):
-        tables = Table.objects.filter(venue=self.venue, seating__gte=self.guest_count)
+    def find_available_table(
+        venue: int,
+        guest_count: int,
+        reservation_date: date,
+        start_time: time,
+        end_time: time,
+    ) -> Table:
+        tables = Table.objects.filter(venue=venue, seating__gte=guest_count)
         if tables.count() == 0:
-            return False  # No available tables
+            return None
+
         reserved_tables = Reservation.objects.filter(
-            Q(start_time__lte=self.start_time, end_time__gt=self.start_time) | Q(start_time__lt=self.end_time, end_time__gte=self.end_time),
-            venue=self.venue,
-            reservation_date=self.reservation_date,
-            table__in=tables
+            Q(venue=venue, reservation_date=reservation_date, table__in=tables) &
+            (Q(start_time__lte=start_time, end_time__gt=start_time) | Q(start_time__lt=end_time, end_time__gte=end_time))
         )
-        if self.id:
-            reserved_tables.exclude(id=self.id)
-        return tables.count() > reserved_tables.count()
+
+        return tables.exclude(id__in=reserved_tables.values_list('table_id', flat=True)).order_by('seating').first()
 
     def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
         """

@@ -311,12 +311,13 @@ class TableView(ModelViewSet):
     queryset = Table.objects.all()
 
 
-class ReservationCreateView(APIView):
+class ReservationCreateView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = ReservationSerializer
+    queryset = Reservation.objects.all()
 
-    def post(self, request: Request) -> Response:
-        serializer = self.serializer_class(data=request.data)
+    def create(self, request: Request) -> Response:
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             headers = self.get_success_headers(serializer.data)

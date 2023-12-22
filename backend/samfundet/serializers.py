@@ -503,9 +503,10 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs: dict) -> dict:
+
         instance = Reservation(**attrs)
         try:
-            instance.clean()
+            instance.full_clean()
         except ValidationError as e:
             raise serializers.ValidationError(e.args[0])
         return attrs

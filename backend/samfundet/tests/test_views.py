@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import Permission, Group
 from django.utils import timezone
+from datetime import date, time
 from django.urls import reverse
 from rest_framework import status
 from guardian.shortcuts import assign_perm
@@ -21,7 +22,11 @@ from samfundet.models.general import (
     InformationPage,
     BlogPost,
     Image,
+    Venue,
+    Table,
+    Reservation,
 )
+
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
@@ -614,3 +619,51 @@ def test_recruitment_admission_for_applicant(
     assert len(response.data) == 1
     assert (response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text)
     assert (response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id)
+
+
+def test_reservation_clean(
+    fixture_rest_client: APIClient,
+    fixture_venue: Venue,
+    fixture_table: Table,
+    fixture_date_monday: date,
+):
+    url = reverse(routes.samfundet__create_reservation_list)
+    data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.id, 'guest_count': 3, 'start_time': '10:00'}
+    response: Response = fixture_rest_client.post(path=url, data=data)
+    assert status.is_success(code=response.status_code)
+
+
+def test_reservation_double_booked(
+    fixture_rest_client: APIClient,
+    fixture_venue: Venue,
+    fixture_table: Table,
+    fixture_date_monday: date,
+):
+    url = reverse(routes.samfundet__create_reservation_list)
+    data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.id, 'guest_count': 3, 'start_time': '10:00'}
+    response: Response = fixture_rest_client.post(path=url, data=data)
+    assert status.is_success(code=response.status_code)
+
+    response: Response = fixture_rest_client.post(path=url, data=data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_reservation_end_before_start(
+    fixture_rest_client: APIClient,
+    fixture_venue: Venue,
+    fixture_table: Table,
+    fixture_date_monday: date,
+):
+    url = reverse(routes.samfundet__create_reservation_list)
+    data = {
+        'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'),
+        'venue': fixture_venue.id,
+        'guest_count': 3,
+        'end_time': '09:00',
+        'start_time': '10:00'
+    }
+    response: Response = fixture_rest_client.post(path=url, data=data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+#{"reservation_date": "2023-12-25", "venue":8, "start_time": "10:00", "guest_count": 3}

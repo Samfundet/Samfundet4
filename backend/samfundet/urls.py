@@ -40,6 +40,9 @@ router.register('recruitment-admisisons-for-group', views.RecruitmentAdmissionFo
 router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
 router.register('interview', views.InterviewView, 'interview')
 
+######## Lyche #########
+router.register('create-reservation', views.ReservationCreateView, 'create_reservation'),
+
 app_name = 'samfundet'
 
 urlpatterns = [
@@ -61,7 +64,6 @@ urlpatterns = [
 
     ########## Lyche ##########
     path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
-    path('create-reservation/', views.ReservationCreateView.as_view(), name='create_reservation'),
 
     ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
