@@ -503,7 +503,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs: dict) -> dict:
-        instance = Recruitment(**attrs)
+        instance = Reservation(**attrs)
         try:
             instance.clean()
         except ValidationError as e:

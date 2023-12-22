@@ -316,7 +316,7 @@ class ReservationCreateView(APIView):
     serializer_class = ReservationSerializer
 
     def post(self, request: Request) -> Response:
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             headers = self.get_success_headers(serializer.data)

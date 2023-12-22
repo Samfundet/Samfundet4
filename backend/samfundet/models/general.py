@@ -416,8 +416,8 @@ class Reservation(FullCleanSaveMixin):
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
     phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
 
-    reservation_date = models.DateField(blank=True, null=False, verbose_name='Dato')
-    start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
+    reservation_date = models.DateField(blank=False, null=False, verbose_name='Dato')
+    start_time = models.TimeField(blank=False, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
@@ -435,15 +435,16 @@ class Reservation(FullCleanSaveMixin):
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
 
     def clean(self) -> None:
-        errors: dict[str, list[ValidationError]] = defaultdict()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
         if not self.end_time:
-            self.end_time = self.start_time + timedelta(hours=1)
+            self.end_time = (datetime.combine(self.reservation_date, self.start_time) + timedelta(hours=1)).time()
 
         if self.end_time < self.start_time:
             errors['end_time'].append('Time should be in the future')
 
         if not self.check_time():
             errors['start_time'].append('There are no available tables for this date')
+
         raise ValidationError(errors)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
