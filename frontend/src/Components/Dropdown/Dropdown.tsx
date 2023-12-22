@@ -8,7 +8,7 @@ export type DropDownOption<T> = {
   value: T;
 };
 
-type DropdownProps<T> = {
+export type DropdownProps<T> = {
   className?: string;
   defaultValue?: DropDownOption<T>;
   initialValue?: T;
