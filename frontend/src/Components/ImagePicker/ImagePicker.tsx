@@ -8,7 +8,7 @@ import { Children } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './ImagePicker.module.scss';
 
-type ImagePickerProps = {
+export type ImagePickerProps = {
   onSelected?(image: ImageDto): void;
 };
 
