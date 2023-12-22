@@ -93,8 +93,8 @@ type SamfFormProps<T> = {
   validateOnInit?: boolean;
   validateOn?: ValidationMode;
   submitText?: string;
-  submitTheme?: ButtonTheme;
-  submitDisplay?: ButtonDisplay;
+  submitButtonTheme?: ButtonTheme;
+  submitButtonDisplay?: ButtonDisplay;
   noStyle?: boolean;
   className?: string;
   onChange?<T>(data: Partial<T>): void;
@@ -110,8 +110,8 @@ export function SamfForm<T>({
   validateOnInit = false,
   validateOn = 'submit',
   submitText,
-  submitTheme,
-  submitDisplay,
+  submitButtonTheme = 'green',
+  submitButtonDisplay = 'basic',
   noStyle,
   className,
   onChange,
@@ -220,8 +220,8 @@ export function SamfForm<T>({
               <Button
                 preventDefault={true}
                 type="submit"
-                theme={submitTheme !== undefined ? submitTheme : 'green'}
-                display={submitDisplay !== undefined ? submitDisplay : 'basic'}
+                theme={submitButtonTheme}
+                display={submitButtonDisplay}
                 rounded={true}
                 onClick={handleOnClickSubmit}
                 disabled={disableSubmit}

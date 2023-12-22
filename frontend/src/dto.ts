@@ -218,7 +218,7 @@ export type ReservationDto = {
   end_time?: string;
   // Needed for first part
   venue: number;
-  reservation_date: Date;
+  reservation_date: string;
   guest_count: number;
   occasion: string;
   // Maybe ignore and use different dto?
