@@ -7,6 +7,7 @@ from __future__ import annotations
 import re
 import random
 from typing import TYPE_CHECKING
+from collections import defaultdict
 from django.utils import timezone
 from datetime import datetime, date, time, timedelta
 
@@ -449,10 +450,8 @@ class Reservation(FullCleanSaveMixin):
         end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
 
         # Transform each occupied table to stacks of their reservations
-        occupied_table_times: dict[int, list[tuple[time, time]]] = {}
+        occupied_table_times: dict[int, list[tuple[time, time]]] = defaultdict(list)
         for tr in reserved_tables:
-            if tr['table'] not in occupied_table_times.keys():
-                occupied_table_times[tr['table']] = []
             occupied_table_times[tr['table']].append((tr['start_time'], tr['end_time']))
 
         # Checks if list of occupied tables are shorter than available tables

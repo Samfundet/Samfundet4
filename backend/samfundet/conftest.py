@@ -74,7 +74,7 @@ def fixture_date_monday() -> Iterator[datetime]:
 
 @pytest.fixture()
 def fixture_date_tuesday() -> Iterator[datetime]:
-    yield datetime(day=26, year=2023, month=12)  # tusday
+    yield datetime(day=26, year=2023, month=12)  # tuesday
 
 
 @pytest.fixture
