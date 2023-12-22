@@ -99,6 +99,7 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
     OccupiedtimeslotSerializer,
+    ReservationSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
@@ -308,6 +309,20 @@ class TableView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = TableSerializer
     queryset = Table.objects.all()
+
+
+class ReservationCreateView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ReservationSerializer
+
+    def post(self, request: Request) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReservationCheckAvailabilityView(APIView):

@@ -1,5 +1,6 @@
 import itertools
 
+from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
@@ -500,6 +501,14 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
+
+    def validate(self, attrs: dict) -> dict:
+        instance = Recruitment(**attrs)
+        try:
+            instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.args[0])
+        return attrs
 
 
 class ReservationCheckSerializer(serializers.ModelSerializer):

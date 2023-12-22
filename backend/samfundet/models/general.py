@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from collections import defaultdict
 from django.utils import timezone
 from datetime import datetime, date, time, timedelta
+from django.db.models import Q
 
 from notifications.base.models import AbstractNotification
 
@@ -432,6 +433,36 @@ class Reservation(FullCleanSaveMixin):
 
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
+
+    def clean(self) -> None:
+        errors: dict[str, list[ValidationError]] = defaultdict()
+        if not self.end_time:
+            self.end_time = self.start_time + timedelta(hours=1)
+
+        if self.end_time < self.start_time:
+            errors['end_time'].append('Time should be in the future')
+
+        if not self.check_time():
+            errors['start_time'].append('There are no available tables for this date')
+        raise ValidationError(errors)
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def check_time(self):
+        tables = Table.objects.filter(venue=self.venue, seating__gte=self.guest_count)
+        if tables.count() == 0:
+            return False  # No available tables
+        reserved_tables = Reservation.objects.filter(
+            Q(start_time__lte=self.start_time, end_time__gt=self.start_time) | Q(start_time__lt=self.end_time, end_time__gte=self.end_time),
+            venue=self.venue,
+            reservation_date=self.reservation_date,
+            table__in=tables
+        )
+        if self.id:
+            reserved_tables.exclude(id=self.id)
+        return tables.count() > reserved_tables.count()
 
     def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
         """

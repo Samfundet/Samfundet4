@@ -61,6 +61,7 @@ urlpatterns = [
 
     ########## Lyche ##########
     path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
+    path('create-reservation/', views.ReservationCreateView.as_view(), name='create_reservation'),
 
     ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
