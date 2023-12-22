@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
+import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
 
 // ================================== //
 //             Utilities              //
@@ -96,8 +96,9 @@ type SamfFormFieldProps<U> = {
   // Dropdown
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;
+  onChange?: (value: U) => void;
+  props?: FieldProps;
 };
-
 export function SamfFormField<U>({
   field,
   type,
@@ -107,6 +108,8 @@ export function SamfFormField<U>({
   options,
   defaultOption,
   validator,
+  onChange,
+  props,
 }: SamfFormFieldProps<U>) {
   // Validate on init context
   const { validateOnInit, validateOn } = useContext(SamfFormConfigContext);
@@ -134,6 +137,7 @@ export function SamfFormField<U>({
     if (validateOn === 'change' && initialUpdate !== true) {
       setShowError(true);
     }
+    onChange && onChange(newValue as U);
   }
 
   // Enable show error for validate on submit
@@ -184,6 +188,7 @@ export function SamfFormField<U>({
       // Options args
       options: options,
       defaultOption: defaultOption,
+      props: props,
     };
     const generatorFunction = SamfFormFieldTypeMap[type];
     return generatorFunction?.(args) ?? <></>;

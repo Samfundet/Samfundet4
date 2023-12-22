@@ -1,37 +1,45 @@
-from typing import Type
+import os
+import hmac
+import hashlib
+from typing import Any, Type
 
-from django.db.models import Count, Case, When
-from django.contrib.auth import login, logout
-from django.contrib.auth.models import Group
-from django.db.models import QuerySet
-from django.middleware.csrf import get_token
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from django.db.models import Count, Case, When, QuerySet
+from django.contrib.auth import login, logout
+from django.utils.encoding import force_bytes
+from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
+from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+
 from guardian.shortcuts import get_objects_for_user
+
 from rest_framework import status
-from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 
 from root.constants import (
     XCSRFTOKEN,
     AUTH_BACKEND,
+    GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
 
 from .homepage import homepage
 from .models.event import Event, EventGroup
 from .models.recruitment import (
+    Interview,
     Recruitment,
+    InterviewRoom,
+    Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
 )
 from .models.general import (
     Tag,
@@ -48,8 +56,8 @@ from .models.general import (
     GangType,
     TextItem,
     KeyValue,
-    Organization,
     BlogPost,
+    Organization,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -76,8 +84,8 @@ from .serializers import (
     KeyValueSerializer,
     MenuItemSerializer,
     GangTypeSerializer,
-    InterviewSerializer,
     BlogPostSerializer,
+    InterviewSerializer,
     EventGroupSerializer,
     RecruitmentSerializer,
     SaksdokumentSerializer,
@@ -88,6 +96,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    OccupiedtimeslotSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
@@ -157,11 +166,11 @@ class EventPerDayView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
-        # Fetch and serialize events
+        # Fetch and serialize events.
         events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         serialized = EventSerializer(events, many=True).data
 
-        # Organize in date dictionary
+        # Organize in date dictionary.
         events_per_day: dict = {}
         for event, serial in zip(events, serialized):
             date = event.start_dt.strftime('%Y-%m-%d')
@@ -414,6 +423,43 @@ class ProfileView(ModelViewSet):
     queryset = Profile.objects.all()
 
 
+class WebhookView(APIView):
+    """
+    https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries
+    https://simpleisbetterthancomplex.com/tutorial/2016/10/31/how-to-handle-github-webhooks-using-django.html
+    """
+    permission_classes = [AllowAny]
+
+    # TODO: Whitelist ip? https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks#allow-githubs-ip-addresses
+    # TODO: Ensure unique delivery? # https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks#use-the-x-github-delivery-header
+
+    def post(self, request: Request) -> Response:
+
+        WebhookView.verify_signature(
+            payload_body=request.stream.body,
+            secret_token=os.environ['WEBHOOK_SECRET'],
+            signature_header=request.META[GITHUB_SIGNATURE_HEADER],
+        )
+        return Response()  # Success.
+
+    def verify_signature(*, payload_body: Any, secret_token: str, signature_header: str) -> None:
+        """Verify that the payload was sent from GitHub by validating SHA256.
+
+        Raise and return 403 if not authorized.
+
+        Args:
+            payload_body: original request body to verify (request.body())
+            secret_token: GitHub app webhook token (WEBHOOK_SECRET)
+            signature_header: header received from GitHub (x-hub-signature-256)
+        """
+        if not signature_header:
+            raise PermissionDenied(detail='x-hub-signature-256 header is missing!')
+        hash_object = hmac.new(key=force_bytes(secret_token), msg=force_bytes(payload_body), digestmod=hashlib.sha256)
+        expected_signature = 'sha256=' + hash_object.hexdigest()
+        if not hmac.compare_digest(force_bytes(expected_signature), force_bytes(signature_header)):
+            raise PermissionDenied(detail="Request signatures didn't match!")
+
+
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class AssignGroupView(APIView):
     """
@@ -511,6 +557,24 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is not None:
             return RecruitmentPosition.objects.filter(recruitment=recruitment)
+        else:
+            return None
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerGangView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        gang = self.request.query_params.get('gang', None)
+        if recruitment is not None and gang is not None:
+            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         else:
             return None
 
@@ -637,3 +701,24 @@ class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
+
+
+class OccupiedtimeslotView(ListCreateAPIView):
+    model = Occupiedtimeslot
+    serializer_class = OccupiedtimeslotSerializer
+
+    def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
+        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
+        return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
+
+    def create(self, request: Request) -> Response:
+        for p in request.data:
+            p['user'] = request.user.id
+        # TODO Could maybe need a check for saving own, not allowing to save others to themselves
+        serializer = self.get_serializer(data=request.data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
