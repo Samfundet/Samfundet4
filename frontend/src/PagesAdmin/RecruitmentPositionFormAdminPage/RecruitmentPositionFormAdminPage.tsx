@@ -83,10 +83,7 @@ export function RecruitmentPositionFormAdminPage() {
     // recruitment: recruitmentId,
   };
 
-  const initialInterviewers =
-    position.interviewers && position.interviewers?.length > 0
-      ? position?.interviewers?.map((user) => mapUserToMultiselectOption(user))
-      : [];
+  const initialInterviewers = position?.interviewers?.map((user) => mapUserToMultiselectOption(user));
 
   const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
 
