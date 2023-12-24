@@ -157,9 +157,9 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
-    
+
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    
+
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
@@ -183,7 +183,6 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
-
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'

@@ -56,15 +56,12 @@ class TagSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.ModelSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
-    url = serializers.SerializerMethodField(method_name='get_url',
-                                            read_only=True)
+    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
 
     # Write only fields for posting new images.
     file = serializers.FileField(write_only=True, required=True)
     # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models.
-    tag_string = serializers.CharField(write_only=True,
-                                       allow_blank=True,
-                                       required=False)
+    tag_string = serializers.CharField(write_only=True, allow_blank=True, required=False)
 
     class Meta:
         model = Image
@@ -78,9 +75,7 @@ class ImageSerializer(serializers.ModelSerializer):
         file = validated_data.pop('file')
         if 'tag_string' in validated_data:
             tag_names = validated_data.pop('tag_string').split(',')
-            tags = [
-                Tag.objects.get_or_create(name=name)[0] for name in tag_names
-            ]
+            tags = [Tag.objects.get_or_create(name=name)[0] for name in tag_names]
         else:
             tags = []
         image = Image.objects.create(
@@ -106,10 +101,7 @@ class BilligPriceGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BilligPriceGroup
-        fields = [
-            'id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale',
-            'price'
-        ]
+        fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
 
 
 class BilligTicketGroupSerializer(serializers.ModelSerializer):
@@ -156,8 +148,7 @@ class EventListSerializer(serializers.ListSerializer):
     Speedup fetching of billig events for lists serialization
     """
 
-    def to_representation(self,
-                          events: list[Event] | QuerySet[Event]) -> list[str]:
+    def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
         if hasattr(events, 'prefetch_related'):
             events = events.prefetch_related('custom_tickets')
@@ -195,8 +186,7 @@ class EventSerializer(serializers.ModelSerializer):
         and sets it in the new event. Read/write only fields enable
         us to use the same serializer for both reading and writing.
         """
-        validated_data['image'] = Image.objects.get(
-            pk=validated_data['image_id'])
+        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
         event = Event(**validated_data)
         event.save()
         return event
@@ -237,7 +227,8 @@ class LoginSerializer(serializers.Serializer):
         # This will be used when the DRF browsable API is enabled.
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True)
+        write_only=True
+    )
 
     def validate(self, attrs: dict) -> dict:
         # Inherited function.
@@ -247,9 +238,7 @@ class LoginSerializer(serializers.Serializer):
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
-            user = authenticate(request=self.context.get('request'),
-                                username=username,
-                                password=password)
+            user = authenticate(request=self.context.get('request'), username=username, password=password)
             if not user:
                 # If we don't have a regular user, raise a ValidationError.
                 msg = 'Access denied: wrong username or password.'
@@ -287,7 +276,8 @@ class RegisterSerializer(serializers.Serializer):
         # This will be used when the DRF browsable API is enabled.
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True)
+        write_only=True
+    )
 
     def validate(self, attrs: dict) -> dict:
         # Inherited function.
@@ -301,15 +291,10 @@ class RegisterSerializer(serializers.Serializer):
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
-            user = User.objects.create_user(first_name=firstname,
-                                            last_name=lastname,
-                                            username=username,
-                                            email=email,
-                                            phone_number=phone_number,
-                                            password=password)
-            user = authenticate(request=self.context.get('request'),
-                                username=username,
-                                password=password)
+            user = User.objects.create_user(
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+            )
+            user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
             msg = 'Both "username" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
@@ -343,12 +328,9 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
-    permissions = serializers.SerializerMethodField(
-        method_name='get_permissions', read_only=True)
-    object_permissions = serializers.SerializerMethodField(
-        method_name='get_object_permissions', read_only=True)
-    user_preference = serializers.SerializerMethodField(
-        method_name='get_user_preference', read_only=True)
+    permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
+    object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
+    user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
 
     class Meta:
         model = User
@@ -361,32 +343,26 @@ class UserSerializer(serializers.ModelSerializer):
     def _permission_to_str(permission: Permission) -> str:
         return f'{permission.content_type.app_label}.{permission.codename}'
 
-    def _obj_permission_to_obj(
-        self, obj_perm: UserObjectPermission | GroupObjectPermission
-    ) -> dict[str, str]:
+    def _obj_permission_to_obj(self, obj_perm: UserObjectPermission | GroupObjectPermission) -> dict[str, str]:
         perm_obj = {
             'obj_pk': obj_perm.object_pk,
-            'permission':
-            self._permission_to_str(permission=obj_perm.permission),
+            'permission': self._permission_to_str(permission=obj_perm.permission),
         }
         return perm_obj
 
     def get_object_permissions(self, user: User) -> list[dict[str, str]]:
         # Collect user-level and group-level object permissions.
         user_object_perms_qs = UserObjectPermission.objects.filter(user=user)
-        group_object_perms_qs = GroupObjectPermission.objects.filter(
-            group__in=user.groups.all())
+        group_object_perms_qs = GroupObjectPermission.objects.filter(group__in=user.groups.all())
 
         perm_objs = []
-        for obj_perm in itertools.chain(user_object_perms_qs,
-                                        group_object_perms_qs):
+        for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
             perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))
 
         return perm_objs
 
     def get_user_preference(self, user: User) -> dict:
-        user_preference, _created = UserPreference.objects.get_or_create(
-            user=user)
+        user_preference, _created = UserPreference.objects.get_or_create(user=user)
         return UserPreferenceSerializer(user_preference, many=False).data
 
 
@@ -459,8 +435,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
 class SaksdokumentSerializer(serializers.ModelSerializer):
     # Read only url file path used in frontend
-    url = serializers.SerializerMethodField(method_name='get_url',
-                                            read_only=True)
+    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
     # Write only field for posting new document
     file = serializers.FileField(write_only=True, required=False)
 
@@ -554,8 +529,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
     def get_recruitment_admission_ids(self, obj: User) -> list[int]:
         """Return list of recruitment admission IDs for the user."""
-        return RecruitmentAdmission.objects.filter(user=obj).values_list(
-            'id', flat=True)
+        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
 
 
 class InterviewerSerializer(serializers.ModelSerializer):
@@ -579,15 +553,11 @@ class RecruitmentPositionSerializer(serializers.ModelSerializer):
         model = RecruitmentPosition
         fields = '__all__'
 
-    def _update_interviewers(self, recruitment_position: RecruitmentPosition,
-                             interviewer_objects: list[dict]) -> None:
+    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
         try:
             interviewers = []
             if interviewer_objects:
-                interviewer_ids = [
-                    interviewer.get('id')
-                    for interviewer in interviewer_objects
-                ]
+                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
                 if interviewer_ids:
                     interviewers = User.objects.filter(id__in=interviewer_ids)
             recruitment_position.interviewers.set(interviewers)
@@ -600,8 +570,7 @@ class RecruitmentPositionSerializer(serializers.ModelSerializer):
         self._update_interviewers(recruitment_position, interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition,
-               validated_data: dict) -> RecruitmentPosition:
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(updated_instance, interviewer_objects)
@@ -648,9 +617,7 @@ class ApplicantInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'id', 'first_name', 'last_name', 'email', 'occupied_timeslots'
-        ]
+        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
 
 
 class InterviewRoomSerializer(serializers.ModelSerializer):
@@ -675,15 +642,12 @@ class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
         model = RecruitmentAdmission
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission,
-               validated_data: dict) -> RecruitmentAdmission:
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
-        interview_instance.interview_location = interview_data.get(
-            'interview_location', interview_instance.interview_location)
-        interview_instance.interview_time = interview_data.get(
-            'interview_time', interview_instance.interview_time)
+        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
+        interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
