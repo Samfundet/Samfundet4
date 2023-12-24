@@ -682,6 +682,18 @@ class ActiveRecruitmentPositionsView(ListAPIView):
         return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
 
 
+class ActiveRecruitmentsView(ListAPIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    serializer_class = RecruitmentSerializer
+
+    def get_queryset(self) -> Response:
+        """
+            Returns all active recruitments
+        """
+        # TODO Use is not completed instead of actual_application_deadline__gte
+        return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+
+
 class InterviewRoomView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewRoomSerializer

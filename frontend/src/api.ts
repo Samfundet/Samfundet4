@@ -638,6 +638,13 @@ export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<Rec
   return response;
 }
 
+export async function getActiveRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitments;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
   const url =
     BACKEND_DOMAIN +
