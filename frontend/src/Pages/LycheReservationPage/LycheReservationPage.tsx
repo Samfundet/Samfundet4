@@ -110,22 +110,20 @@ export function LycheReservationPage() {
   );
 
   return (
-    <>
-      <SultenPage>
-        <div className={styles.container}>
-          <div className={styles.partContainer}>
-            <h1 className={styles.header}>{t(KEY.common_reservation)}</h1>
-            <p className={styles.text}>{useTextItem(TextItem.sulten_reservation_help)}</p>
-            <p className={styles.text}>
-              {useTextItem(TextItem.sulten_reservation_contact)}{' '}
-              <Link target="email" className={styles.email} url={`mailto:${sultenMail}`}>
-                {sultenMail}
-              </Link>
-            </p>
-          </div>
-          {availableDate ? reserveStage : findAvailableDateStage}
+    <SultenPage>
+      <div className={styles.container}>
+        <div className={styles.partContainer}>
+          <h1 className={styles.header}>{t(KEY.common_reservation)}</h1>
+          <p className={styles.text}>{useTextItem(TextItem.sulten_reservation_help)}</p>
+          <p className={styles.text}>
+            {useTextItem(TextItem.sulten_reservation_contact)}{' '}
+            <Link target="email" className={styles.email} url={`mailto:${sultenMail}`}>
+              {sultenMail}
+            </Link>
+          </p>
         </div>
-      </SultenPage>
-    </>
+        {availableDate ? reserveStage : findAvailableDateStage}
+      </div>
+    </SultenPage>
   );
 }
