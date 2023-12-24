@@ -361,4 +361,6 @@ export type RecruitmentAdmissionDto = {
   applicant_priority: number;
   recruiter_priority?: number;
   recruiter_status?: number;
+  created_at: string;
+  withdrawn: boolean;
 };

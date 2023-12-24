@@ -157,7 +157,9 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
-
+    
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
@@ -176,10 +178,12 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         (3, 'Automatic Rejection'),
     ]
 
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
 
     recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
+
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
@@ -199,7 +203,10 @@ class RecruitmentAdmission(FullCleanSaveMixin):
             else:
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
-
+        # Auto set not wanted when withdrawn
+        if self.withdrawn:
+            self.recruiter_priority = 1
+            self.recruiter_status = 3
         super().save(*args, **kwargs)
 
 
