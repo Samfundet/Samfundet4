@@ -25,7 +25,7 @@ from . import (
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
-    ('images', images.seed),
+    ('campuses', campus.seed)('images', images.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),
     ('event', events.seed),
