@@ -57,6 +57,7 @@ export const KEY = {
   common_edit: 'common_edit',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
+  common_table: 'common_table',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',

@@ -1,0 +1,36 @@
+
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.reservationContainer {
+  width: '100%';
+  height: '100%';
+  background-color: $blue;
+  cursor: pointer;
+  &:hover { 
+    filter: brightness(3);
+    filter: contrast(3);
+    -webkit-filter: brightness(3);
+    -webkit-filter: contrast(3);
+  }
+  &:active { 
+    filter: brightness(4);
+    filter: contrast(4);
+    -webkit-filter: brightness(4);
+    -webkit-filter: contrast(4);
+
+  }
+}
+
+.reservationName {
+  text-align: center;
+  color: $white;
+}
+.moreInfo {
+  color: $red-samf;
+  background-color: $white;
+}
+.hidden {
+  display: none;
+}

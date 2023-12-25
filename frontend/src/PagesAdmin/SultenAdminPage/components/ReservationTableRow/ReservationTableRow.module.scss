@@ -74,21 +74,20 @@
 
 .table {
   border-right: 1px solid $black;
+  margin-right: -1px;
   height: 100%;
   margin:0;
   flex:1;
 }
-
 
 .tableText {
   font-size: 1em;
 }
 
 .time {
-  flex:4;
   border-right: 1px dashed $black;
   height: 100%;
-  margin:0;
+  margin-right: -1px;
 }
 
 .timeText {

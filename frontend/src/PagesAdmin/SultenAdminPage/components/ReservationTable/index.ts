@@ -1,1 +1,1 @@
-export {ReservationTable} from './ReservationTable';
+export { ReservationTable } from './ReservationTable';
