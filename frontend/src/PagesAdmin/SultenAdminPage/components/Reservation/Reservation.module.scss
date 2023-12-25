@@ -9,17 +9,13 @@
   background-color: $blue;
   cursor: pointer;
   &:hover { 
-    filter: brightness(3);
-    filter: contrast(3);
-    -webkit-filter: brightness(3);
-    -webkit-filter: contrast(3);
+    filter: brightness(1.1);
+    -webkit-filter: brightness(1.1);
+
   }
   &:active { 
-    filter: brightness(4);
-    filter: contrast(4);
-    -webkit-filter: brightness(4);
-    -webkit-filter: contrast(4);
-
+    filter: brightness(1.2);
+    -webkit-filter: brightness(1.2);
   }
 }
 

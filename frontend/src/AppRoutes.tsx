@@ -202,6 +202,10 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_gang_position_overview}
           element={<ProtectedRoute perms={[]} Page={RecruitmentGangAdminPage} />}
         />
+        <Route
+          path={ROUTES.frontend.admin_sulten}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenAdminPage} />}
+        />
 
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_create}
@@ -228,10 +232,6 @@ export function AppRoutes() {
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
         />
       </Route>
-      <Route
-        path={ROUTES.frontend.admin_sulten}
-        element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenAdminPage} />}
-      />
       {/* 
             SULTEN ROUTES
       */}

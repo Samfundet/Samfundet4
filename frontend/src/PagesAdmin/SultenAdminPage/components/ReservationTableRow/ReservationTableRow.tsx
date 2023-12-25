@@ -2,6 +2,8 @@ import { TableDto, ReservationTableDto } from '~/dto';
 import styles from './ReservationTableRow.module.scss';
 import { useEffect, useState } from 'react';
 import { Reservation } from '../Reservation/Reservation';
+import { dbT } from '~/utils';
+import classNames from 'classnames';
 
 type ReservationTableRowProps = {
   table: TableDto;
@@ -16,6 +18,7 @@ type columns = {
 
 export function ReservationTableRow({ table, start_time, end_time }: ReservationTableRowProps) {
   const [cols, setCols] = useState<columns[]>([]);
+  const [hover, setHover] = useState<boolean>(false);
 
   function getTimeObject(time: string) {
     const timeSplit = time.split(':');
@@ -50,9 +53,14 @@ export function ReservationTableRow({ table, start_time, end_time }: Reservation
   }, []);
 
   return (
-    <div className={styles.timeHeader}>
-      <div className={styles.table}>
-        <p className={styles.tableText}>{table.id}</p>
+    <div className={styles.row}>
+      <div className={styles.table} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+        <div style={{ position: 'relative' }}>
+          <p className={styles.tableText}>
+            {table.id} ({table.seating})
+          </p>
+          <div className={classNames(styles.tableInfo, !hover && styles.hidden)}>{dbT(table, 'description')}</div>
+        </div>
       </div>
       {cols.map((col, index) => (
         <div className={styles.time} key={index} style={{ flex: col.size }}>
