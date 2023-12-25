@@ -48,7 +48,7 @@ Basic.args = {
         <SamfFormField field="duration" type="number" label="Tall-input med krav" validator={validate69} />
         <SamfFormField field="category" type="options" label="Dropdown input" options={options} />
       </div>
-      <SamfFormField field="description_long_nb" type="text-long" label="Lang tekst input" />
+      <SamfFormField field="description_long_nb" type="text-long" label="Lang tekst input" props={{ rows: 19 }} />
     </>
   ),
 };

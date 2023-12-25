@@ -6,7 +6,7 @@ import styles from './InputField.module.scss';
 
 export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'time';
 
-type InputFieldProps<T> = {
+export type InputFieldProps<T> = {
   children?: Children;
   labelClassName?: string;
   inputClassName?: string;
