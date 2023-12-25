@@ -21,14 +21,13 @@
   margin-left: 0.5em;
   margin-right: 0.5em;
   transition: .2s;
-
   white-space: nowrap;
-
   font-weight: 700;
   font-size: 1.2em;
   color: $white;
   flex:1;
 }
+
 .dateIterator {
   @include flex-row;
   flex:0;
@@ -40,9 +39,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.iterateButton {
   color: $white;
   cursor: pointer;
   &:hover { 
@@ -74,7 +70,6 @@
   margin:0;
   width: 3em;
 }
-
 
 .tableText {
   font-size: 1em;
