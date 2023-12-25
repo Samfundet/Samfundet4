@@ -78,10 +78,6 @@ export function SultenAdminPage() {
     setShowSpinner(false);
   }, []);
 
-  useEffect(() => {
-    console.log(dayInfo);
-  }, [dayInfo]);
-
   const dateIterator = (days: number) => {
     const newDate = new Date();
     newDate.setDate(dayInfo.date.getDate() + days);

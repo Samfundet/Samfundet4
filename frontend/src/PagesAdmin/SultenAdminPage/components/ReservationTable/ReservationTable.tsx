@@ -29,7 +29,6 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
       hours_iterator += 1;
     }
     setHours(hoursList);
-    console.log('sum:', hoursList.length * 4);
   }, [sultenDay]);
 
   const hoursHeader = (
