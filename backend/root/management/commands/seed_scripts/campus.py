@@ -1,9 +1,3 @@
-import random
-
-from django.utils import timezone
-from django.utils.text import slugify
-
-from root.utils.samfundet_random import words
 from samfundet.models.general import Campus
 
 CAMPUS = [
@@ -70,7 +64,7 @@ def seed():
     yield 0, 'Deleted old campus'
 
     for i, campus in enumerate(CAMPUS):
-        CAMPUS.objects.create(campus)
+        Campus.objects.create(**campus)
         yield i / len(CAMPUS), 'Creating venues'
 
     yield 100, f'Created {len(Campus.objects.all())} venues'
