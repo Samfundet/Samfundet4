@@ -68,6 +68,7 @@ export const ROUTES_FRONTEND = {
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId',
   admin_recruitment_gang_position_applicants_interview_notes:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/notesId', //fix when backend is done
+  admin_sulten: '/control-panel/lyche/',
   // ==================== //
   //      Development     //
   // ==================== //

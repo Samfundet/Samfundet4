@@ -362,3 +362,10 @@ export type RecruitmentAdmissionDto = {
   recruiter_priority?: number;
   recruiter_status?: number;
 };
+
+export type SultenDayDto = {
+  date: Date;
+  start_time: string;
+  closing_time: string;
+  tables: TableDto[];
+};
