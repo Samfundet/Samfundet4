@@ -9,13 +9,10 @@ import {
   getFoodCategorys,
   getFoodPreferences,
   getMenuItem,
-  getRecruitmentPosition,
   postMenuItem,
-  postRecruitmentPosition,
   putMenuItem,
-  putRecruitmentPosition,
 } from '~/api';
-import { FoodCategoryDto, FoodPreferenceDto, MenuItemDto, RecruitmentPositionDto } from '~/dto';
+import { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -72,6 +69,7 @@ export function SultenMenuItemFormAdminPage() {
           console.error(error);
         }),
     ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
