@@ -8,3 +8,8 @@
   font-size: 1.5em;
   font-weight: 700;
 }
+
+.headerRow {
+  @include flex-row;
+  gap: 0.2em;
+}

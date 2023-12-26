@@ -97,7 +97,7 @@ export function SultenMenuAdminPage() {
   const title = t(KEY.admin_sultenmenu_title);
   const backendUrl = ROUTES.backend.admin__samfundet_menuitem_changelist;
   const header = (
-    <div>
+    <div className={styles.headerRow}>
       <Button theme="success" rounded={true} onClick={() => alert('TODO create dish')}>
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.sulten_dishes)}`)}
       </Button>
