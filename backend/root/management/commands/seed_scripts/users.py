@@ -19,7 +19,7 @@ TEST_USERS = [
     ('marcusaf', 'Marcus', 'Frenje'),
     ('sigverok', 'Sigve', 'Røkenes'),
     ('emil123', 'Emil', 'Telstad'),
-    ('kevinkr', 'Kevin', 'Kristiansen')
+    ('kevinkr', 'Kevin', 'Kristiansen'),
 ]
 
 
