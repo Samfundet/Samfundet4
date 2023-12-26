@@ -8,7 +8,7 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ReservationTable } from './components/ReservationTable';
 
-export function SultenAdminPage() {
+export function SultenReservationAdminPage() {
   const navigate = useNavigate();
   const [dayInfo, setDayInfo] = useState<SultenDayDto>({} as SultenDayDto);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);

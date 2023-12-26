@@ -1,4 +1,5 @@
-import { TableDto, ReservationTableDto } from '~/dto';
+import { TableDto } from '~/dto';
+import { columns } from './types';
 import styles from './ReservationTableRow.module.scss';
 import { useEffect, useState } from 'react';
 import { Reservation } from '../Reservation/Reservation';
@@ -9,11 +10,6 @@ type ReservationTableRowProps = {
   table: TableDto;
   start_time: string;
   end_time: string;
-};
-
-type columns = {
-  size: number;
-  reservation?: ReservationTableDto; // TODO replace with object
 };
 
 export function ReservationTableRow({ table, start_time, end_time }: ReservationTableRowProps) {
