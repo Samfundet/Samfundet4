@@ -1,1 +1,0 @@
-export { ReservationTableRow } from './ReservationTableRow';

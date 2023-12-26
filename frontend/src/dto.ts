@@ -164,14 +164,7 @@ export type InformationPageDto = {
   text_en?: string;
 };
 
-export type ReservationTableDto = {
-  name: string;
-  start_time: string;
-  end_time: string;
-};
-
 export type TableDto = {
-  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -179,21 +172,23 @@ export type TableDto = {
   description_en?: string;
 
   seating?: number;
-  reservations?: ReservationTableDto[];
 };
 
 export type FoodPreferenceDto = {
+  id: number;
   name_nb?: string;
   name_en?: string;
 };
 
 export type FoodCategoryDto = {
+  id: number;
   name_nb?: string;
   name_en?: string;
   order?: number;
 };
 
 export type MenuItemDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -204,7 +199,8 @@ export type MenuItemDto = {
   price_member?: number;
 
   order?: number;
-  food_preferences?: FoodPreferenceDto[];
+  food_preferences?: FoodPreferenceDto[] | number[];
+  food_category: FoodCategoryDto | number;
 };
 
 export type MenuDto = {
@@ -215,22 +211,6 @@ export type MenuDto = {
   description_en?: string;
 
   menu_items?: MenuItemDto[];
-};
-
-export type ReservationDto = {
-  name?: string;
-  email?: string;
-  phonenumber?: string;
-  additional_info?: string;
-  start_time: string;
-  end_time?: string;
-  // Needed for first part
-  venue?: number;
-  reservation_date?: string;
-  guest_count?: number;
-  occasion?: string;
-  // Maybe ignore and use different dto?
-  // internal_message?: string;
 };
 
 export type SaksdokumentDto = {
@@ -385,11 +365,4 @@ export type RecruitmentAdmissionDto = {
   applicant_priority: number;
   recruiter_priority?: number;
   recruiter_status?: number;
-};
-
-export type SultenDayDto = {
-  date: Date;
-  start_time: string;
-  closing_time: string;
-  tables: TableDto[];
 };

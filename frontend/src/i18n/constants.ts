@@ -46,6 +46,9 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_price: 'common_price',
+  common_food: 'common_food',
+  common_preferences: 'common_preferences',
   common_buy: 'common_buy',
   common_here: 'common_here',
   common_name: 'common_name',
@@ -57,7 +60,6 @@ export const KEY = {
   common_edit: 'common_edit',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
-  common_table: 'common_table',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -100,6 +102,7 @@ export const KEY = {
   common_norwegian: 'common_norwegian',
   common_contact_us: 'common_contact_us',
   common_restaurant: 'common_restaurant',
+  common_member: 'common_member',
   common_membership: 'common_membership',
   common_information: 'common_information',
   common_description: 'common_description',
@@ -148,6 +151,7 @@ export const KEY = {
   navbar_nybygg: 'navbar_nybygg',
 
   // Sulten / Lyche:
+  sulten_dishes: 'sulten_dishes',
   sulten_lyche_goal: 'sulten_lyche_goal',
   sulten_what_is_lyche: 'sulten_what_is_lyche',
   sulten_page_see_menu: 'sulten_page_see_menu',
@@ -198,6 +202,7 @@ export const KEY = {
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
+  admin_sultenmenu_title: 'admin_sultenmenu_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',
   admin_events_recently_edited: 'admin_events_recently_edited',
   admin_closed_period_new_period: 'admin_closed_period_new_period',

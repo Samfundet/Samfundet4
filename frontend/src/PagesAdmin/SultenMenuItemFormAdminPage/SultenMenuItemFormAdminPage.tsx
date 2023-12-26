@@ -71,7 +71,7 @@ export function SultenMenuItemFormAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-    ])
+    ]);
   }, []);
 
   useEffect(() => {
@@ -163,8 +163,18 @@ export function SultenMenuItemFormAdminPage() {
     <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm<MenuItemDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
-          <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
+          <SamfFormField
+            field="name_nb"
+            required={true}
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+          />
+          <SamfFormField
+            field="name_en"
+            required={true}
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+          />
         </div>
 
         <div className={styles.row}>
@@ -180,9 +190,20 @@ export function SultenMenuItemFormAdminPage() {
           />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="price" type="number" label={t(KEY.common_price)} />
-          <SamfFormField field="price_member" type="number" label={t(KEY.common_price) + ' ' + t(KEY.common_member)} />
-          <SamfFormField field="food_category" type="options" label={t(KEY.category)} options={foodCategoryOptions} />
+          <SamfFormField field="price" required={true} type="number" label={t(KEY.common_price)} />
+          <SamfFormField
+            field="price_member"
+            required={true}
+            type="number"
+            label={t(KEY.common_price) + ' ' + t(KEY.common_member)}
+          />
+          <SamfFormField
+            field="food_category"
+            required={true}
+            type="options"
+            label={t(KEY.category)}
+            options={foodCategoryOptions}
+          />
           <SamfFormField
             field="food_preferences"
             type="options"
