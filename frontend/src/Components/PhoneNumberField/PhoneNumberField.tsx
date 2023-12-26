@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { InputField, InputFieldProps } from '../InputField';
+import { InputField, InputFieldProps } from '~/Components';
 import { PHONENUMBER_REGEX } from '~/constants';
 
 export function PhoneNumberField<T>({

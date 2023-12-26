@@ -29,7 +29,6 @@ function validate69(num: number) {
   return 'Tallet må være 69';
 }
 
-
 const options: DropDownOption<string>[] = [
   { label: 'Option 1', value: 'Option 1' },
   { label: 'Option 2', value: 'Option 2' },
@@ -51,7 +50,6 @@ Basic.args = {
       </div>
       <SamfFormField field="description_long_nb" type="text-long" label="Lang tekst input" props={{ rows: 5 }} />
       <SamfFormField field="phonenumber" type="phonenumber" label="Phonenumber" />
-
     </>
   ),
 };
