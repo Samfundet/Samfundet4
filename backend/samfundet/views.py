@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from guardian.shortcuts import get_objects_for_user
 
 from rest_framework import status
+from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -282,7 +283,7 @@ class MenuItemView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     queryset = MenuItem.objects.all()
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action in ['create', 'update']:
             return MenuItemWriteSerializer
 
