@@ -27,7 +27,7 @@ def create_test_users(username, firstname, lastname):
     User.objects.create_user(
         username=username,
         email=f'{username}@mg-web.no',
-        password='Django123',
+        password='passord',  # nosec
         first_name=firstname,
         last_name=lastname,
     )
