@@ -10,6 +10,7 @@ import {
   InputFieldProps,
   TextAreaField,
   TextAreaFieldProps,
+  PhoneNumberField,
 } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker, ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
@@ -45,7 +46,8 @@ export type SamfFormFieldType =
   | 'datetime'
   | 'time'
   | 'upload-image'
-  | 'upload-pdf';
+  | 'upload-pdf'
+  | 'phonenumber';
 
 /**
  * Arguments used to generate the input component.
@@ -93,6 +95,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   'upload-pdf': makeFilePickerFunction('pdf'),
   checkbox: makeCheckboxInput,
   email: makeStandardInputFunction<string>('email'),
+  phonenumber: makePhoneNumberInput,
 };
 
 // ================================== //
@@ -187,5 +190,22 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
       onChange={args.onChange}
       error={args.error}
     />
+  );
+}
+
+// Phonenumber fields
+function makePhoneNumberInput(args: SamfFormFieldArgs) {
+  const safeVal = args.value === undefined ? '' : (args.value as string);
+  return (
+    <PhoneNumberField
+      {...(args.props as InputFieldProps<string>)}
+      key={args.field}
+      value={safeVal}
+      onChange={args.onChange}
+      error={args.error}
+      inputClassName={styles.input_element}
+    >
+      {args.label}
+    </PhoneNumberField>
   );
 }
