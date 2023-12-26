@@ -414,12 +414,11 @@ class FoodCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodCategory
-        fields = ['id', 'name_nb', 'name_en']
+        fields = '__all__'
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
-    food_category = FoodCategorySerializer()
 
     class Meta:
         model = MenuItem

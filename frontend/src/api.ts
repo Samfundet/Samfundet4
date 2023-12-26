@@ -250,7 +250,7 @@ export async function getMenu(pk: string | number): Promise<MenuDto> {
 }
 
 export async function getMenuItems(): Promise<MenuItemDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_items_list;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
   const response = await axios.get<MenuItemDto[]>(url, { withCredentials: true });
 
   return response.data;

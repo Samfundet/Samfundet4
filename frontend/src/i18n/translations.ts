@@ -35,7 +35,6 @@ export const nb: Record<KeyValues, string> = {
 
   // Other common
   [KEY.common_to]: 'Til',
-  [KEY.common_price]: 'Pris',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -48,6 +47,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_next]: 'Neste',
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
+  [KEY.common_table]: 'Bord',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
@@ -185,7 +185,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
-  [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
   [KEY.admin_information_manage_title]: 'Administrer sider',
@@ -224,7 +223,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
-  [KEY.sulten_dishes]: 'Retter',
   [KEY.sulten_lyche_goal]: 'Lyches mål',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
@@ -275,7 +273,6 @@ export const en: Record<KeyValues, string> = {
 
   // No category:
   [KEY.common_to]: 'To',
-  [KEY.common_price]: 'Price',
   [KEY.common_buy]: 'Buy',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -290,6 +287,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_name]: 'Name',
   [KEY.common_next]: 'Next',
   [KEY.common_gang]: 'Group',
+  [KEY.common_table]: 'Table',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
@@ -427,7 +425,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',
-  [KEY.admin_sultenmenu_title]: 'Mange Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
   [KEY.admin_information_manage_title]: 'Administrate pages',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
@@ -457,7 +454,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
 
   // Sulten / Lyche:
-  [KEY.sulten_dishes]: 'Dishes',
   [KEY.sulten_lyche_goal]: 'Lyches goal',
   [KEY.sulten_what_is_lyche]: 'What is Lyche?',
   [KEY.sulten_page_see_menu]: 'See our menu',
