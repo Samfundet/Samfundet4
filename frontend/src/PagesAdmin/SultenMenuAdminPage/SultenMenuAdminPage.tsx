@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
@@ -14,14 +13,12 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SultenMenuAdminPage.module.scss';
 
 export function SultenMenuAdminPage() {
-  const navigate = useNavigate();
-
   const [menuItems, setMenuItems] = useState<MenuItemDto[]>([]);
   const [menus, setMenus] = useState<MenuDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  // Get Manus and Menuitems
+  // Get Menus and Menuitems
   useEffect(() => {
     Promise.all([
       getMenuItems()

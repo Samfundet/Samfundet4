@@ -427,7 +427,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',
-  [KEY.admin_sultenmenu_title]: 'Mange Lyche menu',
+  [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
   [KEY.admin_information_manage_title]: 'Administrate pages',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',

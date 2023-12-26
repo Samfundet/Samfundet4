@@ -420,6 +420,7 @@ class FoodCategorySerializer(serializers.ModelSerializer):
 class MenuItemSerializer(serializers.ModelSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
     food_category = FoodCategorySerializer()
+
     class Meta:
         model = MenuItem
         fields = '__all__'
