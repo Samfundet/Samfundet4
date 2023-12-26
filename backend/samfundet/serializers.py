@@ -1,11 +1,13 @@
 import itertools
 
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
+
 from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
@@ -549,12 +551,49 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
         return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
 
 
+class InterviewerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'id',
+        ]
+
+
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
     gang = GangSerializer(read_only=True)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
 
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'
+
+    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
+        try:
+            interviewers = []
+            if interviewer_objects:
+                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
+                if interviewer_ids:
+                    interviewers = User.objects.filter(id__in=interviewer_ids)
+            recruitment_position.interviewers.set(interviewers)
+        except (TypeError, KeyError):
+            raise ValidationError('Invalid data for interviewers.')
+
+    def create(self, validated_data: dict) -> RecruitmentPosition:
+        recruitment_position = super().create(validated_data)
+        interviewer_objects = self.initial_data.get('interviewers', [])
+        self._update_interviewers(recruitment_position, interviewer_objects)
+        return recruitment_position
+
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+        updated_instance = super().update(instance, validated_data)
+        interviewer_objects = self.initial_data.get('interviewers', [])
+        self._update_interviewers(updated_instance, interviewer_objects)
+        return updated_instance
 
 
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):

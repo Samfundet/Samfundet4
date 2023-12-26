@@ -19,7 +19,7 @@ import { useMobile } from '~/hooks';
  */
 export function AdminLayout() {
   const { t } = useTranslation();
-  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
 
   function makeAppletShortcut(applet: Applet, index: number) {
@@ -33,7 +33,7 @@ export function AdminLayout() {
         key={index}
         className={classNames(styles.panel_item, selected && styles.selected)}
         url={applet.url}
-        onAfterClick={() => mobilePanelOpen && setMobilePanelOpen(false)}
+        onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
         plain={true}
       >
         <Icon icon={applet.icon} />
@@ -46,17 +46,15 @@ export function AdminLayout() {
 
   useEffect(() => {
     if (!isMobile) {
-      setMobilePanelOpen(false);
+      setPanelOpen(true);
     }
   }, [isMobile]);
 
   const panel = (
-    <div className={classNames(styles.panel, isMobile && !mobilePanelOpen && styles.mobile_panel_closed)}>
-      {isMobile && (
-        <button className={styles.mobile_panel_close_btn} onClick={() => setMobilePanelOpen(false)}>
-          <Icon icon="mdi:close" width={24} />
-        </button>
-      )}
+    <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
+      <button className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
+        <Icon icon="mdi:close" width={24} />
+      </button>
 
       {/* Header */}
       <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
@@ -64,7 +62,7 @@ export function AdminLayout() {
       <Link
         className={classNames(styles.panel_item, selectedIndex && styles.selected)}
         url={ROUTES_FRONTEND.admin}
-        onAfterClick={() => mobilePanelOpen && setMobilePanelOpen(false)}
+        onAfterClick={() => panelOpen && setPanelOpen(false)}
       >
         <Icon icon="mdi:person" />
         {t(KEY.common_profile)}
@@ -88,28 +86,30 @@ export function AdminLayout() {
     </div>
   );
 
-  const mobileHeader = (
+  const mobileOpen = (
     <>
       <div className={styles.mobile_header}>
-        <Button theme="samf" onClick={() => setMobilePanelOpen(!mobilePanelOpen)}>
+        <Button theme="samf" onClick={() => setPanelOpen(!panelOpen)}>
           <Icon icon="ci:hamburger-md" /> {t(KEY.common_open)} {t(KEY.control_panel_title)}
         </Button>
       </div>
-      <div
-        className={classNames(styles.mobile_backdrop, mobilePanelOpen && styles.mobile_backdrop_open)}
-        onClick={() => setMobilePanelOpen(false)}
-      ></div>
     </>
+  );
+
+  const desktopOpen = (
+    <div className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
+      <Icon icon="mdi:arrow-right-bold" width={32} className={styles.arrow} />
+    </div>
   );
 
   return (
     <div>
       <Navbar />
       <div className={styles.wrapper}>
-        {isMobile && mobileHeader}
         {panel}
+        {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
         {/* Content */}
-        <div className={styles.content_wrapper}>
+        <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
           <Outlet />
         </div>
       </div>
