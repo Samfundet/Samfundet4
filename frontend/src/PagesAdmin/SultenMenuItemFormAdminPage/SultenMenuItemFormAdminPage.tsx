@@ -5,13 +5,7 @@ import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import {
-  getFoodCategorys,
-  getFoodPreferences,
-  getMenuItem,
-  postMenuItem,
-  putMenuItem,
-} from '~/api';
+import { getFoodCategorys, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
 import { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
