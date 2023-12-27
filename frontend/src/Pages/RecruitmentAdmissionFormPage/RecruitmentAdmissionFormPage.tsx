@@ -9,7 +9,7 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getRecruitmentPosition,
   getRecruitmentAdmissionForApplicant,
-  postRecruitmentAdmission,
+  putRecruitmentAdmission,
   getRecruitmentPositionsGang,
 } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
@@ -53,8 +53,7 @@ export function RecruitmentAdmissionFormPage() {
   }, [recruitmentPosition]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    data.recruitment_position = positionID ? +positionID : 1;
-    postRecruitmentAdmission(data)
+    putRecruitmentAdmission(data, positionID ? +positionID : 1)
       .then(() => {
         navigate({ url: ROUTES.frontend.home });
         toast.success(t(KEY.common_creation_successful));

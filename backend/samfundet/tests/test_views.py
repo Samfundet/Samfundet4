@@ -614,3 +614,45 @@ def test_recruitment_admission_for_applicant(
     assert len(response.data) == 1
     assert (response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text)
     assert (response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id)
+
+
+def test_post_admission(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data = {'admission_text': 'test_text'}
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data['admission_text'] == post_data['admission_text']
+    # Assert the returned data based on the logic in the view
+
+
+def test_update_admission(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    ### Act Send create ###
+    post_data1 = {'admission_text': 'I love samf!'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data1)
+    ### Assert ###
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data['admission_text'] == post_data1['admission_text']
+    ### Act 2 Send update ###
+    post_data2 = {'admission_text': 'No i really love samf!'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data2)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['admission_text'] == post_data2['admission_text']
+    # Assert the returned data based on the logic in the view

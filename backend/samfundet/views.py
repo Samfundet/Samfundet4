@@ -2,6 +2,7 @@ import os
 import hmac
 import hashlib
 from typing import Any, Type
+from django.http import QueryDict
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -609,19 +610,22 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     serializer_class = RecruitmentAdmissionForApplicantSerializer
     queryset = RecruitmentAdmission.objects.all()
 
-    def create(self, request: Request) -> Response:
-        serializer = self.get_serializer(data=request.data)
+    def update(self, request: Request, pk: int) -> Response:
+        data = request.data.dict() if type(request.data) == QueryDict else request.data
+        data['recruitment_position'] = pk
+        serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            existing_admission = RecruitmentAdmission.objects.filter(user=request.user,
-                                                                     recruitment_position=serializer.validated_data['recruitment_position']).first()
+            existing_admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
             if existing_admission:
                 existing_admission.admission_text = serializer.validated_data['admission_text']
                 existing_admission.save()
                 serializer = self.get_serializer(existing_admission)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 serializer.save()
-            return Response(serializer.data)
-        return Response(request.data)
+
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
         admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
@@ -631,7 +635,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
             # TODO: Add permissions
             admission = RecruitmentAdmission.objects.filter(recruitment_position=pk, user_id=user_id).first()
         serializer = self.get_serializer(admission)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
 
     def list(self, request: Request) -> Response:
         """
