@@ -191,6 +191,9 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         """
         If the admission is saved without an interview, try to find an interview from a shared position.
         """
+        if self.withdrawn:
+            self.recruiter_priority = 1
+            self.recruiter_status = 3
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
@@ -203,9 +206,7 @@ class RecruitmentAdmission(FullCleanSaveMixin):
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
         # Auto set not wanted when withdrawn
-        if self.withdrawn:
-            self.recruiter_priority = 1
-            self.recruiter_status = 3
+
         super().save(*args, **kwargs)
 
 

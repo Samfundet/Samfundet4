@@ -3,7 +3,7 @@ import pytest
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.recruitment import Recruitment, Organization
+from samfundet.models.recruitment import Recruitment, Organization, RecruitmentAdmission
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.
@@ -67,3 +67,17 @@ class TestRecruitmentClean:
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError, match=error_msg):
             _create_recruitment_with_dt(overrides={'reprioritization_deadline_for_applicant': future_more})
+
+
+class TestRecruitmentAdmission:
+
+    def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
+
+        assert fixture_recruitment_admission.recruiter_status == 0
+        assert fixture_recruitment_admission.recruiter_priority == 0
+
+        fixture_recruitment_admission.withdrawn = True
+        fixture_recruitment_admission.save()
+
+        assert fixture_recruitment_admission.recruiter_status == 3
+        assert fixture_recruitment_admission.recruiter_priority == 1
