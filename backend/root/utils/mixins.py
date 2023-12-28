@@ -4,6 +4,8 @@ import copy
 import logging
 from typing import Any, Union
 
+from rest_framework import serializers
+from django.core.exceptions import ValidationError
 from django.db.models import DEFERRED, Model
 
 LOG = logging.getLogger(__name__)
@@ -173,3 +175,15 @@ class FullCleanSaveMixin(Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class ValidationSerializerMixin(serializers.ModelSerializer):
+    """Mixin to also return custom validation errors from a models clean method"""
+
+    def validate(self, attrs: dict) -> dict:
+        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
+        try:
+            instance.full_clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.args[0])
+        return attrs
