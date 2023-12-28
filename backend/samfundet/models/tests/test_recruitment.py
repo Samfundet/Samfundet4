@@ -113,7 +113,7 @@ class TestRecruitmentStats:
 
         # Create simple copy
         fixture_recruitment_position_copy = fixture_recruitment_position
-        fixture_recruitment_position.pk == None
+        fixture_recruitment_position.pk = None
         fixture_recruitment_position_copy.save()
 
         RecruitmentAdmission.objects.create(
