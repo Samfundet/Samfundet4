@@ -93,6 +93,8 @@ export const KEY = {
   common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
+  common_number: 'common_number',
+  common_places: 'common_places',
   common_festivals: 'common_festivals',
   common_more_info: 'common_more_info',
   common_firstname: 'common_firstname',
@@ -155,7 +157,7 @@ export const KEY = {
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_lyche_about_menu: 'sulten_lyche_about_menu',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
-
+  sulten_total_seats: 'sulten_page_more_about_us',
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',

@@ -80,6 +80,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
+  [KEY.common_number]: 'Antall',
+  [KEY.common_places]: 'Plasser',
   [KEY.common_overview]: 'Oversikt',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_festivals]: 'Festivaler',
@@ -224,6 +226,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
   [KEY.sulten_lyche_goal]: 'Lyches mål',
+  [KEY.sulten_total_seats]: 'Antall plasser',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -319,6 +322,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
+  [KEY.common_number]: 'Number',
+  [KEY.common_places]: 'Places',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_more_info]: 'More info',
   [KEY.common_firstname]: 'First name',
@@ -461,6 +466,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.sulten_page_book_table]: 'Book table',
   [KEY.sulten_lyche_about_menu]: 'About the menu',
   [KEY.sulten_page_more_about_us]: 'More about us',
+  [KEY.sulten_total_seats]: 'Number of seats',
 
   // No category:
   [KEY.owner]: 'Owner',

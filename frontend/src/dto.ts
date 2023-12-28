@@ -180,6 +180,8 @@ export type TableDto = {
 
   seating?: number;
   reservations?: ReservationTableDto[];
+
+  venue?: number;
 };
 
 export type FoodPreferenceDto = {

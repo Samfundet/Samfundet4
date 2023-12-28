@@ -42,6 +42,7 @@ import {
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
   SultenReservationAdminPage,
+  SultenTableFormAdminPage,
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
@@ -206,7 +207,14 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_sulten_reservations}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}
         />
-
+        <Route
+          path={ROUTES.frontend.admin_sulten_table_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_TABLE]} Page={SultenTableFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_sulten_table_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_TABLE]} Page={SultenTableFormAdminPage} />}
+        />
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_create}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
