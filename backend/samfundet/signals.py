@@ -66,11 +66,10 @@ def update_editor_permissions(
 def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, created: bool, **kwargs: Any) -> None:
     """Ensures user_preference is created whenever a user is created."""
     if created:
-        stats = RecruitmentStatistics.objects.get_or_create(recruitment=instance)[0]
-        stats.save()  # Update stats
+        RecruitmentStatistics.objects.get_or_create(recruitment=instance)[0]
 
 
 @receiver(post_save, sender=RecruitmentAdmission)
 def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, created: bool, **kwargs: Any) -> None:
     if created:
-        instance.recruitment.statistics.save()
+        instance.recruitment.update_stats()
