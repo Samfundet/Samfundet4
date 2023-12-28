@@ -5,8 +5,6 @@
 from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from django.db.models import Count
-
 from django.db import models
 
 from root.utils.mixins import FullCleanSaveMixin
@@ -27,6 +25,9 @@ class Recruitment(FullCleanSaveMixin):
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
+
+    def update_stats(self) -> None:
+        self.statistics.save()
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
         super().clean()
@@ -66,12 +67,6 @@ class Recruitment(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
-
-    def save(self, *args: tuple, **kwargs: dict) -> None:
-        if not self.statistics:
-            # Create statics object if it doe snot exist
-            self.statistics = RecruitmentStatistics.objects.get_or_create(recruitment=self.id)[0]
-        super().save(*args, **kwargs)
 
 
 class RecruitmentPosition(FullCleanSaveMixin):
@@ -195,6 +190,8 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         """
         If the admission is saved without an interview, try to find an interview from a shared position.
         """
+        if not self.recruitment:
+            self.recruitment = self.recruitment_position.recruitment
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
@@ -229,14 +226,13 @@ class Occupiedtimeslot(FullCleanSaveMixin):
 
 
 class RecruitmentStatistics(FullCleanSaveMixin):
-    # annoying cant use one to one field, since it to be supplied in recruitment creation, not only saved
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, primary_key=True, related_name='statistics')
+    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
 
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        #TODO make uneditable/unsavable after being anonymized
+        # TODO make uneditable/unsavable after being anonymized
 
         self.total_admissions = self.recruitment.admissions.count()
         self.total_applicants = self.recruitment.admissions.values('user').distinct().count()

@@ -8,7 +8,7 @@ from guardian.shortcuts import assign_perm, remove_perm
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import UserPreference, Profile, User, Event, Gang
-from .models.recruitment import RecruitmentAdmission, RecruitmentStatistics
+from .models.recruitment import RecruitmentAdmission, RecruitmentStatistics, Recruitment
 
 
 @receiver(post_save, sender=User)
@@ -62,8 +62,15 @@ def update_editor_permissions(
                     assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
 
 
+@receiver(post_save, sender=Recruitment)
+def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, created: bool, **kwargs: Any) -> None:
+    """Ensures user_preference is created whenever a user is created."""
+    if created:
+        stats = RecruitmentStatistics.objects.get_or_create(recruitment=instance)[0]
+        stats.save()  # Update stats
+
+
 @receiver(post_save, sender=RecruitmentAdmission)
 def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, created: bool, **kwargs: Any) -> None:
     if created:
-        stats = RecruitmentStatistics.objects.get_or_create(recruitment=instance.recruitment)[0]
-        stats.save()  # Update stats
+        instance.recruitment.statistics.save()

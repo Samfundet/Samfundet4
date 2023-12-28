@@ -116,6 +116,18 @@ def fixture_user(fixture_user_pw: str) -> Iterator[User]:
 
 
 @pytest.fixture
+def fixture_user2(fixture_user_pw: str) -> Iterator[User]:
+    # Extra user if neeed
+    user = User.objects.create_user(
+        username='user2',
+        email='user2@test.com',
+        password=fixture_user_pw,
+    )
+    yield user
+    user.delete()
+
+
+@pytest.fixture
 def fixture_image() -> Iterator[Image]:
     path = BASE_DIR / 'samfundet' / 'tests' / 'test_image.jpg'
     with open(path, 'rb') as file:
