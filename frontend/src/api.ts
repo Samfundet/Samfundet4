@@ -20,6 +20,7 @@ import {
   RecruitmentDto,
   RecruitmentPositionDto,
   SaksdokumentDto,
+  TableDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
@@ -292,6 +293,27 @@ export async function getFoodCategory(pk: string | number): Promise<FoodCategory
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function getTable(pk: string | number): Promise<TableDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__table_detail, urlParams: { pk: pk } });
+  const response = await axios.get<TableDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postTable(data: TableDto): Promise<TableDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__table_list;
+  const response = await axios.postForm<TableDto>(url, data, {
+    withCredentials: true,
+  });
+  return response.data;
+}
+
+export async function putTable(id: string | number, data: Partial<TableDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__table_detail, urlParams: { pk: id } });
+  const response = await axios.put<TableDto>(url, data, { withCredentials: true });
+  return response;
 }
 
 export async function getTextItem(pk: string): Promise<TextItemDto> {

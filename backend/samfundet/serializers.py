@@ -464,7 +464,6 @@ class SaksdokumentSerializer(serializers.ModelSerializer):
 
 
 class TableSerializer(serializers.ModelSerializer):
-    venue = VenueSerializer(many=True)
 
     class Meta:
         model = Table

@@ -1,0 +1,1 @@
+export { SultenTableFormAdminPage } from './SultenTableFormAdminPage';
