@@ -8,6 +8,7 @@ from guardian.shortcuts import assign_perm, remove_perm
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import UserPreference, Profile, User, Event, Gang
+from .models.recruitment import RecruitmentAdmission, RecruitmentStatistics
 
 
 @receiver(post_save, sender=User)
@@ -59,3 +60,10 @@ def update_editor_permissions(
                 if gang.gang_leader_group:
                     assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
                     assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
+
+
+@receiver(post_save, sender=RecruitmentAdmission)
+def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, created: bool, **kwargs: Any) -> None:
+    if created:
+        stats = RecruitmentStatistics.objects.get_or_create(recruitment=instance.recruitment)
+        stats.save()  # Update stats

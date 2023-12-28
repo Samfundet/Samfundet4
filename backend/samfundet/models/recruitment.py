@@ -5,6 +5,7 @@
 from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.db.models import Count
 
 from django.db import models
 
@@ -65,6 +66,12 @@ class Recruitment(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        if not self.statistics:
+            # Create statics object if it doe snot exist
+            self.statistics = RecruitmentStatistics.objects.create(recruitment=self.id)
+        super().save(*args, **kwargs)
 
 
 class RecruitmentPosition(FullCleanSaveMixin):
@@ -219,3 +226,16 @@ class Occupiedtimeslot(FullCleanSaveMixin):
     # Start and end time of availability
     start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
     end_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
+
+
+class RecruitmentStatistics(FullCleanSaveMixin):
+    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, primary_key=True, related_name='statistics')
+
+    total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
+    total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        self.total_admissions = self.recruitment.admissions.length
+        self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
+
+        super().save(*args, **kwargs)
