@@ -26,6 +26,7 @@ export function SultenTableFormAdminPage() {
     // The correct venueid for lyche
     getVenues().then((data) => {
       for (const venue of data) {
+        console.log(venue.name.toLowerCase());
         if (venue.name.toLowerCase() == 'lyche') {
           setLycheId(venue.id);
           break;
@@ -45,7 +46,7 @@ export function SultenTableFormAdminPage() {
         .catch((data) => {
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_recruitment);
+            navigate(ROUTES.frontend.admin_sulten_reservations);
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(data);
@@ -64,7 +65,7 @@ export function SultenTableFormAdminPage() {
     seating: table?.seating,
   };
 
-  const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
+  const submitText = (id ? t(KEY.common_save) : t(KEY.common_create)) + ' ' + t(KEY.common_table);
 
   // Loading.
   if (showSpinner) {
@@ -77,6 +78,7 @@ export function SultenTableFormAdminPage() {
 
   function handleOnSubmit(data: TableDto) {
     data.venue = lycheId;
+    console.log(data);
     if (id) {
       // Update page.
       putTable(id, data)

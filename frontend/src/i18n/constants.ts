@@ -157,7 +157,7 @@ export const KEY = {
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_lyche_about_menu: 'sulten_lyche_about_menu',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
-  sulten_total_seats: 'sulten_page_more_about_us',
+  sulten_total_seats: 'sulten_total_seats',
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
