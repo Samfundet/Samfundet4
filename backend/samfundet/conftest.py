@@ -13,7 +13,7 @@ from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
+from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Table, Venue
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -262,6 +262,25 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
     )
     yield blogpost
     blogpost.delete()
+
+
+@pytest.fixture
+def fixture_venue() -> Iterator[Venue]:
+    venue = Venue.objects.create(name='venue', slug='venue')
+    yield venue
+    venue.delete()
+
+
+@pytest.fixture
+def fixture_table(fixture_venue: Venue) -> Iterator[Table]:
+    table = Table.objects.create(
+        name_nb='bord',
+        name_en='bord',
+        seating=4,
+        venue=fixture_venue,
+    )
+    yield table
+    table.delete()
 
 
 @pytest.fixture

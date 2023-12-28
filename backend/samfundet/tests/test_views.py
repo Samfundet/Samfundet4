@@ -21,6 +21,8 @@ from samfundet.models.general import (
     InformationPage,
     BlogPost,
     Image,
+    Table,
+    Venue,
 )
 from samfundet.serializers import UserSerializer
 
@@ -486,6 +488,100 @@ class TestAssignGroupView:
 
         ### Assert ###
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+# =============================== #
+#            Sulten               #
+# =============================== #
+class TestSultenTableView:
+
+    def test_get_table(self, fixture_rest_client: APIClient, fixture_table: Table):
+        ### Arrange ###
+        url = reverse(routes.samfundet__table_detail, kwargs={'pk': fixture_table.id})
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['id'] == fixture_table.id
+
+    def test_get_tables(self, fixture_rest_client: APIClient, fixture_table: Table):
+        ### Arrange ###
+        url = reverse(routes.samfundet__table_list)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['id'] == fixture_table.id
+
+    def test_create_table(self, fixture_rest_client: APIClient, fixture_user: User, fixture_venue: Venue):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__table_list)
+
+        post_data = {'name_nb': 'kule barns bord', 'name_en': 'cool kids table', 'seating': 4, 'venue': fixture_venue.id}
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_TABLE, fixture_user)
+
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+        assert data['name_nb'] == post_data['name_nb']
+
+        # Deleted since protected connection to venue makes it error
+        Table.objects.get(id=data['id']).delete()
+
+    # TODO Add test for not able to delete table if existing resevations for table exists
+
+    def test_delete_table(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_table: Table,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__table_detail, kwargs={'pk': fixture_table.id})
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_TABLE, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert status.is_success(code=response.status_code)
+
+    def test_put_blogpost(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_table: Table,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__table_detail, kwargs={'pk': fixture_table.id})
+        put_data = {'name_nb': 'Don Sygards bord'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+        assign_perm(permissions.SAMFUNDET_CHANGE_TABLE, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+
+        assert data['name_nb'] == put_data['name_nb']
 
 
 # =============================== #
