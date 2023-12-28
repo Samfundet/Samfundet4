@@ -70,7 +70,7 @@ class Recruitment(FullCleanSaveMixin):
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if not self.statistics:
             # Create statics object if it doe snot exist
-            self.statistics = RecruitmentStatistics.objects.create(recruitment=self.id)
+            self.statistics = RecruitmentStatistics.objects.get_or_create(recruitment=self.id)[0]
         super().save(*args, **kwargs)
 
 
@@ -229,13 +229,19 @@ class Occupiedtimeslot(FullCleanSaveMixin):
 
 
 class RecruitmentStatistics(FullCleanSaveMixin):
-    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, primary_key=True, related_name='statistics')
+    # annoying cant use one to one field, since it to be supplied in recruitment creation, not only saved
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, primary_key=True, related_name='statistics')
 
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        self.total_admissions = self.recruitment.admissions.length
+        #TODO make uneditable/unsavable after being anonymized
+
+        self.total_admissions = self.recruitment.admissions.count()
         self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
 
         super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f'{self.recruitment} stats'

@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly, DjangoModelPermissions
 
 from root.constants import (
     XCSRFTOKEN,
@@ -40,6 +40,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 from .models.general import (
     Tag,
@@ -88,6 +89,7 @@ from .serializers import (
     InterviewSerializer,
     EventGroupSerializer,
     RecruitmentSerializer,
+    RecruitmentStatisticsSerializer,
     SaksdokumentSerializer,
     OrganizationSerializer,
     FoodCategorySerializer,
@@ -528,6 +530,13 @@ class RecruitmentView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentStatisticsView(ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )  # Allow read only to permissions
+    serializer_class = RecruitmentStatisticsSerializer
+    queryset = RecruitmentStatistics.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

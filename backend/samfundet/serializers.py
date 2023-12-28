@@ -15,6 +15,7 @@ from .models.recruitment import (
     Recruitment,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
     InterviewRoom,
     Interview,
     Occupiedtimeslot,
@@ -504,6 +505,13 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 #            Recruitment          #
 # =============================== #
+
+
+class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentStatistics
+        fields = '__all__'
 
 
 class RecruitmentSerializer(serializers.ModelSerializer):

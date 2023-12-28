@@ -21,6 +21,7 @@ from .models.recruitment import (
     InterviewRoom,
     Interview,
     Occupiedtimeslot,
+    RecruitmentStatistics,
 )
 from .models.general import (
     Tag,
@@ -585,6 +586,12 @@ class InterviewAdmin(CustomGuardedModelAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+
+
+@admin.register(RecruitmentStatistics)
+class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
+    list_display = ['recruitment', 'total_applicants', 'total_admissions']
+    search_fields = ['recruitment']
 
 
 ### End: Our models ###
