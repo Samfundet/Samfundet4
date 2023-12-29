@@ -27,9 +27,8 @@ class Recruitment(FullCleanSaveMixin):
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
     def update_stats(self) -> None:
-        if not hasattr(self, 'statistics'):
-            self.statistics = RecruitmentStatistics.objects.create(recruitment=self)
-        else:
+        created = RecruitmentStatistics.objects.get_or_create(recruitment=self)[1]
+        if not created:
             self.statistics.save()
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
