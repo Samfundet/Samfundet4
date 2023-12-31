@@ -649,3 +649,47 @@ class KeyValue(FullCleanSaveMixin):
     def is_false(self) -> bool:
         """Check if value is falsy."""
         return self.value.lower() in self.FALSY
+
+
+class Merch(FullCleanSaveMixin):
+    name_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Navn (norsk)')
+    description_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Beskrivelse (norsk)')
+
+    name_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Navn (engelsk)')
+    description_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Beskrivelse (engelsk)')
+
+    base_price = models.PositiveSmallIntegerField(blank=True, null=False)
+
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Produkt Bilde')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        verbose_name = 'Merch'
+        verbose_name_plural = 'Merch'
+
+    def in_stock(self) -> int:
+        return sum(self.variations.values_list('stock', flat=True))
+
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
+
+    def __str__(self) -> str:
+        return f'{self.name_nb}'
+
+
+class MerchVariation(FullCleanSaveMixin):
+    specification = models.CharField(max_length=16, blank=False, null=False, verbose_name='Variation specification')
+
+    merch = models.ForeignKey(Merch, blank=False, null=False, related_name='variations', on_delete=models.CASCADE, verbose_name="Merch")
+    price = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Price Variation")
+
+    stock = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="In stock")
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    def __str__(self) -> str:
+        return f'{self.merch.name_nb} ({self.specification})'
