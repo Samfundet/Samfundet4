@@ -191,7 +191,7 @@ class CustomBaseSerializer(serializers.ModelSerializer):
 class CustomBaseAdmin(admin.ModelAdmin):
     readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
 
-    def save_model(self, request: HttpRequest, obj, form, change): # mypy: ignore-errors
+    def save_model(self, request: HttpRequest, obj, form, change):  # type: ignore[no-untyped-def]
         try:
             if not change:
                 obj.created_by = request.user
