@@ -13,7 +13,17 @@ from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
+from samfundet.models.general import (
+    User,
+    Image,
+    InformationPage,
+    Organization,
+    Gang,
+    BlogPost,
+    TextItem,
+    Merch,
+    MerchVariation,
+)
 
 import root.management.commands.seed_scripts.billig as billig_seed
 """
@@ -202,6 +212,22 @@ def fixture_text_item() -> Iterator[TextItem]:
     )
     yield text_item
     text_item.delete()
+
+
+@pytest.fixture
+def fixture_merch(fixture_image: Image) -> Iterator[Merch]:
+    merch = Merch.objects.create(
+        name_nb='basic merch', name_en='basic merch', description_nb='basic merch', description_en='basic merch', base_price=100, image=fixture_image
+    )
+    yield merch
+    merch.delete()
+
+
+@pytest.fixture
+def fixture_merchvariation(fixture_merch: Merch) -> Iterator[MerchVariation]:
+    merch_variation = MerchVariation.objects.create(specification='big', stock=69, merch=fixture_merch)
+    yield merch_variation
+    merch_variation.delete()
 
 
 @pytest.fixture

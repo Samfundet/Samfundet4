@@ -652,14 +652,14 @@ class KeyValue(FullCleanSaveMixin):
 
 
 class Merch(FullCleanSaveMixin):
-    name_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Navn (norsk)')
-    description_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Beskrivelse (norsk)')
+    name_nb = models.CharField(max_length=60, blank=True, null=False, verbose_name='Navn (norsk)')
+    description_nb = models.CharField(max_length=255, blank=True, null=False, verbose_name='Beskrivelse (norsk)')
 
-    name_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Navn (engelsk)')
-    description_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Beskrivelse (engelsk)')
+    name_en = models.CharField(max_length=60, blank=True, null=False, verbose_name='Navn (engelsk)')
+    description_en = models.CharField(max_length=255, blank=True, null=False, verbose_name='Beskrivelse (engelsk)')
 
     base_price = models.PositiveSmallIntegerField(blank=True, null=False)
-
+    released_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Produkt Bilde')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)

@@ -21,6 +21,7 @@ from samfundet.models.general import (
     InformationPage,
     BlogPost,
     Image,
+    Merch,
 )
 from samfundet.serializers import UserSerializer
 
@@ -213,6 +214,115 @@ class TestInformationPagesView:
         data = response.json()
 
         assert data['title_nb'] == put_data['title_nb']
+
+
+class TestMerchView:
+
+    def test_get_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: Merch,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['id'] == fixture_merch.id
+
+    def test_get_merchs(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: BlogPost,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__merch_list)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['id'] == fixture_merch.id
+
+    def test_create_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_image: Image,
+    ):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__merch_list)
+
+        post_data = {
+            'name_nb': 'Beanie',
+            'name_en': 'Beanie',
+            'description_en': 'For a beanie boy',
+            'description_nb': 'Beanie Boy trenger en beanie',
+            'base_price': 69,
+            'image': fixture_image.id,
+        }
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_MERCH, fixture_user)
+
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+        assert data['name_nb'] == post_data['name_nb']
+        Merch.objects.get(id=data['id']).delete()
+
+    def test_delete_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: Merch,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_MERCH, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
+
+        assert status.is_success(code=response.status_code)
+
+    def test_put_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: Merch,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
+        put_data = {'name_nb': 'Apple bottom jeans'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+        assign_perm(permissions.SAMFUNDET_CHANGE_MERCH, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
+
+        data = response.json()
+
+        assert data['name_nb'] == put_data['name_nb']
 
 
 class TestBlogPostView:
