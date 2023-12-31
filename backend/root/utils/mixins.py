@@ -191,7 +191,7 @@ class CustomBaseSerializer(serializers.ModelSerializer):
 class CustomBaseAdmin(admin.ModelAdmin):
     readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
 
-    def save_model(self, request: HttpRequest, obj, form, change):
+    def save_model(self, request: HttpRequest, obj, form, change): # mypy: ignore-errors
         try:
             if not change:
                 obj.created_by = request.user
@@ -214,7 +214,7 @@ class CustomBaseModel(FullCleanSaveMixin):
     class Meta:
         abstract = True
 
-    def is_edited(self):
+    def is_edited(self) -> bool:
         return self.updated_at != self.created_at
 
     def save(self, *args: Any, **kwargs: Any) -> None:
