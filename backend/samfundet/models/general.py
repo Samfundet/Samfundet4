@@ -683,10 +683,10 @@ class Merch(FullCleanSaveMixin):
 class MerchVariation(FullCleanSaveMixin):
     specification = models.CharField(max_length=16, blank=False, null=False, verbose_name='Variation specification')
 
-    merch = models.ForeignKey(Merch, blank=False, null=False, related_name='variations', on_delete=models.CASCADE, verbose_name="Merch")
-    price = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Price Variation")
+    merch = models.ForeignKey(Merch, blank=False, null=False, related_name='variations', on_delete=models.CASCADE, verbose_name='Merch')
+    price = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Price Variation')
 
-    stock = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="In stock")
+    stock = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='In stock')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
