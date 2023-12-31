@@ -4,6 +4,11 @@ import copy
 import logging
 from typing import Any, Union
 
+from django.db import models
+
+from django.http import HttpRequest
+from django.contrib import admin
+from rest_framework import serializers
 from django.db.models import DEFERRED, Model
 
 LOG = logging.getLogger(__name__)
@@ -172,4 +177,52 @@ class FullCleanSaveMixin(Model):
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
+        super().save(*args, **kwargs)
+
+
+class CustomBaseSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data: dict) -> CustomBaseModel:
+        instance = self.Meta.model(**validated_data)
+        instance.save(user=self.context['request'].user)
+        return instance
+
+
+class CustomBaseAdmin(admin.ModelAdmin):
+    readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
+
+    def save_model(self, request: HttpRequest, obj, form, change):
+        try:
+            if not change:
+                obj.created_by = request.user
+            obj.updated_by = request.user
+        except Exception as _e:  # pylint: disable=broad-except
+            pass
+
+        return super().save_model(request, obj, form, change)
+
+
+class CustomBaseModel(FullCleanSaveMixin):
+    version = models.PositiveIntegerField(default=0, null=True, blank=True, editable=False)
+
+    created_by = models.ForeignKey('samfundet.User', null=True, blank=True, on_delete=models.SET_NULL, editable=False)
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True, editable=False)
+
+    updated_by = models.ForeignKey('samfundet.User', null=True, blank=True, on_delete=models.SET_NULL, editable=False)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True, editable=False)
+
+    class Meta:
+        abstract = True
+
+    def is_edited(self):
+        return self.updated_at != self.created_at
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        self.version += 1
+        user = kwargs.pop('user', None)  # Must pop because super().save() doesn't accept user
+        if user:
+            self.last_editor = user
+            if not self.id:
+                self.creator = user
         super().save(*args, **kwargs)
