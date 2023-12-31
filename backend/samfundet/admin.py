@@ -42,6 +42,8 @@ from .models.general import (
     Reservation,
     ClosedPeriod,
     Saksdokument,
+    Merch,
+    MerchVariation,
     FoodCategory,
     FoodPreference,
     UserPreference,
@@ -585,6 +587,30 @@ class InterviewAdmin(CustomGuardedModelAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+
+
+@admin.register(Merch)
+class MerchAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'base_price']
+    # list_filter = []
+    list_display = ['name_nb', 'base_price']
+    search_fields = ['name_nb']
+    # filter_horizontal = []
+    list_display_links = ['name_nb']
+    # autocomplete_fields = []
+
+
+@admin.register(MerchVariation)
+class MerchVariationAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'specification']
+    # list_filter = []
+    list_display = ['id', '__str__', 'specification']
+    search_fields = ['id', 'specification']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
 
 
 ### End: Our models ###

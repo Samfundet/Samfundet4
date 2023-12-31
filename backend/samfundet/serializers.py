@@ -42,6 +42,8 @@ from .models.general import (
     ClosedPeriod,
     FoodPreference,
     UserPreference,
+    Merch,
+    MerchVariation,
     InformationPage,
 )
 
@@ -499,6 +501,30 @@ class KeyValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = KeyValue
         fields = '__all__'
+
+
+# =============================== #
+#              Merch              #
+# =============================== #
+
+
+class MerchVariationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MerchVariation
+        fields = '__all__'
+
+
+class MerchSerializer(serializers.ModelSerializer):
+    variations = MerchVariationSerializer(many=True, read_only=True)
+    stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Merch
+        fields = '__all__'
+
+    def get_stock(self, obj: Merch) -> int:
+        return obj.in_stock()
 
 
 # =============================== #
