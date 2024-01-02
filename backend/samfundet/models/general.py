@@ -33,7 +33,7 @@ class Notification(AbstractNotification):
         abstract = False
 
 
-class Tag(FullCleanSaveMixin):
+class Tag(CustomBaseModel):
     # TODO make name case-insensitive
     # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
@@ -70,7 +70,7 @@ class Tag(FullCleanSaveMixin):
         super().save(*args, **kwargs)
 
 
-class Image(FullCleanSaveMixin):
+class Image(CustomBaseModel):
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
     image = models.ImageField(upload_to='images/', blank=False, null=False)
@@ -186,7 +186,7 @@ class Profile(FullCleanSaveMixin):
         assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
-class Venue(FullCleanSaveMixin):
+class Venue(CustomBaseModel):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
     slug = models.SlugField(unique=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -213,9 +213,6 @@ class Venue(FullCleanSaveMixin):
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
 
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
@@ -224,7 +221,7 @@ class Venue(FullCleanSaveMixin):
         return f'{self.name}'
 
 
-class ClosedPeriod(FullCleanSaveMixin):
+class ClosedPeriod(CustomBaseModel):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
 
@@ -233,9 +230,6 @@ class ClosedPeriod(FullCleanSaveMixin):
 
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
     end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'ClosedPeriod'
@@ -246,7 +240,7 @@ class ClosedPeriod(FullCleanSaveMixin):
 
 
 # GANGS ###
-class Organization(FullCleanSaveMixin):
+class Organization(CustomBaseModel):
     """
     Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
     """
@@ -260,15 +254,12 @@ class Organization(FullCleanSaveMixin):
         return self.name
 
 
-class GangType(FullCleanSaveMixin):
+class GangType(CustomBaseModel):
     """
     Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
     """
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'GangType'
@@ -278,7 +269,7 @@ class GangType(FullCleanSaveMixin):
         return f'{self.title_nb}'
 
 
-class Gang(FullCleanSaveMixin):
+class Gang(CustomBaseModel):
     name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
     abbreviation = models.CharField(max_length=8, blank=True, null=True, verbose_name='Forkortelse')
@@ -296,9 +287,6 @@ class Gang(FullCleanSaveMixin):
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # Gang related permission groups
     gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
@@ -341,7 +329,7 @@ class InformationPage(CustomBaseModel):
         return f'{self.slug_field}'
 
 
-class BlogPost(FullCleanSaveMixin):
+class BlogPost(CustomBaseModel):
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
     text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
 
@@ -351,8 +339,6 @@ class BlogPost(FullCleanSaveMixin):
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
 
     published_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # TODO Find usage for owner field
 
@@ -364,7 +350,7 @@ class BlogPost(FullCleanSaveMixin):
         return f'{self.title_nb} {self.published_at}'
 
 
-class Table(FullCleanSaveMixin):
+class Table(CustomBaseModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -374,9 +360,6 @@ class Table(FullCleanSaveMixin):
     seating = models.PositiveSmallIntegerField(blank=True, null=True)
 
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     # TODO Implement HTML and Markdown
     # TODO Find usage for owner field
@@ -389,7 +372,7 @@ class Table(FullCleanSaveMixin):
         return f'{self.name_nb}'
 
 
-class Reservation(FullCleanSaveMixin):
+class Reservation(CustomBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
@@ -416,12 +399,9 @@ class Reservation(FullCleanSaveMixin):
         return f'{self.name}'
 
 
-class FoodPreference(FullCleanSaveMixin):
+class FoodPreference(CustomBaseModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'FoodPreference'
@@ -431,13 +411,10 @@ class FoodPreference(FullCleanSaveMixin):
         return f'{self.name_nb}'
 
 
-class FoodCategory(FullCleanSaveMixin):
+class FoodCategory(CustomBaseModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn (engelsk)')
     order = models.PositiveSmallIntegerField(blank=True, null=True, unique=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'FoodCategory'
@@ -447,7 +424,7 @@ class FoodCategory(FullCleanSaveMixin):
         return f'{self.name_nb}'
 
 
-class MenuItem(FullCleanSaveMixin):
+class MenuItem(CustomBaseModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -462,9 +439,6 @@ class MenuItem(FullCleanSaveMixin):
     food_preferences = models.ManyToManyField(FoodPreference, blank=True)
     food_category = models.ForeignKey(FoodCategory, blank=True, null=True, on_delete=models.PROTECT)
 
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
     class Meta:
         verbose_name = 'MenuItem'
         verbose_name_plural = 'MenuItems'
@@ -473,7 +447,7 @@ class MenuItem(FullCleanSaveMixin):
         return f'{self.name_nb}'
 
 
-class Menu(FullCleanSaveMixin):
+class Menu(CustomBaseModel):
     name_nb = models.CharField(max_length=64, unique=True, blank=True, null=True, verbose_name='Navn (norsk)')
     description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
 
@@ -481,9 +455,6 @@ class Menu(FullCleanSaveMixin):
     description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     menu_items = models.ManyToManyField(MenuItem, blank=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Menu'
@@ -493,13 +464,10 @@ class Menu(FullCleanSaveMixin):
         return f'{self.name_nb}'
 
 
-class Saksdokument(FullCleanSaveMixin):
+class Saksdokument(CustomBaseModel):
     title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class SaksdokumentCategory(models.TextChoices):
         FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
@@ -518,7 +486,7 @@ class Saksdokument(FullCleanSaveMixin):
         return f'{self.title_nb}'
 
 
-class Booking(FullCleanSaveMixin):
+class Booking(CustomBaseModel):
     name = models.CharField(max_length=64, blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     from_dt = models.DateTimeField(blank=True, null=True)
@@ -531,9 +499,6 @@ class Booking(FullCleanSaveMixin):
     last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
     email = models.CharField(max_length=64, unique=True, blank=True, null=True)
     phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'Booking'
@@ -570,7 +535,7 @@ class Booking(FullCleanSaveMixin):
         super().save(*args, **kwargs)
 
 
-class Infobox(FullCleanSaveMixin):
+class Infobox(CustomBaseModel):
     title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
     text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
 
@@ -593,7 +558,7 @@ class Infobox(FullCleanSaveMixin):
         return f'{self.title_nb}'
 
 
-class TextItem(FullCleanSaveMixin):
+class TextItem(CustomBaseModel):
     key = models.CharField(max_length=40, blank=False, null=False, unique=True, primary_key=True)
     text_nb = models.TextField()
     text_en = models.TextField()

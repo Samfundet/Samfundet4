@@ -214,6 +214,77 @@ class TestInformationPagesView:
 
         assert data['title_nb'] == put_data['title_nb']
 
+class TestVersionModel:
+    """
+        Test simple model which uses CustomBaseModel
+    """
+
+    def test_created_by(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        assign_perm(permissions.SAMFUNDET_ADD_TAG, fixture_user)
+        url = reverse(routes.samfundet__tags_list)
+        post_data = {'name':'name'}
+
+
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        data = response.json()
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['created_by'] == fixture_user.__str__()
+
+    def test_updated_and_created_at(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        assign_perm(permissions.SAMFUNDET_ADD_TAG, fixture_user)
+        assign_perm(permissions.SAMFUNDET_CHANGE_TAG, fixture_user)
+        url = reverse(routes.samfundet__tags_list)
+        post_data = {'name':'name'}
+
+        ### Act Create ###
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        data = response.json()
+        assert status.is_success(code=response.status_code)
+        assert data['created_at'] == data['updated_at']
+
+        ### Act Update ###
+        url = reverse(routes.samfundet__tags_detail, kwargs={'pk': data['id']})
+        response: Response = fixture_rest_client.put(path=url, data=post_data)
+
+        data = response.json()
+        assert status.is_success(code=response.status_code)
+        assert data['created_at'] != data['updated_at']
+
+    def test_updated_and_created_by(self, fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        assign_perm(permissions.SAMFUNDET_ADD_TAG, fixture_user)
+        url = reverse(routes.samfundet__tags_list)
+        post_data = {'name': 'name'}
+
+        ### Act Create ###
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        data = response.json()
+        assert status.is_success(code=response.status_code)
+
+        ### Act Update ###
+        fixture_rest_client.logout()
+        fixture_rest_client.force_authenticate(user=fixture_user2)
+        assign_perm(permissions.SAMFUNDET_CHANGE_TAG, fixture_user2)
+        print(fixture_rest_client.credentials)
+        url = reverse(routes.samfundet__tags_detail, kwargs={'pk': data['id']})
+        response: Response = fixture_rest_client.put(path=url, data=post_data)
+
+        data = response.json()
+        assert status.is_success(code=response.status_code)
+
+        assert fixture_rest_client.credentials != data['updated_by']
+        assert data['created_by'] == fixture_user.__str__()
+        assert data['updated_by'] == fixture_user2.__str__()
+
+
 
 class TestBlogPostView:
 

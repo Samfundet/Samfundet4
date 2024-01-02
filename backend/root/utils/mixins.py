@@ -5,6 +5,7 @@ import logging
 from typing import Any, Union
 
 from django.db import models
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db.models import DEFERRED, Model
 
@@ -236,12 +237,11 @@ class CustomBaseModel(FullCleanSaveMixin):
         blank=True,
         on_delete=models.SET_NULL,
         editable=False,
-        related_name='created',
+        related_name='+',  # allows only one way relation, UserModel cant have different models with same related name
     )
     created_at = models.DateTimeField(
         null=True,
         blank=True,
-        auto_now_add=True,
         editable=False,
     )
 
@@ -251,12 +251,11 @@ class CustomBaseModel(FullCleanSaveMixin):
         blank=True,
         on_delete=models.SET_NULL,
         editable=False,
-        related_name='updated',
+        related_name='+',  # allows only one way relation
     )
     updated_at = models.DateTimeField(
         null=True,
         blank=True,
-        auto_now=True,
         editable=False,
     )
 
@@ -276,9 +275,14 @@ class CustomBaseModel(FullCleanSaveMixin):
         """
         self.full_clean()
         self.version += 1
+        self.updated_at = timezone.now()
         user = kwargs.pop('user', None)  # Must pop because super().save() doesn't accept user
         if user:
             self.updated_by = user
             if self.created_by is None:
                 self.created_by = user
+        if not self.created_at:
+            # instead of auto add, since they are added at different ticks
+            self.created_at = self.updated_at
+
         super().save(*args, **kwargs)

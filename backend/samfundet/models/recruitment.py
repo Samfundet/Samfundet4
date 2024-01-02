@@ -5,6 +5,7 @@
 from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from root.utils.mixins import CustomBaseModel
 
 from django.db import models
 
@@ -12,7 +13,7 @@ from root.utils.mixins import FullCleanSaveMixin
 from .general import Organization, User, Gang
 
 
-class Recruitment(FullCleanSaveMixin):
+class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
@@ -67,7 +68,7 @@ class Recruitment(FullCleanSaveMixin):
         return f'Recruitment: {self.name_en} at {self.organization}'
 
 
-class RecruitmentPosition(FullCleanSaveMixin):
+class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
@@ -114,7 +115,7 @@ class RecruitmentPosition(FullCleanSaveMixin):
         super(RecruitmentPosition, self).save(*args, **kwargs)
 
 
-class InterviewRoom(FullCleanSaveMixin):
+class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
@@ -132,7 +133,7 @@ class InterviewRoom(FullCleanSaveMixin):
             raise ValidationError('Start time should be before end time')
 
 
-class Interview(FullCleanSaveMixin):
+class Interview(CustomBaseModel):
     # User visible fields
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
     interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
@@ -149,7 +150,7 @@ class Interview(FullCleanSaveMixin):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-class RecruitmentAdmission(FullCleanSaveMixin):
+class RecruitmentAdmission(CustomBaseModel):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
