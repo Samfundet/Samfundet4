@@ -1,4 +1,10 @@
+import os
 from samfundet.models.general import User
+
+from root.constants import Environment
+# End: imports -----------------------------------------------------
+
+ENV = os.environ.get('ENV', Environment.DEV)
 
 TEST_USERS = [
     ('amaliejvik', 'Amalie', 'Johansen Vik'),
@@ -30,14 +36,17 @@ def create_test_users(username, firstname, lastname):
         password='passord',  # nosec
         first_name=firstname,
         last_name=lastname,
+        is_superuser=(ENV == Environment.DEV)
     )
 
 
 def seed():
-    User.objects.filter(is_superuser=False).delete()
+    anonomyous_user = User.get_anonymous()
+    User.objects.filter(is_superuser=False).exclude(id=anonomyous_user.id).delete()
     yield 0, 'Deleted existing non-superusers'
 
     for i, user in enumerate(TEST_USERS):
         create_test_users(user[0], user[1], user[2])
         yield i / len(TEST_USERS), 'Creating test users'
+
     yield 100, f'Created {len(TEST_USERS)} test users'
