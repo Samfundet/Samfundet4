@@ -6,6 +6,7 @@ from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from guardian import models as guardian_models
+from django.utils.translation import gettext_lazy as _
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
 
 from root.custom_classes.admin_classes import (
@@ -69,7 +70,9 @@ admin.site.register(Occupiedtimeslot)
 
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
-    sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
+    sortable_by = [
+        'id', 'username', 'email', 'phone_number', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at'
+    ]
     list_display = [
         'id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'group_memberships', 'last_login', 'date_joined',
         'updated_at'
@@ -81,6 +84,37 @@ class UserAdmin(CustomGuardedUserAdmin):
     def group_memberships(self, obj: User) -> int:
         n: int = obj.groups.all().count()
         return n
+
+    fieldsets = (
+        (None, {
+            'fields': ('username', 'password')
+        }),
+        (_('Personal info'), {
+            'fields': ('first_name', 'last_name', 'email', 'phone_number')
+        }),
+        (
+            _('Permissions'),
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                ),
+            },
+        ),
+        (_('Important dates'), {
+            'fields': ('last_login', 'date_joined')
+        }),
+    )
+    add_fieldsets = ((
+        None,
+        {
+            'classes': ('wide', ),
+            'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+        },
+    ), )
 
 
 @admin.register(Group)
