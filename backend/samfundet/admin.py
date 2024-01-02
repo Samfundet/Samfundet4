@@ -8,11 +8,8 @@ from django.contrib.sessions.models import Session
 from guardian import models as guardian_models
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
 
-from root.custom_classes.admin_classes import (
-    CustomGuardedUserAdmin,
-    CustomGuardedGroupAdmin,
-    CustomGuardedModelAdmin,
-)
+from root.custom_classes.admin_classes import (CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin, CustomBaseAdmin)
+
 from .models.event import (Event, EventGroup, EventRegistration)
 from .models.recruitment import (
     Recruitment,
@@ -305,7 +302,7 @@ class GangTypeAdmin(CustomGuardedModelAdmin):
 
 
 @admin.register(InformationPage)
-class InformationPageAdmin(CustomGuardedModelAdmin):
+class InformationPageAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['slug_field', 'created_at', 'updated_at']
     # list_filter = []

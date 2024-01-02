@@ -8,6 +8,7 @@ from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
+from root.utils.mixins import CustomBaseSerializer
 from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
@@ -389,7 +390,7 @@ class GangTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class InformationPageSerializer(serializers.ModelSerializer):
+class InformationPageSerializer(CustomBaseSerializer):
 
     class Meta:
         model = InformationPage

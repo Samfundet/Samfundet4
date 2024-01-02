@@ -6,7 +6,7 @@ from guardian.shortcuts import get_objects_for_user
 from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 from admin_auto_filters.filters import AutocompleteFilter
@@ -265,3 +265,18 @@ class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):
 
 class CustomGuardedGroupAdmin(CustomGuardedModelAdmin, GroupAdmin):
     ...
+
+
+class CustomBaseAdmin(CustomGuardedModelAdmin):
+    """
+        Custom base admin, sets user on save
+        Displays these fields as read only in admi
+    """
+    readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
+
+    def save_model(self, request: HttpRequest, obj: Model, form: Any, change: Any) -> Any:
+        if not change:
+            obj.created_by = request.user
+        obj.updated_by = request.user
+
+        return super().save_model(request, obj, form, change)

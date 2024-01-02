@@ -5,12 +5,13 @@ import logging
 from typing import Any, Union
 
 from django.db import models
-
-from django.http import HttpRequest
 from django.core.exceptions import ValidationError
-from django.contrib import admin
-from rest_framework import serializers
 from django.db.models import DEFERRED, Model
+
+from rest_framework import status, serializers
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 LOG = logging.getLogger(__name__)
 
@@ -182,6 +183,8 @@ class FullCleanSaveMixin(Model):
 
 
 class CustomBaseSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField(method_name='get_created_by', read_only=True)
+    updated_by = serializers.SerializerMethodField(method_name='get_updated_by', read_only=True)
     """
         Base serializer, sets version fields to read_only
         Adds validation errors from models clean
@@ -197,6 +200,12 @@ class CustomBaseSerializer(serializers.ModelSerializer):
             'updated_by',
         )
 
+    def get_created_by(self, obj: CustomBaseModel):
+        return obj.created_by.__str__() if obj.created_by else None
+
+    def get_updated_by(self, obj: CustomBaseModel):
+        return obj.updated_by.__str__() if obj.updated_by else None
+
     def validate(self, attrs: dict) -> dict:
         instance: FullCleanSaveMixin = self.Meta.model(**attrs)
         try:
@@ -209,21 +218,6 @@ class CustomBaseSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         instance.save(user=self.context['request'].user)
         return instance
-
-
-class CustomBaseAdmin(admin.ModelAdmin):
-    """
-        Custom base admin, sets user on save
-        Displays these fields as read only in admi
-    """
-    readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
-
-    def save_model(self, request: HttpRequest, obj: Model, form: Any, change: Any) -> Any:
-        if not change:
-            obj.created_by = request.user
-        obj.updated_by = request.user
-
-        return super().save_model(request, obj, form, change)
 
 
 class CustomBaseModel(FullCleanSaveMixin):
@@ -240,11 +234,12 @@ class CustomBaseModel(FullCleanSaveMixin):
     )
 
     created_by = models.ForeignKey(
-        'samfundet.User',
+        'User',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         editable=False,
+        related_name='created',
     )
     created_at = models.DateTimeField(
         null=True,
@@ -254,11 +249,12 @@ class CustomBaseModel(FullCleanSaveMixin):
     )
 
     updated_by = models.ForeignKey(
-        'samfundet.User',
+        'User',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         editable=False,
+        related_name='updated',
     )
     updated_at = models.DateTimeField(
         null=True,
@@ -285,7 +281,7 @@ class CustomBaseModel(FullCleanSaveMixin):
         self.version += 1
         user = kwargs.pop('user', None)  # Must pop because super().save() doesn't accept user
         if user:
-            self.last_editor = user
-            if not self.id:
-                self.creator = user
+            self.updated_by = user
+            if self.created_by is None:
+                self.created_by = user
         super().save(*args, **kwargs)

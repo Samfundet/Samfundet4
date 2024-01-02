@@ -17,7 +17,7 @@ from django.db import models
 from guardian.shortcuts import assign_perm
 from django.utils.translation import gettext as _
 
-from root.utils.mixins import FullCleanSaveMixin
+from root.utils.mixins import FullCleanSaveMixin, CustomBaseModel
 from root.utils import permissions
 
 from .utils.fields import LowerCaseField, PhoneNumberField
@@ -317,7 +317,7 @@ class Gang(FullCleanSaveMixin):
         return f'{self.gang_type} - {self.name_nb}'
 
 
-class InformationPage(FullCleanSaveMixin):
+class InformationPage(CustomBaseModel):
     slug_field = models.SlugField(
         max_length=64,
         blank=True,
@@ -332,11 +332,6 @@ class InformationPage(FullCleanSaveMixin):
 
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
     text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    # TODO Find usage for owner field
 
     class Meta:
         verbose_name = 'InformationPage'
