@@ -233,7 +233,7 @@ class CustomBaseSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance: CustomBaseModel, validated_data: dict) -> CustomBaseModel:
-        """ 
+        """
             Copied from: https://github.com/encode/django-rest-framework/blob/master/rest_framework/serializers.py
         """
         info = model_meta.get_field_info(instance)
@@ -253,7 +253,7 @@ class CustomBaseSerializer(serializers.ModelSerializer):
 
 class CustomBaseModel(FullCleanSaveMixin):
     """
-        Basic model which will contains necessary version info of a model: 
+        Basic model which will contains necessary version info of a model:
         With by who and when it was updated and created.
         Also keeps a counter for how many times it has been updated
     """
@@ -303,7 +303,7 @@ class CustomBaseModel(FullCleanSaveMixin):
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
-            User should always be provided, but that can be ignored. 
+            User should always be provided, but that can be ignored.
             Will update and set which user interacted with it when it was saved.
         """
         self.full_clean()
