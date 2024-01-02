@@ -7,6 +7,7 @@ from typing import Any, Union
 from django.db import models
 
 from django.http import HttpRequest
+from django.core.exceptions import ValidationError
 from django.contrib import admin
 from rest_framework import serializers
 from django.db.models import DEFERRED, Model
@@ -181,6 +182,28 @@ class FullCleanSaveMixin(Model):
 
 
 class CustomBaseSerializer(serializers.ModelSerializer):
+    """
+        Base serializer, sets version fields to read_only
+        Adds validation errors from models clean
+        Context of request needs to be passed
+    """
+
+    class Meta:
+        read_only_fields = (
+            'version',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+        )
+
+    def validate(self, attrs: dict) -> dict:
+        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
+        try:
+            instance.full_clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.args[0])
+        return attrs
 
     def create(self, validated_data: dict) -> CustomBaseModel:
         instance = self.Meta.model(**validated_data)
@@ -189,35 +212,75 @@ class CustomBaseSerializer(serializers.ModelSerializer):
 
 
 class CustomBaseAdmin(admin.ModelAdmin):
+    """
+        Custom base admin, sets user on save
+        Displays these fields as read only in admi
+    """
     readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
 
-    def save_model(self, request: HttpRequest, obj, form, change):  # type: ignore[no-untyped-def]
-        try:
-            if not change:
-                obj.created_by = request.user
-            obj.updated_by = request.user
-        except Exception as _e:  # pylint: disable=broad-except
-            pass
+    def save_model(self, request: HttpRequest, obj: Model, form: Any, change: Any) -> Any:
+        if not change:
+            obj.created_by = request.user
+        obj.updated_by = request.user
 
         return super().save_model(request, obj, form, change)
 
 
 class CustomBaseModel(FullCleanSaveMixin):
-    version = models.PositiveIntegerField(default=0, null=True, blank=True, editable=False)
+    """
+        Basic model which will contains necessary version info of a model: 
+        With by who and when it was updated and created.
+        Also keeps a counter for how many times it has been updated
+    """
+    version = models.PositiveIntegerField(
+        default=0,
+        null=True,
+        blank=True,
+        editable=False,
+    )
 
-    created_by = models.ForeignKey('samfundet.User', null=True, blank=True, on_delete=models.SET_NULL, editable=False)
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True, editable=False)
+    created_by = models.ForeignKey(
+        'samfundet.User',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        editable=False,
+    )
+    created_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        auto_now_add=True,
+        editable=False,
+    )
 
-    updated_by = models.ForeignKey('samfundet.User', null=True, blank=True, on_delete=models.SET_NULL, editable=False)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True, editable=False)
+    updated_by = models.ForeignKey(
+        'samfundet.User',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        editable=False,
+    )
+    updated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        auto_now=True,
+        editable=False,
+    )
 
     class Meta:
         abstract = True
 
     def is_edited(self) -> bool:
+        """
+            Method for checking if object is updated or not
+        """
         return self.updated_at != self.created_at
 
     def save(self, *args: Any, **kwargs: Any) -> None:
+        """
+            User should always be provided, but that can be ignored. 
+            Will update and set which user interacted with it when it was saved.
+        """
         self.full_clean()
         self.version += 1
         user = kwargs.pop('user', None)  # Must pop because super().save() doesn't accept user
