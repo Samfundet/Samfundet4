@@ -8,10 +8,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import DEFERRED, Model
 
-from rest_framework import status, serializers
-from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import serializers
 
 LOG = logging.getLogger(__name__)
 
