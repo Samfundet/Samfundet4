@@ -1,4 +1,5 @@
 from . import (
+    users,
     images,
     gangs,
     campus,
@@ -27,6 +28,7 @@ from . import (
 
 SEED_SCRIPTS = [
     ('campus', campus.seed),
+    ('users', users.seed),
     ('images', images.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),
