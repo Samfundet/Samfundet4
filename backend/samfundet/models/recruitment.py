@@ -166,20 +166,6 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
-    PRIORITY_CHOICES = [
-        (0, 'Not Set'),
-        (1, 'Not Wanted'),
-        (2, 'Wanted'),
-        (3, 'Reserve'),
-    ]
-
-    STATUS_CHOICES = [
-        (0, 'Nothing'),
-        (1, 'Called and Accepted'),
-        (2, 'Called and Rejected'),
-        (3, 'Automatic Rejection'),
-    ]
-
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
@@ -196,8 +182,8 @@ class RecruitmentAdmission(FullCleanSaveMixin):
         If the admission is saved without an interview, try to find an interview from a shared position.
         """
         if self.withdrawn:
-            self.recruiter_priority = 1
-            self.recruiter_status = 3
+            self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
+            self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()

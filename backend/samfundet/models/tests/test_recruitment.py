@@ -3,6 +3,7 @@ import pytest
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
+from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentAdmission
 
 datetime_fields_expecting_error = [
@@ -73,11 +74,11 @@ class TestRecruitmentAdmission:
 
     def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
 
-        assert fixture_recruitment_admission.recruiter_status == 0
-        assert fixture_recruitment_admission.recruiter_priority == 0
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+        assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
 
         fixture_recruitment_admission.withdrawn = True
         fixture_recruitment_admission.save()
 
-        assert fixture_recruitment_admission.recruiter_status == 3
-        assert fixture_recruitment_admission.recruiter_priority == 1
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
