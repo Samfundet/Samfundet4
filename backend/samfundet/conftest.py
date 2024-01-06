@@ -11,7 +11,8 @@ from django.contrib.auth.models import Group
 from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
+from samfundet.models.event import Event
+from samfundet.models.model_choices import EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
 
