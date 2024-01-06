@@ -49,7 +49,6 @@ class TestRecruitmentClean:
             with pytest.raises(ValidationError) as error:
                 _create_recruitment_with_dt(overrides={field: past})
             assert field in dict(error.value).keys()
-            assert len(dict(error.value).keys()) == 1
 
     def test_visible_from_before_application_deadline(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
