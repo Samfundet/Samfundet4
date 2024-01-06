@@ -85,6 +85,17 @@ class Image(FullCleanSaveMixin):
         return f'{self.title}'
 
 
+class Campus(FullCleanSaveMixin):
+    name_nb = models.CharField(max_length=64, unique=True, blank=False, null=False)
+    name_en = models.CharField(max_length=64, unique=True, blank=False, null=False)
+    abbreviation = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self) -> str:
+        if not self.abbreviation:
+            return f'{self.name_nb}'
+        return f'{self.name_nb} ({self.abbreviation})'
+
+
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -109,6 +120,13 @@ class User(AbstractUser):
         blank=False,
         null=False,
         unique=True,
+    )
+
+    campus = models.ForeignKey(
+        Campus,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
 
     class Meta:
