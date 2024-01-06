@@ -1,5 +1,5 @@
 import { TableDto } from '~/dto';
-import { columns } from './types';
+import { Column } from './types';
 import styles from './ReservationTableRow.module.scss';
 import { useEffect, useState } from 'react';
 import { Reservation } from '../Reservation/Reservation';
@@ -13,7 +13,7 @@ type ReservationTableRowProps = {
 };
 
 export function ReservationTableRow({ table, start_time, end_time }: ReservationTableRowProps) {
-  const [cols, setCols] = useState<columns[]>([]);
+  const [cols, setCols] = useState<Column[]>([]);
   const [hover, setHover] = useState<boolean>(false);
 
   function getTimeObject(time: string) {
@@ -24,7 +24,7 @@ export function ReservationTableRow({ table, start_time, end_time }: Reservation
   useEffect(() => {
     let start_dt = getTimeObject(start_time);
     const end_dt = getTimeObject(end_time);
-    const colList: columns[] = [];
+    const colList: Column[] = [];
 
     table.reservations
       ?.sort((r1, r2) => r1.start_time.localeCompare(r2.start_time))

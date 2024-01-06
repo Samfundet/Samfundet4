@@ -78,22 +78,22 @@ export function SultenReservationAdminPage() {
     setShowSpinner(false);
   }, []);
 
-  const dateIterator = (days: number) => {
+  function dateIterator(days: number) {
     const newDate = new Date();
     newDate.setDate(dayInfo.date.getDate() + days);
     setDayInfo({ ...dayInfo, date: newDate });
-  };
+  }
 
-  const goToToday = () => {
+  function goToToday() {
     setDayInfo({ ...dayInfo, date: new Date() });
-  };
+  }
 
   const title = t(KEY.common_sulten);
   const backendUrl = ROUTES.backend.admin__samfundet_reservation_changelist;
 
   const header = (
     <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
-      Add text
+      TODO ADD
     </Button>
   );
 

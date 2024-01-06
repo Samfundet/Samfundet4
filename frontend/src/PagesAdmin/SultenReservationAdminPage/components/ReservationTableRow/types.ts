@@ -1,6 +1,6 @@
 import { ReservationTableDto } from '~/dto';
 
-export type columns = {
+export type Column = {
   size: number;
-  reservation?: ReservationTableDto; // TODO replace with object
+  reservation?: ReservationTableDto;
 };
