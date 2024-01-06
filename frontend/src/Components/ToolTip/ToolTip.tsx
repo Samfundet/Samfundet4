@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './ToolTip.module.scss';
 import classNames from 'classnames';
 import { Children } from '~/types';
@@ -16,17 +16,18 @@ type ToolTipProps = {
 export function ToolTip({ value = 'Jokes on you', display = 'text', alignment = 'top', children }: ToolTipProps) {
   const [hover, setHover] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(hover);
-  }, [hover]);
   return (
     <div>
       <div style={{ position: 'relative' }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
         {children}
         <div
-          className={classNames(styles.tooltip, alignment == 'top' ? styles.top : styles.left, !hover && styles.hidden)}
+          className={classNames(
+            styles.tooltip,
+            alignment === 'top' ? styles.top : styles.left,
+            !hover && styles.hidden,
+          )}
         >
-          {display == 'text' ? <p>{value}</p> : <Image className={styles.noMargin} src={value} />}
+          {display === 'text' ? <p>{value}</p> : <Image className={styles.noMargin} src={value} />}
         </div>
       </div>
     </div>
