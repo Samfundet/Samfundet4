@@ -28,6 +28,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Campus,
     Infobox,
     Booking,
     Profile,
@@ -326,9 +327,17 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CampusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Campus
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
+    campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
@@ -401,6 +410,37 @@ class BlogPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BlogPost
+        fields = '__all__'
+
+
+class FoodPreferenceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodCategory
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class MenuItemSerializer(serializers.ModelSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True)
+    food_category = FoodCategorySerializer()
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(serializers.ModelSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
         fields = '__all__'
 
 
