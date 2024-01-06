@@ -8,7 +8,7 @@ import styles from './InputFile.module.scss';
 
 export type InputFileType = 'image' | 'pdf';
 
-type InputFileProps = {
+export type InputFileProps = {
   fileType: InputFileType;
   label?: ReactNode;
   error?: boolean | string;
