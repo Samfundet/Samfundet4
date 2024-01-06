@@ -175,13 +175,14 @@ export function SamfFormField<U>({
 
   // Generate UI based on type
   function makeFormField() {
-    const errorMessage = error ? (required && !value ? t(KEY.common_required) : error) : false;
+    let errorMsg = required && !value ? t(KEY.common_required) : error;
+    errorMsg = error ? errorMsg : false;
     const args: SamfFormFieldArgs = {
       // Standard args
       field: field,
       value: value,
       onChange: handleOnChange,
-      error: showError ? errorMessage : false,
+      error: showError ? errorMsg : false,
       label: label,
       // Options args
       options: options,
