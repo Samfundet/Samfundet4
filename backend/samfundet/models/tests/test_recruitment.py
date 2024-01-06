@@ -46,20 +46,40 @@ class TestRecruitmentClean:
         past = timezone.now() - timezone.timedelta(days=2)
 
         for field in datetime_fields_expecting_error:
-            with pytest.raises(ValidationError):
+            with pytest.raises(ValidationError) as error:
                 _create_recruitment_with_dt(overrides={field: past})
+            assert field in dict(error.value).keys()
+            assert len(dict(error.value).keys()) == 1
 
     def test_visible_from_before_application_deadline(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
-        with pytest.raises(ValidationError):
+        with pytest.raises(ValidationError) as error:
             _create_recruitment_with_dt(overrides={'visible_from': future_more})
+        assert 'actual_application_deadline' in dict(error.value).keys()
+        assert 'visible_from' in dict(error.value).keys()
+        assert len(dict(error.value).keys()) == 2
 
     def test_application_deadline_before_reprioritization_deadline(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
-        with pytest.raises(ValidationError):
+        with pytest.raises(ValidationError) as error:
             _create_recruitment_with_dt(overrides={'actual_application_deadline': future_more})
+
+        assert 'actual_application_deadline' in dict(error.value).keys()
+        assert 'reprioritization_deadline_for_applicant' in dict(error.value).keys()
+        assert len(dict(error.value).keys()) == 2
 
     def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_groups(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
-        with pytest.raises(ValidationError):
+        with pytest.raises(ValidationError) as error:
             _create_recruitment_with_dt(overrides={'reprioritization_deadline_for_applicant': future_more})
+        assert 'reprioritization_deadline_for_groups' in dict(error.value).keys()
+        assert 'reprioritization_deadline_for_applicant' in dict(error.value).keys()
+        assert len(dict(error.value).keys()) == 2
+
+    def test_actual_deadline_before_shown_deadline(self, fixture_org):
+        future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
+        with pytest.raises(ValidationError) as error:
+            _create_recruitment_with_dt(overrides={'shown_application_deadline': future_more})
+        assert 'actual_application_deadline' in dict(error.value).keys()
+        assert 'shown_application_deadline' in dict(error.value).keys()
+        assert len(dict(error.value).keys()) == 2
