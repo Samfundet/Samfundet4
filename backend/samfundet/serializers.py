@@ -29,6 +29,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Campus,
     Infobox,
     Booking,
     Profile,
@@ -326,9 +327,17 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CampusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Campus
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
+    campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
@@ -415,11 +424,12 @@ class FoodCategorySerializer(CustomBaseSerializer):
 
     class Meta:
         model = FoodCategory
-        fields = '__all__'
+        fields = ['id', 'name_nb', 'name_en']
 
 
 class MenuItemSerializer(CustomBaseSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
+    food_category = FoodCategorySerializer()
 
     class Meta:
         model = MenuItem

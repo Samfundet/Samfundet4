@@ -52,6 +52,7 @@ export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
+export { ToolTip } from './ToolTip';
 
 // Props
 export type { TextAreaFieldProps } from './TextAreaField';

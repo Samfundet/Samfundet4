@@ -13,12 +13,11 @@ from typing import Any
 from django.db import models
 from django.db.models import Prefetch, QuerySet
 from django.utils import timezone
-from django.utils.translation import gettext as _
 
 from root.utils.mixins import CustomBaseModel
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
 from samfundet.models.general import User, Image, Gang
-
+from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventStatus, EventTicketType
 # ======================== #
 #      Event Group         #
 # ======================== #
@@ -90,73 +89,7 @@ class EventCustomTicket(CustomBaseModel):
 
 
 # ======================== #
-#       Event Status       #
-# ======================== #
-
-
-class EventStatus(models.TextChoices):
-    """
-    Status for a given event. Deleted status
-    is used to hide event without actually deleting it
-    so that it can be restored if something wrong happens
-    """
-    ACTIVE = 'active', _('Aktiv')
-    ARCHIVED = 'archived', _('Arkivert')
-    CANCELED = 'cancelled', _('Avlyst')
-    DELETED = 'deleted', _('Slettet')
-
-
-# ======================== #
-#       Ticket Type        #
-# ======================== #
-
-
-class EventTicketType(models.TextChoices):
-    """
-    Handles event ticket type.
-        Included/Free - simple info shown on event
-        Billig - event connected to billig payment system
-        Registration - connect event to registration model (påmelding)
-        Custom - connect event to custom payment list (only used to show in frontend)
-    """
-    INCLUDED = 'included', _('Included with entrance')
-    FREE = 'free', _('Free')
-    BILLIG = 'billig', _('Paid')
-    REGISTRATION = 'registration', _('Free with registration')
-    CUSTOM = 'custom', _('Custom')
-
-
-# ======================== #
-#      Age Restriction     #
-# ======================== #
-
-
-class EventAgeRestriction(models.TextChoices):
-    NO_RESTRICTION = 'none', _('Ingen aldersgrense')
-    AGE_18 = 'eighteen', _('18 år')
-    AGE_20 = 'twenty', _('20 år')
-    MIXED = 'mixed', _('18 år (student), 20 år (ikke-student)')
-
-
-# ======================== #
-#      Event Category      #
-# ======================== #
-
-
-class EventCategory(models.TextChoices):
-    """
-    Used for sorting, filtering and organizing stuff in frontend
-    """
-    SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
-    CONCERT = 'concert', _('Konsert')
-    DEBATE = 'debate', _('Debatt')
-    QUIZ = 'quiz', _('Quiz')
-    LECTURE = 'lecture', _('Kurs')
-    OTHER = 'other', _('Annet')
-
-
-# ======================== #
-#     Main Event Model     #
+#       Event Model        #
 # ======================== #
 
 

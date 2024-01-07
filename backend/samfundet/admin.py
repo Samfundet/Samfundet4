@@ -27,6 +27,7 @@ from .models.general import (
     Venue,
     Table,
     Image,
+    Campus,
     Profile,
     Booking,
     Infobox,
@@ -172,6 +173,19 @@ class UserObjectPermissionAdmin(CustomGuardedModelAdmin):
 
 
 ### Our models ###
+@admin.register(Campus)
+class CampusAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'name_en', 'abbreviation']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name_nb', 'abbreviation']
+    search_fields = ['id', 'name_nb', 'name_en', 'abbreviation']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
 @admin.register(UserPreference)
 class UserPreferenceAdmin(CustomGuardedModelAdmin):
     # ordering = []
