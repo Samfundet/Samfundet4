@@ -191,6 +191,7 @@ class CustomBaseSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
+        model = None
         read_only_fields = (
             'version',
             'created_at',
@@ -206,11 +207,8 @@ class CustomBaseSerializer(serializers.ModelSerializer):
         return obj.updated_by.__str__() if obj.updated_by else None
 
     def validate(self, attrs: dict) -> dict:
-        instance: FullCleanSaveMixin = self.Meta.model(**attrs)  # type: ignore[attr-defined]
-        try:
-            instance.full_clean()
-        except ValidationError as e:
-            raise serializers.ValidationError(e.args[0])
+        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
+        instance.full_clean()
         return attrs
 
     def create(self, validated_data: dict) -> CustomBaseModel:
@@ -218,8 +216,8 @@ class CustomBaseSerializer(serializers.ModelSerializer):
             mostly same, but fetches user in save
             Copied from: https://github.com/encode/django-rest-framework/blob/master/rest_framework/serializers.py
         """
-        instance = self.Meta.model(**validated_data)  # type: ignore[attr-defined]
-        info = model_meta.get_field_info(self.Meta.model)  # type: ignore[attr-defined]
+        instance = self.Meta.model(**validated_data)
+        info = model_meta.get_field_info(self.Meta.model)
         many_to_many = {}
         for field_name, relation_info in info.relations.items():
             if relation_info.to_many and (field_name in validated_data):
