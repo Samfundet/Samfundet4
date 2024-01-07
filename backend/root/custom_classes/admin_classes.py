@@ -273,10 +273,3 @@ class CustomBaseAdmin(CustomGuardedModelAdmin):
         Displays these fields as read only in admi
     """
     readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
-
-    def save_model(self, request: HttpRequest, obj: Model, form: Any, change: Any) -> Any:
-        if not change:
-            obj.created_by = request.user
-        obj.updated_by = request.user
-
-        return super().save_model(request, obj, form, change)

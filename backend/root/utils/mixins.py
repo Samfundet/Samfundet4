@@ -12,6 +12,8 @@ from django.db.models import DEFERRED, Model
 from rest_framework import serializers
 from rest_framework.utils import model_meta
 
+from root.constants import request_contextvar
+
 LOG = logging.getLogger(__name__)
 
 
@@ -211,43 +213,6 @@ class CustomBaseSerializer(serializers.ModelSerializer):
         instance.full_clean()
         return attrs
 
-    def create(self, validated_data: dict) -> CustomBaseModel:
-        """
-            mostly same, but fetches user in save
-            Copied from: https://github.com/encode/django-rest-framework/blob/master/rest_framework/serializers.py
-        """
-        instance = self.Meta.model(**validated_data)
-        info = model_meta.get_field_info(self.Meta.model)
-        many_to_many = {}
-        for field_name, relation_info in info.relations.items():
-            if relation_info.to_many and (field_name in validated_data):
-                many_to_many[field_name] = validated_data.pop(field_name)
-        instance.save(user=self.context['request'].user)
-
-        if many_to_many:
-            for field_name, value in many_to_many.items():
-                field = getattr(instance, field_name)
-                field.set(value)
-        return instance
-
-    def update(self, instance: CustomBaseModel, validated_data: dict) -> CustomBaseModel:
-        """
-            Copied from: https://github.com/encode/django-rest-framework/blob/master/rest_framework/serializers.py
-        """
-        info = model_meta.get_field_info(instance)
-
-        m2m_fields = []
-        for attr, value in validated_data.items():
-            if attr in info.relations and info.relations[attr].to_many:
-                m2m_fields.append((attr, value))
-            else:
-                setattr(instance, attr, value)
-        instance.save(user=self.context['request'].user)  # Only difference
-        for attr, value in m2m_fields:
-            field = getattr(instance, attr)
-            field.set(value)
-        return instance
-
 
 class CustomBaseModel(FullCleanSaveMixin):
     """
@@ -307,7 +272,8 @@ class CustomBaseModel(FullCleanSaveMixin):
         self.full_clean()
         self.version += 1
         self.updated_at = timezone.now()
-        user = kwargs.pop('user', None)  # Must pop because super().save() doesn't accept user
+        request = request_contextvar.get()
+        user = request.user if request else None
         if user:
             self.updated_by = user
             if self.created_by is None:
