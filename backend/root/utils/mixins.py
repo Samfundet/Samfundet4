@@ -6,11 +6,9 @@ from typing import Any, Union
 
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.db.models import DEFERRED, Model
 
 from rest_framework import serializers
-from rest_framework.utils import model_meta
 
 from root.constants import request_contextvar
 
@@ -193,7 +191,7 @@ class CustomBaseSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = None
+        model = Model
         read_only_fields = (
             'version',
             'created_at',

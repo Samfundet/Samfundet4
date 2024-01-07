@@ -6,7 +6,7 @@ from guardian.shortcuts import get_objects_for_user
 from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
-from django.db.models import QuerySet, Model
+from django.db.models import QuerySet
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 from admin_auto_filters.filters import AutocompleteFilter
