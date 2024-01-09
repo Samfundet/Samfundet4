@@ -181,6 +181,7 @@ export type FoodPreferenceDto = {
 };
 
 export type FoodCategoryDto = {
+  id?: number;
   name_nb?: string;
   name_en?: string;
   order?: number;
@@ -198,6 +199,7 @@ export type MenuItemDto = {
 
   order?: number;
   food_preferences?: FoodPreferenceDto[];
+  food_category: FoodCategoryDto;
 };
 
 export type MenuDto = {
@@ -341,7 +343,7 @@ export type RecruitmentPositionDto = {
 
   tags: string;
 
-  interviewers: UserDto[];
+  interviewers?: UserDto[];
 };
 
 export type InterviewDto = {

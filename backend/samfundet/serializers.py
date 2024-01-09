@@ -1,13 +1,15 @@
 import itertools
 
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
-from rest_framework import serializers
 
+from rest_framework import serializers
+from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from .models.recruitment import (
     Recruitment,
@@ -26,6 +28,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Campus,
     Infobox,
     Booking,
     Profile,
@@ -252,13 +255,21 @@ class LoginSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.Serializer):
     """
-    This serializer defines two fields for authentication:
+    This serializer defines following fields for registration
+      * username
       * email
+      * phone_number
       * firstname
       * lastname
       * password
     """
-    username = serializers.EmailField(label='Username', write_only=True)
+    username = serializers.CharField(label='Username', write_only=True)
+    email = serializers.EmailField(label='Email', write_only=True)
+    phone_number = serializers.RegexField(
+        label='Phonenumber',
+        regex=PHONE_NUMBER_REGEX,
+        write_only=True,
+    )
     firstname = serializers.CharField(label='First name', write_only=True)
     lastname = serializers.CharField(label='Last name', write_only=True)
     password = serializers.CharField(
@@ -273,13 +284,17 @@ class RegisterSerializer(serializers.Serializer):
         # Inherited function.
         # Take username and password from request.
         username = attrs.get('username')
+        email = attrs.get('email')
+        phone_number = attrs.get('phone_number')
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
-            user = User.objects.create_user(first_name=firstname, last_name=lastname, username=username, password=password)
+            user = User.objects.create_user(
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+            )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
             msg = 'Both "username" and "password" are required.'
@@ -311,9 +326,17 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CampusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Campus
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
+    campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
@@ -400,11 +423,12 @@ class FoodCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodCategory
-        fields = '__all__'
+        fields = ['id', 'name_nb', 'name_en']
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
+    food_category = FoodCategorySerializer()
 
     class Meta:
         model = MenuItem
@@ -518,12 +542,49 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
         return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
 
 
+class InterviewerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'id',
+        ]
+
+
 class RecruitmentPositionSerializer(serializers.ModelSerializer):
     gang = GangSerializer(read_only=True)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
 
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'
+
+    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
+        try:
+            interviewers = []
+            if interviewer_objects:
+                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
+                if interviewer_ids:
+                    interviewers = User.objects.filter(id__in=interviewer_ids)
+            recruitment_position.interviewers.set(interviewers)
+        except (TypeError, KeyError):
+            raise ValidationError('Invalid data for interviewers.')
+
+    def create(self, validated_data: dict) -> RecruitmentPosition:
+        recruitment_position = super().create(validated_data)
+        interviewer_objects = self.initial_data.get('interviewers', [])
+        self._update_interviewers(recruitment_position, interviewer_objects)
+        return recruitment_position
+
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+        updated_instance = super().update(instance, validated_data)
+        interviewer_objects = self.initial_data.get('interviewers', [])
+        self._update_interviewers(updated_instance, interviewer_objects)
+        return updated_instance
 
 
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
