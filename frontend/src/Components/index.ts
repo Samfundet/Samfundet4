@@ -22,6 +22,7 @@ export { ImageList } from './ImageList';
 export { ImageQuery } from './ImageQuery';
 export { InputField } from './InputField';
 export { InputFile } from './InputFile';
+export { InputTime } from './InputTime';
 export { Link } from './Link';
 export { List } from './List';
 export { Modal } from './Modal';
