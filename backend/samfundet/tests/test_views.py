@@ -22,7 +22,7 @@ from samfundet.models.general import (
     BlogPost,
     Image,
 )
-from samfundet.serializers import UserSerializer
+from samfundet.serializers import UserSerializer, RegisterSerializer
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
@@ -184,6 +184,41 @@ class TestUserViews:
             assert status.is_client_error(code=response.status_code)
             assert 'phone_number' in data
             assert 'This value does not match the required pattern.' in data['phone_number']
+
+    def test_already_alreadyexists(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        url = reverse(routes.samfundet__register)
+
+        post_data = {
+            'username': 'username',
+            'email': 'kebab@mail.com',
+            'phone_number': '48278994',
+            'firstname': 'kebab',
+            'lastname': 'mannen',
+            'password': 'jeglikerkebab'
+        }
+
+        post_data2 = {
+            'username': 'username2',
+            'email': 'kebab2@mail.com',
+            'phone_number': '48278995',
+            'firstname': 'kebab',
+            'lastname': 'mannen',
+            'password': 'jeglikerkebab'
+        }
+        ### Assert ###
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
+
+        unique_fields = ['username', 'email', 'phone_number']
+        # Test for each field
+        for field in unique_fields:
+            post_data2_copy = post_data2.copy()
+            post_data2_copy[field] = post_data[field]
+            response: Response = fixture_rest_client.post(path=url, data=post_data2_copy)
+            data = response.json()
+            assert status.is_client_error(code=response.status_code)
+            assert RegisterSerializer.ALREADY_EXISTS_MESSAGE in data[field]
 
 
 class TestInformationPagesView:

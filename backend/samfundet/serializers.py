@@ -1,12 +1,14 @@
 import itertools
 
 from django.contrib.auth import authenticate
+from collections import defaultdict
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
+from django.db.models import Q
 
 from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
@@ -280,6 +282,8 @@ class RegisterSerializer(serializers.Serializer):
         write_only=True
     )
 
+    ALREADY_EXISTS_MESSAGE = 'User already exists with this value'
+
     def validate(self, attrs: dict) -> dict:
         # Inherited function.
         # Take username and password from request.
@@ -289,6 +293,19 @@ class RegisterSerializer(serializers.Serializer):
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
+
+        # Check for unique
+        existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
+
+        if existing_users:
+            errors: dict[str, list[ValidationError]] = defaultdict(list)
+            if username in existing_users.values_list('username', flat=True):
+                errors['username'].append(self.ALREADY_EXISTS_MESSAGE)
+            if email in existing_users.values_list('email', flat=True):
+                errors['email'].append(self.ALREADY_EXISTS_MESSAGE)
+            if phone_number in existing_users.values_list('phone_number', flat=True):
+                errors['phone_number'].append(self.ALREADY_EXISTS_MESSAGE)
+            raise serializers.ValidationError(errors)
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
