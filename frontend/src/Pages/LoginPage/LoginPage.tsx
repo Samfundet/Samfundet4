@@ -24,7 +24,9 @@ export function LoginPage() {
   const fallbackUrl = typeof from === 'undefined' ? ROUTES.frontend.home : from.pathname;
 
   useEffect(() => {
-    if (user) navigate(fallbackUrl);
+    if (user) {
+      navigate({ url: fallbackUrl });
+    }
   }, [user, fallbackUrl, navigate]);
 
   function handleLogin(formData: Record<string, string>) {

@@ -136,8 +136,8 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(id: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
+export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
   return response.data;
 }
@@ -250,7 +250,7 @@ export async function getMenu(pk: string | number): Promise<MenuDto> {
 }
 
 export async function getMenuItems(): Promise<MenuItemDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_items_list;
   const response = await axios.get<MenuItemDto[]>(url, { withCredentials: true });
 
   return response.data;
