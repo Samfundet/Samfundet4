@@ -7,5 +7,4 @@ export const ROUTES_OTHER = {
     '          .42220330892942!2d10.3953201100997!3f352.98823313957973!4f2.236618333891684!5f0.7820865974627469',
   maps_lyche: 'https://maps.app.goo.gl/z98jeRNVqQUPRWsv9',
   lyche_facebook: 'https://www.facebook.com/samfundet.lyche',
-  samfundet_kontaktinfo: 'https://samfundet.no/kontaktinfo',
 } as const;

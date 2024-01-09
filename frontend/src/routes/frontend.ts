@@ -16,6 +16,7 @@ export const ROUTES_FRONTEND = {
   saksdokumenter: '/saksdokumenter/',
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
+  contact: '/contact',
   // ==================== //
   //        Sulten        //
   // ==================== //
