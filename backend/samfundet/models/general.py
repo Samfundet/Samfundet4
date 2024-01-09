@@ -20,7 +20,9 @@ from django.utils.translation import gettext as _
 from root.utils.mixins import FullCleanSaveMixin
 from root.utils import permissions
 
-from .utils.fields import LowerCaseField
+from .utils.fields import LowerCaseField, PhoneNumberField
+
+from samfundet.models.model_choices import UserPreferenceTheme, ReservationOccasion, SaksdokumentCategory
 
 if TYPE_CHECKING:
     from typing import Any, Optional
@@ -83,6 +85,17 @@ class Image(FullCleanSaveMixin):
         return f'{self.title}'
 
 
+class Campus(FullCleanSaveMixin):
+    name_nb = models.CharField(max_length=64, unique=True, blank=False, null=False)
+    name_en = models.CharField(max_length=64, unique=True, blank=False, null=False)
+    abbreviation = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self) -> str:
+        if not self.abbreviation:
+            return f'{self.name_nb}'
+        return f'{self.name_nb} ({self.abbreviation})'
+
+
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -95,6 +108,25 @@ class User(AbstractUser):
         error_messages={
             'unique': _('A user with that username already exists.'),
         },
+    )
+    phone_number = PhoneNumberField(
+        _('phone_number'),
+        blank=False,
+        null=False,
+        editable=True,
+    )
+    email = models.EmailField(
+        _('email'),
+        blank=False,
+        null=False,
+        unique=True,
+    )
+
+    campus = models.ForeignKey(
+        Campus,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
 
     class Meta:
@@ -129,14 +161,8 @@ class User(AbstractUser):
 class UserPreference(FullCleanSaveMixin):
     """Group all preferences and config per user."""
 
-    class Theme(models.TextChoices):
-        """Same as in frontend"""
-
-        LIGHT = 'theme-light'
-        DARK = 'theme-dark'
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    theme = models.CharField(max_length=30, choices=Theme.choices, default=Theme.LIGHT, blank=True, null=True)
+    theme = models.CharField(max_length=30, choices=UserPreferenceTheme.choices, default=UserPreferenceTheme.LIGHT, blank=True, null=True)
     mirror_dimension = models.BooleanField(default=False)
     cursor_trail = models.BooleanField(default=False)
 
@@ -392,11 +418,7 @@ class Reservation(FullCleanSaveMixin):
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
 
-    class Occasion(models.TextChoices):
-        DRINK = 'DRINK', _('Drikke')
-        FOOD = 'FOOD', _('Mat')
-
-    occasion = models.CharField(max_length=24, choices=Occasion.choices, default=Occasion.FOOD)
+    occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
     additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
     internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
@@ -493,12 +515,6 @@ class Saksdokument(FullCleanSaveMixin):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class SaksdokumentCategory(models.TextChoices):
-        FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
-        STYRET = 'STYRET', _('Styret')
-        RADET = 'RADET', _('Rådet')
-        ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
 
     category = models.CharField(max_length=25, choices=SaksdokumentCategory.choices, default=SaksdokumentCategory.FS_REFERAT)
     file = models.FileField(upload_to='uploads/saksdokument/', blank=True, null=True)

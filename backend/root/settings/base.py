@@ -175,7 +175,8 @@ REST_FRAMEWORK = {
         [
             # 'rest_framework.permissions.IsAuthenticated',
             # 'rest_framework.permissions.DjangoObjectPermissions',
-            'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
+            'root.custom_classes.permission_classes.SuperUserPermission',
+            # 'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
         ]
 }
 ### End: DRF ###

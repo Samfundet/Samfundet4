@@ -21,6 +21,7 @@ export { ImageCard } from './ImageCard';
 export { ImageList } from './ImageList';
 export { ImageQuery } from './ImageQuery';
 export { InputField } from './InputField';
+export { InputFile } from './InputFile';
 export { Link } from './Link';
 export { List } from './List';
 export { Modal } from './Modal';
@@ -51,3 +52,12 @@ export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
+export { ToolTip } from './ToolTip';
+
+// Props
+export type { TextAreaFieldProps } from './TextAreaField';
+export type { InputFieldProps } from './InputField';
+export type { CheckboxProps } from './Checkbox';
+export type { InputFileProps } from './InputFile';
+export type { DropdownProps } from './Dropdown';
+export type { ImagePickerProps } from './ImagePicker/ImagePicker';
