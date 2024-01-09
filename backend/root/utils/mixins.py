@@ -181,37 +181,6 @@ class FullCleanSaveMixin(Model):
         super().save(*args, **kwargs)
 
 
-class CustomBaseSerializer(serializers.ModelSerializer):
-    created_by = serializers.SerializerMethodField(method_name='get_created_by', read_only=True)
-    updated_by = serializers.SerializerMethodField(method_name='get_updated_by', read_only=True)
-    """
-        Base serializer, sets version fields to read_only
-        Adds validation errors from models clean
-        Context of request needs to be passed
-    """
-
-    class Meta:
-        model = Model
-        read_only_fields = (
-            'version',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
-        )
-
-    def get_created_by(self, obj: CustomBaseModel) -> str:
-        return obj.created_by.__str__() if obj.created_by else None
-
-    def get_updated_by(self, obj: CustomBaseModel) -> str:
-        return obj.updated_by.__str__() if obj.updated_by else None
-
-    def validate(self, attrs: dict) -> dict:
-        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
-        instance.full_clean()
-        return attrs
-
-
 class CustomBaseModel(FullCleanSaveMixin):
     """
         Basic model which will contains necessary version info of a model:
@@ -281,3 +250,34 @@ class CustomBaseModel(FullCleanSaveMixin):
             self.created_at = self.updated_at
 
         super().save(*args, **kwargs)
+
+
+class CustomBaseSerializer(serializers.ModelSerializer):
+    """
+        Base serializer, sets version fields to read_only
+        Adds validation errors from models clean
+        Context of request needs to be passed
+    """
+    created_by = serializers.SerializerMethodField(method_name='get_created_by', read_only=True)
+    updated_by = serializers.SerializerMethodField(method_name='get_updated_by', read_only=True)
+
+    class Meta:
+        model = CustomBaseModel
+        read_only_fields = (
+            'version',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+        )
+
+    def get_created_by(self, obj: CustomBaseModel) -> str | None:
+        return obj.created_by.__str__() if obj.created_by else None
+
+    def get_updated_by(self, obj: CustomBaseModel) -> str | None:
+        return obj.updated_by.__str__() if obj.updated_by else None
+
+    def validate(self, attrs: dict) -> dict:
+        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
+        instance.full_clean()
+        return attrs
