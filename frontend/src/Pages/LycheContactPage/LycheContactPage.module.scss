@@ -9,10 +9,11 @@
   gap: 4rem;
   overflow: hidden;
   color: $white;
+  margin: calc($sulten-navbar-height/4) 0 calc($sulten-navbar-height/4) 0; //this looked the best
 
   @include for-mobile-down {
     @include flex-column-center;
-    margin: calc($sulten-navbar-height / 2) 0 calc($sulten-navbar-height / 2) 0;
+    margin-top: $sulten-navbar-height;
     height: 50%;
     width: 100%;
     gap: 1em;
