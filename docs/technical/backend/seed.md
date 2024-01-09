@@ -4,7 +4,7 @@
 
 Seed scripts are used to populate the database with dummy data for testing. Seed scripts are located in `root/management/commands/seed_scripts/`.
 
-### Seeding loccaly
+### Seeding locally
 
 To seed the database **locally**, run this in terminal:
 
