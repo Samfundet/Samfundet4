@@ -1,34 +1,76 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
+import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
+import { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
 
 export function InterviewNotesPage() {
-  //TODO: interview notes from backend
+  const recruitmentId = useParams().recruitmentId;
+  const gangId = useParams().gangId;
+  const positionId = useParams().positionId;
   const [editingMode, setEditingMode] = useState(false);
-  const [text, setText] = useState('Notater fra intervjuet her...'); //TODO: place the text from the backend here.
-  const posId = 1; //TODO: get the posId from the backend.
+  const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
+  useEffect(() => {
+    if (positionId && recruitmentId && gangId) {
+      getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((response) => {
+        const recruitmentAdmissions = response.data;
+        const admission = recruitmentAdmissions.filter(
+          (admission) => admission.id.toString() === positionId && admission.interview && admission.interview.notes,
+        );
+        setRecruitmentAdmission(admission);
+      });
+    }
+  }, [recruitmentId, positionId, gangId]);
 
-  function handleEditSave() {
+  async function handleEditSave() {
+    if (recruitmentAdmission[0] === undefined) {
+      console.log('no interview notes found');
+      toast.error(t(KEY.common_something_went_wrong));
+      return;
+    }
     if (editingMode) {
-      //TODO: save the text in the textbox and send it to the backend
+      const updatedAdmission = {
+        ...recruitmentAdmission[0],
+        interview: {
+          ...recruitmentAdmission[0].interview,
+          notes: recruitmentAdmission[0].interview.notes,
+        },
+      };
+      try {
+        console.log('Saving this data:', updatedAdmission);
+        const response = await putRecruitmentAdmissionForGang(recruitmentAdmission[0].id.toString(), updatedAdmission);
+        console.log('Saved data response:', response);
+      } catch (error) {
+        console.error('Error saving notes:', error);
+        toast.error(t(KEY.common_something_went_wrong));
+      }
     }
     setEditingMode(!editingMode);
   }
-
-  //TODO: make handleSave function to save the text in the textbox and send it to the backend
 
   return (
     <AdminPageLayout title={t(KEY.recruitment_interview_notes)}>
       <div className={styles.container}>
         <label htmlFor="INotes">
-          {t(KEY.recruitment_applicant)} {posId}
+          {t(KEY.recruitment_applicant)} {positionId}
         </label>
-        <TextAreaField value={text} onChange={setText} disabled={!editingMode}></TextAreaField>
+        <TextAreaField
+          value={recruitmentAdmission[0] ? recruitmentAdmission[0].interview.notes : ' '}
+          onChange={(value: string) => {
+            const updatedNotes = value;
+            const updatedInterview = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
+            const updatedAdmission = { ...recruitmentAdmission[0], interview: updatedInterview };
+            setRecruitmentAdmission([updatedAdmission]);
+          }}
+          disabled={!editingMode}
+        ></TextAreaField>
         <Button theme="samf" rounded={true} className={styles.button} onClick={handleEditSave}>
           {editingMode ? t(KEY.common_save) : t(KEY.common_edit)}
         </Button>
