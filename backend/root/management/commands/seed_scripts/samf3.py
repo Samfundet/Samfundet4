@@ -98,7 +98,7 @@ def image_to_fname(image_dict) -> str:
 
 def get_image_path_for_event(image_csv, event):
     for img in image_csv:
-        if img['id'] == event['image_id']:
+        if img['id'] == event['image']:
             return image_to_fname(img)
     return None
 

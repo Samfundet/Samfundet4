@@ -167,7 +167,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         list_serializer_class = EventListSerializer
         # Warning: registration object contains sensitive data, don't include it!
-        exclude = ['image', 'registration', 'event_group', 'billig_id']
+        exclude = ['registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     end_dt = serializers.DateTimeField(read_only=True)
@@ -178,21 +178,8 @@ class EventSerializer(serializers.ModelSerializer):
     custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
     billig = BilligEventSerializer(read_only=True)
 
+
     # For post/put (change image by id).
-    image_id = serializers.IntegerField(write_only=True)
-
-    def create(self, validated_data: dict) -> Event:
-        """
-        Uses the write_only field 'image_id' to get an Image object
-        and sets it in the new event. Read/write only fields enable
-        us to use the same serializer for both reading and writing.
-        """
-        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
-        event = Event(**validated_data)
-        event.save()
-        return event
-
-
 class EventGroupSerializer(serializers.ModelSerializer):
 
     class Meta:

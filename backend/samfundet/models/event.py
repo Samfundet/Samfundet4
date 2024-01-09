@@ -141,22 +141,22 @@ class Event(models.Model):
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
 
     # Event status
-    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=False, null=False, default=EventStatus.ACTIVE)
+    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=True, null=False, default=EventStatus.ACTIVE)
 
     # Text/images etc
-    title_nb = models.CharField(max_length=140, blank=False, null=False)
-    title_en = models.CharField(max_length=140, blank=False, null=False)
-    description_long_nb = models.TextField(blank=False, null=False)
-    description_long_en = models.TextField(blank=False, null=False)
-    description_short_nb = models.TextField(blank=False, null=False)
-    description_short_en = models.TextField(blank=False, null=False)
-    location = models.CharField(max_length=140, blank=False, null=False)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
-    host = models.CharField(max_length=140, blank=False, null=False)
+    title_nb = models.CharField(max_length=140, blank=True, null=False)
+    title_en = models.CharField(max_length=140, blank=True, null=False)
+    description_long_nb = models.TextField(blank=True, null=False)
+    description_long_en = models.TextField(blank=True, null=False)
+    description_short_nb = models.TextField(blank=True, null=False)
+    description_short_en = models.TextField(blank=True, null=False)
+    location = models.CharField(max_length=140, blank=True, null=False)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=False)
+    host = models.CharField(max_length=140, blank=True, null=False)
     editors = models.ManyToManyField(Gang, blank=True)
 
-    age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
-    category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
+    age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=True, null=False, default=None)
+    category = models.CharField(max_length=30, choices=EventCategory.choices, blank=True, null=False, default=EventCategory.OTHER)
 
     # ======================== #
     #    Duration/Timestamps   #
@@ -164,16 +164,16 @@ class Event(models.Model):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-    start_dt = models.DateTimeField(blank=False, null=False)
-    duration = models.PositiveIntegerField(blank=False, null=False)
-    publish_dt = models.DateTimeField(blank=False, null=False)
+    start_dt = models.DateTimeField(blank=True, null=False)
+    duration = models.PositiveIntegerField(blank=True, null=False)
+    publish_dt = models.DateTimeField(blank=True, null=False)
 
     # ======================== #
     #      Ticket Related      #
     # ======================== #
 
-    capacity = models.PositiveIntegerField(blank=False, null=False)
-    ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices, blank=False, null=False, default=EventTicketType.FREE)
+    capacity = models.PositiveIntegerField(blank=True, null=False)
+    ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices, blank=True, null=False, default=EventTicketType.FREE)
     registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
