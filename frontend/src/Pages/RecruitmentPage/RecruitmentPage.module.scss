@@ -8,12 +8,17 @@
   align-items: center;
   justify-content: center;
   gap: 2em;
+
+  @include for-desktop-up {
+    padding: 3em 6em 3em 6em;
+  }
 }
 
 .video {
   padding-bottom: 0;
   aspect-ratio: 16/9;
   border-width: 0;
+  width: 32em;
 }
 
 .close {

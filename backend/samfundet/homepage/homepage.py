@@ -3,7 +3,8 @@ from typing import Any
 
 from django.utils import timezone
 
-from samfundet.models.event import Event, EventCategory, EventTicketType
+from samfundet.models.event import Event
+from samfundet.models.model_choices import EventCategory, EventTicketType
 from samfundet.serializers import EventSerializer
 
 
