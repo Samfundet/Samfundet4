@@ -14,6 +14,7 @@ from django.db import models
 from django.db.models import Prefetch, QuerySet
 from django.utils import timezone
 
+from root.utils.mixins import CustomBaseModel
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
 from samfundet.models.general import User, Image, Gang
 from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventStatus, EventTicketType
@@ -22,7 +23,7 @@ from samfundet.models.model_choices import EventAgeRestriction, EventCategory, E
 # ======================== #
 
 
-class EventGroup(models.Model):
+class EventGroup(CustomBaseModel):
     """
     Used for recurring events
     Connects multiple recurring events (e.g. the same concert two days in a row)
@@ -30,8 +31,6 @@ class EventGroup(models.Model):
     for admins to edit both or links for users to see other times.
     """
     name = models.CharField(max_length=140)
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'EventGroup'
@@ -79,7 +78,7 @@ class EventRegistration(models.Model):
 # ======================== #
 
 
-class EventCustomTicket(models.Model):
+class EventCustomTicket(CustomBaseModel):
     """
     Used for events with custom price group.
     Stores name and price of each custom ticket type.
@@ -94,7 +93,7 @@ class EventCustomTicket(models.Model):
 # ======================== #
 
 
-class Event(models.Model):
+class Event(CustomBaseModel):
     """
     The primary event model. This is by far the most complex model in Samf4,
     so don't be scared if you're just starting out!
@@ -161,12 +160,10 @@ class Event(models.Model):
     # ======================== #
     #    Duration/Timestamps   #
     # ======================== #
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-    start_dt = models.DateTimeField(blank=True, null=False)
-    duration = models.PositiveIntegerField(blank=True, null=False)
-    publish_dt = models.DateTimeField(blank=True, null=False)
+    
+    start_dt = models.DateTimeField(blank=False, null=False)
+    duration = models.PositiveIntegerField(blank=False, null=False)
+    publish_dt = models.DateTimeField(blank=False, null=False)
 
     # ======================== #
     #      Ticket Related      #
