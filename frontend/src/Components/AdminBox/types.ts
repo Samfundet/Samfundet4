@@ -9,7 +9,7 @@ export const TYPE = {
 
 export type Type = typeof TYPE;
 export type TypeKey = keyof Type;
-export type TypeValue = (typeof TYPE)[TypeKey];
+export type TypeValue = typeof TYPE[TypeKey];
 
 export type Options = {
   text: string;
