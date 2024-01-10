@@ -181,10 +181,12 @@ class RecruitmentAdmission(CustomBaseModel):
 
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
-        choices=RecruitmentPriorityChoices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
+        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
     )
 
-    recruiter_status = models.IntegerField(choices=RecruitmentStatusChoices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission')
+    recruiter_status = models.IntegerField(
+        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
+    )
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
