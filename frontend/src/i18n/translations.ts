@@ -84,6 +84,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_festivals]: 'Festivaler',
   [KEY.common_more_info]: 'Mer info',
+  [KEY.common_other_info]: 'Annen info',
   [KEY.common_norwegian]: 'Norsk',
   [KEY.common_firstname]: 'Fornavn',
   [KEY.common_membership]: 'Medlemskap',
@@ -104,6 +105,13 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'Se i django admin-panel',
   [KEY.common_creation_successful]: 'Opprettelsen var vellykket',
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
+  [KEY.common_volunteering]: 'Frivilligheten',
+  [KEY.common_overview_map]: 'Oversiktskart',
+  [KEY.common_age_limit]: 'Aldersgrenser',
+  [KEY.common_press]: 'Pressen',
+  [KEY.common_film_club]: 'Filmklubb',
+  [KEY.common_privacy_policy]: 'Personvern',
+  [KEY.common_facilitation]: 'Tilrettelegging',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Billett',
@@ -179,6 +187,7 @@ export const nb: Record<KeyValues, string> = {
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
+  [KEY.admin_saksdokumenter]: 'Saksdokumenter',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt Bilde',
   [KEY.admin_steal_identity]: 'Stjel identitet',
@@ -244,6 +253,19 @@ export const nb: Record<KeyValues, string> = {
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+  [KEY.samfundsmøtet]: 'Samfundsmøtet',
+  [KEY.samfundsmøtet_desc]:
+    'Samfundsmøtet er Studentersamfundets høyeste organ. Her velges leder samt medlemmer til Finansstyret og Rådet. Lederen velger ut sitt eget styre, som utformer den politiske profilen og representer medlemmene og foreningen Samfundet. Finansstyret administrerer forretningsdriften. Rådet kontrollerer at all virksomhet i Samfundet foregår i henhold til norske og interne lover. Samfundet har en daglig leder, økonomiansvarlig, husøkonom, vaktmester og renholdspersonell som er ansatte.',
+  [KEY.samfundet_about_the_org]: 'Samfundet som organisasjon',
+  [KEY.samfundets_historie]: 'Samfundets historie',
+  [KEY.volunteering_info]:
+    'Det meste av arbeid på Studentersamfundet i Trondhjem gjøres gjennom dugnad av studenter. Arbeidet er organisert i enheter som kalles gjenger. Potensielle nye medlemmer må søke den aktuelle gjengen om opptak, og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.',
+  [KEY.the_groups_at_samfundet]: 'Gjengene på Samfundet',
+  [KEY.about_samfundet_info]:
+    'Studentersamfundet i Trondhjem er en organisasjon for studenter i Trondheim som eies og drives av sine rundt 16 100 medlemmer. Formålsparagrafen vår sier at ”Studentersamfundet skal være det naturlige samlingsstedet for studenter i Trondhjem”. Vårt røde runde huser konserter, ulike kulturarrangementer, utallige barer, en kafé og en restaurant. Mest sagnomsust er Samfundsmøtene, viet til debatt om politikk og aktuelle spørsmål, eller til underholdning og moro. Samfundet har også tre av Trondheims beste konsertscener.',
+  [KEY.uka_isfit_info]:
+    'Annenhvert år arrangeres Norges største kulturfestival UKA og verdens største internasjonale tematiske studentfestival under Studentersamfundets paraply.',
+  [KEY.renting_and_other_services]: 'Leie og tjenester',
 };
 
 export const en: Record<KeyValues, string> = {
@@ -328,6 +350,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_required]: 'Required',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_more_info]: 'More info',
+  [KEY.common_other_info]: 'Other information',
   [KEY.common_firstname]: 'First name',
   [KEY.common_norwegian]: 'Norwegian',
   [KEY.common_username]: 'Brukernavn',
@@ -349,6 +372,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'See in django admin-panel',
   [KEY.common_creation_successful]: 'Successfully created',
   [KEY.common_something_went_wrong]: 'Something went wrong',
+  [KEY.common_volunteering]: 'Volunteering',
+  [KEY.common_overview_map]: 'Overview map',
+  [KEY.common_age_limit]: 'Age limits',
+  [KEY.common_press]: 'Press',
+  [KEY.common_film_club]: 'Film club',
+  [KEY.common_privacy_policy]: 'Privacy policy',
+  [KEY.common_facilitation]: 'Facilitation',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
@@ -424,6 +454,7 @@ export const en: Record<KeyValues, string> = {
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'case document',
+  [KEY.admin_saksdokumenter]: 'case documents',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
   [KEY.admin_steal_identity]: 'Steal identity',
@@ -491,4 +522,17 @@ export const en: Record<KeyValues, string> = {
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
+  [KEY.samfundsmøtet]: 'The Society Meeting',
+  [KEY.samfundsmøtet_desc]:
+    'The Society Meeting is our highest organ. We elect the leader here, as well as members of the Finance Board and the Council. The leader, elected politically, chooses his or her own Board, which forms the House’s political profile and represents all of Samfundet’s members. The Finance Board manages the business. The Council ensures that all activities at Samfundet take place according to Norwegian and internal laws. Samfundet has a general manager, financial manager, house-economist, caretaker and cleaning staff who are employees.',
+  [KEY.samfundet_about_the_org]: 'About the organization',
+  [KEY.samfundets_historie]: 'Our history',
+  [KEY.volunteering_info]:
+    'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called groups (gjenger). Prospective new members must apply to the appropriate group for admission and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
+  [KEY.the_groups_at_samfundet]: 'The groups at Samfundet',
+  [KEY.about_samfundet_info]:
+    'Samfundet is an organization for students in Trondheim that is owned and run by its approximately 16100 members. Our mission statement is Samfundet will be the natural meeting place for students in Trondheim. In our red, round building we regularly host concerts and various cultural events, and have countless bars, a café and a restaurant. The Society Meetings are perhaps our most famous events. These meetings serve as a place for debating politics and current events, and but also for entertainment and fun. Samfundet also has three of Trondheim’s best music venues.',
+  [KEY.uka_isfit_info]:
+    'Norway’s largest cultural festival, UKA, and the world’s largest international thematic student festival, ISFiT, both have their roots in Studentersamfundet. They are still closely connected to us, with many students volunteering at both Samfundet, and at the festivals.',
+  [KEY.renting_and_other_services]: 'Renting and other services',
 };
