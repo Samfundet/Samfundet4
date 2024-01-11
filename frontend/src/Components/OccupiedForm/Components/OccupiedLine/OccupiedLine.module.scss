@@ -1,15 +1,6 @@
 @import 'src/constants';
 
 @import 'src/mixins';
-.number::-webkit-outer-spin-button,
-.number::-webkit-inner-spin-button {
-  appearance: none;
-}
-
-/* Firefox */
-.number[type='number'] {
-  -moz-appearance: textfield;
-}
 
 .row {
   display: flex;
