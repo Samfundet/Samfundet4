@@ -632,7 +632,7 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         return recruitment_admission
 
 
-class OccupiedtimeslotSerializer(CustomBaseSerializer):
+class OccupiedtimeslotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Occupiedtimeslot
