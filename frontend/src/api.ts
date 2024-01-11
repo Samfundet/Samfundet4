@@ -575,7 +575,6 @@ export async function postOccupiedTimeslots(
   timeslots: OccupiedTimeSlotDto[],
 ): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
-  console.log(timeslots);
   const response = await axios.post(url, timeslots, { withCredentials: true });
 
   return response;
