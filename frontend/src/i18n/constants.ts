@@ -105,6 +105,7 @@ export const KEY = {
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
+  common_save_successful: 'common_save_successful',
   common_delete_successful: 'common_delete_successful',
   common_update_successful: 'common_update_successful',
   common_creation_successful: 'common_creation_successful',
@@ -241,7 +242,7 @@ export const KEY = {
  * Reveals errors in translations.ts if some keys are not translated.
  */
 export type KeyKeys = keyof typeof KEY;
-export type KeyValues = (typeof KEY)[KeyKeys];
+export type KeyValues = typeof KEY[KeyKeys];
 
 export const LANGUAGES = {
   NB: 'nb',
@@ -249,4 +250,4 @@ export const LANGUAGES = {
 } as const;
 
 export type LanguageKey = keyof typeof LANGUAGES;
-export type LanguageValue = (typeof LANGUAGES)[LanguageKey];
+export type LanguageValue = typeof LANGUAGES[LanguageKey];
