@@ -365,3 +365,12 @@ export type RecruitmentAdmissionDto = {
   recruiter_priority?: number;
   recruiter_status?: number;
 };
+
+export type RegistrationDto = {
+  username: string;
+  email: string;
+  phone_number: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+};
