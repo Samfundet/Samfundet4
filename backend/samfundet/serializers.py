@@ -414,37 +414,6 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodCategory
-        fields = ['id', 'name_nb', 'name_en']
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-    food_category = FoodCategorySerializer()
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -481,9 +450,8 @@ class TextItemSerializer(serializers.ModelSerializer):
         model = TextItem
         fields = '__all__'
 
-        
-class InfoboxSerializer(CustomBaseSerializer):
 
+class InfoboxSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Infobox
@@ -502,21 +470,21 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-class FoodPreferenceSerializer(serializers.ModelSerializer):
+class FoodPreferenceSerializer(CustomBaseSerializer):
 
     class Meta:
         model = FoodPreference
         fields = '__all__'
 
 
-class FoodCategorySerializer(serializers.ModelSerializer):
+class FoodCategorySerializer(CustomBaseSerializer):
 
     class Meta:
         model = FoodCategory
         fields = '__all__'
 
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class MenuItemSerializer(CustomBaseSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
 
     class Meta:
@@ -524,7 +492,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MenuSerializer(serializers.ModelSerializer):
+class MenuSerializer(CustomBaseSerializer):
     menu_items = MenuItemSerializer(many=True)
 
     class Meta:
@@ -539,7 +507,7 @@ class TableSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class ReservationSerializer(serializers.ModelSerializer):
+class ReservationSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Reservation
