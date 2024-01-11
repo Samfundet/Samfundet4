@@ -95,6 +95,7 @@ export const KEY = {
   common_required: 'common_required',
   common_festivals: 'common_festivals',
   common_more_info: 'common_more_info',
+  common_other_info: 'common_other_info',
   common_firstname: 'common_firstname',
   common_volunteer: 'common_volunteer',
   common_norwegian: 'common_norwegian',
@@ -115,6 +116,13 @@ export const KEY = {
   common_creation_successful: 'common_creation_successful',
   common_see_in_django_admin: 'common_see_in_django_admin',
   common_something_went_wrong: 'common_something_went_wrong',
+  common_volunteering: 'common_volunteering',
+  common_overview_map: 'common_overview_map',
+  common_age_limit: 'common_age_limit',
+  common_press: 'common_press',
+  common_film_club: 'common_film_club',
+  common_privacy_policy: 'common_privacy_policy',
+  common_facilitation: 'common_facilitation',
 
   // Price groups:
   common_ticket_type: 'common_ticket_type',
@@ -191,6 +199,7 @@ export const KEY = {
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',
+  admin_saksdokumenter: 'admin_saksdokumenter',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
   admin_steal_identity: 'admin_steal_identity',
@@ -246,6 +255,15 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  samfundsmøtet: 'samfundsmøtet',
+  samfundsmøtet_desc: 'samfundsmøtet_desc',
+  samfundet_about_the_org: 'samfundet_about_the_org',
+  samfundets_historie: 'samfundets_historie',
+  volunteering_info: 'volunteering_info',
+  the_groups_at_samfundet: 'the_groups_at_samfundet',
+  about_samfundet_info: 'about_samfundet_info',
+  uka_isfit_info: 'uka_isfit_info',
+  renting_and_other_services: 'renting_and_other_services',
 } as const;
 
 /**
