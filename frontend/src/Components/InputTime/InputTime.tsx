@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './InputTime.module.scss';
+import classNames from 'classnames';
 
 type InputTimeProps = {
   className?: string;
@@ -56,10 +57,10 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
 
   return (
     <div className={styles.inputTime_wrap}>
-      <div className={styles.inputTime}>
+      <div className={classNames(styles.inputTime, error && styles.error)}>
         <input
           type="text"
-          className={styles.number}
+          className={classNames(styles.number, error && styles.error)}
           name="hour"
           value={hour}
           onChange={handleChange}
@@ -68,14 +69,14 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
         <p>:</p>
         <input
           type="text"
-          className={styles.number}
+          className={classNames(styles.number, error && styles.error)}
           name="minute"
           value={minute}
           onChange={handleChange}
           onBlur={handleBlur}
         />
       </div>
-      {error && <div className={styles.error}> {error}</div>}
+      {error && <div className={styles.errorMessage}> {error}</div>}
     </div>
   );
 }

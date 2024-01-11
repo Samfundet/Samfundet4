@@ -52,6 +52,7 @@ export function OccupiedLine({ timeslot, onChange, onDelete, index }: OccupiedLi
       const startDt = new Date(date + ' ' + startTime);
       const endDt = new Date(date + ' ' + endTime);
       if (!(isNaN(startDt.getTime()) && !isNaN(endDt.getTime())) && endDt.getTime() < startDt.getTime()) {
+        setEndTimeError('Time must be after start');
         endDt.setDate(endDt.getDate() + 1);
       }
       const startDtString = !isNaN(startDt.getTime()) ? startDt.toISOString() : timeslot.start_dt;
