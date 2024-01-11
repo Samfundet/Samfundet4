@@ -23,7 +23,7 @@ export const MIRROR_CLASS = 'mirror-dimension';
 export const CURSOR_TRAIL_CLASS = 'trail';
 
 export type ThemeKey = keyof typeof THEME;
-export type ThemeValue = typeof THEME[ThemeKey];
+export type ThemeValue = (typeof THEME)[ThemeKey];
 
 export const XCSRFTOKEN = 'X-CSRFToken';
 
