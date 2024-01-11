@@ -7,7 +7,6 @@
   flex-direction: column;
   gap: .2em;
   padding: 0.5em;
-
 }
 
 .add {
@@ -26,6 +25,7 @@
 .row {
   display: flex;
   flex-direction: row;
+  gap: 1em;
   justify-content: center;
   align-items: center;
 }

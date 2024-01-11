@@ -65,7 +65,7 @@ class EventCategory(models.TextChoices):
 class UserPreferenceTheme(models.TextChoices):
     """Same as in frontend"""
 
-    LIGHT = 'theme-light'
+    LIGHT = '-light'
     DARK = 'theme-dark'
 
 
@@ -78,4 +78,5 @@ class SaksdokumentCategory(models.TextChoices):
     FS_REFERAT = 'FS_REFERAT', _('FS-Referat')
     STYRET = 'STYRET', _('Styret')
     RADET = 'RADET', _('Rådet')
-    ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
+    ARSBERETNINGER = 'ARSBERETNINGER', _(
+        'Årsberetninger, regnskap og budsjettkunngjøringer')

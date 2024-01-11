@@ -6,6 +6,8 @@ import styles from './Modal.module.scss';
 /**
  * https://reactcommunity.org/react-modal/#usage
  */
+
+
 export function Modal({ children, ...props }: ReactModal.Props) {
   return (
     <ReactModal
