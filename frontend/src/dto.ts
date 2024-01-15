@@ -19,6 +19,14 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type OccupiedTimeSlotDto = {
+  id?: number;
+  user?: number;
+  recruitment: number;
+  start_dt: string;
+  end_dt: string;
+};
+
 export type RecruitmentUserDto = {
   id: number;
   username: string;
@@ -62,6 +70,7 @@ export type ObjectPermissionDto = {
 
 export type VenueDto = {
   id: number;
+  slug: string;
   name: string;
   description?: string;
   floor?: number;

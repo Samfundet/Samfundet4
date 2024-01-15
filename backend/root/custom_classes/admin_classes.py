@@ -265,3 +265,11 @@ class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):
 
 class CustomGuardedGroupAdmin(CustomGuardedModelAdmin, GroupAdmin):
     ...
+
+
+class CustomBaseAdmin(CustomGuardedModelAdmin):
+    """
+        Custom base admin, sets user on save
+        Displays these fields as read only in admi
+    """
+    readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']
