@@ -10,6 +10,7 @@ from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
+
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
@@ -57,6 +58,7 @@ from .models.general import (
     TextItem,
     KeyValue,
     BlogPost,
+    Reservation,
     Organization,
     FoodCategory,
     Saksdokument,
@@ -97,6 +99,7 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
     OccupiedtimeslotSerializer,
+    ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
@@ -224,6 +227,12 @@ class IsClosedView(ListAPIView):
         )
 
 
+class BookingView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    serializer_class = BookingSerializer
+    queryset = Booking.objects.all()
+
+
 class SaksdokumentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = SaksdokumentSerializer
@@ -301,10 +310,29 @@ class TableView(ModelViewSet):
     queryset = Table.objects.all()
 
 
-class BookingView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
-    serializer_class = BookingSerializer
-    queryset = Booking.objects.all()
+class ReservationCheckAvailabilityView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ReservationCheckSerializer
+
+    def post(self, request: Request) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            if serializer.validated_data['reservation_date'] <= timezone.now().date():
+                return Response(
+                    {
+                        'error_nb': 'Reservasjoner må dessverre opprettes minst én dag i forveien.',
+                        'error_en': 'Unfortunately, reservations must be made at least one day in advance.'
+                    },
+                    status=status.HTTP_406_NOT_ACCEPTABLE
+                )
+            venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
+            available_tables = Reservation.fetch_available_times_for_date(
+                venue=venue,
+                seating=serializer.validated_data['guest_count'],
+                date=serializer.validated_data['reservation_date'],
+            )
+            return Response(available_tables, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =============================== #
@@ -717,6 +745,8 @@ class OccupiedtimeslotView(ListCreateAPIView):
         # TODO Could maybe need a check for saving own, not allowing to save others to themselves
         serializer = self.get_serializer(data=request.data, many=True)
         if serializer.is_valid():
+            # Uses set functionality, but tries to reduce transactions
+            Occupiedtimeslot.objects.filter(user=request.user, recruitment=request.data[0]['recruitment']).delete()
             serializer.save()
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
