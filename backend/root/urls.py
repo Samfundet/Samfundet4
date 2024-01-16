@@ -12,6 +12,7 @@ urlpatterns = [
     path('rest_framework/', include('rest_framework.urls')),
     path('notifications/', include(notifications.urls, namespace='notifications')),
     path('', include('samfundet.urls')),  # Put last.
+    path('', include('sulten.urls')),  # Put last.
 ]
 
 # Setup static access and media upload.

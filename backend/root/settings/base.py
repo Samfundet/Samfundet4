@@ -205,6 +205,10 @@ INSTALLED_APPS += [
 NOTIFICATIONS_NOTIFICATION_MODEL = 'samfundet.Notification'
 ### End: django-notifications-hq ###
 
+### SULTEN ###
+
+INSTALLED_APPS += ['sulten']
+
 ################## LOGGING ##################
 
 from root.utils.json_formatter import JsonFormatter  # noqa: E402

@@ -20,12 +20,6 @@ router.register('blog', views.BlogPostView, 'blog')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
 router.register('profile', views.ProfileView, 'profile')
-router.register('menu', views.MenuView, 'menu')
-router.register('menu-items', views.MenuItemView, 'menu_items')
-router.register('food-preference', views.FoodPreferenceView, 'food_preference')
-router.register('food-category', views.FoodCategoryView, 'food_category')
-router.register('booking', views.BookingView, 'booking')
-router.register('table', views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
 router.register('infobox', views.InfoboxView, 'infobox')
@@ -58,9 +52,6 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
-
-    ########## Lyche ##########
-    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
 
     ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
