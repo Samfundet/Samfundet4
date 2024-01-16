@@ -8,7 +8,7 @@ import { RecruitmentPositionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentGangAdminPage() {
@@ -23,7 +23,7 @@ export function RecruitmentGangAdminPage() {
     recruitmentId &&
       getRecruitmentPositions(recruitmentId).then((data) => {
         // TODO: Make this filtering happen on the backend
-        setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang == gangId));
+        setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang.id.toString() == gangId));
         setShowSpinner(false);
       });
   }, [recruitmentId, gangId]);
@@ -77,7 +77,7 @@ export function RecruitmentGangAdminPage() {
         },
       })}
     >
-      {t(KEY.common_create)} {t(KEY.recruitment_position)}
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
     </Button>
   );
 

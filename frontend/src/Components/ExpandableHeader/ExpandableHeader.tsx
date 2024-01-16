@@ -30,10 +30,10 @@ export function ExpandableHeader({
   return (
     <div className={containerClassNames}>
       <div className={classNames} onClick={() => setShowChildren(!showChildren)}>
+        <p className={styles.extendable_header_title}>{label}</p>
         <div className={classnames(styles.expandable_header_arrow, showChildren ? styles.open : styles.closed)}>
           &#9660;
         </div>
-        <p className={styles.extendable_header_title}>{label}</p>
       </div>
       {showChildren && children}
     </div>

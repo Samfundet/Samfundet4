@@ -5,14 +5,17 @@
 from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from root.utils.mixins import CustomBaseModel
 
 from django.db import models
 
 from root.utils.mixins import FullCleanSaveMixin
 from .general import Organization, User, Gang
 
+from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 
-class Recruitment(FullCleanSaveMixin):
+
+class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
@@ -28,7 +31,20 @@ class Recruitment(FullCleanSaveMixin):
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
-        # All times should be in the future
+        super().clean()
+
+        if not all(
+            [
+                self.visible_from,
+                self.actual_application_deadline,
+                self.shown_application_deadline,
+                self.reprioritization_deadline_for_applicant,
+                self.reprioritization_deadline_for_groups,
+            ]
+        ):
+            raise ValidationError('Missing datetime')
+
+        # All times should be in the future.
         now = timezone.now()
         if any(
             [
@@ -38,42 +54,38 @@ class Recruitment(FullCleanSaveMixin):
         ):
             raise ValidationError('All times should be in the future')
 
-        # Deadline should be after visible from
-        if self.visible_from > self.actual_application_deadline:
-            raise ValidationError('Application deadline should be after visible from')
+        if self.actual_application_deadline < self.visible_from:
+            raise ValidationError('Visible from should be before application deadline')
 
-        # Shown deadline should be before the actual deadline
-        if self.shown_application_deadline > self.actual_application_deadline:
+        if self.actual_application_deadline < self.shown_application_deadline:
             raise ValidationError('Shown application deadline should be before the actual application deadline')
 
-        # Actual deadline should be before reprioritization deadline for applicants
-        if self.actual_application_deadline > self.reprioritization_deadline_for_applicant:
+        if self.reprioritization_deadline_for_applicant < self.actual_application_deadline:
             raise ValidationError('Actual application deadline should be before reprioritization deadline for applicants')
 
-        # Reprioritization deadline for applicants should be before reprioritization deadline for groups
-        if self.reprioritization_deadline_for_applicant > self.reprioritization_deadline_for_groups:
+        if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
             raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
-
-        super().clean()
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
 
 
-class RecruitmentPosition(FullCleanSaveMixin):
+class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
     short_description_nb = models.CharField(max_length=100, help_text='Short description of the position')
-    short_description_en = models.CharField(max_length=100, help_text='Short description of the position')
+    short_description_en = models.CharField(max_length=100, help_text='Short description of the position', null=True, blank=True)
 
     long_description_nb = models.TextField(help_text='Long description of the position')
-    long_description_en = models.TextField(help_text='Long description of the position')
+    long_description_en = models.TextField(help_text='Long description of the position', null=True, blank=True)
 
     is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
 
     default_admission_letter_nb = models.TextField(help_text='Default admission letter for the position')
-    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position')
+    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position', null=True, blank=True)
+
+    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
     gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting')
     recruitment = models.ForeignKey(
@@ -96,8 +108,16 @@ class RecruitmentPosition(FullCleanSaveMixin):
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        if self.norwegian_applicants_only:
+            self.name_en = 'Norwegian speaking applicants only'
+            self.short_description_en = 'This position only admits Norwegian speaking applicants'
+            self.long_description_en = 'No english applicants'
+            self.default_admission_letter_en = 'No english applicants'
+        super(RecruitmentPosition, self).save(*args, **kwargs)
 
-class InterviewRoom(FullCleanSaveMixin):
+
+class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
@@ -109,13 +129,13 @@ class InterviewRoom(FullCleanSaveMixin):
         return self.name
 
     def clean(self) -> None:
+        super().clean()
+
         if self.start_time > self.end_time:
             raise ValidationError('Start time should be before end time')
 
-        super().clean()
 
-
-class Interview(FullCleanSaveMixin):
+class Interview(CustomBaseModel):
     # User visible fields
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
     interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
@@ -132,7 +152,7 @@ class Interview(FullCleanSaveMixin):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-class RecruitmentAdmission(FullCleanSaveMixin):
+class RecruitmentAdmission(CustomBaseModel):
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
@@ -160,9 +180,13 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     ]
 
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
-    recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
+    recruiter_priority = models.IntegerField(
+        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
+    )
 
-    recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
+    recruiter_status = models.IntegerField(
+        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
+    )
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
@@ -183,4 +207,22 @@ class RecruitmentAdmission(FullCleanSaveMixin):
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
 
-        super(RecruitmentAdmission, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+
+class Occupiedtimeslot(FullCleanSaveMixin):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        help_text='Occupied timeslots for user',
+        related_name='occupied_timeslots',
+    )
+    # Mostly only used for deletion, and anonymization.
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Occupied timeslots for the users for this recruitment')
+
+    # Start and end time of availability
+    start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
+    end_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)

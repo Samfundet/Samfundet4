@@ -1,7 +1,8 @@
-import { Button, Countdown, InputField, ProgressBar, RadioButton } from '~/Components';
+import { Button, Countdown, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
+import { MultiSelect } from '~/Components/MultiSelect';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
@@ -14,6 +15,50 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
+      <MultiSelect
+        options={[
+          {
+            label: '1',
+            value: 1,
+          },
+          {
+            label: '2',
+            value: 2,
+          },
+          {
+            label: '3',
+            value: 3,
+          },
+          {
+            label: '4',
+            value: 4,
+          },
+          {
+            label: '5',
+            value: 5,
+          },
+          {
+            label: '6',
+            value: 6,
+          },
+          {
+            label: '7',
+            value: 7,
+          },
+          {
+            label: '8',
+            value: 8,
+          },
+          {
+            label: '9',
+            value: 9,
+          },
+        ]}
+      />
+      <br />
+      <br />
+      <br />
+      <br />
       <h1>Components:</h1>
       <div>
         <h2>Buttons:</h2>
@@ -52,6 +97,26 @@ export function ComponentPage() {
       <div>
         <h2>List:</h2>
         <List items={['1', '2', '3']} type={'ordered'} />
+      </div>
+      <div>
+        <h2>Tooltip:</h2>
+        <div>
+          <ToolTip value="You hovered!">
+            <p>Hover on me top text!</p>
+          </ToolTip>
+        </div>
+        <br />
+        <div>
+          <ToolTip value="You hovered!" alignment="right">
+            <p>Hover on me right text!</p>
+          </ToolTip>
+        </div>
+        <br />
+        <div>
+          <ToolTip display="image" value="https://i.ebayimg.com/images/g/jwMAAOxy5jxSduxZ/s-l1200.webp">
+            <p>Hover on me Image!</p>
+          </ToolTip>
+        </div>
       </div>
       <div>
         <h2>ProgressBar:</h2>

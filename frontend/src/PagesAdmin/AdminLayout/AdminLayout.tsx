@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { Link, Navbar } from '~/Components';
+import { Button, Link, Navbar } from '~/Components';
 import { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
+import { useMobile } from '~/hooks';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
@@ -18,6 +19,8 @@ import styles from './AdminLayout.module.scss';
  */
 export function AdminLayout() {
   const { t } = useTranslation();
+  const [panelOpen, setPanelOpen] = useState(false);
+  const isMobile = useMobile();
 
   function makeAppletShortcut(applet: Applet, index: number) {
     // No default url, dont show in navmenu
@@ -30,6 +33,7 @@ export function AdminLayout() {
         key={index}
         className={classNames(styles.panel_item, selected && styles.selected)}
         url={applet.url}
+        onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
         plain={true}
       >
         <Icon icon={applet.icon} />
@@ -40,37 +44,72 @@ export function AdminLayout() {
 
   const selectedIndex = window.location.href.endsWith(ROUTES_FRONTEND.admin);
 
+  useEffect(() => {
+    if (!isMobile) {
+      setPanelOpen(true);
+    }
+  }, [isMobile]);
+
+  const panel = (
+    <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
+      <button className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
+        <Icon icon="mdi:close" width={24} />
+      </button>
+
+      {/* Header */}
+      <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
+      {/* Index */}
+      <Link
+        className={classNames(styles.panel_item, selectedIndex && styles.selected)}
+        url={ROUTES_FRONTEND.admin}
+        onAfterClick={() => panelOpen && setPanelOpen(false)}
+      >
+        <Icon icon="mdi:person" />
+        {t(KEY.common_profile)}
+      </Link>
+      <br></br>
+      {/* Applets */}
+      {appletCategories.map((category) => {
+        return (
+          <React.Fragment key={category.title_en}>
+            <div className={styles.category_header}>{dbT(category, 'title')}</div>
+            {category.applets.map((applet, index) => makeAppletShortcut(applet, index))}
+          </React.Fragment>
+        );
+      })}
+      <br></br>
+      {/* TODO help/faq */}
+      <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
+        <Icon icon="material-symbols:question-mark-rounded" />
+        {t(KEY.control_panel_faq)}
+      </Link>
+    </div>
+  );
+
+  const mobileOpen = (
+    <>
+      <div className={styles.mobile_header}>
+        <Button theme="samf" onClick={() => setPanelOpen(!panelOpen)}>
+          <Icon icon="ci:hamburger-md" /> {t(KEY.common_open)} {t(KEY.control_panel_title)}
+        </Button>
+      </div>
+    </>
+  );
+
+  const desktopOpen = (
+    <div className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
+      <Icon icon="mdi:arrow-right-bold" width={16} className={styles.arrow} />
+    </div>
+  );
+
   return (
     <div>
       <Navbar />
       <div className={styles.wrapper}>
-        <div className={styles.panel}>
-          {/* Header */}
-          <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
-          {/* Index */}
-          <Link className={classNames(styles.panel_item, selectedIndex && styles.selected)} url={ROUTES_FRONTEND.admin}>
-            <Icon icon="mdi:person" />
-            Profil {/* TODO translate */}
-          </Link>
-          <br></br>
-          {/* Applets */}
-          {appletCategories.map((category) => {
-            return (
-              <React.Fragment key={category.title_en}>
-                <div className={styles.category_header}>{dbT(category, 'title')}</div>
-                {category.applets.map((applet, index) => makeAppletShortcut(applet, index))}
-              </React.Fragment>
-            );
-          })}
-          <br></br>
-          {/* TODO help/faq */}
-          <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
-            <Icon icon="material-symbols:question-mark-rounded" />
-            {t(KEY.control_panel_faq)}
-          </Link>
-        </div>
+        {panel}
+        {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
         {/* Content */}
-        <div className={styles.content_wrapper}>
+        <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
           <Outlet />
         </div>
       </div>

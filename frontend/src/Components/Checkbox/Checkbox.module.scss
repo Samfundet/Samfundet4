@@ -4,6 +4,7 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
 
 /* Label wraper i checkbox.tsx. */
 .checkbox {
+  position: relative;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
@@ -11,13 +12,17 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
 
 /* Selve input checkbox typen. */
 .checkbox__input {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 /* Div som styles for å representere en checkbox. */
 .checkbox__box {
-  width: 1em;
-  height: 1em;
+  width: 1.2em;
+  height: 1.2em;
   border: 2px solid $grey-3;
   border-radius: 3px;
   display: flex;
