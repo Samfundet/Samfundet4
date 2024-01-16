@@ -29,7 +29,6 @@ After docker container is running:
 - 2) Enable pipenv: `pipenv shell` 
 - 3) Run seed script: `python manage.py seed`
 
-❗️Some Docker versiones might require  `docker compose exec backend bash` at step 1
 
 ### Adding/changing seed scripts
 The seed script `seed.py` does not need to be modified to add new seed scripts.
