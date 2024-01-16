@@ -19,7 +19,6 @@ from samfundet.models.general import User, Image, InformationPage, Organization,
 
 import root.management.commands.seed_scripts.billig as billig_seed
 from sulten.models import Reservation, Table
-
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.
