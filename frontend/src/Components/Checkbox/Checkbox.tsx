@@ -4,7 +4,7 @@ import styles from './Checkbox.module.scss';
 
 type Alignment = 'left' | 'right';
 
-type CheckboxProps = {
+export type CheckboxProps = {
   name?: string;
   label?: string;
   disabled?: boolean;
@@ -47,7 +47,7 @@ export function Checkbox({
         name={name}
         onClick={handleChange}
         disabled={disabled}
-        checked={checked}
+        checked={isChecked}
       />
       <div className={styles.checkbox__box}></div>
       {alignment == 'right' && label}

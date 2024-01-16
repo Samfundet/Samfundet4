@@ -15,6 +15,7 @@ import {
   LycheAboutPage,
   LycheContactPage,
   LycheHomePage,
+  LycheMenuPage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
   RecruitmentPage,
@@ -40,6 +41,7 @@ import {
   RecruitmentPositionFormAdminPage,
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
+  SultenMenuAdminPage,
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
@@ -170,6 +172,10 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_saksdokumenter_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
         />
+        <Route
+          path={ROUTES.frontend.admin_sulten_menu}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
+        />
         {/* Recruitment */}
         <Route
           path={ROUTES.frontend.admin_recruitment}
@@ -232,6 +238,7 @@ export function AppRoutes() {
       <Route element={<SultenOutlet />}>
         <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
+        <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />
         <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
       </Route>
 

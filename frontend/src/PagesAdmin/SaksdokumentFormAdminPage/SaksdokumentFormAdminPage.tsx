@@ -11,7 +11,7 @@ import { SaksdokumentDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { utcTimestampToLocal } from '~/utils';
+import { lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SaksdokumentFormAdminPage.module.scss';
 
@@ -95,8 +95,8 @@ export function SaksdokumentFormAdminPage() {
     }
   }
 
-  const submitText = id ? t(KEY.common_save) : `${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`;
-  const title = id ? t(KEY.common_edit) : `${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`;
+  const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
+  const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
       {/* Document form */}

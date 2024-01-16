@@ -13,7 +13,7 @@ type GangItemProps = {
 export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
-      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang == `${gang.id}`);
+      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);
       if (filteredPositions && filteredPositions.length > 0) {
         return (
           <ExpandableHeader
@@ -34,7 +34,15 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                 >
                   {dbT(pos, 'name')}
                 </Link>
-                <a className={styles.position_short_desc}>{dbT(pos, 'short_description')}</a>
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.recruitment_application,
+                    urlParams: { positionID: pos.id, gangID: gang.id },
+                  })}
+                  className={styles.position_short_desc}
+                >
+                  {dbT(pos, 'short_description')}
+                </Link>
               </div>
             ))}
           </ExpandableHeader>

@@ -8,7 +8,8 @@ from django.db import transaction
 from django.utils.timezone import make_aware
 from django.utils import dateparse
 
-from samfundet.models.event import Event, EventAgeRestriction, EventCategory, EventTicketType, EventStatus
+from samfundet.models.event import Event
+from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventTicketType, EventStatus
 from samfundet.models.general import Image
 
 BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3')
