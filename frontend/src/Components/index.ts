@@ -1,6 +1,7 @@
 export { AccessDenied } from './AccessDenied';
 export { AdminBox } from './AdminBox';
 export { Alert } from './Alert';
+export { Breadcrumb } from './Breadcrumb';
 export { Button } from './Button';
 export { Carousel } from './Carousel';
 export { Checkbox } from './Checkbox';
