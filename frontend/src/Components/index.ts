@@ -38,7 +38,7 @@ export { RadioButton } from './RadioButton';
 export { SamfOutlet } from './SamfOutlet';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
-export { ScrollToTop } from './ScrollToTop';
+export { useScrollToTop } from './ScrollToTop';
 export { Select } from './Select';
 export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
