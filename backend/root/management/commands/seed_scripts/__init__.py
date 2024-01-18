@@ -1,6 +1,8 @@
 from . import (
+    users,
     images,
     gangs,
+    campus,
     information_pages,
     oganizations,
     venues,
@@ -25,6 +27,8 @@ from . import (
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
+    ('campus', campus.seed),
+    ('users', users.seed),
     ('images', images.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),

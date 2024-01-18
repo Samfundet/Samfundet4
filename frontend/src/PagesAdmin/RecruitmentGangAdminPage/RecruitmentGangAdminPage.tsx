@@ -23,7 +23,7 @@ export function RecruitmentGangAdminPage() {
     recruitmentId &&
       getRecruitmentPositions(recruitmentId).then((data) => {
         // TODO: Make this filtering happen on the backend
-        setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang == gangId));
+        setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang.id.toString() == gangId));
         setShowSpinner(false);
       });
   }, [recruitmentId, gangId]);

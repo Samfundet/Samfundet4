@@ -19,6 +19,14 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type OccupiedTimeSlotDto = {
+  id?: number;
+  user?: number;
+  recruitment: number;
+  start_dt: string;
+  end_dt: string;
+};
+
 export type RecruitmentUserDto = {
   id: number;
   username: string;
@@ -62,6 +70,7 @@ export type ObjectPermissionDto = {
 
 export type VenueDto = {
   id: number;
+  slug: string;
   name: string;
   description?: string;
   floor?: number;
@@ -180,6 +189,7 @@ export type FoodPreferenceDto = {
 };
 
 export type FoodCategoryDto = {
+  id?: number;
   name_nb?: string;
   name_en?: string;
   order?: number;
@@ -197,6 +207,7 @@ export type MenuItemDto = {
 
   order?: number;
   food_preferences?: FoodPreferenceDto[];
+  food_category: FoodCategoryDto;
 };
 
 export type MenuDto = {
@@ -335,12 +346,12 @@ export type RecruitmentPositionDto = {
   default_admission_letter_nb: string;
   default_admission_letter_en: string;
 
-  gang: string;
+  gang: GangDto;
   recruitment: string;
 
   tags: string;
 
-  interviewers: UserDto[];
+  interviewers?: UserDto[];
 };
 
 export type InterviewDto = {

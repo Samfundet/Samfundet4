@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from root.utils.samfundet_random import words
 from samfundet.models.general import Saksdokument
+from samfundet.models.model_choices import SaksdokumentCategory
 
 COUNT = 100
 DAY_RANGE = 365 * 5
@@ -16,10 +17,10 @@ CREATE_OFFSET = 30
 def seed():
 
     cats = [
-        Saksdokument.SaksdokumentCategory.FS_REFERAT,
-        Saksdokument.SaksdokumentCategory.STYRET,
-        Saksdokument.SaksdokumentCategory.RADET,
-        Saksdokument.SaksdokumentCategory.ARSBERETNINGER,
+        SaksdokumentCategory.FS_REFERAT,
+        SaksdokumentCategory.STYRET,
+        SaksdokumentCategory.RADET,
+        SaksdokumentCategory.ARSBERETNINGER,
     ]
 
     # Load file just once (much faster)

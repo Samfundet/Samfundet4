@@ -38,3 +38,7 @@ GITHUB_EVENT_HEADER = 'X-GitHub-Event'
 request_contextvar: ContextVar[HttpRequest] = ContextVar('request_contextvar', default=None)
 
 AUTH_BACKEND = 'django.contrib.auth.backends.ModelBackend'
+
+# Phone number regex
+
+PHONE_NUMBER_REGEX = r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$'

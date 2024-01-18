@@ -35,12 +35,14 @@ export const nb: Record<KeyValues, string> = {
 
   // Other common
   [KEY.common_to]: 'Til',
+  [KEY.common_price]: 'Pris',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
   [KEY.common_date]: 'Dato',
   [KEY.common_send]: 'Send',
+  [KEY.common_open]: 'Åpne',
   [KEY.common_menu]: 'Meny',
   [KEY.common_name]: 'Navn',
   [KEY.common_next]: 'Neste',
@@ -66,10 +68,13 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_missing]: 'Mangler',
   [KEY.common_contact]: 'Kontakt',
   [KEY.common_english]: 'Engelsk',
+  [KEY.common_profile]: 'Profil',
   [KEY.common_message]: 'Melding',
   [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_lastname]: 'Etternavn',
+  [KEY.common_email]: 'Email',
+  [KEY.common_phonenumber]: 'Phonenumber',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
   [KEY.common_about_us]: 'Om oss',
@@ -116,7 +121,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
-  [KEY.loginpage_email_placeholder]: 'E-post eller medlemsnummer',
+  [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
   // GroupsPage:
@@ -152,6 +157,12 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_admission]: 'Søknad',
   [KEY.recruitment_funksjonaer]: 'Funksjonær',
+  [KEY.recruitment_gangmember]: 'Gjengmedlem',
+  [KEY.recruitment_applyfor]: 'Søk på dette vervet',
+  [KEY.recruitment_applyforhelp]:
+    'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg! Etter at du er registrert som søker, kan du logge inn for å se status på dine søknader. Hvis du har søkt flere verv, må du også prioritere hvilket du ønsker mest. Du vil kun få tilbud om ett verv.',
+  [KEY.recruitment_volunteerfor]: 'Verv som',
+  [KEY.recruitment_otherpositions]: 'Andre verv i',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
   [KEY.recruitment_administrate]: 'Administrer opptak',
@@ -174,6 +185,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
+  [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
   [KEY.admin_information_manage_title]: 'Administrer sider',
@@ -202,6 +214,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
+  // Occupied Recruitment
+  [KEY.occupied_title]: 'Tilgjenglighet',
+  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_show]: 'Sett din tilgjengelighet',
+
   // No category:
   [KEY.owner]: 'Eier',
   [KEY.end_time]: 'Sluttid',
@@ -212,6 +229,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
+  [KEY.sulten_dishes]: 'Retter',
   [KEY.sulten_lyche_goal]: 'Lyches mål',
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
@@ -262,12 +280,14 @@ export const en: Record<KeyValues, string> = {
 
   // No category:
   [KEY.common_to]: 'To',
+  [KEY.common_price]: 'Price',
   [KEY.common_buy]: 'Buy',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
   [KEY.common_date]: 'Date',
   [KEY.common_send]: 'Send',
+  [KEY.common_open]: 'Open',
   [KEY.common_edit]: 'Edit',
   [KEY.common_show]: 'Show',
   [KEY.common_tags]: 'Tags',
@@ -295,8 +315,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_sponsor]: 'Sponsors',
   [KEY.common_whatsup]: "what's up?",
   [KEY.common_english]: 'English',
+  [KEY.common_profile]: 'Profile',
   [KEY.common_contact]: 'Contact',
   [KEY.common_register]: 'Register',
+  [KEY.common_email]: 'Email',
+  [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
   [KEY.common_overview]: 'Oversikt',
@@ -342,7 +365,7 @@ export const en: Record<KeyValues, string> = {
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
   [KEY.loginpage_internal_login]: 'Log in as internal',
-  [KEY.loginpage_email_placeholder]: 'Email or membership ID',
+  [KEY.loginpage_username]: 'Username',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
   [KEY.loginpage_login_failed]: 'Login failed',
 
@@ -379,6 +402,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_admission]: 'Admission',
   [KEY.recruitment_funksjonaer]: 'Functionary',
+  [KEY.recruitment_gangmember]: 'Gangmember',
+  [KEY.recruitment_applyfor]: 'Apply for this position',
+  [KEY.recruitment_applyforhelp]:
+    ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
+  [KEY.recruitment_volunteerfor]: 'Position as',
+  [KEY.recruitment_otherpositions]: 'Other positions in',
   [KEY.recruitment_organization]: 'Organization',
   [KEY.recruitment_visible_from]: 'Visible from',
   [KEY.recruitment_administrate]: 'Administrate recruitment',
@@ -403,6 +432,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',
+  [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
   [KEY.admin_information_manage_title]: 'Administrate pages',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
@@ -432,6 +462,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
 
   // Sulten / Lyche:
+  [KEY.sulten_dishes]: 'Dishes',
   [KEY.sulten_lyche_goal]: 'Lyches goal',
   [KEY.sulten_what_is_lyche]: 'What is Lyche?',
   [KEY.sulten_page_see_menu]: 'See our menu',
@@ -439,6 +470,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.sulten_page_book_table]: 'Book table',
   [KEY.sulten_lyche_about_menu]: 'About the menu',
   [KEY.sulten_page_more_about_us]: 'More about us',
+
+  // Occupied Recruitment
+  [KEY.occupied_title]: 'Availability',
+  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_show]: 'Set your availability',
 
   // No category:
   [KEY.owner]: 'Owner',
