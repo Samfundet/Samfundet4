@@ -1,4 +1,7 @@
+import { Icon } from '@iconify/react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import styles from './Breadcrumb.module.scss';
 
 export function Breadcrumb() {
   const location = useLocation();
@@ -9,19 +12,24 @@ export function Breadcrumb() {
   let url = '';
   const breadcrumbLinks = segments.map((segment, i) => {
     url += '/' + segment;
-    if (i != segments.length - 1) {
-      segment += ' > ';
-    }
     return (
-      <Link key={i} to={baseUrl + url}>
-        {segment}
-      </Link>
+      <React.Fragment key={i}>
+        <span className={styles.separator}>&nbsp;&gt;&nbsp;</span>
+        <Link to={baseUrl + url} className={styles.link}>
+          {segment}
+        </Link>
+      </React.Fragment>
     );
   });
 
-  const baseLink = <Link to={baseUrl + url}>{'Hjem > '}</Link>;
-  const result = [];
-  result.push(baseLink);
-  result.push(breadcrumbLinks);
-  return <div className="breadcrumb">{result}</div>;
+  return (
+    <div className={styles.breadcrumb}>
+      <div className={styles.icon_wrap}>
+        <Link to={baseUrl}>
+          <Icon icon="ion:home" className={styles.icon} />
+        </Link>
+      </div>
+      <div className={styles.titles}>{breadcrumbLinks}</div>
+    </div>
+  );
 }
