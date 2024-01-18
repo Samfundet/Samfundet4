@@ -661,13 +661,13 @@ class InterviewSerializer(CustomBaseSerializer):
         model = Interview
         fields = '__all__'
 
-    def create(self, validated_data) -> Interview:
+    def create(self, validated_data: dict) -> Interview:
         interviewers_data = validated_data.pop('interviewers', [])
         interview = super().create(validated_data)
         interview.interviewers.set(interviewers_data)
         return interview
 
-    def update(self, instance, validated_data) -> Interview:
+    def update(self, instance: Interview, validated_data: dict) -> Interview:
         interviewers_data = validated_data.pop('interviewers', [])
         instance = super().update(instance, validated_data)
         instance.interviewers.set(interviewers_data)
