@@ -8,10 +8,10 @@ from django.utils import timezone
 
 from root.constants import Environment
 from samfundet.models.general import (
-    Venue,
     InformationPage,
     ClosedPeriod,
 )
+from samfundet.models.venue import Venue
 
 User = get_user_model()
 

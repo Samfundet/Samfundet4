@@ -195,7 +195,7 @@ class CustomBaseModel(FullCleanSaveMixin):
     )
 
     created_by = models.ForeignKey(
-        'User',
+        'samfundet.User',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -209,7 +209,7 @@ class CustomBaseModel(FullCleanSaveMixin):
     )
 
     updated_by = models.ForeignKey(
-        'User',
+        'samfundet.User',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

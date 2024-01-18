@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest_framework/', include('rest_framework.urls')),
     path('notifications/', include(notifications.urls, namespace='notifications')),
+    path('sulten/', include('sulten.urls')),
     path('', include('samfundet.urls')),  # Put last.
 ]
 

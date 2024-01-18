@@ -1,7 +1,7 @@
 import random
 
 from root.utils.samfundet_random import words
-from samfundet.models.general import Menu, MenuItem, FoodCategory, FoodPreference
+from sulten.models import Menu, MenuItem, FoodCategory, FoodPreference
 
 preferences = [
     ('Vegetar', 'Vegetarian'),

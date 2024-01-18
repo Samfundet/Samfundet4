@@ -20,30 +20,23 @@ from .models.recruitment import (
     Interview,
     Occupiedtimeslot,
 )
+from .models.venue import (Table, Reservation, Booking, Venue)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
     User,
-    Menu,
     Gang,
-    Table,
-    Venue,
     Image,
     Campus,
     Infobox,
-    Booking,
     Profile,
     TextItem,
-    MenuItem,
     GangType,
     KeyValue,
     BlogPost,
-    Reservation,
     Organization,
-    FoodCategory,
     Saksdokument,
     ClosedPeriod,
-    FoodPreference,
     UserPreference,
     InformationPage,
 )
@@ -199,13 +192,6 @@ class EventGroupSerializer(CustomBaseSerializer):
 
     class Meta:
         model = EventGroup
-        fields = '__all__'
-
-
-class VenueSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = Venue
         fields = '__all__'
 
 
@@ -466,71 +452,6 @@ class KeyValueSerializer(serializers.ModelSerializer):
 
 
 # =============================== #
-#            Sulten               #
-# =============================== #
-
-
-class FoodPreferenceSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodCategory
-        fields = '__all__'
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
-class TableSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = Table
-        fields = '__all__'
-
-
-class ReservationSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = Reservation
-        fields = '__all__'
-
-
-class ReservationCheckSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Reservation
-        fields = ['guest_count', 'occasion', 'reservation_date']
-
-
-class BookingSerializer(serializers.ModelSerializer):
-    tables = TableSerializer(many=True)
-    user = UserSerializer(many=True)
-
-    class Meta:
-        model = Booking
-        fields = '__all__'
-
-
-# =============================== #
 #            Recruitment          #
 # =============================== #
 
@@ -679,3 +600,45 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+
+# ======================= #
+#   VENUE & RESERVATION   #
+# ======================= #
+
+
+class VenueSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Venue
+        fields = '__all__'
+
+
+class TableSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Table
+        fields = '__all__'
+
+
+class ReservationSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Reservation
+        fields = '__all__'
+
+
+class ReservationCheckSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Reservation
+        fields = ['guest_count', 'occasion', 'reservation_date']
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    tables = TableSerializer(many=True)
+    user = UserSerializer(many=True)
+
+    class Meta:
+        model = Booking
+        fields = '__all__'
