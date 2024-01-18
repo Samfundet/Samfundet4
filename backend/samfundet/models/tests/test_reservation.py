@@ -1,6 +1,6 @@
 from datetime import date
-from samfundet.models.general import Venue
-from sulten.models import Table, Reservation
+
+from samfundet.models.venue import (Venue, Reservation, Table)
 
 
 class TestReservation:

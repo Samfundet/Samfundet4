@@ -20,12 +20,12 @@ from .models.recruitment import (
     Interview,
     Occupiedtimeslot,
 )
+from .models.venue import (Table, Reservation, Booking, Venue)
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
     Tag,
     User,
     Gang,
-    Venue,
     Image,
     Campus,
     Infobox,
@@ -192,13 +192,6 @@ class EventGroupSerializer(CustomBaseSerializer):
 
     class Meta:
         model = EventGroup
-        fields = '__all__'
-
-
-class VenueSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = Venue
         fields = '__all__'
 
 
@@ -607,3 +600,45 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+
+# ======================= #
+#   VENUE & RESERVATION   #
+# ======================= #
+
+
+class VenueSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Venue
+        fields = '__all__'
+
+
+class TableSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Table
+        fields = '__all__'
+
+
+class ReservationSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Reservation
+        fields = '__all__'
+
+
+class ReservationCheckSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Reservation
+        fields = ['guest_count', 'occasion', 'reservation_date']
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    tables = TableSerializer(many=True)
+    user = UserSerializer(many=True)
+
+    class Meta:
+        model = Booking
+        fields = '__all__'

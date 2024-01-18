@@ -17,7 +17,7 @@ from samfundet.models.event import (
     EventAgeRestriction,
     NonMemberEmailRegistration,
 )
-from samfundet.models.general import Venue
+from samfundet.models.venue import Venue
 
 # Number of events
 COUNT = 300

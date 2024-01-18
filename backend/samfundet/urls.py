@@ -25,6 +25,8 @@ router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
 router.register('infobox', views.InfoboxView, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('organizations', views.OrganizationView, 'organizations')
+router.register('booking', views.BookingView, 'booking')
+router.register('table', views.TableView, 'table')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
@@ -52,6 +54,7 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
+    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
 
     ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),

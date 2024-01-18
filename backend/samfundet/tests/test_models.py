@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytest
 from django.core.exceptions import ValidationError
 
-from sulten.models import Booking
+from samfundet.models.venue import Booking
 
 
 @pytest.mark.django_db

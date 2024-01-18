@@ -1,7 +1,6 @@
 from root.utils.mixins import CustomBaseSerializer
-from samfundet.serializers import UserSerializer
-from sulten.models import FoodPreference, FoodCategory, MenuItem, Menu, Table, Reservation, Booking
-from rest_framework import serializers
+
+from sulten.models import (FoodPreference, FoodCategory, MenuItem, Menu)
 
 
 class FoodPreferenceSerializer(CustomBaseSerializer):
@@ -31,34 +30,4 @@ class MenuSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Menu
-        fields = '__all__'
-
-
-class TableSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = Table
-        fields = '__all__'
-
-
-class ReservationSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = Reservation
-        fields = '__all__'
-
-
-class ReservationCheckSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Reservation
-        fields = ['guest_count', 'occasion', 'reservation_date']
-
-
-class BookingSerializer(serializers.ModelSerializer):
-    tables = TableSerializer(many=True)
-    user = UserSerializer(many=True)
-
-    class Meta:
-        model = Booking
         fields = '__all__'

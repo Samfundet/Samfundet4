@@ -13,12 +13,13 @@ from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event
+from samfundet.models.venue import Table, Reservation, Venue
 from samfundet.models.model_choices import EventAgeRestriction, EventTicketType
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue
+from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
 
 import root.management.commands.seed_scripts.billig as billig_seed
-from sulten.models import Reservation, Table
+
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.

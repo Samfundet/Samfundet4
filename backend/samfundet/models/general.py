@@ -7,8 +7,6 @@ from __future__ import annotations
 import re
 import random
 from typing import TYPE_CHECKING
-from django.utils import timezone
-from datetime import date, time
 
 from notifications.base.models import AbstractNotification
 
@@ -198,54 +196,6 @@ class Profile(FullCleanSaveMixin):
         # Extend Profile to assign permission to whichever user is related to it.
         assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
         assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
-
-
-class Venue(CustomBaseModel):
-    name = models.CharField(max_length=140, blank=True, null=True, unique=True)
-    slug = models.SlugField(unique=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    floor = models.IntegerField(blank=True, null=True)
-    last_renovated = models.DateTimeField(blank=True, null=True)
-    handicapped_approved = models.BooleanField(blank=True, null=True)
-    responsible_crew = models.CharField(max_length=140, blank=True, null=True)
-    opening = models.TimeField(default=time(hour=8), blank=True, null=True)
-    closing = models.TimeField(default=time(hour=20), blank=True, null=True)
-
-    opening_monday = models.TimeField(default=time(hour=8), blank=True, null=True)
-    opening_tuesday = models.TimeField(default=time(hour=8), blank=True, null=True)
-    opening_wednesday = models.TimeField(default=time(hour=8), blank=True, null=True)
-    opening_thursday = models.TimeField(default=time(hour=8), blank=True, null=True)
-    opening_friday = models.TimeField(default=time(hour=8), blank=True, null=True)
-    opening_saturday = models.TimeField(default=time(hour=8), blank=True, null=True)
-    opening_sunday = models.TimeField(default=time(hour=8), blank=True, null=True)
-
-    closing_monday = models.TimeField(default=time(hour=20), blank=True, null=True)
-    closing_tuesday = models.TimeField(default=time(hour=20), blank=True, null=True)
-    closing_wednesday = models.TimeField(default=time(hour=20), blank=True, null=True)
-    closing_thursday = models.TimeField(default=time(hour=20), blank=True, null=True)
-    closing_friday = models.TimeField(default=time(hour=20), blank=True, null=True)
-    closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
-    closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Venue'
-        verbose_name_plural = 'Venues'
-
-    def get_opening_hours_date(self, selected_date: date | None = None) -> tuple[time, time]:
-        selected_date = selected_date or timezone.now().date()
-        fields = [
-            (self.opening_monday, self.closing_monday),
-            (self.opening_tuesday, self.closing_tuesday),
-            (self.opening_wednesday, self.closing_wednesday),
-            (self.opening_thursday, self.closing_thursday),
-            (self.opening_friday, self.closing_friday),
-            (self.opening_saturday, self.closing_saturday),
-            (self.opening_sunday, self.closing_sunday),
-        ]
-        return fields[selected_date.weekday()]
-
-    def __str__(self) -> str:
-        return f'{self.name}'
 
 
 class ClosedPeriod(CustomBaseModel):

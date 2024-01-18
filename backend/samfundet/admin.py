@@ -23,7 +23,6 @@ from .models.general import (
     Tag,
     User,
     Gang,
-    Venue,
     Image,
     Campus,
     Profile,
@@ -38,6 +37,7 @@ from .models.general import (
     UserPreference,
     InformationPage,
 )
+from .models.venue import Table, Reservation, Booking, Venue
 
 # Common fields:
 # ordering = []
@@ -494,6 +494,45 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+
+
+@admin.register(Table)
+class TableAdmin(CustomBaseAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
+    search_fields = ['id', 'name_nb', 'name_en']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Reservation)
+class ReservationAdmin(CustomBaseAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name', 'email', 'phonenumber']
+    # list_filter = []
+    list_display = ['id', '__str__', 'name', 'email', 'phonenumber']
+    search_fields = ['id', 'name', 'email', 'phonenumber']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(Booking)
+class BookingAdmin(CustomBaseAdmin):
+    # ordering = []
+    # list_filter = []
+    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count', 'created_at', 'updated_at']
+    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
+    search_fields = ['id', 'name', *_user_search_fields]
+    filter_horizontal = ['tables']
+    list_display_links = ['id', '__str__']
+    autocomplete_fields = ['user']
+    list_select_related = True
 
 
 ### End: Our models ###

@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from root.utils.samfundet_random import words
-from samfundet.models.general import Venue
+from samfundet.models.venue import Venue
 
 VENUES = [
     'Storsalen',
