@@ -33,6 +33,41 @@ def seed():
             'text_nb': 'Har du spørsmål eller ønsker å komme i kontakt med oss? Ikke nøl med å ta kontakt!',
             'text_en': 'Do you have any questions or want to get in touch with us? Don"t hesitate to contact us!',
         },
+        {
+         'key': 'no_recruitment_text',
+            'text_nb': 'Det er for tiden ingen opptak på Samfundet',
+            'text_en': 'There are currently no recruitments at Samfundet',
+        },
+        {
+         'key': 'no_recruitment_text_0',
+            'text_nb': 'Vi har opptak på starten av hvert semester og ønsker at du søker til oss som frivillig!',
+            'text_en': 'We have recruitments at the start of each semester and would like you to apply to us as a volunteer!',
+        },
+        {
+         'key': 'no_recruitment_text_1',
+            'text_nb': 'Studentersamfundet i Trondhjem er Norges største studentersamfund og vi har et tilbud andre byer bare kan drømme om.',
+            'text_en': 'Studentersamfundet in Trondhjem is Norways largest student society and we have an offer that other cities can only dream of.',
+        },
+        {
+         'key': 'no_recruitment_text_2',
+            'text_nb': 'Nesten uansett hvilken studiebakgrunn eller interesser du har, så finnes det en frivillig gjeng som søker nettopp deg!',
+            'text_en': 'Almost regardless of your study background or interests, there is a group of volunteers looking for you!',
+        },
+        {
+         'key': 'no_recruitment_text_3',
+            'text_nb': 'Omtrent 2000 studenter bidrar allerede frivillig! Du kan være med å jobbe med blant annet lyd, lys, teater, snekring, IT, artistbooking, korsang, musikk og mye annet. Du kan lære mye av å jobbe på Samfundet, og du blir garantert kjent med mange andre studenter.',
+            'text_en': 'Approximately 2,000 students are already contributing voluntarily! You can help work with, among other things, sound, lighting, theatre, carpentry, IT, artist booking, choir singing, music and much more. You can learn a lot from working at Samfundet, and you are guaranteed to get to know many other students.',
+        },
+        {
+         'key': 'no_recruitment_text_4',
+            'text_nb': 'For mer informasjon om samfundets gjenger ',
+            'text_en': 'For more information about the groups ',
+        },
+        {
+         'key': 'no_recruitment_text_5',
+            'text_nb': 'Hvis du allerede har søkt kan du logge inn som søker for å prioritere og følge med på dine søknader.',
+            'text_en': 'If you have already applied, you can log in as an applicant to prioritize and monitor your applications.',
+        },
     ]
 
     TextItem.objects.all().delete()

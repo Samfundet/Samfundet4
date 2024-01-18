@@ -176,13 +176,6 @@ export const KEY = {
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
-  no_recruitment_text: 'no_recruitment_text',
-  no_recruitment_text_0: 'no_recruitment_text_0',
-  no_recruitment_text_1: 'no_recruitment_text_1',
-  no_recruitment_text_2: 'no_recruitment_text_2',
-  no_recruitment_text_3: 'no_recruitment_text_3',
-  no_recruitment_text_4: 'no_recruitment_text_4',
-  no_recruitment_text_5: 'no_recruitment_text_5',
 
   // Admin:
   admin_organizer: 'admin_organizer',

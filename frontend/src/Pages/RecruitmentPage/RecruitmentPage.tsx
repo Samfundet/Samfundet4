@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
+import { TextItem } from '~/constants';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { GangTypeContainer } from './Components';
@@ -17,29 +19,29 @@ export function RecruitmentPage() {
   const noadmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
-        <h1 className={styles.header}>{t(KEY.no_recruitment_text)}</h1>
+        <h1 className={styles.header}>{useTextItem(TextItem.no_recruitment_text)}</h1>
       </div>
 
       <div className={styles.info}>
         <p>
           <br />
-          {t(KEY.no_recruitment_text_0)}
+          {useTextItem(TextItem.no_recruitment_text_0)}
           <br />
-          {t(KEY.no_recruitment_text_1)}
+          {useTextItem(TextItem.no_recruitment_text_1)}
           <br />
-          {t(KEY.no_recruitment_text_2)}
+          {useTextItem(TextItem.no_recruitment_text_2)}
           <br />
           <br />
-          {t(KEY.no_recruitment_text_3)}
+          {useTextItem(TextItem.no_recruitment_text_3)}
           <br />
-          {t(KEY.no_recruitment_text_4)}{' '}
+          {useTextItem(TextItem.no_recruitment_text_4)}{' '}
           <strong>
             <a className={styles.link} href={ROUTES.frontend.contact}>
               {t(KEY.common_click_here)}
             </a>
           </strong>
           <br />
-          {t(KEY.no_recruitment_text_5)}
+          {useTextItem(TextItem.no_recruitment_text_5)}
         </p>
       </div>
     </div>
