@@ -46,6 +46,7 @@ gunicorn = "*"
 django-admin-autocomplete-filter = "*"
 django-notifications-hq = "*"
 psycopg = {extras = ["c"], version = "*"}
+python-magic = "*"
 
 [dev-packages]
 yapf = "*"
