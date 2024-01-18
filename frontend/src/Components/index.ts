@@ -38,6 +38,7 @@ export { RadioButton } from './RadioButton';
 export { SamfOutlet } from './SamfOutlet';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
+export { ScrollToTop } from './ScrollToTop';
 export { Select } from './Select';
 export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
@@ -52,13 +53,13 @@ export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
-export { Video } from './Video';
 export { ToolTip } from './ToolTip';
+export { Video } from './Video';
 
 // Props
-export type { TextAreaFieldProps } from './TextAreaField';
-export type { InputFieldProps } from './InputField';
 export type { CheckboxProps } from './Checkbox';
-export type { InputFileProps } from './InputFile';
 export type { DropdownProps } from './Dropdown';
 export type { ImagePickerProps } from './ImagePicker/ImagePicker';
+export type { InputFieldProps } from './InputField';
+export type { InputFileProps } from './InputFile';
+export type { TextAreaFieldProps } from './TextAreaField';

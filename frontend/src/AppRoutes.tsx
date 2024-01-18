@@ -45,7 +45,7 @@ import {
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
-import { ProtectedRoute } from './Components';
+import { ProtectedRoute, ScrollToTop } from './Components';
 import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
@@ -60,6 +60,7 @@ import { ROUTES } from './routes';
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
   useGoatCounter();
+  ScrollToTop();
 
   return (
     <Routes>
