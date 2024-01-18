@@ -1,11 +1,13 @@
-from samfundet.models.model_choices import ReservationOccasion
-from datetime import datetime, date, time, timedelta
-from django.core.exceptions import ValidationError
-from root.utils.mixins import CustomBaseModel
-from collections import defaultdict
-from django.utils import timezone
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 from typing import Any
+from collections import defaultdict
+from datetime import datetime, date, time, timedelta
+
+from root.utils.mixins import CustomBaseModel
+from samfundet.models.model_choices import ReservationOccasion
 
 
 class Venue(CustomBaseModel):
