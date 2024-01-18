@@ -1,17 +1,19 @@
 from __future__ import annotations
-
+import secrets
+import uuid
+#import magic
 from django.http import QueryDict
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from .models.event import (
-    Event,
-)
+    Event, )
 
 ###
 
 
-def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:
+def event_query(query: QueryDict,
+                events: QuerySet[Event] = None) -> QuerySet[Event]:
     if not events:
         events = Event.objects.all()
     search = query.get('search', None)
@@ -34,5 +36,10 @@ def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Ev
 
     location = query.get('venue', None)
     if location:
-        events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
+        events = events.filter(
+            location__icontains=location)  # TODO should maybe be a foreignKey?
     return events
+
+
+def upload_image_reqruitment_path(instance, filename: str) -> str:
+    return str(uuid.uuid1(secrets.randbelow(281474697710655))) + "-" + filename
