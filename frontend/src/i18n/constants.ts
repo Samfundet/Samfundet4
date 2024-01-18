@@ -46,6 +46,7 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_price: 'common_price',
   common_buy: 'common_buy',
   common_here: 'common_here',
   common_name: 'common_name',
@@ -58,6 +59,7 @@ export const KEY = {
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_next: 'common_next',
+  common_open: 'common_open',
   common_send: 'common_send',
   common_event: 'common_event',
   common_login: 'common_login',
@@ -75,6 +77,7 @@ export const KEY = {
   common_choose: 'common_choose',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
+  common_profile: 'common_profile',
   common_message: 'common_message',
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
@@ -83,6 +86,8 @@ export const KEY = {
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
+  common_email: 'common_email',
+  common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
@@ -127,7 +132,7 @@ export const KEY = {
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
-  loginpage_email_placeholder: 'loginpage_email_placeholder',
+  loginpage_username: 'loginpage_username',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
   loginpage_login_failed: 'loginpage_login_failed',
 
@@ -144,6 +149,7 @@ export const KEY = {
   navbar_nybygg: 'navbar_nybygg',
 
   // Sulten / Lyche:
+  sulten_dishes: 'sulten_dishes',
   sulten_lyche_goal: 'sulten_lyche_goal',
   sulten_what_is_lyche: 'sulten_what_is_lyche',
   sulten_page_see_menu: 'sulten_page_see_menu',
@@ -165,7 +171,12 @@ export const KEY = {
   recruitment_duration: 'recruitment_duration',
   recruitment_admission: 'recruitment_admission',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
+  recruitment_gangmember: 'recruitment_gangmember',
   recruitment_organization: 'recruitment_organization',
+  recruitment_applyfor: 'recruitment_applyfor',
+  recruitment_applyforhelp: 'recruitment_applyforhelp',
+  recruitment_volunteerfor: 'recruitment_volunteerfor',
+  recruitment_otherpositions: 'KEY.recruitment_otherpositions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   shown_application_deadline: 'shown_application_deadline',
@@ -173,6 +184,7 @@ export const KEY = {
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
@@ -182,11 +194,13 @@ export const KEY = {
   admin_saksdokument: 'admin_saksdokument',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
+  admin_steal_identity: 'admin_steal_identity',
   adminpage_gangs_title: 'admin_gangs_title',
   adminpage_gangs_create: 'admin_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
+  admin_sultenmenu_title: 'admin_sultenmenu_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',
   admin_events_recently_edited: 'admin_events_recently_edited',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
@@ -215,6 +229,11 @@ export const KEY = {
   command_menu_shortcut_opening_hours: 'command_menu_shortcut_opening_hours',
   command_menu_shortcut_control_panel: 'command_menu_shortcut_control_panel',
   command_menu_shortcut_about_samfundet: 'command_menu_shortcut_about_samfundet',
+
+  // Occupied Recruitment
+  occupied_help_text: 'occupied_help_text',
+  occupied_title: 'occupied_title',
+  occupied_show: 'occupied_show',
 
   // No category:
   owner: 'owner',
