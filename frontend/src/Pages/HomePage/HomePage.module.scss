@@ -105,7 +105,7 @@
 }
 
 .splash_info {
-  width: 1500px;
+  width: $primary-content-width-wide;
   margin: 0 auto;
   max-width: calc(100vw - 5rem);
   display: flex;
