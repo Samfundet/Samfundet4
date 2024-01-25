@@ -46,7 +46,7 @@ export function SultenNavbar() {
       </Link>
 
       <Link to={ROUTES.frontend.sulten_reservation} onClick={() => setMobileNavigation(false)} className={itemStyling}>
-        {t(KEY.common_reservations)}
+        {t(KEY.common_reservation)}
       </Link>
       <Link to={ROUTES.frontend.sulten_menu} onClick={() => setMobileNavigation(false)} className={itemStyling}>
         {t(KEY.common_menu)}

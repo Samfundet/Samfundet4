@@ -15,6 +15,7 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentDto,
@@ -554,6 +555,27 @@ export async function getRecruitmentPositionsGang(
       queryParams: { recruitment: recruitmentId, gang: gangId },
     });
   const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__occupied_timeslots,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postOccupiedTimeslots(
+  timeslots: OccupiedTimeSlotDto[],
+): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
+  const response = await axios.post(url, timeslots, { withCredentials: true });
 
   return response;
 }

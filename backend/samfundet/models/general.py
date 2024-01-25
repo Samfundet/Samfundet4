@@ -7,7 +7,9 @@ from __future__ import annotations
 import re
 import random
 from typing import TYPE_CHECKING
-from datetime import time, timedelta
+from collections import defaultdict
+from django.utils import timezone
+from datetime import datetime, date, time, timedelta
 
 from notifications.base.models import AbstractNotification
 
@@ -231,6 +233,19 @@ class Venue(CustomBaseModel):
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
 
+    def get_opening_hours_date(self, selected_date: date | None = None) -> tuple[time, time]:
+        selected_date = selected_date or timezone.now().date()
+        fields = [
+            (self.opening_monday, self.closing_monday),
+            (self.opening_tuesday, self.closing_tuesday),
+            (self.opening_wednesday, self.closing_wednesday),
+            (self.opening_thursday, self.closing_thursday),
+            (self.opening_friday, self.closing_friday),
+            (self.opening_saturday, self.closing_saturday),
+            (self.opening_sunday, self.closing_sunday),
+        ]
+        return fields[selected_date.weekday()]
+
     def __str__(self) -> str:
         return f'{self.name}'
 
@@ -391,15 +406,75 @@ class Reservation(CustomBaseModel):
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
     phonenumber = models.CharField(max_length=8, blank=True, null=True, verbose_name='Telefonnummer')
-    date = models.DateField(blank=True, null=False, verbose_name='Dato')
+
+    reservation_date = models.DateField(blank=True, null=False, verbose_name='Dato')
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Sted')
+
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
 
     occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
     additional_info = models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')
     internal_messages = models.TextField(blank=True, null=True, verbose_name='Interne meldinger')
+
+    # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
+    table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
+
+    def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
+        """
+            Method for returning available reservation times for a venue
+            Based on the amount of seating and the date
+        """
+        # Fetch tables that fits size criteria
+        tables = Table.objects.filter(venue=venue, seating__gte=seating)
+        # fetch all reservations for those tables for that date
+        reserved_tables = Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time',
+                                                                                                                  'end_time').order_by('start_time')
+
+        # fetch opening hours for the date
+        open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
+        c_time = datetime.combine(date, open_hours[0])
+        end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
+
+        # Transform each occupied table to stacks of their reservations
+        occupied_table_times: dict[int, list[tuple[time, time]]] = defaultdict(list)
+        for tr in reserved_tables:
+            occupied_table_times[tr['table']].append((tr['start_time'], tr['end_time']))
+
+        # Checks if list of occupied tables are shorter than available tables
+        safe = (len(occupied_table_times) < len(tables) or len(reserved_tables) == 0)
+
+        available_hours: list[str] = []
+        if (len(tables) > 0):
+            while (c_time <= end_time):
+                available = False
+                # If there are still occupied tables for time
+                if not safe:
+                    # Loop through tables and reservation
+                    for key, table_times in occupied_table_times.items():
+                        # If top of stack is over, remove it
+
+                        if (c_time.time()) >= table_times[0][1]:  # If greater than end remove element
+                            occupied_table_times[key].pop(0)
+                            # if the reservations for a table is empty, drop checking for availability
+                            if len(occupied_table_times[key]) == 0:
+                                safe = True
+                                break
+                        # If time next occupancy is in future, drop and set available table,
+                        # also tests for a buffer for an hour, to see if table is available for the next hour
+                        if (c_time.time()) < table_times[0][0] and (c_time + timezone.timedelta(hours=1)).time() < table_times[0][0]:
+                            # if there is no reservation at the moment, is available for booking
+                            available = True
+                            break
+                # If available or safe, add available hour
+                if safe or available:
+                    available_hours.append(c_time.strftime('%H:%M'))
+
+                # iterate to next half hour
+                c_time = (c_time + timezone.timedelta(minutes=30))
+                c_time = c_time + (timezone.datetime.min - c_time) % timedelta(minutes=30)
+        return available_hours
 
     class Meta:
         verbose_name = 'Reservation'

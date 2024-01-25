@@ -40,3 +40,12 @@
   outline: 3px hidden var(--active);
   box-shadow: 0 0 2px 2px #999999;
 }
+
+.error {
+  color:$red;
+}
+
+.errorMessage {
+  font-size: 0.8em;
+  color:$red;
+}

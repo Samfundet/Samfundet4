@@ -37,8 +37,9 @@ from .models.general import (
     MenuItem,
     GangType,
     KeyValue,
-    Organization,
     BlogPost,
+    Reservation,
+    Organization,
     FoodCategory,
     Saksdokument,
     ClosedPeriod,
@@ -413,37 +414,6 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodCategory
-        fields = ['id', 'name_nb', 'name_en']
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-    food_category = FoodCategorySerializer()
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -474,24 +444,7 @@ class SaksdokumentSerializer(CustomBaseSerializer):
         return document
 
 
-class TableSerializer(CustomBaseSerializer):
-    venue = VenueSerializer(many=True)
-
-    class Meta:
-        model = Table
-        fields = '__all__'
-
-
-class BookingSerializer(CustomBaseSerializer):
-    tables = TableSerializer(many=True)
-    user = UserSerializer(many=True)
-
-    class Meta:
-        model = Booking
-        fields = '__all__'
-
-
-class TextItemSerializer(CustomBaseSerializer):
+class TextItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TextItem
@@ -509,6 +462,71 @@ class KeyValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KeyValue
+        fields = '__all__'
+
+
+# =============================== #
+#            Sulten               #
+# =============================== #
+
+
+class FoodPreferenceSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = FoodCategory
+        fields = '__all__'
+
+
+class MenuItemSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(CustomBaseSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+
+class TableSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Table
+        fields = '__all__'
+
+
+class ReservationSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = Reservation
+        fields = '__all__'
+
+
+class ReservationCheckSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Reservation
+        fields = ['guest_count', 'occasion', 'reservation_date']
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    tables = TableSerializer(many=True)
+    user = UserSerializer(many=True)
+
+    class Meta:
+        model = Booking
         fields = '__all__'
 
 
@@ -595,6 +613,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
+            'created_at',
+            'withdrawn',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
@@ -614,7 +634,7 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         return recruitment_admission
 
 
-class OccupiedtimeslotSerializer(CustomBaseSerializer):
+class OccupiedtimeslotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Occupiedtimeslot
