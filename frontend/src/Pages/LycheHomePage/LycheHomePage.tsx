@@ -99,7 +99,7 @@ export function LycheHomePage() {
     <SultenCard
       image={sulten_inside}
       imageAlt={t(KEY.common_sulten)}
-      header={t(KEY.common_reservations)}
+      header={t(KEY.common_reservation)}
       text={useTextItem(TextItem.sulten_reservation_text)}
       buttonText={t(KEY.sulten_page_book_table) || undefined}
       imageAlignment="left"
