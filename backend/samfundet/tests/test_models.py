@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 import pytest
-
 from django.core.exceptions import ValidationError
 
 from samfundet.models.general import Booking

@@ -15,6 +15,7 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentDto,
@@ -136,8 +137,8 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(id: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
+export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
   return response.data;
 }
@@ -250,7 +251,7 @@ export async function getMenu(pk: string | number): Promise<MenuDto> {
 }
 
 export async function getMenuItems(): Promise<MenuItemDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_items_list;
   const response = await axios.get<MenuItemDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -554,6 +555,27 @@ export async function getRecruitmentPositionsGang(
       queryParams: { recruitment: recruitmentId, gang: gangId },
     });
   const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__occupied_timeslots,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postOccupiedTimeslots(
+  timeslots: OccupiedTimeSlotDto[],
+): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
+  const response = await axios.post(url, timeslots, { withCredentials: true });
 
   return response;
 }
