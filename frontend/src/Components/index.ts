@@ -24,6 +24,7 @@ export { InputField } from './InputField';
 export { InputFile } from './InputFile';
 export { Link } from './Link';
 export { List } from './List';
+export { ManyToMany } from './ManyToMany';
 export { Modal } from './Modal';
 export { Navbar } from './Navbar';
 export { NotificationBadge } from './NotificationBadge';
@@ -54,9 +55,11 @@ export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
 
 // Props
-export type { TextAreaFieldProps } from './TextAreaField';
-export type { InputFieldProps } from './InputField';
 export type { CheckboxProps } from './Checkbox';
-export type { InputFileProps } from './InputFile';
 export type { DropdownProps } from './Dropdown';
 export type { ImagePickerProps } from './ImagePicker/ImagePicker';
+export type { InputFieldProps } from './InputField';
+export type { InputFileProps } from './InputFile';
+export type { ManyToManyProps } from './ManyToMany';
+export type { TextAreaFieldProps } from './TextAreaField';
+

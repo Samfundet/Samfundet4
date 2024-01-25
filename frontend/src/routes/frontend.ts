@@ -71,6 +71,7 @@ export const ROUTES_FRONTEND = {
   admin_sulten_menu: '/control-panel/lyche/menu',
   admin_sulten_menuitem_create: '/control-panel/lyche/menuitems/create',
   admin_sulten_menuitem_edit: '/control-panel/lyche/menuitems/edit/:id',
+  admin_sulten_menu_create: '/control-panel/lyche/menu/create',
   // ==================== //
   //      Development     //
   // ==================== //

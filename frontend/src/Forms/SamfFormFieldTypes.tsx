@@ -4,10 +4,12 @@ import {
   CheckboxProps,
   Dropdown,
   DropdownProps,
-  InputFile,
-  InputFileProps,
   InputField,
   InputFieldProps,
+  InputFile,
+  InputFileProps,
+  ManyToMany,
+  ManyToManyProps,
   TextAreaField,
   TextAreaFieldProps,
 } from '~/Components';
@@ -29,7 +31,8 @@ export type FieldProps =
   | InputFileProps
   | DropdownProps<number | string>
   | InputFieldProps<InputFieldType>
-  | ImagePickerProps;
+  | ImagePickerProps
+  | ManyToManyProps;
 
 export type SamfFormFieldType =
   | 'text'
@@ -45,7 +48,8 @@ export type SamfFormFieldType =
   | 'datetime'
   | 'time'
   | 'upload-image'
-  | 'upload-pdf';
+  | 'upload-pdf'
+  | 'manyToMany';
 
 /**
  * Arguments used to generate the input component.
@@ -93,6 +97,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   'upload-pdf': makeFilePickerFunction('pdf'),
   checkbox: makeCheckboxInput,
   email: makeStandardInputFunction<string>('email'),
+  manyToMany: makeManyToManyFunction,
 };
 
 // ================================== //
@@ -188,4 +193,8 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
       error={args.error}
     />
   );
+}
+
+function makeManyToManyFunction() {
+  return <ManyToMany />;
 }

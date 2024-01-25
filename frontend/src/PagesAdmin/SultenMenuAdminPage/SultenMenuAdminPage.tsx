@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
@@ -7,12 +8,11 @@ import { Table } from '~/Components/Table';
 import { getMenuItems, getMenus } from '~/api';
 import { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SultenMenuAdminPage.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { reverse } from '~/named-urls';
 
 export function SultenMenuAdminPage() {
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ export function SultenMenuAdminPage() {
       <Button theme="success" rounded={true} link={ROUTES.frontend.admin_sulten_menuitem_create}>
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.sulten_dishes)}`)}
       </Button>
-      <Button theme="success" rounded={true} onClick={() => alert('TODO create menu')}>
+      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_sulten_menu_create}>
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_menu)}`)}
       </Button>
     </div>
