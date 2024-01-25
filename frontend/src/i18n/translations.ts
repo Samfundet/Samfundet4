@@ -217,7 +217,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
   // Sulten / Lyche
-
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
   [KEY.sulten_page_about_us]: 'Om Lyche',
