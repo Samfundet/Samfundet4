@@ -33,12 +33,22 @@ export function SultenCard({
 
   // position image to the left, or top if mobile
   const leftAlignedImage = (alignImageLeft || isMobile) && (
-    <img src={image} alt={imageAlt} className={smallCard ? styles.smallcard_image : styles.card_image}></img>
+    <img
+      src={image}
+      alt={imageAlt}
+      className={smallCard ? styles.smallcard_image : styles.card_image}
+      loading="lazy"
+    ></img>
   );
 
   // position image to the right, not at the bottom if mobile
   const rightAlignedImage = !alignImageLeft && !isMobile && (
-    <img src={image} alt={imageAlt} className={smallCard ? styles.smallcard_image : styles.card_image}></img>
+    <img
+      src={image}
+      alt={imageAlt}
+      className={smallCard ? styles.smallcard_image : styles.card_image}
+      loading="lazy"
+    ></img>
   );
 
   const cardButton = buttonText && (
