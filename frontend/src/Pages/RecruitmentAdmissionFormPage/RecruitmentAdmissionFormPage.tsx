@@ -18,8 +18,10 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
+import { useAuthContext } from '~/AuthContext';
 
 export function RecruitmentAdmissionFormPage() {
+  const { user } = useAuthContext();
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
@@ -29,10 +31,11 @@ export function RecruitmentAdmissionFormPage() {
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
 
   const [loading, setLoading] = useState(true);
+
   const { positionID } = useParams();
 
   useEffect(() => {
-    Promise.all([
+    Promise.allSettled([
       getRecruitmentPosition(positionID as string).then((res) => {
         setRecruitmentPosition(res.data);
       }),
@@ -138,16 +141,20 @@ export function RecruitmentAdmissionFormPage() {
             })}
           </div>
         </div>
-        <SamfForm
-          initialData={{ admission_text: recruitmentAdmission?.admission_text }}
-          onSubmit={handleOnSubmit}
-          submitText={submitText}
-          validateOnInit={true}
-          devMode={false}
-        >
-          <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
-          <SamfFormField field="admission_text" type="text-long" />{' '}
-        </SamfForm>
+        {user ? (
+          <SamfForm
+            initialData={{ admission_text: recruitmentAdmission?.admission_text }}
+            onSubmit={handleOnSubmit}
+            submitText={submitText}
+            validateOnInit={true}
+            devMode={false}
+          >
+            <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
+            <SamfFormField field="admission_text" type="text-long" />{' '}
+          </SamfForm>
+        ) : (
+          <div>TODO add login redirect</div>
+        )}
       </div>
     </Page>
   );
