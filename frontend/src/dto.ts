@@ -220,6 +220,22 @@ export type MenuDto = {
   menu_items?: MenuItemDto[];
 };
 
+export type ReservationDto = {
+  name?: string;
+  email?: string;
+  phonenumber?: string;
+  additional_info?: string;
+  start_time: string;
+  end_time?: string;
+  // Needed for first part
+  venue: number;
+  reservation_date: string;
+  guest_count: number;
+  occasion: string;
+  // Maybe ignore and use different dto?
+  // internal_message?: string;
+};
+
 export type SaksdokumentDto = {
   id: number;
   title_nb: string;
