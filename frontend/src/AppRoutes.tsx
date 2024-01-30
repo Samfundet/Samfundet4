@@ -54,9 +54,10 @@ import { InterviewNotesPage } from './PagesAdmin/InterviewNotesAdminPage';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
+import { SultenMenuFormAdminPage } from './PagesAdmin/SultenMenuFormAdminPage';
+import { SultenMenuItemFormAdminPage } from './PagesAdmin/SultenMenuItemFormAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
-import { SultenMenuItemFormAdminPage } from './PagesAdmin/SultenMenuItemFormAdminPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -184,6 +185,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_sulten_menuitem_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_sulten_menu_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_MENU]} Page={SultenMenuFormAdminPage} />}
         />
         {/* Recruitment */}
         <Route

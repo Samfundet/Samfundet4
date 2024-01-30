@@ -1,0 +1,1 @@
+export { SultenMenuFormAdminPage } from './SultenMenuFormAdminPage';

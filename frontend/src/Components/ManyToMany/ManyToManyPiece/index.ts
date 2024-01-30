@@ -1,0 +1,1 @@
+export { ManyToManyPiece } from './ManyToManyPiece';
