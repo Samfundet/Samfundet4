@@ -18,6 +18,7 @@ type ButtonProps = {
   children?: Children;
   preventDefault?: boolean;
   onClick?: () => void;
+  hover?: boolean;
 };
 
 export function Button({
@@ -31,6 +32,7 @@ export function Button({
   className,
   children,
   preventDefault = false,
+  hover = true,
   ...props
 }: ButtonProps) {
   const isPure = theme === 'pure';
@@ -41,6 +43,7 @@ export function Button({
     !isPure && displayToStyleMap[display],
     rounded && styles.rounded,
     className,
+    hover && styles.hover,
   );
 
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {

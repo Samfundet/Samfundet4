@@ -1,16 +1,16 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
-import styles from '../../HomePage.module.scss';
-import { dbT, lowerCapitalize } from '~/utils';
-import { Button } from '~/Components';
-import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-import { Icon } from '@iconify/react';
-import { PAID_TICKET_TYPES } from '~/types';
-import { ROUTES } from '~/routes';
 import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { PAID_TICKET_TYPES } from '~/types';
+import { dbT, lowerCapitalize } from '~/utils';
+import styles from '../../HomePage.module.scss';
 
 type SplashProps = {
   events?: EventDto[];
@@ -18,17 +18,20 @@ type SplashProps = {
 };
 
 // Milliseconds between each slide
-const SLIDE_FREQUENCY = 5_000;
+const SLIDE_FREQUENCY = 50_000;
 
 export function Splash({ events, showInfo }: SplashProps) {
   const { t } = useTranslation();
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isBackwards, setIsBackwards] = useState(false);
 
   const [index, setIndex] = useState<number>(0);
   const nextIndex = events ? (index + 1) % events?.length : 0;
+  const prevIndex = events ? (index - 1 + events.length) % events.length : 0;
 
   const imageUrl = events ? BACKEND_DOMAIN + events[index].image_url : '';
   const nextImageUrl = events ? BACKEND_DOMAIN + events[nextIndex].image_url : '';
+  const prevImageUrl = events ? BACKEND_DOMAIN + events[prevIndex].image_url : '';
 
   const description = events ? dbT(events[index], 'description_short') : '';
 
@@ -72,8 +75,22 @@ export function Splash({ events, showInfo }: SplashProps) {
 
   function nextSplash() {
     setIsAnimating(false);
-    setIndex((val) => (val + 1) % (events?.length ?? 0));
+    setIsBackwards(false);
+    if (isBackwards) {
+      setIndex((val) => (val - 1 + (events?.length ?? 0)) % (events?.length ?? 0));
+    } else {
+      setIndex((val) => (val + 1) % (events?.length ?? 0));
+    }
     startSlideTimer();
+  }
+
+  function onClickNext() {
+    setIsAnimating(true);
+  }
+
+  function onClickPrev() {
+    setIsBackwards(true);
+    setIsAnimating(true);
   }
 
   // Start timer when events change
@@ -94,19 +111,36 @@ export function Splash({ events, showInfo }: SplashProps) {
           </div>
         </div>
       )}
+      <Button hover={false} onClick={onClickPrev} className={styles.splash_change_button}>
+        <Icon icon="ooui:next-rtl" className={styles.change_icon} />
+      </Button>
+      <Button
+        hover={false}
+        onClick={onClickNext}
+        className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}
+      >
+        <Icon icon="ooui:next-ltr" className={styles.change_icon} />
+      </Button>
       <img
         src={imageUrl}
-        className={classNames({ [styles.splash]: true, [styles.splash_slide_out]: isAnimating })}
+        className={classNames({
+          [styles.splash]: true,
+          [styles.splash_slide_out]: isAnimating && !isBackwards,
+          [styles.splash_slide_out_reverse]: isAnimating && isBackwards,
+        })}
         onAnimationEnd={nextSplash}
       />
       <img
-        src={nextImageUrl}
+        src={isBackwards ? prevImageUrl : nextImageUrl}
         className={classNames({
           [styles.splash]: true,
           [styles.splash_second]: true,
-          [styles.splash_slide_in]: isAnimating,
+          [styles.splash_slide_in]: isAnimating && !isBackwards,
+          [styles.splash_slide_in_reverse]: isAnimating && isBackwards,
         })}
       />
+      <img src={prevImageUrl} className={styles.splash_second} />
+
       <div className={styles.splash_fade}></div>
     </div>
   );
