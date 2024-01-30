@@ -139,7 +139,6 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_in_reverse]: isAnimating && isBackwards,
         })}
       />
-      <img src={prevImageUrl} className={styles.splash_second} />
 
       <div className={styles.splash_fade}></div>
     </div>
