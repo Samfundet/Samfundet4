@@ -4,7 +4,7 @@
 
 .container {
   @include flex-row;
-  background-color: $black;
+  // background-color: $black;
   border-radius: 0.5em;
   gap: 1em;
   padding: 1.5em;
@@ -16,7 +16,7 @@
 
 .smallcard_container {
   @include flex-row-center;
-  background-color: $black;
+  // background-color: $black;
   border-radius: 0.5em;
   gap: 1em;
   padding: 1.5em;
@@ -33,6 +33,7 @@
   flex: 1;
   display: inline-block;
   border-radius: 0.5em;
+  box-shadow: 0 0 15px #282828;
 
   @include for-mobile-down {
     width: 100%;
@@ -50,6 +51,7 @@
   border-radius: 0.5em;
   object-position: top;
   object-fit: cover;
+  box-shadow: 0 0 15px #282828;
 
   @include for-mobile-down {
     width: 100%;

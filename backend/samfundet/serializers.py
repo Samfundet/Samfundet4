@@ -613,6 +613,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
+            'created_at',
+            'withdrawn',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
