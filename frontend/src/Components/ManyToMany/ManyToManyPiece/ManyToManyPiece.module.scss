@@ -1,10 +1,62 @@
 @import 'src/constants';
+@import 'src/mixins';
+
+$focus-blur-color-dark: rgba(80, 150, 255, 0.391);
+$focus-blur-color: $blue-medium;
+$focus-blur-radius: 10px;
+$focus-blur-spread: 2px;
+$error-color: red;
+$form-bg: #dddddd;
 
 .wrapper {
+  background-color: form-bg;
+  @include rounded;
+  flex-grow: 1;
+  padding: 1em 0;
+  padding: 1em 1em;
+  border: 1px solid transparent;
+  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
+  outline: none;
+  &:focus {
+    outline: none;
+    border: 1px solid $grey-4;
+    box-shadow: 0 0 $focus-blur-radius $focus-blur-spread $focus-blur-color;
+    @include theme-dark {
+      border-color: $grey-1;
+      box-shadow: 0 0 $focus-blur-radius $focus-blur-spread $focus-blur-color-dark;
+    }
+  }
+  @include theme-dark {
+    color: white;
+    background-color: $grey-0;
+  }
+}
+
+.wrapper > div {
+  padding: 1em 1em;
 }
 
 .header {
+  border-bottom: 1px solid black;
 }
 
 .content {
+  overflow-y: scroll;
+  max-height: 20em;
+  height: 20em;
+}
+
+.element {
+  height: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.1s;
+}
+
+.element:hover {
+  background: rgb(210, 210, 210);
+  @include theme-dark {
+    background-color: $grey-0;
+  }
 }

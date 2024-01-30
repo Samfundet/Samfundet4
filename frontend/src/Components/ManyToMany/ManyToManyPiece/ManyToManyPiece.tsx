@@ -1,18 +1,20 @@
-import { MenuItemDto } from '~/dto';
 import styles from './ManyToManyPiece.module.scss';
 
 type ManyToManyPieceProps = {
   title: string;
-  dishes: MenuItemDto[];
+  elements: string[];
 };
 
-export function ManyToManyPiece({ title, dishes }: ManyToManyPieceProps) {
+export function ManyToManyPiece({ title, elements }: ManyToManyPieceProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>{title}</div>
       <div className={styles.content}>
-        {dishes.map((i) => (
-          <div key={i.id}>{dishes[i].name}</div>
+        {elements.map((i) => (
+          <div className={styles.element} key={i}>
+            checkbox
+            {i}
+          </div>
         ))}
       </div>
     </div>

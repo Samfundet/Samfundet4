@@ -1,1 +1,36 @@
 @import 'src/constants';
+@import 'src/mixins';
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.button_wrapper {
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 1em;
+  background-color: rgba(255, 0, 0, 0.373);
+  padding: 0.5em;
+  border-radius: 1.25em;
+}
+
+#button_left,
+#button_right {
+  border-radius: 100%;
+  border: 0px;
+  width: 1.5em;
+  aspect-ratio: 1;
+  background-color: red;
+}
+
+#button_left {
+}
+
+#button_right {
+}
