@@ -4,6 +4,7 @@ import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
 
 export function RecruitmentPage() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
@@ -27,6 +28,7 @@ export function RecruitmentPage() {
     <Page>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
+        <OccupiedFormModal recruitmentId={1} />
         {loading ? (
           <SamfundetLogoSpinner />
         ) : (
