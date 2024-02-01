@@ -46,7 +46,7 @@ def seed():
          {
             'key': 'the_society_meeting'
             'text_nb': 'Samfundsmøtet er Studentersamfundets høyeste organ. Her velges leder samt medlemmer til Finansstyret og Rådet. Lederen velger ut sitt eget styre, som utformer den politiske profilen og representer medlemmene og foreningen Samfundet. Finansstyret administrerer forretningsdriften. Rådet kontrollerer at all virksomhet i Samfundet foregår i henhold til norske og interne lover. Samfundet har en daglig leder, økonomiansvarlig, husøkonom, vaktmester og renholdspersonell som er ansatte.',
-            'text_en': 'The Society Meeting is our highest organ. We elect the leader here, as well as members of the Finance Board and the Council. The leader, elected politically, chooses his or her own Board, which forms the House´s political profile and represents all of Samfundet´s members. The Finance Board manages the business. The Council ensures that all activities at Samfundet take place according to Norwegian and internal laws. Samfundet has a general manager, financial manager, house-economist, caretaker and cleaning staff who are employees.',
+            'text_en': 'The Society Meeting is our highest organ. We elect the leader here, as well as members of the Finance Board and the Council. The leader, elected politically, chooses his or her own Board, which forms the House\'s political profile and represents all of Samfundet\'s members. The Finance Board manages the business. The Council ensures that all activities at Samfundet take place according to Norwegian and internal laws. Samfundet has a general manager, financial manager, house-economist, caretaker and cleaning staff who are employees.',
         },
          {
             'key': 'about_samfundet'
