@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '~/Components';
+import { Button, IconButton } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -18,7 +18,7 @@ type SplashProps = {
 };
 
 // Milliseconds between each slide
-const SLIDE_FREQUENCY = 50_000;
+const SLIDE_FREQUENCY = 5_000;
 
 export function Splash({ events, showInfo }: SplashProps) {
   const { t } = useTranslation();
@@ -77,9 +77,9 @@ export function Splash({ events, showInfo }: SplashProps) {
     setIsAnimating(false);
     setIsBackwards(false);
     if (isBackwards) {
-      setIndex((val) => (val - 1 + (events?.length ?? 0)) % (events?.length ?? 0));
+      setIndex(prevIndex);
     } else {
-      setIndex((val) => (val + 1) % (events?.length ?? 0));
+      setIndex(nextIndex);
     }
     startSlideTimer();
   }
@@ -111,16 +111,22 @@ export function Splash({ events, showInfo }: SplashProps) {
           </div>
         </div>
       )}
-      <Button hover={false} onClick={onClickPrev} className={styles.splash_change_button}>
-        <Icon icon="ooui:next-rtl" className={styles.change_icon} />
-      </Button>
-      <Button
-        hover={false}
+      <IconButton
+        icon="ooui:next-rtl"
+        title="prev"
+        color={'transparent'}
+        height="5em"
+        onClick={onClickPrev}
+        className={styles.splash_change_button}
+      />
+      <IconButton
+        icon="ooui:next-ltr"
+        title="next"
+        height="5em"
+        color={'transparent'}
         onClick={onClickNext}
         className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}
-      >
-        <Icon icon="ooui:next-ltr" className={styles.change_icon} />
-      </Button>
+      />
       <img
         src={imageUrl}
         className={classNames({

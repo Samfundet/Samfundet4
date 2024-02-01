@@ -170,11 +170,9 @@
 .splash_change_button {
   position: absolute;
   z-index: 1;
-  top: 50%;
-  background-color: transparent;
-  box-shadow: none;
-  padding: 0;
-  opacity: 50%;
+  top: calc(50% - 2.5em);
+  opacity: 40%;
+  margin: 0 1em;
 
   &:hover {
     opacity: 100%;
