@@ -36,7 +36,7 @@ def seed():
         {
          'key': 'festivals',
             'text_nb': 'Annenhvert år arrangeres Norges største kulturfestival UKA og verdens største internasjonale tematiske studentfestival under Studentersamfundets paraply.',
-            'text_en': 'Every other year, Norway`s largest cultural festival UKA and the world`s largest international thematic student festival are organized under the Student Association`s umbrella.',
+            'text_en': 'Every other year, Norway\'s largest cultural festival UKA and the world\'s largest international thematic student festival are organized under Studentersamfundet\'s umbrella.',
         },
         {
             'key': 'volunteering'
