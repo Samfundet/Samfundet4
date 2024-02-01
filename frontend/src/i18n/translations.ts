@@ -15,6 +15,15 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_day_saturday]: 'Lørdag',
   [KEY.common_day_sunday]: 'Søndag',
 
+  // Day abbreviations:
+  [KEY.common_day_monday_short]: 'Man',
+  [KEY.common_day_tuesday_short]: 'Tir',
+  [KEY.common_day_wednesday_short]: 'Ons',
+  [KEY.common_day_thursday_short]: 'Tor',
+  [KEY.common_day_friday_short]: 'Fre',
+  [KEY.common_day_saturday_short]: 'Lør',
+  [KEY.common_day_sunday_short]: 'Søn',
+
   // Months:
   [KEY.common_month_january]: 'Januar',
   [KEY.common_month_february]: 'Februar',
@@ -37,6 +46,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_to]: 'Til',
   [KEY.common_price]: 'Pris',
   [KEY.common_buy]: 'Kjøp',
+  [KEY.common_not]: 'Ikke',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
@@ -61,6 +71,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
+  [KEY.common_cancel]: 'Avbryt',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
@@ -89,6 +100,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
+  [KEY.common_select_all]: 'Velg alle',
+  [KEY.common_unselect_all]: 'Fjern valgte',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
@@ -216,7 +229,8 @@ export const nb: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
-  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig',
+  [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
   // No category:
@@ -260,6 +274,15 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_day_saturday]: 'Saturday',
   [KEY.common_day_sunday]: 'Sunday',
 
+  // Day abbreviations:
+  [KEY.common_day_monday_short]: 'Mon',
+  [KEY.common_day_tuesday_short]: 'Tue',
+  [KEY.common_day_wednesday_short]: 'Wed',
+  [KEY.common_day_thursday_short]: 'Thu',
+  [KEY.common_day_friday_short]: 'Fri',
+  [KEY.common_day_saturday_short]: 'Sat',
+  [KEY.common_day_sunday_short]: 'Sun',
+
   // Months:
   [KEY.common_month_january]: 'January',
   [KEY.common_month_february]: 'February',
@@ -282,6 +305,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_to]: 'To',
   [KEY.common_price]: 'Price',
   [KEY.common_buy]: 'Buy',
+  [KEY.common_not]: 'Not',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
@@ -300,6 +324,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -322,6 +347,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
+  [KEY.common_select_all]: 'Select all',
+  [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Oversikt',
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
@@ -473,7 +500,8 @@ export const en: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
-  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available',
+  [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
 
   // No category:
