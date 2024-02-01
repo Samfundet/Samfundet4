@@ -39,7 +39,7 @@ def seed():
             'text_en': 'Every other year, Norway\'s largest cultural festival UKA and the world\'s largest international thematic student festival are organized under Studentersamfundet\'s umbrella.',
         },
         {
-            'key': 'volunteering'
+            'key': 'volunteering',
             'text_nb': 'Det meste av arbeid på Studentersamfundet i Trondhjem gjøres gjennom dugnad av studenter. Arbeidet er organisert i enheter som kalles gjenger. Potensielle nye medlemmer må søke den aktuelle gjengen om opptak, og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.',
             'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called groups. Prospective new members must apply to the appropriate group for admission and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
         },
