@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import styles from './Breadcrumb.module.scss';
-import { BREADCRUMB_TITLES } from '~/constants/BreadCrumbTitles';
 import { useTranslation } from 'react-i18next';
+import { Link, useLocation } from 'react-router-dom';
+import { BreadcrumbTitles } from '~/constants/BreadcrumbTitles';
+import styles from './Breadcrumb.module.scss';
 
 export function Breadcrumb() {
   const { t } = useTranslation();
@@ -13,9 +13,9 @@ export function Breadcrumb() {
 
   let url = '';
   const breadcrumbLinks = segments.map((segment, i) => {
-    const title = t(BREADCRUMB_TITLES[url + '/' + segment]);
     url += '/' + segment;
-    //Removes part segments containing an ID
+    const title = t(BreadcrumbTitles[url]);
+    //Removes segments containing an ID
     if (/\d/.test(segment)) {
       return null;
     }
