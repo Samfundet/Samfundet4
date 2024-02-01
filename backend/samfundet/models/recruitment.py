@@ -161,24 +161,13 @@ class RecruitmentAdmission(CustomBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
-    PRIORITY_CHOICES = [
-        (0, 'Not Set'),
-        (1, 'Not Wanted'),
-        (2, 'Wanted'),
-        (3, 'Reserve'),
-    ]
-
-    STATUS_CHOICES = [
-        (0, 'Nothing'),
-        (1, 'Called and Accepted'),
-        (2, 'Called and Rejected'),
-        (3, 'Automatic Rejection'),
-    ]
-
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
         choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
@@ -195,6 +184,9 @@ class RecruitmentAdmission(CustomBaseModel):
         """
         If the admission is saved without an interview, try to find an interview from a shared position.
         """
+        if self.withdrawn:
+            self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
+            self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
@@ -206,6 +198,7 @@ class RecruitmentAdmission(CustomBaseModel):
             else:
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
+        # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
 
