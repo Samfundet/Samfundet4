@@ -22,7 +22,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ParseError
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
 
 from root.constants import (
@@ -604,7 +604,7 @@ class RecruitmentPositionsPerGangView(ListAPIView):
         if recruitment is not None and gang is not None:
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         else:
-            return None
+            raise ParseError(detail='Recruitment or gang is required')
 
 
 class ApplicantsWithoutInterviewsView(ListAPIView):
