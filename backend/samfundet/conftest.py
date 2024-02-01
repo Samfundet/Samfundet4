@@ -13,7 +13,7 @@ from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
 from samfundet.models.event import Event
-from samfundet.models.model_choices import EventAgeRestriction, EventTicketType
+from samfundet.models.model_choices import EventAgeRestriction, EventTicketType, RecruitmentPriorityChoices, RecruitmentStatusChoices
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue, Table, Reservation
 
@@ -296,8 +296,8 @@ def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_positi
         recruitment=fixture_recruitment,
         user=fixture_user,
         applicant_priority=1,
-        recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
-        recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
     yield admission
     admission.delete()
