@@ -8,7 +8,7 @@ import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { PAID_TICKET_TYPES } from '~/types';
+import { COLORS, PAID_TICKET_TYPES } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import styles from '../../HomePage.module.scss';
 
@@ -114,7 +114,7 @@ export function Splash({ events, showInfo }: SplashProps) {
       <IconButton
         icon="ooui:next-rtl"
         title="prev"
-        color={'transparent'}
+        color={COLORS.transparent}
         height="5em"
         onClick={onClickPrev}
         className={styles.splash_change_button}
@@ -123,7 +123,7 @@ export function Splash({ events, showInfo }: SplashProps) {
         icon="ooui:next-ltr"
         title="next"
         height="5em"
-        color={'transparent'}
+        color={COLORS.transparent}
         onClick={onClickNext}
         className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}
       />
