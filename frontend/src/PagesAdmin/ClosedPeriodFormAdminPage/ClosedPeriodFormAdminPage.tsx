@@ -61,7 +61,7 @@ export function ClosedPeriodFormAdminPage() {
   }
 
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
-  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}' (${t(KEY.common_norwegian)})`;
+  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
   return (
@@ -71,24 +71,24 @@ export function ClosedPeriodFormAdminPage() {
           <SamfFormField
             field="message_no"
             type="text-long"
-            label={`${labelMessage} (${KEY.common_norwegian})`}
+            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
           ></SamfFormField>
           <SamfFormField
             field="message_en"
             type="text-long"
-            label={`${labelMessage} (${KEY.common_english})`}
+            label={`${labelMessage} (${t(KEY.common_english)})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_no"
             type="text-long"
-            label={`${labelDescription} (${KEY.common_norwegian})`}
+            label={`${labelDescription} (${t(KEY.common_norwegian)})`}
           ></SamfFormField>
           <SamfFormField
             field="description_en"
             type="text-long"
-            label={`${labelDescription} (${KEY.common_english})`}
+            label={`${labelDescription} (${t(KEY.common_english)})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>
