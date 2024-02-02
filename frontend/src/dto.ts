@@ -220,6 +220,16 @@ export type MenuDto = {
   menu_items?: MenuItemDto[];
 };
 
+export type FetchAvailableTimesDto = {
+  guest_count: number;
+  reservation_date: string;
+};
+
+export type ReservationFormDto = {
+  occasion: string[][];
+  biggest_table: number;
+};
+
 export type ReservationDto = {
   name?: string;
   email?: string;

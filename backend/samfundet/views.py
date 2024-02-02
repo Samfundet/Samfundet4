@@ -105,6 +105,7 @@ from .serializers import (
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
+from .models.model_choices import ReservationOccasion
 from .utils import event_query
 
 # =============================== #
@@ -308,6 +309,15 @@ class TableView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
     serializer_class = TableSerializer
     queryset = Table.objects.all()
+
+
+class ReservationFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
+        biggest_table = Table.objects.filter(venue=venue).order_by('-seating').first()
+        return Response({'occasion': ReservationOccasion.choices, 'biggest_table': biggest_table.seating if biggest_table else 0}, status=status.HTTP_200_OK)
 
 
 class ReservationCheckAvailabilityView(APIView):
