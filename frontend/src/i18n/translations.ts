@@ -250,6 +250,7 @@ export const nb: Record<KeyValues, string> = {
 
   [KEY.control_panel_title]: 'Kontrollpanel',
   [KEY.information_page_short]: 'Side',
+  [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
@@ -503,10 +504,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.event_type]: 'Event type',
   [KEY.start_time]: 'Start time',
   [KEY.last_updated]: 'Last updated',
+
   [KEY.form_confirm]: 'Are you sure you want do',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
+  [KEY.invalid_phonenumber]: 'Not a valid phone number',
   [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
