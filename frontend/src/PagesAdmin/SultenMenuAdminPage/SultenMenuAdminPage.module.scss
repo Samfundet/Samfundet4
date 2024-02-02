@@ -1,0 +1,15 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.subheader {
+  margin-top: 0.2em;
+  padding: 0.2em;
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.headerRow {
+  @include flex-row;
+  gap: 0.2em;
+}
