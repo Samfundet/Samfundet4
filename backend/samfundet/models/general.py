@@ -402,7 +402,7 @@ class Table(CustomBaseModel):
         return f'{self.name_nb}'
 
 
-class Reservation(CustomBaseModel):
+class Reservation(FullCleanSaveMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')

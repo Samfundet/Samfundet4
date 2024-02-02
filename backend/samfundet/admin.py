@@ -355,7 +355,7 @@ class TableAdmin(CustomBaseAdmin):
 
 
 @admin.register(Reservation)
-class ReservationAdmin(CustomBaseAdmin):
+class ReservationAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'name', 'email', 'phonenumber']
     # list_filter = []

@@ -9,7 +9,7 @@ from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
-from root.utils.mixins import CustomBaseSerializer
+from root.utils.mixins import CustomBaseSerializer, FullCleanSerializer
 from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
@@ -508,7 +508,7 @@ class TableSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class ReservationSerializer(CustomBaseSerializer):
+class ReservationSerializer(FullCleanSerializer):
 
     class Meta:
         model = Reservation
