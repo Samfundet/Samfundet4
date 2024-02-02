@@ -20,4 +20,5 @@ export const TextItem = {
   sulten_lyche_goal_text: 'sulten_lyche_goal_text',
   sulten_lyche_about_menu_text: 'sulten_lyche_about_menu_text',
   sulten_contact_page_text: 'sulten_contact_page_text',
+  sulten_contact_page_title: 'sulten_contact_page_title',
 } as const;
