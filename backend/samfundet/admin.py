@@ -500,14 +500,14 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'reprioritization_deadline_for_groups', 'organization'
     ]
     list_display = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'name_en', 'organization', 'visible_from', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups'
     ]
     search_fields = [
         'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups', 'organization'
     ]
-    list_display_links = ['visible_from']
+    list_display_links = ['name_en']
     list_select_related = True
 
 
