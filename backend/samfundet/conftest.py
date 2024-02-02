@@ -12,7 +12,8 @@ from django.contrib.auth.models import Group
 from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event, EventAgeRestriction, EventTicketType
+from samfundet.models.event import Event
+from samfundet.models.model_choices import EventAgeRestriction, EventTicketType, RecruitmentPriorityChoices, RecruitmentStatusChoices
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue, Table, Reservation
 
@@ -127,6 +128,17 @@ def fixture_user(fixture_user_pw: str) -> Iterator[User]:
 
 
 @pytest.fixture
+def fixture_user2(fixture_user_pw: str) -> Iterator[User]:
+    user2 = User.objects.create_user(
+        username='user2',
+        email='user2@test.com',
+        password=fixture_user_pw,
+    )
+    yield user2
+    user2.delete()
+
+
+@pytest.fixture
 def fixture_image() -> Iterator[Image]:
     path = BASE_DIR / 'samfundet' / 'tests' / 'test_image.jpg'
     with open(path, 'rb') as file:
@@ -156,15 +168,15 @@ def fixture_event(fixture_image: Image) -> Iterator[Event]:
         start_dt=timezone.now(),
         publish_dt=timezone.now() - timezone.timedelta(hours=1),
         duration=60,
-        description_long_nb='',
-        description_long_en='',
-        description_short_nb='',
-        description_short_en='',
-        location='',
+        description_long_nb='description',
+        description_long_en='description',
+        description_short_nb='description',
+        description_short_en='description',
+        location='location',
+        host='host',
         image=fixture_image,
         age_restriction=EventAgeRestriction.AGE_18,
         capacity=100,
-        host='',
     )
     yield event
     event.delete()
@@ -284,8 +296,8 @@ def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_positi
         recruitment=fixture_recruitment,
         user=fixture_user,
         applicant_priority=1,
-        recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
-        recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
     yield admission
     admission.delete()

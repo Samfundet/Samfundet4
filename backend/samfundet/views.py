@@ -324,8 +324,7 @@ class ReservationCreateView(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
+      
 class ReservationCheckAvailabilityView(APIView):
     permission_classes = [AllowAny]
     serializer_class = ReservationCheckSerializer
@@ -761,6 +760,8 @@ class OccupiedtimeslotView(ListCreateAPIView):
         # TODO Could maybe need a check for saving own, not allowing to save others to themselves
         serializer = self.get_serializer(data=request.data, many=True)
         if serializer.is_valid():
+            # Uses set functionality, but tries to reduce transactions
+            Occupiedtimeslot.objects.filter(user=request.user, recruitment=request.data[0]['recruitment']).delete()
             serializer.save()
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

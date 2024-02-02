@@ -1,0 +1,37 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.noMargin {
+  margin:0;
+}
+
+.tooltip {
+  width: 10em;
+  background-color: $grey-3;
+  color: $white;
+  text-align: center;
+  border-radius: 0.2em;
+  padding: 0.25em;
+
+  @include theme-dark {
+    background-color: $black;
+  }
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.left {
+  top: -5px;
+  left: 105%;
+}
+
+.top {
+  bottom: 105%;
+}
+
+.hidden {
+  display: none;
+}

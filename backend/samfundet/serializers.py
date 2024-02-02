@@ -2,11 +2,14 @@ import itertools
 
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
+
+from root.utils.mixins import CustomBaseSerializer
 from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
 from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
@@ -27,6 +30,7 @@ from .models.general import (
     Table,
     Venue,
     Image,
+    Campus,
     Infobox,
     Booking,
     Profile,
@@ -46,14 +50,14 @@ from .models.general import (
 )
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Tag
         fields = '__all__'
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -90,21 +94,21 @@ class ImageSerializer(serializers.ModelSerializer):
         return image.image.url if image.image else None
 
 
-class EventCustomTicketSerializer(serializers.ModelSerializer):
+class EventCustomTicketSerializer(CustomBaseSerializer):
 
     class Meta:
         model = EventCustomTicket
         fields = '__all__'
 
 
-class BilligPriceGroupSerializer(serializers.ModelSerializer):
+class BilligPriceGroupSerializer(CustomBaseSerializer):
 
     class Meta:
         model = BilligPriceGroup
         fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
 
 
-class BilligTicketGroupSerializer(serializers.ModelSerializer):
+class BilligTicketGroupSerializer(CustomBaseSerializer):
     # These fields are calculated based on percentages sold and should be public
     is_almost_sold_out = serializers.BooleanField(read_only=True)
     is_sold_out = serializers.BooleanField(read_only=True)
@@ -126,7 +130,7 @@ class BilligTicketGroupSerializer(serializers.ModelSerializer):
         ]
 
 
-class BilligEventSerializer(serializers.ModelSerializer):
+class BilligEventSerializer(CustomBaseSerializer):
     ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
 
     class Meta:
@@ -160,7 +164,7 @@ class EventListSerializer(serializers.ListSerializer):
         return [self.child.to_representation(e) for e in events]
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Event
@@ -192,21 +196,21 @@ class EventSerializer(serializers.ModelSerializer):
         return event
 
 
-class EventGroupSerializer(serializers.ModelSerializer):
+class EventGroupSerializer(CustomBaseSerializer):
 
     class Meta:
         model = EventGroup
         fields = '__all__'
 
 
-class VenueSerializer(serializers.ModelSerializer):
+class VenueSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Venue
         fields = '__all__'
 
 
-class ClosedPeriodSerializer(serializers.ModelSerializer):
+class ClosedPeriodSerializer(CustomBaseSerializer):
 
     class Meta:
         model = ClosedPeriod
@@ -325,9 +329,17 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CampusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Campus
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
+    campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
@@ -367,21 +379,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # GANGS ###
-class OrganizationSerializer(serializers.ModelSerializer):
+class OrganizationSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Organization
         fields = '__all__'
 
 
-class GangSerializer(serializers.ModelSerializer):
+class GangSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Gang
         fields = '__all__'
 
 
-class GangTypeSerializer(serializers.ModelSerializer):
+class GangTypeSerializer(CustomBaseSerializer):
     gangs = GangSerializer(read_only=True, many=True)
 
     class Meta:
@@ -389,21 +401,22 @@ class GangTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class InformationPageSerializer(serializers.ModelSerializer):
+class InformationPageSerializer(CustomBaseSerializer):
 
     class Meta:
         model = InformationPage
         fields = '__all__'
 
 
-class BlogPostSerializer(serializers.ModelSerializer):
+class BlogPostSerializer(CustomBaseSerializer):
 
     class Meta:
         model = BlogPost
         fields = '__all__'
 
 
-class SaksdokumentSerializer(serializers.ModelSerializer):
+
+class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
     # Write only field for posting new document
@@ -440,7 +453,8 @@ class TextItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class InfoboxSerializer(serializers.ModelSerializer):
+
+class InfoboxSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Infobox
@@ -459,21 +473,23 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-class FoodPreferenceSerializer(serializers.ModelSerializer):
+
+class FoodPreferenceSerializer(CustomBaseSerializer):
+
 
     class Meta:
         model = FoodPreference
         fields = '__all__'
 
 
-class FoodCategorySerializer(serializers.ModelSerializer):
+class FoodCategorySerializer(CustomBaseSerializer):
 
     class Meta:
         model = FoodCategory
         fields = '__all__'
 
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class MenuItemSerializer(CustomBaseSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
 
     class Meta:
@@ -481,7 +497,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MenuSerializer(serializers.ModelSerializer):
+class MenuSerializer(CustomBaseSerializer):
     menu_items = MenuItemSerializer(many=True)
 
     class Meta:
@@ -489,28 +505,18 @@ class MenuSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TableSerializer(serializers.ModelSerializer):
+class TableSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Table
         fields = '__all__'
 
 
-class ReservationSerializer(serializers.ModelSerializer):
+class ReservationSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Reservation
         fields = '__all__'
-
-    def validate(self, attrs: dict) -> dict:
-
-        instance = Reservation(**attrs)
-        try:
-            instance.full_clean()
-        except ValidationError as e:
-            raise serializers.ValidationError(e.args[0])
-        return attrs
-
 
 class ReservationCheckSerializer(serializers.ModelSerializer):
 
@@ -533,7 +539,7 @@ class BookingSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-class RecruitmentSerializer(serializers.ModelSerializer):
+class RecruitmentSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Recruitment
@@ -559,12 +565,49 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
         return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
 
 
-class RecruitmentPositionSerializer(serializers.ModelSerializer):
+class InterviewerSerializer(CustomBaseSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'id',
+        ]
+
+
+class RecruitmentPositionSerializer(CustomBaseSerializer):
     gang = GangSerializer(read_only=True)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
 
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'
+
+    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
+        try:
+            interviewers = []
+            if interviewer_objects:
+                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
+                if interviewer_ids:
+                    interviewers = User.objects.filter(id__in=interviewer_ids)
+            recruitment_position.interviewers.set(interviewers)
+        except (TypeError, KeyError):
+            raise ValidationError('Invalid data for interviewers.')
+
+    def create(self, validated_data: dict) -> RecruitmentPosition:
+        recruitment_position = super().create(validated_data)
+        interviewer_objects = self.initial_data.get('interviewers', [])
+        self._update_interviewers(recruitment_position, interviewer_objects)
+        return recruitment_position
+
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+        updated_instance = super().update(instance, validated_data)
+        interviewer_objects = self.initial_data.get('interviewers', [])
+        self._update_interviewers(updated_instance, interviewer_objects)
+        return updated_instance
 
 
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
@@ -574,6 +617,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         fields = [
             'admission_text',
             'recruitment_position',
+            'created_at',
+            'withdrawn',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
@@ -600,7 +645,7 @@ class OccupiedtimeslotSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ApplicantInfoSerializer(serializers.ModelSerializer):
+class ApplicantInfoSerializer(CustomBaseSerializer):
     occupied_timeslots = OccupiedtimeslotSerializer(many=True)
 
     class Meta:
@@ -608,21 +653,21 @@ class ApplicantInfoSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
 
 
-class InterviewRoomSerializer(serializers.ModelSerializer):
+class InterviewRoomSerializer(CustomBaseSerializer):
 
     class Meta:
         model = InterviewRoom
         fields = '__all__'
 
 
-class InterviewSerializer(serializers.ModelSerializer):
+class InterviewSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Interview
         fields = '__all__'
 
 
-class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
 
