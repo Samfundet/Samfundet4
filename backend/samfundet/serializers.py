@@ -415,7 +415,6 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -453,7 +452,6 @@ class TextItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class InfoboxSerializer(CustomBaseSerializer):
 
     class Meta:
@@ -473,9 +471,7 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-
 class FoodPreferenceSerializer(CustomBaseSerializer):
-
 
     class Meta:
         model = FoodPreference
@@ -517,6 +513,7 @@ class ReservationSerializer(CustomBaseSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
+
 
 class ReservationCheckSerializer(serializers.ModelSerializer):
 

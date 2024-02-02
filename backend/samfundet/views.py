@@ -324,7 +324,8 @@ class ReservationCreateView(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-      
+
+
 class ReservationCheckAvailabilityView(APIView):
     permission_classes = [AllowAny]
     serializer_class = ReservationCheckSerializer
