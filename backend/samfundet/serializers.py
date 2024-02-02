@@ -2,7 +2,6 @@ import itertools
 
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile

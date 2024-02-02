@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import Permission, Group
 from django.utils import timezone
-from datetime import date, time
+from datetime import date
 from django.urls import reverse
 from rest_framework import status
 from guardian.shortcuts import assign_perm
@@ -700,6 +700,7 @@ def test_reservation_clean(
     data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.id, 'guest_count': 3, 'start_time': '10:00'}
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert status.is_success(code=response.status_code)
+    Reservation.objects.first().delete()
 
 
 def test_reservation_double_booked(
@@ -715,6 +716,7 @@ def test_reservation_double_booked(
 
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    Reservation.objects.first().delete()
 
 
 def test_reservation_end_before_start(
@@ -733,6 +735,3 @@ def test_reservation_end_before_start(
     }
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
-#{"reservation_date": "2023-12-25", "venue":8, "start_time": "10:00", "guest_count": 3}
