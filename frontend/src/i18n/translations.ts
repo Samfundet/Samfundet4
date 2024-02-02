@@ -231,6 +231,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.sulten_reservation_form_remember_closing]: 'Husk at Lyche stenger',
   [KEY.sulten_reservation_form_find_times]: 'Finn Ledige Tidspunkt',
   [KEY.sulten_dishes]: 'Retter',
+  [KEY.sulten_no_available_tables]: 'Ingen ledige bord for denne dagen eller antall gjester',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -490,7 +491,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
   [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
-
+  [KEY.sulten_no_available_tables]: 'No available tables for this date and guest count',
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
   [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',

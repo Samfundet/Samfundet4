@@ -2,50 +2,75 @@ import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
 import { TextItem } from '~/constants/TextItems';
 import styles from './LycheReservationPage.module.scss';
+import { toast } from 'react-toastify';
 import { KV } from '~/constants';
 import { useKeyValue, useTextItem } from '~/hooks';
-import { ReservationDto } from '~/dto';
+import { FetchAvailableTimesDto, ReservationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ReservationFormLine } from './Components';
+import { getAvailableTimes, getReservationForm } from '~/api';
+import { dbT } from '~/utils';
+import { STATUS } from '~/http_status_codes';
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<ReservationDto>();
+  const [hoursOptions, setHoursOptions] = useState<DropDownOption<string>[]>();
+  const [occasionOptions, setOccasionOptions] = useState<DropDownOption<string>[]>();
+  const [occupancyOptions, setOccupancyOptions] = useState<DropDownOption<number>[]>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
 
-  const occasionOptions: DropDownOption<string>[] = [
-    { value: 'DRINK', label: 'drikke' },
-    { value: 'EAT', label: 'spise' },
-  ];
-
-  const hoursOptions: DropDownOption<string>[] = [
-    { value: '12:00', label: '12:00' },
-    { value: '13:00', label: '13:00' },
-    { value: '14:00', label: '14:00' },
-    { value: '15:00', label: '15:00' },
-  ];
-
-  const occupancyOptions: DropDownOption<number>[] = [
-    { value: 1, label: '1' },
-    { value: 2, label: '2' },
-    { value: 3, label: '3' },
-    { value: 4, label: '4' },
-  ];
+  useEffect(() => {
+    getReservationForm()
+      .then((data) => {
+        setOccasionOptions(data.occasion.map((d: string[]) => ({ value: d[0], label: d[1] })));
+        if (data.biggest_table == 0) {
+          toast.error('Det eksisterer ingen bord i backend');
+        } else {
+          setOccupancyOptions(
+            new Array(data.biggest_table).fill(null).map((_, i) => ({ value: i + 1, label: (i + 1).toString() })),
+          );
+        }
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function checkAvailableDate(data: ReservationDto) {
-    setReservation({ ...reservation, ...data } as ReservationDto);
-    setAvailableDate(true);
+    getAvailableTimes(data as FetchAvailableTimesDto)
+      .then((dateData: string[]) => {
+        const transformed_hours = dateData.map((d: string) => ({ value: d, label: d }));
+        setHoursOptions(transformed_hours);
+        if (transformed_hours.length > 0) {
+          setReservation(data);
+          setAvailableDate(true);
+        } else {
+          toast.error(t(KEY.sulten_no_available_tables));
+        }
+      })
+      .catch((e) => {
+        if (e.response.status == STATUS.HTTP_406_NOT_ACCEPTABLE) {
+          toast.error(dbT(e.response.data, 'error'));
+        } else {
+          toast.error(t(KEY.common_something_went_wrong));
+        }
+        setAvailableDate(false);
+      });
   }
 
   function submit(data: ReservationDto) {
     console.log({ ...reservation, data });
   }
+
   const findAvailableDateStage = (
     <SamfForm
       className={styles.formContainer}
@@ -87,7 +112,7 @@ export function LycheReservationPage() {
           {t(KEY.common_date)} {reservation?.reservation_date as string}
         </p>
         <p className={styles.text}>
-          {t(KEY.common_guests)} {reservation?.guest_count}
+          {t(KEY.common_guests)}: {reservation?.guest_count}
         </p>
       </div>
       <ReservationFormLine label={t(KEY.common_time) + '*'}>
