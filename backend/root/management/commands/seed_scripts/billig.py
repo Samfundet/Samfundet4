@@ -6,6 +6,7 @@
 # database simulating the real billig in prod (cirkus).
 #
 #
+from __future__ import annotations
 
 import os
 from typing import Tuple, Iterable

@@ -1,4 +1,5 @@
 # imports
+from __future__ import annotations
 import notifications.urls
 
 from django.urls import path, include

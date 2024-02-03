@@ -69,7 +69,7 @@ ignore = [
 
 
 [tool.ruff.lint.per-file-ignores]
-"test_*.py" = ["PLR0917"]
+"test_*.py" = ["PLR0917", "ANN201"]
 "signals.py" = ["PLR0917"]
 "conftest.py" = ["PLR0917"]
 
@@ -83,16 +83,14 @@ section-order = [
     "future", 
     "standard-library",
     "third-party",
-    "rest_framework", # from custom section below.
-    "django", # from custom section below.
+    "rest_framework", # From custom section below.
+    "django", # From custom section below.
     "first-party",
-    "samfundet",
+    "samfundet", # From custom section below.
     "local-folder",
 ]
 
-
 [tool.ruff.lint.isort.sections]
-# Group all Django imports into a separate section.
 "django" = ["django"] # Used in section-order.
 "rest_framework" = ["rest_framework"] # Used in section-order.
 "samfundet" = ["samfundet"] # Used in section-order.

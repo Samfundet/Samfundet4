@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.test.client import Client
 from django.urls import reverse
 from guardian.shortcuts import assign_perm

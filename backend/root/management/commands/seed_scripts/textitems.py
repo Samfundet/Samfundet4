@@ -1,3 +1,4 @@
+from __future__ import annotations
 from samfundet.models.general import TextItem
 
 

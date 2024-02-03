@@ -1,3 +1,4 @@
+from __future__ import annotations
 from random import randint
 
 from samfundet.models.recruitment import RecruitmentAdmission, RecruitmentPosition
