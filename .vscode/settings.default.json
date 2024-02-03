@@ -16,9 +16,6 @@
   // mypy (type checker, linter)
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
-  // flake8 (linter)
-  "flake8.importStrategy": "fromEnvironment",
-  "flake8.args": ["--config", "backend/.flake8"],
   // pytest
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
