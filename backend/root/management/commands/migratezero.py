@@ -40,7 +40,7 @@ class Command(BaseCommand):
         for app in settings.INSTALLED_APPS:
             try:
                 appname = app.split('.')[-1]
-                management.call_command('migrate', appname, 'zero')  # noqa: FKA01
+                management.call_command('migrate', appname, 'zero')
             except Exception as _e:
                 pass
                 # print(f"{app} failed. {_e}")
