@@ -21,7 +21,7 @@ def create_link_method(*, field: str) -> Callable[[Any], str]:
 
     @admin.display(description=field, ordering=field)
     def link_method(obj: Any) -> str | None:
-        related_obj = getattr(obj, field, None)  # noqa: FKA01
+        related_obj = getattr(obj, field, None)
         return get_obj_link(related_obj)
 
     return link_method
@@ -192,7 +192,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
             # Construct field name, e.g. 'user_link'.
             field_name = f'{field}_{self.link_suffix}'
             # Generate method for field and attach with name.
-            setattr(self, field_name, create_link_method(field=field))  # noqa: FKA01
+            setattr(self, field_name, create_link_method(field=field))
 
         return list_select_related
 
@@ -256,7 +256,7 @@ def autocomplete_filter(**kwargs: Any) -> AutocompleteFilter:
     """
     Simple AutocompleteFilter factory.
     """
-    return type('AutocompleteFilter', (AutocompleteFilter, ), kwargs)  # noqa: FKA01
+    return type('AutocompleteFilter', (AutocompleteFilter, ), kwargs)
 
 
 class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):

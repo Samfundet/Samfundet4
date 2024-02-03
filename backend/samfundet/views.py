@@ -359,7 +359,7 @@ class LoginView(APIView):
         )
 
         # Reset impersonation after login.
-        setattr(response, REQUESTED_IMPERSONATE_USER, None)  # noqa: FKA01
+        setattr(response, REQUESTED_IMPERSONATE_USER, None)
 
         return response
 
@@ -377,7 +377,7 @@ class LogoutView(APIView):
         response = Response(status=status.HTTP_200_OK)
 
         # Reset impersonation after logout.
-        setattr(response, REQUESTED_IMPERSONATE_USER, None)  # noqa: FKA01
+        setattr(response, REQUESTED_IMPERSONATE_USER, None)
 
         return response
 
@@ -420,7 +420,7 @@ class ImpersonateView(APIView):
     def post(self, request: Request) -> Response:
         response = Response(status=200)
         user_id = request.data.get('user_id', None)
-        setattr(response, REQUESTED_IMPERSONATE_USER, user_id)  # noqa: FKA01
+        setattr(response, REQUESTED_IMPERSONATE_USER, user_id)
         return response
 
 
