@@ -18,11 +18,12 @@ import styles from './GroupsPage.module.scss';
 export function GroupsPage() {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
-
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   useEffect(() => {
     getGangList()
       .then((data) => {
         setGroups(data);
+        setShowSpinner(false);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
@@ -32,7 +33,7 @@ export function GroupsPage() {
   }, []);
 
   return (
-    <Page>
+    <Page loading={showSpinner}>
       <div className={styles.wrapper}>
         <div className={styles.description}>
           <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>

@@ -8,6 +8,7 @@ import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
+import { Page } from '~/Components';
 
 export function HomePage() {
   const [homePage, setHomePage] = useState<HomePageDto>();
@@ -46,8 +47,9 @@ export function HomePage() {
     </>
   );
 
+  // TODO: Could maybe add alternative load here
   return (
-    <div>
+    <Page className={styles.page}>
       <Splash events={homePage?.splash} showInfo={true} />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
@@ -56,6 +58,6 @@ export function HomePage() {
         {/* Render elements for frontpage. */}
         {homePage?.elements.map((el, index) => renderElement(index, el))}
       </div>
-    </div>
+    </Page>
   );
 }

@@ -2,7 +2,7 @@ import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button } from '~/Components';
 import { Page } from '~/Components/Page';
 import { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -25,13 +25,17 @@ export function InformationPage() {
 
   const { user } = useAuthContext();
   const [page, setPage] = useState<InformationPageDto>();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { slugField } = useParams();
 
   // Fetch page data
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
-        .then((data) => setPage(data))
+        .then((data) => {
+          setPage(data);
+          setShowSpinner(false);
+        })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
@@ -43,26 +47,17 @@ export function InformationPage() {
   const text = dbT(page, 'text') ?? '';
   const title = dbT(page, 'title') ?? '';
 
-  // Loading
-  if (!page) {
-    return (
-      <Page>
-        <div className={styles.spinner}>
-          <SamfundetLogoSpinner />
-        </div>
-      </Page>
-    );
-  }
-
   // Editing
-  const editUrl = reverse({
-    pattern: ROUTES.frontend.admin_information_edit,
-    urlParams: { slugField: page?.slug_field },
-  });
+  const editUrl = page
+    ? reverse({
+        pattern: ROUTES.frontend.admin_information_edit,
+        urlParams: { slugField: page?.slug_field },
+      })
+    : '';
   const canEditPage = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE, obj: page?.slug_field });
 
   return (
-    <div className={styles.wrapper}>
+    <Page className={styles.wrapper} loading={showSpinner}>
       {canEditPage && (
         <>
           <Button rounded={true} theme="blue" onClick={() => navigate(editUrl)}>
@@ -73,6 +68,6 @@ export function InformationPage() {
         </>
       )}
       <SamfMarkdown>{`# ${title} \n ${text}`}</SamfMarkdown>
-    </div>
+    </Page>
   );
 }

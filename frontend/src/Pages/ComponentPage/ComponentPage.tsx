@@ -1,4 +1,4 @@
-import { Button, Countdown, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
+import { Button, Countdown, InputField, Page, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -14,7 +14,7 @@ import styles from './ComponentPage.module.scss';
  */
 export function ComponentPage() {
   return (
-    <div className={styles.wrapper}>
+    <Page className={styles.wrapper}>
       <MultiSelect
         options={[
           {
@@ -130,6 +130,6 @@ export function ComponentPage() {
           </Countdown>
         </h2>
       </div>
-    </div>
+    </Page>
   );
 }

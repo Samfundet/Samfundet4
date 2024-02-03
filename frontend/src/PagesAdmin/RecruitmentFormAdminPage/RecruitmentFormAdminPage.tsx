@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -13,6 +12,8 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import styles from './RecruitmentFormAdminPage.module.scss';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { reverse } from '~/named-urls';
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
@@ -73,14 +74,15 @@ export function RecruitmentFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
 
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  const title = (id ? t(KEY.common_edit) : t(KEY.common_create)) + ' ' + t(KEY.common_recruitment);
+  const backendUrl = id
+    ? reverse({
+        pattern: ROUTES.backend.admin__samfundet_recruitment_change,
+        urlParams: {
+          objectId: id,
+        },
+      })
+    : ROUTES.backend.admin__samfundet_recruitment_add;
 
   function handleOnSubmit(data: RecruitmentDto) {
     if (id) {
@@ -110,7 +112,7 @@ export function RecruitmentFormAdminPage() {
 
   // TODO: Add validation for the dates
   return (
-    <div className={styles.wrapper}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} loading={showSpinner}>
       <SamfForm<RecruitmentDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
           <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
@@ -152,6 +154,6 @@ export function RecruitmentFormAdminPage() {
           />
         </div>
       </SamfForm>
-    </div>
+    </AdminPageLayout>
   );
 }

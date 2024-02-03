@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Button, Link } from '~/Components';
+import { Button, Link, Page } from '~/Components';
 import { ROUTES } from '~/routes';
 
 export function RouteOverviewPage() {
   const [showName, setShowName] = useState(false);
 
   return (
-    <>
+    <Page>
       <Button onClick={() => setShowName(!showName)}>Toggle name</Button>
 
       <h1>Routes</h1>
@@ -38,6 +38,6 @@ export function RouteOverviewPage() {
           </div>
         );
       })}
-    </>
+    </Page>
   );
 }

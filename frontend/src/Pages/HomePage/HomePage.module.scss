@@ -134,3 +134,9 @@
   top: -$navbar-height;
   // max-width: 100%; // QUESTION: Why is this needed?
 }
+
+.page {
+  max-width: 100%;
+  // Center all content.
+  margin: auto;
+}

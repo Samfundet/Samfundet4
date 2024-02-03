@@ -45,6 +45,7 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_new: 'common_new',
   common_to: 'common_to',
   common_price: 'common_price',
   common_buy: 'common_buy',
