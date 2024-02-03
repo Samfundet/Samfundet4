@@ -252,7 +252,15 @@ class CustomBaseModel(FullCleanSaveMixin):
         super().save(*args, **kwargs)
 
 
-class CustomBaseSerializer(serializers.ModelSerializer):
+class FullCleanSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs: dict) -> dict:
+        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
+        instance.full_clean()
+        return attrs
+
+
+class CustomBaseSerializer(FullCleanSerializer):
     """
         Base serializer, sets version fields to read_only
         Adds validation errors from models clean
@@ -276,8 +284,3 @@ class CustomBaseSerializer(serializers.ModelSerializer):
 
     def get_updated_by(self, obj: CustomBaseModel) -> str | None:
         return obj.updated_by.__str__() if obj.updated_by else None
-
-    def validate(self, attrs: dict) -> dict:
-        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
-        instance.full_clean()
-        return attrs
