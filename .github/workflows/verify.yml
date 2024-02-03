@@ -61,11 +61,8 @@ jobs:
       - name: Run tests
         run: python -m pipenv run pytest:run
 
-      - name: Run bandit
-        run: python -m pipenv run bandit:run
-
-      - name: Run flake8
-        run: python -m pipenv run flake8:run
+      - name: Run ruff
+        run: python -m pipenv run ruff:check
 
       - name: Run mypy
         run: python -m pipenv run mypy:run
