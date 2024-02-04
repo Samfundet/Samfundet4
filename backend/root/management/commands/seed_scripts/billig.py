@@ -43,9 +43,7 @@ def get_schema() -> str:
 
 
 def create_db() -> Tuple[bool, str]:
-    """
-    Creates a new sqlite3 database with schema using shell scripts
-    """
+    """Creates a new sqlite3 database with schema using shell scripts"""
 
     schema = get_schema()
     schema_queries = schema.split(';')

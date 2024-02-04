@@ -183,9 +183,7 @@ class RecruitmentAdmission(CustomBaseModel):
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        If the admission is saved without an interview, try to find an interview from a shared position.
-        """
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION

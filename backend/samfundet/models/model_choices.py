@@ -55,9 +55,7 @@ class EventAgeRestriction(models.TextChoices):
 
 
 class EventCategory(models.TextChoices):
-    """
-    Used for sorting, filtering and organizing stuff in frontend
-    """
+    """Used for sorting, filtering and organizing stuff in frontend"""
 
     SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
     CONCERT = 'concert', _('Konsert')

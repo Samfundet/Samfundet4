@@ -270,9 +270,7 @@ class ClosedPeriod(CustomBaseModel):
 
 # GANGS ###
 class Organization(CustomBaseModel):
-    """
-    Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
-    """
+    """Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT"""
 
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
 
@@ -285,9 +283,7 @@ class Organization(CustomBaseModel):
 
 
 class GangType(CustomBaseModel):
-    """
-    Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
-    """
+    """Type of gang. eg. 'arrangerende', 'kunstnerisk' etc."""
 
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')

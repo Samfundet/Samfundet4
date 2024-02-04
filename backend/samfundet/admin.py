@@ -559,9 +559,7 @@ class RecruitmentAdmissionInline(admin.TabularInline):
     fields = ['linked_admission_text', 'user', 'applicant_priority']
 
     def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
-        """
-        Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
-        """
+        """Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance."""
         url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
 

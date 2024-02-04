@@ -226,9 +226,7 @@ class CustomBaseModel(FullCleanSaveMixin):
         abstract = True
 
     def is_edited(self) -> bool:
-        """
-        Method for checking if object is updated or not
-        """
+        """Method for checking if object is updated or not"""
         return self.updated_at != self.created_at
 
     def save(self, *args: Any, **kwargs: Any) -> None:

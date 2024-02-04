@@ -257,9 +257,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
 
 def autocomplete_filter(**kwargs: Any) -> AutocompleteFilter:
-    """
-    Simple AutocompleteFilter factory.
-    """
+    """Simple AutocompleteFilter factory."""
     return type('AutocompleteFilter', (AutocompleteFilter,), kwargs)
 
 

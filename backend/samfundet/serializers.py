@@ -149,9 +149,7 @@ class BilligEventSerializer(CustomBaseSerializer):
 
 
 class EventListSerializer(serializers.ListSerializer):
-    """
-    Speedup fetching of billig events for lists serialization
-    """
+    """Speedup fetching of billig events for lists serialization"""
 
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
@@ -420,9 +418,7 @@ class SaksdokumentSerializer(CustomBaseSerializer):
         return instance.file.url if instance.file else None
 
     def create(self, validated_data: dict) -> Event:
-        """
-        Uses the write_only file field to create new document file.
-        """
+        """Uses the write_only file field to create new document file."""
         file = validated_data.pop('file')
         # Ensure file name ends with .pdf
         fname = validated_data['title_nb']
