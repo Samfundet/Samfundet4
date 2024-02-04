@@ -107,7 +107,6 @@ def get_image_path_for_event(image_csv, event):
 
 # Parse rows
 def seed() -> Iterator[tuple[int, str]]:
-
     # Delete old
     with transaction.atomic():
         Event.objects.all().delete()
@@ -124,7 +123,7 @@ def seed() -> Iterator[tuple[int, str]]:
     with open(event_path, 'r') as event_file:
         with open(image_path, 'r') as image_file:
             events = list(reversed(list(csv.DictReader(event_file))))
-            events = events[0:min(max_events, len(events))]
+            events = events[0 : min(max_events, len(events))]
             images = list(csv.DictReader(image_file))
             event_models = []
 
@@ -133,7 +132,7 @@ def seed() -> Iterator[tuple[int, str]]:
 
             for chunk in range(len(events) // chunk_size):
                 start = chunk * chunk_size
-                events_in_chunk = events[start:min(start + chunk_size, len(events))]
+                events_in_chunk = events[start : min(start + chunk_size, len(events))]
                 jobs = [(images, event) for event in events_in_chunk]
                 models = pool.starmap(add_event, jobs)
                 models = [e for e in models if e is not None]

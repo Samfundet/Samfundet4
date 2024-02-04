@@ -265,7 +265,7 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
         default_admission_letter_en='Default Admission Letter EN',
         tags='tag1,tag2',
         gang=fixture_gang,
-        recruitment=fixture_recruitment
+        recruitment=fixture_recruitment,
     )
     yield recruitment_position
     recruitment_position.delete()
@@ -292,8 +292,11 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
-                                  fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
+def fixture_recruitment_admission(
+    fixture_user: User,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentAdmission]:
     admission = RecruitmentAdmission.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,

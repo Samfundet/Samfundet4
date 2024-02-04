@@ -18,7 +18,6 @@ class RequestContextFilter(logging.Filter):
     """
 
     def filter(self, record: logging.LogRecord) -> bool:
-
         # NOTE: Each field is added as an attribute to the record and will thus be
         # interpreted as an 'extra'-field in the JsonFormatter this filter is hooked to.
 

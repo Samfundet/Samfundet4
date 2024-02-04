@@ -25,7 +25,7 @@ class RequestLogMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """ Log request/response context before and after processing. """
+        """Log request/response context before and after processing."""
 
         request.request_id = request.headers.get('X-Request-ID', f'local-{secrets.token_hex(16)}')
 
@@ -52,12 +52,10 @@ class RequestLogMiddleware:
 
 
 class ImpersonateUserMiddleware:
-
     def __init__(self, get_response: HttpResponse) -> None:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-
         ### Handle impersonation before response ###
         impersonate = request.get_signed_cookie(COOKIE_IMPERSONATED_USER_ID, default=None)
         if impersonate is not None:

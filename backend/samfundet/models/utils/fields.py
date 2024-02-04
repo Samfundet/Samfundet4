@@ -9,13 +9,11 @@ from root.constants import PHONE_NUMBER_REGEX
 
 
 class LowerCaseField(models.CharField):
-
     def to_python(self, value: str) -> str:
         return super().to_python(value.lower())
 
 
 class PhoneNumberField(models.CharField):
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs['max_length'] = 15
         self.validators = [

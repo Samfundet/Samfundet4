@@ -9,7 +9,6 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
             '--noinput',
@@ -34,7 +33,7 @@ class Command(BaseCommand):
         return answer in yes
 
     def handle(self, *args, **options):
-        """ Migrate each installed app to zero """
+        """Migrate each installed app to zero"""
         if options['interactive']:
             if not self.confirmation():
                 print('== ABORT ==')

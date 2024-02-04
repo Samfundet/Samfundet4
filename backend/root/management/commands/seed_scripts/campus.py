@@ -23,7 +23,7 @@ CAMPUS = [
     {
         'name_en': 'Trondheim Academy of Fine Art',
         'name_nb': 'Kunstakademiet i Trondheim',
-        'abbreviation': 'KIT'
+        'abbreviation': 'KIT',
     },
     {
         'name_en': 'NTNU Dragvoll',

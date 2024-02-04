@@ -140,9 +140,7 @@ class FieldTrackerMixin(Model):
             else:  # Log changes.
                 LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
                 LOG.info(
-                    f'{self} has changed:\n\n'
-                    f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
-                    f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
+                    f'{self} has changed:\n\n' f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n' f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
                 )
         except Exception as e:
             # Get all changes.
@@ -184,10 +182,11 @@ class FullCleanSaveMixin(Model):
 
 class CustomBaseModel(FullCleanSaveMixin):
     """
-        Basic model which will contains necessary version info of a model:
-        With by who and when it was updated and created.
-        Also keeps a counter for how many times it has been updated
+    Basic model which will contains necessary version info of a model:
+    With by who and when it was updated and created.
+    Also keeps a counter for how many times it has been updated
     """
+
     version = models.PositiveIntegerField(
         default=0,
         null=True,
@@ -228,14 +227,14 @@ class CustomBaseModel(FullCleanSaveMixin):
 
     def is_edited(self) -> bool:
         """
-            Method for checking if object is updated or not
+        Method for checking if object is updated or not
         """
         return self.updated_at != self.created_at
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
-            User should always be provided, but that can be ignored.
-            Will update and set which user interacted with it when it was saved.
+        User should always be provided, but that can be ignored.
+        Will update and set which user interacted with it when it was saved.
         """
         self.full_clean()
         self.version += 1
@@ -255,10 +254,11 @@ class CustomBaseModel(FullCleanSaveMixin):
 
 class CustomBaseSerializer(serializers.ModelSerializer):
     """
-        Base serializer, sets version fields to read_only
-        Adds validation errors from models clean
-        Context of request needs to be passed
+    Base serializer, sets version fields to read_only
+    Adds validation errors from models clean
+    Context of request needs to be passed
     """
+
     created_by = serializers.SerializerMethodField(method_name='get_created_by', read_only=True)
     updated_by = serializers.SerializerMethodField(method_name='get_updated_by', read_only=True)
 

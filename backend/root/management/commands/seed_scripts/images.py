@@ -16,7 +16,6 @@ COUNT = 30
 
 
 def do_seed():
-
     # Preload images first (faster than doing in seed loop)
     image_folder = os.path.join(os.path.dirname(__file__), 'seed_images')
     seed_images = os.listdir(image_folder)
@@ -41,7 +40,14 @@ def do_seed():
         random_image = ImageFile(image_file, name=f'img_{i}')
         title = words(random.randint(1, 2))
         image = Image.objects.create(title=title, image=random_image)
-        image.tags.set(random.choices(Tag.objects.all().values_list(flat=True, ), k=random.randint(1, 4)))
+        image.tags.set(
+            random.choices(
+                Tag.objects.all().values_list(
+                    flat=True,
+                ),
+                k=random.randint(1, 4),
+            )
+        )
         yield int(i / COUNT * 100), 'Creating images'
 
     # Remember to close files!

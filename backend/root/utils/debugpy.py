@@ -18,6 +18,7 @@ def initialize_debugpy() -> None:
     """
     if os.environ.get('ENABLE_DEBUGPY') == 'yes':
         import debugpy
+
         # This is okay as long as ENABLE_DEBUGPY only is enabled during development and NOT in production.
         HOST = '0.0.0.0'
         host_port = debugpy.listen((HOST, 5678))
