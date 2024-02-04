@@ -493,9 +493,7 @@ class WebhookView(APIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class AssignGroupView(APIView):
-    """
-    Assigns a user to a group.
-    """
+    """Assigns a user to a group."""
 
     permission_classes = [IsAuthenticated]
 
@@ -641,9 +639,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     queryset = RecruitmentAdmission.objects.all()
 
     def list(self, request: Request) -> Response:
-        """
-        Returns a list of all the recruitments for the specified gang.
-        """
+        """Returns a list of all the recruitments for the specified gang."""
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')
 
@@ -675,9 +671,7 @@ class RecruitmentAdmissionForGangView(ModelViewSet):
     # TODO: User should only be able to edit the fields that are allowed
 
     def list(self, request: Request) -> Response:
-        """
-        Returns a list of all the recruitments for the specified gang.
-        """
+        """Returns a list of all the recruitments for the specified gang."""
         gang_id = request.query_params.get('gang')
         recruitment_id = request.query_params.get('recruitment')
 
@@ -707,9 +701,7 @@ class ActiveRecruitmentPositionsView(ListAPIView):
     serializer_class = RecruitmentPositionSerializer
 
     def get_queryset(self) -> Response:
-        """
-        Returns all active recruitment positions.
-        """
+        """Returns all active recruitment positions."""
         return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
 
 

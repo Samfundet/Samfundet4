@@ -189,9 +189,7 @@ class Event(CustomBaseModel):
 
     @property
     def total_registrations(self) -> int:
-        """
-        Total number of registrations made for registration type events.
-        """
+        """Total number of registrations made for registration type events."""
         if self.ticket_type == EventTicketType.REGISTRATION and self.registration:
             return self.registration.count
         return 0
@@ -268,9 +266,7 @@ class Event(CustomBaseModel):
     # ======================== #
 
     def get_or_create_registration(self) -> EventRegistration:
-        """
-        Gets the reservation object or creates a new one if it does not exist
-        """
+        """Gets the reservation object or creates a new one if it does not exist"""
         if not self.registration:
             self.registration = EventRegistration.objects.create()
         return self.registration

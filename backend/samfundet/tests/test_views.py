@@ -218,9 +218,7 @@ class TestInformationPagesView:
 
 
 class TestVersionModel:
-    """
-    Test simple model which uses CustomBaseModel
-    """
+    """Test simple model which uses CustomBaseModel"""
 
     def test_created_by(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
