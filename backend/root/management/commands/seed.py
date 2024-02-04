@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from root.constants import Environment
+
 # Import list of all seed scripts.
 from root.management.commands.seed_scripts import SEED_SCRIPTS, OPTIONAL_SEED_SCRIPTS
 

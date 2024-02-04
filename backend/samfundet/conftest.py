@@ -1,23 +1,27 @@
-from typing import Iterator, Any
+from __future__ import annotations
+
+from typing import Any, Iterator
+from datetime import time, datetime
 
 import pytest
-from django.core.files.images import ImageFile
 
-from datetime import time, datetime
-from django.utils import timezone
-from django.test import Client
 from rest_framework.test import APIClient
+
+from django.test import Client
+from django.utils import timezone
+from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group
 
-from root.settings import BASE_DIR
-from samfundet.constants import DEV_PASSWORD
-from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event
-from samfundet.models.model_choices import EventAgeRestriction, EventTicketType, RecruitmentPriorityChoices, RecruitmentStatusChoices
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue, Table, Reservation
-
 import root.management.commands.seed_scripts.billig as billig_seed
+from root.settings import BASE_DIR
+
+from samfundet.constants import DEV_PASSWORD
+from samfundet.models.event import Event
+from samfundet.models.billig import BilligEvent
+from samfundet.models.general import Gang, User, Image, Table, Venue, BlogPost, TextItem, Reservation, Organization, InformationPage
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
+
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.

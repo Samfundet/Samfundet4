@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import os
 import random
 
-from django.core.files import File
 from django.db import transaction
 from django.utils import timezone
+from django.core.files import File
 
 from root.utils.samfundet_random import words
+
 from samfundet.models.general import Saksdokument
 from samfundet.models.model_choices import SaksdokumentCategory
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 from typing import Tuple
 
@@ -5,6 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
+
 from samfundet.models.event import (
     User,
     Event,
@@ -12,8 +15,8 @@ from samfundet.models.event import (
     EventGroup,
     EventCategory,
     EventTicketType,
-    EventRegistration,
     EventCustomTicket,
+    EventRegistration,
     EventAgeRestriction,
     NonMemberEmailRegistration,
 )

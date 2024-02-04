@@ -1,12 +1,15 @@
+from __future__ import annotations
+
 import os
 import random
 
-from django.core.files.images import ImageFile
 from django.db import transaction
+from django.core.files.images import ImageFile
 from django.db.models.deletion import ProtectedError
 
 from root.utils.samfundet_random import words
-from samfundet.models.general import Image, Tag
+
+from samfundet.models.general import Tag, Image
 
 # Number of images
 COUNT = 30

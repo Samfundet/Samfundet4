@@ -1,14 +1,15 @@
 from __future__ import annotations
+
 import sys
 import copy
 import logging
 from typing import Any, Union
 
+from rest_framework import serializers
+
 from django.db import models
 from django.utils import timezone
 from django.db.models import DEFERRED, Model
-
-from rest_framework import serializers
 
 from root.constants import request_contextvar
 

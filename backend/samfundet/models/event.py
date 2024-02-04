@@ -11,13 +11,15 @@ import uuid
 from typing import Any
 
 from django.db import models
-from django.db.models import Prefetch, QuerySet
 from django.utils import timezone
+from django.db.models import Prefetch, QuerySet
 
 from root.utils.mixins import CustomBaseModel
+
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import User, Image, Gang
-from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventStatus, EventTicketType
+from samfundet.models.general import Gang, User, Image
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
+
 # ======================== #
 #      Event Group         #
 # ======================== #

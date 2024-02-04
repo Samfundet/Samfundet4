@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import pytest
 
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentAdmission
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.

@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import random
 
 from django.utils import timezone
 
-from samfundet.models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
+from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 
 # ======================== #
 #  Billig Seed Utilities   #

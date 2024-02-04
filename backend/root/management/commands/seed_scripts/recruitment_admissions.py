@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from random import randint
 
-from samfundet.models.recruitment import RecruitmentAdmission, RecruitmentPosition
 from samfundet.models.general import User
+from samfundet.models.recruitment import RecruitmentPosition, RecruitmentAdmission
 
 # Some example data to use for the new RecruitmentAdmission instances
 ADMISSION_DATA = {
