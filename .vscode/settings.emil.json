@@ -19,9 +19,6 @@
   // ================================
   //              Backend
   // ================================
-  // yapf (formatter)
-  "yapf.importStrategy": "fromEnvironment",
-  "yapf.args": ["--style", "backend/.style.yapf"],
   // mypy (type checker, linter)
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
@@ -32,12 +29,12 @@
   "python.envFile": "backend/.env",
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": false
+      "source.fixAll": "never",
+      "source.organizeImports": "never"
     },
-    "editor.defaultFormatter": "eeyore.yapf"
+    // ruff (formatter, linter)
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
-
   // ================================
   //             Frontend
   // ================================
@@ -48,38 +45,14 @@
   "prettier.ignorePath": "frontend/.prettierignore",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.workingDirectories": ["frontend"],
-  "[typescript]": {
+  "[javascript][javascriptreact][typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
+      "source.fixAll": "always",
+      "source.organizeImports": "always"
     }
   },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": true
-    }
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
-  "[css]": {
+  "[css][scss]": {
     "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
   "css.validate": true,

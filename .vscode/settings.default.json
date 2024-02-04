@@ -10,9 +10,6 @@
   // ================================
   //              Backend
   // ================================
-  // yapf (formatter)
-  "yapf.importStrategy": "fromEnvironment",
-  "yapf.args": ["--style", "backend/.style.yapf"],
   // mypy (type checker, linter)
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
@@ -38,39 +35,15 @@
   "prettier.configPath": "frontend/.prettierrc.js",
   "prettier.ignorePath": "frontend/.prettierignore",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript][javascriptreact][typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always",
+      "source.organizeImports": "always"
+    }
+  },
   "eslint.workingDirectories": ["frontend"],
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": true
-    }
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
-  "[css]": {
+  "[css][scss]": {
     "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
   "css.validate": true,
