@@ -11,28 +11,29 @@ import uuid
 from typing import Any
 
 from django.db import models
-from django.db.models import Prefetch, QuerySet
 from django.utils import timezone
-from django.utils.translation import gettext as _
+from django.db.models import Prefetch, QuerySet
+
+from root.utils.mixins import CustomBaseModel
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import User, Image, Gang
+from samfundet.models.general import Gang, User, Image
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 # ======================== #
 #      Event Group         #
 # ======================== #
 
 
-class EventGroup(models.Model):
+class EventGroup(CustomBaseModel):
     """
     Used for recurring events
     Connects multiple recurring events (e.g. the same concert two days in a row)
     Enables frontend to know about recurring events and provide tools
     for admins to edit both or links for users to see other times.
     """
+
     name = models.CharField(max_length=140)
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     class Meta:
         verbose_name = 'EventGroup'
@@ -53,6 +54,7 @@ class NonMemberEmailRegistration(models.Model):
     With this we can create a link 'samfundet.no/confirm_registration?id=<UUID>'
     that only the person who registered will know.
     """
+
     # Long unique identifier (used for email cancellation)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Email of the registered user
@@ -65,6 +67,7 @@ class EventRegistration(models.Model):
     Used for events with registration payment type
     Stores list of registered users and emails.
     """
+
     # Registered users
     registered_users = models.ManyToManyField(User, blank=True)
     # Registered emails (for those not logged in/not a member)
@@ -80,88 +83,23 @@ class EventRegistration(models.Model):
 # ======================== #
 
 
-class EventCustomTicket(models.Model):
+class EventCustomTicket(CustomBaseModel):
     """
     Used for events with custom price group.
     Stores name and price of each custom ticket type.
     """
+
     name_nb = models.CharField(max_length=140, blank=False, null=False)
     name_en = models.CharField(max_length=140, blank=False, null=False)
     price = models.PositiveIntegerField(blank=False, null=False)
 
 
 # ======================== #
-#       Event Status       #
+#       Event Model        #
 # ======================== #
 
 
-class EventStatus(models.TextChoices):
-    """
-    Status for a given event. Deleted status
-    is used to hide event without actually deleting it
-    so that it can be restored if something wrong happens
-    """
-    ACTIVE = 'active', _('Aktiv')
-    ARCHIVED = 'archived', _('Arkivert')
-    CANCELED = 'cancelled', _('Avlyst')
-    DELETED = 'deleted', _('Slettet')
-
-
-# ======================== #
-#       Ticket Type        #
-# ======================== #
-
-
-class EventTicketType(models.TextChoices):
-    """
-    Handles event ticket type.
-        Included/Free - simple info shown on event
-        Billig - event connected to billig payment system
-        Registration - connect event to registration model (påmelding)
-        Custom - connect event to custom payment list (only used to show in frontend)
-    """
-    INCLUDED = 'included', _('Included with entrance')
-    FREE = 'free', _('Free')
-    BILLIG = 'billig', _('Paid')
-    REGISTRATION = 'registration', _('Free with registration')
-    CUSTOM = 'custom', _('Custom')
-
-
-# ======================== #
-#      Age Restriction     #
-# ======================== #
-
-
-class EventAgeRestriction(models.TextChoices):
-    NO_RESTRICTION = 'none', _('Ingen aldersgrense')
-    AGE_18 = 'eighteen', _('18 år')
-    AGE_20 = 'twenty', _('20 år')
-    MIXED = 'mixed', _('18 år (student), 20 år (ikke-student)')
-
-
-# ======================== #
-#      Event Category      #
-# ======================== #
-
-
-class EventCategory(models.TextChoices):
-    """
-    Used for sorting, filtering and organizing stuff in frontend
-    """
-    SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
-    CONCERT = 'concert', _('Konsert')
-    DEBATE = 'debate', _('Debatt')
-    QUIZ = 'quiz', _('Quiz')
-    LECTURE = 'lecture', _('Kurs')
-    OTHER = 'other', _('Annet')
-
-
-# ======================== #
-#     Main Event Model     #
-# ======================== #
-
-
-class Event(models.Model):
+class Event(CustomBaseModel):
     """
     The primary event model. This is by far the most complex model in Samf4,
     so don't be scared if you're just starting out!
@@ -228,9 +166,6 @@ class Event(models.Model):
     # ======================== #
     #    Duration/Timestamps   #
     # ======================== #
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
     start_dt = models.DateTimeField(blank=False, null=False)
     duration = models.PositiveIntegerField(blank=False, null=False)
     publish_dt = models.DateTimeField(blank=False, null=False)
@@ -300,7 +235,7 @@ class Event(models.Model):
             ```python
             Event.fetch_billig_events(your_events)
             if your_events[0].billig:
-                print("Yay! Billig is fetched!")
+                print('Yay! Billig is fetched!')
             ```
 
         Note that if you don't need billig for any logic you don't need to

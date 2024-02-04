@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import csv
 import os
+import csv
 import urllib
 from urllib.request import urlopen
 

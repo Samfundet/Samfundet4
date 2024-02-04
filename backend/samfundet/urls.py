@@ -1,6 +1,9 @@
 # imports
-from django.urls import path, include
+from __future__ import annotations
+
 from rest_framework import routers
+
+from django.urls import path, include
 
 from . import views
 
@@ -36,6 +39,7 @@ router.register('organizations', views.OrganizationView, 'organizations')
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-admisisons-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
+router.register('recruitment-admisisons-for-group', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_group')
 router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
 router.register('interview', views.InterviewView, 'interview')
 
@@ -57,10 +61,12 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
-
+    ########## Lyche ##########
+    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     ########## Recruitment ##########
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
+    path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
-    path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots')
+    path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
 ]

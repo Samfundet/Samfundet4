@@ -1,4 +1,6 @@
-from samfundet.models.general import GangType, Gang
+from __future__ import annotations
+
+from samfundet.models.general import Gang, GangType
 
 # Template gangs for seeding
 GANGS = {
@@ -7,28 +9,26 @@ GANGS = {
         ('Lørdagskomiteen', 'LØK'),
         ('Klubbstyret', 'KLST'),
     ],
-    'Drift':
-        [
-            ('Markedsføringsgjengen', 'MG'),
-            ('Fotogjengen', 'FG'),
-            ('Diversegjengen', 'DG'),
-            ('Forsterkerkomiteen', 'FK'),
-            ('Regi', None),
-            ('Videokomiteen', 'VK'),
-        ],
-    'Kunstneriske':
-        [
-            ('Studentersamfundets interne teater', 'SIT'),
-            ('Studentersamfundets Symfoniorkester', 'Symforch'),
-            ('Strindens promenadeorkester', 'SPO'),
-            ('Pirum', None),
-            ('Candiss', None),
-        ],
+    'Drift': [
+        ('Markedsføringsgjengen', 'MG'),
+        ('Fotogjengen', 'FG'),
+        ('Diversegjengen', 'DG'),
+        ('Forsterkerkomiteen', 'FK'),
+        ('Regi', None),
+        ('Videokomiteen', 'VK'),
+    ],
+    'Kunstneriske': [
+        ('Studentersamfundets interne teater', 'SIT'),
+        ('Studentersamfundets Symfoniorkester', 'Symforch'),
+        ('Strindens promenadeorkester', 'SPO'),
+        ('Pirum', None),
+        ('Candiss', None),
+    ],
     'Styrende': [
         ('Finansstyret', 'FS'),
         ('Styret', None),
         ('Rådet', None),
-    ]
+    ],
 }
 
 

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event, EventTicketType
+from samfundet.models.model_choices import EventTicketType
 
 
 def test_billig_link_with_event(fixture_event: Event, fixture_billig_event: BilligEvent):

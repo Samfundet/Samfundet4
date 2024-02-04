@@ -1,8 +1,10 @@
 # imports
+from __future__ import annotations
 
 import os
 
 from root.constants import Environment
+
 from .base import *  # noqa: F403
 
 # End: imports -----------------------------------------------------
@@ -79,7 +81,7 @@ DATABASES = {
     'billig': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,  # noqa: F405
-    }
+    },
 }
 
 # ======================== #

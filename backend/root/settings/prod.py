@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import os
 
 from root.constants import Environment
+
 from .base import *  # noqa: F403,F401
 
 ALLOWED_HOSTS = [os.environ['DOMAIN']]
@@ -24,23 +27,21 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 DATABASES = {
     # The default database used for all Samf4 models
-    'default':
-        {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['DB_NAME'],
-            'USER': os.environ['DB_USER'],
-            'PASSWORD': os.environ['DB_PASSWORD'],
-            'HOST': os.environ['DB_HOST'],
-            'PORT': os.environ['DB_PORT'],
-        },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT'],
+    },
     # The database for the billig system
-    'billig':
-        {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['BILLIG_DB_NAME'],
-            'USER': os.environ['BILLIG_DB_USER'],
-            'PASSWORD': os.environ['BILLIG_DB_PASSWORD'],
-            'HOST': os.environ['BILLIG_DB_HOST'],
-            'PORT': os.environ['BILLIG_DB_PORT'],
-        }
+    'billig': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['BILLIG_DB_NAME'],
+        'USER': os.environ['BILLIG_DB_USER'],
+        'PASSWORD': os.environ['BILLIG_DB_PASSWORD'],
+        'HOST': os.environ['BILLIG_DB_HOST'],
+        'PORT': os.environ['BILLIG_DB_PORT'],
+    },
 }

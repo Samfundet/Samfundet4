@@ -1,15 +1,18 @@
+from __future__ import annotations
+
 import csv
-import multiprocessing
 import os.path
+import multiprocessing
 from typing import Iterator
 
-from django.core.files.images import ImageFile
 from django.db import transaction
-from django.utils.timezone import make_aware
 from django.utils import dateparse
+from django.utils.timezone import make_aware
+from django.core.files.images import ImageFile
 
-from samfundet.models.event import Event, EventAgeRestriction, EventCategory, EventTicketType, EventStatus
+from samfundet.models.event import Event
 from samfundet.models.general import Image
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3')
 BASE_IMAGE_PATH = os.path.join(BASE_IMAGE_PATH, 'images')
@@ -104,7 +107,6 @@ def get_image_path_for_event(image_csv, event):
 
 # Parse rows
 def seed() -> Iterator[tuple[int, str]]:
-
     # Delete old
     with transaction.atomic():
         Event.objects.all().delete()
@@ -121,7 +123,7 @@ def seed() -> Iterator[tuple[int, str]]:
     with open(event_path, 'r') as event_file:
         with open(image_path, 'r') as image_file:
             events = list(reversed(list(csv.DictReader(event_file))))
-            events = events[0:min(max_events, len(events))]
+            events = events[0 : min(max_events, len(events))]
             images = list(csv.DictReader(image_file))
             event_models = []
 
@@ -130,7 +132,7 @@ def seed() -> Iterator[tuple[int, str]]:
 
             for chunk in range(len(events) // chunk_size):
                 start = chunk * chunk_size
-                events_in_chunk = events[start:min(start + chunk_size, len(events))]
+                events_in_chunk = events[start : min(start + chunk_size, len(events))]
                 jobs = [(images, event) for event in events_in_chunk]
                 models = pool.starmap(add_event, jobs)
                 models = [e for e in models if e is not None]

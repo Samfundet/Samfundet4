@@ -1,9 +1,14 @@
-from django.test.client import Client
-from django.urls import reverse
+from __future__ import annotations
+
 from guardian.shortcuts import assign_perm
-from rest_framework.status import is_success, is_redirect, HTTP_403_FORBIDDEN
+
+from rest_framework.status import HTTP_403_FORBIDDEN, is_success, is_redirect
+
+from django.urls import reverse
+from django.test.client import Client
 
 from root.utils import routes, permissions
+
 from samfundet.models.general import User
 
 ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
@@ -120,8 +125,14 @@ def test_staff_permission_admin_panel(fixture_django_client: Client, fixture_sta
 def test_staff_object_permission_admin_panel(fixture_django_client: Client, fixture_staff: User):
     fixture_django_client.force_login(user=fixture_staff)
 
-    some_user = User.objects.create_user(username='some_user')
-    other_user = User.objects.create_user(username='other_user')
+    some_user = User.objects.create_user(
+        username='some_user',
+        email='some_email@samfundet.no',
+    )
+    other_user = User.objects.create_user(
+        username='other_user',
+        email='other_user@samfundet.no',
+    )
 
     url_some_user = reverse(routes.admin__samfundet_user_change, args=[some_user.id])
     url_other_user = reverse(routes.admin__samfundet_user_change, args=[other_user.id])
