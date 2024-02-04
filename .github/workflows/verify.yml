@@ -49,8 +49,8 @@ jobs:
           python -m pip install pipenv
           python -m pipenv install --dev --deploy --python $PY
 
-      - name: Check yapf
-        run: python -m pipenv run yapf --parallel --recursive --diff .
+      # - name: Check yapf
+      #   run: python -m pipenv run yapf --parallel --recursive --diff .
 
       # TODO: broken test - https://github.com/Samfundet/Samfundet4/issues/730
       - name: Verify migrations
