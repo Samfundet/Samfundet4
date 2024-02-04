@@ -63,7 +63,6 @@ def create_db() -> Tuple[bool, str]:
 
 
 def seed_tables() -> Iterable[Tuple[int, str]]:
-
     events, tickets, prices = [], [], []
 
     # Create a few billig events that are not used
@@ -82,7 +81,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
                 name=f'Billig - {event.title_nb}',
                 sale_from=event.start_dt - timezone.timedelta(days=90),
                 sale_to=event.start_dt + timezone.timedelta(minutes=30),
-                hidden=False
+                hidden=False,
             )
             events.append(billig_event)
 
@@ -119,7 +118,6 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 
 # Main seed script entry point
 def seed() -> Iterable[Tuple[int, str]]:
-
     # Create database and schema
     yield 0, 'Creating billig_dev database...'
     ok, message = create_db()

@@ -72,8 +72,18 @@ admin.site.register(Occupiedtimeslot)
 class UserAdmin(CustomGuardedUserAdmin):
     sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
     list_display = [
-        'id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'group_memberships', 'last_login', 'date_joined',
-        'updated_at'
+        'id',
+        'username',
+        'email',
+        'first_name',
+        'last_name',
+        'is_active',
+        'is_staff',
+        'is_superuser',
+        'group_memberships',
+        'last_login',
+        'date_joined',
+        'updated_at',
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
@@ -282,7 +292,17 @@ class VenueAdmin(CustomBaseAdmin):
     sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
     list_filter = ['handicapped_approved']
     list_display = [
-        'id', '__str__', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at'
+        'id',
+        '__str__',
+        'name',
+        'floor',
+        'last_renovated',
+        'handicapped_approved',
+        'responsible_crew',
+        'opening',
+        'closing',
+        'created_at',
+        'updated_at',
     ]
     search_fields = ['id', 'name', 'responsible_crew']
     # filter_horizontal = []
@@ -499,16 +519,28 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 @admin.register(Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'visible_from',
+        'actual_application_deadline',
+        'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
+        'organization',
     ]
     list_display = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'visible_from',
+        'actual_application_deadline',
+        'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
+        'organization',
     ]
     search_fields = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'visible_from',
+        'actual_application_deadline',
+        'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
+        'organization',
     ]
     list_display_links = ['visible_from']
     list_select_related = True
@@ -520,6 +552,7 @@ class RecruitmentAdmissionInline(admin.TabularInline):
 
     Displays a link to the detailed admin page of each admission along with its user and applicant priority.
     """
+
     model = RecruitmentAdmission
     extra = 0
     readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']

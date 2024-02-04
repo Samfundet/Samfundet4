@@ -81,7 +81,7 @@ DATABASES = {
     'billig': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,  # noqa: F405
-    }
+    },
 }
 
 # ======================== #

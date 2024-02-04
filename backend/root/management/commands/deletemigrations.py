@@ -12,7 +12,6 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
             '--noinput',
@@ -37,7 +36,7 @@ class Command(BaseCommand):
         return answer in yes
 
     def handle(self, *args, **options):
-        """ Delete all migration files for each installed app """
+        """Delete all migration files for each installed app"""
 
         if options['interactive']:
             if not self.confirmation():

@@ -33,7 +33,6 @@ if TYPE_CHECKING:
 
 
 class Notification(AbstractNotification):
-
     class Meta(AbstractNotification.Meta):
         abstract = False
 
@@ -274,6 +273,7 @@ class Organization(CustomBaseModel):
     """
     Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
     """
+
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
 
     class Meta:
@@ -288,6 +288,7 @@ class GangType(CustomBaseModel):
     """
     Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
     """
+
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
@@ -424,14 +425,15 @@ class Reservation(CustomBaseModel):
 
     def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
         """
-            Method for returning available reservation times for a venue
-            Based on the amount of seating and the date
+        Method for returning available reservation times for a venue
+        Based on the amount of seating and the date
         """
         # Fetch tables that fits size criteria
         tables = Table.objects.filter(venue=venue, seating__gte=seating)
         # fetch all reservations for those tables for that date
-        reserved_tables = Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time',
-                                                                                                                  'end_time').order_by('start_time')
+        reserved_tables = (
+            Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+        )
 
         # fetch opening hours for the date
         open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
@@ -444,11 +446,11 @@ class Reservation(CustomBaseModel):
             occupied_table_times[tr['table']].append((tr['start_time'], tr['end_time']))
 
         # Checks if list of occupied tables are shorter than available tables
-        safe = (len(occupied_table_times) < len(tables) or len(reserved_tables) == 0)
+        safe = len(occupied_table_times) < len(tables) or len(reserved_tables) == 0
 
         available_hours: list[str] = []
-        if (len(tables) > 0):
-            while (c_time <= end_time):
+        if len(tables) > 0:
+            while c_time <= end_time:
                 available = False
                 # If there are still occupied tables for time
                 if not safe:
@@ -473,7 +475,7 @@ class Reservation(CustomBaseModel):
                     available_hours.append(c_time.strftime('%H:%M'))
 
                 # iterate to next half hour
-                c_time = (c_time + timezone.timedelta(minutes=30))
+                c_time = c_time + timezone.timedelta(minutes=30)
                 c_time = c_time + (timezone.datetime.min - c_time) % timedelta(minutes=30)
         return available_hours
 
@@ -665,6 +667,7 @@ class KeyValue(FullCleanSaveMixin):
 
     All keys should be registered in 'samfundet.utils.key_values' for better overview and easy access backend.
     """
+
     key = models.CharField(max_length=60, blank=False, null=False, unique=True)
     value = models.CharField(max_length=60, default='', blank=True, null=False)
 

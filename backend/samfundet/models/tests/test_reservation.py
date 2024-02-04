@@ -6,7 +6,6 @@ from samfundet.models.general import Table, Venue, Reservation
 
 
 class TestReservation:
-
     def test_check_fetches_times(
         self,
         fixture_venue: Venue,

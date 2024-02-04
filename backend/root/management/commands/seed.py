@@ -46,7 +46,6 @@ def run_seed_script(*, target: tuple, index: int, count: int):
 
     # Generator types print their progress throughout.
     if isinstance(generator, types.GeneratorType):
-
         # Run script and print progress
         step: int | tuple[int, str] = 0
         for step in generator:
@@ -56,8 +55,7 @@ def run_seed_script(*, target: tuple, index: int, count: int):
             elif type(step) in [int, float]:
                 print_progress(progress=step, prefix=prefix, start_time=start_time)
             else:
-                raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', "
-                                'expected number type or tuple of (number, str)')
+                raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', " 'expected number type or tuple of (number, str)')
 
         # Final output 100%.
         if isinstance(step, tuple):

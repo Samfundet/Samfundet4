@@ -45,7 +45,6 @@ SEED_SCRIPTS = [
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
     ('recruitment_admissions', recruitment_admissions.seed),
-
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]

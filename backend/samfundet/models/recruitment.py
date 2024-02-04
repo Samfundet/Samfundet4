@@ -48,8 +48,10 @@ class Recruitment(CustomBaseModel):
         now = timezone.now()
         if any(
             [
-                self.actual_application_deadline < now, self.shown_application_deadline < now, self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now
+                self.actual_application_deadline < now,
+                self.shown_application_deadline < now,
+                self.reprioritization_deadline_for_applicant < now,
+                self.reprioritization_deadline_for_groups < now,
             ]
         ):
             raise ValidationError('All times should be in the future')
@@ -190,8 +192,9 @@ class RecruitmentAdmission(CustomBaseModel):
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
-            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
-                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            shared_interview = (
+                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            )
 
             if shared_interview:
                 self.interview = shared_interview.interview
@@ -204,7 +207,6 @@ class RecruitmentAdmission(CustomBaseModel):
 
 
 class Occupiedtimeslot(FullCleanSaveMixin):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

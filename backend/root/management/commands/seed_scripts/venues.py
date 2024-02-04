@@ -35,7 +35,7 @@ def seed():
             floor=random.randint(1, 4),
             last_renovated=timezone.now() + timezone.timedelta(days=-random.randint(30, 365 * 30)),
             handicapped_approved=random.randint(1, 3) != 1,
-            responsible_crew=words(1)
+            responsible_crew=words(1),
         )
         yield i / len(VENUES), 'Creating venues'
 

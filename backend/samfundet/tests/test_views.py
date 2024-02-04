@@ -114,7 +114,6 @@ def test_get_groups(fixture_rest_client: APIClient, fixture_user: User):
 
 
 class TestInformationPagesView:
-
     def test_get_informationpage(
         self,
         fixture_rest_client: APIClient,
@@ -220,7 +219,7 @@ class TestInformationPagesView:
 
 class TestVersionModel:
     """
-        Test simple model which uses CustomBaseModel
+    Test simple model which uses CustomBaseModel
     """
 
     def test_created_by(self, fixture_rest_client: APIClient, fixture_user: User):
@@ -288,7 +287,6 @@ class TestVersionModel:
 
 
 class TestBlogPostView:
-
     def test_get_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -384,7 +382,6 @@ class TestBlogPostView:
 
 
 class TestKeyValueView:
-
     def test_anyone_can_retrieve_keyvalues(self, fixture_rest_client: APIClient):
         ### Arrange ###
         keyvalue = KeyValue.objects.create(key='FOO', value='bar')
@@ -434,7 +431,6 @@ class TestKeyValueView:
 
 
 class TestTextItemView:
-
     def test_anyone_can_retrieve_textitems(self, fixture_rest_client: APIClient, fixture_text_item: TextItem):
         ### Arrange ###
         url = reverse(routes.samfundet__text_item_detail, kwargs={'pk': fixture_text_item.key})
@@ -480,7 +476,6 @@ class TestTextItemView:
 
 
 class TestAssignGroupView:
-
     def test_assign_group(
         self,
         fixture_rest_client: APIClient,
@@ -684,5 +679,5 @@ def test_recruitment_admission_for_applicant(
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 1
-    assert (response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text)
-    assert (response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id)
+    assert response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text
+    assert response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id

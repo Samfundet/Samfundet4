@@ -122,7 +122,6 @@ def do_seed():
 
     n_recurring = 0
     for i in range(COUNT):
-
         metadata = dummy_metadata()
         capacity = random.randint(MIN_CAPACITY, MAX_CAPACITY)
         event_time = timezone.now() + timezone.timedelta(
@@ -151,12 +150,12 @@ def do_seed():
                     name_nb=f'Billett {i + 1}',
                     name_en=f'Ticket {i + 1}',
                     price=random.randint(50, 200),
-                ) for i in range(0, random.randint(2, 4))
+                )
+                for i in range(0, random.randint(2, 4))
             ]
 
         # Create event(s)
         for j in range(recurring):
-
             # Add tag to recurring titles
             metadata_this = {**metadata}
             if recurring != 1:
