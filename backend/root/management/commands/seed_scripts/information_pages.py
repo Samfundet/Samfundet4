@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from django.utils.text import slugify
 
 from root.utils.samfundet_random import words

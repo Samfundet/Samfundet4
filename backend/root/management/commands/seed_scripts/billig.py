@@ -12,12 +12,12 @@ import os
 from typing import Tuple, Iterable
 
 import django
+from django import db
 from django.db import transaction
 from django.utils import timezone
-from django import db
 
-from samfundet.models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from samfundet.models.event import Event, EventTicketType
+from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 
 from .seed_billig import util
 

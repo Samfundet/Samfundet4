@@ -1,8 +1,10 @@
 # imports
 from __future__ import annotations
+
 import os
 
 from root.constants import Environment
+
 # End: imports -----------------------------------------------------
 
 ENV = os.environ.get('ENV', Environment.DEV)

@@ -1,6 +1,7 @@
 from __future__ import annotations
-from samfundet.models.billig import BilligEvent
+
 from samfundet.models.event import Event
+from samfundet.models.billig import BilligEvent
 from samfundet.models.model_choices import EventTicketType
 
 

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import Union
 
 # Oftentimes we don't care about if parameters are string or integer.

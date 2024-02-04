@@ -1,5 +1,6 @@
 ### auth ###
 from __future__ import annotations
+
 AUTH_VIEW_CONTENTTYPES = 'auth.view_contenttypes'
 AUTH_ADD_CONTENTTYPES = 'auth.add_contenttypes'
 AUTH_CHANGE_CONTENTTYPES = 'auth.change_contenttypes'

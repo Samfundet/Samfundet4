@@ -1,17 +1,18 @@
 from __future__ import annotations
+
 import csv
-import multiprocessing
 import os.path
+import multiprocessing
 from typing import Iterator
 
-from django.core.files.images import ImageFile
 from django.db import transaction
-from django.utils.timezone import make_aware
 from django.utils import dateparse
+from django.utils.timezone import make_aware
+from django.core.files.images import ImageFile
 
 from samfundet.models.event import Event
-from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventTicketType, EventStatus
 from samfundet.models.general import Image
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3')
 BASE_IMAGE_PATH = os.path.join(BASE_IMAGE_PATH, 'images')

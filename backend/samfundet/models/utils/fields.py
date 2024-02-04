@@ -1,7 +1,10 @@
 from __future__ import annotations
+
+from typing import Any
+
 from django.db import models
 from django.core.validators import RegexValidator
-from typing import Any
+
 from root.constants import PHONE_NUMBER_REGEX
 
 

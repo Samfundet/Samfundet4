@@ -1,10 +1,14 @@
 from __future__ import annotations
-from django.test.client import Client
-from django.urls import reverse
+
 from guardian.shortcuts import assign_perm
-from rest_framework.status import is_success, is_redirect, HTTP_403_FORBIDDEN
+
+from rest_framework.status import HTTP_403_FORBIDDEN, is_success, is_redirect
+
+from django.urls import reverse
+from django.test.client import Client
 
 from root.utils import routes, permissions
+
 from samfundet.models.general import User
 
 ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [

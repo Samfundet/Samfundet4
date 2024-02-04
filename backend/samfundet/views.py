@@ -1,30 +1,30 @@
 from __future__ import annotations
+
 import os
 import hmac
 import hashlib
 from typing import Any, Type
-
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from django.db.models import Count, Case, When, QuerySet
-from django.contrib.auth import login, logout
-from django.utils.encoding import force_bytes
-from django.middleware.csrf import get_token
-from django.utils.decorators import method_decorator
-
-from django.contrib.auth.models import Group
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from guardian.shortcuts import get_objects_for_user
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
+
+from django.utils import timezone
+from django.db.models import Case, When, Count, QuerySet
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import login, logout
+from django.utils.encoding import force_bytes
+from django.middleware.csrf import get_token
+from django.utils.decorators import method_decorator
+from django.contrib.auth.models import Group
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import (
     XCSRFTOKEN,
@@ -33,68 +33,35 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
+from .utils import event_query
 from .homepage import homepage
-from .models.event import Event, EventGroup
-from .models.recruitment import (
-    Interview,
-    Recruitment,
-    InterviewRoom,
-    Occupiedtimeslot,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-)
-from .models.general import (
-    Tag,
-    User,
-    Menu,
-    Gang,
-    Table,
-    Venue,
-    Image,
-    Infobox,
-    Profile,
-    Booking,
-    MenuItem,
-    GangType,
-    TextItem,
-    KeyValue,
-    BlogPost,
-    Reservation,
-    Organization,
-    FoodCategory,
-    Saksdokument,
-    ClosedPeriod,
-    FoodPreference,
-    UserPreference,
-    InformationPage,
-)
 from .serializers import (
     TagSerializer,
     GangSerializer,
     MenuSerializer,
     UserSerializer,
-    ImageSerializer,
     EventSerializer,
+    GroupSerializer,
+    ImageSerializer,
+    LoginSerializer,
     TableSerializer,
     VenueSerializer,
-    LoginSerializer,
-    GroupSerializer,
+    BookingSerializer,
     InfoboxSerializer,
     ProfileSerializer,
-    BookingSerializer,
-    RegisterSerializer,
-    TextItemSerializer,
+    BlogPostSerializer,
+    GangTypeSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
-    GangTypeSerializer,
-    BlogPostSerializer,
+    RegisterSerializer,
+    TextItemSerializer,
     InterviewSerializer,
     EventGroupSerializer,
     RecruitmentSerializer,
-    SaksdokumentSerializer,
-    OrganizationSerializer,
-    FoodCategorySerializer,
     ClosedPeriodSerializer,
+    FoodCategorySerializer,
+    OrganizationSerializer,
+    SaksdokumentSerializer,
     InterviewRoomSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -106,7 +73,40 @@ from .serializers import (
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
-from .utils import event_query
+from .models.event import Event, EventGroup
+from .models.general import (
+    Tag,
+    Gang,
+    Menu,
+    User,
+    Image,
+    Table,
+    Venue,
+    Booking,
+    Infobox,
+    Profile,
+    BlogPost,
+    GangType,
+    KeyValue,
+    MenuItem,
+    TextItem,
+    Reservation,
+    ClosedPeriod,
+    FoodCategory,
+    Organization,
+    Saksdokument,
+    FoodPreference,
+    UserPreference,
+    InformationPage,
+)
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    Occupiedtimeslot,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+)
 
 # =============================== #
 #          Home Page              #

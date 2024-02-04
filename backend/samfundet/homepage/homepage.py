@@ -1,12 +1,13 @@
 from __future__ import annotations
-from dataclasses import dataclass
+
 from typing import Any
+from dataclasses import dataclass
 
 from django.utils import timezone
 
+from samfundet.serializers import EventSerializer
 from samfundet.models.event import Event
 from samfundet.models.model_choices import EventCategory, EventTicketType
-from samfundet.serializers import EventSerializer
 
 
 class ElementType:

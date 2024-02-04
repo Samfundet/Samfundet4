@@ -8,9 +8,9 @@ from django.contrib.auth import login
 from django.middleware.csrf import get_token
 
 from root.constants import (
-    request_contextvar,
     REQUESTED_IMPERSONATE_USER,
     COOKIE_IMPERSONATED_USER_ID,
+    request_contextvar,
 )
 
 from samfundet.models import User

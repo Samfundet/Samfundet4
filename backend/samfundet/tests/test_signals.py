@@ -1,8 +1,10 @@
 from __future__ import annotations
+
 from guardian.shortcuts import get_perms
+
 from django.contrib.auth.models import Group
 
-from samfundet.models import Event, Gang, Profile, User, UserPreference
+from samfundet.models import Gang, User, Event, Profile, UserPreference
 
 
 class TestUserSignals:

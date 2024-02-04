@@ -1,50 +1,52 @@
 from __future__ import annotations
+
+from guardian import models as guardian_models
+
 from django.urls import reverse
 from django.contrib import admin
 from django.utils.html import format_html
+from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
-from django.contrib.auth.models import Permission, Group
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
-from guardian import models as guardian_models
+from django.contrib.contenttypes.models import ContentType
+
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
+from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
 
-from root.custom_classes.admin_classes import (CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin, CustomBaseAdmin)
-
-from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-)
+from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
     Tag,
-    User,
-    Menu,
     Gang,
-    Venue,
-    Table,
+    Menu,
+    User,
     Image,
+    Table,
+    Venue,
     Campus,
-    Profile,
     Booking,
     Infobox,
-    MenuItem,
-    GangType,
-    TextItem,
-    KeyValue,
+    Profile,
     BlogPost,
-    Organization,
+    GangType,
+    KeyValue,
+    MenuItem,
+    TextItem,
     Reservation,
     ClosedPeriod,
-    Saksdokument,
     FoodCategory,
+    Organization,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
+)
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    Occupiedtimeslot,
+    RecruitmentPosition,
+    RecruitmentAdmission,
 )
 
 # Common fields:

@@ -1,14 +1,15 @@
 from __future__ import annotations
+
 from typing import Any
+
+from guardian.shortcuts import assign_perm, remove_perm
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, m2m_changed
 
-from guardian.shortcuts import assign_perm, remove_perm
-
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
-from .models import UserPreference, Profile, User, Event, Gang
+from .models import Gang, User, Event, Profile, UserPreference
 
 
 @receiver(post_save, sender=User)

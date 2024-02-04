@@ -3,16 +3,16 @@
 
 # This is required for registering user model in auth
 from __future__ import annotations
-from .general import (
-    User,
-    Gang,
-    Image,
-    Profile,
-    UserPreference,
-)
 
 from .event import (
     Event,
+)
+from .general import (
+    Gang,
+    User,
+    Image,
+    Profile,
+    UserPreference,
 )
 
 __all__ = [

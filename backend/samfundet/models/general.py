@@ -7,27 +7,28 @@ from __future__ import annotations
 import re
 import random
 from typing import TYPE_CHECKING
+from datetime import date, time, datetime, timedelta
 from collections import defaultdict
-from django.utils import timezone
-from datetime import datetime, date, time, timedelta
 
+from guardian.shortcuts import assign_perm
 from notifications.base.models import AbstractNotification
 
-from django.contrib.auth.models import AbstractUser, Group
-from django.core.exceptions import ValidationError
 from django.db import models
-from guardian.shortcuts import assign_perm
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from django.contrib.auth.models import Group, AbstractUser
 
-from root.utils.mixins import FullCleanSaveMixin, CustomBaseModel
 from root.utils import permissions
+from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+
+from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
 
-from samfundet.models.model_choices import UserPreferenceTheme, ReservationOccasion, SaksdokumentCategory
-
 if TYPE_CHECKING:
     from typing import Any, Optional
+
     from django.db.models import Model
 
 

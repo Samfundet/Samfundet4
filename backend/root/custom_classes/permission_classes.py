@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from rest_framework.permissions import DjangoObjectPermissions, BasePermission
+from rest_framework.permissions import BasePermission, DjangoObjectPermissions
 
 if TYPE_CHECKING:
     from rest_framework.views import APIView
     from rest_framework.request import Request
+
     from django.db.models import Model, QuerySet
+
     from samfundet.models.general import User
 
 

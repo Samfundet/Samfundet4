@@ -1,5 +1,6 @@
 from __future__ import annotations
-from samfundet.models.general import GangType, Gang
+
+from samfundet.models.general import Gang, GangType
 
 # Template gangs for seeding
 GANGS = {

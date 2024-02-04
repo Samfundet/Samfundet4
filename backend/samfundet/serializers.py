@@ -1,52 +1,56 @@
 from __future__ import annotations
+
 import itertools
 
+from guardian.models import UserObjectPermission, GroupObjectPermission
+
+from rest_framework import serializers
+
+from django.db.models import QuerySet
+from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import Group, Permission
-from django.core.files import File
 from django.core.files.images import ImageFile
-from django.db.models import QuerySet
-from guardian.models import GroupObjectPermission, UserObjectPermission
+from django.contrib.auth.models import Group, Permission
 
-from root.utils.mixins import CustomBaseSerializer
-from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
-from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-)
-from .models.event import (Event, EventGroup, EventCustomTicket)
+from root.utils.mixins import CustomBaseSerializer
+
+from .models.event import Event, EventGroup, EventCustomTicket
+from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
-    User,
-    Menu,
     Gang,
+    Menu,
+    User,
+    Image,
     Table,
     Venue,
-    Image,
     Campus,
-    Infobox,
     Booking,
+    Infobox,
     Profile,
-    TextItem,
-    MenuItem,
+    BlogPost,
     GangType,
     KeyValue,
-    BlogPost,
+    MenuItem,
+    TextItem,
     Reservation,
-    Organization,
-    FoodCategory,
-    Saksdokument,
     ClosedPeriod,
+    FoodCategory,
+    Organization,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
+)
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    Occupiedtimeslot,
+    RecruitmentPosition,
+    RecruitmentAdmission,
 )
 
 

@@ -2,27 +2,30 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from django.contrib.auth.models import Permission, Group
-from django.utils import timezone
-from django.urls import reverse
-from rest_framework import status
 from guardian.shortcuts import assign_perm
 
+from rest_framework import status
+
+from django.urls import reverse
+from django.utils import timezone
+from django.contrib.auth.models import Group, Permission
+
 from root.utils import routes, permissions
+
+from samfundet.serializers import UserSerializer
+from samfundet.models.general import (
+    User,
+    Image,
+    BlogPost,
+    KeyValue,
+    TextItem,
+    InformationPage,
+)
 from samfundet.models.recruitment import (
     Recruitment,
     RecruitmentPosition,
     RecruitmentAdmission,
 )
-from samfundet.models.general import (
-    User,
-    KeyValue,
-    TextItem,
-    InformationPage,
-    BlogPost,
-    Image,
-)
-from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient

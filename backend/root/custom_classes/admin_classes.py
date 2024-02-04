@@ -1,16 +1,16 @@
 from __future__ import annotations
+
 from typing import Any, Callable, Sequence
 
 from guardian.admin import GuardedModelAdmin
 from guardian.shortcuts import get_objects_for_user
+from admin_auto_filters.filters import AutocompleteFilter
 
 from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
-
-from admin_auto_filters.filters import AutocompleteFilter
 
 
 def create_link_method(*, field: str) -> Callable[[Any], str]:
