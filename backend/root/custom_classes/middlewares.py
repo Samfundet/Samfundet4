@@ -90,7 +90,7 @@ class ImpersonateUserMiddleware2:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        user: User = request.user
+        _user: User = request.user
         impersonated_user_id = request.get_signed_cookie(
             key=COOKIE_IMPERSONATED_USER_ID,
             default=None,

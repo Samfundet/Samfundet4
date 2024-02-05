@@ -15,7 +15,7 @@ extend-exclude = [ # https://docs.astral.sh/ruff/settings/#extend-exclude
     "/database",
     "/logs",
     "/diagrams", # draw.io diagrams.net
-    "backend/root/utils/routes.py",
+    "root/utils/routes.py",
 ]
 
 
@@ -81,6 +81,8 @@ ignore = [
 "conftest.py" = ["PLR0917"]
 "root/management/commands/*" = ["ANN001", "ANN201", "T201"]
 "samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"root/settings/dev.py" = ["F405"]
+
 
 
 

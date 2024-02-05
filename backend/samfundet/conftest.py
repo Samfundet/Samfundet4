@@ -7,7 +7,7 @@ import pytest
 
 from rest_framework.test import APIClient
 
-from django.test import Client
+from django.test import Client, TestCase
 from django.utils import timezone
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group
@@ -31,7 +31,6 @@ It's recommended to yield objects, and tear them down afterwards.
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
 
-from django.test import TestCase
 
 TestCase.databases = {'default', 'billig'}
 

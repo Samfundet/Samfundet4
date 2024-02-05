@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 import time
 import types
+from typing import Optional
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -21,7 +22,7 @@ def print_progress(
     progress: int,
     prefix: str = '',
     suffix: str = '',
-    start_time: float = None,
+    start_time: Optional[float] = None,
 ):
     # Calculate size of bar and padding.
     percent = min(1, max(0, progress / 100.0))

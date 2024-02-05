@@ -34,7 +34,7 @@ def seed():
                         'recruitment': recruitment,
                     }
                 )
-                position, created = RecruitmentPosition.objects.get_or_create(**position_data)
+                _position, created = RecruitmentPosition.objects.get_or_create(**position_data)
 
                 if created:
                     created_count += 1

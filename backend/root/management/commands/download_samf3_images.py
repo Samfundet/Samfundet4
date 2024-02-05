@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import csv
+import sys
 import urllib
 from urllib.request import urlopen
 
@@ -71,7 +72,7 @@ class Command(BaseCommand):
         # Check if file exists
         if not os.path.exists(image_csv_path) or not os.path.exists(image_csv_path):
             print("Samf3 CSVs couldn't be found. Get them and place it in the /seed_samf3/ folder!")
-            exit(-1)
+            sys.exit(-1)
 
         print('Parsing CSV...')
         downloaded = 0

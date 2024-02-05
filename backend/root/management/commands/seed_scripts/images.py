@@ -32,7 +32,7 @@ def do_seed():
     Tag.objects.all().delete()
     yield 0, 'Deleted old images and tags'
 
-    for i in range(int(COUNT / 2)):
+    for _ in range(int(COUNT / 2)):
         Tag.objects.create(name=words(1))
 
     for i in range(COUNT):
