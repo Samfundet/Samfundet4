@@ -79,8 +79,8 @@ ignore = [
 "test_*.py" = ["PLR0917", "ANN201", "ANN001"]
 "signals.py" = ["PLR0917"]
 "conftest.py" = ["PLR0917"]
-"root/management/commands/*" = ["ANN001", "ANN201"]
-"samfundet/management/commands/*" = ["ANN001", "ANN201"]
+"root/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
 
 
 
