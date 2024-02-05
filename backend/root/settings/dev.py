@@ -33,7 +33,7 @@ CORS_ALLOW_CREDENTIALS = True
 BYPASS_AUTHENTICATION = os.environ.get('BYPASS_AUTHENTICATION') == 'yes'
 if BYPASS_AUTHENTICATION:
     # We know REST_FRAMEWORK and other variables are available from star import.
-    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = ['rest_framework.permissions.AllowAny']  # noqa: F405
+    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = ['rest_framework.permissions.AllowAny']
 
 # Security
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -64,23 +64,23 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 # Default database
 DOCKER_DB_NAME = 'docker.db.sqlite3'
 LOCAL_DB_NAME = 'db.sqlite3'
-DB_NAME = DOCKER_DB_NAME if IS_DOCKER else LOCAL_DB_NAME  # noqa: F405
+DB_NAME = DOCKER_DB_NAME if IS_DOCKER else LOCAL_DB_NAME
 
 # Billig
 BILLIG_DOCKER_DB_NAME = 'docker.billig.db.sqlite3'
 BILLIG_LOCAL_DB_NAME = 'billig.db.sqlite3'
-BILLIG_DB_NAME = BILLIG_DOCKER_DB_NAME if IS_DOCKER else BILLIG_LOCAL_DB_NAME  # noqa: F405
+BILLIG_DB_NAME = BILLIG_DOCKER_DB_NAME if IS_DOCKER else BILLIG_LOCAL_DB_NAME
 
 DATABASES = {
     # Default database for all django models
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database' / DB_NAME,  # noqa: F405
+        'NAME': BASE_DIR / 'database' / DB_NAME,
     },
     # Database emulating billig
     'billig': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,  # noqa: F405
+        'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,
     },
 }
 
@@ -89,7 +89,7 @@ DATABASES = {
 # ======================== #
 
 # Clean console logging in development (pretty stack trace)
-LOGGING['loggers'][''] = {  # type: ignore[index] # noqa: 405
+LOGGING['loggers'][''] = {  # type: ignore[index]
     'handlers': ['console'],
     'level': 'DEBUG',
     'propagate': True,

@@ -81,6 +81,8 @@ ignore = [
 "conftest.py" = ["PLR0917"]
 "root/management/commands/*" = ["ANN001", "ANN201", "T201"]
 "samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"root/settings/dev.py" = ["F405"]
+
 
 
 
