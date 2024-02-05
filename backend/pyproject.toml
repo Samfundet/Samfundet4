@@ -76,9 +76,12 @@ ignore = [
 
 
 [tool.ruff.lint.per-file-ignores]
-"test_*.py" = ["PLR0917", "ANN201"]
+"test_*.py" = ["PLR0917", "ANN201", "ANN001"]
 "signals.py" = ["PLR0917"]
 "conftest.py" = ["PLR0917"]
+"root/management/commands/*" = ["ANN001", "ANN201"]
+"samfundet/management/commands/*" = ["ANN001", "ANN201"]
+
 
 
 ### isort ###
