@@ -35,7 +35,7 @@ def image_to_fname(image_dict) -> str:
 
 # Parse image
 # Paths in samf3 are '/upload/:class/:attachment/:id_partition/:style/:filename'
-def download_image(image_dict, save_path) -> bool:
+def download_image(*, image_dict, save_path) -> bool:
     try:
         img_url = image_samf3_url(image_dict)
         with urlopen(img_url) as uo:
@@ -89,7 +89,7 @@ class Command(BaseCommand):
                 for i, image in enumerate(reversed(images)):
                     if image['id'] in images_to_download:
                         save_path = os.path.join(save_root_path, image_to_fname(image))
-                        if os.path.exists(save_path) or download_image(image, save_path):
+                        if os.path.exists(save_path) or download_image(image_dict=image, save_path=save_path):
                             downloaded += 1
                     if i % 10 == 0:
                         print(f' {downloaded}/{len(images_to_download)}')

@@ -224,7 +224,12 @@ class Event(CustomBaseModel):
     # ======================== #
 
     @staticmethod
-    def prefetch_billig(events: list[Event] | QuerySet[Event], tickets: bool = True, prices: bool = True) -> None:
+    def prefetch_billig(
+        *,
+        events: list[Event] | QuerySet[Event],
+        tickets: bool = True,
+        prices: bool = True,
+    ) -> None:
         """
         Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig.
         This is much faster than getting each billig event in separate queries when using `event.billig`

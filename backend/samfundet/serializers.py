@@ -157,7 +157,7 @@ class EventListSerializer(serializers.ListSerializer):
             events = events.prefetch_related('custom_tickets')
             events = events.prefetch_related('image')
 
-        Event.prefetch_billig(events, tickets=True, prices=True)
+        Event.prefetch_billig(events=events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
         return [self.child.to_representation(e) for e in events]
@@ -560,7 +560,12 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         model = RecruitmentPosition
         fields = '__all__'
 
-    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
+    def _update_interviewers(
+        self,
+        *,
+        recruitment_position: RecruitmentPosition,
+        interviewer_objects: list[dict],
+    ) -> None:
         try:
             interviewers = []
             if interviewer_objects:
@@ -574,13 +579,13 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position, interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:  # noqa: PLR0917
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(updated_instance, interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
 
 
@@ -645,7 +650,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         model = RecruitmentAdmission
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:  # noqa: PLR0917
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
