@@ -35,7 +35,7 @@ GANGS = {
 def seed():
     # Create gang types
     for i, gang_type in enumerate(GANGS):
-        gtype, created = GangType.objects.get_or_create(title_nb=gang_type)
+        gtype, _created = GangType.objects.get_or_create(title_nb=gang_type)
 
         # Create gangs
         for gang in GANGS[gang_type]:

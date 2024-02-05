@@ -30,7 +30,7 @@ def seed():
                     'user': users[randint(0, len(users) - 1)],  # random user from all users
                 }
             )
-            admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
+            _admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
 
             if created:
                 created_count += 1
