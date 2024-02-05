@@ -41,7 +41,7 @@ def create_event(
     Utility for creating a BilligEvent with some default values.
     Returns event without saving it!
     """
-    global NEXT_EVENT_ID
+    global NEXT_EVENT_ID  # noqa: PLW0603
     NEXT_EVENT_ID += 1
 
     # Default values
@@ -64,7 +64,7 @@ def create_prices(ticket: BilligTicketGroup) -> list[BilligPriceGroup]:
     Utility function to create prices for a ticket group.
     Returns list of price groups without saving them.
     """
-    global NEXT_PRICE_GROUP_ID
+    global NEXT_PRICE_GROUP_ID  # noqa: PLW0603
 
     # Loop for some number of times
     price_groups: list[BilligPriceGroup] = []
@@ -92,7 +92,7 @@ def create_tickets(event: BilligEvent) -> list[BilligTicketGroup]:
     Utility function to create tickets for an event
     Returns list of tickets without saving them.
     """
-    global NEXT_TICKET_GROUP_ID
+    global NEXT_TICKET_GROUP_ID  # noqa: PLW0603
 
     # Loop to create ticket groups
     ticket_groups: list[BilligTicketGroup] = []
