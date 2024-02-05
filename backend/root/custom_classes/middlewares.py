@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import secrets
+from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth import login
@@ -21,7 +22,7 @@ LOG = logging.getLogger('root.middlewares')
 class RequestLogMiddleware:
     """Request Logging Middleware."""
 
-    def __init__(self, get_response) -> None:  # type: ignore # noqa: ANN001 # Uknown type # type: ignore
+    def __init__(self, get_response: Any) -> None:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
