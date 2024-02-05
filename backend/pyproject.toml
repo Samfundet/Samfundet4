@@ -60,7 +60,7 @@ select = [
     "D204", # pydocstyle
     "D200", # pydocstyle
     "D211", # pydocstyle
-    
+    "T20", # flake8-print
 ]
 ignore = [
     "PLR0913", # pylint
