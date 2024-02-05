@@ -52,7 +52,6 @@ jobs:
       - name: Check ruff format
         run: python -m pipenv run ruff:format:check
 
-      # TODO: broken test - https://github.com/Samfundet/Samfundet4/issues/730
       - name: Verify migrations
         run: |
           python -m pipenv run migrations:verify
@@ -61,8 +60,8 @@ jobs:
       - name: Run tests
         run: python -m pipenv run pytest:run
 
-      # - name: Run ruff
-      #   run: python -m pipenv run ruff:check
+      - name: Run ruff
+        run: python -m pipenv run ruff:check
 
       - name: Run mypy
         run: python -m pipenv run mypy:run
