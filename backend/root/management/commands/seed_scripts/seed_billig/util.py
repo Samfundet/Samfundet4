@@ -31,6 +31,7 @@ NEXT_PRICE_GROUP_ID = 0
 
 
 def create_event(
+    *,
     name: str | None = None,
     sale_from: timezone.datetime | None = None,
     sale_to: timezone.datetime | None = None,

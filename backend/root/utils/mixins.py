@@ -154,7 +154,7 @@ class FieldTrackerMixin(Model):
             raise e
 
     @classmethod
-    def from_db(cls, db, field_names, values):  # type: ignore # noqa: ANN001,ANN206 # Unknown types.
+    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:  # noqa: PLR0917
         """Extends django 'from_db' to set 'loaded_fields'."""
 
         instance = super().from_db(db, field_names, values)

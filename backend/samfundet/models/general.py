@@ -137,7 +137,7 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
+    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:  # noqa: PLR0917
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`
@@ -419,7 +419,7 @@ class Reservation(CustomBaseModel):
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
 
-    def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
+    def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:
         """
         Method for returning available reservation times for a venue
         Based on the amount of seating and the date
