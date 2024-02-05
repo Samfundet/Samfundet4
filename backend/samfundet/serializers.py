@@ -574,7 +574,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
                     interviewers = User.objects.filter(id__in=interviewer_ids)
             recruitment_position.interviewers.set(interviewers)
         except (TypeError, KeyError):
-            raise ValidationError('Invalid data for interviewers.')
+            raise ValidationError('Invalid data for interviewers.') from None
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
