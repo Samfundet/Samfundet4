@@ -41,6 +41,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
   [KEY.common_date]: 'Dato',
+  [KEY.common_time]: 'Tidspunkt',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Åpne',
   [KEY.common_menu]: 'Meny',
@@ -93,7 +94,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
   [KEY.common_description]: 'Beskrivelse',
-  [KEY.common_reservations]: 'Reservasjon',
+  [KEY.common_reservation]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
   [KEY.common_about_samfundet]: 'Generelt',
   [KEY.common_long_description]: 'Lang beskrivelse',
@@ -104,6 +105,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'Se i django admin-panel',
   [KEY.common_creation_successful]: 'Opprettelsen var vellykket',
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
+  [KEY.common_total]: 'Antall',
+  [KEY.common_guests]: 'Gjester',
+  [KEY.common_occasion]: 'Annledning',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Billett',
@@ -214,6 +218,25 @@ export const nb: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
+  // Sulten / Lyche
+  [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
+  [KEY.sulten_page_see_menu]: 'Se meny',
+  [KEY.sulten_page_about_us]: 'Om Lyche',
+  [KEY.sulten_page_book_table]: 'Bestill bord',
+  [KEY.sulten_lyche_goal]: 'Lyches mål',
+  [KEY.sulten_lyche_about_menu]: 'Om menyen',
+  [KEY.sulten_page_more_about_us]: 'Mer om oss',
+  [KEY.sulten_reservation_form_occasion_help]: 'Vi bruker dette for å tildele et passende bord. ',
+  [KEY.sulten_reservation_form_more_than_8_help]: 'Flere enn 8 personer? Send oss en',
+  [KEY.sulten_reservation_form_remember_closing]: 'Husk at Lyche stenger',
+  [KEY.sulten_reservation_form_find_times]: 'Finn Ledige Tidspunkt',
+  [KEY.sulten_dishes]: 'Retter',
+
+  // Occupied Recruitment
+  [KEY.occupied_title]: 'Tilgjenglighet',
+  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_show]: 'Sett din tilgjengelighet',
+
   // No category:
   [KEY.owner]: 'Eier',
   [KEY.end_time]: 'Sluttid',
@@ -224,17 +247,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
-  [KEY.sulten_dishes]: 'Retter',
-  [KEY.sulten_lyche_goal]: 'Lyches mål',
+
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
-  [KEY.sulten_page_see_menu]: 'Se meny',
-  [KEY.sulten_page_about_us]: 'Om Lyche',
   [KEY.information_page_short]: 'Side',
-  [KEY.sulten_page_book_table]: 'Bestill bord',
+  [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
-  [KEY.sulten_lyche_about_menu]: 'Om menyen',
-  [KEY.sulten_page_more_about_us]: 'Mer om oss',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
@@ -281,6 +298,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
   [KEY.common_date]: 'Date',
+  [KEY.common_time]: 'Time',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Open',
   [KEY.common_edit]: 'Edit',
@@ -333,7 +351,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_description]: 'Description',
   [KEY.common_information]: 'Information',
   [KEY.common_recruitment]: 'Recruitment',
-  [KEY.common_reservations]: 'Reservations',
+  [KEY.common_reservation]: 'Reservation',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_about_samfundet]: 'General',
   [KEY.common_long_description]: 'Long description',
@@ -344,6 +362,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_see_in_django_admin]: 'See in django admin-panel',
   [KEY.common_creation_successful]: 'Successfully created',
   [KEY.common_something_went_wrong]: 'Something went wrong',
+  [KEY.common_total]: 'Total',
+  [KEY.common_guests]: 'Guests',
+  [KEY.common_occasion]: 'Occasion',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
@@ -465,6 +486,16 @@ export const en: Record<KeyValues, string> = {
   [KEY.sulten_page_book_table]: 'Book table',
   [KEY.sulten_lyche_about_menu]: 'About the menu',
   [KEY.sulten_page_more_about_us]: 'More about us',
+  [KEY.sulten_reservation_form_occasion_help]:
+    'What is the purpose of the visit? This us helps determine what kind of table you will be given.',
+  [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
+  [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
+  [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
+
+  // Occupied Recruitment
+  [KEY.occupied_title]: 'Availability',
+  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_show]: 'Set your availability',
 
   // No category:
   [KEY.owner]: 'Owner',
@@ -473,10 +504,12 @@ export const en: Record<KeyValues, string> = {
   [KEY.event_type]: 'Event type',
   [KEY.start_time]: 'Start time',
   [KEY.last_updated]: 'Last updated',
+
   [KEY.form_confirm]: 'Are you sure you want do',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
+  [KEY.invalid_phonenumber]: 'Not a valid phone number',
   [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+from django.db import models
+from django.utils import timezone
+
 #
 # This file handles mirrors the database models in billig
 #
 # By mirroring what we need from the models in unmanaged django models
 # we can use them in the same way as our other models without
 # thinking about them being in a different database.
-
 # Unlike other models in the project, these models are not managed by django
 # and can only be read. The actual tables may contain more columns than
 # represented here, we only need to think about data relevant for Samf4.
@@ -29,10 +31,7 @@ from __future__ import annotations
 # billig.seat
 # billig.ticket_seat
 # billig.theater
-
 from django.db.models import QuerySet
-from django.utils import timezone
-from django.db import models
 
 # Percentage of tickets that must be sold
 # before the event/ticket is marked as almost sold out
