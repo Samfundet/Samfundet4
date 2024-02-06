@@ -6,14 +6,12 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.core.files import File
 from django.core.files.images import ImageFile
-#from django.core.files.images import get_image_dimensions
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
 from django.db.models import QuerySet
 from guardian.models import GroupObjectPermission, UserObjectPermission
 
 from PIL import Image as PilImage
-
 from root.utils.mixins import CustomBaseSerializer
 from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
