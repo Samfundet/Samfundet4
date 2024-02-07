@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 import os
-from typing import Tuple, Iterable
+from collections.abc import Iterable
 
 import django
 from django import db
@@ -37,20 +37,18 @@ SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 def get_schema() -> str:
     # Generate schema (pass schema.sql to sqlite3)
     seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
-    with open(seed_schema, 'r') as f:
-        schema = f.read()
-    return schema
+    with open(seed_schema) as f:
+        return f.read()
 
 
-def create_db() -> Tuple[bool, str]:
+def create_db() -> tuple[bool, str]:
     """Creates a new sqlite3 database with schema using shell scripts"""
 
     schema = get_schema()
     schema_queries = schema.split(';')
-    with django.db.connections['billig'].cursor() as cursor:
-        with transaction.atomic():
-            for query in schema_queries:
-                cursor.execute(query)
+    with django.db.connections['billig'].cursor() as cursor, transaction.atomic():
+        for query in schema_queries:
+            cursor.execute(query)
 
     return True, 'Created database and schema'
 
@@ -60,7 +58,7 @@ def create_db() -> Tuple[bool, str]:
 # ======================== #
 
 
-def seed_tables() -> Iterable[Tuple[int, str]]:
+def seed_tables() -> Iterable[tuple[int, str]]:
     events, tickets, prices = [], [], []
 
     # Create a few billig events that are not used
@@ -115,7 +113,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 
 
 # Main seed script entry point
-def seed() -> Iterable[Tuple[int, str]]:
+def seed() -> Iterable[tuple[int, str]]:
     # Create database and schema
     yield 0, 'Creating billig_dev database...'
     ok, message = create_db()

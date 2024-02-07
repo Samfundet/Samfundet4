@@ -45,7 +45,6 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
 
         if request.method == 'POST':
             post_perms: list[str] = self.get_required_permissions(method='POST', model_cls=model_cls)
-            has_perm = user.has_perms(perm_list=post_perms)
-            return has_perm
+            return user.has_perms(perm_list=post_perms)
 
         return True

@@ -38,8 +38,7 @@ def parse_line(permission: Permission):
     """
     name = parse_permission_name(permission=permission)
     value = parse_permission_value(permission=permission)
-    line = f"{name} = '{value}'"
-    return line
+    return f"{name} = '{value}'"
 
 
 def ts_comment(string: str, /) -> str:
@@ -82,7 +81,7 @@ class Command(BaseCommand):
         # Fetch all permissions.
         permissions = Permission.objects.all()
 
-        with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:
+        with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:  # noqa: SIM117
             with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:
                 # Write header.
                 backend_file.write(YAPF_DISABLE)

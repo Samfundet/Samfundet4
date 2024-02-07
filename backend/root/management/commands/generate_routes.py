@@ -54,8 +54,7 @@ def parse_name(name: str) -> str:
     Parse django url name to frontend route format.
     'scope:some-name' -> 'scope__some_name'
     """
-    scoped_snake_name = name.replace(':', '__').replace('-', '_').replace('/', '')
-    return scoped_snake_name
+    return name.replace(':', '__').replace('-', '_').replace('/', '')
 
 
 ### common ###
@@ -109,10 +108,8 @@ def parse_url(url: str) -> str:
         sub_paths[i] = new_sub_path
 
     # from: ['', 'some', 'path', ':orgId', '']
-    new_url = '/'.join(sub_paths)
+    return '/'.join(sub_paths)
     # to: '/some/path/:orgId/'
-
-    return new_url
 
 
 class Command(BaseCommand):
@@ -131,7 +128,7 @@ class Command(BaseCommand):
         # Create space from output after call_command('show_urls').
         print('\n' * 40)
 
-        with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:
+        with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:  # noqa: SIM117
             with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:
                 ### entry message ###
                 # backend

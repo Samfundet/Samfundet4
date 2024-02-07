@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import datetime
-from typing import Any, Optional
+from typing import Any
 from collections import OrderedDict
 
 LOG = logging.getLogger(__name__)
@@ -80,9 +80,9 @@ class JsonFormatter(logging.Formatter):
     def __init__(
         self,
         *args: Any,
-        fields: Optional[str] = None,
+        fields: str | None = None,
         delimiter: str = DELIMITER,
-        indent: Optional[int] = None,
+        indent: int | None = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -143,8 +143,7 @@ class JsonFormatter(logging.Formatter):
         # Call str() on each field.
         # We do this because the input is unknown and may not be serializable, causing errors.
         # Calling str() returns the string representation of any object.
-        extra_items = OrderedDict({k: str(v) for k, v in record.__dict__.items() if k not in self.DEFAULT_LOG_RECORD_KEYS})
-        return extra_items
+        return OrderedDict({k: str(v) for k, v in record.__dict__.items() if k not in self.DEFAULT_LOG_RECORD_KEYS})
 
     # --------------------------------------------------------------------
     # Validation helpers:
@@ -161,7 +160,7 @@ class JsonFormatter(logging.Formatter):
     def _get_time(self, *, record: logging.LogRecord) -> str:
         return datetime.datetime.fromtimestamp(
             record.created,
-            tz=datetime.timezone.utc,
+            tz=datetime.UTC,
         ).isoformat(timespec='microseconds')
 
     def _get_logger_name(self, *, record: logging.LogRecord) -> str:

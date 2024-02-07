@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Sequence
+from typing import Any
+from collections.abc import Callable, Sequence
 
 from guardian.admin import GuardedModelAdmin
 from guardian.shortcuts import get_objects_for_user
@@ -54,8 +55,7 @@ def get_obj_link(obj: Any) -> str | None:
 def get_admin_url(*, obj: Any) -> str:
     """https://stackoverflow.com/questions/10420271/django-how-to-get-admin-url-from-model-instance"""
     info = (obj._meta.app_label, obj._meta.model_name)
-    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk,))
-    return admin_url
+    return reverse('admin:{}_{}_change'.format(*info), args=(obj.pk,))
 
 
 class CustomGuardedModelAdmin(GuardedModelAdmin):
@@ -87,9 +87,8 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
             # print(18, super().get_queryset(request))
             return super().get_queryset(request)
 
-        data = self.get_model_objects(request=request)
+        return self.get_model_objects(request=request)
         # print(22, self.opts.model_name, data)
-        return data
 
     def get_model_objects(
         self,
@@ -219,8 +218,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         autocomplete_filters = [autocomplete_filter(title=f, field_name=f) for f in autocomplete_fields]
 
         # Add new filters to result and return.
-        new_list_filter = list_filter + autocomplete_filters
-        return new_list_filter
+        return list_filter + autocomplete_filters
 
     def get_list_display(self, request: HttpRequest) -> Sequence[str]:
         """
@@ -247,9 +245,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
             return field
 
         # Replace fields with link-fields if specified.
-        list_display = [_insert_link(field=field, related_links=related_links) for field in list_display]
-
-        return list_display
+        return [_insert_link(field=field, related_links=related_links) for field in list_display]
 
     # Adopt methods. Kept separate because this class shouldn't be required in order to use them.
     get_admin_url = get_admin_url

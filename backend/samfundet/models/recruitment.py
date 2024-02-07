@@ -30,7 +30,7 @@ class Recruitment(CustomBaseModel):
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
-    def clean(self, *args: tuple, **kwargs: dict) -> None:
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
 
         if not all(
@@ -116,7 +116,7 @@ class RecruitmentPosition(CustomBaseModel):
             self.short_description_en = 'This position only admits Norwegian speaking applicants'
             self.long_description_en = 'No english applicants'
             self.default_admission_letter_en = 'No english applicants'
-        super(RecruitmentPosition, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class InterviewRoom(CustomBaseModel):
