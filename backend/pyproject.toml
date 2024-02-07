@@ -71,7 +71,6 @@ select = [
     "N", # flake8-broken-line
     "UP",
     "FBT",
-    "B",
     "C4",
     "T20",
     "PYI",
