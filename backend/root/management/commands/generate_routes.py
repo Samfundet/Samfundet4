@@ -111,7 +111,8 @@ def parse_url(url: str) -> str:
         sub_paths[i] = new_sub_path
 
     # from: ['', 'some', 'path', ':orgId', '']
-    return '/'.join(sub_paths)
+    new_url = '/'.join(sub_paths)
+    return new_url
     # to: '/some/path/:orgId/'
 
 
