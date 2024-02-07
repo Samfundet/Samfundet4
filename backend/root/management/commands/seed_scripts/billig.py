@@ -38,7 +38,8 @@ def get_schema() -> str:
     # Generate schema (pass schema.sql to sqlite3)
     seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
     with open(seed_schema) as f:
-        return f.read()
+        schema = f.read()
+    return schema
 
 
 def create_db() -> tuple[bool, str]:

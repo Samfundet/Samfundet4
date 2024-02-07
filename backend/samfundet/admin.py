@@ -580,7 +580,8 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
     inlines = [RecruitmentAdmissionInline]
 
     def admissions_count(self, obj: RecruitmentPosition) -> int:
-        return obj.admissions.all().count()
+        count = obj.admissions.all().count()
+        return count
 
 
 @admin.register(RecruitmentAdmission)

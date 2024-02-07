@@ -349,17 +349,22 @@ class UserSerializer(serializers.ModelSerializer):
         return f'{permission.content_type.app_label}.{permission.codename}'
 
     def _obj_permission_to_obj(self, obj_perm: UserObjectPermission | GroupObjectPermission) -> dict[str, str]:
-        return {
+        perm_obj = {
             'obj_pk': obj_perm.object_pk,
             'permission': self._permission_to_str(permission=obj_perm.permission),
         }
+        return perm_obj
 
     def get_object_permissions(self, user: User) -> list[dict[str, str]]:
         # Collect user-level and group-level object permissions.
         user_object_perms_qs = UserObjectPermission.objects.filter(user=user)
         group_object_perms_qs = GroupObjectPermission.objects.filter(group__in=user.groups.all())
 
-        return [self._obj_permission_to_obj(obj_perm=obj_perm) for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs)]
+        perm_objs = []
+        for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
+            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))  # noqa: PERF401
+
+        return perm_objs
 
     def get_user_preference(self, user: User) -> dict:
         user_preference, _created = UserPreference.objects.get_or_create(user=user)
@@ -600,13 +605,15 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         applicant_priority = 1
 
-        return RecruitmentAdmission.objects.create(
+        recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
             applicant_priority=applicant_priority,
         )
+
+        return recruitment_admission
 
 
 class OccupiedtimeslotSerializer(serializers.ModelSerializer):

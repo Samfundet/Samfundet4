@@ -38,7 +38,8 @@ def parse_line(permission: Permission):
     """
     name = parse_permission_name(permission=permission)
     value = parse_permission_value(permission=permission)
-    return f"{name} = '{value}'"
+    line = f"{name} = '{value}'"
+    return line
 
 
 def ts_comment(string: str, /) -> str:

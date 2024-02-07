@@ -54,7 +54,10 @@ def parse_name(name: str) -> str:
     Parse django url name to frontend route format.
     'scope:some-name' -> 'scope__some_name'
     """
-    return name.replace(':', '__').replace('-', '_').replace('/', '')
+    replacements = {':': '__', '-': '_', '/': ''}
+    for old, new in replacements.items():
+        name = name.replace(old, new)
+    return name
 
 
 ### common ###

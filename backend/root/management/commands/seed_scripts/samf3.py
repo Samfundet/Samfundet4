@@ -55,7 +55,9 @@ def load_image(image_name) -> Image | None:
 
     with open(image_path, 'rb') as image:
         file = ImageFile(image, name=image_name)
-        return Image.objects.create(title=f'samf3-{image_name}', image=file)
+        image = Image.objects.create(title=f'samf3-{image_name}', image=file)
+
+    return image
 
 
 # Parse a row

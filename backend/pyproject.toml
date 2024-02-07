@@ -94,6 +94,7 @@ ignore = [
     "Q003", # flake8-quotes # Ruff formatter handles this.
     "S101", # Use of assert
     "DJ001", # Django null=true on text/char fileds
+    "RET504" # Return statement
 ]
 
 

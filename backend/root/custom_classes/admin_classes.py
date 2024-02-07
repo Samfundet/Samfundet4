@@ -55,7 +55,8 @@ def get_obj_link(obj: Any) -> str | None:
 def get_admin_url(*, obj: Any) -> str:
     """https://stackoverflow.com/questions/10420271/django-how-to-get-admin-url-from-model-instance"""
     info = (obj._meta.app_label, obj._meta.model_name)
-    return reverse('admin:{}_{}_change'.format(*info), args=(obj.pk,))
+    admin_url = reverse('admin:{}_{}_change'.format(*info), args=(obj.pk,))
+    return admin_url
 
 
 class CustomGuardedModelAdmin(GuardedModelAdmin):
@@ -87,8 +88,9 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
             # print(18, super().get_queryset(request))
             return super().get_queryset(request)
 
-        return self.get_model_objects(request=request)
+        data = self.get_model_objects(request=request)
         # print(22, self.opts.model_name, data)
+        return data
 
     def get_model_objects(
         self,
@@ -218,7 +220,8 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         autocomplete_filters = [autocomplete_filter(title=f, field_name=f) for f in autocomplete_fields]
 
         # Add new filters to result and return.
-        return list_filter + autocomplete_filters
+        new_list_filter = list_filter + autocomplete_filters
+        return new_list_filter
 
     def get_list_display(self, request: HttpRequest) -> Sequence[str]:
         """
@@ -245,7 +248,9 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
             return field
 
         # Replace fields with link-fields if specified.
-        return [_insert_link(field=field, related_links=related_links) for field in list_display]
+        list_display = [_insert_link(field=field, related_links=related_links) for field in list_display]
+
+        return list_display
 
     # Adopt methods. Kept separate because this class shouldn't be required in order to use them.
     get_admin_url = get_admin_url

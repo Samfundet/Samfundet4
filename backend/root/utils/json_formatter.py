@@ -143,7 +143,8 @@ class JsonFormatter(logging.Formatter):
         # Call str() on each field.
         # We do this because the input is unknown and may not be serializable, causing errors.
         # Calling str() returns the string representation of any object.
-        return OrderedDict({k: str(v) for k, v in record.__dict__.items() if k not in self.DEFAULT_LOG_RECORD_KEYS})
+        extra_items = OrderedDict({k: str(v) for k, v in record.__dict__.items() if k not in self.DEFAULT_LOG_RECORD_KEYS})
+        return extra_items
 
     # --------------------------------------------------------------------
     # Validation helpers:
