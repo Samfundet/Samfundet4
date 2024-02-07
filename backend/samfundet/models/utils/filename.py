@@ -6,7 +6,7 @@ def upload_file_recruitment_path(instance: Any, filename: str) -> str:
     username = instance.user.username
     recruitment_position_id = instance.recruitment_position.id
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Formats the current time as YYYYMMDDHHMMSS
+    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")  # Formats the current time as YYYYMMDDHHMMSS
     unique_filename = f"{uuid.uuid4()}-{timestamp}-{filename}"
 
     # Define the folder name using the username and recruitment_position_id
