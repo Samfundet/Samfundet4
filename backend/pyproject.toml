@@ -35,7 +35,6 @@ preview = true
 explicit-preview-rules = true
 ignore-init-module-imports = true # This implicit export strategy is used in this project.
 
-dummy-variable-rgx = '^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$'
 
 # See list of implemented and overlapping rules from pylint.
 # https://github.com/astral-sh/ruff/issues/970
@@ -72,7 +71,6 @@ select = [
     "N", # flake8-broken-line
     "UP",
     "FBT",
-    "B",
     "C4",
     "T20",
     "PYI",
