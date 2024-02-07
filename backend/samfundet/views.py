@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import hmac
 import hashlib
-from typing import Any, Type
+from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -396,9 +396,11 @@ class RegisterView(APIView):
         user = serializer.validated_data['user']
         login(request=request, user=user, backend=AUTH_BACKEND)
         new_csrf_token = get_token(request=request)
-        res = Response(status=status.HTTP_202_ACCEPTED,
+        res = Response(
+            status=status.HTTP_202_ACCEPTED,
             data=new_csrf_token,
-            headers={XCSRFTOKEN: new_csrf_token},)
+            headers={XCSRFTOKEN: new_csrf_token},
+        )
         return res
 
 
@@ -433,7 +435,7 @@ class AllGroupsView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class CsrfView(APIView):
-    permission_classes: list[Type[BasePermission]] = [AllowAny]
+    permission_classes: list[type[BasePermission]] = [AllowAny]
 
     def get(self, request: Request) -> Response:
         csrf_token = get_token(request=request)
@@ -627,6 +629,7 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
         )
         return users_without_interviews
+
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
