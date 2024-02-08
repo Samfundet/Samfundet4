@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event, EventTicketType
+from samfundet.models.model_choices import EventTicketType
 
 
 def test_billig_link_with_event(fixture_event: Event, fixture_billig_event: BilligEvent):
@@ -11,5 +14,5 @@ def test_billig_link_with_event(fixture_event: Event, fixture_billig_event: Bill
 
 def test_prefetch_billig(fixture_event_with_billig: Event):
     event, billig_event = fixture_event_with_billig
-    Event.prefetch_billig([event])
+    Event.prefetch_billig(events=[event])
     assert event._billig == billig_event

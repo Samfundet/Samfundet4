@@ -12,7 +12,7 @@ POSITION_DATA = {
     'is_funksjonaer_position': False,
     'default_admission_letter_nb': 'Default Admission Letter NB',
     'default_admission_letter_en': 'Default Admission Letter EN',
-    'tags': 'tag1,tag2'
+    'tags': 'tag1,tag2',
 }
 
 
@@ -34,7 +34,7 @@ def seed():
                         'recruitment': recruitment,
                     }
                 )
-                position, created = RecruitmentPosition.objects.get_or_create(**position_data)
+                _position, created = RecruitmentPosition.objects.get_or_create(**position_data)
 
                 if created:
                     created_count += 1

@@ -4,16 +4,18 @@
 from __future__ import annotations
 import uuid
 
-from django.core.exceptions import ValidationError
-from django.utils import timezone
 from django.db import models
-from samfundet.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
-from root.utils.mixins import FullCleanSaveMixin
-from .general import Organization, User, Gang
+from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
+from .general import Gang, User, Organization
 
 
-class Recruitment(FullCleanSaveMixin):
+class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
@@ -46,8 +48,10 @@ class Recruitment(FullCleanSaveMixin):
         now = timezone.now()
         if any(
             [
-                self.actual_application_deadline < now, self.shown_application_deadline < now, self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now
+                self.actual_application_deadline < now,
+                self.shown_application_deadline < now,
+                self.reprioritization_deadline_for_applicant < now,
+                self.reprioritization_deadline_for_groups < now,
             ]
         ):
             raise ValidationError('All times should be in the future')
@@ -68,7 +72,7 @@ class Recruitment(FullCleanSaveMixin):
         return f'Recruitment: {self.name_en} at {self.organization}'
 
 
-class RecruitmentPosition(FullCleanSaveMixin):
+class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
@@ -115,7 +119,7 @@ class RecruitmentPosition(FullCleanSaveMixin):
         super(RecruitmentPosition, self).save(*args, **kwargs)
 
 
-class InterviewRoom(FullCleanSaveMixin):
+class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
@@ -133,7 +137,7 @@ class InterviewRoom(FullCleanSaveMixin):
             raise ValidationError('Start time should be before end time')
 
 
-class Interview(FullCleanSaveMixin):
+class Interview(CustomBaseModel):
     # User visible fields
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
     interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
@@ -150,8 +154,8 @@ class Interview(FullCleanSaveMixin):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-class RecruitmentAdmission(FullCleanSaveMixin):
 
+class RecruitmentAdmission(CustomBaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
@@ -161,12 +165,16 @@ class RecruitmentAdmission(FullCleanSaveMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
 
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
+    # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
-        choices=RecruitmentPriorityChoices.choices, help_text='The priority of the admission', default=RecruitmentPriorityChoices.NOT_SET
+        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
     )
 
     recruiter_status = models.IntegerField(
@@ -184,24 +192,28 @@ class RecruitmentAdmission(FullCleanSaveMixin):
             current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
-
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        if self.withdrawn:
+            self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
+            self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
-            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
-                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            shared_interview = (
+                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            )
 
             if shared_interview:
                 self.interview = shared_interview.interview
             else:
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
+        # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
 
 
 class Occupiedtimeslot(FullCleanSaveMixin):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
