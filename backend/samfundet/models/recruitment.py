@@ -3,16 +3,16 @@
 #
 
 from __future__ import annotations
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from root.utils.mixins import CustomBaseModel
 
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
-from root.utils.mixins import FullCleanSaveMixin
-from .general import Organization, User, Gang
+from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
+from .general import Gang, User, Organization
 
 
 class Recruitment(CustomBaseModel):
@@ -48,8 +48,10 @@ class Recruitment(CustomBaseModel):
         now = timezone.now()
         if any(
             [
-                self.actual_application_deadline < now, self.shown_application_deadline < now, self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now
+                self.actual_application_deadline < now,
+                self.shown_application_deadline < now,
+                self.reprioritization_deadline_for_applicant < now,
+                self.reprioritization_deadline_for_groups < now,
             ]
         ):
             raise ValidationError('All times should be in the future')
@@ -181,17 +183,16 @@ class RecruitmentAdmission(CustomBaseModel):
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        If the admission is saved without an interview, try to find an interview from a shared position.
-        """
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
-            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
-                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            shared_interview = (
+                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            )
 
             if shared_interview:
                 self.interview = shared_interview.interview
@@ -204,7 +205,6 @@ class RecruitmentAdmission(CustomBaseModel):
 
 
 class Occupiedtimeslot(FullCleanSaveMixin):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

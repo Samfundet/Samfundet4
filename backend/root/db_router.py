@@ -2,9 +2,12 @@
 Handles routing for databases (which database should be used for which model).
 All models use the default database except billig models.
 """
+from __future__ import annotations
+
 from typing import Any, Type
 
 from django.db import models
+
 from samfundet.models.billig import (
     BilligEvent,
     BilligPriceGroup,
@@ -20,7 +23,6 @@ BILLIG_MODELS: list[Type[models.Model]] = [
 
 
 class SamfundetDatabaseRouter:
-
     def db_for_read(self, model: Type[models.Model], **hints: dict[str, Any]) -> str | None:
         if model in BILLIG_MODELS:
             return 'billig'
@@ -31,7 +33,7 @@ class SamfundetDatabaseRouter:
             return 'billig'
         return None
 
-    def allow_migrate(
+    def allow_migrate(  # noqa: PLR0917
         self,
         db: str,
         app_label: str,
