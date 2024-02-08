@@ -541,7 +541,6 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
 
 class InterviewerSerializer(CustomBaseSerializer):
-  
     class Meta:
         model = User
         fields = [
