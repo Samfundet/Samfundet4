@@ -35,7 +35,7 @@ export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
-export const PHONENUMBER_REGEX = new RegExp('^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]{7,15}$');
+export const PHONENUMBER_REGEX = new RegExp('^\\+?\\s*(\\d\\s*){8,15}$');
 /**
  * Screen sizes, breakpoint (bp).
  * These values are also in _constants.scss
