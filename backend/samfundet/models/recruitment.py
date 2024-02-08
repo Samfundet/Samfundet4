@@ -5,14 +5,13 @@ from __future__ import annotations
 
 import uuid
 
-from .general import Gang, User, Organization
-
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
+from .general import Gang, User, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 
