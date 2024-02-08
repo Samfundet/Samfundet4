@@ -4,21 +4,15 @@ import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
-import { useCustomNavigate } from '~/hooks';
-import { ROUTES } from '~/routes';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 
 export function RecruitmentPage() {
-  const { t } = useTranslation();
-
   const navigate = useCustomNavigate();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [loading, setLoading] = useState(true);
