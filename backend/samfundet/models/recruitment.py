@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 
 class Recruitment(CustomBaseModel):
