@@ -17,7 +17,6 @@ export function InterviewNotesPage() {
   const interviewId = useParams().interviewId;
   const [editingMode, setEditingMode] = useState(false);
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [disabled, setdisabled] = useState<boolean>(true);
   const [nameUser, setNameUser] = useState<string>('');
   const { t } = useTranslation();
