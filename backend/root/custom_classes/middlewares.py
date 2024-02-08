@@ -53,6 +53,7 @@ class RequestLogMiddleware:
 
 
 class ImpersonateUserMiddleware:
+
     def __init__(self, get_response: HttpResponse) -> None:
         self.get_response = get_response
 

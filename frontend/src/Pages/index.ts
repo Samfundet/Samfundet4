@@ -14,7 +14,6 @@ export { LoginPage } from './LoginPage';
 export { LycheContactPage } from './LycheContactPage';
 export { LycheReservationPage } from './LycheReservationPage';
 export { LycheAboutPage } from './LycheAboutPage';
-export { LycheContactPage } from './LycheContactPage';
 export { LycheHomePage } from './LycheHomePage';
 export { LycheMenuPage } from './LycheMenuPage';
 export { NotFoundPage } from './NotFoundPage';

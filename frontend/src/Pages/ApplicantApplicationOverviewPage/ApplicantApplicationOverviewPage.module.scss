@@ -24,3 +24,14 @@ $back-button-width: 5rem;
 .empty_div {
   width: $back-button-width;
 }
+
+.arrows {
+  &:hover {
+    filter: brightness(150%);
+    transform: scale(1.05);
+  }
+  &:active {
+    filter: brightness(200%);
+    transform: scale(1.10);
+  }
+}
