@@ -51,6 +51,7 @@
 .input_row {
   @include flex-row;
   gap: 1.5em;
+  padding-top: 1em;
   @include for-mobile-only {
     flex-direction: column;
   }
@@ -69,7 +70,6 @@
 
 .button_row {
   @include flex-row;
-  justify-content: space-between;
   justify-content: space-between;
   margin-top: 1.5em;
 }

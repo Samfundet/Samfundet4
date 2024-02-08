@@ -53,6 +53,7 @@ export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
+export { PhoneNumberField } from './PhoneNumberField';
 export { ToolTip } from './ToolTip';
 
 // Props

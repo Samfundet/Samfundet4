@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextvars import ContextVar
 
 from django.http import HttpRequest
@@ -8,6 +10,7 @@ class Environment:
     Useful in eg. templates.
     Override in different settings.
     """
+
     BASE = 'base'
     DEV = 'development'
     PROD = 'production'
