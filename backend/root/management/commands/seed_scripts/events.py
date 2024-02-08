@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 from typing import Tuple
 
@@ -5,6 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
+
 from samfundet.models.event import (
     User,
     Event,
@@ -12,8 +15,8 @@ from samfundet.models.event import (
     EventGroup,
     EventCategory,
     EventTicketType,
-    EventRegistration,
     EventCustomTicket,
+    EventRegistration,
     EventAgeRestriction,
     NonMemberEmailRegistration,
 )
@@ -119,7 +122,6 @@ def do_seed():
 
     n_recurring = 0
     for i in range(COUNT):
-
         metadata = dummy_metadata()
         capacity = random.randint(MIN_CAPACITY, MAX_CAPACITY)
         event_time = timezone.now() + timezone.timedelta(
@@ -148,12 +150,12 @@ def do_seed():
                     name_nb=f'Billett {i + 1}',
                     name_en=f'Ticket {i + 1}',
                     price=random.randint(50, 200),
-                ) for i in range(0, random.randint(2, 4))
+                )
+                for i in range(0, random.randint(2, 4))
             ]
 
         # Create event(s)
         for j in range(recurring):
-
             # Add tag to recurring titles
             metadata_this = {**metadata}
             if recurring != 1:

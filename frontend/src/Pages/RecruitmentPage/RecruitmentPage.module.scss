@@ -8,10 +8,51 @@
   align-items: center;
   justify-content: center;
   gap: 2em;
+  box-sizing: border-box;
+}
+
+.no_recruitment_wrapper {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  align-content: center;
+  color: $red-samf;
+  font-size: 35px;
+  font-family: sans-serif;
+}
+
+.link {
+  color: $red-samf;
+  font-family: sans-serif;
+}
+
+.info {
+  text-align: left;
+  box-sizing: inherit;
+  max-width: 60%;
+  place-content: center;
+  font-size: 20px;
+  font-family: sans-serif;
+  
+  @include for-desktop-up {
+    padding: 3em 6em 3em 6em;
+  }
+
 }
 
 .video {
   padding-bottom: 0;
   aspect-ratio: 16/9;
   border-width: 0;
+  width: 32em;
+}
+
+.personalRow {
+  @include flex-row-center;
+  gap: 2em;
 }

@@ -133,7 +133,6 @@ class Command(BaseCommand):
 
         with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:
             with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:
-
                 ### entry message ###
                 # backend
                 backend_file.write(YAPF_DISABLE)
@@ -153,7 +152,6 @@ class Command(BaseCommand):
 
                 # Parse all urls to frontend routes.
                 for url in urls:
-
                     if '<format>' in url.url:
                         # Generic and malformed urls we don't need to keep.
                         continue

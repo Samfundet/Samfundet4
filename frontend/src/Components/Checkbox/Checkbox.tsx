@@ -4,7 +4,7 @@ import styles from './Checkbox.module.scss';
 
 type Alignment = 'left' | 'right';
 
-type CheckboxProps = {
+export type CheckboxProps = {
   name?: string;
   label?: string;
   disabled?: boolean;

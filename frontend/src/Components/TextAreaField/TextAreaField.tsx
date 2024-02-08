@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react';
 import { Children } from '~/types';
 import styles from './TextAreaField.module.scss';
 
-type TextAreaFieldProps = {
+export type TextAreaFieldProps = {
   children?: Children;
   className?: string;
   inputClassName?: string;

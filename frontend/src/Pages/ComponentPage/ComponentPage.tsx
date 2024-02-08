@@ -1,4 +1,5 @@
-import { Button, Countdown, InputField, MultiSelect, ProgressBar, RadioButton } from '~/Components';
+
+import { Button, Countdown, InputField, MultiSelect, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -96,6 +97,26 @@ export function ComponentPage() {
       <div>
         <h2>List:</h2>
         <List items={['1', '2', '3']} type={'ordered'} />
+      </div>
+      <div>
+        <h2>Tooltip:</h2>
+        <div>
+          <ToolTip value="You hovered!">
+            <p>Hover on me top text!</p>
+          </ToolTip>
+        </div>
+        <br />
+        <div>
+          <ToolTip value="You hovered!" alignment="right">
+            <p>Hover on me right text!</p>
+          </ToolTip>
+        </div>
+        <br />
+        <div>
+          <ToolTip display="image" value="https://i.ebayimg.com/images/g/jwMAAOxy5jxSduxZ/s-l1200.webp">
+            <p>Hover on me Image!</p>
+          </ToolTip>
+        </div>
       </div>
       <div>
         <h2>ProgressBar:</h2>
