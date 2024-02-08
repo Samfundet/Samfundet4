@@ -44,4 +44,4 @@ AUTH_BACKEND = 'django.contrib.auth.backends.ModelBackend'
 
 # Phone number regex
 
-PHONE_NUMBER_REGEX = r'^(\+?\(?\d{3}\)?[-\s\.]?)?\d{3}[-\s\.]?\d{4,6}$'
+PHONE_NUMBER_REGEX = r'^\+?\s*(\d\s*){8,15}$'
