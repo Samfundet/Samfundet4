@@ -1,8 +1,9 @@
 #
 # This file contains models spesific to the recruitment system
 #
-
 from __future__ import annotations
+
+import uuid
 
 from django.db import models
 from django.utils import timezone
@@ -10,9 +11,8 @@ from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
-
 from .general import Gang, User, Organization
+from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 
 class Recruitment(CustomBaseModel):
@@ -155,6 +155,7 @@ class Interview(CustomBaseModel):
 
 
 class RecruitmentAdmission(CustomBaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
@@ -183,6 +184,11 @@ class RecruitmentAdmission(CustomBaseModel):
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        if not self.applicant_priority:
+            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
+            # Set the applicant_priority to the number of applications + 1 (for the current application)
+            self.applicant_priority = current_applications_count + 1
         """If the admission is saved without an interview, try to find an interview from a shared position."""
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED

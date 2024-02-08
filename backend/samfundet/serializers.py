@@ -589,12 +589,47 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         return updated_instance
 
 
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = [
+            'id',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'short_description_nb',
+            'short_description_en',
+            'long_description_nb',
+            'long_description_en',
+            'is_funksjonaer_position',
+            'default_admission_letter_nb',
+            'default_admission_letter_en',
+            'gang',
+            'recruitment',
+        ]
+
+
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+    interview = ApplicantInterviewSerializer(read_only=True)
+    recruitment_position = RecruitmentPositionForApplicantSerializer(read_only=True)
+
     class Meta:
         model = RecruitmentAdmission
         fields = [
+            'id',
             'admission_text',
             'recruitment_position',
+            'applicant_priority',
+            'interview',
             'created_at',
             'withdrawn',
         ]

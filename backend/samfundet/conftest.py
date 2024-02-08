@@ -31,7 +31,6 @@ It's recommended to yield objects, and tear them down afterwards.
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
 
-
 TestCase.databases = {'default', 'billig'}
 
 

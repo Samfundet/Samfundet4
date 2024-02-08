@@ -688,3 +688,20 @@ export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdm
 
   return response;
 }
+
+export async function putRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: admission.id },
+    });
+  const data = {
+    id: admission.id,
+    admission_text: admission.admission_text,
+    applicant_priority: admission.applicant_priority,
+  };
+  const response = await axios.put(url, data, { withCredentials: true });
+
+  return response;
+}
