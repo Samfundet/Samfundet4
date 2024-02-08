@@ -96,7 +96,6 @@ type SamfFormFieldProps<U> = {
   // Dropdown
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;
-  defaultOptions?: DropDownOption<U>[];
   onChange?: (value: U) => void;
   props?: FieldProps;
 };
@@ -108,7 +107,6 @@ export function SamfFormField<U>({
   label,
   options,
   defaultOption,
-  defaultOptions,
   validator,
   onChange,
   props,

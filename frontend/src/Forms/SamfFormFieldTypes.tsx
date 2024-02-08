@@ -208,8 +208,9 @@ function makeMultiSelectInput(args: SamfFormFieldArgs) {
       onChange={args.onChange}
       label={args.label}
       selected={args.defaultOptions}
-    />  
+    />
   );
+}
 
 // Phonenumber fields
 function makePhoneNumberInput(args: SamfFormFieldArgs) {

@@ -11,10 +11,6 @@ from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
-from django.db.models import QuerySet
-from guardian.models import GroupObjectPermission, UserObjectPermission
-from marshmallow import ValidationError
-from rest_framework import serializers
 from django.contrib.auth.models import Group, Permission
 
 from root.constants import PHONE_NUMBER_REGEX
