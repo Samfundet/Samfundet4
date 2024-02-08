@@ -4,6 +4,8 @@
 from __future__ import annotations
 import uuid
 
+from .general import Gang, User, Organization
+
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -11,8 +13,6 @@ from django.core.exceptions import ValidationError
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
-
-from .general import Gang, User, Organization
 
 
 class Recruitment(CustomBaseModel):
