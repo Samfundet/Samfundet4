@@ -252,6 +252,7 @@ export const KEY = {
   form_confirm: 'form_confirm',
   we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
+  invalid_phonenumber: 'invalid_phonenumber',
   control_panel_title: 'control_panel_title',
   information_page_short: 'information_page_short',
   inputfile_choose_a_file: 'inputfile_choose_a_file',

@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import pytest
 
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentAdmission
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.
@@ -42,7 +44,6 @@ def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> R
 
 
 class TestRecruitmentClean:
-
     def test_all_datetimes_is_in_the_future(self, fixture_org):
         error_msg = 'All times should be in the future'
         past = timezone.now() - timezone.timedelta(days=2)
@@ -71,9 +72,7 @@ class TestRecruitmentClean:
 
 
 class TestRecruitmentAdmission:
-
     def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
-
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
         assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
 
