@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.utils import timezone
 
 from samfundet.models.general import Organization
@@ -54,7 +56,7 @@ def seed():
                 shown_application_deadline=recruitment_data['shown_application_deadline'],
                 actual_application_deadline=recruitment_data['actual_application_deadline'],
                 reprioritization_deadline_for_applicant=recruitment_data['reprioritization_deadline_for_applicant'],
-                reprioritization_deadline_for_groups=recruitment_data['reprioritization_deadline_for_groups']
+                reprioritization_deadline_for_groups=recruitment_data['reprioritization_deadline_for_groups'],
             )
             recruitment_objects.append(recruitment_instance)
 
