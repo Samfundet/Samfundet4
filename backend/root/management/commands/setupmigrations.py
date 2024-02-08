@@ -1,16 +1,17 @@
 # imports
+from __future__ import annotations
+
 import os
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 # End: imports -----------------------------------------------------------------
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
         for app in settings.PROJECT_APPS:
-
             try:
                 path = app.replace('.', '/')
                 migrations = f'{path}/migrations'

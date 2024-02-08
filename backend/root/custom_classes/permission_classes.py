@@ -2,22 +2,23 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from rest_framework.permissions import DjangoObjectPermissions, BasePermission
+from rest_framework.permissions import BasePermission, DjangoObjectPermissions
 
 if TYPE_CHECKING:
     from rest_framework.views import APIView
     from rest_framework.request import Request
+
     from django.db.models import Model, QuerySet
+
     from samfundet.models.general import User
 
 
 class SuperUserPermission(BasePermission):
-
-    def has_permission(self, request: Request, view: APIView) -> bool:
+    def has_permission(self, request: Request, view: APIView) -> bool:  # noqa: PLR0917
         user: User = request.user
         return user.is_active and user.is_superuser
 
-    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:  # noqa: PLR0917
         return self.has_permission(request=request, view=view)
 
 
@@ -34,7 +35,7 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
         'DELETE': ['%(app_label)s.delete_%(model_name)s'],
     }
 
-    def has_permission(self, request: Request, view: APIView) -> bool:
+    def has_permission(self, request: Request, view: APIView) -> bool:  # noqa: PLR0917
         queryset: QuerySet = self._queryset(view)
         model_cls: Model = queryset.model
         user: User = request.user

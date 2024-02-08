@@ -1,0 +1,114 @@
+[tool.ruff] # https://docs.astral.sh/ruff/settings/#top-level
+line-length = 160
+force-exclude = true # Ensure ruff respects `exclude` even when specifying path directly in CLI.
+output-format = "concise" # Pretty output.
+extend-exclude = [ # https://docs.astral.sh/ruff/settings/#extend-exclude
+    ".*",
+    ".vscode",
+    ".history",
+    "venv",
+    ".venv",
+    "node_modules",
+    "dist",
+    "site-packages",
+    "migrations",
+    "/database",
+    "/logs",
+    "/diagrams", # draw.io diagrams.net
+    "root/utils/routes.py",
+]
+
+
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
+line-ending = "lf"
+skip-magic-trailing-comma = false # Similar to yapf. Trailing comma signals multiline formatting.
+
+
+
+[tool.ruff.lint]
+# See list of all rules: rulehttps://docs.astral.sh/ruff/rules
+preview = true
+explicit-preview-rules = true
+ignore-init-module-imports = true # This implicit export strategy is used in this project.
+
+# See list of implemented and overlapping rules from pylint.
+# https://github.com/astral-sh/ruff/issues/970
+
+select = [
+    "PL", # pylint
+    "PLR0917", # pylint
+    "I", # isort.
+    "RUF008", # ruff
+    "RUF009", # ruff
+    "RUF013", # ruff
+    "RUF015", # ruff
+    "RUF016", # ruff
+    "RUF100", # ruff
+    "RUF200", # ruff
+    "ANN001", # flake8-annotations
+    "ANN201", # flake8-annotations
+    "ANN202", # flake8-annotations
+    "ANN205", # flake8-annotations
+    "ANN206", # flake8-annotations
+    "E", # pycodestyle (Error)
+    "F", # Pyflakes
+    "B", # flake8-bugbear
+    "Q", # flake8-quotes
+    "RSE102", # flake8-raise
+    "D204", # pydocstyle
+    "D200", # pydocstyle
+    "D211", # pydocstyle
+    "T20", # flake8-print
+]
+ignore = [
+    "PLR0913", # pylint
+    "PLR5501", # pylint
+    "PLW2901", # pylint
+    "PLR0915", # pylint
+    "PLR2004", # pylint
+    "PLR0912", # pylint
+    "PLR0911", # pylint
+    "Q000", # flake8-quotes # Ruff formatter handles this.
+    "Q003", # flake8-quotes # Ruff formatter handles this.
+]
+
+
+[tool.ruff.lint.per-file-ignores]
+"test_*.py" = ["PLR0917", "ANN201", "ANN001"]
+"signals.py" = ["PLR0917"]
+"conftest.py" = ["PLR0917"]
+"root/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"root/settings/dev.py" = ["F405"]
+
+
+
+
+### isort ###
+
+[tool.ruff.lint.isort]
+length-sort = true # Sort imports on their dotted path length.
+required-imports = ["from __future__ import annotations"]
+section-order = [
+    "future", 
+    "standard-library",
+    "third-party",
+    "rest_framework", # From custom section below.
+    "django", # From custom section below.
+    "first-party",
+    "samfundet", # From custom section below.
+    "local-folder",
+]
+
+[tool.ruff.lint.isort.sections]
+"django" = ["django"] # Used in section-order.
+"rest_framework" = ["rest_framework"] # Used in section-order.
+"samfundet" = ["samfundet"] # Used in section-order.
+
+### End: isort ###
+
+
+[tool.ruff.lint.pylint]
+max-positional-args = 1

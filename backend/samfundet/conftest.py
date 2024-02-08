@@ -1,23 +1,27 @@
-from typing import Iterator, Any
+from __future__ import annotations
+
+from typing import Any, Iterator
+from datetime import time, datetime
 
 import pytest
-from django.core.files.images import ImageFile
 
-from datetime import time, datetime
-from django.utils import timezone
-from django.test import Client
 from rest_framework.test import APIClient
+
+from django.test import Client, TestCase
+from django.utils import timezone
+from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group
 
-from root.settings import BASE_DIR
-from samfundet.constants import DEV_PASSWORD
-from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event
-from samfundet.models.model_choices import EventAgeRestriction, EventTicketType
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue, Table, Reservation
-
 import root.management.commands.seed_scripts.billig as billig_seed
+from root.settings import BASE_DIR
+
+from samfundet.constants import DEV_PASSWORD
+from samfundet.models.event import Event
+from samfundet.models.billig import BilligEvent
+from samfundet.models.general import Gang, User, Image, Table, Venue, BlogPost, TextItem, Reservation, Organization, InformationPage
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
+
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.
@@ -27,7 +31,6 @@ It's recommended to yield objects, and tear them down afterwards.
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
 
-from django.test import TestCase
 
 TestCase.databases = {'default', 'billig'}
 
@@ -261,7 +264,7 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
         default_admission_letter_en='Default Admission Letter EN',
         tags='tag1,tag2',
         gang=fixture_gang,
-        recruitment=fixture_recruitment
+        recruitment=fixture_recruitment,
     )
     yield recruitment_position
     recruitment_position.delete()
@@ -288,16 +291,19 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
-                                  fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
+def fixture_recruitment_admission(
+    fixture_user: User,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentAdmission]:
     admission = RecruitmentAdmission.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
         user=fixture_user,
         applicant_priority=1,
-        recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
-        recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
     yield admission
     admission.delete()

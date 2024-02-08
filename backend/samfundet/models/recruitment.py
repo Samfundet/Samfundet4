@@ -8,11 +8,14 @@ from django.utils import timezone
 from root.utils.mixins import CustomBaseModel
 
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
-from root.utils.mixins import FullCleanSaveMixin
-from .general import Organization, User, Gang
+from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
+from .general import Gang, User, Organization
 from .utils.filename import upload_file_recruitment_path
 
 
@@ -20,7 +23,9 @@ class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
     visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
-    actual_application_deadline = models.DateTimeField(help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail')
+    actual_application_deadline = models.DateTimeField(
+        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'
+    )
     shown_application_deadline = models.DateTimeField(help_text='The deadline that is shown to applicants')
     reprioritization_deadline_for_applicant = models.DateTimeField(help_text='Before allocation meeting')
     reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
@@ -47,8 +52,10 @@ class Recruitment(CustomBaseModel):
         now = timezone.now()
         if any(
             [
-                self.actual_application_deadline < now, self.shown_application_deadline < now, self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now
+                self.actual_application_deadline < now,
+                self.shown_application_deadline < now,
+                self.reprioritization_deadline_for_applicant < now,
+                self.reprioritization_deadline_for_groups < now,
             ]
         ):
             raise ValidationError('All times should be in the future')
@@ -142,7 +149,6 @@ class Interview(CustomBaseModel):
 
 
 class RecruitmentAdmission(CustomBaseModel):
-
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
@@ -150,6 +156,8 @@ class RecruitmentAdmission(CustomBaseModel):
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(help_text='The priority of the admission')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
@@ -161,7 +169,15 @@ class RecruitmentAdmission(CustomBaseModel):
     # TODO: add video, make secure, validate
     file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
 
-    PRIORITY_CHOICES = [
+    # TODO: Make secure, validate
+    image_upload = models.ImageField(help_text='Applicant image', upload_to=upload_file_recruitment_path, blank=True, null=True, verbose_name='Applicant image')
+
+    # TODO: add video, make secure, validate
+    file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
+
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
+    
+     PRIORITY_CHOICES = [
         (0, 'Not Set'),
         (1, 'Not Wanted'),
         (2, 'Wanted'),
@@ -175,6 +191,8 @@ class RecruitmentAdmission(CustomBaseModel):
         (3, 'Automatic Rejection'),
     ]
 
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
+    
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
         choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
@@ -188,20 +206,23 @@ class RecruitmentAdmission(CustomBaseModel):
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        If the admission is saved without an interview, try to find an interview from a shared position.
-        """
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        if self.withdrawn:
+            self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
+            self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
-            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
-                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            shared_interview = (
+                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            )
 
             if shared_interview:
                 self.interview = shared_interview.interview
             else:
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
+        # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
 

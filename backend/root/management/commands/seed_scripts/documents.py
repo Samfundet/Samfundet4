@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import os
 import random
 
-from django.core.files import File
 from django.db import transaction
 from django.utils import timezone
+from django.core.files import File
 
 from root.utils.samfundet_random import words
+
 from samfundet.models.general import Saksdokument
 from samfundet.models.model_choices import SaksdokumentCategory
 
@@ -15,7 +18,6 @@ CREATE_OFFSET = 30
 
 
 def seed():
-
     cats = [
         SaksdokumentCategory.FS_REFERAT,
         SaksdokumentCategory.STYRET,
@@ -33,7 +35,6 @@ def seed():
 
         # Faster in one transaction
         with transaction.atomic():
-
             # Create documents
             for i in range(COUNT):
                 name_no, name_en = words(2, include_english=True)
@@ -61,7 +62,7 @@ def seed():
                     created_at=create_date,
                     updated_at=(create_date - update_delta) if random.randint(0, 2) == 0 else None,
                     category=random.choice(cats),
-                    file=dummy_file
+                    file=dummy_file,
                 )
                 yield int(i / COUNT * 100), 'Creating documents'
 

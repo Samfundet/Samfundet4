@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -22,6 +24,7 @@ class EventStatus(models.TextChoices):
     is used to hide event without actually deleting it
     so that it can be restored if something wrong happens
     """
+
     ACTIVE = 'active', _('Aktiv')
     ARCHIVED = 'archived', _('Arkivert')
     CANCELED = 'cancelled', _('Avlyst')
@@ -36,6 +39,7 @@ class EventTicketType(models.TextChoices):
         Registration - connect event to registration model (påmelding)
         Custom - connect event to custom payment list (only used to show in frontend)
     """
+
     INCLUDED = 'included', _('Included with entrance')
     FREE = 'free', _('Free')
     BILLIG = 'billig', _('Paid')
@@ -51,9 +55,8 @@ class EventAgeRestriction(models.TextChoices):
 
 
 class EventCategory(models.TextChoices):
-    """
-    Used for sorting, filtering and organizing stuff in frontend
-    """
+    """Used for sorting, filtering and organizing stuff in frontend"""
+
     SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
     CONCERT = 'concert', _('Konsert')
     DEBATE = 'debate', _('Debatt')
