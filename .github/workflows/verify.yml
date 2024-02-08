@@ -132,5 +132,8 @@ jobs:
       - name: Run stylelint
         run: yarn run stylelint:check
 
+      - name: Run stylelint
+        run: yarn run prettier:check
+
       - name: Run typescript compiler check
         run: yarn run tsc:check

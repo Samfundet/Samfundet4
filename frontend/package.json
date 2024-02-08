@@ -22,7 +22,9 @@
     "stylelint:check": "stylelint --config .stylelintrc src/**/*.{css,scss}",
     "tsc:check": "tsc",
     "tsc:watch": "tsc --watch",
-    "verify": "yarn eslint:check && yarn tsc:check && yarn stylelint:check"
+    "verify": "yarn eslint:check && yarn tsc:check && yarn stylelint:check",
+    "prettier:check": "yarn prettier \"**/*.{js,jsx,ts,tsx,json}\"  --config .prettierrc.js  --ignore-path .prettierignore  --no-error-on-unmatched-pattern  --list-different",
+    "prettier:apply": "yarn prettier \"**/*.{js,jsx,ts,tsx,json}\"  --config .prettierrc.js  --ignore-path .prettierignore  --no-error-on-unmatched-pattern  --list-different  --write"
   },
   "dependencies": {
     "@babel/core": "^7.23.2",

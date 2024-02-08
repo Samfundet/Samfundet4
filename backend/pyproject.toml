@@ -84,8 +84,6 @@ ignore = [
 "root/settings/dev.py" = ["F405"]
 
 
-
-
 ### isort ###
 
 [tool.ruff.lint.isort]

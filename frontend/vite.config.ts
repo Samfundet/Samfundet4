@@ -8,10 +8,7 @@ const path = require('path');
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
-  plugins: [
-    react(),
-    svgr(),
-  ],
+  plugins: [react(), svgr()],
   resolve: {
     alias: [
       {

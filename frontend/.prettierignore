@@ -6,3 +6,5 @@
 **/.pytest_cache
 .yapfignore
 **/src/routes/backend.ts
+dist/
+build/
