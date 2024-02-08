@@ -22,6 +22,7 @@ from samfundet.models.billig import BilligEvent
 from samfundet.models.general import Gang, User, Image, Table, Venue, BlogPost, TextItem, Reservation, Organization, InformationPage
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
+
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.

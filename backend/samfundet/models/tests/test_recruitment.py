@@ -44,7 +44,6 @@ def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> R
 
 
 class TestRecruitmentClean:
-
     def test_all_datetimes_is_in_the_future(self, fixture_org):
         error_msg = 'All times should be in the future'
         past = timezone.now() - timezone.timedelta(days=2)
@@ -73,7 +72,6 @@ class TestRecruitmentClean:
 
 
 class TestRecruitmentAdmission:
-
     def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
         assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET

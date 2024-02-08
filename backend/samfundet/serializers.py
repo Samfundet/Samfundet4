@@ -55,7 +55,6 @@ from .models.recruitment import (
 
 
 class TagSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Tag
         fields = '__all__'
@@ -99,14 +98,12 @@ class ImageSerializer(CustomBaseSerializer):
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
-
     class Meta:
         model = EventCustomTicket
         fields = '__all__'
 
 
 class BilligPriceGroupSerializer(CustomBaseSerializer):
-
     class Meta:
         model = BilligPriceGroup
         fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
@@ -167,7 +164,6 @@ class EventListSerializer(serializers.ListSerializer):
 
 
 class EventSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Event
         list_serializer_class = EventListSerializer
@@ -199,21 +195,18 @@ class EventSerializer(CustomBaseSerializer):
 
 
 class EventGroupSerializer(CustomBaseSerializer):
-
     class Meta:
         model = EventGroup
         fields = '__all__'
 
 
 class VenueSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Venue
         fields = '__all__'
 
 
 class ClosedPeriodSerializer(CustomBaseSerializer):
-
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
@@ -313,28 +306,24 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Group
         fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ['id', 'nickname']
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserPreference
         fields = '__all__'
 
 
 class CampusSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Campus
         fields = '__all__'
@@ -384,14 +373,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 # GANGS ###
 class OrganizationSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Organization
         fields = '__all__'
 
 
 class GangSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Gang
         fields = '__all__'
@@ -406,14 +393,12 @@ class GangTypeSerializer(CustomBaseSerializer):
 
 
 class InformationPageSerializer(CustomBaseSerializer):
-
     class Meta:
         model = InformationPage
         fields = '__all__'
 
 
 class BlogPostSerializer(CustomBaseSerializer):
-
     class Meta:
         model = BlogPost
         fields = '__all__'
@@ -448,21 +433,18 @@ class SaksdokumentSerializer(CustomBaseSerializer):
 
 
 class TextItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = TextItem
         fields = '__all__'
 
 
 class InfoboxSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Infobox
         fields = '__all__'
 
 
 class KeyValueSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = KeyValue
         fields = '__all__'
@@ -474,14 +456,12 @@ class KeyValueSerializer(serializers.ModelSerializer):
 
 
 class FoodPreferenceSerializer(CustomBaseSerializer):
-
     class Meta:
         model = FoodPreference
         fields = '__all__'
 
 
 class FoodCategorySerializer(CustomBaseSerializer):
-
     class Meta:
         model = FoodCategory
         fields = '__all__'
@@ -504,21 +484,18 @@ class MenuSerializer(CustomBaseSerializer):
 
 
 class TableSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Table
         fields = '__all__'
 
 
 class ReservationSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Reservation
         fields = '__all__'
 
 
 class ReservationCheckSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Reservation
         fields = ['guest_count', 'occasion', 'reservation_date']
@@ -539,7 +516,6 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Recruitment
         fields = '__all__'
@@ -565,7 +541,6 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
 
 class InterviewerSerializer(CustomBaseSerializer):
-
     class Meta:
         model = User
         fields = [
@@ -612,6 +587,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
+
 
 class ApplicantInterviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -676,7 +652,6 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
 
 
 class OccupiedtimeslotSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Occupiedtimeslot
         fields = '__all__'
@@ -691,14 +666,12 @@ class ApplicantInfoSerializer(CustomBaseSerializer):
 
 
 class InterviewRoomSerializer(CustomBaseSerializer):
-
     class Meta:
         model = InterviewRoom
         fields = '__all__'
 
 
 class InterviewSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Interview
         fields = '__all__'

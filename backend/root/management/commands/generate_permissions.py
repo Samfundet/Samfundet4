@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import Permission
 from django.core.management.base import BaseCommand
+
 """
 NOTE: This command cannot run within docker container because the backend has no access to the frontend.
 Use on host machine.

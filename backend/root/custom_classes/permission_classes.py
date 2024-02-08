@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 class SuperUserPermission(BasePermission):
-
     def has_permission(self, request: Request, view: APIView) -> bool:  # noqa: PLR0917
         user: User = request.user
         return user.is_active and user.is_superuser

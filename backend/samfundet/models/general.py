@@ -33,7 +33,6 @@ if TYPE_CHECKING:
 
 
 class Notification(AbstractNotification):
-
     class Meta(AbstractNotification.Meta):
         abstract = False
 

@@ -150,7 +150,8 @@ def do_seed():
                     name_nb=f'Billett {i + 1}',
                     name_en=f'Ticket {i + 1}',
                     price=random.randint(50, 200),
-                ) for i in range(0, random.randint(2, 4))
+                )
+                for i in range(0, random.randint(2, 4))
             ]
 
         # Create event(s)

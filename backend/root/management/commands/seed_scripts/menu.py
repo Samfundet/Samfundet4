@@ -38,10 +38,13 @@ def seed():
     FoodPreference.objects.all().delete()
 
     # Create food preferences
-    prefs = [FoodPreference.objects.create(
-        name_nb=p_name[0],
-        name_en=p_name[1],
-    ) for p_name in preferences]
+    prefs = [
+        FoodPreference.objects.create(
+            name_nb=p_name[0],
+            name_en=p_name[1],
+        )
+        for p_name in preferences
+    ]
     yield 10, f'Created {len(preferences)} food preferences'
 
     # Create menu categories
