@@ -265,7 +265,7 @@ class ClosedPeriod(CustomBaseModel):
         verbose_name_plural = 'ClosedPeriods'
 
     def __str__(self) -> str:
-        return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
+        return f'{self.start_dt}-{self.end_dt}'
 
 
 # GANGS ###

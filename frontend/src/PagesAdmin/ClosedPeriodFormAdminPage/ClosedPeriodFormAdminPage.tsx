@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getClosedPeriod } from '~/api';
+import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -38,6 +38,7 @@ export function ClosedPeriodFormAdminPage() {
       .then((data) => {
         setClosedPeriod(data);
         setShowSpinner(false);
+        console.log(data);
       })
       .catch((data: AxiosError) => {
         // TODO add error pop up message?
@@ -52,12 +53,26 @@ export function ClosedPeriodFormAdminPage() {
 
   function handleOnSubmit(data: ClosedPeriodDto) {
     if (id !== undefined) {
-      // TODO patch data
+      putClosedPeriod(id, data)
+        .then(() => {
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
+      navigate({ url: ROUTES.frontend.admin_closed });
     } else {
-      // TODO post data
+      postClosedPeriod(data)
+        .then(() => {
+          navigate({ url: ROUTES.frontend.admin_closed });
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        });
     }
-    alert('TODO Submit');
-    console.log(JSON.stringify(data));
   }
 
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
@@ -69,26 +84,26 @@ export function ClosedPeriodFormAdminPage() {
       <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
         <div className={styles.row}>
           <SamfFormField
-            field="message_no"
+            field="message_nb"
             type="text-long"
-            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
+            label={`${labelMessage} (${t(KEY.common_norwegian).toLowerCase()})`}
           ></SamfFormField>
           <SamfFormField
             field="message_en"
             type="text-long"
-            label={`${labelMessage} (${t(KEY.common_english)})`}
+            label={`${labelMessage} (${t(KEY.common_english).toLowerCase()})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>
           <SamfFormField
-            field="description_no"
+            field="description_nb"
             type="text-long"
-            label={`${labelDescription} (${t(KEY.common_norwegian)})`}
+            label={`${labelDescription} (${t(KEY.common_norwegian).toLowerCase()})`}
           ></SamfFormField>
           <SamfFormField
             field="description_en"
             type="text-long"
-            label={`${labelDescription} (${t(KEY.common_english)})`}
+            label={`${labelDescription} (${t(KEY.common_english).toLowerCase()})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>
