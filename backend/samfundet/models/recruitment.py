@@ -184,9 +184,7 @@ class RecruitmentAdmission(CustomBaseModel):
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        If the admission is saved without an interview, try to find an interview from a shared position.
-        """
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
         if not self.applicant_priority:
             current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)

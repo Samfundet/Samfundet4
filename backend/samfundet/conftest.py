@@ -11,7 +11,6 @@ from django.test import Client, TestCase
 from django.utils import timezone
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group
-from samfundet.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
 
 import root.management.commands.seed_scripts.billig as billig_seed
 from root.settings import BASE_DIR
