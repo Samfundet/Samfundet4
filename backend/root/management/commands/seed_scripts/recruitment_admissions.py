@@ -27,7 +27,8 @@ def seed():
                 {
                     'recruitment_position': position,
                     'recruitment': position.recruitment,
-                    'user': users[randint(0, len(users) - 1)],  # random user from all users
+                    'user': users[randint(0,
+                                          len(users) - 1)],  # random user from all users
                 }
             )
             _admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)

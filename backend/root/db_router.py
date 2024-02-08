@@ -23,6 +23,7 @@ BILLIG_MODELS: list[Type[models.Model]] = [
 
 
 class SamfundetDatabaseRouter:
+
     def db_for_read(self, model: Type[models.Model], **hints: dict[str, Any]) -> str | None:
         if model in BILLIG_MODELS:
             return 'billig'

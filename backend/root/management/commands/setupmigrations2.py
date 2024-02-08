@@ -9,6 +9,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
+
     def handle(self, *args, **options):
         for app in settings.INSTALLED_APPS:
             appname = app.split('.')[-1]

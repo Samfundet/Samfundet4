@@ -140,7 +140,9 @@ class FieldTrackerMixin(Model):
             else:  # Log changes.
                 LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
                 LOG.info(
-                    f'{self} has changed:\n\n' f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n' f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
+                    f'{self} has changed:\n\n'
+                    f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
+                    f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
                 )
         except Exception as e:
             # Get all changes.

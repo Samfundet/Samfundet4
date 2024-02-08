@@ -10,6 +10,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
+
     def handle(self, *args, **options):
         for app in settings.PROJECT_APPS:
             try:

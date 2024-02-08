@@ -8,6 +8,7 @@ from samfundet.models import Gang, User, Event, Profile, UserPreference
 
 
 class TestUserSignals:
+
     def test_create_user_preference(self):
         ### Arrange ###
         user = User.objects.create_user(
@@ -44,6 +45,7 @@ class TestUserSignals:
 
 
 class TestEditorPermissions:
+
     def test_update_editor_permissions_add(
         self,
         fixture_event: Event,
