@@ -63,10 +63,10 @@ export function ApplicantApplicationOverviewPage() {
   }, [admissions]);
 
   const tableColumns = [
-    { sortable: false, content: 'Recruitment Position' },
-    { sortable: false, content: 'Interview Date' },
-    { sortable: false, content: 'Interview Location' },
-    { sortable: true, content: 'Applicant Priority' },
+    { sortable: false, content: t(KEY.recruitment_position) },
+    { sortable: false, content: t(KEY.recruitment_interview_time) },
+    { sortable: false, content: t(KEY.recruitment_interview_location) },
+    { sortable: true, content: t(KEY.recruitment_priority) },
     { sortable: false, content: '' },
   ];
 
@@ -87,14 +87,14 @@ export function ApplicantApplicationOverviewPage() {
           <Button link={ROUTES.frontend.recruitment} className={styles.back_button} theme="green">
             {t(KEY.common_go_back)}
           </Button>
-          <h1 className={styles.header}>My applications</h1>
+          <h1 className={styles.header}>{t(KEY.recruitment_my_applications)}</h1>
           <div className={styles.empty_div}></div>
         </div>
-        <p>All info related to the applications will be anonymized three weeks after the recruitment is over</p>
+        <p>{t(KEY.recruitment_will_be_anonymized)}</p>
         {admissions ? (
           <Table data={admissions.map(admissionToTableRow)} columns={tableColumns} defaultSortColumn={3}></Table>
         ) : (
-          <p>You have not applied to any positions yet</p>
+          <p>{t(KEY.recruitment_not_applied)}</p>
         )}
 
         <OccupiedFormModal recruitmentId={parseInt(recruitmentID ?? '')} />

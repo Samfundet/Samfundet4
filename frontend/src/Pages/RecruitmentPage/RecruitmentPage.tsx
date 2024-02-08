@@ -8,8 +8,12 @@ import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
 import { useCustomNavigate } from '~/hooks';
 import { ROUTES } from '~/routes';
+import { useTranslation } from 'react-i18next';
+import { KEY } from '~/i18n/constants';
 
 export function RecruitmentPage() {
+  const { t } = useTranslation();
+
   const navigate = useCustomNavigate();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [loading, setLoading] = useState(true);
@@ -45,7 +49,7 @@ export function RecruitmentPage() {
               });
             }}
           >
-            Se søknader
+            {t(KEY.recruitment_organization)}
           </Button>
         </div>
         {loading ? (
