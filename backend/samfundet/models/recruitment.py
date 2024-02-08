@@ -154,7 +154,6 @@ class Interview(CustomBaseModel):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-
 class RecruitmentAdmission(CustomBaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')

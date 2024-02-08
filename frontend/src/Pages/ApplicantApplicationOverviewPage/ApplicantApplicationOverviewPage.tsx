@@ -8,8 +8,9 @@ import { getRecruitmentAdmissionsForApplicant, putRecruitmentAdmission } from '~
 import { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, niceDateTime } from '~/utils';
 import styles from './ApplicantApplicationOverviewPage.module.scss';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
 
 export function ApplicantApplicationOverviewPage() {
   const { recruitmentID } = useParams();
@@ -17,27 +18,25 @@ export function ApplicantApplicationOverviewPage() {
   const { t } = useTranslation();
 
   function handleChangePriority(id: number, direction: 'up' | 'down') {
-    const newAdmissions = [...admissions];
+    const newAdmissions = [
+      ...admissions.sort(function (a1, a2) {
+        return a1.applicant_priority - a2.applicant_priority;
+      }),
+    ];
     const index = newAdmissions.findIndex((admission) => admission.id === id);
     const directionIncrement = direction === 'up' ? -1 : 1;
-    if (newAdmissions[index].applicant_priority === 1 && direction === 'up') return;
-    if (newAdmissions[index].applicant_priority === newAdmissions.length && direction === 'down') return;
-    const targetIndex = newAdmissions.findIndex(
-      (admission) => admission.applicant_priority === newAdmissions[index].applicant_priority + directionIncrement,
-    );
+    if (index == 0 && direction === 'up') return;
+    if (index === newAdmissions.length - 1 && direction === 'down') return;
 
     const old_priority = newAdmissions[index].applicant_priority;
-    const new_priority = newAdmissions[targetIndex].applicant_priority;
-
-    console.log('old priority', old_priority);
-    console.log('new priority', new_priority);
+    const new_priority = newAdmissions[index + directionIncrement].applicant_priority;
 
     newAdmissions[index].applicant_priority = new_priority;
-    newAdmissions[targetIndex].applicant_priority = old_priority;
+    newAdmissions[index + directionIncrement].applicant_priority = old_priority;
 
     // TODO: Make this a single API call
     putRecruitmentAdmission(newAdmissions[index]);
-    putRecruitmentAdmission(newAdmissions[targetIndex]).then(() => {
+    putRecruitmentAdmission(newAdmissions[index + directionIncrement]).then(() => {
       setAdmissions(newAdmissions);
     });
   }
@@ -45,8 +44,8 @@ export function ApplicantApplicationOverviewPage() {
   function upDownArrow(id: number) {
     return (
       <>
-        <Icon icon="bxs:up-arrow" onClick={() => handleChangePriority(id, 'up')} />
-        <Icon icon="bxs:down-arrow" onClick={() => handleChangePriority(id, 'down')} />
+        <Icon icon="bxs:up-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'up')} />
+        <Icon icon="bxs:down-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'down')} />
       </>
     );
   }
@@ -74,7 +73,7 @@ export function ApplicantApplicationOverviewPage() {
   function admissionToTableRow(admission: RecruitmentAdmissionDto) {
     return [
       dbT(admission.recruitment_position, 'name'),
-      admission.interview.interview_time,
+      niceDateTime(admission.interview.interview_time),
       admission.interview.interview_location,
       admission.applicant_priority,
       { content: upDownArrow(admission.id) },
@@ -97,6 +96,8 @@ export function ApplicantApplicationOverviewPage() {
         ) : (
           <p>You have not applied to any positions yet</p>
         )}
+
+        <OccupiedFormModal recruitmentId={parseInt(recruitmentID ?? '')} />
       </div>
     </Page>
   );

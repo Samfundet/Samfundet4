@@ -588,8 +588,8 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
 
-class ApplicantInterviewSerializer(serializers.ModelSerializer):
 
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interview
         fields = [
@@ -600,7 +600,6 @@ class ApplicantInterviewSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = RecruitmentPosition
         fields = [
@@ -622,7 +621,7 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
     recruitment_position = RecruitmentPositionForApplicantSerializer(read_only=True)
-):
+
     class Meta:
         model = RecruitmentAdmission
         fields = [
