@@ -20,6 +20,12 @@ export const TextItem = {
   sulten_lyche_goal_text: 'sulten_lyche_goal_text',
   sulten_lyche_about_menu_text: 'sulten_lyche_about_menu_text',
   sulten_contact_page_text: 'sulten_contact_page_text',
+
+  //About page
+  festivals: 'festivals',
+  volunteering: 'volunteering',
+  the_society_meeting: 'the_society_meeting',
+  about_samfundet: 'about_samfundet',
   sulten_contact_page_title: 'sulten_contact_page_title',
 
   //Recruitment
