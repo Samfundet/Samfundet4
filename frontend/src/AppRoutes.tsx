@@ -87,6 +87,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
         <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
+        <Route path={ROUTES.frontend.contact} element={<></>} />
       </Route>
       {/* 
             ADMIN ROUTES

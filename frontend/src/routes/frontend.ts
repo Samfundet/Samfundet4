@@ -18,6 +18,7 @@ export const ROUTES_FRONTEND = {
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
+  contact: '/contact',
   // ==================== //
   //        Sulten        //
   // ==================== //

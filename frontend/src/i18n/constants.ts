@@ -119,6 +119,7 @@ export const KEY = {
   common_creation_successful: 'common_creation_successful',
   common_see_in_django_admin: 'common_see_in_django_admin',
   common_something_went_wrong: 'common_something_went_wrong',
+  common_click_here: 'common_click_here',
 
   // Price groups:
   common_ticket_type: 'common_ticket_type',
