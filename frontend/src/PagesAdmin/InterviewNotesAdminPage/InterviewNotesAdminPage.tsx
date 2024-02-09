@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionInterview } from '~/api';
+import { InterviewDto, RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
@@ -17,6 +17,7 @@ export function InterviewNotesPage() {
   const interviewId = useParams().interviewId;
   const [editingMode, setEditingMode] = useState(false);
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto[]>([]);
+  const [interview, setInterview] = useState<InterviewDto | null>(null);
   const [disabled, setdisabled] = useState<boolean>(true);
   const [nameUser, setNameUser] = useState<string>('');
   const { t } = useTranslation();
@@ -29,11 +30,13 @@ export function InterviewNotesPage() {
           (admission) =>
             admission.recruitment_position &&
             admission.recruitment_position.toString() === positionId &&
-            admission.interview.id.toString() === interviewId,
+            admission.interview.id.toString() === interviewId &&
+            admission.interview.interview_time !== null,
         );
         if (admission.length !== 0) {
           setdisabled(false);
           setRecruitmentAdmission(admission);
+          setInterview(admission[0].interview);
           setNameUser(
             admission[0].user.first_name ? admission[0].user.first_name + ' ' + admission[0].user.last_name : '',
           );
@@ -43,9 +46,9 @@ export function InterviewNotesPage() {
   }, [recruitmentId, positionId, gangId, interviewId, t]);
 
   async function handleEditSave() {
-    if (editingMode) {
+    if (editingMode && interview) {
       try {
-        await putRecruitmentAdmissionForGang(recruitmentAdmission[0].id.toString(), recruitmentAdmission[0]);
+        await putRecruitmentAdmissionInterview(interview.id.toString(), interview);
         toast.success(t(KEY.common_save_successful));
       } catch (error) {
         toast.error(t(KEY.common_something_went_wrong));
@@ -61,12 +64,11 @@ export function InterviewNotesPage() {
           {t(KEY.recruitment_applicant)}: {nameUser}
         </label>
         <TextAreaField
-          value={recruitmentAdmission[0] ? recruitmentAdmission[0].interview.notes : ' '}
+          value={interview ? interview.notes : ' '}
           onChange={(value: string) => {
             const updatedNotes = value;
-            const updatedInterview = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
-            const updatedAdmission = { ...recruitmentAdmission[0], interview: updatedInterview };
-            setRecruitmentAdmission([updatedAdmission]);
+            const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
+            setInterview(updatedInterview);
           }}
           disabled={!editingMode}
         ></TextAreaField>
