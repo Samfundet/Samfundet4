@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './InputTime.module.scss';
+import classNames from 'classnames';
 
 type InputTimeProps = {
   className?: string;
@@ -7,9 +8,10 @@ type InputTimeProps = {
   onChange?: (value: string) => void;
   onBlur?: (value: string) => void;
   value?: string;
+  error?: string;
 };
 
-export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
+export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
 
@@ -28,10 +30,11 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const inputName = e.target.getAttribute('name');
-    let numericValue = e.target.value.replace(/[^0-9]/g, '');
+    let numericValue = e.target.value.replace(/[^0-9]/g, '').trim();
+    if (numericValue.length > 2) numericValue = numericValue.slice(1, 3);
     const parsedValue = parseInt(numericValue, 10);
     if (inputName === 'hour') {
-      numericValue = parsedValue > 23 ? '23' : e.target.value;
+      numericValue = parsedValue > 23 ? '23' : numericValue;
       // Regex for 00-23, allowing for values without 0 padding
       if (/^(2[0-3]|[0-1]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
         setHour(numericValue);
@@ -54,10 +57,10 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
 
   return (
     <div className={styles.inputTime_wrap}>
-      <div className={styles.inputTime}>
+      <div className={classNames(styles.inputTime, error && styles.error)}>
         <input
           type="text"
-          className={styles.number}
+          className={classNames(styles.number, error && styles.error)}
           name="hour"
           value={hour}
           onChange={handleChange}
@@ -66,14 +69,14 @@ export function InputTime({ onChange, onBlur, value }: InputTimeProps) {
         <p>:</p>
         <input
           type="text"
-          className={styles.number}
+          className={classNames(styles.number, error && styles.error)}
           name="minute"
           value={minute}
           onChange={handleChange}
           onBlur={handleBlur}
         />
       </div>
-      <div className={styles.error}></div>
+      {error && <div className={styles.errorMessage}> {error}</div>}
     </div>
   );
 }

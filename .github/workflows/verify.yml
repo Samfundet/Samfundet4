@@ -49,10 +49,9 @@ jobs:
           python -m pip install pipenv
           python -m pipenv install --dev --deploy --python $PY
 
-      - name: Check yapf
-        run: python -m pipenv run yapf --parallel --recursive --diff .
+      - name: Check ruff format
+        run: python -m pipenv run ruff:format:check
 
-      # TODO: broken test - https://github.com/Samfundet/Samfundet4/issues/730
       - name: Verify migrations
         run: |
           python -m pipenv run migrations:verify
@@ -61,11 +60,8 @@ jobs:
       - name: Run tests
         run: python -m pipenv run pytest:run
 
-      - name: Run bandit
-        run: python -m pipenv run bandit:run
-
-      - name: Run flake8
-        run: python -m pipenv run flake8:run
+      - name: Run ruff
+        run: python -m pipenv run ruff:check
 
       - name: Run mypy
         run: python -m pipenv run mypy:run

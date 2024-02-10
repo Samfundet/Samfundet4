@@ -15,6 +15,7 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentDto,
@@ -558,6 +559,27 @@ export async function getRecruitmentPositionsGang(
   return response;
 }
 
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__occupied_timeslots,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postOccupiedTimeslots(
+  timeslots: OccupiedTimeSlotDto[],
+): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
+  const response = await axios.post(url, timeslots, { withCredentials: true });
+
+  return response;
+}
+
 export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
   const url =
     BACKEND_DOMAIN +
@@ -663,6 +685,23 @@ export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdm
     recruitment_position: admission.recruitment_position,
   };
   const response = await axios.post(url, data, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: admission.id },
+    });
+  const data = {
+    id: admission.id,
+    admission_text: admission.admission_text,
+    applicant_priority: admission.applicant_priority,
+  };
+  const response = await axios.put(url, data, { withCredentials: true });
 
   return response;
 }

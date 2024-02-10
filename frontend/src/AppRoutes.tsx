@@ -3,6 +3,7 @@ import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
+  ApplicantApplicationOverviewPage,
   ComponentPage,
   EventPage,
   EventsPage,
@@ -14,6 +15,7 @@ import {
   LoginPage,
   LycheAboutPage,
   LycheContactPage,
+  LycheReservationPage,
   LycheHomePage,
   LycheMenuPage,
   NotFoundPage,
@@ -84,6 +86,8 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
+        <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
+        <Route path={ROUTES.frontend.contact} element={<></>} />
       </Route>
       {/* 
             ADMIN ROUTES
@@ -240,6 +244,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
         <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />
         <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
+        <Route path={ROUTES.frontend.sulten_reservation} element={<LycheReservationPage />} />
       </Route>
 
       {/* 
