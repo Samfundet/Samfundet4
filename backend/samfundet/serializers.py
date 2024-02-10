@@ -149,9 +149,7 @@ class BilligEventSerializer(CustomBaseSerializer):
 
 
 class EventListSerializer(serializers.ListSerializer):
-    """
-    Speedup fetching of billig events for lists serialization
-    """
+    """Speedup fetching of billig events for lists serialization"""
 
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
@@ -159,7 +157,7 @@ class EventListSerializer(serializers.ListSerializer):
             events = events.prefetch_related('custom_tickets')
             events = events.prefetch_related('image')
 
-        Event.prefetch_billig(events, tickets=True, prices=True)
+        Event.prefetch_billig(events=events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
         return [self.child.to_representation(e) for e in events]
@@ -420,9 +418,7 @@ class SaksdokumentSerializer(CustomBaseSerializer):
         return instance.file.url if instance.file else None
 
     def create(self, validated_data: dict) -> Event:
-        """
-        Uses the write_only file field to create new document file.
-        """
+        """Uses the write_only file field to create new document file."""
         file = validated_data.pop('file')
         # Ensure file name ends with .pdf
         fname = validated_data['title_nb']
@@ -564,7 +560,12 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         model = RecruitmentPosition
         fields = '__all__'
 
-    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
+    def _update_interviewers(
+        self,
+        *,
+        recruitment_position: RecruitmentPosition,
+        interviewer_objects: list[dict],
+    ) -> None:
         try:
             interviewers = []
             if interviewer_objects:
@@ -573,27 +574,62 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
                     interviewers = User.objects.filter(id__in=interviewer_ids)
             recruitment_position.interviewers.set(interviewers)
         except (TypeError, KeyError):
-            raise ValidationError('Invalid data for interviewers.')
+            raise ValidationError('Invalid data for interviewers.') from None
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position, interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:  # noqa: PLR0917
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(updated_instance, interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
 
 
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = [
+            'id',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'short_description_nb',
+            'short_description_en',
+            'long_description_nb',
+            'long_description_en',
+            'is_funksjonaer_position',
+            'default_admission_letter_nb',
+            'default_admission_letter_en',
+            'gang',
+            'recruitment',
+        ]
+
+
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+    interview = ApplicantInterviewSerializer(read_only=True)
+    recruitment_position = RecruitmentPositionForApplicantSerializer(read_only=True)
+
     class Meta:
         model = RecruitmentAdmission
         fields = [
+            'id',
             'admission_text',
             'recruitment_position',
+            'applicant_priority',
+            'interview',
             'created_at',
             'withdrawn',
         ]
@@ -649,7 +685,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         model = RecruitmentAdmission
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:  # noqa: PLR0917
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview

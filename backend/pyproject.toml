@@ -15,7 +15,7 @@ extend-exclude = [ # https://docs.astral.sh/ruff/settings/#extend-exclude
     "/database",
     "/logs",
     "/diagrams", # draw.io diagrams.net
-    "backend/root/utils/routes.py",
+    "root/utils/routes.py",
 ]
 
 
@@ -60,7 +60,7 @@ select = [
     "D204", # pydocstyle
     "D200", # pydocstyle
     "D211", # pydocstyle
-    
+    "T20", # flake8-print
 ]
 ignore = [
     "PLR0913", # pylint
@@ -76,9 +76,14 @@ ignore = [
 
 
 [tool.ruff.lint.per-file-ignores]
-"test_*.py" = ["PLR0917", "ANN201"]
+"test_*.py" = ["PLR0917", "ANN201", "ANN001"]
 "signals.py" = ["PLR0917"]
 "conftest.py" = ["PLR0917"]
+"root/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"root/settings/dev.py" = ["F405"]
+
+
 
 
 ### isort ###

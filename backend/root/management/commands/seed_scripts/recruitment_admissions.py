@@ -21,7 +21,7 @@ def seed():
     created_count = 0
 
     for position_index, position in enumerate(positions):
-        for i in range(randint(0, 5)):  # Create between 0 and 5 instances for each position
+        for _ in range(randint(0, 5)):  # Create between 0 and 5 instances for each position
             admission_data = ADMISSION_DATA.copy()
             admission_data.update(
                 {
@@ -30,7 +30,7 @@ def seed():
                     'user': users[randint(0, len(users) - 1)],  # random user from all users
                 }
             )
-            admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
+            _admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
 
             if created:
                 created_count += 1

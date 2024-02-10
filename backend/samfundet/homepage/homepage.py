@@ -46,7 +46,7 @@ def large_card(event: Event) -> HomePageElement:
     )
 
 
-def carousel(title_nb: str, title_en: str, events: list[Event]) -> HomePageElement:
+def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageElement:
     return HomePageElement(
         variation=ElementType.CAROUSEL,
         title_nb=title_nb,

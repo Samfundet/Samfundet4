@@ -218,9 +218,7 @@ class TestInformationPagesView:
 
 
 class TestVersionModel:
-    """
-    Test simple model which uses CustomBaseModel
-    """
+    """Test simple model which uses CustomBaseModel"""
 
     def test_created_by(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
@@ -680,4 +678,4 @@ def test_recruitment_admission_for_applicant(
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 1
     assert response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text
-    assert response.data[0]['recruitment_position'] == fixture_recruitment_admission.recruitment_position.id
+    assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_admission.recruitment_position.id

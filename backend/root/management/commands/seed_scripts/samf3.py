@@ -61,8 +61,8 @@ def load_image(image_name) -> Image | None:
 
 
 # Parse a row
-def add_event(image_csv, row) -> Event | None:
-    image_name = get_image_path_for_event(image_csv, row)
+def add_event(image_csv, row) -> Event | None:  # noqa: PLR0917
+    image_name = get_image_path_for_event(image_csv=image_csv, event=row)
     image = load_image(image_name)
     if not image:
         return None
@@ -98,7 +98,7 @@ def image_to_fname(image_dict) -> str:
     return f'{img_id}_{name}'
 
 
-def get_image_path_for_event(image_csv, event):
+def get_image_path_for_event(*, image_csv, event):
     for img in image_csv:
         if img['id'] == event['image_id']:
             return image_to_fname(img)

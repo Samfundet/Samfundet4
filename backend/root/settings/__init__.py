@@ -15,6 +15,6 @@ if ENV not in Environment.VALID:
     raise Exception(f"Environment variable 'ENV' is required to import this module ('{__name__}')." f'Possible values: {ENV_OPTIONS}')
 
 if ENV == Environment.DEV:
-    from .dev import *  # type: ignore[assignment] # noqa: F403,F401
+    from .dev import *  # type: ignore[assignment] # noqa: F403
 elif ENV == Environment.PROD:
-    from .prod import *  # type: ignore # noqa: F403,F401
+    from .prod import *  # type: ignore # noqa: F403

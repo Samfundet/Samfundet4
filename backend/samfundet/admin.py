@@ -559,9 +559,7 @@ class RecruitmentAdmissionInline(admin.TabularInline):
     fields = ['linked_admission_text', 'user', 'applicant_priority']
 
     def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
-        """
-        Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
-        """
+        """Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance."""
         url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
 
@@ -589,19 +587,16 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
 @admin.register(RecruitmentAdmission)
 class RecruitmentAdmissionAdmin(CustomBaseAdmin):
     sortable_by = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     list_display = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     search_fields = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',

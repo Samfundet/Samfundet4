@@ -189,9 +189,7 @@ class Event(CustomBaseModel):
 
     @property
     def total_registrations(self) -> int:
-        """
-        Total number of registrations made for registration type events.
-        """
+        """Total number of registrations made for registration type events."""
         if self.ticket_type == EventTicketType.REGISTRATION and self.registration:
             return self.registration.count
         return 0
@@ -226,7 +224,12 @@ class Event(CustomBaseModel):
     # ======================== #
 
     @staticmethod
-    def prefetch_billig(events: list[Event] | QuerySet[Event], tickets: bool = True, prices: bool = True) -> None:
+    def prefetch_billig(
+        *,
+        events: list[Event] | QuerySet[Event],
+        tickets: bool = True,
+        prices: bool = True,
+    ) -> None:
         """
         Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig.
         This is much faster than getting each billig event in separate queries when using `event.billig`
@@ -268,9 +271,7 @@ class Event(CustomBaseModel):
     # ======================== #
 
     def get_or_create_registration(self) -> EventRegistration:
-        """
-        Gets the reservation object or creates a new one if it does not exist
-        """
+        """Gets the reservation object or creates a new one if it does not exist"""
         if not self.registration:
             self.registration = EventRegistration.objects.create()
         return self.registration

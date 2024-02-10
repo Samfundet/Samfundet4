@@ -140,16 +140,16 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         # print(71, self.opts.model_name, has_module_or_obj_perm, has_action_object_perm)
         return has_module_or_obj_perm or has_action_object_perm
 
-    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
         return self.has_permission(request=request, obj=obj, action='add')
 
-    def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+    def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
         return self.has_permission(request=request, obj=obj, action='view')
 
-    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
         return self.has_permission(request=request, obj=obj, action='change')
 
-    def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+    def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
         return self.has_permission(request=request, obj=obj, action='delete')
 
     @classmethod
@@ -257,9 +257,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
 
 def autocomplete_filter(**kwargs: Any) -> AutocompleteFilter:
-    """
-    Simple AutocompleteFilter factory.
-    """
+    """Simple AutocompleteFilter factory."""
     return type('AutocompleteFilter', (AutocompleteFilter,), kwargs)
 
 
