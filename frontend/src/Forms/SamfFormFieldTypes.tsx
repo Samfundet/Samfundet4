@@ -5,8 +5,9 @@ import {
   Dropdown,
   DropdownProps,
   InputFile,
-  MultiSelect,
   InputFileProps,
+  MultiSelect,
+  MultiSelectProps,
   InputField,
   InputFieldProps,
   TextAreaField,
@@ -30,6 +31,7 @@ export type FieldProps =
   | CheckboxProps
   | InputFileProps
   | DropdownProps<number | string>
+  | MultiSelectProps<number | string>
   | InputFieldProps<InputFieldType>
   | ImagePickerProps;
 
@@ -203,6 +205,7 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
 function makeMultiSelectInput(args: SamfFormFieldArgs) {
   return (
     <MultiSelect
+      {...(args.props as MultiSelectProps<number | string>)}
       key={args.field}
       options={args.options}
       onChange={args.onChange}

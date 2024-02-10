@@ -132,8 +132,8 @@ export function ComponentPage() {
       <div>
         <MultiSelect
           options={[
-            { id: '1', value: 'tomato', label: 'tomato' },
-            { id: '2', value: 'maaan', label: 'maaan' },
+            { value: 'tomato', label: 'tomato' },
+            { value: 'maaan', label: 'maaan' },
           ]}
         />
       </div>

@@ -64,3 +64,4 @@ export type { CheckboxProps } from './Checkbox';
 export type { InputFileProps } from './InputFile';
 export type { DropdownProps } from './Dropdown';
 export type { ImagePickerProps } from './ImagePicker/ImagePicker';
+export type { MultiSelectProps } from './MultiSelect';

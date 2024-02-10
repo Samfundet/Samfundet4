@@ -6,7 +6,7 @@ import { DropDownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
 import { exists, searchFilter } from './utils';
 
-type MultiSelectProps<T> = {
+export type MultiSelectProps<T> = {
   label?: string;
   optionsLabel?: string;
   selectedLabel?: string;
