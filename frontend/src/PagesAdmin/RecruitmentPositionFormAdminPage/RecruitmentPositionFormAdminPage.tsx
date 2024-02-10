@@ -206,8 +206,8 @@ export function RecruitmentPositionFormAdminPage() {
             type="multi-select"
             label={t(KEY.recruitment_interviewers) ?? ''}
             options={users.map((user) => mapUserToMultiselectOption(user))}
-            defaultOptions={initialInterviewers}
             required={false}
+            props={{ selected: initialInterviewers }}
           />
         </div>
         <div className={styles.row}>

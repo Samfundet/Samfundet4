@@ -69,7 +69,6 @@ export type SamfFormFieldArgs = {
   label?: string; // Text label above the input
   // Custom args for options type
   defaultOption?: DropDownOption<unknown>;
-  defaultOptions?: DropDownOption<unknown>[];
   options?: DropDownOption<unknown>[];
   props?: FieldProps;
 };
@@ -210,7 +209,6 @@ function makeMultiSelectInput(args: SamfFormFieldArgs) {
       options={args.options}
       onChange={args.onChange}
       label={args.label}
-      selected={args.defaultOptions}
     />
   );
 }
