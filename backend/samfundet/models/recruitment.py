@@ -214,8 +214,8 @@ class Occupiedtimeslot(FullCleanSaveMixin):
         related_name='occupied_timeslots',
     )
     # Mostly only used for deletion, and anonymization.
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Occupied timeslots for the users for this recruitment')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Which recruitment this occupancy applies to')
 
     # Start and end time of availability
-    start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
-    end_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
+    start_dt = models.DateTimeField(help_text='Start of occupied time', null=False, blank=False)
+    end_dt = models.DateTimeField(help_text='End of occupied time', null=False, blank=False)
