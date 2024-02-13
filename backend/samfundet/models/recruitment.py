@@ -226,7 +226,7 @@ class RecruitmentAdmission(CustomBaseModel):
         """If the admission is saved without an interview, try to find an interview from a shared position."""
         if not self.applicant_priority:
             self.organize_priorities()
-            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user, recuruitment=self.recruitment).count()
+            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
         """If the admission is saved without an interview, try to find an interview from a shared position."""
