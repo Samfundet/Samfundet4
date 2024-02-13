@@ -40,15 +40,19 @@ export function RecruitmentAdmissionFormPage() {
   }, [recruitmentPosition]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    data.recruitment_position = positionID ? +positionID : 1;
-    postRecruitmentAdmission(data)
-      .then(() => {
-        navigate({ url: ROUTES.frontend.home });
-        toast.success(t(KEY.common_creation_successful));
-      })
-      .catch(() => {
-        toast.error(t(KEY.common_something_went_wrong));
-      });
+    if (positionID && !isNaN(Number(positionID))) {
+      data.recruitment_position.id = positionID;
+      postRecruitmentAdmission(data)
+        .then(() => {
+          navigate({ url: ROUTES.frontend.home });
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    } else {
+      toast.error(t(KEY.common_something_went_wrong));
+    }
   }
 
   if (loading) {
