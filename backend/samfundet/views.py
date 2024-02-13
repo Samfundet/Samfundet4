@@ -71,6 +71,7 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
+    RecruitmentUpdateUserPrioritySerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
 from .models.event import Event, EventGroup
@@ -660,6 +661,35 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
             admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user=request.user)
 
         serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
+class RecruitmentAdmissionApplicantPriorityView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentUpdateUserPrioritySerializer
+
+    def put(  # noqa: PLR0917
+        self,
+        request: Request,
+        pk: int,
+    ) -> Response:
+        direction = request.data.get('direction')
+        # Dont think we need any extra perms in this view, admin should not be able to change priority
+        admission = RecruitmentAdmission.objects.filter(
+            id=pk,
+            user=request.user,
+        ).first()
+        if not admission:
+            # Just throw error equally for not found, should hide if id exists and who it belongs to
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        admission.update_priority(direction)
+        serializer = RecruitmentAdmissionForApplicantSerializer(
+            RecruitmentAdmission.objects.filter(
+                recruitment=admission.recruitment,
+                user=request.user,
+            ),
+            many=True,
+        )
         return Response(serializer.data)
 
 

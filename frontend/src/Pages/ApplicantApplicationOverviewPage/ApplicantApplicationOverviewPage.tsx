@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Page } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForApplicant, putRecruitmentAdmission } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentAdmissionsForApplicant, putRecruitmentAdmission, putRecruitmentPriorityForUser } from '~/api';
+import { RecruitmentAdmissionDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
@@ -17,31 +17,15 @@ export function ApplicantApplicationOverviewPage() {
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
 
-  function handleChangePriority(id: number, direction: 'up' | 'down') {
-    const newAdmissions = [
-      ...admissions.sort(function (a1, a2) {
-        return a1.applicant_priority - a2.applicant_priority;
-      }),
-    ];
-    const index = newAdmissions.findIndex((admission) => admission.id === id);
-    const directionIncrement = direction === 'up' ? -1 : 1;
-    if (index == 0 && direction === 'up') return;
-    if (index === newAdmissions.length - 1 && direction === 'down') return;
-
-    const old_priority = newAdmissions[index].applicant_priority;
-    const new_priority = newAdmissions[index + directionIncrement].applicant_priority;
-
-    newAdmissions[index].applicant_priority = new_priority;
-    newAdmissions[index + directionIncrement].applicant_priority = old_priority;
-
-    // TODO: Make this a single API call
-    putRecruitmentAdmission(newAdmissions[index]);
-    putRecruitmentAdmission(newAdmissions[index + directionIncrement]).then(() => {
-      setAdmissions(newAdmissions);
-    });
+  function handleChangePriority(id: string, direction: 'up' | 'down') {
+    putRecruitmentPriorityForUser(id, { direction: direction === 'up' ? 1 : -1 } as UserPriorityDto).then(
+      (response) => {
+        setAdmissions(response.data);
+      },
+    );
   }
 
-  function upDownArrow(id: number) {
+  function upDownArrow(id: string) {
     return (
       <>
         <Icon icon="bxs:up-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'up')} />

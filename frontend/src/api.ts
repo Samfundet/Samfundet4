@@ -24,6 +24,7 @@ import {
   TextItemDto,
   UserDto,
   UserPreferenceDto,
+  UserPriorityDto,
   VenueDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
@@ -617,6 +618,21 @@ export async function getRecruitmentAdmissionsForApplicant(
       queryParams: { recruitment: recruitmentId },
     });
   const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentPriorityForUser(
+  admissionId: string,
+  data: UserPriorityDto,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_user_priority_update,
+      urlParams: { pk: admissionId },
+    });
+  const response = await axios.put(url, data, { withCredentials: true });
 
   return response;
 }

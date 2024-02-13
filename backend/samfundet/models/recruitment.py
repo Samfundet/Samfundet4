@@ -7,7 +7,9 @@ import uuid
 
 from django.db import models
 from django.utils import timezone
+from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
+
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -180,13 +182,53 @@ class RecruitmentAdmission(CustomBaseModel):
         choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
     )
 
+    def organize_priorities(self) -> None:
+        """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
+        admissions_for_user = RecruitmentAdmission.objects.filter(recruitment=self.recruitment, user=self.user).order_by('applicant_priority')
+        for i in range(len(admissions_for_user)):
+            if admissions_for_user[i].applicant_priority != i + 1:
+                admissions_for_user[i].applicant_priority = i + 1
+                admissions_for_user[i].save()
+
+    def update_priority(self, direction: int) -> None:
+        """
+        Method for moving priorites up or down,
+        positive direction indicates moving it to higher priority,
+        negative direction indicates moving it to lower priority,
+        can move n positions up or down
+
+        """
+        admissions_for_user = RecruitmentAdmission.objects.filter(recruitment=self.recruitment, user=self.user)
+        # Use order for more simple an unified for direction
+        admissions_for_user = admissions_for_user.order_by('-applicant_priority') if (direction > 0) else admissions_for_user.order_by('applicant_priority')
+        direction = abs(direction) # convert to absolute
+        for i in range(len(admissions_for_user)):
+            if admissions_for_user[i].id == self.id: # find current
+                switch = 0
+                # Find index of which to switch  priority with
+                if i + direction >= len(admissions_for_user):
+                    switch = len(admissions_for_user) - 1
+                else:
+                    switch = i + direction
+                new_priority = admissions_for_user[switch].applicant_priority
+                # Move priorites down in direction
+                for ii in range(switch, i, -1):
+                    admissions_for_user[ii].applicant_priority = admissions_for_user[ii - 1].applicant_priority
+                    admissions_for_user[ii].save()
+                # update priority
+                admissions_for_user[i].applicant_priority = new_priority
+                admissions_for_user[i].save()
+                break
+        self.organize_priorities()
+
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         """If the admission is saved without an interview, try to find an interview from a shared position."""
         if not self.applicant_priority:
-            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
+            self.organize_priorities()
+            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user, recuruitment=self.recruitment).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
         """If the admission is saved without an interview, try to find an interview from a shared position."""
