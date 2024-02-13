@@ -81,3 +81,48 @@ class TestRecruitmentAdmission:
 
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+
+    def test_priority_up(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission):
+        assert fixture_recruitment_admission.applicant_priority == 1
+        assert fixture_recruitment_admission2.applicant_priority == 2
+
+        # Test general up
+        fixture_recruitment_admission2.update_priority(1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 2
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 1
+
+        # Test up overloading
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).update_priority(2)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+        # Test up from top position does not change anything
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).update_priority(1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+    def test_priority_down(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission):
+        # intial priority
+        assert fixture_recruitment_admission.applicant_priority == 1
+        assert fixture_recruitment_admission2.applicant_priority == 2
+
+        # Test general up
+        fixture_recruitment_admission.update_priority(-1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 2
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 1
+
+        # Test up overloading
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).update_priority(-2)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+        # Test up from top position does not change anything
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).update_priority(-1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
