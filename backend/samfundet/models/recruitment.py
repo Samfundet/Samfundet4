@@ -4,10 +4,6 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from root.utils.mixins import CustomBaseModel
 
 from django.db import models
 from django.utils import timezone
@@ -178,8 +174,8 @@ class RecruitmentAdmission(CustomBaseModel):
     file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
 
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
-    
-     PRIORITY_CHOICES = [
+
+    PRIORITY_CHOICES = [
         (0, 'Not Set'),
         (1, 'Not Wanted'),
         (2, 'Wanted'),
@@ -194,7 +190,7 @@ class RecruitmentAdmission(CustomBaseModel):
     ]
 
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
-    
+
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
         choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
