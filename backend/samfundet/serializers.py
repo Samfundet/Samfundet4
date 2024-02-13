@@ -3,7 +3,6 @@ from __future__ import annotations
 import itertools
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
-from backend.root.constants import PHONE_NUMBER_REGEX
 
 from rest_framework import serializers
 
@@ -14,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
 
+from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
 from .models.event import Event, EventGroup, EventCustomTicket
