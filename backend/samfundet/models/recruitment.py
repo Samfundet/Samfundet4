@@ -7,9 +7,7 @@ import uuid
 
 from django.db import models
 from django.utils import timezone
-from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
-
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -201,9 +199,9 @@ class RecruitmentAdmission(CustomBaseModel):
         admissions_for_user = RecruitmentAdmission.objects.filter(recruitment=self.recruitment, user=self.user)
         # Use order for more simple an unified for direction
         admissions_for_user = admissions_for_user.order_by('-applicant_priority') if (direction > 0) else admissions_for_user.order_by('applicant_priority')
-        direction = abs(direction) # convert to absolute
+        direction = abs(direction)  # convert to absolute
         for i in range(len(admissions_for_user)):
-            if admissions_for_user[i].id == self.id: # find current
+            if admissions_for_user[i].id == self.id:  # find current
                 switch = 0
                 # Find index of which to switch  priority with
                 if i + direction >= len(admissions_for_user):

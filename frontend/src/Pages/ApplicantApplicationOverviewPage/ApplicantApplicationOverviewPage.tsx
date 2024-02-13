@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Page } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForApplicant, putRecruitmentAdmission, putRecruitmentPriorityForUser } from '~/api';
+import { getRecruitmentAdmissionsForApplicant, putRecruitmentPriorityForUser } from '~/api';
 import { RecruitmentAdmissionDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';

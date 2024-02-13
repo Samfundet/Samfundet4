@@ -217,6 +217,7 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
     yield organization
     organization.delete()
 
+
 @pytest.fixture
 def fixture_gang2(fixture_organization: Organization) -> Iterator[Gang]:
     organization = Gang.objects.create(
@@ -279,6 +280,7 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
     yield recruitment_position
     recruitment_position.delete()
 
+
 @pytest.fixture
 def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang2: Gang) -> Iterator[Recruitment]:
     recruitment_position2 = RecruitmentPosition.objects.create(
@@ -297,6 +299,7 @@ def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang
     )
     yield recruitment_position2
     recruitment_position2.delete()
+
 
 @pytest.fixture
 def fixture_informationpage() -> Iterator[InformationPage]:
@@ -335,6 +338,7 @@ def fixture_recruitment_admission(
     )
     yield admission
     admission.delete()
+
 
 @pytest.fixture
 def fixture_recruitment_admission2(
@@ -390,9 +394,7 @@ def fixture_table(fixture_venue: Venue) -> Iterator[Table]:
 
 
 @pytest.fixture
-def fixture_reservation(
-        fixture_venue: Venue, fixture_table: Table,
-        fixture_date_monday: datetime) -> Iterator[Reservation]:
+def fixture_reservation(fixture_venue: Venue, fixture_table: Table, fixture_date_monday: datetime) -> Iterator[Reservation]:
     reservation = Reservation.objects.create(
         venue=fixture_venue,
         table=fixture_table,
