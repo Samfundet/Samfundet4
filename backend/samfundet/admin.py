@@ -587,19 +587,16 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
 @admin.register(RecruitmentAdmission)
 class RecruitmentAdmissionAdmin(CustomBaseAdmin):
     sortable_by = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     list_display = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     search_fields = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
