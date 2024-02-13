@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import os.path
 import multiprocessing
-from typing import Iterator
+from collections.abc import Iterator
 
 from django.db import transaction
 from django.utils import dateparse
@@ -120,31 +120,30 @@ def seed() -> Iterator[tuple[int, str]]:
     # Read files
     chunk_size = 30
     max_events = 30000
-    with open(event_path, 'r') as event_file:
-        with open(image_path, 'r') as image_file:
-            events = list(reversed(list(csv.DictReader(event_file))))
-            events = events[0 : min(max_events, len(events))]
-            images = list(csv.DictReader(image_file))
-            event_models = []
+    with open(event_path) as event_file, open(image_path) as image_file:
+        events = list(reversed(list(csv.DictReader(event_file))))
+        events = events[0 : min(max_events, len(events))]
+        images = list(csv.DictReader(image_file))
+        event_models = []
 
-            # Pool parallel
-            pool = multiprocessing.Pool(10)
+        # Pool parallel
+        pool = multiprocessing.Pool(10)
 
-            for chunk in range(len(events) // chunk_size):
-                start = chunk * chunk_size
-                events_in_chunk = events[start : min(start + chunk_size, len(events))]
-                jobs = [(images, event) for event in events_in_chunk]
-                models = pool.starmap(add_event, jobs)
-                models = [e for e in models if e is not None]
-                event_models.extend(models)
+        for chunk in range(len(events) // chunk_size):
+            start = chunk * chunk_size
+            events_in_chunk = events[start : min(start + chunk_size, len(events))]
+            jobs = [(images, event) for event in events_in_chunk]
+            models = pool.starmap(add_event, jobs)
+            models = [e for e in models if e is not None]
+            event_models.extend(models)
 
-                progress = len(event_models) / len(events) * 100
-                yield progress, f'Converted {len(event_models)}/{len(events)} events'
+            progress = len(event_models) / len(events) * 100
+            yield progress, f'Converted {len(event_models)}/{len(events)} events'
 
-                # Break early
-                if len(event_models) >= max_events:
-                    break
+            # Break early
+            if len(event_models) >= max_events:
+                break
 
-            # Save django models
-            Event.objects.bulk_create(event_models)
-            yield 100, f'Saved {len(event_models)} samf3 events'
+        # Save django models
+        Event.objects.bulk_create(event_models)
+        yield 100, f'Saved {len(event_models)} samf3 events'

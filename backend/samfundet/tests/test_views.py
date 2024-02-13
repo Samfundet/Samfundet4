@@ -406,7 +406,7 @@ class TestKeyValueView:
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
-        assert any([kv['id'] == keyvalue.id for kv in data])
+        assert any(kv['id'] == keyvalue.id for kv in data)
 
     def test_crud_not_possible(self, fixture_rest_client: APIClient, fixture_superuser: User):
         """Not even superuser can do anything."""
@@ -451,7 +451,7 @@ class TestTextItemView:
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
-        assert any([kv['key'] == fixture_text_item.key for kv in data])
+        assert any(kv['key'] == fixture_text_item.key for kv in data)
 
     def test_crud_not_possible(self, fixture_rest_client: APIClient, fixture_superuser: User):
         """Not even superuser can do anything."""

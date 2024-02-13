@@ -34,15 +34,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Migrate each installed app to zero"""
-        if options['interactive']:
-            if not self.confirmation():
-                print('== ABORT ==')
-                return
+        if options['interactive'] and not self.confirmation():
+            print('== ABORT ==')
+            return
 
         for app in settings.INSTALLED_APPS:
             try:
                 appname = app.split('.')[-1]
                 management.call_command('migrate', appname, 'zero')
-            except Exception as _e:
+            # Supress since performance is not an issue here
+            except Exception as _e:  # noqa: S110
                 pass
                 # print(f"{app} failed. {_e}")

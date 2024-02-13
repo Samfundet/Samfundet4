@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Iterator
+from typing import Any
 from datetime import time, datetime
+from collections.abc import Iterator
 
 import pytest
 

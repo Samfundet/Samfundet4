@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import hmac
 import hashlib
-from typing import Any, Type
+from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -178,7 +178,7 @@ class EventPerDayView(APIView):
 
         # Organize in date dictionary.
         events_per_day: dict = {}
-        for event, serial in zip(events, serialized):
+        for event, serial in zip(events, serialized, strict=False):
             date = event.start_dt.strftime('%Y-%m-%d')
             events_per_day.setdefault(date, [])
             events_per_day[date].append(serial)
@@ -396,12 +396,12 @@ class RegisterView(APIView):
         user = serializer.validated_data['user']
         login(request=request, user=user, backend=AUTH_BACKEND)
         new_csrf_token = get_token(request=request)
-
-        return Response(
+        res = Response(
             status=status.HTTP_202_ACCEPTED,
             data=new_csrf_token,
             headers={XCSRFTOKEN: new_csrf_token},
         )
+        return res
 
 
 class UserView(APIView):
@@ -435,7 +435,7 @@ class AllGroupsView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class CsrfView(APIView):
-    permission_classes: list[Type[BasePermission]] = [AllowAny]
+    permission_classes: list[type[BasePermission]] = [AllowAny]
 
     def get(self, request: Request) -> Response:
         csrf_token = get_token(request=request)
@@ -578,7 +578,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 
-    def get_queryset(self) -> Response:
+    def get_queryset(self) -> Response | None:
         """
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
@@ -586,8 +586,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is not None:
             return RecruitmentPosition.objects.filter(recruitment=recruitment)
-        else:
-            return None
+        return None
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -595,7 +594,7 @@ class RecruitmentPositionsPerGangView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 
-    def get_queryset(self) -> Response:
+    def get_queryset(self) -> Response | None:
         """
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
@@ -604,8 +603,7 @@ class RecruitmentPositionsPerGangView(ListAPIView):
         gang = self.request.query_params.get('gang', None)
         if recruitment is not None and gang is not None:
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
-        else:
-            return None
+        return None
 
 
 class ApplicantsWithoutInterviewsView(ListAPIView):
