@@ -161,36 +161,7 @@ class RecruitmentAdmission(CustomBaseModel):
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
-    # TODO: Make secure, validate
-    image_upload = models.ImageField(help_text='Applicant image', upload_to=upload_file_recruitment_path, blank=True, null=True, verbose_name='Applicant image')
-
-    # TODO: add video, make secure, validate
-    file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
-
-    # TODO: Make secure, validate
-    image_upload = models.ImageField(help_text='Applicant image', upload_to=upload_file_recruitment_path, blank=True, null=True, verbose_name='Applicant image')
-
-    # TODO: add video, make secure, validate
-    file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
-
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
-
-    PRIORITY_CHOICES = [
-        (0, 'Not Set'),
-        (1, 'Not Wanted'),
-        (2, 'Wanted'),
-        (3, 'Reserve'),
-    ]
-
-    STATUS_CHOICES = [
-        (0, 'Nothing'),
-        (1, 'Called and Accepted'),
-        (2, 'Called and Rejected'),
-        (3, 'Automatic Rejection'),
-    ]
-
-    withdrawn = models.BooleanField(default=False, blank=True, null=True)
-
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
         choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
@@ -199,6 +170,12 @@ class RecruitmentAdmission(CustomBaseModel):
     recruiter_status = models.IntegerField(
         choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
     )
+
+    # TODO: Make secure, validate
+    image_upload = models.ImageField(help_text='Applicant image', upload_to=upload_file_recruitment_path, blank=True, null=True, verbose_name='Applicant image')
+
+    # TODO: add video, make secure, validate
+    file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
