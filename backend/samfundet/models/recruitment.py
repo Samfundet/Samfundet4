@@ -13,6 +13,7 @@ from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from .general import Gang, User, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .utils.recruitment_filename import upload_file_recruitment_path
 
 
 class Recruitment(CustomBaseModel):
@@ -171,6 +172,13 @@ class RecruitmentAdmission(CustomBaseModel):
     )
 
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
+
+    # TODO: validate
+    image_upload = models.ImageField(help_text='Applicant image', upload_to=upload_file_recruitment_path, blank=True, null=True, verbose_name='Applicant image')
+
+    # TODO: video, validate
+    file_upload = models.FileField(help_text='Applicant file', blank=True, upload_to=upload_file_recruitment_path, null=True, verbose_name='Applicant file')
+
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
         choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'

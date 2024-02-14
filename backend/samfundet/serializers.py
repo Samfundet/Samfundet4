@@ -632,6 +632,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'interview',
             'created_at',
             'withdrawn',
+            'admission_images',
+            'file_upload',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
