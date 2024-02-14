@@ -652,9 +652,9 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
 
         return recruitment_admission
 
-    def to_representation(self, instance: RecruitmentAdmission):
+    def to_representation(self, instance: RecruitmentAdmission) -> dict:
         data = super().to_representation(instance)
-        data['recruitment_positiion'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
+        data['recruitment_position'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
         return data
 
 

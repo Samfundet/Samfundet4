@@ -3,19 +3,8 @@ from __future__ import annotations
 import os
 import hmac
 import hashlib
-from typing import Any, Type
-from django.http import QueryDict
+from typing import Any
 
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from django.db.models import Count, Case, When, QuerySet
-from django.contrib.auth import login, logout
-from django.utils.encoding import force_bytes
-from django.middleware.csrf import get_token
-from django.utils.decorators import method_decorator
-
-from django.contrib.auth.models import Group
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from guardian.shortcuts import get_objects_for_user
 
 from rest_framework import status
@@ -27,6 +16,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
 
+from django.http import QueryDict
 from django.utils import timezone
 from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
