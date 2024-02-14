@@ -81,7 +81,7 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onAfterClick={() => setExpandedDropdown('')}
       >
-        {t(KEY.common_about_samfundet)}
+        {t(KEY.common_general)}
       </Link>
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_membership)}

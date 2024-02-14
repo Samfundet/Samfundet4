@@ -1,6 +1,7 @@
 export { AboutPage } from './AboutPage';
 export { AdminPage } from './AdminPage';
 export { ApiTestingPage } from './ApiTestingPage';
+export { ApplicantApplicationOverviewPage } from './ApplicantApplicationOverviewPage';
 export { ComponentPage } from './ComponentPage';
 export { EventPage } from './EventPage';
 export { EventsPage } from './EventsPage';

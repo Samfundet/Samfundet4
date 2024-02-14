@@ -12,7 +12,7 @@ POSITION_DATA = {
     'is_funksjonaer_position': False,
     'default_admission_letter_nb': 'Default Admission Letter NB',
     'default_admission_letter_en': 'Default Admission Letter EN',
-    'tags': 'tag1,tag2'
+    'tags': 'tag1,tag2',
 }
 
 
@@ -26,13 +26,15 @@ def seed():
         for recruitment_index, recruitment in enumerate(recruitments):
             for i in range(2):  # Create 2 instances for each gang and recruitment
                 position_data = POSITION_DATA.copy()
-                position_data.update({
-                    'name_nb': f'Stilling {i}',
-                    'name_en': f'Position {i}',
-                    'gang': gang,
-                    'recruitment': recruitment,
-                })
-                position, created = RecruitmentPosition.objects.get_or_create(**position_data)
+                position_data.update(
+                    {
+                        'name_nb': f'{gang.abbreviation} stilling {i}',
+                        'name_en': f'{gang.abbreviation} position {i}',
+                        'gang': gang,
+                        'recruitment': recruitment,
+                    }
+                )
+                _position, created = RecruitmentPosition.objects.get_or_create(**position_data)
 
                 if created:
                     created_count += 1
