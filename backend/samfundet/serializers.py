@@ -620,7 +620,6 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
 
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
-    recruitment_position = RecruitmentPositionForApplicantSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
@@ -629,8 +628,12 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'admission_text',
             'recruitment_position',
             'applicant_priority',
+            'withdrawn',
             'interview',
             'created_at',
+        ]
+        read_only_fields = [
+            'applicant_priority',
             'withdrawn',
         ]
 
@@ -639,17 +642,20 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
-        applicant_priority = 1
 
         recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
-            applicant_priority=applicant_priority,
         )
 
         return recruitment_admission
+
+    def to_representation(self, instance: RecruitmentAdmission):
+        data = super().to_representation(instance)
+        data['recruitment_positiion'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
+        return data
 
 
 class OccupiedtimeslotSerializer(serializers.ModelSerializer):

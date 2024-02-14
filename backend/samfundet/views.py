@@ -665,7 +665,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
+        admission = get_object_or_404(RecruitmentAdmission, user=request.user, recruitment_position=pk)
 
         user_id = request.query_params.get('user_id')
         if user_id:
