@@ -735,7 +735,7 @@ class ActiveRecruitmentsView(ListAPIView):
 
     def get_queryset(self) -> Response:
         """
-            Returns all active recruitments
+        Returns all active recruitments
         """
         # TODO Use is not completed instead of actual_application_deadline__gte
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
