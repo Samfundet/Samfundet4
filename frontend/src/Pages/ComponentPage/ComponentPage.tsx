@@ -1,8 +1,7 @@
-import { Button, Countdown, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
+import { Button, Countdown, InputField, MultiSelect, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
-import { MultiSelect } from '~/Components/MultiSelect';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
@@ -129,6 +128,14 @@ export function ComponentPage() {
             <img src={norwegianFlag}></img>
           </Countdown>
         </h2>
+      </div>
+      <div>
+        <MultiSelect
+          options={[
+            { value: 'tomato', label: 'tomato' },
+            { value: 'maaan', label: 'maaan' },
+          ]}
+        />
       </div>
     </div>
   );

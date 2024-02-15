@@ -6,6 +6,8 @@ import {
   DropdownProps,
   InputFile,
   InputFileProps,
+  MultiSelect,
+  MultiSelectProps,
   InputField,
   InputFieldProps,
   TextAreaField,
@@ -29,6 +31,7 @@ export type FieldProps =
   | CheckboxProps
   | InputFileProps
   | DropdownProps<number | string>
+  | MultiSelectProps<number | string>
   | InputFieldProps<InputFieldType>
   | ImagePickerProps;
 
@@ -47,6 +50,7 @@ export type SamfFormFieldType =
   | 'date'
   | 'time'
   | 'upload-image'
+  | 'multi-select'
   | 'upload-pdf'
   | 'phonenumber';
 
@@ -97,6 +101,7 @@ export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction |
   'upload-pdf': makeFilePickerFunction('pdf'),
   checkbox: makeCheckboxInput,
   email: makeStandardInputFunction<string>('email'),
+  'multi-select': makeMultiSelectInput,
   phonenumber: makePhoneNumberInput,
 };
 
@@ -191,6 +196,19 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
       className={styles.input_element}
       onChange={args.onChange}
       error={args.error}
+    />
+  );
+}
+
+// Multi select
+function makeMultiSelectInput(args: SamfFormFieldArgs) {
+  return (
+    <MultiSelect
+      {...(args.props as MultiSelectProps<number | string>)}
+      key={args.field}
+      options={args.options}
+      onChange={args.onChange}
+      label={args.label}
     />
   );
 }
