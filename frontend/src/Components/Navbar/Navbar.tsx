@@ -143,7 +143,7 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
-        textDecoration={activeRecruitments && styles.active_recruitment}
+        labelClassName={activeRecruitments && styles.active_recruitment}
       />
     </div>
   );
