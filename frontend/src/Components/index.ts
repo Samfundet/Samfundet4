@@ -38,6 +38,7 @@ export { RadioButton } from './RadioButton';
 export { SamfOutlet } from './SamfOutlet';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
+export { useScrollToTop } from './ScrollToTop';
 export { Select } from './Select';
 export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
@@ -57,9 +58,9 @@ export { PhoneNumberField } from './PhoneNumberField';
 export { ToolTip } from './ToolTip';
 
 // Props
-export type { TextAreaFieldProps } from './TextAreaField';
-export type { InputFieldProps } from './InputField';
 export type { CheckboxProps } from './Checkbox';
-export type { InputFileProps } from './InputFile';
 export type { DropdownProps } from './Dropdown';
 export type { ImagePickerProps } from './ImagePicker/ImagePicker';
+export type { InputFieldProps } from './InputField';
+export type { InputFileProps } from './InputFile';
+export type { TextAreaFieldProps } from './TextAreaField';
