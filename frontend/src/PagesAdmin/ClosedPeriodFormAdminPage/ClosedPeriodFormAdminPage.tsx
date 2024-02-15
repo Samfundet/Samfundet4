@@ -21,10 +21,8 @@ export function ClosedPeriodFormAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [closedPeriod, setClosedPeriod] = useState<ClosedPeriodDto | undefined>(undefined);
 
-  // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
 
-  // Stuff to do on first render.
   //TODO add permissions on render
 
   useEffect(() => {
@@ -35,13 +33,11 @@ export function ClosedPeriodFormAdminPage() {
     }
 
     getClosedPeriod(id)
-      .then((data) => {
+      .then((data: ClosedPeriodDto) => {
         setClosedPeriod(data);
         setShowSpinner(false);
-        console.log(data);
       })
       .catch((data: AxiosError) => {
-        // TODO add error pop up message?
         if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
           navigate({ url: ROUTES.frontend.admin_gangs });
         }
@@ -75,13 +71,22 @@ export function ClosedPeriodFormAdminPage() {
     }
   }
 
+  const initialData: Partial<ClosedPeriodDto> = {
+    message_nb: closedPeriod?.message_nb,
+    description_nb: closedPeriod?.description_nb,
+    message_en: closedPeriod?.message_en,
+    description_en: closedPeriod?.description_en,
+    start_dt: closedPeriod?.start_dt,
+    end_dt: closedPeriod?.end_dt,
+  };
+
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
-      <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
+      <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
           <SamfFormField
             field="message_nb"
@@ -107,8 +112,8 @@ export function ClosedPeriodFormAdminPage() {
           ></SamfFormField>
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="datetime" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="datetime" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
+          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
       </SamfForm>
     </AdminPageLayout>
