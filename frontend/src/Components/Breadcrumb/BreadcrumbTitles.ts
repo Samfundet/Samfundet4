@@ -14,7 +14,7 @@ export const BreadcrumbTitles: Record<string, KeyValues> = {
   '/control-panel/events/edit': KEY.common_edit,
   '/control-panel/events/create': KEY.command_menu_shortcut_create_event,
   // Info pages:
-  '/control-panel/information': KEY.adminpage_gangs_title,
+  '/control-panel/information': KEY.admin_information_manage_title,
   //'/control-panel/information/edit/:slugField': ,
   '/control-panel/information/create': KEY.common_create,
   // Opening hours:
