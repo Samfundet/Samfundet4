@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Iterator
+from typing import Any
 from datetime import time, datetime
+from collections.abc import Iterator
 
 import pytest
 
@@ -30,7 +31,6 @@ It's recommended to yield objects, and tear them down afterwards.
 
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
-
 
 TestCase.databases = {'default', 'billig'}
 

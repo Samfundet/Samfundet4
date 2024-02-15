@@ -362,7 +362,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         perm_objs = []
         for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
-            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))
+            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))  # noqa: PERF401
 
         return perm_objs
 
@@ -582,38 +582,80 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:  # noqa: PLR0917
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
 
 
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = [
+            'id',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'short_description_nb',
+            'short_description_en',
+            'long_description_nb',
+            'long_description_en',
+            'is_funksjonaer_position',
+            'default_admission_letter_nb',
+            'default_admission_letter_en',
+            'gang',
+            'recruitment',
+        ]
+
+
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+    interview = ApplicantInterviewSerializer(read_only=True)
+
     class Meta:
         model = RecruitmentAdmission
         fields = [
+            'id',
             'admission_text',
             'recruitment_position',
+            'applicant_priority',
+            'withdrawn',
+            'interview',
             'created_at',
+        ]
+        read_only_fields = [
+            'applicant_priority',
             'withdrawn',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
         recruitment_position = validated_data['recruitment_position']
+        # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
-        applicant_priority = 1
 
         recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
-            applicant_priority=applicant_priority,
         )
 
         return recruitment_admission
+
+    def to_representation(self, instance: RecruitmentAdmission) -> dict:
+        data = super().to_representation(instance)
+        data['recruitment_position'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
+        return data
 
 
 class OccupiedtimeslotSerializer(serializers.ModelSerializer):
@@ -650,7 +692,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         model = RecruitmentAdmission
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:  # noqa: PLR0917
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
