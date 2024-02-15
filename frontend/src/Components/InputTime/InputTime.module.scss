@@ -1,0 +1,51 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.inputTime {
+  display: flex;
+  align-items: left;
+}
+
+.number {
+  width: 2em;
+  height: 1.5em;
+  box-sizing: border-box;
+  padding: auto 5px;
+  text-align: center;
+  border: 2px solid $grey-4;
+  @include theme-dark {
+    border-color: $grey-2;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+.number::-webkit-outer-spin-button,
+.number::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+/* Firefox */
+.number[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.inputTime,
+.number {
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.number:focus {
+  outline: 3px hidden var(--active);
+  box-shadow: 0 0 2px 2px #999999;
+}
+
+.error {
+  color:$red;
+}
+
+.errorMessage {
+  font-size: 0.8em;
+  color:$red;
+}

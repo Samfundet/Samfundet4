@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import csv
 import os
+import csv
+import sys
 import urllib
 from urllib.request import urlopen
 
@@ -35,11 +36,11 @@ def image_to_fname(image_dict) -> str:
 
 # Parse image
 # Paths in samf3 are '/upload/:class/:attachment/:id_partition/:style/:filename'
-def download_image(image_dict, save_path) -> bool:
+def download_image(*, image_dict, save_path) -> bool:
     try:
         img_url = image_samf3_url(image_dict)
-        with urlopen(img_url) as uo:
-            if not uo.status == 200:
+        with urlopen(img_url) as uo:  # noqa: S310
+            if uo.status != 200:
                 return False
             with open(save_path, 'wb') as new_img:
                 new_img.write(uo.read())
@@ -53,7 +54,7 @@ def download_image(image_dict, save_path) -> bool:
 class Command(BaseCommand):
     help = 'Download samf3 images to seed folder before seeding.'
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: C901
         print('Running samf3 download images script...')
 
         # Avoid running seed in production.
@@ -71,28 +72,25 @@ class Command(BaseCommand):
         # Check if file exists
         if not os.path.exists(image_csv_path) or not os.path.exists(image_csv_path):
             print("Samf3 CSVs couldn't be found. Get them and place it in the /seed_samf3/ folder!")
-            exit(-1)
+            sys.exit(-1)
 
         print('Parsing CSV...')
         downloaded = 0
-        images_to_download = []
-        with open(event_csv_path, 'r') as event_csv:
-            with open(image_csv_path, 'r') as image_csv:
-                events = list(csv.DictReader(event_csv))
-                images = list(csv.DictReader(image_csv))
+        with open(event_csv_path) as event_csv, open(image_csv_path) as image_csv:
+            events = list(csv.DictReader(event_csv))
+            images = list(csv.DictReader(image_csv))
 
-                for event in events:
-                    images_to_download.append(event['image_id'])
+            images_to_download = [event['image_id'] for event in events]
 
-                print(f'Now downloading {len(images_to_download)} images.')
+            print(f'Now downloading {len(images_to_download)} images.')
 
-                for i, image in enumerate(reversed(images)):
-                    if image['id'] in images_to_download:
-                        save_path = os.path.join(save_root_path, image_to_fname(image))
-                        if os.path.exists(save_path) or download_image(image, save_path):
-                            downloaded += 1
-                    if i % 10 == 0:
-                        print(f' {downloaded}/{len(images_to_download)}')
+            for i, image in enumerate(reversed(images)):
+                if image['id'] in images_to_download:
+                    save_path = os.path.join(save_root_path, image_to_fname(image))
+                    if os.path.exists(save_path) or download_image(image_dict=image, save_path=save_path):
+                        downloaded += 1
+                if i % 10 == 0:
+                    print(f' {downloaded}/{len(images_to_download)}')
 
         # Done
         print('\nDownload complete.')

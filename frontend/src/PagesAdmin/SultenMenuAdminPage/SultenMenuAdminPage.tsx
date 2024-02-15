@@ -21,7 +21,7 @@ export function SultenMenuAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
-  // Get Manus and Menuitems
+  // Get Menus and Menuitems
   useEffect(() => {
     Promise.all([
       getMenuItems()
