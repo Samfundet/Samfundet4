@@ -7,7 +7,7 @@ export const BreadcrumbTitles: Record<string, KeyValues> = {
   '/control-panel': KEY.command_menu_shortcut_control_panel,
   // Gangs:
   '/control-panel/gangs': KEY.adminpage_gangs_title,
-  '/control-panel/gangs/create': KEY.command_menu_shortcut_create_event,
+  '/control-panel/gangs/create': KEY.adminpage_gangs_create,
   '/control-panel/gangs/edit': KEY.common_edit,
   // Events:
   '/control-panel/events': KEY.common_events,
