@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import datetime
-from typing import Any, Optional
+from typing import Any
 from collections import OrderedDict
 
 LOG = logging.getLogger(__name__)
@@ -80,9 +80,9 @@ class JsonFormatter(logging.Formatter):
     def __init__(
         self,
         *args: Any,
-        fields: Optional[str] = None,
+        fields: str | None = None,
         delimiter: str = DELIMITER,
-        indent: Optional[int] = None,
+        indent: int | None = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -161,7 +161,7 @@ class JsonFormatter(logging.Formatter):
     def _get_time(self, *, record: logging.LogRecord) -> str:
         return datetime.datetime.fromtimestamp(
             record.created,
-            tz=datetime.timezone.utc,
+            tz=datetime.UTC,
         ).isoformat(timespec='microseconds')
 
     def _get_logger_name(self, *, record: logging.LogRecord) -> str:

@@ -28,8 +28,8 @@ def seed():
                 position_data = POSITION_DATA.copy()
                 position_data.update(
                     {
-                        'name_nb': f'Stilling {i}',
-                        'name_en': f'Position {i}',
+                        'name_nb': f'{gang.abbreviation} stilling {i}',
+                        'name_en': f'{gang.abbreviation} position {i}',
                         'gang': gang,
                         'recruitment': recruitment,
                     }

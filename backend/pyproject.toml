@@ -2,6 +2,8 @@
 line-length = 160
 force-exclude = true # Ensure ruff respects `exclude` even when specifying path directly in CLI.
 output-format = "concise" # Pretty output.
+target-version = 'py311'
+
 extend-exclude = [ # https://docs.astral.sh/ruff/settings/#extend-exclude
     ".*",
     ".vscode",
@@ -33,12 +35,12 @@ preview = true
 explicit-preview-rules = true
 ignore-init-module-imports = true # This implicit export strategy is used in this project.
 
+
 # See list of implemented and overlapping rules from pylint.
 # https://github.com/astral-sh/ruff/issues/970
 
 select = [
     "PL", # pylint
-    "PLR0917", # pylint
     "I", # isort.
     "RUF008", # ruff
     "RUF009", # ruff
@@ -61,6 +63,21 @@ select = [
     "D200", # pydocstyle
     "D211", # pydocstyle
     "T20", # flake8-print
+    "S", # https://docs.astral.sh/ruff/rules/#flake8-bandit-s
+    "DJ", # Flake8-Django
+    "C90", # maccabe
+    "W", # pycodestyle (Warning)
+    "N", # flake8-broken-line
+    "UP",
+    "FBT",
+    "C4",
+    "T20",
+    "PYI",
+    "RET",
+    "SIM",
+    "TID",
+    "PERF",
+    "A",
 ]
 ignore = [
     "PLR0913", # pylint
@@ -72,14 +89,17 @@ ignore = [
     "PLR0911", # pylint
     "Q000", # flake8-quotes # Ruff formatter handles this.
     "Q003", # flake8-quotes # Ruff formatter handles this.
+    "S101", # Use of assert
+    "DJ001", # Django null=true on text/char fileds
+    "RET504" # Return statement
 ]
 
 
 [tool.ruff.lint.per-file-ignores]
-"test_*.py" = ["PLR0917", "ANN201", "ANN001"]
+"test_*.py" = ["PLR0917", "ANN201", "ANN001", "S106"]
 "signals.py" = ["PLR0917"]
 "conftest.py" = ["PLR0917"]
-"root/management/commands/*" = ["ANN001", "ANN201", "T201"]
+"root/management/commands/*" = ["ANN001", "ANN201", "T201", "S311", "S106"]
 "samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
 "root/settings/dev.py" = ["F405"]
 
@@ -112,3 +132,6 @@ section-order = [
 
 [tool.ruff.lint.pylint]
 max-positional-args = 1
+
+[tool.ruff.lint.mccabe]
+max-complexity = 5

@@ -3,7 +3,6 @@ from __future__ import annotations
 import math
 import time
 import types
-from typing import Optional
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -22,7 +21,7 @@ def print_progress(
     progress: int,
     prefix: str = '',
     suffix: str = '',
-    start_time: Optional[float] = None,
+    start_time: float | None = None,
 ):
     # Calculate size of bar and padding.
     percent = min(1, max(0, progress / 100.0))
@@ -39,7 +38,7 @@ def print_progress(
     print(f'\r{prefix} |{bar}| {100 * percent:.0f}% {desc}', end='\r')
 
 
-def run_seed_script(*, target: tuple, index: int, count: int):
+def run_seed_script(*, target: tuple, index: int, count: int):  # noqa: C901
     # Run specific seed script.
     prefix = f'{index + 1}/{count}'
     generator = target[1]()
@@ -76,7 +75,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('target', type=str, nargs='?', default=None)
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: C901
         print(f"Running seed script {options['target'] or ''}...\n")
 
         # Avoid running seed in production.
@@ -105,10 +104,7 @@ class Command(BaseCommand):
             # Allow endings with and without 's', e.g. events and event
             target = options['target']
             if target not in keys:
-                if target.endswith('s'):
-                    target = target[0:-1]
-                else:
-                    target = target + 's'
+                target = target[0:-1] if target.endswith('s') else target + 's'
 
             # Check if target matches
             if target in keys:
