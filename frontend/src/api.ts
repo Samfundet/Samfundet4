@@ -621,6 +621,20 @@ export async function getRecruitmentAdmissionsForApplicant(
   return response;
 }
 
+export async function getRecruitmentAdmissionForApplicant(
+  recruitment_position: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: recruitment_position },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getRecruitmentAdmissionsForGang(
   gangId: string,
   recruitmentId: string,
@@ -674,32 +688,19 @@ export async function getApplicantsWithoutInterviews(recruitmentId: string): Pro
   return response;
 }
 
-export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
-    });
-  const data = {
-    admission_text: admission.admission_text,
-    recruitment_position: admission.recruitment_position,
-  };
-  const response = await axios.post(url, data, { withCredentials: true });
-
-  return response;
-}
-
-export async function putRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+export async function putRecruitmentAdmission(
+  admission: Partial<RecruitmentAdmissionDto>,
+  admissionId: number,
+): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
-      urlParams: { pk: admission.id },
+      urlParams: { pk: admissionId },
     });
   const data = {
-    id: admission.id,
     admission_text: admission.admission_text,
-    applicant_priority: admission.applicant_priority,
+    recruitment_position: admission.recruitment_position,
   };
   const response = await axios.put(url, data, { withCredentials: true });
 

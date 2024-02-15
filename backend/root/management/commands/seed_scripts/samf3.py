@@ -61,7 +61,7 @@ def load_image(image_name) -> Image | None:
 
 
 # Parse a row
-def add_event(image_csv, row) -> Event | None:  # noqa: PLR0917
+def add_event(image_csv, row) -> Event | None:
     image_name = get_image_path_for_event(image_csv=image_csv, event=row)
     image = load_image(image_name)
     if not image:
