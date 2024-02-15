@@ -294,7 +294,7 @@ class MenuView(ModelViewSet):
 
 
 class MenuItemView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = MenuItemSerializer
     queryset = MenuItem.objects.all()
 

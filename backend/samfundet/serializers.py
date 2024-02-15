@@ -403,15 +403,14 @@ class BlogPostSerializer(CustomBaseSerializer):
         model = BlogPost
         fields = '__all__'
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
 
+class FoodPreferenceSerializer(CustomBaseSerializer):
     class Meta:
         model = FoodPreference
         fields = '__all__'
 
 
 class FoodCategorySerializer(CustomBaseSerializer):
-
     class Meta:
         model = FoodCategory
         fields = ['id', 'name_nb', 'name_en']
@@ -427,6 +426,7 @@ class MenuItemReadSerializer(CustomBaseSerializer):
 
 
 class MenuItemWriteSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True)
 
     class Meta:
         model = MenuItem
