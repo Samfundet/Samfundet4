@@ -5,6 +5,7 @@ export const themeToStyleMap = {
   basic: styles.button_basic,
   pure: styles.pure,
   samf: styles.button_samf,
+  lyche: styles.button_lyche,
   secondary: styles.button_secondary,
   success: styles.button_success,
   outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.

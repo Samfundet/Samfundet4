@@ -171,3 +171,38 @@ $panel-dark-bg: #333333;
     margin-left: 0;
   }
 }
+
+.closed_panel_content_wrapper {
+  margin-left: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+.open_panel_desktop {
+  position: fixed;
+  height: 100%;
+  padding : 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: $black-t10;
+    -webkit-transition: background-color 200ms linear;
+    -ms-transition: background-color 200ms linear;
+    transition: background-color 200ms linear;
+  }
+  &:active {
+    background-color: $black-t25;
+    -webkit-transition: background-color 1ms linear;
+    -ms-transition: background-color 1ms linear;
+    transition: background-color 1ms linear;
+  }
+}
+
+.arrow {
+  color: $grey-2;
+  background-color: transparent;
+  @include theme-dark {
+    background-color: $grey-4;
+  }
+}

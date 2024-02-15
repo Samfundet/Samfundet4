@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import random
 
 from root.utils.samfundet_random import words
+
 from samfundet.models.general import Menu, MenuItem, FoodCategory, FoodPreference
 
 preferences = [
@@ -35,10 +38,13 @@ def seed():
     FoodPreference.objects.all().delete()
 
     # Create food preferences
-    prefs = [FoodPreference.objects.create(
-        name_nb=p_name[0],
-        name_en=p_name[1],
-    ) for p_name in preferences]
+    prefs = [
+        FoodPreference.objects.create(
+            name_nb=p_name[0],
+            name_en=p_name[1],
+        )
+        for p_name in preferences
+    ]
     yield 10, f'Created {len(preferences)} food preferences'
 
     # Create menu categories
@@ -60,7 +66,7 @@ def seed():
                 description_en=words(10),
                 food_category=category,
                 price=base_price,
-                price_member=int(base_price * 0.8)
+                price_member=int(base_price * 0.8),
             )
             item.food_preferences.add(*random.sample(prefs, random.randint(0, 3)))
             menu_items.append(item)

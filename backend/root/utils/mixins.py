@@ -1,10 +1,17 @@
 from __future__ import annotations
+
 import sys
 import copy
 import logging
 from typing import Any, Union
 
+from rest_framework import serializers
+
+from django.db import models
+from django.utils import timezone
 from django.db.models import DEFERRED, Model
+
+from root.constants import request_contextvar
 
 LOG = logging.getLogger(__name__)
 
@@ -59,7 +66,7 @@ class FieldTrackerMixin(Model):
         if self.ftm_get_tracked_fields() == '__all__':
             # Fetch field_names from meta.
             track_fields = [field.attname for field in self._meta.fields if field.attname not in self._FTM_FIELD_BLACKLIST]
-            setattr(self, self._FTM_TRACK_FIELDS_NAME, track_fields)  # noqa: FKA01
+            setattr(self, self._FTM_TRACK_FIELDS_NAME, track_fields)
 
     @staticmethod
     def ftm_log_parse(*, fields: dict) -> dict:
@@ -81,11 +88,11 @@ class FieldTrackerMixin(Model):
     def ftm_get_tracked_fields(self) -> Union[list[str], str]:
         """Returns a list of all field names this mixin tracks."""
         # ftm_track_fields can be '__all__'.
-        return getattr(self, self._FTM_TRACK_FIELDS_NAME, [])  # noqa: FKA01
+        return getattr(self, self._FTM_TRACK_FIELDS_NAME, [])
 
     def ftm_get_loaded_fields(self) -> dict:
         """Returns the cached tracked values currently on the instance."""
-        return getattr(self, self._FTM_LOADED_FIELDS_NAME, {})  # noqa: FKA01
+        return getattr(self, self._FTM_LOADED_FIELDS_NAME, {})
 
     def ftm_get_dirty_fields(self) -> tuple[dict, dict]:
         """Detects all changes, return old and new states."""
@@ -122,7 +129,7 @@ class FieldTrackerMixin(Model):
             # Update loaded_fields after save.
             loaded_fields = self.ftm_get_loaded_fields()
             loaded_fields.update(dirty_fields_new)
-            setattr(self, self._FTM_LOADED_FIELDS_NAME, loaded_fields)  # noqa: FKA01
+            setattr(self, self._FTM_LOADED_FIELDS_NAME, loaded_fields)
 
             # Log creation or update.
             if is_creation:  # Log creation.
@@ -133,9 +140,7 @@ class FieldTrackerMixin(Model):
             else:  # Log changes.
                 LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
                 LOG.info(
-                    f'{self} has changed:\n\n'
-                    f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
-                    f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
+                    f'{self} has changed:\n\n' f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n' f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
                 )
         except Exception as e:
             # Get all changes.
@@ -149,17 +154,17 @@ class FieldTrackerMixin(Model):
             raise e
 
     @classmethod
-    def from_db(cls, db, field_names, values):  # type: ignore # noqa: ANN001,ANN206 # Unknown types.
+    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:  # noqa: PLR0917
         """Extends django 'from_db' to set 'loaded_fields'."""
 
-        instance = super().from_db(db, field_names, values)  # noqa: FKA01
+        instance = super().from_db(db, field_names, values)
 
         track_fields: list[str] = instance.ftm_get_tracked_fields()
 
         loaded_fields = {field: value for field, value in zip(field_names, values) if field in track_fields and value is not DEFERRED}
 
         # Set loaded_fields on instance.
-        setattr(instance, instance._FTM_LOADED_FIELDS_NAME, loaded_fields)  # noqa: FKA01
+        setattr(instance, instance._FTM_LOADED_FIELDS_NAME, loaded_fields)
 
         return instance
 
@@ -173,3 +178,105 @@ class FullCleanSaveMixin(Model):
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class CustomBaseModel(FullCleanSaveMixin):
+    """
+    Basic model which will contains necessary version info of a model:
+    With by who and when it was updated and created.
+    Also keeps a counter for how many times it has been updated
+    """
+
+    version = models.PositiveIntegerField(
+        default=0,
+        null=True,
+        blank=True,
+        editable=False,
+    )
+
+    created_by = models.ForeignKey(
+        'User',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        editable=False,
+        related_name='+',  # allows only one way relation, UserModel cant have different models with same related name
+    )
+    created_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        editable=False,
+    )
+
+    updated_by = models.ForeignKey(
+        'User',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        editable=False,
+        related_name='+',  # allows only one way relation
+    )
+    updated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        editable=False,
+    )
+
+    class Meta:
+        abstract = True
+
+    def is_edited(self) -> bool:
+        """Method for checking if object is updated or not"""
+        return self.updated_at != self.created_at
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """
+        User should always be provided, but that can be ignored.
+        Will update and set which user interacted with it when it was saved.
+        """
+        self.full_clean()
+        self.version += 1
+        self.updated_at = timezone.now()
+        request = request_contextvar.get()
+        user = request.user if request else None
+        if user:
+            self.updated_by = user
+            if self.created_by is None:
+                self.created_by = user
+        if not self.created_at:
+            # instead of auto add, since they are added at different ticks
+            self.created_at = self.updated_at
+
+        super().save(*args, **kwargs)
+
+
+class CustomBaseSerializer(serializers.ModelSerializer):
+    """
+    Base serializer, sets version fields to read_only
+    Adds validation errors from models clean
+    Context of request needs to be passed
+    """
+
+    created_by = serializers.SerializerMethodField(method_name='get_created_by', read_only=True)
+    updated_by = serializers.SerializerMethodField(method_name='get_updated_by', read_only=True)
+
+    class Meta:
+        model = CustomBaseModel
+        read_only_fields = (
+            'version',
+            'created_at',
+            'created_by',
+            'updated_at',
+            'updated_by',
+        )
+
+    def get_created_by(self, obj: CustomBaseModel) -> str | None:
+        return obj.created_by.__str__() if obj.created_by else None
+
+    def get_updated_by(self, obj: CustomBaseModel) -> str | None:
+        return obj.updated_by.__str__() if obj.updated_by else None
+
+    def validate(self, attrs: dict) -> dict:
+        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
+        instance.full_clean()
+        return attrs

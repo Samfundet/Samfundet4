@@ -15,6 +15,7 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentDto,
@@ -56,12 +57,14 @@ export async function logout(): Promise<AxiosResponse> {
 
 export async function register(
   username: string,
+  email: string,
+  phone_number: string,
   firstname: string,
   lastname: string,
   password: string,
 ): Promise<number> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__register;
-  const data = { username, firstname, lastname, password };
+  const data = { username, email, phone_number, firstname, lastname, password };
   const response = await axios.post(url, data, { withCredentials: true });
 
   // Django rotates csrftoken after login, set new token received.
@@ -134,8 +137,8 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(id: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
+export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
   return response.data;
 }
@@ -248,7 +251,7 @@ export async function getMenu(pk: string | number): Promise<MenuDto> {
 }
 
 export async function getMenuItems(): Promise<MenuItemDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_items_list;
   const response = await axios.get<MenuItemDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -556,6 +559,27 @@ export async function getRecruitmentPositionsGang(
   return response;
 }
 
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__occupied_timeslots,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postOccupiedTimeslots(
+  timeslots: OccupiedTimeSlotDto[],
+): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
+  const response = await axios.post(url, timeslots, { withCredentials: true });
+
+  return response;
+}
+
 export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
   const url =
     BACKEND_DOMAIN +
@@ -661,6 +685,23 @@ export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdm
     recruitment_position: admission.recruitment_position,
   };
   const response = await axios.post(url, data, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: admission.id },
+    });
+  const data = {
+    id: admission.id,
+    admission_text: admission.admission_text,
+    applicant_priority: admission.applicant_priority,
+  };
+  const response = await axios.put(url, data, { withCredentials: true });
 
   return response;
 }
