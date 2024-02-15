@@ -554,8 +554,7 @@ class AssignGroupView(APIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentView(ModelViewSet):
-    # TODO: Verify that object is valid (that the times make sense)
-    permission_classes = [AllowAny]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import uuid
+from collections import defaultdict
 
 from django.db import models
 from django.utils import timezone
@@ -18,55 +19,63 @@ from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
-    visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
+    visible_from = models.DateTimeField(null=False, blank=False, help_text='When it becomes visible for applicants')
     actual_application_deadline = models.DateTimeField(
-        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'
+        null=False,
+        blank=False,
+        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
     )
-    shown_application_deadline = models.DateTimeField(help_text='The deadline that is shown to applicants')
-    reprioritization_deadline_for_applicant = models.DateTimeField(help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
-    organization = models.ForeignKey(to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
+    shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
+    reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
+    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
-
-        if not all(
-            [
-                self.visible_from,
-                self.actual_application_deadline,
-                self.shown_application_deadline,
-                self.reprioritization_deadline_for_applicant,
-                self.reprioritization_deadline_for_groups,
-            ]
-        ):
-            raise ValidationError('Missing datetime')
-
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
         # All times should be in the future.
         now = timezone.now()
-        if any(
-            [
-                self.actual_application_deadline < now,
-                self.shown_application_deadline < now,
-                self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now,
-            ]
-        ):
-            raise ValidationError('All times should be in the future')
+
+        for field in [
+            'actual_application_deadline',
+            'shown_application_deadline',
+            'reprioritization_deadline_for_applicant',
+            'reprioritization_deadline_for_groups',
+        ]:
+            if getattr(self, field) < now:
+                errors[field].append(self.NOT_IN_FUTURE_ERROR)
 
         if self.actual_application_deadline < self.visible_from:
-            raise ValidationError('Visible from should be before application deadline')
+            errors['actual_application_deadline'].append(self.SHOWN_BEFORE_VISIBLE_ERROR)
+            errors['visible_from'].append(self.VISIBLE_AFTER_SHOWN_ERROR)
 
         if self.actual_application_deadline < self.shown_application_deadline:
-            raise ValidationError('Shown application deadline should be before the actual application deadline')
+            errors['actual_application_deadline'].append(self.ACTUAL_BEFORE_SHOWN_ERROR)
+            errors['shown_application_deadline'].append(self.SHOWN_AFTER_ACTUAL_ERROR)
 
         if self.reprioritization_deadline_for_applicant < self.actual_application_deadline:
-            raise ValidationError('Actual application deadline should be before reprioritization deadline for applicants')
+            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
+            errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
 
         if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
+            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
+
+        raise ValidationError(errors)
+
+    # Error messages
+    NOT_IN_FUTURE_ERROR = 'Time should be in the future'
+    SHOWN_BEFORE_VISIBLE_ERROR = 'Shown application deadline should be after visible'
+    VISIBLE_AFTER_SHOWN_ERROR = 'Visible from should be before shown application deadline'
+    ACTUAL_BEFORE_SHOWN_ERROR = 'Actual application deadline should be after the shown application deadline'
+    SHOWN_AFTER_ACTUAL_ERROR = 'Shown application deadline should be before the actual application deadline'
+    REPRIORITIZATION_BEFORE_ACTUAL = 'Reprioritization application deadline should be after actual deadline for applicants'
+    ACTUAL_AFTER_REPRIORITIZATION = 'Actual application deadline should be before reprioritization deadline for applicants'
+    REPRIORITIZATION_GROUP_BEFORE_APPLICANT = 'Reprioritization deadline for groups should be after reprioritization deadline for applicants'
+    REPRIORITIZATION_APPLICANT_AFTER_GROUP = 'Reprioritization deadline for applicants should be before reprioritization deadline for groups'
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'

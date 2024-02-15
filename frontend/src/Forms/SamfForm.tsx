@@ -13,7 +13,7 @@ import { ButtonDisplay, ButtonTheme } from '~/Components/Button';
 // Action on form state
 type SamfFormAction<U> = {
   field: string;
-  value: U;
+  value?: U;
   error: string | boolean;
 };
 
@@ -69,18 +69,30 @@ function samfFormReducer<T extends SamfFormModel, U>(
     };
   }
   // Change state of a field
-  return {
-    ...state,
-    values: {
-      ...state.values,
-      [action.field]: action.value,
-    },
-    errors: {
-      ...state.errors,
-      [action.field]: action.error,
-    },
-    allFields: Array.from(new Set(state.allFields.concat(action.field))),
-  };
+  let newState = { ...state, allFields: Array.from(new Set(state.allFields.concat(action.field))) };
+  if (action.value) {
+    newState = {
+      ...newState,
+      values: {
+        ...state.values,
+        [action.field]: action.value,
+      },
+      errors: {
+        ...state.errors,
+        [action.field]: action.error,
+      },
+    };
+  }
+  if (action.error) {
+    newState = {
+      ...newState,
+      errors: {
+        ...state.errors,
+        [action.field]: action.error,
+      },
+    };
+  }
+  return newState;
 }
 
 // ================================== //
@@ -102,6 +114,7 @@ type SamfFormProps<T> = {
   onSubmit?(data: Partial<T>): void;
   children: ReactNode;
   devMode?: boolean; // Dev/debug mode.
+  externalErrors?: object;
   isDisabled?: boolean; // If true, disables submit button
 };
 
@@ -117,6 +130,7 @@ export function SamfForm<T>({
   onChange,
   onValidityChanged,
   onSubmit,
+  externalErrors,
   children,
   devMode = false,
   isDisabled = false,
@@ -146,6 +160,15 @@ export function SamfForm<T>({
       break;
     }
   }
+
+  useEffect(() => {
+    if (externalErrors) {
+      for (const [field, errors] of Object.entries(externalErrors)) {
+        const newError = typeof errors === 'string' ? errors : errors.join('\n');
+        dispatch({ field: field, error: newError } as SamfFormAction<string>);
+      }
+    }
+  }, [externalErrors]);
 
   // Submit values to parent
   function handleOnClickSubmit(e?: React.MouseEvent<HTMLElement>) {
