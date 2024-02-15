@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import pytest
 
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.recruitment import Recruitment, Organization
+from samfundet.models.recruitment import Recruitment, Organization, RecruitmentAdmission
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.
@@ -41,7 +44,6 @@ def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> R
 
 
 class TestRecruitmentClean:
-
     def test_all_datetimes_is_in_the_future(self, fixture_org):
         past = timezone.now() - timezone.timedelta(days=2)
 
@@ -83,3 +85,14 @@ class TestRecruitmentClean:
         e = dict(error.value)
         assert Recruitment.ACTUAL_BEFORE_SHOWN_ERROR in e['actual_application_deadline']
         assert Recruitment.SHOWN_AFTER_ACTUAL_ERROR in e['shown_application_deadline']
+
+class TestRecruitmentAdmission:
+    def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+        assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+
+        fixture_recruitment_admission.withdrawn = True
+        fixture_recruitment_admission.save()
+
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED

@@ -4,6 +4,7 @@ import { Button } from '~/Components';
 import { usePermission } from '~/hooks';
 import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
+import { ButtonDisplay, ButtonTheme } from '~/Components/Button';
 
 // ================================== //
 //    Context & State Management      //
@@ -104,6 +105,8 @@ type SamfFormProps<T> = {
   validateOnInit?: boolean;
   validateOn?: ValidationMode;
   submitText?: string;
+  submitButtonTheme?: ButtonTheme;
+  submitButtonDisplay?: ButtonDisplay;
   noStyle?: boolean;
   className?: string;
   onChange?<T>(data: Partial<T>): void;
@@ -120,6 +123,8 @@ export function SamfForm<T>({
   validateOnInit = false,
   validateOn = 'submit',
   submitText,
+  submitButtonTheme = 'green',
+  submitButtonDisplay = 'basic',
   noStyle,
   className,
   onChange,
@@ -238,7 +243,8 @@ export function SamfForm<T>({
               <Button
                 preventDefault={true}
                 type="submit"
-                theme="green"
+                theme={submitButtonTheme}
+                display={submitButtonDisplay}
                 rounded={true}
                 onClick={handleOnClickSubmit}
                 disabled={disableSubmit}

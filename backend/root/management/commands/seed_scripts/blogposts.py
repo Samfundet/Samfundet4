@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import random
+
 from root.utils.samfundet_random import words
 
-from samfundet.models.general import BlogPost, Image
+from samfundet.models.general import Image, BlogPost
 
 COUNT = 10
 

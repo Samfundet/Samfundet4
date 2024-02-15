@@ -18,12 +18,12 @@ $bg-dark: #272727;
 }
 
 .venue_box {
-  border-radius: .4em;
+  border-radius: 0.4em;
   background-color: $white;
   border: 1px solid $grey-4;
   overflow: hidden;
   min-width: 16em;
-  max-width: 16em;
+  max-width: 20em;
 
   @include theme-dark {
     border-color: $black;
@@ -33,7 +33,7 @@ $bg-dark: #272727;
 }
 
 .venue_header {
-  padding: .5em .75em;
+  padding: 0.5em 0.75em;
   border-bottom: 1px solid $header-border;
   font-size: 1.25em;
   font-weight: 700;
@@ -54,7 +54,7 @@ $bg-dark: #272727;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  gap: .5em;
+  gap: 0.5em;
 }
 
 .day_row {
@@ -72,9 +72,5 @@ $bg-dark: #272727;
 
 .day_edit {
   @include flex-row;
-  gap: .5em;
-}
-
-.invalid {
-  border: 2px solid red;
+  gap: 0.5em;
 }
