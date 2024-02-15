@@ -86,6 +86,7 @@ class TestRecruitmentClean:
         assert Recruitment.ACTUAL_BEFORE_SHOWN_ERROR in e['actual_application_deadline']
         assert Recruitment.SHOWN_AFTER_ACTUAL_ERROR in e['shown_application_deadline']
 
+
 class TestRecruitmentAdmission:
     def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET

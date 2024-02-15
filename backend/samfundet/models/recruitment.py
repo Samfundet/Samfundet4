@@ -4,11 +4,11 @@
 from __future__ import annotations
 
 import uuid
-
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from django.db import models
 from collections import defaultdict
+
+from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -23,7 +23,7 @@ class Recruitment(CustomBaseModel):
     actual_application_deadline = models.DateTimeField(
         null=False,
         blank=False,
-        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'
+        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
     )
     shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
     reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')

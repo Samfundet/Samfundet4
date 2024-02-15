@@ -553,7 +553,7 @@ class AssignGroupView(APIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 

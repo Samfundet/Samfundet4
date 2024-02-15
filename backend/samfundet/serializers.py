@@ -525,7 +525,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
         try:
             instance.clean()
         except ValidationError as e:
-            raise serializers.ValidationError(e.args[0])
+            raise serializers.ValidationError(e.args[0]) from None
         return attrs
 
 
