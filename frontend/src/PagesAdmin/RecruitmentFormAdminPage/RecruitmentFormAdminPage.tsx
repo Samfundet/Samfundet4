@@ -84,7 +84,7 @@ export function RecruitmentFormAdminPage() {
   }
 
   function handleOnSubmit(data: RecruitmentDto) {
-    setExternalErrors([]);
+    setExternalErrors({});
     if (id) {
       // Update page.
       putRecruitment(id, data)
