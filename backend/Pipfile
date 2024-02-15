@@ -17,23 +17,20 @@ name = "pypi"
 "pipenv:where" = "pipenv --where" # Show location of virtual environment.
 "pipenv:rm" = "pipenv --rm" # Completely remove virtual environment.
 "pipenv:shell" = "pipenv shell" # Opens a shell within the virtual environment.
+"ruff:check" = "pipenv run ruff check ." # Run ruff check linter on project.
+"ruff:format:check" = "pipenv run ruff format --check ." # Dry-run ruff format on all files in the project.
+"ruff:format:apply" = "pipenv run ruff format ." # Apply ruff format on all files in the project.
 "mypy:run" = "pipenv run mypy --config-file mypy.ini ."
 "migrations:make" = "pipenv run python manage.py makemigrations --noinput"
 "migrations:verify" = "pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2"
 "migrations:apply" = "pipenv run python manage.py migrate"
 "static:collect" = "pipenv run python manage.py collectstatic --noinput"
-"bandit:run" = "pipenv run bandit --recursive --ini .bandit ."
-"flake8:run" = "pipenv run flake8 --config=.flake8 ."
-"yapf:diff" = "pipenv run yapf --parallel --recursive --diff ." # Dry-run yapf on all files in the project.
-"yapf:apply" = "pipenv run yapf --parallel --recursive -i ." # Applies yapf to all files in the project.
 "pytest:run" = "pipenv run pytest"
-"pipeline:run" = "bash -c \"pipenv run mypy:run && pipenv run yapf:diff && pipenv run migrations:verify && pipenv run bandit:run && pipenv run flake8:run && pipenv run pytest:run\""
+"pipeline:run" = "bash -c \"pipenv run mypy:run && pipenv run ruff:check && pipenv run ruff:format:check && pipenv run migrations:verify && pipenv run pytest:run\""
 "seed:run" = "pipenv run python manage.py seed"
 
 [packages]
 django = "*"
-pytest = "*"
-pytest-django = "*"
 django-extensions = "*"
 django-environ = "*"
 djangorestframework = "*"
@@ -41,23 +38,20 @@ django-cors-headers = "*"
 dataclasses-json = "*"
 django-guardian = "*"
 pillow = "*"
-debugpy = "*"
 gunicorn = "*"
 django-admin-autocomplete-filter = "*"
 django-notifications-hq = "*"
 psycopg = {extras = ["c"], version = "*"}
 
 [dev-packages]
-yapf = "*"
 mypy = "*"
+ruff = "*"
 bandit = "*"
 pillow = "*"
-flake8 = "~=5.0"
-flake8-annotations = "*"
-# flake8-keyword-arguments = "*"
-flake8-print = "*"
-flake8-quotes = "*"
+debugpy = "*"
 requests = "*"
+pytest = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.11.2" # from .python-version

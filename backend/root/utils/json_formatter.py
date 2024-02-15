@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import json
 import logging
 import datetime
-from typing import Any, Optional
+from typing import Any
 from collections import OrderedDict
 
 LOG = logging.getLogger(__name__)
@@ -78,9 +80,9 @@ class JsonFormatter(logging.Formatter):
     def __init__(
         self,
         *args: Any,
-        fields: Optional[str] = None,
+        fields: str | None = None,
         delimiter: str = DELIMITER,
-        indent: Optional[int] = None,
+        indent: int | None = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -116,7 +118,7 @@ class JsonFormatter(logging.Formatter):
     # --------------------------------------------------------------------
 
     def _get_record_items(self, *, record: logging.LogRecord) -> dict[str, Any]:
-        """ Wrapper function to get specified default fields and all extra fields from LogRecord. """
+        """Wrapper function to get specified default fields and all extra fields from LogRecord."""
         record_items = OrderedDict({k: v for k, v in record.__dict__.items() if k in self.fields})
         # Need to manually input message because the record field is named 'msg' and will not be
         # recognized as part any option in self.fields.
@@ -128,7 +130,7 @@ class JsonFormatter(logging.Formatter):
         return record_items
 
     def _get_custom_items(self, *, record: logging.LogRecord) -> dict[str, Any]:
-        """ Wrapper function to get custom implemented fields. """
+        """Wrapper function to get custom implemented fields."""
         custom_fields = OrderedDict()
         # Call the getter for each specified customised field.
         for field in self.fields:
@@ -137,7 +139,7 @@ class JsonFormatter(logging.Formatter):
         return custom_fields
 
     def _get_extra_items(self, *, record: logging.LogRecord) -> dict[str, Any]:
-        """ Wrapper function to get extra fields. """
+        """Wrapper function to get extra fields."""
         # Call str() on each field.
         # We do this because the input is unknown and may not be serializable, causing errors.
         # Calling str() returns the string representation of any object.
@@ -149,7 +151,7 @@ class JsonFormatter(logging.Formatter):
     # --------------------------------------------------------------------
 
     def _is_valid_fields(self, *, fields: list[str]) -> bool:
-        """ Check if specified fields are all possible options, i.e. custom or default fields. """
+        """Check if specified fields are all possible options, i.e. custom or default fields."""
         return all(field in self.ALL_FIELDS for field in fields)
 
     # --------------------------------------------------------------------
@@ -159,7 +161,7 @@ class JsonFormatter(logging.Formatter):
     def _get_time(self, *, record: logging.LogRecord) -> str:
         return datetime.datetime.fromtimestamp(
             record.created,
-            tz=datetime.timezone.utc,
+            tz=datetime.UTC,
         ).isoformat(timespec='microseconds')
 
     def _get_logger_name(self, *, record: logging.LogRecord) -> str:
@@ -173,7 +175,7 @@ class JsonFormatter(logging.Formatter):
     # --------------------------------------------------------------------
 
     def format(self, record: logging.LogRecord) -> str:
-        """ Override with custom json formatting. """
+        """Override with custom json formatting."""
 
         # Prepend custom fields.
         # NOTE: Custom fields will be overwritten by any collision with default and extra fields.

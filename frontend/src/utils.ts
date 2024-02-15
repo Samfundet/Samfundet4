@@ -173,6 +173,21 @@ export function utcTimestampToLocal(time: string | undefined): string {
 }
 
 /**
+ * Converts a UTC timestring from django to
+ * a finer time
+ * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @returns timestamp in local format, eg. '2023-04-05T20:15'
+ */
+export function niceDateTime(time: string | undefined): string | undefined {
+  const date = new Date(time ?? '');
+  if (!isNaN(date.getTime())) {
+    const dateString = date.toUTCString();
+    return dateString.substring(0, dateString.length - 3);
+  }
+  return time;
+}
+
+/**
  * Generic query function for DTOs. Returns elements from array matching query.
  * @param query String query to search with
  * @param elements Array of DTO elements
