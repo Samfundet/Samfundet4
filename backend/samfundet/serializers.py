@@ -520,6 +520,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
         model = Recruitment
         fields = '__all__'
 
+
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
 
