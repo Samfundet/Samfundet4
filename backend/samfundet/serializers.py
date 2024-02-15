@@ -492,31 +492,11 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = '__all__'
-
-
 class MenuItemSerializer(CustomBaseSerializer):
     food_preferences = FoodPreferenceSerializer(many=True)
 
     class Meta:
         model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
         fields = '__all__'
 
 

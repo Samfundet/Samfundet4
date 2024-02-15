@@ -7,8 +7,7 @@ from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
 
-from rest_framework import status
-from rest_framework import serializers
+from rest_framework import status, serializers
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
@@ -54,8 +53,6 @@ from .serializers import (
     BlogPostSerializer,
     GangTypeSerializer,
     KeyValueSerializer,
-    MenuItemReadSerializer,
-    MenuItemWriteSerializer,
     MenuItemSerializer,
     RegisterSerializer,
     TextItemSerializer,
@@ -64,9 +61,11 @@ from .serializers import (
     RecruitmentSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
+    MenuItemReadSerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
     InterviewRoomSerializer,
+    MenuItemWriteSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
