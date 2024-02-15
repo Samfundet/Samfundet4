@@ -33,7 +33,7 @@ class SamfundetDatabaseRouter:
             return 'billig'
         return None
 
-    def allow_migrate(  # noqa: PLR0917
+    def allow_migrate(
         self,
         db: str,
         app_label: str,

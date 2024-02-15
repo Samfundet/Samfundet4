@@ -16,6 +16,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
 
+from django.http import QueryDict
 from django.utils import timezone
 from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
@@ -644,8 +645,33 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     serializer_class = RecruitmentAdmissionForApplicantSerializer
     queryset = RecruitmentAdmission.objects.all()
 
+    def update(self, request: Request, pk: int) -> Response:
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        data['recruitment_position'] = pk
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            existing_admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
+            if existing_admission:
+                existing_admission.admission_text = serializer.validated_data['admission_text']
+                existing_admission.save()
+                serializer = self.get_serializer(existing_admission)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request: Request, pk: int) -> Response:
+        admission = get_object_or_404(RecruitmentAdmission, user=request.user, recruitment_position=pk)
+
+        user_id = request.query_params.get('user_id')
+        if user_id:
+            # TODO: Add permissions
+            admission = RecruitmentAdmission.objects.filter(recruitment_position=pk, user_id=user_id).first()
+        serializer = self.get_serializer(admission)
+        return Response(serializer.data)
+
     def list(self, request: Request) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
+        """Returns a list of all the admissions for a user for a specified recruitment"""
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')
 

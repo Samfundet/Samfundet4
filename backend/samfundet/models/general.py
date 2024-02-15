@@ -137,7 +137,7 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: Model | None = None) -> bool:  # noqa: PLR0917
+    def has_perm(self, perm: str, obj: Model | None = None) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`

@@ -171,7 +171,7 @@ class RecruitmentAdmission(CustomBaseModel):
     )
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
-    applicant_priority = models.IntegerField(help_text='The priority of the admission')
+    applicant_priority = models.IntegerField(null=True, blank=True, help_text='The priority of the admission')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 

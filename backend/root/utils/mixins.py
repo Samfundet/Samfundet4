@@ -154,7 +154,7 @@ class FieldTrackerMixin(Model):
         return dirty_fields_old, dirty_fields_new
 
     @classmethod
-    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:  # noqa: PLR0917
+    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:
         """Extends django 'from_db' to set 'loaded_fields'."""
 
         instance = super().from_db(db, field_names, values)

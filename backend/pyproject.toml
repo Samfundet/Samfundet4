@@ -41,7 +41,6 @@ ignore-init-module-imports = true # This implicit export strategy is used in thi
 
 select = [
     "PL", # pylint
-    "PLR0917", # pylint
     "I", # isort.
     "RUF008", # ruff
     "RUF009", # ruff
