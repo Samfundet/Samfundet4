@@ -7,7 +7,7 @@ from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
 
-from rest_framework import status, serializers
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
@@ -61,11 +61,9 @@ from .serializers import (
     RecruitmentSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
-    MenuItemReadSerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
     InterviewRoomSerializer,
-    MenuItemWriteSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
@@ -296,12 +294,6 @@ class MenuItemView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = MenuItemSerializer
     queryset = MenuItem.objects.all()
-
-    def get_serializer_class(self) -> serializers.ModelSerializer:
-        if self.action in ['create', 'update']:
-            return MenuItemWriteSerializer
-
-        return MenuItemReadSerializer
 
 
 class FoodCategoryView(ModelViewSet):

@@ -416,8 +416,8 @@ class FoodCategorySerializer(CustomBaseSerializer):
         fields = ['id', 'name_nb', 'name_en']
 
 
-class MenuItemReadSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)
+class MenuItemSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)  # Todo make this work with post
     food_category = FoodCategorySerializer(read_only=True)
 
     class Meta:
@@ -425,16 +425,8 @@ class MenuItemReadSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class MenuItemWriteSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
 class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemReadSerializer(many=True)
+    menu_items = MenuItemSerializer(many=True)
 
     class Meta:
         model = Menu
@@ -490,14 +482,6 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 #            Sulten               #
 # =============================== #
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
 
 
 class TableSerializer(CustomBaseSerializer):
