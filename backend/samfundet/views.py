@@ -638,7 +638,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     queryset = RecruitmentAdmission.objects.all()
 
     def update(self, request: Request, pk: int) -> Response:
-        data = request.data.dict() if type(request.data) == QueryDict else request.data
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         data['recruitment_position'] = pk
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
@@ -648,10 +648,8 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
                 existing_admission.save()
                 serializer = self.get_serializer(existing_admission)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                serializer.save()
-
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
@@ -665,9 +663,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         return Response(serializer.data)
 
     def list(self, request: Request) -> Response:
-        """
-        Returns a list of all the admissions for a user for a specified recruitment
-        """
+        """Returns a list of all the admissions for a user for a specified recruitment"""
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')
 

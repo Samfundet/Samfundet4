@@ -582,7 +582,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:  # noqa: PLR0917
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
@@ -692,7 +692,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         model = RecruitmentAdmission
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:  # noqa: PLR0917
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
