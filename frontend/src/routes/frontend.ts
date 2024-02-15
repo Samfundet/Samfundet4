@@ -14,8 +14,11 @@ export const ROUTES_FRONTEND = {
   information_page_list: '/information/',
   information_page_detail: '/information/:slugField/',
   saksdokumenter: '/saksdokumenter/',
+  // Recruitment:
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
+  recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
+  contact: '/contact',
   // ==================== //
   //        Sulten        //
   // ==================== //
@@ -68,6 +71,7 @@ export const ROUTES_FRONTEND = {
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId',
   admin_recruitment_gang_position_applicants_interview_notes:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/notesId', //fix when backend is done
+  admin_sulten_menu: '/control-panel/lyche/menu',
   // ==================== //
   //      Development     //
   // ==================== //

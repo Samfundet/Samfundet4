@@ -22,6 +22,7 @@ export { ImageList } from './ImageList';
 export { ImageQuery } from './ImageQuery';
 export { InputField } from './InputField';
 export { InputFile } from './InputFile';
+export { InputTime } from './InputTime';
 export { Link } from './Link';
 export { List } from './List';
 export { Modal } from './Modal';
@@ -52,6 +53,8 @@ export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
 export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
+export { PhoneNumberField } from './PhoneNumberField';
+export { ToolTip } from './ToolTip';
 
 // Props
 export type { TextAreaFieldProps } from './TextAreaField';

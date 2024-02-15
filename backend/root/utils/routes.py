@@ -9,6 +9,7 @@ LAST UPDATE: 2023-12-24 11:43:07.616207+00:00
 """
 
 ############################################################
+from __future__ import annotations
 
 
 admin__index = 'admin:index'
