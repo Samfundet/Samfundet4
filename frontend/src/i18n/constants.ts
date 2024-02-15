@@ -99,7 +99,6 @@ export const KEY = {
   common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
-  common_age_limit: 'common_age_limit',
   common_festivals: 'common_festivals',
   common_more_info: 'common_more_info',
   common_firstname: 'common_firstname',
