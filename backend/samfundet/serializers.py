@@ -520,15 +520,6 @@ class RecruitmentSerializer(CustomBaseSerializer):
         model = Recruitment
         fields = '__all__'
 
-    def validate(self, attrs: dict) -> dict:
-        instance = Recruitment(**attrs)
-        try:
-            instance.clean()
-        except ValidationError as e:
-            raise serializers.ValidationError(e.args[0]) from None
-        return attrs
-
-
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
 
