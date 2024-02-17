@@ -46,12 +46,14 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_price: 'common_price',
   common_buy: 'common_buy',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
   common_from: 'common_from',
   common_date: 'common_date',
+  common_time: 'common_time',
   common_show: 'common_show',
   common_menu: 'common_menu',
   common_edit: 'common_edit',
@@ -85,6 +87,11 @@ export const KEY = {
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
+  common_email: 'common_email',
+  common_total: 'common_total',
+  common_guests: 'common_guests',
+  common_occasion: 'common_occasion',
+  common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
@@ -101,9 +108,9 @@ export const KEY = {
   common_information: 'common_information',
   common_description: 'common_description',
   common_recruitment: 'common_recruitment',
-  common_reservations: 'common_reservations',
+  common_reservation: 'common_reservation',
   common_opening_hours: 'common_opening_hours',
-  common_about_samfundet: 'common_about_samfundet',
+  common_general: 'common_general',
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
@@ -112,6 +119,26 @@ export const KEY = {
   common_creation_successful: 'common_creation_successful',
   common_see_in_django_admin: 'common_see_in_django_admin',
   common_something_went_wrong: 'common_something_went_wrong',
+  common_click_here: 'common_click_here',
+
+  //About page
+  common_age_limit: 'common_age_limit',
+  common_rent_services: 'common_rent_services',
+  common_press: 'common_press',
+  common_film_club: 'common_film_club',
+  common_privacy_policy: 'common_privacy_policy',
+  common_facilitation: 'common_facilitation',
+  common_the_groups_at_samfundet: 'commong_the_groups_at_samfundet',
+  common_volunteering: 'common_volunteering',
+  common_overview_map: 'common_overview_map',
+  common_new_building: 'common_new_building',
+  common_documents: 'common_documents',
+  common_our_history: 'common_our_history',
+  common_about_the_organisation: 'common_about_the_organisation',
+  common_the_society_meeting: 'common_the_society_meeting',
+  common_tickets: 'common_tickets',
+  common_contact_information: 'common_contact_information',
+  common_about_samfundet: 'common_about_samfundet',
 
   // Price groups:
   common_ticket_type: 'common_ticket_type',
@@ -128,7 +155,7 @@ export const KEY = {
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
-  loginpage_email_placeholder: 'loginpage_email_placeholder',
+  loginpage_username: 'loginpage_username',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
   loginpage_login_failed: 'loginpage_login_failed',
 
@@ -145,6 +172,7 @@ export const KEY = {
   navbar_nybygg: 'navbar_nybygg',
 
   // Sulten / Lyche:
+  sulten_dishes: 'sulten_dishes',
   sulten_lyche_goal: 'sulten_lyche_goal',
   sulten_what_is_lyche: 'sulten_what_is_lyche',
   sulten_page_see_menu: 'sulten_page_see_menu',
@@ -152,7 +180,10 @@ export const KEY = {
   sulten_page_book_table: 'sulten_page_book_table',
   sulten_lyche_about_menu: 'sulten_lyche_about_menu',
   sulten_page_more_about_us: 'sulten_page_more_about_us',
-
+  sulten_reservation_form_occasion_help: 'sulten_reservation_form_occasion_help',
+  sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
+  sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
+  sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
@@ -174,6 +205,9 @@ export const KEY = {
   recruitment_otherpositions: 'KEY.recruitment_otherpositions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
+  recruitment_my_applications: 'recruitment_my_applications',
+  recruitment_not_applied: 'recruitment_not_applied',
+  recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
   shown_application_deadline: 'shown_application_deadline',
   actual_application_deadlin: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',
@@ -195,6 +229,7 @@ export const KEY = {
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
+  admin_sultenmenu_title: 'admin_sultenmenu_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',
   admin_events_recently_edited: 'admin_events_recently_edited',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
@@ -224,6 +259,11 @@ export const KEY = {
   command_menu_shortcut_control_panel: 'command_menu_shortcut_control_panel',
   command_menu_shortcut_about_samfundet: 'command_menu_shortcut_about_samfundet',
 
+  // Occupied Recruitment
+  occupied_help_text: 'occupied_help_text',
+  occupied_title: 'occupied_title',
+  occupied_show: 'occupied_show',
+
   // No category:
   owner: 'owner',
   end_time: 'end_time',
@@ -234,6 +274,7 @@ export const KEY = {
   form_confirm: 'form_confirm',
   we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
+  invalid_phonenumber: 'invalid_phonenumber',
   control_panel_title: 'control_panel_title',
   information_page_short: 'information_page_short',
   inputfile_choose_a_file: 'inputfile_choose_a_file',

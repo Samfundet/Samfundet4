@@ -1,73 +1,87 @@
 #
 # This file contains models spesific to the recruitment system
 #
-
 from __future__ import annotations
-from django.core.exceptions import ValidationError
-from django.utils import timezone
+
+import uuid
+from collections import defaultdict
 
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
-from root.utils.mixins import FullCleanSaveMixin
-from .general import Organization, User, Gang
+from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+
+from .general import Gang, User, Organization
+from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 
-class Recruitment(FullCleanSaveMixin):
+class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
-    visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
+    visible_from = models.DateTimeField(null=False, blank=False, help_text='When it becomes visible for applicants')
     actual_application_deadline = models.DateTimeField(
-        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'
+        null=False,
+        blank=False,
+        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
     )
-    shown_application_deadline = models.DateTimeField(help_text='The deadline that is shown to applicants')
-    reprioritization_deadline_for_applicant = models.DateTimeField(help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
-    organization = models.ForeignKey(to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
+    shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
+    reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
+    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
-    def clean(self, *args: tuple, **kwargs: dict) -> None:
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
-
-        if not all(
-            [
-                self.visible_from,
-                self.actual_application_deadline,
-                self.shown_application_deadline,
-                self.reprioritization_deadline_for_applicant,
-                self.reprioritization_deadline_for_groups,
-            ]
-        ):
-            raise ValidationError('Missing datetime')
-
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
         # All times should be in the future.
         now = timezone.now()
-        if any(
-            [
-                self.actual_application_deadline < now, self.shown_application_deadline < now, self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now
-            ]
-        ):
-            raise ValidationError('All times should be in the future')
+
+        for field in [
+            'actual_application_deadline',
+            'shown_application_deadline',
+            'reprioritization_deadline_for_applicant',
+            'reprioritization_deadline_for_groups',
+        ]:
+            if getattr(self, field) < now:
+                errors[field].append(self.NOT_IN_FUTURE_ERROR)
 
         if self.actual_application_deadline < self.visible_from:
-            raise ValidationError('Visible from should be before application deadline')
+            errors['actual_application_deadline'].append(self.SHOWN_BEFORE_VISIBLE_ERROR)
+            errors['visible_from'].append(self.VISIBLE_AFTER_SHOWN_ERROR)
 
         if self.actual_application_deadline < self.shown_application_deadline:
-            raise ValidationError('Shown application deadline should be before the actual application deadline')
+            errors['actual_application_deadline'].append(self.ACTUAL_BEFORE_SHOWN_ERROR)
+            errors['shown_application_deadline'].append(self.SHOWN_AFTER_ACTUAL_ERROR)
 
         if self.reprioritization_deadline_for_applicant < self.actual_application_deadline:
-            raise ValidationError('Actual application deadline should be before reprioritization deadline for applicants')
+            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
+            errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
 
         if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
+            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
+
+        raise ValidationError(errors)
+
+    # Error messages
+    NOT_IN_FUTURE_ERROR = 'Time should be in the future'
+    SHOWN_BEFORE_VISIBLE_ERROR = 'Shown application deadline should be after visible'
+    VISIBLE_AFTER_SHOWN_ERROR = 'Visible from should be before shown application deadline'
+    ACTUAL_BEFORE_SHOWN_ERROR = 'Actual application deadline should be after the shown application deadline'
+    SHOWN_AFTER_ACTUAL_ERROR = 'Shown application deadline should be before the actual application deadline'
+    REPRIORITIZATION_BEFORE_ACTUAL = 'Reprioritization application deadline should be after actual deadline for applicants'
+    ACTUAL_AFTER_REPRIORITIZATION = 'Actual application deadline should be before reprioritization deadline for applicants'
+    REPRIORITIZATION_GROUP_BEFORE_APPLICANT = 'Reprioritization deadline for groups should be after reprioritization deadline for applicants'
+    REPRIORITIZATION_APPLICANT_AFTER_GROUP = 'Reprioritization deadline for applicants should be before reprioritization deadline for groups'
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
 
 
-class RecruitmentPosition(FullCleanSaveMixin):
+class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
@@ -111,10 +125,10 @@ class RecruitmentPosition(FullCleanSaveMixin):
             self.short_description_en = 'This position only admits Norwegian speaking applicants'
             self.long_description_en = 'No english applicants'
             self.default_admission_letter_en = 'No english applicants'
-        super(RecruitmentPosition, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
-class InterviewRoom(FullCleanSaveMixin):
+class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
@@ -132,7 +146,7 @@ class InterviewRoom(FullCleanSaveMixin):
             raise ValidationError('Start time should be before end time')
 
 
-class Interview(FullCleanSaveMixin):
+class Interview(CustomBaseModel):
     # User visible fields
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
     interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
@@ -149,62 +163,63 @@ class Interview(FullCleanSaveMixin):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-class RecruitmentAdmission(FullCleanSaveMixin):
+class RecruitmentAdmission(CustomBaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
     )
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
-    applicant_priority = models.IntegerField(help_text='The priority of the admission')
+    applicant_priority = models.IntegerField(null=True, blank=True, help_text='The priority of the admission')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
-    PRIORITY_CHOICES = [
-        (0, 'Not Set'),
-        (1, 'Not Wanted'),
-        (2, 'Wanted'),
-        (3, 'Reserve'),
-    ]
-
-    STATUS_CHOICES = [
-        (0, 'Nothing'),
-        (1, 'Called and Accepted'),
-        (2, 'Called and Rejected'),
-        (3, 'Automatic Rejection'),
-    ]
-
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
-    recruiter_priority = models.IntegerField(choices=PRIORITY_CHOICES, default=0, help_text='The priority of the admission')
+    recruiter_priority = models.IntegerField(
+        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
+    )
 
-    recruiter_status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='The status of the admission')
+    recruiter_status = models.IntegerField(
+        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
+    )
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        If the admission is saved without an interview, try to find an interview from a shared position.
-        """
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        if not self.applicant_priority:
+            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
+            # Set the applicant_priority to the number of applications + 1 (for the current application)
+            self.applicant_priority = current_applications_count + 1
+        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        if self.withdrawn:
+            self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
+            self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
-            shared_interview = RecruitmentAdmission.objects.filter(user=self.user,
-                                                                   recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            shared_interview = (
+                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+            )
 
             if shared_interview:
                 self.interview = shared_interview.interview
             else:
                 # Create a new interview instance if needed
                 self.interview = Interview.objects.create()
+        # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
 
 
 class Occupiedtimeslot(FullCleanSaveMixin):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

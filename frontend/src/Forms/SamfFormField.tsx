@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
+import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
 
 // ================================== //
 //             Utilities              //
@@ -97,8 +97,8 @@ type SamfFormFieldProps<U> = {
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;
   onChange?: (value: U) => void;
+  props?: FieldProps;
 };
-
 export function SamfFormField<U>({
   field,
   type,
@@ -109,6 +109,7 @@ export function SamfFormField<U>({
   defaultOption,
   validator,
   onChange,
+  props,
 }: SamfFormFieldProps<U>) {
   // Validate on init context
   const { validateOnInit, validateOn } = useContext(SamfFormConfigContext);
@@ -141,9 +142,7 @@ export function SamfFormField<U>({
 
   // Enable show error for validate on submit
   useEffect(() => {
-    if (didSubmit) {
-      setShowError(true);
-    }
+    setShowError(true);
   }, [didSubmit]);
 
   // Validate again whenever validateOnInit is turned on
@@ -176,17 +175,19 @@ export function SamfFormField<U>({
 
   // Generate UI based on type
   function makeFormField() {
-    const errorMessage = error == true ? t(KEY.common_required) : false;
+    let errorMsg = required && !value ? t(KEY.common_required) : error;
+    errorMsg = error ? errorMsg : false;
     const args: SamfFormFieldArgs = {
       // Standard args
       field: field,
       value: value,
       onChange: handleOnChange,
-      error: showError ? errorMessage : false,
+      error: showError ? errorMsg : false,
       label: label,
       // Options args
       options: options,
       defaultOption: defaultOption,
+      props: props,
     };
     const generatorFunction = SamfFormFieldTypeMap[type];
     return generatorFunction?.(args) ?? <></>;

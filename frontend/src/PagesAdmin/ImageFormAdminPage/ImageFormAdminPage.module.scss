@@ -1,3 +1,17 @@
 @import 'src/mixins';
 
 @import 'src/constants';
+
+.input_row {
+  @include flex-row;
+  gap: 1.5em;
+  padding-top: 1em;
+  @include for-mobile-only {
+    flex-direction: column;
+  }
+  // Ensure children elements stretch to fit entire row
+  /* stylelint-disable-next-line selector-max-universal */
+  & > * {
+    flex: 1;
+  }
+}

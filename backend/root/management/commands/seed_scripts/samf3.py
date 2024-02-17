@@ -1,15 +1,18 @@
+from __future__ import annotations
+
 import csv
-import multiprocessing
 import os.path
-from typing import Iterator
+import multiprocessing
+from collections.abc import Iterator
 
-from django.core.files.images import ImageFile
 from django.db import transaction
-from django.utils.timezone import make_aware
 from django.utils import dateparse
+from django.utils.timezone import make_aware
+from django.core.files.images import ImageFile
 
-from samfundet.models.event import Event, EventAgeRestriction, EventCategory, EventTicketType, EventStatus
+from samfundet.models.event import Event
 from samfundet.models.general import Image
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 BASE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'seed_samf3')
 BASE_IMAGE_PATH = os.path.join(BASE_IMAGE_PATH, 'images')
@@ -59,7 +62,7 @@ def load_image(image_name) -> Image | None:
 
 # Parse a row
 def add_event(image_csv, row) -> Event | None:
-    image_name = get_image_path_for_event(image_csv, row)
+    image_name = get_image_path_for_event(image_csv=image_csv, event=row)
     image = load_image(image_name)
     if not image:
         return None
@@ -95,7 +98,7 @@ def image_to_fname(image_dict) -> str:
     return f'{img_id}_{name}'
 
 
-def get_image_path_for_event(image_csv, event):
+def get_image_path_for_event(*, image_csv, event):
     for img in image_csv:
         if img['id'] == event['image_id']:
             return image_to_fname(img)
@@ -104,7 +107,6 @@ def get_image_path_for_event(image_csv, event):
 
 # Parse rows
 def seed() -> Iterator[tuple[int, str]]:
-
     # Delete old
     with transaction.atomic():
         Event.objects.all().delete()
@@ -118,31 +120,30 @@ def seed() -> Iterator[tuple[int, str]]:
     # Read files
     chunk_size = 30
     max_events = 30000
-    with open(event_path, 'r') as event_file:
-        with open(image_path, 'r') as image_file:
-            events = list(reversed(list(csv.DictReader(event_file))))
-            events = events[0:min(max_events, len(events))]
-            images = list(csv.DictReader(image_file))
-            event_models = []
+    with open(event_path) as event_file, open(image_path) as image_file:
+        events = list(reversed(list(csv.DictReader(event_file))))
+        events = events[0 : min(max_events, len(events))]
+        images = list(csv.DictReader(image_file))
+        event_models = []
 
-            # Pool parallel
-            pool = multiprocessing.Pool(10)
+        # Pool parallel
+        pool = multiprocessing.Pool(10)
 
-            for chunk in range(len(events) // chunk_size):
-                start = chunk * chunk_size
-                events_in_chunk = events[start:min(start + chunk_size, len(events))]
-                jobs = [(images, event) for event in events_in_chunk]
-                models = pool.starmap(add_event, jobs)
-                models = [e for e in models if e is not None]
-                event_models.extend(models)
+        for chunk in range(len(events) // chunk_size):
+            start = chunk * chunk_size
+            events_in_chunk = events[start : min(start + chunk_size, len(events))]
+            jobs = [(images, event) for event in events_in_chunk]
+            models = pool.starmap(add_event, jobs)
+            models = [e for e in models if e is not None]
+            event_models.extend(models)
 
-                progress = len(event_models) / len(events) * 100
-                yield progress, f'Converted {len(event_models)}/{len(events)} events'
+            progress = len(event_models) / len(events) * 100
+            yield progress, f'Converted {len(event_models)}/{len(events)} events'
 
-                # Break early
-                if len(event_models) >= max_events:
-                    break
+            # Break early
+            if len(event_models) >= max_events:
+                break
 
-            # Save django models
-            Event.objects.bulk_create(event_models)
-            yield 100, f'Saved {len(event_models)} samf3 events'
+        # Save django models
+        Event.objects.bulk_create(event_models)
+        yield 100, f'Saved {len(event_models)} samf3 events'

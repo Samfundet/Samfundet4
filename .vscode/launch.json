@@ -16,7 +16,7 @@
     // https://code.visualstudio.com/docs/containers/docker-compose
     {
       "name": "Django (docker)",
-      "type": "python",
+      "type": "debugpy",
       "request": "attach",
       "django": true,
       "justMyCode": false,
@@ -35,7 +35,7 @@
     // https://code.visualstudio.com/docs/containers/docker-compose
     {
       "name": "Django (localhost)",
-      "type": "python",
+      "type": "debugpy",
       "request": "attach",
       "justMyCode": false,
       "django": true,

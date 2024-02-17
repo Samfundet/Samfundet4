@@ -1,19 +1,23 @@
+from __future__ import annotations
+
 from . import (
-    images,
-    gangs,
-    information_pages,
-    oganizations,
-    venues,
-    events,
-    billig,
     menu,
+    gangs,
+    samf3,
+    users,
+    billig,
+    campus,
+    events,
+    images,
+    venues,
+    example,
+    blogposts,
     documents,
     textitems,
-    example,
-    samf3,
     recruitment,
+    oganizations,
+    information_pages,
     recruitment_position,
-    blogposts,
     recruitment_admissions,
 )
 
@@ -25,6 +29,8 @@ from . import (
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
+    ('campus', campus.seed),
+    ('users', users.seed),
     ('images', images.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),
@@ -39,7 +45,6 @@ SEED_SCRIPTS = [
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
     ('recruitment_admissions', recruitment_admissions.seed),
-
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]
