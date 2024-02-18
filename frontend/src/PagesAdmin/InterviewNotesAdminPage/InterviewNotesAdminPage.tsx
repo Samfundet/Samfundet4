@@ -9,6 +9,7 @@ import { InterviewDto, RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
+import { filterRecruitmentAdmission, getNameUser } from './utils';
 
 export function InterviewNotesPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -25,36 +26,33 @@ export function InterviewNotesPage() {
   useEffect(() => {
     if (positionId && recruitmentId && gangId && interviewId) {
       getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((response) => {
-        const recruitmentAdmissions = response.data;
-        const admission = recruitmentAdmissions.filter(
-          (admission) =>
-            admission.recruitment_position &&
-            admission.recruitment_position.toString() === positionId &&
-            admission.interview.id.toString() === interviewId &&
-            admission.interview.interview_time !== null,
-        );
+        const admission = filterRecruitmentAdmission(response.data, positionId, interviewId);
         if (admission.length !== 0) {
           setdisabled(false);
           setRecruitmentAdmission(admission);
           setInterview(admission[0].interview);
-          setNameUser(
-            admission[0].user.first_name ? admission[0].user.first_name + ' ' + admission[0].user.last_name : '',
-          );
+          setNameUser(getNameUser(admission[0]));
         }
       });
     }
-  }, [recruitmentId, positionId, gangId, interviewId, t]);
+  }, [recruitmentId, positionId, gangId, interviewId]);
 
   async function handleEditSave() {
     if (editingMode && interview) {
       try {
-        await putRecruitmentAdmissionInterview(interview.id.toString(), interview);
+        await putRecruitmentAdmissionInterview(interview.id, interview);
         toast.success(t(KEY.common_save_successful));
       } catch (error) {
         toast.error(t(KEY.common_something_went_wrong));
       }
     }
     setEditingMode(!editingMode);
+  }
+
+  function handleUpdateNotes(value: string) {
+    const updatedNotes = value;
+    const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
+    setInterview(updatedInterview);
   }
 
   return (
@@ -65,11 +63,7 @@ export function InterviewNotesPage() {
         </label>
         <TextAreaField
           value={interview ? interview.notes : ' '}
-          onChange={(value: string) => {
-            const updatedNotes = value;
-            const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
-            setInterview(updatedInterview);
-          }}
+          onChange={handleUpdateNotes}
           disabled={!editingMode}
         ></TextAreaField>
         <Button theme="samf" rounded={true} className={styles.button} onClick={handleEditSave} disabled={disabled}>
