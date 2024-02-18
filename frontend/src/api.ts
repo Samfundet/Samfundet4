@@ -708,14 +708,14 @@ export async function putRecruitmentAdmission(admission: Partial<RecruitmentAdmi
 }
 
 export async function putRecruitmentAdmissionInterview(
-  interviewId: string,
+  interviewId: string | number,
   interview: Partial<InterviewDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__interview_detail,
-      urlParams: { pk: interviewId },
+      urlParams: { pk: interviewId.toString() },
     });
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
