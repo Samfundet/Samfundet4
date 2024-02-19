@@ -218,6 +218,20 @@ class ClosedPeriodView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = ClosedPeriodSerializer
     queryset = ClosedPeriod.objects.all()
+        
+    # Make sure data is valid
+    def create(self, request: Request) -> Response:
+        serializer = ClosedPeriodSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request: Request, pk: int) -> Response:
+        closed_period = self.get_object()
+        serializer = ClosedPeriodSerializer(closed_period, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class IsClosedView(ListAPIView):
