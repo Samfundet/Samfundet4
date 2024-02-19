@@ -1,6 +1,6 @@
 import { RecruitmentAdmissionDto } from '~/dto';
 
-// Filtrer recruitmentadmission based on positionId, InterviewId and interview time
+/** Filtrer recruitmentadmission based on positionId, InterviewId and interview time */
 export function filterRecruitmentAdmission(
   recruitmentAdmissions: RecruitmentAdmissionDto[],
   positionId: string,
