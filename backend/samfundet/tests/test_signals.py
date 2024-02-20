@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 from guardian.shortcuts import get_perms
+
 from django.contrib.auth.models import Group
 
-from samfundet.models import Event, Gang, Profile, User, UserPreference
+from samfundet.models import Gang, User, Event, Profile, UserPreference
 
 
 class TestUserSignals:
-
     def test_create_user_preference(self):
         ### Arrange ###
         user = User.objects.create_user(
@@ -42,7 +44,6 @@ class TestUserSignals:
 
 
 class TestEditorPermissions:
-
     def test_update_editor_permissions_add(
         self,
         fixture_event: Event,

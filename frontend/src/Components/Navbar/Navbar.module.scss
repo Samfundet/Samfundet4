@@ -436,3 +436,11 @@ offsets the text by 18px, the size of the chevron-icon */
     color: $white;
   }
 }
+
+.active_recruitment {
+  background-color: $green;
+  font-weight: 700;
+  color: $white;
+  padding: 0.2em 0.4em 0.2em 0.4em;
+  border-radius: 0.4em;
+}
