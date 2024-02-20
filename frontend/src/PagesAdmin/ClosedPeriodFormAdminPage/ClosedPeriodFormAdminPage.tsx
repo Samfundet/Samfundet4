@@ -84,6 +84,11 @@ export function ClosedPeriodFormAdminPage() {
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
+  const [startTime, setStartTime] = useState<Date | undefined>(closedPeriod?.start_dt);
+  const [endTime, setEndTime] = useState<Date | undefined>(closedPeriod?.end_dt);
+
+  useEffect(() => {}, [startTime, endTime]);
+
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
@@ -112,8 +117,26 @@ export function ClosedPeriodFormAdminPage() {
           ></SamfFormField>
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField
+            field="start_dt"
+            type="date"
+            label={`${t(KEY.start_time)}`}
+            required={true}
+            onChange={(value: Date) => {
+              setStartTime(value);
+            }}
+            validator={(value) => (endTime ? value < endTime : true)}
+          ></SamfFormField>
+          <SamfFormField
+            field="end_dt"
+            type="date"
+            label={`${t(KEY.end_time)}`}
+            required={true}
+            onChange={(value: Date) => {
+              setEndTime(value);
+            }}
+            validator={(value) => (startTime ? value > startTime : true)}
+          ></SamfFormField>
         </div>
       </SamfForm>
     </AdminPageLayout>
