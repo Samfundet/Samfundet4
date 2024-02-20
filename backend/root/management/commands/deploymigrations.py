@@ -36,10 +36,9 @@ class Command(BaseCommand):
         return answer in yes
 
     def handle(self, *args, **options):
-        if options['interactive']:
-            if not self.confirmation():
-                print('== ABORT ==')
-                return
+        if options['interactive'] and not self.confirmation():
+            print('== ABORT ==')
+            return
 
         management.call_command('migratezero', interactive=options['interactive'])
         management.call_command('deletemigrations', interactive=options['interactive'])

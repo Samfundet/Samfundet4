@@ -38,10 +38,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """Delete all migration files for each installed app"""
 
-        if options['interactive']:
-            if not self.confirmation():
-                print('== ABORT ==')
-                return
+        if options['interactive'] and not self.confirmation():
+            print('== ABORT ==')
+            return
 
         for app in settings.INSTALLED_APPS:
             try:
@@ -57,6 +56,7 @@ class Command(BaseCommand):
                 shutil.rmtree(pycache)
                 print(f'Removed {pycache}')
 
-            except Exception as _e:
+            # Supress since performance is not an issue here
+            except Exception as _e:  # noqa: S110
                 pass
                 # print(f'{app} failed. {_e}')

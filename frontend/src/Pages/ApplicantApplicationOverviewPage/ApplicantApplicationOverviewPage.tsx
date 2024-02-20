@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Page } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForApplicant, putRecruitmentAdmission } from '~/api';
+import { getRecruitmentAdmissionsForApplicant } from '~/api';
 import { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -34,11 +34,7 @@ export function ApplicantApplicationOverviewPage() {
     newAdmissions[index].applicant_priority = new_priority;
     newAdmissions[index + directionIncrement].applicant_priority = old_priority;
 
-    // TODO: Make this a single API call
-    putRecruitmentAdmission(newAdmissions[index]);
-    putRecruitmentAdmission(newAdmissions[index + directionIncrement]).then(() => {
-      setAdmissions(newAdmissions);
-    });
+    // TODO: Done and fixed in other PR
   }
 
   function upDownArrow(id: number) {

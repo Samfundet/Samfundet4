@@ -46,7 +46,7 @@ class RequestLogMiddleware:
 
         return response
 
-    def process_exception(self, request: HttpRequest, exception: Exception) -> None:  # noqa: PLR0917
+    def process_exception(self, request: HttpRequest, exception: Exception) -> None:
         """Log unhandled exceptions."""
 
         LOG.error('Unhandled exception while processing request', exc_info=exception)
