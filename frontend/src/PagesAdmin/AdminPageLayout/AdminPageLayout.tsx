@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import { IconButton, SamfundetLogoSpinner } from '~/Components';
+import { Breadcrumb, IconButton, SamfundetLogoSpinner } from '~/Components';
 import { COLORS } from '~/types';
 import styles from './AdminPageLayout.module.scss';
 
@@ -23,6 +23,7 @@ export function AdminPageLayout({ title, backendUrl, header, loading, children }
   return (
     <>
       <div className={styles.header}>
+        <Breadcrumb></Breadcrumb>
         <div className={styles.title_row}>
           <div className={styles.title}>{title}</div>
           {backendUrl && (
