@@ -48,7 +48,7 @@ samf_words = [
 
 
 def words(count: int, /, *, include_english: bool = False) -> str | tuple[str, str]:
-    choice = random.choices(samf_words, k=count)
+    choice = random.choices(samf_words, k=count)  # noqa: S311 Suppress random.choice since a secure method is not necessary
     no = ' '.join([w[0] for w in choice])
     en = ' '.join([w[1] for w in choice])
     if include_english:
