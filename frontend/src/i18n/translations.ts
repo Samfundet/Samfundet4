@@ -74,13 +74,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_lastname]: 'Etternavn',
-  [KEY.common_email]: 'Email',
+  [KEY.common_email]: 'Epost',
   [KEY.common_phonenumber]: 'Phonenumber',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
+  [KEY.common_not_required]: 'Ikke påkrevd',
   [KEY.common_overview]: 'Oversikt',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_festivals]: 'Festivaler',
@@ -260,6 +261,13 @@ export const nb: Record<KeyValues, string> = {
   [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
+  // Feedback
+  [KEY.feedback_type]: 'Type tilbakemelding',
+  [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
+  [KEY.feedback_helper_text]: 'Vi ønsker å vite hva vi kan gjøre bedre og hva du syntes er bra med denne siden.',
+  [KEY.feedback_want_contact_text]: 'Om du ønsker at vi skal kontakte deg kan du skrive eposten din her.',
+  [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+
   // No category:
   [KEY.owner]: 'Eier',
   [KEY.end_time]: 'Sluttid',
@@ -362,6 +370,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
+  [KEY.common_not_required]: 'Not required',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_more_info]: 'More info',
   [KEY.common_firstname]: 'First name',
@@ -543,6 +552,14 @@ export const en: Record<KeyValues, string> = {
   [KEY.occupied_title]: 'Availability',
   [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
+
+  // Feedback
+  [KEY.feedback_type]: 'Feedback type',
+  [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
+  [KEY.feedback_helper_text]: 'We want to know what we can do better and what you think is good about this page.',
+  [KEY.feedback_want_contact_text]: 'If you want us to contact you, you can write your email here.',
+  [KEY.feedback_your_feedback]: 'Your feedback',
+
 
   // No category:
   [KEY.owner]: 'Owner',
