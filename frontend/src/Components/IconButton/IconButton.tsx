@@ -12,9 +12,10 @@ type IconButtonProps = {
   icon: string;
   className?: string;
   border?: string;
+  width?: number
 } & Pick<LinkProps, 'target'>;
 
-export function IconButton({ onClick, className, color, icon, title, border, url, target }: IconButtonProps) {
+export function IconButton({ onClick, className, color, icon, title, border, url, target, width }: IconButtonProps) {
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
     e?.preventDefault();
     onClick?.();
@@ -30,7 +31,7 @@ export function IconButton({ onClick, className, color, icon, title, border, url
         className={classNames(styles.icon_button, className)}
         style={{ backgroundColor: color, border: border }}
       >
-        <Icon icon={icon} />
+        <Icon icon={icon} width={width} />
       </Link>
     );
   }
@@ -42,7 +43,7 @@ export function IconButton({ onClick, className, color, icon, title, border, url
       className={classNames(styles.icon_button, className)}
       style={{ backgroundColor: color, border: border }}
     >
-      <Icon icon={icon} />
+      <Icon icon={icon} width={width}/>
     </button>
   );
 }
