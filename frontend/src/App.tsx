@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 // Neccessary import for translations.
 import { CommandMenu } from './Components/CommandMenu';
 import './i18n/i18n';
-import { UserFeedBack } from '~/Components/UserFeedBack/UserFeedBack';
+import { UserFeedback } from '~/Components/UserFeedback/UserFeedback';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
@@ -20,7 +20,7 @@ export function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
-        <UserFeedBack enabled={true} />
+        <UserFeedback enabled={true} />
         {goatCounterCode && (
           <Helmet>
             {/* Helmet is linked to <head>. Used to add scripts. */}

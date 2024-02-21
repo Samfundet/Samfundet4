@@ -1,18 +1,17 @@
-import styles from './UserFeedBack.module.scss';
+import styles from './UserFeedback.module.scss';
 import { IconButton, Modal } from '~/Components';
 import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
 
-type UserFeedBackProps = {
+type UserFeedbackProps = {
   enabled: boolean;
 };
 
-export function UserFeedBack({ enabled }: UserFeedBackProps) {
+export function UserFeedback({ enabled }: UserFeedbackProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -73,6 +72,7 @@ export function UserFeedBack({ enabled }: UserFeedBackProps) {
           icon={'mdi:plus'}
           height={'35'}
           onClick={() => setIsOpen(false)}
+          avatarColor={'red'}
         />
         {modalContent()}
       </Modal>

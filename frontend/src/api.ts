@@ -3,7 +3,7 @@ import {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
-  FeedBackDto,
+  FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
@@ -730,7 +730,7 @@ export async function putRecruitmentAdmissionInterview(
   return response;
 }
 
-export async function postFeedback(feedBackData: FeedBackDto): Promise<AxiosResponse> {
+export async function postFeedback(feedBackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedBackData, { withCredentials: true });
 

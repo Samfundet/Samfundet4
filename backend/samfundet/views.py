@@ -63,7 +63,7 @@ from .serializers import (
     FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
-    UserFeedBackSerializer,
+    UserFeedbackSerializer,
     InterviewRoomSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -100,7 +100,7 @@ from .models.general import (
     FoodPreference,
     UserPreference,
     InformationPage,
-    UserFeedBackModel,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -784,10 +784,10 @@ class OccupiedtimeslotView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserFeedBackView(CreateAPIView):
+class UserFeedbackView(CreateAPIView):
     permission_classes = [AllowAny]
-    model = UserFeedBackModel
-    serializer_class = UserFeedBackSerializer
+    model = UserFeedbackModel
+    serializer_class = UserFeedbackSerializer
 
     def create(self, request: Request) -> Response:
         data = request.data
@@ -795,11 +795,11 @@ class UserFeedBackView(CreateAPIView):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
 
-        UserFeedBackModel.objects.create(
+        UserFeedbackModel.objects.create(
             user=request.user if request.user.is_authenticated else None,
             text=data.get('text'),
             path=data.get('path'),
-            device_headers=request.META.get('HTTP_USER_AGENT'),
+            user_agent=request.META.get('HTTP_USER_AGENT'),
             screen_resolution=data.get('screen_resolution'),
             contact_email=data.get('contact_email'),
         )

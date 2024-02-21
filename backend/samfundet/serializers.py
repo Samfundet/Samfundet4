@@ -43,7 +43,7 @@ from .models.general import (
     FoodPreference,
     UserPreference,
     InformationPage,
-    UserFeedBackModel,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -706,9 +706,9 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         return super().update(instance, validated_data)
 
 
-class UserFeedBackSerializer(serializers.ModelSerializer):
+class UserFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserFeedBackModel
+        model = UserFeedbackModel
         fields = [
             'text',
             'contact_email',

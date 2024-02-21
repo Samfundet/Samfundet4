@@ -39,7 +39,7 @@ from .models.general import (
     FoodPreference,
     UserPreference,
     InformationPage,
-    UserFeedBackModel,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -630,8 +630,8 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display_links = ['id', 'notes']
 
 
-@admin.register(UserFeedBackModel)
-class UserFeedBackAdmin(CustomGuardedModelAdmin):
+@admin.register(UserFeedbackModel)
+class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
 

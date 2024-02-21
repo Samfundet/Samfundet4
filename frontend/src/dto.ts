@@ -396,7 +396,7 @@ export type RecruitmentAdmissionDto = {
   withdrawn: boolean;
 };
 
-export type FeedBackDto = {
+export type FeedbackDto = {
   text: string;
   screen_resolution: string;
   path: string;
