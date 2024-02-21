@@ -560,7 +560,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.feedback_want_contact_text]: 'If you want us to contact you, you can write your email here.',
   [KEY.feedback_your_feedback]: 'Your feedback',
 
-
   // No category:
   [KEY.owner]: 'Owner',
   [KEY.end_time]: 'End time',

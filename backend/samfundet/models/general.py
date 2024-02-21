@@ -688,3 +688,35 @@ class KeyValue(FullCleanSaveMixin):
     def is_false(self) -> bool:
         """Check if value is falsy."""
         return self.value.lower() in self.FALSY
+
+
+# ----------------- #
+#     Feedback      #
+# ----------------- #
+
+
+class UserFeedBackModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    text = models.TextField(blank=False, null=False)
+    path = models.CharField(max_length=255, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    device_headers = models.CharField(max_length=255, blank=True)
+    screen_resolution = models.CharField(max_length=255, blank=True)
+    contact_email = models.EmailField(null=True)
+
+    feedback_type = models.CharField(
+        max_length=100,
+        choices=(
+            ('POSITIVE', 'POSITIVE'),
+            ('NEGATIVE', 'NEGATIVE'),
+            ('MIX', 'MIX'),
+            ('OTHER', 'OTHER'),
+        ),
+        default='POSITIVE',
+    )
+
+    class Meta:
+        verbose_name = 'UserFeedBack'
+
+    def __str__(self) -> str:
+        return f'{self.text[0:10] + "..." if len(self.text) > 10 else self.text}... - {self.feedback_type}'

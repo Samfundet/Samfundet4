@@ -12,7 +12,7 @@ type IconButtonProps = {
   icon: string;
   className?: string;
   border?: string;
-  width?: number
+  width?: number;
 } & Pick<LinkProps, 'target'>;
 
 export function IconButton({ onClick, className, color, icon, title, border, url, target, width }: IconButtonProps) {
@@ -43,7 +43,7 @@ export function IconButton({ onClick, className, color, icon, title, border, url
       className={classNames(styles.icon_button, className)}
       style={{ backgroundColor: color, border: border }}
     >
-      <Icon icon={icon} width={width}/>
+      <Icon icon={icon} width={width} />
     </button>
   );
 }

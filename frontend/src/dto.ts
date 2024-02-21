@@ -395,3 +395,11 @@ export type RecruitmentAdmissionDto = {
   created_at: string;
   withdrawn: boolean;
 };
+
+export type FeedBackDto = {
+  text: string;
+  screen_resolution: string;
+  feedback_type: string;
+  path: string;
+  contact_email?: string;
+};

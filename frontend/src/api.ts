@@ -3,6 +3,7 @@ import {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  FeedBackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
@@ -710,6 +711,13 @@ export async function putRecruitmentAdmission(
     recruitment_position: admission.recruitment_position,
   };
   const response = await axios.put(url, data, { withCredentials: true });
+
+  return response;
+}
+
+export async function postFeedback(feedBackData: FeedBackDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
+  const response = await axios.post(url, feedBackData, { withCredentials: true });
 
   return response;
 }
