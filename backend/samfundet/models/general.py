@@ -25,6 +25,7 @@ from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
+from ..utils import ellipsize
 
 if TYPE_CHECKING:
     from typing import Any
@@ -708,4 +709,4 @@ class UserFeedBackModel(models.Model):
         verbose_name = 'UserFeedBack'
 
     def __str__(self) -> str:
-        return f'{self.text[0:10] + "..." if len(self.text) > 10 else self.text}...'
+        return ellipsize(self.text, length=10)
