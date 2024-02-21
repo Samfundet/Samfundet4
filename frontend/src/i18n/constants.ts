@@ -114,6 +114,7 @@ export const KEY = {
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
+  common_save_successful: 'common_save_successful',
   common_delete_successful: 'common_delete_successful',
   common_update_successful: 'common_update_successful',
   common_creation_successful: 'common_creation_successful',
