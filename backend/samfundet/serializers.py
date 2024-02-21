@@ -712,7 +712,6 @@ class UserFeedBackSerializer(serializers.ModelSerializer):
         fields = [
             'text',
             'contact_email',
-            'feedback_type',
             'path',
             'screen_resolution',
         ]

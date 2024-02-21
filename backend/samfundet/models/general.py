@@ -704,19 +704,8 @@ class UserFeedBackModel(models.Model):
     screen_resolution = models.CharField(max_length=255, blank=True)
     contact_email = models.EmailField(null=True)
 
-    feedback_type = models.CharField(
-        max_length=100,
-        choices=(
-            ('POSITIVE', 'POSITIVE'),
-            ('NEGATIVE', 'NEGATIVE'),
-            ('MIX', 'MIX'),
-            ('OTHER', 'OTHER'),
-        ),
-        default='POSITIVE',
-    )
-
     class Meta:
         verbose_name = 'UserFeedBack'
 
     def __str__(self) -> str:
-        return f'{self.text[0:10] + "..." if len(self.text) > 10 else self.text}... - {self.feedback_type}'
+        return f'{self.text[0:10] + "..." if len(self.text) > 10 else self.text}...'

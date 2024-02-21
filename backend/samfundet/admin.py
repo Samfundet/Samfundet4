@@ -632,8 +632,8 @@ class InterviewAdmin(CustomBaseAdmin):
 
 @admin.register(UserFeedBackModel)
 class UserFeedBackAdmin(CustomGuardedModelAdmin):
-    sortable_by = ['date', 'path', 'feedback_type']
-    list_display = ['id', 'feedback_type', 'date', 'path', 'text', 'user', 'contact_email']
+    sortable_by = ['date', 'path']
+    list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
 
 
 ### End: Our models ###

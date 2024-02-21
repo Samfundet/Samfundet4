@@ -23,7 +23,6 @@ export function UserFeedBack({ enabled }: UserFeedBackProps) {
   const handleFormSubmit = (formData: Record<string, string>) => {
     postFeedback({
       text: formData['feedback-text'],
-      feedback_type: formData['feedback-type'],
       screen_resolution: window.innerWidth + 'x' + window.innerHeight,
       path: window.location.pathname,
       contact_email: formData['feedback-email'],
@@ -34,13 +33,6 @@ export function UserFeedBack({ enabled }: UserFeedBackProps) {
       });
   };
 
-  const feedBackOptions: DropDownOption<string>[] = [
-    { value: 'POSITIVE', label: 'Positive' },
-    { value: 'NEGATIVE', label: 'Negative' },
-    { value: 'MIX', label: 'Mix' },
-    { value: 'OTHER', label: 'Other' },
-  ];
-
   const modalContent = () => {
     return (
       <SamfForm onSubmit={handleFormSubmit} isDisabled={!isOpen} submitText={t(KEY.common_send)}>
@@ -50,12 +42,6 @@ export function UserFeedBack({ enabled }: UserFeedBackProps) {
         <br />
         <text>{t(KEY.feedback_helper_text)}</text>
         <SamfFormField field={'feedback-text'} type={'text-long'} label={t(KEY.feedback_your_feedback)} />
-        <SamfFormField
-          field={'feedback-type'}
-          type={'options'}
-          options={feedBackOptions}
-          label={t(KEY.feedback_type)}
-        />
         <text>{t(KEY.feedback_want_contact_text)}</text>
         <SamfFormField
           field={'feedback-email'}

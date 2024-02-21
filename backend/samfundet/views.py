@@ -798,7 +798,6 @@ class UserFeedBackView(CreateAPIView):
         UserFeedBackModel.objects.create(
             user=request.user if request.user.is_authenticated else None,
             text=data.get('text'),
-            feedback_type=data.get('feedback_type'),
             path=data.get('path'),
             device_headers=request.META.get('HTTP_USER_AGENT'),
             screen_resolution=data.get('screen_resolution'),
