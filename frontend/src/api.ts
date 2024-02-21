@@ -730,7 +730,6 @@ export async function putRecruitmentAdmissionInterview(
   return response;
 }
 
-
 export async function postFeedback(feedBackData: FeedBackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedBackData, { withCredentials: true });

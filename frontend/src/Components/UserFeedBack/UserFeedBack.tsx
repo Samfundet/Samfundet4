@@ -85,7 +85,7 @@ export function UserFeedBack({ enabled }: UserFeedBackProps) {
           className={styles.modal_close_button}
           title={'Close'}
           icon={'mdi:plus'}
-          height={"35"}
+          height={'35'}
           onClick={() => setIsOpen(false)}
         />
         {modalContent()}
