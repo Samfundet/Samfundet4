@@ -12,6 +12,7 @@ import {
   ImageDto,
   ImagePostDto,
   InformationPageDto,
+  InterviewDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -714,6 +715,21 @@ export async function putRecruitmentAdmission(
 
   return response;
 }
+
+export async function putRecruitmentAdmissionInterview(
+  interviewId: string | number,
+  interview: Partial<InterviewDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_detail,
+      urlParams: { pk: interviewId.toString() },
+    });
+  const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
+  return response;
+}
+
 
 export async function postFeedback(feedBackData: FeedBackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
