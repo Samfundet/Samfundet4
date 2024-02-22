@@ -21,7 +21,7 @@ const Template: ComponentStory<typeof SamfForm> = function (args) {
 
 function validateShrimp(values: SamfFormModel) {
   const str = values['title_en'] as string;
-  if (str.toLowerCase().includes('reke')) return true;
+  if (str && str.toLowerCase().includes('reke')) return true;
   return "Feltet må inneholde 'reke'";
 }
 

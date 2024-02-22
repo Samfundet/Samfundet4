@@ -12,12 +12,17 @@ import { FieldProps, SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap 
 /**
  * Calculates the error state for a given value
  * @param value Current value of the field
+ * @param values All values in the form
  * @param required Whether the field is required
  * @param validator Optional validation function
  * @returns error state (true/false or error message string)
  */
-function GetErrorState<U>(value: U, required?: boolean, validator?: (values: SamfFormModel) => string | boolean) {
-  const values = useContext(SamfFormContext).state.values; // maybe the old context idk
+function getErrorState(
+  value: unknown,
+  values: SamfFormModel,
+  required?: boolean,
+  validator?: (values: SamfFormModel) => string | boolean,
+) {
   if (values === undefined) {
     throw new Error('SamfFormField must be used inside a SamfForm (the context provider)');
   }
@@ -74,11 +79,17 @@ function useSamfForm<U>(field: string, required: boolean, validator?: (v: SamfFo
 
   // Set the current value of the state using form context
   function setValue(newValue: U) {
+    // Update values in state
+    const newValues = {
+      ...state.values,
+      [field]: newValue,
+    };
+
     // Dispatch event to form reducer
     dispatch?.({
       field: field,
       value: newValue,
-      error: GetErrorState(newValue, required, validator),
+      error: getErrorState(newValue, newValues, required, validator),
     });
   }
 
