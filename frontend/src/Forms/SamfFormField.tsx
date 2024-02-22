@@ -138,6 +138,9 @@ export function SamfFormField<U>({
   // Toggeled on submit or on field change
   const [showError, setShowError] = useState<boolean>(validateOnInit);
 
+  // Get form state and dispatch from context
+  const { state, dispatch } = useContext(SamfFormContext);
+
   // Handles all change events
   function handleOnChange(newValue: unknown, initialUpdate?: boolean) {
     // Cast types (eg number inputs might initially be strings)
@@ -184,6 +187,16 @@ export function SamfFormField<U>({
     // Handle on change depends on field type which should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [required]);
+
+  useEffect(() => {
+    // Run dispatch to update error state
+    dispatch({
+      field: field,
+      value: value,
+      error: getErrorState(value, state.values, required, validator),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.values, required, validator]);
 
   // ================================== //
   //           Form Field UI            //
