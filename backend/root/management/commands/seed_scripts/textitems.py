@@ -112,7 +112,6 @@ def seed():
             'text_nb': 'Om du ønsker at vi skal kontakte deg kan du skrive eposten din her.',
             'text_en': 'If you want us to contact you, you can write your email here.',
         },
-
     ]
 
     TextItem.objects.all().delete()

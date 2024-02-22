@@ -6,8 +6,8 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
-import {useTextItem} from "~/hooks";
-import {TextItem} from "~/constants";
+import { useTextItem } from '~/hooks';
+import { TextItem } from '~/constants';
 
 type UserFeedbackProps = {
   enabled: boolean;
@@ -34,7 +34,7 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
       });
   };
 
-  const modalContent = () => {
+  const ModalContent = () => {
     return (
       <SamfForm onSubmit={handleFormSubmit} isDisabled={!isOpen} submitText={t(KEY.common_send)}>
         <h1>
@@ -76,7 +76,7 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
           onClick={() => setIsOpen(false)}
           avatarColor={'red'}
         />
-        {modalContent()}
+        {ModalContent()}
       </Modal>
     </div>
   );
