@@ -20,6 +20,10 @@
     border: 1px solid gray;
     background-color: $theme-dark-bg;
   }
+  width: 50%;
+  @include for-mobile-only {
+    width: 100%;
+  }
 }
 
 .overlay {

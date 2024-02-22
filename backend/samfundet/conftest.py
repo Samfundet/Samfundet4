@@ -1,22 +1,28 @@
-from typing import Iterator, Any
+from __future__ import annotations
+
+from typing import Any
+from datetime import time, datetime
+from collections.abc import Iterator
 
 import pytest
-from django.core.files.images import ImageFile
 
-from django.utils import timezone
-from django.test import Client
 from rest_framework.test import APIClient
+
+from django.test import Client, TestCase
+from django.utils import timezone
+from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group
 
-from root.settings import BASE_DIR
-from samfundet.constants import DEV_PASSWORD
-from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event
-from samfundet.models.model_choices import EventAgeRestriction, EventTicketType
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem
-
 import root.management.commands.seed_scripts.billig as billig_seed
+from root.settings import BASE_DIR
+
+from samfundet.constants import DEV_PASSWORD
+from samfundet.models.event import Event
+from samfundet.models.billig import BilligEvent
+from samfundet.models.general import Gang, User, Image, Table, Venue, BlogPost, TextItem, Reservation, Organization, InformationPage
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
+
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.
@@ -25,8 +31,6 @@ It's recommended to yield objects, and tear them down afterwards.
 
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
-
-from django.test import TestCase
 
 TestCase.databases = {'default', 'billig'}
 
@@ -65,6 +69,16 @@ def fixture_rest_client() -> APIClient:
 @pytest.fixture
 def fixture_django_client() -> Client:
     yield Client()
+
+
+@pytest.fixture()
+def fixture_date_monday() -> Iterator[datetime]:
+    yield datetime(day=25, year=2023, month=12)  # monday
+
+
+@pytest.fixture()
+def fixture_date_tuesday() -> Iterator[datetime]:
+    yield datetime(day=26, year=2023, month=12)  # tuesday
 
 
 @pytest.fixture
@@ -250,7 +264,7 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
         default_admission_letter_en='Default Admission Letter EN',
         tags='tag1,tag2',
         gang=fixture_gang,
-        recruitment=fixture_recruitment
+        recruitment=fixture_recruitment,
     )
     yield recruitment_position
     recruitment_position.delete()
@@ -277,16 +291,67 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
-                                  fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
+def fixture_recruitment_admission(
+    fixture_user: User,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentAdmission]:
     admission = RecruitmentAdmission.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
         user=fixture_user,
         applicant_priority=1,
-        recruiter_priority=RecruitmentAdmission.PRIORITY_CHOICES[0][0],
-        recruiter_status=RecruitmentAdmission.STATUS_CHOICES[0][0],
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
     yield admission
     admission.delete()
+
+
+@pytest.fixture
+def fixture_venue() -> Iterator[Venue]:
+    venue = Venue.objects.create(
+        name='venue',
+        slug='venue',
+        description='Some description',
+        floor=1,
+        last_renovated=timezone.now(),
+        handicapped_approved=True,
+        responsible_crew='Cypress team',
+        opening_monday=time(hour=8),
+        closing_monday=time(hour=14),
+        opening_tuesday=time(hour=8),
+        closing_tuesday=time(hour=14),
+    )
+
+    yield venue
+    venue.delete()
+
+
+@pytest.fixture
+def fixture_table(fixture_venue: Venue) -> Iterator[Table]:
+    table = Table.objects.create(
+        name_nb='table 1',
+        description_nb='table',
+        name_en='table 1',
+        description_en='table',
+        seating=4,
+        venue=fixture_venue,
+    )
+    yield table
+    table.delete()
+
+
+@pytest.fixture
+def fixture_reservation(fixture_venue: Venue, fixture_table: Table, fixture_date_monday: datetime) -> Iterator[Reservation]:
+    reservation = Reservation.objects.create(
+        venue=fixture_venue,
+        table=fixture_table,
+        guest_count=4,
+        start_time=time(hour=10),
+        end_time=time(hour=11),
+        reservation_date=fixture_date_monday,
+    )
+    yield reservation
+    reservation.delete()

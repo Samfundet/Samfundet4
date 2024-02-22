@@ -9,13 +9,14 @@ import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
 import { useGlobalContext } from '~/GlobalContextProvider';
+import { getActiveRecruitments, impersonateUser, logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag } from '~/assets';
 import { useDesktop, useScrollY } from '~/hooks';
-import { impersonateUser, logout } from '~/api';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
+import { RecruitmentDto } from '~/dto';
 
 const scrollDistanceForOpaque = 30;
 
@@ -23,6 +24,7 @@ export function Navbar() {
   const { isMobileNavigation, setIsMobileNavigation, notifications } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
+  const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -56,6 +58,12 @@ export function Navbar() {
     }
   }, [isMobileNavigation, isDesktop]);
 
+  useEffect(() => {
+    getActiveRecruitments().then((response) => {
+      setActiveRecruitments(response.data);
+    });
+  }, []);
+
   const languageButton = (
     <button className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
       <img src={otherFlag} className={styles.language_flag} />
@@ -79,7 +87,7 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onAfterClick={() => setExpandedDropdown('')}
       >
-        {t(KEY.common_about_samfundet)}
+        {t(KEY.common_general)}
       </Link>
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_membership)}
@@ -133,6 +141,7 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
+        labelClassName={activeRecruitments && styles.active_recruitment}
       />
     </div>
   );

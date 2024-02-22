@@ -1,48 +1,43 @@
+import { LycheFrame } from '~/Components/LycheFrame';
 import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
 
 export function LycheMenuPage() {
   return (
     <SultenPage>
-      <MenuItem
-        dishTitle="LYCHEBRØD"
-        dishDescription="Serveres med en skål aioli på siden."
-        allergens="Allergener: Gluten (hvete), sulfitt og egg (aioli)"
-        price="19,- / 29,-"
-      />
+      <LycheFrame>
+        <MenuItem
+          dishTitle="LYCHEBRØD"
+          dishDescription="Serveres med en skål aioli på siden."
+          allergens="Allergener: Gluten (hvete), sulfitt og egg (aioli)"
+          price="19,- / 29,-"
+        />
 
-      <br></br>
-      <br></br>
+        <MenuItem
+          dishTitle="LYCHESNITTER"
+          dishDescription="Lychebrød med rødbethummus, ruccula, mango og pistou. "
+          allergens="Allergener: Gluten (hvete), melk (pistou), sesam (hummus). Kan inneholde spor av peanøtter: hummus"
+          price="40,- / 49,-"
+        />
 
-      <MenuItem
-        dishTitle="LYCHESNITTER"
-        dishDescription="Lychebrød med rødbethummus, ruccula, mango og pistou. "
-        allergens="Allergener: Gluten (hvete), melk (pistou), sesam (hummus). Kan inneholde spor av peanøtter: hummus"
-        price="40,- / 49,-"
-      />
+        <MenuItem
+          dishTitle="LYCHEBURGER"
+          dishDescription="Okse og n’duja kjøtt, servert med løkkompott, bacon,
+          tomater, aioli, cheddar, salat og potet på siden.
+            Burgeren kan serveres med glutenfritt brød, og kan serveres uten ost og pistou (melkeallergi)"
+          allergens="Allergener: Egg, sennep, sulfitt. Det er svinekjøtt i selve burgerkaken. "
+          recommendations="Baren anbefaler: Hacienda lopez De Haro (rød)"
+          price="129,- / 154,-"
+        />
 
-      <br></br>
-      <br></br>
-
-      <MenuItem
-        dishTitle="LYCHEBURGER"
-        dishDescription="Okse og n’duja kjøtt, servert med løkkompott, bacon,
-         tomater, aioli, cheddar, salat og potet på siden.
-          Burgeren kan serveres med glutenfritt brød, og kan serveres uten ost og pistou (melkeallergi)"
-        allergens="Allergener: Egg, sennep, sulfitt. Det er svinekjøtt i selve burgerkaken. "
-        recommendations="Baren anbefaler: Hacienda lopez De Haro (rød)"
-        price="129,- / 154,-"
-      />
-
-      <br></br>
-
-      <MenuItem
-        dishTitle="SOPPAI"
-        dishDescription="Kremet soppai med feta, toppes med ruccula. Vegetar."
-        allergens="Allergener: Melk og gluten"
-        recommendations="Baren anbefaler: jue de vie"
-        price="99,- / 119,-"
-      />
+        <MenuItem
+          dishTitle="SOPPAI"
+          dishDescription="Kremet soppai med feta, toppes med ruccula. Vegetar."
+          allergens="Allergener: Melk og gluten"
+          recommendations="Baren anbefaler: jue de vie"
+          price="99,- / 119,-"
+        />
+      </LycheFrame>
     </SultenPage>
   );
 }

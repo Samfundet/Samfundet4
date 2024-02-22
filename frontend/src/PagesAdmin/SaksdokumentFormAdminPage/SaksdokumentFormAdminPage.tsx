@@ -102,7 +102,7 @@ export function SaksdokumentFormAdminPage() {
       {/* Document form */}
       <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
         {/* Name */}
-        <div className={styles.row}>
+        <div className={styles.input_row}>
           <SamfFormField
             field="title_nb"
             type="text"
@@ -117,7 +117,7 @@ export function SaksdokumentFormAdminPage() {
           />
         </div>
         {/* Metadata */}
-        <div className={styles.row}>
+        <div className={styles.input_row}>
           <SamfFormField
             field="category"
             type="options"
@@ -132,11 +132,13 @@ export function SaksdokumentFormAdminPage() {
             label={`${t(KEY.saksdokumentpage_publication_date)}`}
           />
         </div>
-        {/* File upload */}
-        {id === undefined && <SamfFormField type="upload-pdf" field="file" />}
-        {id !== undefined && (
-          <div className={styles.cannot_reupload}>{t(KEY.admin_saksdokumenter_cannot_reupload)}</div>
-        )}
+        <div className={styles.input_row}>
+          {/* File upload */}
+          {id === undefined && <SamfFormField type="upload-pdf" field="file" />}
+          {id !== undefined && (
+            <div className={styles.cannot_reupload}>{t(KEY.admin_saksdokumenter_cannot_reupload)}</div>
+          )}
+        </div>
       </SamfForm>
     </AdminPageLayout>
   );

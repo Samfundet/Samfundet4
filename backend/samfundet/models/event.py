@@ -11,13 +11,15 @@ import uuid
 from typing import Any
 
 from django.db import models
-from django.db.models import Prefetch, QuerySet
 from django.utils import timezone
+from django.db.models import Prefetch, QuerySet
 
 from root.utils.mixins import CustomBaseModel
+
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import User, Image, Gang
-from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventStatus, EventTicketType
+from samfundet.models.general import Gang, User, Image
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
+
 # ======================== #
 #      Event Group         #
 # ======================== #
@@ -30,6 +32,7 @@ class EventGroup(CustomBaseModel):
     Enables frontend to know about recurring events and provide tools
     for admins to edit both or links for users to see other times.
     """
+
     name = models.CharField(max_length=140)
 
     class Meta:
@@ -51,11 +54,15 @@ class NonMemberEmailRegistration(models.Model):
     With this we can create a link 'samfundet.no/confirm_registration?id=<UUID>'
     that only the person who registered will know.
     """
+
     # Long unique identifier (used for email cancellation)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Email of the registered user
     # WARNING: sensitive data! Make sure this is not exposed through the API or otherwise!
     email = models.EmailField(blank=False, null=False, editable=False)
+
+    def __str__(self) -> str:
+        return self.email
 
 
 class EventRegistration(models.Model):
@@ -63,10 +70,14 @@ class EventRegistration(models.Model):
     Used for events with registration payment type
     Stores list of registered users and emails.
     """
+
     # Registered users
     registered_users = models.ManyToManyField(User, blank=True)
     # Registered emails (for those not logged in/not a member)
     registered_emails = models.ManyToManyField(NonMemberEmailRegistration, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.count} registered'
 
     @property
     def count(self) -> int:
@@ -83,6 +94,7 @@ class EventCustomTicket(CustomBaseModel):
     Used for events with custom price group.
     Stores name and price of each custom ticket type.
     """
+
     name_nb = models.CharField(max_length=140, blank=False, null=False)
     name_en = models.CharField(max_length=140, blank=False, null=False)
     price = models.PositiveIntegerField(blank=False, null=False)
@@ -183,9 +195,7 @@ class Event(CustomBaseModel):
 
     @property
     def total_registrations(self) -> int:
-        """
-        Total number of registrations made for registration type events.
-        """
+        """Total number of registrations made for registration type events."""
         if self.ticket_type == EventTicketType.REGISTRATION and self.registration:
             return self.registration.count
         return 0
@@ -220,7 +230,12 @@ class Event(CustomBaseModel):
     # ======================== #
 
     @staticmethod
-    def prefetch_billig(events: list[Event] | QuerySet[Event], tickets: bool = True, prices: bool = True) -> None:
+    def prefetch_billig(  # noqa: C901
+        *,
+        events: list[Event] | QuerySet[Event],
+        tickets: bool = True,
+        prices: bool = True,
+    ) -> None:
         """
         Gets the billig event/ticket/prices for a list of events, and stores it in each event.billig.
         This is much faster than getting each billig event in separate queries when using `event.billig`
@@ -229,7 +244,7 @@ class Event(CustomBaseModel):
             ```python
             Event.fetch_billig_events(your_events)
             if your_events[0].billig:
-                print("Yay! Billig is fetched!")
+                print('Yay! Billig is fetched!')
             ```
 
         Note that if you don't need billig for any logic you don't need to
@@ -262,9 +277,7 @@ class Event(CustomBaseModel):
     # ======================== #
 
     def get_or_create_registration(self) -> EventRegistration:
-        """
-        Gets the reservation object or creates a new one if it does not exist
-        """
+        """Gets the reservation object or creates a new one if it does not exist"""
         if not self.registration:
             self.registration = EventRegistration.objects.create()
         return self.registration
