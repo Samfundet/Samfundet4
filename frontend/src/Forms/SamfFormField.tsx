@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
-import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
+import { SamfFormConfigContext, SamfFormContext, SamfFormModel } from './SamfForm';
+import { FieldProps, SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
 
 // ================================== //
 //             Utilities              //
@@ -16,13 +16,18 @@ import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps 
  * @param validator Optional validation function
  * @returns error state (true/false or error message string)
  */
-function getErrorState<U>(value: U, required?: boolean, validator?: (v: U) => string | boolean) {
+function GetErrorState<U>(value: U, required?: boolean, validator?: (values: SamfFormModel) => string | boolean) {
+  const values = useContext(SamfFormContext).state.values; // maybe the old context idk
+  if (values === undefined) {
+    throw new Error('SamfFormField must be used inside a SamfForm (the context provider)');
+  }
+
   // Missing value but field is required
   if (required === true && (value === undefined || value === '')) {
     return true;
   }
   // Run custom validation check
-  const validationResult = validator?.(value);
+  const validationResult = validator?.(values);
   // No error for validator
   if (validationResult === undefined || validationResult === true) {
     return false;
@@ -60,7 +65,7 @@ function castNumber(value: string, int: boolean): number | undefined {
  * @param validator Optional additional validator function for the field
  * @returns hook for value, state and setValue
  */
-function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
+function useSamfForm<U>(field: string, required: boolean, validator?: (v: SamfFormModel) => string | boolean) {
   // Get the context provided by SamfForm
   const { state, dispatch } = useContext(SamfFormContext);
   if (state === undefined || dispatch === undefined) {
@@ -73,7 +78,7 @@ function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => 
     dispatch?.({
       field: field,
       value: newValue,
-      error: getErrorState(newValue, required, validator),
+      error: GetErrorState(newValue, required, validator),
     });
   }
 
@@ -92,7 +97,7 @@ type SamfFormFieldProps<U> = {
   required?: boolean;
   label?: string;
   hidden?: boolean;
-  validator?: (v: U) => string | boolean;
+  validator?: (s: SamfFormModel) => string | boolean;
   // Dropdown
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;

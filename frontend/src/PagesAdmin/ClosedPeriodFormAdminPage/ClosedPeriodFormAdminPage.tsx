@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
+import { SamfForm, SamfFormModel } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
@@ -92,7 +92,14 @@ export function ClosedPeriodFormAdminPage() {
           ></SamfFormField>
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="datetime" label={`${t(KEY.start_time)}`}></SamfFormField>
+          <SamfFormField
+            field="start_dt"
+            type="datetime"
+            label={`${t(KEY.start_time)}`}
+            validator={(values: SamfFormModel) =>
+              values['start_dt'] != undefined && values['end_dt'] != undefined && values['start_dt'] < values['end_dt']
+            }
+          ></SamfFormField>
           <SamfFormField field="end_dt" type="datetime" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
       </SamfForm>
