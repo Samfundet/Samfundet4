@@ -6,6 +6,8 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
+import {useTextItem} from "~/hooks";
+import {TextItem} from "~/constants";
 
 type UserFeedbackProps = {
   enabled: boolean;
@@ -39,9 +41,9 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
           <b>{t(KEY.feedback_type_heading)}</b>
         </h1>
         <br />
-        <text>{t(KEY.feedback_helper_text)}</text>
+        <p>{useTextItem(TextItem.feedback_helper_text)}</p>
         <SamfFormField field={'feedback-text'} type={'text-long'} label={t(KEY.feedback_your_feedback)} />
-        <text>{t(KEY.feedback_want_contact_text)}</text>
+        <p>{useTextItem(TextItem.feedback_want_contact_text)}</p>
         <SamfFormField
           field={'feedback-email'}
           type={'email'}

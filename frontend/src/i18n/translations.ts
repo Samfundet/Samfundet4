@@ -265,8 +265,6 @@ export const nb: Record<KeyValues, string> = {
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
   [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
-  [KEY.feedback_helper_text]: 'Vi ønsker å vite hva vi kan gjøre bedre og hva du syntes er bra med denne siden.',
-  [KEY.feedback_want_contact_text]: 'Om du ønsker at vi skal kontakte deg kan du skrive eposten din her.',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
 
   // No category:
@@ -558,8 +556,6 @@ export const en: Record<KeyValues, string> = {
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
-  [KEY.feedback_helper_text]: 'We want to know what we can do better and what you think is good about this page.',
-  [KEY.feedback_want_contact_text]: 'If you want us to contact you, you can write your email here.',
   [KEY.feedback_your_feedback]: 'Your feedback',
 
   // No category:

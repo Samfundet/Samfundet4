@@ -102,6 +102,17 @@ def seed():
             'text_nb': 'Reservasjonssystemet vårt er fortsatt under utvikling, og vi ber om forbehold om at feil kan forekomme. Klikk her for å bestille via epost: ',
             'text_en': 'Our reservation system is still under development, and reservation errors may therefore occur. Click here to order via email: ',
         },
+        {
+            'key': 'feedback_helper_text',
+            'text_nb': 'Vi ønsker å vite hva vi kan gjøre bedre og hva du syntes er bra med denne siden.',
+            'text_en': 'We want to know what we can do better and what you think is good about this page.',
+        },
+        {
+            'key': 'feedback_want_contact_text',
+            'text_nb': 'Om du ønsker at vi skal kontakte deg kan du skrive eposten din her.',
+            'text_en': 'If you want us to contact you, you can write your email here.',
+        },
+
     ]
 
     TextItem.objects.all().delete()
