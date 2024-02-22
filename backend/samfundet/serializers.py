@@ -698,6 +698,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
