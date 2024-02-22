@@ -10,8 +10,8 @@ import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
 import { useGlobalContext } from '~/GlobalContextProvider';
 import { getActiveRecruitments, impersonateUser, logout } from '~/api';
-import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
-import { useDesktop, useIsDarkTheme, useScrollY } from '~/hooks';
+import { englishFlag, logoWhite, norwegianFlag } from '~/assets';
+import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,7 +21,6 @@ import { RecruitmentDto } from '~/dto';
 const scrollDistanceForOpaque = 30;
 
 export function Navbar() {
-  const isDarkTheme = useIsDarkTheme();
   const { isMobileNavigation, setIsMobileNavigation, notifications } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
@@ -50,7 +49,6 @@ export function Navbar() {
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
   const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
-  const navbarLogo = isDarkTheme || isTransparentNavbar ? logoWhite : logoBlack;
 
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
@@ -208,11 +206,9 @@ export function Navbar() {
     </div>
   );
 
-  const isLightLoginButton = isDarkTheme || (isTransparentNavbar && !isMobileNavigation);
-
   const loginButton = !user && (
     <Button
-      theme={isLightLoginButton ? 'white' : 'black'}
+      theme={'white'}
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
@@ -226,7 +222,7 @@ export function Navbar() {
 
   const logoutButton = user && (
     <Button
-      theme={isLightLoginButton ? 'white' : 'black'}
+      theme={'white'}
       rounded={true}
       className={isDesktop ? undefined : styles.popup_internal_button}
       onClick={() => {
@@ -268,7 +264,7 @@ export function Navbar() {
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
           <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
-            <img src={navbarLogo} id={styles.navbar_logo_img} />
+            <img src={logoWhite} id={styles.navbar_logo_img} />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
