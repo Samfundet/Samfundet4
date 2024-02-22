@@ -94,13 +94,20 @@ export function ClosedPeriodFormAdminPage() {
         <div className={styles.row}>
           <SamfFormField
             field="start_dt"
-            type="datetime"
+            type="date"
             label={`${t(KEY.start_time)}`}
             validator={(values: SamfFormModel) =>
               values['start_dt'] != undefined && values['end_dt'] != undefined && values['start_dt'] < values['end_dt']
             }
           ></SamfFormField>
-          <SamfFormField field="end_dt" type="datetime" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField
+            field="end_dt"
+            type="date"
+            label={`${t(KEY.end_time)}`}
+            validator={(values: SamfFormModel) =>
+              values['start_dt'] != undefined && values['end_dt'] != undefined && values['start_dt'] < values['end_dt']
+            }
+          ></SamfFormField>
         </div>
       </SamfForm>
     </AdminPageLayout>
