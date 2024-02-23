@@ -11,6 +11,7 @@ import {
   ImageDto,
   ImagePostDto,
   InformationPageDto,
+  InterviewDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -621,6 +622,20 @@ export async function getRecruitmentAdmissionsForApplicant(
   return response;
 }
 
+export async function getRecruitmentAdmissionForApplicant(
+  recruitment_position: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: recruitment_position },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getRecruitmentAdmissionsForGang(
   gangId: string,
   recruitmentId: string,
@@ -660,6 +675,13 @@ export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<Rec
   return response;
 }
 
+export async function getActiveRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitments;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
   const url =
     BACKEND_DOMAIN +
@@ -674,17 +696,35 @@ export async function getApplicantsWithoutInterviews(recruitmentId: string): Pro
   return response;
 }
 
-export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+export async function putRecruitmentAdmission(
+  admission: Partial<RecruitmentAdmissionDto>,
+  admissionId: number,
+): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: admissionId },
     });
   const data = {
     admission_text: admission.admission_text,
     recruitment_position: admission.recruitment_position,
   };
-  const response = await axios.post(url, data, { withCredentials: true });
+  const response = await axios.put(url, data, { withCredentials: true });
 
+  return response;
+}
+
+export async function putRecruitmentAdmissionInterview(
+  interviewId: string | number,
+  interview: Partial<InterviewDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_detail,
+      urlParams: { pk: interviewId.toString() },
+    });
+  const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
 }

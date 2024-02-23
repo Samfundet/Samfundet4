@@ -3,6 +3,7 @@ import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
+  ApplicantApplicationOverviewPage,
   ComponentPage,
   EventPage,
   EventsPage,
@@ -14,6 +15,7 @@ import {
   LoginPage,
   LycheAboutPage,
   LycheContactPage,
+  LycheReservationPage,
   LycheHomePage,
   LycheMenuPage,
   NotFoundPage,
@@ -45,7 +47,7 @@ import {
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
-import { ProtectedRoute } from './Components';
+import { ProtectedRoute, useScrollToTop } from './Components';
 import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
@@ -60,6 +62,7 @@ import { ROUTES } from './routes';
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
   useGoatCounter();
+  useScrollToTop();
 
   return (
     <Routes>
@@ -84,6 +87,8 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
+        <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
+        <Route path={ROUTES.frontend.contact} element={<></>} />
       </Route>
       {/* 
             ADMIN ROUTES
@@ -240,6 +245,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
         <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />
         <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
+        <Route path={ROUTES.frontend.sulten_reservation} element={<LycheReservationPage />} />
       </Route>
 
       {/* 
