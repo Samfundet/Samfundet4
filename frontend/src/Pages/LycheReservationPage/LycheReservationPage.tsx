@@ -106,7 +106,12 @@ export function LycheReservationPage() {
         <SamfFormField type="text" field="additional_info" required={false} />
       </ReservationFormLine>
       <div className={styles.check_box}>
-        <SamfFormField type="checkbox" field="agree" label="Privacy policy agreement" required={true} />
+        <SamfFormField
+          type="checkbox"
+          field="agree"
+          label={useTextItem(TextItem.sulten_reservation_policy) + '*'}
+          required={true}
+        />
       </div>
     </SamfForm>
   );
