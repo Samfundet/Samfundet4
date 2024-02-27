@@ -4,12 +4,14 @@
 
 .feedback_div {
   position: fixed;
-  z-index: 10000;
-  height: 90vh;
-  width: 98vw;
-  display: flex;
-  align-items: end;
-  justify-content: end;
+  top: 80%;
+  left: 95%;
+  z-index: 1000;
+
+ @include for-mobile-down {
+    top: 80%;
+    left: 85%;
+  }
 }
 
 .feedback_button {
