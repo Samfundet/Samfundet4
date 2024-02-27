@@ -57,15 +57,13 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
   return (
     <div>
       {!isOpen && (
-        <div className={styles.feedback_div}>
-          <IconButton
-            color={'orange'}
-            className={styles.feedback_button}
-            title={'Feedback'}
-            icon={'mdi:feedback-outline'}
-            onClick={() => setIsOpen(true)}
-          />
-        </div>
+        <IconButton
+          color={'orange'}
+          className={styles.feedback_button}
+          title={'Feedback'}
+          icon={'mdi:feedback-outline'}
+          onClick={() => setIsOpen(true)}
+        />
       )}
       <Modal isOpen={isOpen} className={styles.modal}>
         <IconButton

@@ -2,22 +2,14 @@
 
 @import 'src/mixins';
 
-.feedback_div {
-  position: fixed;
-  top: 80%;
-  left: 95%;
-  z-index: 1000;
-
- @include for-mobile-down {
-    top: 80%;
-    left: 85%;
-  }
-}
-
 .feedback_button {
-  position: sticky;
+  position: fixed;
+  bottom: 10vh;
+  right: 3vh;
+  z-index: 1000;
   height: 50px;
   width: 50px;
+
 }
 
 .modal_close_button {
