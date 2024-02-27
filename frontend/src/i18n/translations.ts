@@ -81,6 +81,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
+  [KEY.common_not_required]: 'Ikke påkrevd',
   [KEY.common_overview]: 'Oversikt',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_festivals]: 'Festivaler',
@@ -261,6 +262,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
+  // Feedback
+  [KEY.feedback_type]: 'Type tilbakemelding',
+  [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
+  [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+
   // No category:
   [KEY.owner]: 'Eier',
   [KEY.end_time]: 'Sluttid',
@@ -363,6 +369,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
+  [KEY.common_not_required]: 'Not required',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_more_info]: 'More info',
   [KEY.common_firstname]: 'First name',
@@ -545,6 +552,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.occupied_title]: 'Availability',
   [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
+
+  // Feedback
+  [KEY.feedback_type]: 'Feedback type',
+  [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
+  [KEY.feedback_your_feedback]: 'Your feedback',
 
   // No category:
   [KEY.owner]: 'Owner',
