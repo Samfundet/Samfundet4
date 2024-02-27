@@ -8,7 +8,7 @@
 }
 
 .header {
- font-size: 2em;
+  font-size: 2em;
 }
 
 .partContainer {
@@ -31,9 +31,9 @@
 }
 
 .email {
-  color: $sulten-orange
+  color: $sulten-orange;
 }
- 
+
 .formContainer {
   width: 50%;
   background-color: $black-1;
@@ -47,9 +47,13 @@
   font-weight: 700;
 }
 
-.check_box  {
-  color: white;
-  font-size: 0.2em;
+.check_box {
+  label {
+    color: $white;
+    display: flex;
+    flex-direction: row-reverse;
+    font-weight: 400;
+  }
 }
 
 .reservation_info {
