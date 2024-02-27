@@ -48,7 +48,7 @@
 }
 
 .check_box {
-  label {
+  & label {
     color: $white;
     display: flex;
     flex-direction: row-reverse;
