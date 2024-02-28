@@ -395,3 +395,13 @@ export type RecruitmentAdmissionDto = {
   created_at: string;
   withdrawn: boolean;
 };
+
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type FeedbackDto = {
+  otherOption: string;
+  comment: string;
+  alternatives: string[];
+};

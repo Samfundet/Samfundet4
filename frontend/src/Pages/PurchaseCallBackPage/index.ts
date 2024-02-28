@@ -1,0 +1,1 @@
+export { PurchaseCallBackPage } from './PurchaseCallbackPage';
