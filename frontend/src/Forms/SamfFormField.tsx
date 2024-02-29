@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
-import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
+import { SamfFormConfigContext, SamfFormContext, SamfFormModel } from './SamfForm';
+import { FieldProps, SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
 
 // ================================== //
 //             Utilities              //
@@ -12,17 +12,27 @@ import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps 
 /**
  * Calculates the error state for a given value
  * @param value Current value of the field
+ * @param values All values in the form
  * @param required Whether the field is required
  * @param validator Optional validation function
  * @returns error state (true/false or error message string)
  */
-function getErrorState<U>(value: U, required?: boolean, validator?: (v: U) => string | boolean) {
+function getErrorState(
+  value: unknown,
+  values: SamfFormModel,
+  required?: boolean,
+  validator?: (values: SamfFormModel) => string | boolean,
+) {
+  if (values === undefined) {
+    throw new Error('SamfFormField must be used inside a SamfForm (the context provider)');
+  }
+
   // Missing value but field is required
   if (required === true && (value === undefined || value === '')) {
     return true;
   }
   // Run custom validation check
-  const validationResult = validator?.(value);
+  const validationResult = validator?.(values);
   // No error for validator
   if (validationResult === undefined || validationResult === true) {
     return false;
@@ -60,7 +70,7 @@ function castNumber(value: string, int: boolean): number | undefined {
  * @param validator Optional additional validator function for the field
  * @returns hook for value, state and setValue
  */
-function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
+function useSamfForm<U>(field: string, required: boolean, validator?: (v: SamfFormModel) => string | boolean) {
   // Get the context provided by SamfForm
   const { state, dispatch } = useContext(SamfFormContext);
   if (state === undefined || dispatch === undefined) {
@@ -69,11 +79,17 @@ function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => 
 
   // Set the current value of the state using form context
   function setValue(newValue: U) {
+    // Update values in state
+    const newValues = {
+      ...state.values,
+      [field]: newValue,
+    };
+
     // Dispatch event to form reducer
     dispatch?.({
       field: field,
       value: newValue,
-      error: getErrorState(newValue, required, validator),
+      error: getErrorState(newValue, newValues, required, validator),
     });
   }
 
@@ -92,7 +108,7 @@ type SamfFormFieldProps<U> = {
   required?: boolean;
   label?: string;
   hidden?: boolean;
-  validator?: (v: U) => string | boolean;
+  validator?: (s: SamfFormModel) => string | boolean;
   // Dropdown
   options?: DropDownOption<U>[];
   defaultOption?: DropDownOption<U>;
@@ -121,6 +137,9 @@ export function SamfFormField<U>({
   // Whether or not to show error for field
   // Toggeled on submit or on field change
   const [showError, setShowError] = useState<boolean>(validateOnInit);
+
+  // Get form state and dispatch from context
+  const { state, dispatch } = useContext(SamfFormContext);
 
   // Handles all change events
   function handleOnChange(newValue: unknown, initialUpdate?: boolean) {
@@ -168,6 +187,15 @@ export function SamfFormField<U>({
     // Handle on change depends on field type which should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [required]);
+
+  useEffect(() => {
+    // Run dispatch to update error state
+    dispatch({
+      field: field,
+      value: value,
+      error: getErrorState(value, state.values, required, validator),
+    });
+  }, [dispatch, field, value, state.values, required, validator]);
 
   // ================================== //
   //           Form Field UI            //

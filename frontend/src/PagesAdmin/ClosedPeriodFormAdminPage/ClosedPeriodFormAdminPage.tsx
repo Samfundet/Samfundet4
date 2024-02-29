@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
+import { SamfForm, SamfFormModel } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
@@ -11,6 +11,7 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { isValidDateRange } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
@@ -121,21 +122,17 @@ export function ClosedPeriodFormAdminPage() {
             field="start_dt"
             type="date"
             label={`${t(KEY.start_time)}`}
-            required={true}
-            onChange={(value: Date) => {
-              setStartTime(value);
+            validator={(values: SamfFormModel) => {
+              return isValidDateRange(values['start_dt'] as Date, values['end_dt'] as Date);
             }}
-            validator={(value) => (endTime ? value < endTime : true)}
           ></SamfFormField>
           <SamfFormField
             field="end_dt"
             type="date"
             label={`${t(KEY.end_time)}`}
-            required={true}
-            onChange={(value: Date) => {
-              setEndTime(value);
+            validator={(values: SamfFormModel) => {
+              return isValidDateRange(values['start_dt'] as Date, values['end_dt'] as Date);
             }}
-            validator={(value) => (startTime ? value > startTime : true)}
           ></SamfFormField>
         </div>
       </SamfForm>

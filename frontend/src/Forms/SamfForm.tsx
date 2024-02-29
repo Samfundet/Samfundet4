@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { createContext, Dispatch, ReactNode, useEffect, useReducer, useState } from 'react';
 import { Button } from '~/Components';
+import { ButtonDisplay, ButtonTheme } from '~/Components/Button';
 import { usePermission } from '~/hooks';
 import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
-import { ButtonDisplay, ButtonTheme } from '~/Components/Button';
 
 // ================================== //
 //    Context & State Management      //
@@ -18,7 +18,7 @@ type SamfFormAction<U> = {
 };
 
 // Current state of form
-type SamfFormModel = Record<string, unknown>;
+export type SamfFormModel = Record<string, unknown>;
 type SamfFormState<T extends SamfFormModel> = {
   values: T;
   validity: Record<string, boolean>;
