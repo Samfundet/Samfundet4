@@ -11,11 +11,9 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { isValidDateRange } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
-
-const isValidDateRange = (values: SamfFormModel) =>
-  values['start_dt'] != undefined && values['end_dt'] != undefined && values['start_dt'] < values['end_dt'];
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -99,13 +97,17 @@ export function ClosedPeriodFormAdminPage() {
             field="start_dt"
             type="date"
             label={`${t(KEY.start_time)}`}
-            validator={isValidDateRange}
+            validator={(values: SamfFormModel) => {
+              return isValidDateRange(values['start_dt'] as Date, values['end_dt'] as Date);
+            }}
           ></SamfFormField>
           <SamfFormField
             field="end_dt"
             type="date"
             label={`${t(KEY.end_time)}`}
-            validator={isValidDateRange}
+            validator={(values: SamfFormModel) => {
+              return isValidDateRange(values['start_dt'] as Date, values['end_dt'] as Date);
+            }}
           ></SamfFormField>
         </div>
       </SamfForm>
