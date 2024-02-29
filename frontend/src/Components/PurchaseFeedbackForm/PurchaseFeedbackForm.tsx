@@ -1,38 +1,46 @@
+import { t } from 'i18next';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { postFeedback } from '~/api';
-import { FeedbackDto } from '~/dto';
+import { postPurchaseFeedback } from '~/api';
+import { PurchaseFeedbackDto, PurchaseFeedbackFormDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import styles from './PurchaseFeedbackform.module.scss';
 
-type PurchaseFeedbackFormProps = {
-  alternatives: string[];
-};
-
-export function PurchaseFeedbackForm({ alternatives }: PurchaseFeedbackFormProps) {
+export function PurchaseFeedbackForm({ title, questions, alternatives }: PurchaseFeedbackFormDto) {
   function handleSubmit(formData: Record<string, string>) {
+    const questionResponses: Record<string, string> = {};
+
+    for (const question in formData) {
+      if (questions.includes(question)) {
+        questionResponses[question] = formData[question];
+      }
+    }
+
     const selectedAlternatives = alternatives.filter((alternative) => formData[alternative] === 'on');
 
-    const feedback: FeedbackDto = {
-      otherOption: formData['other'],
-      comment: formData['comment'],
+    const feedback: PurchaseFeedbackDto = {
+      responses: questionResponses,
       alternatives: selectedAlternatives,
     };
-    postFeedback(feedback);
+    postPurchaseFeedback(feedback);
   }
   return (
     <div>
-      <SamfForm onSubmit={handleSubmit} submitText="Send inn">
-        <h1 className={styles.title}>Hvor hørte du om dette arrangementet?</h1>
+      <SamfForm onSubmit={handleSubmit} submitText={t(KEY.common_save)}>
+        <h1 className={styles.title}>{title}</h1>
         <div className={styles.buttonContainer}>
-          {alternatives.map((alternative, index) => (
+          {alternatives.map((alternatives, index) => (
             <div key={index}>
-              <p>{alternative}</p>
-              <SamfFormField required={false} field={alternative} type="checkbox" />
+              <p>{alternatives}</p>
+              <SamfFormField required={false} field={alternatives} type="checkbox" />
             </div>
           ))}
         </div>
-        <SamfFormField required={true} field="other" type="text" label="Andre steder:" />
-        <SamfFormField required={true} field="comment" type="text" label="Øvrige Kommentarer:" />
+        {questions.map((questions, index) => (
+          <div key={index}>
+            <SamfFormField required={true} field={questions} type="text" label={questions} />
+          </div>
+        ))}
       </SamfForm>
     </div>
   );

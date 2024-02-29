@@ -19,6 +19,9 @@ export const ROUTES_FRONTEND = {
   recruitment_application: '/recruitment/position/:positionID/',
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
   contact: '/contact',
+  // Purchase callback:
+  purchase_callback: '/callback/',
+
   // ==================== //
   //        Sulten        //
   // ==================== //
@@ -72,6 +75,7 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_gang_position_applicants_interview_notes:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/interview-notes/:interviewId',
   admin_sulten_menu: '/control-panel/lyche/menu',
+
   // ==================== //
   //      Development     //
   // ==================== //

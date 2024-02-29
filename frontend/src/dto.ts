@@ -400,8 +400,13 @@ export type RecruitmentAdmissionDto = {
 //                       Purchase Feedback
 // ############################################################
 
-export type FeedbackDto = {
-  otherOption: string;
-  comment: string;
+export type PurchaseFeedbackDto = {
+  responses: Record<string, string>;
+  alternatives: string[];
+};
+
+export type PurchaseFeedbackFormDto = {
+  title: string;
+  questions: string[];
   alternatives: string[];
 };
