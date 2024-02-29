@@ -85,11 +85,6 @@ export function ClosedPeriodFormAdminPage() {
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
-  const [startTime, setStartTime] = useState<Date | undefined>(closedPeriod?.start_dt);
-  const [endTime, setEndTime] = useState<Date | undefined>(closedPeriod?.end_dt);
-
-  useEffect(() => {}, [startTime, endTime]);
-
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
