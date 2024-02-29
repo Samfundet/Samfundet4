@@ -211,14 +211,15 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
-        
+
     def validate(self, attrs: dict) -> dict:
         # Make sure that the start date is before the end date
-        startDate = attrs['start_dt']
-        endDate = attrs['end_dt']
-        if startDate > endDate:
-            raise serializers.ValidationError(f'Start date ({startDate}) must be before end date ({endDate})')
+        start_date = attrs['start_dt']
+        end_date = attrs['end_dt']
+        if start_date > end_date:
+            raise serializers.ValidationError(f'Start date ({start_date}) must be before end date ({end_date})')
         return attrs
+
 
 class LoginSerializer(serializers.Serializer):
     """

@@ -477,7 +477,7 @@ class ClosedPeriodAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id']
     # list_filter = [] # TODO
-    list_display = ['id','message_nb', '__str__', 'created_at', 'updated_at']
+    list_display = ['id', 'message_nb', '__str__', 'created_at', 'updated_at']
     # search_fields = []
     # filter_horizontal = []
     list_display_links = ['id', '__str__']

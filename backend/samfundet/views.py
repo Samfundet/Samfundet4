@@ -220,7 +220,7 @@ class ClosedPeriodView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = ClosedPeriodSerializer
     queryset = ClosedPeriod.objects.all()
-        
+
     # Make sure data is valid
     def create(self, request: Request) -> Response:
         serializer = ClosedPeriodSerializer(data=request.data)
