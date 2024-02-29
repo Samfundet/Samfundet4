@@ -3,6 +3,8 @@ import {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  FeedbackDto,
+  FeedbackFormDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
@@ -727,4 +729,19 @@ export async function putRecruitmentAdmissionInterview(
     });
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
+}
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export async function postFeedback(feedback: FeedbackDto): Promise<FeedbackDto> {
+  const url = BACKEND_DOMAIN; //TODO: set correct url
+  const response = await axios.post<FeedbackDto>(url, feedback, { withCredentials: true });
+  return response.data;
+}
+
+export async function getFeedbackForm(): Promise<FeedbackFormDto> {
+  const url = BACKEND_DOMAIN; //TODO: set correct url
+  const response = await axios.get<FeedbackFormDto>(url, { withCredentials: true });
+  return response.data;
 }

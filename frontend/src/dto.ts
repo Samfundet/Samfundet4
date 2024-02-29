@@ -401,7 +401,12 @@ export type RecruitmentAdmissionDto = {
 // ############################################################
 
 export type FeedbackDto = {
-  otherOption: string;
-  comment: string;
+  responses: Record<string, string>;
+  alternatives: string[];
+};
+
+export type FeedbackFormDto = {
+  title: string;
+  questions: string[];
   alternatives: string[];
 };

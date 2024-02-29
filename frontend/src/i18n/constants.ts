@@ -265,6 +265,9 @@ export const KEY = {
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
 
+  //Feedback form
+  question: 'question',
+
   // No category:
   owner: 'owner',
   end_time: 'end_time',
