@@ -43,6 +43,7 @@ from .models.general import (
     FoodPreference,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -705,7 +706,23 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+
+class UserFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFeedbackModel
+        fields = [
+            'text',
+            'contact_email',
+            'path',
+            'screen_resolution',
+        ]
+        extra_kwargs = {
+            'contact_email': {'required': False},
+            'screen_resolution': {'required': False},
+        }
