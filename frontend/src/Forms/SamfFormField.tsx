@@ -195,8 +195,7 @@ export function SamfFormField<U>({
       value: value,
       error: getErrorState(value, state.values, required, validator),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.values, required, validator]);
+  }, [dispatch, field, value, state.values, required, validator]);
 
   // ================================== //
   //           Form Field UI            //
