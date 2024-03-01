@@ -1,6 +1,9 @@
 # imports
-from django.urls import path, include
+from __future__ import annotations
+
 from rest_framework import routers
+
+from django.urls import path, include
 
 from . import views
 
@@ -58,17 +61,16 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
-
     ########## Lyche ##########
     path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
-
     ########## Recruitment ##########
+    path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
-
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
+    path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
 ]
