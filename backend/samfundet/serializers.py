@@ -1,4 +1,5 @@
 import itertools
+from datetime import datetime, timedelta
 
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
@@ -18,7 +19,8 @@ from .models.recruitment import (
     RecruitmentAdmission,
     InterviewRoom,
     Interview,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
+    RecruitmentInterviewAvailability,
 )
 from .models.event import (Event, EventGroup, EventCustomTicket)
 from .models.general import (
@@ -634,15 +636,25 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         return recruitment_admission
 
 
-class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
+    # Set custom format to remove seconds from start/end times, as they are ignored
+    start_time = serializers.DateTimeField(format='%H:%M')
+    end_time = serializers.DateTimeField(format='%H:%M')
 
     class Meta:
-        model = Occupiedtimeslot
+        model = RecruitmentInterviewAvailability
+        fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+
+class OccupiedTimeslotSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OccupiedTimeslot
         fields = '__all__'
 
 
 class ApplicantInfoSerializer(CustomBaseSerializer):
-    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
+    occupied_timeslots = OccupiedTimeslotSerializer(many=True)
 
     class Meta:
         model = User

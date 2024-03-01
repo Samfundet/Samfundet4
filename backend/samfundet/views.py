@@ -1,3 +1,4 @@
+import datetime
 import os
 import hmac
 import hashlib
@@ -10,6 +11,7 @@ from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
+from django.utils.timezone import make_aware
 
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
@@ -20,7 +22,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
@@ -38,9 +40,10 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentInterviewAvailability,
 )
 from .models.general import (
     Tag,
@@ -98,14 +101,16 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    OccupiedtimeslotSerializer,
+    OccupiedTimeslotSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
+    RecruitmentInterviewAvailabilitySerializer,
 )
-from .utils import event_query
+from .utils import event_query, generate_timeslots
+
 
 # =============================== #
 #          Home Page              #
@@ -731,24 +736,110 @@ class InterviewView(ModelViewSet):
     queryset = Interview.objects.all()
 
 
-class OccupiedtimeslotView(ListCreateAPIView):
-    model = Occupiedtimeslot
-    serializer_class = OccupiedtimeslotSerializer
+class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
+    model = RecruitmentInterviewAvailability
+    serializer_class = RecruitmentInterviewAvailabilitySerializer
+    queryset = RecruitmentInterviewAvailability.objects.all()
 
-    def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
-        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
-        return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
 
-    def create(self, request: Request) -> Response:
-        for p in request.data:
-            p['user'] = request.user.id
-        # TODO Could maybe need a check for saving own, not allowing to save others to themselves
-        serializer = self.get_serializer(data=request.data, many=True)
-        if serializer.is_valid():
-            # Uses set functionality, but tries to reduce transactions
-            Occupiedtimeslot.objects.filter(user=request.user, recruitment=request.data[0]['recruitment']).delete()
-            serializer.save()
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+class RecruitmentAvailabilityView(APIView):
+    model = RecruitmentInterviewAvailability
+    serializer_class = RecruitmentInterviewAvailabilitySerializer
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request: Request, **kwargs) -> Response:
+        recruitment = kwargs.get('id')
+        availability = get_object_or_404(RecruitmentInterviewAvailability, recruitment__id=recruitment)
+
+        start_time = availability.start_time
+        end_time = availability.end_time
+        interval = availability.timeslot_interval
+
+        timeslots = generate_timeslots(start_time, end_time, interval)
+
+        return Response({
+            'start_date': availability.start_date,
+            'end_date': availability.end_date,
+            'timeslots': timeslots,
+        })
+
+
+class OccupiedTimeslotView(ListCreateAPIView):
+    model = OccupiedTimeslot
+    serializer_class = OccupiedTimeslotSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, **kwargs) -> Response:
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id)
+
+        dates = {}
+        for occupied in occupied_timeslots:
+            date_string = occupied.start_dt.strftime("%Y.%m.%d")
+            time_string = occupied.start_dt.strftime("%H:%M")
+
+            if date_string in dates:
+                dates[date_string].append(time_string)
+            else:
+                dates[date_string] = [time_string]
+
+        return Response({
+            "recruitment": recruitment.id,
+            "dates": dates,
+        })
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        if 'recruitment' not in request.data or not request.data['recruitment']:
+            return Response({'error': 'recruitment is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'dates' not in request.data or not request.data['recruitment']:
+            return Response({'error': 'dates is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Exit early if no timeslots are provided
+        if not request.data['dates'] or all(not x for x in request.data['dates'].values()):
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        recruitment = get_object_or_404(Recruitment, id=request.data['recruitment'])
+        availability = RecruitmentInterviewAvailability.objects.filter(recruitment__id=recruitment.id).first()
+
+        occupied_timeslots = []
+
+        # If there is no set availability for this recruitment, we accept all valid timeslots
+        if availability:
+            timeslots = generate_timeslots(
+                availability.start_time,
+                availability.end_time,
+                availability.timeslot_interval,
+            )
+
+            # Check that all provided timeslots exist for the recruitment
+            for d in request.data['dates']:
+                invalid = [x for x in request.data['dates'][d] if x not in timeslots]
+                if invalid:
+                    return Response(
+                        {'error': 'Invalid timeslot(s)', 'invalid_timeslots': invalid},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                for timeslot in request.data['dates'][d]:
+                    start_date = make_aware(
+                        datetime.datetime.strptime(f"{d} {timeslot}", "%Y.%m.%d %H:%M"),
+                        timezone=datetime.timezone.utc,
+                    )
+                    end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
+
+                    print(f"Save start {start_date}")
+
+                    occupied_timeslots.append(
+                        OccupiedTimeslot(user=request.user,
+                                         recruitment=recruitment,
+                                         start_dt=start_date,
+                                         end_dt=end_date))
+
+        # If we've reached this point, all provided timeslots are valid
+
+        # First delete all user's previous occupied timeslots
+        OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id).delete()
+        OccupiedTimeslot.objects.bulk_create(occupied_timeslots)
+
+        return Response({'message': 'Successfully updated occupied timeslots'})

@@ -17,7 +17,8 @@ from .models.recruitment import (
     RecruitmentAdmission,
     InterviewRoom,
     Interview,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
+    RecruitmentInterviewAvailability,
 )
 from .models.general import (
     Tag,
@@ -62,7 +63,7 @@ from .models.general import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
@@ -596,6 +597,12 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
 
 
 ### End: Our models ###

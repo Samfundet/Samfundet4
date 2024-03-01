@@ -203,7 +203,29 @@ class RecruitmentAdmission(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
-class Occupiedtimeslot(FullCleanSaveMixin):
+class RecruitmentInterviewAvailability(CustomBaseModel):
+    """This models all possible times for interviews for the given recruitment.
+
+    If position is null, this instance will be used to display the possible timeslots applicants may mark as
+    unavailable. There can only exist one such instance per recruitment. If position is set, this will be used for the
+    automatic interview booking logic.
+    """
+
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Which recruitment this availability applies to')
+    position = models.ForeignKey(RecruitmentPosition, on_delete=models.CASCADE, help_text='Which position this availability applies to', null=True, blank=True)
+    start_date = models.DateField(help_text='First possible date for interviews', null=False, blank=False)
+    end_date = models.DateField(help_text='Last possible date for interviews', null=False, blank=False)
+    start_time = models.TimeField(help_text='First possible time of day for interviews', default='08:00:00', null=False, blank=False)
+    end_time = models.TimeField(help_text='Last possible time of day for interviews', default='23:00:00', null=False, blank=False)
+    timeslot_interval = models.PositiveSmallIntegerField(help_text='The time interval (in minutes) between each timeslot', default=30)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['recruitment', 'position'], name='recruitment_position_UNIQ')
+        ]
+
+
+class OccupiedTimeslot(FullCleanSaveMixin):
 
     user = models.ForeignKey(
         User,
@@ -219,3 +241,8 @@ class Occupiedtimeslot(FullCleanSaveMixin):
     # Start and end time of availability
     start_dt = models.DateTimeField(help_text='Start of occupied time', null=False, blank=False)
     end_dt = models.DateTimeField(help_text='End of occupied time', null=False, blank=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')
+        ]

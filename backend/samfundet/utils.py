@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import timedelta, datetime
+
 from django.http import QueryDict
 from django.db.models import Q
 from django.db.models.query import QuerySet
@@ -36,3 +38,18 @@ def event_query(query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Ev
     if location:
         events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
     return events
+
+
+def generate_timeslots(start_time, end_time, interval_minutes: int) -> list[str]:
+    # Convert from datetime.time objects to datetime.datetime
+    start_datetime = datetime.combine(datetime.today(), start_time)
+    end_datetime = datetime.combine(datetime.today(), end_time)
+    diff = end_datetime - start_datetime
+
+    # Calculate the number of intervals. Rounded to ensure we don't bypass end_time
+    num_intervals = int(diff.total_seconds() / (interval_minutes * 60))
+
+    timeslots = [start_datetime + timedelta(minutes=i * interval_minutes) for i in range(num_intervals + 1)]
+    formatted = [timeslot.strftime('%H:%M') for timeslot in timeslots]
+
+    return formatted

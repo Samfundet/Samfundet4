@@ -87,6 +87,7 @@ export const KEY = {
   common_create: 'common_create',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_loading: 'common_loading',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_profile: 'common_profile',

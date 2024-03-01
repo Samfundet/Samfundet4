@@ -121,6 +121,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_total]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
+  [KEY.common_loading]: 'Laster inn',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Billett',
@@ -391,6 +392,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_total]: 'Total',
   [KEY.common_guests]: 'Guests',
   [KEY.common_occasion]: 'Occasion',
+  [KEY.common_loading]: 'Loading',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
