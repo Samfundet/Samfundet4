@@ -836,10 +836,6 @@ class OccupiedTimeslotView(ListCreateAPIView):
         if 'dates' not in request.data or not request.data['recruitment']:
             return Response({'error': 'dates is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Exit early if no timeslots are provided
-        if not request.data['dates'] or all(not x for x in request.data['dates'].values()):
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
         recruitment = get_object_or_404(Recruitment, id=request.data['recruitment'])
         availability = RecruitmentInterviewAvailability.objects.filter(recruitment__id=recruitment.id).first()
 
@@ -868,8 +864,6 @@ class OccupiedTimeslotView(ListCreateAPIView):
                         timezone=datetime.timezone.utc,
                     )
                     end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
-
-                    print(f"Save start {start_date}")
 
                     occupied_timeslots.append(
                         OccupiedTimeslot(user=request.user,
