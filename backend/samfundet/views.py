@@ -11,11 +11,11 @@ from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
 
 from django.http import QueryDict
 from django.utils import timezone
@@ -82,25 +82,25 @@ from .serializers import (
 from .models.event import Event, EventGroup
 from .models.general import (
     Tag,
-    User,
-    Menu,
     Gang,
+    Menu,
+    User,
     Table,
     Venue,
+    Booking,
     Image,
     Infobox,
     Profile,
-    Booking,
-    MenuItem,
-    GangType,
-    TextItem,
-    KeyValue,
     BlogPost,
+    GangType,
+    KeyValue,
+    MenuItem,
+    TextItem,
     Reservation,
-    Organization,
-    FoodCategory,
-    Saksdokument,
     ClosedPeriod,
+    FoodCategory,
+    Organization,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
