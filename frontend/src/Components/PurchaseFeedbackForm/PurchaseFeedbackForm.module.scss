@@ -1,5 +1,21 @@
+.alternative {
+  display: flex; 
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .title {
+  font-weight: 700;
   text-decoration: solid;
   font-size: 1.8em;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
 
+.buttonContainer {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 10px; 
 }

@@ -15,6 +15,11 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
         questionResponses[question] = formData[question];
       }
     }
+    for (const question in formData) {
+      if (questions.includes(question)) {
+        questionResponses[question] = formData[question];
+      }
+    }
 
     const selectedAlternatives = alternatives.filter((alternative) => formData[alternative] === 'on');
 
@@ -30,7 +35,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.buttonContainer}>
           {alternatives.map((alternatives, index) => (
-            <div key={index}>
+            <div key={index} className={styles.alternative}>
               <p>{alternatives}</p>
               <SamfFormField required={false} field={alternatives} type="checkbox" />
             </div>
