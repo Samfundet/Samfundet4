@@ -6,17 +6,6 @@ import hmac
 import hashlib
 from typing import Any
 
-from guardian.shortcuts import get_objects_for_user
-
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.request import Request
-from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
-
 from django.http import QueryDict
 from django.utils import timezone
 from django.db.models import Case, When, Count, QuerySet
@@ -36,7 +25,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission, DjangoModelPermissionsOrAnonReadOnly
@@ -50,42 +39,6 @@ from root.constants import (
 
 from .utils import event_query, generate_timeslots
 from .homepage import homepage
-from .models.event import Event, EventGroup
-from .models.general import (
-    Tag,
-    User,
-    Menu,
-    Gang,
-    Table,
-    Venue,
-    Image,
-    Infobox,
-    Profile,
-    Booking,
-    MenuItem,
-    GangType,
-    TextItem,
-    KeyValue,
-    BlogPost,
-    Reservation,
-    Organization,
-    FoodCategory,
-    Saksdokument,
-    ClosedPeriod,
-    FoodPreference,
-    UserPreference,
-    InformationPage,
-    UserFeedbackModel,
-)
-from .models.recruitment import (
-    Interview,
-    Recruitment,
-    InterviewRoom,
-    OccupiedTimeslot,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    RecruitmentInterviewAvailability,
-)
 from .serializers import (
     TagSerializer,
     GangSerializer,
@@ -125,6 +78,42 @@ from .serializers import (
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
+)
+from .models.event import Event, EventGroup
+from .models.general import (
+    Tag,
+    User,
+    Menu,
+    Gang,
+    Table,
+    Venue,
+    Image,
+    Infobox,
+    Profile,
+    Booking,
+    MenuItem,
+    GangType,
+    TextItem,
+    KeyValue,
+    BlogPost,
+    Reservation,
+    Organization,
+    FoodCategory,
+    Saksdokument,
+    ClosedPeriod,
+    FoodPreference,
+    UserPreference,
+    InformationPage,
+    UserFeedbackModel,
+)
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    OccupiedTimeslot,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    RecruitmentInterviewAvailability,
 )
 
 # =============================== #

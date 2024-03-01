@@ -14,14 +14,6 @@ from root.utils.routes import admin__samfundet_recruitmentadmission_change
 from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
 
 from .models.event import Event, EventGroup, EventRegistration
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    OccupiedTimeslot,
-)
 from .models.general import (
     Tag,
     Gang,

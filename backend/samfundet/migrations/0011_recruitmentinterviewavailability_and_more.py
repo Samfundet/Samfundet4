@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('samfundet', '0008_alter_occupiedtimeslot_end_dt_and_more'),
+        ('samfundet', '0010_userfeedbackmodel'),
     ]
 
     operations = [
