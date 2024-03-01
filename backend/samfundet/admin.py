@@ -20,7 +20,7 @@ from .models.recruitment import (
     RecruitmentAdmission,
     InterviewRoom,
     Interview,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
 )
 from .models.general import (
     Tag,
@@ -53,7 +53,7 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentInterviewAvailability,
