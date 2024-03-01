@@ -59,6 +59,16 @@
   }
 }
 
+.marker {
+  height: 4px;
+  width: 4px;
+  border-radius: 3px;
+  background: $grey-2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .selected_day {
   background: $red-samf;
   color: $white;
@@ -75,14 +85,4 @@
   @include theme-dark {
     color: $grey-3;
   }
-}
-
-.marker {
-  height: 4px;
-  width: 4px;
-  border-radius: 3px;
-  background: $grey-2;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
