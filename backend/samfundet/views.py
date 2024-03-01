@@ -786,11 +786,13 @@ class RecruitmentAvailabilityView(APIView):
 
         timeslots = generate_timeslots(start_time, end_time, interval)
 
-        return Response({
-            'start_date': availability.start_date,
-            'end_date': availability.end_date,
-            'timeslots': timeslots,
-        })
+        return Response(
+            {
+                'start_date': availability.start_date,
+                'end_date': availability.end_date,
+                'timeslots': timeslots,
+            }
+        )
 
 
 class OccupiedTimeslotView(ListCreateAPIView):
@@ -805,18 +807,20 @@ class OccupiedTimeslotView(ListCreateAPIView):
 
         dates = {}
         for occupied in occupied_timeslots:
-            date_string = occupied.start_dt.strftime("%Y.%m.%d")
-            time_string = occupied.start_dt.strftime("%H:%M")
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
 
             if date_string in dates:
                 dates[date_string].append(time_string)
             else:
                 dates[date_string] = [time_string]
 
-        return Response({
-            "recruitment": recruitment.id,
-            "dates": dates,
-        })
+        return Response(
+            {
+                'recruitment': recruitment.id,
+                'dates': dates,
+            }
+        )
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         if 'recruitment' not in request.data or not request.data['recruitment']:
@@ -842,23 +846,16 @@ class OccupiedTimeslotView(ListCreateAPIView):
             for d in request.data['dates']:
                 invalid = [x for x in request.data['dates'][d] if x not in timeslots]
                 if invalid:
-                    return Response(
-                        {'error': 'Invalid timeslot(s)', 'invalid_timeslots': invalid},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+                    return Response({'error': 'Invalid timeslot(s)', 'invalid_timeslots': invalid}, status=status.HTTP_400_BAD_REQUEST)
 
                 for timeslot in request.data['dates'][d]:
                     start_date = make_aware(
-                        datetime.datetime.strptime(f"{d} {timeslot}", "%Y.%m.%d %H:%M"),
+                        datetime.datetime.strptime(f'{d} {timeslot}', '%Y.%m.%d %H:%M'),
                         timezone=datetime.timezone.utc,
                     )
                     end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
 
-                    occupied_timeslots.append(
-                        OccupiedTimeslot(user=request.user,
-                                         recruitment=recruitment,
-                                         start_dt=start_date,
-                                         end_dt=end_date))
+                    occupied_timeslots.append(OccupiedTimeslot(user=request.user, recruitment=recruitment, start_dt=start_date, end_dt=end_date))
 
         # If we've reached this point, all provided timeslots are valid
 

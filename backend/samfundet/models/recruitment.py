@@ -236,13 +236,10 @@ class RecruitmentInterviewAvailability(CustomBaseModel):
     timeslot_interval = models.PositiveSmallIntegerField(help_text='The time interval (in minutes) between each timeslot', default=30)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['recruitment', 'position'], name='recruitment_position_UNIQ')
-        ]
+        constraints = [models.UniqueConstraint(fields=['recruitment', 'position'], name='recruitment_position_UNIQ')]
 
 
 class OccupiedTimeslot(FullCleanSaveMixin):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -259,6 +256,4 @@ class OccupiedTimeslot(FullCleanSaveMixin):
     end_dt = models.DateTimeField(help_text='End of occupied time', null=False, blank=False)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')
-        ]
+        constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]

@@ -672,7 +672,6 @@ class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
 
 
 class OccupiedTimeslotSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = OccupiedTimeslot
         fields = '__all__'
