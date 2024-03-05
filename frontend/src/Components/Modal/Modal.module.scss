@@ -21,6 +21,7 @@
     background-color: $theme-dark-bg;
   }
   width: 50%;
+  height: fit-content;
   @include for-mobile-only {
     width: 100%;
   }

@@ -45,8 +45,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   top: 0;
   width: 100%;
   height: $navbar-height;
-  background: $navbar-bg;
-  color: $black;
+  background: $navbar-bg-dark;
+  color: $white;
   transition: 0.2s;
   transition-timing-function: ease-in-out;
   display: flex;
@@ -56,10 +56,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   white-space: nowrap;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
 
-  @include theme-dark {
-    background: $navbar-bg-dark;
-    color: $white;
-  }
 }
 
 .navbar_inner {
@@ -116,7 +112,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  background-color: $navbar-dropdown-bg;
+  background-color: $navbar-dropdown-bg-dark;
+  color: $white;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -124,14 +121,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   transform: scaleY(0);
   transform-origin: 50% 0%;
   opacity: 0;
+  border-radius: 0 0 0.5em 0.5em;
 
   @include for-desktop-up {
     border-radius: $navbar-dropdown-border-radius;
-  }
-
-  @include theme-dark {
-    background-color: $navbar-dropdown-bg-dark;
-    color: $white;
   }
 }
 
@@ -150,7 +143,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   padding: 0.5rem 1rem;
   text-decoration: none;
   transition: 0.1s;
-  color: $black;
+  color: $white;
   cursor: pointer;
   font-size: inherit;
   display: flex;
@@ -170,14 +163,9 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   }
 
   &:hover {
-    background: $navbar-dropdown-link-light-hover;
-    color: $white;
+    background: $navbar-dropdown-link-dark-hover;
+    color: $black;
     text-decoration: none;
-
-    @include theme-dark {
-      background: $navbar-dropdown-link-dark-hover;
-      color: $black;
-    }
   }
 }
 
@@ -218,29 +206,18 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   // This ensures navbar dropdown shadow does not lie
   // on top of the navbar item
   &.selected {
-    background-color: $navbar-bg;
-    @include theme-dark {
-      background-color: $navbar-bg-dark;
-    }
+    background-color: $navbar-bg-dark;
   }
 
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
-      to bottom,
-      $navbar-link-light-hover-gradient-top,
-      $navbar-link-light-hover-gradient-bottom
-    );
-    text-decoration: none;
-
-    @include theme-dark {
-      background: linear-gradient(
         to bottom,
         $navbar-link-dark-hover-gradient-top,
         $navbar-link-dark-hover-gradient-bottom
-      );
-      color: #eeeeee;
-    }
+    );
+    color: #eeeeee;
+    text-decoration: none;
   }
 }
 
@@ -325,14 +302,9 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
 /* Transparent navbar (on top of page) */
 #navbar_container.transparent_navbar {
-  background: $navbar-bg-transparent;
+  background: $navbar-bg-dark-transparent;
+  color: white;
   box-shadow: none;
-  color: $white;
-
-  @include theme-dark {
-    background: $navbar-bg-dark-transparent;
-    color: $white;
-  }
 
   .navbar_link:hover {
     background: linear-gradient(
@@ -359,7 +331,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   width: 100vw;
   height: calc(100vh - 60px);
   min-height: 400px;
-  background: $white;
+  background: $navbar-bg-dark;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -369,13 +342,9 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
     display: none;
   }
 
-  @include theme-dark {
-    background: $navbar-bg-dark;
-    color: $white;
-  }
 }
 
-/* A way to make the "Information" text look more centered 
+/* A way to make the "Information" text look more centered
 offsets the text by 18px, the size of the chevron-icon */
 #mobile_popup_container > .navbar_mobile_item:nth-child(2) {
   margin-left: 18px;
@@ -418,7 +387,6 @@ offsets the text by 18px, the size of the chevron-icon */
 
 .chevron {
   transition: transform 0.2s;
-  // display: none;
 }
 
 .chevron.flip {
@@ -428,13 +396,8 @@ offsets the text by 18px, the size of the chevron-icon */
 // When this dropdown menu item is open and navbar is transparent
 // we add backdrop filter to the dropdown itself as well
 .selected {
-  background-color: $navbar-bg;
-  color: $black;
-
-  @include theme-dark {
-    background: $navbar-bg-dark;
-    color: $white;
-  }
+  background: $navbar-bg-dark;
+  color: $white;
 }
 
 .active_recruitment {

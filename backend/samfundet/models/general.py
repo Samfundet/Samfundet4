@@ -25,6 +25,7 @@ from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
+from .utils.string_utils import ellipsize
 
 if TYPE_CHECKING:
     from typing import Any
@@ -688,3 +689,24 @@ class KeyValue(FullCleanSaveMixin):
     def is_false(self) -> bool:
         """Check if value is falsy."""
         return self.value.lower() in self.FALSY
+
+
+# ----------------- #
+#     Feedback      #
+# ----------------- #
+
+
+class UserFeedbackModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    text = models.TextField(blank=False, null=False)
+    path = models.CharField(max_length=255, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    user_agent = models.TextField(blank=True)
+    screen_resolution = models.CharField(max_length=13, blank=True)
+    contact_email = models.EmailField(null=True)
+
+    class Meta:
+        verbose_name = 'UserFeedback'
+
+    def __str__(self) -> str:
+        return ellipsize(self.text, length=10)

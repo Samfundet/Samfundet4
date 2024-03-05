@@ -410,3 +410,10 @@ export type PurchaseFeedbackFormDto = {
   questions: string[];
   alternatives: string[];
 };
+
+export type FeedbackDto = {
+  text: string;
+  screen_resolution: string;
+  path: string;
+  contact_email?: string;
+};

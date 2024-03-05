@@ -36,4 +36,8 @@ export const TextItem = {
   no_recruitment_text_3: 'no_recruitment_text_3',
   no_recruitment_text_4: 'no_recruitment_text_4',
   no_recruitment_text_5: 'no_recruitment_text_5',
+
+  // Feedback
+  feedback_helper_text: 'feedback_helper_text',
+  feedback_want_contact_text: 'feedback_want_contact_text',
 } as const;

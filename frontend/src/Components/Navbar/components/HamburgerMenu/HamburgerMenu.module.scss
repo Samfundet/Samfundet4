@@ -33,15 +33,11 @@
 }
 
 .navbar_hamburger_line {
-  background-color: $black;
+  background-color: $white;
   width: 35px;
   height: 4px;
   border-radius: 10px;
   transition: transform 400ms;
-
-  @include theme-dark {
-    background-color: $white;
-  }
 }
 
 .transparent_background {
