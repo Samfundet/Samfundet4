@@ -26,6 +26,15 @@ export const KEY = {
   common_day_saturday: 'common_day_saturday',
   common_day_sunday: 'common_day_sunday',
 
+  // Day abbreviations:
+  common_day_monday_short: 'common_day_monday_short',
+  common_day_tuesday_short: 'common_day_tuesday_short',
+  common_day_wednesday_short: 'common_day_wednesday_short',
+  common_day_thursday_short: 'common_day_thursday_short',
+  common_day_friday_short: 'common_day_friday_short',
+  common_day_saturday_short: 'common_day_saturday_short',
+  common_day_sunday_short: 'common_day_sunday_short',
+
   // Months:
   common_month_january: 'common_month_january',
   common_month_february: 'common_month_february',
@@ -48,6 +57,7 @@ export const KEY = {
   common_to: 'common_to',
   common_price: 'common_price',
   common_buy: 'common_buy',
+  common_not: 'common_not',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
@@ -67,6 +77,7 @@ export const KEY = {
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
+  common_cancel: 'common_cancel',
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
@@ -76,6 +87,7 @@ export const KEY = {
   common_create: 'common_create',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_loading: 'common_loading',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_profile: 'common_profile',
@@ -106,10 +118,12 @@ export const KEY = {
   common_contact_us: 'common_contact_us',
   common_restaurant: 'common_restaurant',
   common_membership: 'common_membership',
+  common_select_all: 'common_select_all',
   common_information: 'common_information',
   common_description: 'common_description',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
+  common_unselect_all: 'common_unselect_all',
   common_opening_hours: 'common_opening_hours',
   common_general: 'common_general',
   common_long_description: 'common_long_description',
@@ -186,6 +200,7 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
@@ -263,6 +278,7 @@ export const KEY = {
 
   // Occupied Recruitment
   occupied_help_text: 'occupied_help_text',
+  occupied_select_time_text: 'occupied_select_time_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
 

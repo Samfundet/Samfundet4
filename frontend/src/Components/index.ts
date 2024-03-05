@@ -25,6 +25,7 @@ export { InputFile } from './InputFile';
 export { InputTime } from './InputTime';
 export { Link } from './Link';
 export { List } from './List';
+export { MiniCalendar } from './MiniCalendar';
 export { Modal } from './Modal';
 export { Navbar } from './Navbar';
 export { NotificationBadge } from './NotificationBadge';

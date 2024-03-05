@@ -45,9 +45,10 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentInterviewAvailability,
 )
 
 # Common fields:
@@ -66,7 +67,7 @@ from .models.recruitment import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
@@ -528,12 +529,13 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'organization',
     ]
     list_display = [
+        'name_en',
+        'organization',
         'visible_from',
         'actual_application_deadline',
         'shown_application_deadline',
         'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups',
-        'organization',
     ]
     search_fields = [
         'visible_from',
@@ -543,7 +545,7 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'reprioritization_deadline_for_groups',
         'organization',
     ]
-    list_display_links = ['visible_from']
+    list_display_links = ['name_en']
     list_select_related = True
 
 
@@ -628,6 +630,12 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
 
 
 @admin.register(UserFeedbackModel)
