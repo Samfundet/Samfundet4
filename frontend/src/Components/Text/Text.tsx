@@ -1,53 +1,43 @@
-import { Children } from "~/types";
+import { Children } from '~/types';
+import { textSizes } from '~/constants';
 import React from "react";
-
-const elements = {
-  p: "p",
-  b: "b",
-}
 
 type textProps = {
   children?: Children;
   fontSize?: string | null;
   color?: string;
-  size?: "xs" | "s" | "m" | "l" | "xl" | "2xl";
+  size?: 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
   noOfLines?: number;
-  type?: "p" | "b";
+  type?: 'p' | 'strong';
+  className?: string;
 };
 
-type TextAttrProps = {
-  type: "p" | "b";
-  children: Children;
-  [key: string]: any;
-};
+export function Text({ children, color, className, size = 'm', fontSize = null, noOfLines, type = 'p' }: textProps) {
+  const elements = {
+    p: 'p',
+    strong: 'strong',
+  };
 
+  type TextAttrProps = {
+    type: 'p' | 'strong';
+    children: Children;
+    className?: string;
+    style?: React.CSSProperties;
+  };
 
-function TextAttr({ type, children, ...props }: TextAttrProps) {
-  return React.createElement(
-    elements[type] || elements.p,
-    props,
-    children
-  );
-}
-
-
-export function Text({children, color, size="m", fontSize=null, noOfLines, type="p"}: textProps) {
-  const sizes: Record<string, string> = {
-    "xs": "0.1rem",
-    "s": "0.5rem",
-    "m": "1rem",
-    "l": "2rem",
-    "xl": "3rem",
-    "2xl": "4rem"
+  function TextAttr({ type, children, ...props }: TextAttrProps) {
+    return React.createElement(elements[type] || elements.p, props, children);
   }
 
   return (
-    <TextAttr type={type} style={
-      {
-      color: color,
-      fontSize: (fontSize || sizes[size]),
-      lineClamp: noOfLines,
-    }}
+    <TextAttr
+      type={type}
+      className={className}
+      style={{
+        color: color,
+        fontSize: fontSize || textSizes[size],
+        lineClamp: noOfLines,
+      }}
     >
       {children}
     </TextAttr>
