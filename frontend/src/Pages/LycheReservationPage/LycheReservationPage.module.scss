@@ -47,13 +47,11 @@
   font-weight: 700;
 }
 
-.check_box {
-  & label {
-    color: $white;
-    display: flex;
-    flex-direction: row-reverse;
-    font-weight: 400;
-  }
+.check_box > label {
+  color: $white;
+  display: flex;
+  flex-direction: row-reverse;
+  font-weight: 400;
 }
 
 .reservation_info {
