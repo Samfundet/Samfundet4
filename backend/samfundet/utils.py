@@ -36,7 +36,7 @@ def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet
     return events
 
 
-def generate_timeslots(start_time, end_time, interval_minutes: int) -> list[str]:
+def generate_timeslots(start_time: datetime, end_time: datetime, interval_minutes: int) -> list[str]:
     # Convert from datetime.time objects to datetime.datetime
     start_datetime = datetime.combine(datetime.today(), start_time)
     end_datetime = datetime.combine(datetime.today(), end_time)

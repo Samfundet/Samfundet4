@@ -851,7 +851,7 @@ class OccupiedTimeslotView(ListCreateAPIView):
                 for timeslot in request.data['dates'][d]:
                     start_date = make_aware(
                         datetime.datetime.strptime(f'{d} {timeslot}', '%Y.%m.%d %H:%M'),
-                        timezone=datetime.timezone.utc,
+                        timezone=datetime.UTC,
                     )
                     end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
 
