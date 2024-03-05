@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay, TimeDuration } from '~/Components';
 import { EventDto } from '~/dto';
-import { KEY, KeyValues } from '~/i18n/constants';
-import { EventAgeRestriction, EventAgeRestrictionValue } from '~/types';
-import { dbT, getTicketTypeKey } from '~/utils';
+import { KEY } from '~/i18n/constants';
+import { AgeLimitRow } from '../AgeLimitRow';
+import { TicketTypeRow } from '../TicketTypeRow';
 import styles from './EventTable.module.scss';
 
 type EventTableProps = {
@@ -12,49 +12,6 @@ type EventTableProps = {
 
 export function EventTable({ event }: EventTableProps) {
   const { t } = useTranslation();
-
-  function ticketType() {
-    if (event.ticket_type !== 'custom') {
-      return (
-        <tr>
-          <td className={styles.table_element_left}> {t(KEY.common_ticket_type).toUpperCase()} </td>
-          <td className={styles.table_element_right}> {t(getTicketTypeKey(event.ticket_type))} </td>
-        </tr>
-      );
-    }
-    return (
-      <>
-        {event.custom_tickets.map((ticket, index) => (
-          <tr key={ticket.id}>
-            <td className={styles.table_element_left}>{index === 0 ? 'BILLETT' : <>&nbsp;</>}</td>
-            <td className={styles.table_element_right}>
-              <b> {dbT(ticket, 'name')} </b>
-              <br></br>
-              <span> {ticket.price},- </span>
-            </td>
-          </tr>
-        ))}
-      </>
-    );
-  }
-
-  function ageLimitType() {
-    const ageRestrictions: Record<EventAgeRestrictionValue, KeyValues> = {
-      [EventAgeRestriction.NONE]: KEY.none,
-      [EventAgeRestriction.EIGHTEEN]: KEY.eighteen,
-      [EventAgeRestriction.TWENTY]: KEY.twenty,
-      [EventAgeRestriction.MIXED]: KEY.mix,
-    };
-
-    const ageRestrictionKey = ageRestrictions[event.age_restriction];
-
-    return (
-      <tr>
-        <td className={styles.table_element_left}>{t(KEY.common_age_limit).toUpperCase()}</td>
-        <td className={styles.table_element_right}>{t(ageRestrictionKey)}</td>
-      </tr>
-    );
-  }
 
   return (
     <table className={styles.table_container}>
@@ -78,8 +35,8 @@ export function EventTable({ event }: EventTableProps) {
           <TimeDuration start={event.start_dt} end={event.end_dt} />
         </td>
       </tr>
-      {ticketType()}
-      {ageLimitType()}
+      <TicketTypeRow event={event} />
+      <AgeLimitRow event={event} />
     </table>
   );
 }
