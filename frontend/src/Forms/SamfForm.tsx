@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { createContext, Dispatch, ReactNode, useEffect, useReducer, useState } from 'react';
 import { Button } from '~/Components';
+import { ButtonDisplay, ButtonTheme } from '~/Components/Button';
 import { usePermission } from '~/hooks';
 import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
-import { ButtonDisplay, ButtonTheme } from '~/Components/Button';
 
 // ================================== //
 //    Context & State Management      //
@@ -155,7 +155,7 @@ export function SamfForm<T>({
   let allValid = true;
   for (const key of state.allFields) {
     const err = state.errors[key];
-    if (err !== false) {
+    if (err !== false && err !== undefined) {
       allValid = false;
       break;
     }
