@@ -5,9 +5,9 @@ import { PurchaseFeedbackFormDto } from '~/dto';
 
 export function PurchaseCallbackPage() {
   const [form, setForm] = useState<PurchaseFeedbackFormDto>({
-    title: 'Hvor hørte du om dette arrangementet?',
-    questions: ['Andre steder?', 'Øvrige kommentarer?'],
-    alternatives: ['Hørte det på bunnpris', 'Jeg fikk det på mail', 'Tja'],
+    title: '',
+    questions: [''],
+    alternatives: [''],
   });
 
   useEffect(() => {
