@@ -1,13 +1,14 @@
-import styles from './UserFeedback.module.scss';
-import { IconButton, Modal } from '~/Components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { IconButton, Modal } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
-import { useTextItem } from '~/hooks';
 import { TextItem } from '~/constants';
+import { useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import styles from './UserFeedback.module.scss';
 
 type UserFeedbackProps = {
   enabled: boolean;
@@ -23,14 +24,15 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
 
   const handleFormSubmit = (formData: Record<string, string>) => {
     postFeedback({
-      text: formData['feedback-text'],
+      text: formData['feedback_text'],
       screen_resolution: window.innerWidth + 'x' + window.innerHeight,
       path: window.location.pathname,
-      contact_email: formData['feedback-email'],
+      contact_email: formData['feedback_email'],
     })
       .then(() => setIsOpen(false))
       .catch((e) => {
         console.error(e);
+        toast.error(t(KEY.common_something_went_wrong));
       });
   };
 
@@ -42,10 +44,10 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
         </h1>
         <br />
         <p>{useTextItem(TextItem.feedback_helper_text)}</p>
-        <SamfFormField field={'feedback-text'} type={'text-long'} label={t(KEY.feedback_your_feedback)} />
+        <SamfFormField field={'feedback_text'} type={'text-long'} label={t(KEY.feedback_your_feedback)} />
         <p>{useTextItem(TextItem.feedback_want_contact_text)}</p>
         <SamfFormField
-          field={'feedback-email'}
+          field={'feedback_email'}
           type={'email'}
           required={false}
           label={t(KEY.common_email) + ' (' + t(KEY.common_not_required) + ')'}
