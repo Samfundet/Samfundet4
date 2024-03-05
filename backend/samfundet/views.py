@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import datetime
 import os
 import hmac
 import hashlib
+import datetime
 from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
@@ -23,10 +23,9 @@ from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
+from django.utils.timezone import make_aware
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.utils.timezone import make_aware
-
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
