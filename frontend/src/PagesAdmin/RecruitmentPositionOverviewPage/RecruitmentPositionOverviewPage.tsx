@@ -4,7 +4,11 @@ import { useParams } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
+import {
+  getRecruitmentAdmissionsForGang,
+  putRecruitmentAdmissionForGang,
+  putRecruitmentAdmissionInterview,
+} from '~/api';
 import { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -92,7 +96,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <InputField
             value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onBlur={() => putRecruitmentAdmissionInterview(admission.interview.id, admission.interview)}
             onChange={(value: string) => {
               const updatedInterview = { ...admission.interview, interview_time: value.toString() };
               const newAdmission = { ...admission, interview: updatedInterview };
@@ -106,7 +110,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <InputField
             value={admission.interview.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onBlur={() => putRecruitmentAdmissionInterview(admission.interview.id, admission.interview)}
             onChange={(value: string) => {
               const updatedInterview = { ...admission.interview, interview_location: value.toString() };
               const newAdmission = { ...admission, interview: updatedInterview };
@@ -124,6 +128,7 @@ export function RecruitmentPositionOverviewPage() {
               const newAdmission = { ...admission, recruiter_priority: value };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
               putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+              // TODO: Fix this, change the priority of the recruiter
             }}
           />
         ),
@@ -137,6 +142,7 @@ export function RecruitmentPositionOverviewPage() {
               const newAdmission = { ...admission, recruiter_status: value };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
               putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+              // TODO: Fix this, change the status of the recruiter
             }}
           />
         ),
