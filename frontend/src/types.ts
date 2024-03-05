@@ -55,6 +55,7 @@ export const COLORS = {
   black_t50: 'rgba(0, 0, 0, 0.5)',
   black_t25: 'rgba(0, 0, 0, 0.25)',
   black_t10: 'rgba(0, 0, 0, 0.1)',
+  transparent: 'rgba(0, 0, 0, 0)',
 
   // Theme colors:
   theme_light_bg: '#f5f5f5',

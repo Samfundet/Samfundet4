@@ -41,7 +41,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
   [KEY.common_date]: 'Dato',
-  [KEY.common_time]: 'Tidspunkt',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Åpne',
   [KEY.common_menu]: 'Meny',
@@ -76,13 +75,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_lastname]: 'Etternavn',
-  [KEY.common_email]: 'Email',
+  [KEY.common_email]: 'Epost',
   [KEY.common_phonenumber]: 'Phonenumber',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
+  [KEY.common_not_required]: 'Ikke påkrevd',
   [KEY.common_overview]: 'Oversikt',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_age_limit]: 'Aldersgrense',
@@ -103,6 +103,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_long_description]: 'Lang beskrivelse',
   [KEY.common_short_description]: 'Kort beskrivelse',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
+  [KEY.common_save_successful]: 'Lagring var vellykket',
   [KEY.common_delete_successful]: 'Slettingen var vellykket',
   [KEY.common_update_successful]: 'Oppdateringen var vellykket',
   [KEY.common_see_in_django_admin]: 'Se i django admin-panel',
@@ -114,7 +115,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_occasion]: 'Annledning',
 
   //About page
-  [KEY.common_age_limit]: 'aldersgrense',
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
   [KEY.common_film_club]: 'filmklubb',
@@ -268,6 +268,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
+  // Feedback
+  [KEY.feedback_type]: 'Type tilbakemelding',
+  [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
+  [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+
   // No category:
   [KEY.owner]: 'Eier',
   [KEY.end_time]: 'Sluttid',
@@ -329,7 +334,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
   [KEY.common_date]: 'Date',
-  [KEY.common_time]: 'Time',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Open',
   [KEY.common_edit]: 'Edit',
@@ -373,6 +377,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
   [KEY.common_age_limit]: 'Age Limit',
+  [KEY.common_not_required]: 'Not required',
   [KEY.common_festivals]: 'Festivals',
   [KEY.common_more_info]: 'More info',
   [KEY.common_firstname]: 'First name',
@@ -391,6 +396,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_long_description]: 'Long description',
   [KEY.common_short_description]: 'Short description',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
+  [KEY.common_save_successful]: 'Saving was successful',
   [KEY.common_delete_successful]: 'Deletion was successful',
   [KEY.common_update_successful]: 'The update was successful',
   [KEY.common_see_in_django_admin]: 'See in django admin-panel',
@@ -402,7 +408,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_occasion]: 'Occasion',
 
   //About page
-  [KEY.common_age_limit]: 'Age limit',
   [KEY.common_rent_services]: 'Renting and other services',
   [KEY.common_press]: 'Press',
   [KEY.common_film_club]: 'Film club',
@@ -559,6 +564,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.occupied_title]: 'Availability',
   [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
+
+  // Feedback
+  [KEY.feedback_type]: 'Feedback type',
+  [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
+  [KEY.feedback_your_feedback]: 'Your feedback',
 
   // No category:
   [KEY.owner]: 'Owner',

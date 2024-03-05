@@ -20,6 +20,6 @@ def initialize_debugpy() -> None:
         import debugpy
 
         # This is okay as long as ENABLE_DEBUGPY only is enabled during development and NOT in production.
-        HOST = '0.0.0.0'
+        HOST = '0.0.0.0'  # noqa: N806, S104
         host_port = debugpy.listen((HOST, 5678))
         logger.info(f'Attached debugpy on {host_port}')

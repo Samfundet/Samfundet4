@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 import re
-import random
+import secrets
 from typing import TYPE_CHECKING
 from datetime import date, time, datetime, timedelta
 from collections import defaultdict
@@ -25,9 +25,10 @@ from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
+from .utils.string_utils import ellipsize
 
 if TYPE_CHECKING:
-    from typing import Any, Optional
+    from typing import Any
 
     from django.db.models import Model
 
@@ -53,9 +54,9 @@ class Tag(CustomBaseModel):
     @classmethod
     def random_color(cls) -> str:
         hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
-        c = random.choices(range(len(hexnr)), k=6)
+        c = [secrets.choice(range(len(hexnr))) for _ in range(6)]
         while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
-            c = random.choices(range(len(hexnr)), k=6)
+            c = [secrets.choice(range(len(hexnr))) for _ in range(6)]
         return ''.join([hexnr[i] for i in c])
 
     @classmethod
@@ -137,7 +138,7 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:  # noqa: PLR0917
+    def has_perm(self, perm: str, obj: Model | None = None) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`
@@ -419,7 +420,7 @@ class Reservation(CustomBaseModel):
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
 
-    def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:
+    def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:  # noqa: C901
         """
         Method for returning available reservation times for a venue
         Based on the amount of seating and the date
@@ -688,3 +689,24 @@ class KeyValue(FullCleanSaveMixin):
     def is_false(self) -> bool:
         """Check if value is falsy."""
         return self.value.lower() in self.FALSY
+
+
+# ----------------- #
+#     Feedback      #
+# ----------------- #
+
+
+class UserFeedbackModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    text = models.TextField(blank=False, null=False)
+    path = models.CharField(max_length=255, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    user_agent = models.TextField(blank=True)
+    screen_resolution = models.CharField(max_length=13, blank=True)
+    contact_email = models.EmailField(null=True)
+
+    class Meta:
+        verbose_name = 'UserFeedback'
+
+    def __str__(self) -> str:
+        return ellipsize(self.text, length=10)

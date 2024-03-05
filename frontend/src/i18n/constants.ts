@@ -99,6 +99,7 @@ export const KEY = {
   common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
+  common_not_required: 'common_not_required',
   common_festivals: 'common_festivals',
   common_more_info: 'common_more_info',
   common_firstname: 'common_firstname',
@@ -116,6 +117,7 @@ export const KEY = {
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
+  common_save_successful: 'common_save_successful',
   common_delete_successful: 'common_delete_successful',
   common_update_successful: 'common_update_successful',
   common_creation_successful: 'common_creation_successful',
@@ -271,6 +273,11 @@ export const KEY = {
   occupied_help_text: 'occupied_help_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
+
+  // Feedback
+  feedback_type: 'feedback_type',
+  feedback_type_heading: 'feedback_type_heading',
+  feedback_your_feedback: 'feedback_your_feedback',
 
   // No category:
   owner: 'owner',

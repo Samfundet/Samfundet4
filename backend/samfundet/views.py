@@ -3,19 +3,20 @@ from __future__ import annotations
 import os
 import hmac
 import hashlib
-from typing import Any, Type
+from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
 
+from django.http import QueryDict
 from django.utils import timezone
 from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
@@ -62,6 +63,7 @@ from .serializers import (
     FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
+    UserFeedbackSerializer,
     InterviewRoomSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -98,6 +100,7 @@ from .models.general import (
     FoodPreference,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -178,7 +181,7 @@ class EventPerDayView(APIView):
 
         # Organize in date dictionary.
         events_per_day: dict = {}
-        for event, serial in zip(events, serialized):
+        for event, serial in zip(events, serialized, strict=False):
             date = event.start_dt.strftime('%Y-%m-%d')
             events_per_day.setdefault(date, [])
             events_per_day[date].append(serial)
@@ -396,12 +399,12 @@ class RegisterView(APIView):
         user = serializer.validated_data['user']
         login(request=request, user=user, backend=AUTH_BACKEND)
         new_csrf_token = get_token(request=request)
-
-        return Response(
+        res = Response(
             status=status.HTTP_202_ACCEPTED,
             data=new_csrf_token,
             headers={XCSRFTOKEN: new_csrf_token},
         )
+        return res
 
 
 class UserView(APIView):
@@ -435,7 +438,7 @@ class AllGroupsView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class CsrfView(APIView):
-    permission_classes: list[Type[BasePermission]] = [AllowAny]
+    permission_classes: list[type[BasePermission]] = [AllowAny]
 
     def get(self, request: Request) -> Response:
         csrf_token = get_token(request=request)
@@ -553,8 +556,7 @@ class AssignGroupView(APIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentView(ModelViewSet):
-    # TODO: Verify that object is valid (that the times make sense)
-    permission_classes = [AllowAny]
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 
@@ -578,7 +580,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 
-    def get_queryset(self) -> Response:
+    def get_queryset(self) -> Response | None:
         """
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
@@ -586,8 +588,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is not None:
             return RecruitmentPosition.objects.filter(recruitment=recruitment)
-        else:
-            return None
+        return None
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -595,7 +596,7 @@ class RecruitmentPositionsPerGangView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 
-    def get_queryset(self) -> Response:
+    def get_queryset(self) -> Response | None:
         """
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
@@ -604,8 +605,7 @@ class RecruitmentPositionsPerGangView(ListAPIView):
         gang = self.request.query_params.get('gang', None)
         if recruitment is not None and gang is not None:
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
-        else:
-            return None
+        return None
 
 
 class ApplicantsWithoutInterviewsView(ListAPIView):
@@ -638,8 +638,33 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
     serializer_class = RecruitmentAdmissionForApplicantSerializer
     queryset = RecruitmentAdmission.objects.all()
 
+    def update(self, request: Request, pk: int) -> Response:
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        data['recruitment_position'] = pk
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            existing_admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
+            if existing_admission:
+                existing_admission.admission_text = serializer.validated_data['admission_text']
+                existing_admission.save()
+                serializer = self.get_serializer(existing_admission)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request: Request, pk: int) -> Response:
+        admission = get_object_or_404(RecruitmentAdmission, user=request.user, recruitment_position=pk)
+
+        user_id = request.query_params.get('user_id')
+        if user_id:
+            # TODO: Add permissions
+            admission = RecruitmentAdmission.objects.filter(recruitment_position=pk, user_id=user_id).first()
+        serializer = self.get_serializer(admission)
+        return Response(serializer.data)
+
     def list(self, request: Request) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
+        """Returns a list of all the admissions for a user for a specified recruitment"""
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')
 
@@ -705,6 +730,16 @@ class ActiveRecruitmentPositionsView(ListAPIView):
         return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
 
 
+class ActiveRecruitmentsView(ListAPIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    serializer_class = RecruitmentSerializer
+
+    def get_queryset(self) -> Response:
+        """Returns all active recruitments"""
+        # TODO Use is not completed instead of actual_application_deadline__gte
+        return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+
+
 class InterviewRoomView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewRoomSerializer
@@ -747,3 +782,26 @@ class OccupiedtimeslotView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserFeedbackView(CreateAPIView):
+    permission_classes = [AllowAny]
+    model = UserFeedbackModel
+    serializer_class = UserFeedbackSerializer
+
+    def create(self, request: Request) -> Response:
+        data = request.data
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        UserFeedbackModel.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            text=data.get('text'),
+            path=data.get('path'),
+            user_agent=request.META.get('HTTP_USER_AGENT'),
+            screen_resolution=data.get('screen_resolution'),
+            contact_email=data.get('contact_email'),
+        )
+
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
