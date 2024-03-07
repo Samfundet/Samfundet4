@@ -7,16 +7,15 @@ import styles from './AgeLimitRow.module.scss';
 type EventTableProps = {
   event: EventDto;
 };
+const ageRestrictions: Record<EventAgeRestrictionValue, KeyValues> = {
+  [EventAgeRestriction.NONE]: KEY.none,
+  [EventAgeRestriction.EIGHTEEN]: KEY.eighteen,
+  [EventAgeRestriction.TWENTY]: KEY.twenty,
+  [EventAgeRestriction.MIXED]: KEY.mix,
+};
 
 export function AgeLimitRow({ event }: EventTableProps) {
   const { t } = useTranslation();
-  const ageRestrictions: Record<EventAgeRestrictionValue, KeyValues> = {
-    [EventAgeRestriction.NONE]: KEY.none,
-    [EventAgeRestriction.EIGHTEEN]: KEY.eighteen,
-    [EventAgeRestriction.TWENTY]: KEY.twenty,
-    [EventAgeRestriction.MIXED]: KEY.mix,
-  };
-
   const ageRestrictionKey = ageRestrictions[event.age_restriction];
 
   return (

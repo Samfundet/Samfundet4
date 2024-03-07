@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { EventTicketType } from '~/types';
 import { dbT, getTicketTypeKey } from '~/utils';
 import styles from './TicketTypeRow.module.scss';
 
@@ -11,7 +12,7 @@ type EventTableProps = {
 export function TicketTypeRow({ event }: EventTableProps) {
   const { t } = useTranslation();
 
-  if (event.ticket_type !== 'custom') {
+  if (event.ticket_type !== EventTicketType.CUSTOM) {
     return (
       <tr>
         <td className={styles.table_element_left}> {t(KEY.common_ticket_type).toUpperCase()} </td>
