@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from root.constants import Environment
+
 # Import list of all seed scripts.
 from root.management.commands.seed_scripts import SEED_SCRIPTS, OPTIONAL_SEED_SCRIPTS
 
@@ -20,7 +21,7 @@ def print_progress(
     progress: int,
     prefix: str = '',
     suffix: str = '',
-    start_time: float = None,
+    start_time: float | None = None,
 ):
     # Calculate size of bar and padding.
     percent = min(1, max(0, progress / 100.0))
@@ -37,7 +38,7 @@ def print_progress(
     print(f'\r{prefix} |{bar}| {100 * percent:.0f}% {desc}', end='\r')
 
 
-def run_seed_script(*, target: tuple, index: int, count: int):
+def run_seed_script(*, target: tuple, index: int, count: int):  # noqa: C901
     # Run specific seed script.
     prefix = f'{index + 1}/{count}'
     generator = target[1]()
@@ -45,7 +46,6 @@ def run_seed_script(*, target: tuple, index: int, count: int):
 
     # Generator types print their progress throughout.
     if isinstance(generator, types.GeneratorType):
-
         # Run script and print progress
         step: int | tuple[int, str] = 0
         for step in generator:
@@ -55,8 +55,7 @@ def run_seed_script(*, target: tuple, index: int, count: int):
             elif type(step) in [int, float]:
                 print_progress(progress=step, prefix=prefix, start_time=start_time)
             else:
-                raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', "
-                                'expected number type or tuple of (number, str)')
+                raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', " 'expected number type or tuple of (number, str)')
 
         # Final output 100%.
         if isinstance(step, tuple):
@@ -76,7 +75,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('target', type=str, nargs='?', default=None)
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # noqa: C901
         print(f"Running seed script {options['target'] or ''}...\n")
 
         # Avoid running seed in production.
@@ -105,10 +104,7 @@ class Command(BaseCommand):
             # Allow endings with and without 's', e.g. events and event
             target = options['target']
             if target not in keys:
-                if target.endswith('s'):
-                    target = target[0:-1]
-                else:
-                    target = target + 's'
+                target = target[0:-1] if target.endswith('s') else target + 's'
 
             # Check if target matches
             if target in keys:

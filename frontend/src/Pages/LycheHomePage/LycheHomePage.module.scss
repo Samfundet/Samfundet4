@@ -2,17 +2,8 @@
 
 @import 'src/mixins';
 
-.content_container {
-  flex-direction: row;
-  background-color: $black;
-  z-index: 10;
-  @include for-mobile-down {
-    padding: 0%;
-  }
-}
-
 .image_container {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   z-index: 30;
   display: flex;
@@ -59,7 +50,9 @@
 }
 
 .opening_hour_header {
-  color: $orange-light;
+  color: $sulten-orange;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .hour_item_container {

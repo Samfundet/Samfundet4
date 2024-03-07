@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.utils import timezone
-
 from django.contrib.auth.models import Permission
 from django.core.management.base import BaseCommand
+
 """
 NOTE: This command cannot run within docker container because the backend has no access to the frontend.
 Use on host machine.
@@ -79,13 +79,11 @@ class Command(BaseCommand):
     """Generate frontend routes"""
 
     def handle(self, *args, **options) -> None:  # type: ignore
-
         # Fetch all permissions.
         permissions = Permission.objects.all()
 
-        with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:
+        with open(file=settings.BASE_DIR / OUTPUT_BACKEND_FILE, mode='w', encoding='UTF-8') as backend_file:  # noqa: SIM117
             with open(file=settings.BASE_DIR / OUTPUT_FRONTEND_FILE, mode='w', encoding='UTF-8') as frontend_file:
-
                 # Write header.
                 backend_file.write(YAPF_DISABLE)
                 backend_file.write(ENTRY_MSG)
@@ -102,7 +100,6 @@ class Command(BaseCommand):
                 current_model = None
 
                 for permission in permissions:
-
                     # Write between different apps.
                     if current_app != permission.content_type.app_label:
                         prev_app = current_app
