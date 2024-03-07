@@ -9,3 +9,5 @@ StrInt = Union[str, int]  # noqa: UP007
 
 # Common insecure password used during development. Used for pytest etc...
 DEV_PASSWORD = 'Django123'  # nosec: B105 # Allow password.  # noqa: S105
+
+ONE_MB = 1000000
