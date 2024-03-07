@@ -636,6 +636,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'applicant_priority',
             'withdrawn',
+            'admission_images',
+            'file_upload',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
