@@ -10,6 +10,8 @@ import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
 import { filterRecruitmentAdmission, getNameUser } from './utils';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 
 export function InterviewNotesPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -55,8 +57,27 @@ export function InterviewNotesPage() {
     setInterview(updatedInterview);
   }
 
+  const header = (
+    <>
+      <Button
+        theme="success"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
+          urlParams: {
+            recruitmentId: recruitmentId,
+            gangId: gangId,
+            positionId: positionId,
+          },
+        })}
+      >
+        {t(KEY.common_go_back)}
+      </Button>
+    </>
+  );
+
   return (
-    <AdminPageLayout title={t(KEY.recruitment_interview_notes)}>
+    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={header}>
       <div className={styles.container}>
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}
