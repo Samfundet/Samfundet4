@@ -402,3 +402,12 @@ export type FeedbackDto = {
   path: string;
   contact_email?: string;
 };
+
+export type RegistrationDto = {
+  username: string;
+  email: string;
+  phone_number: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+};
