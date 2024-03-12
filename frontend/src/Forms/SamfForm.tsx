@@ -260,6 +260,8 @@ export function SamfForm<T extends FormType>({
                 preventDefault={true}
                 type="submit"
                 rounded={true}
+                theme="green"
+                display="basic"
                 onClick={handleOnClickSubmit}
                 disabled={disableSubmit}
               >
