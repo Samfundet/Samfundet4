@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { Dispatch, ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ButtonDisplay, ButtonTheme } from '~/Components/Button';
+import { Button } from '~/Components/Button';
 import { usePermission } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
@@ -53,9 +53,6 @@ export type SamfFormProps<T extends FormType> = {
   initialData?: T;
   validateOn?: SamfFormActionType;
   submitTextProp?: string; // Submit button text
-  // submitButtonProps?: ButtonProps; // Submit button props
-  submitButtonTheme?: ButtonTheme; // Replace with above line
-  submitButtonDisplay?: ButtonDisplay; // Replace with above line
   className?: string;
   onChange?<T>(state: T): void;
   onValidityChanged?(valid: boolean): void;
@@ -155,8 +152,6 @@ export function SamfForm<T extends FormType>({
   initialData,
   validateOn = 'change',
   submitTextProp,
-  submitButtonTheme = 'green',
-  submitButtonDisplay = 'basic',
   className,
   onChange,
   onValidityChanged,
@@ -265,8 +260,6 @@ export function SamfForm<T extends FormType>({
                 // {...submitButtonProps} // TODO: implement this
                 preventDefault={true}
                 type="submit"
-                theme={submitButtonTheme}
-                display={submitButtonDisplay}
                 rounded={true}
                 onClick={handleOnClickSubmit}
                 disabled={disableSubmit}
