@@ -115,7 +115,7 @@ def seed():
         {
             'key': 'sulten_reservation_policy',
             'text_nb': 'Jeg godtar Samfundets personværnserklæring.',
-            'text_en': 'I agree to Samfundet\'s privacy policy.',
+            'text_en': "I agree to Samfundet's privacy policy.",
         },
     ]
 
