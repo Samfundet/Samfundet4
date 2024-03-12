@@ -266,9 +266,6 @@ export const KEY = {
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
 
-  //Feedback form
-  question: 'question',
-
   // Feedback
   feedback_type: 'feedback_type',
   feedback_type_heading: 'feedback_type_heading',
