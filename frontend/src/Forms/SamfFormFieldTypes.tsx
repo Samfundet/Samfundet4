@@ -181,6 +181,7 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
 }
 
 // Options dropdown input
+// TODO: Fix type
 function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
   const errorBoolean = args.error !== false && args.error !== undefined;
   return (
