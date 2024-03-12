@@ -113,7 +113,7 @@ def seed():
             'text_en': 'If you want us to contact you, you can write your email here.',
         },
         {
-            'key': 'feedback_want_contact_text',
+            'key': 'sulten_reservation_policy',
             'text_nb': 'Jeg godtar Samfundets personværnserklæring.',
             'text_en': 'I agree to Samfundet\'s privacy policy.',
         },
