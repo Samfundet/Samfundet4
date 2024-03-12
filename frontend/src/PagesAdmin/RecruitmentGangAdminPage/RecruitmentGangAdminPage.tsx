@@ -10,6 +10,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentGangAdminPage.module.scss';
 
 export function RecruitmentGangAdminPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -66,19 +67,33 @@ export function RecruitmentGangAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <Button
-      theme="success"
-      rounded={true}
-      link={reverse({
-        pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
-        urlParams: {
-          gangId: gangId,
-          recruitmentId: recruitmentId,
-        },
-      })}
-    >
-      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
-    </Button>
+    <>
+      <Button
+        theme="success"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_overview,
+          urlParams: {
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {t(KEY.common_go_back)}
+      </Button>
+      <Button
+        theme="success"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
+      </Button>
+    </>
   );
 
   return (

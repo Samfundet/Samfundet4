@@ -12,3 +12,8 @@
   }
 }
 
+.headerRow {
+  @include flex-row;
+  gap: 0.2em;
+}
+

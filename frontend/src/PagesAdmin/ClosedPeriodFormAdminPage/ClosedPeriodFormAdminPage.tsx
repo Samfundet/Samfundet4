@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { Button } from '~/Components';
 import { getClosedPeriod } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
@@ -63,9 +64,22 @@ export function ClosedPeriodFormAdminPage() {
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
+  const header = (
+    <>
+      <Button
+        theme="success"
+        rounded={true}
+        onClick={() => {
+          navigate({ url: ROUTES.frontend.admin_closed });
+        }}
+      >
+        {t(KEY.common_go_back)}
+      </Button>
+    </>
+  );
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={header}>
       <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
         <div className={styles.row}>
           <SamfFormField
