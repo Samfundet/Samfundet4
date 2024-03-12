@@ -1,30 +1,31 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AuthContextProvider } from '~/AuthContext';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { EventDto } from '~/dto';
-import { SamfForm } from './SamfForm';
+import { SamfForm, SamfFormProps } from './SamfForm';
 import { SamfFormField } from './SamfFormField';
 
 // Local component config.
 export default {
-  title: 'Forms/SamfForm',
+  title: 'Forms/SamfFormCopy',
   component: SamfForm,
 } as ComponentMeta<typeof SamfForm>;
 
 const Template: ComponentStory<typeof SamfForm> = function (args) {
   return (
     <AuthContextProvider>
-      <SamfForm<EventDto> {...args} onSubmit={(v) => alert('Data that could be posted: ' + JSON.stringify(v))} />
+      <SamfForm {...args} />
     </AuthContextProvider>
   );
 };
 
-function validateShrimp(str: string) {
-  if (str.toLowerCase().includes('reke')) return true;
+function validateShrimp(values: BasicFormProps) {
+  const str = values.advanced_field;
+  if (str && str.toLowerCase().includes('reke')) return true;
   return "Feltet må inneholde 'reke'";
 }
 
-function validate69(num: number) {
+function validate69(values: BasicFormProps) {
+  const num = values.number_field;
   if (num == 69) return true;
   return 'Tallet må være 69';
 }
@@ -34,22 +35,69 @@ const options: DropDownOption<string>[] = [
   { label: 'Option 2', value: 'Option 2' },
 ];
 
+type BasicFormProps = {
+  req_field: string;
+  advanced_field: string;
+  number_field: number;
+  option_field: DropDownOption<string>;
+  large_field: string;
+  phonenumber: string;
+};
+
+const initialData: BasicFormProps = {
+  req_field: '',
+  advanced_field: '',
+  number_field: 420,
+  option_field: options[0],
+  large_field: 'Default text',
+  phonenumber: '',
+};
+
 export const Basic = Template.bind({});
 Basic.args = {
-  submitText: 'Lagre - Demo',
+  submitTextProp: 'Demo',
   devMode: true,
+  onSubmit: (values: BasicFormProps) => {
+    alert('Data that could be posted: ' + JSON.stringify(values));
+  },
+  initialData,
   children: (
     <>
       <div style={{ display: 'flex', gap: '.5em' }}>
-        <SamfFormField field="title_nb" type="text" label="Tekst som er nødvendig" />
-        <SamfFormField field="title_en" type="text" label="Tekst med avansert krav" validator={validateShrimp} />
+        <SamfFormField<string, BasicFormProps>
+          type={'text'}
+          field={'req_field'}
+          label="Tekst som er nødvendig"
+          required={true}
+        />
+        <SamfFormField<string, BasicFormProps>
+          type={'text'}
+          field={'advanced_field'}
+          label="Tekst med avansert krav"
+          validator={validateShrimp}
+        />
       </div>
       <div style={{ display: 'flex', gap: '.5em' }}>
-        <SamfFormField field="duration" type="number" label="Tall-input med krav" validator={validate69} />
-        <SamfFormField field="category" type="options" label="Dropdown input" options={options} />
+        <SamfFormField<number, BasicFormProps>
+          type={'number'}
+          field={'number_field'}
+          label="Tall-input med krav"
+          validator={validate69}
+        />
+        <SamfFormField<DropDownOption<string>, BasicFormProps>
+          type={'options'}
+          field={'option_field'}
+          label="Dropdown input"
+          options={options}
+        />
       </div>
-      <SamfFormField field="description_long_nb" type="text-long" label="Lang tekst input" props={{ rows: 5 }} />
-      <SamfFormField field="phonenumber" type="phonenumber" label="Phonenumber" />
+      <SamfFormField<string, BasicFormProps>
+        type={'textLong'}
+        field={'large_field'}
+        label="Lang tekst input"
+        props={{ rows: 5 }}
+      />
+      <SamfFormField<string, BasicFormProps> type={'phonenumber'} field={'phonenumber'} label="Phonenumber" />
     </>
   ),
-};
+} as SamfFormProps<BasicFormProps>;

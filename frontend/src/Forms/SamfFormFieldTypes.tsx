@@ -4,26 +4,52 @@ import {
   CheckboxProps,
   Dropdown,
   DropdownProps,
-  InputFile,
-  InputFileProps,
   InputField,
   InputFieldProps,
+  InputFile,
+  InputFileProps,
+  PhoneNumberField,
   TextAreaField,
   TextAreaFieldProps,
-  PhoneNumberField,
 } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker, ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
 import { InputFieldType } from '~/Components/InputField/InputField';
 import { InputFileType } from '~/Components/InputFile/InputFile';
+import { ImageDto } from '~/dto';
+import { SamfError } from './SamfForm';
 import styles from './SamfForm.module.scss';
 
-// ================================== //
-//         Form Field Types           //
-// ================================== //
+// ---------------------------------- //
+//            Return types            //
+// ---------------------------------- //
+/**
+ * Union of all possible return types for SamfFormField.
+ */
+export type FormFieldReturnType = string | number | boolean | DropDownOption<unknown> | ImageDto | Date | File;
 
-// SamfFormField types (used to defined field UI in <SamfFormField type=XXX>)
+// /**
+//  * Define a type that checks if a given type is assignable to FormFieldReturnType.
+//  * If T is a valid return type for SamfFormField, return true, else false.
+//  */
+// type IsAllowed<T> = T extends FormFieldReturnType ? true : false;
 
+// /**
+//  * Define a type that checks if all properties of an object are assignable to FormFieldReturnType.
+//  * If T is a valid type for SamfForm, return true, else false.
+//  */
+// type ArePropertiesAllowed<T> = {
+//   [K in keyof T]: IsAllowed<T[K]>;
+// }[keyof T] extends true
+//   ? true
+//   : false;
+
+// ---------------------------------- //
+//               Props                //
+// -----------------------------------//
+/**
+ * Wrapper type for the props of all implemented SamfFormField types.
+ */
 export type FieldProps =
   | TextAreaFieldProps
   | CheckboxProps
@@ -32,36 +58,15 @@ export type FieldProps =
   | InputFieldProps<InputFieldType>
   | ImagePickerProps;
 
-export type SamfFormFieldType =
-  | 'text'
-  | 'email'
-  | 'text-long'
-  | 'password'
-  | 'checkbox'
-  | 'float'
-  | 'integer'
-  | 'number'
-  | 'options'
-  | 'image'
-  | 'datetime'
-  | 'date'
-  | 'time'
-  | 'upload-image'
-  | 'upload-pdf'
-  | 'phonenumber';
-
 /**
  * Arguments used to generate the input component.
- * Field is the key in the object, eg 'title_en'
- * onChange alerts the samf form of changes to automatically
- * handle validation etc.
+ *
+ * @param T Type of the form value
  */
-export type SamfFormFieldArgs = {
-  // Shared args for all input types
-  field: string; // Field name
-  value: unknown; // Current value of field
-  onChange(value: unknown): void; // Callback to change field
-  error: string | boolean; // True or string message if error, false or undefined if OK
+export type SamfFormFieldArgs<T extends FormFieldReturnType> = {
+  value: T; // Current value of field
+  onChange(value: T): void; // Callback to change field
+  error: SamfError;
   label?: string; // Text label above the input
   // Custom args for options type
   defaultOption?: DropDownOption<unknown>;
@@ -69,49 +74,67 @@ export type SamfFormFieldArgs = {
   props?: FieldProps;
 };
 
-// Each form type defines a generator function
-type GeneratorFunction = (args: SamfFormFieldArgs) => ReactElement;
+// ---------------------------------- //
+//          Input components          //
+// ---------------------------------- //
+/**
+ * Union of all imput component identifiers. Theese are used to generate the correct input component.
+ */
+export type SamfFormFieldType =
+  | 'text'
+  | 'email'
+  | 'textLong'
+  | 'password'
+  | 'checkbox'
+  | 'float'
+  | 'integer'
+  | 'number'
+  | 'options'
+  | 'image'
+  | 'dateTime'
+  | 'date'
+  | 'time'
+  | 'upload_image'
+  | 'upload_pdf'
+  | 'phonenumber';
 
 /**
- * Register form field types here. Each key should map to a function which generates
- * the UI component handling some type of input.
+ * Generator function for a SamfFormField.
  *
- * Any UI component can be used as long as it calls the onChange function when the value changes.
+ * @param T Returntype of the field generated.
+ */
+export type GeneratorFunction<T extends FormFieldReturnType> = (args: SamfFormFieldArgs<T>) => ReactElement;
+
+/**
+ * Map of all implemented SamfFormField types to their generator functions.
  * */
-export const SamfFormFieldTypeMap: Record<SamfFormFieldType, GeneratorFunction | undefined> = {
-  // Standard field inputs use the same function with a type parameter
-  // The type here is the standard used for html <input> tags
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const SamfFormGenrators: Record<SamfFormFieldType, GeneratorFunction<any>> = {
   text: makeStandardInputFunction<string>('text'),
-  number: makeStandardInputFunction<string>('number'),
-  float: makeStandardInputFunction<string>('number'),
-  integer: makeStandardInputFunction<string>('number'),
-  datetime: makeStandardInputFunction<string>('datetime-local'),
-  date: makeStandardInputFunction<string>('date'),
-  time: makeStandardInputFunction<string>('time'),
+  email: makeStandardInputFunction<string>('email'),
+  textLong: makeAreaInput,
   password: makeStandardInputFunction<string>('password'),
-  // Custom input types
-  'text-long': makeAreaInput,
+  checkbox: makeCheckboxInput,
+  float: makeStandardInputFunction<number>('number'),
+  integer: makeStandardInputFunction<number>('number'),
+  number: makeStandardInputFunction<number>('number'),
   options: makeOptionsInput,
   image: makeImagePicker,
-  'upload-image': makeFilePickerFunction('image'),
-  'upload-pdf': makeFilePickerFunction('pdf'),
-  checkbox: makeCheckboxInput,
-  email: makeStandardInputFunction<string>('email'),
+  dateTime: makeStandardInputFunction<Date>('datetime-local'),
+  date: makeStandardInputFunction<Date>('date'),
+  time: makeStandardInputFunction<Date>('time'),
+  upload_image: makeFilePickerFunction('image'),
+  upload_pdf: makeFilePickerFunction('pdf'),
   phonenumber: makePhoneNumberInput,
 };
 
-// ================================== //
-//           Form Field UI            //
-// ================================== //
-
 // Regular input for text, numbers, dates
-function makeStandardInputFunction<U>(type: InputFieldType): GeneratorFunction {
-  return function generator(args: SamfFormFieldArgs) {
+function makeStandardInputFunction<U extends FormFieldReturnType>(type: InputFieldType): GeneratorFunction<U> {
+  return function generator(args: SamfFormFieldArgs<U>) {
     const safeVal = args.value === undefined ? '' : (args.value as string);
     return (
       <InputField<U>
         {...(args.props as InputFieldProps<U>)}
-        key={args.field}
         value={safeVal}
         onChange={args.onChange}
         error={args.error}
@@ -125,12 +148,12 @@ function makeStandardInputFunction<U>(type: InputFieldType): GeneratorFunction {
 }
 
 // Long text input for descriptions etc
-function makeAreaInput(args: SamfFormFieldArgs) {
+function makeAreaInput(args: SamfFormFieldArgs<string>) {
   const safeVal = args.value === undefined ? '' : (args.value as string);
   return (
     <TextAreaField
       {...(args.props as TextAreaFieldProps)}
-      key={args.field}
+      // key={args.field}
       value={safeVal}
       onChange={args.onChange}
       error={args.error}
@@ -141,51 +164,13 @@ function makeAreaInput(args: SamfFormFieldArgs) {
   );
 }
 
-// Options dropdown input
-function makeOptionsInput(args: SamfFormFieldArgs) {
-  const errorBoolean = args.error !== false && args.error !== undefined;
-  return (
-    <Dropdown
-      {...(args.props as DropdownProps<number | string>)}
-      key={args.field}
-      defaultValue={args.defaultOption}
-      options={args.options}
-      onChange={args.onChange}
-      label={args.label}
-      error={errorBoolean}
-      className={styles.input_element}
-    />
-  );
-}
-
-// Image picker
-function makeImagePicker(args: SamfFormFieldArgs) {
-  return <ImagePicker {...(args.props as ImagePickerProps)} key={args.field} onSelected={args.onChange} />;
-}
-
-// File picker
-function makeFilePickerFunction(fileType: InputFileType) {
-  return function makeFilePicker(args: SamfFormFieldArgs) {
-    return (
-      <InputFile
-        {...(args.props as InputFileProps)}
-        fileType={fileType}
-        key={args.field}
-        label={args.label}
-        error={args.error}
-        onSelected={args.onChange}
-      />
-    );
-  };
-}
-
 // Checkbox
-function makeCheckboxInput(args: SamfFormFieldArgs) {
+function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
   const safeVal = args.value === undefined ? false : (args.value as boolean);
   return (
     <Checkbox
       {...(args.props as CheckboxProps)}
-      key={args.field}
+      // key={args.field}
       checked={safeVal}
       label={args.label}
       className={styles.input_element}
@@ -195,13 +180,51 @@ function makeCheckboxInput(args: SamfFormFieldArgs) {
   );
 }
 
+// Options dropdown input
+function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
+  const errorBoolean = args.error !== false && args.error !== undefined;
+  return (
+    <Dropdown<unknown>
+      {...(args.props as DropdownProps<number | string>)}
+      // key={args.field}
+      defaultValue={args.defaultOption}
+      options={args.options}
+      onChange={args.onChange as (value?: unknown) => void}
+      label={args.label}
+      error={errorBoolean}
+      className={styles.input_element}
+    />
+  );
+}
+
+// Image picker
+function makeImagePicker(args: SamfFormFieldArgs<ImageDto>) {
+  return <ImagePicker {...(args.props as ImagePickerProps)} /*key={args.field}*/ onSelected={args.onChange} />;
+}
+
+// File picker
+function makeFilePickerFunction(fileType: InputFileType) {
+  return function makeFilePicker(args: SamfFormFieldArgs<ImageDto | File>) {
+    return (
+      <InputFile
+        {...(args.props as InputFileProps)}
+        fileType={fileType}
+        // key={args.field}
+        label={args.label}
+        error={args.error}
+        onSelected={args.onChange}
+      />
+    );
+  };
+}
+
 // Phonenumber fields
-function makePhoneNumberInput(args: SamfFormFieldArgs) {
+function makePhoneNumberInput(args: SamfFormFieldArgs<string>) {
   const safeVal = args.value === undefined ? '' : (args.value as string);
   return (
     <PhoneNumberField
       {...(args.props as InputFieldProps<string>)}
-      key={args.field}
+      // key={args.field}
       value={safeVal}
       onChange={args.onChange}
       error={args.error}

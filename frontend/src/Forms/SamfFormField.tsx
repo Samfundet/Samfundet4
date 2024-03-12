@@ -2,107 +2,94 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
-import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
+import {
+  FormType,
+  SamfError,
+  SamfFormActionType,
+  SamfFormConfigContext,
+  SamfFormContext,
+  SamfFormContextType,
+} from './SamfForm';
+import {
+  FieldProps,
+  GeneratorFunction,
+  SamfFormFieldArgs,
+  SamfFormFieldType,
+  SamfFormGenrators,
+} from './SamfFormFieldTypes';
 
-// ================================== //
+// ---------------------------------- //
 //             Utilities              //
-// ================================== //
-
+// ---------------------------------- //
 /**
- * Calculates the error state for a given value
+ * Calculates the error state for a given value.
+ *
  * @param value Current value of the field
  * @param required Whether the field is required
  * @param validator Optional validation function
  * @returns error state (true/false or error message string)
+ * @param U Type of the SamfFormField value
+ * @param T Type of the SamfForm values
  */
-function getErrorState<U>(value: U, required?: boolean, validator?: (v: U) => string | boolean) {
+function getErrorState<U extends T[keyof T], T>(
+  value: U,
+  values: T,
+  required?: boolean,
+  validator?: (state: T) => SamfError,
+  required_message?: string,
+) {
   // Missing value but field is required
   if (required === true && (value === undefined || value === '')) {
-    return true;
+    const errorMsg = required_message ? required_message : true;
+    return errorMsg;
   }
   // Run custom validation check
-  const validationResult = validator?.(value);
+  const validationResult = validator?.(values);
   // No error for validator
   if (validationResult === undefined || validationResult === true) {
     return false;
   }
-  // Error for validator
+  // Validator error without message
   if (validationResult === false) {
     return true;
   }
-  // Error message from validator
+  // Validator error with message
   return validationResult;
 }
 
 /**
- * Casts a string value to a number
- * @param value string value
- * @param int cast as int
- * @returns number value
+ * SamfFormField properties.
+ *
+ * @param U Type of the SamfFormField value
+ * @param T Type of the SamfForm values
  */
-function castNumber(value: string, int: boolean): number | undefined {
-  const num = int ? Number.parseInt(value) : Number.parseFloat(value);
-  if (isNaN(num)) {
-    return undefined;
-  }
-  return num;
-}
-
-// ================================== //
-//        Form Field Component        //
-// ================================== //
-
-/**
- * Hook for samfFormField. Wraps context and useful logic in a separate hook.
- * @param type The field type to use, eg text, number, image etc.
- * @param required Whether or not the field is required
- * @param validator Optional additional validator function for the field
- * @returns hook for value, state and setValue
- */
-function useSamfForm<U>(field: string, required: boolean, validator?: (v: U) => string | boolean) {
-  // Get the context provided by SamfForm
-  const { state, dispatch } = useContext(SamfFormContext);
-  if (state === undefined || dispatch === undefined) {
-    throw new Error('SamfFormField must be used inside a SamfForm (the context provider)');
-  }
-
-  // Set the current value of the state using form context
-  function setValue(newValue: U) {
-    // Dispatch event to form reducer
-    dispatch?.({
-      field: field,
-      value: newValue,
-      error: getErrorState(newValue, required, validator),
-    });
-  }
-
-  // Return state to render and update function
-  const value = state.values[field] as U;
-  const error = state.errors[field];
-  const didSubmit = state.didSubmit;
-  return { value, error, didSubmit, setValue };
-}
-
-// SamfFormField properties
-type SamfFormFieldProps<U> = {
+export type SamfFormFieldProps<U extends T[keyof T], T extends FormType> = {
   // General
-  field: string;
   type: SamfFormFieldType;
+  field: keyof T; // The property of T to bind the field to
   required?: boolean;
   label?: string;
   hidden?: boolean;
-  validator?: (v: U) => string | boolean;
+  validator?: (state: T) => SamfError;
   // Dropdown
-  options?: DropDownOption<U>[];
-  defaultOption?: DropDownOption<U>;
+  options?: DropDownOption<unknown>[];
+  defaultOption?: DropDownOption<unknown>;
   onChange?: (value: U) => void;
   props?: FieldProps;
 };
-export function SamfFormField<U>({
-  field,
+
+/**
+ * SamfFormField component. Only to be used inside a SamfForm. Note the state and dispatch props is
+ * provided by the SamfForm element and should not be passed in manually.
+ *
+ * @param U Return type of the form field
+ * @param T Type of the form values
+ * @see SamfFormFieldProps
+ */
+export function SamfFormField<U extends T[keyof T], T extends FormType>({
   type,
-  required = true,
+  field,
+  required = false,
   hidden = false,
   label,
   options,
@@ -110,87 +97,84 @@ export function SamfFormField<U>({
   validator,
   onChange,
   props,
-}: SamfFormFieldProps<U>) {
-  // Validate on init context
-  const { validateOnInit, validateOn } = useContext(SamfFormConfigContext);
+}: SamfFormFieldProps<U, T>) {
+  // ---------------------------------- //
+  //               Context              //
+  // ---------------------------------- //
+  function setValue(newValue: U, actionType: SamfFormActionType = 'change') {
+    if (state === undefined || dispatch === undefined) {
+      throw new Error('SamfFormField must be used inside a SamfForm (the context provider)');
+    }
+    const newValues: T = { ...state.values, [field]: newValue };
+    const newError: SamfError = getErrorState(newValue, newValues, required, validator, t(KEY.common_required));
+    if (actionType === validateOn) {
+      setDisplayError(newError);
+    }
+    // Dispatch event to form reducer
+    dispatch?.({
+      type: 'field',
+      field: field,
+      value: newValue,
+      error: newError,
+    });
+    // Update value, error and didSubmit locally
+    setLocalValue(newValue as U);
+    //setError(newError);
+  }
+
+  // ---------------------------------- //
+  //               Hooks                //
+  // ---------------------------------- //
+  const { state, dispatch } = useContext(SamfFormContext) as SamfFormContextType<T>;
   const { t } = useTranslation();
+  const { validateOn } = useContext(SamfFormConfigContext);
+  const [displayError, setDisplayError] = useState<SamfError>(false);
+  // Return state to render and update function
+  const [localValue, setLocalValue] = useState<U>(state.values[field] as U);
 
-  // Value state (from context hook)
-  const { value, error, didSubmit, setValue } = useSamfForm<U>(field, required, validator);
-
-  // Whether or not to show error for field
-  // Toggeled on submit or on field change
-  const [showError, setShowError] = useState<boolean>(validateOnInit);
-
-  // Handles all change events
-  function handleOnChange(newValue: unknown, initialUpdate?: boolean) {
-    // Cast types (eg number inputs might initially be strings)
-    if (type === 'number' || type === 'float') {
-      newValue = castNumber(newValue as string, false);
-    }
-    if (type === 'integer') {
-      newValue = castNumber(newValue as string, true);
-    }
-    // Set value using samf form hook
+  // ---------------------------------- //
+  //              Handlers              //
+  // ---------------------------------- //
+  function handleOnChange(newValue: U) {
+    // Set value using form hook
     setValue(newValue as U);
-    // Validate on change, enable display error
-    if (validateOn === 'change' && initialUpdate !== true) {
-      setShowError(true);
-    }
+    // Notify parrent component of change
     onChange && onChange(newValue as U);
   }
 
-  // Enable show error for validate on submit
+  // Enable show error and update error for validate on submit
   useEffect(() => {
-    setShowError(true);
-  }, [didSubmit]);
-
-  // Validate again whenever validateOnInit is turned on
-  useEffect(() => {
-    if (validateOnInit) {
-      handleOnChange(value, false);
+    if (state.didSubmit) {
+      setValue(localValue as U, 'submit');
     }
-    // Handle on change depends on field type which should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validateOnInit]);
+  }, [state.didSubmit]);
 
-  // Set value in context on first render (not critical to run every dep change)
+  // Update value and error on state change
   useEffect(() => {
-    handleOnChange(value, true);
-    // Handle on change depends on field type which should never change
+    handleOnChange(localValue as U);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state.values, localValue, required, validator]);
 
-  // Change validity on requirement changed
-  // Set value in context on first render (not critical to run every dep change)
-  useEffect(() => {
-    handleOnChange(value, false);
-    // Handle on change depends on field type which should never change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [required]);
-
-  // ================================== //
-  //           Form Field UI            //
-  // ================================== //
+  // ---------------------------------- //
+  //               Render               //
+  // ---------------------------------- //
 
   // Generate UI based on type
   function makeFormField() {
-    let errorMsg = required && !value ? t(KEY.common_required) : error;
-    errorMsg = error ? errorMsg : false;
-    const args: SamfFormFieldArgs = {
+    const args: SamfFormFieldArgs<U> = {
       // Standard args
-      field: field,
-      value: value,
+      value: localValue,
       onChange: handleOnChange,
-      error: showError ? errorMsg : false,
+      error: displayError,
       label: label,
       // Options args
       options: options,
       defaultOption: defaultOption,
       props: props,
     };
-    const generatorFunction = SamfFormFieldTypeMap[type];
-    return generatorFunction?.(args) ?? <></>;
+    const generatorFunction: GeneratorFunction<U> = SamfFormGenrators[type];
+    return generatorFunction(args);
   }
 
   return (
