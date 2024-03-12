@@ -1,1 +1,1 @@
-export { PurchaseCallBackPage } from './PurchaseCallbackPage';
+export { PurchaseCallbackPage } from './PurchaseCallbackPage';
