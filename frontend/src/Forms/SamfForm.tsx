@@ -52,7 +52,7 @@ export type SamfFormActionType = 'submit' | 'change';
 export type SamfFormProps<T extends FormType> = {
   initialData?: T;
   validateOn?: SamfFormActionType;
-  submitTextProp?: string; // Submit button text
+  submitText?: string; // Submit button text
   className?: string;
   onChange?<T>(state: T): void;
   onValidityChanged?(valid: boolean): void;
@@ -151,7 +151,7 @@ export const SamfFormConfigContext = createContext<SamfFormConfigContextType>({
 export function SamfForm<T extends FormType>({
   initialData,
   validateOn = 'change',
-  submitTextProp,
+  submitText,
   className,
   onChange,
   onValidityChanged,
@@ -168,7 +168,7 @@ export function SamfForm<T extends FormType>({
   const [animateError, setAnimateError] = useState<boolean>(false);
 
   // memos
-  const submitText = useMemo(() => submitTextProp ?? t(KEY.common_send), [submitTextProp, t]);
+  const submitTextProp = useMemo(() => submitText ?? t(KEY.common_send), [submitText, t]);
   const allValid = Object.values(state.errors).every((v) => v === false);
   const disableSubmit = isDisabled || (validateOn === 'change' && !allValid);
   // const disableSubmit: boolean = isDisabled || (validateOn === 'change' && !allValid);
@@ -257,14 +257,13 @@ export function SamfForm<T extends FormType>({
           {onSubmit !== undefined && (
             <div className={styles.submit_row}>
               <Button
-                // {...submitButtonProps} // TODO: implement this
                 preventDefault={true}
                 type="submit"
                 rounded={true}
                 onClick={handleOnClickSubmit}
                 disabled={disableSubmit}
               >
-                {submitText !== undefined ? submitText : 'Lagre'}
+                {submitTextProp}
               </Button>
             </div>
           )}
