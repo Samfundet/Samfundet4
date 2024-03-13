@@ -1,5 +1,7 @@
 import { SamfError } from './SamfForm';
 
+// TODO: add translations
+
 // ---------------------------------- //
 //             Validators             //
 // -----------------------------------//
