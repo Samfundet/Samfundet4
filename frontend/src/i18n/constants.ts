@@ -159,6 +159,7 @@ export const KEY = {
   loginpage_internal_login: 'loginpage_internal_login',
   loginpage_username: 'loginpage_username',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
+  loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
   // GroupsPage:
