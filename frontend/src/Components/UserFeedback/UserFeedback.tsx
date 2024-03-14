@@ -8,6 +8,7 @@ import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
 import { useTextItem } from '~/hooks';
 import { TextItem } from '~/constants';
+import { toast } from 'react-toastify';
 
 type UserFeedbackProps = {
   enabled: boolean;
@@ -32,9 +33,13 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
       screen_resolution: window.innerWidth + 'x' + window.innerHeight,
       path: window.location.pathname,
     })
-      .then(() => setIsOpen(false))
+      .then(() => {
+        setIsOpen(false);
+        toast.success(t(KEY.feedback_thank_you_for_feedback));
+      })
       .catch((e) => {
         console.error(e);
+        toast.error(t(KEY.common_something_went_wrong));
       });
   };
 

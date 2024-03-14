@@ -267,6 +267,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.feedback_type]: 'Type tilbakemelding',
   [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+  [KEY.feedback_thank_you_for_feedback]: 'Takk for din tilbakemelding',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -559,6 +560,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.feedback_type]: 'Feedback type',
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
+  [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
   // No category:
   [KEY.owner]: 'Owner',
