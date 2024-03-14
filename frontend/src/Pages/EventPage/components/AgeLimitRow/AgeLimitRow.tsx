@@ -1,22 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { EventDto } from '~/dto';
-import { KEY, KeyValues } from '~/i18n/constants';
-import { EventAgeRestriction, EventAgeRestrictionValue } from '~/types';
+import { KEY } from '~/i18n/constants';
+import { getEventAgeRestrictionKey } from '~/utils';
 import styles from './AgeLimitRow.module.scss';
 
-type EventTableProps = {
+type AgeLimitRowProps = {
   event: EventDto;
 };
-const ageRestrictions: Record<EventAgeRestrictionValue, KeyValues> = {
-  [EventAgeRestriction.NONE]: KEY.none,
-  [EventAgeRestriction.EIGHTEEN]: KEY.eighteen,
-  [EventAgeRestriction.TWENTY]: KEY.twenty,
-  [EventAgeRestriction.MIXED]: KEY.mix,
-};
 
-export function AgeLimitRow({ event }: EventTableProps) {
+export function AgeLimitRow({ event }: AgeLimitRowProps) {
   const { t } = useTranslation();
-  const ageRestrictionKey = ageRestrictions[event.age_restriction];
+
+  const ageRestrictionKey = getEventAgeRestrictionKey(event.age_restriction);
 
   return (
     <tr>

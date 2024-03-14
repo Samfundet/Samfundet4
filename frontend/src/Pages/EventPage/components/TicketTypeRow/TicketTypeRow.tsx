@@ -5,11 +5,11 @@ import { EventTicketType } from '~/types';
 import { dbT, getTicketTypeKey } from '~/utils';
 import styles from './TicketTypeRow.module.scss';
 
-type EventTableProps = {
+type TicketTypeRowProps = {
   event: EventDto;
 };
 
-export function TicketTypeRow({ event }: EventTableProps) {
+export function TicketTypeRow({ event }: TicketTypeRowProps) {
   const { t } = useTranslation();
 
   if (event.ticket_type !== EventTicketType.CUSTOM) {
