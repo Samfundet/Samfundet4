@@ -50,7 +50,7 @@ export type SamfFormActionType = 'submit' | 'change';
 
 // Form properties
 export type SamfFormProps<T extends FormType> = {
-  initialData?: T;
+  initialData?: Partial<T>;
   validateOn?: SamfFormActionType;
   submitText?: string; // Submit button text
   className?: string;
@@ -170,7 +170,7 @@ export function SamfForm<T extends FormType>({
   //               Hooks                //
   // ---------------------------------- //
   const { t } = useTranslation();
-  const [state, dispatch] = useFormReducer<T>(initialData);
+  const [state, dispatch] = useFormReducer<T>(initialData as T);
   const [animateError, setAnimateError] = useState<boolean>(false);
 
   // memos
