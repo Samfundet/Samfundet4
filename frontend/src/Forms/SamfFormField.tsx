@@ -122,9 +122,8 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
       value: newValue,
       error: newError,
     });
-    // Update value, error and didSubmit locally
+    // Update local value
     setLocalValue(newValue as U);
-    //setError(newError);
   }
 
   // ---------------------------------- //
