@@ -123,7 +123,8 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
       error: newError,
     });
     // Update local value
-    setLocalValue(newValue as U);
+    setLocalValue(newValue);
+    setLocalError(newError);
   }
 
   // ---------------------------------- //
@@ -136,6 +137,7 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
   const [isInit, setIsInit] = useState<boolean>(true);
   const [displayError, setDisplayError] = useState<SamfError>(false);
   const [localValue, setLocalValue] = useState<U>(state.values[field] as U);
+  const [localError, setLocalError] = useState<SamfError>(false);
 
   // ---------------------------------- //
   //              Handlers              //
@@ -160,9 +162,9 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
   // Display current error when isInit is disabled
   useEffect(() => {
     if (!isInit) {
-      const newError: SamfError = getErrorState(localValue, state.values, required, validator, t(KEY.common_required));
-      setDisplayError(newError);
+      setDisplayError(localError);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInit]);
 
   // Update error on any change in the form
@@ -174,6 +176,7 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
   // Trigger init on first render
   useEffect(() => {
     setValue(localValue, 'init');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ---------------------------------- //
