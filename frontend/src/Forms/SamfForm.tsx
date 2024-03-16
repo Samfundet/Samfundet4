@@ -60,6 +60,7 @@ export type SamfFormProps<T extends FormType> = {
   children: ReactNode;
   devMode?: boolean; // Dev/debug mode.
   isDisabled?: boolean; // Disables submit button
+  validateOnInit?: boolean; // Validate fields on init
 };
 
 // ---------------------------------- //
@@ -92,6 +93,7 @@ function formReducer<T>(state: SamfFormState<T>, action: SamfFormAction<T>): Sam
   switch (action.type) {
     case 'submit': {
       // Submit action
+
       return {
         ...state,
         didSubmit: true,
@@ -99,6 +101,7 @@ function formReducer<T>(state: SamfFormState<T>, action: SamfFormAction<T>): Sam
     }
     case 'field': {
       // Change state of a field
+
       const newState = { ...state } as SamfFormState<T>;
 
       // Reset didSubmit
@@ -113,7 +116,7 @@ function formReducer<T>(state: SamfFormState<T>, action: SamfFormAction<T>): Sam
     }
     default: {
       // TODO: maybe throw an error here?
-      return state;
+      return { ...state };
     }
   }
 }
@@ -140,9 +143,11 @@ export const SamfFormContext = createContext<SamfFormContextType<unknown>>({
 // Samf form context for configs (currently only option to validate on init)
 type SamfFormConfigContextType = {
   validateOn: SamfFormActionType;
+  validateOnInit: boolean;
 };
 export const SamfFormConfigContext = createContext<SamfFormConfigContextType>({
   validateOn: 'change',
+  validateOnInit: false,
 });
 
 // ---------------------------------- //
@@ -159,6 +164,7 @@ export function SamfForm<T extends FormType>({
   children,
   devMode = false,
   isDisabled = false,
+  validateOnInit = false,
 }: SamfFormProps<T>) {
   // ---------------------------------- //
   //               Hooks                //
@@ -170,8 +176,8 @@ export function SamfForm<T extends FormType>({
   // memos
   const submitTextProp = useMemo(() => submitText ?? t(KEY.common_send), [submitText, t]);
   const allValid = Object.values(state.errors).every((v) => v === false);
-  const disableSubmit = isDisabled || (validateOn === 'change' && !allValid);
-  // const disableSubmit: boolean = isDisabled || (validateOn === 'change' && !allValid);
+  const [isInit, setIsInit] = useState(true);
+  const disableSubmit = isDisabled || (validateOn === 'change' && !allValid && (!isInit || validateOnInit));
   const formClass = useMemo(
     () => classNames(styles.samf_form, animateError && styles.animate_error, className),
     [animateError, className],
@@ -188,6 +194,7 @@ export function SamfForm<T extends FormType>({
   // Submit values to parent
   function handleOnClickSubmit(e?: React.MouseEvent<HTMLElement>) {
     e?.preventDefault();
+    setIsInit(false);
     dispatch({ type: 'submit' });
     if (allValid) {
       onSubmit?.(state.values);
@@ -199,6 +206,7 @@ export function SamfForm<T extends FormType>({
   // ---------------------------------- //
   //               Render               //
   // ---------------------------------- //
+
   // Allert parent of changes in form values
   useEffect(() => {
     onChange?.(state.values as T);
@@ -251,7 +259,7 @@ export function SamfForm<T extends FormType>({
   // Render children with form context
   return (
     <SamfFormContext.Provider value={{ state, dispatch }}>
-      <SamfFormConfigContext.Provider value={{ validateOn }}>
+      <SamfFormConfigContext.Provider value={{ validateOn, validateOnInit }}>
         <form className={formClass} onAnimationEnd={() => setAnimateError(false)}>
           {children}
           {onSubmit !== undefined && (

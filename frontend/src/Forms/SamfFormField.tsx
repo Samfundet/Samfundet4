@@ -101,15 +101,20 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
   // ---------------------------------- //
   //               Context              //
   // ---------------------------------- //
-  function setValue(newValue: U, actionType: SamfFormActionType = 'change') {
+  function setValue(newValue: U, actionType: SamfFormActionType | 'init' = 'change') {
     if (state === undefined || dispatch === undefined) {
       throw new Error('SamfFormField must be used inside a SamfForm (the context provider)');
     }
     const newValues: T = { ...state.values, [field]: newValue };
     const newError: SamfError = getErrorState(newValue, newValues, required, validator, t(KEY.common_required));
     if (actionType === validateOn) {
+      if (!(!validateOnInit && isInit)) {
+        setDisplayError(newError);
+      }
+    } else if (actionType === 'init' && validateOnInit) {
       setDisplayError(newError);
     }
+
     // Dispatch event to form reducer
     dispatch?.({
       type: 'field',
@@ -127,34 +132,50 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
   // ---------------------------------- //
   const { state, dispatch } = useContext(SamfFormContext) as SamfFormContextType<T>;
   const { t } = useTranslation();
-  const { validateOn } = useContext(SamfFormConfigContext);
+  const { validateOn, validateOnInit } = useContext(SamfFormConfigContext);
+
+  const [isInit, setIsInit] = useState<boolean>(true);
   const [displayError, setDisplayError] = useState<SamfError>(false);
-  // Return state to render and update function
   const [localValue, setLocalValue] = useState<U>(state.values[field] as U);
 
   // ---------------------------------- //
   //              Handlers              //
   // ---------------------------------- //
   function handleOnChange(newValue: U) {
+    setIsInit(false);
     // Set value using form hook
-    setValue(newValue as U);
+    setValue(newValue);
     // Notify parrent component of change
-    onChange && onChange(newValue as U);
+    onChange && onChange(newValue);
   }
 
-  // Enable show error and update error for validate on submit
+  // When form is submitted, trigger an update in this field
   useEffect(() => {
     if (state.didSubmit) {
-      setValue(localValue as U, 'submit');
+      setIsInit(false);
+      setValue(localValue, 'submit');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.didSubmit]);
 
-  // Update value and error on state change
+  // Display current error when isInit is disabled
   useEffect(() => {
-    handleOnChange(localValue as U);
+    if (!isInit) {
+      const newError: SamfError = getErrorState(localValue, state.values, required, validator, t(KEY.common_required));
+      setDisplayError(newError);
+    }
+  }, [isInit]);
+
+  // Update error on any change in the form
+  useEffect(() => {
+    setValue(localValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.values, localValue, required, validator]);
+
+  // Trigger init on first render
+  useEffect(() => {
+    setValue(localValue, 'init');
+  }, []);
 
   // ---------------------------------- //
   //               Render               //
