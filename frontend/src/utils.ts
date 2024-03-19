@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventAgeRestriction, EventAgeRestrictionValue, EventTicketType, EventTicketTypeValue } from './types';
+import { Day, EventTicketType, EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -150,22 +150,6 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
       return KEY.common_ticket_type_custom;
     case EventTicketType.REGISTRATION:
       return KEY.common_ticket_type_registration;
-  }
-}
-
-/**
- * Gets the translation key for a given age restriction
- */
-export function getEventAgeRestrictionKey(ageRestriction: EventAgeRestrictionValue): KeyValues {
-  switch (ageRestriction) {
-    case EventAgeRestriction.NONE:
-      return KEY.none;
-    case EventAgeRestriction.EIGHTEEN:
-      return KEY.eighteen;
-    case EventAgeRestriction.TWENTY:
-      return KEY.twenty;
-    case EventAgeRestriction.MIXED:
-      return KEY.mix;
   }
 }
 
