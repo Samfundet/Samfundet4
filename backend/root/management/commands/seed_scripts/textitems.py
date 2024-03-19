@@ -131,7 +131,7 @@ def seed():
         },
         {
             'key': 'why_member_header',
-            'text_nb': 'Hvorfor bli medlem av Samfundet?',
+            'text_nb': 'Hvorfor bli medlem?',
             'text_en': 'Why become a member?',
         },
         {
@@ -236,7 +236,7 @@ def seed():
             'text_nb':
                 'Er eller har vært student eller lærer ved en utdanningsinstitusjon i Trondheimsområdet som baserer seg på heltidsstudier, samt er tilknyttet Studentsamskipnaden. (NTNU, DMMH, Luftkrigsskolen, BI, Fotofagskolen og Trondheim Fagskole)',
             'text_en':
-                'Are, or have been, a student or teacher at an educational institution based on full time studies, connetcted to Studentsamskipnadden in Trondheim. (NTNU, DMMH, Luftkrigsskolen, BI, Fotofagskolen and Trondheim Fagskole)',
+                'Is, or have been, a student or teacher at an educational institution based on full time studies, connetcted to Studentsamskipnadden in Trondheim. (NTNU, DMMH, Luftkrigsskolen, BI, Fotofagskolen and Trondheim Fagskole)',
         },
         {
             'key':
@@ -244,12 +244,12 @@ def seed():
             'text_nb':
                 'Er eller har vært student ved en utdanningsinstitusjon som baserer seg på heltidsstudier tilknyttet en studentsamskipnad, og som nå er bosatt i Trondheimsområdet',
             'text_en':
-                'Have been a student at an educational institution based on full time studies, connetcted to Studentsamskipnadden and are now living in the Trondheim area.',
+                'Is, or have been a student at an educational institution based on full time studies, connected to Studentsamskipnadden and are now living in the Trondheim area.',
         },
         {
             'key': 'who_member_list_2',
             'text_nb': 'Er, eller har vært, studenter ved en tilsvarende utdanningsinstitusjon utenfor Norge, som nå er bosatt i Trondheimsområdet',
-            'text_en': 'Have been a student at an equivalent educational institution outside Norway and are now living in the Trondheim area.',
+            'text_en': 'Is, or have been a student at an equivalent educational institution outside of Norway and are now living in the Trondheim area.',
         },
         {
             'key': 'member_benefits',
@@ -266,8 +266,8 @@ def seed():
         },
         {
             'key': 'member_benefits_list_0',
-            'text_nb': 'Gratis inngang hver dag unntatt festivaler, temafester og andre spesielle arrangementer.',
-            'text_en': 'Free entry every day except for festivals, themed parties and other special events.',
+            'text_nb': 'Gratis inngang hver dag unntatt festivaler, temafester og andre spesielle arrangementer',
+            'text_en': 'Free entry every day except for festivals, themed parties and other special events',
         },
         {
             'key': 'member_benefits_list_1',
@@ -276,23 +276,23 @@ def seed():
         },
         {
             'key': 'member_benefits_list_2',
-            'text_nb': 'Medlemspriser på et utvalg av mat og drikke på Samfundet.',
-            'text_en': 'Member prices on a variety of food and drinks at Samfundet.',
+            'text_nb': 'Medlemspriser på et utvalg av mat og drikke på Samfundet',
+            'text_en': 'Member prices on a variety of food and drinks at Samfundet',
         },
         {
             'key': 'member_benefits_list_3',
-            'text_nb': 'Medlemspriser på Fotogjengens bilder fra alle Samfundets arrangementer.',
-            'text_en': 'Member prices on Fotogjengen\'s photos from all of Samfundets events.',
+            'text_nb': 'Medlemspriser på Fotogjengens bilder fra alle Samfundets arrangementer',
+            'text_en': 'Member prices on Fotogjengen\'s photos from all of Samfundets events',
         },
         {
             'key': 'buy_membership',
             'text_nb': 'Hvor kjøper jeg medlemskap?',
-            'text_en': 'Where to buy a membership',
+            'text_en': 'Where to buy a membership?',
         },
         {
             'key': 'buy_membership_text_0',
             'text_nb': 'Medlemskort selges i Luka (Samfundets resepsjon) som er lokalisert ved glassinngangen på søndre side. Åpningstider finner du ',
-            'text_en': 'We sell memberships at Luka (Samfundet´s reception), which is by the glass entrance. You can find the opening ours',
+            'text_en': 'We sell memberships at Luka (Samfundet\'s reception), which is by the glass entrance. You can find the opening hours',
         },
         {
             'key': 'buy_membership_text_1',
@@ -303,9 +303,9 @@ def seed():
             'key':
                 'buy_membership_text_2',
             'text_nb':
-                'Husk å ta med legitimasjon og studentbevis ved kjøp av medlemskort! NB! Medlemskap er personlig og kan ikke selges videre eller deles med andre.',
+                'Husk å ta med legitimasjon og studentbevis ved kjøp av medlemskort! NB: Medlemskap er personlig og kan ikke selges videre eller deles med andre.',
             'text_en':
-                'Remember ID and student-ID when you wish to become a member! Membership cards are personal and cannot be sold to others.',
+                'Remember ID and student-ID when you wish to become a member! NB: Membership cards are personal and cannot be sold to others.',
         },
         {
             'key': 'register_card',
@@ -316,9 +316,9 @@ def seed():
             'key':
                 'register_card_text',
             'text_nb':
-                'Det er viktig at du registrerer deg for at ingen skal kunne misbruke medlemsnummeret ditt, og for at du skal kunne få erstattet mistet kort. Dette gjør du på medlemsdatabasen vår medlem.samfundet.no Medlemskortet er gyldig uten bilde én uke etter det er kjøpt. Etter dette må du ha limt på bilde av deg selv på kortet for at det skal være gyldig. Husk at du bare skal registrere deg første gang du får kort. Når du så senere får nytt oblat eller nytt kort skal du kun oppdatere de opplysningene du allerede har lagret, ikke registrere deg på nytt.',
+                'Det er viktig at du registrerer deg for at ingen skal kunne misbruke medlemsnummeret ditt, og for at du skal kunne få erstattet mistet kort. Dette gjør du på medlemsdatabasen vår medlem.samfundet.no. Medlemskortet er gyldig uten bilde én uke etter det er kjøpt. Etter dette må du ha limt på bilde av deg selv på kortet for at det skal være gyldig. Husk at du bare skal registrere deg første gang du får kort. Når du så senere får nytt oblat eller nytt kort skal du kun oppdatere de opplysningene du allerede har lagret, ikke registrere deg på nytt.',
             'text_en':
-                'It is important that you register so that nobody can misuse your membership number, and so that you can replace a lost card. You can register at out member database: [medlem.samfundet.no](medlem.samfundet.no). Remember that you must register the first time you receive a card. When you then later get a new sticker or new card all you´ll have to do are updating the information that you have already saved, you do not have to register all over again.'
+                'It is important that you register so that nobody can misuse your membership number, and so that you can replace a lost card. You can register at out member database medlem.samfundet.no. The card is valid without a picture one week after it is purchased. After one week, you must have a photo of yourself on the card for it to be valid. Remember that you must register the first time you receive a card. When you later get a new sticker or a new card , you only need to update the information already saved, you do not need to register all over again.'
         },
     ]
 
