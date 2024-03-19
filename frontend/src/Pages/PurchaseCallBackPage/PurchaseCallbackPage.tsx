@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PurchaseFeedbackForm } from '~/Components/PurchaseFeedbackForm';
 import { getPurchaseFeedbackForm } from '~/api';
 import { PurchaseFeedbackFormDto } from '~/dto';
-
+import { TITLE, ALTERNATIVES, QUESTIONS } from '~/constants/PurchaseFeedbackForm'
 export function PurchaseCallbackPage() {
   const [form, setForm] = useState<PurchaseFeedbackFormDto>({
     title: '',
@@ -11,7 +11,7 @@ export function PurchaseCallbackPage() {
   });
 
   useEffect(() => {
-    getPurchaseFeedbackForm().then((data) => setForm(data));
+    setForm({ TITLE, ALTERNATIVES, QUESTIONS })
   }, []);
 
   return (

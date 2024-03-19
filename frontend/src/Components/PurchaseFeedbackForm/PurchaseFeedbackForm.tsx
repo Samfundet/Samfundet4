@@ -21,11 +21,13 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
       }
     }
 
-    const selectedAlternatives = alternatives.filter((alternative) => formData[alternative] === 'on');
+    //const selectedAlternatives = alternatives.filter((alternative) => formData[alternative] === 'on');
+    const selectedAlternatives = {}
 
     const feedback: PurchaseFeedbackDto = {
-      responses: questionResponses,
+      title: title,
       alternatives: selectedAlternatives,
+      responses: questionResponses,
     };
     postPurchaseFeedback(feedback);
   }

@@ -74,7 +74,8 @@ class EventRegistration(models.Model):
     # Registered users
     registered_users = models.ManyToManyField(User, blank=True)
     # Registered emails (for those not logged in/not a member)
-    registered_emails = models.ManyToManyField(NonMemberEmailRegistration, blank=True)
+    registered_emails = models.ManyToManyField(
+        NonMemberEmailRegistration, blank=True)
 
     def __str__(self) -> str:
         return f'{self.count} registered'
@@ -149,10 +150,12 @@ class Event(CustomBaseModel):
     # ======================== #
 
     # Event group is used for events occurring multiple times (e.g. a concert repeating twice)
-    event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
+    event_group = models.ForeignKey(
+        EventGroup, on_delete=models.PROTECT, blank=True, null=True)
 
     # Event status
-    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=False, null=False, default=EventStatus.ACTIVE)
+    status = models.CharField(max_length=30, choices=EventStatus.choices,
+                              blank=False, null=False, default=EventStatus.ACTIVE)
 
     # Text/images etc
     title_nb = models.CharField(max_length=140, blank=False, null=False)
@@ -162,12 +165,15 @@ class Event(CustomBaseModel):
     description_short_nb = models.TextField(blank=False, null=False)
     description_short_en = models.TextField(blank=False, null=False)
     location = models.CharField(max_length=140, blank=False, null=False)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
+    image = models.ForeignKey(
+        Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
     editors = models.ManyToManyField(Gang, blank=True)
 
-    age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
-    category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
+    age_restriction = models.CharField(
+        max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
+    category = models.CharField(max_length=30, choices=EventCategory.choices,
+                                blank=False, null=False, default=EventCategory.OTHER)
 
     # ======================== #
     #    Duration/Timestamps   #
@@ -181,8 +187,10 @@ class Event(CustomBaseModel):
     # ======================== #
 
     capacity = models.PositiveIntegerField(blank=False, null=False)
-    ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices, blank=False, null=False, default=EventTicketType.FREE)
-    registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
+    ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices,
+                                   blank=False, null=False, default=EventTicketType.FREE)
+    registration = models.ForeignKey(
+        EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
 
     # Billig ID used as a foreign key to the billig database
@@ -252,15 +260,19 @@ class Event(CustomBaseModel):
         """
 
         # Fetch billig events for all events with billig
-        events_with_billig = [e for e in events if e.ticket_type == EventTicketType.BILLIG]
-        billig_ids = [int(e.billig_id) for e in events_with_billig if e.billig_id is not None]
+        events_with_billig = [
+            e for e in events if e.ticket_type == EventTicketType.BILLIG]
+        billig_ids = [int(e.billig_id)
+                      for e in events_with_billig if e.billig_id is not None]
         billig_events = BilligEvent.objects.filter(id__in=billig_ids)
 
         # Prefetch related tickets and prices to improve performance
         if tickets and prices:
-            billig_events = billig_events.prefetch_related(Prefetch('ticket_groups', queryset=BilligTicketGroup.objects.prefetch_related('price_groups')))
+            billig_events = billig_events.prefetch_related(Prefetch(
+                'ticket_groups', queryset=BilligTicketGroup.objects.prefetch_related('price_groups')))
         elif tickets:
-            billig_events = billig_events.prefetch_related(Prefetch('ticket_groups', queryset=BilligTicketGroup.objects.all()))
+            billig_events = billig_events.prefetch_related(
+                Prefetch('ticket_groups', queryset=BilligTicketGroup.objects.all()))
 
         # Attach billig events to event objects (set the private _billig field)
         # This is neccessary because billig_id is not a real foreign key
@@ -302,3 +314,21 @@ class Event(CustomBaseModel):
             self.get_or_create_registration().registered_users.add(user)
             return True
         return False
+
+
+class PurchaseFeedbackModel(CustomBaseModel):
+    title = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+
+class PurchaseFeedbackAlternative(CustomBaseModel):
+    alternative = models.CharField(max_length=255, blank=True)
+    selected = models.BooleanField()
+    form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+
+class PurchaseFeedbackQuestion(CustomBaseModel):
+    question = models.CharField(max_length=255, blank=True)
+    answer = models.CharField(max_length=255, blank=True)
+    form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)

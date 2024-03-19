@@ -401,8 +401,9 @@ export type RecruitmentAdmissionDto = {
 // ############################################################
 
 export type PurchaseFeedbackDto = {
+  title: string;
   responses: Record<string, string>;
-  alternatives: string[];
+  alternatives: Record<string, number>;
 };
 
 export type PurchaseFeedbackFormDto = {
