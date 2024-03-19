@@ -160,6 +160,7 @@ class Interview(CustomBaseModel):
         help_text='Room where the interview is held',
         related_name='interviews',
     )
+    interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 

@@ -380,6 +380,7 @@ export type InterviewDto = {
   interview_location: string;
   room: string;
   notes: string;
+  interviewers?: UserDto[];
 };
 
 export type RecruitmentAdmissionDto = {
