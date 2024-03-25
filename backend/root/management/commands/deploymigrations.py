@@ -1,4 +1,6 @@
 # imports
+from __future__ import annotations
+
 from django.core import management
 from django.core.management.base import BaseCommand
 
@@ -6,7 +8,6 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
             '--noinput',
@@ -35,11 +36,9 @@ class Command(BaseCommand):
         return answer in yes
 
     def handle(self, *args, **options):
-
-        if options['interactive']:
-            if not self.confirmation():
-                print('== ABORT ==')
-                return
+        if options['interactive'] and not self.confirmation():
+            print('== ABORT ==')
+            return
 
         management.call_command('migratezero', interactive=options['interactive'])
         management.call_command('deletemigrations', interactive=options['interactive'])

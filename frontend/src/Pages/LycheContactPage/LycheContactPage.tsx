@@ -12,6 +12,7 @@ export function LycheContactPage() {
       <SultenPage>
         <div className={styles.contactContainer}>
           <div className={styles.textContainer}>
+            <h1 className={styles.lycheContactTitle}>{useTextItem(TextItem.sulten_contact_page_title)}</h1>
             <p className={styles.lycheContactText}>{useTextItem(TextItem.sulten_contact_page_text)}</p>
             <p className={styles.contactAddress}>booking-lyche@uka.no</p>
             <p className={styles.contactAddress}>Elgesetergate 1</p>

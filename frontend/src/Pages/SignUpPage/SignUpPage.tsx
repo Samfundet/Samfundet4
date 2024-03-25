@@ -70,7 +70,12 @@ export function SignUpPage() {
             <h1 className={styles.header_text}>{t(KEY.loginpage_register)}</h1>
             <SamfFormField required={true} field="username" type="text" label={t(KEY.loginpage_username) ?? ''} />
             <SamfFormField required={true} field="email" type="email" label={t(KEY.common_email) ?? ''} />
-            <SamfFormField required={true} field="phone_number" type="text" label={t(KEY.common_phonenumber) ?? ''} />
+            <SamfFormField
+              required={true}
+              field="phone_number"
+              type="phonenumber"
+              label={t(KEY.common_phonenumber) ?? ''}
+            />
             <SamfFormField required={true} field="firstname" type="text" label={t(KEY.common_firstname) ?? ''} />
             <SamfFormField required={true} field="lastname" type="text" label={t(KEY.common_lastname) ?? ''} />
             <SamfFormField required={true} field="password" type="password" label={t(KEY.common_password) ?? ''} />
