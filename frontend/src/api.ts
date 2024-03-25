@@ -295,7 +295,7 @@ export async function getFoodPreference(pk: string | number): Promise<FoodPrefer
   return response.data;
 }
 
-export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
+export async function getFoodCategories(): Promise<FoodCategoryDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__food_category_list;
   const response = await axios.get<FoodCategoryDto[]>(url, { withCredentials: true });
 

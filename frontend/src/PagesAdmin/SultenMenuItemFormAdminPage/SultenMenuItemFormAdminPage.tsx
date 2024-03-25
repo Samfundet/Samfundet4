@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getFoodCategorys, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
+import { getFoodCategories, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
 import { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -26,11 +26,30 @@ export function SultenMenuItemFormAdminPage() {
   const [menuItem, setMenuItem] = useState<Partial<MenuItemDto>>({});
   const [foodPreferenceOptions, setFoodPreferenceOptions] = useState<DropDownOption<number>[]>([]);
   const [foodCategoryOptions, setFoodCategoryOptions] = useState<DropDownOption<number>[]>([]);
+
+  const initialData: Partial<MenuItemDto> = {
+    name_nb: menuItem?.name_nb,
+    name_en: menuItem?.name_en,
+
+    description_nb: menuItem?.description_nb,
+    description_en: menuItem?.description_en,
+
+    price: menuItem?.price,
+    price_member: menuItem?.price_member,
+
+    food_preferences: [], // TODO add on multiselect
+    food_category: (menuItem?.food_category as FoodCategoryDto)?.id,
+  };
+
+  const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
+  const title = (id ? t(KEY.common_edit) : t(KEY.common_create)) + ' ' + lowerCapitalize(`${t(KEY.sulten_dishes)}`);
+
+
   // Fetch data if edit mode.
 
   useEffect(() => {
     Promise.all([
-      getFoodCategorys()
+      getFoodCategories()
         .then((data) => {
           setFoodCategoryOptions(
             data.map(
@@ -87,23 +106,7 @@ export function SultenMenuItemFormAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const initialData: Partial<MenuItemDto> = {
-    name_nb: menuItem?.name_nb,
-    name_en: menuItem?.name_en,
-
-    description_nb: menuItem?.description_nb,
-    description_en: menuItem?.description_en,
-
-    price: menuItem?.price,
-    price_member: menuItem?.price_member,
-
-    food_preferences: [], // TODO add on multiselect
-    food_category: (menuItem?.food_category as FoodCategoryDto)?.id,
-  };
-
-  const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
-
-  // Loading.
+  // Guards.
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -148,8 +151,6 @@ export function SultenMenuItemFormAdminPage() {
         });
     }
   }
-
-  const title = (id ? t(KEY.common_edit) : t(KEY.common_create)) + ' ' + lowerCapitalize(`${t(KEY.sulten_dishes)}`);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
