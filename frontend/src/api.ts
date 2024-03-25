@@ -3,6 +3,7 @@ import {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
@@ -11,6 +12,7 @@ import {
   ImageDto,
   ImagePostDto,
   InformationPageDto,
+  InterviewDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -687,6 +689,13 @@ export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<Rec
   return response;
 }
 
+export async function getActiveRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitments;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
   const url =
     BACKEND_DOMAIN +
@@ -716,6 +725,27 @@ export async function putRecruitmentAdmission(
     recruitment_position: admission.recruitment_position,
   };
   const response = await axios.put(url, data, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentAdmissionInterview(
+  interviewId: string | number,
+  interview: Partial<InterviewDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_detail,
+      urlParams: { pk: interviewId.toString() },
+    });
+  const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
+  return response;
+}
+
+export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
+  const response = await axios.post(url, feedbackData, { withCredentials: true });
 
   return response;
 }
