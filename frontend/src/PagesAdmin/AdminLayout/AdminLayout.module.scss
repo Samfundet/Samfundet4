@@ -179,8 +179,9 @@ $panel-dark-bg: #333333;
 }
 
 .open_panel_desktop {
+  position: fixed;
   height: 100%;
-  padding : 0.5em;
+  padding : 0.2em;
   display: flex;
   align-items: center;
   justify-content: center;

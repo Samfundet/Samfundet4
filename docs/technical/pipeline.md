@@ -1,24 +1,17 @@
-
 # Pipelines
 
 ## Frontend
-*No docs yet*
+
+_No docs yet_
 
 ## Backend
-*No docs yet*
+
+_No docs yet_
 
 ### Yapf
-Python formatter
 
-### Bandit
-Security issues
+Python formatter
 
 ### mypy
+
 Static typing
-
-### flake8
-Python formatter
-
-### pylint
-Python linter
-

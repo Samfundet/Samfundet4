@@ -1,38 +1,40 @@
+from __future__ import annotations
+
 from typing import Any
+
+from guardian.shortcuts import assign_perm, remove_perm
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, m2m_changed
 
-from guardian.shortcuts import assign_perm, remove_perm
-
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
-from .models import UserPreference, Profile, User, Event, Gang
 from .models.recruitment import RecruitmentAdmission, RecruitmentStatistics, Recruitment
-
+from .models import Gang, User, Event, Profile, UserPreference
 
 @receiver(post_save, sender=User)
-def create_user_preference(sender: User, instance: User, created: bool, **kwargs: Any) -> None:
+def create_user_preference(sender: User, instance: User, *, created: bool, **kwargs: Any) -> None:
     """Ensures user_preference is created whenever a user is created."""
     if created:
         UserPreference.objects.get_or_create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def create_profile(sender: User, instance: User, created: bool, **kwargs: Any) -> None:
+def create_profile(sender: User, instance: User, *, created: bool, **kwargs: Any) -> None:
     """Ensures profile is created whenever a user is created."""
     if created:
         Profile.objects.get_or_create(user=instance)
 
 
 @receiver(m2m_changed, sender=Event.editors.through)
-def update_editor_permissions(
+def update_editor_permissions(  # noqa: C901
     sender: User,
     instance: Event,
     action: str,
-    reverse: bool,
     model: Gang,
     pk_set: set[int],
+    *,
+    reverse: bool,
     **kwargs: dict,
 ) -> None:
     if action in ['post_add', 'post_remove', 'post_clear']:
