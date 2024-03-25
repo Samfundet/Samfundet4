@@ -63,6 +63,13 @@ export const appletCategories: AppletCategory[] = [
         icon: 'mdi:person-search',
         url: ROUTES.frontend.admin_recruitment,
       },
+      {
+        title_nb: 'Lyche Meny',
+        title_en: 'Lyche Meny',
+        perm: PERM.SAMFUNDET_VIEW_MENU,
+        icon: 'bx:food-menu',
+        url: ROUTES.frontend.admin_sulten_menu,
+      },
     ],
   },
 ];

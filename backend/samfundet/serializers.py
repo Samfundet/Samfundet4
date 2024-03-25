@@ -1,61 +1,69 @@
+from __future__ import annotations
+
 import itertools
 
-from django.contrib.auth import authenticate
-from django.core.exceptions import ValidationError
-from django.contrib.auth.models import Group, Permission
-from django.core.files import File
-from django.core.files.images import ImageFile
-from django.db.models import QuerySet
-from guardian.models import GroupObjectPermission, UserObjectPermission
+from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
+
+from django.db.models import QuerySet
+from django.core.files import File
+from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
+from django.core.files.images import ImageFile
+from django.contrib.auth.models import Group, Permission
+
 from root.constants import PHONE_NUMBER_REGEX
-from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-)
-from .models.event import (Event, EventGroup, EventCustomTicket)
+from root.utils.mixins import CustomBaseSerializer
+
+from .models.event import Event, EventGroup, EventCustomTicket
+from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
-    User,
-    Menu,
     Gang,
+    Menu,
+    User,
+    Image,
     Table,
     Venue,
-    Image,
-    Infobox,
+    Campus,
     Booking,
+    Infobox,
     Profile,
-    TextItem,
-    MenuItem,
+    BlogPost,
     GangType,
     KeyValue,
-    Organization,
-    BlogPost,
-    FoodCategory,
-    Saksdokument,
+    MenuItem,
+    TextItem,
+    Reservation,
     ClosedPeriod,
+    FoodCategory,
+    Organization,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     Merch,
     MerchVariation,
     InformationPage,
+    UserFeedbackModel,
+)
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    Occupiedtimeslot,
+    RecruitmentPosition,
+    RecruitmentAdmission,
 )
 
 
-class TagSerializer(serializers.ModelSerializer):
-
+class TagSerializer(CustomBaseSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -92,21 +100,19 @@ class ImageSerializer(serializers.ModelSerializer):
         return image.image.url if image.image else None
 
 
-class EventCustomTicketSerializer(serializers.ModelSerializer):
-
+class EventCustomTicketSerializer(CustomBaseSerializer):
     class Meta:
         model = EventCustomTicket
         fields = '__all__'
 
 
-class BilligPriceGroupSerializer(serializers.ModelSerializer):
-
+class BilligPriceGroupSerializer(CustomBaseSerializer):
     class Meta:
         model = BilligPriceGroup
         fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
 
 
-class BilligTicketGroupSerializer(serializers.ModelSerializer):
+class BilligTicketGroupSerializer(CustomBaseSerializer):
     # These fields are calculated based on percentages sold and should be public
     is_almost_sold_out = serializers.BooleanField(read_only=True)
     is_sold_out = serializers.BooleanField(read_only=True)
@@ -128,7 +134,7 @@ class BilligTicketGroupSerializer(serializers.ModelSerializer):
         ]
 
 
-class BilligEventSerializer(serializers.ModelSerializer):
+class BilligEventSerializer(CustomBaseSerializer):
     ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
 
     class Meta:
@@ -146,9 +152,7 @@ class BilligEventSerializer(serializers.ModelSerializer):
 
 
 class EventListSerializer(serializers.ListSerializer):
-    """
-    Speedup fetching of billig events for lists serialization
-    """
+    """Speedup fetching of billig events for lists serialization"""
 
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
@@ -156,14 +160,13 @@ class EventListSerializer(serializers.ListSerializer):
             events = events.prefetch_related('custom_tickets')
             events = events.prefetch_related('image')
 
-        Event.prefetch_billig(events, tickets=True, prices=True)
+        Event.prefetch_billig(events=events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
         return [self.child.to_representation(e) for e in events]
 
 
-class EventSerializer(serializers.ModelSerializer):
-
+class EventSerializer(CustomBaseSerializer):
     class Meta:
         model = Event
         list_serializer_class = EventListSerializer
@@ -194,22 +197,19 @@ class EventSerializer(serializers.ModelSerializer):
         return event
 
 
-class EventGroupSerializer(serializers.ModelSerializer):
-
+class EventGroupSerializer(CustomBaseSerializer):
     class Meta:
         model = EventGroup
         fields = '__all__'
 
 
-class VenueSerializer(serializers.ModelSerializer):
-
+class VenueSerializer(CustomBaseSerializer):
     class Meta:
         model = Venue
         fields = '__all__'
 
 
-class ClosedPeriodSerializer(serializers.ModelSerializer):
-
+class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
@@ -223,13 +223,14 @@ class LoginSerializer(serializers.Serializer):
     It will try to authenticate the user with when validated.
     https://www.guguweb.com/2022/01/23/django-rest-framework-authentication-the-easy-way/
     """
+
     username = serializers.CharField(label='Username', write_only=True)
     password = serializers.CharField(
         label='Password',
         # This will be used when the DRF browsable API is enabled.
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True
+        write_only=True,
     )
 
     def validate(self, attrs: dict) -> dict:
@@ -264,6 +265,7 @@ class RegisterSerializer(serializers.Serializer):
       * lastname
       * password
     """
+
     username = serializers.CharField(label='Username', write_only=True)
     email = serializers.EmailField(label='Email', write_only=True)
     phone_number = serializers.RegexField(
@@ -278,7 +280,7 @@ class RegisterSerializer(serializers.Serializer):
         # This will be used when the DRF browsable API is enabled.
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True
+        write_only=True,
     )
 
     def validate(self, attrs: dict) -> dict:
@@ -307,29 +309,33 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Group
         fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ['id', 'nickname']
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserPreference
+        fields = '__all__'
+
+
+class CampusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Campus
         fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
+    campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
@@ -359,7 +365,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         perm_objs = []
         for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
-            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))
+            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))  # noqa: PERF401
 
         return perm_objs
 
@@ -369,21 +375,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # GANGS ###
-class OrganizationSerializer(serializers.ModelSerializer):
-
+class OrganizationSerializer(CustomBaseSerializer):
     class Meta:
         model = Organization
         fields = '__all__'
 
 
-class GangSerializer(serializers.ModelSerializer):
-
+class GangSerializer(CustomBaseSerializer):
     class Meta:
         model = Gang
         fields = '__all__'
 
 
-class GangTypeSerializer(serializers.ModelSerializer):
+class GangTypeSerializer(CustomBaseSerializer):
     gangs = GangSerializer(read_only=True, many=True)
 
     class Meta:
@@ -391,51 +395,19 @@ class GangTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class InformationPageSerializer(serializers.ModelSerializer):
-
+class InformationPageSerializer(CustomBaseSerializer):
     class Meta:
         model = InformationPage
         fields = '__all__'
 
 
-class BlogPostSerializer(serializers.ModelSerializer):
-
+class BlogPostSerializer(CustomBaseSerializer):
     class Meta:
         model = BlogPost
         fields = '__all__'
 
 
-class FoodPreferenceSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = FoodCategory
-        fields = '__all__'
-
-
-class MenuItemSerializer(serializers.ModelSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(serializers.ModelSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
-class SaksdokumentSerializer(serializers.ModelSerializer):
+class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
     # Write only field for posting new document
@@ -449,9 +421,7 @@ class SaksdokumentSerializer(serializers.ModelSerializer):
         return instance.file.url if instance.file else None
 
     def create(self, validated_data: dict) -> Event:
-        """
-        Uses the write_only file field to create new document file.
-        """
+        """Uses the write_only file field to create new document file."""
         file = validated_data.pop('file')
         # Ensure file name ends with .pdf
         fname = validated_data['title_nb']
@@ -465,12 +435,73 @@ class SaksdokumentSerializer(serializers.ModelSerializer):
         return document
 
 
-class TableSerializer(serializers.ModelSerializer):
-    venue = VenueSerializer(many=True)
+class TextItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextItem
+        fields = '__all__'
 
+
+class InfoboxSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Infobox
+        fields = '__all__'
+
+
+class KeyValueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KeyValue
+        fields = '__all__'
+
+
+# =============================== #
+#            Sulten               #
+# =============================== #
+
+
+class FoodPreferenceSerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodCategory
+        fields = '__all__'
+
+
+class MenuItemSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(CustomBaseSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+
+class TableSerializer(CustomBaseSerializer):
     class Meta:
         model = Table
         fields = '__all__'
+
+
+class ReservationSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Reservation
+        fields = '__all__'
+
+
+class ReservationCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ['guest_count', 'occasion', 'reservation_date']
 
 
 class BookingSerializer(serializers.ModelSerializer):
@@ -479,27 +510,6 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = '__all__'
-
-
-class TextItemSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TextItem
-        fields = '__all__'
-
-
-class InfoboxSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Infobox
-        fields = '__all__'
-
-
-class KeyValueSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = KeyValue
         fields = '__all__'
 
 
@@ -532,8 +542,7 @@ class MerchSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-class RecruitmentSerializer(serializers.ModelSerializer):
-
+class RecruitmentSerializer(CustomBaseSerializer):
     class Meta:
         model = Recruitment
         fields = '__all__'
@@ -558,8 +567,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
         return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
 
 
-class InterviewerSerializer(serializers.ModelSerializer):
-
+class InterviewerSerializer(CustomBaseSerializer):
     class Meta:
         model = User
         fields = [
@@ -571,7 +579,7 @@ class InterviewerSerializer(serializers.ModelSerializer):
         ]
 
 
-class RecruitmentPositionSerializer(serializers.ModelSerializer):
+class RecruitmentPositionSerializer(CustomBaseSerializer):
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
 
@@ -579,7 +587,12 @@ class RecruitmentPositionSerializer(serializers.ModelSerializer):
         model = RecruitmentPosition
         fields = '__all__'
 
-    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
+    def _update_interviewers(
+        self,
+        *,
+        recruitment_position: RecruitmentPosition,
+        interviewer_objects: list[dict],
+    ) -> None:
         try:
             interviewers = []
             if interviewer_objects:
@@ -588,55 +601,97 @@ class RecruitmentPositionSerializer(serializers.ModelSerializer):
                     interviewers = User.objects.filter(id__in=interviewer_ids)
             recruitment_position.interviewers.set(interviewers)
         except (TypeError, KeyError):
-            raise ValidationError('Invalid data for interviewers.')
+            raise ValidationError('Invalid data for interviewers.') from None
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position, interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
     def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(updated_instance, interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
 
 
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = [
+            'id',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'short_description_nb',
+            'short_description_en',
+            'long_description_nb',
+            'long_description_en',
+            'is_funksjonaer_position',
+            'default_admission_letter_nb',
+            'default_admission_letter_en',
+            'gang',
+            'recruitment',
+        ]
+
+
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+    interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
         fields = [
+            'id',
             'admission_text',
             'recruitment_position',
+            'applicant_priority',
+            'withdrawn',
+            'interview',
+            'created_at',
+        ]
+        read_only_fields = [
+            'applicant_priority',
+            'withdrawn',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
         recruitment_position = validated_data['recruitment_position']
+        # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
-        applicant_priority = 1
 
         recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
-            applicant_priority=applicant_priority,
         )
 
         return recruitment_admission
 
+    def to_representation(self, instance: RecruitmentAdmission) -> dict:
+        data = super().to_representation(instance)
+        data['recruitment_position'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
+        return data
+
 
 class OccupiedtimeslotSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Occupiedtimeslot
         fields = '__all__'
 
 
-class ApplicantInfoSerializer(serializers.ModelSerializer):
+class ApplicantInfoSerializer(CustomBaseSerializer):
     occupied_timeslots = OccupiedtimeslotSerializer(many=True)
 
     class Meta:
@@ -644,21 +699,19 @@ class ApplicantInfoSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
 
 
-class InterviewRoomSerializer(serializers.ModelSerializer):
-
+class InterviewRoomSerializer(CustomBaseSerializer):
     class Meta:
         model = InterviewRoom
         fields = '__all__'
 
 
-class InterviewSerializer(serializers.ModelSerializer):
-
+class InterviewSerializer(CustomBaseSerializer):
     class Meta:
         model = Interview
         fields = '__all__'
 
 
-class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
+class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
 
@@ -672,7 +725,23 @@ class RecruitmentAdmissionForGangSerializer(serializers.ModelSerializer):
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+
+class UserFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFeedbackModel
+        fields = [
+            'text',
+            'contact_email',
+            'path',
+            'screen_resolution',
+        ]
+        extra_kwargs = {
+            'contact_email': {'required': False},
+            'screen_resolution': {'required': False},
+        }

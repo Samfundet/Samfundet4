@@ -1,10 +1,14 @@
-from dataclasses import dataclass
+from __future__ import annotations
+
+import contextlib
 from typing import Any
+from dataclasses import dataclass
 
 from django.utils import timezone
 
-from samfundet.models.event import Event, EventCategory, EventTicketType
 from samfundet.serializers import EventSerializer
+from samfundet.models.event import Event
+from samfundet.models.model_choices import EventCategory, EventTicketType
 
 
 class ElementType:
@@ -43,7 +47,7 @@ def large_card(event: Event) -> HomePageElement:
     )
 
 
-def carousel(title_nb: str, title_en: str, events: list[Event]) -> HomePageElement:
+def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageElement:
     return HomePageElement(
         variation=ElementType.CAROUSEL,
         title_nb=title_nb,
@@ -52,28 +56,28 @@ def carousel(title_nb: str, title_en: str, events: list[Event]) -> HomePageEleme
     )
 
 
-def generate() -> dict[str, Any]:
+def generate() -> dict[str, Any]:  # noqa: C901
     elements: list[HomePageElement] = []
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
 
     # Splash events
     # TODO we should make a datamodel for this
     try:
-        splash_events = list(upcoming_events[0:min(3, len(upcoming_events))])
+        splash_events = list(upcoming_events[0 : min(3, len(upcoming_events))])
         splash = EventSerializer(splash_events, many=True).data
     except IndexError:
         splash = []
         pass
 
     # Upcoming events
-    try:
-        elements.append(carousel(
-            title_nb='Hva skjer?',
-            title_en="What's happening?",
-            events=list(upcoming_events[:10]),
-        ))
-    except IndexError:
-        pass
+    with contextlib.suppress(IndexError):
+        elements.append(
+            carousel(
+                title_nb='Hva skjer?',
+                title_en="What's happening?",
+                events=list(upcoming_events[:10]),
+            )
+        )
 
     # Another highlight
     # TODO we should make a datamodel for this
@@ -85,14 +89,14 @@ def generate() -> dict[str, Any]:
         pass
 
     # Concerts
-    try:
-        elements.append(carousel(
-            title_nb='Konserter',
-            title_en='Concerts',
-            events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
-        ))
-    except IndexError:
-        pass
+    with contextlib.suppress(IndexError):
+        elements.append(
+            carousel(
+                title_nb='Konserter',
+                title_en='Concerts',
+                events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
+            )
+        )
 
     # Another highlight
     # TODO we should make a datamodel for this
@@ -104,17 +108,17 @@ def generate() -> dict[str, Any]:
         pass
 
     # Debates
-    try:
-        elements.append(carousel(
-            title_nb='Debatter',
-            title_en='Debates',
-            events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
-        ))
-    except IndexError:
-        pass
+    with contextlib.suppress(IndexError):
+        elements.append(
+            carousel(
+                title_nb='Debatter',
+                title_en='Debates',
+                events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
+            )
+        )
 
     # Courses
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Kurs og Forelesninger',
@@ -122,11 +126,9 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(category=EventCategory.LECTURE)[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Free!
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Gratisarrangementer',
@@ -134,11 +136,9 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(ticket_type__in=[EventTicketType.FREE, EventTicketType.INCLUDED])[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Other
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Andre arrangementer',
@@ -146,7 +146,5 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(category=EventCategory.OTHER)[:10]),
             )
         )
-    except IndexError:
-        pass
 
     return {'splash': splash, 'elements': [el.to_dict() for el in elements]}

@@ -10,6 +10,8 @@ LAST UPDATE: 2023-12-31 13:44:38.878050+00:00
 ############################################################
 
 ### admin ###
+from __future__ import annotations
+
 ADMIN_ADD_LOGENTRY = 'admin.add_logentry'
 ADMIN_CHANGE_LOGENTRY = 'admin.change_logentry'
 ADMIN_DELETE_LOGENTRY = 'admin.delete_logentry'

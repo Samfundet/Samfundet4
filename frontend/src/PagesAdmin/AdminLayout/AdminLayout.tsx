@@ -98,7 +98,7 @@ export function AdminLayout() {
 
   const desktopOpen = (
     <div className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
-      <Icon icon="mdi:arrow-right-bold" width={32} className={styles.arrow} />
+      <Icon icon="mdi:arrow-right-bold" width={16} className={styles.arrow} />
     </div>
   );
 

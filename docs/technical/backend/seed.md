@@ -4,9 +4,9 @@
 
 Seed scripts are used to populate the database with dummy data for testing. Seed scripts are located in `root/management/commands/seed_scripts/`.
 
-### Seeding commands
+### Seeding locally
 
-To seed the database locally, run this in terminal:
+To seed the database **locally**, run this in terminal:
 
 - `python manage.py seed`
 
@@ -19,19 +19,18 @@ For instance, to seed events run:
 - `python manage.py seed events`
 
 ### Seeding in docker 
-
-After docker container is running, send command to the container:
-
+<!-- 
 `docker compose exec backend python -m pipenv run python manage.py seed`
 
-I find this very long and messy, so I prefer to have a terminal window inside the docker container all the time:
+I find this very long and messy, so I prefer to have a terminal window inside the docker container all the time: -->
+After docker container is running:
 
-- Go into docker: `docker exec backend bash`
-- Enable pipenv: `pipenv shell` 
-- Run seed script: `python manage.py seed`
+- 1) Open shell in Docker container: `docker compose exec backend bash`
+- 2) Enable pipenv: `pipenv shell` 
+- 3) Run seed script: `python manage.py seed`
+
 
 ### Adding/changing seed scripts
-
 The seed script `seed.py` does not need to be modified to add new seed scripts.
 Instead, add scripts inside the `seed_scripts/` folder. In order for them to be detected, you must include it in the `seed_scripts/__init__.py` file:
 

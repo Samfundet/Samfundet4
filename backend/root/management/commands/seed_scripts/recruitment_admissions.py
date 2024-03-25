@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from random import randint
 
-from samfundet.models.recruitment import RecruitmentAdmission, RecruitmentPosition
 from samfundet.models.general import User
+from samfundet.models.recruitment import RecruitmentPosition, RecruitmentAdmission
 
 # Some example data to use for the new RecruitmentAdmission instances
 ADMISSION_DATA = {
@@ -19,18 +21,16 @@ def seed():
     created_count = 0
 
     for position_index, position in enumerate(positions):
-        for i in range(randint(0, 5)):  # Create between 0 and 5 instances for each position
+        for _ in range(randint(0, 5)):  # Create between 0 and 5 instances for each position
             admission_data = ADMISSION_DATA.copy()
             admission_data.update(
                 {
                     'recruitment_position': position,
                     'recruitment': position.recruitment,
-                    'user':
-                        users[randint(0,
-                                      len(users) - 1)]  # random user from all users
+                    'user': users[randint(0, len(users) - 1)],  # random user from all users
                 }
             )
-            admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
+            _admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
 
             if created:
                 created_count += 1

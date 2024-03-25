@@ -2,15 +2,16 @@ from __future__ import annotations
 
 import logging
 import secrets
+from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth import login
 from django.middleware.csrf import get_token
 
 from root.constants import (
-    request_contextvar,
     REQUESTED_IMPERSONATE_USER,
     COOKIE_IMPERSONATED_USER_ID,
+    request_contextvar,
 )
 
 from samfundet.models import User
@@ -21,11 +22,11 @@ LOG = logging.getLogger('root.middlewares')
 class RequestLogMiddleware:
     """Request Logging Middleware."""
 
-    def __init__(self, get_response) -> None:  # type: ignore # noqa: ANN001 # Uknown type # type: ignore
+    def __init__(self, get_response: Any) -> None:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """ Log request/response context before and after processing. """
+        """Log request/response context before and after processing."""
 
         request.request_id = request.headers.get('X-Request-ID', f'local-{secrets.token_hex(16)}')
 
@@ -52,12 +53,10 @@ class RequestLogMiddleware:
 
 
 class ImpersonateUserMiddleware:
-
     def __init__(self, get_response: HttpResponse) -> None:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-
         ### Handle impersonation before response ###
         impersonate = request.get_signed_cookie(COOKIE_IMPERSONATED_USER_ID, default=None)
         if impersonate is not None:
@@ -91,7 +90,7 @@ class ImpersonateUserMiddleware2:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        user: User = request.user
+        _user: User = request.user
         impersonated_user_id = request.get_signed_cookie(
             key=COOKIE_IMPERSONATED_USER_ID,
             default=None,
