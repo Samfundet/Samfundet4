@@ -60,7 +60,7 @@ export function SultenMenuItemFormAdminPage() {
             ),
           );
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
         }),
       getFoodPreferences()
@@ -75,7 +75,7 @@ export function SultenMenuItemFormAdminPage() {
             ),
           );
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
         }),
     ]);
@@ -94,7 +94,6 @@ export function SultenMenuItemFormAdminPage() {
             navigate(ROUTES.frontend.admin_sulten_menu);
           }
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
         });
     } else {
       setShowSpinner(false);
@@ -126,7 +125,7 @@ export function SultenMenuItemFormAdminPage() {
             }),
           );
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
@@ -140,7 +139,7 @@ export function SultenMenuItemFormAdminPage() {
           );
           toast.success(t(KEY.common_creation_successful));
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
