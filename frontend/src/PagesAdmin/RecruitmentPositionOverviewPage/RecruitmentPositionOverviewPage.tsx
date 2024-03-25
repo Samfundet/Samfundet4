@@ -11,6 +11,8 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { useNavigate } from 'react-router-dom';
 
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
@@ -48,6 +50,7 @@ export function RecruitmentPositionOverviewPage() {
   const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const navigate = useNavigate();
   useEffect(() => {
     recruitmentId &&
       gangId &&
@@ -68,7 +71,7 @@ export function RecruitmentPositionOverviewPage() {
     { content: t(KEY.recruitment_interview_location), sortable: true },
     { content: t(KEY.recruitment_recruiter_priority), sortable: true },
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
-    { content: t(KEY.recruitment_interview_notes), sortable: true },
+    { content: '', sortable: false },
   ];
   const data = recruitmentApplicants.map(function (admission) {
     return [
@@ -144,22 +147,21 @@ export function RecruitmentPositionOverviewPage() {
       },
       {
         content: (
-          // TODO: Make the button only visable when the interview is set (the interview time is set)
-          <Button
-            theme="success"
-            rounded={true}
-            link={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-              urlParams: {
-                recruitmentId: recruitmentId,
-                gangId: gangId,
-                positionId: positionId,
-                interviewId: admission.interview.id,
-              },
-            })}
-          >
-            {t(KEY.common_show)}
-          </Button>
+          <CrudButtons
+            onView={ 
+              admission.interview.interview_time != null 
+                ? () => {
+                  navigate(reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
+                        urlParams: {
+                          recruitmentId: recruitmentId,
+                          gangId: gangId,
+                          positionId: positionId,
+                          interviewId: admission.interview.id,
+                        },
+                  })
+                )} : undefined} 
+          />
         ),
       },
     ];
