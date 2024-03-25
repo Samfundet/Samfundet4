@@ -46,7 +46,7 @@ export function ReservationTableRow({ table, start_time, end_time }: Reservation
 
     colList.push({ size: Math.floor((end_dt - start_dt) / 900000) });
     setCols(colList);
-  }, []);
+  }, [start_time, end_time, table]);
 
   return (
     <div className={styles.row}>

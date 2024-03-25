@@ -411,7 +411,7 @@ export type FeedbackDto = {
   contact_email?: string;
 };
 
-export type SultenDayDto = {
+export type SultenReservationDayDto = {
   date: Date;
   start_time: string;
   closing_time: string;

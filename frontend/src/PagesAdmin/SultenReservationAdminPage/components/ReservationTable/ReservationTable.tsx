@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { SultenDayDto } from '~/dto';
+import { SultenReservationDayDto } from '~/dto';
 import styles from './ReservationTable.module.scss';
 import { KEY } from '~/i18n/constants';
 import { Icon } from '@iconify/react';
@@ -8,8 +8,7 @@ import { useEffect, useState } from 'react';
 import { ReservationTableRow } from '../ReservationTableRow';
 
 type ReservationTableProps = {
-  // The event being edited
-  sultenDay: SultenDayDto;
+  sultenDay: SultenReservationDayDto;
   iterateDay: (days: number) => void;
   goToToday: () => void;
 };
@@ -17,6 +16,8 @@ type ReservationTableProps = {
 export function ReservationTable({ sultenDay, iterateDay, goToToday }: ReservationTableProps) {
   const { t } = useTranslation();
   const [hours, setHours] = useState<string[]>([]);
+
+  const today = new Date();
 
   useEffect(() => {
     let hours_iterator = parseInt(sultenDay.start_time.split(':')[0]) + 1;
@@ -60,7 +61,7 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
           </div>
         </div>
         <div className={styles.buttonsHeader}>
-          {new Date().getDate() != sultenDay.date.getDate() && (
+          {today.getDate() != sultenDay.date.getDate() && (
             <Button theme="secondary" onClick={() => goToToday()}>
               {t(KEY.common_today)}
             </Button>

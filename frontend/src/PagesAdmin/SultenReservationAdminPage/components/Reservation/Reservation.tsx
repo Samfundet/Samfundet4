@@ -5,7 +5,6 @@ import { useState } from 'react';
 import classNames from 'classnames';
 
 type ReservationProps = {
-  // The event being edited
   reservation: ReservationTableDto;
 };
 
