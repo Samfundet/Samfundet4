@@ -19,6 +19,14 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type OccupiedTimeSlotDto = {
+  id?: number;
+  user?: number;
+  recruitment: number;
+  start_dt: string;
+  end_dt: string;
+};
+
 export type RecruitmentUserDto = {
   id: number;
   username: string;
@@ -62,6 +70,7 @@ export type ObjectPermissionDto = {
 
 export type VenueDto = {
   id: number;
+  slug: string;
   name: string;
   description?: string;
   floor?: number;
@@ -331,6 +340,10 @@ export type NotificationDto = {
   // TODO: There are more fields than this.
 };
 
+// ############################################################
+//                       Recruitment
+// ############################################################
+
 export type RecruitmentDto = {
   id: string | undefined;
   name_nb: string;
@@ -381,12 +394,21 @@ export type RecruitmentAdmissionDto = {
   id: number;
   interview: InterviewDto;
   admission_text: string;
-  recruitment_position?: number;
+  recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
   recruiter_priority?: number;
   recruiter_status?: number;
+  created_at: string;
+  withdrawn: boolean;
+};
+
+export type FeedbackDto = {
+  text: string;
+  screen_resolution: string;
+  path: string;
+  contact_email?: string;
 };
 
 export type SultenDayDto = {

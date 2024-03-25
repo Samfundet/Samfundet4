@@ -2,16 +2,17 @@
 # things like samfundet.models.general
 
 # This is required for registering user model in auth
-from .general import (
-    User,
-    Gang,
-    Image,
-    Profile,
-    UserPreference,
-)
+from __future__ import annotations
 
 from .event import (
     Event,
+)
+from .general import (
+    Gang,
+    User,
+    Image,
+    Profile,
+    UserPreference,
 )
 
 __all__ = [
