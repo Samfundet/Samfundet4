@@ -60,7 +60,7 @@ export function SultenMenuAdminPage() {
   function menuItemsTableRow(menuItem: MenuItemDto) {
     return [
       dbT(menuItem, 'name'),
-      dbT(menuItem.food_category as FoodCategoryDto, 'name'),
+      menuItem.food_category ? dbT(menuItem.food_category as FoodCategoryDto, 'name') : '',
       (menuItem.price_member + '/' + menuItem.price) as string,
       {
         content: (
