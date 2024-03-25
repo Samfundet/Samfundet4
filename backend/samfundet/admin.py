@@ -5,12 +5,10 @@ from guardian import models as guardian_models
 from django.urls import reverse
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
-
-from guardian import models as guardian_models
-from django.utils.translation import gettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
