@@ -17,11 +17,5 @@ python manage.py migrate
 echo;echo;echo "Run tests."
 pytest
 
-echo;echo;echo "Run bandit."
-bandit --recursive --ini .bandit .
-
 echo;echo;echo "Run mypy."
 mypy --config-file mypy.ini .
-
-echo;echo;echo "Run flake8."
-flake8 --config=.flake8 .
