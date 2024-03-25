@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from samfundet.models.general import User
+import os
 
 from root.constants import Environment
+
+from samfundet.models.general import User
+
 # End: imports -----------------------------------------------------
 
 ENV = os.environ.get('ENV', Environment.DEV)
@@ -37,7 +40,7 @@ def create_test_users(*, username, firstname, lastname):
         password='passord',  # nosec
         first_name=firstname,
         last_name=lastname,
-        is_superuser=(ENV == Environment.DEV)
+        is_superuser=(ENV == Environment.DEV),
     )
 
 
