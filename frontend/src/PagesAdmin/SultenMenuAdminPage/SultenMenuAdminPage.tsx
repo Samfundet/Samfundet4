@@ -27,21 +27,18 @@ export function SultenMenuAdminPage() {
       getMenuItems()
         .then((data) => {
           setMenuItems(data);
-          console.log(data);
           setShowSpinner(false);
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
         }),
       getMenus()
         .then((data) => {
           setMenus(data);
           setShowSpinner(false);
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
         }),
     ]).then(() => {
       setShowSpinner(false);

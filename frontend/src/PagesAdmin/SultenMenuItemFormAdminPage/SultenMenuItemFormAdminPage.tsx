@@ -62,7 +62,6 @@ export function SultenMenuItemFormAdminPage() {
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
         }),
       getFoodPreferences()
         .then((data) => {
@@ -78,7 +77,6 @@ export function SultenMenuItemFormAdminPage() {
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
         }),
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,9 +90,8 @@ export function SultenMenuItemFormAdminPage() {
           setShowSpinner(false);
         })
         .catch((data) => {
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_recruitment);
+            navigate(ROUTES.frontend.admin_sulten_menu);
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(data);
@@ -131,7 +128,6 @@ export function SultenMenuItemFormAdminPage() {
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
         });
     } else {
       // Post new page.
@@ -146,7 +142,6 @@ export function SultenMenuItemFormAdminPage() {
         })
         .catch((error) => {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
         });
     }
   }
