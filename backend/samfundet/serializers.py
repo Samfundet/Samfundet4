@@ -24,6 +24,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -41,9 +42,8 @@ from .models.general import (
     Organization,
     Saksdokument,
     FoodPreference,
-    UserPreference,
-    Merch,
     MerchVariation,
+    UserPreference,
     InformationPage,
     UserFeedbackModel,
 )
@@ -519,7 +519,6 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 class MerchVariationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = MerchVariation
         fields = '__all__'

@@ -45,11 +45,9 @@ from .serializers import (
     GroupSerializer,
     ImageSerializer,
     LoginSerializer,
+    MerchSerializer,
     TableSerializer,
     VenueSerializer,
-    LoginSerializer,
-    GroupSerializer,
-    MerchSerializer,
     BookingSerializer,
     InfoboxSerializer,
     ProfileSerializer,
@@ -85,9 +83,9 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
-    Merch,
     Booking,
     Infobox,
     Profile,
@@ -349,7 +347,7 @@ class ReservationCheckAvailabilityView(APIView):
 #             Merch               #
 # =============================== #
 class MerchView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = MerchSerializer
     queryset = Merch.objects.all()
 

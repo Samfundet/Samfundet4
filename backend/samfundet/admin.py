@@ -20,6 +20,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -33,12 +34,11 @@ from .models.general import (
     TextItem,
     Reservation,
     ClosedPeriod,
-    Merch,
-    MerchVariation,
     FoodCategory,
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -655,11 +655,11 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
 
+
 @admin.register(UserFeedbackModel)
 class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
-
 
 
 ### End: Our models ###

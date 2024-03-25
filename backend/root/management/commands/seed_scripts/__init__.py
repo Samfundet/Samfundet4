@@ -3,6 +3,7 @@ from __future__ import annotations
 from . import (
     menu,
     gangs,
+    merch,
     samf3,
     users,
     billig,
@@ -19,7 +20,6 @@ from . import (
     information_pages,
     recruitment_position,
     recruitment_admissions,
-    merch,
 )
 
 # Insert seed scripts here (in order of priority)

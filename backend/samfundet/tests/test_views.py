@@ -16,11 +16,11 @@ from samfundet.serializers import UserSerializer
 from samfundet.models.general import (
     User,
     Image,
+    Merch,
     BlogPost,
     KeyValue,
     TextItem,
     InformationPage,
-    Merch,
 )
 from samfundet.models.recruitment import (
     Recruitment,
@@ -217,8 +217,8 @@ class TestInformationPagesView:
 
         assert data['title_nb'] == put_data['title_nb']
 
-class TestMerchView:
 
+class TestMerchView:
     def test_get_merch(
         self,
         fixture_rest_client: APIClient,
@@ -252,7 +252,7 @@ class TestMerchView:
         ### Assert ###
         assert status.is_success(code=response.status_code)
         assert data[0]['id'] == fixture_merch.id
-        
+
     def test_create_merch(
         self,
         fixture_rest_client: APIClient,
@@ -324,7 +324,8 @@ class TestMerchView:
         data = response.json()
 
         assert data['name_nb'] == put_data['name_nb']
-        
+
+
 class TestVersionModel:
     """Test simple model which uses CustomBaseModel"""
 
@@ -337,6 +338,7 @@ class TestVersionModel:
 
         ### Act ###
         response: Response = fixture_rest_client.post(path=url, data=post_data)
+        data = response.json()
         assert data['created_by'] == fixture_user.__str__()
 
     def test_updated_and_created_at(self, fixture_rest_client: APIClient, fixture_user: User):

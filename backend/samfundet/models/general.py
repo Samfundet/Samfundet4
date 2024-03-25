@@ -690,6 +690,7 @@ class KeyValue(FullCleanSaveMixin):
         """Check if value is falsy."""
         return self.value.lower() in self.FALSY
 
+
 # ----------------- #
 #     Merch         #
 # ----------------- #
@@ -736,6 +737,7 @@ class MerchVariation(FullCleanSaveMixin):
     def __str__(self) -> str:
         return f'{self.merch.name_nb} ({self.specification})'
 
+
 # ----------------- #
 #     Feedback      #
 # ----------------- #
@@ -755,4 +757,3 @@ class UserFeedbackModel(models.Model):
 
     def __str__(self) -> str:
         return ellipsize(self.text, length=10)
-      
