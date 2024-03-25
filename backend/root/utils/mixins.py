@@ -275,8 +275,3 @@ class CustomBaseSerializer(serializers.ModelSerializer):
 
     def get_updated_by(self, obj: CustomBaseModel) -> str | None:
         return obj.updated_by.__str__() if obj.updated_by else None
-
-    def validate(self, attrs: dict) -> dict:
-        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
-        instance.full_clean()
-        return attrs
