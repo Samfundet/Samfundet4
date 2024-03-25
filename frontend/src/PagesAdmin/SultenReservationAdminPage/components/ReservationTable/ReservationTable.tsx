@@ -66,7 +66,7 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
             </Button>
           )}
           <Button theme="green" onClick={() => alert('TODO add reservation form')}>
-            {t(KEY.common_create)} {t(KEY.common_reservations)}
+            {t(KEY.common_create)} {t(KEY.common_reservation)}
           </Button>
         </div>
       </div>
