@@ -6,10 +6,8 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from samfundet.models.general import User
-
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
-
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.
@@ -91,7 +89,6 @@ class TestRecruitmentClean:
 
 
 class TestRecruitmentStats:
-
     def test_recruitment_has_stats(self, fixture_recruitment: Recruitment):
         """Check if fixture_recruitment has the related object"""
         assert fixture_recruitment.statistics
@@ -116,7 +113,7 @@ class TestRecruitmentStats:
     def test_recruitmentstats_multiple_applications_single_user(
         self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
     ):
-        """ Check if only admissions are updated if same user creates an additional admission"""
+        """Check if only admissions are updated if same user creates an additional admission"""
         assert fixture_recruitment.statistics.total_applicants == 0
         assert fixture_recruitment.statistics.total_admissions == 0
         RecruitmentAdmission.objects.create(
@@ -175,6 +172,7 @@ class TestRecruitmentStats:
 
         assert fixture_recruitment.statistics.total_admissions == 2
         assert fixture_recruitment.statistics.total_applicants == 2
+
 
 class TestRecruitmentAdmission:
     def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):

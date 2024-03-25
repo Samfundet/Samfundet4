@@ -2,8 +2,6 @@
 # This file contains models spesific to the recruitment system
 #
 from __future__ import annotations
-from django.core.exceptions import ValidationError
-from django.utils import timezone
 
 import uuid
 from collections import defaultdict
@@ -40,7 +38,7 @@ class Recruitment(CustomBaseModel):
         if not created:
             self.statistics.save()
 
-    def clean(self, *args: tuple, **kwargs: dict) -> None:
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
         errors: dict[str, list[ValidationError]] = defaultdict(list)
         # All times should be in the future.
@@ -199,9 +197,10 @@ class RecruitmentAdmission(CustomBaseModel):
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
-    def save(self, *args: tuple, **kwargs: dict) -> None:
+    def save(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         """
-        If the admission is saved without an interview, try to find an interview from a shared position.
+        If the admission is saved without an interview,
+        try to find an interview from a shared position.
         """
         if not self.recruitment:
             self.recruitment = self.recruitment_position.recruitment

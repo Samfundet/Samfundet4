@@ -9,8 +9,9 @@ from django.db.models.signals import post_save, m2m_changed
 
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
-from .models.recruitment import RecruitmentAdmission, RecruitmentStatistics, Recruitment
 from .models import Gang, User, Event, Profile, UserPreference
+from .models.recruitment import Recruitment, RecruitmentAdmission, RecruitmentStatistics
+
 
 @receiver(post_save, sender=User)
 def create_user_preference(sender: User, instance: User, *, created: bool, **kwargs: Any) -> None:
@@ -65,13 +66,13 @@ def update_editor_permissions(  # noqa: C901
 
 
 @receiver(post_save, sender=Recruitment)
-def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, created: bool, **kwargs: Any) -> None:
-    """Ensures stats are createed when an recruitment is created"""
+def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, created: bool, **kwargs: Any) -> None:  # noqa FBT001
+    """Ensures stats are created when an recruitment is created"""
     if created:
         RecruitmentStatistics.objects.get_or_create(recruitment=instance)
 
 
 @receiver(post_save, sender=RecruitmentAdmission)
-def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, created: bool, **kwargs: Any) -> None:
+def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, created: bool, **kwargs: Any) -> None:  # noqa FBT001
     if created:
         instance.recruitment.update_stats()

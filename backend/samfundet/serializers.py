@@ -14,15 +14,6 @@ from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
 
 from root.constants import PHONE_NUMBER_REGEX
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    RecruitmentStatistics,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-)
 from root.utils.mixins import CustomBaseSerializer
 
 from .models.event import Event, EventGroup, EventCustomTicket
@@ -61,6 +52,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 
 
@@ -526,7 +518,6 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = RecruitmentStatistics
         fields = '__all__'

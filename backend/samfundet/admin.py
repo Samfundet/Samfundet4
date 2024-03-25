@@ -11,23 +11,14 @@ from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
-from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
-
 from root.custom_classes.admin_classes import (
+    CustomBaseAdmin,
     CustomGuardedUserAdmin,
     CustomGuardedGroupAdmin,
     CustomGuardedModelAdmin,
 )
-from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-    RecruitmentStatistics,
-)
+
+from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
     Tag,
     Gang,
@@ -62,6 +53,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 
 # Common fields:
@@ -648,6 +640,7 @@ class InterviewAdmin(CustomBaseAdmin):
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_admissions']
     search_fields = ['recruitment']
+
 
 @admin.register(UserFeedbackModel)
 class UserFeedbackAdmin(CustomGuardedModelAdmin):
