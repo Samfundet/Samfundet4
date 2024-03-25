@@ -1,4 +1,5 @@
-import os
+from __future__ import annotations
+
 from samfundet.models.general import User
 
 from root.constants import Environment
@@ -29,7 +30,7 @@ TEST_USERS = [
 ]
 
 
-def create_test_users(username, firstname, lastname):
+def create_test_users(*, username, firstname, lastname):
     User.objects.create_user(
         username=username,
         email=f'{username}@mg-web.no',
@@ -46,7 +47,7 @@ def seed():
     yield 0, 'Deleted existing non-superusers'
 
     for i, user in enumerate(TEST_USERS):
-        create_test_users(user[0], user[1], user[2])
+        create_test_users(username=user[0], firstname=user[1], lastname=user[2])
         yield i / len(TEST_USERS), 'Creating test users'
 
     yield 100, f'Created {len(TEST_USERS)} test users'

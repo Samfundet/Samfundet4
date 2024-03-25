@@ -1,49 +1,53 @@
+from __future__ import annotations
+
+from guardian import models as guardian_models
+
 from django.urls import reverse
 from django.contrib import admin
 from django.utils.html import format_html
+from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
-from django.contrib.auth.models import Permission, Group
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
-from guardian import models as guardian_models
+from django.contrib.contenttypes.models import ContentType
+
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
+from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
 
-from root.custom_classes.admin_classes import (CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin, CustomBaseAdmin)
-
-from .models.event import (Event, EventGroup, EventRegistration)
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-)
+from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
     Tag,
-    User,
-    Menu,
     Gang,
-    Venue,
-    Table,
+    Menu,
+    User,
     Image,
+    Table,
+    Venue,
     Campus,
-    Profile,
     Booking,
     Infobox,
-    MenuItem,
-    GangType,
-    TextItem,
-    KeyValue,
+    Profile,
     BlogPost,
-    Organization,
+    GangType,
+    KeyValue,
+    MenuItem,
+    TextItem,
     Reservation,
     ClosedPeriod,
-    Saksdokument,
     FoodCategory,
+    Organization,
+    Saksdokument,
     FoodPreference,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
+)
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    Occupiedtimeslot,
+    RecruitmentPosition,
+    RecruitmentAdmission,
 )
 
 # Common fields:
@@ -69,8 +73,18 @@ admin.site.register(Occupiedtimeslot)
 class UserAdmin(CustomGuardedUserAdmin):
     sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
     list_display = [
-        'id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'group_memberships', 'last_login', 'date_joined',
-        'updated_at'
+        'id',
+        'username',
+        'email',
+        'first_name',
+        'last_name',
+        'is_active',
+        'is_staff',
+        'is_superuser',
+        'group_memberships',
+        'last_login',
+        'date_joined',
+        'updated_at',
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
@@ -279,7 +293,17 @@ class VenueAdmin(CustomBaseAdmin):
     sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
     list_filter = ['handicapped_approved']
     list_display = [
-        'id', '__str__', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at'
+        'id',
+        '__str__',
+        'name',
+        'floor',
+        'last_renovated',
+        'handicapped_approved',
+        'responsible_crew',
+        'opening',
+        'closing',
+        'created_at',
+        'updated_at',
     ]
     search_fields = ['id', 'name', 'responsible_crew']
     # filter_horizontal = []
@@ -496,16 +520,28 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 @admin.register(Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'visible_from',
+        'actual_application_deadline',
+        'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
+        'organization',
     ]
     list_display = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'visible_from',
+        'actual_application_deadline',
+        'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
+        'organization',
     ]
     search_fields = [
-        'visible_from', 'actual_application_deadline', 'shown_application_deadline', 'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups', 'organization'
+        'visible_from',
+        'actual_application_deadline',
+        'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
+        'organization',
     ]
     list_display_links = ['visible_from']
     list_select_related = True
@@ -517,15 +553,14 @@ class RecruitmentAdmissionInline(admin.TabularInline):
 
     Displays a link to the detailed admin page of each admission along with its user and applicant priority.
     """
+
     model = RecruitmentAdmission
     extra = 0
     readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
     fields = ['linked_admission_text', 'user', 'applicant_priority']
 
     def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
-        """
-        Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance.
-        """
+        """Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance."""
         url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
 
@@ -553,19 +588,16 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
 @admin.register(RecruitmentAdmission)
 class RecruitmentAdmissionAdmin(CustomBaseAdmin):
     sortable_by = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     list_display = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     search_fields = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
@@ -596,6 +628,12 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+
+
+@admin.register(UserFeedbackModel)
+class UserFeedbackAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['date', 'path']
+    list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
 
 
 ### End: Our models ###

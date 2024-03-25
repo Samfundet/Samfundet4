@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from django.conf import settings
+from django.core import management
 from django.core.management.base import BaseCommand
 
 from root.constants import Environment
-from django.core import management
-from samfundet.models.general import Venue, Image
+
 from samfundet.models.event import Event
+from samfundet.models.general import Image, Venue
 from samfundet.models.recruitment import Recruitment
 
 

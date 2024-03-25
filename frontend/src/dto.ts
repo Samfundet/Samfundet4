@@ -332,6 +332,10 @@ export type NotificationDto = {
   // TODO: There are more fields than this.
 };
 
+// ############################################################
+//                       Recruitment
+// ############################################################
+
 export type RecruitmentDto = {
   id: string | undefined;
   name_nb: string;
@@ -382,7 +386,7 @@ export type RecruitmentAdmissionDto = {
   id: number;
   interview: InterviewDto;
   admission_text: string;
-  recruitment_position?: number;
+  recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
@@ -390,4 +394,11 @@ export type RecruitmentAdmissionDto = {
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+};
+
+export type FeedbackDto = {
+  text: string;
+  screen_resolution: string;
+  path: string;
+  contact_email?: string;
 };
