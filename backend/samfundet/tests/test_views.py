@@ -43,7 +43,6 @@ def test_csrf(fixture_rest_client: APIClient):
 
 
 class TestUserViews:
-
     def test_login(
         self,
         fixture_rest_client: APIClient,
@@ -122,7 +121,7 @@ class TestUserViews:
             'phone_number': '48278994',
             'firstname': 'kebab',
             'lastname': 'mannen',
-            'password': 'jeglikerkebab'
+            'password': 'jeglikerkebab',
         }
         ### Act ###
         response: Response = fixture_rest_client.post(path=url, data=post_data)
@@ -153,7 +152,7 @@ class TestUserViews:
             'phone_number': '48278994',
             'firstname': 'kebab',
             'lastname': 'mannen',
-            'password': 'jeglikerkebab'
+            'password': 'jeglikerkebab',
         }
         ### Act ###
         for field in post_data:
@@ -197,7 +196,7 @@ class TestUserViews:
             'phone_number': '48278994',
             'firstname': 'kebab',
             'lastname': 'mannen',
-            'password': 'jeglikerkebab'
+            'password': 'jeglikerkebab',
         }
 
         post_data2 = {
@@ -206,7 +205,7 @@ class TestUserViews:
             'phone_number': '48278995',
             'firstname': 'kebab',
             'lastname': 'mannen',
-            'password': 'jeglikerkebab'
+            'password': 'jeglikerkebab',
         }
         ### Assert ###
         response: Response = fixture_rest_client.post(path=url, data=post_data)
