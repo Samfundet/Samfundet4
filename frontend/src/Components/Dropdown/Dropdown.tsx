@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropDownOption<T> = {
@@ -29,6 +29,7 @@ export function Dropdown<T>({
   disabled = false,
   error,
 }: DropdownProps<T>) {
+  const [startVal, setStartValue] = useState<number>(-1);
   /**
    * Handles the raw change event from <option>
    * The raw value choice is an index where -1 is reserved for
@@ -36,6 +37,12 @@ export function Dropdown<T>({
    * the onChange callback is provided with the respective DropDownOption
    * @param e Standard onChange HTML event for dropdown
    */
+  useEffect(() => {
+    if (options.length > 0 && initialValue !== undefined) {
+      setStartValue(initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1);
+    }
+  }, [initialValue, options]);
+
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
     const choice = (e?.currentTarget.value ?? 0) as number;
     if (choice >= 0 && choice <= options.length) {
@@ -51,12 +58,12 @@ export function Dropdown<T>({
         className={classNames(styles.samf_select, error && styles.error)}
         onChange={handleChange}
         disabled={disabled}
-        defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
+        defaultValue={startVal}
       >
         {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
         {options.map((opt, index) => {
           return (
-            <option value={index} key={index}>
+            <option value={index} key={index} selected={index == startVal}>
               {opt.label}
             </option>
           );

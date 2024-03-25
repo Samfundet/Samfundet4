@@ -64,7 +64,7 @@ export type SamfFormFieldArgs = {
   error: string | boolean; // True or string message if error, false or undefined if OK
   label?: string; // Text label above the input
   // Custom args for options type
-  defaultOption?: DropDownOption<unknown>;
+  defaultOption?: unknown;
   options?: DropDownOption<unknown>[];
   props?: FieldProps;
 };
@@ -148,7 +148,7 @@ function makeOptionsInput(args: SamfFormFieldArgs) {
     <Dropdown
       {...(args.props as DropdownProps<number | string>)}
       key={args.field}
-      defaultValue={args.defaultOption}
+      initialValue={args.value}
       options={args.options}
       onChange={args.onChange}
       label={args.label}
