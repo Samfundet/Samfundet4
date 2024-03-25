@@ -1,23 +1,18 @@
 from __future__ import annotations
 
 import itertools
+from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.core.files import File
 from django.contrib.auth import authenticate
-from collections import defaultdict
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
-from django.db.models import QuerySet
-from guardian.models import GroupObjectPermission, UserObjectPermission
-from django.db.models import Q
-
 from django.contrib.auth.models import Group, Permission
-
 
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
@@ -289,7 +284,7 @@ class RegisterSerializer(serializers.Serializer):
 
     ALREADY_EXISTS_MESSAGE = 'User already exists with this value'
 
-    def validate(self, attrs: dict) -> dict:
+    def validate(self, attrs: dict) -> dict:  # noqa: C901
         # Inherited function.
         # Take username and password from request.
         username = attrs.get('username')
@@ -298,7 +293,6 @@ class RegisterSerializer(serializers.Serializer):
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
-
         # Check for unique
         existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
 

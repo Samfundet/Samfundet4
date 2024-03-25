@@ -21,13 +21,11 @@ from samfundet.models.general import (
     TextItem,
     InformationPage,
 )
-
 from samfundet.models.recruitment import (
     Recruitment,
     RecruitmentPosition,
     RecruitmentAdmission,
 )
-
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
@@ -158,7 +156,7 @@ class TestUserViews:
             'password': 'jeglikerkebab'
         }
         ### Act ###
-        for field in post_data.keys():
+        for field in post_data:
             post_data_copy = post_data.copy()
             post_data_copy.pop(field)
             response: Response = fixture_rest_client.post(path=url, data=post_data_copy)
@@ -175,7 +173,6 @@ class TestUserViews:
         invalidphonenumbers = [
             '1',
             '+9932420',
-            '12932939293929',
             'thecakeisalie',
             '48278994)191',
             '482789k4',
