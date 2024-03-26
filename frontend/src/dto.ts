@@ -401,6 +401,7 @@ export type RecruitmentAdmissionDto = {
 // ############################################################
 
 export type PurchaseFeedbackDto = {
+  eventId: number;
   title: string;
   responses: Record<string, string>;
   alternatives: Record<string, number>;

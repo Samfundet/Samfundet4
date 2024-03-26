@@ -741,12 +741,6 @@ export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promi
   return response.data;
 }
 
-export async function getPurchaseFeedbackForm(): Promise<PurchaseFeedbackFormDto> {
-  const url = BACKEND_DOMAIN; //TODO: set correct url
-  const response = await axios.get<PurchaseFeedbackFormDto>(url, { withCredentials: true });
-  return response.data;
-}
-
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });

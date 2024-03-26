@@ -5,9 +5,12 @@ import { postPurchaseFeedback } from '~/api';
 import { PurchaseFeedbackDto, PurchaseFeedbackFormDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './PurchaseFeedbackform.module.scss';
+import { useParams } from 'react-router-dom';
 
 export function PurchaseFeedbackForm({ title, questions, alternatives }: PurchaseFeedbackFormDto) {
-  function handleSubmit(formData: Record<string, string>) {
+  const { eventId } = useParams();
+
+  function handleSubmit(eventId: number, formData: Record<string, string>) {
     const questionResponses: Record<string, string> = {};
 
     for (const question in formData) {
@@ -25,6 +28,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
     const selectedAlternatives = {}
 
     const feedback: PurchaseFeedbackDto = {
+      eventId: eventId,
       title: title,
       alternatives: selectedAlternatives,
       responses: questionResponses,
