@@ -1,14 +1,15 @@
 from __future__ import annotations
+
 import sys
 import copy
 import logging
-from typing import Any, Union
+from typing import Any
+
+from rest_framework import serializers
 
 from django.db import models
 from django.utils import timezone
 from django.db.models import DEFERRED, Model
-
-from rest_framework import serializers
 
 from root.constants import request_contextvar
 
@@ -56,6 +57,44 @@ class FieldTrackerMixin(Model):
     class Meta:
         abstract = True
 
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extends django 'save' to log all changes."""
+
+        # Ensure changes are logged when attempting to save.
+        try:
+            is_creation = self.pk is None  # Store value before saving because id exists afterwards.
+            super().save(*args, **kwargs)
+
+            # Get all changes.
+            dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()  # includes id after save.
+
+            # Update loaded_fields after save.
+            loaded_fields = self.ftm_get_loaded_fields()
+            loaded_fields.update(dirty_fields_new)
+            setattr(self, self._FTM_LOADED_FIELDS_NAME, loaded_fields)
+
+            # Log creation or update.
+            if is_creation:  # Log creation.
+                LOG.info(f'{self} was created:\n\nfields: {dirty_fields_new}')
+                LOG.info(f'{self} was created:\n\nfields: {self.ftm_log_parse(fields=dirty_fields_new)}')
+            elif not dirty_fields_new:  # Log save, notify no detection of new fields.
+                LOG.info(f"{self} was saved.\nFieldTrackerMixin couldn't detect any changes to tracked fields.")
+            else:  # Log changes.
+                LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
+                LOG.info(
+                    f'{self} has changed:\n\n' f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n' f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
+                )
+        except Exception as e:
+            # Get all changes.
+            dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()
+            LOG.info(f'{self} failed attempting to save:\n\nold: {dirty_fields_old}\n\nnew: {dirty_fields_new}')
+            LOG.info(
+                f'{self} failed attempting to save:\n\n'
+                f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
+                f'new: {self.ftm_log_parse(fields=dirty_fields_new)}'
+            )
+            raise e
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         if not hasattr(self, self._FTM_TRACK_FIELDS_NAME):
@@ -84,7 +123,7 @@ class FieldTrackerMixin(Model):
                 fields_copy[field] = "Omitted, FieldTrackerMixin couldn't determine size."
         return fields_copy
 
-    def ftm_get_tracked_fields(self) -> Union[list[str], str]:
+    def ftm_get_tracked_fields(self) -> list[str] | str:
         """Returns a list of all field names this mixin tracks."""
         # ftm_track_fields can be '__all__'.
         return getattr(self, self._FTM_TRACK_FIELDS_NAME, [])
@@ -114,55 +153,15 @@ class FieldTrackerMixin(Model):
 
         return dirty_fields_old, dirty_fields_new
 
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Extends django 'save' to log all changes."""
-
-        # Ensure changes are logged when attempting to save.
-        try:
-            is_creation = self.pk is None  # Store value before saving because id exists afterwards.
-            super().save(*args, **kwargs)
-
-            # Get all changes.
-            dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()  # includes id after save.
-
-            # Update loaded_fields after save.
-            loaded_fields = self.ftm_get_loaded_fields()
-            loaded_fields.update(dirty_fields_new)
-            setattr(self, self._FTM_LOADED_FIELDS_NAME, loaded_fields)
-
-            # Log creation or update.
-            if is_creation:  # Log creation.
-                LOG.info(f'{self} was created:\n\nfields: {dirty_fields_new}')
-                LOG.info(f'{self} was created:\n\nfields: {self.ftm_log_parse(fields=dirty_fields_new)}')
-            elif not dirty_fields_new:  # Log save, notify no detection of new fields.
-                LOG.info(f"{self} was saved.\nFieldTrackerMixin couldn't detect any changes to tracked fields.")
-            else:  # Log changes.
-                LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
-                LOG.info(
-                    f'{self} has changed:\n\n'
-                    f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
-                    f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
-                )
-        except Exception as e:
-            # Get all changes.
-            dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()
-            LOG.info(f'{self} failed attempting to save:\n\nold: {dirty_fields_old}\n\nnew: {dirty_fields_new}')
-            LOG.info(
-                f'{self} failed attempting to save:\n\n'
-                f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
-                f'new: {self.ftm_log_parse(fields=dirty_fields_new)}'
-            )
-            raise e
-
     @classmethod
-    def from_db(cls, db, field_names, values):  # type: ignore # noqa: ANN001,ANN206 # Unknown types.
+    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:
         """Extends django 'from_db' to set 'loaded_fields'."""
 
         instance = super().from_db(db, field_names, values)
 
         track_fields: list[str] = instance.ftm_get_tracked_fields()
 
-        loaded_fields = {field: value for field, value in zip(field_names, values) if field in track_fields and value is not DEFERRED}
+        loaded_fields = {field: value for field, value in zip(field_names, values, strict=False) if field in track_fields and value is not DEFERRED}
 
         # Set loaded_fields on instance.
         setattr(instance, instance._FTM_LOADED_FIELDS_NAME, loaded_fields)
@@ -183,10 +182,11 @@ class FullCleanSaveMixin(Model):
 
 class CustomBaseModel(FullCleanSaveMixin):
     """
-        Basic model which will contains necessary version info of a model:
-        With by who and when it was updated and created.
-        Also keeps a counter for how many times it has been updated
+    Basic model which will contains necessary version info of a model:
+    With by who and when it was updated and created.
+    Also keeps a counter for how many times it has been updated
     """
+
     version = models.PositiveIntegerField(
         default=0,
         null=True,
@@ -225,16 +225,10 @@ class CustomBaseModel(FullCleanSaveMixin):
     class Meta:
         abstract = True
 
-    def is_edited(self) -> bool:
-        """
-            Method for checking if object is updated or not
-        """
-        return self.updated_at != self.created_at
-
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
-            User should always be provided, but that can be ignored.
-            Will update and set which user interacted with it when it was saved.
+        User should always be provided, but that can be ignored.
+        Will update and set which user interacted with it when it was saved.
         """
         self.full_clean()
         self.version += 1
@@ -251,13 +245,18 @@ class CustomBaseModel(FullCleanSaveMixin):
 
         super().save(*args, **kwargs)
 
+    def is_edited(self) -> bool:
+        """Method for checking if object is updated or not"""
+        return self.updated_at != self.created_at
+
 
 class CustomBaseSerializer(serializers.ModelSerializer):
     """
-        Base serializer, sets version fields to read_only
-        Adds validation errors from models clean
-        Context of request needs to be passed
+    Base serializer, sets version fields to read_only
+    Adds validation errors from models clean
+    Context of request needs to be passed
     """
+
     created_by = serializers.SerializerMethodField(method_name='get_created_by', read_only=True)
     updated_by = serializers.SerializerMethodField(method_name='get_updated_by', read_only=True)
 

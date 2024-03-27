@@ -1,6 +1,0 @@
-.*
-venv/
-.venv/
-**/docs/
-**/node_modules/
-**/migrations/

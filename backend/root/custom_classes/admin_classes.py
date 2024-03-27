@@ -1,15 +1,17 @@
-from typing import Any, Callable, Sequence
+from __future__ import annotations
+
+from typing import Any
+from collections.abc import Callable, Sequence
 
 from guardian.admin import GuardedModelAdmin
 from guardian.shortcuts import get_objects_for_user
+from admin_auto_filters.filters import AutocompleteFilter
 
 from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
-
-from admin_auto_filters.filters import AutocompleteFilter
 
 
 def create_link_method(*, field: str) -> Callable[[Any], str]:
@@ -34,8 +36,9 @@ def get_obj_link(obj: Any) -> str | None:
 
     Example (ContactAdmin):
     ```py
-    list_display = ['user_link'] # Show field.
-    list_select_related = ['user'] # Reduce sql queries.
+    list_display = ['user_link']  # Show field.
+    list_select_related = ['user']  # Reduce sql queries.
+
 
     @admin.display(description='column title', ordering='user')
     def user_link(self, obj: Contact) -> str:
@@ -52,7 +55,7 @@ def get_obj_link(obj: Any) -> str | None:
 def get_admin_url(*, obj: Any) -> str:
     """https://stackoverflow.com/questions/10420271/django-how-to-get-admin-url-from-model-instance"""
     info = (obj._meta.app_label, obj._meta.model_name)
-    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk, ))
+    admin_url = reverse('admin:{}_{}_change'.format(*info), args=(obj.pk,))
     return admin_url
 
 
@@ -69,6 +72,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
     https://www.youtube.com/watch?v=2jhQyWeEVHc&list=LL&index=2
     """
+
     user_can_access_owned_objects_only = True  # setting for GuardedModelAdmin
     list_display = ['id', '__str__']
     list_display_links = ['id', '__str__']
@@ -167,6 +171,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
             # Results in e.g.:
             search_fields = ['owner__username', 'owner__first_name', 'owner__last_name']
+        ```
         """
         prefix__ = f'{prefix}__' if prefix else ''
         return [f'{prefix__}{field}' for field in cls.search_fields]
@@ -253,10 +258,8 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
 
 
 def autocomplete_filter(**kwargs: Any) -> AutocompleteFilter:
-    """
-    Simple AutocompleteFilter factory.
-    """
-    return type('AutocompleteFilter', (AutocompleteFilter, ), kwargs)
+    """Simple AutocompleteFilter factory."""
+    return type('AutocompleteFilter', (AutocompleteFilter,), kwargs)
 
 
 class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):
@@ -269,7 +272,8 @@ class CustomGuardedGroupAdmin(CustomGuardedModelAdmin, GroupAdmin):
 
 class CustomBaseAdmin(CustomGuardedModelAdmin):
     """
-        Custom base admin, sets user on save
-        Displays these fields as read only in admi
+    Custom base admin, sets user on save
+    Displays these fields as read only in admi
     """
+
     readonly_fields = ['version', 'created_by', 'created_at', 'updated_by', 'updated_at']

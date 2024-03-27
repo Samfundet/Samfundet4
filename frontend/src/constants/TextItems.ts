@@ -20,5 +20,24 @@ export const TextItem = {
   sulten_lyche_goal_text: 'sulten_lyche_goal_text',
   sulten_lyche_about_menu_text: 'sulten_lyche_about_menu_text',
   sulten_contact_page_text: 'sulten_contact_page_text',
+
+  //About page
+  festivals: 'festivals',
+  volunteering: 'volunteering',
+  the_society_meeting: 'the_society_meeting',
+  about_samfundet: 'about_samfundet',
   sulten_contact_page_title: 'sulten_contact_page_title',
+
+  //Recruitment
+  no_recruitment_text: 'no_recruitment_text',
+  no_recruitment_text_0: 'no_recruitment_text_0',
+  no_recruitment_text_1: 'no_recruitment_text_1',
+  no_recruitment_text_2: 'no_recruitment_text_2',
+  no_recruitment_text_3: 'no_recruitment_text_3',
+  no_recruitment_text_4: 'no_recruitment_text_4',
+  no_recruitment_text_5: 'no_recruitment_text_5',
+
+  // Feedback
+  feedback_helper_text: 'feedback_helper_text',
+  feedback_want_contact_text: 'feedback_want_contact_text',
 } as const;

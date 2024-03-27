@@ -1,12 +1,14 @@
 # imports
+from __future__ import annotations
+
 from django.conf import settings
 from django.core import management
 from django.core.management.base import BaseCommand
+
 # End: imports -----------------------------------------------------------------
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
             '--noinput',
@@ -31,16 +33,16 @@ class Command(BaseCommand):
         return answer in yes
 
     def handle(self, *args, **options):
-        """ Migrate each installed app to zero """
-        if options['interactive']:
-            if not self.confirmation():
-                print('== ABORT ==')
-                return
+        """Migrate each installed app to zero"""
+        if options['interactive'] and not self.confirmation():
+            print('== ABORT ==')
+            return
 
         for app in settings.INSTALLED_APPS:
             try:
                 appname = app.split('.')[-1]
                 management.call_command('migrate', appname, 'zero')
-            except Exception as _e:
+            # Supress since performance is not an issue here
+            except Exception as _e:  # noqa: S110
                 pass
                 # print(f"{app} failed. {_e}")
