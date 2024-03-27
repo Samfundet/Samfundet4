@@ -73,7 +73,18 @@ admin.site.register(Occupiedtimeslot)
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
     sortable_by = [
-        'id', 'username', 'email', 'phone_number', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at'
+        'id',
+        'username',
+        'email',
+        'phone_number',
+        'first_name',
+        'last_name',
+        'is_active',
+        'is_staff',
+        'is_superuser',
+        'last_login',
+        'date_joined',
+        'updated_at',
     ]
     list_display = [
         'id',
@@ -98,12 +109,8 @@ class UserAdmin(CustomGuardedUserAdmin):
         return n
 
     fieldsets = (
-        (None, {
-            'fields': ('username', 'password')
-        }),
-        (_('Personal info'), {
-            'fields': ('first_name', 'last_name', 'email', 'phone_number')
-        }),
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
         (
             _('Permissions'),
             {
@@ -116,17 +123,17 @@ class UserAdmin(CustomGuardedUserAdmin):
                 ),
             },
         ),
-        (_('Important dates'), {
-            'fields': ('last_login', 'date_joined')
-        }),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
-    add_fieldsets = ((
-        None,
-        {
-            'classes': ('wide', ),
-            'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
-        },
-    ), )
+    add_fieldsets = (
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+            },
+        ),
+    )
 
 
 @admin.register(Group)
