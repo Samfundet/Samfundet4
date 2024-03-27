@@ -15,7 +15,7 @@ export function AdminPage() {
   const { t } = useTranslation();
   const { user } = useAuthContext();
 
-  const WISEWORD = getRandomEntryFromList(WISEWORDS);
+  const WISEWORD = getRandomEntryFromList(WISEWORDS) as string;
 
   const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
 
