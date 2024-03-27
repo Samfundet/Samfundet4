@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button } from '~/Components';
+import { Button, CrudButtons } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -15,6 +16,7 @@ export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const navigate = useCustomNavigate();
 
   const getAllClosedPeriods = useCallback(() => {
     setShowSpinner(true);
@@ -73,38 +75,28 @@ export function ClosedPeriodAdminPage() {
           ]}
           data={closedPeriods.map(function (element) {
             return [
-              element.message_no,
-              element.description_no,
-              // { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
+              element.message_nb,
+              element.description_nb,
               element.start_dt.toLocaleString(),
-              // { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
               element.end_dt.toLocaleString(),
               {
                 content: (
                   <div>
-                    <Button
-                      theme="blue"
-                      display="block"
-                      className={styles.smallButtons}
-                      link={reverse({
-                        pattern: ROUTES.frontend.admin_closed_edit,
-                        urlParams: { id: element.id },
-                      })}
-                    >
-                      {t(KEY.common_edit)}
-                    </Button>
-                    <Button
-                      theme="samf"
-                      display="block"
-                      className={styles.smallButtons}
-                      onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
+                    <CrudButtons
+                      onEdit={() => {
+                        navigate({
+                          url: reverse({
+                            pattern: ROUTES.frontend.admin_closed_edit,
+                            urlParams: { id: element.id },
+                          }),
+                        });
+                      }}
+                      onDelete={() => {
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}
-                    >
-                      {t(KEY.common_delete)}
-                    </Button>{' '}
+                    />
                   </div>
                 ),
               },

@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketTypeValue, EventTicketType } from './types';
+import { Day, EventTicketType, EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -267,4 +267,8 @@ export function lowerCapitalize(s: string): string {
     return s.toUpperCase();
   }
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+
+export function isValidDateRange(start_dt: Date, end_dt: Date): boolean {
+  return start_dt !== undefined && end_dt !== undefined && start_dt < end_dt;
 }

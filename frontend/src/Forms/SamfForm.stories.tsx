@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AuthContextProvider } from '~/AuthContext';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { EventDto } from '~/dto';
-import { SamfForm } from './SamfForm';
+import { SamfForm, SamfFormModel } from './SamfForm';
 import { SamfFormField } from './SamfFormField';
 
 // Local component config.
@@ -19,12 +19,14 @@ const Template: ComponentStory<typeof SamfForm> = function (args) {
   );
 };
 
-function validateShrimp(str: string) {
-  if (str.toLowerCase().includes('reke')) return true;
+function validateShrimp(values: SamfFormModel) {
+  const str = values['title_en'] as string;
+  if (str && str.toLowerCase().includes('reke')) return true;
   return "Feltet må inneholde 'reke'";
 }
 
-function validate69(num: number) {
+function validate69(values: SamfFormModel) {
+  const num = values['duration'] as number;
   if (num == 69) return true;
   return 'Tallet må være 69';
 }

@@ -288,12 +288,17 @@ export type GangTypeDto = {
 
 export type ClosedPeriodDto = {
   id: number;
-  message_no: string;
-  description_no: string;
+  message_nb: string;
+  description_nb: string;
   message_en: string;
   description_en: string;
   start_dt: Date;
   end_dt: Date;
+  created_at: Date;
+  updated_at: Date;
+  version: number;
+  created_by: UserDto;
+  updated_by: UserDto;
 };
 
 export type TagDto = {
