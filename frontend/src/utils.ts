@@ -268,3 +268,10 @@ export function lowerCapitalize(s: string): string {
   }
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
+
+/**
+ * Method for fetching Random entry from list
+ */
+export function getRandomEntryFromList(entries: unknown[]): unknown {
+  return entries[Math.floor(Math.random() * entries.length)];
+}
