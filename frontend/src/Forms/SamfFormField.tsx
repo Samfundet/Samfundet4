@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
+import { FieldProps, SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
 
 // ================================== //
 //             Utilities              //

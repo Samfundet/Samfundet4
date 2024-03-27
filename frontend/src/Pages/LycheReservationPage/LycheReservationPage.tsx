@@ -1,17 +1,17 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
-import { TextItem } from '~/constants/TextItems';
-import styles from './LycheReservationPage.module.scss';
-import { KV } from '~/constants';
-import { useKeyValue, useTextItem } from '~/hooks';
-import { ReservationDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { KV } from '~/constants';
+import { TextItem } from '~/constants/TextItems';
+import { ReservationDto } from '~/dto';
+import { useKeyValue, useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { ReservationFormLine } from './Components';
+import styles from './LycheReservationPage.module.scss';
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
@@ -105,7 +105,14 @@ export function LycheReservationPage() {
       <ReservationFormLine label={t(KEY.common_message)}>
         <SamfFormField type="text" field="additional_info" required={false} />
       </ReservationFormLine>
-      <SamfFormField type="checkbox" field="agree" label="piracy policy agree" required={true} />
+      <div className={styles.check_box}>
+        <SamfFormField
+          type="checkbox"
+          field="agree"
+          label={useTextItem(TextItem.sulten_reservation_policy) + '*'}
+          required={true}
+        />
+      </div>
     </SamfForm>
   );
 
