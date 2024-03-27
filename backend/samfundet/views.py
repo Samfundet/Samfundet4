@@ -20,6 +20,7 @@ from django.http import QueryDict
 from django.utils import timezone
 from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
@@ -805,3 +806,75 @@ class UserFeedbackView(CreateAPIView):
         )
 
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class MissingInfoPagesView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        missing_list = list()
+        misc_list = [
+            'aapningstider',
+            'aldersgrenser',
+            'annen-info',
+            'ansatt-stab',
+            'arrangementsbilder',
+            'biblioteket'  # Is listed as venue in samf3, but not offical
+            'billetter',
+            'booking',
+            'brukerveiledning',
+            'diverse-informasjon',
+            'fb-faq',
+            'filmklubben',
+            'gjenger',
+            # --- TODO intern gangs --
+            'gjengsekretariatet',
+            'gjengsjefkollegiet',
+            'gjengutvalget',
+            'samfundets-byggekomite',
+            'sikringskomiteen'
+            # ---
+            'historie',
+            '_index',
+            'intern-faq',
+            'kontaktinfo',
+            'kostymeutleie',
+            'leie-eksternt',
+            'leie-ksg',
+            'leie-lokaler',
+            'live',
+            'markdown',
+            'mazemap',
+            'medlemskap',
+            '_menu',
+            'miljotiltak',
+            'mistillit-info',
+            'nybygg',
+            'nybygg-arkiv',
+            'nybygg-gammel',
+            'organisasjon',
+            'orvar',
+            'oversiktskart',
+            'personvern',
+            'presse',
+            'propheten',
+            'quiz',
+            'teknisk-informasjon',
+            'tilrettelegging',
+            'utleie',
+            'valg',
+        ]
+        for gang in Gang.objects.all():
+            slug = slugify(gang.name_nb)
+            if not gang.info_page or gang.info_page.slug_field != slug:
+                missing_list.append(slug)
+        for venue in Venue.objects.all():
+            slug = slugify(venue.name)
+            if not venue.info_page or venue.info_page.slug_field != slug:
+                missing_list.append(slug)
+        for organization in Organization.objects.all():
+            slug = slugify(organization.name)
+            if not organization.info_page or organization.info_page.slug_field != slug:
+                missing_list.append(slug)
+
+        return Response(data=missing_list + misc_list)  # Success.

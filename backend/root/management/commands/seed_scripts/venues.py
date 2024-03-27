@@ -20,6 +20,7 @@ VENUES = [
     'Lyche',
     'Daglighallen',
     'Rundhallen',
+    'Luka',
 ]
 
 
