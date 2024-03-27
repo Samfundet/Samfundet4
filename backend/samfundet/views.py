@@ -811,8 +811,8 @@ class UserFeedbackView(CreateAPIView):
 class MissingInfoPagesView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request: Request) -> Response:
-        missing_list = list()
+    def get(self, request: Request) -> Response:  # noqa: C901
+        missing_list = []
         misc_list = [
             'aapningstider',
             'aldersgrenser',
