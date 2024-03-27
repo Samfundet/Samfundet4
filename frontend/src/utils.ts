@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketTypeValue, EventTicketType } from './types';
+import { Day, EventTicketType, EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
