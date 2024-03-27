@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
+import { Page, Link, Button } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
@@ -27,10 +27,8 @@ export function RecruitmentAdmissionFormPage() {
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
-
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
-
-  const [loading, setLoading] = useState(true);
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   const { positionID } = useParams();
 
@@ -43,7 +41,7 @@ export function RecruitmentAdmissionFormPage() {
         setRecruitmentAdmission(res.data);
       }),
     ]).then(() => {
-      setLoading(false);
+      setShowSpinner(false);
     });
   }, [positionID]);
 
@@ -66,17 +64,9 @@ export function RecruitmentAdmissionFormPage() {
       });
   }
 
-  if (loading) {
-    return (
-      <div>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   if (!positionID || isNaN(Number(positionID))) {
     return (
-      <Page>
+      <Page loading={showSpinner}>
         <div className={styles.container}>
           <h1>{t(KEY.recruitment_admission)}</h1>
           <p>The position id is invalid, please enter another position id</p>
@@ -88,7 +78,7 @@ export function RecruitmentAdmissionFormPage() {
   const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_admission);
 
   return (
-    <Page>
+    <Page loading={showSpinner}>
       <div className={styles.container}>
         <div className={styles.row}>
           <div className={styles.textcontainer}>
@@ -100,14 +90,18 @@ export function RecruitmentAdmissionFormPage() {
                   ? t(KEY.recruitment_funksjonaer)
                   : t(KEY.recruitment_gangmember)}
               </i>{' '}
-              <Link
-                url={reverse({
-                  pattern: ROUTES.frontend.information_page_detail,
-                  urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
-                })}
-              >
-                {dbT(recruitmentPosition?.gang, 'name')}
-              </Link>
+              {
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.information_page_detail,
+                    urlParams: {
+                      slugField: recruitmentPosition?.gang.info_page ? recruitmentPosition?.gang.info_page : '404',
+                    },
+                  })}
+                >
+                  {dbT(recruitmentPosition?.gang, 'name')}
+                </Link>
+              }
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
             <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>

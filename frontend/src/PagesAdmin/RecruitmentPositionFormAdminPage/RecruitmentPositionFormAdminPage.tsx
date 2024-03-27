@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
@@ -12,6 +11,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentPositionFormAdminPage() {
   const { t } = useTranslation();
@@ -73,14 +73,20 @@ export function RecruitmentPositionFormAdminPage() {
 
   const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
 
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  const title =
+    (positionId ? t(KEY.common_edit) : t(KEY.common_create) + ' ' + t(KEY.common_new)) +
+    ' ' +
+    t(KEY.common_recruitment) +
+    's ' +
+    t(KEY.recruitment_position);
+  const backendUrl = positionId
+    ? reverse({
+        pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
+        urlParams: {
+          objectId: positionId,
+        },
+      })
+    : ROUTES.backend.admin__samfundet_recruitmentposition_add;
 
   function handleOnSubmit(data: RecruitmentPositionDto) {
     const updatedPosition = data;
@@ -124,7 +130,7 @@ export function RecruitmentPositionFormAdminPage() {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} loading={showSpinner}>
       <SamfForm<RecruitmentPositionDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
           <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
@@ -189,6 +195,6 @@ export function RecruitmentPositionFormAdminPage() {
           <SamfFormField field="tags" type="text" label={t(KEY.common_tags) ?? ''} />
         </div>
       </SamfForm>
-    </div>
+    </AdminPageLayout>
   );
 }

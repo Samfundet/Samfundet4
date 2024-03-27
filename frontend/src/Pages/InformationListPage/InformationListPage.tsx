@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getInformationPages } from '~/api';
-import { Link } from '~/Components';
+import { Link, Page } from '~/Components';
 import { InformationPageDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { getTranslatedTitle } from '~/Pages/InformationListPage/utils';
@@ -17,12 +17,16 @@ import styles from './InformationListPage.module.scss';
  */
 export function InformationListPage() {
   const [pages, setPages] = useState<InformationPageDto[]>([]);
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { i18n, t } = useTranslation();
 
   // Stuff to do on first render.
   useEffect(() => {
     getInformationPages()
-      .then((data) => setPages(data))
+      .then((data) => {
+        setPages(data);
+        setShowSpinner(false);
+      })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
@@ -31,7 +35,7 @@ export function InformationListPage() {
   }, []);
 
   return (
-    <div className={styles.wrapper}>
+    <Page className={styles.wrapper} loading={showSpinner}>
       {pages.map((page, i) => {
         return (
           <Link
@@ -46,6 +50,6 @@ export function InformationListPage() {
           </Link>
         );
       })}
-    </div>
+    </Page>
   );
 }
