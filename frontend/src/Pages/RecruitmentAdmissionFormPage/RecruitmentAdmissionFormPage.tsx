@@ -28,10 +28,7 @@ export function RecruitmentAdmissionFormPage() {
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
-  const { positionID } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-
-  const [loading, setLoading] = useState(true);
 
   const { positionID } = useParams();
 
@@ -93,14 +90,18 @@ export function RecruitmentAdmissionFormPage() {
                   ? t(KEY.recruitment_funksjonaer)
                   : t(KEY.recruitment_gangmember)}
               </i>{' '}
-              <Link
-                url={reverse({
-                  pattern: ROUTES.frontend.information_page_detail,
-                  urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
-                })}
-              >
-                {dbT(recruitmentPosition?.gang, 'name')}
-              </Link>
+              {
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.information_page_detail,
+                    urlParams: {
+                      slugField: recruitmentPosition?.gang.info_page ? recruitmentPosition?.gang.info_page : '404',
+                    },
+                  })}
+                >
+                  {dbT(recruitmentPosition?.gang, 'name')}
+                </Link>
+              }
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
             <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>

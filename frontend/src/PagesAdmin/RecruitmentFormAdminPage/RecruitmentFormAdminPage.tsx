@@ -78,11 +78,11 @@ export function RecruitmentFormAdminPage() {
   const title = (id ? t(KEY.common_edit) : t(KEY.common_create)) + ' ' + t(KEY.common_recruitment);
   const backendUrl = id
     ? reverse({
-        pattern: ROUTES.backend.admin__samfundet_recruitment_change,
-        urlParams: {
-          objectId: id,
-        },
-      })
+      pattern: ROUTES.backend.admin__samfundet_recruitment_change,
+      urlParams: {
+        objectId: id,
+      },
+    })
     : ROUTES.backend.admin__samfundet_recruitment_add;
 
   function handleOnSubmit(data: RecruitmentDto) {
@@ -115,53 +115,54 @@ export function RecruitmentFormAdminPage() {
   // TODO: Add validation for the dates
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} loading={showSpinner}>
-    <div className={styles.wrapper}>
-      <SamfForm<RecruitmentDto>
-        externalErrors={externalErrors}
-        onSubmit={handleOnSubmit}
-        initialData={initialData}
-        submitText={submitText}
-      >
-        <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
-          <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField field="visible_from" type="datetime" label={t(KEY.recruitment_visible_from) ?? ''} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="shown_application_deadline"
-            type="datetime"
-            label={t(KEY.shown_application_deadline) ?? ''}
-          />
-          <SamfFormField
-            field="actual_application_deadline"
-            type="datetime"
-            label={t(KEY.actual_application_deadlin) ?? ''}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="reprioritization_deadline_for_applicant"
-            type="datetime"
-            label={t(KEY.reprioritization_deadline_for_applicant) ?? ''}
-          />
-          <SamfFormField
-            field="reprioritization_deadline_for_groups"
-            type="datetime"
-            label={t(KEY.reprioritization_deadline_for_groups) ?? ''}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="organization"
-            type="options"
-            label={t(KEY.recruitment_organization) ?? ''}
-            options={organizationOptions}
-          />
-        </div>
-      </SamfForm>
+      <div className={styles.wrapper}>
+        <SamfForm<RecruitmentDto>
+          externalErrors={externalErrors}
+          onSubmit={handleOnSubmit}
+          initialData={initialData}
+          submitText={submitText}
+        >
+          <div className={styles.row}>
+            <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
+            <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField field="visible_from" type="datetime" label={t(KEY.recruitment_visible_from) ?? ''} />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField
+              field="shown_application_deadline"
+              type="datetime"
+              label={t(KEY.shown_application_deadline) ?? ''}
+            />
+            <SamfFormField
+              field="actual_application_deadline"
+              type="datetime"
+              label={t(KEY.actual_application_deadlin) ?? ''}
+            />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField
+              field="reprioritization_deadline_for_applicant"
+              type="datetime"
+              label={t(KEY.reprioritization_deadline_for_applicant) ?? ''}
+            />
+            <SamfFormField
+              field="reprioritization_deadline_for_groups"
+              type="datetime"
+              label={t(KEY.reprioritization_deadline_for_groups) ?? ''}
+            />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField
+              field="organization"
+              type="options"
+              label={t(KEY.recruitment_organization) ?? ''}
+              options={organizationOptions}
+            />
+          </div>
+        </SamfForm>
+      </div>
     </AdminPageLayout>
   );
 }
