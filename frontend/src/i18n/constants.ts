@@ -46,6 +46,7 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_type: 'common_type',
   common_price: 'common_price',
   common_buy: 'common_buy',
   common_here: 'common_here',
