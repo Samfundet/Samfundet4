@@ -48,9 +48,10 @@ def seed():
     anonomyous_user = User.get_anonymous()
     User.objects.filter(is_superuser=False).exclude(id=anonomyous_user.id).delete()
     yield 0, 'Deleted existing non-superusers'
-
+    existing_superusers = User.objects.filter(is_superuser=True).values_list('username', flat=True)
     for i, user in enumerate(TEST_USERS):
-        create_test_users(username=user[0], firstname=user[1], lastname=user[2])
+        if user[0] not in existing_superusers:
+            create_test_users(username=user[0], firstname=user[1], lastname=user[2])
         yield i / len(TEST_USERS), 'Creating test users'
 
     yield 100, f'Created {len(TEST_USERS)} test users'
