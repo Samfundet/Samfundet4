@@ -251,6 +251,7 @@ export function AppRoutes() {
       {/* 
             404 NOT FOUND
       */}
+      <Route path={ROUTES.frontend.not_found} element={<NotFoundPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
