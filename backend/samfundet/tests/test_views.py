@@ -73,8 +73,7 @@ class TestUserViews:
         response: Response = fixture_rest_client.post(path=url)
         assert status.is_success(code=response.status_code)
 
-    def test_get_user(self, fixture_rest_client: APIClient,
-                      fixture_user: User):
+    def test_get_user(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
 
         # Give user an arbitrary permission.
@@ -99,8 +98,7 @@ class TestUserViews:
         # Check permission in list.
         assert some_perm_str in data['permissions']
 
-    def test_get_users(self, fixture_rest_client: APIClient,
-                       fixture_user: User):
+    def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__users)
@@ -111,8 +109,7 @@ class TestUserViews:
         ### Assert ###
         assert status.is_success(code=response.status_code)
 
-    def test_get_groups(self, fixture_rest_client: APIClient,
-                        fixture_user: User):
+    def test_get_groups(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
         url = reverse(routes.samfundet__groups)
@@ -128,8 +125,7 @@ class TestUserViews:
         url = reverse(routes.samfundet__register)
 
         ### Act ###
-        response: Response = fixture_rest_client.post(path=url,
-                                                      data=self.post_data)
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
@@ -154,8 +150,7 @@ class TestUserViews:
         for field in self.post_data:
             post_data_copy = self.post_data.copy()
             post_data_copy.pop(field)
-            response: Response = fixture_rest_client.post(path=url,
-                                                          data=post_data_copy)
+            response: Response = fixture_rest_client.post(path=url, data=post_data_copy)
             data = response.json()
             assert status.is_client_error(code=response.status_code)
             assert field in data
@@ -174,17 +169,16 @@ class TestUserViews:
             '48278994d',
         ]
         ### Act ###
+        post_data_copy = self.post_data.copy()
         for value in invalidphonenumbers:
-            self.post_data['phone_number'] = value
-            response: Response = fixture_rest_client.post(path=url,
-                                                          data=self.post_data)
+            post_data_copy['phone_number'] = value
+            response: Response = fixture_rest_client.post(path=url, data=post_data_copy)
             data = response.json()
             assert status.is_client_error(code=response.status_code)
             assert 'phone_number' in data
-            assert 'This value does not match the required pattern.' in data[
-                'phone_number']
+            assert 'This value does not match the required pattern.' in data['phone_number']
 
-    def test_already_alreadyexists(self, fixture_rest_client: APIClient):
+    def test_user_alreadyexists(self, fixture_rest_client: APIClient):
         ### Arrange ###
         url = reverse(routes.samfundet__register)
 
@@ -196,9 +190,9 @@ class TestUserViews:
             'lastname': 'mannen',
             'password': 'jeglikerkebab',
         }
+
         ### Assert ###
-        response: Response = fixture_rest_client.post(path=url,
-                                                      data=self.post_data)
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
         assert status.is_success(code=response.status_code)
 
         unique_fields = ['username', 'email', 'phone_number']
@@ -206,8 +200,7 @@ class TestUserViews:
         for field in unique_fields:
             post_data2_copy = post_data2.copy()
             post_data2_copy[field] = self.post_data[field]
-            response: Response = fixture_rest_client.post(path=url,
-                                                          data=post_data2_copy)
+            response: Response = fixture_rest_client.post(path=url, data=post_data2_copy)
             data = response.json()
             assert status.is_client_error(code=response.status_code)
             assert RegisterSerializer.ALREADY_EXISTS_MESSAGE in data[field]
