@@ -17,4 +17,5 @@ export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { RecruitmentUsersWithoutInterview } from './RecruitmentUsersWithoutInterview';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
+export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';

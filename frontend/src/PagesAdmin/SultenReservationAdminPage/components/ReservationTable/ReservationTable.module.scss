@@ -1,0 +1,89 @@
+
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.tableHeader {
+  background-color: $red-samf;
+  border-top-right-radius: 0.2em;
+  border-top-left-radius: 0.2em;
+  padding: 0.5em;
+  @include flex-row;
+  justify-content: space-between;
+}
+
+.date {
+  @include flex-row;
+  text-align: right;
+  gap: 1em;
+  padding: .5em .5em;
+  padding-left: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  transition: .2s;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 1.2em;
+  color: $white;
+  flex:1;
+}
+
+.dateIterator {
+  @include flex-row;
+  flex:0;
+}
+
+.iterateButton {
+  height: 100%;
+  padding : 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  cursor: pointer;
+  &:hover { 
+    filter: brightness(0.5);
+    -webkit-filter: brightness(0.5);
+  }
+  &:active { 
+    filter: brightness(0.75);
+    -webkit-filter: brightness(0.75);
+  }
+}
+
+.buttonsHeader {
+  @include flex-row;
+  gap: 0.5em;
+}
+
+.timeHeader {
+  @include flex-row;
+  background-color: $grey-3;
+  width: 100%;
+  height: 1.5em;
+  border-bottom: 1px solid $grey-2;
+}
+
+.table {
+  border-right: 1px solid $black;
+  height: 100%;
+  margin:0;
+  width: 3em;
+}
+
+.tableText {
+  font-size: 1em;
+}
+
+.time {
+  flex:4;
+  border-right: 1px dashed $black;
+  height: 100%;
+  margin:0;
+}
+
+.timeText {
+  font-size: 0.8em;
+  font-weight: 200;
+  text-align: right;
+}
