@@ -396,6 +396,23 @@ export type RecruitmentAdmissionDto = {
   withdrawn: boolean;
 };
 
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, number>;
+};
+
+export type PurchaseFeedbackFormDto = {
+  title: string;
+  questions: string[];
+  alternatives: string[];
+};
+
 export type FeedbackDto = {
   text: string;
   screen_resolution: string;

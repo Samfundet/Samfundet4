@@ -75,7 +75,13 @@ from .serializers import (
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
-from .models.event import Event, EventGroup
+from .models.event import (
+    Event,
+    EventGroup,
+    PurchaseFeedbackModel,
+    PurchaseFeedbackQuestion,
+    PurchaseFeedbackAlternative,
+)
 from .models.general import (
     Tag,
     Gang,
@@ -804,4 +810,39 @@ class UserFeedbackView(CreateAPIView):
             contact_email=data.get('contact_email'),
         )
 
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class PurchaseFeedbackView(APIView):
+    permission_classes = [IsAuthenticated]
+    model = PurchaseFeedbackModel
+    serializer_class = PurchaseFeedbackModel
+
+    def post(self, request: Request) -> Response:
+        data = request.data
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        purchase_model = PurchaseFeedbackModel.objects.create(
+            user=request.user,
+            title=data.get('title'),
+            event=request.event,
+        )
+
+        alternatives = data.get('alternatives', {})
+        for alternative, selected in alternatives.items():
+            PurchaseFeedbackAlternative.objects.create(
+                alternative=alternative,
+                selected=selected,
+                form=purchase_model,
+            )
+
+        questions = data.get('questions', {})
+        for question, answer in questions.items():
+            PurchaseFeedbackQuestion.objects.create(
+                question=question,
+                answer=answer,
+                form=purchase_model,
+            )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})

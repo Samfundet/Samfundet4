@@ -19,6 +19,8 @@ import {
   NotificationDto,
   OccupiedTimeSlotDto,
   OrganizationDto,
+  PurchaseFeedbackDto,
+  PurchaseFeedbackFormDto,
   RecruitmentAdmissionDto,
   RecruitmentDto,
   RecruitmentPositionDto,
@@ -728,6 +730,15 @@ export async function putRecruitmentAdmissionInterview(
     });
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
+}
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promise<PurchaseFeedbackDto> {
+  const url = BACKEND_DOMAIN; //TODO: set correct url
+  const response = await axios.post<PurchaseFeedbackDto>(url, feedback, { withCredentials: true });
+  return response.data;
 }
 
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
