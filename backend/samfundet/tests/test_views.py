@@ -43,6 +43,15 @@ def test_csrf(fixture_rest_client: APIClient):
 
 
 class TestUserViews:
+    post_data = {
+        'username': 'username',
+        'email': 'kebab@mail.com',
+        'firstname': 'kebab',
+        'lastname': 'mannen',
+        'phone_number': '48278994',
+        'password': 'jeglikerkebab',
+    }
+
     def test_login(
         self,
         fixture_rest_client: APIClient,
@@ -115,16 +124,8 @@ class TestUserViews:
         ### Arrange ###
         url = reverse(routes.samfundet__register)
 
-        post_data = {
-            'username': 'username',
-            'email': 'kebab@mail.com',
-            'phone_number': '48278994',
-            'firstname': 'kebab',
-            'lastname': 'mannen',
-            'password': 'jeglikerkebab',
-        }
         ### Act ###
-        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
 
         ### Assert ###
         assert status.is_success(code=response.status_code)
@@ -138,25 +139,16 @@ class TestUserViews:
 
         # check if user is correct
         assert status.is_success(code=response.status_code)
-        assert data['username'] == post_data['username']
-        assert data['email'] == post_data['email']
-        assert data['phone_number'] == post_data['phone_number']
+        assert data['username'] == self.post_data['username']
+        assert data['email'] == self.post_data['email']
+        assert data['phone_number'] == self.post_data['phone_number']
 
     def test_register_missingfields(self, fixture_rest_client: APIClient):
         ### Arrange ###
         url = reverse(routes.samfundet__register)
-
-        post_data = {
-            'username': 'username',
-            'email': 'kebab@mail.com',
-            'phone_number': '48278994',
-            'firstname': 'kebab',
-            'lastname': 'mannen',
-            'password': 'jeglikerkebab',
-        }
         ### Act ###
-        for field in post_data:
-            post_data_copy = post_data.copy()
+        for field in self.post_data:
+            post_data_copy = self.post_data.copy()
             post_data_copy.pop(field)
             response: Response = fixture_rest_client.post(path=url, data=post_data_copy)
             data = response.json()
@@ -168,7 +160,6 @@ class TestUserViews:
         ### Arrange ###
         url = reverse(routes.samfundet__register)
 
-        post_data = {'username': 'username', 'email': 'kebab@mail.com', 'firstname': 'kebab', 'lastname': 'mannen', 'password': 'jeglikerkebab'}
         invalidphonenumbers = [
             '1',
             '+9932420',
@@ -179,8 +170,8 @@ class TestUserViews:
         ]
         ### Act ###
         for value in invalidphonenumbers:
-            post_data['phone_number'] = value
-            response: Response = fixture_rest_client.post(path=url, data=post_data)
+            self.post_data['phone_number'] = value
+            response: Response = fixture_rest_client.post(path=url, data=self.post_data)
             data = response.json()
             assert status.is_client_error(code=response.status_code)
             assert 'phone_number' in data
@@ -189,15 +180,6 @@ class TestUserViews:
     def test_already_alreadyexists(self, fixture_rest_client: APIClient):
         ### Arrange ###
         url = reverse(routes.samfundet__register)
-
-        post_data = {
-            'username': 'username',
-            'email': 'kebab@mail.com',
-            'phone_number': '48278994',
-            'firstname': 'kebab',
-            'lastname': 'mannen',
-            'password': 'jeglikerkebab',
-        }
 
         post_data2 = {
             'username': 'username2',
@@ -208,14 +190,14 @@ class TestUserViews:
             'password': 'jeglikerkebab',
         }
         ### Assert ###
-        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
         assert status.is_success(code=response.status_code)
 
         unique_fields = ['username', 'email', 'phone_number']
         # Test for each field
         for field in unique_fields:
             post_data2_copy = post_data2.copy()
-            post_data2_copy[field] = post_data[field]
+            post_data2_copy[field] = self.post_data[field]
             response: Response = fixture_rest_client.post(path=url, data=post_data2_copy)
             data = response.json()
             assert status.is_client_error(code=response.status_code)
