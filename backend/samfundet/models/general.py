@@ -230,6 +230,8 @@ class Venue(CustomBaseModel):
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
 
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
+
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
@@ -274,6 +276,7 @@ class Organization(CustomBaseModel):
     """Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT"""
 
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'Organization'

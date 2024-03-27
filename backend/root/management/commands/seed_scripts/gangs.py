@@ -4,11 +4,7 @@ from samfundet.models.general import Gang, GangType
 
 # Template gangs for seeding
 GANGS = {
-    'Arrangerende': [
-        ('Kulturutvalget', 'KU'),
-        ('Lørdagskomiteen', 'LØK'),
-        ('Klubbstyret', 'KLST'),
-    ],
+    'Arrangerende': [('Kulturutvalget', 'KU'), ('Lørdagskomiteen', 'LØK'), ('Klubbstyret', 'KLST'), ('Samfundets Debattkomité', 'SDK')],
     'Drift': [
         ('Markedsføringsgjengen', 'MG'),
         ('Fotogjengen', 'FG'),
@@ -16,11 +12,24 @@ GANGS = {
         ('Forsterkerkomiteen', 'FK'),
         ('Regi', None),
         ('Videokomiteen', 'VK'),
+        ('Sikringskomitéen', None),
+        ('Samfundets konsept- og prosjekteringsgruppe', 'SKP'),
+        ('Studentmediene', 'SM'),
     ],
     'Kunstneriske': [
         ('Studentersamfundets interne teater', 'SIT'),
         ('Studentersamfundets Symfoniorkester', 'Symforch'),
         ('Strindens promenadeorkester', 'SPO'),
+        # Laafte underskudd
+        ('Studentersamfundets Orkester', 'Låfte'),  # TODO Remove this?
+        ('Kjeller Bandet', None),
+        ('Leisure Suit Lovers', 'LSL'),
+        ('Salongorkesteret', 'S.Møller'),
+        ('Snaustrinda Spelemannslag', None),
+        # Sangern underskudd
+        ('Trondheims Kvinnelige Studentersangforening', 'TKS'),
+        ('Trondheims Studentersangforening', 'TSS'),
+        ('Knauskoret', None),
         ('Pirum', None),
         ('Candiss', None),
     ],
