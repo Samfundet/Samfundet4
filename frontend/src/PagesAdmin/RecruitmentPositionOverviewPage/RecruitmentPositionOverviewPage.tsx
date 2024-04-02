@@ -162,7 +162,7 @@ export function RecruitmentPositionOverviewPage() {
                       }),
                     );
                   }
-                  : undefined
+                : undefined
             }
           />
         ),
