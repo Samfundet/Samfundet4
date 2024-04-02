@@ -4,37 +4,36 @@ import React from 'react';
 
 type textProps = {
   children?: Children;
-  fontSize?: string | null;
   color?: string;
   size?: 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
-  type?: 'p' | 'strong';
+  as?: 'p' | 'strong';
   className?: string;
 };
 
-export function Text({ children, color, className, size = 'm', fontSize = null, type = 'p' }: textProps) {
+export function Text({ children, color, className, size = 'm', as = 'p' }: textProps) {
   const elements = {
     p: 'p',
     strong: 'strong',
   };
 
   type TextAttrProps = {
-    type: 'p' | 'strong';
+    as: 'p' | 'strong';
     children: Children;
     className?: string;
     style?: React.CSSProperties;
   };
 
-  function TextAttr({ type, children, ...props }: TextAttrProps) {
-    return React.createElement(elements[type] || elements.p, props, children);
+  function TextAttr({ as, children, ...props }: TextAttrProps) {
+    return React.createElement(elements[as], props, children);
   }
 
   return (
     <TextAttr
-      type={type}
+      as={as}
       className={className}
       style={{
         color: color,
-        fontSize: fontSize || textSizes[size],
+        fontSize: textSizes[size],
       }}
     >
       {children}
