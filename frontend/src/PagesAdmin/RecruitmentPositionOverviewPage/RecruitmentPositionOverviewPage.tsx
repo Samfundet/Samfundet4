@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
@@ -12,7 +12,7 @@ import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { useNavigate } from 'react-router-dom';
+
 
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
@@ -148,10 +148,11 @@ export function RecruitmentPositionOverviewPage() {
       {
         content: (
           <CrudButtons
-            onView={ 
-              admission.interview.interview_time != null 
+            onView={
+              admission.interview.interview_time != null
                 ? () => {
-                  navigate(reverse({
+                  navigate(
+                    reverse({
                         pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
                         urlParams: {
                           recruitmentId: recruitmentId,
@@ -159,8 +160,11 @@ export function RecruitmentPositionOverviewPage() {
                           positionId: positionId,
                           interviewId: admission.interview.id,
                         },
-                  })
-                )} : undefined} 
+                  }),
+                );
+              }
+              : undefined
+            }
           />
         ),
       },
