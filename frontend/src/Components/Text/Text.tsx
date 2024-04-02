@@ -4,13 +4,12 @@ import React from 'react';
 
 type textProps = {
   children?: Children;
-  color?: string;
   size?: 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
   as?: 'p' | 'strong';
   className?: string;
 };
 
-export function Text({ children, color, className, size = 'm', as = 'p' }: textProps) {
+export function Text({ children, className, size = 'm', as = 'p' }: textProps) {
   const elements = {
     p: 'p',
     strong: 'strong',
@@ -32,7 +31,6 @@ export function Text({ children, color, className, size = 'm', as = 'p' }: textP
       as={as}
       className={className}
       style={{
-        color: color,
         fontSize: textSizes[size],
       }}
     >
