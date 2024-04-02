@@ -13,7 +13,6 @@ import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 
-
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
   { label: 'Not Set', value: 0 },
@@ -151,8 +150,8 @@ export function RecruitmentPositionOverviewPage() {
             onView={
               admission.interview.interview_time != null
                 ? () => {
-                  navigate(
-                    reverse({
+                    navigate(
+                      reverse({
                         pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
                         urlParams: {
                           recruitmentId: recruitmentId,
@@ -160,10 +159,10 @@ export function RecruitmentPositionOverviewPage() {
                           positionId: positionId,
                           interviewId: admission.interview.id,
                         },
-                  }),
-                );
-              }
-              : undefined
+                      }),
+                    );
+                  }
+                  : undefined
             }
           />
         ),
