@@ -1,18 +1,17 @@
 import { Children } from '~/types';
 import { textSizes } from '~/constants';
-import React from "react";
+import React from 'react';
 
 type textProps = {
   children?: Children;
   fontSize?: string | null;
   color?: string;
   size?: 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
-  noOfLines?: number;
   type?: 'p' | 'strong';
   className?: string;
 };
 
-export function Text({ children, color, className, size = 'm', fontSize = null, noOfLines, type = 'p' }: textProps) {
+export function Text({ children, color, className, size = 'm', fontSize = null, type = 'p' }: textProps) {
   const elements = {
     p: 'p',
     strong: 'strong',
@@ -36,7 +35,6 @@ export function Text({ children, color, className, size = 'm', fontSize = null, 
       style={{
         color: color,
         fontSize: fontSize || textSizes[size],
-        lineClamp: noOfLines,
       }}
     >
       {children}

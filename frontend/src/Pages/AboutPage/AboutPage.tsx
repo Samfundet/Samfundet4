@@ -10,6 +10,7 @@ import { ROUTES } from '~/routes';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
+import { Text } from '~/Components/Text/Text';
 
 export function AboutPage() {
   const { t } = useTranslation();
@@ -19,8 +20,10 @@ export function AboutPage() {
       <div className={styles.row}>
         <img src={runderode} alt="Runderode" className={classNames(styles.runderode, styles.box)} />
         <div className={styles.textBox}>
-          <h2 className={styles.header}>{t(KEY.common_about_samfundet)}</h2>
-          <p className={styles.text}>{useTextItem(TextItem.about_samfundet)}</p>
+          <Text size={'l'} className={styles.header}>
+            {t(KEY.common_about_samfundet)}
+          </Text>
+          <Text className={styles.text}>{useTextItem(TextItem.about_samfundet)}</Text>
           <Button theme="samf" className={styles.button}>
             {t(KEY.common_membership).toUpperCase()}
           </Button>
@@ -36,8 +39,10 @@ export function AboutPage() {
         </div>
       </div>
       <div className={classNames(styles.box, styles.textBox)}>
-        <h2 className={styles.header}>{t(KEY.common_the_society_meeting)}</h2>
-        <p className={styles.text}>{useTextItem(TextItem.the_society_meeting)}</p>
+        <Text size={'l'} className={styles.header}>
+          {t(KEY.common_the_society_meeting)}
+        </Text>
+        <Text className={styles.text}>{useTextItem(TextItem.the_society_meeting)}</Text>
         <Button theme="samf" className={styles.button}>
           {t(KEY.common_about_the_organisation).toUpperCase()}
         </Button>
@@ -48,7 +53,9 @@ export function AboutPage() {
           {t(KEY.common_our_history).toUpperCase()}
         </Button>
       </div>
-      <h2 className={styles.header2}>{t(KEY.common_venues)}</h2>
+      <Text size={'l'} className={styles.header2}>
+        {t(KEY.common_venues)}
+      </Text>
 
       <Carousel spacing={1.5} header>
         {VENUES.images.map((image, idx) => {
@@ -74,7 +81,7 @@ export function AboutPage() {
           <img src={splash} alt="Splash" className={styles.splash} />
           <div className={styles.textBox}>
             <h2 className={styles.header}>{t(KEY.common_volunteering)}</h2>
-            <p className={styles.text}>{useTextItem(TextItem.volunteering)}</p>
+            <Text className={styles.text}>{useTextItem(TextItem.volunteering)}</Text>
             <div className={styles.buttonTable}>
               <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.groups}>
                 {t(KEY.common_the_groups_at_samfundet).toUpperCase()}
@@ -88,7 +95,7 @@ export function AboutPage() {
         <div className={styles.col}>
           <div className={styles.uka_isfit}>
             <h3 className={styles.header_col}>UKA & ISFiT</h3>
-            <p className={styles.text}>{useTextItem(TextItem.festivals)}</p>
+            <Text className={styles.text}>{useTextItem(TextItem.festivals)}</Text>
             <div className={styles.buttonTable}>
               <Button className={styles.tableButton} theme="samf">
                 UKA
