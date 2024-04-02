@@ -254,8 +254,6 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        # TODO make uneditable/unsavable after being anonymized
-
         self.total_admissions = self.recruitment.admissions.count()
         self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
 
