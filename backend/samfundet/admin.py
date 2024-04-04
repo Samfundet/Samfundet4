@@ -5,6 +5,7 @@ from guardian import models as guardian_models
 from django.urls import reverse
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
@@ -72,7 +73,20 @@ admin.site.register(OccupiedTimeslot)
 
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
-    sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
+    sortable_by = [
+        'id',
+        'username',
+        'email',
+        'phone_number',
+        'first_name',
+        'last_name',
+        'is_active',
+        'is_staff',
+        'is_superuser',
+        'last_login',
+        'date_joined',
+        'updated_at',
+    ]
     list_display = [
         'id',
         'username',
@@ -94,6 +108,33 @@ class UserAdmin(CustomGuardedUserAdmin):
     def group_memberships(self, obj: User) -> int:
         n: int = obj.groups.all().count()
         return n
+
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        (
+            _('Permissions'),
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                ),
+            },
+        ),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+            },
+        ),
+    )
 
 
 @admin.register(Group)
