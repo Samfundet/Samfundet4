@@ -74,7 +74,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_lastname]: 'Etternavn',
-  [KEY.common_email]: 'Email',
+  [KEY.common_email]: 'Epost',
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
