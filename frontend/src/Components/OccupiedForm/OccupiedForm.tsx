@@ -35,31 +35,24 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
     setLoading(true);
 
     Promise.allSettled([
-      getRecruitmentAvailability(recruitmentId)
-        .then((response) => {
-          if (!response.data) {
-            toast.error(t(KEY.common_something_went_wrong));
-            return;
-          }
-          setMinDate(new Date(response.data.start_date));
-          setMaxDate(new Date(response.data.end_date));
-          setTimeslots(response.data.timeslots);
-        })
-        .catch((error) => {
+      getRecruitmentAvailability(recruitmentId).then((response) => {
+        if (!response.data) {
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
-        }),
-      getOccupiedTimeslots(recruitmentId)
-        .then((res) => {
-          setSelectedTimeslots(res.data.dates);
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
-        }),
-    ]).finally(() => {
-      setLoading(false);
-    });
+          return;
+        }
+        setMinDate(new Date(response.data.start_date));
+        setMaxDate(new Date(response.data.end_date));
+        setTimeslots(response.data.timeslots);
+      }),
+      getOccupiedTimeslots(recruitmentId).then((res) => {
+        setSelectedTimeslots(res.data.dates);
+      }),
+    ])
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      })
+      .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
