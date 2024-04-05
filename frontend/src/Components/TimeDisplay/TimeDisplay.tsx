@@ -2,7 +2,7 @@ import { format, isToday, isTomorrow } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
-type TimeDisplayType = 'datetime' | 'date' | 'nice-date' | 'time' | 'event-date' | 'event-datetime' | 'nice-month-year';
+type TimeDisplayType = 'datetime' | 'date' | 'nice-date' | 'time' | 'event-date' | 'event-datetime';
 
 type TimeDisplayProps = {
   timestamp: string | Date;
@@ -69,8 +69,6 @@ export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: 
       case 'event-date':
       case 'event-datetime':
         return getEventString();
-      case 'nice-month-year':
-        return `${niceMonths[date.getMonth()]} ${date.getFullYear()}`;
     }
   }
 
