@@ -10,7 +10,7 @@ import { MiniCalendar } from '~/Components';
 import { format } from 'date-fns';
 import classNames from 'classnames';
 import { lowerCapitalize } from '~/utils';
-import { CalendarMarker } from '~/Components/MiniCalendar/MiniCalendar';
+import { CalendarMarker } from '~/types';
 
 type OccupiedFormProps = {
   recruitmentId: number;
@@ -27,10 +27,6 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
 
   const [timeslots, setTimeslots] = useState<string[]>([]);
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
-
-  const onDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
 
   useEffect(() => {
     if (!recruitmentId) {
@@ -67,7 +63,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
-  const save = () => {
+  function save() {
     const data: OccupiedTimeslotDto = {
       recruitment: recruitmentId,
       dates: selectedTimeslots,
@@ -81,7 +77,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-  };
+  }
 
   const markers = useMemo(() => {
     const x: CalendarMarker[] = [];
@@ -104,7 +100,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
     return x;
   }, [timeslots, selectedTimeslots]);
 
-  const toggleTimeslot = (d: Date, timeslot: string) => {
+  function toggleTimeslot(d: Date, timeslot: string) {
     const dayString = formatDate(d);
     const selectedTimeslotsCopy = { ...selectedTimeslots };
     if (selectedTimeslots[dayString]) {
@@ -120,21 +116,23 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
       selectedTimeslotsCopy[dayString] = [timeslot];
     }
     setSelectedTimeslots(selectedTimeslotsCopy);
-  };
+  }
 
-  const formatDate = (d: Date) => format(d, 'yyyy.LL.dd');
+  function formatDate(d: Date) {
+    return format(d, 'yyyy.LL.dd');
+  }
 
-  const isTimeslotSelected = (d: Date, timeslot: string) => {
+  function isTimeslotSelected(d: Date, timeslot: string) {
     const x = selectedTimeslots[formatDate(d)];
     return !(!x || !x.find((s) => s === timeslot));
-  };
+  }
 
-  const isAllSelected = (d: Date) => {
+  function isAllSelected(d: Date) {
     const selectedLength = selectedTimeslots[formatDate(d)]?.length || 0;
     return selectedLength === timeslots.length;
-  };
+  }
 
-  const toggleSelectAll = (d: Date) => {
+  function toggleSelectAll(d: Date) {
     const slots = { ...selectedTimeslots };
     if (isAllSelected(d)) {
       delete slots[formatDate(d)];
@@ -142,7 +140,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
       slots[formatDate(d)] = timeslots;
     }
     setSelectedTimeslots(slots);
-  };
+  }
 
   return (
     <div className={styles.container}>
@@ -160,7 +158,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
               minDate={minDate}
               maxDate={maxDate}
               baseDate={minDate}
-              onChange={onDateChange}
+              onChange={(date: Date | null) => setSelectedDate(date)}
               displayLabel={true}
               markers={markers}
             />
