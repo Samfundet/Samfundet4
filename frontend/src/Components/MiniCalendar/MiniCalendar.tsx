@@ -41,24 +41,20 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
   }
 
   useEffect(() => {
-    function setup() {
-      const monthStart = new Date(currentDate);
-      monthStart.setDate(1);
-      const monthEnd = lastDayOfMonth(currentDate);
+    const monthStart = new Date(currentDate);
+    monthStart.setDate(1);
+    const monthEnd = lastDayOfMonth(currentDate);
 
-      const padStart = isMonday(monthStart) ? monthStart : previousMonday(monthStart);
-      const padEnd = isSunday(monthEnd) ? monthEnd : nextSunday(monthEnd);
+    const padStart = isMonday(monthStart) ? monthStart : previousMonday(monthStart);
+    const padEnd = isSunday(monthEnd) ? monthEnd : nextSunday(monthEnd);
 
-      const d = [];
-      let curr = padStart;
-      while (curr < addDays(padEnd, 1)) {
-        d.push(curr);
-        curr = addDays(curr, 1);
-      }
-      setDays(d);
+    const d = [];
+    let curr = padStart;
+    while (curr < addDays(padEnd, 1)) {
+      d.push(curr);
+      curr = addDays(curr, 1);
     }
-
-    setup();
+    setDays(d);
   }, [currentDate]);
 
   useEffect(() => {
