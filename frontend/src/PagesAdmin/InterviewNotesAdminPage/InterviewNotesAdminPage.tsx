@@ -58,22 +58,20 @@ export function InterviewNotesPage() {
   }
 
   const header = (
-    <>
-      <Button
-        theme="success"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
-          urlParams: {
-            recruitmentId: recruitmentId,
-            gangId: gangId,
-            positionId: positionId,
-          },
-        })}
-      >
-        {t(KEY.common_go_back)}
-      </Button>
-    </>
+    <Button
+      theme="success"
+      rounded={true}
+      link={reverse({
+        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
+        urlParams: {
+          recruitmentId: recruitmentId,
+          gangId: gangId,
+          positionId: positionId,
+        },
+      })}
+    >
+      {t(KEY.common_go_back)}
+    </Button>
   );
 
   return (
