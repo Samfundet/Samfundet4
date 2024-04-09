@@ -71,4 +71,5 @@ urlpatterns = [
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
+    path('purchase_feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
 ]

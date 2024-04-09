@@ -7,30 +7,38 @@ import { KEY } from '~/i18n/constants';
 import styles from './PurchaseFeedbackform.module.scss';
 import { useParams } from 'react-router-dom';
 
-export function PurchaseFeedbackForm({ title, questions, alternatives }: PurchaseFeedbackFormDto) {
-  const { eventId } = useParams();
 
-  function handleSubmit(eventId: number, formData: Record<string, string>) {
+type PurchaseFeedbackFormProps = {
+  title: string;
+  alternatives: string[];
+  questions: string[];
+}
+
+export function PurchaseFeedbackForm({ title, questions, alternatives }: PurchaseFeedbackFormProps) {
+  //TODO: ensure information submitted is correct
+
+  function handleSubmit(formData: Record<string, string>) {
+
+    const { eventId } = useParams();
     const questionResponses: Record<string, string> = {};
+    const alternativesSelected: Record<string, string> = {};
 
     for (const question in formData) {
       if (questions.includes(question)) {
         questionResponses[question] = formData[question];
       }
     }
-    for (const question in formData) {
-      if (questions.includes(question)) {
-        questionResponses[question] = formData[question];
+
+    for (const alternative in formData) {
+      if (alternatives.includes(formData[alternative])) {
+        alternativesSelected[alternative] = formData[alternative];
       }
     }
-
-    //const selectedAlternatives = alternatives.filter((alternative) => formData[alternative] === 'on');
-    const selectedAlternatives = {}
 
     const feedback: PurchaseFeedbackDto = {
-      eventId: eventId,
+      eventId: Number(eventId),
       title: title,
-      alternatives: selectedAlternatives,
+      alternatives: alternativesSelected,
       responses: questionResponses,
     };
     postPurchaseFeedback(feedback);

@@ -17,6 +17,7 @@ export { LycheAboutPage } from './LycheAboutPage';
 export { LycheHomePage } from './LycheHomePage';
 export { LycheMenuPage } from './LycheMenuPage';
 export { NotFoundPage } from './NotFoundPage';
+export { PurchaseCallbackPage } from './PurchaseCallbackPage';
 export { RecruitmentAdmissionFormPage } from './RecruitmentAdmissionFormPage';
 export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';

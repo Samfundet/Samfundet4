@@ -404,13 +404,7 @@ export type PurchaseFeedbackDto = {
   eventId: number;
   title: string;
   responses: Record<string, string>;
-  alternatives: Record<string, number>;
-};
-
-export type PurchaseFeedbackFormDto = {
-  title: string;
-  questions: string[];
-  alternatives: string[];
+  alternatives: Record<string, string>;
 };
 
 export type FeedbackDto = {
