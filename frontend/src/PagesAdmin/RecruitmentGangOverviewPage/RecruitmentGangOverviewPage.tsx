@@ -49,6 +49,9 @@ export function RecruitmentGangOverviewPage() {
       <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.recruitment_show_unprocessed_applicants)}
       </Button>
+      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_recruitment_gang_overview_rejection_email}>
+        Rejection mail
+      </Button>
     </>
   );
 

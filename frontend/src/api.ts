@@ -688,3 +688,17 @@ export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdm
 
   return response;
 }
+
+export async function getRejectedApplicants(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__rejected_applicants,
+      queryParams: {
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
