@@ -275,3 +275,12 @@ export function lowerCapitalize(s: string): string {
 export function getRandomEntryFromList(entries: unknown[]): unknown {
   return entries[Math.floor(Math.random() * entries.length)];
 }
+
+/**
+ * Fetches an datetime object from time
+ * Example: '13:00' becomes a dateobject with time 13:00:00
+ */
+export function getTimeObject(time: string): number {
+  const timeSplit = time.split(':');
+  return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
+}

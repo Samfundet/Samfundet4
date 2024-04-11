@@ -173,7 +173,14 @@ export type InformationPageDto = {
   text_en?: string;
 };
 
+export type ReservationTableDto = {
+  name: string;
+  start_time: string;
+  end_time: string;
+};
+
 export type TableDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -181,6 +188,7 @@ export type TableDto = {
   description_en?: string;
 
   seating?: number;
+  reservations?: ReservationTableDto[];
 };
 
 export type FoodPreferenceDto = {
@@ -228,10 +236,10 @@ export type ReservationDto = {
   start_time: string;
   end_time?: string;
   // Needed for first part
-  venue: number;
-  reservation_date: string;
-  guest_count: number;
-  occasion: string;
+  venue?: number;
+  reservation_date?: string;
+  guest_count?: number;
+  occasion?: string;
   // Maybe ignore and use different dto?
   // internal_message?: string;
 };
@@ -401,4 +409,11 @@ export type FeedbackDto = {
   screen_resolution: string;
   path: string;
   contact_email?: string;
+};
+
+export type SultenReservationDayDto = {
+  date: Date;
+  start_time: string;
+  closing_time: string;
+  tables: TableDto[];
 };
