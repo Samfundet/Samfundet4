@@ -6,14 +6,14 @@ import { SamfFormField } from './SamfFormField';
 
 // Local component config.
 export default {
-  title: 'Forms/SamfFormCopy',
+  title: 'Forms/SamfForm',
   component: SamfForm,
 } as ComponentMeta<typeof SamfForm>;
 
 const Template: ComponentStory<typeof SamfForm> = function (args) {
   return (
     <AuthContextProvider>
-      <SamfForm {...args} />
+      <SamfForm<BasicFormProps> {...args} />
     </AuthContextProvider>
   );
 };
@@ -39,7 +39,7 @@ type BasicFormProps = {
   req_field: string;
   advanced_field: string;
   number_field: number;
-  option_field: DropDownOption<string>;
+  option_field: string;
   large_field: string;
   phonenumber: string;
 };
@@ -48,7 +48,7 @@ const initialData: BasicFormProps = {
   req_field: '',
   advanced_field: '',
   number_field: 420,
-  option_field: options[0],
+  option_field: options[0].value,
   large_field: 'Default text',
   phonenumber: '',
 };
@@ -61,6 +61,8 @@ Basic.args = {
     alert('Data that could be posted: ' + JSON.stringify(values));
   },
   initialData,
+  validateOn: 'change',
+  validateOnInit: false,
   children: (
     <>
       <div style={{ display: 'flex', gap: '.5em' }}>
@@ -84,7 +86,7 @@ Basic.args = {
           label="Tall-input med krav"
           validator={validate69}
         />
-        <SamfFormField<DropDownOption<string>, BasicFormProps>
+        <SamfFormField<string, BasicFormProps>
           type={'options'}
           field={'option_field'}
           label="Dropdown input"
