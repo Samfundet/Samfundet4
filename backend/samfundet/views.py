@@ -45,6 +45,7 @@ from .serializers import (
     GroupSerializer,
     ImageSerializer,
     LoginSerializer,
+    MerchSerializer,
     TableSerializer,
     VenueSerializer,
     BookingSerializer,
@@ -88,6 +89,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Booking,
@@ -345,6 +347,15 @@ class ReservationCheckAvailabilityView(APIView):
             )
             return Response(available_tables, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# =============================== #
+#             Merch               #
+# =============================== #
+class MerchView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = MerchSerializer
+    queryset = Merch.objects.all()
 
 
 # =============================== #

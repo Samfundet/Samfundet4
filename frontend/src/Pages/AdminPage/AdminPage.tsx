@@ -9,13 +9,13 @@ import { ROUTES } from '~/routes';
 import { Link } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
+import { getRandomEntryFromList } from '~/utils';
 
 export function AdminPage() {
   const { t } = useTranslation();
   const { user } = useAuthContext();
 
-  const randomWisewordIndex = Math.floor(Math.random() * WISEWORDS.length);
-  const WISEWORD = WISEWORDS[randomWisewordIndex];
+  const WISEWORD = getRandomEntryFromList(WISEWORDS) as string;
 
   const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
 

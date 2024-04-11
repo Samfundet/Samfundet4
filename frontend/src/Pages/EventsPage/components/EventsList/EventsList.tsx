@@ -131,8 +131,8 @@ export function EventsList({ events }: EventsListProps) {
 
         {/* TODO translate */}
         <div className={styles.button_row}>
-          {getButton('Kort', 'material-symbols:grid-view-rounded', () => setTableView(false), !tableView)}
-          {getButton('Tabell', 'material-symbols:view-list', () => setTableView(true), tableView)}
+          {getButton(t(KEY.common_card), 'material-symbols:grid-view-rounded', () => setTableView(false), !tableView)}
+          {getButton(t(KEY.common_table), 'material-symbols:view-list', () => setTableView(true), tableView)}
         </div>
       </div>
 
