@@ -5,6 +5,7 @@ from guardian import models as guardian_models
 from django.urls import reverse
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
@@ -25,6 +26,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -42,6 +44,7 @@ from .models.general import (
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -77,7 +80,20 @@ admin.site.register(Occupiedtimeslot)
 
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
-    sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
+    sortable_by = [
+        'id',
+        'username',
+        'email',
+        'phone_number',
+        'first_name',
+        'last_name',
+        'is_active',
+        'is_staff',
+        'is_superuser',
+        'last_login',
+        'date_joined',
+        'updated_at',
+    ]
     list_display = [
         'id',
         'username',
@@ -99,6 +115,33 @@ class UserAdmin(CustomGuardedUserAdmin):
     def group_memberships(self, obj: User) -> int:
         n: int = obj.groups.all().count()
         return n
+
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        (
+            _('Permissions'),
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                ),
+            },
+        ),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+            },
+        ),
+    )
 
 
 @admin.register(Group)
@@ -640,6 +683,30 @@ class InterviewAdmin(CustomBaseAdmin):
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_admissions']
     search_fields = ['recruitment']
+
+    
+@admin.register(Merch)
+class MerchAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'base_price']
+    # list_filter = []
+    list_display = ['name_nb', 'base_price']
+    search_fields = ['name_nb']
+    # filter_horizontal = []
+    list_display_links = ['name_nb']
+    # autocomplete_fields = []
+
+
+@admin.register(MerchVariation)
+class MerchVariationAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'specification']
+    # list_filter = []
+    list_display = ['id', '__str__', 'specification']
+    search_fields = ['id', 'specification']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
 
 
 @admin.register(UserFeedbackModel)
