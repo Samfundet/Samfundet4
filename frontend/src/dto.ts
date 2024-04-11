@@ -417,3 +417,12 @@ export type SultenReservationDayDto = {
   closing_time: string;
   tables: TableDto[];
 };
+
+export type RegistrationDto = {
+  username: string;
+  email: string;
+  phone_number: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+};
