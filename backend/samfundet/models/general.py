@@ -99,6 +99,24 @@ class Campus(FullCleanSaveMixin):
         return f'{self.name_nb} ({self.abbreviation})'
 
 
+class PermissionGroup(CustomBaseModel):
+    # The name of the permission group. i.e. 'MG-gjengleder', 'FS-arrangementansvarlig', 'MG-WEB-funksjonær'
+    name = models.CharField(max_length=64, blank=True, unique=True)
+
+    # The owner group of this permission group. This allows for a hierarchy of permission groups.
+    owner = models.ForeignKey(permissions.Permission, on_delete=models.CASCADE, blank=True, null=True)
+
+    # This is a list of all permissions that may assign this permission group to users. Default this will just be the parrent group but there may be exceptions.
+    admin_perms = models.ManyToManyField(permissions.Permission, related_name='owner_perms', blank=True)
+
+    class Meta:
+        verbose_name = 'PermissionGroup'
+        verbose_name_plural = 'PermissionGroups'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -124,13 +142,13 @@ class User(AbstractUser):
         null=False,
         unique=True,
     )
-
     campus = models.ForeignKey(
         Campus,
         blank=True,
         null=True,
         on_delete=models.PROTECT,
     )
+    permission_groups = models.ManyToManyField(PermissionGroup, blank=True)
 
     class Meta:
         permissions = [
