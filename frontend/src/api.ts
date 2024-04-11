@@ -22,6 +22,7 @@ import {
   RecruitmentAdmissionDto,
   RecruitmentDto,
   RecruitmentPositionDto,
+  RegistrationDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -57,16 +58,8 @@ export async function logout(): Promise<AxiosResponse> {
   return response;
 }
 
-export async function register(
-  username: string,
-  email: string,
-  phone_number: string,
-  firstname: string,
-  lastname: string,
-  password: string,
-): Promise<number> {
+export async function register(data: RegistrationDto): Promise<number> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__register;
-  const data = { username, email, phone_number, firstname, lastname, password };
   const response = await axios.post(url, data, { withCredentials: true });
 
   // Django rotates csrftoken after login, set new token received.

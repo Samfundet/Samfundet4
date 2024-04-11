@@ -43,6 +43,7 @@ import {
   RecruitmentPositionFormAdminPage,
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
+  SultenReservationAdminPage,
   SultenMenuAdminPage,
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
@@ -220,7 +221,6 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_gang_position_overview}
           element={<ProtectedRoute perms={[]} Page={RecruitmentGangAdminPage} />}
         />
-
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_create}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
@@ -232,6 +232,11 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_edit}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+        />
+        {/* Sulten Admin */}
+        <Route
+          path={ROUTES.frontend.admin_sulten_reservations}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}
         />
         {/* 
         Info pages
