@@ -25,6 +25,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -42,6 +43,7 @@ from .models.general import (
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -524,6 +526,29 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = '__all__'
+
+
+# =============================== #
+#              Merch              #
+# =============================== #
+
+
+class MerchVariationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MerchVariation
+        fields = '__all__'
+
+
+class MerchSerializer(serializers.ModelSerializer):
+    variations = MerchVariationSerializer(many=True, read_only=True)
+    stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Merch
+        fields = '__all__'
+
+    def get_stock(self, obj: Merch) -> int:
+        return obj.in_stock()
 
 
 # =============================== #
