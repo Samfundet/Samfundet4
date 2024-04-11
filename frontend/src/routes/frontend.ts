@@ -82,4 +82,5 @@ export const ROUTES_FRONTEND = {
   api_testing: '/api-testing/',
   components: '/components/',
   route_overview: '/route/overview/',
+  not_found: '/not_found',
 } as const;
