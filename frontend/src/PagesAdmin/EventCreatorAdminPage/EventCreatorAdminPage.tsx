@@ -68,8 +68,8 @@ export function EventCreatorAdminPage() {
             <SamfFormField field="description_short_en" type="text" label="Kort beskrivelse (engelsk)" />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)" />
-            <SamfFormField field="description_long_en" type="text-long" label="Lang beskrivelse (engelsk)" />
+            <SamfFormField field="description_long_nb" type="textLong" label="Lang beskrivelse (norsk)" />
+            <SamfFormField field="description_long_en" type="textLong" label="Lang beskrivelse (engelsk)" />
           </div>
         </>
       ),
@@ -82,7 +82,7 @@ export function EventCreatorAdminPage() {
       template: (
         <>
           <div className={styles.input_row}>
-            <SamfFormField field="start_dt" type="datetime" label="Dato & tid" />
+            <SamfFormField field="start_dt" type="dateTime" label="Dato & tid" />
             <SamfFormField field="duration" type="number" label="Varighet (minutter)" />
           </div>
           <div className={styles.input_row}>
@@ -120,7 +120,7 @@ export function EventCreatorAdminPage() {
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
       template: (
-        <SamfFormField field="publish_dt" type="datetime" label={t(KEY.saksdokumentpage_publication_date) ?? ''} />
+        <SamfFormField field="publish_dt" type="dateTime" label={t(KEY.saksdokumentpage_publication_date) ?? ''} />
       ),
     },
   ];
