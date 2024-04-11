@@ -1,5 +1,4 @@
 import { Button, ImageCard } from '~/Components';
-
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
@@ -17,7 +16,7 @@ import { useCustomNavigate, usePrevious } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { Children, EventAgeRestriction } from '~/types';
+import { Children, EventAgeRestrictionValue } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
@@ -42,7 +41,7 @@ export function EventCreatorAdminPage() {
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
   ];
-  const ageLimitOptions: DropDownOption<EventAgeRestriction>[] = [
+  const ageLimitOptions: DropDownOption<EventAgeRestrictionValue>[] = [
     { value: 'none', label: 'Ingen' },
     { value: 'eighteen', label: '18 år' },
     { value: 'twenty', label: '20 år' },
