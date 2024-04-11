@@ -79,8 +79,7 @@ export function SultenMenuItemFormAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
         }),
     ]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (id) {
