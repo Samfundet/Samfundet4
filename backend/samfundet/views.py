@@ -631,6 +631,26 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
         )
         return users_without_interviews
+    
+class RejectedApplicantsView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserForRecruitmentSerializer
+
+    def get_queryset(self) -> QuerySet[User]:
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is None:
+            return User.objects.none()  # Return an empty queryset instead of None
+
+        # Exculde users who have gotten any offers
+        recuiter_status_for_user = Case(
+            When(admissions__recruitment=recruitment, then='admissions__recuiter_status'),
+            default=None,
+            output_field=None,
+        )
+        rejected_users = (
+            User.objects.filter(admissions__recruitment=recruitment).annotate(num_offers=Count(recuiter_status_for_user!=3)).filter(num_offers=0)
+        )
+        return rejected_users
 
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
