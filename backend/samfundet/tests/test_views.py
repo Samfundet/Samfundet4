@@ -12,7 +12,7 @@ from django.contrib.auth.models import Group, Permission
 
 from root.utils import routes, permissions
 
-from samfundet.serializers import UserSerializer
+from samfundet.serializers import UserSerializer, RegisterSerializer
 from samfundet.models.general import (
     User,
     Image,
@@ -43,75 +43,168 @@ def test_csrf(fixture_rest_client: APIClient):
     assert status.is_success(code=response.status_code)
 
 
-def test_login(
-    fixture_rest_client: APIClient,
-    fixture_user: User,
-    fixture_user_pw: str,
-):
-    url = reverse(routes.samfundet__login)
-    data = {'username': fixture_user.username, 'password': fixture_user_pw}
-    response: Response = fixture_rest_client.post(path=url, data=data)
-    assert status.is_success(code=response.status_code)
+class TestUserViews:
+    post_data = {
+        'username': 'username',
+        'email': 'kebab@mail.com',
+        'firstname': 'kebab',
+        'lastname': 'mannen',
+        'phone_number': '48278994',
+        'password': 'jeglikerkebab',
+    }
 
+    def test_login(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_user_pw: str,
+    ):
+        url = reverse(routes.samfundet__login)
+        data = {'username': fixture_user.username, 'password': fixture_user_pw}
+        response: Response = fixture_rest_client.post(path=url, data=data)
+        assert status.is_success(code=response.status_code)
 
-def test_logout(
-    fixture_rest_client: APIClient,
-    fixture_user: User,
-):
-    fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse(routes.samfundet__logout)
-    response: Response = fixture_rest_client.post(path=url)
-    assert status.is_success(code=response.status_code)
+    def test_logout(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__logout)
+        response: Response = fixture_rest_client.post(path=url)
+        assert status.is_success(code=response.status_code)
 
+    def test_get_user(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
 
-def test_get_user(fixture_rest_client: APIClient, fixture_user: User):
-    ### Arrange ###
+        # Give user an arbitrary permission.
+        some_perm = Permission.objects.first()
+        fixture_user.user_permissions.add(some_perm)
+        some_perm_str = UserSerializer._permission_to_str(permission=some_perm)
 
-    # Give user an arbitrary permission.
-    some_perm = Permission.objects.first()
-    fixture_user.user_permissions.add(some_perm)
-    some_perm_str = UserSerializer._permission_to_str(permission=some_perm)
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
 
-    fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse(routes.samfundet__user)
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-    ### Act ###
-    response: Response = fixture_rest_client.get(path=url)
-    data = response.json()
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['username'] == fixture_user.username
+        # All users should have a UserPreference.
+        assert data['user_preference']['id'] == fixture_user.userpreference.id
+        # All users should have a Profile.
+        assert data['profile']['id'] == fixture_user.profile.id
+        # Check permission in list.
+        assert some_perm_str in data['permissions']
 
-    ### Assert ###
-    assert status.is_success(code=response.status_code)
-    assert data['username'] == fixture_user.username
-    # All users should have a UserPreference.
-    assert data['user_preference']['id'] == fixture_user.userpreference.id
-    # All users should have a Profile.
-    assert data['profile']['id'] == fixture_user.profile.id
-    # Check permission in list.
-    assert some_perm_str in data['permissions']
+    def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__users)
 
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
 
-def test_get_users(fixture_rest_client: APIClient, fixture_user: User):
-    ### Arrange ###
-    fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse(routes.samfundet__users)
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
 
-    ### Act ###
-    response: Response = fixture_rest_client.get(path=url)
+    def test_get_groups(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__groups)
 
-    ### Assert ###
-    assert status.is_success(code=response.status_code)
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
 
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
 
-def test_get_groups(fixture_rest_client: APIClient, fixture_user: User):
-    ### Arrange ###
-    fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse(routes.samfundet__groups)
+    def test_register_clean(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        url = reverse(routes.samfundet__register)
 
-    ### Act ###
-    response: Response = fixture_rest_client.get(path=url)
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
 
-    ### Assert ###
-    assert status.is_success(code=response.status_code)
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+
+        ### Check if logged inn ###
+        url = reverse(routes.samfundet__user)
+
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
+
+        # check if user is correct
+        assert status.is_success(code=response.status_code)
+        assert data['username'] == self.post_data['username']
+        assert data['email'] == self.post_data['email']
+        assert data['phone_number'] == self.post_data['phone_number']
+
+    def test_register_missingfields(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        url = reverse(routes.samfundet__register)
+        ### Act ###
+        for field in self.post_data:
+            post_data_copy = self.post_data.copy()
+            post_data_copy.pop(field)
+            response: Response = fixture_rest_client.post(path=url, data=post_data_copy)
+            data = response.json()
+            assert status.is_client_error(code=response.status_code)
+            assert field in data
+            assert 'This field is required.' in data[field]
+
+    def test_register_wrongphonenumber(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        url = reverse(routes.samfundet__register)
+
+        invalidphonenumbers = [
+            '1',
+            '+9932420',
+            'thecakeisalie',
+            '48278994)191',
+            '482789k4',
+            '48278994d',
+        ]
+        ### Act ###
+        post_data_copy = self.post_data.copy()
+        for value in invalidphonenumbers:
+            post_data_copy['phone_number'] = value
+            response: Response = fixture_rest_client.post(path=url, data=post_data_copy)
+            data = response.json()
+            assert status.is_client_error(code=response.status_code)
+            assert 'phone_number' in data
+            assert 'This value does not match the required pattern.' in data['phone_number']
+
+    def test_user_alreadyexists(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        url = reverse(routes.samfundet__register)
+
+        post_data2 = {
+            'username': 'username2',
+            'email': 'kebab2@mail.com',
+            'phone_number': '48278995',
+            'firstname': 'kebab',
+            'lastname': 'mannen',
+            'password': 'jeglikerkebab',
+        }
+
+        ### Assert ###
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
+        assert status.is_success(code=response.status_code)
+
+        unique_fields = ['username', 'email', 'phone_number']
+        # Test for each field
+        for field in unique_fields:
+            post_data2_copy = post_data2.copy()
+            post_data2_copy[field] = self.post_data[field]
+            response: Response = fixture_rest_client.post(path=url, data=post_data2_copy)
+            data = response.json()
+            assert status.is_client_error(code=response.status_code)
+            assert RegisterSerializer.ALREADY_EXISTS_MESSAGE in data[field]
 
 
 class TestInformationPagesView:
