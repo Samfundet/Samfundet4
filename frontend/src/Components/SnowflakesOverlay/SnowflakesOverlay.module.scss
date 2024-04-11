@@ -57,12 +57,8 @@
   .snowflake:nth-of-type(#{$i}) {
     left: #{random(100)} + '%';
     top: calc(-10% - #{random(10)}) + '%';
-    animation-duration:
-      #{10 + random(5)}s,
-      #{2.5 + random(2)}s;
-    animation-delay:
-      #{($i * 0.2) + random(5)} + 's',
-      #{random(4)} + 's';
+    animation-duration: #{10 + random(5)}s, #{2.5 + random(2)}s;
+    animation-delay: #{($i * 0.2) + random(5)} + 's', #{random(4)} + 's';
 
     @keyframes snowflakes-shake-#{$i} {
       0%,
@@ -73,8 +69,6 @@
         transform: translateX(#{40 + random(40)}px);
       }
     }
-    animation-name:
-      snowflakes-fall,
-      snowflakes-shake-#{$i};
+    animation-name: snowflakes-fall, snowflakes-shake-#{$i};
   }
 }

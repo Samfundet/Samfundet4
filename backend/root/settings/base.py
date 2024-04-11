@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+from __future__ import annotations
+
 import os
 import sys
 from pathlib import Path
@@ -79,7 +81,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # Imported apps.
     'django_extensions',
     'corsheaders',
@@ -112,16 +113,14 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
-        'OPTIONS':
-            {
-                'context_processors':
-                    [
-                        'django.template.context_processors.debug',
-                        'django.template.context_processors.request',
-                        'django.contrib.auth.context_processors.auth',
-                        'django.contrib.messages.context_processors.messages',
-                    ],
-            },
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
     },
 ]
 
@@ -171,13 +170,12 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.authentication.SessionAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES':
-        [
-            # 'rest_framework.permissions.IsAuthenticated',
-            # 'rest_framework.permissions.DjangoObjectPermissions',
-            'root.custom_classes.permission_classes.SuperUserPermission',
-            # 'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
-        ]
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.DjangoObjectPermissions',
+        'root.custom_classes.permission_classes.SuperUserPermission',
+        # 'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
+    ],
 }
 ### End: DRF ###
 
@@ -216,97 +214,91 @@ SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters':
-        {
-            'json': {
-                # Need to be a callable in order to use init parameters.
-                '()': lambda: JsonFormatter(indent=4 if ENV == Environment.DEV else None),
-            },
-            'file': {
-                'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-            },
+    'formatters': {
+        'json': {
+            # Need to be a callable in order to use init parameters.
+            '()': lambda: JsonFormatter(indent=4 if ENV == Environment.DEV else None),
         },
-    'filters':
-        {
-            'request_context_filter': {
-                '()': RequestContextFilter,
-            },
-            'require_debug_false': {
-                '()': 'django.utils.log.RequireDebugFalse',
-            },
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue',
-            },
+        'file': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
         },
-    'handlers':
-        {
-            'null': {
-                'class': 'logging.NullHandler',
-            },
-            'console': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'filters': ['require_debug_true'],
-            },
-            'file': {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'formatter': 'json',
-                'filename': LOGFILENAME,
-                'filters': ['request_context_filter'],
-            },
-            'mail_admins': {
-                'level': 'ERROR',
-                'class': 'django.utils.log.AdminEmailHandler',
-                'filters': ['require_debug_false'],
-            },
-            'humio':
-                {
-                    'level': 'DEBUG' if ENV == Environment.DEV else 'INFO',
-                    'formatter': 'json',
-                    'class': 'logging.StreamHandler',
-                    'stream': sys.stdout,
-                    'filters': ['request_context_filter'],
-                },
-            'sql_file':
-                {
-                    'level': 'DEBUG',
-                    'class': 'logging.FileHandler',
-                    'mode': 'w',
-                    'filename': SQL_LOG_FILE,  # Added to '.gitignore'.
-                    'filters': ['require_debug_true'],
-                },
+    },
+    'filters': {
+        'request_context_filter': {
+            '()': RequestContextFilter,
         },
-    'loggers':
-        {
-            # Default logger.
-            '': {
-                'handlers': ['humio', 'file'],
-                'propagate': True,
-                'level': 'INFO',
-            },
-            # Catch all from django unless explicitly prevented propagation.
-            'django': {
-                'handlers': ['console', 'mail_admins'],
-                'propagate': True,
-                'level': 'DEBUG',
-            },
-            'django.db.backends': {
-                'handlers': ['sql_file'],
-                'propagate': False,  # Don't pass up to 'django'.
-                'level': 'DEBUG',
-            },
-            'django.server': {
-                'handlers': ['console'],
-                'propagate': False,  # Don't pass up to 'django'.
-                'level': 'INFO',
-            },
-            'django.utils.autoreload': {
-                'handlers': ['console'],
-                'propagate': False,  # Don't pass up to 'django'.
-                'level': 'INFO',
-            },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
         },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'filters': ['require_debug_true'],
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'json',
+            'filename': LOGFILENAME,
+            'filters': ['request_context_filter'],
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+        },
+        'humio': {
+            'level': 'DEBUG' if ENV == Environment.DEV else 'INFO',
+            'formatter': 'json',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'filters': ['request_context_filter'],
+        },
+        'sql_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'mode': 'w',
+            'filename': SQL_LOG_FILE,  # Added to '.gitignore'.
+            'filters': ['require_debug_true'],
+        },
+    },
+    'loggers': {
+        # Default logger.
+        '': {
+            'handlers': ['humio', 'file'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        # Catch all from django unless explicitly prevented propagation.
+        'django': {
+            'handlers': ['console', 'mail_admins'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'django.db.backends': {
+            'handlers': ['sql_file'],
+            'propagate': False,  # Don't pass up to 'django'.
+            'level': 'DEBUG',
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'propagate': False,  # Don't pass up to 'django'.
+            'level': 'INFO',
+        },
+        'django.utils.autoreload': {
+            'handlers': ['console'],
+            'propagate': False,  # Don't pass up to 'django'.
+            'level': 'INFO',
+        },
+    },
 }
 
 # Quick fix for avoiding concurrency issues related to db access
