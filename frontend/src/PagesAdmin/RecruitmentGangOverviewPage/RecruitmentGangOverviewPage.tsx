@@ -7,7 +7,6 @@ import { getGangs } from '~/api';
 import { GangDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { useCustomNavigate } from '~/hooks';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -16,7 +15,6 @@ export function RecruitmentGangOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
   const [allGangs, setAllGangs] = useState<GangDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -42,15 +40,6 @@ export function RecruitmentGangOverviewPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>
-      <Button
-        theme="success"
-        rounded={true}
-        onClick={() => {
-          navigate({ url: ROUTES.frontend.admin_recruitment });
-        }}
-      >
-        {t(KEY.common_go_back)}
-      </Button>
       <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.common_overview)}
       </Button>
@@ -64,7 +53,7 @@ export function RecruitmentGangOverviewPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner} showBackButton={true}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );

@@ -66,37 +66,23 @@ export function RecruitmentGangAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <>
-      <Button
-        theme="success"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-          urlParams: {
-            recruitmentId: recruitmentId,
-          },
-        })}
-      >
-        {t(KEY.common_go_back)}
-      </Button>
-      <Button
-        theme="success"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
-          urlParams: {
-            gangId: gangId,
-            recruitmentId: recruitmentId,
-          },
-        })}
-      >
-        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
-      </Button>
-    </>
+    <Button
+      theme="success"
+      rounded={true}
+      link={reverse({
+        pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
+        urlParams: {
+          gangId: gangId,
+          recruitmentId: recruitmentId,
+        },
+      })}
+    >
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
+    </Button>
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner} showBackButton={true}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );

@@ -1,5 +1,4 @@
 import { Button, ImageCard } from '~/Components';
-
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
@@ -289,7 +288,7 @@ export function EventCreatorAdminPage() {
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
   return (
-    <AdminPageLayout title={title}>
+    <AdminPageLayout title={title} header={true} showBackButton={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}
