@@ -251,7 +251,6 @@ class CustomBaseModel(FullCleanSaveMixin):
 
 
 class FullCleanSerializer(serializers.ModelSerializer):
-
     def validate(self, attrs: dict) -> dict:
         instance: FullCleanSaveMixin = self.Meta.model(**attrs)
         instance.full_clean()

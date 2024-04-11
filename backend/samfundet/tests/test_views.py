@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from guardian.shortcuts import assign_perm
 
 from rest_framework import status
-
+from datetime import date
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import Group, Permission
@@ -21,6 +21,9 @@ from samfundet.models.general import (
     KeyValue,
     TextItem,
     InformationPage,
+    Venue,
+    Reservation,
+    Table,
 )
 from samfundet.models.recruitment import (
     Recruitment,
@@ -921,7 +924,8 @@ def test_update_admission(
     assert response.data['admission_text'] == post_data2['admission_text']
     # Assert the returned data based on the logic in the view
 
-    def test_reservation_clean(
+
+def test_reservation_clean(
     fixture_rest_client: APIClient,
     fixture_venue: Venue,
     fixture_table: Table,
@@ -962,7 +966,7 @@ def test_reservation_end_before_start(
         'venue': fixture_venue.id,
         'guest_count': 3,
         'end_time': '09:00',
-        'start_time': '10:00'
+        'start_time': '10:00',
     }
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST

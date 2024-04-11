@@ -430,7 +430,6 @@ class Reservation(FullCleanSaveMixin):
         super().save(*args, **kwargs)
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
-
         super().clean()
 
         errors: dict[str, ValidationError] = {}
@@ -453,13 +452,16 @@ class Reservation(FullCleanSaveMixin):
         start_time: time,
         end_time: time,
     ) -> bool:
-        return Reservation.find_available_table(
-            venue,
-            guest_count,
-            reservation_date,
-            start_time,
-            end_time,
-        ) is not None
+        return (
+            Reservation.find_available_table(
+                venue,
+                guest_count,
+                reservation_date,
+                start_time,
+                end_time,
+            )
+            is not None
+        )
 
     def find_available_table(
         venue: int,
@@ -473,8 +475,8 @@ class Reservation(FullCleanSaveMixin):
             return None
 
         reserved_tables = Reservation.objects.filter(
-            Q(venue=venue, reservation_date=reservation_date, table__in=tables) &
-            (Q(start_time__lte=start_time, end_time__gt=start_time) | Q(start_time__lt=end_time, end_time__gte=end_time))
+            Q(venue=venue, reservation_date=reservation_date, table__in=tables)
+            & (Q(start_time__lte=start_time, end_time__gt=start_time) | Q(start_time__lt=end_time, end_time__gte=end_time))
         )
 
         return tables.exclude(id__in=reserved_tables.values_list('table_id', flat=True)).order_by('seating').first()
