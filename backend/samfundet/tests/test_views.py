@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from datetime import date
 
 from guardian.shortcuts import assign_perm
 
 from rest_framework import status
-from datetime import date
+
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import Group, Permission
@@ -17,13 +18,13 @@ from samfundet.models.general import (
     User,
     Image,
     Merch,
+    Table,
+    Venue,
     BlogPost,
     KeyValue,
     TextItem,
-    InformationPage,
-    Venue,
     Reservation,
-    Table,
+    InformationPage,
 )
 from samfundet.models.recruitment import (
     Recruitment,

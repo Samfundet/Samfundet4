@@ -9,15 +9,13 @@ import secrets
 from typing import TYPE_CHECKING
 from datetime import date, time, datetime, timedelta
 from collections import defaultdict
-from django.utils import timezone
-from datetime import datetime, date, time, timedelta
-from django.db.models import Q
 
 from guardian.shortcuts import assign_perm
 from notifications.base.models import AbstractNotification
 
 from django.db import models
 from django.utils import timezone
+from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import Group, AbstractUser
@@ -432,7 +430,7 @@ class Reservation(FullCleanSaveMixin):
     def clean(self, *args: tuple, **kwargs: dict) -> None:
         super().clean()
 
-        errors: dict[str, ValidationError] = {}
+        errors: dict[str, ValidationError] = defaultdict()
 
         if not self.end_time:
             self.end_time = (datetime.combine(self.reservation_date, self.start_time) + timedelta(hours=1)).time()
@@ -452,6 +450,9 @@ class Reservation(FullCleanSaveMixin):
         start_time: time,
         end_time: time,
     ) -> bool:
+        """
+        Checks if time has available tables
+        """
         return (
             Reservation.find_available_table(
                 venue,

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from datetime import date, time
-from samfundet.models.general import Table, Reservation, Venue
+
+from samfundet.models.general import Table, Venue, Reservation
 
 
 class TestReservation:

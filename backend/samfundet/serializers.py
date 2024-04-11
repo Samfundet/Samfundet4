@@ -15,7 +15,7 @@ from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
 
 from root.constants import PHONE_NUMBER_REGEX
-from root.utils.mixins import CustomBaseSerializer, FullCleanSerializer
+from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
 
 from .models.event import Event, EventGroup, EventCustomTicket
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
