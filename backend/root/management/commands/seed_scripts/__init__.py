@@ -1,21 +1,24 @@
+from __future__ import annotations
+
 from . import (
-    users,
-    images,
-    gangs,
-    campus,
-    information_pages,
-    oganizations,
-    venues,
-    events,
-    billig,
     menu,
+    gangs,
+    merch,
+    samf3,
+    users,
+    billig,
+    campus,
+    events,
+    images,
+    venues,
+    example,
+    blogposts,
     documents,
     textitems,
-    example,
-    samf3,
     recruitment,
+    oganizations,
+    information_pages,
     recruitment_position,
-    blogposts,
     recruitment_admissions,
 )
 
@@ -40,10 +43,10 @@ SEED_SCRIPTS = [
     ('textitems', textitems.seed),
     ('blogposts', blogposts.seed),
     ('organization', oganizations.seed),
+    ('merch', merch.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
     ('recruitment_admissions', recruitment_admissions.seed),
-
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]

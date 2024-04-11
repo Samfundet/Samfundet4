@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from datetime import date, time
 from samfundet.models.general import Table, Reservation, Venue
 
 
-class TestReservation:
 
+class TestReservation:
     def test_check_fetches_times(
         self,
         fixture_venue: Venue,

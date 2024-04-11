@@ -55,6 +55,7 @@ export const COLORS = {
   black_t50: 'rgba(0, 0, 0, 0.5)',
   black_t25: 'rgba(0, 0, 0, 0.25)',
   black_t10: 'rgba(0, 0, 0, 0.1)',
+  transparent: 'rgba(0, 0, 0, 0)',
 
   // Theme colors:
   theme_light_bg: '#f5f5f5',
@@ -85,8 +86,16 @@ export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'f
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 /** Event types */
-export type EventAgeRestriction = 'none' | 'eighteen' | 'twenty' | 'mixed';
 export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
+
+export const EventAgeRestriction = {
+  NONE: 'none',
+  EIGHTEEN: 'eighteen',
+  TWENTY: 'twenty',
+  MIXED: 'mixed',
+} as const;
+
+export type EventAgeRestrictionValue = (typeof EventAgeRestriction)[keyof typeof EventAgeRestriction];
 
 export const EventTicketType = {
   FREE: 'free',

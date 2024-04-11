@@ -1,4 +1,14 @@
+from __future__ import annotations
+
+import os
+
+from root.constants import Environment
+
 from samfundet.models.general import User
+
+# End: imports -----------------------------------------------------
+
+ENV = os.environ.get('ENV', Environment.DEV)
 
 TEST_USERS = [
     ('amaliejvik', 'Amalie', 'Johansen Vik'),
@@ -23,21 +33,25 @@ TEST_USERS = [
 ]
 
 
-def create_test_users(username, firstname, lastname):
+def create_test_users(*, username, firstname, lastname):
     User.objects.create_user(
         username=username,
         email=f'{username}@mg-web.no',
         password='passord',  # nosec
         first_name=firstname,
         last_name=lastname,
+        is_superuser=(ENV == Environment.DEV),
     )
 
 
 def seed():
-    User.objects.filter(is_superuser=False).delete()
+    anonomyous_user = User.get_anonymous()
+    User.objects.filter(is_superuser=False).exclude(id=anonomyous_user.id).delete()
     yield 0, 'Deleted existing non-superusers'
-
+    existing_superusers = User.objects.filter(is_superuser=True).values_list('username', flat=True)
     for i, user in enumerate(TEST_USERS):
-        create_test_users(user[0], user[1], user[2])
+        if user[0] not in existing_superusers:
+            create_test_users(username=user[0], firstname=user[1], lastname=user[2])
         yield i / len(TEST_USERS), 'Creating test users'
+
     yield 100, f'Created {len(TEST_USERS)} test users'
