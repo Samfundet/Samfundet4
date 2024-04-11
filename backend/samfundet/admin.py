@@ -684,7 +684,7 @@ class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_admissions']
     search_fields = ['recruitment']
 
-    
+
 @admin.register(Merch)
 class MerchAdmin(CustomGuardedModelAdmin):
     # ordering = []
