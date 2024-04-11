@@ -824,7 +824,7 @@ class UserFeedbackView(CreateAPIView):
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
 
 
-class PurchaseFeedbackView(APIView):
+class PurchaseFeedbackView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     model = PurchaseFeedbackModel
     serializer_class = PurchaseFeedbackModel
@@ -835,11 +835,14 @@ class PurchaseFeedbackView(APIView):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
 
-        purchase_model = PurchaseFeedbackModel.objects.create(
-            user=request.user,
-            title=data.get('title'),
-            event=request.event,
-        )
+        try:
+            purchase_model = PurchaseFeedbackModel.objects.create(
+                user=request.user,
+                title=data.get('title'),
+                event=request.event,
+            )
+        except AttributeError:
+            return Response({'error': 'Event not found'})
 
         alternatives = data.get('alternatives', {})
         for alternative, selected in alternatives.items():
