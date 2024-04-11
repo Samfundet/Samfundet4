@@ -270,6 +270,13 @@ export function lowerCapitalize(s: string): string {
 }
 
 /**
+ * Method for fetching Random entry from list
+ */
+export function getRandomEntryFromList(entries: unknown[]): unknown {
+  return entries[Math.floor(Math.random() * entries.length)];
+}
+
+/**
  * Fetches an datetime object from time
  * Example: '13:00' becomes a dateobject with time 13:00:00
  */
