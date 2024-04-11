@@ -70,7 +70,7 @@ export function RecruitmentPositionOverviewPage() {
     { content: t(KEY.recruitment_interview_location), sortable: true },
     { content: t(KEY.recruitment_recruiter_priority), sortable: true },
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
-    { content: '', sortable: false },
+    { content: t(KEY.recruitment_interview_notes), sortable: false },
   ];
   const data = recruitmentApplicants.map(function (admission) {
     return [
