@@ -10,13 +10,13 @@ export type DropDownOption<T> = {
 
 export type DropdownProps<T> = {
   className?: string;
-  defaultValue?: DropDownOption<T>;
-  initialValue?: T;
-  options?: DropDownOption<T>[];
+  defaultValue?: DropDownOption<T>; // Why is this diffrent form initialValue
+  initialValue?: T; // Why is this diffrent form defaultValue
+  options?: DropDownOption<T>[]; // Why can this be null
   label?: string | ReactElement;
   disabled?: boolean;
   error?: boolean;
-  onChange?: (value?: T) => void;
+  onChange?: (value?: T) => void; // why is the parameter optional
 };
 
 export function Dropdown<T>({
