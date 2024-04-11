@@ -11,11 +11,11 @@ import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SultenMenuAdminPage.module.scss';
-import { useNavigate } from 'react-router-dom';
 import { reverse } from '~/named-urls';
+import { useCustomNavigate } from '~/hooks';
 
 export function SultenMenuAdminPage() {
-  const navigate = useNavigate();
+  const navigate = useCustomNavigate();
   const [menuItems, setMenuItems] = useState<MenuItemDto[]>([]);
   const [menus, setMenus] = useState<MenuDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -63,12 +63,12 @@ export function SultenMenuAdminPage() {
         content: (
           <CrudButtons
             onEdit={() => {
-              navigate(
-                reverse({
+              navigate({
+                url: reverse({
                   pattern: ROUTES.frontend.admin_sulten_menuitem_edit,
                   urlParams: { id: menuItem.id },
                 }),
-              );
+              });
             }}
           />
         ),
