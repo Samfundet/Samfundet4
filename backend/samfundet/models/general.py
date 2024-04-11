@@ -443,6 +443,7 @@ class Reservation(FullCleanSaveMixin):
 
         raise ValidationError(errors)
 
+    @staticmethod
     def check_time(
         venue: int,
         guest_count: int,
@@ -450,9 +451,7 @@ class Reservation(FullCleanSaveMixin):
         start_time: time,
         end_time: time,
     ) -> bool:
-        """
-        Checks if time has available tables
-        """
+        """Checks if time has available tables"""
         return (
             Reservation.find_available_table(
                 venue,
@@ -464,6 +463,7 @@ class Reservation(FullCleanSaveMixin):
             is not None
         )
 
+    @staticmethod
     def find_available_table(
         venue: int,
         guest_count: int,
