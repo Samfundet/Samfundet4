@@ -470,7 +470,7 @@ class Reservation(FullCleanSaveMixin):
         reservation_date: date,
         start_time: time,
         end_time: time,
-    ) -> Table:
+    ) -> Table | None:
         tables = Table.objects.filter(venue=venue, seating__gte=guest_count)
         if tables.count() == 0:
             return None
