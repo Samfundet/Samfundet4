@@ -728,7 +728,7 @@ export async function putRecruitmentAdmissionInterview(
 // ############################################################
 
 export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promise<PurchaseFeedbackDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__purchase_feedback; 
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__purchase_feedback;
   const response = await axios.post<PurchaseFeedbackDto>(url, feedback, { withCredentials: true });
   return response.data;
 }
