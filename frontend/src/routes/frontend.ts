@@ -20,7 +20,7 @@ export const ROUTES_FRONTEND = {
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
   contact: '/contact',
   // Purchase callback:
-  purchase_callback: '/callback/:id',
+  purchase_callback: '/callback/:eventId',
 
   // ==================== //
   //        Sulten        //

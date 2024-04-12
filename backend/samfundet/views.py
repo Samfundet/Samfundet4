@@ -75,11 +75,11 @@ from .serializers import (
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
+    PurchaseFeedbackSerializer,
 )
 from .models.event import (
     Event,
     EventGroup,
-    PurchaseFeedbackModel,
     PurchaseFeedbackQuestion,
     PurchaseFeedbackAlternative,
 )
@@ -826,25 +826,15 @@ class UserFeedbackView(CreateAPIView):
 
 class PurchaseFeedbackView(CreateAPIView):
     permission_classes = [IsAuthenticated]
-    model = PurchaseFeedbackModel
-    serializer_class = PurchaseFeedbackModel
+    serializer_class = PurchaseFeedbackSerializer
 
     def post(self, request: Request) -> Response:
-        data = request.data
-
-        serializer = self.get_serializer(data=data)
+        request.data['event'] = request.data.pop('eventId')
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        purchase_model = serializer.save(user=request.user)
 
-        try:
-            purchase_model = PurchaseFeedbackModel.objects.create(
-                user=request.user,
-                title=data.get('title'),
-                event=request.event,
-            )
-        except AttributeError:
-            return Response({'error': 'Event not found'})
-
-        alternatives = data.get('alternatives', {})
+        alternatives = request.data.get('alternatives', {})
         for alternative, selected in alternatives.items():
             PurchaseFeedbackAlternative.objects.create(
                 alternative=alternative,
@@ -852,7 +842,7 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
 
-        questions = data.get('questions', {})
+        questions = request.data.get('questions', {})
         for question, answer in questions.items():
             PurchaseFeedbackQuestion.objects.create(
                 question=question,

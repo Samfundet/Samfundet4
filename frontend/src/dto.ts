@@ -409,6 +409,7 @@ export type RecruitmentAdmissionDto = {
 // ############################################################
 
 export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
   eventId: number;
   title: string;
   responses: Record<string, string>;

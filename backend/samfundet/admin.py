@@ -14,7 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
 from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
 
-from .models.event import Event, EventGroup, EventRegistration
+from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
     Tag,
     Gang,
@@ -701,6 +701,11 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
 class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
+
+@admin.register(PurchaseFeedbackModel)
+class PurchaseFeedbackModel(CustomGuardedModelAdmin):
+    sortable_by = ['title']
+    list_display = ['user', 'title']
 
 
 ### End: Our models ###

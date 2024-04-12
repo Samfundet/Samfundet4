@@ -304,22 +304,37 @@ class Event(CustomBaseModel):
         return False
 
 
-class PurchaseFeedbackModel(CustomBaseModel):
-    class Meta:
-        verbose_name = 'PurchaseFeedback'
-
+class PurchaseFeedbackModel(models.Model):
     title = models.CharField(max_length=255, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'PurchaseFeedback'
 
-class PurchaseFeedbackAlternative(CustomBaseModel):
+    def __str__(self):
+        return self.title
+
+
+class PurchaseFeedbackAlternative(models.Model):
     alternative = models.CharField(max_length=255, blank=True)
-    selected = models.BooleanField()
+    selected = models.CharField(max_length=255)
     form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['form', 'alternative']
+
+    def __str__(self):
+        return f"{self.alternative}: {self.selected}"
 
 
 class PurchaseFeedbackQuestion(CustomBaseModel):
     question = models.CharField(max_length=255, blank=True)
-    answer = models.CharField(max_length=255, blank=True)
+    answer = models.CharField(max_length=255, blank=True)  # TODO: Change into BoolField When SamfForm is updated.
     form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['form', 'question']
+
+    def __str__(self):
+        return f"{self.question}: {self.answer}"

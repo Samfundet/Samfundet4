@@ -1,25 +1,22 @@
 import { t } from 'i18next';
+import { useParams } from 'react-router-dom';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { postPurchaseFeedback } from '~/api';
-import { PurchaseFeedbackDto, PurchaseFeedbackFormDto } from '~/dto';
+import { PurchaseFeedbackDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './PurchaseFeedbackform.module.scss';
-import { useParams } from 'react-router-dom';
-
 
 type PurchaseFeedbackFormProps = {
   title: string;
   alternatives: string[];
   questions: string[];
-}
+};
 
 export function PurchaseFeedbackForm({ title, questions, alternatives }: PurchaseFeedbackFormProps) {
-  //TODO: ensure information submitted is correct
+  const { eventId } = useParams();
 
   function handleSubmit(formData: Record<string, string>) {
-
-    const { eventId } = useParams();
     const questionResponses: Record<string, string> = {};
     const alternativesSelected: Record<string, string> = {};
 
