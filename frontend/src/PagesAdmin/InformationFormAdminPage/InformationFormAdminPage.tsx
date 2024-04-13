@@ -1,9 +1,8 @@
-import { Icon } from '@iconify/react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
@@ -14,6 +13,8 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './InformationFormAdminPage.module.scss';
 import { lowerCapitalize } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { reverse } from '~/named-urls';
 
 export function InformationFormAdminPage() {
   const { t } = useTranslation();
@@ -56,15 +57,6 @@ export function InformationFormAdminPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slugField]);
-
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
 
   // Handles changes of text area.
   function handleTextAreaChange(field: string) {
@@ -125,31 +117,26 @@ export function InformationFormAdminPage() {
   const title_field = languageTab.key === 'nb' ? 'title_nb' : 'title_en';
   const title_value = languageTab.key === 'nb' ? infoPage.title_nb : infoPage.title_en;
 
+  const title =
+    (slugField ? t(KEY.common_edit) : lowerCapitalize(t(KEY.common_create))) + ' ' + t(KEY.information_page_short);
+
+  const header = (
+    <div className={styles.tab_container}>
+      <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} compact={true} />
+    </div>
+  );
+
+  const backendUrl = slugField
+    ? reverse({
+        pattern: ROUTES.backend.admin__samfundet_informationpage_change,
+        urlParams: {
+          objectId: slugField,
+        },
+      })
+    : ROUTES.backend.admin__samfundet_informationpage_add;
+
   return (
-    <div className={styles.wrapper}>
-      {/* Header tools */}
-      <div className={styles.header_container}>
-        <div className={styles.logo_container}>
-          {slugField ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
-        </div>
-        <Button
-          rounded={true}
-          theme="white"
-          onClick={() => {
-            if (window.confirm(`${t(KEY.admin_information_confirm_cancel)}`)) {
-              navigate({ url: ROUTES.frontend.admin_information });
-            }
-          }}
-        >
-          <Icon icon="mdi:close" />
-        </Button>
-      </div>
-
-      {/* Language tab */}
-      <div className={styles.tab_container}>
-        <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} compact={true} />
-      </div>
-
+    <AdminPageLayout title={title} header={header} backendUrl={backendUrl} loading={showSpinner}>
       {/* Edit fields */}
       <div className={styles.edit_container}>
         <div className={styles.left_side}>
@@ -174,6 +161,6 @@ export function InformationFormAdminPage() {
           <div style={{ padding: '0 1em' }}>{t(KEY.common_save)}</div>
         </Button>
       </div>
-    </div>
+    </AdminPageLayout>
   );
 }

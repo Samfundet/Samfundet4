@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Link, SamfundetLogoSpinner } from '~/Components';
+import { Link, Page } from '~/Components';
 import { Child, ExpandableList, ExpandableListContextProvider, Parent } from '~/Components/ExpandableList';
 import {
   getFormattedDate,
@@ -87,17 +87,13 @@ export function SaksdokumenterPage() {
     );
   }
 
-  if (loading) {
-    <SamfundetLogoSpinner />;
-  }
-
   return (
-    <div className={styles.container}>
+    <Page loading={loading} className={styles.container}>
       <ExpandableListContextProvider>
         <ExpandableList header="" depth={3}>
           {categoryMapping()}
         </ExpandableList>
       </ExpandableListContextProvider>
-    </div>
+    </Page>
   );
 }
