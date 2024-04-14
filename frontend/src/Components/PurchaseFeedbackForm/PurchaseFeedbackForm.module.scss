@@ -1,8 +1,7 @@
-.alternative {
-  display: flex; 
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+.checkboxContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 15rem;
 }
 
 .title {
@@ -16,6 +15,6 @@
 .buttonContainer {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 10px; 
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }

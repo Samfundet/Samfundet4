@@ -11,6 +11,6 @@ const Template: ComponentStory<typeof PurchaseFeedbackForm> = (args) => <Purchas
 export const Basic = Template.bind({});
 Basic.args = {
   title: 'tittel',
-  alternatives: ['alt1', 'alt2', 'alt3'],
+  alternatives: ['samfundet.no', 'Venner', 'Plakat'],
   questions: ['hvem?', 'hva?', 'hvor?'],
 };

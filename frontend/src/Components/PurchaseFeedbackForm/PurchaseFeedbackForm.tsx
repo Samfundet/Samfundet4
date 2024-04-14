@@ -46,7 +46,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.buttonContainer}>
           {alternatives.map((alternatives, index) => (
-            <div key={index} className={styles.alternative}>
+            <div key={index} className={styles.checkboxContainer}>
               <p>{alternatives}</p>
               <SamfFormField required={false} field={alternatives} type="checkbox" />
             </div>
