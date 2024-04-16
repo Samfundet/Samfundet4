@@ -66,14 +66,14 @@ export function MembershipPage() {
           <div>
             {useTextItem(TextItem.buy_membership_text_0)}{' '}
             <a className={styles.link} href={ROUTES.frontend.luka}>
-              {t(KEY.common_here)}
+              {t(KEY.common_here) + '.'}
             </a>
           </div>
           <div>
             {useTextItem(TextItem.buy_membership_text_1)}
 
-            <a className={styles.link} href="www.akademika.no/butikker">
-              {t(KEY.common_here)}
+            <a className={styles.link} href={ROUTES.other.akademika}>
+              {t(KEY.common_here) + '.'}
             </a>
           </div>
           <div>{useTextItem(TextItem.buy_membership_text_2)}</div>
