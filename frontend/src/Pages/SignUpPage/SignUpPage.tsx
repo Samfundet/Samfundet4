@@ -6,6 +6,7 @@ import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, register } from '~/api';
+import { RegistrationDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -36,14 +37,7 @@ export function SignUpPage() {
   }, [user, navigate]);
 
   function handleRegistration(formData: SignUpFormData) {
-    register(
-      formData.username,
-      formData.email,
-      formData.phone_number,
-      formData.firstname,
-      formData.lastname,
-      formData.password,
-    )
+    register({ ...formData } as RegistrationDto)
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser().then((user) => {
@@ -77,7 +71,7 @@ export function SignUpPage() {
           ></Alert>
         )}
         <div className={styles.content_container}>
-          <SamfForm onSubmit={handleRegistration} submitText={t(KEY.common_register) ?? ''}>
+          <SamfForm<RegistrationDto> onSubmit={handleRegistration} submitText={t(KEY.common_register) ?? ''}>
             <h1 className={styles.header_text}>{t(KEY.loginpage_register)}</h1>
             <SamfFormField<string, SignUpFormData>
               required={true}

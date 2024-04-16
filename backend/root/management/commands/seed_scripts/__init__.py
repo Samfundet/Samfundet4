@@ -3,6 +3,7 @@ from __future__ import annotations
 from . import (
     menu,
     gangs,
+    merch,
     samf3,
     users,
     billig,
@@ -42,6 +43,7 @@ SEED_SCRIPTS = [
     ('textitems', textitems.seed),
     ('blogposts', blogposts.seed),
     ('organization', oganizations.seed),
+    ('merch', merch.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
     ('recruitment_admissions', recruitment_admissions.seed),

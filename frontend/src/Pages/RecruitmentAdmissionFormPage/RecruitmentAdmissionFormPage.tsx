@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { reverse } from '~/named-urls';
 import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
@@ -19,6 +19,7 @@ import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
 import { useAuthContext } from '~/AuthContext';
+import { STATUS } from '~/http_status_codes';
 
 type FormProps = {
   admission_text: string;
@@ -27,6 +28,7 @@ type FormProps = {
 export function RecruitmentAdmissionFormPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
+  const standardNavigate = useNavigate();
   const { t } = useTranslation();
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
@@ -40,9 +42,17 @@ export function RecruitmentAdmissionFormPage() {
 
   useEffect(() => {
     Promise.allSettled([
-      getRecruitmentPosition(positionID as string).then((res) => {
-        setRecruitmentPosition(res.data);
-      }),
+      getRecruitmentPosition(positionID as string)
+        .then((res) => {
+          setRecruitmentPosition(res.data);
+        })
+        .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            standardNavigate(ROUTES.frontend.not_found);
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+        }),
       getRecruitmentAdmissionForApplicant(positionID as string).then((res) => {
         setRecruitmentAdmission(res.data);
       }),
