@@ -48,15 +48,17 @@ export const KEY = {
   common_to: 'common_to',
   common_price: 'common_price',
   common_buy: 'common_buy',
+  common_time: 'common_time',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
   common_from: 'common_from',
   common_date: 'common_date',
-  common_time: 'common_time',
   common_show: 'common_show',
   common_menu: 'common_menu',
+  common_table: 'common_table',
   common_edit: 'common_edit',
+  common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_next: 'common_next',
@@ -97,6 +99,7 @@ export const KEY = {
   common_overview: 'common_overview',
   common_previous: 'common_previous',
   common_required: 'common_required',
+  common_not_required: 'common_not_required',
   common_festivals: 'common_festivals',
   common_more_info: 'common_more_info',
   common_firstname: 'common_firstname',
@@ -163,6 +166,12 @@ export const KEY = {
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
+
+  // EventPageAge:
+  eighteen: 'eighteen',
+  twenty: 'twenty',
+  none: 'none',
+  mix: 'mix',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
@@ -264,6 +273,11 @@ export const KEY = {
   occupied_help_text: 'occupied_help_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
+
+  // Feedback
+  feedback_type: 'feedback_type',
+  feedback_type_heading: 'feedback_type_heading',
+  feedback_your_feedback: 'feedback_your_feedback',
 
   // No category:
   owner: 'owner',
