@@ -74,22 +74,7 @@ export function RecruitmentPositionOverviewPage() {
   ];
   const data = recruitmentApplicants.map(function (admission) {
     return [
-      {
-        content: (
-          <Link
-            key={admission.user.id}
-            target={'backend'}
-            url={reverse({
-              pattern: ROUTES.backend.admin__samfundet_recruitmentadmission_change,
-              urlParams: {
-                objectId: admission.id,
-              },
-            })}
-          >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
-          </Link>
-        ),
-      },
+      { content: admission.user.first_name + ' ' + admission.user.last_name },
       { content: admission.applicant_priority },
       {
         content: (
