@@ -174,11 +174,14 @@ class User(AbstractUser):
             We have decided that global permissions implies that any obj perm check
         should return `True`. This function is extended to check both.
         """
+        # Fetch all permission groups
+        all_perms = PermissionGroup.objects.all()
+
         # Collaps the permission groups tree to a list of all permissions the user has
         user_perms: set = set(self.permission_groups)
         while True:
             # Fetch all child permission groups and exclude those already in the set
-            new_perms = PermissionGroup.objects.filter(owner__in=user_perms).exclude(id__in=user_perms)
+            new_perms = all_perms.filter(owner__in=user_perms).exclude(id__in=user_perms)
             # If no new permissions are found, break the loop
             if not new_perms:
                 break
