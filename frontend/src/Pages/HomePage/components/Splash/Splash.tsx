@@ -12,15 +12,19 @@ import { COLORS, PAID_TICKET_TYPES } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import styles from '../../HomePage.module.scss';
 
+type Size = 'normal' | 'small';
+
 type SplashProps = {
   events?: EventDto[];
   showInfo?: boolean;
+  showButtons?: boolean;
+  size?: Size;
 };
 
 // Milliseconds between each slide
 const SLIDE_FREQUENCY = 5_000;
 
-export function Splash({ events, showInfo }: SplashProps) {
+export function Splash({ events, showInfo, showButtons = true, size = 'normal' }: SplashProps) {
   const { t } = useTranslation();
   const [isAnimating, setIsAnimating] = useState(false);
   const [isBackwards, setIsBackwards] = useState(false);
@@ -99,7 +103,13 @@ export function Splash({ events, showInfo }: SplashProps) {
   }, [events, startSlideTimer]);
 
   return (
-    <div className={styles.splash_container}>
+    <div
+      className={classNames({
+        [styles.splash_container]: true,
+        [styles.splash_container_small]: size === 'small',
+        [styles.splash_fade]: true,
+      })}
+    >
       {showInfo && (
         <div className={styles.splash_info_wrapper}>
           <div className={styles.splash_info}>
@@ -111,22 +121,27 @@ export function Splash({ events, showInfo }: SplashProps) {
           </div>
         </div>
       )}
-      <IconButton
-        icon="ooui:next-rtl"
-        title="prev"
-        color={COLORS.transparent}
-        height="5em"
-        onClick={onClickPrev}
-        className={styles.splash_change_button}
-      />
-      <IconButton
-        icon="ooui:next-ltr"
-        title="next"
-        height="5em"
-        color={COLORS.transparent}
-        onClick={onClickNext}
-        className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}
-      />
+      {showButtons && (
+        <>
+          <IconButton
+            icon="ooui:next-rtl"
+            title="prev"
+            color={COLORS.transparent}
+            height="5em"
+            onClick={onClickPrev}
+            className={styles.splash_change_button}
+          />
+          <IconButton
+            icon="ooui:next-ltr"
+            title="next"
+            height="5em"
+            color={COLORS.transparent}
+            onClick={onClickNext}
+            className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}
+          />
+        </>
+      )}
+
       <img
         src={imageUrl}
         className={classNames({

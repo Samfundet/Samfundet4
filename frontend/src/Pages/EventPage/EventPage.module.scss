@@ -13,16 +13,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 40em;
-  margin: 0 auto;
+  margin: auto;
   gap: 2em;
 }
 
+.splash_fade {
+  width: 100vw;
+  height: 250px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(black, 0.6), transparent);
+
+  @include for-mobile-only {
+    height: 100px;
+  }
+}
 .text_title {
   font-weight: 700;
-  font-size: 2em;
+  font-size: 3em;
   text-align: center;
-  margin-bottom: 2em;
+  font-family: serif;
 }
 
 .info_list {
@@ -30,31 +42,29 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
-  margin-bottom: 0;
-  padding: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  font-size: 1em;
 }
 
 .text_container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  text-align: left;
 }
 
 .description_short {
-  margin-bottom: 2em;
-}
-
-.text_short {
+  align-items: center;
   font-weight: 700;
+  padding-bottom: 1em;
 }
 
 .description_long {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  max-width: 50em;
+  max-width: 60em;
+  padding-left: 2em;
 }
 
 .spinner {

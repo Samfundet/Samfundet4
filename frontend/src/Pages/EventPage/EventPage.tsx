@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -42,22 +43,17 @@ export function EventPage() {
 
   return (
     <div className={styles.container}>
-      {/* TODO splash should be its own component rather than homepage subcomponent */}
-      <Splash events={event && [event]} />
-      <div className={styles.text_title}>{dbT(event, 'title')}</div>
+      <Splash className={classNames(styles.splash_fade)} events={event && [event]} showButtons={false} size="small" />
       <div className={styles.content_row}>
-        {/* Info table */}
-        <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
-
-        {/* Text */}
+        <div className={styles.text_title}>{dbT(event, 'title')}</div>
+        <div className={styles.description_short}>{dbT(event, 'description_short')}</div>
         <div className={styles.text_container}>
-          <div className={styles.description}>
-            <div className={styles.description_short}>
-              <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
-            </div>
-            <div className={styles.description_long}>
-              <p>{dbT(event, 'description_long')}</p>
-            </div>
+          <div>
+            <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
+            <button>KNAPP🌷</button>
+          </div>
+          <div className={styles.description_long}>
+            <p>{dbT(event, 'description_long')}</p>
           </div>
         </div>
       </div>
