@@ -704,7 +704,7 @@ class UserFeedbackAdmin(CustomGuardedModelAdmin):
 
 
 @admin.register(PurchaseFeedbackModel)
-class PurchaseFeedbackModel(CustomGuardedModelAdmin):
+class PurchaseFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['title']
     list_display = ['user', 'title']
 

@@ -312,7 +312,7 @@ class PurchaseFeedbackModel(models.Model):
     class Meta:
         verbose_name = 'PurchaseFeedback'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
 
 
@@ -324,7 +324,7 @@ class PurchaseFeedbackAlternative(models.Model):
     class Meta:
         unique_together = ['form', 'alternative']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.alternative}: {self.selected}'
 
 
@@ -336,5 +336,5 @@ class PurchaseFeedbackQuestion(CustomBaseModel):
     class Meta:
         unique_together = ['form', 'question']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.question}: {self.answer}'

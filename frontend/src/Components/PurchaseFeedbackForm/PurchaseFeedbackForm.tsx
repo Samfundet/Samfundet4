@@ -5,7 +5,7 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { postPurchaseFeedback } from '~/api';
 import { PurchaseFeedbackDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import styles from './PurchaseFeedbackform.module.scss';
+import styles from './PurchaseFeedbackForm.module.scss';
 
 type PurchaseFeedbackFormProps = {
   title: string;
