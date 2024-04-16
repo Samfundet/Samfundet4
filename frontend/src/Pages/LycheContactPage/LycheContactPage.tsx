@@ -5,8 +5,12 @@ import { TextItem } from '~/constants/TextItems';
 import { useTextItem } from '~/hooks';
 import { ROUTES } from '~/routes';
 import styles from './LycheContactPage.module.scss';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
+import { KEY } from '~/i18n/constants';
+import { t } from 'i18next';
 
 export function LycheContactPage() {
+  UseTitle(t(KEY.common_contact) + ' ' + t(KEY.common_sulten));
   return (
     <>
       <SultenPage>

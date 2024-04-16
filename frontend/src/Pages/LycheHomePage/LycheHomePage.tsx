@@ -12,6 +12,7 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LycheHomePage.module.scss';
 import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function LycheHomePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
@@ -19,6 +20,7 @@ export function LycheHomePage() {
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
   const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
+  UseTitle(t(KEY.common_sulten));
 
   useEffect(() => {
     getVenues()

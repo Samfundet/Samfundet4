@@ -14,6 +14,7 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import { dbT } from '~/utils';
 import styles from './EventsList.module.scss';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 type EventsListProps = {
   events: Record<string, EventDto[]>;
@@ -24,6 +25,7 @@ export function EventsList({ events }: EventsListProps) {
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
   const isDesktop = useDesktop();
+  UseTitle(t(KEY.common_events));
 
   const eventColumns = [
     { content: t(KEY.common_title), sortable: true },

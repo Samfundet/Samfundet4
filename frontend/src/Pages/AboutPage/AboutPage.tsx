@@ -10,9 +10,11 @@ import { ROUTES } from '~/routes';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function AboutPage() {
   const { t } = useTranslation();
+  UseTitle(t(KEY.command_menu_shortcut_about_samfundet));
 
   return (
     <Page>

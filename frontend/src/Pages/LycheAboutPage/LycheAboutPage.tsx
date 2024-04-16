@@ -6,9 +6,11 @@ import styles from './LycheAboutPage.module.scss';
 import { TextItem } from '~/constants';
 import { SultenCard } from '~/Components';
 import { burger, soup, dessert } from '~/assets';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function LycheAboutPage() {
   const { t } = useTranslation();
+  UseTitle(t(KEY.sulten_page_about_us));
 
   const aboutCardWhatIsLyche = (
     <SultenCard
