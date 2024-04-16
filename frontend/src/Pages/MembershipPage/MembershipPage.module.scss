@@ -1,4 +1,5 @@
 @import 'src/mixins';
+@import 'src/constants';
 
 .link {
   color: $red-samf;
@@ -12,6 +13,10 @@
   font-weight: 800;
   font-size: 2em;
   margin-bottom: 0.3em;
+
+  @include theme-dark {
+    color: $theme-dark-color;
+  }
 }
 
 .header2 {
