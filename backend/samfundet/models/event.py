@@ -325,7 +325,7 @@ class PurchaseFeedbackAlternative(models.Model):
         unique_together = ['form', 'alternative']
 
     def __str__(self):
-        return f"{self.alternative}: {self.selected}"
+        return f'{self.alternative}: {self.selected}'
 
 
 class PurchaseFeedbackQuestion(CustomBaseModel):
@@ -337,4 +337,4 @@ class PurchaseFeedbackQuestion(CustomBaseModel):
         unique_together = ['form', 'question']
 
     def __str__(self):
-        return f"{self.question}: {self.answer}"
+        return f'{self.question}: {self.answer}'

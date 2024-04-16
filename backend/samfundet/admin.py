@@ -702,6 +702,7 @@ class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
 
+
 @admin.register(PurchaseFeedbackModel)
 class PurchaseFeedbackModel(CustomGuardedModelAdmin):
     sortable_by = ['title']
