@@ -70,7 +70,7 @@ export function ImageFormAdminPage() {
   const title = id ? lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
         <div className={styles.input_row}>
           <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />

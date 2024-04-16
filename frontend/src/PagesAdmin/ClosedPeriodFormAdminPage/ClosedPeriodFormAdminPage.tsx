@@ -65,7 +65,7 @@ export function ClosedPeriodFormAdminPage() {
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
         <div className={styles.row}>
           <SamfFormField

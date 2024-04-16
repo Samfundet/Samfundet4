@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
@@ -98,7 +97,7 @@ export function SaksdokumentFormAdminPage() {
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       {/* Document form */}
       <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
         {/* Name */}
