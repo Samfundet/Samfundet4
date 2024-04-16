@@ -155,7 +155,7 @@ def seed():
         {
             'key': 'why_member_list_2',
             'text_nb': 'Stemmerett på Samfundsmøtene, og mulighet til å fremme forslag til Storsalen.',
-            'text_en': 'The right to vote at Samfunds-meetings, and the opportunity to submit proposals to Storsalen.',
+            'text_en': 'The right to vote at Samfundet-meetings, and the opportunity to submit proposals to Storsalen.',
         },
         {
             'key': 'why_member_list_3',
@@ -207,8 +207,8 @@ def seed():
         },
         {
             'key': 'membership_prices_3',
-            'text_nb': '6 måneder: 350,- NB: gjelder for alle på vårsemesteret, og kun utvekslingsstudenter på høstsemesteret',
-            'text_en': '6 months: 350 NOK, available for everyone in the spring term, and only exchange students in the fall semester',
+            'text_nb': '6 måneder: 350,- NB: Gjelder for alle på vårsemesteret, og kun utvekslingsstudenter på høstsemesteret',
+            'text_en': '6 months: 350 NOK, NB: Available for everyone in the spring term, and only exchange students in the fall semester',
         },
         {
             'key': 'membership_prices_4',
@@ -218,7 +218,7 @@ def seed():
         {
             'key': 'membership_prices_5',
             'text_nb': 'NB! Medlemskap følger skoleåret og har utløpsdato i august',
-            'text_en': 'NB! The membership follows the study year and expires in august.',
+            'text_en': 'NB! The membership follows the study year and expires in August.',
         },
         {
             'key': 'who_member_header',
@@ -236,7 +236,7 @@ def seed():
             'text_nb':
                 'Er eller har vært student eller lærer ved en utdanningsinstitusjon i Trondheimsområdet som baserer seg på heltidsstudier, samt er tilknyttet Studentsamskipnaden. (NTNU, DMMH, Luftkrigsskolen, BI, Fotofagskolen og Trondheim Fagskole)',
             'text_en':
-                'Is, or have been, a student or teacher at an educational institution based on full time studies, connetcted to Studentsamskipnadden in Trondheim. (NTNU, DMMH, Luftkrigsskolen, BI, Fotofagskolen and Trondheim Fagskole)',
+                'Is, or have been, a student or teacher at an educational institution based on full time studies, connected to Studentsamskipnadden in Trondheim. (NTNU, DMMH, Luftkrigsskolen, BI, Fotofagskolen and Trondheim Fagskole)',
         },
         {
             'key':
