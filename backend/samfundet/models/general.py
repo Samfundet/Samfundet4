@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import re
 import secrets
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 from datetime import date, time, datetime, timedelta
 from collections import defaultdict
@@ -31,6 +32,15 @@ if TYPE_CHECKING:
     from typing import Any
 
     from django.db.models import Model
+
+
+class CustomPermisionsModel(CustomBaseModel, ABC):
+    class Meta:
+        abstract = True
+
+    @abstractmethod
+    def has_perm(self, user: User) -> bool:
+        pass
 
 
 class Notification(AbstractNotification):
@@ -156,7 +166,7 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: Model | None = None) -> bool:
+    def has_perm(self, perm: str, obj: CustomPermisionsModel | None = None) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`
@@ -164,8 +174,23 @@ class User(AbstractUser):
             We have decided that global permissions implies that any obj perm check
         should return `True`. This function is extended to check both.
         """
-        has_global_perm = super().has_perm(perm=perm)
-        has_object_perm = super().has_perm(perm=perm, obj=obj)
+        # Collaps the permission groups tree to a list of all permissions the user has
+        user_perms: set = set(self.permission_groups)
+        while True:
+            # Fetch all child permission groups and exclude those already in the set
+            new_perms = PermissionGroup.objects.filter(owner__in=user_perms).exclude(id__in=user_perms)
+            # If no new permissions are found, break the loop
+            if not new_perms:
+                break
+            # Add the new permissions to the set
+            user_perms.add(*new_perms)
+
+        # Check if the user has the global permission
+        has_global_perm: bool = new_perms.filter(name=perm).exists()
+
+        # Check if the user has the object permission
+        has_object_perm: bool = obj is not None and obj.has_perm(self)
+
         return has_global_perm or has_object_perm
 
     @property
