@@ -19,7 +19,16 @@ const Template: ComponentStory<typeof Text> = () => {
         Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.
       </Text>
-      <Text type={'strong'}>Bold text</Text>
+      <br />
+      <Text as={'p'}>p - Paragraph / Normal text</Text>
+      <Text as={'strong'}>bold - Bold text</Text>
+      <Text as={'u'}>u - Underline text</Text>
+      <Text as={'i'}>i - Italic text</Text>
+      <Text as={'em'}>em - Emphasized text</Text>
+      <Text as={'mark'}>mark - Marked / Highlighted text</Text>
+      <Text as={'del'}>del - Deleted text</Text>
+      <Text as={'ins'}>ins - Inserted text</Text>
+      <br />
       <Text size={'xs'}>Extra Small text</Text>
       <Text size={'s'}>Small text</Text>
       <Text size={'m'}>Medium / Normal text</Text>

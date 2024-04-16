@@ -5,7 +5,7 @@ import React from 'react';
 type textProps = {
   children?: Children;
   size?: 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
-  as?: 'p' | 'strong';
+  as?: 'p' | 'strong' | 'u' | 'i' | 'em' | 'mark' | 'del' | 'ins';
   className?: string;
 };
 
@@ -13,10 +13,16 @@ export function Text({ children, className, size = 'm', as = 'p' }: textProps) {
   const elements = {
     p: 'p',
     strong: 'strong',
+    u: 'u',
+    i: 'i',
+    em: 'em',
+    mark: 'mark',
+    del: 'del',
+    ins: 'ins',
   };
 
   type TextAttrProps = {
-    as: 'p' | 'strong';
+    as: 'p' | 'strong' | 'u' | 'i' | 'em' | 'mark' | 'del' | 'ins';
     children: Children;
     className?: string;
     style?: React.CSSProperties;
@@ -32,6 +38,7 @@ export function Text({ children, className, size = 'm', as = 'p' }: textProps) {
       className={className}
       style={{
         fontSize: textSizes[size],
+        display: 'block'
       }}
     >
       {children}
