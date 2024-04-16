@@ -73,4 +73,6 @@ export const TextItem = {
   buy_membership_text_2: 'buy_membership_text_2',
   register_card: 'register_card',
   register_card_text: 'register_card_text',
+  laws_and_statutes_header: 'laws_and_statutes_header',
+  laws_and_statutes_text: 'laws_and_statutes_text',
 } as const;

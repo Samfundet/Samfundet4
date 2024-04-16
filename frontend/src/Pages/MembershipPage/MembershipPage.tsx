@@ -82,6 +82,15 @@ export function MembershipPage() {
           <h2 className={styles.header2}>{useTextItem(TextItem.register_card)}</h2>
           <div>{useTextItem(TextItem.register_card_text)}</div>
         </div>
+        <div className={styles.info}>
+          <h2 className={styles.header2}>{useTextItem(TextItem.laws_and_statutes_header)}</h2>
+          <div>
+            {useTextItem(TextItem.laws_and_statutes_text)}{' '}
+            <a className={styles.link} href={ROUTES.other.lover_og_statutter}>
+              {t(KEY.common_here) + '.'}
+            </a>
+          </div>
+        </div>
       </div>
     </Page>
   );

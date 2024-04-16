@@ -320,6 +320,16 @@ def seed():
             'text_en':
                 'It is important that you register so that nobody can misuse your membership number, and so that you can replace a lost card. You can register at out member database medlem.samfundet.no. The card is valid without a picture one week after it is purchased. After one week, you must have a photo of yourself on the card for it to be valid. Remember that you must register the first time you receive a card. When you later get a new sticker or a new card , you only need to update the information already saved, you do not need to register all over again.'
         },
+        {
+            'key': 'laws_and_statutes_header',
+            'text_nb': 'Samfundets lover og statutter',
+            'text_en': 'The laws and statutes of Samfundet',
+        },
+        {
+            'key': 'laws_and_statutes_text',
+            'text_nb': 'Du finner lovene som gjelder for deg når du er medlem på Samfundet ',
+            'text_en': 'You can find the laws that apply to you when you are a member at Samfundet ',
+        },
     ]
 
     TextItem.objects.all().delete()

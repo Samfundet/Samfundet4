@@ -8,4 +8,5 @@ export const ROUTES_OTHER = {
   maps_lyche: 'https://maps.app.goo.gl/z98jeRNVqQUPRWsv9',
   lyche_facebook: 'https://www.facebook.com/samfundet.lyche',
   akademika: 'https://www.akademika.no/butikker',
+  lover_og_statutter: 'http://raadet.samfundet.no/lover.html',
 } as const;
