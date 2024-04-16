@@ -42,6 +42,7 @@ from .models.general import (
     MerchVariation,
     UserPreference,
     InformationPage,
+    PermissionGroup,
     UserFeedbackModel,
 )
 from .models.recruitment import (
@@ -70,6 +71,15 @@ from .models.recruitment import (
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
 admin.site.register(Occupiedtimeslot)
+
+
+@admin.register(PermissionGroup)
+class PermissionGroupAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name']
+    search_fields = ['id', 'name']
+    list_display_links = ['id', 'name']
+    filter_horizontal = ['admin_perms']
 
 
 @admin.register(User)
@@ -104,10 +114,11 @@ class UserAdmin(CustomGuardedUserAdmin):
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
+    filter_horizontal = ['permission_groups']
 
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
-        n: int = obj.groups.all().count()
+        n: int = obj.permission_groups.all().count()
         return n
 
     fieldsets = (
@@ -120,8 +131,7 @@ class UserAdmin(CustomGuardedUserAdmin):
                     'is_active',
                     'is_staff',
                     'is_superuser',
-                    'groups',
-                    'user_permissions',
+                    'permission_groups',
                 ),
             },
         ),
@@ -136,31 +146,6 @@ class UserAdmin(CustomGuardedUserAdmin):
             },
         ),
     )
-
-
-@admin.register(Group)
-class GroupAdmin(CustomGuardedGroupAdmin):
-    sortable_by = ['id', 'name']
-    list_display = ['id', 'name', 'members']
-    list_display_links = ['id', 'name']
-    list_select_related = True
-
-    def members(self, obj: Group) -> int:
-        n: int = obj.user_set.all().count()
-        return n
-
-
-@admin.register(Permission)
-class PermissionAdmin(CustomGuardedModelAdmin):
-    # ordering = []
-    sortable_by = ['id', 'codename', 'content_type']
-    # list_filter = []
-    list_display = ['id', '__str__', 'codename', 'content_type']
-    search_fields = ['name', 'codename', 'content_type__app_label', 'content_type__model']
-    # filter_horizontal = []
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['content_type']
-    list_select_related = True
 
 
 @admin.register(ContentType)
@@ -203,30 +188,6 @@ class SessionAdmin(CustomGuardedModelAdmin):
 
 
 ### End: Django models ###
-
-
-### Guardian models ###
-@admin.register(guardian_models.GroupObjectPermission)
-class GroupObjectPermissionAdmin(CustomGuardedModelAdmin):
-    list_display = ['id', '__str__', 'permission', 'group', 'content_type']
-    list_display_links = ['id', '__str__']
-
-
-@admin.register(guardian_models.UserObjectPermission)
-class UserObjectPermissionAdmin(CustomGuardedModelAdmin):
-    ordering = ['user']
-    sortable_by = ['id', 'user', 'permission', 'content_type']
-    # list_filter = [] # TODO
-    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
-    list_display = ['id', '__str__', 'user', 'permission', 'content_type']
-    search_fields = [*_user_search_fields]
-    # filter_horizontal = [] # TODO
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['user', 'permission', 'content_type']
-    list_select_related = True
-
-
-### End: Guardian models ###
 
 
 ### Our models ###

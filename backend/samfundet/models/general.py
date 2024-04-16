@@ -104,10 +104,10 @@ class PermissionGroup(CustomBaseModel):
     name = models.CharField(max_length=64, blank=True, unique=True)
 
     # The owner group of this permission group. This allows for a hierarchy of permission groups.
-    owner = models.ForeignKey(permissions.Permission, on_delete=models.CASCADE, blank=True, null=True)
+    owner = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
 
     # This is a list of all permissions that may assign this permission group to users. Default this will just be the parrent group but there may be exceptions.
-    admin_perms = models.ManyToManyField(permissions.Permission, related_name='owner_perms', blank=True)
+    admin_perms = models.ManyToManyField('self', blank=True)
 
     class Meta:
         verbose_name = 'PermissionGroup'
