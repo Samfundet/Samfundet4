@@ -70,12 +70,12 @@ from .serializers import (
     UserPreferenceSerializer,
     InformationPageSerializer,
     OccupiedtimeslotSerializer,
+    PurchaseFeedbackSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
-    PurchaseFeedbackSerializer,
 )
 from .models.event import (
     Event,

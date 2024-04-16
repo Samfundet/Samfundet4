@@ -17,14 +17,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
-from .models.event import (Event,
-    EventGroup,
-    EventCustomTicket,
-    PurchaseFeedbackModel,
-    PurchaseFeedbackQuestion,
-    PurchaseFeedbackAlternative
-)
-
+from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,

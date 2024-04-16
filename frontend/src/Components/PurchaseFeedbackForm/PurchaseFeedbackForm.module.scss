@@ -20,7 +20,7 @@
 .buttonContainer {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: auto min-content;
   gap: 10px;
   max-width: 30rem;
 }
