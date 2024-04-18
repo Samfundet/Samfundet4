@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import re
 import secrets
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import TYPE_CHECKING
 from datetime import date, time, datetime, timedelta
 from collections import defaultdict
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from django.db.models import Model
 
 
-class CustomPermisionsModel(CustomBaseModel, ABC):
+class CustomPermisionsModel(CustomBaseModel):
     class Meta:
         abstract = True
 
@@ -166,19 +166,12 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: CustomPermisionsModel | None = None) -> bool:
-        """
-        Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
-        are completely separate, calling `has_perm()` with an `obj` will return `False`
-        even though the user has global perms.
-            We have decided that global permissions implies that any obj perm check
-        should return `True`. This function is extended to check both.
-        """
+    def has_global_perm(self, perm: PermissionGroup) -> bool:
         # Fetch all permission groups
         all_perms = PermissionGroup.objects.all()
 
         # Collaps the permission groups tree to a list of all permissions the user has
-        user_perms: set = set(self.permission_groups)
+        user_perms: set = set(self.permission_groups.all())
         while True:
             # Fetch all child permission groups and exclude those already in the set
             new_perms = all_perms.filter(owner__in=user_perms).exclude(id__in=user_perms)
@@ -189,12 +182,20 @@ class User(AbstractUser):
             user_perms.add(*new_perms)
 
         # Check if the user has the global permission
-        has_global_perm: bool = new_perms.filter(name=perm).exists()
+        return perm in user_perms
 
-        # Check if the user has the object permission
-        has_object_perm: bool = obj is not None and obj.has_perm(self)
+    def has_object_perm(self, obj: CustomPermisionsModel) -> bool:
+        return obj is not None and obj.has_perm(self)
 
-        return has_global_perm or has_object_perm
+    def has_perm(self, perm: PermissionGroup, obj: CustomPermisionsModel) -> bool:
+        """
+        Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
+        are completely separate, calling `has_perm()` with an `obj` will return `False`
+        even though the user has global perms.
+            We have decided that global permissions implies that any obj perm check
+        should return `True`. This function is extended to check both.
+        """
+        return self.has_global_perm(perm) or self.has_object_perm(obj)
 
     @property
     def is_impersonated(self) -> bool:
