@@ -305,6 +305,16 @@ class Event(CustomBaseModel):
 
 
 class PurchaseFeedbackModel(models.Model):
+    """
+    feedback after purchasing an event ticket.
+
+    Stores both the form itself and the feedback, by having
+    PurchaseFeedbackAlternative and PurchaseFeedbackQuestion
+    connect to it.
+
+    Events doesnt necesarily have the same feedbackform.
+    """
+
     title = models.CharField(max_length=255, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -317,8 +327,14 @@ class PurchaseFeedbackModel(models.Model):
 
 
 class PurchaseFeedbackAlternative(models.Model):
+    """
+    Stores whether a checkbox alternative was selected or not. Is connected
+    to a single feedbackform.
+    """
+
     alternative = models.CharField(max_length=255, blank=True)
-    selected = models.CharField(max_length=255)
+    selected = models.CharField(max_length=255) # TODO: Change into BoolField When SamfForm is updated.
+
     form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
 
     class Meta:
@@ -329,8 +345,13 @@ class PurchaseFeedbackAlternative(models.Model):
 
 
 class PurchaseFeedbackQuestion(CustomBaseModel):
+    """
+    Stores a question and response. Is connected to a single 
+    feedbackform.
+    """
+
     question = models.CharField(max_length=255, blank=True)
-    answer = models.CharField(max_length=255, blank=True)  # TODO: Change into BoolField When SamfForm is updated.
+    answer = models.CharField(max_length=255, blank=True)
     form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
 
     class Meta:
