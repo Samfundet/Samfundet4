@@ -13,6 +13,7 @@ import { ROUTES } from '~/routes';
 import { lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SaksdokumentFormAdminPage.module.scss';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function SaksdokumentFormAdminPage() {
   const navigate = useNavigate();
@@ -96,6 +97,7 @@ export function SaksdokumentFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
+  UseTitle(title);
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       {/* Document form */}

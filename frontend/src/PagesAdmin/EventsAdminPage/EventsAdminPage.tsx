@@ -14,6 +14,7 @@ import { ROUTES } from '~/routes';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function EventsAdminPage() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export function EventsAdminPage() {
   const [allEvents, setAllEvents] = useState<EventDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t, i18n } = useTranslation();
+  UseTitle(t(KEY.admin_events_administrate));
 
   function getEvents() {
     getEventsUpcomming()
@@ -106,7 +108,7 @@ export function EventsAdminPage() {
     ];
   });
 
-  const title = lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_event)}`);
+  const title = t(KEY.admin_events_administrate);
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>

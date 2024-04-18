@@ -12,12 +12,14 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function InformationAdminPage() {
   const navigate = useCustomNavigate();
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  UseTitle(t(KEY.admin_information_manage_title));
 
   // Stuff to do on first render.
   //TODO add permissions on render

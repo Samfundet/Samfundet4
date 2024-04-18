@@ -12,12 +12,15 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function RecruitmentAdminPage() {
   const navigate = useNavigate();
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = t(KEY.recruitment_administrate);
+  UseTitle(title);
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -73,7 +76,6 @@ export function RecruitmentAdminPage() {
     ];
   });
 
-  const title = t(KEY.recruitment_administrate);
   const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
   const header = (
     <>

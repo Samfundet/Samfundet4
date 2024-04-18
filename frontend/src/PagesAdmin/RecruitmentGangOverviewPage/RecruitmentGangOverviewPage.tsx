@@ -10,12 +10,15 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function RecruitmentGangOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
   const [allGangs, setAllGangs] = useState<GangDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = t(KEY.admin_information_manage_title);
+  UseTitle(title);
 
   useEffect(() => {
     getGangs().then((data) => {
@@ -36,7 +39,6 @@ export function RecruitmentGangOverviewPage() {
     return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }];
   });
 
-  const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>

@@ -13,6 +13,7 @@ import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageFormAdminPage.module.scss';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ImageFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -68,6 +69,7 @@ export function ImageFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
   const title = id ? lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
+  UseTitle(title);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>

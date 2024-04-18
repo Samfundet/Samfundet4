@@ -13,6 +13,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export function GangsAdminPage() {
   const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  UseTitle(t(KEY.adminpage_gangs_title));
 
   // Stuff to do on first render.
   // TODO add permissions on render

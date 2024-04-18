@@ -12,6 +12,7 @@ import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
@@ -50,6 +51,8 @@ export function RecruitmentPositionOverviewPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const title = t(KEY.recruitment_administrate_applications);
+  UseTitle(title);
   useEffect(() => {
     recruitmentId &&
       gangId &&
@@ -169,7 +172,6 @@ export function RecruitmentPositionOverviewPage() {
       },
     ];
   });
-  const title = t(KEY.admin_information_manage_title);
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
     urlParams: {

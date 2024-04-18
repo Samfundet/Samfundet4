@@ -11,11 +11,13 @@ import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
 import styles from './ApplicantApplicationOverviewPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ApplicantApplicationOverviewPage() {
   const { recruitmentID } = useParams();
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
+  UseTitle(t(KEY.admin_information_manage_title));
 
   function handleChangePriority(id: number, direction: 'up' | 'down') {
     const newAdmissions = [

@@ -13,6 +13,7 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
 import { lowerCapitalize } from '~/utils';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function GangsFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -56,6 +57,7 @@ export function GangsFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
+  UseTitle(title);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>

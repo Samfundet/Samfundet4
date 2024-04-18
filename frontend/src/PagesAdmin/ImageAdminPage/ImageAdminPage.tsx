@@ -9,12 +9,14 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
 import { lowerCapitalize } from '~/utils';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ImageAdminPage() {
   const [images, setImages] = useState<ImageDto[]>([]);
   const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  UseTitle(t(KEY.admin_images_title));
 
   // Stuff to do on first render.
   // TODO add permissions on render

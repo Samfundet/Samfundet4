@@ -11,12 +11,14 @@ import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SultenMenuAdminPage.module.scss';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function SultenMenuAdminPage() {
   const [menuItems, setMenuItems] = useState<MenuItemDto[]>([]);
   const [menus, setMenus] = useState<MenuDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  UseTitle(t(KEY.admin_sultenmenu_title));
 
   // Get Menus and Menuitems
   useEffect(() => {

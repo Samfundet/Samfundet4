@@ -7,11 +7,13 @@ import { ROUTES } from '~/routes';
 import { TABLES_TEST_DATA } from './utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ReservationTable } from './components/ReservationTable';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function SultenReservationAdminPage() {
   const [dayInfo, setDayInfo] = useState<SultenReservationDayDto>({} as SultenReservationDayDto);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  UseTitle(t(KEY.recruitment_administrate_reservations));
 
   // Stuff to do on first render.
   // TODO add permissions on render

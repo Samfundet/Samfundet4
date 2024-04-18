@@ -10,6 +10,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function RecruitmentGangAdminPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -18,6 +19,8 @@ export function RecruitmentGangAdminPage() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = t(KEY.recruitment_administrate_positions);
+  UseTitle(title);
 
   useEffect(() => {
     recruitmentId &&
@@ -63,7 +66,6 @@ export function RecruitmentGangAdminPage() {
     ];
   });
 
-  const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <Button

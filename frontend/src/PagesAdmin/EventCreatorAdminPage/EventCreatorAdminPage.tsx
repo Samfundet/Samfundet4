@@ -21,6 +21,7 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
+import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 type EventCreatorStep = {
   key: string; // Unique key.
@@ -312,6 +313,7 @@ export function EventCreatorAdminPage() {
   );
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
+  UseTitle(title);
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <TabBar
