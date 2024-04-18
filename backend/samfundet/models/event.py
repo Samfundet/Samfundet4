@@ -333,7 +333,8 @@ class PurchaseFeedbackAlternative(models.Model):
     """
 
     alternative = models.CharField(max_length=255, blank=True)
-    selected = models.CharField(max_length=255) # TODO: Change into BoolField When SamfForm is updated.
+    # TODO: Change into BoolField When SamfForm is updated.
+    selected = models.CharField(max_length=255)
 
     form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
 
@@ -346,7 +347,7 @@ class PurchaseFeedbackAlternative(models.Model):
 
 class PurchaseFeedbackQuestion(CustomBaseModel):
     """
-    Stores a question and response. Is connected to a single 
+    Stores a question and response. Is connected to a single
     feedbackform.
     """
 
