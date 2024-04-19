@@ -152,32 +152,38 @@ export function RecruitmentPositionFormAdminPage() {
     <div className={styles.wrapper}>
       <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
-          <SamfFormField<string, FormType>
-            field="name_nb"
-            type="text"
-            label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
-          />
-          <SamfFormField<string, FormType>
-            field="name_en"
-            type="text"
-            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
-          />
-        </div>
-        <div className={styles.row}>
           <SamfFormField<boolean, FormType>
             field="norwegian_applicants_only"
             type="checkbox"
             label={t(KEY.recruitment_norwegian_applicants_only) + '?'}
-            onChange={(value: boolean) => {
-              setNorwegianApplicantsOnly(value);
+            onChange={(value) => {
+              setNorwegianApplicantsOnly(!value);
             }}
+            required={true}
           />
         </div>
+        <div className={styles.row}>
+          <SamfFormField<string, FormType>
+            field="name_nb"
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+            required={true}
+          />
+          <SamfFormField<string, FormType>
+            field="name_en"
+            type="text"
+            required={!norwegianApplicantsOnly}
+            hidden={norwegianApplicantsOnly}
+            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+          />
+        </div>
+
         <div className={styles.row}>
           <SamfFormField<string, FormType>
             field="short_description_nb"
             type="text"
             label={t(KEY.common_short_description) + ' ' + t(KEY.common_norwegian)}
+            required={true}
           />
           <SamfFormField<string, FormType>
             field="short_description_en"
@@ -192,6 +198,7 @@ export function RecruitmentPositionFormAdminPage() {
             field="long_description_nb"
             type="text_long"
             label={t(KEY.common_long_description) + ' ' + t(KEY.common_norwegian)}
+            required={true}
           />
           <SamfFormField<string, FormType>
             field="long_description_en"
@@ -206,6 +213,7 @@ export function RecruitmentPositionFormAdminPage() {
             field="is_funksjonaer_position"
             type="checkbox"
             label={t(KEY.recruitment_funksjonaer) + '?'}
+            required={true}
           />
         </div>
         <div className={styles.row}>
@@ -213,6 +221,7 @@ export function RecruitmentPositionFormAdminPage() {
             field="default_admission_letter_nb"
             type="text_long"
             label={t(KEY.recrutment_default_admission_letter) + ' ' + t(KEY.common_norwegian)}
+            required={true}
           />
           <SamfFormField<string, FormType>
             field="default_admission_letter_en"
