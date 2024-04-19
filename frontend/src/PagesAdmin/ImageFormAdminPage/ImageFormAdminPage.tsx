@@ -80,7 +80,7 @@ export function ImageFormAdminPage() {
         </div>
         <SamfFormField
           field="file"
-          type="upload-image"
+          type="upload_image"
           label={lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_image)}`)}
         />
         <p>
