@@ -144,6 +144,7 @@ export type EventDto = {
   // Write only:
   // Used to create new event with using id of existing imagedto
   image?: ImageDto;
+  capacity?: number;
 };
 
 export type EventGroupDto = {
