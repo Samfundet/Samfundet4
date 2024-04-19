@@ -160,8 +160,9 @@ class ComputedRoleDescendants(CustomBaseModel):
             while stack:
                 current_node = stack.pop()
                 for child in current_node.children:
-                    role_descendants[node].add(child)
-                    stack.append(child)
+                    if child not in role_descendants[node]:
+                        role_descendants[node].add(child)
+                        stack.append(child)
 
     @staticmethod
     def compute_descendants() -> None:
