@@ -109,22 +109,58 @@ class Campus(FullCleanSaveMixin):
         return f'{self.name_nb} ({self.abbreviation})'
 
 
-class PermissionGroup(CustomBaseModel):
-    # The name of the permission group. i.e. 'MG-gjengleder', 'FS-arrangementansvarlig', 'MG-WEB-funksjonær'
+class Role(CustomBaseModel):
+    """
+    This table stores all roles avalible. Groups, permissions and roles are all the same things, although a
+    role functioning as a permission should ideally not have any children.
+    """
+
+    # The name of the role. i.e. 'MG-gjengleder', 'FS-arrangementansvarlig', 'MG-WEB-funksjonær'
     name = models.CharField(max_length=64, blank=True, unique=True)
 
-    # The owner group of this permission group. This allows for a hierarchy of permission groups.
-    owner = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
-
-    # This is a list of all permissions that may assign this permission group to users. Default this will just be the parrent group but there may be exceptions.
-    admin_perms = models.ManyToManyField('self', blank=True)
+    # This is a list of all roles that are included in this permission group.
+    ownes = models.ManyToManyField('self', blank=True)
 
     class Meta:
-        verbose_name = 'PermissionGroup'
-        verbose_name_plural = 'PermissionGroups'
+        verbose_name = 'Role'
+        verbose_name_plural = 'Roles'
 
     def __str__(self) -> str:
         return f'{self.name}'
+
+
+class ComputedRoleDescendants(CustomBaseModel):
+    """This table stores the computed descendant roles for each role."""
+
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role')
+
+    # A descendent of the role.
+    descendant = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='descendant')
+
+    @staticmethod
+    def compute_descendants():
+        # Drop ComputedRoleDescendants table
+        ComputedRoleDescendants.objects.all().delete()
+
+        # Compute new rows
+        roles = Role.objects.all()
+        ## Create adjacency matrix of boolean values
+        descendants = [[False for _ in range(len(roles))] for _ in range(len(roles))]
+        for i, role in enumerate(roles):
+            descendants[i][i] = True
+            for descendant in role.ownes.all():
+                descendants[i][roles.index(descendant)] = True
+
+        # Find all descendants of the roles using Floyd Warshall algorithm
+        for k in range(len(roles)):
+            for i in range(len(roles)):
+                for j in range(len(roles)):
+                    descendants[i][j] = descendants[i][j] or (descendants[i][k] and descendants[k][j])
+
+        # Create a new row for each descendant of each role
+        for role in roles:
+            for descendant in descendants:
+                ComputedRoleDescendants.objects.create(role=role, descendant=descendant)
 
 
 class User(AbstractUser):
@@ -158,7 +194,7 @@ class User(AbstractUser):
         null=True,
         on_delete=models.PROTECT,
     )
-    permission_groups = models.ManyToManyField(PermissionGroup, blank=True)
+    role = models.ManyToManyField(Role, blank=True)
 
     class Meta:
         permissions = [
@@ -166,28 +202,16 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_global_perm(self, perm: PermissionGroup) -> bool:
-        # Fetch all permission groups
-        all_perms = PermissionGroup.objects.all()
-
-        # Collaps the permission groups tree to a list of all permissions the user has
-        user_perms: set = set(self.permission_groups.all())
-        while True:
-            # Fetch all child permission groups and exclude those already in the set
-            new_perms = all_perms.filter(owner__in=user_perms).exclude(id__in=user_perms)
-            # If no new permissions are found, break the loop
-            if not new_perms:
-                break
-            # Add the new permissions to the set
-            user_perms.add(*new_perms)
-
-        # Check if the user has the global permission
-        return perm in user_perms
+    def has_global_perm(self, perm: Role) -> bool:
+        # Fetch precomputed descendants
+        descendants = ComputedRoleDescendants.objects.filter(role__in=self.role)
+        # Check if the required permission is in the descendants
+        return perm is not None and perm in descendants
 
     def has_object_perm(self, obj: CustomPermisionsModel) -> bool:
         return obj is not None and obj.has_perm(self)
 
-    def has_perm(self, perm: PermissionGroup, obj: CustomPermisionsModel) -> bool:
+    def has_perm(self, perm: Role, obj: CustomPermisionsModel) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`
