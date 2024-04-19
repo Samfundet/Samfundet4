@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Iterator
+from typing import Any
 from datetime import time, datetime
+from collections.abc import Iterator
 
 import pytest
 
@@ -18,7 +19,7 @@ from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
-from samfundet.models.general import Gang, User, Image, Table, Venue, BlogPost, TextItem, Reservation, Organization, InformationPage
+from samfundet.models.general import Gang, User, Image, Merch, Table, Venue, BlogPost, TextItem, Reservation, Organization, MerchVariation, InformationPage
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -227,6 +228,22 @@ def fixture_text_item() -> Iterator[TextItem]:
     )
     yield text_item
     text_item.delete()
+
+
+@pytest.fixture
+def fixture_merch(fixture_image: Image) -> Iterator[Merch]:
+    merch = Merch.objects.create(
+        name_nb='basic merch', name_en='basic merch', description_nb='basic merch', description_en='basic merch', base_price=100, image=fixture_image
+    )
+    yield merch
+    merch.delete()
+
+
+@pytest.fixture
+def fixture_merchvariation(fixture_merch: Merch) -> Iterator[MerchVariation]:
+    merch_variation = MerchVariation.objects.create(specification='big', stock=69, merch=fixture_merch)
+    yield merch_variation
+    merch_variation.delete()
 
 
 @pytest.fixture

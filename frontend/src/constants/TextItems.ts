@@ -20,6 +20,7 @@ export const TextItem = {
   sulten_lyche_goal_text: 'sulten_lyche_goal_text',
   sulten_lyche_about_menu_text: 'sulten_lyche_about_menu_text',
   sulten_contact_page_text: 'sulten_contact_page_text',
+  sulten_reservation_policy: 'sulten_reservation_policy',
 
   //About page
   festivals: 'festivals',
@@ -75,4 +76,9 @@ export const TextItem = {
   register_card_text: 'register_card_text',
   laws_and_statutes_header: 'laws_and_statutes_header',
   laws_and_statutes_text: 'laws_and_statutes_text',
+
+  // Feedback
+  feedback_helper_text: 'feedback_helper_text',
+  feedback_want_contact_text: 'feedback_want_contact_text',
+
 } as const;

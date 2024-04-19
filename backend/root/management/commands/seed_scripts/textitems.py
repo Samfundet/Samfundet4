@@ -330,6 +330,21 @@ def seed():
             'text_nb': 'Du finner lovene som gjelder for deg når du er medlem på Samfundet ',
             'text_en': 'You can find the laws that apply to you when you are a member at Samfundet ',
         },
+        {
+            'key': 'feedback_helper_text',
+            'text_nb': 'Vi ønsker å vite hva vi kan gjøre bedre og hva du syntes er bra med denne siden.',
+            'text_en': 'We want to know what we can do better and what you think is good about this page.',
+        },
+        {
+            'key': 'feedback_want_contact_text',
+            'text_nb': 'Om du ønsker at vi skal kontakte deg kan du skrive eposten din her.',
+            'text_en': 'If you want us to contact you, you can write your email here.',
+        },
+        {
+            'key': 'sulten_reservation_policy',
+            'text_nb': 'Jeg godtar Samfundets personværnserklæring.',
+            'text_en': "I agree to Samfundet's privacy policy.",
+        },
     ]
 
     TextItem.objects.all().delete()

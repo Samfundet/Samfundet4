@@ -15,13 +15,13 @@ from samfundet.models.general import Tag, Image
 COUNT = 30
 
 
-def do_seed():
+def do_seed():  # noqa: C901
     # Preload images first (faster than doing in seed loop)
     image_folder = os.path.join(os.path.dirname(__file__), 'seed_images')
     seed_images = os.listdir(image_folder)
     image_files = []
     for name in seed_images:
-        f = open(os.path.join(image_folder, name), mode='rb')
+        f = open(os.path.join(image_folder, name), mode='rb')  # noqa: SIM115
         image_files.append(f)
 
     try:
@@ -61,5 +61,4 @@ def do_seed():
 def seed():
     # Run in transaction for speed
     with transaction.atomic():
-        for progress, msg in do_seed():
-            yield progress, msg
+        yield from do_seed()
