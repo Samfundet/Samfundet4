@@ -124,29 +124,29 @@ export function RecruitmentFormAdminPage() {
           <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="visible_from" type="datetime" label={t(KEY.recruitment_visible_from) ?? ''} />
+          <SamfFormField field="visible_from" type="date_time" label={t(KEY.recruitment_visible_from) ?? ''} />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="shown_application_deadline"
-            type="datetime"
+            type="date_time"
             label={t(KEY.shown_application_deadline) ?? ''}
           />
           <SamfFormField
             field="actual_application_deadline"
-            type="datetime"
+            type="date_time"
             label={t(KEY.actual_application_deadlin) ?? ''}
           />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="reprioritization_deadline_for_applicant"
-            type="datetime"
+            type="date_time"
             label={t(KEY.reprioritization_deadline_for_applicant) ?? ''}
           />
           <SamfFormField
             field="reprioritization_deadline_for_groups"
-            type="datetime"
+            type="date_time"
             label={t(KEY.reprioritization_deadline_for_groups) ?? ''}
           />
         </div>

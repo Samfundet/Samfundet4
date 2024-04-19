@@ -163,7 +163,7 @@ export function RecruitmentAdmissionFormPage() {
             devMode={false}
           >
             <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
-            <SamfFormField field="admission_text" type="textLong" />{' '}
+            <SamfFormField field="admission_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
           <div>TODO add login redirect</div>

@@ -53,7 +53,7 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
         <p>{useTextItem(TextItem.feedback_helper_text)}</p>
         <SamfFormField<string, FormProps>
           field={'text'}
-          type={'textLong'}
+          type={'text_long'}
           required={true}
           label={t(KEY.feedback_your_feedback)}
         />

@@ -83,7 +83,7 @@ export type SamfFormFieldArgs<T extends FormFieldReturnType> = {
 export type SamfFormFieldType =
   | 'text'
   | 'email'
-  | 'textLong'
+  | 'text_long'
   | 'password'
   | 'checkbox'
   | 'float'
@@ -91,7 +91,7 @@ export type SamfFormFieldType =
   | 'number'
   | 'options'
   | 'image'
-  | 'dateTime'
+  | 'date_time'
   | 'date'
   | 'time'
   | 'upload_image'
@@ -112,7 +112,7 @@ export type GeneratorFunction<T extends FormFieldReturnType> = (args: SamfFormFi
 export const SamfFormGenrators: Record<SamfFormFieldType, GeneratorFunction<any>> = {
   text: makeStandardInputFunction<string>('text'),
   email: makeStandardInputFunction<string>('email'),
-  textLong: makeAreaInput,
+  text_long: makeAreaInput,
   password: makeStandardInputFunction<string>('password'),
   checkbox: makeCheckboxInput,
   float: makeStandardInputFunction<number>('number'),
@@ -120,7 +120,7 @@ export const SamfFormGenrators: Record<SamfFormFieldType, GeneratorFunction<any>
   number: makeStandardInputFunction<number>('number'),
   options: makeOptionsInput,
   image: makeImagePicker,
-  dateTime: makeStandardInputFunction<Date>('datetime-local'),
+  date_time: makeStandardInputFunction<Date>('datetime-local'),
   date: makeStandardInputFunction<Date>('date'),
   time: makeStandardInputFunction<Date>('time'),
   upload_image: makeFilePickerFunction('image'),

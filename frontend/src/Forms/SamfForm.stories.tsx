@@ -94,7 +94,7 @@ Basic.args = {
         />
       </div>
       <SamfFormField<string, BasicFormProps>
-        type={'textLong'}
+        type={'text_long'}
         field={'large_field'}
         label="Lang tekst input"
         props={{ rows: 5 }}
