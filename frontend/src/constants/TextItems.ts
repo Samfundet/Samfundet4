@@ -80,5 +80,4 @@ export const TextItem = {
   // Feedback
   feedback_helper_text: 'feedback_helper_text',
   feedback_want_contact_text: 'feedback_want_contact_text',
-
 } as const;
