@@ -13,6 +13,31 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
 
+type FormType = {
+  name_nb: string;
+  name_en: string;
+
+  norwegian_applicants_only: boolean;
+
+  short_description_nb: string;
+  short_description_en: string;
+
+  long_description_nb: string;
+  long_description_en: string;
+
+  is_funksjonaer_position: boolean;
+
+  default_admission_letter_nb: string;
+  default_admission_letter_en: string;
+
+  //gang: GangDto;
+  //recruitment: string;
+
+  tags: string;
+
+  //interviewers?: UserDto[];
+};
+
 export function RecruitmentPositionFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -125,13 +150,21 @@ export function RecruitmentPositionFormAdminPage() {
 
   return (
     <div className={styles.wrapper}>
-      <SamfForm<RecruitmentPositionDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
+      <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
-          <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
+          <SamfFormField<string, FormType>
+            field="name_nb"
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+          />
+          <SamfFormField<string, FormType>
+            field="name_en"
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField
+          <SamfFormField<boolean, FormType>
             field="norwegian_applicants_only"
             type="checkbox"
             label={t(KEY.recruitment_norwegian_applicants_only) + '?'}
@@ -141,12 +174,12 @@ export function RecruitmentPositionFormAdminPage() {
           />
         </div>
         <div className={styles.row}>
-          <SamfFormField
+          <SamfFormField<string, FormType>
             field="short_description_nb"
             type="text"
             label={t(KEY.common_short_description) + ' ' + t(KEY.common_norwegian)}
           />
-          <SamfFormField
+          <SamfFormField<string, FormType>
             field="short_description_en"
             hidden={norwegianApplicantsOnly}
             required={!norwegianApplicantsOnly}
@@ -155,38 +188,42 @@ export function RecruitmentPositionFormAdminPage() {
           />
         </div>
         <div className={styles.row}>
-          <SamfFormField
+          <SamfFormField<string, FormType>
             field="long_description_nb"
-            type="text-long"
+            type="text_long"
             label={t(KEY.common_long_description) + ' ' + t(KEY.common_norwegian)}
           />
-          <SamfFormField
+          <SamfFormField<string, FormType>
             field="long_description_en"
-            type="text-long"
+            type="text_long"
             hidden={norwegianApplicantsOnly}
             required={!norwegianApplicantsOnly}
             label={t(KEY.common_long_description) + ' ' + t(KEY.common_english)}
           />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="is_funksjonaer_position" type="checkbox" label={t(KEY.recruitment_funksjonaer) + '?'} />
+          <SamfFormField<boolean, FormType>
+            field="is_funksjonaer_position"
+            type="checkbox"
+            label={t(KEY.recruitment_funksjonaer) + '?'}
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField
+          <SamfFormField<string, FormType>
             field="default_admission_letter_nb"
-            type="text-long"
+            type="text_long"
             label={t(KEY.recrutment_default_admission_letter) + ' ' + t(KEY.common_norwegian)}
           />
-          <SamfFormField
+          <SamfFormField<string, FormType>
             field="default_admission_letter_en"
-            type="text-long"
+            type="text_long"
             label={t(KEY.recrutment_default_admission_letter) + ' ' + t(KEY.common_english)}
             hidden={norwegianApplicantsOnly}
             required={!norwegianApplicantsOnly}
           />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="tags" type="text" label={t(KEY.common_tags) ?? ''} />
+          <SamfFormField<string, FormType> field="tags" type="text" label={t(KEY.common_tags) ?? ''} />
         </div>
       </SamfForm>
     </div>
