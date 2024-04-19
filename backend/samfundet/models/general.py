@@ -22,6 +22,7 @@ from django.contrib.auth.models import Group, AbstractUser
 
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+from root.utils.compute_permissions import Node, dfs
 
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
@@ -125,6 +126,14 @@ class Role(CustomBaseModel):
         verbose_name = 'Role'
         verbose_name_plural = 'Roles'
 
+    def save(self, *args, **kwargs) -> None:
+        ComputedRoleDescendants.compute_descendants()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs) -> None:
+        ComputedRoleDescendants.compute_descendants()
+        super().delete(*args, **kwargs)
+
     def __str__(self) -> str:
         return f'{self.name}'
 
@@ -138,28 +147,33 @@ class ComputedRoleDescendants(CustomBaseModel):
     descendant = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='descendant')
 
     @staticmethod
-    def compute_descendants():
-        # Drop ComputedRoleDescendants table
+    def initialize_descendants() -> dict[Role, set[Role]]:
+        role_descendants = {node: set() for node in Role.objects.all()}
+        for node in role_descendants:
+            role_descendants[node].add(node)
+        return role_descendants
+
+    @staticmethod
+    def search_for_descendants(role_descendants: dict[Role, set[Role]]) -> dict[Role, set[Role]]:
+        for node in role_descendants:
+            stack = [node]
+            while stack:
+                current_node = stack.pop()
+                for child in current_node.children:
+                    role_descendants[node].add(child)
+                    stack.append(child)
+
+    @staticmethod
+    def compute_descendants() -> None:
+        # Drop rows ComputedRoleDescendants table
         ComputedRoleDescendants.objects.all().delete()
 
-        # Compute new rows
-        roles = Role.objects.all()
-        ## Create adjacency matrix of boolean values
-        descendants = [[False for _ in range(len(roles))] for _ in range(len(roles))]
-        for i, role in enumerate(roles):
-            descendants[i][i] = True
-            for descendant in role.ownes.all():
-                descendants[i][roles.index(descendant)] = True
+        # Compute the descendants of each role
+        role_descendants = ComputedRoleDescendants.search_for_descendants(ComputedRoleDescendants.initialize_descendants())
 
-        # Find all descendants of the roles using Floyd Warshall algorithm
-        for k in range(len(roles)):
-            for i in range(len(roles)):
-                for j in range(len(roles)):
-                    descendants[i][j] = descendants[i][j] or (descendants[i][k] and descendants[k][j])
-
-        # Create a new row for each descendant of each role
-        for role in roles:
-            for descendant in descendants:
+        ##Create a new row for each descendant of each role
+        for role in role_descendants:
+            for descendant in role:
                 ComputedRoleDescendants.objects.create(role=role, descendant=descendant)
 
 
