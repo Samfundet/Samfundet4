@@ -45,10 +45,7 @@ export function RecruitmentPositionFormAdminPage() {
   // Form data
   const { recruitmentId, gangId, positionId } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>({
-    name_nb: 'Ny stilling',
-    name_en: 'New position',
-  });
+  const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
   const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
 
   // Fetch data if edit mode.
@@ -147,7 +144,6 @@ export function RecruitmentPositionFormAdminPage() {
         });
     }
   }
-
   return (
     <div className={styles.wrapper}>
       <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
@@ -156,8 +152,8 @@ export function RecruitmentPositionFormAdminPage() {
             field="norwegian_applicants_only"
             type="checkbox"
             label={t(KEY.recruitment_norwegian_applicants_only) + '?'}
-            onChange={(value) => {
-              setNorwegianApplicantsOnly(!value);
+            onChange={() => {
+              setNorwegianApplicantsOnly(!norwegianApplicantsOnly);
             }}
             required={true}
           />
@@ -173,7 +169,6 @@ export function RecruitmentPositionFormAdminPage() {
             field="name_en"
             type="text"
             required={!norwegianApplicantsOnly}
-            hidden={norwegianApplicantsOnly}
             label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
           />
         </div>
@@ -187,7 +182,6 @@ export function RecruitmentPositionFormAdminPage() {
           />
           <SamfFormField<string, FormType>
             field="short_description_en"
-            hidden={norwegianApplicantsOnly}
             required={!norwegianApplicantsOnly}
             type="text"
             label={t(KEY.common_short_description) + ' ' + t(KEY.common_english)}
@@ -203,7 +197,6 @@ export function RecruitmentPositionFormAdminPage() {
           <SamfFormField<string, FormType>
             field="long_description_en"
             type="text_long"
-            hidden={norwegianApplicantsOnly}
             required={!norwegianApplicantsOnly}
             label={t(KEY.common_long_description) + ' ' + t(KEY.common_english)}
           />
@@ -227,7 +220,6 @@ export function RecruitmentPositionFormAdminPage() {
             field="default_admission_letter_en"
             type="text_long"
             label={t(KEY.recrutment_default_admission_letter) + ' ' + t(KEY.common_english)}
-            hidden={norwegianApplicantsOnly}
             required={!norwegianApplicantsOnly}
           />
         </div>
