@@ -842,14 +842,14 @@ class OccupiedTimeslotView(ListCreateAPIView):
             )
 
             # Check that all provided timeslots exist for the recruitment
-            for d in request.data['dates']:
-                invalid = [x for x in request.data['dates'][d] if x not in timeslots]
+            for date in request.data['dates']:
+                invalid = [x for x in request.data['dates'][date] if x not in timeslots]
                 if invalid:
                     return Response({'error': 'Invalid timeslot(s)', 'invalid_timeslots': invalid}, status=status.HTTP_400_BAD_REQUEST)
 
-                for timeslot in request.data['dates'][d]:
+                for timeslot in request.data['dates'][date]:
                     start_date = make_aware(
-                        datetime.datetime.strptime(f'{d} {timeslot}', '%Y.%m.%d %H:%M'),
+                        datetime.datetime.strptime(f'{date} {timeslot}', '%Y.%m.%d %H:%M'),
                         timezone=datetime.UTC,
                     )
                     end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
