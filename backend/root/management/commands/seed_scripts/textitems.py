@@ -112,6 +112,11 @@ def seed():
             'text_nb': 'Om du ønsker at vi skal kontakte deg kan du skrive eposten din her.',
             'text_en': 'If you want us to contact you, you can write your email here.',
         },
+        {
+            'key': 'sulten_reservation_policy',
+            'text_nb': 'Jeg godtar Samfundets personværnserklæring.',
+            'text_en': "I agree to Samfundet's privacy policy.",
+        },
     ]
 
     TextItem.objects.all().delete()

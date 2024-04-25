@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import itertools
+from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
@@ -24,6 +25,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -41,6 +43,7 @@ from .models.general import (
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -282,7 +285,9 @@ class RegisterSerializer(serializers.Serializer):
         write_only=True,
     )
 
-    def validate(self, attrs: dict) -> dict:
+    ALREADY_EXISTS_MESSAGE = 'User already exists with this value'
+
+    def validate(self, attrs: dict) -> dict:  # noqa: C901
         # Inherited function.
         # Take username and password from request.
         username = attrs.get('username')
@@ -291,6 +296,18 @@ class RegisterSerializer(serializers.Serializer):
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
+        # Check for unique
+        existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
+
+        if existing_users:
+            errors: dict[str, list[ValidationError]] = defaultdict(list)
+            if username in existing_users.values_list('username', flat=True):
+                errors['username'].append(self.ALREADY_EXISTS_MESSAGE)
+            if email in existing_users.values_list('email', flat=True):
+                errors['email'].append(self.ALREADY_EXISTS_MESSAGE)
+            if phone_number in existing_users.values_list('phone_number', flat=True):
+                errors['phone_number'].append(self.ALREADY_EXISTS_MESSAGE)
+            raise serializers.ValidationError(errors)
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
@@ -513,6 +530,29 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 # =============================== #
+#              Merch              #
+# =============================== #
+
+
+class MerchVariationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MerchVariation
+        fields = '__all__'
+
+
+class MerchSerializer(serializers.ModelSerializer):
+    variations = MerchVariationSerializer(many=True, read_only=True)
+    stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Merch
+        fields = '__all__'
+
+    def get_stock(self, obj: Merch) -> int:
+        return obj.in_stock()
+
+
+# =============================== #
 #            Recruitment          #
 # =============================== #
 
@@ -691,14 +731,29 @@ class InterviewRoomSerializer(CustomBaseSerializer):
 
 
 class InterviewSerializer(CustomBaseSerializer):
+    interviewers = InterviewerSerializer(many=True)
+
     class Meta:
         model = Interview
         fields = '__all__'
+
+    def create(self, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview = super().create(validated_data)
+        interview.interviewers.set(interviewers_data)
+        return interview
+
+    def update(self, instance: Interview, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        instance = super().update(instance, validated_data)
+        instance.interviewers.set(interviewers_data)
+        return instance
 
 
 class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
@@ -710,6 +765,8 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview_instance.interviewers.set(interviewers_data)
         interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
