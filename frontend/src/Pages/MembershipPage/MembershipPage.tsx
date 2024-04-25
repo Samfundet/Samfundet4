@@ -86,7 +86,7 @@ export function MembershipPage() {
           <h2 className={styles.header2}>{useTextItem(TextItem.laws_and_statutes_header)}</h2>
           <div>
             {useTextItem(TextItem.laws_and_statutes_text)}{' '}
-            <a className={styles.link} href={ROUTES.other.lover_og_statutter}>
+            <a className={styles.link} href={ROUTES.other.laws_and_statutes}>
               {t(KEY.common_here) + '.'}
             </a>
           </div>
