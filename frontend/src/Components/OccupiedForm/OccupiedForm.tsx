@@ -158,9 +158,9 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
                   <div className={styles.timeslots}>
                     {timeslots.map((slot) => (
                       <button
-                        className={`${styles.timeslot} ${
-                          isTimeslotSelected(selectedDate, slot) && styles.timeslot_active
-                        }`}
+                        className={classNames(styles.timeslot, {
+                          [styles.timeslot_active]: isTimeslotSelected(selectedDate, slot),
+                        })}
                         key={slot}
                         onClick={() => toggleTimeslot(selectedDate, slot)}
                       >
