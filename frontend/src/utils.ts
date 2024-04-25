@@ -136,6 +136,16 @@ export function getDayKey(day: Day): KeyValues {
   }
 }
 
+export const SHORT_DAY_I18N_KEYS = [
+  KEY.common_day_monday_short,
+  KEY.common_day_tuesday_short,
+  KEY.common_day_wednesday_short,
+  KEY.common_day_thursday_short,
+  KEY.common_day_friday_short,
+  KEY.common_day_saturday_short,
+  KEY.common_day_sunday_short,
+];
+
 /**
  * Gets the translation key for a given price group
  */

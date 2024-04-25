@@ -26,6 +26,15 @@ export const KEY = {
   common_day_saturday: 'common_day_saturday',
   common_day_sunday: 'common_day_sunday',
 
+  // Day abbreviations:
+  common_day_monday_short: 'common_day_monday_short',
+  common_day_tuesday_short: 'common_day_tuesday_short',
+  common_day_wednesday_short: 'common_day_wednesday_short',
+  common_day_thursday_short: 'common_day_thursday_short',
+  common_day_friday_short: 'common_day_friday_short',
+  common_day_saturday_short: 'common_day_saturday_short',
+  common_day_sunday_short: 'common_day_sunday_short',
+
   // Months:
   common_month_january: 'common_month_january',
   common_month_february: 'common_month_february',

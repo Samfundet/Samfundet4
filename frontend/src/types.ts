@@ -119,3 +119,8 @@ export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.REGISTRATION,
   EventTicketType.CUSTOM,
 ];
+
+export type CalendarMarker = {
+  date: Date;
+  className?: string;
+};
