@@ -24,7 +24,7 @@ type MiniCalendarProps = {
 };
 
 export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabel, markers }: MiniCalendarProps) {
-  const [currentDate, setCurrentDate] = useState<Date>(baseDate);
+  const [displayDate, setDisplayDate] = useState<Date>(baseDate);
   const [days, setDays] = useState<Date[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { t } = useTranslation();
@@ -41,9 +41,9 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
   }
 
   useEffect(() => {
-    const monthStart = new Date(currentDate);
+    const monthStart = new Date(displayDate);
     monthStart.setDate(1);
-    const monthEnd = lastDayOfMonth(currentDate);
+    const monthEnd = lastDayOfMonth(displayDate);
 
     const padStart = isMonday(monthStart) ? monthStart : previousMonday(monthStart);
     const padEnd = isSunday(monthEnd) ? monthEnd : nextSunday(monthEnd);
@@ -55,33 +55,33 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
       curr = addDays(curr, 1);
     }
     setDays(d);
-  }, [currentDate]);
+  }, [displayDate]);
 
   useEffect(() => {
-    setCurrentDate(baseDate);
+    setDisplayDate(baseDate);
   }, [baseDate]);
 
   const showPrevMonthButton =
     minDate === undefined ||
-    new Date(minDate.getFullYear(), minDate.getMonth()) < new Date(currentDate.getFullYear(), currentDate.getMonth());
+    new Date(minDate.getFullYear(), minDate.getMonth()) < new Date(displayDate.getFullYear(), displayDate.getMonth());
 
   const showNextMonthButton =
     maxDate === undefined ||
-    new Date(maxDate.getFullYear(), maxDate.getMonth()) > new Date(currentDate.getFullYear(), currentDate.getMonth());
+    new Date(maxDate.getFullYear(), maxDate.getMonth()) > new Date(displayDate.getFullYear(), displayDate.getMonth());
 
   const monthHeader = displayLabel && (
     <div className={styles.month_header}>
       <div className={styles.previous_month}>
         {showPrevMonthButton && (
-          <Button onClick={() => setCurrentDate(addMonths(currentDate, -1))} className={styles.change_month_button}>
+          <Button onClick={() => setDisplayDate(addMonths(displayDate, -1))} className={styles.change_month_button}>
             <Icon icon="carbon:chevron-left" />
           </Button>
         )}
       </div>
-      <TimeDisplay className={styles.label} timestamp={currentDate} displayType={'nice-month-year'} />
+      <TimeDisplay className={styles.label} timestamp={displayDate} displayType={'nice-month-year'} />
       <div className={styles.next_month}>
         {showNextMonthButton && (
-          <Button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className={styles.change_month_button}>
+          <Button onClick={() => setDisplayDate(addMonths(displayDate, 1))} className={styles.change_month_button}>
             <Icon icon="carbon:chevron-right" />
           </Button>
         )}
@@ -106,7 +106,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
           const valid = dateValid(d);
           const isSelected = selectedDate?.toDateString() === d.toDateString();
           const marker = getMarker(d);
-          const outsideDay = currentDate.getFullYear() !== d.getFullYear() || currentDate.getMonth() !== d.getMonth();
+          const outsideDay = displayDate.getFullYear() !== d.getFullYear() || displayDate.getMonth() !== d.getMonth();
 
           return (
             <button
