@@ -4,15 +4,22 @@ import { Button } from '../Button';
 import { InputField } from '../InputField';
 import { TextAreaField } from '../TextAreaField';
 import { getRejectedApplicants } from '~/api';
+import { UserDto } from '~/dto';
 
 export function RejectionMail() {
   const [text, setText] = useState('');
   const [subject, setSubject] = useState('');
   const recruitmentId = useParams().recruitmentId;
+  const [rejectedUsers, setRejectedUsers] = useState<UserDto[]>([]);
 
   useEffect(() => {
-    getRejectedApplicants(recruitmentId);
-  }, []);
+    if (recruitmentId) {
+      getRejectedApplicants(recruitmentId).then((response) => {
+        console.log(response.data);
+        setRejectedUsers(response.data);
+      });
+    }
+  }, [recruitmentId]);
 
   function handleSubmit() {
     console.log('Text: ' + text);
