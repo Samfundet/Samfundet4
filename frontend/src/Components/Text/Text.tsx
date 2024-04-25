@@ -38,7 +38,7 @@ export function Text({ children, className, size = 'm', as = 'p' }: textProps) {
       className={className}
       style={{
         fontSize: textSizes[size],
-        display: 'block'
+        display: 'block',
       }}
     >
       {children}
