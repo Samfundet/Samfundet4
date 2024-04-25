@@ -1,10 +1,10 @@
-import { Button, ImageCard } from '~/Components';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Button, ImageCard } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -12,7 +12,7 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
-import { useCustomNavigate, usePrevious } from '~/hooks';
+import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,7 +21,6 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 type EventCreatorStep = {
   key: string; // Unique key.
@@ -313,7 +312,7 @@ export function EventCreatorAdminPage() {
   );
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
-  UseTitle(title);
+  useTitle(title);
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <TabBar

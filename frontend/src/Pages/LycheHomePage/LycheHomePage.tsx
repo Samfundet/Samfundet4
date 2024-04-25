@@ -7,12 +7,11 @@ import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { TextItem, VENUE } from '~/constants';
 import { VenueDto } from '~/dto';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LycheHomePage.module.scss';
 import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function LycheHomePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
@@ -20,7 +19,7 @@ export function LycheHomePage() {
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
   const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
-  UseTitle(t(KEY.common_sulten));
+  useTitle(t(KEY.common_sulten));
 
   useEffect(() => {
     getVenues()

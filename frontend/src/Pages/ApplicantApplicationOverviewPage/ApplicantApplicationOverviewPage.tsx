@@ -3,21 +3,21 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Page } from '~/Components';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { Table } from '~/Components/Table';
 import { getRecruitmentAdmissionsForApplicant } from '~/api';
 import { RecruitmentAdmissionDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
 import styles from './ApplicantApplicationOverviewPage.module.scss';
-import { OccupiedFormModal } from '~/Components/OccupiedForm';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ApplicantApplicationOverviewPage() {
   const { recruitmentID } = useParams();
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
-  UseTitle(t(KEY.admin_information_manage_title));
+  useTitle(t(KEY.admin_information_manage_title));
 
   function handleChangePriority(id: number, direction: 'up' | 'down') {
     const newAdmissions = [

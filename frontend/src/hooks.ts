@@ -419,3 +419,9 @@ export function useIsMetaKeyDown(): boolean {
 
   return isDown;
 }
+
+export function useTitle(title: string): void {
+  useEffect(() => {
+    document.title = `Samfundet | ${title}`;
+  }, [title]);
+}

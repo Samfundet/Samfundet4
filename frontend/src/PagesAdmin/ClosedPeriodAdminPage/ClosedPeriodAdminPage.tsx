@@ -5,18 +5,18 @@ import { Button } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  UseTitle(t(KEY.command_menu_shortcut_closed));
+  useTitle(t(KEY.command_menu_shortcut_closed));
 
   const getAllClosedPeriods = useCallback(() => {
     setShowSpinner(true);

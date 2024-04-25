@@ -2,12 +2,12 @@ import { t } from 'i18next';
 import { LycheFrame } from '~/Components/LycheFrame';
 import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { lowerCapitalize } from '~/utils';
 
 export function LycheMenuPage() {
-  UseTitle(lowerCapitalize(`${t(KEY.common_sulten)} ${t(KEY.common_menu)}`));
+  useTitle(lowerCapitalize(`${t(KEY.common_sulten)} ${t(KEY.common_menu)}`));
   return (
     <SultenPage>
       <LycheFrame>

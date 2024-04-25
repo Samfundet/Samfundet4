@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
 import { RecruitmentAdmissionDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
@@ -52,7 +52,7 @@ export function RecruitmentPositionOverviewPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const title = t(KEY.recruitment_administrate_applications);
-  UseTitle(title);
+  useTitle(title);
   useEffect(() => {
     recruitmentId &&
       gangId &&

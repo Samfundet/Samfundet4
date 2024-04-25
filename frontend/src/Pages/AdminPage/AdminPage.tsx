@@ -10,12 +10,12 @@ import { Link } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { getRandomEntryFromList } from '~/utils';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
+import { useTitle } from '~/hooks';
 
 export function AdminPage() {
   const { t } = useTranslation();
   const { user } = useAuthContext();
-  UseTitle(t(KEY.command_menu_shortcut_control_panel));
+  useTitle(t(KEY.command_menu_shortcut_control_panel));
 
   const WISEWORD = getRandomEntryFromList(WISEWORDS) as string;
 

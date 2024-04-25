@@ -3,20 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { Button, ImageQuery } from '~/Components';
 import { getImages } from '~/api';
 import { ImageDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
-import { lowerCapitalize } from '~/utils';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ImageAdminPage() {
   const [images, setImages] = useState<ImageDto[]>([]);
   const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  UseTitle(t(KEY.admin_images_title));
+  useTitle(t(KEY.admin_images_title));
 
   // Stuff to do on first render.
   // TODO add permissions on render

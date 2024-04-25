@@ -1,16 +1,15 @@
 import { Icon } from '@iconify/react';
+import { t } from 'i18next';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
 import { TextItem } from '~/constants/TextItems';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LycheContactPage.module.scss';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
-import { KEY } from '~/i18n/constants';
-import { t } from 'i18next';
 
 export function LycheContactPage() {
-  UseTitle(t(KEY.common_contact) + ' ' + t(KEY.common_sulten));
+  useTitle(t(KEY.common_contact) + ' ' + t(KEY.common_sulten));
   return (
     <>
       <SultenPage>

@@ -7,13 +7,12 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
 import { ClosedPeriodDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -64,7 +63,7 @@ export function ClosedPeriodFormAdminPage() {
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
-  UseTitle(title);
+  useTitle(title);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>

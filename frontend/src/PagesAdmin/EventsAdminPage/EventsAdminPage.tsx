@@ -8,13 +8,13 @@ import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function EventsAdminPage() {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export function EventsAdminPage() {
   const [allEvents, setAllEvents] = useState<EventDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t, i18n } = useTranslation();
-  UseTitle(t(KEY.admin_events_administrate));
+  useTitle(t(KEY.admin_events_administrate));
 
   function getEvents() {
     getEventsUpcomming()

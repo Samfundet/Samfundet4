@@ -8,13 +8,12 @@ import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import { InformationPageDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './InformationFormAdminPage.module.scss';
 import { lowerCapitalize } from '~/utils';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
+import styles from './InformationFormAdminPage.module.scss';
 
 export function InformationFormAdminPage() {
   const { t } = useTranslation();
@@ -40,7 +39,7 @@ export function InformationFormAdminPage() {
   const title = slugField
     ? t(KEY.common_edit)
     : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`);
-  UseTitle(title);
+  useTitle(title);
 
   // Fetch data if edit mode.
   useEffect(() => {

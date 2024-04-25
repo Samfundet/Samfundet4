@@ -4,17 +4,16 @@ import { Button, Carousel } from '~/Components';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
 import { TextItem } from '~/constants';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function AboutPage() {
   const { t } = useTranslation();
-  UseTitle(t(KEY.command_menu_shortcut_about_samfundet));
+  useTitle(t(KEY.command_menu_shortcut_about_samfundet));
 
   return (
     <Page>

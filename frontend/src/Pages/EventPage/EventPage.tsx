@@ -5,14 +5,14 @@ import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
 import { EventDto } from '~/dto';
+import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
-import { ROUTES } from '~/routes';
-import { STATUS } from '~/http_status_codes';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function EventPage() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export function EventPage() {
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  UseTitle(t(KEY.common_events));
+  useTitle(t(KEY.common_events));
 
   useEffect(() => {
     if (id) {

@@ -7,12 +7,12 @@ import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
 import { RecruitmentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function RecruitmentAdminPage() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export function RecruitmentAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const title = t(KEY.recruitment_administrate);
-  UseTitle(title);
+  useTitle(title);
 
   // Stuff to do on first render.
   //TODO add permissions on render

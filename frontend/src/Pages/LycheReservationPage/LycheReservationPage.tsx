@@ -8,16 +8,15 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { KV } from '~/constants';
 import { TextItem } from '~/constants/TextItems';
 import { ReservationDto } from '~/dto';
-import { useKeyValue, useTextItem } from '~/hooks';
+import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { lowerCapitalize } from '~/utils';
 import { ReservationFormLine } from './Components';
 import styles from './LycheReservationPage.module.scss';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
-import { lowerCapitalize } from '~/utils';
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
-  UseTitle(lowerCapitalize(`${t(KEY.common_sulten)} ${t(KEY.common_reservation)}`));
+  useTitle(lowerCapitalize(`${t(KEY.common_sulten)} ${t(KEY.common_reservation)}`));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<ReservationDto>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);

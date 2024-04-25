@@ -5,12 +5,12 @@ import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGangs } from '~/api';
 import { GangDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function RecruitmentGangOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -18,7 +18,7 @@ export function RecruitmentGangOverviewPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const title = t(KEY.admin_information_manage_title);
-  UseTitle(title);
+  useTitle(title);
 
   useEffect(() => {
     getGangs().then((data) => {

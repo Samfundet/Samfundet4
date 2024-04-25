@@ -4,19 +4,19 @@ import { toast } from 'react-toastify';
 import { InputTime } from '~/Components';
 import { getVenues, putVenue } from '~/api';
 import { VenueDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS } from '~/types';
 import { getDayKey, lowerCapitalize } from '~/utils';
 import { AdminPage } from '../AdminPageLayout';
 import styles from './OpeningHoursAdminPage.module.scss';
-import { UseTitle } from '~/Components/UseTitle/UseTitle';
 
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
   const [venues, setVenues] = useState<VenueDto[]>([]);
   const [saveTimer, setSaveTimer] = useState<Record<string, NodeJS.Timeout>>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  UseTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
+  useTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
   // We need a reference to read changed state inside timeout
   const venueRef = useRef(venues);
 
