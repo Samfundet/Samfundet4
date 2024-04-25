@@ -316,8 +316,8 @@ class PurchaseFeedbackModel(models.Model):
     """
 
     title = models.CharField(max_length=255, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    event = models.ForeignKey(Event, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = 'PurchaseFeedback'
