@@ -351,7 +351,7 @@ class PurchaseFeedbackQuestion(CustomBaseModel):
     feedbackform.
     """
 
-    question = models.CharField(max_length=255, blank=True)
+    question = models.CharField(max_length=255)
     answer = models.CharField(max_length=255, blank=True)
     form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
 
