@@ -7,7 +7,9 @@ export default {
 } as ComponentMeta<typeof MiniCalendar>;
 
 const Template: ComponentStory<typeof MiniCalendar> = function (args) {
-  return <MiniCalendar {...args} />;
+  const minDate = new Date(args.minDate as unknown as number);
+  const maxDate = new Date(args.maxDate as unknown as number);
+  return <MiniCalendar {...args} minDate={minDate} maxDate={maxDate} />;
 };
 
 export const Basic = Template.bind({});
