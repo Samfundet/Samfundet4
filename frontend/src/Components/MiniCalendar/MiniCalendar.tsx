@@ -118,7 +118,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
                 [styles.selected_day]: isSelected,
               })}
               onClick={() => {
-                onChange && onChange(d);
+                onChange?.(d);
                 setSelectedDate(d);
               }}
               disabled={!valid}
