@@ -7,9 +7,8 @@ import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots
 import { Trans, useTranslation } from 'react-i18next';
 import { Button } from '../Button';
 import { MiniCalendar } from '~/Components';
-import { format } from 'date-fns';
 import classNames from 'classnames';
-import { lowerCapitalize } from '~/utils';
+import { formatDateYMD, lowerCapitalize } from '~/utils';
 import { CalendarMarker } from '~/types';
 
 type OccupiedFormProps = {
@@ -94,7 +93,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
   }, [timeslots, selectedTimeslots]);
 
   function toggleTimeslot(d: Date, timeslot: string) {
-    const dayString = formatDate(d);
+    const dayString = formatDateYMD(d);
     const selectedTimeslotsCopy = { ...selectedTimeslots };
     if (selectedTimeslots[dayString]) {
       if (selectedTimeslotsCopy[dayString].includes(timeslot)) {
@@ -111,26 +110,22 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
     setSelectedTimeslots(selectedTimeslotsCopy);
   }
 
-  function formatDate(d: Date) {
-    return format(d, 'yyyy.LL.dd');
-  }
-
   function isTimeslotSelected(d: Date, timeslot: string) {
-    const x = selectedTimeslots[formatDate(d)];
+    const x = selectedTimeslots[formatDateYMD(d)];
     return !(!x || !x.find((s) => s === timeslot));
   }
 
   function isAllSelected(d: Date) {
-    const selectedLength = selectedTimeslots[formatDate(d)]?.length || 0;
+    const selectedLength = selectedTimeslots[formatDateYMD(d)]?.length || 0;
     return selectedLength === timeslots.length;
   }
 
   function toggleSelectAll(d: Date) {
     const slots = { ...selectedTimeslots };
     if (isAllSelected(d)) {
-      delete slots[formatDate(d)];
+      delete slots[formatDateYMD(d)];
     } else {
-      slots[formatDate(d)] = timeslots;
+      slots[formatDateYMD(d)] = timeslots;
     }
     setSelectedTimeslots(slots);
   }
