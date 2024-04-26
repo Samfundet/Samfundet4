@@ -10,12 +10,12 @@ import { MiniCalendar } from '~/Components';
 import { CalendarMarker } from '~/types';
 import { TimeslotContainer } from '~/Components/OccupiedForm/components';
 
-type OccupiedFormProps = {
+type Props = {
   recruitmentId: number;
   onCancel?: () => void;
 };
 
-export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps) {
+export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
