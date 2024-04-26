@@ -10,12 +10,13 @@ type Props = {
   selectedDate: Date | null;
   timeslots: string[];
   onChange?: (timeslots: Record<string, string[]>) => void;
+  selectedTimeslots?: Record<string, string[]>;
 };
 
-export function TimeslotContainer({ selectedDate, timeslots, onChange }: Props) {
+export function TimeslotContainer({ selectedDate, timeslots, onChange, ...props }: Props) {
   const { t } = useTranslation();
 
-  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
+  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>(props.selectedTimeslots || {});
 
   // Click & drag functionality
   const mouseDown = useMouseDown();

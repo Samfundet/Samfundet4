@@ -116,6 +116,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
               selectedDate={selectedDate}
               timeslots={timeslots}
               onChange={(slots) => setSelectedTimeslots(slots)}
+              selectedTimeslots={selectedTimeslots}
             />
           </div>
 
