@@ -33,6 +33,7 @@ from .models.general import (
     KeyValue,
     MenuItem,
     TextItem,
+    GangSection,
     Reservation,
     ClosedPeriod,
     FoodCategory,
@@ -379,6 +380,19 @@ class GangTypeAdmin(CustomBaseAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+    list_select_related = True
+
+
+@admin.register(GangSection)
+class GangSectionAdmin(CustomBaseAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
+    list_filter = ['gang']
+    list_display = ['id', '__str__', 'name_nb', 'gang', 'created_at', 'updated_at']
+    search_fields = ['id', 'name_nb']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    autocomplete_fields = ['gang']
     list_select_related = True
 
 

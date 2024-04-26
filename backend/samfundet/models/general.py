@@ -333,6 +333,16 @@ class Gang(CustomBaseModel):
         return f'{self.gang_type} - {self.name_nb}'
 
 
+class GangSection(CustomBaseModel):
+    name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
+    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
+    logo = models.ImageField(upload_to='gangsectionlogos/', blank=True, null=True, verbose_name='Logo')
+    gang = models.ForeignKey(Gang, blank=False, null=False, related_name='gang', on_delete=models.PROTECT, verbose_name='Gjeng')
+
+    def __str__(self) -> str:
+        return f'{self.gang.name_nb} - {self.name_nb}'
+
+
 class InformationPage(CustomBaseModel):
     slug_field = models.SlugField(
         max_length=64,
