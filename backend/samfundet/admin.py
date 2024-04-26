@@ -11,7 +11,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from root.utils.routes import admin__samfundet_recruitmentadmission_change
+from root.utils.routes import admin__samfundet_recruitmentadmission_change, admin__samfundet_gang_change
 from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
 
 from .models.event import Event, EventGroup, EventRegistration
@@ -385,15 +385,18 @@ class GangTypeAdmin(CustomBaseAdmin):
 
 @admin.register(GangSection)
 class GangSectionAdmin(CustomBaseAdmin):
-    # ordering = []
+
+    def gang_link(self, obj):
+        link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
+        return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)
+
     sortable_by = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
     list_filter = ['gang']
-    list_display = ['id', '__str__', 'name_nb', 'gang', 'created_at', 'updated_at']
+    list_display = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb']
-    # filter_horizontal = []
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['gang']
+    list_display_links = ['id', 'name_nb']
     list_select_related = True
+    related_links = ['gang']
 
 
 @admin.register(InformationPage)
