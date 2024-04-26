@@ -280,7 +280,7 @@ export const nb: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
-  [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig',
+  [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
   [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
@@ -593,7 +593,7 @@ export const en: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
-  [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available',
+  [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
   [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
 
