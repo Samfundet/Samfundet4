@@ -7,9 +7,8 @@ import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots
 import { Trans, useTranslation } from 'react-i18next';
 import { Button } from '../Button';
 import { MiniCalendar } from '~/Components';
-import classNames from 'classnames';
-import { formatDateYMD, lowerCapitalize } from '~/utils';
 import { CalendarMarker } from '~/types';
+import { TimeslotContainer } from '~/Components/OccupiedForm/components';
 
 type OccupiedFormProps = {
   recruitmentId: number;
@@ -92,44 +91,6 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
     return x;
   }, [timeslots, selectedTimeslots]);
 
-  function toggleTimeslot(d: Date, timeslot: string) {
-    const dayString = formatDateYMD(d);
-    const selectedTimeslotsCopy = { ...selectedTimeslots };
-    if (selectedTimeslots[dayString]) {
-      if (selectedTimeslotsCopy[dayString].includes(timeslot)) {
-        selectedTimeslotsCopy[dayString] = selectedTimeslotsCopy[dayString].filter((s) => s !== timeslot);
-        if (selectedTimeslotsCopy[dayString].length === 0) {
-          delete selectedTimeslotsCopy[dayString];
-        }
-      } else {
-        selectedTimeslotsCopy[dayString].push(timeslot);
-      }
-    } else {
-      selectedTimeslotsCopy[dayString] = [timeslot];
-    }
-    setSelectedTimeslots(selectedTimeslotsCopy);
-  }
-
-  function isTimeslotSelected(d: Date, timeslot: string) {
-    const x = selectedTimeslots[formatDateYMD(d)];
-    return !(!x || !x.find((s) => s === timeslot));
-  }
-
-  function isAllSelected(d: Date) {
-    const selectedLength = selectedTimeslots[formatDateYMD(d)]?.length || 0;
-    return selectedLength === timeslots.length;
-  }
-
-  function toggleSelectAll(d: Date) {
-    const slots = { ...selectedTimeslots };
-    if (isAllSelected(d)) {
-      delete slots[formatDateYMD(d)];
-    } else {
-      slots[formatDateYMD(d)] = timeslots;
-    }
-    setSelectedTimeslots(slots);
-  }
-
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>{t(KEY.occupied_title)}</h3>
@@ -151,42 +112,15 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: OccupiedFormProps)
               markers={markers}
             />
 
-            <div className={styles.timeslot_container}>
-              {selectedDate ? (
-                <>
-                  {t(KEY.occupied_select_time_text)}:
-                  <div className={styles.timeslots}>
-                    {timeslots.map((slot) => (
-                      <button
-                        className={classNames(styles.timeslot, {
-                          [styles.timeslot_active]: isTimeslotSelected(selectedDate, slot),
-                        })}
-                        key={slot}
-                        onClick={() => toggleTimeslot(selectedDate, slot)}
-                      >
-                        <div className={styles.dot}></div>
-                        <span>{slot}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <button
-                    className={classNames({
-                      [styles.timeslot]: true,
-                      [styles.timeslot_active]: isAllSelected(selectedDate),
-                    })}
-                    onClick={() => toggleSelectAll(selectedDate)}
-                  >
-                    {isAllSelected(selectedDate) ? t(KEY.common_unselect_all) : t(KEY.common_select_all)}
-                  </button>
-                </>
-              ) : (
-                <div>{lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_date)}`)}</div>
-              )}
-            </div>
+            <TimeslotContainer
+              selectedDate={selectedDate}
+              timeslots={timeslots}
+              onChange={(slots) => setSelectedTimeslots(slots)}
+            />
           </div>
 
           <div className={styles.button_row}>
-            <Button display="block" theme="secondary" onClick={() => onCancel && onCancel()}>
+            <Button display="block" theme="secondary" onClick={() => onCancel?.()}>
               {t(KEY.common_cancel)}
             </Button>
             <Button display="block" theme="samf" onClick={save}>
