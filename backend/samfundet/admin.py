@@ -11,7 +11,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from root.utils.routes import admin__samfundet_recruitmentadmission_change, admin__samfundet_gang_change
+from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentadmission_change
 from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
 
 from .models.event import Event, EventGroup, EventRegistration
@@ -385,7 +385,6 @@ class GangTypeAdmin(CustomBaseAdmin):
 
 @admin.register(GangSection)
 class GangSectionAdmin(CustomBaseAdmin):
-
     def gang_link(self, obj):
         link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
         return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)

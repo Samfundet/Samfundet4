@@ -10,9 +10,19 @@ GANGS = {
         ('Klubbstyret', 'KLST', []),
     ],
     'Drift': [
-        ('Markedsføringsgjengen', 'MG', [
-            'Web', 'Layout', 'Info', 'Marked', 'Redaksjonen', 'STØNT', 'Video',
-        ]),
+        (
+            'Markedsføringsgjengen',
+            'MG',
+            [
+                'Web',
+                'Layout',
+                'Info',
+                'Marked',
+                'Redaksjonen',
+                'STØNT',
+                'Video',
+            ],
+        ),
         ('Fotogjengen', 'FG', []),
         ('Diversegjengen', 'DG', []),
         ('Forsterkerkomiteen', 'FK', []),
