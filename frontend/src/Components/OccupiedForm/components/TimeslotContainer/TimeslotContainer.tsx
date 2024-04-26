@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { TimeslotButton } from '~/Components/OccupiedForm/components';
 import { useEffect, useState } from 'react';
+import { useMouseDown } from '~/hooks';
 
 type Props = {
   selectedDate: Date | null;
@@ -16,12 +17,17 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange }: Props) 
 
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
 
+  // Click & drag functionality
+  const mouseDown = useMouseDown();
+  // dragSetSelected decides whether we select or unselect buttons we drag over
+  const [dragSetSelected, setDragSetSelected] = useState(false);
+
   useEffect(() => {
     onChange?.(selectedTimeslots);
   }, [selectedTimeslots]);
 
-  function toggleTimeslot(d: Date, timeslot: string) {
-    const dayString = formatDateYMD(d);
+  function toggleTimeslot(date: Date, timeslot: string) {
+    const dayString = formatDateYMD(date);
     const selectedTimeslotsCopy = { ...selectedTimeslots };
     if (selectedTimeslots[dayString]) {
       if (selectedTimeslotsCopy[dayString].includes(timeslot)) {
@@ -38,24 +44,56 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange }: Props) 
     setSelectedTimeslots(selectedTimeslotsCopy);
   }
 
-  function isTimeslotSelected(d: Date, timeslot: string) {
-    const x = selectedTimeslots[formatDateYMD(d)];
+  function selectTimeslot(date: Date, timeslot: string) {
+    if (isTimeslotSelected(date, timeslot)) return;
+    const dayString = formatDateYMD(date);
+    const copy = { ...selectedTimeslots };
+    if (copy[dayString]) {
+      copy[dayString].push(timeslot);
+    } else {
+      copy[dayString] = [timeslot];
+    }
+    setSelectedTimeslots(copy);
+  }
+
+  function unselectTimeslot(date: Date, timeslot: string) {
+    if (!isTimeslotSelected(date, timeslot)) return;
+    const dayString = formatDateYMD(date);
+    const copy = { ...selectedTimeslots };
+    copy[dayString] = copy[dayString].filter((s) => s !== timeslot);
+    if (copy[dayString].length === 0) {
+      delete copy[dayString];
+    }
+    setSelectedTimeslots(copy);
+  }
+
+  function isTimeslotSelected(date: Date, timeslot: string) {
+    const x = selectedTimeslots[formatDateYMD(date)];
     return !(!x || !x.find((s) => s === timeslot));
   }
 
-  function isAllSelected(d: Date) {
-    const selectedLength = selectedTimeslots[formatDateYMD(d)]?.length || 0;
+  function isAllSelected(date: Date) {
+    const selectedLength = selectedTimeslots[formatDateYMD(date)]?.length || 0;
     return selectedLength === timeslots.length;
   }
 
-  function toggleSelectAll(d: Date) {
+  function toggleSelectAll(date: Date) {
     const slots = { ...selectedTimeslots };
-    if (isAllSelected(d)) {
-      delete slots[formatDateYMD(d)];
+    if (isAllSelected(date)) {
+      delete slots[formatDateYMD(date)];
     } else {
-      slots[formatDateYMD(d)] = timeslots;
+      slots[formatDateYMD(date)] = timeslots;
     }
     setSelectedTimeslots(slots);
+  }
+
+  function onMouseEnter(date: Date, timeslot: string) {
+    if (!mouseDown) return;
+    if (dragSetSelected) {
+      selectTimeslot(date, timeslot);
+    } else {
+      unselectTimeslot(date, timeslot);
+    }
   }
 
   if (!selectedDate) {
@@ -66,15 +104,23 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange }: Props) 
     <div className={styles.container}>
       {t(KEY.occupied_select_time_text)}:
       <div className={styles.timeslots}>
-        {timeslots.map((timeslot) => (
-          <TimeslotButton
-            key={timeslot}
-            active={isTimeslotSelected(selectedDate, timeslot)}
-            onClick={() => toggleTimeslot(selectedDate, timeslot)}
-          >
-            {timeslot}
-          </TimeslotButton>
-        ))}
+        {timeslots.map((timeslot) => {
+          const active = isTimeslotSelected(selectedDate, timeslot);
+
+          return (
+            <TimeslotButton
+              key={timeslot}
+              active={active}
+              onMouseDown={() => {
+                toggleTimeslot(selectedDate, timeslot);
+                setDragSetSelected(!active);
+              }}
+              onMouseEnter={() => onMouseEnter(selectedDate, timeslot)}
+            >
+              {timeslot}
+            </TimeslotButton>
+          );
+        })}
       </div>
       <TimeslotButton
         active={isAllSelected(selectedDate)}

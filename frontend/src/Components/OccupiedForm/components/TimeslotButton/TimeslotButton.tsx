@@ -1,22 +1,21 @@
 import classNames from 'classnames';
 import styles from './TimeslotButton.module.scss';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
-type Props = {
-  onClick?: () => void;
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;
   children?: ReactNode;
   showDot?: boolean;
-};
+}
 
-export function TimeslotButton({ active, onClick, children, showDot = true }: Props) {
+export function TimeslotButton({ active, children, showDot = true, ...props }: Props) {
   return (
     <button
       className={classNames(styles.timeslot, {
         [styles.timeslot_active]: active,
       })}
-      onClick={() => onClick?.()}
       type="button"
+      {...props}
     >
       {showDot && <div className={styles.dot}></div>}
       <span>{children}</span>
