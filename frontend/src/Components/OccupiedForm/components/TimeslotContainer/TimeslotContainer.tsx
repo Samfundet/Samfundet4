@@ -28,20 +28,20 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange }: Props) 
 
   function toggleTimeslot(date: Date, timeslot: string) {
     const dayString = formatDateYMD(date);
-    const selectedTimeslotsCopy = { ...selectedTimeslots };
+    const copy = { ...selectedTimeslots };
     if (selectedTimeslots[dayString]) {
-      if (selectedTimeslotsCopy[dayString].includes(timeslot)) {
-        selectedTimeslotsCopy[dayString] = selectedTimeslotsCopy[dayString].filter((s) => s !== timeslot);
-        if (selectedTimeslotsCopy[dayString].length === 0) {
-          delete selectedTimeslotsCopy[dayString];
+      if (copy[dayString].includes(timeslot)) {
+        copy[dayString] = copy[dayString].filter((s) => s !== timeslot);
+        if (copy[dayString].length === 0) {
+          delete copy[dayString];
         }
       } else {
-        selectedTimeslotsCopy[dayString].push(timeslot);
+        copy[dayString].push(timeslot);
       }
     } else {
-      selectedTimeslotsCopy[dayString] = [timeslot];
+      copy[dayString] = [timeslot];
     }
-    setSelectedTimeslots(selectedTimeslotsCopy);
+    setSelectedTimeslots(copy);
   }
 
   function selectTimeslot(date: Date, timeslot: string) {
