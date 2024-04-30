@@ -16,6 +16,7 @@ import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
+import { STATUS } from '~/http_status_codes';
 
 /**
  * Renders information page using markdown
@@ -33,6 +34,9 @@ export function InformationPage() {
       getInformationPage(slugField)
         .then((data) => setPage(data))
         .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found);
+          }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         });

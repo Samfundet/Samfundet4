@@ -21,6 +21,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -38,6 +39,7 @@ from .models.general import (
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -669,6 +671,31 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+    filter_horizontal = ['interviewers']
+
+
+@admin.register(Merch)
+class MerchAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'base_price']
+    # list_filter = []
+    list_display = ['name_nb', 'base_price']
+    search_fields = ['name_nb']
+    # filter_horizontal = []
+    list_display_links = ['name_nb']
+    # autocomplete_fields = []
+
+
+@admin.register(MerchVariation)
+class MerchVariationAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'specification']
+    # list_filter = []
+    list_display = ['id', '__str__', 'specification']
+    search_fields = ['id', 'specification']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
 
 
 @admin.register(UserFeedbackModel)

@@ -64,8 +64,15 @@ export const appletCategories: AppletCategory[] = [
         url: ROUTES.frontend.admin_recruitment,
       },
       {
+        title_nb: 'Lyche Reservasjon',
+        title_en: 'Lyche Reservation',
+        perm: PERM.SAMFUNDET_VIEW_RESERVATION,
+        icon: 'mdi:food-outline',
+        url: ROUTES.frontend.admin_sulten_reservations,
+      },
+      {
         title_nb: 'Lyche Meny',
-        title_en: 'Lyche Meny',
+        title_en: 'Lyche Menu',
         perm: PERM.SAMFUNDET_VIEW_MENU,
         icon: 'bx:food-menu',
         url: ROUTES.frontend.admin_sulten_menu,
