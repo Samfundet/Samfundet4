@@ -385,7 +385,7 @@ class GangTypeAdmin(CustomBaseAdmin):
 
 @admin.register(GangSection)
 class GangSectionAdmin(CustomBaseAdmin):
-    def gang_link(self, obj):
+    def gang_link(self, obj: GangSection) -> str:
         link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
         return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)
 
