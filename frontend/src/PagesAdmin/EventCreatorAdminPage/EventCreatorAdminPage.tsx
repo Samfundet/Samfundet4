@@ -339,13 +339,13 @@ export function EventCreatorAdminPage() {
     return (
       <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
         <SamfForm
-          onChange={(part) => setEvent({ ...event, ...part })}
+          onChange={(part) => setEvent({ ...event, ...part })} // TODO: BURDE VÆRE 'ny/oppdatert' event data ?
           onValidityChanged={(valid) => {
             setStepCompleted(step, valid);
           }}
           validateOnInit={visited}
           devMode={false}
-          initialData={event as FormType}
+          initialData={event as FormType} //TODO: BURDE VÆRE INITIAL EVENT ?
         >
           {step.key == 'summary' ? eventPreview : <></>}
           {step.template}
