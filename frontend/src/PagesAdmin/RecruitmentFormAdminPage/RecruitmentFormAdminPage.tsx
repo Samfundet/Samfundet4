@@ -14,6 +14,17 @@ import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import styles from './RecruitmentFormAdminPage.module.scss';
 
+type FormType = {
+  name_nb: string;
+  name_en: string;
+  visible_from: string;
+  shown_application_deadline: string;
+  actual_application_deadline: string;
+  reprioritization_deadline_for_applicant: string;
+  reprioritization_deadline_for_groups: string;
+  organization: string;
+};
+
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -22,11 +33,7 @@ export function RecruitmentFormAdminPage() {
   const { id } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
-  const [externalErrors, setExternalErrors] = useState<object>({});
-  const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>({
-    name_nb: 'Nytt opptak',
-    name_en: 'New recruitment',
-  });
+  const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>();
 
   useEffect(() => {
     // Fetch organizations.
@@ -61,7 +68,7 @@ export function RecruitmentFormAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const initialData: Partial<RecruitmentDto> = {
+  const initialData: Partial<FormType> = {
     name_nb: recruitment?.name_nb,
     name_en: recruitment?.name_en,
     visible_from: utcTimestampToLocal(recruitment?.visible_from),
@@ -83,29 +90,26 @@ export function RecruitmentFormAdminPage() {
     );
   }
 
-  function handleOnSubmit(data: RecruitmentDto) {
-    setExternalErrors({});
+  function handleOnSubmit(data: FormType) {
     if (id) {
       // Update page.
-      putRecruitment(id, data)
+      putRecruitment(id, data as RecruitmentDto)
         .then(() => {
           toast.success(t(KEY.common_update_successful));
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
-          setExternalErrors(error.response.data);
         });
       navigate(ROUTES.frontend.admin_recruitment);
     } else {
       // Post new page.
-      postRecruitment(data)
+      postRecruitment(data as RecruitmentDto)
         .then(() => {
           navigate(ROUTES.frontend.admin_recruitment);
           toast.success(t(KEY.common_creation_successful));
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
-          setExternalErrors(error.response.data);
         });
     }
   }
@@ -113,29 +117,46 @@ export function RecruitmentFormAdminPage() {
   // TODO: Add validation for the dates
   return (
     <div className={styles.wrapper}>
-      <SamfForm<RecruitmentDto>
-        externalErrors={externalErrors}
+      <SamfForm<FormType>
         onSubmit={handleOnSubmit}
         initialData={initialData}
         submitText={submitText}
+        validateOn={'submit'}
       >
         <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
-          <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
+          <SamfFormField<string, FormType>
+            field="name_nb"
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+            required={true}
+          />
+          <SamfFormField<string, FormType>
+            field="name_en"
+            type="text"
+            label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+            required={true}
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="visible_from" type="date_time" label={t(KEY.recruitment_visible_from) ?? ''} />
+          <SamfFormField
+            field="visible_from"
+            type="date_time"
+            label={t(KEY.recruitment_visible_from) ?? ''}
+            required={true}
+          />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="shown_application_deadline"
             type="date_time"
             label={t(KEY.shown_application_deadline) ?? ''}
+            required={true}
           />
           <SamfFormField
             field="actual_application_deadline"
             type="date_time"
             label={t(KEY.actual_application_deadlin) ?? ''}
+            required={true}
           />
         </div>
         <div className={styles.row}>
@@ -143,11 +164,13 @@ export function RecruitmentFormAdminPage() {
             field="reprioritization_deadline_for_applicant"
             type="date_time"
             label={t(KEY.reprioritization_deadline_for_applicant) ?? ''}
+            required={true}
           />
           <SamfFormField
             field="reprioritization_deadline_for_groups"
             type="date_time"
             label={t(KEY.reprioritization_deadline_for_groups) ?? ''}
+            required={true}
           />
         </div>
         <div className={styles.row}>
@@ -156,6 +179,7 @@ export function RecruitmentFormAdminPage() {
             type="options"
             label={t(KEY.recruitment_organization) ?? ''}
             options={organizationOptions}
+            required={true}
           />
         </div>
       </SamfForm>
