@@ -62,7 +62,9 @@ export const MINUTE_MILLIS = 60 * SECOND_MILLIS;
 export const HOUR_MILLIS = 60 * MINUTE_MILLIS;
 export const DAY_MILLIS = 24 * HOUR_MILLIS;
 
-// Sizes
+/**
+ * Sizes
+ */
 
 export const textSizes: Record<string, string> = {
   xs: '0.1rem',
