@@ -334,8 +334,8 @@ class Gang(CustomBaseModel):
 
 
 class GangSection(CustomBaseModel):
-    name_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Norsk')
-    name_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Navn Engelsk')
+    name_nb = models.CharField(max_length=64, blank=True, verbose_name='Navn Norsk')
+    name_en = models.CharField(max_length=64, blank=True, verbose_name='Navn Engelsk')
     logo = models.ImageField(upload_to='gangsectionlogos/', blank=True, null=True, verbose_name='Logo')
     gang = models.ForeignKey(Gang, blank=False, null=False, related_name='gang', on_delete=models.PROTECT, verbose_name='Gjeng')
 
