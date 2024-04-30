@@ -47,7 +47,7 @@ graf.add(node1)
 graf.add(node2)
 graf.add(node3)
 
-print(dfs(graf))
+# print(dfs(graf))
 
 
 class Permissions:

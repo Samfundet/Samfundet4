@@ -17,6 +17,7 @@ from .models.general import (
     Tag,
     Gang,
     Menu,
+    Role,
     User,
     Image,
     Merch,
@@ -40,7 +41,6 @@ from .models.general import (
     MerchVariation,
     UserPreference,
     InformationPage,
-    PermissionGroup,
     UserFeedbackModel,
 )
 from .models.recruitment import (
@@ -71,13 +71,13 @@ admin.site.unregister(Group)
 admin.site.register(Occupiedtimeslot)
 
 
-@admin.register(PermissionGroup)
-class PermissionGroupAdmin(CustomGuardedModelAdmin):
+@admin.register(Role)
+class Role(CustomGuardedModelAdmin):
     sortable_by = ['id', 'name']
     list_display = ['id', 'name']
     search_fields = ['id', 'name']
     list_display_links = ['id', 'name']
-    filter_horizontal = ['admin_perms']
+    filter_horizontal = ['ownes']
 
 
 @admin.register(User)
@@ -112,11 +112,11 @@ class UserAdmin(CustomGuardedUserAdmin):
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
-    filter_horizontal = ['permission_groups']
+    filter_horizontal = ['role']
 
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
-        n: int = obj.permission_groups.all().count()
+        n: int = obj.role.all().count()
         return n
 
     fieldsets = (
@@ -129,7 +129,7 @@ class UserAdmin(CustomGuardedUserAdmin):
                     'is_active',
                     'is_staff',
                     'is_superuser',
-                    'permission_groups',
+                    'role',
                 ),
             },
         ),

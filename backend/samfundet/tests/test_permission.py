@@ -12,7 +12,6 @@ from root.utils import routes
 from samfundet.models.general import (
     Role,
     User,
-    ComputedRoleDescendants,
 )
 
 
