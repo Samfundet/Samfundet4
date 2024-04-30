@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
@@ -10,8 +10,11 @@ import { dbT } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
+import { ROUTES } from '~/routes';
+import { STATUS } from '~/http_status_codes';
 
 export function EventPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
@@ -25,6 +28,9 @@ export function EventPage() {
           setShowSpinner(false);
         })
         .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found);
+          }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         });

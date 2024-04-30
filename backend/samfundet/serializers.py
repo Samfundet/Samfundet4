@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import itertools
+from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
@@ -24,6 +25,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -41,8 +43,10 @@ from .models.general import (
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -280,7 +284,9 @@ class RegisterSerializer(serializers.Serializer):
         write_only=True,
     )
 
-    def validate(self, attrs: dict) -> dict:
+    ALREADY_EXISTS_MESSAGE = 'User already exists with this value'
+
+    def validate(self, attrs: dict) -> dict:  # noqa: C901
         # Inherited function.
         # Take username and password from request.
         username = attrs.get('username')
@@ -289,6 +295,18 @@ class RegisterSerializer(serializers.Serializer):
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
+        # Check for unique
+        existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
+
+        if existing_users:
+            errors: dict[str, list[ValidationError]] = defaultdict(list)
+            if username in existing_users.values_list('username', flat=True):
+                errors['username'].append(self.ALREADY_EXISTS_MESSAGE)
+            if email in existing_users.values_list('email', flat=True):
+                errors['email'].append(self.ALREADY_EXISTS_MESSAGE)
+            if phone_number in existing_users.values_list('phone_number', flat=True):
+                errors['phone_number'].append(self.ALREADY_EXISTS_MESSAGE)
+            raise serializers.ValidationError(errors)
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
@@ -362,7 +380,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         perm_objs = []
         for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
-            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))
+            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))  # noqa: PERF401
 
         return perm_objs
 
@@ -511,6 +529,29 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 # =============================== #
+#              Merch              #
+# =============================== #
+
+
+class MerchVariationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MerchVariation
+        fields = '__all__'
+
+
+class MerchSerializer(serializers.ModelSerializer):
+    variations = MerchVariationSerializer(many=True, read_only=True)
+    stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Merch
+        fields = '__all__'
+
+    def get_stock(self, obj: Merch) -> int:
+        return obj.in_stock()
+
+
+# =============================== #
 #            Recruitment          #
 # =============================== #
 
@@ -582,7 +623,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:  # noqa: PLR0917
+    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
@@ -620,7 +661,6 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
 
 class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
-    recruitment_position = RecruitmentPositionForApplicantSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
@@ -629,26 +669,34 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'admission_text',
             'recruitment_position',
             'applicant_priority',
+            'withdrawn',
             'interview',
             'created_at',
+        ]
+        read_only_fields = [
+            'applicant_priority',
             'withdrawn',
         ]
 
     def create(self, validated_data: dict) -> RecruitmentAdmission:
         recruitment_position = validated_data['recruitment_position']
+        # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
-        applicant_priority = 1
 
         recruitment_admission = RecruitmentAdmission.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
-            applicant_priority=applicant_priority,
         )
 
         return recruitment_admission
+
+    def to_representation(self, instance: RecruitmentAdmission) -> dict:
+        data = super().to_representation(instance)
+        data['recruitment_position'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
+        return data
 
 
 class OccupiedtimeslotSerializer(serializers.ModelSerializer):
@@ -672,26 +720,59 @@ class InterviewRoomSerializer(CustomBaseSerializer):
 
 
 class InterviewSerializer(CustomBaseSerializer):
+    interviewers = InterviewerSerializer(many=True)
+
     class Meta:
         model = Interview
         fields = '__all__'
+
+    def create(self, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview = super().create(validated_data)
+        interview.interviewers.set(interviewers_data)
+        return interview
+
+    def update(self, instance: Interview, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        instance = super().update(instance, validated_data)
+        instance.interviewers.set(interviewers_data)
+        return instance
 
 
 class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:  # noqa: PLR0917
+    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview_instance.interviewers.set(interviewers_data)
+        interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+
+class UserFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFeedbackModel
+        fields = [
+            'text',
+            'contact_email',
+            'path',
+            'screen_resolution',
+        ]
+        extra_kwargs = {
+            'contact_email': {'required': False},
+            'screen_resolution': {'required': False},
+        }

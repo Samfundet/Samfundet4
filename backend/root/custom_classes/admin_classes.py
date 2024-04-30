@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Sequence
+from typing import Any
+from collections.abc import Callable, Sequence
 
 from guardian.admin import GuardedModelAdmin
 from guardian.shortcuts import get_objects_for_user
@@ -54,7 +55,7 @@ def get_obj_link(obj: Any) -> str | None:
 def get_admin_url(*, obj: Any) -> str:
     """https://stackoverflow.com/questions/10420271/django-how-to-get-admin-url-from-model-instance"""
     info = (obj._meta.app_label, obj._meta.model_name)
-    admin_url = reverse('admin:%s_%s_change' % info, args=(obj.pk,))
+    admin_url = reverse('admin:{}_{}_change'.format(*info), args=(obj.pk,))
     return admin_url
 
 
@@ -140,16 +141,16 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
         # print(71, self.opts.model_name, has_module_or_obj_perm, has_action_object_perm)
         return has_module_or_obj_perm or has_action_object_perm
 
-    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
+    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='add')
 
-    def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
+    def has_view_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='view')
 
-    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
+    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='change')
 
-    def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: PLR0917
+    def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return self.has_permission(request=request, obj=obj, action='delete')
 
     @classmethod

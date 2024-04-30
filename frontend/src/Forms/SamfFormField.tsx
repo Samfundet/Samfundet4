@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import { SamfFormConfigContext, SamfFormContext } from './SamfForm';
-import { SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap, FieldProps } from './SamfFormFieldTypes';
+import { FieldProps, SamfFormFieldArgs, SamfFormFieldType, SamfFormFieldTypeMap } from './SamfFormFieldTypes';
 
 // ================================== //
 //             Utilities              //
@@ -143,9 +143,7 @@ export function SamfFormField<U>({
 
   // Enable show error for validate on submit
   useEffect(() => {
-    if (didSubmit) {
-      setShowError(true);
-    }
+    setShowError(true);
   }, [didSubmit]);
 
   // Validate again whenever validateOnInit is turned on
@@ -178,13 +176,14 @@ export function SamfFormField<U>({
 
   // Generate UI based on type
   function makeFormField() {
-    const errorMessage = error == true ? t(KEY.common_required) : false;
+    let errorMsg = required && !value ? t(KEY.common_required) : error;
+    errorMsg = error ? errorMsg : false;
     const args: SamfFormFieldArgs = {
       // Standard args
       field: field,
       value: value,
       onChange: handleOnChange,
-      error: showError ? errorMessage : false,
+      error: showError ? errorMsg : false,
       label: label,
       // Options args
       options: options,
