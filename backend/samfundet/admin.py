@@ -671,6 +671,7 @@ class InterviewAdmin(CustomBaseAdmin):
     list_display = ['id', 'notes']
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
+    filter_horizontal = ['interviewers']
 
 
 @admin.register(Merch)

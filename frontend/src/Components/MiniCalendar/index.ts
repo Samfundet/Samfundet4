@@ -1,0 +1,1 @@
+export { MiniCalendar } from './MiniCalendar';
