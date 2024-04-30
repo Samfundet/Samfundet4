@@ -132,13 +132,14 @@ def fixture_user(fixture_user_pw: str) -> Iterator[User]:
 
 @pytest.fixture
 def fixture_user2(fixture_user_pw: str) -> Iterator[User]:
-    user2 = User.objects.create_user(
+    # Extra user if need
+    user = User.objects.create_user(
         username='user2',
         email='user2@test.com',
         password=fixture_user_pw,
     )
-    yield user2
-    user2.delete()
+    yield user
+    user.delete()
 
 
 @pytest.fixture
