@@ -55,6 +55,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 
 
@@ -554,6 +555,12 @@ class MerchSerializer(serializers.ModelSerializer):
 # =============================== #
 #            Recruitment          #
 # =============================== #
+
+
+class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentStatistics
+        fields = '__all__'
 
 
 class RecruitmentSerializer(CustomBaseSerializer):
