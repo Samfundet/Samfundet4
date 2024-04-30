@@ -124,7 +124,7 @@ export function SamfFormField<U>({
 
   // Handles all change events
   function handleOnChange(newValue: unknown, initialUpdate?: boolean) {
-    onChange && onChange(newValue as U);
+    onChange?.(newValue as U);
     // Cast types (eg number inputs might initially be strings)
     if (type === 'number' || type === 'float') {
       newValue = castNumber(newValue as string, false);
