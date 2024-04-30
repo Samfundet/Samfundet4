@@ -56,7 +56,7 @@ export function InterviewNotesPage() {
   }
 
   return (
-    <AdminPageLayout title={t(KEY.recruitment_interview_notes)}>
+    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={true} showBackButton={true}>
       <div className={styles.container}>
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}
