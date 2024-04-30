@@ -14,6 +14,15 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_day_saturday]: 'Lørdag',
   [KEY.common_day_sunday]: 'Søndag',
 
+  // Day abbreviations:
+  [KEY.common_day_monday_short]: 'Man',
+  [KEY.common_day_tuesday_short]: 'Tir',
+  [KEY.common_day_wednesday_short]: 'Ons',
+  [KEY.common_day_thursday_short]: 'Tor',
+  [KEY.common_day_friday_short]: 'Fre',
+  [KEY.common_day_saturday_short]: 'Lør',
+  [KEY.common_day_sunday_short]: 'Søn',
+
   // Months:
   [KEY.common_month_january]: 'Januar',
   [KEY.common_month_february]: 'Februar',
@@ -77,7 +86,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_sponsor]: 'Sponsorer',
   [KEY.common_lastname]: 'Etternavn',
   [KEY.common_email]: 'Epost',
-  [KEY.common_phonenumber]: 'Phonenumber',
+  [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
   [KEY.common_about_us]: 'Om oss',
@@ -310,6 +319,15 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_day_saturday]: 'Saturday',
   [KEY.common_day_sunday]: 'Sunday',
 
+  // Day abbreviations:
+  [KEY.common_day_monday_short]: 'Mon',
+  [KEY.common_day_tuesday_short]: 'Tue',
+  [KEY.common_day_wednesday_short]: 'Wed',
+  [KEY.common_day_thursday_short]: 'Thu',
+  [KEY.common_day_friday_short]: 'Fri',
+  [KEY.common_day_saturday_short]: 'Sat',
+  [KEY.common_day_sunday_short]: 'Sun',
+
   // Months:
   [KEY.common_month_january]: 'January',
   [KEY.common_month_february]: 'February',
@@ -373,7 +391,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contact]: 'Contact',
   [KEY.common_register]: 'Register',
   [KEY.common_email]: 'Email',
-  [KEY.common_phonenumber]: 'Telefonnummer',
+  [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
   [KEY.common_overview]: 'Oversikt',

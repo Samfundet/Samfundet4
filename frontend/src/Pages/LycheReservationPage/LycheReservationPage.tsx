@@ -89,8 +89,6 @@ export function LycheReservationPage() {
     </SamfForm>
   );
 
-  console.log(reservation?.reservation_date);
-
   const reserveStage = (
     <SamfForm
       validateOn="submit"
@@ -121,7 +119,14 @@ export function LycheReservationPage() {
       <ReservationFormLine label={t(KEY.common_message)}>
         <SamfFormField<string, FormProps> type="text" field="additional_info" required={false} />
       </ReservationFormLine>
-      <SamfFormField<boolean, FormProps> type="checkbox" field="agree" label="piracy policy agree" required={true} />
+      <div className={styles.check_box}>
+        <SamfFormField<boolean, FormProps>
+          type="checkbox"
+          field="agree"
+          label={useTextItem(TextItem.sulten_reservation_policy) + '*'}
+          required={true}
+        />
+      </div>
     </SamfForm>
   );
 
