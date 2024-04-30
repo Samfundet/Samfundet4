@@ -14,6 +14,12 @@ import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageFormAdminPage.module.scss';
 
+type FormType = {
+  title: string;
+  tag_string: string;
+  file: File;
+};
+
 export function ImageFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
@@ -46,13 +52,13 @@ export function ImageFormAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, setImage]);
 
-  async function handleOnSubmit(data: ImagePostDto) {
+  async function handleOnSubmit(data: FormType) {
     setShowSpinner(true);
     if (id !== undefined) {
       // TODO patch
       setShowSpinner(false);
     } else {
-      postImage(data)
+      postImage(data as ImagePostDto)
         .then(() => {
           // Success!
           navigate({ url: ROUTES.frontend.admin_images });
@@ -71,9 +77,14 @@ export function ImageFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
-      <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
+      <SamfForm<FormType>
+        onSubmit={handleOnSubmit}
+        //onChange={handleOnChange}
+        submitText={submitText}
+        validateOn="submit"
+      >
         <div className={styles.input_row}>
-          <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
+          <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} required={true} />
           {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
           <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
           {/* TODO create file picker input type */}
@@ -82,6 +93,7 @@ export function ImageFormAdminPage() {
           field="file"
           type="upload_image"
           label={lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_image)}`)}
+          required={true}
         />
         <p>
           {JSON.stringify(image.file)}
