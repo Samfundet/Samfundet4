@@ -347,13 +347,19 @@ class CampusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PermissionGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
-    profile = ProfileSerializer(many=False, read_only=True)
     campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
+    permission_groups = PermissionGroupSerializer(many=True, read_only=True)
 
     class Meta:
         model = User

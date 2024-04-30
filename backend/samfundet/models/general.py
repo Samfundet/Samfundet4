@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import re
 import secrets
+from abc import abstractmethod
 from typing import TYPE_CHECKING
 from datetime import date, time, datetime, timedelta
 from collections import defaultdict
@@ -21,6 +22,7 @@ from django.contrib.auth.models import Group, AbstractUser
 
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+from root.utils.compute_permissions import Node, dfs
 
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
@@ -31,6 +33,15 @@ if TYPE_CHECKING:
     from typing import Any
 
     from django.db.models import Model
+
+
+class CustomPermisionsModel(CustomBaseModel):
+    class Meta:
+        abstract = True
+
+    @abstractmethod
+    def has_perm(self, user: User) -> bool:
+        pass
 
 
 class Notification(AbstractNotification):
@@ -99,6 +110,74 @@ class Campus(FullCleanSaveMixin):
         return f'{self.name_nb} ({self.abbreviation})'
 
 
+class Role(CustomBaseModel):
+    """
+    This table stores all roles avalible. Groups, permissions and roles are all the same things, although a
+    role functioning as a permission should ideally not have any children.
+    """
+
+    # The name of the role. i.e. 'MG-gjengleder', 'FS-arrangementansvarlig', 'MG-WEB-funksjonær'
+    name = models.CharField(max_length=64, blank=True, unique=True)
+
+    # This is a list of all roles that are included in this permission group.
+    ownes = models.ManyToManyField('self', blank=True)
+
+    class Meta:
+        verbose_name = 'Role'
+        verbose_name_plural = 'Roles'
+
+    def save(self, *args, **kwargs) -> None:
+        ComputedRoleDescendants.compute_descendants()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs) -> None:
+        ComputedRoleDescendants.compute_descendants()
+        super().delete(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
+class ComputedRoleDescendants(CustomBaseModel):
+    """This table stores the computed descendant roles for each role."""
+
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role')
+
+    # A descendent of the role.
+    descendant = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='descendant')
+
+    @staticmethod
+    def initialize_descendants() -> dict[Role, set[Role]]:
+        role_descendants = {node: set() for node in Role.objects.all()}
+        for node in role_descendants:
+            role_descendants[node].add(node)
+        return role_descendants
+
+    @staticmethod
+    def search_for_descendants(role_descendants: dict[Role, set[Role]]) -> dict[Role, set[Role]]:
+        for node in role_descendants:
+            stack = [node]
+            while stack:
+                current_node = stack.pop()
+                for child in current_node.children:
+                    if child not in role_descendants[node]:
+                        role_descendants[node].add(child)
+                        stack.append(child)
+
+    @staticmethod
+    def compute_descendants() -> None:
+        # Drop rows ComputedRoleDescendants table
+        ComputedRoleDescendants.objects.all().delete()
+
+        # Compute the descendants of each role
+        role_descendants = ComputedRoleDescendants.search_for_descendants(ComputedRoleDescendants.initialize_descendants())
+
+        ##Create a new row for each descendant of each role
+        for role in role_descendants:
+            for descendant in role:
+                ComputedRoleDescendants.objects.create(role=role, descendant=descendant)
+
+
 class User(AbstractUser):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -124,13 +203,13 @@ class User(AbstractUser):
         null=False,
         unique=True,
     )
-
     campus = models.ForeignKey(
         Campus,
         blank=True,
         null=True,
         on_delete=models.PROTECT,
     )
+    role = models.ManyToManyField(Role, blank=True)
 
     class Meta:
         permissions = [
@@ -138,7 +217,16 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: Model | None = None) -> bool:
+    def has_global_perm(self, perm: Role) -> bool:
+        # Fetch precomputed descendants
+        descendants = ComputedRoleDescendants.objects.filter(role__in=self.role)
+        # Check if the required permission is in the descendants
+        return perm is not None and perm in descendants
+
+    def has_object_perm(self, obj: CustomPermisionsModel) -> bool:
+        return obj is not None and obj.has_perm(self)
+
+    def has_perm(self, perm: Role, obj: CustomPermisionsModel) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`
@@ -146,9 +234,7 @@ class User(AbstractUser):
             We have decided that global permissions implies that any obj perm check
         should return `True`. This function is extended to check both.
         """
-        has_global_perm = super().has_perm(perm=perm)
-        has_object_perm = super().has_perm(perm=perm, obj=obj)
-        return has_global_perm or has_object_perm
+        return self.has_global_perm(perm) or self.has_object_perm(obj)
 
     @property
     def is_impersonated(self) -> bool:

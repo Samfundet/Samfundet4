@@ -528,10 +528,10 @@ class AssignGroupView(APIView):
         except Group.DoesNotExist:
             return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        if request.user.has_perm('auth.change_group', group):
-            user.groups.add(group)
-        else:
-            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
+        # if request.user.has_perm('auth.change_group', group):
+        #     user.groups.add(group)
+        # else:
+        #     return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
 
@@ -552,10 +552,10 @@ class AssignGroupView(APIView):
         except Group.DoesNotExist:
             return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        if request.user.has_perm('auth.change_group', group):
-            user.groups.remove(group)
-        else:
-            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+        # if request.user.has_perm('auth.change_group', group):
+        #     user.groups.remove(group)
+        # else:
+        #     return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
 

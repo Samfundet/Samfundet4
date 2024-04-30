@@ -1,24 +1,23 @@
 from __future__ import annotations
 
-from guardian import models as guardian_models
-
 from django.urls import reverse
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
 from root.utils.routes import admin__samfundet_recruitmentadmission_change
-from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
+from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedModelAdmin
 
 from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
     Tag,
     Gang,
     Menu,
+    Role,
     User,
     Image,
     Merch,
@@ -72,6 +71,15 @@ admin.site.unregister(Group)
 admin.site.register(Occupiedtimeslot)
 
 
+@admin.register(Role)
+class Role(CustomGuardedModelAdmin):
+    sortable_by = ['id', 'name']
+    list_display = ['id', 'name']
+    search_fields = ['id', 'name']
+    list_display_links = ['id', 'name']
+    filter_horizontal = ['ownes']
+
+
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
     sortable_by = [
@@ -104,10 +112,11 @@ class UserAdmin(CustomGuardedUserAdmin):
     ]
     list_display_links = ['id', 'username']
     list_select_related = True
+    filter_horizontal = ['role']
 
     @admin.display(empty_value='all')
     def group_memberships(self, obj: User) -> int:
-        n: int = obj.groups.all().count()
+        n: int = obj.role.all().count()
         return n
 
     fieldsets = (
@@ -120,8 +129,7 @@ class UserAdmin(CustomGuardedUserAdmin):
                     'is_active',
                     'is_staff',
                     'is_superuser',
-                    'groups',
-                    'user_permissions',
+                    'role',
                 ),
             },
         ),
@@ -136,31 +144,6 @@ class UserAdmin(CustomGuardedUserAdmin):
             },
         ),
     )
-
-
-@admin.register(Group)
-class GroupAdmin(CustomGuardedGroupAdmin):
-    sortable_by = ['id', 'name']
-    list_display = ['id', 'name', 'members']
-    list_display_links = ['id', 'name']
-    list_select_related = True
-
-    def members(self, obj: Group) -> int:
-        n: int = obj.user_set.all().count()
-        return n
-
-
-@admin.register(Permission)
-class PermissionAdmin(CustomGuardedModelAdmin):
-    # ordering = []
-    sortable_by = ['id', 'codename', 'content_type']
-    # list_filter = []
-    list_display = ['id', '__str__', 'codename', 'content_type']
-    search_fields = ['name', 'codename', 'content_type__app_label', 'content_type__model']
-    # filter_horizontal = []
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['content_type']
-    list_select_related = True
 
 
 @admin.register(ContentType)
@@ -203,30 +186,6 @@ class SessionAdmin(CustomGuardedModelAdmin):
 
 
 ### End: Django models ###
-
-
-### Guardian models ###
-@admin.register(guardian_models.GroupObjectPermission)
-class GroupObjectPermissionAdmin(CustomGuardedModelAdmin):
-    list_display = ['id', '__str__', 'permission', 'group', 'content_type']
-    list_display_links = ['id', '__str__']
-
-
-@admin.register(guardian_models.UserObjectPermission)
-class UserObjectPermissionAdmin(CustomGuardedModelAdmin):
-    ordering = ['user']
-    sortable_by = ['id', 'user', 'permission', 'content_type']
-    # list_filter = [] # TODO
-    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
-    list_display = ['id', '__str__', 'user', 'permission', 'content_type']
-    search_fields = [*_user_search_fields]
-    # filter_horizontal = [] # TODO
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['user', 'permission', 'content_type']
-    list_select_related = True
-
-
-### End: Guardian models ###
 
 
 ### Our models ###
