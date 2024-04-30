@@ -39,7 +39,7 @@ export function Text({ children, className, size = 'm', as = 'p' }: textProps) {
       style={{
         fontSize: textSizes[size],
         display: 'block',
-        width: "fit-content"
+        width: 'fit-content',
       }}
     >
       {children}
