@@ -497,7 +497,7 @@ export const en: Record<KeyValues, string> = {
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
-  [KEY.admin_saksdokument]: 'case document',
+  [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
   [KEY.admin_steal_identity]: 'Steal identity',

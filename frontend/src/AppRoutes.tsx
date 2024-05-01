@@ -201,17 +201,26 @@ export const router = createBrowserRouter(
         </Route>
         {/* Saksdokumenter */}
         <Route
-          path={ROUTES.frontend.admin_saksdokumenter}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]} Page={SaksdokumentAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_saksdokumenter_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_saksdokumenter_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
-        />
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter}>{t(KEY.admin_saksdokument)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_saksdokumenter}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]} Page={SaksdokumentAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_saksdokumenter_create}
+            handle={{
+              crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter_create}>{t(KEY.common_create)}</Link>,
+            }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_saksdokumenter_edit}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter_edit}>{t(KEY.common_edit)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
+          />
+        </Route>
         <Route
           path={ROUTES.frontend.admin_sulten_menu}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
