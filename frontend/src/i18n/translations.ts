@@ -164,6 +164,10 @@ export const nb: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
+  // InformationPage
+  [KEY.information_page]: 'Informasjonsside',
+  [KEY.information_page_short]: 'Side',
+
   // Navbar:
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
@@ -274,7 +278,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.information_page_short]: 'Side',
   [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
@@ -446,6 +449,10 @@ export const en: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publication date',
 
+  // InformationPage
+  [KEY.information_page]: 'Information page',
+  [KEY.information_page_short]: 'Page',
+
   // Navbar:
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
@@ -561,7 +568,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.invalid_phonenumber]: 'Not a valid phone number',
-  [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',

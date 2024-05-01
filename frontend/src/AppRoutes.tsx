@@ -153,6 +153,7 @@ export const router = createBrowserRouter(
         */}
         <Route
           path={ROUTES.frontend.admin_information}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_information}>{t(KEY.information_page)}</Link> }}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]} Page={InformationAdminPage} />}
         />
         {/* Opening hours, TODO ADD OPENING HOURS PERMISSIONS*/}

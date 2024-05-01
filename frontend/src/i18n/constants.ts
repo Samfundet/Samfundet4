@@ -167,6 +167,10 @@ export const KEY = {
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
+  // InformationPage
+  information_page: 'information_page',
+  information_page_short: 'information_page_short',
+
   // Navbar:
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
@@ -278,7 +282,6 @@ export const KEY = {
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
   control_panel_title: 'control_panel_title',
-  information_page_short: 'information_page_short',
   inputfile_choose_a_file: 'inputfile_choose_a_file',
   inputfile_no_file_selected: 'inputfile_no_file_selected',
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
