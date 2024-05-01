@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, Routes } from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
@@ -15,9 +15,9 @@ import {
   LoginPage,
   LycheAboutPage,
   LycheContactPage,
-  LycheReservationPage,
   LycheHomePage,
   LycheMenuPage,
+  LycheReservationPage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
   RecruitmentPage,
@@ -46,28 +46,26 @@ import {
   SultenMenuAdminPage,
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
-import { useGoatCounter } from '~/hooks';
-import { ProtectedRoute, useScrollToTop } from './Components';
+import { ProtectedRoute } from './Components';
 import { SamfOutlet } from './Components/SamfOutlet';
 import { SultenOutlet } from './Components/SultenOutlet';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { InterviewNotesPage } from './PagesAdmin/InterviewNotesAdminPage';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
-import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
+import {
+  RecruitmentPositionOverviewPage
+} from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+import { App } from '~/App';
 
-export function AppRoutes() {
-  // Must be called within <BrowserRouter> because it uses hook useLocation().
-  useGoatCounter();
-  useScrollToTop();
-
-  return (
-    <Routes>
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<App />}>
       <Route element={<SamfOutlet />}>
-        {/* 
+        {/*
           PUBLIC ROUTES
         */}
         <Route path={ROUTES.frontend.home} element={<HomePage />} />
@@ -87,10 +85,12 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
-        <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
+        <Route
+          path={ROUTES.frontend.recruitment_application_overview}
+          element={<ApplicantApplicationOverviewPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
       </Route>
-      {/* 
+      {/*
             ADMIN ROUTES
       */}
       <Route element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}>
@@ -129,7 +129,7 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_events_edit}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />}
         />
-        {/* 
+        {/*
           Info pages 
           NOTE: edit/create uses custom views
         */}
@@ -224,7 +224,7 @@ export function AppRoutes() {
           path={ROUTES.frontend.admin_recruitment_gang_position_edit}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
         />
-        {/* 
+        {/*
         Info pages
         Custom layout for edit/create
       */}
@@ -237,7 +237,7 @@ export function AppRoutes() {
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
         />
       </Route>
-      {/* 
+      {/*
             SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
@@ -248,10 +248,10 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.sulten_reservation} element={<LycheReservationPage />} />
       </Route>
 
-      {/* 
+      {/*
             404 NOT FOUND
       */}
       <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
-}
+    </Route>,
+  ),
+);
