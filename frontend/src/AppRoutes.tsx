@@ -159,21 +159,31 @@ export const router = createBrowserRouter(
         {/* Opening hours, TODO ADD OPENING HOURS PERMISSIONS*/}
         <Route
           path={ROUTES.frontend.admin_opening_hours}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_opening_hours}>{t(KEY.common_opening_hours)}</Link> }}
           element={<ProtectedRoute perms={[]} Page={OpeningHoursAdminPage} />}
         />
         {/* Closed period */}
         <Route
-          path={ROUTES.frontend.admin_closed}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_CLOSEDPERIOD]} Page={ClosedPeriodAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_closed_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_closed_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
-        />
+          element={<Outlet />}
+          handle={{
+            crumb: () => <Link url={ROUTES.frontend.admin_closed}>{t(KEY.command_menu_shortcut_closed)}</Link>,
+          }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_closed}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_CLOSEDPERIOD]} Page={ClosedPeriodAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_closed_create}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_closed_create}>{t(KEY.common_create)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_closed_edit}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_closed_edit}>{t(KEY.common_edit)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
+          />
+        </Route>
         {/* Images */}
         <Route
           path={ROUTES.frontend.admin_images}
