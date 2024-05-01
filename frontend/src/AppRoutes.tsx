@@ -223,6 +223,13 @@ export const router = createBrowserRouter(
         </Route>
         <Route
           path={ROUTES.frontend.admin_sulten_menu}
+          handle={{
+            crumb: () => (
+              <Link url={ROUTES.frontend.admin_sulten_menu}>
+                {t(KEY.common_sulten)} {t(KEY.common_menu)}
+              </Link>
+            ),
+          }}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
         />
         {/* Recruitment */}
