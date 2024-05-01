@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
@@ -36,6 +36,7 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
   RecruitmentGangAdminPage,
@@ -46,12 +47,9 @@ import {
   SultenMenuAdminPage,
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
-import { ProtectedRoute } from './Components';
-import { SamfOutlet } from './Components/SamfOutlet';
-import { SultenOutlet } from './Components/SultenOutlet';
+import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
-import { InterviewNotesPage } from './PagesAdmin/InterviewNotesAdminPage';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
 import {
   RecruitmentPositionOverviewPage
@@ -60,6 +58,9 @@ import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
 import { App } from '~/App';
+import { lowerCapitalize } from '~/utils';
+import { t } from 'i18next';
+import { KEY } from '~/i18n/constants';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -122,6 +123,13 @@ export const router = createBrowserRouter(
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
         />
         <Route
+          handle={{
+            crumb: () => (
+              <Link url={ROUTES.frontend.admin_events_edit}>
+                {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
+              </Link>
+            ),
+          }}
           path={ROUTES.frontend.admin_events_create}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
         />

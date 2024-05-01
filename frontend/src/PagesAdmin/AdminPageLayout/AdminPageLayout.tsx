@@ -23,7 +23,7 @@ export function AdminPageLayout({ title, backendUrl, header, loading, children }
   return (
     <>
       <div className={styles.header}>
-        <Breadcrumb></Breadcrumb>
+        <Breadcrumb />
         <div className={styles.title_row}>
           <div className={styles.title}>{title}</div>
           {backendUrl && (
