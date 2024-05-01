@@ -186,13 +186,19 @@ export const router = createBrowserRouter(
         </Route>
         {/* Images */}
         <Route
-          path={ROUTES.frontend.admin_images}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_IMAGE]} Page={ImageAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_images_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_IMAGE]} Page={ImageFormAdminPage} />}
-        />
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_images}>{t(KEY.admin_images_title)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_images}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_IMAGE]} Page={ImageAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_images_create}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_images_create}>{t(KEY.common_create)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_IMAGE]} Page={ImageFormAdminPage} />}
+          />
+        </Route>
         {/* Saksdokumenter */}
         <Route
           path={ROUTES.frontend.admin_saksdokumenter}
