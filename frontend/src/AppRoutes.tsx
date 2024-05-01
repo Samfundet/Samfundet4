@@ -109,17 +109,24 @@ export const router = createBrowserRouter(
         />
         {/* Gangs */}
         <Route
-          path={ROUTES.frontend.admin_gangs}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={GangsAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_gangs_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_gangs_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
-        />
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs}>{t(KEY.common_gangs)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_gangs}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={GangsAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_gangs_create}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs_create}>{t(KEY.common_create)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_gangs_edit}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs_edit}>{t(KEY.common_edit)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
+          />
+        </Route>
         {/* Events */}
         <Route
           element={<Outlet />}
