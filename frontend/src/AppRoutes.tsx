@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
@@ -94,7 +94,10 @@ export const router = createBrowserRouter(
       {/*
             ADMIN ROUTES
       */}
-      <Route element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}>
+      <Route
+        handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
+        element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}
+      >
         {/* TODO PERMISSION FOR IMPERSONATE */}
         <Route
           path={ROUTES.frontend.admin_impersonate}
@@ -119,24 +122,24 @@ export const router = createBrowserRouter(
         />
         {/* Events */}
         <Route
-          path={ROUTES.frontend.admin_events}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
-        />
-        <Route
-          handle={{
-            crumb: () => (
-              <Link url={ROUTES.frontend.admin_events_edit}>
-                {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
-              </Link>
-            ),
-          }}
-          path={ROUTES.frontend.admin_events_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
-        />
-        <Route
-          path={ROUTES.frontend.admin_events_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />}
-        />
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events}>{t(KEY.common_events)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_events}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_events_create}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events_edit}>{t(KEY.common_create)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_events_edit}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events_edit}>{t(KEY.common_edit)}</Link> }}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />}
+          />
+        </Route>
         {/*
           Info pages 
           NOTE: edit/create uses custom views
