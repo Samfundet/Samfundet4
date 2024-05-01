@@ -4,21 +4,13 @@
 
 .breadcrumb {
   display: flex;
-  padding: 15px;
+  padding: 1rem 0;
   margin: 0;
 }
 
-.icon_wrap {
-  flex-basis: 20px;
-}
-
-.titles {
-  flex-basis: 1;
-}
-
 .link {
-  color: $red-samf;
-  text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 .icon {

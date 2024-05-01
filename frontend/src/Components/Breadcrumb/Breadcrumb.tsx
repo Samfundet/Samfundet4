@@ -1,9 +1,9 @@
 import { UIMatch, useMatches } from 'react-router-dom';
 import { ReactNode } from 'react';
 import styles from './Breadcrumb.module.scss';
-import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { Link } from '~/Components';
 import { Icon } from '@iconify/react';
+import { ROUTES } from '~/routes';
 
 type HandleWithCrumb = {
   crumb: () => ReactNode;
@@ -22,11 +22,9 @@ export function Breadcrumb() {
 
   return (
     <div className={styles.breadcrumb}>
-      <div className={styles.icon_wrap}>
-        <Link url={ROUTES_FRONTEND.home}>
-          <Icon icon="ion:home" className={styles.icon} />
-        </Link>
-      </div>
+      <Link url={ROUTES.frontend.home} className={styles.link}>
+        <Icon icon="ion:home" className={styles.icon} />
+      </Link>
       {crumbs.map((crumb, i) => (
         <div key={i}>
           <span>&nbsp;&gt;&nbsp;</span>
