@@ -12,7 +12,12 @@ from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
 from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentadmission_change
-from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
+from root.custom_classes.admin_classes import (
+    CustomBaseAdmin,
+    CustomGuardedUserAdmin,
+    CustomGuardedGroupAdmin,
+    CustomGuardedModelAdmin,
+)
 
 from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
@@ -52,6 +57,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 
 # Common fields:
@@ -688,6 +694,12 @@ class InterviewAdmin(CustomBaseAdmin):
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
     filter_horizontal = ['interviewers']
+
+
+@admin.register(RecruitmentStatistics)
+class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
+    list_display = ['recruitment', 'total_applicants', 'total_admissions']
+    search_fields = ['recruitment']
 
 
 @admin.register(Merch)
