@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { CommandMenu } from './Components/CommandMenu';
 import './i18n/i18n';
 import { useScrollToTop } from '~/Components';
+import { UserFeedback } from '~/Components/UserFeedback/UserFeedback';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
@@ -22,6 +23,7 @@ export function App() {
 
   return (
     <HelmetProvider>
+      <UserFeedback enabled={true} />
       {goatCounterCode && (
         <Helmet>
           {/* Helmet is linked to <head>. Used to add scripts. */}

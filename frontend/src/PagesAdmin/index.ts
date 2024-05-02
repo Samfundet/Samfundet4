@@ -22,4 +22,5 @@ export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPa
 export { RecruitmentUsersWithoutInterview } from './RecruitmentUsersWithoutInterview';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
+export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';

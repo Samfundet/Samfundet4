@@ -10,11 +10,11 @@ from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
 from django.http import QueryDict
 from django.utils import timezone
@@ -45,6 +45,7 @@ from .serializers import (
     GroupSerializer,
     ImageSerializer,
     LoginSerializer,
+    MerchSerializer,
     TableSerializer,
     VenueSerializer,
     BookingSerializer,
@@ -63,6 +64,7 @@ from .serializers import (
     FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
+    UserFeedbackSerializer,
     InterviewRoomSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -71,6 +73,7 @@ from .serializers import (
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
+    RecruitmentStatisticsSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
@@ -81,6 +84,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Booking,
@@ -99,6 +103,7 @@ from .models.general import (
     FoodPreference,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -107,6 +112,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 
 # =============================== #
@@ -340,6 +346,15 @@ class ReservationCheckAvailabilityView(APIView):
 
 
 # =============================== #
+#             Merch               #
+# =============================== #
+class MerchView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = MerchSerializer
+    queryset = Merch.objects.all()
+
+
+# =============================== #
 #          Auth/Login             #
 # =============================== #
 
@@ -557,6 +572,13 @@ class RecruitmentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentStatisticsView(ModelViewSet):
+    permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
+    serializer_class = RecruitmentStatisticsSerializer
+    queryset = RecruitmentStatistics.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -780,3 +802,26 @@ class OccupiedtimeslotView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserFeedbackView(CreateAPIView):
+    permission_classes = [AllowAny]
+    model = UserFeedbackModel
+    serializer_class = UserFeedbackSerializer
+
+    def create(self, request: Request) -> Response:
+        data = request.data
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        UserFeedbackModel.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            text=data.get('text'),
+            path=data.get('path'),
+            user_agent=request.META.get('HTTP_USER_AGENT'),
+            screen_resolution=data.get('screen_resolution'),
+            contact_email=data.get('contact_email'),
+        )
+
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})

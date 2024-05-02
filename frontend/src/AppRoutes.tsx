@@ -48,6 +48,7 @@ import {
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
+  SultenReservationAdminPage,
   SultenMenuAdminPage,
   AdminLayout,
   ImpersonateUserAdminPage,
@@ -341,6 +342,10 @@ export const router = createBrowserRouter(
             </Route>
           </Route>
         </Route>
+        <Route
+          path={ROUTES.frontend.admin_sulten_reservations}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}
+        />
         {/*
         Info pages
         Custom layout for edit/create
@@ -368,6 +373,7 @@ export const router = createBrowserRouter(
       {/*
             404 NOT FOUND
       */}
+      <Route path={ROUTES.frontend.not_found} element={<NotFoundPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ),
