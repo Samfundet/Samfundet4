@@ -27,7 +27,7 @@ export function Breadcrumb() {
       </Link>
       {crumbs.map((crumb, i) => (
         <div key={i}>
-          <span>&nbsp;&gt;&nbsp;</span>
+          <span className={styles.separator}>&gt;</span>
           {crumb}
         </div>
       ))}

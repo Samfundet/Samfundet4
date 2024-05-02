@@ -8,6 +8,11 @@
   margin: 0;
 }
 
+.separator {
+  margin: 0 0.3rem;
+  user-select: none;
+}
+
 .link {
   display: flex;
   align-items: center;
