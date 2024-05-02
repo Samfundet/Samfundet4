@@ -24,6 +24,7 @@ import {
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
+  VenuePage,
 } from '~/Pages';
 import {
   ClosedPeriodAdminPage,
@@ -42,17 +43,16 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
+  RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
+  SaksdokumentAdminPage,
+  RecruitmentFormAdminPage,
   SultenMenuAdminPage,
+  AdminLayout,
+  ImpersonateUserAdminPage,
 } from '~/PagesAdmin';
-import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
-import { VenuePage } from './Pages/VenuePage';
-import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
-import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
-import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
-import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
 import { App } from '~/App';
