@@ -51,14 +51,11 @@ import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { VenuePage } from './Pages/VenuePage';
 import { AdminLayout } from './PagesAdmin/AdminLayout/AdminLayout';
 import { RecruitmentFormAdminPage } from './PagesAdmin/RecruitmentFormAdminPage';
-import {
-  RecruitmentPositionOverviewPage
-} from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
+import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositionOverviewPage/RecruitmentPositionOverviewPage';
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
 import { App } from '~/App';
-import { lowerCapitalize } from '~/utils';
 import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
 
@@ -86,9 +83,7 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
-        <Route
-          path={ROUTES.frontend.recruitment_application_overview}
-          element={<ApplicantApplicationOverviewPage />} />
+        <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
       </Route>
       {/*
@@ -148,7 +143,7 @@ export const router = createBrowserRouter(
           />
         </Route>
         {/*
-          Info pages 
+          Info pages
           NOTE: edit/create uses custom views
         */}
         <Route
