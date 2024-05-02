@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react';
 import { ROUTES } from '~/routes';
 
 type HandleWithCrumb = {
-  crumb: () => ReactNode;
+  crumb: (data?: unknown) => ReactNode;
 };
 
 interface MatchWithCrumb extends UIMatch {
@@ -18,7 +18,7 @@ export function Breadcrumb() {
 
   const crumbs = matches
     .filter((match) => Boolean((match as MatchWithCrumb).handle?.crumb))
-    .map((match) => (match as MatchWithCrumb).handle?.crumb());
+    .map((match) => (match as MatchWithCrumb).handle?.crumb(match.data));
 
   return (
     <div className={styles.breadcrumb}>
