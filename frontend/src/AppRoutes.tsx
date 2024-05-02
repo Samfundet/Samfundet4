@@ -285,7 +285,7 @@ export const router = createBrowserRouter(
                 return { recruitmentId: params.recruitmentId, gangId: params.gangId };
               }}
               handle={{
-                crumb: ({ recruitmentId, gangId }: { recruitmentId: string, gangId: string }) => (
+                crumb: ({ recruitmentId, gangId }: { recruitmentId: string; gangId: string }) => (
                   <Link
                     url={reverse({
                       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
@@ -322,9 +322,9 @@ export const router = createBrowserRouter(
                     gangId,
                     positionId,
                   }: {
-                    recruitmentId: string,
-                    gangId: string,
-                    positionId: string,
+                    recruitmentId: string;
+                    gangId: string;
+                    positionId: string;
                   }) => (
                     <Link
                       url={reverse({
