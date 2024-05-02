@@ -6,10 +6,8 @@ import { useGoatCounter, useIsDarkTheme } from '~/hooks';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // Neccessary import for translations.
-import { CommandMenu } from './Components/CommandMenu';
+import { CommandMenu, UserFeedback, useScrollToTop } from './Components';
 import './i18n/i18n';
-import { useScrollToTop } from '~/Components';
-import { UserFeedback } from '~/Components/UserFeedback/UserFeedback';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
