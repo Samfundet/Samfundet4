@@ -21,9 +21,9 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('name_nb', models.CharField(blank=True, max_length=64, verbose_name='Navn Norsk')),
                 ('name_en', models.CharField(blank=True, max_length=64, verbose_name='Navn Engelsk')),
-                ('logo', models.ImageField(blank=True, null=True, upload_to='gangsectionlogos/', verbose_name='Logo')),
                 ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
                 ('gang', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='gang', to='samfundet.gang', verbose_name='Gjeng')),
+                ('logo', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.image', verbose_name='Logo')),
                 ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
             ],
             options={
