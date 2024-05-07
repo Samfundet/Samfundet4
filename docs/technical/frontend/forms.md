@@ -1,13 +1,105 @@
 [👈 back](/docs/technical/README.md)
 
-# SamfForm 
+# **Forms**
 
-SamfForm is a generic react component that makes it very easy to create forms for all kinds of data. The form automatically handles validation and UI for you, so you only have to specify things like field names, input type and labels:
+This documantation details the Samf4 form component, the form field component, use and technical details. Se the [SamfForm](#SamfForm) and [SamfFormField](#SamfFormField) sections for more information or the [Storybook](../../../frontend/src/Forms/SamfForm.stories.tsx) for examples.
+
+![Example image](image.png)
+<br></br>
+
+# How to use
+
+The following is a template for using forms in Samf4:
+
+```tsx
+// Define a type for form data:
+type FormData = {
+  varName: returnType;
+  // Add more fields
+}
+
+// Define a submit function:
+const submitFunction = (data: FormData) => {
+  // Your submit logic
+}
+
+// Use the form component:
+function YourComponent() {
+  return (
+    <SamfForm<FormData> onSubmit={submitFunction}>
+      <!-- Your form fields -->
+    </SamfForm>
+  )
+}
+```
+
+<br></br>
+
+# **SamfForm**
+
+SamfForm is a generic react component that makes it easy to create forms for all kinds of data.
+
+## Props
+
+**initialData?: Partial\<T>** - The initial data to populate the form with
+
+**validateOn?: ValidationMode** - When to validate the form. Can be either 'change' or 'submit'. This affects the logic of when [fields display error](#field-error) and when the submit button is [diabled](#submitt-button). Default is 'change'
+
+**submitText?: string** - The text to display on the submit button. Default is 'Submit'
+
+**className?: string** - The class name of the form
+
+**onChange?\<T>(data: Partial\<T>): void** - The function to call when the form data changes. The data parameter is the form data.
+
+**onValidityChanged?(valid: boolean): void** - The function to call when the form validity changes. The valid parameter is a boolean indicating if the form is valid or not.
+
+**onSubmit?(data: Partial\<T>): void** - The function to call when the form is submitted. The data parameter is the form data.
+
+**children: ReactNode** - The form [SamfFormField](#SamfFormField) components and other elements.
+
+**devMode?: boolean** - Whether to display a live preview of the form data, errors and fields. This is usefull for debugging and development. Default is false
+
+**isDisabled?: boolean** - Whether the form is disabled. This will disable the [submit button](#submitt-button). Default is false
+
+**validateOnInit?: boolean** - Whether to validate the form on init. Default is false
+
+## Usage
+
+## Types
+
+The form component is type generic, so you can easily create forms for any kind of data. The type parameter don't affect the realtime behavior of the form as the types are removed when TS is compiled to JS. They are however useful for type checking, development, documentation and debugging. It is recommended to use the type parameter to specify the type of data the form is handling. SamfForm has the following types paramaters:
+
+**T** - The type of data the form is handling. This will define the expected initial data, the forms state and the data passed to the [onChange](#props) and [onSubmit](#props) functions.
+
+## Submitt button
+
+Every form has a submit button. This button can be disabled, preventing the user from submitting the form. This is determened by the following logic:
+
+<center>
+  <img src="submit_button_logic.png" alt="Submit button"/>
+</center>
+<br></br>
+
+# **SamfFormField**
+
+SamfFormField is a generic react component that makes it easy to create form fields for all kinds of data.
+
+## Props
+
+## Field types
+
+## Usage
+
+## Types
+
+## Field error
+
+The form automatically handles validation and UI for you, so you only have to specify things like field names, input type and labels:
 
 ```html
-<SamfForm onSubmit={yourSubmitFunction} submitButton="Save Name">
-    <SamfFormField field="name" type="text" label="Enter name"/>
-    <SamfFormField field="age" type="number" label="Enter age"/>
+<SamfForm onSubmit="{yourSubmitFunction}" submitButton="Save Name">
+  <SamfFormField field="name" type="text" label="Enter name" />
+  <SamfFormField field="age" type="number" label="Enter age" />
 </SamfForm>
 ```
 
@@ -15,20 +107,21 @@ All fields are required by default (so an empty string will not be allowed). Whe
 
 ## Usage
 
-- Use the `<SamfForm>` component to create a new form. The component accepts any children, so you can place things in columns or add whatever wrappers you want. 
+- Use the `<SamfForm>` component to create a new form. The component accepts any children, so you can place things in columns or add whatever wrappers you want.
 - Add inputs by placing `<SamfFormField>` components inside the form. You can set labels, value types and validation settings for these inputs.
 
-- **IMPORTANT:** 
-    - SamfForm does not care about elements other than `<SamfFormField>`. An `<input>` tag will, for instance, not get validation nor will its data be included in `onSubmit`. 
+- **IMPORTANT:**
+  - SamfForm does not care about elements other than `<SamfFormField>`. An `<input>` tag will, for instance, not get validation nor will its data be included in `onSubmit`.
 
 ### Form Properties
 
 Forms should use either `onSubmit` or `onChange`. Submit is useful for typical forms where you post/put data. By defining a form with a type (inside the `< >` after `SamfForm`) you can easily model any datatype.
 
 #### Posting/putting data
+
 ```tsx
 function postEvent(event: EventDto) {
-    // your posting logic
+  // your posting logic
 }
 ```
 
@@ -40,18 +133,19 @@ function postEvent(event: EventDto) {
 
 #### Storing data in a state
 
-If the component needs to display some information about the form while you are editing, you can use the `onChange` property to get notified when data changes. 
+If the component needs to display some information about the form while you are editing, you can use the `onChange` property to get notified when data changes.
 
 ```tsx
 const [event, setEvent] = useState<EventDto>(undefined);
 ```
+
 ```html
 <SamfForm<EventDto> onChange={setEvent}>
     <!-- Your input fields -->
 </SamfForm>
 ```
 
-You can also use `onValidityChanged` to get a simple boolean indicating if the form is valid or not (eg. if some fields are missing). 
+You can also use `onValidityChanged` to get a simple boolean indicating if the form is valid or not (eg. if some fields are missing).
 
 #### Setting initial data
 
@@ -59,10 +153,11 @@ If you are changing existing data (for instance when doing a http PATCH), set th
 
 ```tsx
 const event: Partial<EventDto> = {
-    title_nb: 'some title',
-    title_en: 'some title',
-}
+  title_nb: 'some title',
+  title_en: 'some title',
+};
 ```
+
 ```html
 <SamfForm<EventDto> initialData={event}>
     <!-- Your input fields -->
@@ -77,10 +172,12 @@ const event: Partial<EventDto> = {
 ### Input Fields
 
 All inputs area created using `<SamfFormField>`. Required properties are:
-- `type` Which type of input is used, eg. 'text', 'number', 'image', 'date' etc. See `SamfFormFieldTypes`. 
-- `field` The name of the property to set. In an `EventDto` you may want to use a field like `title_nb` or `duration`. 
+
+- `type` Which type of input is used, eg. 'text', 'number', 'image', 'date' etc. See `SamfFormFieldTypes`.
+- `field` The name of the property to set. In an `EventDto` you may want to use a field like `title_nb` or `duration`.
 
 Optional properties include:
+
 - `required` whether the field is invalid when empty/undefined. Default `true`.
 - `label` a text string label that is shown above the input
 - `options` a list of `DropDownOption` used for dropdown inputs
@@ -92,26 +189,24 @@ Example:
 ```html
 <SamfFormField type="text" field="title_en" label="English title" />
 <SamfFormField type="text-long" field="description_en' label="English description" />
-<SamfFormField type="text" field="social_media_url" label="Social media"  required={false}/>
-<SamfFormField type="image" field="image" label="Event Image"/>
+<SamfFormField type="text" field="social_media_url" label="Social media" required="{false}" />
+<SamfFormField type="image" field="image" label="Event Image" />
 ```
 
 Option Example (with value type inside the `< >`):
 
 ```tsx
 const myOptions: DropDownOption<number>[] = [
-    {value: 1, label: "One"},
-    {value: 2, label: "Two"},
-]
+  { value: 1, label: 'One' },
+  { value: 2, label: 'Two' },
+];
 ```
+
 ```html
-<SamfFormField<number> 
-    type="options"
-    field="some_number_field"
-    label="Pick a number" 
-    options={myOptions} 
-    defaultOption={myOptions[0]}
-/>
+<SamfFormField<number>
+  type="options" field="some_number_field" label="Pick a number" options={myOptions} defaultOption={myOptions[0]}
+  /></SamfFormField<number
+>
 ```
 
 ## Implementation details
