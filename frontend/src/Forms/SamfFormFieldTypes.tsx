@@ -169,7 +169,6 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
   return (
     <Checkbox
       {...(args.props as CheckboxProps)}
-      // key={args.field}
       checked={safeVal}
       label={args.label}
       className={styles.input_element}
@@ -180,13 +179,12 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
 }
 
 // Options dropdown input
-// TODO: Fix type
+// # issue 1090
 function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
   const errorBoolean = args.error !== false && args.error !== undefined;
   return (
     <Dropdown<unknown>
       {...(args.props as DropdownProps<number | string>)}
-      // key={args.field}
       defaultValue={args.defaultOption}
       options={args.options}
       onChange={args.onChange as (value?: unknown) => void}
@@ -199,7 +197,7 @@ function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
 
 // Image picker
 function makeImagePicker(args: SamfFormFieldArgs<ImageDto>) {
-  return <ImagePicker {...(args.props as ImagePickerProps)} /*key={args.field}*/ onSelected={args.onChange} />;
+  return <ImagePicker {...(args.props as ImagePickerProps)} onSelected={args.onChange} />;
 }
 
 // File picker
@@ -209,7 +207,6 @@ function makeFilePickerFunction(fileType: InputFileType) {
       <InputFile
         {...(args.props as InputFileProps)}
         fileType={fileType}
-        // key={args.field}
         label={args.label}
         error={args.error}
         onSelected={args.onChange}
@@ -224,7 +221,6 @@ function makePhoneNumberInput(args: SamfFormFieldArgs<string>) {
   return (
     <PhoneNumberField
       {...(args.props as InputFieldProps<string>)}
-      // key={args.field}
       value={safeVal}
       onChange={args.onChange}
       error={args.error}
