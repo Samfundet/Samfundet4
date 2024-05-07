@@ -153,7 +153,6 @@ function makeAreaInput(args: SamfFormFieldArgs<string>) {
   return (
     <TextAreaField
       {...(args.props as TextAreaFieldProps)}
-      // key={args.field}
       value={safeVal}
       onChange={args.onChange}
       error={args.error}
