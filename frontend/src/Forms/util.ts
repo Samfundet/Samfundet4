@@ -1,6 +1,6 @@
 import { SamfError } from './SamfForm';
 
-// TODO: add translations
+// isse 1091
 
 // ---------------------------------- //
 //             Validators             //
