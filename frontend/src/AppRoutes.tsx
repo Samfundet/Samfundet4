@@ -120,8 +120,23 @@ export const router = createBrowserRouter(
           />
           <Route
             path={ROUTES.frontend.admin_gangs_edit}
-            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs_edit}>{t(KEY.common_edit)}</Link> }}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
+            loader={({ params }) => {
+              // TODO: Fetch gang to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
+              return { id: params.id };
+            }}
+            handle={{
+              crumb: ({ id }: { id: string }) => (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_gangs_edit,
+                    urlParams: { id },
+                  })}
+                >
+                  {t(KEY.common_edit)}
+                </Link>
+              ),
+            }}
           />
         </Route>
         {/* Events */}
@@ -135,7 +150,7 @@ export const router = createBrowserRouter(
           />
           <Route
             path={ROUTES.frontend.admin_events_create}
-            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events_edit}>{t(KEY.common_create)}</Link> }}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events_create}>{t(KEY.common_create)}</Link> }}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
           />
           <Route
@@ -241,10 +256,27 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_recruitment_create}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_edit}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+            loader={({ params }) => {
+              // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
+              return { id: params.id };
+            }}
+            handle={{
+              crumb: ({ id }: { id: string }) => (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_edit,
+                    urlParams: { id },
+                  })}
+                >
+                  {t(KEY.common_edit)}
+                </Link>
+              ),
+            }}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_users_without_interview}
