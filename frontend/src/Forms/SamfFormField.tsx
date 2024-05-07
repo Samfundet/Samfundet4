@@ -15,7 +15,7 @@ import {
   GeneratorFunction,
   SamfFormFieldArgs,
   SamfFormFieldType,
-  SamfFormGenrators,
+  SamfFormGenerators,
 } from './SamfFormFieldTypes';
 
 // ---------------------------------- //
@@ -196,7 +196,7 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
       defaultOption: defaultOption,
       props: props,
     };
-    const generatorFunction: GeneratorFunction<U> = SamfFormGenrators[type];
+    const generatorFunction: GeneratorFunction<U> = SamfFormGenerators[type];
     return generatorFunction(args);
   }
 
