@@ -108,7 +108,7 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
     const newValues: T = { ...state.values, [field]: newValue };
     const newError: SamfError = getErrorState(newValue, newValues, required, validator, t(KEY.common_required));
     if (actionType === validateOn) {
-      if (!(!validateOnInit && isInit)) {
+      if (validateOnInit || !isInit) {
         setDisplayError(newError);
       }
     } else if (actionType === 'init' && validateOnInit) {
