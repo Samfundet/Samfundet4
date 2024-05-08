@@ -405,6 +405,18 @@ export type RecruitmentAdmissionDto = {
   withdrawn: boolean;
 };
 
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, string>;
+};
+
 export type FeedbackDto = {
   text: string;
   screen_resolution: string;

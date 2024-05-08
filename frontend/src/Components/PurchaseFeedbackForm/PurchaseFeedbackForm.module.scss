@@ -1,0 +1,30 @@
+.checkboxContainer {
+  display: flex;
+  flex-direction: row;
+  max-width: 15rem;
+}
+
+.checkbox {
+  width: 3rem;
+}
+
+.title {
+  margin-left: 0.45rem;
+  font-weight: 700;
+  text-decoration: solid;
+  font-size: 1.8em;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.buttonContainer {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: auto min-content;
+  gap: 10px;
+  max-width: 30rem;
+}
+
+.questionContainer {
+  margin-left: 0.45rem;
+}

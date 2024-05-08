@@ -19,6 +19,7 @@ import {
   LycheHomePage,
   LycheMenuPage,
   NotFoundPage,
+  PurchaseCallbackPage,
   RecruitmentAdmissionFormPage,
   RecruitmentPage,
   RouteOverviewPage,
@@ -84,6 +85,7 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
         <Route path={ROUTES.frontend.events} element={<EventsPage />} />
         <Route path={ROUTES.frontend.event} element={<EventPage />} />
+        <Route path={ROUTES.frontend.purchase_callback} element={<PurchaseCallbackPage />} />
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
@@ -256,7 +258,6 @@ export function AppRoutes() {
       {/* 
             404 NOT FOUND
       */}
-      <Route path={ROUTES.frontend.not_found} element={<NotFoundPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

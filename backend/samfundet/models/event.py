@@ -302,3 +302,61 @@ class Event(CustomBaseModel):
             self.get_or_create_registration().registered_users.add(user)
             return True
         return False
+
+
+class PurchaseFeedbackModel(models.Model):
+    """
+    feedback after purchasing an event ticket.
+
+    Stores both the form itself and the feedback, by having
+    PurchaseFeedbackAlternative and PurchaseFeedbackQuestion
+    connect to it.
+
+    Events doesnt necesarily have the same feedbackform.
+    """
+
+    title = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    event = models.ForeignKey(Event, on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = 'PurchaseFeedback'
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class PurchaseFeedbackAlternative(models.Model):
+    """
+    Stores whether a checkbox alternative was selected or not. Is connected
+    to a single feedbackform.
+    """
+
+    alternative = models.CharField(max_length=255, blank=True)
+    # TODO: Change into BoolField When SamfForm is updated.
+    selected = models.CharField(max_length=255)
+
+    form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['form', 'alternative']
+
+    def __str__(self) -> str:
+        return f'{self.alternative}: {self.selected}'
+
+
+class PurchaseFeedbackQuestion(CustomBaseModel):
+    """
+    Stores a question and response. Is connected to a single
+    feedbackform.
+    """
+
+    question = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255, blank=True)
+    form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['form', 'question']
+
+    def __str__(self) -> str:
+        return f'{self.question}: {self.answer}'
