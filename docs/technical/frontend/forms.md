@@ -63,8 +63,6 @@ SamfForm is a generic react component that makes it easy to create forms for all
 
 **validateOnInit?: boolean** - Whether to validate the form on init. Default is false
 
-## Usage
-
 ## Types
 
 The form component is type generic, so you can easily create forms for any kind of data. The type parameter don't affect the realtime behavior of the form as the types are removed when TS is compiled to JS. They are however useful for type checking, development, documentation and debugging. It is recommended to use the type parameter to specify the type of data the form is handling. SamfForm has the following types paramaters:
