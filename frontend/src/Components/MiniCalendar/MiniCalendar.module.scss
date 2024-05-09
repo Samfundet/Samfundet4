@@ -1,0 +1,120 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  padding: 10px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.label {
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+  display: block;
+  font-weight: 500;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.days_header {
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  border-bottom: 1px solid $grey-3;
+  padding: 0.25rem 0;
+  user-select: none;
+  color: $grey-2;
+
+  @include theme-dark {
+    color: $grey-2;
+  }
+}
+
+.day {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 1.5rem;
+  color: $grey-0;
+  cursor: pointer;
+  position: relative;
+
+  @include theme-dark {
+    color: $grey-4;
+  }
+
+  &:not(.disabled_day):hover {
+    background: $red-samf;
+    color: $white;
+  }
+}
+
+.month_header {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.previous_month, .next_month {
+  display: flex;
+  flex: 1;
+}
+
+.previous_month {
+  justify-content: flex-start;
+}
+
+.next_month {
+  justify-content: flex-end;
+}
+
+.change_month_button {
+  padding: 6px;
+}
+
+.marker {
+  height: 4px;
+  width: 4px;
+  border-radius: 3px;
+  background: $grey-2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.outside_month_day {
+  color: $grey-3;
+
+  @include theme-dark {
+    color: $grey-2;
+  }
+}
+
+.selected_day {
+  background: $red-samf;
+  color: $white;
+
+  .marker {
+    background: $white;
+  }
+}
+
+.disabled_day {
+  cursor: not-allowed;
+  color: $grey-3;
+
+  @include theme-dark {
+    color: $grey-2;
+  }
+}
