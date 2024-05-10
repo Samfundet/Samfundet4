@@ -4,7 +4,6 @@
     "eamodio.gitlens",
     "mikestead.dotenv",
     "ms-python.python",
-    "charliermarsh.ruff",
     "hediet.vscode-drawio",
     "mrorz.language-gettext",
     "esbenp.prettier-vscode",

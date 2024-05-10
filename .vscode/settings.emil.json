@@ -32,8 +32,6 @@
       "source.fixAll": "never",
       "source.organizeImports": "never"
     },
-    // ruff (formatter, linter)
-    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   // ================================
   //             Frontend

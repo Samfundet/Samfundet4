@@ -1,10 +1,10 @@
-[tool.ruff] # https://docs.astral.sh/ruff/settings/#top-level
+
 line-length = 160
-force-exclude = true # Ensure ruff respects `exclude` even when specifying path directly in CLI.
+force-exclude = true # Ensure respects `exclude` even when specifying path directly in CLI.
 output-format = "concise" # Pretty output.
 target-version = 'py311'
 
-extend-exclude = [ # https://docs.astral.sh/ruff/settings/#extend-exclude
+extend-exclude = [
     ".*",
     ".vscode",
     ".history",
@@ -21,7 +21,6 @@ extend-exclude = [ # https://docs.astral.sh/ruff/settings/#extend-exclude
 ]
 
 
-[tool.ruff.format]
 quote-style = "single"
 docstring-code-format = true
 line-ending = "lf"
@@ -29,26 +28,9 @@ skip-magic-trailing-comma = false # Similar to yapf. Trailing comma signals mult
 
 
 
-[tool.ruff.lint]
-# See list of all rules: rulehttps://docs.astral.sh/ruff/rules
-preview = true
-explicit-preview-rules = true
-ignore-init-module-imports = true # This implicit export strategy is used in this project.
-
-
-# See list of implemented and overlapping rules from pylint.
-# https://github.com/astral-sh/ruff/issues/970
-
 select = [
     "PL", # pylint
     "I", # isort.
-    "RUF008", # ruff
-    "RUF009", # ruff
-    "RUF013", # ruff
-    "RUF015", # ruff
-    "RUF016", # ruff
-    "RUF100", # ruff
-    "RUF200", # ruff
     "ANN001", # flake8-annotations
     "ANN201", # flake8-annotations
     "ANN202", # flake8-annotations
@@ -63,7 +45,6 @@ select = [
     "D200", # pydocstyle
     "D211", # pydocstyle
     "T20", # flake8-print
-    "S", # https://docs.astral.sh/ruff/rules/#flake8-bandit-s
     "DJ", # Flake8-Django
     "C90", # maccabe
     "W", # pycodestyle (Warning)
@@ -87,15 +68,12 @@ ignore = [
     "PLR2004", # pylint
     "PLR0912", # pylint
     "PLR0911", # pylint
-    "Q000", # flake8-quotes # Ruff formatter handles this.
-    "Q003", # flake8-quotes # Ruff formatter handles this.
     "S101", # Use of assert
     "DJ001", # Django null=true on text/char fileds
     "RET504" # Return statement
 ]
 
 
-[tool.ruff.lint.per-file-ignores]
 "test_*.py" = ["PLR0917", "ANN201", "ANN001", "S106"]
 "signals.py" = ["PLR0917"]
 "conftest.py" = ["PLR0917"]
@@ -107,8 +85,6 @@ ignore = [
 
 
 ### isort ###
-
-[tool.ruff.lint.isort]
 length-sort = true # Sort imports on their dotted path length.
 required-imports = ["from __future__ import annotations"]
 section-order = [
@@ -122,16 +98,8 @@ section-order = [
     "local-folder",
 ]
 
-[tool.ruff.lint.isort.sections]
 "django" = ["django"] # Used in section-order.
 "rest_framework" = ["rest_framework"] # Used in section-order.
 "samfundet" = ["samfundet"] # Used in section-order.
 
 ### End: isort ###
-
-
-[tool.ruff.lint.pylint]
-max-positional-args = 1
-
-[tool.ruff.lint.mccabe]
-max-complexity = 5

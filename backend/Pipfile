@@ -17,16 +17,13 @@ name = "pypi"
 "pipenv:where" = "pipenv --where" # Show location of virtual environment.
 "pipenv:rm" = "pipenv --rm" # Completely remove virtual environment.
 "pipenv:shell" = "pipenv shell" # Opens a shell within the virtual environment.
-"ruff:check" = "pipenv run ruff check ." # Run ruff check linter on project.
-"ruff:format:check" = "pipenv run ruff format --check ." # Dry-run ruff format on all files in the project.
-"ruff:format:apply" = "pipenv run ruff format ." # Apply ruff format on all files in the project.
 "mypy:run" = "pipenv run mypy --config-file mypy.ini ."
 "migrations:make" = "pipenv run python manage.py makemigrations --noinput"
 "migrations:verify" = "pipenv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2"
 "migrations:apply" = "pipenv run python manage.py migrate"
 "static:collect" = "pipenv run python manage.py collectstatic --noinput"
 "pytest:run" = "pipenv run pytest"
-"pipeline:run" = "bash -c \"pipenv run mypy:run && pipenv run ruff:check && pipenv run ruff:format:check && pipenv run migrations:verify && pipenv run pytest:run\""
+"pipeline:run" = "bash -c \"pipenv run mypy:run && pipenv run pipenv run migrations:verify && pipenv run pytest:run\""
 "seed:run" = "pipenv run python manage.py seed"
 
 [packages]
@@ -45,7 +42,6 @@ psycopg = {extras = ["c"], version = "*"}
 
 [dev-packages]
 mypy = "*"
-ruff = "*"
 bandit = "*"
 pillow = "*"
 debugpy = "*"

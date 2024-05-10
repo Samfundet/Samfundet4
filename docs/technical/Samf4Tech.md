@@ -107,7 +107,7 @@ If you want you can also read the [prettier](https://prettier.io/), [eslint](htt
 #### Backend ⚙️
 
 In backend we use the Python formatter [yapf](https://pypi.org/project/yapf/) because it is a formatter that offers multiple popular Python formats and standards. The format is configured in a Python file in backend.
-For linting we use ruff (TODO). These tools are especially helpful because they can highlight code errors and can make suggestions for better code. You can run the backend GitHub Actions checks in Docker, [read more here.](/docs/docker-project-specific-commands.md). We use a tool called [Bandit](https://bandit.readthedocs.io/en/latest/), which is a linter that detects security issues in Python code. We also aim to make our Python code more strictly typed, which is why we use [mypy](https://mypy.readthedocs.io/en/stable/index.html).
+For linting we use CENSORED (TODO). These tools are especially helpful because they can highlight code errors and can make suggestions for better code. You can run the backend GitHub Actions checks in Docker, [read more here.](/docs/docker-project-specific-commands.md). We use a tool called [Bandit](https://bandit.readthedocs.io/en/latest/), which is a linter that detects security issues in Python code. We also aim to make our Python code more strictly typed, which is why we use [mypy](https://mypy.readthedocs.io/en/stable/index.html).
 
 # Summation
 
