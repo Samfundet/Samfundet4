@@ -11,7 +11,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
+import { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -227,7 +227,7 @@ export function EventCreatorAdminPage() {
       <ImageCard
         title={dbT(event, 'title') ?? ''}
         description={dbT(event, 'description_short') ?? ''}
-        imageUrl={BACKEND_DOMAIN + event?.image?.url}
+        imageUrl={BACKEND_DOMAIN + (event?.image as ImageDto)?.url}
         date={event?.start_dt ?? ''}
       />
       {/* Preview Info */}
