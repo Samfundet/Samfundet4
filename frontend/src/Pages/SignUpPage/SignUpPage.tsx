@@ -6,6 +6,7 @@ import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, register } from '~/api';
+import { RegistrationDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -24,15 +25,8 @@ export function SignUpPage() {
     }
   }, [user, navigate]);
 
-  function handleRegistration(formData: Record<string, string>) {
-    register(
-      formData['username'],
-      formData['email'],
-      formData['phone_number'],
-      formData['firstname'],
-      formData['lastname'],
-      formData['password'],
-    )
+  function handleRegistration(formData: RegistrationDto) {
+    register(formData)
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser().then((user) => {
@@ -66,11 +60,16 @@ export function SignUpPage() {
           ></Alert>
         )}
         <div className={styles.content_container}>
-          <SamfForm onSubmit={handleRegistration} submitText={t(KEY.common_register) ?? ''}>
+          <SamfForm<RegistrationDto> onSubmit={handleRegistration} submitText={t(KEY.common_register) ?? ''}>
             <h1 className={styles.header_text}>{t(KEY.loginpage_register)}</h1>
             <SamfFormField required={true} field="username" type="text" label={t(KEY.loginpage_username) ?? ''} />
             <SamfFormField required={true} field="email" type="email" label={t(KEY.common_email) ?? ''} />
-            <SamfFormField required={true} field="phone_number" type="text" label={t(KEY.common_phonenumber) ?? ''} />
+            <SamfFormField
+              required={true}
+              field="phone_number"
+              type="phonenumber"
+              label={t(KEY.common_phonenumber) ?? ''}
+            />
             <SamfFormField required={true} field="firstname" type="text" label={t(KEY.common_firstname) ?? ''} />
             <SamfFormField required={true} field="lastname" type="text" label={t(KEY.common_lastname) ?? ''} />
             <SamfFormField required={true} field="password" type="password" label={t(KEY.common_password) ?? ''} />

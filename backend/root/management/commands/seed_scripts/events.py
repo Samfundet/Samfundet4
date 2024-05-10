@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import random
-from typing import Tuple
 
 from django.db import transaction
 from django.utils import timezone
 
 from root.utils.samfundet_random import words
+
 from samfundet.models.event import (
     User,
     Event,
@@ -12,8 +14,8 @@ from samfundet.models.event import (
     EventGroup,
     EventCategory,
     EventTicketType,
-    EventRegistration,
     EventCustomTicket,
+    EventRegistration,
     EventAgeRestriction,
     NonMemberEmailRegistration,
 )
@@ -70,7 +72,7 @@ VENUES = Venue.objects.all()
 IMAGES = Image.objects.all()
 
 
-def create_event_ticket_type(capacity) -> Tuple[str, dict]:
+def create_event_ticket_type(capacity) -> tuple[str, dict]:
     ticket_type = random.choices(list(TICKET_TYPES.keys()), weights=list(TICKET_TYPES.values()), k=1)[0]
     ticket_type_data: dict = {}
     # Registration type, register some number of users/emails
@@ -110,7 +112,7 @@ def dummy_metadata() -> dict:
     }
 
 
-def do_seed():
+def do_seed():  # noqa: C901
     Event.objects.all().delete()
     EventGroup.objects.all().delete()
     EventCustomTicket.objects.all().delete()
@@ -119,7 +121,6 @@ def do_seed():
 
     n_recurring = 0
     for i in range(COUNT):
-
         metadata = dummy_metadata()
         capacity = random.randint(MIN_CAPACITY, MAX_CAPACITY)
         event_time = timezone.now() + timezone.timedelta(
@@ -148,12 +149,12 @@ def do_seed():
                     name_nb=f'Billett {i + 1}',
                     name_en=f'Ticket {i + 1}',
                     price=random.randint(50, 200),
-                ) for i in range(0, random.randint(2, 4))
+                )
+                for i in range(0, random.randint(2, 4))
             ]
 
         # Create event(s)
         for j in range(recurring):
-
             # Add tag to recurring titles
             metadata_this = {**metadata}
             if recurring != 1:
@@ -186,5 +187,4 @@ def do_seed():
 def seed():
     # Seed with transaction (much faster)
     with transaction.atomic():
-        for seed in do_seed():
-            yield seed
+        yield from do_seed()

@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketTypeValue, EventTicketType } from './types';
+import { Day, EventTicketType, EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -135,6 +135,16 @@ export function getDayKey(day: Day): KeyValues {
   }
 }
 
+export const SHORT_DAY_I18N_KEYS = [
+  KEY.common_day_monday_short,
+  KEY.common_day_tuesday_short,
+  KEY.common_day_wednesday_short,
+  KEY.common_day_thursday_short,
+  KEY.common_day_friday_short,
+  KEY.common_day_saturday_short,
+  KEY.common_day_sunday_short,
+];
+
 /**
  * Gets the translation key for a given price group
  */
@@ -170,6 +180,21 @@ export function utcTimestampToLocal(time: string | undefined): string {
       second: '2-digit',
     })
     .replace(' ', 'T');
+}
+
+/**
+ * Converts a UTC timestring from django to
+ * a finer time
+ * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @returns timestamp in local format, eg. '2023-04-05T20:15'
+ */
+export function niceDateTime(time: string | undefined): string | undefined {
+  const date = new Date(time ?? '');
+  if (!isNaN(date.getTime())) {
+    const dateString = date.toUTCString();
+    return dateString.substring(0, dateString.length - 3);
+  }
+  return time;
 }
 
 /**
@@ -252,4 +277,20 @@ export function lowerCapitalize(s: string): string {
     return s.toUpperCase();
   }
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+
+/**
+ * Method for fetching Random entry from list
+ */
+export function getRandomEntryFromList(entries: unknown[]): unknown {
+  return entries[Math.floor(Math.random() * entries.length)];
+}
+
+/**
+ * Fetches an datetime object from time
+ * Example: '13:00' becomes a dateobject with time 13:00:00
+ */
+export function getTimeObject(time: string): number {
+  const timeSplit = time.split(':');
+  return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
 }

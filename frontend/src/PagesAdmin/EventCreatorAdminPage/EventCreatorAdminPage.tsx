@@ -1,21 +1,22 @@
 import { Button, ImageCard } from '~/Components';
-
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { postEvent } from '~/api';
+import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { Children, EventAgeRestriction } from '~/types';
+import { Children, EventAgeRestrictionValue } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
@@ -32,18 +33,40 @@ type EventCreatorStep = {
 export function EventCreatorAdminPage() {
   const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const { id } = useParams();
 
   // TODO these are temporary and must be fetched from API when implemented.
   const eventCategoryOptions: DropDownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
   ];
-  const ageLimitOptions: DropDownOption<EventAgeRestriction>[] = [
+  const ageLimitOptions: DropDownOption<EventAgeRestrictionValue>[] = [
     { value: 'none', label: 'Ingen' },
     { value: 'eighteen', label: '18 år' },
     { value: 'twenty', label: '20 år' },
     { value: 'mixed', label: '18 år (student), 20 år (ikke student)' },
   ];
+
+  //Fetch event data using the event ID
+  useEffect(() => {
+    if (id) {
+      getEvent(id)
+        .then((eventData) => {
+          setEvent(eventData);
+          setShowSpinner(false);
+        })
+        .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate({ url: ROUTES.frontend.admin_events });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    } else {
+      setShowSpinner(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // ================================== //
   //          Creation Steps            //
@@ -255,6 +278,7 @@ export function EventCreatorAdminPage() {
           onValidityChanged={(valid) => setStepCompleted(step, valid)}
           validateOnInit={visited}
           devMode={false}
+          initialData={event}
         >
           {step.key == 'summary' ? eventPreview : <></>}
           {step.template}
@@ -289,7 +313,7 @@ export function EventCreatorAdminPage() {
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
   return (
-    <AdminPageLayout title={title}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}

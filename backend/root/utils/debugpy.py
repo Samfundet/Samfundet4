@@ -1,5 +1,6 @@
-import os
+from __future__ import annotations
 
+import os
 import logging
 
 logger = logging.getLogger('root.utils')
@@ -17,7 +18,8 @@ def initialize_debugpy() -> None:
     """
     if os.environ.get('ENABLE_DEBUGPY') == 'yes':
         import debugpy
+
         # This is okay as long as ENABLE_DEBUGPY only is enabled during development and NOT in production.
-        HOST = '0.0.0.0'
+        HOST = '0.0.0.0'  # noqa: N806, S104
         host_port = debugpy.listen((HOST, 5678))
         logger.info(f'Attached debugpy on {host_port}')

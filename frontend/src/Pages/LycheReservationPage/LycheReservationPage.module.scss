@@ -1,0 +1,60 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.container {
+  @include flex-column-center;
+  margin-top: $sulten-navbar-height;
+}
+
+.header {
+  font-size: 2em;
+}
+
+.partContainer {
+  width: 50%;
+  height: 100%;
+  color: white;
+  text-align: center;
+  margin-bottom: 1em;
+  @include flex-column-center;
+  gap: 1rem;
+  @include for-mobile-down {
+    width: 100%;
+  }
+}
+
+.text {
+  font-size: 0.9em;
+  margin-bottom: 0.5em;
+  color: $grey-3;
+}
+
+.email {
+  color: $sulten-orange;
+}
+
+.formContainer {
+  width: 50%;
+  background-color: $black-1;
+  border: none;
+  @include for-mobile-down {
+    width: 100%;
+  }
+}
+
+.button {
+  font-weight: 700;
+}
+
+/* stylelint-disable-next-line */
+.check_box > label {
+  color: $white;
+  display: flex;
+  flex-direction: row-reverse;
+  font-weight: 400;
+}
+
+.reservation_info {
+  margin-bottom: 1em;
+}

@@ -10,8 +10,9 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { lowerCapitalize } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './ImageFormAdminPage.module.scss';
 
 export function ImageFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -69,12 +70,14 @@ export function ImageFormAdminPage() {
   const title = id ? lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
-        <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
-        {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
-        <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
-        {/* TODO create file picker input type */}
+        <div className={styles.input_row}>
+          <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
+          {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
+          <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
+          {/* TODO create file picker input type */}
+        </div>
         <SamfFormField
           field="file"
           type="upload-image"

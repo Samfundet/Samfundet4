@@ -3,6 +3,7 @@ import {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
@@ -11,14 +12,17 @@ import {
   ImageDto,
   ImagePostDto,
   InformationPageDto,
+  InterviewDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
   NotificationDto,
+  OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentDto,
   RecruitmentPositionDto,
+  RegistrationDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -54,16 +58,8 @@ export async function logout(): Promise<AxiosResponse> {
   return response;
 }
 
-export async function register(
-  username: string,
-  email: string,
-  phone_number: string,
-  firstname: string,
-  lastname: string,
-  password: string,
-): Promise<number> {
+export async function register(data: RegistrationDto): Promise<number> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__register;
-  const data = { username, email, phone_number, firstname, lastname, password };
   const response = await axios.post(url, data, { withCredentials: true });
 
   // Django rotates csrftoken after login, set new token received.
@@ -558,6 +554,27 @@ export async function getRecruitmentPositionsGang(
   return response;
 }
 
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__occupied_timeslots,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function postOccupiedTimeslots(
+  timeslots: OccupiedTimeSlotDto[],
+): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
+  const response = await axios.post(url, timeslots, { withCredentials: true });
+
+  return response;
+}
+
 export async function getRecruitmentPosition(positionId: string): Promise<AxiosResponse<RecruitmentPositionDto>> {
   const url =
     BACKEND_DOMAIN +
@@ -593,6 +610,20 @@ export async function getRecruitmentAdmissionsForApplicant(
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
       queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentAdmissionForApplicant(
+  recruitment_position: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: recruitment_position },
     });
   const response = await axios.get(url, { withCredentials: true });
 
@@ -638,6 +669,13 @@ export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<Rec
   return response;
 }
 
+export async function getActiveRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitments;
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
   const url =
     BACKEND_DOMAIN +
@@ -652,17 +690,42 @@ export async function getApplicantsWithoutInterviews(recruitmentId: string): Pro
   return response;
 }
 
-export async function postRecruitmentAdmission(admission: Partial<RecruitmentAdmissionDto>): Promise<AxiosResponse> {
+export async function putRecruitmentAdmission(
+  admission: Partial<RecruitmentAdmissionDto>,
+  admissionId: number,
+): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: admissionId },
     });
   const data = {
     admission_text: admission.admission_text,
     recruitment_position: admission.recruitment_position,
   };
-  const response = await axios.post(url, data, { withCredentials: true });
+  const response = await axios.put(url, data, { withCredentials: true });
+
+  return response;
+}
+
+export async function putRecruitmentAdmissionInterview(
+  interviewId: string | number,
+  interview: Partial<InterviewDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_detail,
+      urlParams: { pk: interviewId.toString() },
+    });
+  const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
+  return response;
+}
+
+export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
+  const response = await axios.post(url, feedbackData, { withCredentials: true });
 
   return response;
 }

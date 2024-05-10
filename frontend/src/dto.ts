@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestriction, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -17,6 +17,14 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+};
+
+export type OccupiedTimeSlotDto = {
+  id?: number;
+  user?: number;
+  recruitment: number;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type RecruitmentUserDto = {
@@ -115,7 +123,7 @@ export type EventDto = {
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
-  age_restriction: EventAgeRestriction;
+  age_restriction: EventAgeRestrictionValue;
   location: string;
   category: string;
   host: string;
@@ -165,7 +173,14 @@ export type InformationPageDto = {
   text_en?: string;
 };
 
+export type ReservationTableDto = {
+  name: string;
+  start_time: string;
+  end_time: string;
+};
+
 export type TableDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -173,6 +188,7 @@ export type TableDto = {
   description_en?: string;
 
   seating?: number;
+  reservations?: ReservationTableDto[];
 };
 
 export type FoodPreferenceDto = {
@@ -210,6 +226,22 @@ export type MenuDto = {
   description_en?: string;
 
   menu_items?: MenuItemDto[];
+};
+
+export type ReservationDto = {
+  name?: string;
+  email?: string;
+  phonenumber?: string;
+  additional_info?: string;
+  start_time: string;
+  end_time?: string;
+  // Needed for first part
+  venue?: number;
+  reservation_date?: string;
+  guest_count?: number;
+  occasion?: string;
+  // Maybe ignore and use different dto?
+  // internal_message?: string;
 };
 
 export type SaksdokumentDto = {
@@ -308,6 +340,10 @@ export type NotificationDto = {
   // TODO: There are more fields than this.
 };
 
+// ############################################################
+//                       Recruitment
+// ############################################################
+
 export type RecruitmentDto = {
   id: string | undefined;
   name_nb: string;
@@ -352,16 +388,42 @@ export type InterviewDto = {
   interview_location: string;
   room: string;
   notes: string;
+  interviewers?: UserDto[];
 };
 
 export type RecruitmentAdmissionDto = {
   id: number;
   interview: InterviewDto;
   admission_text: string;
-  recruitment_position?: number;
+  recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
   recruiter_priority?: number;
   recruiter_status?: number;
+  created_at: string;
+  withdrawn: boolean;
+};
+
+export type FeedbackDto = {
+  text: string;
+  screen_resolution: string;
+  path: string;
+  contact_email?: string;
+};
+
+export type SultenReservationDayDto = {
+  date: Date;
+  start_time: string;
+  closing_time: string;
+  tables: TableDto[];
+};
+
+export type RegistrationDto = {
+  username: string;
+  email: string;
+  phone_number: string;
+  firstname: string;
+  lastname: string;
+  password: string;
 };
