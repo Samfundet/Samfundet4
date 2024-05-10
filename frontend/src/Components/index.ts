@@ -57,6 +57,9 @@ export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
 export { PhoneNumberField } from './PhoneNumberField';
 export { ToolTip } from './ToolTip';
+export { SamfLogo } from './SamfLogo';
+export { UkaLogo } from './UkaLogo';
+export { IsfitLogo } from './IsfitLogo';
 
 // Props
 export type { CheckboxProps } from './Checkbox';
