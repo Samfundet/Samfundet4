@@ -5,7 +5,7 @@ from django.utils import timezone
 from samfundet.models.general import Organization
 from samfundet.models.recruitment import Recruitment
 
-organizations = ['Samfundet', 'ISFiT', 'UKA']
+organizations = ['Samfundet', 'UKA']
 
 recruitments = [
     {
@@ -40,7 +40,7 @@ recruitments = [
 
 def seed():
     yield 0, 'recruitment'
-
+    Recruitment.objects.all().delete()
     total_recruitments = len(recruitments) * len(organizations)
     created_recruitments = 0
     recruitment_objects = []

@@ -53,6 +53,9 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     Occupiedtimeslot,
+    RecruitmentTimeStat,
+    RecruitmentDateStat,
+    RecruitmentCampusStat,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
@@ -557,7 +560,34 @@ class MerchSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
+class RecruitmentTimeStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentTimeStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentDateStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentDateStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
+    campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+
+    class Meta:
+        model = RecruitmentCampusStat
+        exclude = ['id', 'recruitment_stats']
+
+    def campus_name(self, stat: RecruitmentCampusStat) -> str:
+        return stat.campus.name_nb if stat.campus else None
+
+
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+    time_stats = RecruitmentTimeStatSerializer(read_only=True, many=True)
+    date_stats = RecruitmentDateStatSerializer(read_only=True, many=True)
+    campus_stats = RecruitmentCampusStatSerializer(read_only=True, many=True)
+
     class Meta:
         model = RecruitmentStatistics
         fields = '__all__'

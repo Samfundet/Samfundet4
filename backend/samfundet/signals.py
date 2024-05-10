@@ -70,9 +70,3 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
     """Ensures stats are created when an recruitment is created"""
     if created:
         RecruitmentStatistics.objects.get_or_create(recruitment=instance)
-
-
-@receiver(post_save, sender=RecruitmentAdmission)
-def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
-    if created:
-        instance.recruitment.update_stats()

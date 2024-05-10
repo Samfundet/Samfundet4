@@ -119,7 +119,7 @@ class UserAdmin(CustomGuardedUserAdmin):
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'campus')}),
         (
             _('Permissions'),
             {
@@ -139,7 +139,7 @@ class UserAdmin(CustomGuardedUserAdmin):
             None,
             {
                 'classes': ('wide',),
-                'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+                'fields': ('username', 'email', 'phone_number', 'campus', 'password1', 'password2'),
             },
         ),
     )
@@ -696,10 +696,17 @@ class InterviewAdmin(CustomBaseAdmin):
     filter_horizontal = ['interviewers']
 
 
+@admin.action(description='Update stats')
+def update_stats(modeladmin, request, queryset):
+    for q in queryset:
+        q.save()
+
+
 @admin.register(RecruitmentStatistics)
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_admissions']
     search_fields = ['recruitment']
+    actions = [update_stats]
 
 
 @admin.register(Merch)
