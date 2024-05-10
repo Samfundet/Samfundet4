@@ -262,11 +262,11 @@ def autocomplete_filter(**kwargs: Any) -> AutocompleteFilter:
     return type('AutocompleteFilter', (AutocompleteFilter,), kwargs)
 
 
-class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin): ...
+class CustomGuardedUserAdmin(CustomGuardedModelAdmin, UserAdmin):
+    ...
 
-
-class CustomGuardedGroupAdmin(CustomGuardedModelAdmin, GroupAdmin): ...
-
+class CustomGuardedGroupAdmin(CustomGuardedModelAdmin, GroupAdmin):
+    ...
 
 class CustomBaseAdmin(CustomGuardedModelAdmin):
     """
