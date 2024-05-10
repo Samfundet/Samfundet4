@@ -14,7 +14,7 @@ from samfundet.models.general import (
     Image,
     Gang,
 )
-from samfundet.models.model_choices import (EventAgeRestriction, EventCategory, EventStatus)
+from samfundet.models.model_choices import EventAgeRestriction, EventCategory, EventStatus
 from samfundet.serializers import UserSerializer
 
 if TYPE_CHECKING:
@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 
 
 class TestEventView:
-
     def test_get_event(
         self,
         fixture_rest_client: APIClient,
@@ -74,7 +73,7 @@ class TestEventView:
             'publish_dt': '2024-01-11T13:00',
             'duration': 60,
             'capacity': 100,
-            'editors': [fixture_gang.id]
+            'editors': [fixture_gang.id],
         }
         response: Response = fixture_rest_client.post(path=url, data=post_data)
 
