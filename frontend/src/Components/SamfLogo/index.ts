@@ -1,0 +1,1 @@
+export { SamfLogo } from './SamfLogo';

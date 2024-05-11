@@ -1,0 +1,1 @@
+export { IsfitLogo } from './IsfitLogo';
