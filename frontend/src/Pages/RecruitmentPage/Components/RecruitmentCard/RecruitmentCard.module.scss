@@ -1,4 +1,5 @@
 @import 'src/constants';
+
 @import "src/mixins";
 
 .card{
@@ -15,13 +16,13 @@
   @include theme-dark {
     background-color: $black-t75;
   }
-
   @include for-tablet-down {
     display: grid;
     grid-template-rows: auto auto;
     width: 22rem;
   }
 }
+
 .cardHeader{
   margin: 0 0 1rem 0;
 }
@@ -35,11 +36,13 @@
     grid-template-columns: 1fr;
   }
 }
+
 .textContainer {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 .cardSamf{
   @extend .card;
   border-color: $red-samf;
