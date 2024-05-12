@@ -124,3 +124,11 @@ export type CalendarMarker = {
   date: Date;
   className?: string;
 };
+
+export const OrganizationType = {
+  SAMF: 'samfundet',
+  UKA: 'uka',
+  ISFIT: 'isfit',
+} as const;
+
+export type OrganizationTypeValue = (typeof OrganizationType)[keyof typeof OrganizationType];

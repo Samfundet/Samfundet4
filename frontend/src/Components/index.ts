@@ -60,6 +60,9 @@ export { ToolTip } from './ToolTip';
 export { SamfLogo } from './SamfLogo';
 export { UkaLogo } from './UkaLogo';
 export { IsfitLogo } from './IsfitLogo';
+export { Text } from './Text';
+export { TabBar } from './TabBar';
+export { Table } from './Table';
 
 // Props
 export type { CheckboxProps } from './Checkbox';
@@ -68,3 +71,7 @@ export type { ImagePickerProps } from './ImagePicker/ImagePicker';
 export type { InputFieldProps } from './InputField';
 export type { InputFileProps } from './InputFile';
 export type { TextAreaFieldProps } from './TextAreaField';
+
+//types
+export type { Tab } from './TabBar';
+export type { TableRow } from './Table';

@@ -1,0 +1,21 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container{
+  margin: 2rem;
+  @include flex-column-center;
+  gap: 2rem;
+}
+
+.video {
+  padding-bottom: 0;
+  aspect-ratio: 16/9;
+  border-width: 0;
+  width: 32em;
+}
+
+.openPositionsContainer{
+  @include  flex-column-center;
+  gap: 2rem;
+}

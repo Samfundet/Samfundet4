@@ -1,5 +1,11 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import {
+  EventAgeRestrictionValue,
+  EventStatus,
+  EventTicketTypeValue,
+  HomePageElementVariation,
+  OrganizationTypeValue,
+} from './types';
 
 export type UserDto = {
   id: number;
@@ -270,10 +276,19 @@ export type BookingDto = {
   from_dto?: Date;
   from_to?: Date;
 };
-
+// ############################################################
+//                       Org-structure DTOs
+// ############################################################
 export type OrganizationDto = {
   id: number;
   name: string;
+};
+
+export type GangTypeDto = {
+  id: number;
+  title_nb: string;
+  title_en: string;
+  gangs: GangDto[];
 };
 
 export type GangDto = {
@@ -285,13 +300,18 @@ export type GangDto = {
   logo?: string;
   gang_type?: number;
   info_page?: number;
+  sections?: SectionDto[];
 };
 
-export type GangTypeDto = {
+export type SectionDto = {
   id: number;
-  title_nb: string;
-  title_en: string;
-  gangs: GangDto[];
+  section_name_nb: string;
+  section_name_en?: string;
+  abbreviation?: string;
+  webpage?: string;
+  logo?: string;
+  in_gang?: number;
+  recruitment_positions: Partial<RecruitmentPositionDto>[];
 };
 
 export type ClosedPeriodDto = {
@@ -354,6 +374,13 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: 'samfundet' | 'isfit' | 'uka';
+};
+
+export type OrganizationRecruitmentDto = {
+  id: string;
+  // TODO: DECIDE: we want to "semi-hardcode" orgs, or have adminusers be able to creat them?
+  organization: OrganizationTypeValue;
+  recruiting_gang_types: GangTypeDto[];
 };
 
 export type RecruitmentPositionDto = {
