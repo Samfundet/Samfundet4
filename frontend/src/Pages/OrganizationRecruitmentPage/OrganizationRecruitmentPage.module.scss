@@ -2,20 +2,111 @@
 
 @import 'src/mixins';
 
-.container{
+.container {
   margin: 2rem;
   @include flex-column-center;
   gap: 2rem;
 }
 
-.video {
-  padding-bottom: 0;
-  aspect-ratio: 16/9;
-  border-width: 0;
-  width: 32em;
+.organizationHeader{
+  width: 40vw;
+  min-width: fit-content;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.15rem;
+  @include flex-row;
+  gap: 5rem;
+  @include for-tablet-down{
+    width: 80vw;
+  }
 }
 
-.openPositionsContainer{
+.video {
+  width: 40vw;
+  aspect-ratio: 16 / 9; // Specifies the width to height aspect ratio
+  border-width: 0;
+  @include for-tablet-down{
+    width: 80vw;
+  }
+}
+
+.basicRecruitment{
+  width: 40vw;
+  min-width: fit-content;
+  color: black;
+  padding: 1rem;
+  border-radius: 0.15rem;
+  @include flex-row-center;
+  gap: 5rem;
+  @include for-tablet-down{
+    width: 80vw;
+  }
+}
+
+.samfRecruitment{
+  @extend .basicRecruitment;
+  color: white;
+  background-color: $red-samf;
+}
+
+.ukaRecruitment{
+  @extend .samfRecruitment;
+  background-color: $blue-uka;
+}
+
+.isfitRecruitment{
+  @extend .samfRecruitment;
+  background-color: $blue-isfit;
+}
+
+.openPositionsContainer {
   @include  flex-column-center;
   gap: 2rem;
 }
+
+.recruitmentTable {
+  width: 50vw;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  @include for-tablet-down {
+    width: 75vw;
+  }
+  @include for-mobile-only {
+    width: 95vw;
+  }
+}
+
+.recruitmentTable th {
+  width: 33.33%;
+  overflow: hidden;          /* Ensures that any overflow is clipped */
+  white-space: nowrap;       /* Keeps the text in a single line */
+  text-overflow: ellipsis;   /* Shows ellipsis if the text overflows */
+  padding: 0.25rem;
+}
+
+.recruitmentTable thead {
+  border: 2px solid black;
+}
+
+.sectionName{
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+}
+
+.recruitmentTable td {
+  border: 2px solid black;
+  padding: 0.25rem;
+  text-align: center;
+  min-width: fit-content;
+  width: 33.33%;
+  overflow: hidden;          /* Ensures that any overflow is clipped */
+  text-overflow: ellipsis;   /* Shows ellipsis if the text overflows */
+}
+
+.positionButton {
+  @include flex-row-center;
+  width: 100%;
+}
+

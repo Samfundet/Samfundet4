@@ -1,23 +1,42 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
-import { Text, Page, TabBar, Tab, Video, Button, SamfundetLogoSpinner } from '~/Components';
+import {
+  Text,
+  Page,
+  TabBar,
+  Tab,
+  Video,
+  Button,
+  SamfundetLogoSpinner,
+  SamfLogo,
+  UkaLogo,
+  IsfitLogo,
+} from '~/Components';
 
 import { GangDto, GangTypeDto, SectionDto } from '~/dto';
 import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
+import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME } from '~/types';
 
-import { samf_recruitment_mock_data } from './mock_data/samf_data';
+//import { samf_recruitment_mock_data } from './mock_data/samf_data';
+import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
+import { OrganizationTypeValue } from '~/types';
+import { useDesktop } from '~/hooks';
 
+//TODO: Fix translations
 export function OrganizationRecruitmentPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const isDesktop = useDesktop();
   const [currentGangTypeTab, setCurrentGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
   const [gangs, setGangs] = useState<GangDto[]>([]); // Holds all gangs
   const [currentGangTab, setCurrentGangTab] = useState<Tab<GangDto> | undefined>(undefined);
   const [selectedSections, setSelectedSections] = useState<SectionDto[] | undefined>(undefined);
+  const [organization, setOrganization] = useState<OrganizationTypeValue>();
 
-  const data = samf_recruitment_mock_data;
-
+  //const data = samf_recruitment_mock_data;
+  const data = uka_mock_data;
   useEffect(() => {
     if (data.recruiting_gang_types.length > 0) {
+      setOrganization(data.organization);
       setCurrentGangTypeTab({
         key: data.recruiting_gang_types[0].id,
         label: dbT(data.recruiting_gang_types[0], 'title') ?? '?',
@@ -81,11 +100,11 @@ export function OrganizationRecruitmentPage() {
       return <p>💥No data available. 💥</p>;
     }
     return (
-      <table>
+      <table className={styles.recruitmentTable}>
         <thead>
           <tr>
             <th>Seksjon</th>
-            <th colSpan={2}>Verv</th>
+            <th>Verv</th>
             <th>Beskrivelse</th>
           </tr>
         </thead>
@@ -93,11 +112,15 @@ export function OrganizationRecruitmentPage() {
           {selectedSections.map((section) =>
             section.recruitment_positions.map((position, index) => (
               <tr key={position.id}>
-                {index === 0 && <th rowSpan={section.recruitment_positions.length}>{section.section_name_nb}</th>}
-                <td>{position.name_nb}</td>
+                {index === 0 && (
+                  <th className={styles.sectionName} rowSpan={section.recruitment_positions.length}>
+                    {section.section_name_nb}
+                  </th>
+                )}
                 <td>
                   <Button
                     theme={'samf'}
+                    className={styles.positionButton}
                     onClick={() => {
                       alert(
                         'Naviger til vervets side, hvor det skal finnes et skjema å fylle ut. vervets id: ' +
@@ -105,7 +128,9 @@ export function OrganizationRecruitmentPage() {
                       );
                     }}
                   >
-                    Søk vervet
+                    <Text as={'strong'} size={'m'}>
+                      {position.name_nb}{' '}
+                    </Text>
                   </Button>
                 </td>
                 <td>{position.short_description_nb}</td>
@@ -120,14 +145,58 @@ export function OrganizationRecruitmentPage() {
   return (
     <Page>
       <div className={styles.container}>
+        <div
+          className={styles.organizationHeader}
+          style={
+            organization === 'samfundet'
+              ? { backgroundColor: COLORS.red_samf }
+              : organization === 'uka'
+              ? { backgroundColor: COLORS.blue_uka }
+              : organization === 'isfit'
+              ? { backgroundColor: COLORS.blue_isfit }
+              : { color: 'black' }
+          }
+        >
+          {organization === 'samfundet' ? (
+            <SamfLogo color={'light'} />
+          ) : organization === 'uka' ? (
+            <UkaLogo color={'light'} />
+          ) : organization === 'isfit' ? (
+            <IsfitLogo color={'light'} />
+          ) : null}
+          <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
+            Opptak navn placeholder
+          </Text>
+        </div>
+
         {isLoading ? (
           <SamfundetLogoSpinner />
         ) : (
           <>
-            <Text as={'p'} size={'xl'}>
-              RecruitmentOrganizationPage
-            </Text>
             <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
+            <div
+              className={
+                organization === 'samfundet'
+                  ? styles.samfRecruitment
+                  : organization === 'uka'
+                  ? styles.ukaRecruitment
+                  : organization === 'isfit'
+                  ? styles.ukaRecruitment
+                  : styles.basicRecruitment
+              }
+            >
+              {' '}
+              <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
+                Opptak hos{' '}
+                {organization === 'samfundet'
+                  ? SAMFUNDET_NAME
+                  : organization === 'uka'
+                  ? UKA_NAME
+                  : organization === 'isfit'
+                  ? ISFIT_NAME
+                  : 'missing organization'}
+              </Text>
+            </div>
             <div className={styles.openPositionsContainer}>
               <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={handleSetGangTypeTab} />
               <TabBar tabs={gangTabs} selected={currentGangTab} onSetTab={handleSetGangTab} />

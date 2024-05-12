@@ -28,6 +28,8 @@ export const COLORS = {
   blue_medium: '#88b3e0',
   blue_deep: '#1a3b80',
   blue_deeper: '#062356',
+  blue_uka: '#150b59',
+  blue_isfit: '#0099cc',
   turquoise_light: '#e2f8f5',
   turquoise_medium: '#9fe9dc',
   turquoise: '#5accb9',
@@ -132,3 +134,7 @@ export const OrganizationType = {
 } as const;
 
 export type OrganizationTypeValue = (typeof OrganizationType)[keyof typeof OrganizationType];
+
+export const SAMFUNDET_NAME = 'Samfundet';
+export const ISFIT_NAME = 'ISFiT';
+export const UKA_NAME = 'UKA';
