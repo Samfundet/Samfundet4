@@ -11,32 +11,44 @@ import {
   UkaLogo,
   IsfitLogo,
 } from '~/Components';
-import { GangDto, GangTypeDto, SectionDto } from '~/dto';
+import { GangDto, GangTypeDto, RecruitmentPositionDto, SectionDto } from '~/dto';
 import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
 import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME, OrganizationTypeValue } from '~/types';
-
-//import { samf_recruitment_mock_data } from './mock_data/samf_data';
-import { isfit_mock_data } from './mock_data/isfit_data';
-//import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
 import { useDesktop } from '~/hooks';
+import { samf_recruitment_mock_data } from './mock_data/samf_data';
+import { isfit_mock_data } from './mock_data/isfit_data';
+import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
+import { getActiveRecruitmentPositions, getGangList } from '~/api';
+import { GangTypeTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangTypeTabs';
 
 //TODO: Fix translations. DO IN #1117
 export function OrganizationRecruitmentPage() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const isDesktop = useDesktop();
   const [currentGangTypeTab, setCurrentGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
-  const [gangs, setGangs] = useState<GangDto[]>([]); // Holds all gangs
+  const [gangs, setGangs] = useState<GangDto[]>([]);
   const [currentGangTab, setCurrentGangTab] = useState<Tab<GangDto> | undefined>(undefined);
   const [selectedSections, setSelectedSections] = useState<SectionDto[] | undefined>(undefined);
   const [organization, setOrganization] = useState<OrganizationTypeValue>();
 
-  //TODO: get data from DB. DO IN ISSUE #1121. Get only requiered data based on UI actions
-  // --> get recruitment data needed for the (gangType, section) combination??
+  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
+
   const embededId = '-nYQb8_TvQ4';
-  //const data = samf_recruitment_mock_data;
-  //const data = uka_mock_data;
-  const data = isfit_mock_data;
+  const data = samf_recruitment_mock_data;
+
+  useEffect(() => {
+    Promise.all([getActiveRecruitmentPositions(), getGangList()])
+      .then(([recruitmentRes, gangsRes]) => {
+        setRecruitmentPositions(recruitmentRes.data);
+        setGangs(gangsRes);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
   useEffect(() => {
     if (data.recruiting_gang_types.length > 0) {
       setOrganization(data.organization);
@@ -45,16 +57,16 @@ export function OrganizationRecruitmentPage() {
         label: dbT(data.recruiting_gang_types[0], 'title') ?? '?',
         value: data.recruiting_gang_types[0],
       });
-      setIsLoading(false);
+      setLoading(false);
     } else {
-      setIsLoading(true);
+      setLoading(true);
     }
   }, []);
 
   useEffect(() => {
     if (currentGangTypeTab) {
       const currentGangs = currentGangTypeTab.value.gangs;
-      setGangs(currentGangs);
+      //setGangs(currentGangs);
       if (currentGangs.length > 0) {
         setCurrentGangTab({
           key: currentGangs[0].id,
@@ -156,6 +168,7 @@ export function OrganizationRecruitmentPage() {
   return (
     <Page>
       <div className={styles.container}>
+        <GangTypeTabs />
         <div
           className={styles.organizationHeader}
           style={
@@ -180,7 +193,7 @@ export function OrganizationRecruitmentPage() {
           </Text>
         </div>
 
-        {isLoading ? (
+        {loading ? (
           <SamfundetLogoSpinner />
         ) : (
           <>

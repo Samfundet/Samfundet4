@@ -6,6 +6,9 @@ import { useDesktop, useIsDarkTheme } from '~/hooks';
 import { Button, IsfitLogo, SamfLogo, UkaLogo } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
+import { navigate } from '@storybook/addon-links';
+import { ROUTES } from '~/routes';
+import { useNavigate } from 'react-router-dom';
 
 type RecruitmentCardProps = {
   recruitment_id?: string;
@@ -29,6 +32,7 @@ export function RecruitmentCard({
   const { i18n } = useTranslation();
   const isDesktop = useDesktop();
   const isDarkTheme = useIsDarkTheme();
+  const navigate = useNavigate();
 
   const SAMFUNDET = 'Samfundet';
   const ISFIT = 'ISFiT';
@@ -53,14 +57,7 @@ export function RecruitmentCard({
       <Button
         theme={'green'}
         onClick={() => {
-          alert(
-            'SKAL NAVIGERE TIL OVERSIKT OVER VERV FOR ' +
-              recruitment_organization +
-              ' { id: ' +
-              recruitment_id +
-              ' }' +
-              ' opptak',
-          );
+          navigate(ROUTES.frontend.organization_recruitment_list);
         }}
       >
         {recruitment_organization === 'samfundet'
