@@ -46,6 +46,7 @@ import {
   SaksdokumentFormAdminPage,
   SultenReservationAdminPage,
   SultenMenuAdminPage,
+  RecruitmentOverviewPage,
 } from '~/PagesAdmin';
 import { ImpersonateUserAdminPage } from '~/PagesAdmin/ImpersonateUserAdminPage/ImpersonateUserAdminPage';
 import { useGoatCounter } from '~/hooks';
@@ -189,6 +190,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_overview}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_recruitment_create}

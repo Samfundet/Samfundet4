@@ -26,7 +26,7 @@ export function RecruitmentGangOverviewPage() {
 
   const tableColumns = [{ content: t(KEY.common_gang), sortable: true }];
 
-  // TODO: Only show gangs that user has access to, and only show gangs that are recruiting
+  // TODO: Only show gangs that user has access to, and only show gangs that are recruiting. ISSUE #1121
   const data = allGangs.map(function (gang) {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
@@ -40,7 +40,7 @@ export function RecruitmentGangOverviewPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>
-      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
+      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_recruitment_overview}>
         {t(KEY.common_overview)}
       </Button>
       <Button theme="blue" rounded={true} link={ROUTES.frontend.admin_recruitment_users_without_interview}>

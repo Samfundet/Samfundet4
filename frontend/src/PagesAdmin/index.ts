@@ -19,3 +19,4 @@ export { RecruitmentUsersWithoutInterview } from './RecruitmentUsersWithoutInter
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
 export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';
+export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
