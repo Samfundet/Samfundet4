@@ -1,6 +1,6 @@
 import { OrganizationRecruitmentDto } from '~/dto';
 
-export const isfit_recruitment_mock_data: OrganizationRecruitmentDto = {
+export const isfit_mock_data: OrganizationRecruitmentDto = {
   id: '1',
   organization: 'isfit',
   recruiting_gang_types: [

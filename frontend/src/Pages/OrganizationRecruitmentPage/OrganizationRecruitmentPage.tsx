@@ -17,7 +17,8 @@ import { useEffect, useState } from 'react';
 import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME, OrganizationTypeValue } from '~/types';
 
 //import { samf_recruitment_mock_data } from './mock_data/samf_data';
-import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
+import { isfit_mock_data } from './mock_data/isfit_data';
+//import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
 import { useDesktop } from '~/hooks';
 
 //TODO: Fix translations. DO IN #1117
@@ -30,8 +31,12 @@ export function OrganizationRecruitmentPage() {
   const [selectedSections, setSelectedSections] = useState<SectionDto[] | undefined>(undefined);
   const [organization, setOrganization] = useState<OrganizationTypeValue>();
 
+  //TODO: get data from DB. DO IN ISSUE #1121. Get only requiered data based on UI actions
+  // --> get recruitment data needed for the (gangType, section) combination??
+  const embededId = '-nYQb8_TvQ4';
   //const data = samf_recruitment_mock_data;
-  const data = uka_mock_data; //TODO: get data from DB. DO IN ISSUE #1114. Get only requiered data based on UI actions
+  //const data = uka_mock_data;
+  const data = isfit_mock_data;
   useEffect(() => {
     if (data.recruiting_gang_types.length > 0) {
       setOrganization(data.organization);
@@ -179,7 +184,13 @@ export function OrganizationRecruitmentPage() {
           <SamfundetLogoSpinner />
         ) : (
           <>
-            <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
+            {embededId ? (
+              <>
+                <Video embedId={embededId} className={styles.video}></Video>
+              </>
+            ) : (
+              <></>
+            )}
             <div
               className={
                 organization === 'samfundet'
@@ -187,7 +198,7 @@ export function OrganizationRecruitmentPage() {
                   : organization === 'uka'
                   ? styles.ukaRecruitment
                   : organization === 'isfit'
-                  ? styles.ukaRecruitment
+                  ? styles.isfitRecruitment
                   : styles.basicRecruitment
               }
             >
@@ -202,6 +213,17 @@ export function OrganizationRecruitmentPage() {
                   ? ISFIT_NAME
                   : 'missing organization'}
               </Text>
+              <input
+                placeholder={'SØK PÅ TAG PLACEHOLDER'}
+                type={'text'}
+                onClick={() => {
+                  alert(
+                    'multiselect for å filtrere verv. Her kan det være hensiktsmessig at' +
+                      ' man viser en tabell med ALL verv når en eller flere tags er valgt. ' +
+                      'Legg til ekstra desing på multiselect: mer som en dropdown',
+                  );
+                }}
+              />
             </div>
             <div className={styles.openPositionsContainer}>
               <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={handleSetGangTypeTab} />
