@@ -6,7 +6,6 @@ import { useDesktop, useIsDarkTheme } from '~/hooks';
 import { Button, IsfitLogo, SamfLogo, UkaLogo } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
-import { navigate } from '@storybook/addon-links';
 import { ROUTES } from '~/routes';
 import { useNavigate } from 'react-router-dom';
 

@@ -2,7 +2,7 @@ import { GangDto, GangTypeDto } from '~/dto';
 import { useEffect, useState } from 'react';
 import { Tab, TabBar } from '~/Components';
 import { dbT } from '~/utils';
-import { PositionsTable } from '~/Pages/OrganizationRecruitmentPage/Components/PositionsTable';
+import { PositionsTable } from '~/Pages/OrganizationRecruitmentPage/Components/PositionsTable/PositionsTable';
 
 type GangTabsProps = {
   currentGangType: Tab<GangTypeDto> | undefined;

@@ -3,7 +3,7 @@ import { SamfundetLogoSpinner, Tab, TabBar } from '~/Components';
 import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
-import { GangTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangTabs';
+import { GangTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangTab/GangTabs';
 import { NoPostions } from '~/Pages/OrganizationRecruitmentPage/Components/NoPositions/NoPostions';
 
 export function GangTypeTabs() {

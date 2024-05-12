@@ -1,174 +1,20 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
-import {
-  Text,
-  Page,
-  TabBar,
-  Tab,
-  Video,
-  Button,
-  SamfundetLogoSpinner,
-  SamfLogo,
-  UkaLogo,
-  IsfitLogo,
-} from '~/Components';
-import { GangDto, GangTypeDto, RecruitmentPositionDto, SectionDto } from '~/dto';
-import { dbT } from '~/utils';
-import { useEffect, useState } from 'react';
+import { Text, Page, Video, SamfLogo, UkaLogo, IsfitLogo } from '~/Components';
+
 import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME, OrganizationTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
-import { samf_recruitment_mock_data } from './mock_data/samf_data';
-import { isfit_mock_data } from './mock_data/isfit_data';
-import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
-import { getActiveRecruitmentPositions, getGangList } from '~/api';
-import { GangTypeTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangTypeTabs';
+
+import { GangTypeTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangTypeTabs/GangTypeTabs';
 
 //TODO: Fix translations. DO IN #1117
 export function OrganizationRecruitmentPage() {
-  const [loading, setLoading] = useState(true);
   const isDesktop = useDesktop();
-  const [currentGangTypeTab, setCurrentGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
-  const [gangs, setGangs] = useState<GangDto[]>([]);
-  const [currentGangTab, setCurrentGangTab] = useState<Tab<GangDto> | undefined>(undefined);
-  const [selectedSections, setSelectedSections] = useState<SectionDto[] | undefined>(undefined);
-  const [organization, setOrganization] = useState<OrganizationTypeValue>();
-
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
-
+  const organization: OrganizationTypeValue = 'samfundet';
   const embededId = '-nYQb8_TvQ4';
-  const data = samf_recruitment_mock_data;
-
-  useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList()])
-      .then(([recruitmentRes, gangsRes]) => {
-        setRecruitmentPositions(recruitmentRes.data);
-        setGangs(gangsRes);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }, []);
-  useEffect(() => {
-    if (data.recruiting_gang_types.length > 0) {
-      setOrganization(data.organization);
-      setCurrentGangTypeTab({
-        key: data.recruiting_gang_types[0].id,
-        label: dbT(data.recruiting_gang_types[0], 'title') ?? '?',
-        value: data.recruiting_gang_types[0],
-      });
-      setLoading(false);
-    } else {
-      setLoading(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentGangTypeTab) {
-      const currentGangs = currentGangTypeTab.value.gangs;
-      //setGangs(currentGangs);
-      if (currentGangs.length > 0) {
-        setCurrentGangTab({
-          key: currentGangs[0].id,
-          label: dbT(currentGangs[0], 'name') ?? '?',
-          value: currentGangs[0],
-        });
-      } else {
-        setCurrentGangTab(undefined);
-      }
-    }
-  }, [currentGangTypeTab]);
-
-  useEffect(() => {
-    if (currentGangTab) {
-      const currenentSections = currentGangTab.value.sections;
-      setSelectedSections(currenentSections);
-    }
-  }, [currentGangTab]);
-
-  const gangTypeTabs: Tab<GangTypeDto>[] = data.recruiting_gang_types.map((gangType) => ({
-    key: gangType.id,
-    label: dbT(gangType, 'title') ?? '?',
-    value: gangType,
-  }));
-
-  //TODO: fix translation for this:
-  const gangTabs: Tab<GangDto>[] = gangs.map((gang) => ({
-    key: gang.id,
-    label: dbT(gang, 'name') ?? '?',
-    value: gang,
-  }));
-
-  const handleSetGangTypeTab = (tab: Tab<GangTypeDto>) => {
-    setCurrentGangTypeTab(tab);
-  };
-
-  const handleSetGangTab = (tab: Tab<GangDto>) => {
-    setCurrentGangTab(tab);
-  };
-
-  //const tags = getTags(samf_recruitment_mock_data);
-  //console.log(tags);
-
-  const RecruitmentTable = (selectedSections: SectionDto[] | undefined) => {
-    if (!selectedSections || selectedSections.length === 0) {
-      return <p>💥No data available. 💥</p>;
-    }
-    return (
-      <table className={styles.recruitmentTable}>
-        <thead>
-          <tr>
-            <th>Seksjon</th>
-            <th>Verv</th>
-            <th>Beskrivelse</th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedSections.map((section) =>
-            section.recruitment_positions.map((position, index) => (
-              <tr key={position.id}>
-                {index === 0 && (
-                  <th className={styles.sectionName} rowSpan={section.recruitment_positions.length}>
-                    {section.section_name_nb}
-                  </th>
-                )}
-                <td>
-                  <Button
-                    theme={
-                      organization === 'samfundet'
-                        ? 'samf'
-                        : organization === 'uka'
-                        ? 'uka'
-                        : organization === 'isfit'
-                        ? 'isfit'
-                        : 'green'
-                    }
-                    className={styles.positionButton}
-                    onClick={() => {
-                      alert(
-                        'Naviger til vervets side, hvor det skal finnes et skjema å fylle ut. vervets id: ' +
-                          position.id,
-                      );
-                    }}
-                  >
-                    <Text as={'strong'} size={'m'}>
-                      {position.name_nb}{' '}
-                    </Text>
-                  </Button>
-                </td>
-                <td>{position.short_description_nb}</td>
-              </tr>
-            )),
-          )}
-        </tbody>
-      </table>
-    );
-  };
 
   return (
     <Page>
       <div className={styles.container}>
-        <GangTypeTabs />
         <div
           className={styles.organizationHeader}
           style={
@@ -192,59 +38,53 @@ export function OrganizationRecruitmentPage() {
             Opptak navn placeholder
           </Text>
         </div>
-
-        {loading ? (
-          <SamfundetLogoSpinner />
-        ) : (
+        {embededId ? (
           <>
-            {embededId ? (
-              <>
-                <Video embedId={embededId} className={styles.video}></Video>
-              </>
-            ) : (
-              <></>
-            )}
-            <div
-              className={
-                organization === 'samfundet'
-                  ? styles.samfRecruitment
-                  : organization === 'uka'
-                  ? styles.ukaRecruitment
-                  : organization === 'isfit'
-                  ? styles.isfitRecruitment
-                  : styles.basicRecruitment
-              }
-            >
-              {' '}
-              <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-                Opptak hos{' '}
-                {organization === 'samfundet'
-                  ? SAMFUNDET_NAME
-                  : organization === 'uka'
-                  ? UKA_NAME
-                  : organization === 'isfit'
-                  ? ISFIT_NAME
-                  : 'missing organization'}
-              </Text>
-              <input
-                placeholder={'SØK PÅ TAG PLACEHOLDER'}
-                type={'text'}
-                onClick={() => {
-                  alert(
-                    'multiselect for å filtrere verv. Her kan det være hensiktsmessig at' +
-                      ' man viser en tabell med ALL verv når en eller flere tags er valgt. ' +
-                      'Legg til ekstra desing på multiselect: mer som en dropdown',
-                  );
-                }}
-              />
-            </div>
-            <div className={styles.openPositionsContainer}>
-              <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={handleSetGangTypeTab} />
-              <TabBar tabs={gangTabs} selected={currentGangTab} onSetTab={handleSetGangTab} />
-              {selectedSections && <>{RecruitmentTable(selectedSections)}</>}
-            </div>
+            <Video embedId={embededId} className={styles.video}></Video>
           </>
+        ) : (
+          <></>
         )}
+        <div
+          className={
+            organization === 'samfundet'
+              ? styles.samfRecruitment
+              : organization === 'uka'
+              ? styles.ukaRecruitment
+              : organization === 'isfit'
+              ? styles.isfitRecruitment
+              : styles.basicRecruitment
+          }
+        >
+          {' '}
+          <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
+            Opptak hos{' '}
+            {organization === 'samfundet'
+              ? SAMFUNDET_NAME
+              : organization === 'uka'
+              ? UKA_NAME
+              : organization === 'isfit'
+              ? ISFIT_NAME
+              : 'missing organization'}
+          </Text>
+          <input
+            placeholder={'SØK PÅ TAG PLACEHOLDER'}
+            type={'text'}
+            onClick={() => {
+              alert(
+                'multiselect for å filtrere verv. Her kan det være hensiktsmessig at' +
+                  ' man viser en tabell med ALL verv når en eller flere tags er valgt. ' +
+                  'Legg til ekstra desing på multiselect: mer som en dropdown',
+              );
+            }}
+          />
+        </div>
+        <div className={styles.openPositionsContainer}>
+          {/*
+          GangTypeTabs contains a nested TabBar component, which contains a table component
+          */}
+          <GangTypeTabs />
+        </div>
       </div>
     </Page>
   );

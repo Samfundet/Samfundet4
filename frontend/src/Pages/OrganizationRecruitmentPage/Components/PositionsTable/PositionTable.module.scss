@@ -1,0 +1,49 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.recruitmentTable {
+  width: 50vw;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  @include for-tablet-down {
+    width: 75vw;
+  }
+  @include for-mobile-only {
+    width: 95vw;
+  }
+}
+
+.recruitmentTable th {
+  width: 33.33%;
+  overflow: hidden;          /* Ensures that any overflow is clipped */
+  white-space: nowrap;       /* Keeps the text in a single line */
+  text-overflow: ellipsis;   /* Shows ellipsis if the text overflows */
+  padding: 0.25rem;
+}
+
+.recruitmentTable thead {
+  border: 2px solid black;
+}
+
+.sectionName{
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+}
+
+.recruitmentTable td {
+  border: 2px solid black;
+  padding: 0.25rem;
+  text-align: center;
+  min-width: fit-content;
+  width: 33.33%;
+  overflow: hidden;          /* Ensures that any overflow is clipped */
+  text-overflow: ellipsis;   /* Shows ellipsis if the text overflows */
+}
+
+.positionButton {
+  @include flex-row-center;
+  width: 100%;
+}
