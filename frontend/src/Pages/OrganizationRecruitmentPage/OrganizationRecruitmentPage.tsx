@@ -11,18 +11,16 @@ import {
   UkaLogo,
   IsfitLogo,
 } from '~/Components';
-
 import { GangDto, GangTypeDto, SectionDto } from '~/dto';
 import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
-import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME } from '~/types';
+import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME, OrganizationTypeValue } from '~/types';
 
 //import { samf_recruitment_mock_data } from './mock_data/samf_data';
 import { uka_mock_data } from '~/Pages/OrganizationRecruitmentPage/mock_data/uka_data';
-import { OrganizationTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
 
-//TODO: Fix translations
+//TODO: Fix translations. DO IN #1117
 export function OrganizationRecruitmentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const isDesktop = useDesktop();
@@ -33,7 +31,7 @@ export function OrganizationRecruitmentPage() {
   const [organization, setOrganization] = useState<OrganizationTypeValue>();
 
   //const data = samf_recruitment_mock_data;
-  const data = uka_mock_data;
+  const data = uka_mock_data; //TODO: get data from DB. DO IN ISSUE #1114. Get only requiered data based on UI actions
   useEffect(() => {
     if (data.recruiting_gang_types.length > 0) {
       setOrganization(data.organization);
@@ -119,7 +117,15 @@ export function OrganizationRecruitmentPage() {
                 )}
                 <td>
                   <Button
-                    theme={'samf'}
+                    theme={
+                      organization === 'samfundet'
+                        ? 'samf'
+                        : organization === 'uka'
+                        ? 'uka'
+                        : organization === 'isfit'
+                        ? 'isfit'
+                        : 'green'
+                    }
                     className={styles.positionButton}
                     onClick={() => {
                       alert(
