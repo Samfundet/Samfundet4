@@ -50,6 +50,7 @@ export function PositionsTable({ currentSelectedGang }: PositionsTableProps) {
               <td>
                 <Button
                   theme={'samf'}
+                  className={styles.positionButton}
                   disabled={loading}
                   onClick={() => {
                     navigate(
@@ -72,7 +73,7 @@ export function PositionsTable({ currentSelectedGang }: PositionsTableProps) {
     );
   };
   return (
-    <div>
+    <div className={styles.recruitmentTableContainer}>
       {loading ? <SamfundetLogoSpinner /> : positions ? <div> {positionsTable(positions)}</div> : <p>Ingen verv</p>}
     </div>
   );

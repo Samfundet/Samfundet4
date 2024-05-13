@@ -1,0 +1,9 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.gangTypesTabsContainer{
+  display: flex;
+  flex-direction: column;
+  width: 95vw;
+}

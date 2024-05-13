@@ -3,21 +3,22 @@ import { useEffect, useState } from 'react';
 import { Tab, TabBar } from '~/Components';
 import { dbT } from '~/utils';
 import { PositionsTable } from '~/Pages/OrganizationRecruitmentPage/Components/PositionsTable/PositionsTable';
+import styles from './GangTabs.module.scss';
 
 type GangTabsProps = {
-  currentGangType: Tab<GangTypeDto> | undefined;
+  currentGangType: Tab<GangTypeDto>;
 };
 
 export function GangTabs({ currentGangType }: GangTabsProps) {
-  const [currentTab, setCurrentTab] = useState<Tab<GangDto> | undefined>(undefined);
-  const [gangs, setGangs] = useState<GangDto[]>();
+  const [currentTab, setCurrentTab] = useState<Tab<GangDto>>();
+  const [gangs, setGangs] = useState<GangDto[]>([]);
 
   useEffect(() => {
-    if (!currentGangType) {
+    if (!currentGangType.value) {
       return;
     }
-    setGangs(currentGangType.value?.gangs);
-    if (gangs) {
+    setGangs(currentGangType.value.gangs);
+    if (gangs.length > 0) {
       const initialTab: Tab<GangDto> = {
         key: gangs[0].id,
         label: dbT(gangs[0], 'name') ?? 'possible dbt problem',
@@ -25,12 +26,11 @@ export function GangTabs({ currentGangType }: GangTabsProps) {
       };
       setCurrentTab(initialTab);
     }
-    console.log('useEffect');
   }, [currentGangType, gangs]);
 
-  const gangTabs: Tab<GangDto>[] = gangs?.map((gang) => ({
+  const gangTabs: Tab<GangDto>[] = gangs.map((gang) => ({
     key: gang.id,
-    label: dbT(gang, 'name') ?? '?',
+    label: dbT(gang, 'name') ?? 'possible dbt problem',
     value: gang,
   }));
 
@@ -39,10 +39,19 @@ export function GangTabs({ currentGangType }: GangTabsProps) {
   };
 
   return (
-    <div>
-      {gangs ? (
+    <div className={styles.gangTabsContainer}>
+      {gangs.length > 0 ? (
         <div>
-          <TabBar tabs={gangTabs} selected={currentTab} onSetTab={handleSetTab} />
+          <TabBar
+            tabs={gangTabs}
+            selected={currentTab}
+            onSetTab={handleSetTab}
+            compact={true}
+            spaceBetween={true}
+            disabled={false}
+            vertical={true}
+          />
+
           <PositionsTable currentSelectedGang={currentTab?.value} />
         </div>
       ) : (
