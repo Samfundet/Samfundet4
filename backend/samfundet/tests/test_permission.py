@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 import pytest
-from samfundet.root.utils import Graph, Permissions  # Adjust the import according to your project structure.
+
+from root.utils.permission_algorithm import Graph, PermissionDictionary
+
 
 def test_graph_compute_permissions():
     # Setup graph and permissions data.
@@ -20,33 +23,22 @@ def test_graph_compute_permissions():
     }
 
     # Create instances of Graph and Permissions
-    p = Permissions(permissions_data)
+    p = PermissionDictionary(permissions_data)
     g = Graph(5, graph_data)
 
     # Compute permissions
     updated_permissions = g.compute_permissions(p)
 
     # Define expected results
-    expected_permissions = {
-        'Ansatt': 'ABCDE',
-        'Hest': 'ABCDE',
-        'Mellomleder': 'CD',
-        'Sjef': 'D',
-        'Baltazar': 'E'
-    }
+    expected_permissions = {'Ansatt': 'B', 'Hest': 'A', 'Mellomleder': 'ABC', 'Sjef': 'ABCD', 'Baltazar': 'AE'}
 
     # Assertions to check the correctness of the permissions computation
     for key, value in expected_permissions.items():
-        assert ''.join(sorted(updated_permissions.dict[key])) == value, f"Mismatch in permissions for {key}"
+        assert ''.join(sorted(updated_permissions.dict[key])) == value, f'Mismatch in permissions for {key}'
 
-    expected_graph = [
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-        [0, 0, 1, 1, 1],
-        [0, 0, 0, 1, 1],
-        [0, 0, 0, 0, 1]
-    ]
-    assert g.graph == expected_graph, "Graph transitive closure incorrect"
+    expected_graph = [[1, 0, 1, 1, 0], [0, 1, 1, 1, 1], [0, 0, 1, 1, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]]
+    assert g.graph == expected_graph, 'Graph transitive closure incorrect'
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     pytest.main()

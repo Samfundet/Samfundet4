@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-class Permissions:
+
+class PermissionDictionary:
     def __init__(self, dictionary: dict):
         self.dict = {k: set(v) for k, v in dictionary.items()}
         self.index_array = list(dictionary.keys())
@@ -18,7 +19,7 @@ class Permissions:
         if key in self.dict:
             self.dict[key].update(value)
         else:
-            raise KeyError("Key not found in permissions dictionary")
+            raise KeyError('Key not found in permissions dictionary')
 
     def get_index_array(self) -> list:
         return self.index_array
@@ -37,7 +38,7 @@ class Graph:
             matrix_str += '\n'
         return matrix_str
 
-    def compute_permissions(self, permissions: Permissions) -> Permissions:
+    def compute_permissions(self, permissions: PermissionDictionary) -> PermissionDictionary:
         reach = [row[:] for row in self.graph]
         index_array = permissions.get_index_array()
 
