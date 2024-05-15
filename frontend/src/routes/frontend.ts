@@ -20,7 +20,9 @@ export const ROUTES_FRONTEND = {
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
-  organization_recruitment_list: '/recruitment/:organizationID/',
+  organization_recruitment_list: '/recruitment/:recruitmentID/',
+  //TODO:^ IN ISSUE #1121, create "recruitment /:organizationID/:recruitmentID/
+  // -- with backend and implement in organisation recruitment page
   contact: '/contact',
   // ==================== //
   //        Sulten        //
