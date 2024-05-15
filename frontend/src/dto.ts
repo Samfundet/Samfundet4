@@ -288,6 +288,10 @@ export type GangTypeDto = {
   id: number;
   title_nb: string;
   title_en: string;
+  //TODO: add these two fields in backend. Would be nice to have for information on
+  // org recruitment page, without having to redirect to info page.  DO IN ISSUE #1121
+  description_nb?: string;
+  description_en?: string;
   gangs: GangDto[];
 };
 
@@ -300,9 +304,15 @@ export type GangDto = {
   logo?: string;
   gang_type?: number;
   info_page?: number;
+  //TODO: add these three fields. Would be nice to have for information during recruitment,
+  // without having to redirect to info page.  DO IN ISSUE #1121
   sections?: SectionDto[];
+  description_nb?: string;
+  description_en?: string;
 };
 
+//TODO: decide if we want sections to be a "concept" in our systems.
+// I believe some gangs would like to differentiate positions more strongly based on positions .  DO IN ISSUE #1121
 export type SectionDto = {
   id: number;
   section_name_nb: string;
@@ -310,8 +320,6 @@ export type SectionDto = {
   abbreviation?: string;
   webpage?: string;
   logo?: string;
-  in_gang?: number;
-  recruitment_positions: Partial<RecruitmentPositionDto>[];
 };
 
 export type ClosedPeriodDto = {
