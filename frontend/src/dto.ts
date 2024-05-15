@@ -1,5 +1,11 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import {
+  EventAgeRestrictionValue,
+  EventStatus,
+  EventTicketTypeValue,
+  HomePageElementVariation,
+  OrganizationTypeValue,
+} from './types';
 
 export type UserDto = {
   id: number;
@@ -270,10 +276,23 @@ export type BookingDto = {
   from_dto?: Date;
   from_to?: Date;
 };
-
+// ############################################################
+//                       Org-structure DTOs
+// ############################################################
 export type OrganizationDto = {
   id: number;
   name: string;
+};
+
+export type GangTypeDto = {
+  id: number;
+  title_nb: string;
+  title_en: string;
+  //TODO: add these two fields in backend. Would be nice to have for information on
+  // org recruitment page, without having to redirect to info page.  DO IN ISSUE #1121
+  description_nb?: string;
+  description_en?: string;
+  gangs: GangDto[];
 };
 
 export type GangDto = {
@@ -285,13 +304,22 @@ export type GangDto = {
   logo?: string;
   gang_type?: number;
   info_page?: number;
+  //TODO: add these three fields. Would be nice to have for information during recruitment,
+  // without having to redirect to info page.  DO IN ISSUE #1121
+  sections?: SectionDto[];
+  description_nb?: string;
+  description_en?: string;
 };
 
-export type GangTypeDto = {
+//TODO: decide if we want sections to be a "concept" in our systems.
+// I believe some gangs would like to differentiate positions more strongly based on positions .  DO IN ISSUE #1121
+export type SectionDto = {
   id: number;
-  title_nb: string;
-  title_en: string;
-  gangs: GangDto[];
+  section_name_nb: string;
+  section_name_en?: string;
+  abbreviation?: string;
+  webpage?: string;
+  logo?: string;
 };
 
 export type ClosedPeriodDto = {
@@ -354,6 +382,13 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: 'samfundet' | 'isfit' | 'uka';
+};
+
+export type OrganizationRecruitmentDto = {
+  id: string;
+  // TODO: DECIDE: we want to "semi-hardcode" orgs, or have adminusers be able to creat them?
+  organization: OrganizationTypeValue;
+  recruiting_gang_types: GangTypeDto[];
 };
 
 export type RecruitmentPositionDto = {

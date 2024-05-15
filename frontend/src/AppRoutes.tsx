@@ -60,6 +60,7 @@ import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositio
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+import { OrganizationRecruitmentPage } from '~/Pages/OrganizationRecruitmentPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -87,10 +88,11 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.event} element={<EventPage />} />
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
+        <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
         <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
-        <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
+        <Route path={ROUTES.frontend.organization_recruitment_list} element={<OrganizationRecruitmentPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
         <Route path={ROUTES.frontend.luka} element={<></>} />
       </Route>

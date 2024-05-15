@@ -7,16 +7,21 @@
   overflow-x: auto;
   background-color: $white;
   border: 1px solid $grey-3;
+  align-items: stretch; //the children (buttons) stretch to fill the possible width and height
+  width: 100%; // want to be able to control the with by the parent
 
   &.vertical {
     flex-direction: column;
     align-items: stretch;
     text-align: center;
-    @include rounded-heavy;
   }
 
   &.space_between {
     justify-content: space-between;
+  }
+
+  &.space_around {
+    justify-content: space-around;
   }
 
   &.disabled {
@@ -32,6 +37,7 @@
   @include flex-row-center;
   background-color: transparent;
   padding: 0.8em 1.25em;
+  flex: 1; // fill possible width and height
   transition: 0.2s;
   cursor: pointer;
   border: none;
@@ -46,6 +52,7 @@
     border-bottom: 3px solid $blue;
     background-color: $background-primary;
     color: $blue;
+    box-shadow: inset 0 0 1px 1.5px rgba(0, 0, 0, 0.15);
 
     /* stylelint-disable-next-line max-nesting-depth */
     @include theme-dark {
