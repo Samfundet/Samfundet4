@@ -1,16 +1,21 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
 import { Text, Page, Video, SamfLogo, UkaLogo, IsfitLogo } from '~/Components';
-
 import { COLORS, SAMFUNDET_NAME, UKA_NAME, ISFIT_NAME, OrganizationTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
+import { RecruitmentTabs } from '~/Pages/OrganizationRecruitmentPage/Components/RecruitmentTabs/RecruitmentTabs';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
+import { useParams } from 'react-router-dom';
+import { KEY } from '~/i18n/constants';
+import { useTranslation } from 'react-i18next';
 
-import { GangTypeTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangTypeTabs/GangTypeTabs';
-
-//TODO: Fix translations. DO IN #1117
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const organization: OrganizationTypeValue = 'samfundet';
-  const embededId = '-nYQb8_TvQ4';
+  const organization: OrganizationTypeValue = 'samfundet'; // TODO: DO IN ISSUE #1114. Make this dynamic
+  const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
+  const recruitmentID = useParams();
+  const { t } = useTranslation();
+
+  //TODO: IN ISSUE #689. Create organization style theme.
 
   return (
     <Page>
@@ -35,7 +40,7 @@ export function OrganizationRecruitmentPage() {
             <IsfitLogo color={'light'} />
           ) : null}
           <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-            Opptak navn placeholder
+            {t(KEY.recruitment_organization)} #### placeholder
           </Text>
         </div>
         {embededId ? (
@@ -58,7 +63,7 @@ export function OrganizationRecruitmentPage() {
         >
           {' '}
           <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-            Opptak hos{' '}
+            {t(KEY.recruitment_active) + ' '}
             {organization === 'samfundet'
               ? SAMFUNDET_NAME
               : organization === 'uka'
@@ -67,23 +72,10 @@ export function OrganizationRecruitmentPage() {
               ? ISFIT_NAME
               : 'missing organization'}
           </Text>
-          <input
-            placeholder={'SØK PÅ TAG PLACEHOLDER'}
-            type={'text'}
-            onClick={() => {
-              alert(
-                'multiselect for å filtrere verv. Her kan det være hensiktsmessig at' +
-                  ' man viser en tabell med ALL verv når en eller flere tags er valgt. ' +
-                  'Legg til ekstra desing på multiselect: mer som en dropdown',
-              );
-            }}
-          />
         </div>
+        <OccupiedFormModal recruitmentId={recruitmentID} />
         <div className={styles.openPositionsContainer}>
-          {/*
-          GangTypeTabs contains a nested TabBar component, which contains a table component
-          */}
-          <GangTypeTabs />
+          <RecruitmentTabs />
         </div>
       </div>
     </Page>

@@ -23,7 +23,7 @@
 
 .video {
   width: 40vw;
-  aspect-ratio: 16 / 9; // Specifies the width to height aspect ratio
+  aspect-ratio: 16 / 9;
   border-width: 0;
   @include for-tablet-down{
     width: 80vw;
