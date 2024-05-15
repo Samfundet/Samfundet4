@@ -1,5 +1,4 @@
 import styles from './RecruitmentCard.module.scss';
-import { RecruitmentDto } from '~/dto';
 import { Text } from '~/Components/Text/Text';
 import { useTranslation } from 'react-i18next';
 import { useDesktop, useIsDarkTheme } from '~/hooks';
@@ -8,6 +7,7 @@ import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
 import { ROUTES } from '~/routes';
 import { useNavigate } from 'react-router-dom';
+import { reverse } from '~/named-urls';
 
 type RecruitmentCardProps = {
   recruitment_id?: string;
@@ -15,7 +15,7 @@ type RecruitmentCardProps = {
   recruitment_name_en?: string;
   shown_application_deadline?: string;
   reprioritization_deadline_for_applicant?: string;
-  recruitment_organization?: RecruitmentDto['organization'];
+  recruitment_organization: number;
   isAuthenticated?: boolean;
 };
 
@@ -37,13 +37,14 @@ export function RecruitmentCard({
   const ISFIT = 'ISFiT';
   const UKA = 'UKA';
 
-  const setOrganizationStyle = (org: 'samfundet' | 'isfit' | 'uka' | undefined) => {
+  //TODO: IN ISSUE #689. Create organization style theme.
+  const setOrganizationStyle = (org: number | undefined) => {
     switch (org) {
-      case 'samfundet':
+      case 1:
         return styles.cardSamf;
-      case 'uka':
+      case 2:
         return styles.cardUKA;
-      case 'isfit':
+      case 3:
         return styles.cardISFIT;
       default:
         return styles.card;
@@ -52,39 +53,62 @@ export function RecruitmentCard({
 
   const applicationCardButtons = (
     <>
-      {/*TODO: issue #1114: navigate to correct organization recruitment*/}
       <Button
         theme={'green'}
         onClick={() => {
-          navigate(ROUTES.frontend.organization_recruitment_list);
+          const path = reverse({
+            pattern: ROUTES.frontend.organization_recruitment_list,
+            urlParams: { recruitmentID: recruitment_id },
+          });
+          if (path) {
+            navigate(path);
+          } else {
+            navigate(path);
+          }
         }}
       >
-        {recruitment_organization === 'samfundet'
+        {recruitment_organization === 1
           ? 'Søk verv hos ' + SAMFUNDET
-          : recruitment_organization === 'uka'
+          : recruitment_organization === 2
           ? 'Søk verv hos ' + UKA
-          : recruitment_organization === 'isfit'
+          : recruitment_organization === 3
           ? 'Søk verv hos ' + ISFIT
           : 'Søk verv'}
       </Button>
       {/*TODO: issue #1114: navigate to users application overview page*/}
       {isAuthenticated && (
-        <Button theme={'blue'} onClick={() => alert('IMPLEMENTER NAVIGASJON TIL BRUKERENS SØKNADER')}>
-          Dine søknader
-        </Button>
+        <>
+          <Button
+            theme="samf"
+            onClick={() => {
+              const path = reverse({
+                pattern: ROUTES.frontend.recruitment_application_overview,
+                urlParams: { recruitmentID: recruitment_id },
+              });
+              if (path) {
+                navigate(path);
+              } else {
+                navigate(ROUTES.frontend.not_found);
+              }
+            }}
+          >
+            Dine søknader
+            {/*TODO: ^ IN ISSUE #689, translations*/}
+          </Button>
+        </>
       )}
     </>
   );
 
   const organizationLogo = (
     <>
-      {recruitment_organization === 'samfundet' && (
+      {recruitment_organization === 1 && (
         <SamfLogo color={isDarkTheme ? 'light' : 'red-samf'} size={isDesktop ? 'medium' : 'small'} />
       )}
-      {recruitment_organization === 'uka' && (
+      {recruitment_organization === 2 && (
         <UkaLogo color={isDarkTheme ? 'light' : 'blue-uka'} size={isDesktop ? 'medium' : 'small'} />
       )}
-      {recruitment_organization === 'isfit' && (
+      {recruitment_organization === 3 && (
         <IsfitLogo color={isDarkTheme ? 'light' : 'dark'} size={isDesktop ? 'medium' : 'small'} />
       )}
     </>
@@ -103,11 +127,11 @@ export function RecruitmentCard({
           {t(KEY.recruitment_organization)}
         </Text>{' '}
         -{' '}
-        {recruitment_organization === 'samfundet'
+        {recruitment_organization === 1
           ? SAMFUNDET
-          : recruitment_organization === 'uka'
+          : recruitment_organization === 2
           ? UKA
-          : recruitment_organization === 'isfit'
+          : recruitment_organization === 3
           ? ISFIT
           : 'N/A'}
       </Text>
@@ -116,18 +140,22 @@ export function RecruitmentCard({
           {t(KEY.application_deadline)}:
         </Text>{' '}
         - {shown_application_deadline}
+        {/*TODO: ^ IN ISSUE #689, use TimeDisplay component*/}
       </Text>
       <Text size={'m'} as={'p'}>
         <Text size={'m'} as={'strong'}>
           {t(KEY.reprioritization_deadline_for_applicant)}:
         </Text>{' '}
         - {reprioritization_deadline_for_applicant}
+        {/*TODO: ^ IN ISSUE #689, use TimeDisplay component*/}
       </Text>
     </>
   );
 
   return (
     <div key={recruitment_id} className={setOrganizationStyle(recruitment_organization)}>
+      {/*TODO: IN ISSUE #689. Create organization style theme.*/}
+
       <div className={styles.cardHeader}>{cardHeaderText}</div>
       <div className={styles.cardContent}>
         <div className={styles.cardItemFirst}>
