@@ -1,80 +1,94 @@
 import { GangDto, RecruitmentPositionDto } from '~/dto';
 import { useEffect, useState } from 'react';
-import { getActiveRecruitmentPositions } from '~/api';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { getRecruitmentPositionsGang } from '~/api';
+import { Button, SamfundetLogoSpinner, Text, Table } from '~/Components';
 import { ROUTES } from '~/routes';
 import { reverse } from '~/named-urls';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './PositionTable.module.scss';
+import { KEY } from '~/i18n/constants';
+import { useTranslation } from 'react-i18next';
+import { dbT } from '~/utils';
 
 type PositionsTableProps = {
   currentSelectedGang: GangDto | undefined;
+  setLoading: (loading: boolean) => void;
+  loading: boolean;
 };
 
-export function PositionsTable({ currentSelectedGang }: PositionsTableProps) {
-  const [loading, setLoading] = useState(true);
+export function PositionsTable({ currentSelectedGang, setLoading, loading }: PositionsTableProps) {
   const [positions, setPositions] = useState<RecruitmentPositionDto[]>([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const recruitmentID = useParams().recruitmentID;
 
   useEffect(() => {
-    if (!currentSelectedGang) {
+    if (!currentSelectedGang || !recruitmentID) {
       return;
     }
-    //TODO: filter recruitment positions on gang id in backend? DO IN ISSUE #1121
-    getActiveRecruitmentPositions()
+    setLoading(true);
+    getRecruitmentPositionsGang(recruitmentID, currentSelectedGang.id)
       .then((response) => {
-        const filteredPositions = response.data.filter((pos) => pos.gang.id === currentSelectedGang.id);
-        setPositions(filteredPositions);
+        setPositions(response.data);
         setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-    console.log('useEffect');
-  }, [currentSelectedGang]);
+  }, [currentSelectedGang, recruitmentID, setLoading]);
 
-  const positionsTable = (positions: RecruitmentPositionDto[]) => {
-    return (
-      <table className={styles.recruitmentTable}>
-        <thead>
-          <tr>
-            <th>Verv</th>
-            <th>Beskrivelse</th>
-            <th>Kategori</th>
-          </tr>
-        </thead>
-        <tbody>
-          {positions.map((position) => (
-            <tr key={position.id}>
-              <td>
-                <Button
-                  theme={'samf'}
-                  className={styles.positionButton}
-                  disabled={loading}
-                  onClick={() => {
-                    navigate(
-                      reverse({
-                        pattern: ROUTES.frontend.recruitment_application,
-                        urlParams: { positionID: position.id, gangID: position.id },
-                      }),
-                    );
-                  }}
-                >
-                  {position.name_nb}
-                </Button>
-              </td>
-              <td>{position.short_description_nb}</td>
-              <td>{position.is_funksjonaer_position ? 'Funksjonær' : 'Gjengis'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
-  };
+  const tableColumns = [
+    { content: t(KEY.common_name), sortable: true },
+    { content: t(KEY.common_description), sortable: false },
+    { content: t(KEY.category), sortable: false },
+  ];
+  const tableData = positions.map(function (item) {
+    const positionPageURL = reverse({
+      pattern: ROUTES.frontend.recruitment_application,
+      urlParams: { positionID: item.id, gangID: item.id },
+    });
+    return [
+      {
+        content: (
+          <Button
+            theme={'samf'}
+            className={styles.positionButton}
+            disabled={loading}
+            onClick={() => {
+              navigate(positionPageURL);
+            }}
+          >
+            {dbT(item, 'name')}
+          </Button>
+        ),
+      },
+      {
+        content: (
+          <Text as={'p'} size={'m'}>
+            {' '}
+            {dbT(item, 'short_description')}
+          </Text>
+        ),
+      },
+      {
+        content: (
+          <Text>{item.is_funksjonaer_position ? t(KEY.recruitment_funksjonaer) : t(KEY.recruitment_gangmember)}</Text>
+        ),
+      },
+    ];
+  });
   return (
     <div className={styles.recruitmentTableContainer}>
-      {loading ? <SamfundetLogoSpinner /> : positions ? <div> {positionsTable(positions)}</div> : <p>Ingen verv</p>}
+      {loading ? (
+        <SamfundetLogoSpinner />
+      ) : positions ? (
+        <Table columns={tableColumns} data={tableData} />
+      ) : (
+        <Text as={'strong'} size={'xl'}>
+          {t(KEY.recruitment_no_positions)}
+        </Text>
+      )}
     </div>
   );
 }
