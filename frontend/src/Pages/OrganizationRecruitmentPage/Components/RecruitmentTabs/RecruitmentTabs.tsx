@@ -4,7 +4,7 @@ import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
 import { getGangList } from '~/api';
 import { GangsTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangsTabs/GangsTabs';
-import { NoPostions } from '~/Pages/OrganizationRecruitmentPage/Components/NoPositions/NoPostions';
+import { NoPositions } from '~/Pages/OrganizationRecruitmentPage/Components/NoPositions/NoPositions';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import styles from './RecruitmentTabs.module.scss';
@@ -72,7 +72,7 @@ export function RecruitmentTabs() {
           <GangsTabs currentGangCategory={currentTab} />
         </>
       ) : (
-        <NoPostions />
+        <NoPositions />
       )}
     </div>
   );

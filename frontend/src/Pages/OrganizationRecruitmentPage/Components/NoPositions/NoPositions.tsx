@@ -1,11 +1,11 @@
-import styles from '~/Pages/RecruitmentPage/RecruitmentPage.module.scss';
+import styles from './NoPositions.module.scss';
 import { useTextItem } from '~/hooks';
 import { TextItem } from '~/constants';
 import { ROUTES } from '~/routes';
 import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
 
-export function NoPostions() {
+export function NoPositions() {
   return (
     <div className={styles.no_recruitment_wrapper}>
       <div>
