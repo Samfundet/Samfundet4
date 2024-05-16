@@ -1,5 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { KV } from '~/constants';
+import { themeToStyleMap } from '~/Components/Button/utils';
 /** Module for global generic types. */
 
 /** Type for home page element. */
@@ -136,6 +137,18 @@ export const OrganizationType = {
 
 export type OrganizationTypeValue = (typeof OrganizationType)[keyof typeof OrganizationType];
 
-export const SAMFUNDET_NAME = 'Samfundet';
-export const ISFIT_NAME = 'ISFiT';
-export const UKA_NAME = 'UKA';
+export const OrgNameType = {
+  SAMFUNDET_NAME: 'Samfundet',
+  ISFIT_NAME: 'ISFiT',
+  UKA_NAME: 'UKA',
+} as const;
+
+export type OrgNameTypeValue = (typeof OrgNameType)[keyof typeof OrgNameType];
+
+export type OrganizationTheme = {
+  organizationName: OrgNameTypeValue;
+  pagePrimaryColor: string;
+  pageSecondaryColor: string;
+  pageTertiaryColor?: string;
+  buttonTheme: keyof typeof themeToStyleMap; // Use the keyof typeof to refer to the keys of themeToStyleMap
+};

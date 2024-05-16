@@ -57,6 +57,7 @@ export { ToggleSwitch } from './ToggleSwitch';
 export { Video } from './Video';
 export { PhoneNumberField } from './PhoneNumberField';
 export { ToolTip } from './ToolTip';
+export { Logo } from './Logo';
 
 // Props
 export type { CheckboxProps } from './Checkbox';

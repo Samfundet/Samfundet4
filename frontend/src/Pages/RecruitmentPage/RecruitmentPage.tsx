@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
+import { Button, Page, SamfundetLogoSpinner, Video, Logo } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
@@ -11,6 +11,7 @@ import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
+import { useOrganizationContext } from '~/OrgContextProvider';
 
 export function RecruitmentPage() {
   const navigate = useCustomNavigate();
@@ -18,7 +19,19 @@ export function RecruitmentPage() {
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
+  const { organizationTheme, changeOrgTheme } = useOrganizationContext();
+  useEffect(() => {
+    changeOrgTheme('uka');
+  }, [changeOrgTheme]);
 
+  const header = (
+    <>
+      <div className={styles.orgHeader} style={{ backgroundColor: organizationTheme.pagePrimaryColor }}>
+        <Logo organization={'uka'} size={'medium'} color={'org-alt-color'} />
+      </div>
+      <Button theme={organizationTheme.buttonTheme}>TETSTTS</Button>
+    </>
+  );
   const noadmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
@@ -64,9 +77,10 @@ export function RecruitmentPage() {
   }, []);
 
   return (
-    <Page>
+    <Page className={styles.recruitmentPage}>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
+        {header}
         <div className={styles.personalRow}>
           <OccupiedFormModal recruitmentId={1} />
           <Button
