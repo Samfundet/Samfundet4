@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from backend.samfundet import models
+
 from django.utils.text import slugify
 
 
-def check_missing_pages(model, field_name='name'):
-    """
-    Helper function to check for missing info pages in a model.
-    """
+def check_missing_pages(model: type[models.Model], field_name: str = 'name') -> list[str]:
+    """Helper function to check for missing info pages in a model."""
     missing_list = []
     for obj in model.objects.all():
         slug = slugify(getattr(obj, field_name))
