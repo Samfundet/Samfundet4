@@ -21,7 +21,7 @@ GANGS = {
         ('Studentersamfundets Symfoniorkester', 'Symforch'),
         ('Strindens promenadeorkester', 'SPO'),
         # Laafte underskudd
-        ('Studentersamfundets Orkester', 'Låfte'),  # TODO Remove this?
+        ('Studentersamfundets Orkester', 'Låfte'),
         ('Kjeller Bandet', None),
         ('Leisure Suit Lovers', 'LSL'),
         ('Salongorkesteret', 'S.Møller'),
