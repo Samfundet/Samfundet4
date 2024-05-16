@@ -150,5 +150,5 @@ export type OrganizationTheme = {
   pagePrimaryColor: string;
   pageSecondaryColor: string;
   pageTertiaryColor?: string;
-  buttonTheme: keyof typeof themeToStyleMap; // Use the keyof typeof to refer to the keys of themeToStyleMap
+  buttonTheme: keyof typeof themeToStyleMap;
 };

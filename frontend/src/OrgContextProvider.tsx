@@ -49,6 +49,7 @@ export function OrganizationContextProvider({
   enabled = true,
 }: OrganizationContextProviderProps) {
   const [organizationTheme, setOrganizationTheme] = useState<OrganizationTheme>(organizationThemes.samfundet);
+
   useEffect(() => {
     if (!enabled) {
       return;
