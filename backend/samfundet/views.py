@@ -20,7 +20,6 @@ from django.http import QueryDict
 from django.utils import timezone
 from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
-from django.utils.text import slugify
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
@@ -111,8 +110,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
 )
-from .utils.check_missing_info_pages import check_missing_pages, misc_list
-
+from .utils.check_missing_info_pages import misc_list, check_missing_pages
 
 # =============================== #
 #          Home Page              #
