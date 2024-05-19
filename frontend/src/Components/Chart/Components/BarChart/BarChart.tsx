@@ -24,7 +24,7 @@ export function BarChart({
   const svgWidth = 1200;
   const svgHeight = 800;
   const vAxisSpace = 100;
-  const barSpacing = 1;
+  const barSpacing = 10;
   const numberOfBars = data.length;
   const totalBarSpacing = (numberOfBars - 1) * barSpacing;
   const totalBarWidthAvailable = svgWidth - totalBarSpacing - vAxisSpace;
