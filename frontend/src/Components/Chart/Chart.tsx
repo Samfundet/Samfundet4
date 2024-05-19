@@ -1,5 +1,4 @@
-import { PieChart } from './Components';
-import { BarChart } from './Components';
+import { BarChart, PieChart, LineChart } from './Components';
 
 export type ChartData = {
   label: string;
@@ -14,6 +13,8 @@ type ChartProps = {
   labelSpliceEnd?: number;
   vAxisLabel?: string;
   hAxisLabel?: string;
+  maxBarWidth?: number;
+  minBarWidth?: number;
 };
 
 export function Chart({
@@ -24,6 +25,8 @@ export function Chart({
   labelSpliceEnd,
   vAxisLabel,
   hAxisLabel,
+  maxBarWidth,
+  minBarWidth,
 }: ChartProps) {
   switch (chartType) {
     case 'pie':
@@ -37,7 +40,11 @@ export function Chart({
           labelSpliceEnd={labelSpliceEnd}
           hAxisLabel={hAxisLabel}
           vAxisLabel={vAxisLabel}
+          maxBarWidth={maxBarWidth}
+          minBarWidth={minBarWidth}
         />
       );
+    case 'line':
+      return <LineChart data={data} svgHeight={400} vAxisSpace={5} scale={20} barWidth={40} barSpacing={10} />;
   }
 }

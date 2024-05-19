@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Chart, ChartData } from './Chart';
+import { template } from '@babel/core';
 
 export default {
   title: 'Components/Chart',
@@ -49,3 +50,6 @@ BarChart.args = {
   vAxisLabel: 'Søkere',
   hAxisLabel: 'August',
 };
+
+export const LineChart = Template.bind({});
+LineChart.args = { data: applicant_per_day, chartType: 'line' };
