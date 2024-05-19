@@ -1,0 +1,10 @@
+@import "src/constants";
+
+@import "src/mixins";
+
+.container{
+  @include flex-column-center;
+  border: 2px solid $black;
+  width: fit-content;
+  padding: 1rem;
+}

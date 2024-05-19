@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Chart } from './Chart';
+import { Chart, ChartData } from './Chart';
 
 export default {
   title: 'Components/Chart',
@@ -22,3 +22,30 @@ const Template: ComponentStory<typeof Chart> = function (args) {
 
 export const PieChart = Template.bind({});
 PieChart.args = {};
+
+export const BarChart = Template.bind({});
+const applicant_per_day: ChartData[] = [
+  { label: '15. august', value: 3 },
+  { label: '16. august', value: 5 },
+  { label: '17. august', value: 7 },
+  { label: '18. august', value: 6 },
+  { label: '19. august', value: 8 },
+  { label: '20. august', value: 10 },
+  { label: '21. august', value: 4 },
+  { label: '22. august', value: 9 },
+  { label: '23. august', value: 15 },
+  { label: '24. august', value: 12 },
+  { label: '25. august', value: 11 },
+  { label: '26. august', value: 14 },
+  { label: '27. august', value: 3 },
+  { label: '28. august', value: 5 },
+];
+BarChart.args = {
+  chartType: 'bar',
+  chartTitle: 'Søkere per dag - opptak H24',
+  data: applicant_per_day,
+  labelSpliceStart: 0,
+  labelSpliceEnd: 3,
+  vAxisLabel: 'Søkere',
+  hAxisLabel: 'August',
+};
