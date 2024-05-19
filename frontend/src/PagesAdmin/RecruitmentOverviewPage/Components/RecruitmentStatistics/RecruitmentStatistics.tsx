@@ -1,17 +1,18 @@
 import styles from './RecruitmentStatistics.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { ReactNode, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { KEY } from '~/i18n/constants';
 
 export function RecruitmentStatistics() {
+  const { t } = useTranslation();
   const [mockRecruitmentStatOne, setMockRecruitmentStatOne] = useState([
     { at_date: '28-08-2024', recruitment_applications: 10 },
     { at_date: '25-08-2024', recruitment_applications: 2 },
   ]);
 
   useEffect(() => {
-    // Simulating fetching data
-    // TODO: add API call and backend
-    // This mock data does not represent real data, just a placeholder
+    //TODO: add dynamic data and might need backend features (in ISSUE #1110)
     setMockRecruitmentStatOne([
       {
         at_date: '28-08-2024---PLACEHOLDER',
@@ -45,7 +46,7 @@ export function RecruitmentStatistics() {
   return (
     <div className={styles.container}>
       <Text as={'strong'} size={'xl'}>
-        RecruitmentStatistics
+        {t(KEY.recruitment_statistics)}
       </Text>
       <div className={styles.subContainer}>{statisticsViews()}</div>
     </div>

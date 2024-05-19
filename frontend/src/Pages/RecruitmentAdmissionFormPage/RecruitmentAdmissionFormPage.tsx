@@ -95,7 +95,7 @@ export function RecruitmentAdmissionFormPage() {
     );
   }
 
-  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_admission);
+  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_application);
 
   return (
     <Page>
