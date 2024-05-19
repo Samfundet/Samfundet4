@@ -62,7 +62,7 @@ export function LycheReservationPage() {
         <SamfFormField type="options" options={occasionOptions} field="occasion" required={true} />
       </ReservationFormLine>
       <ReservationFormLine
-        label={t(KEY.common_total) + ' ' + t(KEY.common_guests) + '*'}
+        label={t(KEY.common_count) + ' ' + t(KEY.common_guests) + '*'}
         help_text={t(KEY.sulten_reservation_form_more_than_8_help)}
         underline={true}
       >
