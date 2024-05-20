@@ -1,9 +1,0 @@
-@import "src/constants";
-
-@import "src/mixins";
-
-.container{
-  @include flex-column-center;
-  border: 1px solid $black;
-  padding: 0.25rem;
-}

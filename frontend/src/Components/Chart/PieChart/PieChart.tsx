@@ -1,6 +1,6 @@
-import { calculateSectorPath } from '~/Components/Chart/Components/PieChart/utils/calculateSectorPath';
+import { calculateSectorPath } from '~/Components/Chart/PieChart/utils/calculateSectorPath';
 import { MouseEvent, useEffect, useState } from 'react';
-import { pieChartColors } from '~/Components/Chart/Components/PieChart/utils/pieChartColors';
+import { pieChartColors } from '~/Components/Chart/PieChart/utils/pieChartColors';
 import { HoverLabel } from '~/Components/Chart/Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
 import styles from './PieChart.module.scss';
