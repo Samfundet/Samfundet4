@@ -1,34 +1,23 @@
-import { ChartData, ChartColors } from '../utils/types';
+import { CartesianChartsColors, CartesianChartProps } from '~/Components/Chart/CartesianCharts/utils/types';
 import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
-import styles from '../utils/Chart.module.scss';
+import styles from '../CartesianCharts.module.scss';
 import { useIsDarkTheme } from '~/hooks';
 import { Text } from '~/Components/Text/Text';
-import { createHorizontalLabels, drawVertLabels } from '~/Components/Chart/utils/draw-labels';
-import { drawHorizontalLines } from '../utils/draw-lines';
-import { palette, sizes } from '~/Components/Chart/utils/apperance';
-import { dimensions } from '~/Components/Chart/utils/dimensions';
-
-type BarChartProps = {
-  chartTitle: string;
-  data: ChartData[];
-  size: 'small' | 'medium' | 'large' | 'xlarge';
-  hAxisLegend: string;
-  vAxisLegend: string;
-  hLabelCount: number;
-  spliceVLabel?: [number, number];
-  spliceHLabel?: [number, number];
-};
+import { createHorizontalLabels, drawVertLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
+import { drawHorizontalLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
+import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
+import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
 
 export function BarChart({
   data,
   chartTitle,
-  size = 'medium',
+  size,
   hAxisLegend,
   vAxisLegend,
   spliceVLabel,
   spliceHLabel,
-  hLabelCount = 9,
-}: BarChartProps) {
+  hLabelCount,
+}: CartesianChartProps) {
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const isDarkMode = useIsDarkTheme();
 
@@ -48,7 +37,7 @@ export function BarChart({
   } = dimensions(sizes, size, data);
 
   const lineChartPalette = palette;
-  let colors: ChartColors;
+  let colors: CartesianChartsColors;
 
   isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
 

@@ -1,14 +1,14 @@
 import { COLORS } from '~/types';
-import { ChartPalette, ChartSizes } from './types';
+import { CartesianChartPalette, CartesianChartSizes } from './types';
 
-export const sizes: ChartSizes = {
+export const sizes: CartesianChartSizes = {
   small: { cWith: 325, cHeight: 183, labelFont: 14 },
   medium: { cWith: 450, cHeight: 253, labelFont: 14 },
   large: { cWith: 600, cHeight: 337, labelFont: 14 },
   xlarge: { cWith: 800, cHeight: 450, labelFont: 14 },
 };
 
-export const palette: ChartPalette = {
+export const palette: CartesianChartPalette = {
   dark: { text: COLORS.white, bar: '#FA8072', hoverBar: '#fbb4ac', bg: COLORS.blue_deeper, gridLines: COLORS.grey_4 },
   light: {
     text: COLORS.black,

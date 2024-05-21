@@ -1,14 +1,14 @@
-import { ChartData, ChartProps, ChartSizes, ChartColors } from './types';
+import { CartesianChartsData, ChartProps, CartesianChartSizes, CartesianChartsColors } from './types';
 
 export function createHorizontalLabels(
-  data: ChartData[],
+  data: CartesianChartsData[],
   hLabelFreq: number,
   spliceHLabel: [number, number] | undefined,
   getX: (index: number) => number,
   getY: () => number,
-  sizes: ChartSizes,
+  sizes: CartesianChartSizes,
   size: ChartProps['size'],
-  colors: ChartColors,
+  colors: CartesianChartsColors,
 ) {
   return data.map((item, index) => {
     if (index % hLabelFreq === 0) {
@@ -35,8 +35,8 @@ export const drawVertLabels = (
   getYPosition: (value: number) => number,
   xOffsetVLabels: number,
   spliceVLabel: [number, number] | undefined,
-  colors: ChartColors,
-  sizes: ChartSizes,
+  colors: CartesianChartsColors,
+  sizes: CartesianChartSizes,
   size: ChartProps['size'],
 ) => {
   const step = maxValue / hLabelCount;

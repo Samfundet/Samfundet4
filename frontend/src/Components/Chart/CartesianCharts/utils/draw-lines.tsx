@@ -1,4 +1,4 @@
-import { ChartColors } from '~/Components/Chart/utils/types';
+import { CartesianChartsColors } from '~/Components/Chart/CartesianCharts/utils/types';
 
 export function drawHorizontalLines(
   maxValue: number,
@@ -8,7 +8,7 @@ export function drawHorizontalLines(
   vOffsetBars: number,
   hOffsetBars: number,
   chartWidth: number,
-  colors: ChartColors,
+  colors: CartesianChartsColors,
 ) {
   const step = maxValue / hLabelCount;
   const lines = [];

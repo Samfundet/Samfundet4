@@ -1,7 +1,6 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { LineChart } from '~/Components/Chart/LineChart';
-import { BarChart } from '~/Components/Chart/BarChart';
-import { PieChart } from '~/Components/Chart/PieChart';
+import type { ComponentStory, Meta } from '@storybook/react';
+
+import { Chart } from './Chart';
 
 const applicant_mock_data = [
   { label: '15. august', value: 36 },
@@ -20,6 +19,7 @@ const applicant_mock_data = [
   { label: '28. august', value: 3 },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const campus_mock_data = [
   { label: 'Gløshuagen', value: 50 },
   { label: 'Kalvskinnet', value: 30 },
@@ -27,61 +27,27 @@ const campus_mock_data = [
   { label: 'Dragvoll', value: 10 },
 ];
 
-// Metadata for LineChart
-const lineChartMeta: ComponentMeta<typeof LineChart> = {
-  title: 'Components/Chart/LineChart',
-  component: LineChart,
+export default {
+  title: 'Components/Chart',
+  component: Chart,
   args: {
+    type: 'bar',
     data: applicant_mock_data,
     chartTitle: 'Søkere opptak',
     size: 'large',
     hAxisLegend: 'Dager',
     vAxisLegend: 'Søkere',
-    hLabelCount: 5,
     spliceHLabel: [0, 7],
+    hLabelCount: 9,
   },
-};
-
-// Metadata for BarChart
-const barChartMeta: ComponentMeta<typeof BarChart> = {
-  title: 'Components/Chart/BarChart',
-  component: BarChart,
-  args: {
-    data: applicant_mock_data,
-    chartTitle: 'Søkere opptak',
-    size: 'large',
-    hAxisLegend: 'Dager',
-    vAxisLegend: 'Søkere',
-    hLabelCount: 5,
-    spliceHLabel: [0, 7],
-  },
-};
-
-const pieChartMeta: ComponentMeta<typeof PieChart> = {
-  title: 'Components/Chart/BarChart',
-  component: PieChart,
-  args: {
-    data: campus_mock_data,
-    charTitle: 'Søker campus fordeling',
-  },
-};
+} as Meta<typeof Chart>;
 
 // Template for LineChart
-const LineChartTemplate: ComponentStory<typeof LineChart> = (args) => <LineChart {...args} />;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const Template: ComponentStory<typeof Chart> = function (args) {
+  return <Chart {...args} />;
+};
 
-// Template for BarChart
-const BarChartTemplate: ComponentStory<typeof BarChart> = (args) => <BarChart {...args} />;
-
-const PieChartTemplate: ComponentStory<typeof PieChart> = (args) => <PieChart {...args} />;
-
-// Export metadata and stories for LineChart
-export default lineChartMeta;
-export const LineChartApplicantsPerDay = LineChartTemplate.bind({});
-LineChartApplicantsPerDay.args = {};
-
-// Export metadata and stories for BarChart
-export const BarChartApplicantsPerDay = BarChartTemplate.bind({});
-BarChartApplicantsPerDay.args = {};
-
-export const PieChartCampus = PieChartTemplate.bind({});
-PieChartCampus.args = {};
+export const BarChart = Template.bind({});
+BarChart.args = {};

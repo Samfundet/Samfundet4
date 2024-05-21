@@ -1,21 +1,12 @@
-import { calculateSectorPath } from '~/Components/Chart/PieChart/utils/calculateSectorPath';
+import { calculateSectorPath } from './utils/calculateSectorPath';
 import { useEffect, useState } from 'react';
-import { pieChartColors } from '~/Components/Chart/PieChart/utils/pieChartColors';
-import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
+import { pieChartColors } from './utils/pieChartColors';
+import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
 import styles from './PieChart.module.scss';
+import { CircularChartProps } from './utils/types';
 
-type PieChartData = {
-  label: string;
-  value: number;
-};
-
-type PieChartProps = {
-  data: PieChartData[];
-  charTitle: string;
-};
-
-export function PieChart({ data: initialData, charTitle }: PieChartProps) {
+export function PieChart({ data: initialData, chartTitle }: CircularChartProps) {
   const [dataWithColors, setDataWithColors] = useState<{ color: string; label: string; value: number }[]>([]);
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const radius = 200;
@@ -38,7 +29,7 @@ export function PieChart({ data: initialData, charTitle }: PieChartProps) {
   return (
     <div className={styles.chartContainer}>
       <Text as={'strong'} size={'l'}>
-        {charTitle}
+        {chartTitle}
       </Text>
       <svg height={425} width={425} viewBox={`-${0} -${0} ${viewboxSize} ${viewboxSize}`}>
         {dataWithColors?.map((entry, index) => {
