@@ -1,13 +1,11 @@
 import { ChartData, ChartProps, ChartSizes, ChartColors } from './types';
 
-// labels at the bottom of the chart
 export function createHorizontalLabels(
   data: ChartData[],
   hLabelFreq: number,
   spliceHLabel: [number, number] | undefined,
-  lineCoordinates: { x: number; y: number }[],
-  svgHeight: number,
-  yOffsetHLabels: number,
+  getX: (index: number) => number,
+  getY: () => number,
   sizes: ChartSizes,
   size: ChartProps['size'],
   colors: ChartColors,
@@ -17,8 +15,8 @@ export function createHorizontalLabels(
       return (
         <text
           key={index}
-          x={lineCoordinates[index].x}
-          y={svgHeight - yOffsetHLabels}
+          x={getX(index)}
+          y={getY()}
           style={{ fontSize: sizes[size].labelFont }}
           fill={colors.text}
           textAnchor="middle"
@@ -31,14 +29,10 @@ export function createHorizontalLabels(
   });
 }
 
-export const createVertLabelsLines = (
+export const drawVertLabels = (
   maxValue: number,
   hLabelCount: number,
-  svgHeight: number,
-  svgScale: number,
-  vOffsetBars: number,
-  hOffsetBars: number,
-  chartWidth: number,
+  getYPosition: (value: number) => number,
   xOffsetVLabels: number,
   spliceVLabel: [number, number] | undefined,
   colors: ChartColors,
@@ -49,26 +43,18 @@ export const createVertLabelsLines = (
   const lines = [];
   for (let i = 0; i <= hLabelCount; i++) {
     const value = step * i;
-    const yPosition = svgHeight - value * svgScale - vOffsetBars;
+    const yPosition = getYPosition(value);
     lines.push(
-      <g key={i}>
-        <line
-          x1={hOffsetBars}
-          x2={chartWidth}
-          y1={yPosition}
-          y2={yPosition}
-          style={{ stroke: colors.gridLines, strokeWidth: 0.75 }}
-        />
-        <text
-          x={xOffsetVLabels}
-          y={yPosition + 5} // Adjust the label position
-          style={{ fontSize: sizes[size].labelFont }}
-          fill={colors.text}
-          textAnchor="end"
-        >
-          {spliceVLabel ? value.toFixed(0).toString().slice(spliceVLabel[0], spliceVLabel[1]) : value.toFixed(0)}
-        </text>
-      </g>,
+      <text
+        key={i}
+        x={xOffsetVLabels}
+        y={yPosition + 5}
+        style={{ fontSize: sizes[size].labelFont }}
+        fill={colors.text}
+        textAnchor="end"
+      >
+        {spliceVLabel ? value.toFixed(0).toString().slice(spliceVLabel[0], spliceVLabel[1]) : value.toFixed(0)}
+      </text>,
     );
   }
   return lines;

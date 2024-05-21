@@ -1,11 +1,12 @@
-import { ChartColors, ChartData } from '../utils/types';
-import { Text } from '~/Components/Text/Text';
+import { ChartData, ChartColors } from '../utils/types';
+import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
 import styles from '../utils/Chart.module.scss';
-import { MouseEvent, useState } from 'react';
-import { HoverLabel } from '~/Components/Chart/Components/HoverLabel';
 import { useIsDarkTheme } from '~/hooks';
-import { dimensions } from '~/Components/Chart/utils/dimensions';
+import { Text } from '~/Components/Text/Text';
+import { createHorizontalLabels, drawVertLabels } from '~/Components/Chart/utils/draw-labels';
+import { drawHorizontalLines } from '../utils/draw-lines';
 import { palette, sizes } from '~/Components/Chart/utils/apperance';
+import { dimensions } from '~/Components/Chart/utils/dimensions';
 
 type BarChartProps = {
   chartTitle: string;
@@ -19,41 +20,17 @@ type BarChartProps = {
 };
 
 export function BarChart({
-  chartTitle,
   data,
+  chartTitle,
+  size = 'medium',
   hAxisLegend,
   vAxisLegend,
-  size = 'medium',
   spliceVLabel,
   spliceHLabel,
   hLabelCount = 9,
 }: BarChartProps) {
+  const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const isDarkMode = useIsDarkTheme();
-  const [hoverInfo, setHoverInfo] = useState({ value: '', x: 0, y: 0, visible: false });
-
-  const handleMouseEnter = (event: MouseEvent<SVGPathElement>, value: string) => {
-    setHoverInfo({
-      value: value,
-      x: event.clientX,
-      y: event.clientY,
-      visible: true,
-    });
-  };
-
-  const handleMouseMove = (event: MouseEvent<SVGPathElement>) => {
-    setHoverInfo((prev) => ({
-      ...prev,
-      x: event.clientX,
-      y: event.clientY,
-    }));
-  };
-
-  const handleMouseLeave = () => {
-    setHoverInfo((prev) => ({
-      ...prev,
-      visible: false,
-    }));
-  };
 
   const {
     svgWidth,
@@ -61,28 +38,30 @@ export function BarChart({
     maxValue,
     hLabelFreq,
     svgScale,
-    barPadding,
-    hOffsetBars,
-    vOffsetBars,
-    xOffsetVLabels,
-    yOffsetHLabels,
+    datapointPadding,
+    leftPadding,
+    bottomPadding,
+    vertLabelsRightPadding,
+    hrzntLabelsBottomPadding,
     chartWidth,
-    thisBarWith,
+    datapointWidth,
   } = dimensions(sizes, size, data);
 
-  const barChartPalette = palette;
+  const lineChartPalette = palette;
   let colors: ChartColors;
-  isDarkMode ? (colors = barChartPalette.dark) : (colors = barChartPalette.light);
+
+  isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
 
   const newBars = data.map((item, index) => {
     const barHeight = item.value * svgScale;
-    const xPosition = index * (thisBarWith + barPadding) + hOffsetBars; // Adjust to start after axis labels
-    const yPosition = svgHeight - barHeight - vOffsetBars; // Leave space for labels
+    const xPosition = index * (datapointWidth + datapointPadding) + leftPadding; // Adjust to start after axis labels
+    const yPosition = svgHeight - barHeight - bottomPadding; // Leave space for labels
     const bar = (
       <rect
+        key={index}
         x={xPosition}
         y={yPosition}
-        width={thisBarWith}
+        width={datapointWidth}
         height={barHeight}
         fill={colors.bar}
         onMouseEnter={(event) => handleMouseEnter(event, item.label + ': ' + item.value)}
@@ -93,55 +72,38 @@ export function BarChart({
     return { xPosition, yPosition, bar, barHeight };
   });
 
-  const generateHorizontalLinesAndLabels = () => {
-    const step = maxValue / hLabelCount;
-    const lines = [];
-    for (let i = 0; i <= hLabelCount; i++) {
-      const value = step * i;
-      const yPosition = svgHeight - value * svgScale - vOffsetBars;
-      lines.push(
-        <g key={i}>
-          <line
-            x1={hOffsetBars}
-            x2={chartWidth}
-            y1={yPosition}
-            y2={yPosition}
-            style={{ stroke: palette.light.gridLines, strokeWidth: 0.75 }}
-          />
-          <text
-            x={xOffsetVLabels}
-            y={yPosition + 5} // Adjust the label position
-            style={{ fontSize: sizes[size].labelFont }}
-            fill="currentColor"
-            textAnchor="end"
-          >
-            {spliceVLabel ? value.toFixed(0).toString().slice(spliceVLabel[0], spliceVLabel[1]) : value.toFixed(0)}
-          </text>
-        </g>,
-      );
-    }
-    return lines;
-  };
+  const vertLabels = createHorizontalLabels(
+    data,
+    hLabelFreq,
+    spliceHLabel,
+    (index) => newBars[index].xPosition + datapointWidth / 2, // Center of the bar
+    () => svgHeight - hrzntLabelsBottomPadding,
+    sizes,
+    size,
+    colors,
+  );
 
-  const horizontalLinesAndLabels = generateHorizontalLinesAndLabels();
+  const horizontalLabels = drawVertLabels(
+    maxValue,
+    hLabelCount,
+    (value) => svgHeight - value * svgScale - bottomPadding,
+    vertLabelsRightPadding,
+    spliceVLabel,
+    colors,
+    sizes,
+    size,
+  );
 
-  const newHLabels = newBars.map(({ xPosition }, index) => {
-    if (index % hLabelFreq === 0) {
-      return (
-        <text
-          key={index}
-          x={xPosition + thisBarWith / 2}
-          y={svgHeight - yOffsetHLabels}
-          fill="currentColor"
-          style={{ fontSize: sizes[size].labelFont }}
-          textAnchor="middle"
-        >
-          {spliceHLabel ? data[index].label.toString().slice(spliceHLabel[0], spliceHLabel[1]) : data[index].label}
-        </text>
-      );
-    }
-    return null;
-  });
+  const horizontalLines = drawHorizontalLines(
+    maxValue,
+    hLabelCount,
+    svgHeight,
+    svgScale,
+    bottomPadding,
+    vertLabelsRightPadding,
+    chartWidth,
+    colors,
+  );
 
   return (
     <div className={styles.container} style={{ backgroundColor: colors.bg }}>
@@ -154,21 +116,16 @@ export function BarChart({
         <Text className={styles.vAxisLegend}>{vAxisLegend}</Text>
       </div>
       <div className={styles.chartContainer}>
-        <svg
-          width={svgWidth}
-          height={svgHeight}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-        >
-          {horizontalLinesAndLabels}
-          {newBars.map(({ bar }) => bar)}
-          {newHLabels}
+        <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
+          {horizontalLabels}
+          {vertLabels}
+          {horizontalLines}
+          {newBars.map((barData) => barData.bar)}
         </svg>
       </div>
       <div className={styles.hLegendContainer}>
         <Text>{hAxisLegend}</Text>
       </div>
-
       <HoverLabel hoverInfo={hoverInfo} />
     </div>
   );

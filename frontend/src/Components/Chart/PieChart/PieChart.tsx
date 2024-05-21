@@ -1,7 +1,7 @@
 import { calculateSectorPath } from '~/Components/Chart/PieChart/utils/calculateSectorPath';
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { pieChartColors } from '~/Components/Chart/PieChart/utils/pieChartColors';
-import { HoverLabel } from '~/Components/Chart/Components/HoverLabel';
+import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
 import styles from './PieChart.module.scss';
 
@@ -17,7 +17,7 @@ type PieChartProps = {
 
 export function PieChart({ data: initialData, charTitle }: PieChartProps) {
   const [dataWithColors, setDataWithColors] = useState<{ color: string; label: string; value: number }[]>([]);
-  const [hoverInfo, setHoverInfo] = useState({ value: '', x: 0, y: 0, visible: false });
+  const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const radius = 200;
   const viewboxSize = radius * 2;
 
@@ -34,33 +34,6 @@ export function PieChart({ data: initialData, charTitle }: PieChartProps) {
       setDataWithColors(coloredData);
     }
   }, [initialData]);
-
-  //used for hover label
-  const handleMouseEnter = (event: MouseEvent<SVGPathElement>, value: string) => {
-    setHoverInfo({
-      value: value,
-      x: event.clientX,
-      y: event.clientY,
-      visible: true,
-    });
-  };
-
-  //used for hover label
-  const handleMouseMove = (event: MouseEvent<SVGPathElement>) => {
-    setHoverInfo((prev) => ({
-      ...prev,
-      x: event.clientX,
-      y: event.clientY,
-    }));
-  };
-
-  //used for hover label
-  const handleMouseLeave = () => {
-    setHoverInfo((prev) => ({
-      ...prev,
-      visible: false,
-    }));
-  };
 
   return (
     <div className={styles.chartContainer}>

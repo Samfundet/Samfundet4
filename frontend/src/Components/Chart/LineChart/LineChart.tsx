@@ -1,10 +1,10 @@
 import { ChartData, ChartColors } from '../utils/types';
-import { MouseEvent, useState } from 'react';
-import { HoverLabel } from '~/Components/Chart/Components/HoverLabel';
+import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
 import styles from '../utils/Chart.module.scss';
 import { useIsDarkTheme } from '~/hooks';
 import { Text } from '~/Components/Text/Text';
-import { createHorizontalLabels, createVertLabelsLines } from '~/Components/Chart/utils/draw-labels';
+import { createHorizontalLabels, drawVertLabels } from '~/Components/Chart/utils/draw-labels';
+import { drawHorizontalLines } from '../utils/draw-lines';
 import { palette, sizes } from '~/Components/Chart/utils/apperance';
 import { dimensions } from '~/Components/Chart/utils/dimensions';
 
@@ -29,32 +29,8 @@ export function LineChart({
   spliceHLabel,
   hLabelCount = 9,
 }: LineChartProps) {
-  const [hoverInfo, setHoverInfo] = useState({ value: '', x: 0, y: 0, visible: false });
+  const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const isDarkMode = useIsDarkTheme();
-
-  const handleMouseEnter = (event: MouseEvent<SVGPathElement>, value: string) => {
-    setHoverInfo({
-      value: value,
-      x: event.clientX,
-      y: event.clientY,
-      visible: true,
-    });
-  };
-
-  const handleMouseMove = (event: MouseEvent<SVGPathElement>) => {
-    setHoverInfo((prev) => ({
-      ...prev,
-      x: event.clientX,
-      y: event.clientY,
-    }));
-  };
-
-  const handleMouseLeave = () => {
-    setHoverInfo((prev) => ({
-      ...prev,
-      visible: false,
-    }));
-  };
 
   const {
     svgWidth,
@@ -62,13 +38,13 @@ export function LineChart({
     maxValue,
     hLabelFreq,
     svgScale,
-    barPadding,
-    hOffsetBars,
-    vOffsetBars,
-    xOffsetVLabels,
-    yOffsetHLabels,
+    datapointPadding,
+    leftPadding,
+    bottomPadding,
+    vertLabelsRightPadding,
+    hrzntLabelsBottomPadding,
     chartWidth,
-    thisBarWith,
+    datapointWidth,
   } = dimensions(sizes, size, data);
 
   const lineChartPalette = palette;
@@ -77,8 +53,8 @@ export function LineChart({
   isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
 
   const lineCoordinates = data.map((item, index) => ({
-    x: index * (thisBarWith + barPadding) + xOffsetVLabels + thisBarWith / 2,
-    y: svgHeight - item.value * svgScale - vOffsetBars,
+    x: index * (datapointWidth + datapointPadding) + vertLabelsRightPadding + datapointWidth / 2,
+    y: svgHeight - item.value * svgScale - bottomPadding,
   }));
 
   const linePath = `M${lineCoordinates.map((coord) => `${coord.x},${coord.y}`).join('L')}`;
@@ -96,30 +72,36 @@ export function LineChart({
     />
   ));
 
-  const horizontalLinesAndLabels = createVertLabelsLines(
+  const vertLabels = createHorizontalLabels(
+    data,
+    hLabelFreq,
+    spliceHLabel,
+    (index) => lineCoordinates[index].x, // Function to get x-coordinate
+    () => svgHeight - hrzntLabelsBottomPadding, // Function to get y-coordinate
+    sizes,
+    size,
+    colors,
+  );
+
+  const horizontalLabels = drawVertLabels(
     maxValue,
     hLabelCount,
-    svgHeight,
-    svgScale,
-    vOffsetBars,
-    hOffsetBars,
-    chartWidth,
-    xOffsetVLabels,
+    (value) => svgHeight - value * svgScale - bottomPadding, // Function to get y-coordinate
+    vertLabelsRightPadding,
     spliceVLabel,
     colors,
     sizes,
     size,
   );
 
-  const vertLabels = createHorizontalLabels(
-    data,
-    hLabelFreq,
-    spliceHLabel,
-    lineCoordinates,
+  const horizontalLines = drawHorizontalLines(
+    maxValue,
+    hLabelCount,
     svgHeight,
-    yOffsetHLabels,
-    sizes,
-    size,
+    svgScale,
+    bottomPadding,
+    leftPadding,
+    chartWidth,
     colors,
   );
 
@@ -140,10 +122,11 @@ export function LineChart({
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           xmlns="http://www.w3.org/2000/svg"
         >
-          {horizontalLinesAndLabels}
+          {horizontalLabels}
+          {vertLabels}
+          {horizontalLines}
           <path d={linePath} fill="none" stroke={colors.bar} strokeWidth="3" />
           {dataPoints}
-          {vertLabels}
         </svg>
       </div>
       <div className={styles.hLegendContainer}>

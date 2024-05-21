@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { LineChart } from '~/Components/Chart/LineChart';
 import { BarChart } from '~/Components/Chart/BarChart';
+import { PieChart } from '~/Components/Chart/PieChart';
 
 const applicant_mock_data = [
   { label: '15. august', value: 36 },
@@ -18,6 +19,14 @@ const applicant_mock_data = [
   { label: '27. august', value: 20 },
   { label: '28. august', value: 3 },
 ];
+
+const campus_mock_data = [
+  { label: 'Gløshuagen', value: 50 },
+  { label: 'Kalvskinnet', value: 30 },
+  { label: 'DMM', value: 15 },
+  { label: 'Dragvoll', value: 10 },
+];
+
 // Metadata for LineChart
 const lineChartMeta: ComponentMeta<typeof LineChart> = {
   title: 'Components/Chart/LineChart',
@@ -48,11 +57,22 @@ const barChartMeta: ComponentMeta<typeof BarChart> = {
   },
 };
 
+const pieChartMeta: ComponentMeta<typeof PieChart> = {
+  title: 'Components/Chart/BarChart',
+  component: PieChart,
+  args: {
+    data: campus_mock_data,
+    charTitle: 'Søker campus fordeling',
+  },
+};
+
 // Template for LineChart
 const LineChartTemplate: ComponentStory<typeof LineChart> = (args) => <LineChart {...args} />;
 
 // Template for BarChart
 const BarChartTemplate: ComponentStory<typeof BarChart> = (args) => <BarChart {...args} />;
+
+const PieChartTemplate: ComponentStory<typeof PieChart> = (args) => <PieChart {...args} />;
 
 // Export metadata and stories for LineChart
 export default lineChartMeta;
@@ -62,3 +82,6 @@ LineChartApplicantsPerDay.args = {};
 // Export metadata and stories for BarChart
 export const BarChartApplicantsPerDay = BarChartTemplate.bind({});
 BarChartApplicantsPerDay.args = {};
+
+export const PieChartCampus = PieChartTemplate.bind({});
+PieChartCampus.args = {};

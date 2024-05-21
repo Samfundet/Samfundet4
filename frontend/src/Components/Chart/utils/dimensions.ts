@@ -1,17 +1,31 @@
 import { ChartData, ChartProps, ChartSizes } from './types';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function dimensions(sizes: ChartSizes, size: ChartProps['size'], data: ChartData[]) {
   const svgWidth = sizes[size].cWith; // svg width
   const svgHeight = sizes[size].cHeight; // svg height
-  const bHeightOffset = 70; // bar height offset
+  const topPadding = 70; // datapoint offset from top
   const maxValue = Math.max(...data.map((item: ChartData) => item.value));
-  const svgScale = (svgHeight - bHeightOffset) / maxValue;
+  const svgScale = (svgHeight - topPadding) / maxValue;
+
+  const maxValueStrLength = maxValue.toString().length; //length of the string representing the value
+  const leftPadding = maxValueStrLength * sizes[size].labelFont + 30; // horizontal offset
+
+  const bottomPadding = 40; // chart vertical offset
+
+  const vertLabelsRightPadding = leftPadding - 20;
+
+  const hrzntLabelsBottomPadding = bottomPadding - sizes[size].labelFont - 10;
+
   const entryCount = data.length;
-  let barPadding: number;
-  let hLabelFreq: number = 2; // Initialize hLabelFreq to a default value
+  let datapointPadding: number;
+  entryCount > 80 ? (datapointPadding = 1) : (datapointPadding = 2);
+  const totalBarPadding = (entryCount - 1) * datapointPadding;
 
-  entryCount > 80 ? (barPadding = 1) : (barPadding = 2);
+  const datapointWidth = (svgWidth - bottomPadding - vertLabelsRightPadding - totalBarPadding) / entryCount;
+  const chartWidth = totalBarPadding + datapointWidth * entryCount + bottomPadding + vertLabelsRightPadding;
 
+  let hLabelFreq: number = 2;
   if (entryCount >= 12) {
     if (size === 'large' || size === 'xlarge') {
       hLabelFreq = Math.ceil(entryCount / 8);
@@ -19,34 +33,18 @@ export function dimensions(sizes: ChartSizes, size: ChartProps['size'], data: Ch
       hLabelFreq = Math.ceil(entryCount / 4);
     }
   }
-
-  const maxValueLength = maxValue.toString().length;
-  const hOffsetBars = maxValueLength * sizes[size].labelFont + 30; // horizontal offset
-  const vOffsetBars = 40; // bars vertical offset
-
-  // offset of vertical labels in x,y dir
-  const xOffsetVLabels = hOffsetBars - 20;
-
-  // offset horizontal labels in x dir
-  const yOffsetHLabels = vOffsetBars - sizes[size].labelFont - 10;
-
-  const totalBarPadding = (entryCount - 1) * barPadding;
-
-  const thisBarWith = (svgWidth - vOffsetBars - xOffsetVLabels - totalBarPadding) / entryCount;
-  const chartWidth = totalBarPadding + thisBarWith * entryCount + vOffsetBars + xOffsetVLabels;
-
   return {
     svgWidth,
     svgHeight,
     maxValue,
     hLabelFreq,
     svgScale,
-    barPadding,
-    hOffsetBars,
-    vOffsetBars,
-    xOffsetVLabels,
-    yOffsetHLabels,
+    datapointPadding,
+    leftPadding,
+    bottomPadding,
+    vertLabelsRightPadding,
+    hrzntLabelsBottomPadding,
     chartWidth,
-    thisBarWith,
+    datapointWidth,
   };
 }
