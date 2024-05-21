@@ -1,7 +1,7 @@
-import { CartesianChartsData, ChartProps, CartesianChartSizes } from './types';
+import { CartesianChartsData, CartesianChartSizes, CartesianChartProps } from './types';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function dimensions(sizes: CartesianChartSizes, size: ChartProps['size'], data: CartesianChartsData[]) {
+export function dimensions(sizes: CartesianChartSizes, size: CartesianChartProps['size'], data: CartesianChartsData[]) {
   const svgWidth = sizes[size].cWith; // svg width
   const svgHeight = sizes[size].cHeight; // svg height
   const topPadding = 70; // datapoint offset from top

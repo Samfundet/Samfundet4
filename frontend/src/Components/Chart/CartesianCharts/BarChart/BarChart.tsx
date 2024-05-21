@@ -8,6 +8,7 @@ import { drawHorizontalLines } from '~/Components/Chart/CartesianCharts/utils/dr
 import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
 import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
 
+//TODO: add more properties to sizes
 export function BarChart({
   data,
   chartTitle,

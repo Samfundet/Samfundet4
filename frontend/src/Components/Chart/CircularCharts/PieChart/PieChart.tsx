@@ -6,6 +6,7 @@ import { Text } from '~/Components/Text/Text';
 import styles from './PieChart.module.scss';
 import { CircularChartProps } from './utils/types';
 
+// TODO: add size
 export function PieChart({ data: initialData, chartTitle }: CircularChartProps) {
   const [dataWithColors, setDataWithColors] = useState<{ color: string; label: string; value: number }[]>([]);
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();

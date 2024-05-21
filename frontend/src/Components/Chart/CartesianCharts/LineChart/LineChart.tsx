@@ -7,7 +7,7 @@ import { createHorizontalLabels, drawVertLabels } from '~/Components/Chart/Carte
 import { drawHorizontalLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
 import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
 import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
-
+//TODO: add more properties to sizes
 export function LineChart({
   data,
   chartTitle,
