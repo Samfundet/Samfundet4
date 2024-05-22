@@ -7,17 +7,25 @@ export type CartesianChartProps = {
   chartTitle: string;
   data: CartesianChartsData[];
   size: 'small' | 'medium' | 'large' | 'xlarge';
-  hAxisLegend: string;
-  vAxisLegend: string;
-  hLabelCount: number;
-  spliceVLabel?: [number, number];
-  spliceHLabel?: [number, number];
+  xAxisLegend: string;
+  yAxisLegend: string;
+  yLabelCount: number;
+  hasXDirLines: boolean;
+  hasYDirLines: boolean;
+  spliceYLabel?: [number, number];
+  spliceXLabel?: [number, number];
 };
 
 export type CartesianChartsSize = {
   cWith: number;
   cHeight: number;
   labelFont: number;
+  topPadding: number;
+  rightPadding: number;
+  bottomPadding: number;
+  leftPadding: number;
+  xLabelsMargin: number;
+  yLabelsPosition: number;
 };
 
 export type CartesianChartSizes = {

@@ -3,20 +3,22 @@ import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLa
 import styles from '../CartesianCharts.module.scss';
 import { useIsDarkTheme } from '~/hooks';
 import { Text } from '~/Components/Text/Text';
-import { createHorizontalLabels, drawVertLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
-import { drawHorizontalLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
+import { drawXAxisLabels, drawYAxisLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
+import { drawXDirLines, drawYDirLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
 import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
 import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
-//TODO: add more properties to sizes
+
 export function LineChart({
   data,
   chartTitle,
   size,
-  hAxisLegend,
-  vAxisLegend,
-  spliceVLabel,
-  spliceHLabel,
-  hLabelCount,
+  xAxisLegend,
+  yAxisLegend,
+  spliceYLabel,
+  spliceXLabel,
+  yLabelCount,
+  hasXDirLines = true,
+  hasYDirLines = true,
 }: CartesianChartProps) {
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const isDarkMode = useIsDarkTheme();
@@ -25,14 +27,12 @@ export function LineChart({
     svgWidth,
     svgHeight,
     maxValue,
-    hLabelFreq,
+    xLabelFreq,
     svgScale,
     datapointPadding,
-    leftPadding,
     bottomPadding,
-    vertLabelsRightPadding,
-    hrzntLabelsBottomPadding,
-    chartWidth,
+    yLabelsPosition,
+    xLabelsMargin,
     datapointWidth,
   } = dimensions(sizes, size, data);
 
@@ -42,7 +42,7 @@ export function LineChart({
   isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
 
   const lineCoordinates = data.map((item, index) => ({
-    x: index * (datapointWidth + datapointPadding) + vertLabelsRightPadding + datapointWidth / 2,
+    x: index * (datapointWidth + datapointPadding) + yLabelsPosition + datapointWidth / 2,
     y: svgHeight - item.value * svgScale - bottomPadding,
   }));
 
@@ -53,7 +53,7 @@ export function LineChart({
       key={index}
       cx={lineCoordinates[index].x}
       cy={lineCoordinates[index].y}
-      r={5}
+      r={4}
       fill={colors.bar}
       onMouseEnter={(event) => handleMouseEnter(event, item.label + ': ' + item.value.toString())}
       onMouseMove={handleMouseMove}
@@ -61,65 +61,61 @@ export function LineChart({
     />
   ));
 
-  const vertLabels = createHorizontalLabels(
+  const xAxisLabels = drawXAxisLabels(
     data,
-    hLabelFreq,
-    spliceHLabel,
+    xLabelFreq,
+    spliceXLabel,
     (index) => lineCoordinates[index].x, // Function to get x-coordinate
-    () => svgHeight - hrzntLabelsBottomPadding, // Function to get y-coordinate
+    () => svgHeight - xLabelsMargin, // Function to get y-coordinate
     sizes,
     size,
     colors,
   );
 
-  const horizontalLabels = drawVertLabels(
+  const yAxisLabels = drawYAxisLabels(
     maxValue,
-    hLabelCount,
+    yLabelCount,
     (value) => svgHeight - value * svgScale - bottomPadding, // Function to get y-coordinate
-    vertLabelsRightPadding,
-    spliceVLabel,
+    yLabelsPosition,
+    spliceYLabel,
     colors,
     sizes,
     size,
-  );
-
-  const horizontalLines = drawHorizontalLines(
-    maxValue,
-    hLabelCount,
-    svgHeight,
-    svgScale,
-    bottomPadding,
-    leftPadding,
-    chartWidth,
-    colors,
   );
 
   return (
-    <div className={styles.container} style={{ backgroundColor: colors.bg }}>
+    <div className={styles.container} style={{ backgroundColor: colors.bg, minWidth: svgWidth, minHeight: svgHeight }}>
       <div className={styles.chartTitleContainer}>
         <Text as={'strong'} size={'xl'}>
           {chartTitle}
         </Text>
       </div>
       <div className={styles.vLegendContainer}>
-        <Text className={styles.vAxisLegend}>{vAxisLegend}</Text>
+        <Text className={styles.vAxisLegend}>{yAxisLegend}</Text>
       </div>
       <div className={styles.chartContainer}>
-        <svg
-          width={svgWidth}
-          height={svgHeight}
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {horizontalLabels}
-          {vertLabels}
-          {horizontalLines}
+        <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
+          {hasYDirLines &&
+            drawYDirLines(
+              data,
+              xLabelFreq,
+              (index) => lineCoordinates[index].x, // Function to get x-coordinate
+              svgHeight,
+              bottomPadding,
+              sizes,
+              size,
+              colors,
+            )}
+          {hasXDirLines &&
+            drawXDirLines(maxValue, yLabelCount, svgHeight, svgScale, bottomPadding, yLabelsPosition, svgWidth, colors)}
+          {yAxisLabels}
+          {xAxisLabels}
           <path d={linePath} fill="none" stroke={colors.bar} strokeWidth="3" />
           {dataPoints}
         </svg>
       </div>
       <div className={styles.hLegendContainer}>
-        <Text>{hAxisLegend}</Text>
+        <Text>{xAxisLegend}</Text>
       </div>
       <HoverLabel hoverInfo={hoverInfo} />
     </div>

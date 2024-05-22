@@ -18,11 +18,13 @@ export function Chart({
   data,
   chartTitle, // @ts-ignore
   size, // @ts-ignore
-  hAxisLegend, // @ts-ignore
-  vAxisLegend, // @ts-ignore
-  spliceVLabel, // @ts-ignore
-  spliceHLabel, // @ts-ignore
-  hLabelCount,
+  xAxisLegend, // @ts-ignore
+  yAxisLegend, // @ts-ignore
+  spliceYLabel, // @ts-ignore
+  spliceXLabel, // @ts-ignore
+  yLabelCount, // @ts-ignore
+  hasXDirLines, // @ts-ignore
+  hasYDirLines,
 }: ChartProps) {
   const chart = {
     bar: (
@@ -30,11 +32,13 @@ export function Chart({
         chartTitle={chartTitle}
         data={data}
         size={size}
-        hAxisLegend={hAxisLegend}
-        vAxisLegend={vAxisLegend}
-        hLabelCount={hLabelCount}
-        spliceVLabel={spliceVLabel}
-        spliceHLabel={spliceHLabel}
+        xAxisLegend={xAxisLegend}
+        yAxisLegend={yAxisLegend}
+        yLabelCount={yLabelCount}
+        spliceYLabel={spliceYLabel}
+        spliceXLabel={spliceXLabel}
+        hasXDirLines={hasXDirLines}
+        hasYDirLines={hasYDirLines}
       />
     ),
     line: (
@@ -42,11 +46,13 @@ export function Chart({
         chartTitle={chartTitle}
         data={data}
         size={size}
-        hAxisLegend={hAxisLegend}
-        vAxisLegend={vAxisLegend}
-        hLabelCount={hLabelCount}
-        spliceVLabel={spliceVLabel}
-        spliceHLabel={spliceHLabel}
+        xAxisLegend={xAxisLegend}
+        yAxisLegend={yAxisLegend}
+        yLabelCount={yLabelCount}
+        spliceYLabel={spliceYLabel}
+        spliceXLabel={spliceXLabel}
+        hasXDirLines={hasXDirLines}
+        hasYDirLines={hasYDirLines}
       />
     ),
     pie: <PieChart chartTitle={chartTitle} data={data} />,

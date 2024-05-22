@@ -17,6 +17,7 @@ const applicant_mock_data = [
   { label: '26. august', value: 70 },
   { label: '27. august', value: 20 },
   { label: '28. august', value: 3 },
+  { label: '29. august', value: 9 },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,10 +36,10 @@ export default {
     data: applicant_mock_data,
     chartTitle: 'Søkere opptak',
     size: 'large',
-    hAxisLegend: 'Dager',
-    vAxisLegend: 'Søkere',
-    spliceHLabel: [0, 7],
-    hLabelCount: 9,
+    xAxisLegend: 'Dager',
+    yAxisLegend: 'Søkere',
+    spliceXLabel: [0, 7],
+    yLabelCount: 9,
   },
 } as Meta<typeof Chart>;
 
@@ -49,5 +50,8 @@ const Template: ComponentStory<typeof Chart> = function (args) {
   return <Chart {...args} />;
 };
 
-export const BarChart = Template.bind({});
-BarChart.args = {};
+export const ApplicantsPerDay = Template.bind({});
+ApplicantsPerDay.args = {};
+
+export const CampusDistribution = Template.bind({});
+CampusDistribution.args = { type: 'pie', data: campus_mock_data, chartTitle: 'Campus fordeling' };

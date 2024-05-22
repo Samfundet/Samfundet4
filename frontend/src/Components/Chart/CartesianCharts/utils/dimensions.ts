@@ -1,50 +1,65 @@
-import { CartesianChartsData, CartesianChartSizes, CartesianChartProps } from './types';
+import {
+  CartesianChartProps,
+  CartesianChartsData,
+  CartesianChartSizes,
+} from '~/Components/Chart/CartesianCharts/utils/types';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function dimensions(sizes: CartesianChartSizes, size: CartesianChartProps['size'], data: CartesianChartsData[]) {
-  const svgWidth = sizes[size].cWith; // svg width
-  const svgHeight = sizes[size].cHeight; // svg height
-  const topPadding = 70; // datapoint offset from top
-  const maxValue = Math.max(...data.map((item: CartesianChartsData) => item.value));
-  const svgScale = (svgHeight - topPadding) / maxValue;
+const getDatapointPadding = (entryCount: number) => (entryCount > 80 ? 1 : 2);
 
-  const maxValueStrLength = maxValue.toString().length; //length of the string representing the value
-  const leftPadding = maxValueStrLength * sizes[size].labelFont + 30; // horizontal offset
+const calculateDimensions = (
+  sizes: CartesianChartSizes,
+  size: CartesianChartProps['size'],
+  data: CartesianChartsData[],
+) => {
+  const leftPadding = sizes[size].leftPadding;
+  const bottomPadding = sizes[size].bottomPadding;
+  const rightPadding = sizes[size].rightPadding;
+  const topPadding = sizes[size].topPadding;
 
-  const bottomPadding = 40; // chart vertical offset
+  const yLabelsPosition = sizes[size].yLabelsPosition;
+  const xLabelsMargin = sizes[size].xLabelsMargin;
 
-  const vertLabelsRightPadding = leftPadding - 20;
+  const svgWidth = sizes[size].cWith + rightPadding + leftPadding + xLabelsMargin;
+  const svgHeight = sizes[size].cHeight + topPadding + bottomPadding + yLabelsPosition;
 
-  const hrzntLabelsBottomPadding = bottomPadding - sizes[size].labelFont - 10;
+  const chartWidth = sizes[size].cWith;
+  const chartHeight = sizes[size].cHeight;
+
+  const maxValue = Math.max(...data.map((item) => item.value));
+
+  const svgScale = chartHeight / maxValue;
 
   const entryCount = data.length;
-  let datapointPadding: number;
-  entryCount > 80 ? (datapointPadding = 1) : (datapointPadding = 2);
+  const datapointPadding = getDatapointPadding(entryCount);
   const totalBarPadding = (entryCount - 1) * datapointPadding;
 
-  const datapointWidth = (svgWidth - bottomPadding - vertLabelsRightPadding - totalBarPadding) / entryCount;
-  const chartWidth = totalBarPadding + datapointWidth * entryCount + bottomPadding + vertLabelsRightPadding;
-
-  let hLabelFreq: number = 2;
+  const datapointWidth = (chartWidth - totalBarPadding) / entryCount;
+  let xLabelFreq = 2;
   if (entryCount >= 12) {
     if (size === 'large' || size === 'xlarge') {
-      hLabelFreq = Math.ceil(entryCount / 8);
+      xLabelFreq = Math.ceil(entryCount / 8);
     } else if (size === 'small' || size === 'medium') {
-      hLabelFreq = Math.ceil(entryCount / 4);
+      xLabelFreq = Math.ceil(entryCount / 4);
     }
   }
+
   return {
     svgWidth,
     svgHeight,
     maxValue,
-    hLabelFreq,
+    xLabelFreq,
     svgScale,
     datapointPadding,
     leftPadding,
     bottomPadding,
-    vertLabelsRightPadding,
-    hrzntLabelsBottomPadding,
+    yLabelsPosition,
+    xLabelsMargin,
     chartWidth,
     datapointWidth,
   };
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function dimensions(sizes: CartesianChartSizes, size: CartesianChartProps['size'], data: CartesianChartsData[]) {
+  return calculateDimensions(sizes, size, data);
 }
