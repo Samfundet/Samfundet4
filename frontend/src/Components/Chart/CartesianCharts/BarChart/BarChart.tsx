@@ -8,7 +8,6 @@ import { drawXDirLines, drawYDirLines } from '~/Components/Chart/CartesianCharts
 import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
 import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
 
-//TODO: fix prop and variabel names
 export function BarChart({
   data,
   chartTitle,

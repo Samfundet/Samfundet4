@@ -39,7 +39,7 @@ const calculateDimensions = (
     if (size === 'large' || size === 'xlarge') {
       xLabelFreq = Math.ceil(entryCount / 8);
     } else if (size === 'small' || size === 'medium') {
-      xLabelFreq = Math.ceil(entryCount / 4);
+      xLabelFreq = Math.ceil(entryCount / 3);
     }
   }
 

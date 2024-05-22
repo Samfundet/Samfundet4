@@ -18,6 +18,7 @@ const applicant_mock_data = [
   { label: '27. august', value: 20 },
   { label: '28. august', value: 3 },
   { label: '29. august', value: 9 },
+  { label: '15. august', value: 36 },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,4 +55,10 @@ export const ApplicantsPerDay = Template.bind({});
 ApplicantsPerDay.args = {};
 
 export const CampusDistribution = Template.bind({});
-CampusDistribution.args = { type: 'pie', data: campus_mock_data, chartTitle: 'Campus fordeling' };
+CampusDistribution.args = {
+  type: 'pie',
+  data: campus_mock_data,
+  chartTitle: 'Campus fordeling',
+  size: 'large',
+  legend: 'BRaaa',
+};

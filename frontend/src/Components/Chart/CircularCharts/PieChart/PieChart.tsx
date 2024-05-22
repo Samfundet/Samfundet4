@@ -1,13 +1,13 @@
 import { calculateSectorPath } from './utils/calculateSectorPath';
 import { useEffect, useState } from 'react';
-import { pieChartColors } from './utils/pieChartColors';
+import { sectorColors } from './utils/sectorColors';
 import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
 import styles from './PieChart.module.scss';
 import { CircularChartProps } from './utils/types';
+import { sizes } from './utils/apperance';
 
-// TODO: add size
-export function PieChart({ data: initialData, chartTitle }: CircularChartProps) {
+export function PieChart({ data: initialData, chartTitle, size, legend }: CircularChartProps) {
   const [dataWithColors, setDataWithColors] = useState<{ color: string; label: string; value: number }[]>([]);
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const radius = 200;
@@ -21,18 +21,32 @@ export function PieChart({ data: initialData, chartTitle }: CircularChartProps) 
       //adds colors
       const coloredData = initialData.map((entry, index) => ({
         ...entry,
-        color: pieChartColors[index % pieChartColors.length], // reuses colors if there are more entries than colors
+        color: sectorColors[index % sectorColors.length], // reuses colors if there are more entries than colors
       }));
       setDataWithColors(coloredData);
     }
   }, [initialData]);
 
+  const labels = dataWithColors.map((entry, index) => (
+    <div key={index} className={styles.labelWrapper}>
+      <div className={styles.labelColor} style={{ backgroundColor: entry.color }} />
+      <Text as={'p'} size={'m'}>
+        {entry.label}: {entry.value}
+      </Text>
+    </div>
+  ));
+
   return (
-    <div className={styles.chartContainer}>
+    <div className={styles.chartContainer} style={{ width: sizes[size].cWith + sizes[size].horizontalPadding }}>
       <Text as={'strong'} size={'l'}>
         {chartTitle}
       </Text>
-      <svg height={425} width={425} viewBox={`-${0} -${0} ${viewboxSize} ${viewboxSize}`}>
+      <svg
+        width={sizes[size].cWith}
+        height={sizes[size].cHeight}
+        style={{ minHeight: sizes[size].cHeight, minWidth: sizes[size].cWith }}
+        viewBox={`-${0} -${0} ${viewboxSize} ${viewboxSize}`}
+      >
         {dataWithColors?.map((entry, index) => {
           const pathDescription = calculateSectorPath(entry.value, total, radius, accumulatedAngle);
           accumulatedAngle += (entry.value / total) * 2 * Math.PI;
@@ -51,14 +65,8 @@ export function PieChart({ data: initialData, chartTitle }: CircularChartProps) 
         })}
       </svg>
       <div className={styles.legendWrapper}>
-        {dataWithColors.map((entry, index) => (
-          <div key={index} className={styles.labelWrapper}>
-            <div className={styles.labelColor} style={{ backgroundColor: entry.color }} />
-            <Text as={'p'} size={'m'}>
-              {entry.label}: {entry.value}
-            </Text>
-          </div>
-        ))}
+        <Text as={'strong'}>{legend}</Text>
+        <div className={styles.labelsContainer}>{labels}</div>
       </div>
       <HoverLabel hoverInfo={hoverInfo} />
     </div>

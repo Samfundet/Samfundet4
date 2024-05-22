@@ -1,4 +1,4 @@
-export const pieChartColors: string[] = [
+export const sectorColors: string[] = [
   '#7FFFD4',
   '#FF7F50',
   '#6495ED',

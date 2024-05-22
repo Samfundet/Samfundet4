@@ -49,7 +49,13 @@ export const sizes: CartesianChartSizes = {
 };
 
 export const palette: CartesianChartPalette = {
-  dark: { text: COLORS.white, bar: '#FA8072', hoverBar: '#fbb4ac', bg: COLORS.blue_deeper, gridLines: COLORS.grey_4 },
+  dark: {
+    text: COLORS.white,
+    bar: COLORS.salmon,
+    hoverBar: COLORS.salmon_light,
+    bg: COLORS.blue_deeper,
+    gridLines: COLORS.grey_4,
+  },
   light: {
     text: COLORS.black,
     bar: COLORS.blue_deep,

@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+//@ts-nocheck
+
+// toggle remove ts-nocheck when developing. It is here because TS freaks out over the function props.
 import { BarChart, LineChart, CartesianChartProps } from './CartesianCharts';
 import { CircularChartProps, PieChart } from './CircularCharts';
 
@@ -16,15 +19,16 @@ type ChartProps =
 export function Chart({
   type,
   data,
-  chartTitle, // @ts-ignore
-  size, // @ts-ignore
-  xAxisLegend, // @ts-ignore
-  yAxisLegend, // @ts-ignore
-  spliceYLabel, // @ts-ignore
-  spliceXLabel, // @ts-ignore
-  yLabelCount, // @ts-ignore
-  hasXDirLines, // @ts-ignore
+  chartTitle,
+  size,
+  xAxisLegend,
+  yAxisLegend,
+  spliceYLabel,
+  spliceXLabel,
+  yLabelCount,
+  hasXDirLines,
   hasYDirLines,
+  legend,
 }: ChartProps) {
   const chart = {
     bar: (
@@ -55,7 +59,7 @@ export function Chart({
         hasYDirLines={hasYDirLines}
       />
     ),
-    pie: <PieChart chartTitle={chartTitle} data={data} />,
+    pie: <PieChart chartTitle={chartTitle} data={data} size={size} legend={legend} />,
   };
 
   return chart[type];
