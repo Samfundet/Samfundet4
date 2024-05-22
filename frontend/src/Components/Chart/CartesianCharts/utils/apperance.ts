@@ -1,6 +1,11 @@
 import { COLORS } from '~/types';
 import { CartesianChartPalette, CartesianChartSizes } from './types';
 
+/*
+ * Sizes of the cartesian charts.
+ * Update if needed.
+ * */
+
 export const sizes: CartesianChartSizes = {
   small: {
     cWith: 325,
@@ -47,6 +52,10 @@ export const sizes: CartesianChartSizes = {
     yLabelsPosition: 25,
   },
 };
+
+/*
+ * Color palette of cartesian charts.
+ * */
 
 export const palette: CartesianChartPalette = {
   dark: {

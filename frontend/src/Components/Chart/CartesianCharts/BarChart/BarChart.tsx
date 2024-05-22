@@ -14,8 +14,8 @@ export function BarChart({
   size,
   xAxisLegend,
   yAxisLegend,
-  spliceYLabel,
-  spliceXLabel,
+  splitYLabel,
+  splitXLabel,
   yLabelCount,
   hasXDirLines = true,
   hasYDirLines = false,
@@ -35,13 +35,16 @@ export function BarChart({
     yLabelsPosition,
     xLabelsMargin,
     datapointWidth,
-  } = dimensions(sizes, size, data);
+  } = dimensions(sizes, size, data); // function which hold/calculate dimensions or other needed values.
 
-  const lineChartPalette = palette;
+  const lineChartPalette = palette; // imported from utils
   let colors: CartesianChartsColors;
 
   isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
 
+  /*
+   * Draws bars for the chart.
+   * */
   const dataBars = data.map((item, index) => {
     const barHeight = item.value * svgScale;
     const xPosition = index * (datapointWidth + datapointPadding) + leftPadding; // Adjust to start after axis labels
@@ -65,9 +68,10 @@ export function BarChart({
   const xAxisLabels = drawXAxisLabels(
     data,
     xLabelFreq,
-    spliceXLabel,
-    (index) => dataBars[index].xPosition + datapointWidth / 2, // Center of the bar
-    () => svgHeight - xLabelsMargin,
+    splitXLabel,
+    (index) => dataBars[index].xPosition + datapointWidth / 2, // gets x-pos of bar center
+    svgHeight,
+    xLabelsMargin,
     sizes,
     size,
     colors,
@@ -76,9 +80,9 @@ export function BarChart({
   const yAxisLabels = drawYAxisLabels(
     maxValue,
     yLabelCount,
-    (value) => svgHeight - value * svgScale - bottomPadding, // Function to get y-coordinate
+    (value) => svgHeight - value * svgScale - bottomPadding, // gets y-coordinate
     yLabelsPosition,
-    spliceYLabel,
+    splitYLabel,
     colors,
     sizes,
     size,
@@ -96,18 +100,18 @@ export function BarChart({
       </div>
       <div className={styles.chartContainer}>
         <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
-          {hasYDirLines &&
+          {hasYDirLines && // executes if vertical lines prop is true
             drawYDirLines(
               data,
               xLabelFreq,
-              (index) => dataBars[index].xPosition + datapointWidth / 2,
+              (index) => dataBars[index].xPosition + datapointWidth / 2, // gets x-pos of bar center
               svgHeight,
               bottomPadding,
               sizes,
               size,
               colors,
             )}
-          {hasXDirLines &&
+          {hasXDirLines && // executes if horizontal lines prop is true
             drawXDirLines(maxValue, yLabelCount, svgHeight, svgScale, bottomPadding, yLabelsPosition, svgWidth, colors)}
           {yAxisLabels}
           {xAxisLabels}

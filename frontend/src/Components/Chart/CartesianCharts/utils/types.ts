@@ -10,10 +10,10 @@ export type CartesianChartProps = {
   xAxisLegend: string;
   yAxisLegend: string;
   yLabelCount: number;
-  hasXDirLines: boolean;
-  hasYDirLines: boolean;
-  spliceYLabel?: [number, number];
-  spliceXLabel?: [number, number];
+  hasXDirLines?: boolean;
+  hasYDirLines?: boolean;
+  splitYLabel?: [number, number];
+  splitXLabel?: [number, number];
 };
 
 export type CartesianChartsSize = {

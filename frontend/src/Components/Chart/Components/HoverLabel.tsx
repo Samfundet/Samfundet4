@@ -10,7 +10,9 @@ type HoverInfo = {
 type HoverLabelProps = {
   hoverInfo: HoverInfo;
 };
-
+/*
+ * Hook to implement HoverLabel in charts. Works on SVG based charts.
+ * */
 export function useHoverLabel() {
   const [hoverInfo, setHoverInfo] = useState<HoverInfo>({ value: '', x: 0, y: 0, visible: false });
   const objectRef = useRef<SVGSVGElement | null>(null);
@@ -56,7 +58,7 @@ export function HoverLabel({ hoverInfo }: HoverLabelProps) {
         padding: '5px',
         color: 'black',
         pointerEvents: 'none', // To avoid flickering when the mouse is over the label
-        transform: 'translate(-50%, -50%)', // Center the label at the cursor position
+        transform: 'translate(-50%, -50%)',
       }}
     >
       {hoverInfo.value}

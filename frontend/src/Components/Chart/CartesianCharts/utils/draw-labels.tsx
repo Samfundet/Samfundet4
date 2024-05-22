@@ -1,11 +1,16 @@
 import { CartesianChartsData, CartesianChartProps, CartesianChartSizes, CartesianChartsColors } from './types';
 
+/**
+ * Draws y-axis labels on a chart.
+ * Steps determined by max value and given amount of y-labels through prop.
+ * Allows for splitting the label string.
+ * */
 export const drawYAxisLabels = (
   maxValue: number,
   yLabelCount: number,
   getYPosition: (value: number) => number,
   yLabelsPosition: number,
-  spliceYLabel: [number, number] | undefined,
+  splitYLabel: [number, number] | undefined,
   colors: CartesianChartsColors,
   sizes: CartesianChartSizes,
   size: CartesianChartProps['size'],
@@ -24,19 +29,25 @@ export const drawYAxisLabels = (
         fill={colors.text}
         textAnchor="end"
       >
-        {spliceYLabel ? value.toFixed(0).toString().slice(spliceYLabel[0], spliceYLabel[1]) : value.toFixed(0)}
+        {splitYLabel ? value.toFixed(0).toString().slice(splitYLabel[0], splitYLabel[1]) : value.toFixed(0)}
       </text>,
     );
   }
   return lines;
 };
 
+/*
+ * Draws x-axis labels, bases on a frequency.
+ * Also influenced by number of data entries and size of chart.
+ * Always draws the first and the last label.
+ * */
 export function drawXAxisLabels(
   data: CartesianChartsData[],
   xLabelFreq: number,
-  spliceXLabel: [number, number] | undefined,
+  splitXLabel: [number, number] | undefined,
   getX: (index: number) => number,
-  getY: () => number,
+  svgHeight: number,
+  xLabelsMargin: number,
   sizes: CartesianChartSizes,
   size: CartesianChartProps['size'],
   colors: CartesianChartsColors,
@@ -47,12 +58,13 @@ export function drawXAxisLabels(
         <text
           key={index}
           x={getX(index)}
-          y={getY()}
+          y={svgHeight - xLabelsMargin}
           style={{ fontSize: sizes[size].labelFont }}
           fill={colors.text}
           textAnchor="middle"
+          transform={`rotate(-45, ${getX(index)}, ${svgHeight - xLabelsMargin})`} // Rotate labels for better readability
         >
-          {spliceXLabel ? item.label.slice(spliceXLabel[0], spliceXLabel[1]) : item.label}
+          {splitXLabel ? item.label.slice(splitXLabel[0], splitXLabel[1]) : item.label}
         </text>
       );
     }

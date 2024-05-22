@@ -14,8 +14,8 @@ export function LineChart({
   size,
   xAxisLegend,
   yAxisLegend,
-  spliceYLabel,
-  spliceXLabel,
+  splitYLabel,
+  splitXLabel,
   yLabelCount,
   hasXDirLines = true,
   hasYDirLines = true,
@@ -34,26 +34,33 @@ export function LineChart({
     yLabelsPosition,
     xLabelsMargin,
     datapointWidth,
-  } = dimensions(sizes, size, data);
+  } = dimensions(sizes, size, data); // function which hold/calculate dimensions or other needed values.
 
-  const lineChartPalette = palette;
+  const lineChartPalette = palette; // imported from utils
   let colors: CartesianChartsColors;
 
   isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
 
-  const lineCoordinates = data.map((item, index) => ({
+  /*
+   * Creates a list of coordinates for drawing a data-line.
+   * */
+  const lineCoordinates: { x: number; y: number }[] = data.map((item, index) => ({
     x: index * (datapointWidth + datapointPadding) + yLabelsPosition + datapointWidth / 2,
     y: svgHeight - item.value * svgScale - bottomPadding,
   }));
 
+  // creates svg specification for data-line.
   const linePath = `M${lineCoordinates.map((coord) => `${coord.x},${coord.y}`).join('L')}`;
 
+  /*
+   * Draws data points at he "breaks"/ in the data line.
+   * */
   const dataPoints = data.map((item, index) => (
     <circle
       key={index}
       cx={lineCoordinates[index].x}
       cy={lineCoordinates[index].y}
-      r={4}
+      r={4} // radius of point
       fill={colors.bar}
       onMouseEnter={(event) => handleMouseEnter(event, item.label + ': ' + item.value.toString())}
       onMouseMove={handleMouseMove}
@@ -64,9 +71,10 @@ export function LineChart({
   const xAxisLabels = drawXAxisLabels(
     data,
     xLabelFreq,
-    spliceXLabel,
+    splitXLabel,
     (index) => lineCoordinates[index].x, // Function to get x-coordinate
-    () => svgHeight - xLabelsMargin, // Function to get y-coordinate
+    svgHeight,
+    xLabelsMargin,
     sizes,
     size,
     colors,
@@ -77,7 +85,7 @@ export function LineChart({
     yLabelCount,
     (value) => svgHeight - value * svgScale - bottomPadding, // Function to get y-coordinate
     yLabelsPosition,
-    spliceYLabel,
+    splitYLabel,
     colors,
     sizes,
     size,
@@ -95,7 +103,7 @@ export function LineChart({
       </div>
       <div className={styles.chartContainer}>
         <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
-          {hasYDirLines &&
+          {hasYDirLines && // executes if vertical lines prop is true
             drawYDirLines(
               data,
               xLabelFreq,
@@ -106,7 +114,7 @@ export function LineChart({
               size,
               colors,
             )}
-          {hasXDirLines &&
+          {hasXDirLines && // executes if horizontal lines prop is true
             drawXDirLines(maxValue, yLabelCount, svgHeight, svgScale, bottomPadding, yLabelsPosition, svgWidth, colors)}
           {yAxisLabels}
           {xAxisLabels}

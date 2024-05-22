@@ -5,6 +5,10 @@ import {
   CartesianChartSizes,
 } from '~/Components/Chart/CartesianCharts/utils/types';
 
+/**
+ * Draws horizontal lines on a chart.
+ * Done based on values. Steps determined by max value and given amount of y-labels.
+ * */
 export function drawXDirLines(
   maxValue: number,
   yLabelCount: number,
@@ -34,6 +38,11 @@ export function drawXDirLines(
   return lines;
 }
 
+/*
+ * Draws vertical lines, bases on a frequency.
+ * Also influenced by number of data entries and size of chart.
+ * Always draws the first and the last vertical line.
+ * */
 export function drawYDirLines(
   data: CartesianChartsData[],
   hLabelFreq: number,
@@ -45,7 +54,7 @@ export function drawYDirLines(
   colors: CartesianChartsColors,
 ) {
   return data.map((_item, index) => {
-    if (index % hLabelFreq !== 0 || index === data.length - 1 || index === 0) {
+    if (index % hLabelFreq === 0 || index === data.length - 1 || index === 0) {
       return (
         <line
           key={index}
