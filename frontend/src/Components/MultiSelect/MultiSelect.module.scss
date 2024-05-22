@@ -18,10 +18,9 @@
   padding: 7px;
   background-color: #dddddd;
   @include rounded;
-  
+
   @include theme-dark {
     background-color: $grey-3;
-
   }
 }
 

@@ -5,13 +5,14 @@ import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
-import { RecruitmentPositionDto } from '~/dto';
+import { getRecruitmentPosition, getUsers, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
+import { RecruitmentPositionDto, UserDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
+import { mapUserToMultiselectOption } from './utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentPositionFormAdminPage() {
@@ -25,6 +26,17 @@ export function RecruitmentPositionFormAdminPage() {
     name_nb: 'Ny stilling',
     name_en: 'New position',
   });
+  const [users, setUsers] = useState<UserDto[]>([]);
+
+  useEffect(() => {
+    getUsers()
+      .then((users) => {
+        setUsers(users);
+      })
+      .catch(() => {
+        toast.error(t(KEY.common_something_went_wrong));
+      });
+  }, [t]);
   const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
 
   // Fetch data if edit mode.
@@ -66,15 +78,16 @@ export function RecruitmentPositionFormAdminPage() {
     is_funksjonaer_position: position?.is_funksjonaer_position || false,
 
     tags: position?.tags,
+    interviewers: position?.interviewers || [],
     // TODO: Add necessary fields to form.
     // gang: gangId,
     // recruitment: recruitmentId,
-    // interviewers: position?.interviewers,
   };
+
+  const initialInterviewers = position?.interviewers?.map((user) => mapUserToMultiselectOption(user));
 
   const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
 
-  // Loading.
   if (showSpinner) {
     return (
       <div className={styles.spinner}>
@@ -85,9 +98,11 @@ export function RecruitmentPositionFormAdminPage() {
 
   function handleOnSubmit(data: RecruitmentPositionDto) {
     const updatedPosition = data;
-    updatedPosition.gang.id = parseInt(gangId ?? '');
+    if (!position.gang) {
+      throw new Error('Gang is undefined');
+    }
+    updatedPosition.gang = position.gang;
     updatedPosition.recruitment = recruitmentId ?? '';
-    updatedPosition.interviewers = [];
     if (positionId) {
       // Update page.
 
@@ -193,6 +208,16 @@ export function RecruitmentPositionFormAdminPage() {
               label={t(KEY.recrutment_default_admission_letter) + ' ' + t(KEY.common_english)}
               hidden={norwegianApplicantsOnly}
               required={!norwegianApplicantsOnly}
+            />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField
+              field="interviewers"
+              type="multi-select"
+              label={t(KEY.recruitment_interviewers) ?? ''}
+              options={users.map((user) => mapUserToMultiselectOption(user))}
+              required={false}
+              props={{ selected: initialInterviewers }}
             />
           </div>
           <div className={styles.row}>

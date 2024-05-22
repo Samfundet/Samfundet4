@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { InputField } from '~/Components/InputField';
+import { ButtonType } from '~/types';
 import { Button } from '../Button';
 import { DropDownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
 import { exists, searchFilter } from './utils';
 
-type MultiSelectProps<T> = {
+export type MultiSelectProps<T> = {
   label?: string;
   optionsLabel?: string;
   selectedLabel?: string;
@@ -15,6 +16,7 @@ type MultiSelectProps<T> = {
   options?: DropDownOption<T>[];
   onChange?: (values: T[]) => void;
   className?: string;
+  buttonType?: ButtonType;
 };
 
 /**
@@ -31,6 +33,7 @@ export function MultiSelect<T>({
   selected: initialValues = [],
   options = [],
   onChange,
+  buttonType = 'button',
 }: MultiSelectProps<T>) {
   const [searchUnselected, setSearchUnselected] = useState('');
   const [searchSelected, setSearchSelected] = useState('');
@@ -67,6 +70,7 @@ export function MultiSelect<T>({
           <InputField<string> placeholder={'Search...'} onChange={(e) => setSearchUnselected(e)} />
           {filteredOptions.map((item, i) => (
             <Button
+              type={buttonType}
               className={styles.item}
               key={`${i}-${item.value}`}
               display="block"
@@ -77,7 +81,7 @@ export function MultiSelect<T>({
             </Button>
           ))}
           {filteredOptions.length > 0 && (
-            <Button theme="blue" onClick={() => setSelected(options)}>
+            <Button theme="blue" onClick={() => setSelected(options)} type={buttonType}>
               {selectAllBtnTxt}
             </Button>
           )}
@@ -88,6 +92,7 @@ export function MultiSelect<T>({
           <InputField<string> placeholder={'Search...'} onChange={(e) => setSearchSelected(e)} />
           {filteredSelected.map((item, i) => (
             <Button
+              type={buttonType}
               className={styles.item}
               key={`${i}-${item.value}`}
               display="block"
@@ -98,7 +103,7 @@ export function MultiSelect<T>({
             </Button>
           ))}
           {filteredSelected.length > 0 && (
-            <Button theme="blue" onClick={() => setSelected([])}>
+            <Button type={buttonType} theme="blue" onClick={() => setSelected([])}>
               {unselectAllBtnTxt}
             </Button>
           )}
