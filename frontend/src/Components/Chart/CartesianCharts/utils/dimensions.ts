@@ -27,10 +27,12 @@ const calculateDimensions = (
   const maxValue = Math.max(...data.map((item) => item.value));
 
   const svgScale = chartHeight / maxValue;
-
-  const entryCount = data.length; // data; a list of "data points"
-  const datapointPadding = getDatapointPadding(entryCount); // spacing between bars or points
-  const totalDataPointPadding = (entryCount - 1) * datapointPadding; // the total width taken up by "space between points/bars"
+  // data; a list of "data points" !
+  const entryCount = data.length;
+  // spacing between bars or points
+  const datapointPadding = getDatapointPadding(entryCount);
+  // the total width taken up by "space between points/bars"
+  const totalDataPointPadding = (entryCount - 1) * datapointPadding;
 
   const datapointWidth = (chartWidth - totalDataPointPadding) / entryCount;
 

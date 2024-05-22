@@ -22,10 +22,14 @@ type ChartProps =
  * @param data 👉 displayed in the chart.
  * @param chartTitle 👉 title of the chart.
  * @param size 👉 the visual (style) size of the chart.
- * @param xAxisLegend 👉 cartesian charts only. X-axis description, should contain a word description and unit (+ unit magnitude if relevant).
- * @param yAxisLegend 👉 cartesian only. Y-axis description, should contain a word description and unit. (+ unit magnitude if relevant).
- * @param splitYLabel 👉 cartesian only. Allows for splitting the y-axis label. Usually a number value, but can be split. Nice if large number. E.g. '1000000', can be split to '1'.
- * @param spliceXLabel 👉 cartesian only. Allows for splitting the x-axis label.Used if the label is long e.g. '24. december', could be split to '24. dec'
+ * @param xAxisLegend 👉 cartesian charts only. X-axis description, should contain a word description and unit
+ * (+ unit magnitude if relevant).
+ * @param yAxisLegend 👉 cartesian only. Y-axis description, should contain a word description and unit.
+ * (+ unit magnitude if relevant).
+ * @param splitYLabel 👉 cartesian only. Allows for splitting the y-axis label. Usually a number value, but can split.
+ * Nice if large number. E.g. '1000000', can be split to '1'.
+ * @param spliceXLabel 👉 cartesian only. Allows for splitting the x-axis label.
+ * Used if the label is long e.g. '24. december', could be split to '24. dec'
  * @param yLabelCount 👉 cartesian only. Controls amount of labels on the y-axis.
  * @param hasXDirLines 👉 cartesian only. Controls weather the chart has horizontal lines.
  * @param hasYDirLines 👉 cartesian only. Controls weather the chart has vertical lines.

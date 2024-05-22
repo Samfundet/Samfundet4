@@ -62,7 +62,8 @@ export function drawXAxisLabels(
           style={{ fontSize: sizes[size].labelFont }}
           fill={colors.text}
           textAnchor="middle"
-          transform={`rotate(-45, ${getX(index)}, ${svgHeight - xLabelsMargin})`} // Rotate labels for better readability
+          // Rotate labels for better readability
+          transform={`rotate(-45, ${getX(index)}, ${svgHeight - xLabelsMargin})`}
         >
           {splitXLabel ? item.label.slice(splitXLabel[0], splitXLabel[1]) : item.label}
         </text>
