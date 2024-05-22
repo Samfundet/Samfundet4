@@ -9,7 +9,7 @@ import { sizes } from './utils/apperance';
 
 export function PieChart({ data: initialData, chartTitle, size, legend }: CircularChartProps) {
   const [dataWithColors, setDataWithColors] = useState<{ color: string; label: string; value: number }[]>([]);
-  const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
+  const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave, objectRef } = useHoverLabel();
   const radius = 200;
   const viewboxSize = radius * 2;
 
@@ -42,6 +42,7 @@ export function PieChart({ data: initialData, chartTitle, size, legend }: Circul
         {chartTitle}
       </Text>
       <svg
+        ref={objectRef}
         width={sizes[size].cWith}
         height={sizes[size].cHeight}
         style={{ minHeight: sizes[size].cHeight, minWidth: sizes[size].cWith }}

@@ -60,5 +60,5 @@ CampusDistribution.args = {
   data: campus_mock_data,
   chartTitle: 'Campus fordeling',
   size: 'large',
-  legend: 'BRaaa',
+  legend: 'Antall søkere per campus',
 };

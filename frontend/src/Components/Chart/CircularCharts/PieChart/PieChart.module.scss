@@ -32,6 +32,10 @@
   scrollbar-width: none;  /* HIDES SCROLLBAR Firefox */
   max-height: 250px;
 
+  @include theme-dark{
+    border: 1px solid $background-secondary;
+  }
+
   @include for-mobile-only {
     max-height: 150px;
   }
