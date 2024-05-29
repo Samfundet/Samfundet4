@@ -85,6 +85,11 @@ class Recruitment(CustomBaseModel):
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
 
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        super().save(*args, **kwargs)
+        if not self.statistics:
+            RecruitmentStatistics.objects.create(self)
+
 
 class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
@@ -265,13 +270,13 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     def __str__(self) -> str:
         return f'{self.recruitment} stats'
 
-    def generate_time_stats(self):
+    def generate_time_stats(self) -> None:
         for h in range(0, 24):
             time_stat, created = RecruitmentTimeStat.objects.get_or_create(recruitment_stats=self, hour=h)
             if not created:
                 time_stat.save()
 
-    def generate_date_stats(self):
+    def generate_date_stats(self) -> None:
         date = self.recruitment.visible_from
         while date < self.recruitment.actual_application_deadline:
             date_stat, created = RecruitmentDateStat.objects.get_or_create(recruitment_stats=self, date=date.strftime('%Y-%m-%d'))
@@ -279,7 +284,7 @@ class RecruitmentStatistics(FullCleanSaveMixin):
                 date_stat.save()
             date += timezone.timedelta(days=1)
 
-    def generate_campus_stats(self):
+    def generate_campus_stats(self) -> None:
         for campus in Campus.objects.all():
             campus_stat, created = RecruitmentCampusStat.objects.get_or_create(recruitment_stats=self, campus=campus)
             if not created:
@@ -290,6 +295,9 @@ class RecruitmentTimeStat(models.Model):
     recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='time_stats')
     hour = models.PositiveIntegerField(null=False, blank=False, verbose_name='Time')
     count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.hour} {self.count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
@@ -305,10 +313,13 @@ class RecruitmentDateStat(models.Model):
     date = models.DateField(null=False, blank=False, verbose_name='Time')
     count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
 
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.date} {self.count}'
+
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
         for admission in self.recruitment_stats.recruitment.admissions.all():
-            if admission.created_at.strftime('%Y-%m-%d') == self.date:
+            if admission.created_at.date() == self.date:
                 count += 1
         self.count = count
         super().save(*args, **kwargs)
@@ -319,6 +330,9 @@ class RecruitmentCampusStat(models.Model):
     campus = models.ForeignKey(Campus, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
 
     count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.campus} {self.count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.count = User.objects.filter(
