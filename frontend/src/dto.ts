@@ -19,6 +19,21 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type SimpleUserDto = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  campus?: CampusDto;
+};
+
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+}
+
 export type OccupiedTimeSlotDto = {
   id?: number;
   user?: number;
@@ -403,6 +418,12 @@ export type RecruitmentAdmissionDto = {
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+};
+
+export type RecruitmentAdmissionRecruiterDto = {
+  user: SimpleUserDto;
+  admission: RecruitmentAdmissionDto;
+  other_admissions: RecruitmentAdmissionDto[];
 };
 
 export type FeedbackDto = {

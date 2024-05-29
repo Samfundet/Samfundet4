@@ -755,10 +755,13 @@ class InterviewSerializer(CustomBaseSerializer):
 
 
 class RecruitmentAdmissionForRecruiterSerializer(serializers.ModelSerializer):
+    recruitment_position = RecruitmentPositionForApplicantSerializer()
     class Meta:
         model = RecruitmentAdmission
         fields = [
             'id',
+            'recruitment',
+            'user',
             'admission_text',
             'recruitment_position',
             'recruiter_status',
@@ -769,6 +772,8 @@ class RecruitmentAdmissionForRecruiterSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             'id',
+            'recruitment',
+            'user',
             'admission_text',
             'recruitment_position',
             'recruiter_status',

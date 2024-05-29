@@ -20,6 +20,7 @@ import {
   OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
+  RecruitmentAdmissionRecruiterDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   RegistrationDto,
@@ -610,6 +611,21 @@ export async function getRecruitmentAdmissionsForApplicant(
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
       queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentAdmissionsForRecruiter(
+  admissionID: string,
+): Promise<AxiosResponse<RecruitmentAdmissionRecruiterDto>> {
+  console.log(admissionID);
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_recruiter,
+      queryParams: { admission_id: admissionID },
     });
   const response = await axios.get(url, { withCredentials: true });
 

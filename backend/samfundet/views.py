@@ -41,7 +41,6 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     UserSerializer,
-    SimpleUserSerializer,
     EventSerializer,
     GroupSerializer,
     ImageSerializer,
@@ -60,6 +59,7 @@ from .serializers import (
     TextItemSerializer,
     InterviewSerializer,
     EventGroupSerializer,
+    SimpleUserSerializer,
     RecruitmentSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
@@ -76,8 +76,8 @@ from .serializers import (
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentAdmissionForGangSerializer,
-    RecruitmentAdmissionForRecruiterSerializer,
     RecruitmentAdmissionForApplicantSerializer,
+    RecruitmentAdmissionForRecruiterSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
@@ -784,7 +784,7 @@ class RecruitmentAdmissionForRecruitersView(APIView):
         print(self.kwargs['admission_id'])
         print(RecruitmentAdmission.objects.first().pk)
         admission = get_object_or_404(RecruitmentAdmission, id=self.kwargs['admission_id'])
-        other_admissions = RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment)
+        other_admissions = RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment).order_by('applicant_priority')
         return Response(
             data={
                 'admission': RecruitmentAdmissionForRecruiterSerializer(instance=admission).data,

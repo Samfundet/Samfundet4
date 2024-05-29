@@ -60,6 +60,7 @@ import { RecruitmentPositionOverviewPage } from './PagesAdmin/RecruitmentPositio
 import { SaksdokumentAdminPage } from './PagesAdmin/SaksdokumentAdminPage';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+import { RecruitmentApplicantPage } from './Pages/RecruitmentApplicantPage';
 
 export function AppRoutes() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
@@ -222,6 +223,10 @@ export function AppRoutes() {
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
           element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_recruitment_applicant}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_recruitment_gang_position_edit}

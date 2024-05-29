@@ -75,6 +75,7 @@ export const ROUTES_FRONTEND = {
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/interview-notes/:interviewId',
   admin_sulten_menu: '/control-panel/lyche/menu',
   admin_sulten_reservations: '/control-panel/lyche/reservations',
+  admin_recruitment_applicant: '/control-panel/recruitment/view-applicant/:admissionID/',
   // ==================== //
   //      Development     //
   // ==================== //
