@@ -793,7 +793,7 @@ class RecruitmentAvailabilityView(APIView):
     model = RecruitmentInterviewAvailability
     serializer_class = RecruitmentInterviewAvailabilitySerializer
 
-    def get(self, request: Request, **kwargs) -> Response:
+    def get(self, request: Request, **kwargs: int) -> Response:
         recruitment = kwargs.get('id')
         availability = get_object_or_404(RecruitmentInterviewAvailability, recruitment__id=recruitment)
 
@@ -817,12 +817,12 @@ class OccupiedTimeslotView(ListCreateAPIView):
     serializer_class = OccupiedTimeslotSerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request, **kwargs) -> Response:
+    def get(self, request: Request, **kwargs: int) -> Response:
         recruitment_id = self.request.query_params.get('recruitment')
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         occupied_timeslots = OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id)
 
-        dates = {}
+        dates: dict[str, list[str]] = {}
         for occupied in occupied_timeslots:
             date_string = occupied.start_dt.strftime('%Y.%m.%d')
             time_string = occupied.start_dt.strftime('%H:%M')
@@ -839,7 +839,7 @@ class OccupiedTimeslotView(ListCreateAPIView):
             }
         )
 
-    def create(self, request: Request, *args, **kwargs) -> Response:
+    def create(self, request: Request) -> Response:
         if 'recruitment' not in request.data or not request.data['recruitment']:
             return Response({'error': 'recruitment is required'}, status=status.HTTP_400_BAD_REQUEST)
 
