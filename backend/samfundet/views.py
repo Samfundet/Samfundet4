@@ -780,10 +780,8 @@ class InterviewRoomView(ModelViewSet):
 class RecruitmentAdmissionForRecruitersView(APIView):
     permission_classes = [IsAuthenticated]  # TODO correct perms
 
-    def get(self, request: Request, *args, **kwargs) -> Response:
-        print(self.kwargs['admission_id'])
-        print(RecruitmentAdmission.objects.first().pk)
-        admission = get_object_or_404(RecruitmentAdmission, id=self.kwargs['admission_id'])
+    def get(self, request: Request, admission_id: str) -> Response:
+        admission = get_object_or_404(RecruitmentAdmission, id=admission_id)
         other_admissions = RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment).order_by('applicant_priority')
         return Response(
             data={

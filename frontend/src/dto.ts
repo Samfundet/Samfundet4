@@ -32,7 +32,7 @@ export type CampusDto = {
   name_nb: string;
   name_en: string;
   abbreviation?: string;
-}
+};
 
 export type OccupiedTimeSlotDto = {
   id?: number;
