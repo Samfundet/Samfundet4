@@ -157,7 +157,7 @@ export function RecruitmentFormAdminPage() {
               field="max_admissions"
               type="number"
               label={t(KEY.max_admissions) ?? ''}
-            />
+            />  
             <SamfFormField
               field="organization"
               type="options"
