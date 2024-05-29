@@ -21,6 +21,8 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
+import { Text } from '~/Components/Text/Text';
+import { Table } from '~/Components/Table';
 
 export function RecruitmentApplicantPage() {
   const { user } = useAuthContext();
@@ -59,7 +61,63 @@ export function RecruitmentApplicantPage() {
 
   return (
     <Page>
-      <div>Hello</div>
+      <div>
+        <Text size="l" as="strong">
+        {applicant?.first_name} {applicant?.last_name}
+      </Text>
+      </div>
+      <div>
+
+      </div>
+      <div>
+        <Text size="l" as="strong">
+          {t(KEY.recruitment_admission)}: {dbT(recruitmentAdmission?.recruitment_position, 'name')}
+        </Text>
+        <Text>{recruitmentAdmission?.admission_text}</Text>
+      </div>
+      <div>
+        <Table
+          columns={[
+            t(KEY.common_recruitmentposition),
+            t(KEY.common_gang),
+            t(KEY.recruitment_recruiter_status),
+            t(KEY.recruitment_interview_time),
+          ]}
+          data=
+          {otherRecruitmentAdmission?.map(function (element) {
+            return [
+              {
+                content: (
+                  <Link
+                    target={'frontend'}
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_applicant,
+                      urlParams: {
+                        admissionID: element.id,
+                      },
+                    })}
+                  >
+                    {dbT(element.recruitment_position, 'name')}
+                  </Link>
+                ),
+              },
+              {
+                content: (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.information_page_detail,
+                      urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
+                    })}
+                  >
+                    {dbT(element.recruitment_position.gang, 'name')}
+                  </Link>
+                ),
+              },
+              element.recruiter_priority,
+              element.interview_time ? element.interview_time : t(KEY.common_not_set),
+            ];
+          })} />
+      </div>
     </Page>
   );
 }

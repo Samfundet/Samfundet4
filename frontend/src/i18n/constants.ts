@@ -106,6 +106,8 @@ export const KEY = {
   common_password: 'common_password',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
+  common_recruitmentposition: 'common_recruitmentposition',
+  common_not_set: 'common_not_set',
   common_previous: 'common_previous',
   common_required: 'common_required',
   common_not_required: 'common_not_required',

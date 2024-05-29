@@ -409,12 +409,13 @@ export type InterviewDto = {
 export type RecruitmentAdmissionDto = {
   id: number;
   interview: InterviewDto;
+  interview_time?: Date;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number;
+  recruiter_priority?: number | string;
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;

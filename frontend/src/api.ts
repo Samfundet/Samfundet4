@@ -625,7 +625,7 @@ export async function getRecruitmentAdmissionsForRecruiter(
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_admissions_recruiter,
-      queryParams: { admission_id: admissionID },
+      urlParams: { admissionId: admissionID },
     });
   const response = await axios.get(url, { withCredentials: true });
 
