@@ -30,6 +30,9 @@ class Recruitment(CustomBaseModel):
     reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
+    # Meta
+    max_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max admissions per applicant')
+
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 

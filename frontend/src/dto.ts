@@ -353,6 +353,7 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
+  max_admissions?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
 };
 

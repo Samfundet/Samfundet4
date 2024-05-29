@@ -669,6 +669,16 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
                 existing_admission.save()
                 serializer = self.get_serializer(existing_admission)
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                recruitment = RecruitmentPosition.objects.get(pk=pk).recruitment
+                if (
+                    recruitment.max_admissions
+                    and len(RecruitmentAdmission.objects.filter(user=request.user, recruitment=recruitment)) >= recruitment.max_admissions
+                ):
+                    return Response(
+                        {'error': f'You have applied to too many positions, max for this recruitment is: {recruitment.max_admissions}'},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
