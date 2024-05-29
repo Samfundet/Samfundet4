@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 import hmac
 import hashlib
-import datetime
 from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
@@ -23,7 +22,6 @@ from django.db.models import Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
-from django.utils.timezone import make_aware
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
@@ -36,7 +34,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from .utils import event_query, generate_timeslots
+from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
     TagSerializer,
@@ -842,30 +840,8 @@ class OccupiedTimeslotView(ListCreateAPIView):
         recruitment = get_object_or_404(Recruitment, id=request.data['recruitment'])
         availability = RecruitmentInterviewAvailability.objects.filter(recruitment__id=recruitment.id).first()
 
-        occupied_timeslots = []
-
-        # If there is no set availability for this recruitment, we accept all valid timeslots
-        if availability:
-            timeslots = generate_timeslots(
-                availability.start_time,
-                availability.end_time,
-                availability.timeslot_interval,
-            )
-
-            # Check that all provided timeslots exist for the recruitment
-            for date in request.data['dates']:
-                invalid = [x for x in request.data['dates'][date] if x not in timeslots]
-                if invalid:
-                    return Response({'error': 'Invalid timeslot(s)', 'invalid_timeslots': invalid}, status=status.HTTP_400_BAD_REQUEST)
-
-                for timeslot in request.data['dates'][date]:
-                    start_date = make_aware(
-                        datetime.datetime.strptime(f'{date} {timeslot}', '%Y.%m.%d %H:%M'),
-                        timezone=datetime.UTC,
-                    )
-                    end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
-
-                    occupied_timeslots.append(OccupiedTimeslot(user=request.user, recruitment=recruitment, start_dt=start_date, end_dt=end_date))
+        occupied_timeslots = get_occupied_timeslots_from_request(request.data['dates'], request.user, availability,
+                                                                 recruitment)
 
         # If we've reached this point, all provided timeslots are valid
 
