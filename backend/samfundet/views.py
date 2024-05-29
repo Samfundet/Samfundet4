@@ -849,8 +849,7 @@ class OccupiedTimeslotView(ListCreateAPIView):
         recruitment = get_object_or_404(Recruitment, id=request.data['recruitment'])
         availability = RecruitmentInterviewAvailability.objects.filter(recruitment__id=recruitment.id).first()
 
-        occupied_timeslots = get_occupied_timeslots_from_request(request.data['dates'], request.user, availability,
-                                                                 recruitment)
+        occupied_timeslots = get_occupied_timeslots_from_request(request.data['dates'], request.user, availability, recruitment)
 
         # If we've reached this point, all provided timeslots are valid
 

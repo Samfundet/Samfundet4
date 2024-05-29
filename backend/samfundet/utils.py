@@ -56,8 +56,8 @@ def generate_timeslots(start_time: datetime, end_time: datetime, interval_minute
 
 
 def get_occupied_timeslots_from_request(
-    user_dates: dict[str, list[str]], user: User, availability: RecruitmentInterviewAvailability,
-    recruitment: Recruitment) -> list[OccupiedTimeslot]:
+    user_dates: dict[str, list[str]], user: User, availability: RecruitmentInterviewAvailability, recruitment: Recruitment
+) -> list[OccupiedTimeslot]:
     """
     Based on user provided data, return their occupied timeslots.
 
@@ -87,7 +87,6 @@ def get_occupied_timeslots_from_request(
                 )
                 end_date = start_date + datetime.timedelta(minutes=availability.timeslot_interval)
 
-                occupied_timeslots.append(
-                    OccupiedTimeslot(user=user, recruitment=recruitment, start_dt=start_date, end_dt=end_date))
+                occupied_timeslots.append(OccupiedTimeslot(user=user, recruitment=recruitment, start_dt=start_date, end_dt=end_date))
 
     return occupied_timeslots
