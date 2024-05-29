@@ -11,8 +11,13 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from root.utils.routes import admin__samfundet_recruitmentadmission_change
-from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
+from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentadmission_change
+from root.custom_classes.admin_classes import (
+    CustomBaseAdmin,
+    CustomGuardedUserAdmin,
+    CustomGuardedGroupAdmin,
+    CustomGuardedModelAdmin,
+)
 
 from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
@@ -33,6 +38,7 @@ from .models.general import (
     KeyValue,
     MenuItem,
     TextItem,
+    GangSection,
     Reservation,
     ClosedPeriod,
     FoodCategory,
@@ -51,6 +57,7 @@ from .models.recruitment import (
     OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
     RecruitmentInterviewAvailability,
 )
 
@@ -383,6 +390,21 @@ class GangTypeAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
+@admin.register(GangSection)
+class GangSectionAdmin(CustomBaseAdmin):
+    def gang_link(self, obj: GangSection) -> str:
+        link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
+        return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)
+
+    sortable_by = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
+    list_filter = ['gang']
+    list_display = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
+    search_fields = ['id', 'name_nb']
+    list_display_links = ['id', 'name_nb']
+    list_select_related = True
+    related_links = ['gang']
+
+
 @admin.register(InformationPage)
 class InformationPageAdmin(CustomBaseAdmin):
     # ordering = []
@@ -674,6 +696,12 @@ class InterviewAdmin(CustomBaseAdmin):
     search_fields = ['id', 'notes']
     list_display_links = ['id', 'notes']
     filter_horizontal = ['interviewers']
+
+
+@admin.register(RecruitmentStatistics)
+class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
+    list_display = ['recruitment', 'total_applicants', 'total_admissions']
+    search_fields = ['recruitment']
 
 
 @admin.register(Merch)

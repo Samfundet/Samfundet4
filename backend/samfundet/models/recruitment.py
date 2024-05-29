@@ -33,6 +33,11 @@ class Recruitment(CustomBaseModel):
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
+    def update_stats(self) -> None:
+        created = RecruitmentStatistics.objects.get_or_create(recruitment=self)[1]
+        if not created:
+            self.statistics.save()
+
     def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
         errors: dict[str, list[ValidationError]] = defaultdict(list)
@@ -193,7 +198,13 @@ class RecruitmentAdmission(CustomBaseModel):
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
-    def save(self, *args: tuple, **kwargs: dict) -> None:
+    def save(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
+        """
+        If the admission is saved without an interview,
+        try to find an interview from a shared position.
+        """
+        if not self.recruitment:
+            self.recruitment = self.recruitment_position.recruitment
         """If the admission is saved without an interview, try to find an interview from a shared position."""
         if not self.applicant_priority:
             current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
@@ -255,3 +266,19 @@ class OccupiedTimeslot(FullCleanSaveMixin):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]
+
+
+class RecruitmentStatistics(FullCleanSaveMixin):
+    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
+
+    total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
+    total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        self.total_admissions = self.recruitment.admissions.count()
+        self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f'{self.recruitment} stats'

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button, Carousel } from '~/Components';
+import { Button, Carousel, Link } from '~/Components';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
 import { TextItem } from '~/constants';
@@ -21,9 +21,11 @@ export function AboutPage() {
         <div className={styles.textBox}>
           <h2 className={styles.header}>{t(KEY.common_about_samfundet)}</h2>
           <p className={styles.text}>{useTextItem(TextItem.about_samfundet)}</p>
-          <Button theme="samf" className={styles.button}>
-            {t(KEY.common_membership).toUpperCase()}
-          </Button>
+          <Link url={ROUTES.frontend.membership}>
+            <Button theme="samf" className={styles.button}>
+              {t(KEY.common_membership).toUpperCase()}
+            </Button>
+          </Link>
           <Button theme="success" className={styles.button}>
             FAQ
           </Button>
