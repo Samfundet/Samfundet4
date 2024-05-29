@@ -11,39 +11,10 @@
   }
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
+.infoContainer {
+  padding: 0.2em;
+  margin: 2em;
 }
-
-.textcontainer {
-  flex: 5;
-}
-
-.otherposition {
-  flex: 1;
-  padding: 2em;
-}
-
-.header {
-  font-weight: 700;
-  font-size: 2em;
-}
-
-.subheader {
-  font-weight: 700;
-  font-size: 1.5em;
-  margin-bottom: 0.5em;
-}
-
-.text {
-  margin-bottom: 2em;
-}
-
-.formContainer {
-  background-color: $red-samf;
-}
-
-.formLabel {
-  margin-bottom: 0.5em;
+.textBottom {
+  margin: 0.2em;
 }

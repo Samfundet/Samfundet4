@@ -20,9 +20,10 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './RecruitmentAdmissionFormPage.module.scss';
+import styles from './RecruitmentApplicantPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { Table } from '~/Components/Table';
+import classNames from 'classnames';
 
 export function RecruitmentApplicantPage() {
   const { user } = useAuthContext();
@@ -61,21 +62,28 @@ export function RecruitmentApplicantPage() {
 
   return (
     <Page>
-      <div>
-        <Text size="l" as="strong">
-        {applicant?.first_name} {applicant?.last_name}
-      </Text>
+      <div className={classNames(styles.infoContainer)}>
+        <Text size="l" as="strong" className={styles.textBottom}>
+          {applicant?.first_name} {applicant?.last_name}
+        </Text>
+        <Table 
+          data = {[
+            [t(KEY.common_phonenumber), applicant?.phone_number ? applicant?.phone_number : t(KEY.common_not_set)],
+            [t(KEY.common_email), applicant?.email ? applicant?.email : t(KEY.common_not_set)],
+            [t(KEY.common_campus), applicant?.campus ? dbT(applicant?.campus, 'name') : t(KEY.common_not_set)],
+          ]}
+        />
       </div>
-      <div>
-
-      </div>
-      <div>
-        <Text size="l" as="strong">
+      <div className={classNames(styles.infoContainer)}>
+        <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_admission)}: {dbT(recruitmentAdmission?.recruitment_position, 'name')}
         </Text>
         <Text>{recruitmentAdmission?.admission_text}</Text>
       </div>
-      <div>
+      <div className={classNames(styles.infoContainer)}>
+        <Text size="l" as="strong" className={styles.textBottom}>
+          {t(KEY.recruitment_all_applications)}
+        </Text>
         <Table
           columns={[
             t(KEY.common_recruitmentposition),
@@ -83,8 +91,7 @@ export function RecruitmentApplicantPage() {
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data=
-          {otherRecruitmentAdmission?.map(function (element) {
+          data = {otherRecruitmentAdmission?.map(function (element) {
             return [
               {
                 content: (
@@ -121,3 +128,8 @@ export function RecruitmentApplicantPage() {
     </Page>
   );
 }
+
+/**
+ *             [t(KEY.common_email, applicant?.email ? applicant?.email : t(KEY.common_not_set)],
+            [t(KEY.common_campus), applicant?.campus ? dbT(applicant?.campus, 'name') : t(KEY.common_not_set)],
+ */
