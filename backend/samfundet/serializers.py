@@ -348,6 +348,14 @@ class CampusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SimpleUserSerializer(serializers.ModelSerializer):
+    campus = CampusSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'campus']
+
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
@@ -744,6 +752,31 @@ class InterviewSerializer(CustomBaseSerializer):
         instance = super().update(instance, validated_data)
         instance.interviewers.set(interviewers_data)
         return instance
+
+
+class RecruitmentAdmissionForRecruiterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentAdmission
+        fields = [
+            'id',
+            'admission_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'withdrawn',
+            'created_at',
+        ]
+        read_only_fields = [
+            'id',
+            'admission_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'withdrawn',
+            'created_at',
+        ]
 
 
 class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):

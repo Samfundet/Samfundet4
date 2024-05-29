@@ -41,6 +41,7 @@ from .serializers import (
     GangSerializer,
     MenuSerializer,
     UserSerializer,
+    SimpleUserSerializer,
     EventSerializer,
     GroupSerializer,
     ImageSerializer,
@@ -75,6 +76,7 @@ from .serializers import (
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentAdmissionForGangSerializer,
+    RecruitmentAdmissionForRecruiterSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
 from .models.event import Event, EventGroup
@@ -773,6 +775,23 @@ class InterviewRoomView(ModelViewSet):
         filtered_rooms = InterviewRoom.objects.filter(recruitment__id=recruitment)
         serialized_rooms = self.get_serializer(filtered_rooms, many=True)
         return Response(serialized_rooms.data)
+
+
+class RecruitmentAdmissionForRecruitersView(APIView):
+    permission_classes = [IsAuthenticated]  # TODO correct perms
+
+    def get(self, request: Request, *args, **kwargs) -> Response:
+        print(self.kwargs['admission_id'])
+        print(RecruitmentAdmission.objects.first().pk)
+        admission = get_object_or_404(RecruitmentAdmission, id=self.kwargs['admission_id'])
+        other_admissions = RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment)
+        return Response(
+            data={
+                'admission': RecruitmentAdmissionForRecruiterSerializer(instance=admission).data,
+                'user': SimpleUserSerializer(instance=admission.user).data,
+                'other_admissions': RecruitmentAdmissionForRecruiterSerializer(other_admissions, many=True).data,
+            }
+        )
 
 
 class InterviewView(ModelViewSet):
