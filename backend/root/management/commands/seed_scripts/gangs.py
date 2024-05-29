@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from samfundet.models.general import Gang, GangType
+from samfundet.models.general import Gang, GangType, GangSection
 
 # Template gangs for seeding
 GANGS = {
@@ -34,9 +34,9 @@ GANGS = {
         ('Candiss', None),
     ],
     'Styrende': [
-        ('Finansstyret', 'FS'),
-        ('Styret', None),
-        ('Rådet', None),
+        ('Finansstyret', 'FS', []),
+        ('Styret', None, []),
+        ('Rådet', None, []),
     ],
 }
 
@@ -48,14 +48,21 @@ def seed():
 
         # Create gangs
         for gang in GANGS[gang_type]:
-            name, abbr = gang
-            Gang.objects.get_or_create(
+            name, abbr, sections = gang
+            g, _ = Gang.objects.get_or_create(
                 name_nb=name,
                 name_en=name,
                 abbreviation=abbr,
                 webpage='https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 gang_type=gtype,
             )
+
+            for section in sections:
+                GangSection.objects.get_or_create(
+                    gang_id=g.id,
+                    name_nb=section,
+                    name_en=section,
+                )
 
         yield 10 + i / len(GANGS.keys()) * 90, 'Creating gangs'
 

@@ -14,7 +14,7 @@ from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIVie
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
 from django.http import QueryDict
 from django.utils import timezone
@@ -45,6 +45,7 @@ from .serializers import (
     GroupSerializer,
     ImageSerializer,
     LoginSerializer,
+    MerchSerializer,
     TableSerializer,
     VenueSerializer,
     BookingSerializer,
@@ -72,6 +73,7 @@ from .serializers import (
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
+    RecruitmentStatisticsSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
@@ -82,6 +84,7 @@ from .models.general import (
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Booking,
@@ -109,6 +112,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 from .utils.check_missing_info_pages import misc_list, check_missing_pages
 
@@ -343,6 +347,15 @@ class ReservationCheckAvailabilityView(APIView):
 
 
 # =============================== #
+#             Merch               #
+# =============================== #
+class MerchView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = MerchSerializer
+    queryset = Merch.objects.all()
+
+
+# =============================== #
 #          Auth/Login             #
 # =============================== #
 
@@ -564,6 +577,13 @@ class RecruitmentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentStatisticsView(ModelViewSet):
+    permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
+    serializer_class = RecruitmentStatisticsSerializer
+    queryset = RecruitmentStatistics.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

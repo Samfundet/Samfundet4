@@ -26,6 +26,15 @@ export const KEY = {
   common_day_saturday: 'common_day_saturday',
   common_day_sunday: 'common_day_sunday',
 
+  // Day abbreviations:
+  common_day_monday_short: 'common_day_monday_short',
+  common_day_tuesday_short: 'common_day_tuesday_short',
+  common_day_wednesday_short: 'common_day_wednesday_short',
+  common_day_thursday_short: 'common_day_thursday_short',
+  common_day_friday_short: 'common_day_friday_short',
+  common_day_saturday_short: 'common_day_saturday_short',
+  common_day_sunday_short: 'common_day_sunday_short',
+
   // Months:
   common_month_january: 'common_month_january',
   common_month_february: 'common_month_february',
@@ -48,15 +57,17 @@ export const KEY = {
   common_to: 'common_to',
   common_price: 'common_price',
   common_buy: 'common_buy',
+  common_time: 'common_time',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
   common_from: 'common_from',
   common_date: 'common_date',
-  common_time: 'common_time',
   common_show: 'common_show',
   common_menu: 'common_menu',
+  common_table: 'common_table',
   common_edit: 'common_edit',
+  common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_next: 'common_next',
@@ -164,6 +175,12 @@ export const KEY = {
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
+
+  // EventPageAge:
+  eighteen: 'eighteen',
+  twenty: 'twenty',
+  none: 'none',
+  mix: 'mix',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
