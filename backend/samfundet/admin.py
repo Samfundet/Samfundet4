@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from guardian import models as guardian_models
 
+from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
+from django.db.models import QuerySet
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
@@ -697,7 +699,7 @@ class InterviewAdmin(CustomBaseAdmin):
 
 
 @admin.action(description='Update stats')
-def update_stats(modeladmin, request, queryset) -> None:  # noqa: ANN001
+def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: QuerySet[RecruitmentStatistics]) -> None:
     for q in queryset:
         q.save()
 
