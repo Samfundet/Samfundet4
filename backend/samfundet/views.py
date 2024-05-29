@@ -580,7 +580,7 @@ class RecruitmentStatisticsView(ModelViewSet):
     serializer_class = RecruitmentStatisticsSerializer
     queryset = RecruitmentStatistics.objects.all()
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request: Request, pk: int) -> Response:
         stats = get_object_or_404(self.queryset, pk=pk)
         stats.save()
         stats = get_object_or_404(self.queryset, pk=pk)

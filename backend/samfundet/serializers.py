@@ -53,11 +53,11 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     Occupiedtimeslot,
-    RecruitmentTimeStat,
     RecruitmentDateStat,
-    RecruitmentCampusStat,
     RecruitmentPosition,
+    RecruitmentTimeStat,
     RecruitmentAdmission,
+    RecruitmentCampusStat,
     RecruitmentStatistics,
 )
 

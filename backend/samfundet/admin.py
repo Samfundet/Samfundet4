@@ -697,7 +697,7 @@ class InterviewAdmin(CustomBaseAdmin):
 
 
 @admin.action(description='Update stats')
-def update_stats(modeladmin, request, queryset):
+def update_stats(modeladmin, request, queryset) -> None:  # noqa: ANN001
     for q in queryset:
         q.save()
 

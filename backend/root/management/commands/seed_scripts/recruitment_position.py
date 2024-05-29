@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import random
+
 from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition
 

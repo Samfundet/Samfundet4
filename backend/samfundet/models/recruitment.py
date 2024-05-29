@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from .general import Gang, User, Organization, Campus
+from .general import Gang, User, Campus, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 

@@ -21,12 +21,12 @@ from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
 from samfundet.models.general import (
     Gang,
-    Campus,
     User,
     Image,
     Merch,
     Table,
     Venue,
+    Campus,
     BlogPost,
     TextItem,
     Reservation,
