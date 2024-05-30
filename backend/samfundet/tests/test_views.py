@@ -922,11 +922,20 @@ def test_update_admission(
     # Assert the returned data based on the logic in the view
 
 
-def test_withdraw_admission(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
-):
+def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User,
+                            fixture_recruitment: Recruitment,
+                            fixture_recruitment_position: RecruitmentPosition):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
+
+    # Cant withdraw if not applied
+    url = reverse(
+        routes.samfundet__recruitment_admissions_withdraw_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    response: Response = fixture_rest_client.put(path=url)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
     url = reverse(
         routes.samfundet__recruitment_admissions_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},

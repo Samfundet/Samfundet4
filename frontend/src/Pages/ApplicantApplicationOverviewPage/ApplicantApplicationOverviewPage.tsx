@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Page } from '~/Components';
+import { Button, Link, Page } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentAdmissionsForApplicant } from '~/api';
 import { RecruitmentAdmissionDto } from '~/dto';
@@ -11,6 +11,7 @@ import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
 import styles from './ApplicantApplicationOverviewPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
+import { reverse } from '~/named-urls';
 
 export function ApplicantApplicationOverviewPage() {
   const { recruitmentID } = useParams();
@@ -68,7 +69,22 @@ export function ApplicantApplicationOverviewPage() {
 
   function admissionToTableRow(admission: RecruitmentAdmissionDto) {
     return [
-      dbT(admission.recruitment_position, 'name'),
+      {
+        content: (
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.recruitment_application,
+              urlParams: {
+                positionID: admission.recruitment_position.id,
+                gangID: admission.recruitment_position.gang.id,
+              },
+            })}
+            className={styles.position_name}
+          >
+            {dbT(admission.recruitment_position, 'name')}
+          </Link>
+        ),
+      },
       niceDateTime(admission.interview.interview_time),
       admission.interview.interview_location,
       admission.applicant_priority,
