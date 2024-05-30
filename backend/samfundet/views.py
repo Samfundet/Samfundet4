@@ -708,6 +708,21 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         return Response(serializer.data)
 
 
+class RecruitmentAdmissioWithdrawApplicantView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAdmissionForApplicantSerializer
+    queryset = RecruitmentAdmission.objects.all()
+
+    def update(self, request: Request, pk: int) -> Response:
+        # Checks if user has admission for position
+        admission = get_object_or_404(RecruitmentAdmission, recruitment_position=pk, user=request.user)
+        # Withdraw if ha admission
+        admission.withdrawn = True
+        admission.save()
+        serializer = self.get_serializer(admission)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentAdmissionForGangSerializer
