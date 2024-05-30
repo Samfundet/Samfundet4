@@ -1,3 +1,7 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
 $back-button-width: 5rem;
 
 .container {
@@ -34,4 +38,8 @@ $back-button-width: 5rem;
     filter: brightness(200%);
     transform: scale(1.10);
   }
+}
+
+.withdrawnText {
+  color: $red;
 }

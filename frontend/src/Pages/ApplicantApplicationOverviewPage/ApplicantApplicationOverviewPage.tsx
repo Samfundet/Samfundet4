@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +13,7 @@ import { dbT, niceDateTime } from '~/utils';
 import styles from './ApplicantApplicationOverviewPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
+import { Text } from '~/Components/Text/Text';
 
 export function ApplicantApplicationOverviewPage() {
   const { recruitmentID } = useParams();
@@ -68,28 +70,39 @@ export function ApplicantApplicationOverviewPage() {
   ];
 
   function admissionToTableRow(admission: RecruitmentAdmissionDto) {
-    return [
-      {
-        content: (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.recruitment_application,
-              urlParams: {
-                positionID: admission.recruitment_position.id,
-                gangID: admission.recruitment_position.gang.id,
-              },
-            })}
-            className={styles.position_name}
-          >
-            {dbT(admission.recruitment_position, 'name')}
-          </Link>
-        ),
-      },
+    const position = [ {
+      content: (
+        <Link
+          url={reverse({
+            pattern: ROUTES.frontend.recruitment_application,
+            urlParams: {
+              positionID: admission.recruitment_position.id,
+              gangID: admission.recruitment_position.gang.id,
+            },
+          })}
+          className={styles.position_name}
+        >
+          {dbT(admission.recruitment_position, 'name')}
+        </Link>
+      ),
+    }];
+    const notWithdrawn = [      
       niceDateTime(admission.interview.interview_time),
       admission.interview.interview_location,
       admission.applicant_priority,
       { content: upDownArrow(admission.id) },
     ];
+    const withdrawn = [ {
+      content: (
+        <Text
+          as="strong"
+          className={styles.withdrawnText}
+        >
+          {t(KEY.recruitment_withdrawn)}
+        </Text>
+      ),
+    }];
+    return [...position, ...(admission.withdrawn ? withdrawn : notWithdrawn)];
   }
 
   return (
