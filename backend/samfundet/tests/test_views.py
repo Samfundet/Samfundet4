@@ -930,7 +930,7 @@ def test_withdraw_admission(
 
     # Cant withdraw if not applied
     url = reverse(
-        routes.samfundet__recruitment_admissions_withdraw_for_applicant_detail,
+        routes.samfundet__recruitment_withdraw_admission,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     response: Response = fixture_rest_client.put(path=url)
@@ -949,7 +949,7 @@ def test_withdraw_admission(
     assert response.data['withdrawn'] is False
     ### Act 2 Send withdrawal ###
     url = reverse(
-        routes.samfundet__recruitment_admissions_withdraw_for_applicant_detail,
+        routes.samfundet__recruitment_withdraw_admission,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     response: Response = fixture_rest_client.put(path=url)
