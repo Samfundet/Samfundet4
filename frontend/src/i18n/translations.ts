@@ -224,7 +224,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
 
-
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',

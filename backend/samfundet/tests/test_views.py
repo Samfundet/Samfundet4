@@ -922,9 +922,9 @@ def test_update_admission(
     # Assert the returned data based on the logic in the view
 
 
-def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User,
-                            fixture_recruitment: Recruitment,
-                            fixture_recruitment_position: RecruitmentPosition):
+def test_withdraw_admission(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
+):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
 
