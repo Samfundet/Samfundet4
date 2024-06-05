@@ -1,0 +1,1 @@
+export { SultenMenuPage } from './SultenMenuPage';

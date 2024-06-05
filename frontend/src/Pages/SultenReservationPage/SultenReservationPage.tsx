@@ -11,9 +11,9 @@ import { ReservationDto } from '~/dto';
 import { useKeyValue, useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ReservationFormLine } from './Components';
-import styles from './LycheReservationPage.module.scss';
+import styles from './SultenReservationPage.module.scss';
 
-export function LycheReservationPage() {
+export function SultenReservationPage() {
   const { t } = useTranslation();
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<ReservationDto>();
@@ -50,7 +50,7 @@ export function LycheReservationPage() {
     <SamfForm
       className={styles.formContainer}
       onSubmit={checkAvailableDate}
-      submitButtonTheme="lyche"
+      submitButtonTheme="sulten"
       submitButtonDisplay="block"
       submitText={t(KEY.sulten_reservation_form_find_times)}
     >
@@ -78,7 +78,7 @@ export function LycheReservationPage() {
     <SamfForm
       className={styles.formContainer}
       onSubmit={submit}
-      submitButtonTheme="lyche"
+      submitButtonTheme="sulten"
       submitButtonDisplay="block"
       submitText={t(KEY.sulten_reservation_form_find_times)}
     >

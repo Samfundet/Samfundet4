@@ -1,10 +1,10 @@
 // General
 export { default as englishFlag } from './english_flag.png';
-export { default as front_lyche } from './front_lyche.jpg';
+export { default as front_sulten } from './front_sulten.jpg';
 export { default as kitteh } from './kitteh.jpeg';
 export { default as logoBlack } from './logo_black.png';
 export { default as logoWhite } from './logo_white.png';
-export { default as lycheLogo } from './lyche_logo.png';
+export { default as sultenLogo } from './lyche_logo.png';
 export { default as norwegianFlag } from './norwegian_flag.png';
 export { default as NotFound } from './not-found-404.png';
 export { default as runderode } from './runderode.jpg';

@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { front_lyche } from '~/assets';
+import { front_sulten } from '~/assets';
 import { SultenCard } from './SultenCard';
 
 // Local component config.
@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof SultenCard> = function (args) {
 
 export const Basic = Template.bind({});
 Basic.args = {
-  image: front_lyche,
+  image: front_sulten,
   header: 'Sulten',
   text: 'Sulten er en god ting',
   buttonText: 'Trykk her',

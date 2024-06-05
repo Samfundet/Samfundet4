@@ -1,0 +1,1 @@
+export { SultenReservationPage } from './SultenReservationPage';

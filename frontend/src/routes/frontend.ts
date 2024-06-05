@@ -24,7 +24,6 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   //        Sulten        //
   // ==================== //
-  lyche: '/lyche/',
   sulten: '/lyche',
   sulten_menu: '/lyche/menu/',
   sulten_reservation: '/lyche/reservation/',

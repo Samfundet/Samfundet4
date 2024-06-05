@@ -1,6 +1,6 @@
 @import 'src/constants';
 
-.lyche_menu {
+.sulten_menu {
   max-width: 1200px;
   margin: 0 auto;
   color: white;
@@ -10,7 +10,7 @@
 
 }
 
-.lyche_header_border_top {
+.sulten_header_border_top {
   height: 32px;
   width: 100%;
   display: flex;
@@ -18,13 +18,13 @@
   align-content: center;
 }
 
-.lyche_menu_border {
+.sulten_menu_border {
   border-left: 1px solid white;
   border-right: 1px solid white;
   width: calc(100% - 64px);
 }
 
-.lyche_menu_inner_border {
+.sulten_menu_inner_border {
   margin-right: 14px;
   margin-left: 14px;
   border-left: 1px solid white;
@@ -34,7 +34,7 @@
   display: block;
 }
 
-.lyche_header_border_bottom {
+.sulten_header_border_bottom {
   height: 32px;
   width: 100%;
   display: flex;

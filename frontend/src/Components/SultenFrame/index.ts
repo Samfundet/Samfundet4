@@ -1,0 +1,1 @@
+export { SultenFrame } from './SultenFrame';

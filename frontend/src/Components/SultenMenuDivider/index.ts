@@ -1,0 +1,1 @@
+export { SultenMenuDivider } from './SultenMenuDivider';

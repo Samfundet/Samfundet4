@@ -13,11 +13,11 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
-  LycheAboutPage,
-  LycheContactPage,
-  LycheHomePage,
-  LycheMenuPage,
-  LycheReservationPage,
+  SultenAboutPage,
+  SultenContactPage,
+  SultenHomePage,
+  SultenMenuPage,
+  SultenReservationPage,
   MembershipPage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
@@ -249,11 +249,11 @@ export function AppRoutes() {
             SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
-        <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
-        <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
-        <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />
-        <Route path={ROUTES.frontend.sulten_contact} element={<LycheContactPage />} />
-        <Route path={ROUTES.frontend.sulten_reservation} element={<LycheReservationPage />} />
+        <Route path={ROUTES.frontend.sulten} element={<SultenHomePage />} />
+        <Route path={ROUTES.frontend.sulten_about} element={<SultenAboutPage />} />
+        <Route path={ROUTES.frontend.sulten_menu} element={<SultenMenuPage />} />
+        <Route path={ROUTES.frontend.sulten_contact} element={<SultenContactPage />} />
+        <Route path={ROUTES.frontend.sulten_reservation} element={<SultenReservationPage />} />
       </Route>
 
       {/* 

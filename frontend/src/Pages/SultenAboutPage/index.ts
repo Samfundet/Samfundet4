@@ -1,0 +1,1 @@
+export { SultenAboutPage } from './SultenAboutPage';

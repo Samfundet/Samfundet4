@@ -20,12 +20,12 @@
   }
 }
 
-.lycheContactTitle {
+.sultenContactTitle {
   font-size: 2em;
   font-weight: 600;
 }
 
-.lycheContactText {
+.sultenContactText {
   width: 100%;
   text-align: center;
 }
@@ -40,7 +40,7 @@
   }
 }
 
-.lycheMapContainer {
+.sultenMapContainer {
   width: 50%;
   height: 75%;
   overflow: hidden;
@@ -51,7 +51,7 @@
   }
 }
 
-.lycheStreet {
+.sultenStreet {
   height: 100%;
   width: 100%;
   border: none;
@@ -61,7 +61,7 @@
   color: $sulten-orange;
 }
 
-.lycheSocialsContainer {
+.sultenSocialsContainer {
   @include flex-row-center;
 }
 

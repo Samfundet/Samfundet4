@@ -1,1 +1,0 @@
-export { LycheContactPage } from './LycheContactPage';
