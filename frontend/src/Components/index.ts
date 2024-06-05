@@ -49,6 +49,7 @@ export { SultenCard } from './SultenCard';
 export { SultenFooter } from './SultenFooter';
 export { SultenNavbar } from './SultenNavbar';
 export { SultenOutlet } from './SultenOutlet';
+export { SultenMenuDivider } from './SultenMenuDivider';
 export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';

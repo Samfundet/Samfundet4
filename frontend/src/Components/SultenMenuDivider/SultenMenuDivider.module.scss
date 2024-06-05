@@ -1,6 +1,6 @@
 @import 'src/constants';
 
-.lyche_menu_divider {
+.sulten_menu_divider {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -11,20 +11,20 @@
   margin-right: 10px;
 }
 
-.lyche_menu_divider_img {
+.sulten_menu_divider_img {
   height: 17px;
   width: 128px;
   background-size: contain;
   background-repeat: no-repeat;
 }
 
-.lyche_menu_divider_left {
-  @extend .lyche_menu_divider_img;
-  background-image: $lyche-menu-divider-left;
+.sulten_menu_divider_left {
+  @extend .sulten_menu_divider_img;
+  background-image: $sulten-menu-divider-left;
 }
 
-.lyche_menu_divider_title {
-  font-family: $lyche-title-font;
+.sulten_menu_divider_title {
+  font-family: $sulten-title-font;
   font-size: 1.25em;
   color: white;
   text-transform: uppercase;
@@ -33,7 +33,7 @@
   white-space: nowrap;
 }
 
-.lyche_menu_divider_right {
+.sulten_menu_divider_right {
   @extend .lyche_menu_divider_img;
-  background-image: $lyche-menu-divider-right;
+  background-image: $sulten-menu-divider-right;
 }

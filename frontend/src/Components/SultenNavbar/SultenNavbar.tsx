@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { SamfundetLogo } from '~/Components';
-import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
+import { englishFlag, sultenLogo, norwegianFlag } from '~/assets';
 import { useDesktop, useScrollY } from '~/hooks';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -110,7 +110,7 @@ export function SultenNavbar() {
         {hamburgerMenu}
         {isDesktop && leftItems}
         <img
-          src={lycheLogo}
+          src={sultenLogo}
           onClick={() => {
             navigate(ROUTES.frontend.sulten);
             setMobileNavigation(false);

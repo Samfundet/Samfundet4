@@ -4,16 +4,16 @@ import { toast } from 'react-toastify';
 import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
-import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
+import { front_sulten, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { TextItem, VENUE } from '~/constants';
 import { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './LycheHomePage.module.scss';
+import styles from './SultenHomePage.module.scss';
 import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
 
-export function LycheHomePage() {
+export function SultenHomePage() {
   const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const { t } = useTranslation();
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
@@ -146,7 +146,7 @@ export function LycheHomePage() {
   return (
     <>
       <div className={styles.image_container}>
-        <img src={front_lyche} alt="Lyche" className={styles.background_image} />
+        <img src={front_sulten} alt="Lyche" className={styles.background_image} />
         {openingHours}
       </div>
       <SultenPage>

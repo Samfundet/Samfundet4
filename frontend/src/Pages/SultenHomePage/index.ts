@@ -1,0 +1,1 @@
+export { SultenHomePage } from './SultenHomePage';

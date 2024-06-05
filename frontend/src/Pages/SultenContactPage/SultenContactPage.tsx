@@ -4,19 +4,19 @@ import { SultenPage } from '~/Components/SultenPage';
 import { TextItem } from '~/constants/TextItems';
 import { useTextItem } from '~/hooks';
 import { ROUTES } from '~/routes';
-import styles from './LycheContactPage.module.scss';
+import styles from './SultenContactPage.module.scss';
 
-export function LycheContactPage() {
+export function SultenContactPage() {
   return (
     <>
       <SultenPage>
         <div className={styles.contactContainer}>
           <div className={styles.textContainer}>
-            <h1 className={styles.lycheContactTitle}>{useTextItem(TextItem.sulten_contact_page_title)}</h1>
-            <p className={styles.lycheContactText}>{useTextItem(TextItem.sulten_contact_page_text)}</p>
+            <h1 className={styles.sultenContactTitle}>{useTextItem(TextItem.sulten_contact_page_title)}</h1>
+            <p className={styles.sultenContactText}>{useTextItem(TextItem.sulten_contact_page_text)}</p>
             <p className={styles.contactAddress}>booking-lyche@uka.no</p>
             <p className={styles.contactAddress}>Elgesetergate 1</p>
-            <div className={styles.lycheSocialsContainer}>
+            <div className={styles.sultenSocialsContainer}>
               <Link target="external" url={ROUTES.other.lyche_facebook}>
                 <Icon className={styles.icon} color="white" icon="bi:facebook" width={40} />
               </Link>
@@ -28,9 +28,9 @@ export function LycheContactPage() {
               </Link>
             </div>
           </div>
-          <div className={styles.lycheMapContainer}>
+          <div className={styles.sultenMapContainer}>
             <iframe
-              className={styles.lycheStreet}
+              className={styles.sultenStreet}
               src={ROUTES.other.streetview_lyche}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

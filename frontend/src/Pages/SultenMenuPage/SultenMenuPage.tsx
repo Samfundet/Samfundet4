@@ -1,11 +1,11 @@
-import { LycheFrame } from '~/Components/LycheFrame';
+import { SultenFrame } from '~/Components/SultenFrame';
 import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
 
-export function LycheMenuPage() {
+export function SultenMenuPage() {
   return (
     <SultenPage>
-      <LycheFrame>
+      <SultenFrame>
         <MenuItem
           dishTitle="LYCHEBRØD"
           dishDescription="Serveres med en skål aioli på siden."
@@ -37,7 +37,7 @@ export function LycheMenuPage() {
           recommendations="Baren anbefaler: jue de vie"
           price="99,- / 119,-"
         />
-      </LycheFrame>
+      </SultenFrame>
     </SultenPage>
   );
 }

@@ -1,1 +1,0 @@
-export { LycheMenuPage } from './LycheMenuPage';

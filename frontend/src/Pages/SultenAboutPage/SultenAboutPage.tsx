@@ -2,15 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { SultenPage } from '~/Components/SultenPage';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import styles from './LycheAboutPage.module.scss';
+import styles from './SultenAboutPage.module.scss';
 import { TextItem } from '~/constants';
 import { SultenCard } from '~/Components';
 import { burger, soup, dessert } from '~/assets';
 
-export function LycheAboutPage() {
+export function SultenAboutPage() {
   const { t } = useTranslation();
 
-  const aboutCardWhatIsLyche = (
+  const aboutCardSultenWhatIsLyche = (
     <SultenCard
       image={soup}
       imageAlt={'Chef'}
@@ -20,7 +20,7 @@ export function LycheAboutPage() {
       smallCard={true}
     />
   );
-  const aboutCardLycheGoal = (
+  const aboutCardSultenGoal = (
     <SultenCard
       image={burger}
       imageAlt={'Chef'}
@@ -30,7 +30,8 @@ export function LycheAboutPage() {
       smallCard={true}
     />
   );
-  const aboutCardLycheAboutMenu = (
+
+  const aboutCardSultenMenu = (
     <SultenCard
       image={dessert}
       imageAlt={'Chef'}
@@ -45,9 +46,9 @@ export function LycheAboutPage() {
     <>
       <SultenPage>
         <div className={styles.container}>
-          {aboutCardWhatIsLyche}
-          {aboutCardLycheGoal}
-          {aboutCardLycheAboutMenu}
+          {aboutCardSultenWhatIsLyche}
+          {aboutCardSultenGoal}
+          {aboutCardSultenMenu}
         </div>
       </SultenPage>
     </>
