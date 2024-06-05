@@ -68,7 +68,7 @@ export function CommandMenu({ openKey = 'k' }: CommandMenuProps) {
           <Command.Group heading={t(KEY.command_menu_group_shortcuts)}>
             <Command.Item
               value="lyche-restaurant"
-              onSelect={() => cmdNavigate({ url: ROUTES.frontend.lyche, linkTarget: 'frontend' })}
+              onSelect={() => cmdNavigate({ url: ROUTES.frontend.sulten, linkTarget: 'frontend' })}
             >
               <Icon width={24} icon="ph:hamburger-fill" />
               {t(KEY.command_menu_shortcut_lyche)}
