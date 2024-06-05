@@ -751,6 +751,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
     admission_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
+
     class Meta:
         model = RecruitmentAdmission
         fields = '__all__'
@@ -769,8 +770,9 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
 
-    def get_application_count(self, application: RecruitmentAdmission) ->  int:
+    def get_application_count(self, application: RecruitmentAdmission) -> int:
         return application.user.admissions.filter(recruitment=application.recruitment).count()
+
 
 class UserFeedbackSerializer(serializers.ModelSerializer):
     class Meta:

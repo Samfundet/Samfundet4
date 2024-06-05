@@ -71,11 +71,11 @@ export function Dropdown<T>({
           );
         })}
       </select>
-      {!disableIcon &&
+      {!disableIcon && (
         <div className={styles.arrow_container}>
           <Icon icon="material-symbols:arrow-drop-down-circle" width={10} className={styles.arrow} />
         </div>
-      }
+      )}
     </label>
   );
 }
