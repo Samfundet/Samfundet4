@@ -17,7 +17,7 @@ export function ApplicantApplicationOverviewPage() {
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
 
-  function handleChangePriority(id: number, direction: 'up' | 'down') {
+  function handleChangePriority(id: string, direction: 'up' | 'down') {
     const newAdmissions = [
       ...admissions.sort(function (a1, a2) {
         return a1.applicant_priority - a2.applicant_priority;

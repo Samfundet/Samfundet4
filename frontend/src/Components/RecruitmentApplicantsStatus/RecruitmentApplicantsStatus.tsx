@@ -67,18 +67,18 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
-  function updateAdmisions(id: string, field: string, value: string | number) {
+  function updateAdmisions(id: string, field: string, value: string | number | undefined) {
     let updatedInterview = {} as InterviewDto;
     setRecruitmentApplicants(
       recruitmentApplicants.map((element: RecruitmentAdmissionDto) => {
         if (element.id === id) {
           switch (field) {
             case editChoices.update_time:
-              updatedInterview = { ...element.interview, interview_time: value.toString() };
+              updatedInterview = { ...element.interview, interview_time: (value ?? ' ').toString() };
               element = { ...element, interview: updatedInterview };
               break;
             case editChoices.update_location:
-              updatedInterview = { ...element.interview, interview_location: value.toString() };
+              updatedInterview = { ...element.interview, interview_location: (value ?? ' ').toString() };
               element = { ...element, interview: updatedInterview };
               break;
             case editChoices.update_recruitment_priority:
