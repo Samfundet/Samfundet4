@@ -10,8 +10,10 @@ export type DropDownOption<T> = {
 
 export type DropdownProps<T> = {
   className?: string;
+  classNameSelect?: string;
   defaultValue?: DropDownOption<T>;
   initialValue?: T;
+  disableIcon?: boolean;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
   disabled?: boolean;
@@ -25,8 +27,10 @@ export function Dropdown<T>({
   initialValue,
   onChange,
   className,
+  classNameSelect,
   label,
   disabled = false,
+  disableIcon = false,
   error,
 }: DropdownProps<T>) {
   /**
@@ -48,7 +52,12 @@ export function Dropdown<T>({
     <label className={classnames(className, styles.select_wrapper)}>
       {label}
       <select
-        className={classNames(styles.samf_select, error && styles.error)}
+        className={classNames(
+          classNameSelect,
+          styles.samf_select,
+          !disableIcon && styles.icon_disabled,
+          error && styles.error,
+        )}
         onChange={handleChange}
         disabled={disabled}
         defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
@@ -62,10 +71,11 @@ export function Dropdown<T>({
           );
         })}
       </select>
-      {/* span inneholder "nedover pil" symbol */}
-      <div className={styles.arrow_container}>
-        <Icon icon="material-symbols:arrow-drop-down-circle" width={20} className={styles.arrow} />
-      </div>
+      {!disableIcon &&
+        <div className={styles.arrow_container}>
+          <Icon icon="material-symbols:arrow-drop-down-circle" width={10} className={styles.arrow} />
+        </div>
+      }
     </label>
   );
 }

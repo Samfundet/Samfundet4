@@ -1,0 +1,50 @@
+@import 'src/constants';
+
+.dropdown {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  background-color: $white;
+  border-radius: 0;
+  font-size: 0.7em;
+}
+
+.input {
+  font-size: 0.7em;
+  border-radius:0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.text {
+  font-size: 0.7em;
+  padding: 0;
+}
+
+.header {
+  font-size: 0.7em;
+  background-color: $grey-2;
+  color: $black;
+  &:hover {
+    background-color: $grey-1;
+    color: $black;
+  }
+}
+
+.rows {
+  padding: 0.1em 0.2em;
+  background-color: $pending;
+}
+
+.rows_pending {
+  background-color: $pending;
+}
+
+.table {
+  border-color: $grey-0;
+  border-width: 2.2em;
+}
+
+.tableRow {
+  border-color: $grey-3;
+  border-width: 0.01em;
+}

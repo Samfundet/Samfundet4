@@ -24,12 +24,6 @@
   // TODO: what is this for?
   overflow-y: auto;
 
-  // TODO: what are these for?
-  appearance: none; //appearance "none" i flere browsere
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-
   @include theme-light {
     &:hover {
       border: 0.1px solid $blue;
@@ -43,6 +37,13 @@
       filter: brightness(115%);
     }
   }
+}
+
+.icon_disabled {
+  appearance: none; //appearance "none" i flere browsere
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
 }
 
 .error {

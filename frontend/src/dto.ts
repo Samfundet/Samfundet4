@@ -392,7 +392,7 @@ export type InterviewDto = {
 };
 
 export type RecruitmentAdmissionDto = {
-  id: number;
+  id: string;
   interview: InterviewDto;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
@@ -403,6 +403,7 @@ export type RecruitmentAdmissionDto = {
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+  admission_count?: number;
 };
 
 export type FeedbackDto = {
