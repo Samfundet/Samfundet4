@@ -37,7 +37,7 @@ export function ApplicantApplicationOverviewPage() {
     // TODO: Done and fixed in other PR
   }
 
-  function upDownArrow(id: number) {
+  function upDownArrow(id: string) {
     return (
       <>
         <Icon icon="bxs:up-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'up')} />
