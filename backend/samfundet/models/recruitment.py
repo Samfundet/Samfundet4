@@ -178,6 +178,7 @@ class RecruitmentPosition(CustomBaseModel):
                     without_interview = without_interview.exclude(id=admission.id)
                     break
             if len(without_interview) == 0:
+                # If no more without interview, break out
                 break
 
             current_dt += interview_duration
