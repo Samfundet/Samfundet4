@@ -348,14 +348,6 @@ class CampusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SimpleUserSerializer(serializers.ModelSerializer):
-    campus = CampusSerializer(read_only=True)
-
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'campus']
-
-
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
     profile = ProfileSerializer(many=False, read_only=True)
@@ -587,7 +579,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'username',
-            'email',
+            'phone_number' 'email',
             'recruitment_admission_ids',  # Add this to the fields list
         ]
 

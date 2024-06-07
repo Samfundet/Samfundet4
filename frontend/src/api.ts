@@ -620,7 +620,6 @@ export async function getRecruitmentAdmissionsForApplicant(
 export async function getRecruitmentAdmissionsForRecruiter(
   admissionID: string,
 ): Promise<AxiosResponse<RecruitmentAdmissionRecruiterDto>> {
-  console.log(admissionID);
   const url =
     BACKEND_DOMAIN +
     reverse({

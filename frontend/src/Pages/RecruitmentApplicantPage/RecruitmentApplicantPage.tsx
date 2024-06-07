@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { getRecruitmentAdmissionsForRecruiter } from '~/api';
-import { RecruitmentAdmissionDto, SimpleUserDto } from '~/dto';
+import { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -21,7 +21,7 @@ export function RecruitmentApplicantPage() {
 
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
   const [otherRecruitmentAdmission, setOtherRecruitmentAdmission] = useState<RecruitmentAdmissionDto[]>([]);
-  const [applicant, setApplicant] = useState<SimpleUserDto>();
+  const [applicant, setApplicant] = useState<RecruitmentUserDto>();
 
   const [loading, setLoading] = useState(true);
 
@@ -129,8 +129,3 @@ export function RecruitmentApplicantPage() {
     </Page>
   );
 }
-
-/**
- *             [t(KEY.common_email, applicant?.email ? applicant?.email : t(KEY.common_not_set)],
-            [t(KEY.common_campus), applicant?.campus ? dbT(applicant?.campus, 'name') : t(KEY.common_not_set)],
- */

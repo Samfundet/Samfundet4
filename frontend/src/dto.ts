@@ -19,14 +19,6 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
-export type SimpleUserDto = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
-  campus?: CampusDto;
-};
-
 export type CampusDto = {
   id: number;
   name_nb: string;
@@ -48,6 +40,7 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number: string;
   recruitment_admission_ids?: string[];
 };
 
@@ -422,7 +415,7 @@ export type RecruitmentAdmissionDto = {
 };
 
 export type RecruitmentAdmissionRecruiterDto = {
-  user: SimpleUserDto;
+  user: RecruitmentUserDto;
   admission: RecruitmentAdmissionDto;
   other_admissions: RecruitmentAdmissionDto[];
 };
