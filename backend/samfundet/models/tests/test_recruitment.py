@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 
 from samfundet.models.general import User
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices, RecruitmentApplicantStates
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.

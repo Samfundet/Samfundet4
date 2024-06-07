@@ -8,8 +8,9 @@ from collections import defaultdict
 
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
+from django.core.exceptions import ValidationError
+
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from .general import Gang, User, Organization
