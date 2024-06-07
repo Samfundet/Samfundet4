@@ -7,7 +7,7 @@ from django.utils.text import slugify
 
 from root.utils.samfundet_random import words
 
-from samfundet.models.general import Venue
+from samfundet.models.general import Venue, Reservation
 
 VENUES = [
     'Storsalen',
@@ -24,6 +24,7 @@ VENUES = [
 
 
 def seed():
+    Reservation.objects.all().delete()
     Venue.objects.all().delete()
     yield 0, 'Deleted old venues'
 

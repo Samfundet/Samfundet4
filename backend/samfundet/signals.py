@@ -10,30 +10,32 @@ from django.db.models.signals import post_save, m2m_changed
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import Gang, User, Event, Profile, UserPreference
+from .models.recruitment import Recruitment, RecruitmentAdmission, RecruitmentStatistics
 
 
 @receiver(post_save, sender=User)
-def create_user_preference(sender: User, instance: User, created: bool, **kwargs: Any) -> None:
+def create_user_preference(sender: User, instance: User, *, created: bool, **kwargs: Any) -> None:
     """Ensures user_preference is created whenever a user is created."""
     if created:
         UserPreference.objects.get_or_create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def create_profile(sender: User, instance: User, created: bool, **kwargs: Any) -> None:
+def create_profile(sender: User, instance: User, *, created: bool, **kwargs: Any) -> None:
     """Ensures profile is created whenever a user is created."""
     if created:
         Profile.objects.get_or_create(user=instance)
 
 
 @receiver(m2m_changed, sender=Event.editors.through)
-def update_editor_permissions(
+def update_editor_permissions(  # noqa: C901
     sender: User,
     instance: Event,
     action: str,
-    reverse: bool,
     model: Gang,
     pk_set: set[int],
+    *,
+    reverse: bool,
     **kwargs: dict,
 ) -> None:
     if action in ['post_add', 'post_remove', 'post_clear']:
@@ -61,3 +63,16 @@ def update_editor_permissions(
                 if gang.gang_leader_group:
                     assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
                     assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
+
+
+@receiver(post_save, sender=Recruitment)
+def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *, created: bool, **kwargs: Any) -> None:
+    """Ensures stats are created when an recruitment is created"""
+    if created:
+        RecruitmentStatistics.objects.get_or_create(recruitment=instance)
+
+
+@receiver(post_save, sender=RecruitmentAdmission)
+def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
+    if created:
+        instance.recruitment.update_stats()

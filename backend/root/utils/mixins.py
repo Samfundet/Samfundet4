@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 import copy
 import logging
-from typing import Any, Union
+from typing import Any
 
 from rest_framework import serializers
 
@@ -57,64 +57,6 @@ class FieldTrackerMixin(Model):
     class Meta:
         abstract = True
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        if not hasattr(self, self._FTM_TRACK_FIELDS_NAME):
-            raise Exception(f"Missing field '{self._FTM_TRACK_FIELDS_NAME}' : list[str]'")
-
-        # Shorthand select all fields.
-        if self.ftm_get_tracked_fields() == '__all__':
-            # Fetch field_names from meta.
-            track_fields = [field.attname for field in self._meta.fields if field.attname not in self._FTM_FIELD_BLACKLIST]
-            setattr(self, self._FTM_TRACK_FIELDS_NAME, track_fields)
-
-    @staticmethod
-    def ftm_log_parse(*, fields: dict) -> dict:
-        """
-        Preprocesses fieldsets before logging.
-        Need to limit large output. E.g. logo changes generates a large log.
-        """
-        # Deep copy to not mutate original.
-        fields_copy = copy.deepcopy(fields)
-
-        for field, item in fields_copy.items():
-            try:
-                if sys.getsizeof(str(item)) > 1000:
-                    fields_copy[field] = 'Too large to display'
-            except TypeError:
-                fields_copy[field] = "Omitted, FieldTrackerMixin couldn't determine size."
-        return fields_copy
-
-    def ftm_get_tracked_fields(self) -> Union[list[str], str]:
-        """Returns a list of all field names this mixin tracks."""
-        # ftm_track_fields can be '__all__'.
-        return getattr(self, self._FTM_TRACK_FIELDS_NAME, [])
-
-    def ftm_get_loaded_fields(self) -> dict:
-        """Returns the cached tracked values currently on the instance."""
-        return getattr(self, self._FTM_LOADED_FIELDS_NAME, {})
-
-    def ftm_get_dirty_fields(self) -> tuple[dict, dict]:
-        """Detects all changes, return old and new states."""
-        if not self.pk:
-            return {}, {}  # No dirty fields on creation.
-
-        # Get tracked and loaded fields.
-        track_fields = self.ftm_get_tracked_fields()
-        loaded_fields: dict = self.ftm_get_loaded_fields()
-
-        # Loop tracked field and keep fields that have changed.
-        dirty_fields_old = {}
-        dirty_fields_new = {}
-        for field in track_fields:
-            current_value = getattr(self, field)
-            loaded_value = loaded_fields.get(field)
-            if current_value != loaded_value:
-                dirty_fields_old[field] = loaded_value
-                dirty_fields_new[field] = current_value
-
-        return dirty_fields_old, dirty_fields_new
-
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Extends django 'save' to log all changes."""
 
@@ -153,15 +95,73 @@ class FieldTrackerMixin(Model):
             )
             raise e
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        if not hasattr(self, self._FTM_TRACK_FIELDS_NAME):
+            raise Exception(f"Missing field '{self._FTM_TRACK_FIELDS_NAME}' : list[str]'")
+
+        # Shorthand select all fields.
+        if self.ftm_get_tracked_fields() == '__all__':
+            # Fetch field_names from meta.
+            track_fields = [field.attname for field in self._meta.fields if field.attname not in self._FTM_FIELD_BLACKLIST]
+            setattr(self, self._FTM_TRACK_FIELDS_NAME, track_fields)
+
+    @staticmethod
+    def ftm_log_parse(*, fields: dict) -> dict:
+        """
+        Preprocesses fieldsets before logging.
+        Need to limit large output. E.g. logo changes generates a large log.
+        """
+        # Deep copy to not mutate original.
+        fields_copy = copy.deepcopy(fields)
+
+        for field, item in fields_copy.items():
+            try:
+                if sys.getsizeof(str(item)) > 1000:
+                    fields_copy[field] = 'Too large to display'
+            except TypeError:
+                fields_copy[field] = "Omitted, FieldTrackerMixin couldn't determine size."
+        return fields_copy
+
+    def ftm_get_tracked_fields(self) -> list[str] | str:
+        """Returns a list of all field names this mixin tracks."""
+        # ftm_track_fields can be '__all__'.
+        return getattr(self, self._FTM_TRACK_FIELDS_NAME, [])
+
+    def ftm_get_loaded_fields(self) -> dict:
+        """Returns the cached tracked values currently on the instance."""
+        return getattr(self, self._FTM_LOADED_FIELDS_NAME, {})
+
+    def ftm_get_dirty_fields(self) -> tuple[dict, dict]:
+        """Detects all changes, return old and new states."""
+        if not self.pk:
+            return {}, {}  # No dirty fields on creation.
+
+        # Get tracked and loaded fields.
+        track_fields = self.ftm_get_tracked_fields()
+        loaded_fields: dict = self.ftm_get_loaded_fields()
+
+        # Loop tracked field and keep fields that have changed.
+        dirty_fields_old = {}
+        dirty_fields_new = {}
+        for field in track_fields:
+            current_value = getattr(self, field)
+            loaded_value = loaded_fields.get(field)
+            if current_value != loaded_value:
+                dirty_fields_old[field] = loaded_value
+                dirty_fields_new[field] = current_value
+
+        return dirty_fields_old, dirty_fields_new
+
     @classmethod
-    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:  # noqa: PLR0917
+    def from_db(cls, db: Any, field_names: Any, values: Any) -> Any:
         """Extends django 'from_db' to set 'loaded_fields'."""
 
         instance = super().from_db(db, field_names, values)
 
         track_fields: list[str] = instance.ftm_get_tracked_fields()
 
-        loaded_fields = {field: value for field, value in zip(field_names, values) if field in track_fields and value is not DEFERRED}
+        loaded_fields = {field: value for field, value in zip(field_names, values, strict=False) if field in track_fields and value is not DEFERRED}
 
         # Set loaded_fields on instance.
         setattr(instance, instance._FTM_LOADED_FIELDS_NAME, loaded_fields)
@@ -225,10 +225,6 @@ class CustomBaseModel(FullCleanSaveMixin):
     class Meta:
         abstract = True
 
-    def is_edited(self) -> bool:
-        """Method for checking if object is updated or not"""
-        return self.updated_at != self.created_at
-
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
         User should always be provided, but that can be ignored.
@@ -248,6 +244,10 @@ class CustomBaseModel(FullCleanSaveMixin):
             self.created_at = self.updated_at
 
         super().save(*args, **kwargs)
+
+    def is_edited(self) -> bool:
+        """Method for checking if object is updated or not"""
+        return self.updated_at != self.created_at
 
 
 class CustomBaseSerializer(serializers.ModelSerializer):

@@ -19,6 +19,7 @@ class Command(BaseCommand):
                 init = f'{migrations}/__init__.py'
                 open(file=init, mode='a', encoding='utf-8').close()
 
-            except Exception as _e:
+            #  Supress since performance is not an issue here
+            except Exception as _e:  # noqa: S110
                 pass
                 # print(f'{app} failed. {_e}')

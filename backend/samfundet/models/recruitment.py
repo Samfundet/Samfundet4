@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import uuid
+from collections import defaultdict
 
 from django.db import models
 from django.utils import timezone
@@ -18,55 +19,68 @@ from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 class Recruitment(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
     name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
-    visible_from = models.DateTimeField(help_text='When it becomes visible for applicants')
+    visible_from = models.DateTimeField(null=False, blank=False, help_text='When it becomes visible for applicants')
     actual_application_deadline = models.DateTimeField(
-        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'
+        null=False,
+        blank=False,
+        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
     )
-    shown_application_deadline = models.DateTimeField(help_text='The deadline that is shown to applicants')
-    reprioritization_deadline_for_applicant = models.DateTimeField(help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(help_text='Reprioritization deadline for groups')
-    organization = models.ForeignKey(to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
+    shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
+    reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
+    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
-    def clean(self, *args: tuple, **kwargs: dict) -> None:
+    def update_stats(self) -> None:
+        created = RecruitmentStatistics.objects.get_or_create(recruitment=self)[1]
+        if not created:
+            self.statistics.save()
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
-
-        if not all(
-            [
-                self.visible_from,
-                self.actual_application_deadline,
-                self.shown_application_deadline,
-                self.reprioritization_deadline_for_applicant,
-                self.reprioritization_deadline_for_groups,
-            ]
-        ):
-            raise ValidationError('Missing datetime')
-
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
         # All times should be in the future.
         now = timezone.now()
-        if any(
-            [
-                self.actual_application_deadline < now,
-                self.shown_application_deadline < now,
-                self.reprioritization_deadline_for_applicant < now,
-                self.reprioritization_deadline_for_groups < now,
-            ]
-        ):
-            raise ValidationError('All times should be in the future')
+
+        for field in [
+            'actual_application_deadline',
+            'shown_application_deadline',
+            'reprioritization_deadline_for_applicant',
+            'reprioritization_deadline_for_groups',
+        ]:
+            if getattr(self, field) < now:
+                errors[field].append(self.NOT_IN_FUTURE_ERROR)
 
         if self.actual_application_deadline < self.visible_from:
-            raise ValidationError('Visible from should be before application deadline')
+            errors['actual_application_deadline'].append(self.SHOWN_BEFORE_VISIBLE_ERROR)
+            errors['visible_from'].append(self.VISIBLE_AFTER_SHOWN_ERROR)
 
         if self.actual_application_deadline < self.shown_application_deadline:
-            raise ValidationError('Shown application deadline should be before the actual application deadline')
+            errors['actual_application_deadline'].append(self.ACTUAL_BEFORE_SHOWN_ERROR)
+            errors['shown_application_deadline'].append(self.SHOWN_AFTER_ACTUAL_ERROR)
 
         if self.reprioritization_deadline_for_applicant < self.actual_application_deadline:
-            raise ValidationError('Actual application deadline should be before reprioritization deadline for applicants')
+            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
+            errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
 
         if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            raise ValidationError('Reprioritization deadline for applicants should be before reprioritization deadline for groups')
+            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
+
+        raise ValidationError(errors)
+
+    # Error messages
+    NOT_IN_FUTURE_ERROR = 'Time should be in the future'
+    SHOWN_BEFORE_VISIBLE_ERROR = 'Shown application deadline should be after visible'
+    VISIBLE_AFTER_SHOWN_ERROR = 'Visible from should be before shown application deadline'
+    ACTUAL_BEFORE_SHOWN_ERROR = 'Actual application deadline should be after the shown application deadline'
+    SHOWN_AFTER_ACTUAL_ERROR = 'Shown application deadline should be before the actual application deadline'
+    REPRIORITIZATION_BEFORE_ACTUAL = 'Reprioritization application deadline should be after actual deadline for applicants'
+    ACTUAL_AFTER_REPRIORITIZATION = 'Actual application deadline should be before reprioritization deadline for applicants'
+    REPRIORITIZATION_GROUP_BEFORE_APPLICANT = 'Reprioritization deadline for groups should be after reprioritization deadline for applicants'
+    REPRIORITIZATION_APPLICANT_AFTER_GROUP = 'Reprioritization deadline for applicants should be before reprioritization deadline for groups'
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
@@ -116,7 +130,7 @@ class RecruitmentPosition(CustomBaseModel):
             self.short_description_en = 'This position only admits Norwegian speaking applicants'
             self.long_description_en = 'No english applicants'
             self.default_admission_letter_en = 'No english applicants'
-        super(RecruitmentPosition, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class InterviewRoom(CustomBaseModel):
@@ -151,6 +165,7 @@ class Interview(CustomBaseModel):
         help_text='Room where the interview is held',
         related_name='interviews',
     )
+    interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
@@ -162,7 +177,7 @@ class RecruitmentAdmission(CustomBaseModel):
     )
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
-    applicant_priority = models.IntegerField(help_text='The priority of the admission')
+    applicant_priority = models.IntegerField(null=True, blank=True, help_text='The priority of the admission')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
@@ -222,7 +237,13 @@ class RecruitmentAdmission(CustomBaseModel):
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
-    def save(self, *args: tuple, **kwargs: dict) -> None:
+    def save(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
+        """
+        If the admission is saved without an interview,
+        try to find an interview from a shared position.
+        """
+        if not self.recruitment:
+            self.recruitment = self.recruitment_position.recruitment
         """If the admission is saved without an interview, try to find an interview from a shared position."""
         if not self.applicant_priority:
             self.organize_priorities()
@@ -265,3 +286,19 @@ class Occupiedtimeslot(FullCleanSaveMixin):
     # Start and end time of availability
     start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
     end_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
+
+
+class RecruitmentStatistics(FullCleanSaveMixin):
+    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
+
+    total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
+    total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        self.total_admissions = self.recruitment.admissions.count()
+        self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f'{self.recruitment} stats'

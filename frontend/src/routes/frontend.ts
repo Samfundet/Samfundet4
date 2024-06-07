@@ -14,6 +14,8 @@ export const ROUTES_FRONTEND = {
   information_page_list: '/information/',
   information_page_detail: '/information/:slugField/',
   saksdokumenter: '/saksdokumenter/',
+  membership: '/membership',
+  luka: '/luka',
   // Recruitment:
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
@@ -70,12 +72,14 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_gang_position_applicants_overview:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId',
   admin_recruitment_gang_position_applicants_interview_notes:
-    '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/notesId', //fix when backend is done
+    '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/interview-notes/:interviewId',
   admin_sulten_menu: '/control-panel/lyche/menu',
+  admin_sulten_reservations: '/control-panel/lyche/reservations',
   // ==================== //
   //      Development     //
   // ==================== //
   api_testing: '/api-testing/',
   components: '/components/',
   route_overview: '/route/overview/',
+  not_found: '/not_found',
 } as const;

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 from typing import Any
 from dataclasses import dataclass
 
@@ -55,7 +56,7 @@ def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageEl
     )
 
 
-def generate() -> dict[str, Any]:
+def generate() -> dict[str, Any]:  # noqa: C901
     elements: list[HomePageElement] = []
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
 
@@ -69,7 +70,7 @@ def generate() -> dict[str, Any]:
         pass
 
     # Upcoming events
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Hva skjer?',
@@ -77,8 +78,6 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Another highlight
     # TODO we should make a datamodel for this
@@ -90,7 +89,7 @@ def generate() -> dict[str, Any]:
         pass
 
     # Concerts
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Konserter',
@@ -98,8 +97,6 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Another highlight
     # TODO we should make a datamodel for this
@@ -111,7 +108,7 @@ def generate() -> dict[str, Any]:
         pass
 
     # Debates
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Debatter',
@@ -119,11 +116,9 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Courses
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Kurs og Forelesninger',
@@ -131,11 +126,9 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(category=EventCategory.LECTURE)[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Free!
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Gratisarrangementer',
@@ -143,11 +136,9 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(ticket_type__in=[EventTicketType.FREE, EventTicketType.INCLUDED])[:10]),
             )
         )
-    except IndexError:
-        pass
 
     # Other
-    try:
+    with contextlib.suppress(IndexError):
         elements.append(
             carousel(
                 title_nb='Andre arrangementer',
@@ -155,7 +146,5 @@ def generate() -> dict[str, Any]:
                 events=list(upcoming_events.filter(category=EventCategory.OTHER)[:10]),
             )
         )
-    except IndexError:
-        pass
 
     return {'splash': splash, 'elements': [el.to_dict() for el in elements]}

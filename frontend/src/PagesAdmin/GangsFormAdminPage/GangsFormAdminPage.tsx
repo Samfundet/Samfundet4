@@ -58,7 +58,7 @@ export function GangsFormAdminPage() {
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <SamfForm
         initialData={gang}
         onSubmit={handleOnSubmit}

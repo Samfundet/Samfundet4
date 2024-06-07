@@ -61,6 +61,9 @@ class NonMemberEmailRegistration(models.Model):
     # WARNING: sensitive data! Make sure this is not exposed through the API or otherwise!
     email = models.EmailField(blank=False, null=False, editable=False)
 
+    def __str__(self) -> str:
+        return self.email
+
 
 class EventRegistration(models.Model):
     """
@@ -72,6 +75,9 @@ class EventRegistration(models.Model):
     registered_users = models.ManyToManyField(User, blank=True)
     # Registered emails (for those not logged in/not a member)
     registered_emails = models.ManyToManyField(NonMemberEmailRegistration, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.count} registered'
 
     @property
     def count(self) -> int:
@@ -224,7 +230,7 @@ class Event(CustomBaseModel):
     # ======================== #
 
     @staticmethod
-    def prefetch_billig(
+    def prefetch_billig(  # noqa: C901
         *,
         events: list[Event] | QuerySet[Event],
         tickets: bool = True,
