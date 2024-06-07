@@ -9,11 +9,11 @@ from collections import defaultdict
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-
+from django.db.models import QuerySet
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from .general import Gang, User, Organization
-from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 
 class Recruitment(CustomBaseModel):
@@ -195,6 +195,10 @@ class RecruitmentAdmission(CustomBaseModel):
         choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
     )
 
+    applicant_state = models.IntegerField(
+        choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text='The state of the applicant for the recruiter'
+    )
+
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
@@ -229,6 +233,30 @@ class RecruitmentAdmission(CustomBaseModel):
         # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
+
+    def update_applicant_state(self) -> QuerySet[RecruitmentAdmission]:  # noqa: C901
+        admissions = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
+        # Get top priority
+        top_wanted = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
+        top_reserved = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
+        if not (top_wanted or top_reserved):
+            for adm in admissions:
+                adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
+                adm.save()
+        else:
+            for adm in admissions:
+                if adm.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
+                    adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
+                    adm.save()
+                # I hate conditionals, so instead of checking all forms of condtions
+                # I use memory array indexing formula (col+row_size*row) for matrixes, to index into state
+                has_priority = 0
+                if top_reserved and top_reserved.applicant_priority < adm.applicant_priority:
+                    has_priority = 1
+                if top_wanted and top_wanted.applicant_priority < adm.applicant_priority:
+                    has_priority = 2
+                adm.applicant_state = adm.recruiter_priority + 3 * has_priority
+                adm.save()
 
 
 class Occupiedtimeslot(FullCleanSaveMixin):
