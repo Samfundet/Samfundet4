@@ -717,7 +717,7 @@ class ApplicantInfoSerializer(CustomBaseSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'occupied_timeslots']
 
 
 class InterviewRoomSerializer(CustomBaseSerializer):

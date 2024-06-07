@@ -1,0 +1,64 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+
+.row {
+  border:none;
+}
+
+.header {
+  background-color: $red-samf;
+  color: $white;
+  border: none;
+}
+
+.headerCol {
+  background-color: $red-samf;
+  color: $white;
+  &:hover {
+    filter: brightness(105%);
+    background-color: $red-samf;
+   }
+  padding: 0.2em 0.4em;
+}
+
+.rowCell {
+  font-size: 0.8em;
+}
+
+.withdrawn {
+  background-color: $withdrawn;
+   &:hover {
+    filter: brightness(95%);
+    background-color: $withdrawn;
+   }
+}
+
+.withdrawn {
+  background-color: $withdrawn;
+   &:hover {
+    filter: brightness(95%);
+    background-color: $withdrawn;
+   }
+   border:none;
+}
+
+.accepted {
+  background-color: $accepted;
+   &:hover {
+    filter: brightness(95%);
+    background-color: $accepted;
+   }
+   border:none;
+}
+
+.rejected {
+  background-color: $rejected;
+   &:hover {
+    filter: brightness(95%);
+    background-color: $rejected;
+   }
+   border:none;
+}
+

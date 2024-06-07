@@ -236,7 +236,14 @@ export const KEY = {
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
-
+  recruitment_withdrawn_admissions: 'recruitment_withdrawn_admissions',
+  recruitment_rejected_admissions: 'recruitment_rejected_admissions',
+  recruitment_accepted_admissions: 'recruitment_accepted_admissions',
+  recruitment_rejected_admissions_help_text: 'recruitment_rejected_admissions_help_text',
+  recruitment_accepted_admissions_help_text: 'recruitment_accepted_admissions_help_text',
+  recruitment_accepted_admissions_empty_text: 'recruitment_accepted_admissions_empty_text',
+  recruitment_rejected_admissions_empty_text: 'recruitment_rejected_admissions_empty_text ',
+  recruitment_withdrawn_admissions_empty_text: 'recruitment_withdrawn_admissions_empty_text',
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',

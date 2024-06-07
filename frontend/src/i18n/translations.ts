@@ -220,6 +220,17 @@ export const nb: Record<KeyValues, string> = {
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recruitment_withdrawn_admissions]: 'Trukkede søknader',
+  [KEY.recruitment_rejected_admissions]: 'Søkere som får automatisk avslag',
+  [KEY.recruitment_accepted_admissions]: 'Søkere vi har tatt opp',
+  [KEY.recruitment_rejected_admissions_help_text]:
+    'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_accepted_admissions_help_text]:
+    'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
+  [KEY.recruitment_accepted_admissions_empty_text]: 'Ingen søkere er markert som kontaktet.',
+  [KEY.recruitment_rejected_admissions_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
+  [KEY.recruitment_withdrawn_admissions_empty_text]: 'Ingen trekte søknader.',
+
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -524,7 +535,16 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
-
+  [KEY.recruitment_withdrawn_admissions]: 'Withdrawn admissions',
+  [KEY.recruitment_rejected_admissions]: 'Automatically rejected applicants',
+  [KEY.recruitment_accepted_admissions]: 'Applicants we have contacted and accepted',
+  [KEY.recruitment_rejected_admissions_help_text]:
+    'These will get an automatic rejection email if they are not accepted for a different position',
+  [KEY.recruitment_accepted_admissions_help_text]:
+    'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
+  [KEY.recruitment_accepted_admissions_empty_text]: 'No applicants are marked as contacted.',
+  [KEY.recruitment_rejected_admissions_empty_text]: 'No applicants are marked to receive an automatic rejection email.',
+  [KEY.recruitment_withdrawn_admissions_empty_text]: 'No withdrawn applications.',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'case document',

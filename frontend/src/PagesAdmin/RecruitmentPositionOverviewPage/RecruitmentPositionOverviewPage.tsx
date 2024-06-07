@@ -12,7 +12,9 @@ import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-
+import { ProcessedApplicants } from './components';
+import styles from './RecruitmentPositionOverviewPage.module.scss';
+import { Text } from '~/Components/Text/Text';
 // TODO: Fetch from backend
 const priorityOptions: DropDownOption<number>[] = [
   { label: 'Not Set', value: 0 },
@@ -47,6 +49,10 @@ export function RecruitmentPositionOverviewPage() {
   const gangId = useParams().gangId;
   const positionId = useParams().positionId;
   const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -56,7 +62,32 @@ export function RecruitmentPositionOverviewPage() {
       getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
-            (recruitmentApplicant) => recruitmentApplicant.recruitment_position?.toString() == positionId,
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status == 0 &&
+              recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setWithdrawnApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setRejectedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
+              recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setAcceptedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status == 1 &&
+              recruitmentApplicant.recruitment_position?.toString() == positionId,
           ),
         );
         setShowSpinner(false);
@@ -196,6 +227,48 @@ export function RecruitmentPositionOverviewPage() {
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <Table columns={tableColumns} data={data} />
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_accepted_admissions)}({acceptedApplicants.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_accepted_admissions_help_text)}</Text>
+        {acceptedApplicants.length > 0 ? (
+          <ProcessedApplicants data={acceptedApplicants} type="accepted" />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_accepted_admissions_empty_text)}
+          </Text>
+        )}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_rejected_admissions)}({rejectedApplicants.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_rejected_admissions_help_text)}</Text>
+        {rejectedApplicants.length > 0 ? (
+          <ProcessedApplicants data={rejectedApplicants} type="rejected" />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_rejected_admissions_empty_text)}
+          </Text>
+        )}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_withdrawn_admissions)}({withdrawnApplicants.length})
+        </Text>
+        {withdrawnApplicants.length > 0 ? (
+          <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {' '}
+            {t(KEY.recruitment_withdrawn_admissions_empty_text)}
+          </Text>
+        )}
+      </div>
     </AdminPageLayout>
   );
 }
