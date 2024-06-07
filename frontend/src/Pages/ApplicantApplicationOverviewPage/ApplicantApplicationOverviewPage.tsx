@@ -54,8 +54,6 @@ export function ApplicantApplicationOverviewPage() {
     }
   }, [recruitmentID]);
 
-
-
   const tableColumns = [
     { sortable: false, content: t(KEY.recruitment_position) },
     { sortable: false, content: t(KEY.recruitment_interview_time) },

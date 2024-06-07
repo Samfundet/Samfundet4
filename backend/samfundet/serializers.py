@@ -579,7 +579,8 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'username',
-            'phone_number' 'email',
+            'phone_number',
+            'email',
             'recruitment_admission_ids',  # Add this to the fields list
         ]
 
