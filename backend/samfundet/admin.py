@@ -638,11 +638,11 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
-    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'admissions_count']
+    search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
-
+    list_display_links = ['id']
     inlines = [RecruitmentAdmissionInline]
 
     def admissions_count(self, obj: RecruitmentPosition) -> int:
@@ -667,6 +667,7 @@ class RecruitmentAdmissionAdmin(CustomBaseAdmin):
         'recruitment',
         'user',
     ]
+    list_display_links = ['recruitment_position']
     list_select_related = True
 
 
