@@ -132,6 +132,54 @@ class RecruitmentPosition(CustomBaseModel):
             self.default_admission_letter_en = 'No english applicants'
         super().save(*args, **kwargs)
 
+    def generate_inteviewhours(
+        self,  # noqa: C901
+        start_dt: timezone.datetime,
+        end_dt: timezone.datetime,
+        location: str,
+        interview_duration_minutes: int = 30,
+    ) -> None:
+        interview_duration = timezone.timedelta(minutes=interview_duration_minutes)
+        # Very naive method, just fetches first user that is available
+        without_interview = RecruitmentAdmission.objects.filter(interview=None)
+        times_gone = 0
+        current_dt = start_dt
+        new_interviews = []
+        while current_dt < end_dt:
+            for admission in without_interview:
+                available = True
+                for occupied_time in Occupiedtimeslot.objects.filter(user=admission.user, recruitment=admission.recruitment).order_by('start_dt'):
+                    if (
+                        occupied_time.start_dt <= current_dt <= occupied_time.end_dt
+                        or occupied_time.start_dt <= current_dt + interview_duration <= occupied_time.end_dt
+                        or current_dt <= occupied_time.start_dt <= current_dt + interview_duration
+                    ):
+                        available = False
+                        break
+                for other_interview in Interview.objects.filter(
+                    id__in=RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment)
+                    .exclude(interview=None)
+                    .values_list('interview')
+                ):
+                    if (current_dt <= other_interview.interview_time <= current_dt + interview_duration) or (
+                        other_interview.interview_time <= current_dt <= other_interview.interview_time + interview_duration
+                    ):
+                        available = False
+                        break
+                if available:
+                    interview = Interview(interview_time=current_dt.replace(second=0), interview_location=location)
+                    interview.save()
+                    admission.interview = interview
+                    new_interviews.append(admission.id)
+                    admission.save()
+                    without_interview = without_interview.exclude(id=admission.id)
+                    break
+            if len(without_interview) == 0:
+                break
+            times_gone += 1
+            current_dt += interview_duration
+        return RecruitmentAdmission.objects.filter(id__in=new_interviews)
+
 
 class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
@@ -210,24 +258,19 @@ class RecruitmentAdmission(CustomBaseModel):
             current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
-        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        # Auto set not wanted when withdrawn
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        # If the admission is saved without an interview, try to find an interview from a shared position.
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
             shared_interview = (
                 RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
             )
-
             if shared_interview:
                 self.interview = shared_interview.interview
-            else:
-                # Create a new interview instance if needed
-                self.interview = Interview.objects.create()
-        # Auto set not wanted when withdrawn
-
         super().save(*args, **kwargs)
 
 

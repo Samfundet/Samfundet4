@@ -71,6 +71,7 @@ from .serializers import (
     InformationPageSerializer,
     OccupiedtimeslotSerializer,
     ReservationCheckSerializer,
+    GenerateInterviewSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
@@ -779,6 +780,26 @@ class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
+
+
+class GenerateInterviewsView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = GenerateInterviewSerializer
+
+    def put(self, request: Request, pk: int) -> Response:
+        input_data = self.serializer_class(data=request.data)
+        if not input_data.is_valid():
+            return Response(input_data.errors, status=status.HTTP_400_BAD_REQUEST)
+        position = get_object_or_404(RecruitmentPosition, id=pk)
+        start_dt = input_data.data['start_dt']
+        end_dt = input_data.data['end_dt']
+        # Stupid serializer with Datefield does not convert into date
+        if type(start_dt) is str:
+            start_dt = timezone.datetime.strptime(start_dt, '%Y-%m-%dT%H:%M:%S%z')
+        if type(end_dt) is str:
+            end_dt = timezone.datetime.strptime(end_dt, '%Y-%m-%dT%H:%M:%S%z')
+        new_interviews = position.generate_inteviewhours(start_dt, end_dt, input_data.data['location'])
+        return Response(RecruitmentAdmissionForGangSerializer(new_interviews).data, status=status.HTTP_201_CREATED)
 
 
 class OccupiedtimeslotView(ListCreateAPIView):

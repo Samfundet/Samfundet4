@@ -288,6 +288,26 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
 
 
 @pytest.fixture
+def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang: Gang) -> Iterator[Recruitment]:
+    recruitment_position = RecruitmentPosition.objects.create(
+        name_nb='Position 2 NB',
+        name_en='Position 2 EN',
+        short_description_nb='Short Description NB',
+        short_description_en='Short Description EN',
+        long_description_nb='Long Description NB',
+        long_description_en='Long Description EN',
+        is_funksjonaer_position=False,
+        default_admission_letter_nb='Default Admission Letter NB',
+        default_admission_letter_en='Default Admission Letter EN',
+        tags='tag1,tag2',
+        gang=fixture_gang,
+        recruitment=fixture_recruitment,
+    )
+    yield recruitment_position
+    recruitment_position.delete()
+
+
+@pytest.fixture
 def fixture_informationpage() -> Iterator[InformationPage]:
     informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
     yield informationpage
@@ -316,6 +336,25 @@ def fixture_recruitment_admission(
     admission = RecruitmentAdmission.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,
+        recruitment=fixture_recruitment,
+        user=fixture_user,
+        applicant_priority=1,
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
+    )
+    yield admission
+    admission.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_admission2(
+    fixture_user: User,
+    fixture_recruitment_position2: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentAdmission]:
+    admission = RecruitmentAdmission.objects.create(
+        admission_text='Test admission text',
+        recruitment_position=fixture_recruitment_position2,
         recruitment=fixture_recruitment,
         user=fixture_user,
         applicant_priority=1,

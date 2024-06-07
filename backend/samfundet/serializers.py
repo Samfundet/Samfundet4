@@ -712,6 +712,13 @@ class OccupiedtimeslotSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GenerateInterviewSerializer(serializers.Serializer):
+    location = serializers.CharField(required=True, max_length=100)
+    start_dt = serializers.DateTimeField(required=True)
+    end_dt = serializers.DateTimeField(required=True)
+    position = serializers.IntegerField(required=False)
+
+
 class ApplicantInfoSerializer(CustomBaseSerializer):
     occupied_timeslots = OccupiedtimeslotSerializer(many=True)
 
