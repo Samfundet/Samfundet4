@@ -630,6 +630,18 @@ export async function putRecruitmentPriorityForUser(
   return await axios.put(url, data, { withCredentials: true });
 }
 
+export async function getRecruitmentAdmissionForApplicant(
+  recruitment_position: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      urlParams: { pk: recruitment_position },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 export async function getRecruitmentAdmissionsForGang(
   gangId: string,
   recruitmentId: string,

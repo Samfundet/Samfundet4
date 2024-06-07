@@ -212,12 +212,10 @@ class RecruitmentAdmission(CustomBaseModel):
         can move n positions up or down
 
         """
-        admissions_for_user = RecruitmentAdmission.objects.filter(recruitment=self.recruitment, user=self.user)
         # Use order for more simple an unified for direction
-        ordering = f"{'-' if direction < 0 else '' }applicant_priority"
-        admissions_for_user = admissions_for_user.order_by(ordering)
+        ordering = f"{'' if direction < 0 else '-' }applicant_priority"
+        admissions_for_user = RecruitmentAdmission.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
         direction = abs(direction)  # convert to absolute
-
         for i in range(len(admissions_for_user)):
             if admissions_for_user[i].id == self.id:  # find current
                 # Find index of which to switch  priority with
