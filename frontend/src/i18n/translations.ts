@@ -231,7 +231,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_rejected_admissions_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
   [KEY.recruitment_withdrawn_admissions_empty_text]: 'Ingen trekte søknader.',
 
-
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
