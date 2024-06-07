@@ -18,11 +18,10 @@ export function ApplicantApplicationOverviewPage() {
   const { t } = useTranslation();
 
   function handleChangePriority(id: string, direction: 'up' | 'down') {
-    putRecruitmentPriorityForUser(id, { direction: direction === 'up' ? 1 : -1 } as UserPriorityDto).then(
-      (response) => {
-        setAdmissions(response.data);
-      },
-    );
+    const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
+    putRecruitmentPriorityForUser(id, data).then((response) => {
+      setAdmissions(response.data);
+    });
   }
 
   function upDownArrow(id: string) {

@@ -713,20 +713,23 @@ class RecruitmentAdmissionApplicantPriorityView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
 
-    def put(  # noqa: PLR0917
+    def put(
         self,
         request: Request,
         pk: int,
     ) -> Response:
-        direction = request.data.get('direction')
+        direction = RecruitmentUpdateUserPrioritySerializer(request.data)
+        if direction.is_valid():
+            direction = direction.data['direction']
+        else:
+            return Response(direction.errors, status=status.HTTP_400_BAD_REQUEST)
+
         # Dont think we need any extra perms in this view, admin should not be able to change priority
-        admission = RecruitmentAdmission.objects.filter(
+        admission = get_object_or_404(
+            RecruitmentAdmission,
             id=pk,
             user=request.user,
-        ).first()
-        if not admission:
-            # Just throw error equally for not found, should hide if id exists and who it belongs to
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        )
         admission.update_priority(direction)
         serializer = RecruitmentAdmissionForApplicantSerializer(
             RecruitmentAdmission.objects.filter(
