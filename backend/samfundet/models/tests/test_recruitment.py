@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from samfundet.models.general import User
-from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission, Occupiedtimeslot
+from samfundet.models.recruitment import Recruitment, Organization, Occupiedtimeslot, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
@@ -36,7 +36,7 @@ def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> R
     fields['visible_from'] = future
     fields.update(overrides)
 
-    Recruitment.objects.create(
+    return Recruitment.objects.create(
         **fields,
         name_nb='Navn',
         name_en='Name',
@@ -184,7 +184,7 @@ class TestRecruitmentInterview:
 
         # Check if generated new hour
         location_name = 'Mujaffas BMW'
-        fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
+        fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now(), timezone.now() + timezone.timedelta(hours=1), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
@@ -194,7 +194,7 @@ class TestRecruitmentInterview:
         assert interview.interview_location == location_name
 
         location_name2 = 'NBB'
-        fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
+        fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now(), timezone.now() + timezone.timedelta(hours=1), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
@@ -221,7 +221,7 @@ class TestRecruitmentInterview:
 
         # Check if generated new hour
         location_name = 'Mujaffas BMW'
-        new_interviews = fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
+        new_interviews = fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now(), timezone.now() + timezone.timedelta(hours=2), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
@@ -241,7 +241,7 @@ class TestRecruitmentInterview:
 
         # Check if not generating double
         location_name2 = 'NBB'
-        new_interviews = fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
+        new_interviews = fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now(), timezone.now() + timezone.timedelta(hours=1), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
@@ -267,14 +267,14 @@ class TestRecruitmentInterview:
         )
         # Check does not generate, due to occupied timeslot
         location_name = 'Mujaffas BMW'
-        fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
+        fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now(), timezone.now() + timezone.timedelta(hours=1), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
         assert fixture_recruitment_admission.interview is None
 
         # Check does generate, not occupied
-        fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
+        fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now() + timezone.timedelta(days=1), timezone.now() + timezone.timedelta(days=1, hours=1), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
@@ -291,17 +291,7 @@ class TestRecruitmentInterview:
 
         # Generate the first interview, other does not generate
         location_name = 'Mujaffas BMW'
-        fixture_recruitment_admission.recruitment_position.generate_inteviewhours(
-            timezone.now(), timezone.now() + timezone.timedelta(minutes=30), location=location_name
-        )
-        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)
-
-        assert fixture_recruitment_admission.interview is not None
-        assert fixture_recruitment_admission2.interview is None
-
-        # Check does not generate, time occupied due other interview
-        fixture_recruitment_admission2.recruitment_position.generate_inteviewhours(
+        fixture_recruitment_admission.recruitment_position.generate_interviewhours(
             timezone.now(), timezone.now() + timezone.timedelta(minutes=15), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
@@ -310,8 +300,18 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_admission.interview is not None
         assert fixture_recruitment_admission2.interview is None
 
-        fixture_recruitment_admission2.recruitment_position.generate_inteviewhours(
-            timezone.now() + timezone.timedelta(days=1), timezone.now() + timezone.timedelta(days=1, hours=1), location=location_name
+        # Check does not generate, time occupied due other interview
+        fixture_recruitment_admission2.recruitment_position.generate_interviewhours(
+            timezone.now(), timezone.now() + timezone.timedelta(minutes=15), location=location_name
+        )
+        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)
+
+        assert fixture_recruitment_admission.interview is not None
+        assert fixture_recruitment_admission2.interview is None
+
+        fixture_recruitment_admission2.recruitment_position.generate_interviewhours(
+            timezone.now(), timezone.now() + timezone.timedelta(hours=1), location=location_name
         )
         fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
         fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)

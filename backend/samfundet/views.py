@@ -798,7 +798,7 @@ class GenerateInterviewsView(APIView):
             start_dt = timezone.datetime.strptime(start_dt, '%Y-%m-%dT%H:%M:%S%z')
         if type(end_dt) is str:
             end_dt = timezone.datetime.strptime(end_dt, '%Y-%m-%dT%H:%M:%S%z')
-        new_interviews = position.generate_inteviewhours(start_dt, end_dt, input_data.data['location'])
+        new_interviews = position.generate_interviewhours(start_dt, end_dt, input_data.data['location'])
         return Response(RecruitmentAdmissionForGangSerializer(new_interviews).data, status=status.HTTP_201_CREATED)
 
 

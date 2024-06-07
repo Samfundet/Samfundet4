@@ -132,7 +132,7 @@ class RecruitmentPosition(CustomBaseModel):
             self.default_admission_letter_en = 'No english applicants'
         super().save(*args, **kwargs)
 
-    def generate_inteviewhours(
+    def generate_interviewhours(
         self,  # noqa: C901
         start_dt: timezone.datetime,
         end_dt: timezone.datetime,
