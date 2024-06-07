@@ -285,7 +285,6 @@ class TestRecruitmentAdmission:
         assert fixture_recruitment_admission.applicant_state == RecruitmentApplicantStates.TOP_WANTED
         assert fixture_recruitment_admission2.applicant_state == RecruitmentApplicantStates.NOT_SET
 
-
     def test_check_applicant_state_reserve(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission):
         """
         Tests for each state where one admission is wanted,
