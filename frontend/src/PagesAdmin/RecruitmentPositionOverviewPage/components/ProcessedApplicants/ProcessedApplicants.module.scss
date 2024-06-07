@@ -33,14 +33,6 @@
     filter: brightness(95%);
     background-color: $withdrawn;
    }
-}
-
-.withdrawn {
-  background-color: $withdrawn;
-   &:hover {
-    filter: brightness(95%);
-    background-color: $withdrawn;
-   }
    border:none;
 }
 
