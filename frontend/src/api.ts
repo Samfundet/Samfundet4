@@ -627,7 +627,7 @@ export async function putRecruitmentPriorityForUser(
       pattern: ROUTES.backend.samfundet__recruitment_user_priority_update,
       urlParams: { pk: admissionId },
     });
-  const response = await axios.put(url, data, { withCredentials: true });
+  return await axios.put(url, data, { withCredentials: true });
 }
 
 export async function getRecruitmentAdmissionsForGang(
@@ -643,9 +643,7 @@ export async function getRecruitmentAdmissionsForGang(
         recruitment: recruitmentId,
       },
     });
-  const response = await axios.get(url, { withCredentials: true });
-
-  return response;
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function putRecruitmentAdmissionForGang(
