@@ -72,5 +72,6 @@ urlpatterns = [
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
+    path('generate-interviewhours/<int:pk>/', views.GenerateInterviewsView.as_view(), name='generate_interviews'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
 ]

@@ -23,6 +23,7 @@ from samfundet.models.general import (
     InformationPage,
 )
 from samfundet.models.recruitment import (
+    Interview,
     Recruitment,
     RecruitmentPosition,
     RecruitmentAdmission,
@@ -847,8 +848,9 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     url = reverse(routes.samfundet__applicants_without_interviews)
 
     # Setting the interview time for the user's admission
-    fixture_recruitment_admission.interview.interview_time = timezone.now()
-    fixture_recruitment_admission.interview.save()
+    interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Baghdad')
+    interview.save()
+    fixture_recruitment_admission.interview = interview
     fixture_recruitment_admission.save()
 
     ### Act ###
