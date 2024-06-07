@@ -288,7 +288,7 @@ class TestRecruitmentInterview:
     ):
         assert fixture_recruitment_admission.interview is None
         assert fixture_recruitment_admission2.interview is None
-
+        assert fixture_recruitment_admission2.recruitment_position != fixture_recruitment_admission.recruitment_position
         # Generate the first interview, other does not generate
         location_name = 'Mujaffas BMW'
         fixture_recruitment_admission.recruitment_position.generate_interviewhours(

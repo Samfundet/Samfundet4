@@ -139,15 +139,15 @@ class RecruitmentPosition(CustomBaseModel):
         location: str,
         interview_duration_minutes: int = 30,
     ) -> None:
-        interview_duration = timezone.timedelta(minutes=interview_duration_minutes)
         # Very naive method, just fetches first user that is available
+        interview_duration = timezone.timedelta(minutes=interview_duration_minutes)
         without_interview = RecruitmentAdmission.objects.filter(interview=None)
-        times_gone = 0
         current_dt = start_dt
         new_interviews = []
         while current_dt < end_dt:
             for admission in without_interview:
                 available = True
+                # Check if user is unavailable at that time
                 for occupied_time in Occupiedtimeslot.objects.filter(user=admission.user, recruitment=admission.recruitment).order_by('start_dt'):
                     if (
                         occupied_time.start_dt <= current_dt <= occupied_time.end_dt
@@ -156,17 +156,20 @@ class RecruitmentPosition(CustomBaseModel):
                     ):
                         available = False
                         break
-                for other_interview in Interview.objects.filter(
-                    id__in=RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment)
-                    .exclude(interview=None)
-                    .values_list('interview')
-                ):
-                    if (current_dt <= other_interview.interview_time <= current_dt + interview_duration) or (
-                        other_interview.interview_time <= current_dt <= other_interview.interview_time + interview_duration
-                    ):
-                        available = False
-                        break
+                # Check other interviewtimes
                 if available:
+                    for other_interview in Interview.objects.filter(
+                        id__in=RecruitmentAdmission.objects.filter(user=admission.user, recruitment=admission.recruitment)
+                        .exclude(interview=None)
+                        .values_list('interview')
+                    ):
+                        if (current_dt <= other_interview.interview_time <= current_dt + interview_duration) or (
+                            other_interview.interview_time <= current_dt <= other_interview.interview_time + interview_duration
+                        ):
+                            available = False
+                            break
+                if available:
+                    # If available, set interview time
                     interview = Interview(interview_time=current_dt.replace(second=0), interview_location=location)
                     interview.save()
                     admission.interview = interview
@@ -176,7 +179,7 @@ class RecruitmentPosition(CustomBaseModel):
                     break
             if len(without_interview) == 0:
                 break
-            times_gone += 1
+
             current_dt += interview_duration
         return RecruitmentAdmission.objects.filter(id__in=new_interviews)
 
