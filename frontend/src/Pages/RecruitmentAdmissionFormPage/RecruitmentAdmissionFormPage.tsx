@@ -8,8 +8,8 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getRecruitmentAdmissionForApplicant,
-  getRecruitmentPosition,
-  getRecruitmentPositionsGang,
+  getRecruitmentPositionForApplicant,
+  getRecruitmentPositionsGangForApplicant,
   putRecruitmentAdmission,
 } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
@@ -38,7 +38,7 @@ export function RecruitmentAdmissionFormPage() {
 
   useEffect(() => {
     Promise.allSettled([
-      getRecruitmentPosition(positionID as string)
+      getRecruitmentPositionForApplicant(positionID as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
         })
@@ -58,11 +58,12 @@ export function RecruitmentAdmissionFormPage() {
   }, [positionID, standardNavigate, t]);
 
   useEffect(() => {
-    getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
-      (res) => {
-        setRecruitmentPositionsForGang(res.data);
-      },
-    );
+    getRecruitmentPositionsGangForApplicant(
+      recruitmentPosition?.recruitment as string,
+      recruitmentPosition?.gang.id,
+    ).then((res) => {
+      setRecruitmentPositionsForGang(res.data);
+    });
   }, [recruitmentPosition]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
