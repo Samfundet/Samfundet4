@@ -184,3 +184,51 @@ class TestRecruitmentAdmission:
 
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+
+
+class TestRecruitmentAdmissionStatus:
+    def test_check_called_accepted_sets_auto_rejection(
+        self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission
+    ):
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+        assert fixture_recruitment_admission2.recruiter_status == RecruitmentStatusChoices.NOT_SET
+
+        fixture_recruitment_admission.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        fixture_recruitment_admission.save()
+
+        # Fetch most recent values
+        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)
+
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        assert fixture_recruitment_admission2.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+
+    def test_check_called_rejected_sets_auto_rejection(
+        self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission
+    ):
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+        assert fixture_recruitment_admission2.recruiter_status == RecruitmentStatusChoices.NOT_SET
+
+        fixture_recruitment_admission.recruiter_status = RecruitmentStatusChoices.CALLED_AND_REJECTED
+        fixture_recruitment_admission.save()
+
+        # Fetch most recent values
+        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)
+
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
+        assert fixture_recruitment_admission2.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+
+    def test_check_autorejection_sets_nothing(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission):
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+        assert fixture_recruitment_admission2.recruiter_status == RecruitmentStatusChoices.NOT_SET
+
+        fixture_recruitment_admission.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        fixture_recruitment_admission.save()
+
+        # Fetch most recent values
+        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)
+
+        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        assert fixture_recruitment_admission2.recruiter_status == RecruitmentStatusChoices.NOT_SET
