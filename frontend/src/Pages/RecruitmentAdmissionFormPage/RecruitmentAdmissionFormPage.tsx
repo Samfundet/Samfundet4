@@ -62,9 +62,8 @@ export function RecruitmentAdmissionFormPage() {
       recruitmentPosition?.recruitment as string,
       recruitmentPosition?.gang.id,
     ).then((res) => {
-        setRecruitmentPositionsForGang(res.data);
-      },
-    );
+      setRecruitmentPositionsForGang(res.data);
+    });
   }, [recruitmentPosition]);
 
   function handleOnSubmit(data: RecruitmentAdmissionDto) {
