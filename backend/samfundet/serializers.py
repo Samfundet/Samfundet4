@@ -17,6 +17,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .models.model_choices import RecruitmentStatusChoices
 from .models.event import Event, EventGroup, EventCustomTicket
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
@@ -601,6 +602,10 @@ class InterviewerSerializer(CustomBaseSerializer):
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):
+    total_applicants = serializers.SerializerMethodField(method_name='get_total_applicants', read_only=True)
+    processed_applicants = serializers.SerializerMethodField(method_name='get_processed_applicants', read_only=True)
+    accepted_applicants = serializers.SerializerMethodField(method_name='get_accepted_applicants', read_only=True)
+
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
 
@@ -635,6 +640,21 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
+
+    def get_total_applicants(self, recruitment_position: RecruitmentPosition) -> int:
+        return RecruitmentAdmission.objects.filter(recruitment_position=recruitment_position, withdrawn=False).count()
+
+    def get_processed_applicants(self, recruitment_position: RecruitmentPosition) -> int:
+        return (
+            RecruitmentAdmission.objects.filter(recruitment_position=recruitment_position, withdrawn=False)
+            .exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+            .count()
+        )
+
+    def get_accepted_applicants(self, recruitment_position: RecruitmentPosition) -> int:
+        return RecruitmentAdmission.objects.filter(
+            recruitment_position=recruitment_position, withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        ).count()
 
 
 class ApplicantInterviewSerializer(serializers.ModelSerializer):
