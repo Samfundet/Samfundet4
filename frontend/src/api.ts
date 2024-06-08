@@ -716,7 +716,7 @@ export async function withdrawRecruitmentAdmissionApplicant(positionId: number):
       pattern: ROUTES.backend.samfundet__recruitment_withdraw_admission,
       urlParams: { pk: positionId },
     });
-  const response = await axios.put(url, { withCredentials: true });
+  const response = await axios.put(url, {}, { withCredentials: true });
 
   return response;
 }
