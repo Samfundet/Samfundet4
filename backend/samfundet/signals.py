@@ -80,7 +80,7 @@ def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmissi
 
 
 @receiver(pre_save, sender=RecruitmentAdmission)
-def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, instance: RecruitmentAdmission, **kwargs) -> None:
+def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, instance: RecruitmentAdmission, **kwargs: Any) -> None:
     """Whenever an applicant is contacted, set all other admissions to automatic rejection"""
 
     obj = RecruitmentAdmission.objects.filter(pk=instance.pk).first()
