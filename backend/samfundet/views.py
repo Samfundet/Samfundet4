@@ -74,9 +74,9 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
-    RecruitmentAdmissionUpdateForGangSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
+    RecruitmentAdmissionUpdateForGangSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
@@ -115,7 +115,8 @@ from .models.recruitment import (
     RecruitmentAdmission,
     RecruitmentStatistics,
 )
-from .models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
+from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
 # =============================== #
 #          Home Page              #
 # =============================== #

@@ -697,7 +697,6 @@ export async function getRecruitmentAdmissionStateChoices(): Promise<
   return await axios.get(url, { withCredentials: true });
 }
 
-
 export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_positions;
   const response = await axios.get(url, { withCredentials: true });

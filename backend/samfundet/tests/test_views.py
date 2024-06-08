@@ -27,7 +27,7 @@ from samfundet.models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
 )
-from samfundet.models.model_choices import RecruitmentPriorityChoices, RecruitmentStatusChoices
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
