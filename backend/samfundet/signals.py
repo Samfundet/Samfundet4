@@ -5,7 +5,7 @@ from typing import Any
 from guardian.shortcuts import assign_perm, remove_perm
 
 from django.dispatch import receiver
-from django.db.models.signals import post_save, m2m_changed, pre_save
+from django.db.models.signals import pre_save, post_save, m2m_changed
 
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
