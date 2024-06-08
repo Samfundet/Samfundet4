@@ -46,7 +46,7 @@ export function RecruitmentGangAdminPage() {
     { content: t(KEY.recruitment_applicants), sortable: true },
     { content: t(KEY.recruitment_processed), sortable: true },
     { content: t(KEY.recruitment_accepted_applicants), sortable: true },
-    {},
+    { content: ' ', sortable: false },
   ];
 
   const data = recruitmentPositions.map(function (recruitmentPosition) {

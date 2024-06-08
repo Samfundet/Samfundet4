@@ -224,6 +224,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_processed]: 'Behandlet',
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
+  [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
 
   // Admin:
