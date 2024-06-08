@@ -24,10 +24,12 @@ import {
   RecruitmentPositionDto,
   RegistrationDto,
   SaksdokumentDto,
+  RecruitmentAdmissionStateDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
   VenueDto,
+  RecruitmentAdmissionStateChoicesDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -661,6 +663,40 @@ export async function putRecruitmentAdmissionForGang(
   const response = await axios.put<RecruitmentAdmissionDto>(url, admission, { withCredentials: true });
   return response;
 }
+
+export async function updateRecruitmentAdmissionStateForGang(
+  admissionId: string,
+  admission: Partial<RecruitmentAdmissionStateDto>,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admission_update_state_gang,
+      urlParams: { pk: admissionId },
+    });
+  return await axios.put(url, admission, { withCredentials: true });
+}
+
+export async function updateRecruitmentAdmissionStateForPosition(
+  admissionId: string,
+  admission: Partial<RecruitmentAdmissionStateDto>,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admission_update_state_position,
+      urlParams: { pk: admissionId },
+    });
+  return await axios.put(url, admission, { withCredentials: true });
+}
+
+export async function getRecruitmentAdmissionStateChoices(): Promise<
+  AxiosResponse<RecruitmentAdmissionStateChoicesDto>
+> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_admission_states_choices;
+  return await axios.get(url, { withCredentials: true });
+}
+
 
 export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_positions;

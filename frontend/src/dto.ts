@@ -405,6 +405,16 @@ export type RecruitmentAdmissionDto = {
   withdrawn: boolean;
 };
 
+export type RecruitmentAdmissionStateDto = {
+  recruiter_priority?: number;
+  recruiter_status?: number;
+};
+
+export type RecruitmentAdmissionStateChoicesDto = {
+  recruiter_priority: [number, string][];
+  recruiter_status: [number, string][];
+};
+
 export type FeedbackDto = {
   text: string;
   screen_resolution: string;
