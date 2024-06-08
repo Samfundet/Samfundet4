@@ -55,6 +55,7 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_all: 'common_all',
   common_price: 'common_price',
   common_buy: 'common_buy',
   common_time: 'common_time',
@@ -207,6 +208,7 @@ export const KEY = {
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
   recruitment_interview_notes: 'recruitment_interview_notes',
@@ -216,6 +218,7 @@ export const KEY = {
   recruitment_duration: 'recruitment_duration',
   recruitment_admission: 'recruitment_admission',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
+  recruitment_jobtype: 'recruitment_jobtype',
   recruitment_gangmember: 'recruitment_gangmember',
   recruitment_organization: 'recruitment_organization',
   recruitment_applyfor: 'recruitment_applyfor',
@@ -235,6 +238,9 @@ export const KEY = {
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_show_all_applicants: 'recruitment_show_all_applicants',
+  recruitment_processed: 'recruitment_processed',
+  recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
 
   // Admin:

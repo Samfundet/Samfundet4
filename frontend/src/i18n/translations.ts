@@ -43,6 +43,7 @@ export const nb: Record<KeyValues, string> = {
 
   // Other common
   [KEY.common_to]: 'Til',
+  [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_time]: 'Tid',
@@ -190,6 +191,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_applicant]: 'Søker',
+  [KEY.recruitment_applicants]: 'Søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
@@ -201,6 +203,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_recruiter_status]: 'Status',
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_admission]: 'Søknad',
+  [KEY.recruitment_jobtype]: 'Stillingstype',
   [KEY.recruitment_funksjonaer]: 'Funksjonær',
   [KEY.recruitment_gangmember]: 'Gjengmedlem',
   [KEY.recruitment_applyfor]: 'Søk på dette vervet',
@@ -219,6 +222,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
+  [KEY.recruitment_processed]: 'Behandlet',
+  [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
 
   // Admin:
@@ -346,6 +351,7 @@ export const en: Record<KeyValues, string> = {
 
   // No category:
   [KEY.common_to]: 'To',
+  [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
   [KEY.common_buy]: 'Buy',
   [KEY.common_time]: 'Time',
@@ -493,6 +499,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_applicant]: 'Applicant',
+  [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
@@ -505,6 +512,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_recruiter_status]: 'Status',
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_admission]: 'Admission',
+  [KEY.recruitment_jobtype]: 'Job type',
   [KEY.recruitment_funksjonaer]: 'Functionary',
   [KEY.recruitment_gangmember]: 'Gangmember',
   [KEY.recruitment_applyfor]: 'Apply for this position',
@@ -522,7 +530,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
+  [KEY.recruitment_show_all_applicants]: 'Show all applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
+  [KEY.recruitment_processed]: 'Processed',
+  [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
 
   // Admin:

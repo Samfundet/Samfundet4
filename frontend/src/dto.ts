@@ -380,6 +380,10 @@ export type RecruitmentPositionDto = {
   tags: string;
 
   interviewers?: UserDto[];
+
+  total_applicants?: number;
+  processed_applicants?: number;
+  accepted_applicants?: number;
 };
 
 export type InterviewDto = {
