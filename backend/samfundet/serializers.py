@@ -571,6 +571,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
+    campus = CampusSerializer()
 
     class Meta:
         model = User
@@ -581,6 +582,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'username',
             'phone_number',
             'email',
+            'campus',
             'recruitment_admission_ids',  # Add this to the fields list
         ]
 

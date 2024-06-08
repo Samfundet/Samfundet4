@@ -785,7 +785,7 @@ class RecruitmentAdmissionForRecruitersView(APIView):
         return Response(
             data={
                 'admission': RecruitmentAdmissionForRecruiterSerializer(instance=admission).data,
-                'user': UserForRecruitmentSerializerr(instance=admission.user).data,
+                'user': UserForRecruitmentSerializer(instance=admission.user).data,
                 'other_admissions': RecruitmentAdmissionForRecruiterSerializer(other_admissions, many=True).data,
             }
         )

@@ -23,6 +23,7 @@ import {
   RecruitmentAdmissionRecruiterDto,
   RecruitmentDto,
   RecruitmentPositionDto,
+  RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
   TextItemDto,
@@ -691,7 +692,9 @@ export async function getActiveRecruitments(): Promise<AxiosResponse<Recruitment
   return response;
 }
 
-export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
+export async function getApplicantsWithoutInterviews(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUserDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
