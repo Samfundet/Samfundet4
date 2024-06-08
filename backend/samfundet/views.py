@@ -766,7 +766,7 @@ class DownloadRecruitmentAdmissionGangCSV(APIView):
 
     def get(
         self,
-        request,
+        request: Request,
         recruitment_id: int,
         gang_id: int,
     ) -> HttpResponse:
