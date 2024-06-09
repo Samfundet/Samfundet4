@@ -5,8 +5,6 @@ import { KEY } from '~/i18n/constants';
 import { toast } from 'react-toastify';
 import { setRecruitmentAdmissionsInterview } from '~/api';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../Button';
-import { Icon } from '@iconify/react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { Text } from '../Text/Text';

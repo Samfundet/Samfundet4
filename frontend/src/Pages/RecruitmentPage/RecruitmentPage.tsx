@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, InterviewFormModal, Page, SamfundetLogoSpinner, Video } from '~/Components';
-import { getActiveRecruitmentPositions, getGangList, getRecruitmentAdmissionsForApplicant, getRecruitmentAdmissionsForGang } from '~/api';
+import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
+import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
-import { GangTypeDto, RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
+import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { useTextItem, useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -19,7 +19,6 @@ export function RecruitmentPage() {
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
 
-  const [testAdmission, setTestAdmission] = useState<RecruitmentAdmissionDto>();
   const noadmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
@@ -52,11 +51,10 @@ export function RecruitmentPage() {
   );
 
   useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList(), getRecruitmentAdmissionsForGang('1', '1')])
-      .then(([recruitmentRes, gangsRes, admissionRes]) => {
+    Promise.all([getActiveRecruitmentPositions(), getGangList()])
+      .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
         setGangs(gangsRes);
-        setTestAdmission(admissionRes.data[0]);
         setLoading(false);
       })
       .catch((error) => {
@@ -71,7 +69,6 @@ export function RecruitmentPage() {
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
         <div className={styles.personalRow}>
           <OccupiedFormModal recruitmentId={1} />
-          {testAdmission && <InterviewFormModal admission={testAdmission} /> }
           <Button
             theme="samf"
             onClick={() => {

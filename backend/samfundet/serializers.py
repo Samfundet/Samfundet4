@@ -727,7 +727,7 @@ class InterviewRoomSerializer(CustomBaseSerializer):
 
 
 class InterviewSerializer(CustomBaseSerializer):
-    interviewers = InterviewerSerializer(many=True, required = False)
+    interviewers = InterviewerSerializer(many=True, required=False)
 
     class Meta:
         model = Interview
