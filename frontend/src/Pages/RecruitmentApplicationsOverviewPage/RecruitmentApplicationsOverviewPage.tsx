@@ -9,10 +9,10 @@ import { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
-import styles from './ApplicantApplicationOverviewPage.module.scss';
+import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 
-export function ApplicantApplicationOverviewPage() {
+export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
