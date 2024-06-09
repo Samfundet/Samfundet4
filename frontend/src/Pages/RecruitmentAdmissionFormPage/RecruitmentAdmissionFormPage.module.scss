@@ -47,3 +47,21 @@
 .formLabel {
   margin-bottom: 0.5em;
 }
+
+.rowHeader {
+  display: flex;
+  flex-direction: row;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1em;
+  margin-left: 2em;
+}
+
+.image {
+  width: auto;
+  height: 2em;
+  margin: 0;
+}

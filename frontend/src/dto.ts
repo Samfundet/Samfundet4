@@ -274,6 +274,7 @@ export type BookingDto = {
 export type OrganizationDto = {
   id: number;
   name: string;
+  logo: string;
 };
 
 export type GangDto = {
@@ -376,6 +377,7 @@ export type RecruitmentPositionDto = {
 
   gang: GangDto;
   recruitment: string;
+  organization: OrganizationDto;
 
   tags: string;
 

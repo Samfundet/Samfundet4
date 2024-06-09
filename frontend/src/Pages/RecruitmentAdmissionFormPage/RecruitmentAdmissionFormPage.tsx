@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '~/AuthContext';
-import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Button, Image, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
@@ -102,23 +102,33 @@ export function RecruitmentAdmissionFormPage() {
       <div className={styles.container}>
         <div className={styles.row}>
           <div className={styles.textcontainer}>
-            <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
-            <h2 className={styles.subheader}>
-              {t(KEY.recruitment_volunteerfor)}{' '}
-              <i>
-                {recruitmentPosition?.is_funksjonaer_position
-                  ? t(KEY.recruitment_funksjonaer)
-                  : t(KEY.recruitment_gangmember)}
-              </i>{' '}
-              <Link
-                url={reverse({
-                  pattern: ROUTES.frontend.information_page_detail,
-                  urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
-                })}
-              >
-                {dbT(recruitmentPosition?.gang, 'name')}
-              </Link>
-            </h2>
+            <div className={styles.rowHeader}>
+              <div>
+                <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
+                <h2 className={styles.subheader}>
+                  {t(KEY.recruitment_volunteerfor)}{' '}
+                  <i>
+                    {recruitmentPosition?.is_funksjonaer_position
+                      ? t(KEY.recruitment_funksjonaer)
+                      : t(KEY.recruitment_gangmember)}
+                  </i>{' '}
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.information_page_detail,
+                      urlParams: { slugField: recruitmentPosition?.gang.name_nb.toLowerCase() },
+                    })}
+                  >
+                    {dbT(recruitmentPosition?.gang, 'name')}
+                  </Link>
+                </h2>
+              </div>
+
+              {recruitmentPosition && (
+                <div className={styles.imageContainer}>
+                  <Image src={recruitmentPosition.organization.logo} className={styles.image} />
+                </div>
+              )}
+            </div>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
             <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
