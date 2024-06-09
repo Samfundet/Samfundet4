@@ -274,6 +274,7 @@ class Organization(CustomBaseModel):
     """Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT"""
 
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
+    logo = models.ImageField(upload_to='orglogos/', blank=True, null=True, verbose_name='Logo')
 
     class Meta:
         verbose_name = 'Organization'

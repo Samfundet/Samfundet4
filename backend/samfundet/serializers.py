@@ -398,6 +398,7 @@ class OrganizationSerializer(CustomBaseSerializer):
 
 
 class GangSerializer(CustomBaseSerializer):
+    organization = OrganizationSerializer(read_only=True)
     class Meta:
         model = Gang
         fields = '__all__'
@@ -603,7 +604,7 @@ class InterviewerSerializer(CustomBaseSerializer):
 class RecruitmentPositionSerializer(CustomBaseSerializer):
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
-
+    organization = OrganizationSerializer(read_only=True)
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'
@@ -617,7 +618,10 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         try:
             interviewers = []
             if interviewer_objects:
-                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
+                interviewer_ids = [
+                    interviewer.get('id')
+                    for interviewer in interviewer_objects
+                ]
                 if interviewer_ids:
                     interviewers = User.objects.filter(id__in=interviewer_ids)
             recruitment_position.interviewers.set(interviewers)
@@ -627,13 +631,16 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position,
+                                  interviewer_objects=interviewer_objects)
         return recruitment_position
 
-    def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+    def update(self, instance: RecruitmentPosition,
+               validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance,
+                                  interviewer_objects=interviewer_objects)
         return updated_instance
 
 
@@ -648,6 +655,7 @@ class ApplicantInterviewSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    organization = OrganizationSerializer(read_only=True)
     class Meta:
         model = RecruitmentPosition
         fields = [
@@ -662,6 +670,7 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'default_admission_letter_nb',
             'default_admission_letter_en',
             'gang',
+            'organization',
             'recruitment',
         ]
 
