@@ -80,7 +80,7 @@ export function RecruitmentPage() {
               });
             }}
           >
-            {t(KEY.recruitment_organization)}
+            {t(KEY.recruitment_my_applications)}
           </Button>
         </div>
         {loading ? (
