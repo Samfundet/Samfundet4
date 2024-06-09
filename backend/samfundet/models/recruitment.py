@@ -87,41 +87,23 @@ class Recruitment(CustomBaseModel):
 
 
 class RecruitmentPosition(CustomBaseModel):
-    name_nb = models.CharField(max_length=100,
-                               help_text='Name of the position')
-    name_en = models.CharField(max_length=100,
-                               help_text='Name of the position')
+    name_nb = models.CharField(max_length=100, help_text='Name of the position')
+    name_en = models.CharField(max_length=100, help_text='Name of the position')
 
-    short_description_nb = models.CharField(
-        max_length=100, help_text='Short description of the position')
-    short_description_en = models.CharField(
-        max_length=100,
-        help_text='Short description of the position',
-        null=True,
-        blank=True)
+    short_description_nb = models.CharField(max_length=100, help_text='Short description of the position')
+    short_description_en = models.CharField(max_length=100, help_text='Short description of the position', null=True, blank=True)
 
-    long_description_nb = models.TextField(
-        help_text='Long description of the position')
-    long_description_en = models.TextField(
-        help_text='Long description of the position', null=True, blank=True)
+    long_description_nb = models.TextField(help_text='Long description of the position')
+    long_description_en = models.TextField(help_text='Long description of the position', null=True, blank=True)
 
-    is_funksjonaer_position = models.BooleanField(
-        help_text='Is this a funksjonær position?')
+    is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
 
-    default_admission_letter_nb = models.TextField(
-        help_text='Default admission letter for the position')
-    default_admission_letter_en = models.TextField(
-        help_text='Default admission letter for the position',
-        null=True,
-        blank=True)
+    default_admission_letter_nb = models.TextField(help_text='Default admission letter for the position')
+    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position', null=True, blank=True)
 
-    norwegian_applicants_only = models.BooleanField(
-        help_text='Is this position only for Norwegian applicants?',
-        default=False)
+    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
-    gang = models.ForeignKey(to=Gang,
-                             on_delete=models.CASCADE,
-                             help_text='The gang that is recruiting')
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting')
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -138,21 +120,13 @@ class RecruitmentPosition(CustomBaseModel):
         null=True,
         blank=True,
     )
-    shared_interview_positions = models.ManyToManyField(
-        'self',
-        symmetrical=True,
-        blank=True,
-        help_text='Positions with shared interview')
+    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True, help_text='Positions with shared interview')
 
     # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(
-        to=User,
-        help_text='Interviewers for the position',
-        blank=True,
-        related_name='interviewers')
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'

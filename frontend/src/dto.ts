@@ -354,7 +354,7 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
-  organization: 'samfundet' | 'isfit' | 'uka';
+  organization: OrganizationDto;
 };
 
 export type RecruitmentPositionDto = {

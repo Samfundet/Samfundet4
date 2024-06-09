@@ -6,10 +6,10 @@ from django.core.files.images import ImageFile
 
 from samfundet.models.general import Organization
 
-ORGANIZATIONS = [ 'Samfundet', 'ISFiT', 'UKA']
+ORGANIZATIONS = ['Samfundet', 'ISFiT', 'UKA']
 
 
-def seed():
+def seed():  # noqa: C901
     yield 0, 'organizations'
     for org in Organization.objects.all():
         org.delete()

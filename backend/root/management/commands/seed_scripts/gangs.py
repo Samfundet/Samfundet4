@@ -51,7 +51,11 @@ def seed():
 
         # Create gangs
         for gang in GANGS[gang_type]:
-            name, abbr, sections, = gang
+            (
+                name,
+                abbr,
+                sections,
+            ) = gang
             g, _ = Gang.objects.get_or_create(
                 name_nb=name,
                 name_en=name,
