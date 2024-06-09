@@ -3,7 +3,7 @@ import { InterviewDto, RecruitmentAdmissionDto } from '~/dto';
 import styles from './InterviewForm.module.scss';
 import { KEY } from '~/i18n/constants';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, postOccupiedTimeslots } from '~/api';
+import { setRecruitmentAdmissionsInterview } from '~/api';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../Button';
 import { Icon } from '@iconify/react';
@@ -19,7 +19,7 @@ type InterviewFormProps = {
 export function InterviewForm({ admission }: InterviewFormProps) {
   const { t } = useTranslation();
   const [interviewData, setInterviewData] = useState<InterviewDto>();
-  
+
   useEffect(() => {
     setInterviewData(admission?.interview);
     console.log(admission);
@@ -29,9 +29,15 @@ export function InterviewForm({ admission }: InterviewFormProps) {
     console.log(interviewData);
   }, [interviewData]);
 
-
-  function handleOnSubmit(data:  InterviewDto) {
-    console.log(data);
+  function handleOnSubmit(data: InterviewDto) {
+    setRecruitmentAdmissionsInterview(admission.id, data)
+      .then(() => {
+        toast.success(t(KEY.common_update_successful));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   return (
@@ -45,7 +51,7 @@ export function InterviewForm({ admission }: InterviewFormProps) {
       <Text>
         {t(KEY.recruitment_position)}: {dbT(admission.recruitment_position, 'name')}
       </Text>
-      <SamfForm<InterviewDto> onSubmit={handleOnSubmit} initialData={interviewData}>
+      <SamfForm<InterviewDto> onSubmit={handleOnSubmit} initialData={interviewData ? interviewData : {}}>
         <div className={styles.row}>
           <SamfFormField field="interview_time" type="datetime" label={t(KEY.recruitment_interview_time)} />
         </div>
