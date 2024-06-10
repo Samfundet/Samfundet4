@@ -8,9 +8,15 @@ import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
 import { useTextItem } from '~/hooks';
 import { TextItem } from '~/constants';
+import { toast } from 'react-toastify';
 
 type UserFeedbackProps = {
   enabled: boolean;
+};
+
+type FormProps = {
+  text: string;
+  contact_email?: string;
 };
 
 export function UserFeedback({ enabled }: UserFeedbackProps) {
@@ -21,16 +27,19 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
     return <div></div>;
   }
 
-  const handleFormSubmit = (formData: Record<string, string>) => {
+  const handleFormSubmit = (formData: FormProps) => {
     postFeedback({
-      text: formData['feedback-text'],
+      ...formData,
       screen_resolution: window.innerWidth + 'x' + window.innerHeight,
       path: window.location.pathname,
-      contact_email: formData['feedback-email'],
     })
-      .then(() => setIsOpen(false))
+      .then(() => {
+        setIsOpen(false);
+        toast.success(t(KEY.feedback_thank_you_for_feedback));
+      })
       .catch((e) => {
         console.error(e);
+        toast.error(t(KEY.common_something_went_wrong));
       });
   };
 
@@ -42,12 +51,16 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
         </h1>
         <br />
         <p>{useTextItem(TextItem.feedback_helper_text)}</p>
-        <SamfFormField field={'feedback-text'} type={'text-long'} label={t(KEY.feedback_your_feedback)} />
+        <SamfFormField<string, FormProps>
+          field={'text'}
+          type={'text_long'}
+          required={true}
+          label={t(KEY.feedback_your_feedback)}
+        />
         <p>{useTextItem(TextItem.feedback_want_contact_text)}</p>
-        <SamfFormField
-          field={'feedback-email'}
+        <SamfFormField<string, FormProps>
+          field={'contact_email'}
           type={'email'}
-          required={false}
           label={t(KEY.common_email) + ' (' + t(KEY.common_not_required) + ')'}
         />
       </SamfForm>
