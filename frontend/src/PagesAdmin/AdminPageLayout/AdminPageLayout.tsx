@@ -1,10 +1,7 @@
 import { ReactNode, useEffect } from 'react';
-import { Button, IconButton, SamfundetLogoSpinner } from '~/Components';
+import { BackButton, IconButton, SamfundetLogoSpinner } from '~/Components';
 import { COLORS } from '~/types';
 import styles from './AdminPageLayout.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 
 type AdminPageLayoutProps = {
   title: string;
@@ -13,24 +10,6 @@ type AdminPageLayoutProps = {
   loading?: boolean;
   children: ReactNode;
   showBackButton?: boolean;
-};
-
-/**
- * BackButton component to navigate back in the history stack.
- */
-const BackButton = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const goBack = () => {
-    navigate(-1);
-  };
-
-  return (
-    <Button theme="success" rounded={true} onClick={goBack}>
-      {t(KEY.common_go_back)}
-    </Button>
-  );
 };
 
 /**
