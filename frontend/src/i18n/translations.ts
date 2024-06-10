@@ -58,6 +58,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_table]: 'Bord',
+  [KEY.common_gangs]: 'Gjenger',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_table]: 'Tabell',
   [KEY.common_card]: 'Kort',
@@ -182,6 +183,10 @@ export const nb: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
+  // InformationPage
+  [KEY.information_page]: 'Informasjonsside',
+  [KEY.information_page_short]: 'Side',
+
   // Navbar:
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
@@ -191,6 +196,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_applicant]: 'Søker',
+  [KEY.recruitment_applicants]: 'Søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
@@ -297,7 +303,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.information_page_short]: 'Side',
   [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
@@ -365,7 +370,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_menu]: 'Menu',
   [KEY.common_name]: 'Name',
   [KEY.common_next]: 'Next',
-  [KEY.common_gang]: 'Group',
+  [KEY.common_gang]: 'Gang',
+  [KEY.common_gangs]: 'Gangs',
   [KEY.common_table]: 'Table',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
@@ -487,6 +493,10 @@ export const en: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publication date',
 
+  // InformationPage
+  [KEY.information_page]: 'Information page',
+  [KEY.information_page_short]: 'Page',
+
   // Navbar:
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
@@ -496,6 +506,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_applicant]: 'Applicant',
+  [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
@@ -530,7 +541,7 @@ export const en: Record<KeyValues, string> = {
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
-  [KEY.admin_saksdokument]: 'case document',
+  [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
   [KEY.admin_steal_identity]: 'Steal identity',
@@ -607,7 +618,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.invalid_phonenumber]: 'Not a valid phone number',
-  [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
