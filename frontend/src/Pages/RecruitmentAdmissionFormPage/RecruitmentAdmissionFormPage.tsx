@@ -21,6 +21,10 @@ import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
 
+type FormProps = {
+  admission_text: string;
+};
+
 export function RecruitmentAdmissionFormPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
@@ -65,8 +69,8 @@ export function RecruitmentAdmissionFormPage() {
     );
   }, [recruitmentPosition]);
 
-  function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    putRecruitmentAdmission(data, positionID ? +positionID : 1)
+  function handleOnSubmit(data: FormProps) {
+    putRecruitmentAdmission(data as Partial<RecruitmentAdmissionDto>, positionID ? +positionID : 1)
       .then(() => {
         navigate({ url: ROUTES.frontend.home });
         toast.success(t(KEY.common_creation_successful));
@@ -153,14 +157,13 @@ export function RecruitmentAdmissionFormPage() {
         </div>
         {user ? (
           <SamfForm
-            initialData={{ admission_text: recruitmentAdmission?.admission_text }}
+            initialData={recruitmentAdmission as FormProps}
             onSubmit={handleOnSubmit}
             submitText={submitText}
-            validateOnInit={true}
             devMode={false}
           >
             <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
-            <SamfFormField field="admission_text" type="text-long" />{' '}
+            <SamfFormField field="admission_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
           <div>TODO add login redirect</div>
