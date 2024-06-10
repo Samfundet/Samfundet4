@@ -73,6 +73,7 @@ export const KEY = {
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
+  common_gangs: 'common_gangs',
   common_event: 'common_event',
   common_login: 'common_login',
   common_image: 'common_image',
@@ -186,6 +187,10 @@ export const KEY = {
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
+  // InformationPage
+  information_page: 'information_page',
+  information_page_short: 'information_page_short',
+
   // Navbar:
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
@@ -209,6 +214,7 @@ export const KEY = {
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
   recruitment_interview_notes: 'recruitment_interview_notes',
@@ -303,7 +309,6 @@ export const KEY = {
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
   control_panel_title: 'control_panel_title',
-  information_page_short: 'information_page_short',
   inputfile_choose_a_file: 'inputfile_choose_a_file',
   inputfile_no_file_selected: 'inputfile_no_file_selected',
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
