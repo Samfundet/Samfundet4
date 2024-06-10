@@ -10,7 +10,7 @@ export type DropDownOption<T> = {
 
 export type DropdownProps<T> = {
   className?: string;
-  defaultValue?: DropDownOption<T>;
+  defaultValue?: DropDownOption<T>; // issue 1089
   initialValue?: T;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
