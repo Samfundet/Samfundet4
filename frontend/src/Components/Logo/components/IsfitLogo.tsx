@@ -34,7 +34,6 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
       style={{ maxWidth: dimensions[size].logoWidth, minHeight: dimensions[size].logoHeight }}
       viewBox="0 0 280.69192 166.4414"
       version="1.1"
-      id="svg1"
       xmlSpace="preserve"
       xmlns="http://www.w3.org/2000/svg"
     >
