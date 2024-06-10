@@ -15,9 +15,10 @@ import {
   LoginPage,
   LycheAboutPage,
   LycheContactPage,
-  LycheReservationPage,
   LycheHomePage,
   LycheMenuPage,
+  LycheReservationPage,
+  MembershipPage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
   RecruitmentPage,
@@ -89,7 +90,9 @@ export function AppRoutes() {
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
         <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
+        <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
+        <Route path={ROUTES.frontend.luka} element={<></>} />
       </Route>
       {/* 
             ADMIN ROUTES

@@ -2,24 +2,24 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
+import { useAuthContext } from '~/AuthContext';
+import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentPosition,
   getRecruitmentAdmissionForApplicant,
-  putRecruitmentAdmission,
+  getRecruitmentPosition,
   getRecruitmentPositionsGang,
+  putRecruitmentAdmission,
 } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
-import { useAuthContext } from '~/AuthContext';
-import { STATUS } from '~/http_status_codes';
 
 type FormProps = {
   admission_text: string;
@@ -59,7 +59,7 @@ export function RecruitmentAdmissionFormPage() {
     ]).then(() => {
       setLoading(false);
     });
-  }, [positionID]);
+  }, [positionID, standardNavigate, t]);
 
   useEffect(() => {
     getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
