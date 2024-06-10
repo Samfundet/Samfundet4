@@ -162,6 +162,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
+  [KEY.loginpage_passwords_must_match]: 'Passordene må være like',
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
@@ -288,6 +289,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.feedback_type]: 'Type tilbakemelding',
   [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+  [KEY.feedback_thank_you_for_feedback]: 'Takk for din tilbakemelding',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -472,6 +474,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_username]: 'Username',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
   // GroupsPage:
@@ -601,6 +604,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.feedback_type]: 'Feedback type',
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
+  [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
   // No category:
   [KEY.owner]: 'Owner',
