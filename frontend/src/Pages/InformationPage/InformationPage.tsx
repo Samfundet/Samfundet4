@@ -11,7 +11,7 @@ import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
