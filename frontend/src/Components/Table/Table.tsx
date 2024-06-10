@@ -11,6 +11,7 @@ type TableCellValue = string | number | Date | boolean;
 // Table Column
 type TableColumn = {
   sortable?: boolean;
+  hideSortButton?: boolean;
   content: Children;
 };
 
@@ -28,6 +29,11 @@ type TableDataType = TableRow[];
 
 type TableProps = {
   className?: string;
+  headerColumnClassName?: string;
+  cellClassName?: string;
+  headerClassName?: string;
+  bodyRowClassName?: string;
+  bodyClassName?: string;
   columns?: (TableColumn | string | undefined)[];
   // Data can either be a table cell with separated value and content, or just the raw value
   // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
@@ -35,7 +41,17 @@ type TableProps = {
   defaultSortColumn?: number;
 };
 
-export function Table({ className, columns, data, defaultSortColumn = -1 }: TableProps) {
+export function Table({
+  className,
+  headerClassName,
+  headerColumnClassName,
+  bodyClassName,
+  bodyRowClassName,
+  cellClassName,
+  columns,
+  data,
+  defaultSortColumn = -1,
+}: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
 
@@ -104,6 +120,11 @@ export function Table({ className, columns, data, defaultSortColumn = -1 }: Tabl
     });
   }
 
+  function isHideSortButton(column: TableColumn | string | undefined): boolean {
+    const hideSortButton = (column as TableColumn)?.hideSortButton;
+    return hideSortButton === undefined ? false : hideSortButton;
+  }
+
   function getSortableIcon(column: number): string {
     if (sortColumn != column) return 'carbon:chevron-sort';
     return sortInverse ? 'carbon:chevron-up' : 'carbon:chevron-down';
@@ -141,28 +162,45 @@ export function Table({ className, columns, data, defaultSortColumn = -1 }: Tabl
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
-        <thead>
+        <thead className={headerClassName}>
           <tr>
             {columns &&
               columns?.map((col, index) => {
                 if (isColumnSortable(col)) {
                   return (
-                    <th key={index} className={styles.sortable_th} onClick={() => sort(index)}>
+                    <th
+                      key={index}
+                      className={classNames(headerColumnClassName, styles.sortable_th)}
+                      onClick={() => sort(index)}
+                    >
                       {getColumnContent(col)}
-                      <span className={styles.sort_icons}>
-                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
-                      </span>
+                      {!isHideSortButton(col) && (
+                        <span className={styles.sort_icons}>
+                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
+                        </span>
+                      )}
                     </th>
                   );
                 } else {
-                  return <th key={index}>{getColumnContent(col)}</th>;
+                  return (
+                    <th className={headerColumnClassName} key={index}>
+                      {getColumnContent(col)}
+                    </th>
+                  );
                 }
               })}
           </tr>
         </thead>
-        <tbody>
+        <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
-            <tr key={index1}>{row && row.map((cell, index2) => <td key={index2}>{getCellContent(cell ?? '')}</td>)}</tr>
+            <tr className={bodyRowClassName} key={index1}>
+              {row &&
+                row.map((cell, index2) => (
+                  <td className={cellClassName} key={index2}>
+                    {getCellContent(cell ?? '')}
+                  </td>
+                ))}
+            </tr>
           ))}
         </tbody>
       </table>

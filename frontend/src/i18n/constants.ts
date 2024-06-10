@@ -171,6 +171,7 @@ export const KEY = {
   loginpage_internal_login: 'loginpage_internal_login',
   loginpage_username: 'loginpage_username',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
+  loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
   // GroupsPage:
@@ -204,6 +205,7 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
@@ -293,6 +295,7 @@ export const KEY = {
   feedback_type: 'feedback_type',
   feedback_type_heading: 'feedback_type_heading',
   feedback_your_feedback: 'feedback_your_feedback',
+  feedback_thank_you_for_feedback: 'feedback_thank_you_for_feedback',
 
   // No category:
   owner: 'owner',
