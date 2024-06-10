@@ -3,6 +3,7 @@ export { AdminBox } from './AdminBox';
 export { Alert } from './Alert';
 export { Breadcrumb } from './Breadcrumb';
 export { Button } from './Button';
+export { BackButton } from './BackButton';
 export { Carousel } from './Carousel';
 export { Checkbox } from './Checkbox';
 export { ColorDisplay } from './ColorDisplay';

@@ -2,24 +2,28 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
+import { useAuthContext } from '~/AuthContext';
+import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentPosition,
   getRecruitmentAdmissionForApplicant,
-  putRecruitmentAdmission,
+  getRecruitmentPosition,
   getRecruitmentPositionsGang,
+  putRecruitmentAdmission,
 } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
-import { useAuthContext } from '~/AuthContext';
-import { STATUS } from '~/http_status_codes';
+
+type FormProps = {
+  admission_text: string;
+};
 
 export function RecruitmentAdmissionFormPage() {
   const { user } = useAuthContext();
@@ -55,7 +59,7 @@ export function RecruitmentAdmissionFormPage() {
     ]).then(() => {
       setLoading(false);
     });
-  }, [positionID]);
+  }, [positionID, standardNavigate, t]);
 
   useEffect(() => {
     getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
@@ -65,8 +69,8 @@ export function RecruitmentAdmissionFormPage() {
     );
   }, [recruitmentPosition]);
 
-  function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    putRecruitmentAdmission(data, positionID ? +positionID : 1)
+  function handleOnSubmit(data: FormProps) {
+    putRecruitmentAdmission(data as Partial<RecruitmentAdmissionDto>, positionID ? +positionID : 1)
       .then(() => {
         navigate({ url: ROUTES.frontend.home });
         toast.success(t(KEY.common_creation_successful));
@@ -153,17 +157,27 @@ export function RecruitmentAdmissionFormPage() {
         </div>
         {user ? (
           <SamfForm
-            initialData={{ admission_text: recruitmentAdmission?.admission_text }}
+            initialData={recruitmentAdmission as FormProps}
             onSubmit={handleOnSubmit}
             submitText={submitText}
-            validateOnInit={true}
             devMode={false}
           >
             <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
-            <SamfFormField field="admission_text" type="text-long" />{' '}
+            <SamfFormField field="admission_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
-          <div>TODO add login redirect</div>
+          <div>
+            <Button
+              theme="samf"
+              onClick={() =>
+                navigate({
+                  url: ROUTES.frontend.login,
+                })
+              }
+            >
+              {t(KEY.common_login)}
+            </Button>
+          </div>
         )}
       </div>
     </Page>
