@@ -166,7 +166,18 @@ export function RecruitmentAdmissionFormPage() {
             <SamfFormField field="admission_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
-          <div>TODO add login redirect</div>
+          <div>
+            <Button
+              theme="samf"
+              onClick={() =>
+                navigate({
+                  url: ROUTES.frontend.login,
+                })
+              }
+            >
+              {t(KEY.common_login)}
+            </Button>
+          </div>
         )}
       </div>
     </Page>
