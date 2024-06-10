@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentPositions } from '~/api';
+import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
 import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
 import { KEY } from '~/i18n/constants';
@@ -25,8 +25,8 @@ export function RecruitmentGangAdminPage() {
   useEffect(() => {
     if (recruitmentId && gangId) {
       Promise.allSettled([
-        getRecruitmentPositions(recruitmentId).then((data) => {
-          setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang.id.toString() == gangId));
+        getRecruitmentPositionsGang(recruitmentId, gangId).then((data) => {
+          setRecruitmentPositions(data.data);
         }),
         getGang(gangId).then((data) => {
           setGang(data);

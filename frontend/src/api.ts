@@ -540,8 +540,8 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
 }
 
 export async function getRecruitmentPositionsGang(
-  recruitmentId: string,
-  gangId: number | undefined,
+  recruitmentId: number | string,
+  gangId: number | string | undefined,
 ): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
   const url =
     BACKEND_DOMAIN +
