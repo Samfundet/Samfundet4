@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useIsDarkTheme } from '~/hooks';
 import styles from './ThemeSwitch.module.scss';
 import { Button } from '~/Components';
