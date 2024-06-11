@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { AuthContextProvider } from '~/AuthContext';
+import { AuthContextProvider } from '~/context/AuthContext';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm, SamfFormProps } from './SamfForm';
 import { SamfFormField } from './SamfFormField';

@@ -11,7 +11,7 @@ import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 
 export function RecruitmentPage() {
   const { user } = useAuthContext();

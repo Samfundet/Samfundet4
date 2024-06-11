@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { AuthContextProvider } from '~/AuthContext';
+import { AuthContextProvider } from '~/context/AuthContext';
 import { RadioButton } from '~/Components';
-import { GlobalContextProvider } from '~/GlobalContextProvider';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { PulseEffect } from './PulseEffect';
 
 // Local component config.
