@@ -64,7 +64,7 @@ export function Dropdown<T>({
       </select>
       {/* span inneholder "nedover pil" symbol */}
       <div className={styles.arrow_container}>
-        <Icon icon="material-symbols:arrow-drop-down-circle" width={20} className={styles.arrow} />
+        <Icon icon="mdi:caret" rotate={2} width={20} className={styles.arrow} />
       </div>
     </label>
   );
