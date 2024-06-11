@@ -4,37 +4,34 @@ from samfundet.models.general import Gang, GangType, GangSection
 
 # Template gangs for seeding
 GANGS = {
-    'Arrangerende': [
-        ('Kulturutvalget', 'KU', []),
-        ('Lørdagskomiteen', 'LØK', []),
-        ('Klubbstyret', 'KLST', []),
-    ],
+    'Arrangerende': [('Kulturutvalget', 'KU'), ('Lørdagskomiteen', 'LØK'), ('Klubbstyret', 'KLST'), ('Samfundets Debattkomité', 'SDK')],
     'Drift': [
-        (
-            'Markedsføringsgjengen',
-            'MG',
-            [
-                'Web',
-                'Layout',
-                'Info',
-                'Marked',
-                'Redaksjonen',
-                'STØNT',
-                'Video',
-            ],
-        ),
-        ('Fotogjengen', 'FG', []),
-        ('Diversegjengen', 'DG', []),
-        ('Forsterkerkomiteen', 'FK', []),
-        ('Regi', None, []),
-        ('Videokomiteen', 'VK', []),
+        ('Markedsføringsgjengen', 'MG'),
+        ('Fotogjengen', 'FG'),
+        ('Diversegjengen', 'DG'),
+        ('Forsterkerkomiteen', 'FK'),
+        ('Regi', None),
+        ('Videokomiteen', 'VK'),
+        ('Sikringskomitéen', None),
+        ('Samfundets konsept- og prosjekteringsgruppe', 'SKP'),
+        ('Studentmediene', 'SM'),
     ],
     'Kunstneriske': [
-        ('Studentersamfundets interne teater', 'SIT', []),
-        ('Studentersamfundets Symfoniorkester', 'Symforch', []),
-        ('Strindens promenadeorkester', 'SPO', []),
-        ('Pirum', None, []),
-        ('Candiss', None, []),
+        ('Studentersamfundets interne teater', 'SIT'),
+        ('Studentersamfundets Symfoniorkester', 'Symforch'),
+        ('Strindens promenadeorkester', 'SPO'),
+        # Laafte underskudd
+        ('Studentersamfundets Orkester', 'Låfte'),
+        ('Kjeller Bandet', None),
+        ('Leisure Suit Lovers', 'LSL'),
+        ('Salongorkesteret', 'S.Møller'),
+        ('Snaustrinda Spelemannslag', None),
+        # Sangern underskudd
+        ('Trondheims Kvinnelige Studentersangforening', 'TKS'),
+        ('Trondheims Studentersangforening', 'TSS'),
+        ('Knauskoret', None),
+        ('Pirum', None),
+        ('Candiss', None),
     ],
     'Styrende': [
         ('Finansstyret', 'FS', []),

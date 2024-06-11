@@ -114,6 +114,7 @@ from .models.recruitment import (
     RecruitmentAdmission,
     RecruitmentStatistics,
 )
+from .utils.check_missing_info_pages import misc_list, check_missing_pages
 
 # =============================== #
 #          Home Page              #
@@ -518,7 +519,8 @@ class AssignGroupView(APIView):
         group_name = request.data.get('group_name')
 
         if not username or not group_name:
-            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and group_name fields are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(username=username)
@@ -533,7 +535,8 @@ class AssignGroupView(APIView):
         if request.user.has_perm('auth.change_group', group):
             user.groups.add(group)
         else:
-            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You do not have permission to add users to this group.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
 
@@ -542,7 +545,8 @@ class AssignGroupView(APIView):
         group_name = request.data.get('group_name')
 
         if not username or not group_name:
-            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and group_name fields are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(username=username)
@@ -557,7 +561,8 @@ class AssignGroupView(APIView):
         if request.user.has_perm('auth.change_group', group):
             user.groups.remove(group)
         else:
-            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You do not have permission to remove users from this group.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
 
@@ -648,7 +653,8 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             output_field=None,
         )
         users_without_interviews = (
-            User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
+            User.objects.filter(admissions__recruitment=recruitment).annotate(
+                num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
         )
         return users_without_interviews
 
@@ -747,7 +753,8 @@ class ActiveRecruitmentPositionsView(ListAPIView):
 
     def get_queryset(self) -> Response:
         """Returns all active recruitment positions."""
-        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
+        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(),
+                                                  recruitment__actual_application_deadline__gte=timezone.now())
 
 
 class ActiveRecruitmentsView(ListAPIView):
@@ -757,7 +764,8 @@ class ActiveRecruitmentsView(ListAPIView):
     def get_queryset(self) -> Response:
         """Returns all active recruitments"""
         # TODO Use is not completed instead of actual_application_deadline__gte
-        return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+        return Recruitment.objects.filter(visible_from__lte=timezone.now(),
+                                          actual_application_deadline__gte=timezone.now())
 
 
 class InterviewRoomView(ModelViewSet):
@@ -786,7 +794,8 @@ class OccupiedtimeslotView(ListCreateAPIView):
     serializer_class = OccupiedtimeslotSerializer
 
     def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
-        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
+        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by(
+            '-actual_application_deadline').first())
         return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
 
     def create(self, request: Request) -> Response:
@@ -825,3 +834,14 @@ class UserFeedbackView(CreateAPIView):
         )
 
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class MissingInfoPagesView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        missing_gangs = check_missing_pages(Gang, 'name_nb')
+        missing_venues = check_missing_pages(Venue)
+        missing_orgs = check_missing_pages(Organization)
+
+        return Response(data=missing_gangs + missing_venues + missing_orgs + misc_list)
