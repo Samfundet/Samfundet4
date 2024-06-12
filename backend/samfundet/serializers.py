@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+from typing import TYPE_CHECKING
 from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
@@ -57,6 +58,9 @@ from .models.recruitment import (
     RecruitmentAdmission,
     RecruitmentStatistics,
 )
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -578,7 +582,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'first_name', 'last_name', 'username', 'email', 'phone_number', 'admissions', 'admissions_without_interview', 'top_admission']
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # This will allow it to filter admissions on recruitment
         self.recruitment = kwargs.pop('recruitment', None)
         self.gang = kwargs.pop('gang', None)
