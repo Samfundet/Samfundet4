@@ -21,7 +21,6 @@ export function SaksdokumentFormAdminPage() {
   const { t } = useTranslation();
 
   // If form has a id, check if it exists, and then load that item.
-  const { id } = useParams();
   const [saksdok, setSaksdok] = useState<SaksdokumentDto>();
 
   useEffect(() => {

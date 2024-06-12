@@ -33,7 +33,10 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  recruitment_admission_ids?: string[];
+  phone_number?: string;
+  admissions: RecruitmentAdmissionDto[];
+  admissions_without_interview: RecruitmentAdmissionDto[];
+  top_admission: RecruitmentAdmissionDto;
 };
 
 export type HomePageDto = {

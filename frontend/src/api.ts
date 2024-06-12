@@ -22,6 +22,7 @@ import {
   RecruitmentAdmissionDto,
   RecruitmentDto,
   RecruitmentPositionDto,
+  RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
   TextItemDto,
@@ -676,18 +677,17 @@ export async function getActiveRecruitments(): Promise<AxiosResponse<Recruitment
   return response;
 }
 
-export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
+export async function getApplicantsWithoutInterviews(
+  recruitmentId: string,
+  gangId: string | null = null,
+): Promise<AxiosResponse<RecruitmentUserDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__applicants_without_interviews,
-      queryParams: {
-        recruitment: recruitmentId,
-      },
+      queryParams: gangId ? { recruitment: recruitmentId, gang: gangId } : { recruitment: recruitmentId },
     });
-  const response = await axios.get(url, { withCredentials: true });
-
-  return response;
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function putRecruitmentAdmission(
