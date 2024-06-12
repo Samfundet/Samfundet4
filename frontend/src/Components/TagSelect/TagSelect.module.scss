@@ -34,7 +34,7 @@
 .unselectedContainer{
   width: 100%;
   height: fit-content;
-  max-height: 7rem;
+  max-height: 10rem;
   display: flex;
   flex-direction: column;
   overflow-Y: scroll;
@@ -57,12 +57,7 @@
 .unselectedContainer::-webkit-scrollbar {
   display: none;
 }
-
-.unselectedContainerOuter{
-  position: relative;
-
-}
-
+// gradient at the top of the container to give the effect of scrolling under the the "selected tags" container
 .unselectedContainerTopGradient{
   position: absolute;
   top: 0;
@@ -126,17 +121,20 @@
   }
 }
 
+// gradient to indicate that there are more tags selected which are not visible
 .selectedContainerGradient {
   position: absolute;
   bottom: -15px;
   left: 0;
   width: 100%;
   height: 2.5rem;
-  background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.75), transparent), linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.75), transparent);
+  background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.75), transparent),
+  linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.75), transparent);
 
   @include theme-dark{
     height: 1.5rem;
-    background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.5), transparent), linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), transparent);  }
+    background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.5), transparent),
+    linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), transparent);  }
 }
 
 

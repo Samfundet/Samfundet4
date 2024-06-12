@@ -26,7 +26,7 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   const isDarkMode = useIsDarkTheme();
 
   // uses set because it is easier to crosscheck tagOptions and selectedTags
-  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set([]));
+  const [selectedTags, setSelectedTags] = useState<Set<TagDto>>(new Set());
 
   // gets the font size of the root element (rem)
   const [selectedContainerHeight, setSelectedContainerHeight] = useState(0);
@@ -64,40 +64,41 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   }, [selectedContainerRef, selectedTags]);
 
   // logic for moving a tag to the selected section when clicked, or to the "unselected" section
-  const toggleTag = (tagValue: string, event: React.MouseEvent) => {
+  const toggleTag = (tagName: string, event: React.MouseEvent) => {
     event.stopPropagation();
     const newSelectedTags = new Set(selectedTags);
-    if (newSelectedTags.has(tagValue)) {
-      newSelectedTags.delete(tagValue);
-    } else {
-      newSelectedTags.add(tagValue);
+    const tag = Array.from(tagOptions).find((t) => t.name === tagName);
+    if (tag) {
+      if (newSelectedTags.has(tag)) {
+        newSelectedTags.delete(tag);
+      } else {
+        newSelectedTags.add(tag);
+      }
     }
     setSelectedTags(newSelectedTags);
 
-    if (tempTag === tagValue) {
+    if (tempTag === tagName) {
       setTempTag(null);
       setTagSearch('');
     }
-
-    exportTags(Array.from(newSelectedTags));
+    exportTags(Array.from(newSelectedTags).map((tag) => tag.name));
   };
 
   // tag representation
-  const tagElement = (tagName: string, tagColor?: string) => (
+  const tagElement = (tag: TagDto) => (
     <p
-      key={tagName}
+      key={tag.id}
       className={styles.tag}
-      onClick={(e) => toggleTag(tagName, e)}
+      onClick={(e) => toggleTag(tag.name, e)}
       // tags have support for a color in backend, so that they stand out from each other
       // when the user has selected some tags and click outside the container the tags appear to "lock in"
       style={{
-        backgroundColor: tagColor ? `#${tagColor}` : isDarkMode ? COLORS.grey_2 : COLORS.grey_5,
-        ...(tagOptionsVisible
-          ? { border: 'none' }
-          : { border: `1.5px solid ${COLORS.blue_deeper}`, boxShadow: `inset 0 0 5px 1px ${COLORS.black_t25}` }),
+        backgroundColor: tag.color ? `#${tag.color}` : isDarkMode ? COLORS.grey_2 : COLORS.grey_5,
+        ...(tagOptionsVisible ? { border: 'none' } : { border: `1px solid ${COLORS.blue_deeper}` }),
+        boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.2)', // Add symmetrical inset box-shadow
       }}
     >
-      {tagName}
+      {tag.name}
     </p>
   );
 
@@ -105,30 +106,27 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   // this way when a user attempts to create a tag they might see one that is similar
   // by default all tags are visible in a select like scroll-down
   const filteredTagOptions = () => {
-    const existingTagNames = Array.from(tagOptions).map((tag) => tag.name);
-    let newTagOptions = existingTagNames;
+    const existingTags = Array.from(tagOptions);
+    let newTagOptions = existingTags;
 
-    if (tempTag && !existingTagNames.includes(tempTag)) {
+    if (tempTag) {
       //adds  the search value(if it is not in the tag options, so that the user can add a new tag
-      newTagOptions = [...newTagOptions, tempTag];
+      const tempTagExists = existingTags.some((tag) => tag.name === tempTag);
+      if (!tempTagExists) {
+        // Assign a dummy id and empty color for tempTag
+        newTagOptions = [...newTagOptions, { id: -1, name: tempTag, color: '' }];
+      }
     }
 
     const filteredTags = newTagOptions.filter(
-      (tag) => !selectedTags.has(tag) && tag.toLowerCase().includes(tagSearch.toLowerCase()),
+      (tag) => !selectedTags.has(tag) && tag.name.toLowerCase().includes(tagSearch.toLowerCase()),
     );
-
-    return filteredTags.map((tag) => {
-      const tagObj = currentTagOptions.find((t) => t.name === tag);
-      return tagElement(tag, tagObj ? tagObj.color : undefined);
-    });
+    return filteredTags.map((tag) => tagElement(tag));
   };
 
-  const selectedTagsContainer = () =>
-    Array.from(selectedTags).map((tagName) => {
-      const tagObj = currentTagOptions.find((tag) => tag.name === tagName);
-      return tagElement(tagName, tagObj ? tagObj.color : undefined);
-    });
+  const selectedTagsContainer = () => Array.from(selectedTags).map((tag) => tagElement(tag));
 
+  // logic for setting search value and check if the search value would be a new unique tag(name)
   const handleTagSearch = (searchValue: string) => {
     setTagSearch(searchValue);
     if (
@@ -143,10 +141,6 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
     }
   };
 
-  const handleFocus = () => {
-    setTagOptionsVisible(true);
-  };
-
   return (
     <div ref={containerRef} className={styles.tagSelect}>
       <div
@@ -159,9 +153,9 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
           type="text"
           onChange={(event) => handleTagSearch(event.target.value)}
           value={tagSearch}
-          onFocus={() => handleFocus()}
+          onFocus={() => setTagOptionsVisible(true)}
           className={styles.tagSearch}
-          placeholder={'Søk eller lag ny ...'}
+          placeholder={'Søk...'}
         />
         {selectedTagsContainer().length > 0 && (
           <div className={styles.selectedContainer} ref={selectedContainerRef}>
@@ -171,10 +165,9 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
         )}
       </div>
       {tagOptionsVisible && (
-        <div className={styles.unselectedContainerOuter}>
+        <div style={{ position: 'relative' }}>
           <span className={styles.unselectedContainerTopGradient} />
           <div className={styles.unselectedContainer}>{filteredTagOptions().reverse()}</div>
-
           <span className={styles.unselectedContainerBottomGradient} />
         </div>
       )}
