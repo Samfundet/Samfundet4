@@ -18,7 +18,7 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 
 from django.http import QueryDict
 from django.utils import timezone
-from django.db.models import Case, When, Count, QuerySet
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
