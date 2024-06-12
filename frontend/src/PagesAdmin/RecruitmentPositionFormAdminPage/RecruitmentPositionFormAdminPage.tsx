@@ -252,7 +252,7 @@ export function RecruitmentPositionFormAdminPage() {
             </div>
             <div className={styles.row}>
               <SamfFormField<string, FormType> field="tags" type="text" label={t(KEY.common_tags) ?? ''} />
-              <TagSelect currentTagOptions={excitingTags} onTagChange={setNewTags} />
+              <TagSelect currentTagOptions={excitingTags} exportTags={setNewTags} />
             </div>
           </SamfForm>
         </div>
