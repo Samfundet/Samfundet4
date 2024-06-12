@@ -1,6 +1,6 @@
 import { RecruitmentAdmissionDto } from '~/dto';
-import styles from './WithoutInterview.module.scss';;
-import { Link, List } from '~/Components';
+import styles from './WithoutInterview.module.scss';
+import { Link } from '~/Components';
 import { dbT } from '~/utils';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -32,7 +32,7 @@ export function WithoutInterviewList({ admissions }: WithoutInterviewListProps) 
   }
   return (
     <div className={styles.container}>
-      <Table columns={tableColumns} data={admissions.map((admission) => admissionToRow(admission))}  />
+      <Table columns={tableColumns} data={admissions.map((admission) => admissionToRow(admission))} />
     </div>
   );
 }

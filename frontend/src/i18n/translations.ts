@@ -229,7 +229,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
   [KEY.recruitment_applicants_without_interview]: 'Søkere uten intervju',
-  [KEY.recruitment_applicants_without_interview_help_text]: 'Denne oversikten viser alle søkere som mangler en eller intervjutider på verv de har søkt i denne gjengen. Oversikten fremhever vervet som søkeren har rangert høyest i gjengen, og hvilken rangering den er satt til',
+  [KEY.recruitment_applicants_without_interview_help_text]:
+    'Denne oversikten viser alle søkere som mangler en eller intervjutider på verv de har søkt i denne gjengen. Oversikten fremhever vervet som søkeren har rangert høyest i gjengen, og hvilken rangering den er satt til',
   [KEY.recruitment_not_applicants_without_interviews]: 'Ingen søkere mangler intervju',
   [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   // Admin:
@@ -544,7 +545,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
   [KEY.recruitment_applicants_without_interview]: 'Applicants without interview',
-  [KEY.recruitment_applicants_without_interview_help_text]: 'This overview show all applicantss which lack interviews for this recruitment and gang. It shows their most desired position in this gang, and that positions rank overall',
+  [KEY.recruitment_applicants_without_interview_help_text]:
+    'This overview show all applicantss which lack interviews for this recruitment and gang. It shows their most desired position in this gang, and that positions rank overall',
   [KEY.recruitment_not_applicants_without_interviews]: 'No applicants are lacking interviews',
   [KEY.recruitment_applicant_top_position]: 'Most desired position',
   // Admin:

@@ -576,19 +576,9 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'username',
-            'email',
-            'phone_number',
-            'admissions',
-            'admissions_without_interview',
-            'top_admission'
-        ]
+        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'phone_number', 'admissions', 'admissions_without_interview', 'top_admission']
 
-    def __init__(self,  *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         # This will allow it to filter admissions on recruitment
         self.recruitment = kwargs.pop('recruitment', None)
         self.gang = kwargs.pop('gang', None)
@@ -619,6 +609,8 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
         if self.gang:
             admissions = admissions.filter(recruitment_position__gang=self.gang)
         return RecruitmentAdmissionForApplicantSerializer(admissions.order_by('applicant_priority').first()).data
+
+
 class InterviewerSerializer(CustomBaseSerializer):
     class Meta:
         model = User

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { InputField, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
-import { RecruitmentDto, RecruitmentUserDto } from '~/dto';
+import { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -15,13 +15,12 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { dbT } from '~/utils';
 import { WithoutInterviewModal } from './components';
-import { reverse } from '~/named-urls';
 
 export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();
   const [users, setUsers] = useState<RecruitmentUserDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [gang, setGang] = useState<RecruitmentDto>();
+  const [gang, setGang] = useState<GangDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { t } = useTranslation();

@@ -639,14 +639,14 @@ class ApplicantsWithoutInterviewsView(APIView):
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Filter based on admissions
-        admissions = RecruitmentAdmission.objects.filter(
-            recruitment=recruitment, interview=None)
+        admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, interview=None)
         if gang:
             admissions = admissions.filter(recruitment_position__gang=gang)
         admissions_without_interviews_user_ids = admissions.values_list('user_id', flat=True)
         data = User.objects.filter(id__in=admissions_without_interviews_user_ids)
 
-        return Response(data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data,status=status.HTTP_200_OK)
+        return Response(data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
+
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
