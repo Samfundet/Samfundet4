@@ -24,6 +24,7 @@ import {
   RecruitmentPositionDto,
   RegistrationDto,
   SaksdokumentDto,
+  TagDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
@@ -726,6 +727,13 @@ export async function putRecruitmentAdmissionInterview(
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentPositionTagList(): Promise<AxiosResponse<TagDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_positions_tag_list;
+  const response = await axios.get(url, { withCredentials: true });
 
   return response;
 }

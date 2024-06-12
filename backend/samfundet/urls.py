@@ -44,6 +44,7 @@ router.register('recruitment-admisisons-for-applicant', views.RecruitmentAdmissi
 router.register('recruitment-admisisons-for-group', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_group')
 router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
 router.register('interview', views.InterviewView, 'interview')
+router.register('recruitment-positions-tag', views.RecruitmentPositionTagView, 'recruitment_positions_tag')
 
 app_name = 'samfundet'
 
@@ -73,4 +74,6 @@ urlpatterns = [
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
+    path('recruitment-position-put-tags/', views.RecruitmentPositionPutTagView.as_view(), name='recruitment_position_put_tags'),
+    path('recruitment-positions-by-tags/', views.RecruitmentPositionByTagView.as_view(), name='recruitment_positions_by_tags'),
 ]

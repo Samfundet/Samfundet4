@@ -1,0 +1,145 @@
+@import 'src/constants';
+@import 'src/mixins';
+
+.tagSelect{
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto auto;
+  transition: height 10s ease-in-out;
+  gap: 0.1rem;
+}
+
+.inputSelected{
+  background-color: $white;
+  transition: height 10s ease-in-out;
+  border-radius: 0.5rem 0.5rem 0 0;
+  overflow: hidden;
+  @include theme-dark{
+    background-color: $grey-0;
+  }
+}
+
+.tag{
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  /*Disable text select*/
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.unselectedContainer{
+  width: 100%;
+  height: fit-content;
+  max-height: 7rem;
+  display: flex;
+  flex-direction: column;
+  overflow-Y: scroll;
+  overflow-X: hidden;
+  gap: 0.15rem;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  background-color: $black-t10;
+  padding: 0.5rem 0.25rem 0.25rem 0.25rem;
+  transition: height 10s ease-in-out;
+  border-radius: 0 0 0.5rem 0.5rem;
+  position: relative;
+  @include theme-dark{
+    background-color: $grey-0;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.unselectedContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.unselectedContainerOuter{
+  position: relative;
+
+}
+
+.unselectedContainerTopGradient{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.75rem;
+  z-index: 999;
+  background: linear-gradient(to top, transparent, rgba(193, 193, 193, 0.3));
+  @include theme-dark{
+    background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.3));
+  }
+}
+
+.unselectedContainerBottomGradient{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.75rem;
+  z-index: 999;
+  background: linear-gradient(to bottom, transparent, rgba(193, 193, 193, 0.3));
+  @include theme-dark{
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+  }
+}
+
+.tagSearch{
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  background-color: white;
+  border: none;
+  outline: none;
+  @include  theme-dark{
+    background-color: $grey-0;
+  }
+}
+
+.unselectedContainer > .tag{
+  width: 100%;
+  border-radius: 0;
+}
+
+.selectedContainer {
+  width: fit-content;
+  max-width: 100%;
+  height: fit-content;
+  max-height: 5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+  overflow: hidden;
+  background-color: $white;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  position: relative;
+  @include theme-dark{
+    background-color: $grey-0;
+  }
+}
+
+.selectedContainerGradient {
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 100%;
+  height: 2.5rem;
+  background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.75), transparent), linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.75), transparent);
+
+  @include theme-dark{
+    height: 1.5rem;
+    background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.5), transparent), linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), transparent);  }
+}
+
+
+.selectedContainer > .tag{
+  width: fit-content;
+}

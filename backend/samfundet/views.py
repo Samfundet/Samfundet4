@@ -74,6 +74,7 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentPositionTagSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
@@ -113,6 +114,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentPositionTag,
 )
 
 # =============================== #
@@ -518,7 +520,8 @@ class AssignGroupView(APIView):
         group_name = request.data.get('group_name')
 
         if not username or not group_name:
-            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and group_name fields are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(username=username)
@@ -533,7 +536,8 @@ class AssignGroupView(APIView):
         if request.user.has_perm('auth.change_group', group):
             user.groups.add(group)
         else:
-            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You do not have permission to add users to this group.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
 
@@ -542,7 +546,8 @@ class AssignGroupView(APIView):
         group_name = request.data.get('group_name')
 
         if not username or not group_name:
-            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and group_name fields are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(username=username)
@@ -557,7 +562,8 @@ class AssignGroupView(APIView):
         if request.user.has_perm('auth.change_group', group):
             user.groups.remove(group)
         else:
-            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You do not have permission to remove users from this group.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
         return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
 
@@ -584,8 +590,8 @@ class RecruitmentStatisticsView(ModelViewSet):
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
     permission_classes = [AllowAny]
-    serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
+    serializer_class = RecruitmentPositionSerializer
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -648,7 +654,8 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             output_field=None,
         )
         users_without_interviews = (
-            User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
+            User.objects.filter(admissions__recruitment=recruitment).annotate(
+                num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
         )
         return users_without_interviews
 
@@ -747,7 +754,8 @@ class ActiveRecruitmentPositionsView(ListAPIView):
 
     def get_queryset(self) -> Response:
         """Returns all active recruitment positions."""
-        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
+        return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(),
+                                                  recruitment__actual_application_deadline__gte=timezone.now())
 
 
 class ActiveRecruitmentsView(ListAPIView):
@@ -757,7 +765,8 @@ class ActiveRecruitmentsView(ListAPIView):
     def get_queryset(self) -> Response:
         """Returns all active recruitments"""
         # TODO Use is not completed instead of actual_application_deadline__gte
-        return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+        return Recruitment.objects.filter(visible_from__lte=timezone.now(),
+                                          actual_application_deadline__gte=timezone.now())
 
 
 class InterviewRoomView(ModelViewSet):
@@ -786,7 +795,8 @@ class OccupiedtimeslotView(ListCreateAPIView):
     serializer_class = OccupiedtimeslotSerializer
 
     def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
-        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
+        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by(
+            '-actual_application_deadline').first())
         return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
 
     def create(self, request: Request) -> Response:
@@ -825,3 +835,47 @@ class UserFeedbackView(CreateAPIView):
         )
 
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class RecruitmentPositionPutTagView(CreateAPIView):
+    """Used to create position tags"""
+
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionTagSerializer
+    queryset = RecruitmentPositionTag.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        tag, created = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))
+
+        if 'position_id' in data:
+            try:
+                position = RecruitmentPosition.objects.get(id=data['position_id'])
+                position.tags.add(tag)
+            except RecruitmentPosition.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Position not found'})
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Tag added successfully!'})
+
+
+class RecruitmentPositionTagView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionTagSerializer
+    queryset = RecruitmentPositionTag.objects.all()
+
+
+class RecruitmentPositionByTagView(ListAPIView):
+    """View used to get recruitment positions by multiple tag ids"""
+
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self):
+        queryset = RecruitmentPosition.objects.all()
+        tag_ids = self.request.query_params.get('id', None)
+        if tag_ids:
+            # tags are provided as a string, where tags are separated by comma.
+            tag_ids_list = [tag_id.strip() for tag_id in tag_ids.split(',')]
+            queryset = queryset.filter(tags__id__in=tag_ids_list).distinct()
+        return queryset

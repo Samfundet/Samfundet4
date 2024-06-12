@@ -56,6 +56,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentPositionTag,
 )
 
 
@@ -312,7 +313,8 @@ class RegisterSerializer(serializers.Serializer):
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = User.objects.create_user(
-                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number,
+                password=password
             )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
@@ -600,13 +602,20 @@ class InterviewerSerializer(CustomBaseSerializer):
         ]
 
 
-class RecruitmentPositionSerializer(CustomBaseSerializer):
-    gang = GangSerializer(read_only=True)
-    interviewers = InterviewerSerializer(many=True, read_only=True)
+class RecruitmentPositionTagSerializer(CustomBaseSerializer):
+    class Meta:
+        model = RecruitmentPositionTag
+        fields = ['name', 'id', 'color']
 
+
+class RecruitmentPositionSerializer(CustomBaseSerializer):
+    # gang = GangSerializer(read_only=True)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
+    tags = RecruitmentPositionTagSerializer(many=True)
     class Meta:
         model = RecruitmentPosition
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['shared_interview_positions', 'gang']  # Exclude the field temporarily
 
     def _update_interviewers(
         self,
@@ -624,14 +633,36 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         except (TypeError, KeyError):
             raise ValidationError('Invalid data for interviewers.') from None
 
+    def _update_tags(self, recruitment_position, tag_objects):
+        try:
+            tags = []
+            if tag_objects:
+                for tag in tag_objects:
+                    tag_obj, created = RecruitmentPositionTag.objects.get_or_create(name=tag["name"])
+                    tags.append(tag_obj)
+            recruitment_position.tags.set(tags)
+        except (TypeError, KeyError):
+            raise ValidationError("Invalid data for tags") from None
+
+    def validate(self, attrs):
+        tags_data = attrs.pop('tags', None)
+        validated_data = super().validate(attrs)
+        if tags_data is not None:
+            validated_data['tags'] = tags_data
+        return validated_data
+
     def create(self, validated_data: dict) -> RecruitmentPosition:
+        tags_data = validated_data.pop('tags', [])
         recruitment_position = super().create(validated_data)
+        self._update_tags(recruitment_position=recruitment_position, tag_objects=tags_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
     def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+        tags_data = validated_data.pop('tags', [])
         updated_instance = super().update(instance, validated_data)
+        self._update_tags(recruitment_position=updated_instance, tag_objects=tags_data)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
@@ -759,7 +790,8 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
-        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
+        interview_instance.interview_location = interview_data.get('interview_location',
+                                                                   interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
         interviewers_data = validated_data.pop('interviewers', [])
         interview_instance.interviewers.set(interviewers_data)

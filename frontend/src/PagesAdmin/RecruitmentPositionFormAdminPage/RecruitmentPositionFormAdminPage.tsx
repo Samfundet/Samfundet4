@@ -5,14 +5,20 @@ import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
-import { RecruitmentPositionDto } from '~/dto';
+import {
+  getRecruitmentPosition,
+  getRecruitmentPositionTagList,
+  postRecruitmentPosition,
+  putRecruitmentPosition,
+} from '~/api';
+import { RecruitmentPositionDto, TagDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { TagSelect } from '~/Components/TagSelect/TagSelect';
 
 type FormType = {
   name_nb: string;
@@ -43,6 +49,8 @@ export function RecruitmentPositionFormAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
   const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
+  const [excitingTags, setExcitingTags] = useState<TagDto[]>([]); // tags which are associated with some position(s)
+  const [newTags, setNewTags] = useState<string[]>([]); // values which goes in the PUT request
 
   // Fetch data if edit mode.
   useEffect(() => {
@@ -65,6 +73,23 @@ export function RecruitmentPositionFormAdminPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positionId]);
+
+  useEffect(() => {
+    getRecruitmentPositionTagList()
+      .then((response) => {
+        console.log(response);
+        setExcitingTags(response.data);
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    console.log(newTags);
+  }, [newTags]);
 
   const initialData: Partial<RecruitmentPositionDto> = {
     name_nb: position?.name_nb,
@@ -227,6 +252,7 @@ export function RecruitmentPositionFormAdminPage() {
             </div>
             <div className={styles.row}>
               <SamfFormField<string, FormType> field="tags" type="text" label={t(KEY.common_tags) ?? ''} />
+              <TagSelect currentTagOptions={excitingTags} onTagChange={setNewTags} />
             </div>
           </SamfForm>
         </div>
