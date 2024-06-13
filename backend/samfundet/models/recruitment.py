@@ -204,7 +204,7 @@ class RecruitmentAdmission(CustomBaseModel):
                 admissions_for_user[i].applicant_priority = correct_position
                 admissions_for_user[i].save()
 
-    def update_priority(self, *, direction: int) -> None:
+    def update_priority(self, direction: int) -> None:
         """
         Method for moving priorites up or down,
         positive direction indicates moving it to higher priority,
