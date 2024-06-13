@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getGangs, getRecruitment, getRecruitmentAdmissionsForGang } from '~/api';
+import { getGang, getRecruitment, getRecruitmentAdmissionsForGang } from '~/api';
 import { GangDto, RecruitmentAdmissionDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -74,7 +73,8 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
-  const tableColumns = [{ content: t(KEY.recruitment_applicant), sortable: true },
+  const tableColumns = [
+    { content: t(KEY.recruitment_applicant), sortable: true },
     { content: t(KEY.common_phonenumber), sortable: true },
     { content: t(KEY.common_email), sortable: true },
     { content: t(KEY.recruitment_position), sortable: true },
@@ -83,8 +83,6 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  // TODO: Only show gangs that user has access to, and only show gangs that are recruiting
-  
   const data = admissions.map(function (admission) {
     const admissionURL = 'todo';
 
@@ -105,7 +103,6 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     ];
   });
 
-
   const title = t(KEY.recruitment_all_admissions);
   const header = (
     <div className={styles.header}>
@@ -120,7 +117,12 @@ export function RecruitmentGangAllApplicantsAdminPage() {
 
   return (
     <AdminPageLayout title={title} header={header} loading={showSpinner}>
-      <Table columns={tableColumns} data={data} headerColumnClassName={styles.headerCol} cellClassName={styles.cellStyle} />
+      <Table
+        columns={tableColumns}
+        data={data}
+        headerColumnClassName={styles.headerCol}
+        cellClassName={styles.cellStyle}
+      />
     </AdminPageLayout>
   );
 }

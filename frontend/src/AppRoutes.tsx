@@ -53,6 +53,7 @@ import {
   SultenMenuAdminPage,
   AdminLayout,
   ImpersonateUserAdminPage,
+  RecruitmentGangAllApplicantsAdminPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
@@ -280,6 +281,10 @@ export const router = createBrowserRouter(
                 </Link>
               ),
             }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_gang_all_admissions}
+            element={<RecruitmentGangAllApplicantsAdminPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_users_without_interview}

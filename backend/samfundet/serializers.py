@@ -750,6 +750,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    recruitment_position = RecruitmentPositionSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentAdmission

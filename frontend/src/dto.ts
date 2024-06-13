@@ -7,6 +7,7 @@ export type UserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phonenumber: string;
   is_staff: boolean;
   is_active: boolean;
   is_superuser: boolean;
@@ -394,7 +395,7 @@ export type InterviewDto = {
 
 export type RecruitmentAdmissionDto = {
   id: number;
-  interview: InterviewDto;
+  interview?: InterviewDto;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;

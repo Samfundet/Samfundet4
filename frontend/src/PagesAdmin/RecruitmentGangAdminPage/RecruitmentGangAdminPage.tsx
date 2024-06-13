@@ -66,19 +66,34 @@ export function RecruitmentGangAdminPage() {
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <Button
-      theme="success"
-      rounded={true}
-      link={reverse({
-        pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
-        urlParams: {
-          gangId: gangId,
-          recruitmentId: recruitmentId,
-        },
-      })}
-    >
-      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
-    </Button>
+    <>
+      <Button
+        theme="success"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
+      </Button>
+      <Button
+        theme="outlined"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {lowerCapitalize(`${t(KEY.recruitment_all_admissions)}`)}
+      </Button>
+    </>
   );
 
   return (

@@ -244,7 +244,8 @@ export const KEY = {
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
-
+  recrutment_export_to_csv: 'recrutment_export_to_csv',
+  recruitment_all_admissions: 'recruitment_all_admissions',
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',
