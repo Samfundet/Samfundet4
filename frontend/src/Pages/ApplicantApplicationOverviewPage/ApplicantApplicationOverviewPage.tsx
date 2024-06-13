@@ -69,8 +69,8 @@ export function ApplicantApplicationOverviewPage() {
   function admissionToTableRow(admission: RecruitmentAdmissionDto) {
     return [
       dbT(admission.recruitment_position, 'name'),
-      niceDateTime(admission.interview.interview_time),
-      admission.interview.interview_location,
+      niceDateTime(admission.interview?.interview_time),
+      admission.interview?.interview_location,
       admission.applicant_priority,
       { content: upDownArrow(admission.id) },
     ];

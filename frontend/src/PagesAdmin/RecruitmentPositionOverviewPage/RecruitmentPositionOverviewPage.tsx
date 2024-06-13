@@ -91,33 +91,8 @@ export function RecruitmentPositionOverviewPage() {
         ),
       },
       { content: admission.applicant_priority },
-      {
-        content: (
-          <InputField
-            value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => {
-              const updatedInterview = { ...admission.interview, interview_time: value.toString() };
-              const newAdmission = { ...admission, interview: updatedInterview };
-              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-            }}
-            type="datetime-local"
-          />
-        ),
-      },
-      {
-        content: (
-          <InputField
-            value={admission.interview.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => {
-              const updatedInterview = { ...admission.interview, interview_location: value.toString() };
-              const newAdmission = { ...admission, interview: updatedInterview };
-              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-            }}
-          />
-        ),
-      },
+      admission.interview?.interview_time ? utcTimestampToLocal(admission.interview?.interview_time) : '',
+      admission.interview?.interview_location,
       {
         content: (
           <Dropdown
@@ -148,7 +123,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <CrudButtons
             onView={
-              admission.interview.interview_time != null
+              admission.interview?.interview_time != null
                 ? () => {
                     navigate(
                       reverse({
@@ -157,7 +132,7 @@ export function RecruitmentPositionOverviewPage() {
                           recruitmentId: recruitmentId,
                           gangId: gangId,
                           positionId: positionId,
-                          interviewId: admission.interview.id,
+                          interviewId: admission.interview?.id,
                         },
                       }),
                     );
