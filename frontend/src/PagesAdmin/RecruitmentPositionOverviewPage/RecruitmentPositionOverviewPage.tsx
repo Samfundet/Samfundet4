@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Dropdown, InputField, Link } from '~/Components';
+import { Button, Dropdown, Link } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
