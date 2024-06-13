@@ -485,6 +485,8 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_admissions_for_gang_detail: '/api/recruitment-admisisons-for-gang/:pk/',
   samfundet__interview_list: '/api/interview/',
   samfundet__interview_detail: '/api/interview/:pk/',
+  samfundet__create_reservation_list: '/api/create-reservation/',
+  samfundet__create_reservation_detail: '/api/create-reservation/:pk/',
   samfundet__api_root: '/api/',
   samfundet__csrf: '/csrf/',
   samfundet__login: '/login/',

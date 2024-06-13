@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, time
 
 from samfundet.models.general import Table, Venue, Reservation
 
@@ -46,3 +46,61 @@ class TestReservation:
         # check if it has not removed a value that should not
         assert fixture_venue.opening_monday.strftime('%H:%M') in occupied_date
         assert fixture_venue.opening_monday.strftime('%H:%M') in full_date
+
+    # Check time methods tests both get_available_table and check_time
+    def test_check_time_no_reservations(
+        self,
+        fixture_venue: Venue,
+        fixture_table: Table,
+        fixture_date_monday: date,
+    ):
+        assert Reservation.check_time(
+            venue=fixture_venue,
+            guest_count=4,
+            start_time=time(hour=10),
+            end_time=time(hour=11),
+            reservation_date=fixture_date_monday,
+        )
+
+    def test_check_time_no_table(
+        self,
+        fixture_venue: Venue,
+        fixture_date_monday: date,
+    ):
+        assert not Reservation.check_time(
+            venue=fixture_venue,
+            guest_count=4,
+            start_time=time(hour=10),
+            end_time=time(hour=11),
+            reservation_date=fixture_date_monday,
+        )
+
+    def test_check_time_occupied_time(
+        self,
+        fixture_venue: Venue,
+        fixture_table: Table,
+        fixture_reservation: Reservation,
+        fixture_date_monday: date,
+    ):
+        assert not Reservation.check_time(
+            venue=fixture_venue,
+            guest_count=4,
+            start_time=time(hour=10),
+            end_time=time(hour=11),
+            reservation_date=fixture_date_monday,
+        )
+
+    def test_check_time_other_reservation_but_different_time(
+        self,
+        fixture_venue: Venue,
+        fixture_table: Table,
+        fixture_reservation: Reservation,
+        fixture_date_monday: date,
+    ):
+        assert Reservation.check_time(
+            venue=fixture_venue,
+            guest_count=4,
+            start_time=time(hour=11),
+            end_time=time(hour=12),
+            reservation_date=fixture_date_monday,
+        )
