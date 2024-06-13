@@ -17,13 +17,11 @@
 .headerCol {
   color: $white;
   background-color: $red-samf;
+  font-size: 0.9em;
+
   &:hover:not([disabled]) {
     background-color: $red-samf;
     filter: brightness(120%);
     transition: 0.15s;
   }
-}
-
-.headerCol {
-  font-size: 0.9em;
 }
