@@ -204,7 +204,7 @@ class RecruitmentAdmission(CustomBaseModel):
                 admissions_for_user[i].applicant_priority = correct_position
                 admissions_for_user[i].save()
 
-    def update_priority(self, direction: int) -> None:
+    def update_priority(self, *, direction: int) -> None:
         """
         Method for moving priorites up or down,
         positive direction indicates moving it to higher priority,
@@ -241,13 +241,13 @@ class RecruitmentAdmission(CustomBaseModel):
         """
         if not self.recruitment:
             self.recruitment = self.recruitment_position.recruitment
-        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        # If the admission is saved without an interview, try to find an interview from a shared position.
         if not self.applicant_priority:
             self.organize_priorities()
             current_applications_count = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
-        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        # If the admission is saved without an interview, try to find an interview from a shared position.
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
