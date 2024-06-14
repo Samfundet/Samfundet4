@@ -26,14 +26,10 @@ class Recruitment(CustomBaseModel):
         blank=False,
         help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
     )
-    shown_application_deadline = models.DateTimeField(null=False, blank=False,
-                                                      help_text='The deadline that is shown to applicants')
-    reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False,
-                                                                   help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False,
-                                                                help_text='Reprioritization deadline for groups')
-    organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE,
-                                     help_text='The organization that is recruiting')
+    shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
+    reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
+    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -110,8 +106,7 @@ class RecruitmentPosition(CustomBaseModel):
     name_en = models.CharField(max_length=100, help_text='Name of the position')
 
     short_description_nb = models.CharField(max_length=100, help_text='Short description of the position')
-    short_description_en = models.CharField(max_length=100, help_text='Short description of the position', null=True,
-                                            blank=True)
+    short_description_en = models.CharField(max_length=100, help_text='Short description of the position', null=True, blank=True)
 
     long_description_nb = models.TextField(help_text='Long description of the position')
     long_description_en = models.TextField(help_text='Long description of the position', null=True, blank=True)
@@ -119,14 +114,11 @@ class RecruitmentPosition(CustomBaseModel):
     is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
 
     default_admission_letter_nb = models.TextField(help_text='Default admission letter for the position')
-    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position', null=True,
-                                                   blank=True)
+    default_admission_letter_en = models.TextField(help_text='Default admission letter for the position', null=True, blank=True)
 
-    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?',
-                                                    default=False)
+    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True,
-                             blank=True)
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -136,19 +128,17 @@ class RecruitmentPosition(CustomBaseModel):
         blank=True,
     )
 
-    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True,
-                                                        help_text='Positions with shared interview')
+    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True, help_text='Positions with shared interview')
 
     tags = models.ManyToManyField(
         RecruitmentPositionTag,
-        help_text="tags associated with this position",
+        help_text='tags associated with this position',
         related_name='position_tags',
         blank=True,
     )
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True,
-                                          related_name='interviewers')
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
@@ -167,10 +157,8 @@ class InterviewRoom(CustomBaseModel):
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
     end_time = models.DateTimeField(help_text='End time of availability')
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE,
-                                    help_text='The recruitment that is recruiting', related_name='rooms')
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that booked the room',
-                             related_name='rooms', blank=True, null=True)
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='rooms')
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that booked the room', related_name='rooms', blank=True, null=True)
 
     def __str__(self) -> str:
         return self.name
@@ -185,8 +173,7 @@ class InterviewRoom(CustomBaseModel):
 class Interview(CustomBaseModel):
     # User visible fields
     interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
-    interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True,
-                                          blank=True)
+    interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
 
     # Admin visible fields
     room = models.ForeignKey(
@@ -197,8 +184,7 @@ class Interview(CustomBaseModel):
         help_text='Room where the interview is held',
         related_name='interviews',
     )
-    interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True,
-                                          related_name='interviews')
+    interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
@@ -206,32 +192,26 @@ class RecruitmentAdmission(CustomBaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
-        RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting',
-        related_name='admissions'
+        RecruitmentPosition, on_delete=models.CASCADE, help_text='The recruitment position that is recruiting', related_name='admissions'
     )
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE,
-                                    help_text='The recruitment that is recruiting', related_name='admissions')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying',
-                             related_name='admissions')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
     applicant_priority = models.IntegerField(null=True, blank=True, help_text='The priority of the admission')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     interview = models.ForeignKey(
-        Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission',
-        related_name='admissions'
+        Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the admission', related_name='admissions'
     )
 
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its admission
     recruiter_priority = models.IntegerField(
-        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET,
-        help_text='The priority of the admission'
+        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the admission'
     )
 
     recruiter_status = models.IntegerField(
-        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET,
-        help_text='The status of the admission'
+        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
     )
 
     def __str__(self) -> str:
@@ -257,9 +237,7 @@ class RecruitmentAdmission(CustomBaseModel):
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
             shared_interview = (
-                RecruitmentAdmission.objects.filter(user=self.user,
-                                                    recruitment_position__in=shared_interview_positions).exclude(
-                    interview=None).first()
+                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
             )
 
             if shared_interview:
@@ -282,8 +260,7 @@ class Occupiedtimeslot(FullCleanSaveMixin):
         related_name='occupied_timeslots',
     )
     # Mostly only used for deletion, and anonymization.
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE,
-                                    help_text='Occupied timeslots for the users for this recruitment')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Occupied timeslots for the users for this recruitment')
 
     # Start and end time of availability
     start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
@@ -291,8 +268,7 @@ class Occupiedtimeslot(FullCleanSaveMixin):
 
 
 class RecruitmentStatistics(FullCleanSaveMixin):
-    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True,
-                                       related_name='statistics')
+    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
 
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total admissions')

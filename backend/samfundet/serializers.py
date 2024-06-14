@@ -314,8 +314,7 @@ class RegisterSerializer(serializers.Serializer):
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = User.objects.create_user(
-                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number,
-                password=password
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
             )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
@@ -641,32 +640,24 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
             raise ValidationError('Invalid data for interviewers.') from None
 
     # other positions with same interview, hence shared interview
-    def _update_shared_interview_positions(
-        self,
-        recruitment_position: RecruitmentPosition,
-        shared_interview_positions: list[RecruitmentPosition]
-    ) -> None:
+    def _update_shared_interview_positions(self, recruitment_position: RecruitmentPosition, shared_interview_positions: list[RecruitmentPosition]) -> None:
         try:
             position_ids = [position.id for position in shared_interview_positions]
             recruitment_position.shared_interview_positions.set(position_ids)
         except (TypeError, KeyError):
-            raise ValidationError("Invalid data for shared interview positions.") from None
+            raise ValidationError('Invalid data for shared interview positions.') from None
 
     # tags/labels related to the position
-    def _update_tags(
-        self,
-        recruitment_position: RecruitmentPosition,
-        tag_objects: list[dict]
-    ) -> None:
+    def _update_tags(self, recruitment_position: RecruitmentPosition, tag_objects: list[dict]) -> None:
         try:
             tags = []
             if tag_objects:
                 for tag in tag_objects:
-                    tag_obj = RecruitmentPositionTag.objects.get_or_create(name=tag["name"])[0]
+                    tag_obj = RecruitmentPositionTag.objects.get_or_create(name=tag['name'])[0]
                     tags.append(tag_obj)
             recruitment_position.tags.set(tags)
         except (TypeError, KeyError):
-            raise ValidationError("Invalid data for tags") from None
+            raise ValidationError('Invalid data for tags') from None
 
     def validate(self, attrs: dict) -> dict:
         tags_data = attrs.pop('tags', [])
@@ -674,13 +665,13 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
         # Assuming shared_interview_positions is a list of RecruitmentPosition objects
         if not all(isinstance(pos, RecruitmentPosition) for pos in shared_interview_positions_data):
-            raise ValidationError("Invalid data for shared interview positions")
+            raise ValidationError('Invalid data for shared interview positions')
 
         # Get the IDs
         position_ids = [pos.id for pos in shared_interview_positions_data]
 
         if not all(RecruitmentPosition.objects.filter(id=pos_id).exists() for pos_id in position_ids):
-            raise ValidationError("One or more shared interview positions do not exist.")
+            raise ValidationError('One or more shared interview positions do not exist.')
 
         validated_data = super().validate(attrs)
 
@@ -698,8 +689,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
         recruitment_position = super().create(validated_data)
         self._update_tags(recruitment_position=recruitment_position, tag_objects=tags_data)
-        self._update_shared_interview_positions(recruitment_position=recruitment_position,
-                                                shared_interview_positions=shared_interview_positions_ids)
+        self._update_shared_interview_positions(recruitment_position=recruitment_position, shared_interview_positions=shared_interview_positions_ids)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
@@ -710,8 +700,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
         updated_instance = super().update(instance, validated_data)
         self._update_tags(recruitment_position=updated_instance, tag_objects=tags_data)
-        self._update_shared_interview_positions(recruitment_position=updated_instance,
-                                                shared_interview_positions=shared_interview_positions_ids)
+        self._update_shared_interview_positions(recruitment_position=updated_instance, shared_interview_positions=shared_interview_positions_ids)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance
@@ -839,8 +828,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
-        interview_instance.interview_location = interview_data.get('interview_location',
-                                                                   interview_instance.interview_location)
+        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
         interviewers_data = validated_data.pop('interviewers', [])
         interview_instance.interviewers.set(interviewers_data)
