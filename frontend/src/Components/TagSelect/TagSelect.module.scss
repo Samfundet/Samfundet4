@@ -1,4 +1,6 @@
+
 @import 'src/constants';
+
 @import 'src/mixins';
 
 .tagSelect{
@@ -22,7 +24,7 @@
 .tag{
   padding: 0.25rem;
   border-radius: 0.25rem;
-  /*Disable text select*/
+  /* Disable text select */
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
