@@ -834,7 +834,7 @@ class RecruitmentPositionTagView(ModelViewSet):
     serializer_class = RecruitmentPositionTagSerializer
     queryset = RecruitmentPositionTag.objects.all()
 
-    def create(self, request: Request, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args: tuple, **kwargs: dict) -> Response:
         data = request.data
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)

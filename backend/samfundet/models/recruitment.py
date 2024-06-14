@@ -92,7 +92,7 @@ class RecruitmentPositionTag(CustomBaseModel):
     name = models.CharField(max_length=100, help_text='Tags for the position')
     color = models.CharField(max_length=7, null=True, blank=True)
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: tuple, **kwargs: dict) -> None:
         if not self.color:
             self.color = generate_random_hex_color()
         super().save(*args, **kwargs)
