@@ -837,28 +837,6 @@ class UserFeedbackView(CreateAPIView):
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
 
 
-class RecruitmentPositionPutTagView(CreateAPIView):
-    """Used to create position tags"""
-
-    permission_classes = [AllowAny]
-    serializer_class = RecruitmentPositionTagSerializer
-    queryset = RecruitmentPositionTag.objects.all()
-
-    def create(self, request: Request, *args, **kwargs) -> Response:
-        data = request.data
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        tag = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))[0]
-
-        if 'position_id' in data:
-            try:
-                position = RecruitmentPosition.objects.get(id=data['position_id'])
-                position.tags.add(tag)
-            except RecruitmentPosition.DoesNotExist:
-                return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Position not found'})
-        return Response(status=status.HTTP_201_CREATED, data={'message': 'Tag added successfully!'})
-
-
 class RecruitmentPositionTagView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionTagSerializer
@@ -871,11 +849,18 @@ class RecruitmentPositionTagView(ModelViewSet):
 
         tag, created = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))
 
-        if created:
-            # The tag was created successfully
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # The tag already exists, return appropriate response
-        return Response({'message': 'Tag already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        if not created:
+            return Response({'message': 'Tag already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'position_id' in data:
+            try:
+                position = RecruitmentPosition.objects.get(id=data['position_id'])
+                position.tags.add(tag)
+            except RecruitmentPosition.DoesNotExist:
+                return Response({'message': 'Position not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
 
 
 class RecruitmentPositionByTagView(ListAPIView):
