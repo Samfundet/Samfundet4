@@ -20,7 +20,7 @@ from samfundet.constants import DEV_PASSWORD
 from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
 from samfundet.models.general import Gang, User, Image, Merch, Table, Venue, BlogPost, TextItem, Reservation, Organization, MerchVariation, InformationPage
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission, RecruitmentPositionTag
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 """
@@ -279,10 +279,13 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
         is_funksjonaer_position=False,
         default_admission_letter_nb='Default Admission Letter NB',
         default_admission_letter_en='Default Admission Letter EN',
-        tags='tag1,tag2',
         gang=fixture_gang,
         recruitment=fixture_recruitment,
     )
+
+    # Use set() method to assign tags
+    recruitment_position.tags.set([RecruitmentPositionTag.objects.get_or_create(name='tag1')[0], RecruitmentPositionTag.objects.get_or_create(name='tag2')[0]])
+
     yield recruitment_position
     recruitment_position.delete()
 
