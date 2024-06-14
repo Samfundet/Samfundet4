@@ -844,11 +844,11 @@ class RecruitmentPositionPutTagView(CreateAPIView):
     serializer_class = RecruitmentPositionTagSerializer
     queryset = RecruitmentPositionTag.objects.all()
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args, **kwargs) -> Response:
         data = request.data
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        tag, created = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))
+        tag = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))[0]
 
         if 'position_id' in data:
             try:
@@ -871,7 +871,7 @@ class RecruitmentPositionByTagView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentPositionSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> Response:
         queryset = RecruitmentPosition.objects.all()
         tag_ids = self.request.query_params.get('id', None)
         if tag_ids:
