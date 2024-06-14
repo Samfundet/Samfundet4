@@ -864,6 +864,19 @@ class RecruitmentPositionTagView(ModelViewSet):
     serializer_class = RecruitmentPositionTagSerializer
     queryset = RecruitmentPositionTag.objects.all()
 
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        tag, created = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))
+
+        if created:
+            # The tag was created successfully
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # The tag already exists, return appropriate response
+        return Response({'message': 'Tag already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RecruitmentPositionByTagView(ListAPIView):
     """View used to get recruitment positions by multiple tag ids"""

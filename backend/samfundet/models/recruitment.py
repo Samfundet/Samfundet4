@@ -14,6 +14,7 @@ from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from .general import Gang, User, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .utils.genrate_random_color import generate_random_hex_color
 
 
 class Recruitment(CustomBaseModel):
@@ -93,7 +94,12 @@ class Recruitment(CustomBaseModel):
 class RecruitmentPositionTag(CustomBaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, help_text='Tags for the position')
-    color = models.CharField(max_length=6, null=True, blank=True)
+    color = models.CharField(max_length=7, null=True, blank=True)
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.color:
+            self.color = generate_random_hex_color()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
@@ -119,7 +125,8 @@ class RecruitmentPosition(CustomBaseModel):
     norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?',
                                                     default=False)
 
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True,
+                             blank=True)
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -129,7 +136,8 @@ class RecruitmentPosition(CustomBaseModel):
         blank=True,
     )
 
-    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True, help_text='Positions with shared interview')
+    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True,
+                                                        help_text='Positions with shared interview')
 
     tags = models.ManyToManyField(
         RecruitmentPositionTag,
@@ -139,7 +147,8 @@ class RecruitmentPosition(CustomBaseModel):
     )
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True,
+                                          related_name='interviewers')
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'

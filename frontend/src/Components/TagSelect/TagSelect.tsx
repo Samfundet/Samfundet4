@@ -2,7 +2,7 @@ import styles from './TagSelect.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
 import { TagDto } from '~/dto';
 import { COLORS } from '~/types';
-import { useIsDarkTheme } from '~/hooks';
+import { useIsDarkTheme, useClickOutside } from '~/hooks';
 
 const FOUR_POINT_FIVE_REM = 4.5;
 
@@ -12,7 +12,7 @@ type TagSelectProps = {
 };
 
 export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
-  // tag options, like in a HTML select element
+  // tag options, like in an HTML select element
   // uses set because it is easier to crosscheck tagOptions and selectedTags, I feel the Set api can be easier
   // for humans to read
   const [tagOptions, setTagOptions] = useState<Set<TagDto>>(new Set(currentTagOptions));
@@ -33,26 +33,14 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   const getRootFontSize = () => {
     return parseFloat(getComputedStyle(document.documentElement).fontSize);
   };
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useClickOutside<HTMLDivElement>(() => {
+    setTagOptionsVisible(false);
+  });
   const selectedContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setTagOptions(new Set(currentTagOptions));
   }, [currentTagOptions]);
-
-  // logic for detecting if the user clicks outside the tagOption wrapper
-  // which "unrenders" the relevant TSX, hiding it
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setTagOptionsVisible(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [containerRef]);
 
   // updates selectedContainerHeight, a value used to control styling
   useEffect(() => {
@@ -67,7 +55,16 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   const toggleTag = (tagName: string, event: React.MouseEvent) => {
     event.stopPropagation();
     const newSelectedTags = new Set(selectedTags);
-    const tag = Array.from(tagOptions).find((t) => t.name === tagName);
+    let tag = Array.from(tagOptions).find((t) => t.name === tagName);
+
+    // Handle the case where tag is not found in tagOptions but is a tempTag
+    if (!tag && tempTag === tagName) {
+      // Assign a dummy id and empty color for tempTag
+      tag = { id: -1, name: tempTag, color: '' };
+      // Add tempTag to tagOptions
+      setTagOptions(new Set([...Array.from(tagOptions), tag]));
+    }
+
     if (tag) {
       if (newSelectedTags.has(tag)) {
         newSelectedTags.delete(tag);
@@ -75,6 +72,7 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
         newSelectedTags.add(tag);
       }
     }
+
     setSelectedTags(newSelectedTags);
 
     if (tempTag === tagName) {
@@ -93,9 +91,10 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
       // tags have support for a color in backend, so that they stand out from each other
       // when the user has selected some tags and click outside the container the tags appear to "lock in"
       style={{
-        backgroundColor: tag.color ? `#${tag.color}` : isDarkMode ? COLORS.grey_2 : COLORS.grey_5,
-        ...(tagOptionsVisible ? { border: 'none' } : { border: `1px solid ${COLORS.blue_deeper}` }),
-        boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.2)', // Add symmetrical inset box-shadow
+        backgroundColor: tag.color ? `${tag.color}` : isDarkMode ? COLORS.grey_2 : COLORS.grey_5,
+        ...(tagOptionsVisible
+          ? { border: 'none' }
+          : { border: `1px solid ${COLORS.blue_deeper}`, boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.2)' }),
       }}
     >
       {tag.name}
