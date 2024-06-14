@@ -2,7 +2,7 @@ import styles from './TagSelect.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
 import { TagDto } from '~/dto';
 import { COLORS } from '~/types';
-import { useIsDarkTheme, useClickOutside } from '~/hooks';
+import { useClickOutside } from '~/hooks';
 
 const FOUR_POINT_FIVE_REM = 4.5;
 
@@ -22,14 +22,14 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   const [tagSearch, setTagSearch] = useState<string>('');
   // when the tag is not in tagOptions a new tag can be created,
   // therefor the tagSearch string will be appended to the options
-  const [tempTag, setTempTag] = useState<string | null>(null);
-  const isDarkMode = useIsDarkTheme();
+  //const [tempTag, setTempTag] = useState<string | null>(null); ###############
 
   // uses set because it is easier to crosscheck tagOptions and selectedTags
   const [selectedTags, setSelectedTags] = useState<Set<TagDto>>(new Set());
 
   // gets the font size of the root element (rem)
   const [selectedContainerHeight, setSelectedContainerHeight] = useState(0);
+
   const getRootFontSize = () => {
     return parseFloat(getComputedStyle(document.documentElement).fontSize);
   };
@@ -55,71 +55,92 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   const toggleTag = (tagName: string, event: React.MouseEvent) => {
     event.stopPropagation();
     const newSelectedTags = new Set(selectedTags);
-    let tag = Array.from(tagOptions).find((t) => t.name === tagName);
+    const existingTag = Array.from(tagOptions).find((t) => t.name === tagName);
 
-    // Handle the case where tag is not found in tagOptions but is a tempTag
-    if (!tag && tempTag === tagName) {
-      // Assign a dummy id and empty color for tempTag
-      tag = { id: -1, name: tempTag, color: '' };
-      // Add tempTag to tagOptions
-      setTagOptions(new Set([...Array.from(tagOptions), tag]));
-    }
-
-    if (tag) {
-      if (newSelectedTags.has(tag)) {
-        newSelectedTags.delete(tag);
+    if (existingTag) {
+      if (newSelectedTags.has(existingTag)) {
+        newSelectedTags.delete(existingTag);
       } else {
-        newSelectedTags.add(tag);
+        newSelectedTags.add(existingTag);
+      }
+    } else {
+      // Handle the case where tempTag is being selected
+      const tempTag = { id: -1, name: tagName, color: '' };
+      const tempTagInSelected = Array.from(newSelectedTags).find((t) => t.name === tempTag.name);
+
+      if (tempTagInSelected) {
+        newSelectedTags.delete(tempTagInSelected);
+      } else {
+        newSelectedTags.add(tempTag);
       }
     }
 
     setSelectedTags(newSelectedTags);
-
-    if (tempTag === tagName) {
-      setTempTag(null);
-      setTagSearch('');
-    }
     exportTags(Array.from(newSelectedTags).map((tag) => tag.name));
+    setTagSearch('');
   };
 
-  // tag representation
-  const tagElement = (tag: TagDto) => (
-    <p
-      key={tag.id}
-      className={styles.tag}
-      onClick={(e) => toggleTag(tag.name, e)}
-      // tags have support for a color in backend, so that they stand out from each other
-      // when the user has selected some tags and click outside the container the tags appear to "lock in"
-      style={{
-        backgroundColor: tag.color ? `${tag.color}` : isDarkMode ? COLORS.grey_2 : COLORS.grey_5,
-        ...(tagOptionsVisible
-          ? { border: 'none' }
-          : { border: `1px solid ${COLORS.blue_deeper}`, boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.2)' }),
-      }}
-    >
-      {tag.name}
-    </p>
-  );
+  const isColorDark = (hexColor: string) => {
+    if (!hexColor) {
+      return false; // Default to false if no color is provided
+    }
 
+    // Remove the '#' character if it exists
+    hexColor = hexColor.replace('#', '');
+
+    // Convert hex color to RGB
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+
+    // Calculate brightness (YIQ formula)
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 128;
+  };
+  // tag representation
+
+  const tagElement = (tag: TagDto) => {
+    const backgroundColor = tag.color ? `${tag.color}` : COLORS.orange_ligher;
+
+    const textColor = isColorDark(tag.color) ? COLORS.white : COLORS.black;
+
+    return (
+      <p
+        key={tag.id}
+        className={styles.tag}
+        onClick={(e) => toggleTag(tag.name, e)}
+        // tags have support for a color in backend, so that they stand out from each other
+        // when the user has selected some tags and click outside the container the tags appear to "lock in"
+        style={{
+          backgroundColor: backgroundColor,
+          color: textColor,
+          ...(tagOptionsVisible
+            ? { border: 'none' }
+            : { border: `1px solid ${COLORS.blue_deeper}`, boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.2)' }),
+        }}
+      >
+        {tag.name}
+      </p>
+    );
+  };
   // filters tag options to display the tags which contain the searchValue string
   // this way when a user attempts to create a tag they might see one that is similar
   // by default all tags are visible in a select like scroll-down
   const filteredTagOptions = () => {
     const existingTags = Array.from(tagOptions);
-    let newTagOptions = existingTags;
 
-    if (tempTag) {
-      //adds  the search value(if it is not in the tag options, so that the user can add a new tag
-      const tempTagExists = existingTags.some((tag) => tag.name === tempTag);
-      if (!tempTagExists) {
-        // Assign a dummy id and empty color for tempTag
-        newTagOptions = [...newTagOptions, { id: -1, name: tempTag, color: '' }];
-      }
-    }
-
-    const filteredTags = newTagOptions.filter(
+    const filteredTags = existingTags.filter(
       (tag) => !selectedTags.has(tag) && tag.name.toLowerCase().includes(tagSearch.toLowerCase()),
     );
+
+    if (
+      tagSearch &&
+      !existingTags.some((tag) => tag.name === tagSearch) &&
+      !filteredTags.some((tag) => tag.name === tagSearch)
+    ) {
+      filteredTags.push({ id: -1, name: tagSearch, color: '' });
+    }
+
     return filteredTags.map((tag) => tagElement(tag));
   };
 
@@ -128,16 +149,6 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   // logic for setting search value and check if the search value would be a new unique tag(name)
   const handleTagSearch = (searchValue: string) => {
     setTagSearch(searchValue);
-    if (
-      searchValue.length > 0 &&
-      !Array.from(tagOptions)
-        .map((tag) => tag.name)
-        .includes(searchValue)
-    ) {
-      setTempTag(searchValue);
-    } else {
-      setTempTag(null);
-    }
   };
 
   return (
