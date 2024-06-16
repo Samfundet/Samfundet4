@@ -689,10 +689,10 @@ class InterviewRoomAdmin(CustomBaseAdmin):
 
 @admin.register(Interview)
 class InterviewAdmin(CustomBaseAdmin):
-    list_filter = ['id', 'notes']
-    list_display = ['id', 'notes']
-    search_fields = ['id', 'notes']
-    list_display_links = ['id', 'notes']
+    list_filter = ['interview_time', 'interview_location']
+    list_display = ['id', 'interview_time', 'interview_location']
+    search_fields = ['interview_time', 'interview_location']
+    list_display_links = ['id']
     filter_horizontal = ['interviewers']
 
 

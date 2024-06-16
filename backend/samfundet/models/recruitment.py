@@ -30,6 +30,8 @@ class Recruitment(CustomBaseModel):
     reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
+    max_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max admissions per applicant')
+
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
@@ -230,6 +232,21 @@ class RecruitmentAdmission(CustomBaseModel):
                 admissions_for_user[i].save()
                 break
         self.organize_priorities()
+
+    TOO_MANY_ADMISSIONS_ERROR = 'Too many admissions for recruitment'
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        # If there is max admissions, check if applicant have applied to not to many
+        # Cant use not self.pk, due to UUID generating it before save.
+        if self.recruitment.max_admissions and not RecruitmentAdmission.objects.filter(pk=self.pk).first():
+            user_admissions_count = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            if user_admissions_count >= self.recruitment.max_admissions:
+                errors['recruitment'].append(self.TOO_MANY_ADMISSIONS_ERROR)
+
+        raise ValidationError(errors)
 
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
