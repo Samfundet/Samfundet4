@@ -53,6 +53,7 @@ import {
   SultenMenuAdminPage,
   AdminLayout,
   ImpersonateUserAdminPage,
+  SultenMenuItemFormAdminPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';

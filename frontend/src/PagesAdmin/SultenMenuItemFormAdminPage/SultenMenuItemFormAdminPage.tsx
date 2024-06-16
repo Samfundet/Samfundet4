@@ -161,16 +161,15 @@ export function SultenMenuItemFormAdminPage() {
             label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
           />
         </div>
-
         <div className={styles.row}>
           <SamfFormField
             field="description_nb"
-            type="text-long"
+            type="text_long"
             label={t(KEY.common_description) + ' ' + t(KEY.common_norwegian)}
           />
           <SamfFormField
             field="description_en"
-            type="text-long"
+            type="text_long"
             label={t(KEY.common_description) + ' ' + t(KEY.common_english)}
           />
         </div>
