@@ -921,6 +921,7 @@ def test_update_admission(
     assert response.data['admission_text'] == post_data2['admission_text']
     # Assert the returned data based on the logic in the view
 
+
 def test_post_admission_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,
@@ -954,6 +955,7 @@ def test_post_admission_overflow(
     response2: Response = fixture_rest_client.put(path=url, data=post_data)
     ### Assert ###
     assert response2.status_code == status.HTTP_400_BAD_REQUEST
+
 
 def test_recruitment_admission_update_pri_up(
     fixture_rest_client: APIClient,

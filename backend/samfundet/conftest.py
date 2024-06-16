@@ -318,6 +318,7 @@ def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang
     yield recruitment_position
     recruitment_position.delete()
 
+
 @pytest.fixture
 def fixture_informationpage() -> Iterator[InformationPage]:
     informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
