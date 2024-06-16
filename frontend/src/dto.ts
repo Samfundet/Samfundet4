@@ -144,6 +144,7 @@ export type EventDto = {
   // Write only:
   // Used to create new event with using id of existing imagedto
   image?: ImageDto;
+  capacity?: number;
 };
 
 export type EventGroupDto = {
@@ -347,7 +348,7 @@ export type NotificationDto = {
 // ############################################################
 
 export type RecruitmentDto = {
-  id: string | undefined;
+  id?: string;
   name_nb: string;
   name_en: string;
   visible_from: string;
@@ -355,7 +356,12 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
+  max_admissions?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
+};
+
+export type UserPriorityDto = {
+  direction: number;
 };
 
 export type RecruitmentPositionDto = {
@@ -390,10 +396,11 @@ export type InterviewDto = {
   interview_location: string;
   room: string;
   notes: string;
+  interviewers?: UserDto[];
 };
 
 export type RecruitmentAdmissionDto = {
-  id: number;
+  id: string;
   interview: InterviewDto;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
@@ -404,6 +411,7 @@ export type RecruitmentAdmissionDto = {
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+  admission_count?: number;
 };
 
 export type FeedbackDto = {

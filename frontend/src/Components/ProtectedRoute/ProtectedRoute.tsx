@@ -1,5 +1,5 @@
 // import { Navigate, useLocation } from 'react-router-dom';
-// import { useAuthContext } from '~/AuthContext';
+// import { useAuthContext } from '~/context/AuthContext';
 // import { hasPerm } from '~/utils';
 // import { ROUTES } from '~/routes';
 import { ElementType } from 'react';

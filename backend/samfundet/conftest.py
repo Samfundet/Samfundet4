@@ -132,13 +132,14 @@ def fixture_user(fixture_user_pw: str) -> Iterator[User]:
 
 @pytest.fixture
 def fixture_user2(fixture_user_pw: str) -> Iterator[User]:
-    user2 = User.objects.create_user(
+    # Extra user if need
+    user = User.objects.create_user(
         username='user2',
         email='user2@test.com',
         password=fixture_user_pw,
     )
-    yield user2
-    user2.delete()
+    yield user
+    user.delete()
 
 
 @pytest.fixture
@@ -220,6 +221,18 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
 
 
 @pytest.fixture
+def fixture_gang2(fixture_organization: Organization) -> Iterator[Gang]:
+    organization = Gang.objects.create(
+        name_nb='Gang 2',
+        name_en='Gang 2',
+        abbreviation='G2',
+        organization=fixture_organization,
+    )
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
 def fixture_text_item() -> Iterator[TextItem]:
     text_item = TextItem.objects.create(
         key='foo',
@@ -287,6 +300,26 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
 
 
 @pytest.fixture
+def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang: Gang) -> Iterator[Recruitment]:
+    recruitment_position = RecruitmentPosition.objects.create(
+        name_nb='Position NB 2',
+        name_en='Position EN 2',
+        short_description_nb='Short Description NB 2',
+        short_description_en='Short Description EN 2',
+        long_description_nb='Long Description NB 2',
+        long_description_en='Long Description EN 2',
+        is_funksjonaer_position=False,
+        default_admission_letter_nb='Default Admission Letter NB 2',
+        default_admission_letter_en='Default Admission Letter EN 2',
+        tags='tag1,tag2',
+        gang=fixture_gang,
+        recruitment=fixture_recruitment,
+    )
+    yield recruitment_position
+    recruitment_position.delete()
+
+
+@pytest.fixture
 def fixture_informationpage() -> Iterator[InformationPage]:
     informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
     yield informationpage
@@ -323,6 +356,25 @@ def fixture_recruitment_admission(
     )
     yield admission
     admission.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_admission2(
+    fixture_user: User,
+    fixture_recruitment_position2: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentAdmission]:
+    admission2 = RecruitmentAdmission.objects.create(
+        admission_text='Test admission text',
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment,
+        user=fixture_user,
+        applicant_priority=2,
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
+    )
+    yield admission2
+    admission2.delete()
 
 
 @pytest.fixture

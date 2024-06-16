@@ -14,6 +14,8 @@ export const ROUTES_FRONTEND = {
   information_page_list: '/information/',
   information_page_detail: '/information/:slugField/',
   saksdokumenter: '/saksdokumenter/',
+  membership: '/membership',
+  luka: '/luka',
   // Recruitment:
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
@@ -81,4 +83,5 @@ export const ROUTES_FRONTEND = {
   api_testing: '/api-testing/',
   components: '/components/',
   route_overview: '/route/overview/',
+  not_found: '/not_found',
 } as const;

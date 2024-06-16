@@ -3,8 +3,8 @@ import '~/global.scss';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthContextProvider } from '~/AuthContext';
-import { GlobalContextProvider } from '~/GlobalContextProvider';
+import { AuthContextProvider } from '~/context/AuthContext';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { THEME } from '~/constants';
 import { updateBodyThemeClass } from '~/utils';
 

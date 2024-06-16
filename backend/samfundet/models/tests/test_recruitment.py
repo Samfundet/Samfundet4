@@ -5,7 +5,8 @@ import pytest
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.recruitment import Recruitment, Organization, RecruitmentAdmission
+from samfundet.models.general import User
+from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
@@ -87,6 +88,92 @@ class TestRecruitmentClean:
         assert Recruitment.SHOWN_AFTER_ACTUAL_ERROR in e['shown_application_deadline']
 
 
+class TestRecruitmentStats:
+    def test_recruitment_has_stats(self, fixture_recruitment: Recruitment):
+        """Check if fixture_recruitment has the related object"""
+        assert fixture_recruitment.statistics
+
+    def test_recruitmentstats_update_signal(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
+        """Check if statistics are updated on new admissions"""
+        assert fixture_recruitment.statistics.total_admissions == 0
+        assert fixture_recruitment.statistics.total_applicants == 0
+
+        # Creat new admission
+        RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        # Check if updated
+        assert fixture_recruitment.statistics.total_admissions == 1
+        assert fixture_recruitment.statistics.total_applicants == 1
+
+    def test_recruitmentstats_multiple_applications_single_user(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        """Check if only admissions are updated if same user creates an additional admission"""
+        assert fixture_recruitment.statistics.total_applicants == 0
+        assert fixture_recruitment.statistics.total_admissions == 0
+        RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        assert fixture_recruitment.statistics.total_admissions == 1
+        assert fixture_recruitment.statistics.total_applicants == 1
+
+        # Create simple copy of a new position for new admission
+        fixture_recruitment_position_copy = fixture_recruitment_position
+        fixture_recruitment_position.pk = None
+        fixture_recruitment_position_copy.save()
+
+        # create new admission for same user
+        RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position_copy,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        # check if only admissions are updated
+        assert fixture_recruitment.statistics.total_admissions == 2
+        assert fixture_recruitment.statistics.total_applicants == 1
+
+    def test_recruitmentstats_multiple_applications_multiple_users(
+        self, fixture_user: User, fixture_user2: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        """Check if both applicatats and admissiosn are updated"""
+        assert fixture_recruitment.statistics.total_applicants == 0
+        assert fixture_recruitment.statistics.total_admissions == 0
+
+        # Test for one user
+        RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        assert fixture_recruitment.statistics.total_admissions == 1
+        assert fixture_recruitment.statistics.total_applicants == 1
+
+        # Test for both for extra user
+        RecruitmentAdmission.objects.create(
+            user=fixture_user2,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+
+        assert fixture_recruitment.statistics.total_admissions == 2
+        assert fixture_recruitment.statistics.total_applicants == 2
+
+
 class TestRecruitmentAdmission:
     def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
@@ -97,3 +184,61 @@ class TestRecruitmentAdmission:
 
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+
+    def test_priority_up(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission):
+        assert fixture_recruitment_admission.applicant_priority == 1
+        assert fixture_recruitment_admission2.applicant_priority == 2
+
+        # Test general up
+        fixture_recruitment_admission2.update_priority(1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 2
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 1
+
+        # Test up overloading
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).update_priority(2)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+        # Test up from top position does not change anything
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).update_priority(1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+    def test_priority_down(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_admission2: RecruitmentAdmission):
+        # intial priority
+        assert fixture_recruitment_admission.applicant_priority == 1
+        assert fixture_recruitment_admission2.applicant_priority == 2
+
+        # Test general up
+        fixture_recruitment_admission.update_priority(-1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 2
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 1
+
+        # Test up overloading
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).update_priority(-2)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+        # Test up from top position does not change anything
+        RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).update_priority(-1)
+
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
+        assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+    def test_auto_newest_lowest_pri(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_position2: RecruitmentPosition):
+        """Tests that the newest admission gets automatically the lowest applicant priority"""
+        # intial priority
+        assert fixture_recruitment_admission.applicant_priority == 1
+
+        new_admission = RecruitmentAdmission.objects.create(
+            admission_text='Test admission text 2',
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment_position2.recruitment,
+            user=fixture_recruitment_admission.user,
+        )
+        assert new_admission.applicant_priority == 2

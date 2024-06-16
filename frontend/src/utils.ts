@@ -135,6 +135,16 @@ export function getDayKey(day: Day): KeyValues {
   }
 }
 
+export const SHORT_DAY_I18N_KEYS = [
+  KEY.common_day_monday_short,
+  KEY.common_day_tuesday_short,
+  KEY.common_day_wednesday_short,
+  KEY.common_day_thursday_short,
+  KEY.common_day_friday_short,
+  KEY.common_day_saturday_short,
+  KEY.common_day_sunday_short,
+];
+
 /**
  * Gets the translation key for a given price group
  */
@@ -284,3 +294,15 @@ export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
   return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
 }
+
+/*
+export function immutableSet(list: unknown[], oldValue: unknown, newValue: unknown) {
+  return list.map((element: unknown) => {
+    if (element?.id === oldValue?.id) {
+      return newValue;
+    } else {
+      return element;
+    }
+  });
+}
+*/

@@ -27,6 +27,7 @@ import {
   TextItemDto,
   UserDto,
   UserPreferenceDto,
+  UserPriorityDto,
   VenueDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
@@ -629,6 +630,19 @@ export async function getRecruitmentAdmissionsForApplicant(
   return response;
 }
 
+export async function putRecruitmentPriorityForUser(
+  admissionId: string,
+  data: UserPriorityDto,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_user_priority_update,
+      urlParams: { pk: admissionId },
+    });
+  return await axios.put(url, data, { withCredentials: true });
+}
+
 export async function getRecruitmentAdmissionForApplicant(
   recruitment_position: string,
 ): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
@@ -638,9 +652,7 @@ export async function getRecruitmentAdmissionForApplicant(
       pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
       urlParams: { pk: recruitment_position },
     });
-  const response = await axios.get(url, { withCredentials: true });
-
-  return response;
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function getRecruitmentAdmissionsForGang(
@@ -656,9 +668,19 @@ export async function getRecruitmentAdmissionsForGang(
         recruitment: recruitmentId,
       },
     });
-  const response = await axios.get(url, { withCredentials: true });
+  return await axios.get(url, { withCredentials: true });
+}
 
-  return response;
+export async function getRecruitmentAdmissionsForRecruitmentPosition(
+  recruitmentPositionId: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_position_detail,
+      urlParams: { pk: recruitmentPositionId },
+    });
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function putRecruitmentAdmissionForGang(

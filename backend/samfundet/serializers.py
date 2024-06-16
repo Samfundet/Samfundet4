@@ -55,6 +55,7 @@ from .models.recruitment import (
     Occupiedtimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
+    RecruitmentStatistics,
 )
 
 
@@ -557,10 +558,20 @@ class MerchSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
+class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentStatistics
+        fields = '__all__'
+
+
 class RecruitmentSerializer(CustomBaseSerializer):
     class Meta:
         model = Recruitment
         fields = '__all__'
+
+
+class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
+    direction = serializers.IntegerField(label='direction', write_only=True)
 
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
@@ -660,7 +671,7 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
         ]
 
 
-class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
@@ -673,6 +684,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'withdrawn',
             'interview',
             'created_at',
+            'user',
+            'recruitment',
         ]
         read_only_fields = [
             'applicant_priority',
@@ -721,14 +734,30 @@ class InterviewRoomSerializer(CustomBaseSerializer):
 
 
 class InterviewSerializer(CustomBaseSerializer):
+    interviewers = InterviewerSerializer(many=True)
+
     class Meta:
         model = Interview
         fields = '__all__'
+
+    def create(self, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview = super().create(validated_data)
+        interview.interviewers.set(interviewers_data)
+        return interview
+
+    def update(self, instance: Interview, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        instance = super().update(instance, validated_data)
+        instance.interviewers.set(interviewers_data)
+        return instance
 
 
 class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
+    admission_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
@@ -740,11 +769,16 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview_instance.interviewers.set(interviewers_data)
         interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+    def get_application_count(self, application: RecruitmentAdmission) -> int:
+        return application.user.admissions.filter(recruitment=application.recruitment).count()
 
 
 class UserFeedbackSerializer(serializers.ModelSerializer):

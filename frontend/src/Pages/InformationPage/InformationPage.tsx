@@ -11,8 +11,9 @@ import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
+import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
@@ -33,11 +34,14 @@ export function InformationPage() {
       getInformationPage(slugField)
         .then((data) => setPage(data))
         .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found);
+          }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         });
     }
-  }, [slugField]);
+  }, [navigate, slugField]);
 
   // Text and title
   const text = dbT(page, 'text') ?? '';

@@ -38,10 +38,11 @@ router.register('merch', views.MerchView, 'merch')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
+router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
-router.register('recruitment-admisisons-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
-router.register('recruitment-admisisons-for-group', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_group')
-router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
+router.register('recruitment-admissions-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
+router.register('recruitment-admissions-for-position', views.RecruitmentAdmissionForRecruitmentPositionView, 'recruitment_admissions_for_position')
+router.register('recruitment-admissions-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
 router.register('interview', views.InterviewView, 'interview')
 
 app_name = 'samfundet'
@@ -68,6 +69,7 @@ urlpatterns = [
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
+    path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentAdmissionApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
