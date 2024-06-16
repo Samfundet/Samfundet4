@@ -569,6 +569,10 @@ class RecruitmentSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
+    direction = serializers.IntegerField(label='direction', write_only=True)
+
+
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
 
@@ -666,7 +670,7 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
         ]
 
 
-class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
@@ -679,6 +683,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'withdrawn',
             'interview',
             'created_at',
+            'user',
+            'recruitment',
         ]
         read_only_fields = [
             'applicant_priority',
