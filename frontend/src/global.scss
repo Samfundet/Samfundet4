@@ -103,17 +103,13 @@ label {
   color: $theme-dark-color;
   background: $theme-dark-bg;
 
-  form {
-    background-color: $form-bg-dark;
-    border: 1px solid $form-border-dark;
-  }
-
   label {
     color: $white;
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     background-color: $theme-dark-input-bg;
     color: inherit;
     &:focus {

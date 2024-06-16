@@ -95,7 +95,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <InputField
             value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onBlur={() => putRecruitmentAdmissionForGang(admission.id, admission)}
             onChange={(value: string) => {
               const updatedInterview = { ...admission.interview, interview_time: value.toString() };
               const newAdmission = { ...admission, interview: updatedInterview };
@@ -109,7 +109,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <InputField
             value={admission.interview.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onBlur={() => putRecruitmentAdmissionForGang(admission.id, admission)}
             onChange={(value: string) => {
               const updatedInterview = { ...admission.interview, interview_location: value.toString() };
               const newAdmission = { ...admission, interview: updatedInterview };
@@ -126,7 +126,7 @@ export function RecruitmentPositionOverviewPage() {
             onChange={(value) => {
               const newAdmission = { ...admission, recruiter_priority: value };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+              putRecruitmentAdmissionForGang(admission.id, newAdmission);
             }}
           />
         ),
@@ -139,7 +139,7 @@ export function RecruitmentPositionOverviewPage() {
             onChange={(value) => {
               const newAdmission = { ...admission, recruiter_status: value };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+              putRecruitmentAdmissionForGang(admission.id, newAdmission);
             }}
           />
         ),
