@@ -106,17 +106,13 @@ label {
   background-repeat: no-repeat;
   background-attachment: fixed;
 
-  form {
-    background-color: $form-bg-dark;
-    border: 1px solid $form-border-dark;
-  }
-
   label {
     color: $white;
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     background-color: $theme-dark-input-bg;
     color: inherit;
     &:focus {

@@ -569,6 +569,10 @@ class RecruitmentSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
+    direction = serializers.IntegerField(label='direction', write_only=True)
+
+
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
 
