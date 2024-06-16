@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from random import sample
+
 from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition
 
@@ -18,12 +20,14 @@ POSITION_DATA = {
 
 def seed():
     yield 0, 'recruitment_positions'
+    RecruitmentPosition.objects.all().delete()
+    yield 0, 'Deleted old recruitmentpositions'
+
     gangs = Gang.objects.all()
     recruitments = Recruitment.objects.all()
     created_count = 0
-
-    for gang_index, gang in enumerate(gangs):
-        for recruitment_index, recruitment in enumerate(recruitments):
+    for recruitment_index, recruitment in enumerate(recruitments):
+        for gang_index, gang in enumerate(sample(list(gangs), 6)):
             for i in range(2):  # Create 2 instances for each gang and recruitment
                 position_data = POSITION_DATA.copy()
                 position_data.update(
