@@ -10,7 +10,7 @@ export type DropDownOption<T> = {
 
 export type DropdownProps<T> = {
   className?: string;
-  defaultValue?: DropDownOption<T>;
+  defaultValue?: DropDownOption<T>; // issue 1089
   initialValue?: T;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
@@ -64,7 +64,7 @@ export function Dropdown<T>({
       </select>
       {/* span inneholder "nedover pil" symbol */}
       <div className={styles.arrow_container}>
-        <Icon icon="material-symbols:arrow-drop-down-circle" width={20} className={styles.arrow} />
+        <Icon icon="mdi:caret" rotate={2} width={20} className={styles.arrow} />
       </div>
     </label>
   );
