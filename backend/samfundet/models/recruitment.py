@@ -234,6 +234,7 @@ class RecruitmentAdmission(CustomBaseModel):
         self.organize_priorities()
 
     TOO_MANY_ADMISSIONS_ERROR = 'Too many admissions for recruitment'
+    CANT_WITHDRAW_MANY_ADMISSIONS_ERROR = 'Can not withdraw admission, too many active admissions'
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
         super().clean()
@@ -241,11 +242,16 @@ class RecruitmentAdmission(CustomBaseModel):
 
         # If there is max admissions, check if applicant have applied to not to many
         # Cant use not self.pk, due to UUID generating it before save.
-        if self.recruitment.max_admissions and not RecruitmentAdmission.objects.filter(pk=self.pk).first():
+        if self.recruitment.max_admissions:
             user_admissions_count = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            current_admission = RecruitmentAdmission.objects.filter(pk=self.pk).first()
             if user_admissions_count >= self.recruitment.max_admissions:
-                errors['recruitment'].append(self.TOO_MANY_ADMISSIONS_ERROR)
-
+                if not current_admission:
+                    # attempts to create new admission when too many admissions
+                    errors['recruitment'].append(self.TOO_MANY_ADMISSIONS_ERROR)
+                elif current_admission.withdrawn and not self.withdrawn:
+                    # If it attempts to withdraw, when to many active admissions
+                    errors['recruitment'].append(self.CANT_WITHDRAW_MANY_ADMISSIONS_ERROR)
         raise ValidationError(errors)
 
     def __str__(self) -> str:
