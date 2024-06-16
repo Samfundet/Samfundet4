@@ -777,6 +777,29 @@ class RecruitmentAdmissionForGangView(ModelViewSet):
         return Response(serializer.data)
 
 
+class RecruitmentAdmissionForRecruitmentPositionView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAdmissionForGangSerializer
+    queryset = RecruitmentAdmission.objects.all()
+
+    # TODO: User should only be able to edit the fields that are allowed
+
+    def retrieve(self, request: Request, pk: int) -> Response:
+        """Returns a list of all the recruitments for the specified gang."""
+
+        position = get_object_or_404(RecruitmentPosition, id=pk)
+
+        admissions = RecruitmentAdmission.objects.filter(
+            recruitment_position=position,
+        )
+
+        # check permissions for each admission
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+
+        serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
 class ActiveRecruitmentPositionsView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
