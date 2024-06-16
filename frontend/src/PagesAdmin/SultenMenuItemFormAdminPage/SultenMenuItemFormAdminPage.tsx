@@ -16,7 +16,6 @@ import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
-
 type FormType = {
   name_nb: string;
   name_en: string;
