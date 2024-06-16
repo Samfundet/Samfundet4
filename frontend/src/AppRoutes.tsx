@@ -20,7 +20,7 @@ import {
   LycheReservationPage,
   MembershipPage,
   NotFoundPage,
-  RecruitmentAdmissionFormPage,
+  RecruitmentApplicationFormPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -85,7 +85,7 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
-        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />

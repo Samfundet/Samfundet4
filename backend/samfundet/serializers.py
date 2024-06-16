@@ -54,7 +54,7 @@ from .models.recruitment import (
     InterviewRoom,
     Occupiedtimeslot,
     RecruitmentPosition,
-    RecruitmentAdmission,
+    RecruitmentApplication,
     RecruitmentStatistics,
 )
 
@@ -570,7 +570,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
 
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
-    recruitment_admission_ids = serializers.SerializerMethodField()
+    recruitment_application_ids = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -580,12 +580,12 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'last_name',
             'username',
             'email',
-            'recruitment_admission_ids',  # Add this to the fields list
+            'recruitment_application_ids',  # Add this to the fields list
         ]
 
-    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
+    def get_recruitment_application_ids(self, obj: User) -> list[int]:
         """Return list of recruitment admission IDs for the user."""
-        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
+        return RecruitmentApplication.objects.filter(user=obj).values_list('id', flat=True)
 
 
 class InterviewerSerializer(CustomBaseSerializer):
@@ -666,11 +666,11 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
         ]
 
 
-class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+class RecruitmentApplicationForApplicantSerializer(serializers.ModelSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
-        model = RecruitmentAdmission
+        model = RecruitmentApplication
         fields = [
             'id',
             'admission_text',
@@ -685,22 +685,22 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'withdrawn',
         ]
 
-    def create(self, validated_data: dict) -> RecruitmentAdmission:
+    def create(self, validated_data: dict) -> RecruitmentApplication:
         recruitment_position = validated_data['recruitment_position']
         # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
 
-        recruitment_admission = RecruitmentAdmission.objects.create(
+        recruitment_application = RecruitmentApplication.objects.create(
             admission_text=validated_data.get('admission_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
         )
 
-        return recruitment_admission
+        return recruitment_application
 
-    def to_representation(self, instance: RecruitmentAdmission) -> dict:
+    def to_representation(self, instance: RecruitmentApplication) -> dict:
         data = super().to_representation(instance)
         data['recruitment_position'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
         return data
@@ -746,16 +746,16 @@ class InterviewSerializer(CustomBaseSerializer):
         return instance
 
 
-class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
+class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
 
     class Meta:
-        model = RecruitmentAdmission
+        model = RecruitmentApplication
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+    def update(self, instance: RecruitmentApplication, validated_data: dict) -> RecruitmentApplication:
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
@@ -766,7 +766,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
-        # Update other fields of RecruitmentAdmission instance
+        # Update other fields of RecruitmentApplication instance
         return super().update(instance, validated_data)
 
 

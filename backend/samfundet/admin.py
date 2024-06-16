@@ -11,7 +11,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentadmission_change
+from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentapplication_change
 from root.custom_classes.admin_classes import (
     CustomBaseAdmin,
     CustomGuardedUserAdmin,
@@ -56,7 +56,7 @@ from .models.recruitment import (
     InterviewRoom,
     Occupiedtimeslot,
     RecruitmentPosition,
-    RecruitmentAdmission,
+    RecruitmentApplication,
     RecruitmentStatistics,
 )
 
@@ -612,21 +612,21 @@ class RecruitmentAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-class RecruitmentAdmissionInline(admin.TabularInline):
+class RecruitmentApplicationInline(admin.TabularInline):
     """
-    Inline admin interface for RecruitmentAdmission.
+    Inline admin interface for RecruitmentApplication.
 
     Displays a link to the detailed admin page of each admission along with its user and applicant priority.
     """
 
-    model = RecruitmentAdmission
+    model = RecruitmentApplication
     extra = 0
     readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
     fields = ['linked_admission_text', 'user', 'applicant_priority']
 
-    def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
-        """Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance."""
-        url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
+    def linked_admission_text(self, obj: RecruitmentApplication) -> str:
+        """Returns a clickable link leading to the admin change page of the RecruitmentApplication instance."""
+        url = reverse(admin__samfundet_RecruitmentApplication_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
 
 
@@ -643,15 +643,15 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
     filter_horizontal = ['interviewers']
     list_select_related = True
 
-    inlines = [RecruitmentAdmissionInline]
+    inlines = [RecruitmentApplicationInline]
 
     def admissions_count(self, obj: RecruitmentPosition) -> int:
         count = obj.admissions.all().count()
         return count
 
 
-@admin.register(RecruitmentAdmission)
-class RecruitmentAdmissionAdmin(CustomBaseAdmin):
+@admin.register(RecruitmentApplication)
+class RecruitmentApplicationAdmin(CustomBaseAdmin):
     sortable_by = [
         'recruitment_position',
         'recruitment',

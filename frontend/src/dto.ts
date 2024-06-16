@@ -33,7 +33,7 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  recruitment_admission_ids?: string[];
+  recruitment_application_ids?: string[];
 };
 
 export type HomePageDto = {
@@ -392,7 +392,7 @@ export type InterviewDto = {
   interviewers?: UserDto[];
 };
 
-export type RecruitmentAdmissionDto = {
+export type RecruitmentApplicationDto = {
   id: number;
   interview: InterviewDto;
   admission_text: string;

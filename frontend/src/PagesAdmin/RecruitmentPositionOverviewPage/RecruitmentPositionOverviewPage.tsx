@@ -4,8 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentApplicationsForGang, putRecruitmentApplicationForGang } from '~/api';
+import { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -29,11 +29,11 @@ const statusOptions: DropDownOption<number>[] = [
 ];
 
 function immutableSet(
-  list: RecruitmentAdmissionDto[],
-  oldValue: RecruitmentAdmissionDto,
-  newValue: RecruitmentAdmissionDto,
+  list: RecruitmentApplicationDto[],
+  oldValue: RecruitmentApplicationDto,
+  newValue: RecruitmentApplicationDto,
 ) {
-  return list.map((element: RecruitmentAdmissionDto) => {
+  return list.map((element: RecruitmentApplicationDto) => {
     if (element.id === oldValue.id) {
       return newValue;
     } else {
@@ -46,14 +46,14 @@ export function RecruitmentPositionOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
   const gangId = useParams().gangId;
   const positionId = useParams().positionId;
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useNavigate();
   useEffect(() => {
     recruitmentId &&
       gangId &&
-      getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((data) => {
+      getRecruitmentApplicationsForGang(gangId, recruitmentId).then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
             (recruitmentApplicant) => recruitmentApplicant.recruitment_position?.toString() == positionId,
@@ -80,7 +80,7 @@ export function RecruitmentPositionOverviewPage() {
             key={admission.user.id}
             target={'backend'}
             url={reverse({
-              pattern: ROUTES.backend.admin__samfundet_recruitmentadmission_change,
+              pattern: ROUTES.backend.admin__samfundet_recruitmentapplication_change,
               urlParams: {
                 objectId: admission.id,
               },
@@ -95,7 +95,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <InputField
             value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onBlur={() => putRecruitmentApplicationForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
               const updatedInterview = { ...admission.interview, interview_time: value.toString() };
               const newAdmission = { ...admission, interview: updatedInterview };
@@ -109,7 +109,7 @@ export function RecruitmentPositionOverviewPage() {
         content: (
           <InputField
             value={admission.interview.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+            onBlur={() => putRecruitmentApplicationForGang(admission.id.toString(), admission)}
             onChange={(value: string) => {
               const updatedInterview = { ...admission.interview, interview_location: value.toString() };
               const newAdmission = { ...admission, interview: updatedInterview };
@@ -126,7 +126,7 @@ export function RecruitmentPositionOverviewPage() {
             onChange={(value) => {
               const newAdmission = { ...admission, recruiter_priority: value };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+              putRecruitmentApplicationForGang(admission.id.toString(), newAdmission);
             }}
           />
         ),
@@ -139,7 +139,7 @@ export function RecruitmentPositionOverviewPage() {
             onChange={(value) => {
               const newAdmission = { ...admission, recruiter_status: value };
               setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
+              putRecruitmentApplicationForGang(admission.id.toString(), newAdmission);
             }}
           />
         ),

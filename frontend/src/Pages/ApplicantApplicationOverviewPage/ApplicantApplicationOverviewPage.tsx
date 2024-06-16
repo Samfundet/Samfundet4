@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Page } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForApplicant } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentApplicationsForApplicant } from '~/api';
+import { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
@@ -14,7 +14,7 @@ import { OccupiedFormModal } from '~/Components/OccupiedForm';
 
 export function ApplicantApplicationOverviewPage() {
   const { recruitmentID } = useParams();
-  const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
+  const [admissions, setAdmissions] = useState<RecruitmentApplicationDto[]>([]);
   const { t } = useTranslation();
 
   function handleChangePriority(id: number, direction: 'up' | 'down') {
@@ -48,7 +48,7 @@ export function ApplicantApplicationOverviewPage() {
 
   useEffect(() => {
     if (recruitmentID) {
-      getRecruitmentAdmissionsForApplicant(recruitmentID).then((response) => {
+      getRecruitmentApplicationsForApplicant(recruitmentID).then((response) => {
         setAdmissions(response.data);
       });
     }
@@ -66,7 +66,7 @@ export function ApplicantApplicationOverviewPage() {
     { sortable: false, content: '' },
   ];
 
-  function admissionToTableRow(admission: RecruitmentAdmissionDto) {
+  function admissionToTableRow(admission: RecruitmentApplicationDto) {
     return [
       dbT(admission.recruitment_position, 'name'),
       niceDateTime(admission.interview.interview_time),

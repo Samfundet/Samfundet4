@@ -222,7 +222,7 @@ export const KEY = {
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
   recruitment_duration: 'recruitment_duration',
-  recruitment_admission: 'recruitment_admission',
+  recruitment_application: 'recruitment_application',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_gangmember: 'recruitment_gangmember',
   recruitment_organization: 'recruitment_organization',

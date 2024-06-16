@@ -169,7 +169,7 @@ class Interview(CustomBaseModel):
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
 
-class RecruitmentAdmission(CustomBaseModel):
+class RecruitmentApplication(CustomBaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     admission_text = models.TextField(help_text='Admission text for the admission')
     recruitment_position = models.ForeignKey(
@@ -207,7 +207,7 @@ class RecruitmentAdmission(CustomBaseModel):
             self.recruitment = self.recruitment_position.recruitment
         """If the admission is saved without an interview, try to find an interview from a shared position."""
         if not self.applicant_priority:
-            current_applications_count = RecruitmentAdmission.objects.filter(user=self.user).count()
+            current_applications_count = RecruitmentApplication.objects.filter(user=self.user).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
         """If the admission is saved without an interview, try to find an interview from a shared position."""
@@ -218,7 +218,7 @@ class RecruitmentAdmission(CustomBaseModel):
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
             shared_interview = (
-                RecruitmentAdmission.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+                RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
             )
 
             if shared_interview:

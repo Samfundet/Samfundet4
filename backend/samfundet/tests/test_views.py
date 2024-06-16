@@ -25,7 +25,7 @@ from samfundet.models.general import (
 from samfundet.models.recruitment import (
     Recruitment,
     RecruitmentPosition,
-    RecruitmentAdmission,
+    RecruitmentApplication,
 )
 
 if TYPE_CHECKING:
@@ -817,7 +817,7 @@ def test_get_applicants_without_interviews(
     fixture_superuser: User,
     fixture_recruitment: Recruitment,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
@@ -840,16 +840,16 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     fixture_superuser: User,
     fixture_recruitment: Recruitment,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
     url = reverse(routes.samfundet__applicants_without_interviews)
 
     # Setting the interview time for the user's admission
-    fixture_recruitment_admission.interview.interview_time = timezone.now()
-    fixture_recruitment_admission.interview.save()
-    fixture_recruitment_admission.save()
+    fixture_recruitment_application.interview.interview_time = timezone.now()
+    fixture_recruitment_application.interview.save()
+    fixture_recruitment_application.save()
 
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
@@ -859,15 +859,15 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     assert len(response.data) == 0
 
 
-def test_recruitment_admission_for_applicant(
+def test_recruitment_application_for_applicant(
     fixture_rest_client: APIClient,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
     fixture_recruitment: Recruitment,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse(routes.samfundet__recruitment_admissions_for_applicant_list)
+    url = reverse(routes.samfundet__recruitment_applications_for_applicant_list)
 
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
@@ -876,8 +876,8 @@ def test_recruitment_admission_for_applicant(
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 1
-    assert response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text
-    assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_admission.recruitment_position.id
+    assert response.data[0]['admission_text'] == fixture_recruitment_application.admission_text
+    assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_application.recruitment_position.id
 
 
 def test_post_admission(
@@ -886,7 +886,7 @@ def test_post_admission(
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     post_data = {'admission_text': 'test_text'}
@@ -905,7 +905,7 @@ def test_update_admission(
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     ### Act Send create ###

@@ -3,9 +3,9 @@ from __future__ import annotations
 from random import randint
 
 from samfundet.models.general import User
-from samfundet.models.recruitment import RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import RecruitmentPosition, RecruitmentApplication
 
-# Some example data to use for the new RecruitmentAdmission instances
+# Some example data to use for the new RecruitmentApplication instances
 ADMISSION_DATA = {
     'admission_text': 'This is the admission text',
     'applicant_priority': 0,
@@ -15,7 +15,7 @@ ADMISSION_DATA = {
 
 
 def seed():
-    yield 0, 'recruitment_admissions'
+    yield 0, 'recruitment_applications'
     positions = RecruitmentPosition.objects.all()
     users = User.objects.all()
     created_count = 0
@@ -30,10 +30,10 @@ def seed():
                     'user': users[randint(0, len(users) - 1)],  # random user from all users
                 }
             )
-            _admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
+            _admission, created = RecruitmentApplication.objects.get_or_create(**admission_data)
 
             if created:
                 created_count += 1
-            yield (position_index + 1) / len(positions), 'recruitment_admissions'
+            yield (position_index + 1) / len(positions), 'recruitment_applications'
 
-    yield 100, f'Created {created_count} recruitment_admissions'
+    yield 100, f'Created {created_count} recruitment_applications'

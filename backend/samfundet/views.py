@@ -74,8 +74,8 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
-    RecruitmentAdmissionForGangSerializer,
-    RecruitmentAdmissionForApplicantSerializer,
+    RecruitmentApplicationForGangSerializer,
+    RecruitmentApplicationForApplicantSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
@@ -111,7 +111,7 @@ from .models.recruitment import (
     InterviewRoom,
     Occupiedtimeslot,
     RecruitmentPosition,
-    RecruitmentAdmission,
+    RecruitmentApplication,
     RecruitmentStatistics,
 )
 
@@ -589,10 +589,10 @@ class RecruitmentPositionView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentAdmissionView(ModelViewSet):
+class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
-    serializer_class = RecruitmentAdmissionForGangSerializer
-    queryset = RecruitmentAdmission.objects.all()
+    serializer_class = RecruitmentApplicationForGangSerializer
+    queryset = RecruitmentApplication.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -653,17 +653,17 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
         return users_without_interviews
 
 
-class RecruitmentAdmissionForApplicantView(ModelViewSet):
+class RecruitmentApplicationForApplicantView(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentAdmissionForApplicantSerializer
-    queryset = RecruitmentAdmission.objects.all()
+    serializer_class = RecruitmentApplicationForApplicantSerializer
+    queryset = RecruitmentApplication.objects.all()
 
     def update(self, request: Request, pk: int) -> Response:
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         data['recruitment_position'] = pk
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            existing_admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
+            existing_admission = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
             if existing_admission:
                 existing_admission.admission_text = serializer.validated_data['admission_text']
                 existing_admission.save()
@@ -674,12 +674,12 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        admission = get_object_or_404(RecruitmentAdmission, user=request.user, recruitment_position=pk)
+        admission = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
 
         user_id = request.query_params.get('user_id')
         if user_id:
             # TODO: Add permissions
-            admission = RecruitmentAdmission.objects.filter(recruitment_position=pk, user_id=user_id).first()
+            admission = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
         serializer = self.get_serializer(admission)
         return Response(serializer.data)
 
@@ -693,25 +693,25 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        admissions = RecruitmentAdmission.objects.filter(
+        admissions = RecruitmentApplication.objects.filter(
             recruitment=recruitment,
             user=request.user,
         )
 
         if user_id:
             # TODO: Add permissions
-            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user_id=user_id)
+            admissions = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
         else:
-            admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user=request.user)
+            admissions = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
 
 
-class RecruitmentAdmissionForGangView(ModelViewSet):
+class RecruitmentApplicationForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentAdmissionForGangSerializer
-    queryset = RecruitmentAdmission.objects.all()
+    serializer_class = RecruitmentApplicationForGangSerializer
+    queryset = RecruitmentApplication.objects.all()
 
     # TODO: User should only be able to edit the fields that are allowed
 
@@ -729,13 +729,13 @@ class RecruitmentAdmissionForGangView(ModelViewSet):
         gang = get_object_or_404(Gang, id=gang_id)
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        admissions = RecruitmentAdmission.objects.filter(
+        admissions = RecruitmentApplication.objects.filter(
             recruitment_position__gang=gang,
             recruitment=recruitment,  # only include admissions related to the specified recruitment
         )
 
         # check permissions for each admission
-        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentadmission'], klass=admissions)
+        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=admissions)
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)

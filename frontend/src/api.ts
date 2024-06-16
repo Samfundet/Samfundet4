@@ -19,7 +19,7 @@ import {
   NotificationDto,
   OccupiedTimeSlotDto,
   OrganizationDto,
-  RecruitmentAdmissionDto,
+  RecruitmentApplicationDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   RegistrationDto,
@@ -602,13 +602,13 @@ export async function putRecruitmentPosition(
   return response;
 }
 
-export async function getRecruitmentAdmissionsForApplicant(
+export async function getRecruitmentApplicationsForApplicant(
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_list,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_list,
       queryParams: { recruitment: recruitmentId },
     });
   const response = await axios.get(url, { withCredentials: true });
@@ -616,13 +616,13 @@ export async function getRecruitmentAdmissionsForApplicant(
   return response;
 }
 
-export async function getRecruitmentAdmissionForApplicant(
+export async function getRecruitmentApplicationForApplicant(
   recruitment_position: string,
-): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+): Promise<AxiosResponse<RecruitmentApplicationDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_detail,
       urlParams: { pk: recruitment_position },
     });
   const response = await axios.get(url, { withCredentials: true });
@@ -630,14 +630,14 @@ export async function getRecruitmentAdmissionForApplicant(
   return response;
 }
 
-export async function getRecruitmentAdmissionsForGang(
+export async function getRecruitmentApplicationsForGang(
   gangId: string,
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_gang_list,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_list,
       queryParams: {
         gang: gangId,
         recruitment: recruitmentId,
@@ -648,17 +648,17 @@ export async function getRecruitmentAdmissionsForGang(
   return response;
 }
 
-export async function putRecruitmentAdmissionForGang(
+export async function putRecruitmentApplicationForGang(
   admissionId: string,
-  admission: Partial<RecruitmentAdmissionDto>,
+  admission: Partial<RecruitmentApplicationDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_gang_detail,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_detail,
       urlParams: { pk: admissionId },
     });
-  const response = await axios.put<RecruitmentAdmissionDto>(url, admission, { withCredentials: true });
+  const response = await axios.put<RecruitmentApplicationDto>(url, admission, { withCredentials: true });
   return response;
 }
 
@@ -690,14 +690,14 @@ export async function getApplicantsWithoutInterviews(recruitmentId: string): Pro
   return response;
 }
 
-export async function putRecruitmentAdmission(
-  admission: Partial<RecruitmentAdmissionDto>,
+export async function putRecruitmentApplication(
+  admission: Partial<RecruitmentApplicationDto>,
   admissionId: number,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_detail,
       urlParams: { pk: admissionId },
     });
   const data = {
@@ -709,7 +709,7 @@ export async function putRecruitmentAdmission(
   return response;
 }
 
-export async function putRecruitmentAdmissionInterview(
+export async function putRecruitmentApplicationInterview(
   interviewId: string | number,
   interview: Partial<InterviewDto>,
 ): Promise<AxiosResponse> {

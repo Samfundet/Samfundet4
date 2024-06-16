@@ -18,7 +18,7 @@ export { LycheMenuPage } from './LycheMenuPage';
 export { LycheReservationPage } from './LycheReservationPage';
 export { MembershipPage } from './MembershipPage';
 export { NotFoundPage } from './NotFoundPage';
-export { RecruitmentAdmissionFormPage } from './RecruitmentAdmissionFormPage';
+export { RecruitmentApplicationFormPage } from './RecruitmentApplicationFormPage';
 export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';

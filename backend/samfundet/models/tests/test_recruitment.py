@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from samfundet.models.general import User
-from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentApplication
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
@@ -99,7 +99,7 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics.total_applicants == 0
 
         # Creat new admission
-        RecruitmentAdmission.objects.create(
+        RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
@@ -116,7 +116,7 @@ class TestRecruitmentStats:
         """Check if only admissions are updated if same user creates an additional admission"""
         assert fixture_recruitment.statistics.total_applicants == 0
         assert fixture_recruitment.statistics.total_admissions == 0
-        RecruitmentAdmission.objects.create(
+        RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
@@ -132,7 +132,7 @@ class TestRecruitmentStats:
         fixture_recruitment_position_copy.save()
 
         # create new admission for same user
-        RecruitmentAdmission.objects.create(
+        RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position_copy,
             recruitment=fixture_recruitment,
@@ -151,7 +151,7 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics.total_admissions == 0
 
         # Test for one user
-        RecruitmentAdmission.objects.create(
+        RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
@@ -162,7 +162,7 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics.total_applicants == 1
 
         # Test for both for extra user
-        RecruitmentAdmission.objects.create(
+        RecruitmentApplication.objects.create(
             user=fixture_user2,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
@@ -174,13 +174,13 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics.total_applicants == 2
 
 
-class TestRecruitmentAdmission:
-    def test_check_withdraw_sets_unwanted(self, fixture_recruitment_admission: RecruitmentAdmission):
-        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
-        assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+class TestRecruitmentApplication:
+    def test_check_withdraw_sets_unwanted(self, fixture_recruitment_application: RecruitmentApplication):
+        assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
+        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
 
-        fixture_recruitment_admission.withdrawn = True
-        fixture_recruitment_admission.save()
+        fixture_recruitment_application.withdrawn = True
+        fixture_recruitment_application.save()
 
-        assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
-        assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+        assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED

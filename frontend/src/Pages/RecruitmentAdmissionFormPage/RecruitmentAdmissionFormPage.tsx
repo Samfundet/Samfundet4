@@ -7,25 +7,25 @@ import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentAdmissionForApplicant,
+  getRecruitmentApplicationForApplicant,
   getRecruitmentPosition,
   getRecruitmentPositionsGang,
-  putRecruitmentAdmission,
+  putRecruitmentApplication,
 } from '~/api';
-import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './RecruitmentAdmissionFormPage.module.scss';
+import styles from './RecruitmentApplicationFormPage.module.scss';
 
 type FormProps = {
   admission_text: string;
 };
 
-export function RecruitmentAdmissionFormPage() {
+export function RecruitmentApplicationFormPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
   const standardNavigate = useNavigate();
@@ -34,7 +34,7 @@ export function RecruitmentAdmissionFormPage() {
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
 
-  const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
+  const [RecruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
 
   const [loading, setLoading] = useState(true);
 
@@ -53,8 +53,8 @@ export function RecruitmentAdmissionFormPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-      getRecruitmentAdmissionForApplicant(positionID as string).then((res) => {
-        setRecruitmentAdmission(res.data);
+      getRecruitmentApplicationForApplicant(positionID as string).then((res) => {
+        setRecruitmentApplication(res.data);
       }),
     ]).then(() => {
       setLoading(false);
@@ -70,7 +70,7 @@ export function RecruitmentAdmissionFormPage() {
   }, [recruitmentPosition]);
 
   function handleOnSubmit(data: FormProps) {
-    putRecruitmentAdmission(data as Partial<RecruitmentAdmissionDto>, positionID ? +positionID : 1)
+    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionID ? +positionID : 1)
       .then(() => {
         navigate({ url: ROUTES.frontend.home });
         toast.success(t(KEY.common_creation_successful));
@@ -92,14 +92,14 @@ export function RecruitmentAdmissionFormPage() {
     return (
       <Page>
         <div className={styles.container}>
-          <h1>{t(KEY.recruitment_admission)}</h1>
+          <h1>{t(KEY.recruitment_application)}</h1>
           <p>The position id is invalid, please enter another position id</p>
         </div>
       </Page>
     );
   }
 
-  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_admission);
+  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_application);
 
   return (
     <Page>
@@ -157,12 +157,12 @@ export function RecruitmentAdmissionFormPage() {
         </div>
         {user ? (
           <SamfForm
-            initialData={recruitmentAdmission as FormProps}
+            initialData={RecruitmentApplication as FormProps}
             onSubmit={handleOnSubmit}
             submitText={submitText}
             devMode={false}
           >
-            <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
+            <p className={styles.formLabel}>{t(KEY.recruitment_application)}</p>
             <SamfFormField field="admission_text" type="text_long" />{' '}
           </SamfForm>
         ) : (

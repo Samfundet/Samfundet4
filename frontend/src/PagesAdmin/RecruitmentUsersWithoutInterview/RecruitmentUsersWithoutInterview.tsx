@@ -44,12 +44,12 @@ export function RecruitmentUsersWithoutInterview() {
   }
 
   function userToTableRow(user: RecruitmentUserDto) {
-    console.log(user.recruitment_admission_ids);
+    console.log(user.recruitment_application_ids);
     return [
       user.username,
       user.first_name,
       user.last_name,
-      user.recruitment_admission_ids ? user.recruitment_admission_ids.length : 0,
+      user.recruitment_application_ids ? user.recruitment_application_ids.length : 0,
     ];
   }
 

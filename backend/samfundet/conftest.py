@@ -20,7 +20,7 @@ from samfundet.constants import DEV_PASSWORD
 from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
 from samfundet.models.general import Gang, User, Image, Merch, Table, Venue, BlogPost, TextItem, Reservation, Organization, MerchVariation, InformationPage
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 """
@@ -308,12 +308,12 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(
+def fixture_recruitment_application(
     fixture_user: User,
     fixture_recruitment_position: RecruitmentPosition,
     fixture_recruitment: Recruitment,
-) -> Iterator[RecruitmentAdmission]:
-    admission = RecruitmentAdmission.objects.create(
+) -> Iterator[RecruitmentApplication]:
+    admission = RecruitmentApplication.objects.create(
         admission_text='Test admission text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,

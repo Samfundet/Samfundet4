@@ -10,7 +10,7 @@ from django.db.models.signals import post_save, m2m_changed
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import Gang, User, Event, Profile, UserPreference
-from .models.recruitment import Recruitment, RecruitmentAdmission, RecruitmentStatistics
+from .models.recruitment import Recruitment, RecruitmentApplication, RecruitmentStatistics
 
 
 @receiver(post_save, sender=User)
@@ -72,7 +72,7 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
         RecruitmentStatistics.objects.get_or_create(recruitment=instance)
 
 
-@receiver(post_save, sender=RecruitmentAdmission)
-def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
+@receiver(post_save, sender=RecruitmentApplication)
+def admission_created(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
     if created:
         instance.recruitment.update_stats()
