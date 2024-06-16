@@ -232,7 +232,7 @@ class CustomBaseModel(FullCleanSaveMixin):
         """
         self.full_clean()
         self.version += 1
-        self.updated_at = timezone.now().replace(microsecond=0)
+        self.updated_at = timezone.now()
         request = request_contextvar.get()
         user = request.user if request else None
         if user:

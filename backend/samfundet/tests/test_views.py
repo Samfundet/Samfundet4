@@ -448,6 +448,7 @@ class TestVersionModel:
         assert status.is_success(code=response.status_code)
         assert data['created_at'] == data['updated_at']
 
+        post_data = {'name': 'name2'}
         ### Act Update ###
         url = reverse(routes.samfundet__tags_detail, kwargs={'pk': data['id']})
         response: Response = fixture_rest_client.put(path=url, data=post_data)
