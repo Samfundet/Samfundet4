@@ -735,7 +735,7 @@ class RecruitmentAdmissionApplicantPriorityView(APIView):
             RecruitmentAdmission.objects.filter(
                 recruitment=admission.recruitment,
                 user=request.user,
-            ),
+            ).order_by('applicant_priority'),
             many=True,
         )
         return Response(serializer.data)

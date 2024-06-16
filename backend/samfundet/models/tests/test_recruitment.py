@@ -229,3 +229,16 @@ class TestRecruitmentAdmission:
 
         assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id).applicant_priority == 1
         assert RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id).applicant_priority == 2
+
+    def test_auto_newest_lowest_pri(self, fixture_recruitment_admission: RecruitmentAdmission, fixture_recruitment_position2: RecruitmentPosition):
+        """Tests that the newest admission gets automatically the lowest applicant priority"""
+        # intial priority
+        assert fixture_recruitment_admission.applicant_priority == 1
+
+        new_admission = RecruitmentAdmission.objects.create(
+            admission_text='Test admission text 2',
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment_position2.recruitment,
+            user=fixture_recruitment_admission.user,
+        )
+        assert new_admission.applicant_priority == 2
