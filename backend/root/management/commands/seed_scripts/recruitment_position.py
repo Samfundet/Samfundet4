@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from random import sample
 
+from root.utils.samfundet_random import words
+
 from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition
 
 # Some example data to use for the new RecruitmentPosition instances
 POSITION_DATA = {
-    'short_description_nb': 'Short Description NB',
-    'short_description_en': 'Short Description EN',
-    'long_description_nb': 'Long Description NB',
-    'long_description_en': 'Long Description EN',
     'is_funksjonaer_position': False,
     'default_admission_letter_nb': 'Default Admission Letter NB',
     'default_admission_letter_en': 'Default Admission Letter EN',
@@ -34,6 +32,10 @@ def seed():
                     {
                         'name_nb': f'{gang.abbreviation} stilling {i}',
                         'name_en': f'{gang.abbreviation} position {i}',
+                        'short_description_nb': words(3),
+                        'short_description_en': words(3),
+                        'long_description_nb': words(20),
+                        'long_description_en': words(20),
                         'gang': gang,
                         'recruitment': recruitment,
                     }
