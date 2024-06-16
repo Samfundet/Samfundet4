@@ -1,13 +1,13 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useAuthContext } from './context/AuthContext';
+import { useGlobalContext } from './context/GlobalContextProvider';
 import { getTextItem, putUserPreference } from '~/api';
 import { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper, THEME, THEME_KEY, ThemeValue } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -416,4 +416,24 @@ export function useIsMetaKeyDown(): boolean {
   }, []);
 
   return isDown;
+}
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(
+    () => {
+      // Update debounced value after delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+      // Cancel the timeout if value changes (also on delay change or unmount)
+      // This is how we prevent debounced value from updating if value is changed
+      // within the delay period. Timeout gets cleared and restarted.
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    [value, delay], // Only re-call effect if value or delay changes
+  );
+  return debouncedValue;
 }
