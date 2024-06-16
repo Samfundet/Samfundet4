@@ -11,38 +11,40 @@
 }
 
 .samf_select {
-  @include rounded;
+  @include rounded-lighter;
   display: flex;
   font-size: 1em;
-  padding: 1em 1em;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
   color: $black;
   cursor: pointer;
-  padding-right: 3em;
   margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
-  border: 0.1px solid transparent; // Prevents buggy spacing when border is sat on hover.
+  border: 1px solid $grey-35;
+  background: $white;
+  font-weight: initial;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  appearance: none; // Hide default brower dropdown arrow
 
-  // TODO: what is this for?
-  overflow-y: auto;
-
-  // TODO: what are these for?
-  appearance: none; //appearance "none" i flere browsere
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-
-  @include theme-light {
-    &:hover {
-      border: 0.1px solid $blue;
-    }
+  &:focus {
+    border-color: $grey-3;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   @include theme-dark {
     color: white;
-    background-color: $grey-0;
-    &:hover {
-      filter: brightness(115%);
+    border-color: $grey-0;
+    &:focus {
+      border-color: $grey-1;
+      outline: 1px solid rgba(255, 255, 255, 0.6);
     }
   }
+}
+
+.icon_disabled {
+  appearance: none; //appearance "none" i flere browsere
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
 }
 
 .error {
@@ -53,7 +55,7 @@
   position: relative;
   max-height: 0;
   max-width: 0;
-  top: -2.4em;
+  top: -2.1em;
   left: calc(100% - 2em);
   margin-right: 0.2em;
   pointer-events: none;

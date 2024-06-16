@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Button, Link, Navbar } from '~/Components';
 import { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
@@ -21,26 +21,30 @@ export function AdminLayout() {
   const { t } = useTranslation();
   const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
+  const location = useLocation();
 
-  function makeAppletShortcut(applet: Applet, index: number) {
-    // No default url, dont show in navmenu
-    if (applet.url === undefined) return <></>;
+  const makeAppletShortcut = useCallback(
+    (applet: Applet, index: number) => {
+      // No default url, dont show in navmenu
+      if (applet.url === undefined) return <></>;
 
-    // Create panel item
-    const selected = window.location.href.toLowerCase().indexOf(applet.url) != -1;
-    return (
-      <Link
-        key={index}
-        className={classNames(styles.panel_item, selected && styles.selected)}
-        url={applet.url}
-        onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
-        plain={true}
-      >
-        <Icon icon={applet.icon} />
-        {dbT(applet, 'title')}
-      </Link>
-    );
-  }
+      // Create panel item
+      const selected = location.pathname.toLowerCase().indexOf(applet.url) != -1;
+      return (
+        <Link
+          key={index}
+          className={classNames(styles.panel_item, selected && styles.selected)}
+          url={applet.url}
+          onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
+          plain={true}
+        >
+          <Icon icon={applet.icon} />
+          {dbT(applet, 'title')}
+        </Link>
+      );
+    },
+    [location, isMobile, panelOpen],
+  );
 
   const selectedIndex = window.location.href.endsWith(ROUTES_FRONTEND.admin);
 
