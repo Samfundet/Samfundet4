@@ -26,7 +26,15 @@ import styles from './SamfForm.module.scss';
 /**
  * Union of all possible return types for SamfFormField.
  */
-export type FormFieldReturnType = string | number | boolean | DropDownOption<unknown> | ImageDto | Date | File;
+export type FormFieldReturnType =
+  | string
+  | number
+  | boolean
+  | DropDownOption<unknown>
+  | ImageDto
+  | Date
+  | File
+  | number[];
 
 // /**
 //  * Define a type that checks if a given type is assignable to FormFieldReturnType.

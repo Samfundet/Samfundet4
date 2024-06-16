@@ -221,6 +221,7 @@ export type MenuItemDto = {
   food_category: FoodCategoryDto | number;
 };
 
+
 export type MenuDto = {
   name_nb?: string;
   description_nb?: string;

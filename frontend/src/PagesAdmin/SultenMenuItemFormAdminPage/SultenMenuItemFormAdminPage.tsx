@@ -16,6 +16,21 @@ import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
+
+type FormType = {
+  name_nb: string;
+  name_en: string;
+
+  description_nb: string;
+  description_en: string;
+
+  price: number;
+  price_member: number;
+
+  food_preferences: number[];
+  food_category: number;
+};
+
 export function SultenMenuItemFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -27,7 +42,7 @@ export function SultenMenuItemFormAdminPage() {
   const [foodPreferenceOptions, setFoodPreferenceOptions] = useState<DropDownOption<number>[]>([]);
   const [foodCategoryOptions, setFoodCategoryOptions] = useState<DropDownOption<number>[]>([]);
 
-  const initialData: Partial<MenuItemDto> = {
+  const initialData: Partial<FormType> = {
     name_nb: menuItem?.name_nb,
     name_en: menuItem?.name_en,
 
@@ -109,13 +124,13 @@ export function SultenMenuItemFormAdminPage() {
     );
   }
 
-  function handleOnSubmit(data: MenuItemDto) {
+  function handleOnSubmit(data: FormType) {
     if (data.food_preferences) {
       data.food_preferences = []; // TODO Ignore until multiselect is added
     }
     if (id) {
       // Update page.
-      putMenuItem(id, data)
+      putMenuItem(id, data as MenuItemDto)
         .then(() => {
           toast.success(t(KEY.common_update_successful));
           navigate(
@@ -146,7 +161,7 @@ export function SultenMenuItemFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
-      <SamfForm<MenuItemDto> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
+      <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
         <div className={styles.row}>
           <SamfFormField
             field="name_nb"
