@@ -53,6 +53,7 @@ import {
   SultenMenuAdminPage,
   AdminLayout,
   ImpersonateUserAdminPage,
+  SultenMenuItemFormAdminPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
@@ -246,6 +247,14 @@ export const router = createBrowserRouter(
             ),
           }}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_sulten_menuitem_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_sulten_menuitem_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
         />
         {/* Recruitment */}
         <Route

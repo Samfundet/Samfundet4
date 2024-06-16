@@ -44,6 +44,8 @@ export const nb: Record<KeyValues, string> = {
   // Other common
   [KEY.common_to]: 'Til',
   [KEY.common_price]: 'Pris',
+  [KEY.common_food]: 'Mat',
+  [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
@@ -102,6 +104,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_more_info]: 'Mer info',
   [KEY.common_norwegian]: 'Norsk',
   [KEY.common_firstname]: 'Fornavn',
+  [KEY.common_member]: 'Medlem',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
@@ -356,6 +359,8 @@ export const en: Record<KeyValues, string> = {
   // No category:
   [KEY.common_to]: 'To',
   [KEY.common_price]: 'Price',
+  [KEY.common_food]: 'Food',
+  [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
   [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
@@ -415,6 +420,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_norwegian]: 'Norwegian',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_volunteer]: 'Volunteer',
+  [KEY.common_member]: 'Member',
   [KEY.common_membership]: 'Membership',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Contact us',

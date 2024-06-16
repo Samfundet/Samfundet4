@@ -254,15 +254,28 @@ export async function getMenuItems(): Promise<MenuItemDto[]> {
 }
 
 export async function getMenuItem(pk: string | number): Promise<MenuItemDto> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_items_detail, urlParams: { pk: pk } });
   const response = await axios.get<MenuItemDto>(url, { withCredentials: true });
 
   return response.data;
 }
 
+export async function putMenuItem(pk: string | number, data: Partial<MenuItemDto>): Promise<MenuItemDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__menu_items_detail, urlParams: { pk: pk } });
+  const response = await axios.put<MenuItemDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postMenuItem(data: Partial<MenuItemDto>): Promise<MenuItemDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_items_list;
+  const response = await axios.post<MenuItemDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getFoodPreferences(): Promise<FoodPreferenceDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__food_preference_list;
   const response = await axios.get<FoodPreferenceDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -270,14 +283,14 @@ export async function getFoodPreferences(): Promise<FoodPreferenceDto[]> {
 
 export async function getFoodPreference(pk: string | number): Promise<FoodPreferenceDto> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__food_preference_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodPreferenceDto>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+export async function getFoodCategories(): Promise<FoodCategoryDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__food_category_list;
   const response = await axios.get<FoodCategoryDto[]>(url, { withCredentials: true });
 
   return response.data;
@@ -285,7 +298,7 @@ export async function getFoodCategorys(): Promise<FoodCategoryDto[]> {
 
 export async function getFoodCategory(pk: string | number): Promise<FoodCategoryDto> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: pk } });
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__food_category_detail, urlParams: { pk: pk } });
   const response = await axios.get<FoodCategoryDto>(url, { withCredentials: true });
 
   return response.data;

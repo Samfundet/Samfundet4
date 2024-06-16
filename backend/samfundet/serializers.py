@@ -423,6 +423,35 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class FoodPreferenceSerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodCategory
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class MenuItemSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)  # Todo make this work with post
+    food_category = FoodCategorySerializer(read_only=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(CustomBaseSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -472,34 +501,6 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 #            Sulten               #
 # =============================== #
-
-
-class FoodPreferenceSerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = '__all__'
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
 
 
 class TableSerializer(CustomBaseSerializer):

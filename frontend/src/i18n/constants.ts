@@ -56,6 +56,8 @@ export const KEY = {
   // No category:
   common_to: 'common_to',
   common_price: 'common_price',
+  common_food: 'common_food',
+  common_preferences: 'common_preferences',
   common_buy: 'common_buy',
   common_time: 'common_time',
   common_here: 'common_here',
@@ -118,6 +120,7 @@ export const KEY = {
   common_norwegian: 'common_norwegian',
   common_contact_us: 'common_contact_us',
   common_restaurant: 'common_restaurant',
+  common_member: 'common_member',
   common_membership: 'common_membership',
   common_information: 'common_information',
   common_description: 'common_description',
