@@ -638,11 +638,11 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
-    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'admissions_count']
+    search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
-
+    list_display_links = ['id']
     inlines = [RecruitmentAdmissionInline]
 
     def admissions_count(self, obj: RecruitmentPosition) -> int:
@@ -667,6 +667,7 @@ class RecruitmentAdmissionAdmin(CustomBaseAdmin):
         'recruitment',
         'user',
     ]
+    list_display_links = ['recruitment_position']
     list_select_related = True
 
 
@@ -689,10 +690,10 @@ class InterviewRoomAdmin(CustomBaseAdmin):
 
 @admin.register(Interview)
 class InterviewAdmin(CustomBaseAdmin):
-    list_filter = ['id', 'notes']
-    list_display = ['id', 'notes']
-    search_fields = ['id', 'notes']
-    list_display_links = ['id', 'notes']
+    list_filter = ['interview_time', 'interview_location']
+    list_display = ['id', 'interview_time', 'interview_location']
+    search_fields = ['interview_time', 'interview_location']
+    list_display_links = ['id']
     filter_horizontal = ['interviewers']
 
 
