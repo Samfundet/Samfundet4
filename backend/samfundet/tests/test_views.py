@@ -448,6 +448,7 @@ class TestVersionModel:
         assert status.is_success(code=response.status_code)
         assert data['created_at'] == data['updated_at']
 
+        post_data = {'name': 'name2'}
         ### Act Update ###
         url = reverse(routes.samfundet__tags_detail, kwargs={'pk': data['id']})
         response: Response = fixture_rest_client.put(path=url, data=post_data)
@@ -920,6 +921,42 @@ def test_update_admission(
     assert response.status_code == status.HTTP_200_OK
     assert response.data['admission_text'] == post_data2['admission_text']
     # Assert the returned data based on the logic in the view
+
+
+def test_post_admission_overflow(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_recruitment.max_admissions = 1
+    fixture_recruitment.save()
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data = {'admission_text': 'test_text'}
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+
+    ### Assert ###
+    assert response.data['admission_text'] == post_data['admission_text']
+    assert response.status_code == status.HTTP_201_CREATED
+    # Assert the returned data based on the logic in the view
+
+    # Test then for too many admissions for user
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position2.id},
+    )
+    ### Act ###
+    response2: Response = fixture_rest_client.put(path=url, data=post_data)
+    ### Assert ###
+    assert response2.status_code == status.HTTP_400_BAD_REQUEST
+    assert RecruitmentAdmission.TOO_MANY_ADMISSIONS_ERROR in response2.data['recruitment']
 
 
 def test_recruitment_admission_update_pri_up(

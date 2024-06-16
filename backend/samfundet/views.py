@@ -661,7 +661,10 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 
     def update(self, request: Request, pk: int) -> Response:
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
-        data['recruitment_position'] = pk
+        recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
+        data['recruitment_position'] = recruitment_position.pk
+        data['recruitment'] = recruitment_position.recruitment.pk
+        data['user'] = request.user.pk
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             existing_admission = RecruitmentAdmission.objects.filter(user=request.user, recruitment_position=pk).first()
