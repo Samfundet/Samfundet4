@@ -921,7 +921,6 @@ def test_update_admission(
     assert response.data['admission_text'] == post_data2['admission_text']
     # Assert the returned data based on the logic in the view
 
-
 def test_post_admission_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,
@@ -955,3 +954,60 @@ def test_post_admission_overflow(
     response2: Response = fixture_rest_client.put(path=url, data=post_data)
     ### Assert ###
     assert response2.status_code == status.HTTP_400_BAD_REQUEST
+
+def test_recruitment_admission_update_pri_up(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_admission2: RecruitmentAdmission,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    assert fixture_recruitment_admission.applicant_priority == 1
+    assert fixture_recruitment_admission2.applicant_priority == 2
+
+    url = reverse(
+        routes.samfundet__recruitment_user_priority_update,
+        kwargs={'pk': fixture_recruitment_admission2.id},
+    )
+
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data={'direction': 1})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    # Assert the returned data based on the logic in the view
+    assert len(response.data) == 2
+    assert response.data[0]['id'] == str(fixture_recruitment_admission2.pk)
+    assert response.data[0]['applicant_priority'] == 1
+    assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
+    assert response.data[1]['applicant_priority'] == 2
+
+
+def test_recruitment_admission_update_pri_down(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_admission2: RecruitmentAdmission,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    assert fixture_recruitment_admission.applicant_priority == 1
+    assert fixture_recruitment_admission2.applicant_priority == 2
+
+    url = reverse(
+        routes.samfundet__recruitment_user_priority_update,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data={'direction': -1})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    # Assert the returned data based on the logic in the view
+    assert len(response.data) == 2
+    assert response.data[0]['id'] == str(fixture_recruitment_admission2.pk)
+    assert response.data[0]['applicant_priority'] == 1
+    assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
+    assert response.data[1]['applicant_priority'] == 2

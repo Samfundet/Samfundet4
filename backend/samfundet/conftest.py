@@ -221,6 +221,18 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
 
 
 @pytest.fixture
+def fixture_gang2(fixture_organization: Organization) -> Iterator[Gang]:
+    organization = Gang.objects.create(
+        name_nb='Gang 2',
+        name_en='Gang 2',
+        abbreviation='G2',
+        organization=fixture_organization,
+    )
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
 def fixture_text_item() -> Iterator[TextItem]:
     text_item = TextItem.objects.create(
         key='foo',
@@ -306,7 +318,6 @@ def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang
     yield recruitment_position
     recruitment_position.delete()
 
-
 @pytest.fixture
 def fixture_informationpage() -> Iterator[InformationPage]:
     informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
@@ -344,6 +355,25 @@ def fixture_recruitment_admission(
     )
     yield admission
     admission.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_admission2(
+    fixture_user: User,
+    fixture_recruitment_position2: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentAdmission]:
+    admission2 = RecruitmentAdmission.objects.create(
+        admission_text='Test admission text',
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment,
+        user=fixture_user,
+        applicant_priority=2,
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
+    )
+    yield admission2
+    admission2.delete()
 
 
 @pytest.fixture

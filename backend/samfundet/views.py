@@ -75,6 +75,7 @@ from .serializers import (
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentAdmissionForGangSerializer,
+    RecruitmentUpdateUserPrioritySerializer,
     RecruitmentAdmissionForApplicantSerializer,
 )
 from .models.event import Event, EventGroup
@@ -713,6 +714,38 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
             admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, user=request.user)
 
         serializer = self.get_serializer(admissions, many=True)
+        return Response(serializer.data)
+
+
+class RecruitmentAdmissionApplicantPriorityView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentUpdateUserPrioritySerializer
+
+    def put(
+        self,
+        request: Request,
+        pk: int,
+    ) -> Response:
+        direction = RecruitmentUpdateUserPrioritySerializer(data=request.data)
+        if direction.is_valid():
+            direction = direction.validated_data['direction']
+        else:
+            return Response(direction.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Dont think we need any extra perms in this view, admin should not be able to change priority
+        admission = get_object_or_404(
+            RecruitmentAdmission,
+            id=pk,
+            user=request.user,
+        )
+        admission.update_priority(direction)
+        serializer = RecruitmentAdmissionForApplicantSerializer(
+            RecruitmentAdmission.objects.filter(
+                recruitment=admission.recruitment,
+                user=request.user,
+            ).order_by('applicant_priority'),
+            many=True,
+        )
         return Response(serializer.data)
 
 
