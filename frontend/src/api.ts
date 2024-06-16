@@ -658,6 +658,18 @@ export async function getRecruitmentAdmissionsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
+export async function getRecruitmentAdmissionsForRecruitmentPosition(
+  recruitmentPositionId: string,
+): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_position_detail,
+      urlParams: { pk: recruitmentPositionId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 export async function putRecruitmentAdmissionForGang(
   admissionId: string,
   admission: Partial<RecruitmentAdmissionDto>,

@@ -300,23 +300,23 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
 
 
 @pytest.fixture
-def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang2: Gang) -> Iterator[Recruitment]:
-    recruitment_position2 = RecruitmentPosition.objects.create(
-        name_nb='Position 2 NB',
-        name_en='Position 2 EN',
-        short_description_nb='Short Description NB',
-        short_description_en='Short Description EN',
-        long_description_nb='Long Description NB',
-        long_description_en='Long Description EN',
+def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang: Gang) -> Iterator[Recruitment]:
+    recruitment_position = RecruitmentPosition.objects.create(
+        name_nb='Position NB 2',
+        name_en='Position EN 2',
+        short_description_nb='Short Description NB 2',
+        short_description_en='Short Description EN 2',
+        long_description_nb='Long Description NB 2',
+        long_description_en='Long Description EN 2',
         is_funksjonaer_position=False,
-        default_admission_letter_nb='Default Admission Letter NB',
-        default_admission_letter_en='Default Admission Letter EN',
+        default_admission_letter_nb='Default Admission Letter NB 2',
+        default_admission_letter_en='Default Admission Letter EN 2',
         tags='tag1,tag2',
-        gang=fixture_gang2,
+        gang=fixture_gang,
         recruitment=fixture_recruitment,
     )
-    yield recruitment_position2
-    recruitment_position2.delete()
+    yield recruitment_position
+    recruitment_position.delete()
 
 
 @pytest.fixture
