@@ -67,7 +67,7 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
-  function updateAdmisions(id: string, field: string, value: string | number | undefined) {
+  function updateAdmissions(id: string, field: string, value: string | number | undefined) {
     let updatedInterview = {} as InterviewDto;
     setRecruitmentApplicants(
       recruitmentApplicants.map((element: RecruitmentAdmissionDto) => {
@@ -130,7 +130,7 @@ export function RecruitmentApplicantsStatus({
             inputClassName={styles.input}
             value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmisions(admission.id, editChoices.update_time, value)}
+            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_time, value)}
             type="datetime-local"
           />
         ),
@@ -142,7 +142,7 @@ export function RecruitmentApplicantsStatus({
             inputClassName={styles.input}
             value={admission.interview.interview_location ?? ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmisions(admission.id, editChoices.update_location, value)}
+            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_location, value)}
           />
         ),
       },
@@ -154,7 +154,7 @@ export function RecruitmentApplicantsStatus({
             disableIcon={true}
             classNameSelect={styles.dropdown}
             options={priorityOptions}
-            onChange={(value) => updateAdmisions(admission.id, editChoices.update_recruitment_priority, value)}
+            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_priority, value)}
           />
         ),
       },
@@ -166,7 +166,7 @@ export function RecruitmentApplicantsStatus({
             disableIcon={true}
             classNameSelect={styles.dropdown}
             options={statusOptions}
-            onChange={(value) => updateAdmisions(admission.id, editChoices.update_recruitment_status, value)}
+            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_status, value)}
           />
         ),
       },
