@@ -670,7 +670,7 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
         ]
 
 
-class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
@@ -683,6 +683,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'withdrawn',
             'interview',
             'created_at',
+            'user',
+            'recruitment',
         ]
         read_only_fields = [
             'applicant_priority',

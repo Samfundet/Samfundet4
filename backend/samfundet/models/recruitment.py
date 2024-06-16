@@ -233,6 +233,20 @@ class RecruitmentAdmission(CustomBaseModel):
                 break
         self.organize_priorities()
 
+    TOO_MANY_ADMISSIONS_ERROR = 'Too many admissions for recruitment'
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        # If there is max admissions, check if applicant have applied to not to many
+        if self.recruitment.max_admissions and not RecruitmentAdmission.objects.filter(pk=self.pk).first():
+            user_admissions_count = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            if user_admissions_count >= self.recruitment.max_admissions:
+                errors['recruitment'].append(self.TOO_MANY_ADMISSIONS_ERROR)
+
+        raise ValidationError(errors)
+
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 

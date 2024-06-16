@@ -956,6 +956,7 @@ def test_post_admission_overflow(
     response2: Response = fixture_rest_client.put(path=url, data=post_data)
     ### Assert ###
     assert response2.status_code == status.HTTP_400_BAD_REQUEST
+    assert RecruitmentAdmission.TOO_MANY_ADMISSIONS_ERROR in response2.data['recruitment']
 
 
 def test_recruitment_admission_update_pri_up(
