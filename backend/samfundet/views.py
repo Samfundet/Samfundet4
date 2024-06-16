@@ -718,9 +718,9 @@ class RecruitmentAdmissionApplicantPriorityView(APIView):
         request: Request,
         pk: int,
     ) -> Response:
-        direction = RecruitmentUpdateUserPrioritySerializer(request.data)
+        direction = RecruitmentUpdateUserPrioritySerializer(data=request.data)
         if direction.is_valid():
-            direction = direction.data['direction']
+            direction = direction.validated_data['direction']
         else:
             return Response(direction.errors, status=status.HTTP_400_BAD_REQUEST)
 
