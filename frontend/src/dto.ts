@@ -357,6 +357,10 @@ export type RecruitmentDto = {
   organization: 'samfundet' | 'isfit' | 'uka';
 };
 
+export type UserPriorityDto = {
+  direction: number;
+};
+
 export type RecruitmentPositionDto = {
   id: string;
   name_nb: string;
@@ -393,7 +397,7 @@ export type InterviewDto = {
 };
 
 export type RecruitmentAdmissionDto = {
-  id: number;
+  id: string;
   interview: InterviewDto;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
