@@ -11,7 +11,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LoginPage.module.scss';
-import { lowerCapitalize } from "~/utils";
+import { lowerCapitalize } from '~/utils';
 
 type FormProps = {
   username: string;
