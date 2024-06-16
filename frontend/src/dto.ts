@@ -409,6 +409,7 @@ export type RecruitmentAdmissionDto = {
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+  admission_count?: number;
 };
 
 export type FeedbackDto = {

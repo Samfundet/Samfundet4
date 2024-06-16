@@ -40,6 +40,13 @@
   }
 }
 
+.icon_disabled {
+  appearance: none; //appearance "none" i flere browsere
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+}
+
 .error {
   border: 1px solid $red;
 }
