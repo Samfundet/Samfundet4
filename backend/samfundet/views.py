@@ -724,6 +724,7 @@ class RecruitmentAdmissioWithdrawApplicantView(APIView):
         serializer = RecruitmentAdmissionForApplicantSerializer(admission)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class RecruitmentAdmissionApplicantPriorityView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
@@ -754,6 +755,7 @@ class RecruitmentAdmissionApplicantPriorityView(APIView):
             many=True,
         )
         return Response(serializer.data)
+
 
 class RecruitmentAdmissionForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]

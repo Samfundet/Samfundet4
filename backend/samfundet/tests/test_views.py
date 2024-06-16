@@ -923,9 +923,7 @@ def test_update_admission(
     # Assert the returned data based on the logic in the view
 
 
-def test_withdraw_admission(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
-):
+def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
 
@@ -938,12 +936,17 @@ def test_withdraw_admission(
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
     ### Act Send create ###
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
     post_data1 = {'admission_text': 'I love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data1)
-    ### Assert ###
+    ### Assert Created ###
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data['admission_text'] == post_data1['admission_text']
     assert response.data['withdrawn'] is False
+
     ### Act 2 Send withdrawal ###
     url = reverse(
         routes.samfundet__recruitment_withdraw_admission,
@@ -952,6 +955,7 @@ def test_withdraw_admission(
     response: Response = fixture_rest_client.put(path=url)
     assert response.status_code == status.HTTP_200_OK
     assert response.data['withdrawn'] is True
+
 
 def test_post_admission_overflow(
     fixture_rest_client: APIClient,
@@ -1046,4 +1050,3 @@ def test_recruitment_admission_update_pri_down(
     assert response.data[0]['applicant_priority'] == 1
     assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
     assert response.data[1]['applicant_priority'] == 2
-
