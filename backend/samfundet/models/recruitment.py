@@ -135,6 +135,25 @@ class RecruitmentPosition(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
+class RecruitmentSeperatePosition(CustomBaseModel):
+    name_nb = models.CharField(max_length=100, help_text='Name of the position')
+    name_en = models.CharField(max_length=100, help_text='Name of the position')
+
+    url = models.URLField(help_text='URL to website of seperate recruitment')
+
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='The recruitment that is recruiting',
+        related_name='seperate_positions',
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self) -> str:
+        return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
+
+
 class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')

@@ -40,7 +40,7 @@ recruitments = [
 
 def seed():
     yield 0, 'recruitment'
-
+    Recruitment.objects.all().delete()
     total_recruitments = len(recruitments) * len(organizations)
     created_recruitments = 0
     recruitment_objects = []
@@ -52,6 +52,7 @@ def seed():
                 name_nb=recruitment_data['name_nb'],
                 name_en=recruitment_data['name_en'],
                 organization=org,
+                max_admissions=None,
                 visible_from=recruitment_data['visible_from'],
                 shown_application_deadline=recruitment_data['shown_application_deadline'],
                 actual_application_deadline=recruitment_data['actual_application_deadline'],
