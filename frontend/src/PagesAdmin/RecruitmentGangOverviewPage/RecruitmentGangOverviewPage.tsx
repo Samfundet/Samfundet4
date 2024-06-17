@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGangs } from '~/api';
-import { GangDto } from '~/dto';
+import { getGangsRecruitment } from '~/api';
+import { GangRecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -13,18 +13,23 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentGangOverviewPage() {
   const recruitmentId = useParams().recruitmentId;
-  const [allGangs, setAllGangs] = useState<GangDto[]>([]);
+  const [allGangs, setAllGangs] = useState<GangRecruitmentDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
   useEffect(() => {
-    getGangs().then((data) => {
-      setAllGangs(data);
-      setShowSpinner(false);
-    });
-  }, []);
+    if (recruitmentId) {
+      getGangsRecruitment(recruitmentId).then((data) => {
+        setAllGangs(data);
+        setShowSpinner(false);
+      });
+    }
+  }, [recruitmentId]);
 
-  const tableColumns = [{ content: t(KEY.common_gang), sortable: true }];
+  const tableColumns = [
+    { content: t(KEY.common_gang), sortable: true },
+    { content: t(KEY.recruitment_positions), sortable: true },
+  ];
 
   // TODO: Only show gangs that user has access to, and only show gangs that are recruiting
   const data = allGangs.map(function (gang) {
@@ -33,7 +38,7 @@ export function RecruitmentGangOverviewPage() {
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
     });
 
-    return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }];
+    return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions.length];
   });
 
   const title = t(KEY.admin_information_manage_title);

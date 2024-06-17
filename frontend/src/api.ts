@@ -7,6 +7,7 @@ import {
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
+  GangRecruitmentDto,
   GangTypeDto,
   HomePageDto,
   ImageDto,
@@ -366,6 +367,13 @@ export async function getGang(id: string | number): Promise<GangDto> {
 export async function getGangs(): Promise<GangDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
   const response = await axios.get<GangDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getGangsRecruitment(id: string | number): Promise<GangRecruitmentDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_gang, urlParams: { pk: id } });
+  const response = await axios.get<GangRecruitmentDto[]>(url, { withCredentials: true });
 
   return response.data;
 }

@@ -68,6 +68,7 @@ urlpatterns = [
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
+    path('recruitment-gang/<int:pk>/', views.RecruitmentGangView.as_view(), name='recruitment_gang'),
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
     path(
         'recruitment-admissions-recruiter/<str:admission_id>/', views.RecruitmentAdmissionForRecruitersView.as_view(), name='recruitment_admissions_recruiter'

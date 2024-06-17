@@ -69,6 +69,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentGangSerializer,
     OccupiedtimeslotSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
@@ -711,6 +712,16 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
+
+
+class RecruitmentGangView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk: int) -> Response:
+        # Checks if user has admission for position
+        recruitment = get_object_or_404(Recruitment, pk=pk)
+        serializer = RecruitmentGangSerializer(Gang.objects.all(), recruitment=recruitment, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RecruitmentAdmissionWithdrawApplicantView(APIView):
