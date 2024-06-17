@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import TYPE_CHECKING
 
 from guardian.shortcuts import assign_perm
@@ -450,6 +451,7 @@ class TestVersionModel:
 
         post_data = {'name': 'name2'}
         ### Act Update ###
+        time.sleep(1)
         url = reverse(routes.samfundet__tags_detail, kwargs={'pk': data['id']})
         response: Response = fixture_rest_client.put(path=url, data=post_data)
 

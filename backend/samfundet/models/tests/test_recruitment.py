@@ -182,6 +182,8 @@ class TestRecruitmentAdmission:
         fixture_recruitment_admission.withdrawn = True
         fixture_recruitment_admission.save()
 
+        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+
         assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
 
@@ -203,6 +205,9 @@ class TestRecruitmentAdmission:
         assert fixture_recruitment_admission2.applicant_state == RecruitmentApplicantStates.NOT_SET
 
         fixture_recruitment_admission.update_applicant_state()
+
+        fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission2.id)
 
         assert fixture_recruitment_admission2.applicant_state == RecruitmentApplicantStates.NOT_SET
         assert fixture_recruitment_admission.applicant_state == RecruitmentApplicantStates.NOT_SET

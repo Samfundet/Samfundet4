@@ -6,7 +6,7 @@ from __future__ import annotations
 import uuid
 from collections import defaultdict
 
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
@@ -253,7 +253,6 @@ class RecruitmentAdmission(CustomBaseModel):
 
         raise ValidationError(errors)
 
-
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
@@ -290,20 +289,13 @@ class RecruitmentAdmission(CustomBaseModel):
 
         super().save(*args, **kwargs)
 
-    def update_applicant_state(self) -> QuerySet[RecruitmentAdmission]:  # noqa: C901
+    def update_applicant_state(self) -> QuerySet[RecruitmentAdmission]:
         admissions = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
         # Get top priority
         top_wanted = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
         top_reserved = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
-        if not (top_wanted or top_reserved):
+        with transaction.atomic():
             for adm in admissions:
-                adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
-                adm.save()
-        else:
-            for adm in admissions:
-                if adm.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
-                    adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
-                    adm.save()
                 # I hate conditionals, so instead of checking all forms of condtions
                 # I use memory array indexing formula (col+row_size*row) for matrixes, to index into state
                 has_priority = 0
@@ -312,6 +304,8 @@ class RecruitmentAdmission(CustomBaseModel):
                 if top_wanted and top_wanted.applicant_priority < adm.applicant_priority:
                     has_priority = 2
                 adm.applicant_state = adm.recruiter_priority + 3 * has_priority
+                if adm.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
+                    adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
                 adm.save()
 
 
