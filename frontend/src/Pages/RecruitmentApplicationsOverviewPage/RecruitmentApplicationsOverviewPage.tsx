@@ -73,8 +73,8 @@ export function RecruitmentApplicationsOverviewPage() {
       ),
     }];
     const notWithdrawn = [      
-      niceDateTime(admission.interview.interview_time),
-      admission.interview.interview_location,
+      niceDateTime(admission.interview?.interview_time),
+      admission.interview?.interview_location,
       admission.applicant_priority,
       { content: upDownArrow(admission.id) },
     ];
