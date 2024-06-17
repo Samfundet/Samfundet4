@@ -39,8 +39,8 @@ export type CartesianChartSizes = {
 
 export type CartesianChartsColors = {
   bar: string;
-  bg: string;
-  text: string;
+  background: string;
+  foreground: string;
   hoverBar: string;
   gridLines: string;
 };

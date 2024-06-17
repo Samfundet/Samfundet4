@@ -90,7 +90,10 @@ export function BarChart({
   );
 
   return (
-    <div className={styles.container} style={{ backgroundColor: colors.bg, minWidth: svgWidth, minHeight: svgHeight }}>
+    <div
+      className={styles.container}
+      style={{ backgroundColor: colors.background, minWidth: svgWidth, minHeight: svgHeight }}
+    >
       <div className={styles.chartTitleContainer}>
         <Text as={'strong'} size={'xl'}>
           {chartTitle}

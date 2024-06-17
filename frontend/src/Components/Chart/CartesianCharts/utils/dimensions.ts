@@ -7,13 +7,15 @@ import {
 /*
  * Determines the spacing between bars. 1px if there are more than 80 entries, 2px if less.
  * */
-const getDatapointPadding = (entryCount: number) => (entryCount > 80 ? 1 : 2);
+function getDatapointPadding(entryCount: number) {
+  return entryCount > 80 ? 1 : 1;
+}
 
-const calculateDimensions = (
+function calculateDimensions(
   sizes: CartesianChartSizes,
   size: CartesianChartProps['size'],
   data: CartesianChartsData[],
-) => {
+) {
   const { leftPadding, bottomPadding, rightPadding, topPadding, yLabelsPosition, xLabelsMargin, width, height } =
     sizes[size];
 
@@ -66,7 +68,7 @@ const calculateDimensions = (
     chartWidth,
     datapointWidth,
   };
-};
+}
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function dimensions(sizes: CartesianChartSizes, size: CartesianChartProps['size'], data: CartesianChartsData[]) {

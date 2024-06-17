@@ -47,7 +47,7 @@ export const drawYAxisLabels = (
         x={yLabelsPosition}
         y={yPosition + sizes[size].labelFont / 2}
         style={{ fontSize: sizes[size].labelFont }}
-        fill={colors.text}
+        fill={colors.foreground}
         textAnchor="end"
       >
         {label}
@@ -84,7 +84,7 @@ export function drawXAxisLabels(
           x={getX(index)}
           y={svgHeight - xLabelsMargin}
           style={{ fontSize: sizes[size].labelFont }}
-          fill={colors.text}
+          fill={colors.foreground}
           textAnchor="middle"
           // Rotate labels for better readability
           transform={`rotate(-45, ${getX(index)}, ${svgHeight - xLabelsMargin})`}
