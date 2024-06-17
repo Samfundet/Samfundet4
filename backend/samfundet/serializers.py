@@ -571,6 +571,7 @@ class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
+    campus = CampusSerializer()
 
     class Meta:
         model = User
@@ -579,7 +580,9 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'username',
+            'phone_number',
             'email',
+            'campus',
             'recruitment_admission_ids',  # Add this to the fields list
         ]
 
@@ -666,6 +669,8 @@ class ApplicantInterviewSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    gang = GangSerializer()
+
     class Meta:
         model = RecruitmentPosition
         fields = [
@@ -737,7 +742,7 @@ class ApplicantInfoSerializer(CustomBaseSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'occupied_timeslots']
 
 
 class InterviewRoomSerializer(CustomBaseSerializer):
@@ -764,6 +769,44 @@ class InterviewSerializer(CustomBaseSerializer):
         instance = super().update(instance, validated_data)
         instance.interviewers.set(interviewers_data)
         return instance
+
+
+class RecruitmentAdmissionForRecruiterSerializer(serializers.ModelSerializer):
+    recruitment_position = RecruitmentPositionForApplicantSerializer()
+    recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
+    interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'admission_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'withdrawn',
+            'interview_time',
+            'created_at',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'admission_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'interview_time',
+            'withdrawn',
+            'created_at',
+        ]
+
+    def get_interview_time(self, instance: RecruitmentAdmission) -> str | None:
+        return instance.interview.interview_time if instance.interview else None
 
 
 class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):

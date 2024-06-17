@@ -7,6 +7,7 @@ export type UserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number?: string;
   is_staff: boolean;
   is_active: boolean;
   is_superuser: boolean;
@@ -17,6 +18,13 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+};
+
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
 };
 
 export type OccupiedTimeSlotDto = {
@@ -33,6 +41,8 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number: string;
+  campus?: CampusDto;
   recruitment_admission_ids?: string[];
 };
 
@@ -408,17 +418,24 @@ export type InterviewDto = {
 
 export type RecruitmentAdmissionDto = {
   id: string;
-  interview: InterviewDto;
+  interview?: InterviewDto;
+  interview_time?: Date;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number;
+  recruiter_priority?: number | string;
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
   admission_count?: number;
+};
+
+export type RecruitmentAdmissionRecruiterDto = {
+  user: RecruitmentUserDto;
+  admission: RecruitmentAdmissionDto;
+  other_admissions: RecruitmentAdmissionDto[];
 };
 
 export type FeedbackDto = {

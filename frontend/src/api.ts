@@ -20,8 +20,10 @@ import {
   OccupiedTimeSlotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
+  RecruitmentAdmissionRecruiterDto,
   RecruitmentDto,
   RecruitmentPositionDto,
+  RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
   TextItemDto,
@@ -630,6 +632,20 @@ export async function getRecruitmentAdmissionsForApplicant(
   return response;
 }
 
+export async function getRecruitmentAdmissionsForRecruiter(
+  admissionID: string,
+): Promise<AxiosResponse<RecruitmentAdmissionRecruiterDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_admissions_recruiter,
+      urlParams: { admissionId: admissionID },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function putRecruitmentPriorityForUser(
   admissionId: string,
   data: UserPriorityDto,
@@ -711,7 +727,9 @@ export async function getActiveRecruitments(): Promise<AxiosResponse<Recruitment
   return response;
 }
 
-export async function getApplicantsWithoutInterviews(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
+export async function getApplicantsWithoutInterviews(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUserDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -740,6 +758,18 @@ export async function putRecruitmentAdmission(
     recruitment_position: admission.recruitment_position,
   };
   const response = await axios.put(url, data, { withCredentials: true });
+
+  return response;
+}
+
+export async function withdrawRecruitmentAdmissionApplicant(positionId: number | string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_withdraw_admission,
+      urlParams: { pk: positionId },
+    });
+  const response = await axios.put(url, {}, { withCredentials: true });
 
   return response;
 }
