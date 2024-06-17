@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { AuthContextProvider } from '~/AuthContext';
-import { GlobalContextProvider } from '~/GlobalContextProvider';
+import { AuthContextProvider } from '~/context/AuthContext';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { ThemeSwitch } from './ThemeSwitch';
 
 // Local component config.

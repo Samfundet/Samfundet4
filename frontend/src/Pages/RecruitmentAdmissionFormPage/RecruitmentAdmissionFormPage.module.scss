@@ -47,3 +47,16 @@
 .formLabel {
   margin-bottom: 0.5em;
 }
+
+.withdrawnContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 0.4em;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.withdrawnText {
+  color: $red-samf;
+}

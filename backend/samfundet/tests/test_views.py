@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import TYPE_CHECKING
 
 from guardian.shortcuts import assign_perm
@@ -448,7 +449,9 @@ class TestVersionModel:
         assert status.is_success(code=response.status_code)
         assert data['created_at'] == data['updated_at']
 
+        post_data = {'name': 'name2'}
         ### Act Update ###
+        time.sleep(1)
         url = reverse(routes.samfundet__tags_detail, kwargs={'pk': data['id']})
         response: Response = fixture_rest_client.put(path=url, data=post_data)
 
@@ -920,3 +923,132 @@ def test_update_admission(
     assert response.status_code == status.HTTP_200_OK
     assert response.data['admission_text'] == post_data2['admission_text']
     # Assert the returned data based on the logic in the view
+
+
+def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+
+    # Cant withdraw if not applied
+    url = reverse(
+        routes.samfundet__recruitment_withdraw_admission,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    response: Response = fixture_rest_client.put(path=url)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    ### Act Send create ###
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data1 = {'admission_text': 'I love samf!'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data1)
+    ### Assert Created ###
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data['admission_text'] == post_data1['admission_text']
+    assert response.data['withdrawn'] is False
+
+    ### Act 2 Send withdrawal ###
+    url = reverse(
+        routes.samfundet__recruitment_withdraw_admission,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    response: Response = fixture_rest_client.put(path=url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['withdrawn'] is True
+
+
+def test_post_admission_overflow(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_recruitment.max_admissions = 1
+    fixture_recruitment.save()
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+
+    post_data = {'admission_text': 'test_text'}
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+
+    ### Assert ###
+    assert response.data['admission_text'] == post_data['admission_text']
+    assert response.status_code == status.HTTP_201_CREATED
+    # Assert the returned data based on the logic in the view
+
+    # Test then for too many admissions for user
+    url = reverse(
+        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position2.id},
+    )
+    ### Act ###
+    response2: Response = fixture_rest_client.put(path=url, data=post_data)
+    ### Assert ###
+    assert response2.status_code == status.HTTP_400_BAD_REQUEST
+    assert RecruitmentAdmission.TOO_MANY_ADMISSIONS_ERROR in response2.data['recruitment']
+
+
+def test_recruitment_admission_update_pri_up(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_admission2: RecruitmentAdmission,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    assert fixture_recruitment_admission.applicant_priority == 1
+    assert fixture_recruitment_admission2.applicant_priority == 2
+
+    url = reverse(
+        routes.samfundet__recruitment_user_priority_update,
+        kwargs={'pk': fixture_recruitment_admission2.id},
+    )
+
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data={'direction': 1})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    # Assert the returned data based on the logic in the view
+    assert len(response.data) == 2
+    assert response.data[0]['id'] == str(fixture_recruitment_admission2.pk)
+    assert response.data[0]['applicant_priority'] == 1
+    assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
+    assert response.data[1]['applicant_priority'] == 2
+
+
+def test_recruitment_admission_update_pri_down(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_admission2: RecruitmentAdmission,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    assert fixture_recruitment_admission.applicant_priority == 1
+    assert fixture_recruitment_admission2.applicant_priority == 2
+
+    url = reverse(
+        routes.samfundet__recruitment_user_priority_update,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+
+    ### Act ###
+    response: Response = fixture_rest_client.put(path=url, data={'direction': -1})
+
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    # Assert the returned data based on the logic in the view
+    assert len(response.data) == 2
+    assert response.data[0]['id'] == str(fixture_recruitment_admission2.pk)
+    assert response.data[0]['applicant_priority'] == 1
+    assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
+    assert response.data[1]['applicant_priority'] == 2
