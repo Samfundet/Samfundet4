@@ -36,11 +36,7 @@ export function LineChart({
     datapointWidth,
   } = dimensions(sizes, size, data); // function which hold/calculate dimensions or other needed values.
 
-  const lineChartPalette = palette; // imported from utils
-  let colors: CartesianChartsColors;
-
-  isDarkMode ? (colors = lineChartPalette.dark) : (colors = lineChartPalette.light);
-
+  const colors: CartesianChartsColors = isDarkMode ? palette.dark : palette.light;
   /*
    * Creates a list of coordinates for drawing a data-line.
    * */
