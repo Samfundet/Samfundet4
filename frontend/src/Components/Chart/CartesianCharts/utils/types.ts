@@ -19,8 +19,8 @@ export type CartesianChartProps = {
 };
 
 export type CartesianChartsSize = {
-  cWith: number;
-  cHeight: number;
+  width: number;
+  height: number;
   labelFont: number;
   topPadding: number;
   rightPadding: number;

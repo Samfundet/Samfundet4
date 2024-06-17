@@ -8,8 +8,8 @@ import { CartesianChartPalette, CartesianChartSizes } from './types';
 
 export const sizes: CartesianChartSizes = {
   small: {
-    cWith: 325,
-    cHeight: 183,
+    width: 325,
+    height: 183,
     labelFont: 14,
     topPadding: 0,
     rightPadding: 10,
@@ -19,8 +19,8 @@ export const sizes: CartesianChartSizes = {
     yLabelsPosition: 25,
   },
   medium: {
-    cWith: 450,
-    cHeight: 253,
+    width: 450,
+    height: 253,
     labelFont: 14,
     topPadding: 0,
     rightPadding: 10,
@@ -30,8 +30,8 @@ export const sizes: CartesianChartSizes = {
     yLabelsPosition: 25,
   },
   large: {
-    cWith: 600,
-    cHeight: 337,
+    width: 600,
+    height: 337,
     labelFont: 14,
     topPadding: 0,
     rightPadding: 10,
@@ -41,8 +41,8 @@ export const sizes: CartesianChartSizes = {
     yLabelsPosition: 25,
   },
   xlarge: {
-    cWith: 800,
-    cHeight: 450,
+    width: 800,
+    height: 450,
     labelFont: 14,
     topPadding: 0,
     rightPadding: 10,

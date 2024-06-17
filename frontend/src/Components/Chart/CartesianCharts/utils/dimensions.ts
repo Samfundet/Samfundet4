@@ -14,15 +14,15 @@ const calculateDimensions = (
   size: CartesianChartProps['size'],
   data: CartesianChartsData[],
 ) => {
-  const { leftPadding, bottomPadding, rightPadding, topPadding, yLabelsPosition, xLabelsMargin, cWith, cHeight } =
+  const { leftPadding, bottomPadding, rightPadding, topPadding, yLabelsPosition, xLabelsMargin, width, height } =
     sizes[size];
 
-  const svgWidth = cWith + rightPadding + leftPadding + xLabelsMargin;
-  const svgHeight = cHeight + topPadding + bottomPadding + yLabelsPosition;
+  const svgWidth = width + rightPadding + leftPadding + xLabelsMargin;
+  const svgHeight = height + topPadding + bottomPadding + yLabelsPosition;
 
   // after adding padding and margin this should be the chart width and height
-  const chartWidth = sizes[size].cWith;
-  const chartHeight = sizes[size].cHeight;
+  const chartWidth = sizes[size].width;
+  const chartHeight = sizes[size].height;
 
   const maxValue = Math.max(...data.map((item) => item.value));
 
