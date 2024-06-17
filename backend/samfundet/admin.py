@@ -586,30 +586,25 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 @admin.register(Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
-        'visible_from',
-        'actual_application_deadline',
-        'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'name_nb',
         'organization',
+        'visible_from',
+        'shown_application_deadline',
     ]
     list_display = [
-        'visible_from',
-        'actual_application_deadline',
-        'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'name_nb',
         'organization',
+        'visible_from',
+        'shown_application_deadline',
     ]
     search_fields = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
         'organization',
     ]
-    list_display_links = ['visible_from']
+    list_display_links = ['name_nb', 'name']
     list_select_related = True
 
 
