@@ -613,7 +613,6 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
         ]
 
 
-
 class RecruitmentPositionSerializer(CustomBaseSerializer):
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
@@ -683,14 +682,13 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentSerializer(CustomBaseSerializer):
-    separate_positions = RecruitmentSeparatePositionSerializer(many=True,
-                                                               read_only=True)
-    positions = RecruitmentPositionForApplicantSerializer(
-        many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recruitment
         fields = '__all__'
+
 
 class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
