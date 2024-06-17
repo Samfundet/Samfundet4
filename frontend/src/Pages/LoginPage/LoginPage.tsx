@@ -11,6 +11,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LoginPage.module.scss';
+import { lowerCapitalize } from '~/utils';
 
 type FormProps = {
   username: string;
@@ -66,13 +67,13 @@ export function LoginPage() {
               required={true}
               field="username"
               type="text"
-              label={t(KEY.loginpage_username) ?? ''}
+              label={t(KEY.loginpage_username)}
             />
             <SamfFormField<string, FormProps>
               required={true}
               field="password"
               type="password"
-              label={t(KEY.common_password) ?? ''}
+              label={lowerCapitalize(t(KEY.common_password))}
             />
             {loginFailed && <p className={styles.login_failed_comment}>{t(KEY.loginpage_login_failed)}</p>}
           </SamfForm>

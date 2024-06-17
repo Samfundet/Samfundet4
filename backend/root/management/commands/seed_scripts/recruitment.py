@@ -42,7 +42,6 @@ def seed():
     yield 0, 'recruitment'
     Recruitment.objects.all().delete()
     yield 0, 'Deleted old recruitments'
-
     total_recruitments = len(recruitments) * len(organizations)
     created_recruitments = 0
     recruitment_objects = []

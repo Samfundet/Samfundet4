@@ -56,6 +56,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentSeperatePosition,
 )
 
 
@@ -564,12 +565,6 @@ class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RecruitmentSerializer(CustomBaseSerializer):
-    class Meta:
-        model = Recruitment
-        fields = '__all__'
-
-
 class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
     direction = serializers.IntegerField(label='direction', write_only=True)
 
@@ -606,6 +601,24 @@ class InterviewerSerializer(CustomBaseSerializer):
             'email',
             'id',
         ]
+
+
+class RecruitmentSeperatePositionSerializer(CustomBaseSerializer):
+    class Meta:
+        model = RecruitmentSeperatePosition
+        fields = [
+            'name_nb',
+            'name_en',
+            'url',
+        ]
+
+
+class RecruitmentSerializer(CustomBaseSerializer):
+    seperate_positions = RecruitmentSeperatePositionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Recruitment
+        fields = '__all__'
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):
