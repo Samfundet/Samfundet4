@@ -68,19 +68,10 @@ export function RecruitmentApplicantsStatus({
   ];
 
   function updateAdmissions(id: string, field: string, value: string | number | undefined) {
-    let updatedInterview = {} as InterviewDto;
     setRecruitmentApplicants(
       recruitmentApplicants.map((element: RecruitmentAdmissionDto) => {
         if (element.id === id) {
           switch (field) {
-            case editChoices.update_time:
-              updatedInterview = { ...element.interview, interview_time: (value ?? ' ').toString() };
-              element = { ...element, interview: updatedInterview };
-              break;
-            case editChoices.update_location:
-              updatedInterview = { ...element.interview, interview_location: (value ?? ' ').toString() };
-              element = { ...element, interview: updatedInterview };
-              break;
             case editChoices.update_recruitment_priority:
               element = { ...element, recruiter_priority: value as number };
               break;
@@ -122,11 +113,11 @@ export function RecruitmentApplicantsStatus({
         ),
       },
       {
-        value: admission.interview.interview_time,
+        value: admission.interview?.interview_time,
         content: (
           <InputField
             inputClassName={styles.input}
-            value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
+            value={admission.interview?.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_time, value)}
             type="datetime-local"
@@ -134,11 +125,11 @@ export function RecruitmentApplicantsStatus({
         ),
       },
       {
-        value: admission.interview.interview_location,
+        value: admission.interview?.interview_location,
         content: (
           <InputField
             inputClassName={styles.input}
-            value={admission.interview.interview_location ?? ''}
+            value={admission.interview?.interview_location ?? ''}
             onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
             onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_location, value)}
           />
@@ -172,7 +163,7 @@ export function RecruitmentApplicantsStatus({
         content: (
           <CrudButtons
             onView={
-              admission.interview.interview_time != null
+              admission.interview?.interview_time != null
                 ? () => {
                     navigate({
                       url: reverse({
@@ -181,7 +172,7 @@ export function RecruitmentApplicantsStatus({
                           recruitmentId: recruitmentId,
                           gangId: gangId,
                           positionId: positionId,
-                          interviewId: admission.interview.id,
+                          interviewId: admission.interview?.id,
                         },
                       }),
                     });

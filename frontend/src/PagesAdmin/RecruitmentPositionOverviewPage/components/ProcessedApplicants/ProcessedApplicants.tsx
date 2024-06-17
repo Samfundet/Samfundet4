@@ -46,8 +46,8 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
       },
       { content: admission.user?.phone_number, value: admission.user?.phone_number },
       { content: admission.user?.email, value: admission.user?.email },
-      { content: admission.interview.interview_time, value: admission.interview.interview_time },
-      { content: admission.interview.interview_location, value: admission.interview.interview_location },
+      { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
+      { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
       { content: admission.recruiter_status, value: admission.recruiter_status },
     ];
   });

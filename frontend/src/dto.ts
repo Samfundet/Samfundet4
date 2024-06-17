@@ -411,7 +411,7 @@ export type InterviewDto = {
 
 export type RecruitmentAdmissionDto = {
   id: string;
-  interview: InterviewDto;
+  interview?: InterviewDto;
   interview_time?: Date;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
