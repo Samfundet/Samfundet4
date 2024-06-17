@@ -375,6 +375,13 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_groups: string;
   max_admissions?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
+  seperate_positions?: RecruitmentSeperatePositionDto[];
+};
+
+export type RecruitmentSeperatePositionDto = {
+  name_nb: string;
+  name_en: string;
+  url: string;
 };
 
 export type UserPriorityDto = {
