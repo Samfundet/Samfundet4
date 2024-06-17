@@ -45,6 +45,7 @@ import {
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentApplicantAdminPage,
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
@@ -58,6 +59,7 @@ import {
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+
 import { App } from '~/App';
 import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
@@ -389,6 +391,11 @@ export const router = createBrowserRouter(
             </Route>
           </Route>
         </Route>
+        <Route
+          path={ROUTES.frontend.admin_recruitment_applicant}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
+        />
+        {/* Sulten Admin */}
         <Route
           path={ROUTES.frontend.admin_sulten_reservations}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}
