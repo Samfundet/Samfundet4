@@ -18,6 +18,8 @@ import { Text } from '~/Components/Text/Text';
 export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
+  const [withdrawnAdmissions, setWithdrawnAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
+
   const { t } = useTranslation();
 
   function handleChangePriority(id: string, direction: 'up' | 'down') {
@@ -39,7 +41,8 @@ export function RecruitmentApplicationsOverviewPage() {
   useEffect(() => {
     if (recruitmentID) {
       getRecruitmentAdmissionsForApplicant(recruitmentID).then((response) => {
-        setAdmissions(response.data);
+        setAdmissions(response.data.filter((admission) => !admission.withdrawn));
+        setWithdrawnAdmissions(response.data.filter((admission) => admission.withdrawn));
       });
     }
   }, [recruitmentID]);
@@ -88,6 +91,30 @@ export function RecruitmentApplicationsOverviewPage() {
     return [...position, ...(admission.withdrawn ? withdrawn : notWithdrawn)];
   }
 
+  const withdrawnTableColumns = [{ sortable: true, content: t(KEY.recruitment_withdrawn_admissions) }];
+
+  function withdrawnAdmissionToTableRow(admission: RecruitmentAdmissionDto) {
+    return [
+      {
+        value: dbT(admission.recruitment_position, 'name'),
+        content: (
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.recruitment_application,
+              urlParams: {
+                positionID: admission.recruitment_position.id,
+                gangID: admission.recruitment_position.gang.id,
+              },
+            })}
+            className={styles.withdrawnLink}
+          >
+            {dbT(admission.recruitment_position, 'name')}
+          </Link>
+        ),
+      },
+    ];
+  }
+
   return (
     <Page>
       <div className={styles.container}>
@@ -99,13 +126,25 @@ export function RecruitmentApplicationsOverviewPage() {
           <div className={styles.empty_div}></div>
         </div>
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
-        {admissions ? (
+        {admissions.length > 0 ? (
           <Table data={admissions.map(admissionToTableRow)} columns={tableColumns} defaultSortColumn={3}></Table>
         ) : (
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}
 
         <OccupiedFormModal recruitmentId={parseInt(recruitmentID ?? '')} />
+
+        {withdrawnAdmissions.length > 0 && (
+          <div className={styles.withdrawnContainer}>
+            <Table
+              bodyRowClassName={styles.withdrawnRow}
+              headerClassName={styles.withdrawnHeader}
+              headerColumnClassName={styles.withdrawnHeader}
+              data={withdrawnAdmissions.map(withdrawnAdmissionToTableRow)}
+              columns={withdrawnTableColumns}
+            />
+          </div>
+        )}
       </div>
     </Page>
   );

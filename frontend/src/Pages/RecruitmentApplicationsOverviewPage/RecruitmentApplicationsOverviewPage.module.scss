@@ -1,6 +1,6 @@
-@import 'src/constants';
-
 @import 'src/mixins';
+
+@import 'src/constants';
 
 $back-button-width: 5rem;
 
@@ -38,6 +38,30 @@ $back-button-width: 5rem;
     filter: brightness(200%);
     transform: scale(1.10);
   }
+}
+
+.withdrawnHeader {
+  background-color: $red-samf;
+  color: $white;
+  &:hover {
+    background-color: $red-samf;
+    filter: brightness(95%);
+  }
+  border:none;
+}
+
+.withdrawnRow {
+  background-color: $grey-3;
+  &:hover {
+    background-color: $grey-3;
+    filter: brightness(95%);
+  }
+  border-bottom: none;
+  border-top: 1px solid $grey-2;
+}
+
+.withdrawnContainer {
+  margin-top: 2em;
 }
 
 .withdrawnText {
