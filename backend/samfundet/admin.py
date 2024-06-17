@@ -58,6 +58,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentSeperatePosition,
 )
 
 # Common fields:
@@ -610,6 +611,13 @@ class RecruitmentAdmin(CustomBaseAdmin):
     ]
     list_display_links = ['visible_from']
     list_select_related = True
+
+
+@admin.register(RecruitmentSeperatePosition)
+class RecruitmentSeperatePositionAdmin(CustomBaseAdmin):
+    sortable_by = ['name_nb', 'recruitment', 'url']
+    search_fields = ['name_nb', 'recruitment', 'url']
+    list_display_links = ['name_nb']
 
 
 class RecruitmentAdmissionInline(admin.TabularInline):
