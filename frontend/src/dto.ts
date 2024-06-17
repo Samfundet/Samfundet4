@@ -20,6 +20,13 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+};
+
 export type OccupiedTimeSlotDto = {
   id?: number;
   user?: number;
@@ -34,6 +41,8 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number: string;
+  campus?: CampusDto;
   recruitment_admission_ids?: string[];
 };
 
@@ -145,6 +154,7 @@ export type EventDto = {
   // Write only:
   // Used to create new event with using id of existing imagedto
   image?: ImageDto;
+  capacity?: number;
 };
 
 export type EventGroupDto = {
@@ -193,6 +203,7 @@ export type TableDto = {
 };
 
 export type FoodPreferenceDto = {
+  id: number;
   name_nb?: string;
   name_en?: string;
 };
@@ -205,6 +216,7 @@ export type FoodCategoryDto = {
 };
 
 export type MenuItemDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -215,8 +227,8 @@ export type MenuItemDto = {
   price_member?: number;
 
   order?: number;
-  food_preferences?: FoodPreferenceDto[];
-  food_category: FoodCategoryDto;
+  food_preferences?: FoodPreferenceDto[] | number[];
+  food_category: FoodCategoryDto | number;
 };
 
 export type MenuDto = {
@@ -346,7 +358,7 @@ export type NotificationDto = {
 // ############################################################
 
 export type RecruitmentDto = {
-  id: string | undefined;
+  id?: string;
   name_nb: string;
   name_en: string;
   visible_from: string;
@@ -354,7 +366,12 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
+  max_admissions?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
+};
+
+export type UserPriorityDto = {
+  direction: number;
 };
 
 export type RecruitmentPositionDto = {
@@ -393,17 +410,25 @@ export type InterviewDto = {
 };
 
 export type RecruitmentAdmissionDto = {
-  id: number;
+  id: string;
   interview: InterviewDto;
+  interview_time?: Date;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number;
+  recruiter_priority?: number | string;
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+  admission_count?: number;
+};
+
+export type RecruitmentAdmissionRecruiterDto = {
+  user: RecruitmentUserDto;
+  admission: RecruitmentAdmissionDto;
+  other_admissions: RecruitmentAdmissionDto[];
 };
 
 export type FeedbackDto = {
