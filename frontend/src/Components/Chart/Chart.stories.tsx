@@ -39,8 +39,9 @@ export default {
     size: 'large',
     xAxisLegend: 'Dager',
     yAxisLegend: 'Søkere',
-    spliceXLabel: [0, 7],
     yLabelCount: 9,
+    xLabelMagnitude: 1,
+    yLabelMagnitude: 1,
   },
 } as Meta<typeof Chart>;
 

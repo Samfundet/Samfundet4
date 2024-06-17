@@ -19,6 +19,8 @@ export function BarChart({
   yLabelCount,
   hasXDirLines = true,
   hasYDirLines = false,
+  yLabelMagnitude,
+  xLabelMagnitude,
 }: CartesianChartProps) {
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const isDarkMode = useIsDarkTheme();
@@ -38,6 +40,7 @@ export function BarChart({
   } = dimensions(sizes, size, data); // function which hold/calculate dimensions or other needed values.
 
   const colors: CartesianChartsColors = isDarkMode ? palette.dark : palette.light;
+
   /*
    * Draws bars for the chart.
    * */
@@ -64,13 +67,14 @@ export function BarChart({
   const xAxisLabels = drawXAxisLabels(
     data,
     xLabelFreq,
-    splitXLabel,
     (index) => dataBars[index].xPosition + datapointWidth / 2, // gets x-pos of bar center
     svgHeight,
     xLabelsMargin,
     sizes,
     size,
     colors,
+    splitXLabel,
+    xLabelMagnitude,
   );
 
   const yAxisLabels = drawYAxisLabels(
@@ -78,10 +82,11 @@ export function BarChart({
     yLabelCount,
     (value) => svgHeight - value * svgScale - bottomPadding, // gets y-coordinate
     yLabelsPosition,
-    splitYLabel,
     colors,
     sizes,
     size,
+    splitYLabel,
+    yLabelMagnitude,
   );
 
   return (

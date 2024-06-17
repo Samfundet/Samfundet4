@@ -48,6 +48,8 @@ export function Chart({
   hasXDirLines,
   hasYDirLines,
   legend,
+  yLabelMagnitude,
+  xLabelMagnitude,
 }: ChartProps) {
   // Object containing chart components.
   const chart = {
@@ -63,6 +65,8 @@ export function Chart({
         splitXLabel={splitXLabel}
         hasXDirLines={hasXDirLines}
         hasYDirLines={hasYDirLines}
+        yLabelMagnitude={yLabelMagnitude}
+        xLabelMagnitude={xLabelMagnitude}
       />
     ),
     line: (
@@ -77,6 +81,8 @@ export function Chart({
         splitXLabel={splitXLabel}
         hasXDirLines={hasXDirLines}
         hasYDirLines={hasYDirLines}
+        yLabelMagnitude={yLabelMagnitude}
+        xLabelMagnitude={xLabelMagnitude}
       />
     ),
     pie: <PieChart chartTitle={chartTitle} data={data} size={size} legend={legend} />,

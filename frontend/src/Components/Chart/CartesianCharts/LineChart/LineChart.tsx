@@ -19,6 +19,8 @@ export function LineChart({
   yLabelCount,
   hasXDirLines = true,
   hasYDirLines = true,
+  yLabelMagnitude,
+  xLabelMagnitude,
 }: CartesianChartProps) {
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave } = useHoverLabel();
   const isDarkMode = useIsDarkTheme();
@@ -67,13 +69,14 @@ export function LineChart({
   const xAxisLabels = drawXAxisLabels(
     data,
     xLabelFreq,
-    splitXLabel,
     (index) => lineCoordinates[index].x, // Function to get x-coordinate
     svgHeight,
     xLabelsMargin,
     sizes,
     size,
     colors,
+    splitXLabel,
+    xLabelMagnitude,
   );
 
   const yAxisLabels = drawYAxisLabels(
@@ -81,10 +84,11 @@ export function LineChart({
     yLabelCount,
     (value) => svgHeight - value * svgScale - bottomPadding, // Function to get y-coordinate
     yLabelsPosition,
-    splitYLabel,
     colors,
     sizes,
     size,
+    splitYLabel,
+    yLabelMagnitude,
   );
 
   return (

@@ -14,6 +14,8 @@ export type CartesianChartProps = {
   hasYDirLines?: boolean;
   splitYLabel?: [number, number];
   splitXLabel?: [number, number];
+  yLabelMagnitude?: number;
+  xLabelMagnitude?: number;
 };
 
 export type CartesianChartsSize = {

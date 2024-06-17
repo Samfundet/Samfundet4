@@ -1,5 +1,23 @@
 import { CartesianChartsData, CartesianChartProps, CartesianChartSizes, CartesianChartsColors } from './types';
 
+// processing single label text item
+const labelText = (labelValue: string | number, labelMagnitude?: number, splitLabel?: [number, number]): string => {
+  let labelText: string = '';
+
+  if (labelMagnitude && typeof labelValue === 'number' && (labelMagnitude % 10 === 0 || labelMagnitude === 1)) {
+    // Divide the label value by the magnitude and convert to string
+    labelText = Math.floor(labelValue / labelMagnitude).toString();
+  } else if (typeof labelValue === 'string') {
+    // Shorten the label string if splitYLabel is provided
+    if (splitLabel) {
+      labelText = labelValue.slice(splitLabel[0], splitLabel[1]);
+    } else {
+      labelText = labelValue; // Use the original string if no split range is provided or magnitude is not given
+    }
+  }
+  return labelText;
+};
+
 /**
  * Draws y-axis labels on a chart.
  * Steps determined by max value and given amount of y-labels through prop.
@@ -10,16 +28,19 @@ export const drawYAxisLabels = (
   yLabelCount: number,
   getYPosition: (value: number) => number,
   yLabelsPosition: number,
-  splitYLabel: [number, number] | undefined,
   colors: CartesianChartsColors,
   sizes: CartesianChartSizes,
   size: CartesianChartProps['size'],
+  splitYLabel?: [number, number] | undefined,
+  yLabelMagnitude?: number,
 ) => {
   const step = maxValue / yLabelCount;
   const lines = [];
   for (let i = 0; i <= yLabelCount; i++) {
     const value = step * i;
     const yPosition = getYPosition(value);
+    // splits label string or devices it based on given magnitude
+    const label = labelText(value, yLabelMagnitude, splitYLabel);
     lines.push(
       <text
         key={i}
@@ -29,7 +50,7 @@ export const drawYAxisLabels = (
         fill={colors.text}
         textAnchor="end"
       >
-        {splitYLabel ? value.toFixed(0).toString().slice(splitYLabel[0], splitYLabel[1]) : value.toFixed(0)}
+        {label}
       </text>,
     );
   }
@@ -44,15 +65,18 @@ export const drawYAxisLabels = (
 export function drawXAxisLabels(
   data: CartesianChartsData[],
   xLabelFreq: number,
-  splitXLabel: [number, number] | undefined,
+
   getX: (index: number) => number,
   svgHeight: number,
   xLabelsMargin: number,
   sizes: CartesianChartSizes,
   size: CartesianChartProps['size'],
   colors: CartesianChartsColors,
+  splitXLabel?: [number, number],
+  xLabelMagnitude?: number,
 ) {
   return data.map((item, index) => {
+    const label = labelText(item.label, xLabelMagnitude, splitXLabel);
     if (index % xLabelFreq === 0 || index === data.length - 1 || index === 0) {
       return (
         <text
@@ -65,7 +89,7 @@ export function drawXAxisLabels(
           // Rotate labels for better readability
           transform={`rotate(-45, ${getX(index)}, ${svgHeight - xLabelsMargin})`}
         >
-          {splitXLabel ? item.label.slice(splitXLabel[0], splitXLabel[1]) : item.label}
+          {label}
         </text>
       );
     }
