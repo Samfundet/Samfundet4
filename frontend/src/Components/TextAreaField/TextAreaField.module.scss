@@ -2,26 +2,31 @@
 
 @import 'src/mixins';
 
-$focus-blur-color: $blue-medium;
-$focus-blur-radius: 10px;
-$focus-blur-spread: 2px;
 $error-color: red;
 
 .input_field {
-  @include rounded;
-  padding: 1em 1em;
-  border: 1px solid transparent;
+  @include rounded-lighter;
+  padding: 0.75rem 1rem;
+  border: 1px solid $grey-35;
+  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
   outline: none;
+  font-weight: initial;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   &:focus {
-    outline: none;
-    border: 1px solid $grey-4;
-    box-shadow: 0 0 $focus-blur-radius $focus-blur-spread $focus-blur-color;
-    @include theme-dark {
-      border-color: $grey-1;
-    }
+    border-color: $grey-3;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
   }
   &.error {
     border: 1px solid $error-color;
+  }
+
+  @include theme-dark {
+    border-color: $grey-0;
+    &:focus {
+      border-color: $grey-1;
+      outline: 1px solid rgba(255, 255, 255, 0.6);
+    }
   }
 }
 
