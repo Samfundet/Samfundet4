@@ -1,43 +1,33 @@
+/* eslint-disable prettier/prettier */
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Page } from '~/Components';
+import { Button, Link, Page } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForApplicant } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentAdmissionsForApplicant, putRecruitmentPriorityForUser } from '~/api';
+import { RecruitmentAdmissionDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
-import styles from './ApplicantApplicationOverviewPage.module.scss';
+import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
+import { reverse } from '~/named-urls';
+import { Text } from '~/Components/Text/Text';
 
-export function ApplicantApplicationOverviewPage() {
+export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();
   const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
 
-  function handleChangePriority(id: number, direction: 'up' | 'down') {
-    const newAdmissions = [
-      ...admissions.sort(function (a1, a2) {
-        return a1.applicant_priority - a2.applicant_priority;
-      }),
-    ];
-    const index = newAdmissions.findIndex((admission) => admission.id === id);
-    const directionIncrement = direction === 'up' ? -1 : 1;
-    if (index == 0 && direction === 'up') return;
-    if (index === newAdmissions.length - 1 && direction === 'down') return;
-
-    const old_priority = newAdmissions[index].applicant_priority;
-    const new_priority = newAdmissions[index + directionIncrement].applicant_priority;
-
-    newAdmissions[index].applicant_priority = new_priority;
-    newAdmissions[index + directionIncrement].applicant_priority = old_priority;
-
-    // TODO: Done and fixed in other PR
+  function handleChangePriority(id: string, direction: 'up' | 'down') {
+    const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
+    putRecruitmentPriorityForUser(id, data).then((response) => {
+      setAdmissions(response.data);
+    });
   }
 
-  function upDownArrow(id: number) {
+  function upDownArrow(id: string) {
     return (
       <>
         <Icon icon="bxs:up-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'up')} />
@@ -63,13 +53,39 @@ export function ApplicantApplicationOverviewPage() {
   ];
 
   function admissionToTableRow(admission: RecruitmentAdmissionDto) {
-    return [
-      dbT(admission.recruitment_position, 'name'),
+    const position = [ {
+      content: (
+        <Link
+          url={reverse({
+            pattern: ROUTES.frontend.recruitment_application,
+            urlParams: {
+              positionID: admission.recruitment_position.id,
+              gangID: admission.recruitment_position.gang.id,
+            },
+          })}
+          className={styles.position_name}
+        >
+          {dbT(admission.recruitment_position, 'name')}
+        </Link>
+      ),
+    }];
+    const notWithdrawn = [      
       niceDateTime(admission.interview.interview_time),
       admission.interview.interview_location,
       admission.applicant_priority,
       { content: upDownArrow(admission.id) },
     ];
+    const withdrawn = [ {
+      content: (
+        <Text
+          as="strong"
+          className={styles.withdrawnText}
+        >
+          {t(KEY.recruitment_withdrawn)}
+        </Text>
+      ),
+    }];
+    return [...position, ...(admission.withdrawn ? withdrawn : notWithdrawn)];
   }
 
   return (

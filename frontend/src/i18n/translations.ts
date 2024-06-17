@@ -44,6 +44,8 @@ export const nb: Record<KeyValues, string> = {
   // Other common
   [KEY.common_to]: 'Til',
   [KEY.common_price]: 'Pris',
+  [KEY.common_food]: 'Mat',
+  [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
@@ -58,8 +60,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_table]: 'Bord',
+  [KEY.common_gangs]: 'Gjenger',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_table]: 'Tabell',
+  [KEY.common_max]: 'Maks',
   [KEY.common_card]: 'Kort',
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
@@ -101,6 +105,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_more_info]: 'Mer info',
   [KEY.common_norwegian]: 'Norsk',
   [KEY.common_firstname]: 'Fornavn',
+  [KEY.common_member]: 'Medlem',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
@@ -158,6 +163,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
+  [KEY.loginpage_passwords_must_match]: 'Passordene må være like',
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
@@ -182,6 +188,10 @@ export const nb: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
+  // InformationPage
+  [KEY.information_page]: 'Informasjonsside',
+  [KEY.information_page_short]: 'Side',
+
   // Navbar:
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
@@ -191,6 +201,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_applicant]: 'Søker',
+  [KEY.recruitment_applicants]: 'Søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
@@ -220,10 +231,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_admission_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.max_admissions]: 'Maks søknader per bruker',
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recruitment_withdrawn]: 'Trukket',
+  [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
+  [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -286,6 +301,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.feedback_type]: 'Type tilbakemelding',
   [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+  [KEY.feedback_thank_you_for_feedback]: 'Takk for din tilbakemelding',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -299,7 +315,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.information_page_short]: 'Side',
   [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
@@ -351,6 +366,8 @@ export const en: Record<KeyValues, string> = {
   // No category:
   [KEY.common_to]: 'To',
   [KEY.common_price]: 'Price',
+  [KEY.common_food]: 'Food',
+  [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
   [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
@@ -367,8 +384,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_menu]: 'Menu',
   [KEY.common_name]: 'Name',
   [KEY.common_next]: 'Next',
-  [KEY.common_gang]: 'Group',
+  [KEY.common_gang]: 'Gang',
+  [KEY.common_gangs]: 'Gangs',
   [KEY.common_table]: 'Table',
+  [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
@@ -409,6 +428,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_norwegian]: 'Norwegian',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_volunteer]: 'Volunteer',
+  [KEY.common_member]: 'Member',
   [KEY.common_membership]: 'Membership',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Contact us',
@@ -466,6 +486,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_username]: 'Username',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
   // GroupsPage:
@@ -489,6 +510,10 @@ export const en: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publication date',
 
+  // InformationPage
+  [KEY.information_page]: 'Information page',
+  [KEY.information_page_short]: 'Page',
+
   // Navbar:
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
@@ -498,6 +523,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_applicant]: 'Applicant',
+  [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',
   [KEY.recruitment_all_applications]: 'All applications',
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
@@ -528,14 +554,17 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_admission_letter]: 'Default admission letter',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
+  [KEY.max_admissions]: 'Max admissions per user',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
-
+  [KEY.recruitment_withdrawn]: 'Withdrawn',
+  [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
+  [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
-  [KEY.admin_saksdokument]: 'case document',
+  [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
   [KEY.admin_steal_identity]: 'Steal identity',
@@ -597,6 +626,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.feedback_type]: 'Feedback type',
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
+  [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
   // No category:
   [KEY.owner]: 'Owner',
@@ -611,7 +641,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.invalid_phonenumber]: 'Not a valid phone number',
-  [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',

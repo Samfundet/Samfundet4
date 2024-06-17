@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useClickOutside, useDesktop } from '~/hooks';
 import { Children, SetState } from '~/types';
 import styles from '../../Navbar.module.scss';

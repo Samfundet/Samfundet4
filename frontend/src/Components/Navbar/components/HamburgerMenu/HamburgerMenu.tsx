@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import styles from './HamburgerMenu.module.scss';
 
 type HamburgerMenuProps = {
