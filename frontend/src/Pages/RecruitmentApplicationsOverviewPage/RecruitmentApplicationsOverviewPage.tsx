@@ -44,10 +44,6 @@ export function RecruitmentApplicationsOverviewPage() {
     }
   }, [recruitmentID]);
 
-  useEffect(() => {
-    console.log(admissions);
-  }, [admissions]);
-
   const tableColumns = [
     { sortable: false, content: t(KEY.recruitment_position) },
     { sortable: false, content: t(KEY.recruitment_interview_time) },

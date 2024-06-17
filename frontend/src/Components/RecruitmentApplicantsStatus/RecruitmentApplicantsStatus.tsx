@@ -101,12 +101,10 @@ export function RecruitmentApplicantsStatus({
         value: admission.user.first_name,
         content: (
           <Link
-            key={admission.user.id}
-            target={'backend'}
             url={reverse({
-              pattern: ROUTES.backend.admin__samfundet_recruitmentadmission_change,
+              pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                objectId: admission.id,
+                admissionID: admission.id,
               },
             })}
             className={styles.text}
