@@ -7,14 +7,15 @@ import styles from './PieChart.module.scss';
 import { CircularChartProps } from './utils/types';
 import { sizes } from './utils/apperance';
 
+const radius = 200;
+const viewboxSize = radius * 2;
+let accumulatedAngle = 0;
+
 export function PieChart({ data: initialData, chartTitle, size, legend }: CircularChartProps) {
   const [dataWithColors, setDataWithColors] = useState<{ color: string; label: string; value: number }[]>([]);
   const { hoverInfo, handleMouseEnter, handleMouseMove, handleMouseLeave, objectRef } = useHoverLabel();
-  const radius = 200;
-  const viewboxSize = radius * 2;
 
   const total = dataWithColors.reduce((acc, entry) => acc + entry.value, 0);
-  let accumulatedAngle = 0;
 
   useEffect(() => {
     if (initialData) {
