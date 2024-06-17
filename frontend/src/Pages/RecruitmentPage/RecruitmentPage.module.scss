@@ -56,3 +56,25 @@
   @include flex-row-center;
   gap: 2em;
 }
+
+.separate_header {
+  background-color: $red_samf;
+  color: white;
+  font-size: 17px;
+  font-weight: 400;
+  width: 100%;
+  @include theme-dark{
+    background-color: #590000;
+  }
+}
+
+.separate_header:hover{
+  background-color: $red_samf_hover;
+  @include theme-dark{
+    background-color: #400000;
+  }
+}
+
+.separate_item {
+  padding-left: 1em;
+}

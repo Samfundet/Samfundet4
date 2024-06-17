@@ -369,6 +369,7 @@ export type RecruitmentDto = {
   max_admissions?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
   separate_positions?: RecruitmentSeparatePositionDto[];
+  positions?: RecruitmentPositionDto[];
 };
 
 export type RecruitmentSeparatePositionDto = {

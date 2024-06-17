@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
-import { getActiveRecruitmentPositions, getGangList } from '~/api';
+import { getActiveRecruitments, getGangList } from '~/api';
 import { TextItem } from '~/constants';
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import { GangTypeDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto } from '~/dto';
 import { useTextItem, useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { GangTypeContainer } from './Components';
+import { GangSeparatePositions, GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
@@ -16,8 +16,10 @@ import { useAuthContext } from '~/context/AuthContext';
 export function RecruitmentPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
-  const [separateRecruitmentPositions, setSeparateRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
+  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
+  const [separateRecruitmentPositions, setSeparateRecruitmentPositions] = useState<RecruitmentSeparatePositionDto[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
@@ -54,9 +56,21 @@ export function RecruitmentPage() {
   );
 
   useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList()])
+    Promise.all([getActiveRecruitments(), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
-        setRecruitmentPositions(recruitmentRes.data);
+        let recruitmentPos: RecruitmentPositionDto[] = [];
+        let separateRecruitmentPos: RecruitmentSeparatePositionDto[] = [];
+        recruitmentRes.data.map((rec) => {
+          if (rec.separate_positions) {
+            separateRecruitmentPos = separateRecruitmentPos.concat(rec?.separate_positions);
+          }
+          if (rec.positions) {
+            recruitmentPos = recruitmentPos.concat(rec?.positions);
+            console.log(rec?.positions);
+          }
+        });
+        setRecruitmentPositions(recruitmentPos);
+        setSeparateRecruitmentPositions(separateRecruitmentPos);
         setGangs(gangsRes);
         setLoading(false);
       })
@@ -103,8 +117,15 @@ export function RecruitmentPage() {
         )}
         {loading ? (
           <SamfundetLogoSpinner />
-        ) : recruitmentPositions ? (
-          <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
+        ) : recruitmentPositions.length > 0 || separateRecruitmentPositions.length > 0 ? (
+          <>
+            {recruitmentPositions.length > 0 && (
+              <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
+            )}
+            {separateRecruitmentPositions.length > 0 && (
+              <GangSeparatePositions recruitmentSeparatePositions={separateRecruitmentPositions} />
+            )}
+          </>
         ) : (
           noadmissions
         )}
