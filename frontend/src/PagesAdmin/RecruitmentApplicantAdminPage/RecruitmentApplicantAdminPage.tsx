@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { getRecruitmentAdmissionsForRecruiter } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './RecruitmentApplicantPage.module.scss';
+import styles from './RecruitmentApplicantAdminPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { Table } from '~/Components/Table';
 import classNames from 'classnames';
 import { useParams } from 'react-router-dom';
 
-export function RecruitmentApplicantPage() {
-  const navigate = useCustomNavigate();
+export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
 
   const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
@@ -48,21 +46,11 @@ export function RecruitmentApplicantPage() {
       </div>
     );
   }
-  const backURL = reverse({
-    pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
-    urlParams: {
-      recruitmentId: recruitmentAdmission?.recruitment,
-      gangId: recruitmentAdmission?.recruitment_position?.gang.id,
-      positionId: recruitmentAdmission?.recruitment_position.id,
-    },
-  });
 
   return (
     <Page>
-      <Button theme="success" rounded={true} onClick={() => navigate({ url: backURL })}>
-        {t(KEY.common_go_back)}
-      </Button>
       <div className={classNames(styles.infoContainer)}>
+        <BackButton />
         <Text size="l" as="strong" className={styles.textBottom}>
           {applicant?.first_name} {applicant?.last_name}
         </Text>

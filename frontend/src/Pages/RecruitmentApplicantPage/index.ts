@@ -1,1 +1,0 @@
-export { RecruitmentApplicantPage } from './RecruitmentApplicantPage';
