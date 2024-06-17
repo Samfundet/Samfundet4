@@ -1,0 +1,21 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  @mixin for-tablet-only {
+    width: 100%;
+  }
+}
+
+.infoContainer {
+  padding: 0.2em;
+  margin: 2em;
+}
+
+.textBottom {
+  margin: 0.2em;
+}
