@@ -72,21 +72,23 @@ export function RecruitmentAdmissionFormPage() {
   }, [recruitmentPosition]);
 
   function withdrawAdmission() {
-    withdrawRecruitmentAdmissionApplicant(positionID ? +positionID : 1)
-      .then(() => {
-        navigate({
-          url: reverse({
-            pattern: ROUTES.frontend.recruitment_application_overview,
-            urlParams: {
-              recruitmentID: recruitmentPosition?.recruitment,
-            },
-          }),
+    if (positionID) {
+      withdrawRecruitmentAdmissionApplicant(positionID)
+        .then(() => {
+          navigate({
+            url: reverse({
+              pattern: ROUTES.frontend.recruitment_application_overview,
+              urlParams: {
+                recruitmentID: recruitmentPosition?.recruitment,
+              },
+            }),
+          });
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
         });
-        toast.success(t(KEY.common_creation_successful));
-      })
-      .catch(() => {
-        toast.error(t(KEY.common_something_went_wrong));
-      });
+    }
   }
 
   function handleOnSubmit(data: FormProps) {

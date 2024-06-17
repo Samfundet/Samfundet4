@@ -712,7 +712,7 @@ class RecruitmentAdmissionForApplicantView(ModelViewSet):
         return Response(serializer.data)
 
 
-class RecruitmentAdmissioWithdrawApplicantView(APIView):
+class RecruitmentAdmissionWithdrawApplicantView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: int) -> Response:

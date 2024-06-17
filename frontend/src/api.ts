@@ -744,7 +744,7 @@ export async function putRecruitmentAdmission(
   return response;
 }
 
-export async function withdrawRecruitmentAdmissionApplicant(positionId: number): Promise<AxiosResponse> {
+export async function withdrawRecruitmentAdmissionApplicant(positionId: number | string): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
