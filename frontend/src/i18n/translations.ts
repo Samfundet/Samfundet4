@@ -232,6 +232,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recruitment_withdrawn]: 'Trukket',
+  [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
+  [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -548,7 +551,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
-
+  [KEY.recruitment_withdrawn]: 'Withdrawn',
+  [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
+  [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',

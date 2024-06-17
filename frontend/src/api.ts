@@ -744,6 +744,18 @@ export async function putRecruitmentAdmission(
   return response;
 }
 
+export async function withdrawRecruitmentAdmissionApplicant(positionId: number | string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_withdraw_admission,
+      urlParams: { pk: positionId },
+    });
+  const response = await axios.put(url, {}, { withCredentials: true });
+
+  return response;
+}
+
 export async function putRecruitmentAdmissionInterview(
   interviewId: string | number,
   interview: Partial<InterviewDto>,
