@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
-import { getRecruitmentAdmissionsForRecruiter } from '~/api';
+import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { getRecruitmentAdmissionsForRecruiter, withdrawRecruitmentAdmissionRecruiter } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -39,6 +39,19 @@ export function RecruitmentApplicantAdminPage() {
       });
   }, [admissionID, t]);
 
+  const adminWithdraw = () => {
+    if (recruitmentAdmission) {
+      withdrawRecruitmentAdmissionRecruiter(recruitmentAdmission.id)
+        .then((response) => {
+          setRecruitmentAdmission(response.data);
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    }
+  };
+
   if (loading) {
     return (
       <div>
@@ -67,6 +80,17 @@ export function RecruitmentApplicantAdminPage() {
           {t(KEY.recruitment_admission)}: {dbT(recruitmentAdmission?.recruitment_position, 'name')}
         </Text>
         <Text>{recruitmentAdmission?.admission_text}</Text>
+      </div>
+      <div className={styles.withdrawContainer}>
+        {recruitmentAdmission?.withdrawn ? (
+          <Text as="i" size="l" className={styles.withdrawnText}>
+            {t(KEY.recruitment_withdrawn)}
+          </Text>
+        ) : (
+          <Button theme="samf" onClick={adminWithdraw}>
+            {t(KEY.recruitment_withdraw_admission)}
+          </Button>
+        )}
       </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>

@@ -73,6 +73,11 @@ urlpatterns = [
         'recruitment-admissions-recruiter/<str:admission_id>/', views.RecruitmentAdmissionForRecruitersView.as_view(), name='recruitment_admissions_recruiter'
     ),
     path('recruitment-withdraw-admission/<int:pk>/', views.RecruitmentAdmissionWithdrawApplicantView.as_view(), name='recruitment_withdraw_admission'),
+    path(
+        'recruitment-withdraw-admission-recruiter/<slug:pk>/',
+        views.RecruitmentAdmissionWithdrawRecruiterView.as_view(),
+        name='recruitment_withdraw_admission_recruiter',
+    ),
     path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentAdmissionApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),

@@ -957,6 +957,25 @@ def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, 
     assert response.data['withdrawn'] is True
 
 
+def test_withdraw_admission_recruiter(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_admission: RecruitmentAdmission):
+    # TODO Add Permissions tests later for this
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+
+    # check if not originally withdrawn
+    assert not fixture_recruitment_admission.withdrawn
+
+    ### Act 2 Send withdrawal ###
+    url = reverse(
+        routes.samfundet__recruitment_withdraw_admission_recruiter,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+    response: Response = fixture_rest_client.put(path=url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['withdrawn'] is True
+    assert RecruitmentAdmission.objects.get(pk=fixture_recruitment_admission.id)
+
+
 def test_post_admission_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,

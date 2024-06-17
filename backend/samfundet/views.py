@@ -726,6 +726,19 @@ class RecruitmentAdmissionWithdrawApplicantView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class RecruitmentAdmissionWithdrawRecruiterView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request: Request, pk: str) -> Response:
+        # Checks if user has admission for position
+        admission = get_object_or_404(RecruitmentAdmission, pk=pk)
+        # Withdraw if ha admission
+        admission.withdrawn = True
+        admission.save()
+        serializer = RecruitmentAdmissionForApplicantSerializer(admission)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class RecruitmentAdmissionApplicantPriorityView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
