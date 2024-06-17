@@ -3,7 +3,7 @@ import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
-  ApplicantApplicationOverviewPage,
+  RecruitmentApplicationsOverviewPage,
   ComponentPage,
   EventPage,
   EventsPage,
@@ -45,6 +45,7 @@ import {
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentApplicantAdminPage,
   RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
@@ -53,10 +54,12 @@ import {
   SultenMenuAdminPage,
   AdminLayout,
   ImpersonateUserAdminPage,
+  SultenMenuItemFormAdminPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
+
 import { App } from '~/App';
 import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
@@ -86,7 +89,10 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
-        <Route path={ROUTES.frontend.recruitment_application_overview} element={<ApplicantApplicationOverviewPage />} />
+        <Route
+          path={ROUTES.frontend.recruitment_application_overview}
+          element={<RecruitmentApplicationsOverviewPage />}
+        />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
         <Route path={ROUTES.frontend.luka} element={<></>} />
@@ -247,6 +253,14 @@ export const router = createBrowserRouter(
           }}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
         />
+        <Route
+          path={ROUTES.frontend.admin_sulten_menuitem_create}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
+        />
+        <Route
+          path={ROUTES.frontend.admin_sulten_menuitem_edit}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
+        />
         {/* Recruitment */}
         <Route
           element={<Outlet />}
@@ -377,6 +391,11 @@ export const router = createBrowserRouter(
             </Route>
           </Route>
         </Route>
+        <Route
+          path={ROUTES.frontend.admin_recruitment_applicant}
+          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
+        />
+        {/* Sulten Admin */}
         <Route
           path={ROUTES.frontend.admin_sulten_reservations}
           element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}

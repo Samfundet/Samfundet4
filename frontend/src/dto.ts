@@ -7,6 +7,7 @@ export type UserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number?: string;
   is_staff: boolean;
   is_active: boolean;
   is_superuser: boolean;
@@ -17,6 +18,13 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+};
+
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
 };
 
 export type OccupiedTimeSlotDto = {
@@ -33,6 +41,8 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number: string;
+  campus?: CampusDto;
   recruitment_admission_ids?: string[];
 };
 
@@ -193,6 +203,7 @@ export type TableDto = {
 };
 
 export type FoodPreferenceDto = {
+  id: number;
   name_nb?: string;
   name_en?: string;
 };
@@ -205,6 +216,7 @@ export type FoodCategoryDto = {
 };
 
 export type MenuItemDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -215,8 +227,8 @@ export type MenuItemDto = {
   price_member?: number;
 
   order?: number;
-  food_preferences?: FoodPreferenceDto[];
-  food_category: FoodCategoryDto;
+  food_preferences?: FoodPreferenceDto[] | number[];
+  food_category: FoodCategoryDto | number;
 };
 
 export type MenuDto = {
@@ -399,16 +411,24 @@ export type InterviewDto = {
 
 export type RecruitmentAdmissionDto = {
   id: string;
-  interview: InterviewDto;
+  interview?: InterviewDto;
+  interview_time?: Date;
   admission_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number;
+  recruiter_priority?: number | string;
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
+  admission_count?: number;
+};
+
+export type RecruitmentAdmissionRecruiterDto = {
+  user: RecruitmentUserDto;
+  admission: RecruitmentAdmissionDto;
+  other_admissions: RecruitmentAdmissionDto[];
 };
 
 export type FeedbackDto = {
