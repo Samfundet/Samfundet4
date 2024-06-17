@@ -300,6 +300,10 @@ export type GangDto = {
   info_page?: number;
 };
 
+export type GangRecruitmentDto = GangDto & {
+  recruitment_positions: RecruitmentPositionDto[];
+};
+
 export type GangTypeDto = {
   id: number;
   title_nb: string;

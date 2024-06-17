@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+from typing import TYPE_CHECKING
 from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
@@ -57,6 +58,9 @@ from .models.recruitment import (
     RecruitmentAdmission,
     RecruitmentStatistics,
 )
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -401,6 +405,27 @@ class GangSerializer(CustomBaseSerializer):
     class Meta:
         model = Gang
         fields = '__all__'
+
+
+class RecruitmentGangSerializer(CustomBaseSerializer):
+    recruitment_positions = serializers.SerializerMethodField(method_name='get_positions', read_only=True)
+
+    class Meta:
+        model = Gang
+        fields = '__all__'
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # This will allow it to filter admissions on recruitment
+        self.recruitment = kwargs.pop('recruitment', None)
+        self.gang = kwargs.pop('gang', None)
+        super().__init__(*args, **kwargs)
+
+    def get_positions(self, obj: Gang) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        positions = RecruitmentPosition.objects.filter(gang=obj)
+        if self.recruitment:
+            positions = positions.filter(recruitment=self.recruitment)
+        return RecruitmentPositionForApplicantSerializer(positions, many=True).data
 
 
 class GangTypeSerializer(CustomBaseSerializer):
