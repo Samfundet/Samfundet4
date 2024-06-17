@@ -17,6 +17,7 @@ export function RecruitmentPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
+  const [separateRecruitmentPositions, setSeparateRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();

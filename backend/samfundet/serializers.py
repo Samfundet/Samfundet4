@@ -56,7 +56,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
-    RecruitmentSeperatePosition,
+    RecruitmentSeparatePosition,
 )
 
 
@@ -603,9 +603,9 @@ class InterviewerSerializer(CustomBaseSerializer):
         ]
 
 
-class RecruitmentSeperatePositionSerializer(CustomBaseSerializer):
+class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
-        model = RecruitmentSeperatePosition
+        model = RecruitmentSeparatePosition
         fields = [
             'name_nb',
             'name_en',
@@ -614,7 +614,7 @@ class RecruitmentSeperatePositionSerializer(CustomBaseSerializer):
 
 
 class RecruitmentSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeperatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recruitment
