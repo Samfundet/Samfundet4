@@ -77,8 +77,8 @@ from .serializers import (
     RecruitmentAdmissionForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentAdmissionForApplicantSerializer,
-    RecruitmentAdmissionUpdateForGangSerializer,
     RecruitmentAdmissionForRecruiterSerializer,
+    RecruitmentAdmissionUpdateForGangSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
@@ -793,7 +793,7 @@ class RecruitmentAdmissionForGangView(ModelViewSet):
         return Response(serializer.data)
 
 
-class RecruitmentAdmissionStateChoices(APIView):
+class RecruitmentAdmissionStateChoicesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
@@ -822,6 +822,7 @@ class RecruitmentAdmissionForGangUpdateStateView(APIView):
                 recruitment_position__gang=admission.recruitment_position.gang,
                 recruitment=admission.recruitment,
             )
+            admission.update_applicant_state()
             serializer = RecruitmentAdmissionForGangSerializer(admissions, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -843,6 +844,7 @@ class RecruitmentAdmissionForPositionUpdateStateView(APIView):
             if 'recruiter_status' in update_serializer.data:
                 admission.recruiter_status = update_serializer.data['recruiter_status']
             admission.save()
+            admission.update_applicant_state()
             admissions = RecruitmentAdmission.objects.filter(
                 recruitment_position=admission.recruitment_position,  # Only change from above
                 recruitment=admission.recruitment,
@@ -850,6 +852,7 @@ class RecruitmentAdmissionForPositionUpdateStateView(APIView):
             serializer = RecruitmentAdmissionForGangSerializer(admissions, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RecruitmentAdmissionForRecruitmentPositionView(ModelViewSet):
     permission_classes = [IsAuthenticated]

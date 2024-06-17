@@ -74,7 +74,7 @@ urlpatterns = [
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
     path(
         'recruitment-admission-states-choices',
-        views.RecruitmentAdmissionStateChoices.as_view(),
+        views.RecruitmentAdmissionStateChoicesView.as_view(),
         name='recruitment_admission_states_choices',
     ),
     path(
