@@ -77,8 +77,8 @@ from .serializers import (
     RecruitmentAdmissionForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentAdmissionForApplicantSerializer,
-    RecruitmentInterviewAvailabilitySerializer,
     RecruitmentAdmissionForRecruiterSerializer,
+    RecruitmentInterviewAvailabilitySerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
