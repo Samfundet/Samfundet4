@@ -18,7 +18,7 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 
 from django.http import QueryDict
 from django.utils import timezone
-from django.db.models import QuerySet
+from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
@@ -633,12 +633,10 @@ class RecruitmentPositionsPerGangView(ListAPIView):
 class ApplicantsWithoutInterviewsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request) -> Response:
-        recruitment = self.request.query_params.get('recruitment', None)
-        gang = self.request.query_params.get('gang', None)
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = get_object_or_404(Recruitment, pk=pk)
 
-        if not recruitment:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+        gang = self.request.query_params.get('gang', None)
 
         # Filter based on admissions
         admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, interview=None)
@@ -648,6 +646,21 @@ class ApplicantsWithoutInterviewsView(APIView):
         data = User.objects.filter(id__in=admissions_without_interviews_user_ids)
 
         return Response(data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
+
+
+class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = get_object_or_404(Recruitment, pk=pk)
+
+        # Filter based on admissions > 3 and with less than 3 interview set
+        data = User.objects.annotate(
+            admission_count=Count('admissions', filter=Q(admissions__recruitment=recruitment)),
+            interview_count=Count('admissions', filter=Q(admissions__recruitment=recruitment, admissions__interview__isnull=False)),
+        ).filter(interview_count__lt=3, admission_count__gte=3)
+
+        return Response(data=UserForRecruitmentSerializer(data, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
 
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):

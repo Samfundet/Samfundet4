@@ -255,6 +255,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Vis søkere med 3 eller flere søknader, med færre enn 3 intervjutider satt',
+  [KEY.recruitment_three_interviews_criteria_header]: 'Søkere med 3 eller flere søknader, med færre enn 3 intervjutider satt',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -594,6 +596,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Show applicants with three or more applications, with less than three set interviews',
+  [KEY.recruitment_three_interviews_criteria_header]: 'Applicants with three or more applications, with less than three set interviews',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',

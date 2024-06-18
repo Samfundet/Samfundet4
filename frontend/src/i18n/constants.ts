@@ -268,6 +268,8 @@ export const KEY = {
   recruitment_withdrawn: 'recruitment_withdrawn',
   recruitment_withdraw_admission: 'KEY.recruitment_withdraw_admission',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_three_interviews_criteria_button: 'recruitment_three_interviews_criteria_button',
+  recruitment_three_interviews_criteria_header: 'recruitment_three_interviews_criteria_header',
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',

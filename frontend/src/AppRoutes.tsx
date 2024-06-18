@@ -55,6 +55,7 @@ import {
   AdminLayout,
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
+  RecruitmentUsersWithoutThreeInterviewCriteriaPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
@@ -294,6 +295,10 @@ export const router = createBrowserRouter(
                 </Link>
               ),
             }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
+            element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
