@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputField, Link } from '~/Components';
-import { Table } from '~/Components/Table';
+import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
 import { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -14,7 +13,6 @@ import { Text } from '~/Components/Text/Text';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { dbT } from '~/utils';
-import { WithoutInterviewModal } from './components';
 
 export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();
@@ -22,7 +20,6 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [gang, setGang] = useState<GangDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
@@ -75,59 +72,6 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
-  const tableColumns = [
-    { content: t(KEY.common_name), sortable: true },
-    { content: t(KEY.common_email), sortable: true },
-    { content: t(KEY.common_phonenumber), sortable: true },
-    { content: t(KEY.recruitment_applicant_top_position), sortable: true },
-    { content: t(KEY.recruitment_number_of_applications), sortable: true },
-    { content: t(KEY.common_processed), sortable: true },
-  ];
-
-  function filterUsers(): RecruitmentUserDto[] {
-    if (searchQuery === '') return users;
-    const keywords = searchQuery.split(' ');
-    return users.filter((user) => {
-      const fieldsToSearch = [
-        user.username,
-        user.first_name,
-        user.last_name,
-        user.email,
-        user.top_admission.recruitment_position.name_nb,
-        user.top_admission.recruitment_position.name_en,
-      ]
-        .join(' ')
-        .toLowerCase();
-      for (const kw of keywords) {
-        if (!fieldsToSearch.includes(kw.toLowerCase())) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }
-
-  function userToTableRow(user: RecruitmentUserDto) {
-    return [
-      {
-        value: user.first_name + ' ' + user.last_name,
-        content: <Link url={ROUTES.frontend.recruitment_application}>{user.first_name + ' ' + user.last_name}</Link>,
-      },
-      user.email,
-      user.phone_number,
-      dbT(user.top_admission.recruitment_position, 'name'),
-      user.admissions ? user.admissions.length : 0,
-      {
-        value: user.admissions_without_interview ? user.admissions_without_interview.length : 0,
-        content: (
-          <WithoutInterviewModal
-            admissions_without_interview={user.admissions_without_interview}
-            admissions={user.admissions}
-          />
-        ),
-      },
-    ];
-  }
   const title = t(KEY.recruitment_applicants_without_interview);
   const header = (
     <div className={styles.header}>
@@ -143,10 +87,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   );
   return (
     <AdminPageLayout title={title} backendUrl={ROUTES.backend.samfundet__user} header={header} loading={showSpinner}>
-      <InputField icon="mdi:search" onChange={setSearchQuery} placeholder={t(KEY.common_search)} />
-      <div className={styles.table_container}>
-        <Table columns={tableColumns} data={filterUsers().map((user) => userToTableRow(user))} />
-      </div>
+      <RecruitmentWithoutInterviewTable applicants={users} />
     </AdminPageLayout>
   );
 }

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { Table } from '~/Components/Table';
+import { reverse } from '~/named-urls';
 
 type WithoutInterviewListProps = {
   admissions: RecruitmentAdmissionDto[];
@@ -24,7 +25,16 @@ export function WithoutInterviewList({ admissions }: WithoutInterviewListProps) 
       {
         value: dbT(admission.recruitment_position, 'name'),
         content: (
-          <Link url={ROUTES.frontend.recruitment_application}>{dbT(admission.recruitment_position, 'name')}</Link>
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_applicant,
+              urlParams: {
+                admissionID: admission.id,
+              },
+            })}
+          >
+            {dbT(admission.recruitment_position, 'name')}
+          </Link>
         ),
       },
       admission.applicant_priority,

@@ -47,7 +47,6 @@ import {
   RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentApplicantAdminPage,
-  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
