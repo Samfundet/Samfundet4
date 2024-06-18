@@ -6,14 +6,15 @@ from __future__ import annotations
 import uuid
 from collections import defaultdict
 
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
+from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from .general import Gang, User, Organization
-from .model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 
 class Recruitment(CustomBaseModel):
@@ -29,6 +30,8 @@ class Recruitment(CustomBaseModel):
     reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
     reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
+
+    max_admissions = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max admissions per applicant')
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -133,6 +136,25 @@ class RecruitmentPosition(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
+class RecruitmentSeperatePosition(CustomBaseModel):
+    name_nb = models.CharField(max_length=100, help_text='Name of the position')
+    name_en = models.CharField(max_length=100, help_text='Name of the position')
+
+    url = models.URLField(help_text='URL to website of seperate recruitment')
+
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='The recruitment that is recruiting',
+        related_name='seperate_positions',
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self) -> str:
+        return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
+
+
 class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
     location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
@@ -177,7 +199,7 @@ class RecruitmentApplication(CustomBaseModel):
     )
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='admissions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='admissions')
-    applicant_priority = models.IntegerField(null=True, blank=True, help_text='The priority of the admission')
+    applicant_priority = models.PositiveIntegerField(null=True, blank=True, help_text='The priority of the admission')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
@@ -195,6 +217,61 @@ class RecruitmentApplication(CustomBaseModel):
         choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the admission'
     )
 
+    applicant_state = models.IntegerField(
+        choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text='The state of the applicant for the recruiter'
+    )
+
+    def organize_priorities(self) -> None:
+        """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
+        admissions_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by('applicant_priority')
+        for i in range(len(admissions_for_user)):
+            correct_position = i + 1
+            if admissions_for_user[i].applicant_priority != correct_position:
+                admissions_for_user[i].applicant_priority = correct_position
+                admissions_for_user[i].save()
+
+    def update_priority(self, direction: int) -> None:
+        """
+        Method for moving priorites up or down,
+        positive direction indicates moving it to higher priority,
+        negative direction indicates moving it to lower priority,
+        can move n positions up or down
+
+        """
+        # Use order for more simple an unified for direction
+        ordering = f"{'' if direction < 0 else '-' }applicant_priority"
+        admissions_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
+        direction = abs(direction)  # convert to absolute
+        for i in range(len(admissions_for_user)):
+            if admissions_for_user[i].id == self.id:  # find current
+                # Find index of which to switch  priority with
+                switch = len(admissions_for_user) - 1 if i + direction >= len(admissions_for_user) else i + direction
+                new_priority = admissions_for_user[switch].applicant_priority
+                # Move priorites down in direction
+                for ii in range(switch, i, -1):
+                    admissions_for_user[ii].applicant_priority = admissions_for_user[ii - 1].applicant_priority
+                    admissions_for_user[ii].save()
+                # update priority
+                admissions_for_user[i].applicant_priority = new_priority
+                admissions_for_user[i].save()
+                break
+        self.organize_priorities()
+
+    TOO_MANY_ADMISSIONS_ERROR = 'Too many admissions for recruitment'
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        # If there is max admissions, check if applicant have applied to not to many
+        # Cant use not self.pk, due to UUID generating it before save.
+        if self.recruitment.max_admissions and not RecruitmentApplication.objects.filter(pk=self.pk).first():
+            user_admissions_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            if user_admissions_count >= self.recruitment.max_admissions:
+                errors['recruitment'].append(self.TOO_MANY_ADMISSIONS_ERROR)
+
+        raise ValidationError(errors)
+
     def __str__(self) -> str:
         return f'Admission: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
@@ -205,12 +282,13 @@ class RecruitmentApplication(CustomBaseModel):
         """
         if not self.recruitment:
             self.recruitment = self.recruitment_position.recruitment
-        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        # If the admission is saved without an interview, try to find an interview from a shared position.
         if not self.applicant_priority:
-            current_applications_count = RecruitmentApplication.objects.filter(user=self.user).count()
+            self.organize_priorities()
+            current_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
-        """If the admission is saved without an interview, try to find an interview from a shared position."""
+        # If the admission is saved without an interview, try to find an interview from a shared position.
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
@@ -229,6 +307,25 @@ class RecruitmentApplication(CustomBaseModel):
         # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
+
+    def update_applicant_state(self) -> QuerySet[RecruitmentApplication]:
+        admissions = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
+        # Get top priority
+        top_wanted = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
+        top_reserved = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
+        with transaction.atomic():
+            for adm in admissions:
+                # I hate conditionals, so instead of checking all forms of condtions
+                # I use memory array indexing formula (col+row_size*row) for matrixes, to index into state
+                has_priority = 0
+                if top_reserved and top_reserved.applicant_priority < adm.applicant_priority:
+                    has_priority = 1
+                if top_wanted and top_wanted.applicant_priority < adm.applicant_priority:
+                    has_priority = 2
+                adm.applicant_state = adm.recruiter_priority + 3 * has_priority
+                if adm.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
+                    adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
+                adm.save()
 
 
 class Occupiedtimeslot(FullCleanSaveMixin):

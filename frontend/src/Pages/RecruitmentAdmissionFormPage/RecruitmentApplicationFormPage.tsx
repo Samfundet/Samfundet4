@@ -11,6 +11,7 @@ import {
   getRecruitmentPosition,
   getRecruitmentPositionsGang,
   putRecruitmentApplication,
+  withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
@@ -20,6 +21,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicationFormPage.module.scss';
+import { Text } from '~/Components/Text/Text';
 
 type FormProps = {
   admission_text: string;
@@ -34,7 +36,7 @@ export function RecruitmentApplicationFormPage() {
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
 
-  const [RecruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
+  const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
 
   const [loading, setLoading] = useState(true);
 
@@ -69,10 +71,37 @@ export function RecruitmentApplicationFormPage() {
     );
   }, [recruitmentPosition]);
 
+  function withdrawAdmission() {
+    if (positionID) {
+      withdrawRecruitmentApplicationApplicant(positionID)
+        .then(() => {
+          navigate({
+            url: reverse({
+              pattern: ROUTES.frontend.recruitment_application_overview,
+              urlParams: {
+                recruitmentID: recruitmentPosition?.recruitment,
+              },
+            }),
+          });
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    }
+  }
+
   function handleOnSubmit(data: FormProps) {
     putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionID ? +positionID : 1)
       .then(() => {
-        navigate({ url: ROUTES.frontend.home });
+        navigate({
+          url: reverse({
+            pattern: ROUTES.frontend.recruitment_application_overview,
+            urlParams: {
+              recruitmentID: recruitmentPosition?.recruitment,
+            },
+          }),
+        });
         toast.success(t(KEY.common_creation_successful));
       })
       .catch(() => {
@@ -127,7 +156,6 @@ export function RecruitmentApplicationFormPage() {
             <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
-
           <div className={styles.otherpositions}>
             <h2 className={styles.subheader}>
               {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
@@ -155,9 +183,22 @@ export function RecruitmentApplicationFormPage() {
             })}
           </div>
         </div>
+        {recruitmentApplication && (
+          <div className={styles.withdrawnContainer}>
+            {recruitmentApplication?.withdrawn ? (
+              <Text size="l" as="i" className={styles.withdrawnText}>
+                {t(KEY.recruitment_withdrawn_message)}
+              </Text>
+            ) : (
+              <Button theme="samf" display="basic" onClick={() => withdrawAdmission()}>
+                {t(KEY.recruitment_withdraw_admission)}
+              </Button>
+            )}
+          </div>
+        )}
         {user ? (
           <SamfForm
-            initialData={RecruitmentApplication as FormProps}
+            initialData={recruitmentApplication as FormProps}
             onSubmit={handleOnSubmit}
             submitText={submitText}
             devMode={false}

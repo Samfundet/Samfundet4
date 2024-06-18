@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 
 from samfundet.models.general import User
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentApplication
-from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
     # 'visible_from', # Allowed to be in the past.
@@ -182,5 +182,247 @@ class TestRecruitmentApplication:
         fixture_recruitment_application.withdrawn = True
         fixture_recruitment_application.save()
 
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+
+    def test_check_applicant_state_all_not_set(
+        self,
+        fixture_recruitment: Recruitment,
+        fixture_user: User,
+        fixture_recruitment_application: RecruitmentApplication,
+        fixture_recruitment_application2: RecruitmentApplication,
+    ):
+        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+        # Set priority to get this to work
+        fixture_recruitment_application2.applicant_priority = 2
+        fixture_recruitment_application2.save()
+
+        assert fixture_recruitment_application2.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+        fixture_recruitment_application.update_applicant_state()
+
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+    def test_check_applicant_state_wanted(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+        """
+        Tests for each state where one admission is wanted,
+        and how that affects other admissions state
+        Possible states tested here are:
+        - WANTED is above all others, others are unset
+        - WANTED is above all others, others are reserved
+        - WANTED is above all others, others are wanted
+        - Both are wanted, but swap which has highest applicant priority
+        - An unset is above a wanted
+        """
+        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+        assert fixture_recruitment_application2.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+        # Test higher pri unset other
+        fixture_recruitment_application.recruiter_priority = RecruitmentPriorityChoices.WANTED
+        fixture_recruitment_application.save()
+        fixture_recruitment_application2.applicant_priority = 2
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority < fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_WANTED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_WANT
+
+        # Test higher pri reserved other
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.RESERVE
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority < fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_WANTED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_WANT_RESERVED
+
+        # Test higher pri wanted other
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.WANTED
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority < fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_WANTED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_WANT_WANTED
+
+        # Test flipped, swap priority
+        fixture_recruitment_application.applicant_priority = 2
+        fixture_recruitment_application.save()
+        fixture_recruitment_application2.applicant_priority = 1
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority > fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.LESS_WANT_WANTED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.TOP_WANTED
+
+        # One is at top but not set, but other has top, but has less priority
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.NOT_SET
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority > fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_WANTED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+    def test_check_applicant_state_reserve(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+        """
+        Tests for each state where one admission is wanted,
+        and how that affects other admissions state
+        Possible states tested here are:
+        - RESERVE is above all others, others are unset
+        - RESERVE is above all others, others are reserved
+        - RESERVE is above all others, others are wanted
+        - Both are reserve, but swap which has highest applicant priority
+        - An unset is above a reserve
+        """
+        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+        assert fixture_recruitment_application2.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+        # Test higher pri unset other
+        fixture_recruitment_application.recruiter_priority = RecruitmentPriorityChoices.RESERVE
+        fixture_recruitment_application.save()
+        fixture_recruitment_application2.applicant_priority = 2
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority < fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_RESERVE
+
+        # Test higher pri reserved other
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.RESERVE
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority < fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_RESERVED
+
+        # Test higher pri wanted other
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.WANTED
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority < fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_WANTED
+
+        # Test flipped, swap priority
+        fixture_recruitment_application.applicant_priority = 2
+        fixture_recruitment_application.save()
+        fixture_recruitment_application2.applicant_priority = 1
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.RESERVE
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority > fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_RESERVED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
+
+        # One is at top but not set, but other has top, but has less priority
+        fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.NOT_SET
+        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_applicant_state()
+
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
+
+        assert fixture_recruitment_application.applicant_priority > fixture_recruitment_application2.applicant_priority
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
+        assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
+
+    def test_priority_up(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+        assert fixture_recruitment_application.applicant_priority == 1
+        assert fixture_recruitment_application2.applicant_priority == 2
+
+        # Test general up
+        fixture_recruitment_application2.update_priority(1)
+
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 2
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 1
+
+        # Test up overloading
+        RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).update_priority(2)
+
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 1
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
+
+        # Test up from top position does not change anything
+        RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).update_priority(1)
+
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 1
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
+
+    def test_priority_down(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+        # intial priority
+        assert fixture_recruitment_application.applicant_priority == 1
+        assert fixture_recruitment_application2.applicant_priority == 2
+
+        # Test general up
+        fixture_recruitment_application.update_priority(-1)
+
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 2
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 1
+
+        # Test up overloading
+        RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).update_priority(-2)
+
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 1
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
+
+        # Test up from top position does not change anything
+        RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).update_priority(-1)
+
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 1
+        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
+
+    def test_auto_newest_lowest_pri(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_position2: RecruitmentPosition):
+        """Tests that the newest admission gets automatically the lowest applicant priority"""
+        # intial priority
+        assert fixture_recruitment_application.applicant_priority == 1
+
+        new_admission = RecruitmentApplication.objects.create(
+            admission_text='Test admission text 2',
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment_position2.recruitment,
+            user=fixture_recruitment_application.user,
+        )
+        assert new_admission.applicant_priority == 2

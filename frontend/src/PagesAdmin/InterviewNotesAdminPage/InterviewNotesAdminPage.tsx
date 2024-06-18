@@ -17,7 +17,7 @@ export function InterviewNotesPage() {
   const positionId = useParams().positionId;
   const interviewId = useParams().interviewId;
   const [editingMode, setEditingMode] = useState(false);
-  const [RecruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
+  const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
   const [interview, setInterview] = useState<InterviewDto | null>(null);
   const [disabled, setdisabled] = useState<boolean>(true);
   const [nameUser, setNameUser] = useState<string>('');
@@ -30,7 +30,9 @@ export function InterviewNotesPage() {
         if (admission.length !== 0) {
           setdisabled(false);
           setRecruitmentApplication(admission);
-          setInterview(admission[0].interview);
+          if (admission[0].interview) {
+            setInterview(admission[0].interview);
+          }
           setNameUser(getNameUser(admission[0]));
         }
       });
@@ -51,8 +53,10 @@ export function InterviewNotesPage() {
 
   function handleUpdateNotes(value: string) {
     const updatedNotes = value;
-    const updatedInterview: InterviewDto = { ...recruitmentApplication[0].interview, notes: updatedNotes };
-    setInterview(updatedInterview);
+    if (recruitmentApplication[0].interview) {
+      const updatedInterview: InterviewDto = { ...recruitmentApplication[0].interview, notes: updatedNotes };
+      setInterview(updatedInterview);
+    }
   }
 
   return (
