@@ -20,18 +20,18 @@ export function RecruitmentPage() {
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
   const { organizationTheme, changeOrgTheme } = useOrganizationContext();
-  useEffect(() => {
-    changeOrgTheme('uka');
-  }, [changeOrgTheme]);
 
   const header = (
     <>
-      <div className={styles.orgHeader} style={{ backgroundColor: organizationTheme.pagePrimaryColor }}>
-        <Logo organization={'uka'} size={'medium'} color={'org-alt-color'} />
-      </div>
-      <Button theme={organizationTheme.buttonTheme}>TETSTTS</Button>
+      {organizationTheme && (
+        <div className={styles.orgHeader} style={{ backgroundColor: organizationTheme.pagePrimaryColor }}>
+          <Logo organization={'uka'} size={'medium'} color={'org-alt-color'} />
+        </div>
+      )}
+      <Button theme={organizationTheme?.buttonTheme}>TETSTTS</Button>
     </>
   );
+
   const noadmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
@@ -64,23 +64,25 @@ export function RecruitmentPage() {
   );
 
   useEffect(() => {
+    const org = 'uka';
     Promise.all([getActiveRecruitmentPositions(), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
         setGangs(gangsRes);
         setLoading(false);
+        changeOrgTheme(org);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, []);
+  }, [changeOrgTheme]);
 
   return (
     <Page className={styles.recruitmentPage}>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        {header}
+        {organizationTheme && header}
         <div className={styles.personalRow}>
           <OccupiedFormModal recruitmentId={1} />
           <Button

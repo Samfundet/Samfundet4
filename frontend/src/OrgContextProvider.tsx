@@ -23,8 +23,8 @@ export const organizationThemes: Record<OrganizationTypeValue, OrganizationTheme
 };
 
 type OrganizationContextProps = {
-  organizationTheme: OrganizationTheme;
-  setOrganizationTheme: Dispatch<SetStateAction<OrganizationTheme>>;
+  organizationTheme: OrganizationTheme | null;
+  setOrganizationTheme: Dispatch<SetStateAction<OrganizationTheme | null>>;
   changeOrgTheme: (newThemeKey: OrganizationTypeValue) => void;
 };
 const OrganizationContext = createContext<OrganizationContextProps | undefined>(undefined);
@@ -45,16 +45,16 @@ type OrganizationContextProviderProps = {
 
 export function OrganizationContextProvider({
   children,
-  organization = 'samfundet',
+  organization,
   enabled = true,
 }: OrganizationContextProviderProps) {
-  const [organizationTheme, setOrganizationTheme] = useState<OrganizationTheme>(organizationThemes.samfundet);
+  const [organizationTheme, setOrganizationTheme] = useState<OrganizationTheme | null>(null);
 
   useEffect(() => {
-    if (!enabled) {
+    if (!enabled || !organization) {
       return;
     }
-    setOrganizationTheme(organizationThemes[organization] || organizationThemes.samfundet);
+    setOrganizationTheme(organizationThemes[organization]);
   }, [enabled, organization]);
 
   const changeOrgTheme = (newThemeKey: OrganizationTypeValue) => {
