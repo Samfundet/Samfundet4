@@ -21,7 +21,9 @@ export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdmin
 export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPage';
 export { RecruitmentUsersWithoutInterview } from './RecruitmentUsersWithoutInterview';
 export { RecruitmentGangAllApplicantsAdminPage } from './RecruitmentGangAllApplicantsAdminPage';
+export { RecruitmentApplicantAdminPage } from './RecruitmentApplicantAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
 export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';
+export { SultenMenuItemFormAdminPage } from './SultenMenuItemFormAdminPage';

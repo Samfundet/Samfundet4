@@ -52,8 +52,8 @@ export function InterviewNotesPage() {
   }
 
   function handleUpdateNotes(value: string) {
+    const updatedNotes = value;
     if (recruitmentAdmission[0].interview) {
-      const updatedNotes = value;
       const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
       setInterview(updatedInterview);
     }

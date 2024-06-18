@@ -56,6 +56,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentSeperatePosition,
 )
 
 
@@ -423,6 +424,35 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class FoodPreferenceSerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodCategory
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class MenuItemSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)  # Todo make this work with post
+    food_category = FoodCategorySerializer(read_only=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(CustomBaseSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -472,34 +502,6 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 #            Sulten               #
 # =============================== #
-
-
-class FoodPreferenceSerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = '__all__'
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
 
 
 class TableSerializer(CustomBaseSerializer):
@@ -563,14 +565,13 @@ class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RecruitmentSerializer(CustomBaseSerializer):
-    class Meta:
-        model = Recruitment
-        fields = '__all__'
+class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
+    direction = serializers.IntegerField(label='direction', write_only=True)
 
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_admission_ids = serializers.SerializerMethodField()
+    campus = CampusSerializer()
 
     class Meta:
         model = User
@@ -579,7 +580,9 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'username',
+            'phone_number',
             'email',
+            'campus',
             'recruitment_admission_ids',  # Add this to the fields list
         ]
 
@@ -598,6 +601,24 @@ class InterviewerSerializer(CustomBaseSerializer):
             'email',
             'id',
         ]
+
+
+class RecruitmentSeperatePositionSerializer(CustomBaseSerializer):
+    class Meta:
+        model = RecruitmentSeperatePosition
+        fields = [
+            'name_nb',
+            'name_en',
+            'url',
+        ]
+
+
+class RecruitmentSerializer(CustomBaseSerializer):
+    seperate_positions = RecruitmentSeperatePositionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Recruitment
+        fields = '__all__'
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):
@@ -648,6 +669,8 @@ class ApplicantInterviewSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    gang = GangSerializer()
+
     class Meta:
         model = RecruitmentPosition
         fields = [
@@ -666,7 +689,7 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
         ]
 
 
-class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
 
     class Meta:
@@ -679,6 +702,8 @@ class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
             'withdrawn',
             'interview',
             'created_at',
+            'user',
+            'recruitment',
         ]
         read_only_fields = [
             'applicant_priority',
@@ -717,7 +742,7 @@ class ApplicantInfoSerializer(CustomBaseSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'occupied_timeslots']
 
 
 class InterviewRoomSerializer(CustomBaseSerializer):
@@ -746,11 +771,50 @@ class InterviewSerializer(CustomBaseSerializer):
         return instance
 
 
+class RecruitmentAdmissionForRecruiterSerializer(serializers.ModelSerializer):
+    recruitment_position = RecruitmentPositionForApplicantSerializer()
+    recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
+    interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)
+
+    class Meta:
+        model = RecruitmentAdmission
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'admission_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'withdrawn',
+            'interview_time',
+            'created_at',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'admission_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'interview_time',
+            'withdrawn',
+            'created_at',
+        ]
+
+    def get_interview_time(self, instance: RecruitmentAdmission) -> str | None:
+        return instance.interview.interview_time if instance.interview else None
+
+
 class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
     recruitment_position = RecruitmentPositionSerializer(read_only=True)
+    admission_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:
         model = RecruitmentAdmission
@@ -769,6 +833,9 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
 
         # Update other fields of RecruitmentAdmission instance
         return super().update(instance, validated_data)
+
+    def get_application_count(self, application: RecruitmentAdmission) -> int:
+        return application.user.admissions.filter(recruitment=application.recruitment).count()
 
 
 class UserFeedbackSerializer(serializers.ModelSerializer):
