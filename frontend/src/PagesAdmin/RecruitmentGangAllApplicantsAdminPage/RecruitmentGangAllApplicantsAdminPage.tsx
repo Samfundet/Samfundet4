@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { STATUS } from '~/http_status_codes';
 import { Text } from '~/Components/Text/Text';
 import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
+import { reverse } from '~/named-urls';
 
 export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
@@ -84,7 +85,12 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   ];
 
   const data = admissions.map(function (admission) {
-    const admissionURL = 'todo';
+    const admissionURL = reverse({
+      pattern: ROUTES.frontend.admin_recruitment_applicant,
+      urlParams: {
+        admissionID: admission.id,
+      },
+    });
 
     return [
       {
@@ -95,7 +101,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
         ),
       },
       admission.user.email,
-      admission.user.phonenumber,
+      admission.user?.phone_number,
       { content: <Link url={admissionURL}>{dbT(admission.recruitment_position, 'name')}</Link> },
       admission.interview?.interview_time,
       admission.interview?.interview_location,
