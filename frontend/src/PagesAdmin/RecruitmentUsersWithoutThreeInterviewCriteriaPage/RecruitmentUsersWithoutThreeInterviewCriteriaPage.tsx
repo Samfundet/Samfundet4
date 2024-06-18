@@ -61,7 +61,6 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
       <Text>
         {recruitment?.organization} - {dbT(recruitment, 'name')}
       </Text>
-
     </div>
   );
   return (

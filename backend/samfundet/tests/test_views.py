@@ -825,7 +825,10 @@ def test_get_applicants_without_interviews(
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__applicants_without_interviews)
+    url = reverse(
+        routes.samfundet__applicants_without_interviews,
+        kwargs={'pk': fixture_recruitment.id},
+    )
 
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
@@ -848,7 +851,10 @@ def test_get_applicants_without_interviews_when_interview_is_set(
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__applicants_without_interviews)
+    url = reverse(
+        routes.samfundet__applicants_without_interviews,
+        kwargs={'pk': fixture_recruitment.id},
+    )
 
     # Setting the interview time for the user's admission
     interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Bogstad')
