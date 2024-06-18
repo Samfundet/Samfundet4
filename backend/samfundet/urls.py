@@ -75,7 +75,12 @@ urlpatterns = [
     path('recruitment-withdraw-admission/<int:pk>/', views.RecruitmentAdmissionWithdrawApplicantView.as_view(), name='recruitment_withdraw_admission'),
     path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentAdmissionApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
-    path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
+    path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
+    path(
+        'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
+        views.ApplicantsWithoutThreeInterviewsCriteriaView.as_view(),
+        name='applicants_without_three_interview_criteria',
+    ),
     path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
 ]

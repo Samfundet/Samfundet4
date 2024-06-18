@@ -45,8 +45,8 @@ import {
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentApplicantAdminPage,
-  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
@@ -55,6 +55,7 @@ import {
   AdminLayout,
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
+  RecruitmentUsersWithoutThreeInterviewCriteriaPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
@@ -296,8 +297,12 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_users_without_interview}
-            element={<RecruitmentUsersWithoutInterview />}
+            path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
+            element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
+            element={<RecruitmentUsersWithoutInterviewGangPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}

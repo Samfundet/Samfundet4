@@ -147,6 +147,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tickets]: 'billetter',
   [KEY.common_contact_information]: 'Kontaktinfo',
   [KEY.common_about_samfundet]: 'Om Samfundet',
+  [KEY.common_processed]: 'Prosessert',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Billett',
@@ -236,6 +237,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recruitment_applicants_without_interview]: 'Søkere uten intervju',
+  [KEY.recruitment_applicants_without_interview_help_text]:
+    'Denne oversikten viser alle søkere som mangler en eller intervjutider på verv de har søkt i denne gjengen. Oversikten fremhever vervet som søkeren har rangert høyest i gjengen, og hvilken rangering den er satt til',
+  [KEY.recruitment_not_applicants_without_interviews]: 'Ingen søkere mangler intervju',
+  [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_admissions]: 'Trukkede søknader',
   [KEY.recruitment_rejected_admissions]: 'Søkere som får automatisk avslag',
   [KEY.recruitment_accepted_admissions]: 'Søkere vi har tatt opp',
@@ -249,6 +255,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_three_interviews_criteria_button]:
+    'Vis søkere med 3 eller flere søknader, med færre enn 3 intervjutider satt',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Søkere med 3 eller flere søknader, med færre enn 3 intervjutider satt',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -479,6 +489,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tickets]: 'tickets',
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
+  [KEY.common_processed]: 'Processed',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
@@ -569,6 +580,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
+  [KEY.recruitment_applicants_without_interview]: 'Applicants without interview',
+  [KEY.recruitment_applicants_without_interview_help_text]:
+    'This overview show all applicantss which lack interviews for this recruitment and gang. It shows their most desired position in this gang, and that positions rank overall',
+  [KEY.recruitment_not_applicants_without_interviews]: 'No applicants are lacking interviews',
+  [KEY.recruitment_applicant_top_position]: 'Most desired position',
   [KEY.recruitment_withdrawn_admissions]: 'Withdrawn admissions',
   [KEY.recruitment_rejected_admissions]: 'Automatically rejected applicants',
   [KEY.recruitment_accepted_admissions]: 'Applicants we have contacted and accepted',
@@ -582,6 +598,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
+  [KEY.recruitment_three_interviews_criteria_button]:
+    'Show applicants with three or more applications, with less than three set interviews',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Applicants with three or more applications, with less than three set interviews',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
