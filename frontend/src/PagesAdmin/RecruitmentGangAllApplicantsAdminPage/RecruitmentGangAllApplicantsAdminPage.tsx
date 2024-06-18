@@ -123,12 +123,16 @@ export function RecruitmentGangAllApplicantsAdminPage() {
 
   return (
     <AdminPageLayout title={title} header={header} loading={showSpinner}>
-      <Table
-        columns={tableColumns}
-        data={data}
-        headerColumnClassName={styles.headerCol}
-        cellClassName={styles.cellStyle}
-      />
+      {admissions.length > 0 ? (
+        <Table
+          columns={tableColumns}
+          data={data}
+          headerColumnClassName={styles.headerCol}
+          cellClassName={styles.cellStyle}
+        />
+      ) : (
+        <Text>{t(KEY.recruitment_no_current_admissions_gang)}</Text>
+      )}
     </AdminPageLayout>
   );
 }

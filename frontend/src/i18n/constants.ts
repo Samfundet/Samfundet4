@@ -266,6 +266,9 @@ export const KEY = {
   recruitment_withdrawn: 'recruitment_withdrawn',
   recruitment_withdraw_admission: 'KEY.recruitment_withdraw_admission',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_no_current_positions: 'recruitment_no_current_positions',
+  recruitment_no_current_admissions_position: 'recruitment_no_current_admissions_position',
+  recruitment_no_current_admissions_gang: 'recruitment_no_current_admissions_gang',
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',

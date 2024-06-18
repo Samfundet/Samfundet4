@@ -12,8 +12,7 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentGangAdminPage() {
-  const recruitmentId = useParams().recruitmentId;
-  const gangId = useParams().gangId;
+  const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);

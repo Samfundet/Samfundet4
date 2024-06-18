@@ -672,8 +672,8 @@ export async function getRecruitmentAdmissionForApplicant(
 }
 
 export async function getRecruitmentAdmissionsForGang(
-  gangId: string,
   recruitmentId: string,
+  gangId: string,
 ): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
   const url =
     BACKEND_DOMAIN +
