@@ -212,7 +212,9 @@ class TestRecruitmentApplication:
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
         assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.NOT_SET
 
-    def test_check_applicant_state_wanted(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+    def test_check_applicant_state_wanted(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
         """
         Tests for each state where one admission is wanted,
         and how that affects other admissions state
@@ -290,7 +292,9 @@ class TestRecruitmentApplication:
         assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.TOP_WANTED
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
 
-    def test_check_applicant_state_reserve(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+    def test_check_applicant_state_reserve(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
         """
         Tests for each state where one admission is wanted,
         and how that affects other admissions state

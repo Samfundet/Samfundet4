@@ -77,6 +77,7 @@ from .serializers import (
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentApplicationForApplicantSerializer,
+    RecruitmentApplicationForRecruiterSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
@@ -112,8 +113,8 @@ from .models.recruitment import (
     InterviewRoom,
     Occupiedtimeslot,
     RecruitmentPosition,
-    RecruitmentApplication,
     RecruitmentStatistics,
+    RecruitmentApplication,
 )
 
 # =============================== #

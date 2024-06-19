@@ -56,7 +56,7 @@ export function RecruitmentApplicationFormPage() {
           console.error(error);
         }),
       getRecruitmentApplicationForApplicant(positionID as string).then((res) => {
-        setRecruitmentApplication(res.data);
+        setRecruitmentApplication(res.data.admission);
       }),
     ]).then(() => {
       setLoading(false);
