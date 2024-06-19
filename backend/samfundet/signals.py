@@ -86,11 +86,28 @@ def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, insta
     obj = RecruitmentAdmission.objects.filter(pk=instance.pk).first()
     if not obj:
         return
-    if obj.recruiter_status != instance.recruiter_status and instance.recruiter_status in [
-        RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
-        RecruitmentStatusChoices.CALLED_AND_REJECTED,
-    ]:
-        # Set all others to Automatic rejection
-        for other_admission in RecruitmentAdmission.objects.filter(recruitment=obj.recruitment, user=obj.user).exclude(id=obj.id):
-            other_admission.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
-            other_admission.save()
+    # Check if Status is set to called
+    if obj.recruiter_status != instance.recruiter_status:
+        # Check if Status is changed to called, then set all unset to AUTOMATIC_REJECTION
+        if instance.recruiter_status in [
+            RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+            RecruitmentStatusChoices.CALLED_AND_REJECTED,
+        ]:
+            # Set all others to Automatic rejection
+            for other_admission in RecruitmentAdmission.objects.filter(
+                recruitment=obj.recruitment, user=obj.user, recruiter_status=RecruitmentStatusChoices.NOT_SET
+            ).exclude(id=obj.id):
+                other_admission.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+                other_admission.save()
+
+        # Check if status is reverted from called, this will set all all AUTOMATIC_REJECTION back
+        elif obj.recruiter_status in [
+            RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+            RecruitmentStatusChoices.CALLED_AND_REJECTED,
+        ]:
+            # Set all others to Automatic rejection
+            for other_admission in RecruitmentAdmission.objects.filter(
+                recruitment=obj.recruitment, user=obj.user, recruiter_status=RecruitmentStatusChoices.AUTOMATIC_REJECTION
+            ).exclude(id=obj.id):
+                other_admission.recruiter_status = RecruitmentStatusChoices.NOT_SET
+                other_admission.save()
