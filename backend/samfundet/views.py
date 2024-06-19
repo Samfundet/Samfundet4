@@ -578,11 +578,13 @@ class RecruitmentView(ModelViewSet):
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 
+
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentForRecruiterView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentForRecruiterSerializer
     queryset = Recruitment.objects.all()
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
@@ -900,7 +902,6 @@ class ActiveRecruitmentsView(ListAPIView):
         """Returns all active recruitments"""
         # TODO Use is not completed instead of actual_application_deadline__gte
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
-
 
 
 class InterviewRoomView(ModelViewSet):
