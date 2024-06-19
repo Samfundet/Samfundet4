@@ -2,24 +2,30 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { reverse } from '~/named-urls';
-import { Page, SamfundetLogoSpinner, Link, Button } from '~/Components';
+import { useAuthContext } from '~/context/AuthContext';
+import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentPosition,
   getRecruitmentAdmissionForApplicant,
-  putRecruitmentAdmission,
+  getRecruitmentPosition,
   getRecruitmentPositionsGang,
+  putRecruitmentAdmission,
+  withdrawRecruitmentAdmissionApplicant,
 } from '~/api';
 import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentAdmissionFormPage.module.scss';
-import { useAuthContext } from '~/AuthContext';
-import { STATUS } from '~/http_status_codes';
+import { Text } from '~/Components/Text/Text';
+
+type FormProps = {
+  admission_text: string;
+};
 
 export function RecruitmentAdmissionFormPage() {
   const { user } = useAuthContext();
@@ -55,7 +61,7 @@ export function RecruitmentAdmissionFormPage() {
     ]).then(() => {
       setLoading(false);
     });
-  }, [positionID]);
+  }, [positionID, standardNavigate, t]);
 
   useEffect(() => {
     getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
@@ -65,10 +71,37 @@ export function RecruitmentAdmissionFormPage() {
     );
   }, [recruitmentPosition]);
 
-  function handleOnSubmit(data: RecruitmentAdmissionDto) {
-    putRecruitmentAdmission(data, positionID ? +positionID : 1)
+  function withdrawAdmission() {
+    if (positionID) {
+      withdrawRecruitmentAdmissionApplicant(positionID)
+        .then(() => {
+          navigate({
+            url: reverse({
+              pattern: ROUTES.frontend.recruitment_application_overview,
+              urlParams: {
+                recruitmentID: recruitmentPosition?.recruitment,
+              },
+            }),
+          });
+          toast.success(t(KEY.common_creation_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    }
+  }
+
+  function handleOnSubmit(data: FormProps) {
+    putRecruitmentAdmission(data as Partial<RecruitmentAdmissionDto>, positionID ? +positionID : 1)
       .then(() => {
-        navigate({ url: ROUTES.frontend.home });
+        navigate({
+          url: reverse({
+            pattern: ROUTES.frontend.recruitment_application_overview,
+            urlParams: {
+              recruitmentID: recruitmentPosition?.recruitment,
+            },
+          }),
+        });
         toast.success(t(KEY.common_creation_successful));
       })
       .catch(() => {
@@ -123,7 +156,6 @@ export function RecruitmentAdmissionFormPage() {
             <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
-
           <div className={styles.otherpositions}>
             <h2 className={styles.subheader}>
               {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
@@ -151,19 +183,42 @@ export function RecruitmentAdmissionFormPage() {
             })}
           </div>
         </div>
+        {recruitmentAdmission && (
+          <div className={styles.withdrawnContainer}>
+            {recruitmentAdmission?.withdrawn ? (
+              <Text size="l" as="i" className={styles.withdrawnText}>
+                {t(KEY.recruitment_withdrawn_message)}
+              </Text>
+            ) : (
+              <Button theme="samf" display="basic" onClick={() => withdrawAdmission()}>
+                {t(KEY.recruitment_withdraw_admission)}
+              </Button>
+            )}
+          </div>
+        )}
         {user ? (
           <SamfForm
-            initialData={{ admission_text: recruitmentAdmission?.admission_text }}
+            initialData={recruitmentAdmission as FormProps}
             onSubmit={handleOnSubmit}
             submitText={submitText}
-            validateOnInit={true}
             devMode={false}
           >
             <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
-            <SamfFormField field="admission_text" type="text-long" />{' '}
+            <SamfFormField field="admission_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
-          <div>TODO add login redirect</div>
+          <div>
+            <Button
+              theme="samf"
+              onClick={() =>
+                navigate({
+                  url: ROUTES.frontend.login,
+                })
+              }
+            >
+              {t(KEY.common_login)}
+            </Button>
+          </div>
         )}
       </div>
     </Page>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -11,6 +11,12 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LoginPage.module.scss';
+import { lowerCapitalize } from '~/utils';
+
+type FormProps = {
+  username: string;
+  password: string;
+};
 
 export function LoginPage() {
   const { t } = useTranslation();
@@ -29,9 +35,9 @@ export function LoginPage() {
     }
   }, [user, fallbackUrl, navigate]);
 
-  function handleLogin(formData: Record<string, string>) {
+  function handleLogin(formData: FormProps) {
     setSubmitting(true);
-    login(formData['name'], formData['password'])
+    login(formData.username, formData.password)
       .then((status) => {
         if (status === STATUS.HTTP_202_ACCEPTED) {
           getUser().then((user) => {
@@ -57,8 +63,18 @@ export function LoginPage() {
         <div className={styles.content_container}>
           <SamfForm onSubmit={handleLogin} isDisabled={submitting} submitText={t(KEY.common_login) ?? ''}>
             <h1 className={styles.header_text}>{t(KEY.loginpage_internal_login)}</h1>
-            <SamfFormField field="name" type="text" label={t(KEY.loginpage_username) ?? ''} />
-            <SamfFormField field="password" type="password" label={t(KEY.common_password) ?? ''} />
+            <SamfFormField<string, FormProps>
+              required={true}
+              field="username"
+              type="text"
+              label={t(KEY.loginpage_username)}
+            />
+            <SamfFormField<string, FormProps>
+              required={true}
+              field="password"
+              type="password"
+              label={lowerCapitalize(t(KEY.common_password))}
+            />
             {loginFailed && <p className={styles.login_failed_comment}>{t(KEY.loginpage_login_failed)}</p>}
           </SamfForm>
           <Link to={ROUTES.frontend.signup} className={styles.link}>

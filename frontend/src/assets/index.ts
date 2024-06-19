@@ -45,3 +45,6 @@ export { default as rundhallen } from './venues/rundhallen.jpg';
 export { default as selskapssiden } from './venues/selskapssiden.jpg';
 export { default as storsalen } from './venues/storsalen.jpg';
 export { default as strossa } from './venues/strossa.jpg';
+
+// Fun
+export { default as sprut } from './sprut.png';
