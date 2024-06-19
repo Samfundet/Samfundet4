@@ -14,5 +14,8 @@ __pycache__
 # Script for debugging purposes.
 root/scripts/testing.py
 
+# Migrations
+samfundet/migrations/0001_initial.py
+
 # File to trigger restart of uwsgi server in production environment.
 reload
