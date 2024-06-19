@@ -56,8 +56,8 @@ from .models.recruitment import (
     InterviewRoom,
     Occupiedtimeslot,
     RecruitmentPosition,
-    RecruitmentApplication,
     RecruitmentStatistics,
+    RecruitmentApplication,
     RecruitmentSeperatePosition,
 )
 
