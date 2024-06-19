@@ -21,6 +21,8 @@ import {
   OrganizationDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
+  RecruitmentApplicationStateChoicesDto,
+  RecruitmentApplicationStateDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   RecruitmentUserDto,
@@ -681,7 +683,7 @@ export async function getRecruitmentApplicationsForRecruitmentPosition(
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_applications_for_position_detail,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_detail,
       urlParams: { pk: recruitmentPositionId },
     });
   return await axios.get(url, { withCredentials: true });
@@ -699,6 +701,39 @@ export async function putRecruitmentApplicationForGang(
     });
   const response = await axios.put<RecruitmentApplicationDto>(url, admission, { withCredentials: true });
   return response;
+}
+
+export async function updateRecruitmentApplicationStateForGang(
+  admissionId: string,
+  admission: Partial<RecruitmentApplicationStateDto>,
+): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_application_update_state_gang,
+      urlParams: { pk: admissionId },
+    });
+  return await axios.put(url, admission, { withCredentials: true });
+}
+
+export async function updateRecruitmentApplicationStateForPosition(
+  admissionId: string,
+  admission: Partial<RecruitmentApplicationStateDto>,
+): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_application_update_state_position,
+      urlParams: { pk: admissionId },
+    });
+  return await axios.put(url, admission, { withCredentials: true });
+}
+
+export async function getRecruitmentApplicationStateChoices(): Promise<
+  AxiosResponse<RecruitmentApplicationStateChoicesDto>
+> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_application_states_choices;
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
@@ -754,7 +789,7 @@ export async function withdrawRecruitmentApplicationApplicant(positionId: number
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_withdraw_admission,
+      pattern: ROUTES.backend.samfundet__recruitment_withdraw_application,
       urlParams: { pk: positionId },
     });
   const response = await axios.put(url, {}, { withCredentials: true });

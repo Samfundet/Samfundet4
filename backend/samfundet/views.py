@@ -78,6 +78,7 @@ from .serializers import (
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
+    RecruitmentApplicationUpdateForGangSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
@@ -116,6 +117,7 @@ from .models.recruitment import (
     RecruitmentStatistics,
     RecruitmentApplication,
 )
+from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 # =============================== #
 #          Home Page              #
@@ -789,6 +791,67 @@ class RecruitmentApplicationForGangView(ModelViewSet):
 
         serializer = self.get_serializer(admissions, many=True)
         return Response(serializer.data)
+
+
+class RecruitmentApplicationStateChoicesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request) -> Response:
+        return Response(
+            {'recruiter_priority': RecruitmentPriorityChoices.choices, 'recruiter_status': RecruitmentStatusChoices.choices}, status=status.HTTP_200_OK
+        )
+
+
+class RecruitmentApplicationForGangUpdateStateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentApplicationUpdateForGangSerializer
+
+    def put(self, request: Request, pk: int) -> Response:
+        application = get_object_or_404(RecruitmentApplication, pk=pk)
+
+        # TODO add check if user has permission to update for GANG
+        update_serializer = self.serializer_class(data=request.data)
+        if update_serializer.is_valid():
+            # Should return update list of applications on correct
+            if 'recruiter_priority' in update_serializer.data:
+                application.recruiter_priority = update_serializer.data['recruiter_priority']
+            if 'recruiter_status' in update_serializer.data:
+                application.recruiter_status = update_serializer.data['recruiter_status']
+            application.save()
+            applications = RecruitmentApplication.objects.filter(
+                recruitment_position__gang=application.recruitment_position.gang,
+                recruitment=application.recruitment,
+            )
+            application.update_applicant_state()
+            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RecruitmentApplicationForPositionUpdateStateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentApplicationUpdateForGangSerializer
+
+    def put(self, request: Request, pk: int) -> Response:
+        application = get_object_or_404(RecruitmentApplication, pk=pk)
+
+        # TODO add check if user has permission to update for GANG
+        update_serializer = self.serializer_class(data=request.data)
+        if update_serializer.is_valid():
+            # Should return update list of applications on correct
+            if 'recruiter_priority' in update_serializer.data:
+                application.recruiter_priority = update_serializer.data['recruiter_priority']
+            if 'recruiter_status' in update_serializer.data:
+                application.recruiter_status = update_serializer.data['recruiter_status']
+            application.save()
+            application.update_applicant_state()
+            applications = RecruitmentApplication.objects.filter(
+                recruitment_position=application.recruitment_position,  # Only change from above
+                recruitment=application.recruitment,
+            )
+            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):

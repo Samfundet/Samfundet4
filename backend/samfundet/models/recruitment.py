@@ -8,7 +8,6 @@ from collections import defaultdict
 
 from django.db import models, transaction
 from django.utils import timezone
-from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
@@ -308,13 +307,13 @@ class RecruitmentApplication(CustomBaseModel):
 
         super().save(*args, **kwargs)
 
-    def update_applicant_state(self) -> QuerySet[RecruitmentApplication]:
-        admissions = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
+    def update_applicant_state(self) -> None:
+        applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
         # Get top priority
-        top_wanted = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
-        top_reserved = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
+        top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
+        top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
         with transaction.atomic():
-            for adm in admissions:
+            for adm in applications:
                 # I hate conditionals, so instead of checking all forms of condtions
                 # I use memory array indexing formula (col+row_size*row) for matrixes, to index into state
                 has_priority = 0

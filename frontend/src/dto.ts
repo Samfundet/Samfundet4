@@ -438,6 +438,16 @@ export type RecruitmentApplicationRecruiterDto = {
   other_admissions: RecruitmentApplicationDto[];
 };
 
+export type RecruitmentApplicationStateDto = {
+  recruiter_priority?: number;
+  recruiter_status?: number;
+};
+
+export type RecruitmentApplicationStateChoicesDto = {
+  recruiter_priority: [number, string][];
+  recruiter_status: [number, string][];
+};
+
 export type FeedbackDto = {
   text: string;
   screen_resolution: string;

@@ -43,6 +43,9 @@ router.register('recruitment-position', views.RecruitmentPositionView, 'recruitm
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
 router.register('recruitment-applications-for-group', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_group')
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
+router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
+router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
+router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('interview', views.InterviewView, 'interview')
 
 app_name = 'samfundet'
@@ -69,8 +72,27 @@ urlpatterns = [
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
-    path('recruitment-applications-recruiter/<str:admission_id>/', views.RecruitmentApplicationForRecruitersView.as_view(), name='recruitment_applications_recruiter'),
-    path('recruitment-withdraw-admission/<int:pk>/', views.RecruitmentApplicationWithdrawApplicantView.as_view(), name='recruitment_withdraw_admission'),
+    path(
+        'recruitment-application-states-choices',
+        views.RecruitmentApplicationStateChoicesView.as_view(),
+        name='recruitment_application_states_choices',
+    ),
+    path(
+        'recruitment-application-update-state-gang/<slug:pk>/',
+        views.RecruitmentApplicationForGangUpdateStateView.as_view(),
+        name='recruitment_application_update_state_gang',
+    ),
+    path(
+        'recruitment-application-update-state-position/<slug:pk>/',
+        views.RecruitmentApplicationForPositionUpdateStateView.as_view(),
+        name='recruitment_application_update_state_position',
+    ),
+    path(
+        'recruitment-application-recruiter/<str:application_id>/',
+        views.RecruitmentApplicationForRecruitersView.as_view(),
+        name='recruitment_applications_recruiter',
+    ),
+    path('recruitment-withdraw-application/<int:pk>/', views.RecruitmentApplicationWithdrawApplicantView.as_view(), name='recruitment_withdraw_application'),
     path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentApplicationApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),

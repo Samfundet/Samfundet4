@@ -54,10 +54,11 @@ from .models.recruitment import (
     InterviewRoom,
     Occupiedtimeslot,
     RecruitmentPosition,
-    RecruitmentApplication,
     RecruitmentStatistics,
+    RecruitmentApplication,
     RecruitmentSeperatePosition,
 )
+from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -820,6 +821,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
     def update(self, instance: RecruitmentApplication, validated_data: dict) -> RecruitmentApplication:
+        # More or less this is rough, interview should be its own thing
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
@@ -835,6 +837,11 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
 
     def get_application_count(self, application: RecruitmentApplication) -> int:
         return application.user.admissions.filter(recruitment=application.recruitment).count()
+
+
+class RecruitmentApplicationUpdateForGangSerializer(serializers.Serializer):
+    recruiter_priority = serializers.ChoiceField(choices=RecruitmentPriorityChoices.choices, required=False)
+    recruiter_status = serializers.ChoiceField(choices=RecruitmentStatusChoices.choices, required=False)
 
 
 class UserFeedbackSerializer(serializers.ModelSerializer):
