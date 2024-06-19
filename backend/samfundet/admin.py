@@ -629,7 +629,7 @@ class RecruitmentApplicationInline(admin.TabularInline):
 
     def linked_admission_text(self, obj: RecruitmentApplication) -> str:
         """Returns a clickable link leading to the admin change page of the RecruitmentApplication instance."""
-        url = reverse(admin__samfundet_RecruitmentApplication_change, args=[obj.pk])
+        url = reverse(admin__samfundet_recruitmentapplication_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
 
 
