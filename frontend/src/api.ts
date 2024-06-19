@@ -634,7 +634,7 @@ export async function getRecruitmentApplicationsForApplicant(
   return response;
 }
 
-export async function getRecruitmentApplicationForApplicant(
+export async function getRecruitmentApplicationsForRecruiter(
   admissionID: string,
 ): Promise<AxiosResponse<RecruitmentApplicationRecruiterDto>> {
   const url =

@@ -7,7 +7,7 @@ import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentApplicationForApplicant,
+  getRecruitmentApplicationsForRecruiter,
   getRecruitmentPosition,
   getRecruitmentPositionsGang,
   putRecruitmentApplication,
@@ -55,7 +55,7 @@ export function RecruitmentApplicationFormPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-      getRecruitmentApplicationForApplicant(positionID as string).then((res) => {
+      getRecruitmentApplicationsForRecruiter(positionID as string).then((res) => {
         setRecruitmentApplication(res.data.admission);
       }),
     ]).then(() => {
