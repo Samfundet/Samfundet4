@@ -142,7 +142,7 @@ export function RecruitmentPositionOverviewPage() {
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_accepted_admissions_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
-          <ProcessedApplicants data={acceptedApplicants} type="accepted" />
+          <ProcessedApplicants data={acceptedApplicants} type="accepted" revertStateFunction={updateAdmissionState} />
         ) : (
           <Text as="i" className={styles.subText}>
             {t(KEY.recruitment_accepted_admissions_empty_text)}
@@ -156,7 +156,7 @@ export function RecruitmentPositionOverviewPage() {
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_rejected_admissions_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
-          <ProcessedApplicants data={rejectedApplicants} type="rejected" />
+          <ProcessedApplicants data={rejectedApplicants} type="rejected" revertStateFunction={updateAdmissionState} />
         ) : (
           <Text as="i" className={styles.subText}>
             {t(KEY.recruitment_rejected_admissions_empty_text)}
