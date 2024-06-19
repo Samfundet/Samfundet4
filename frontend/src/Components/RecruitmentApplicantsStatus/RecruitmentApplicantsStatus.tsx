@@ -1,6 +1,5 @@
 import styles from './RecruitmentApplicantsStatus.module.scss';
 import { RecruitmentAdmissionDto, RecruitmentAdmissionStateDto } from '~/dto';
-import { useEffect, useState } from 'react';
 import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
