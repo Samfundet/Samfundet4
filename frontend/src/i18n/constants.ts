@@ -262,7 +262,7 @@ export const KEY = {
   recruitment_rejected_admissions_empty_text: 'recruitment_rejected_admissions_empty_text ',
   recruitment_withdrawn_admissions_empty_text: 'recruitment_withdrawn_admissions_empty_text',
   recruitment_withdrawn: 'recruitment_withdrawn',
-  recruitment_withdraw_admission: 'KEY.recruitment_withdraw_admission',
+  recruitment_withdraw_application: 'KEY.recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
   // Admin:
   admin_organizer: 'admin_organizer',

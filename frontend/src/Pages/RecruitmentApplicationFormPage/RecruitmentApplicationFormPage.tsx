@@ -191,7 +191,7 @@ export function RecruitmentApplicationFormPage() {
               </Text>
             ) : (
               <Button theme="samf" display="basic" onClick={() => withdrawAdmission()}>
-                {t(KEY.recruitment_withdraw_admission)}
+                {t(KEY.recruitment_withdraw_application)}
               </Button>
             )}
           </div>

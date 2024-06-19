@@ -247,7 +247,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_rejected_admissions_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
   [KEY.recruitment_withdrawn_admissions_empty_text]: 'Ingen trekte søknader.',
   [KEY.recruitment_withdrawn]: 'Trukket',
-  [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
+  [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
 
   // Admin:
@@ -580,7 +580,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_rejected_admissions_empty_text]: 'No applicants are marked to receive an automatic rejection email.',
   [KEY.recruitment_withdrawn_admissions_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
-  [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
+  [KEY.recruitment_withdraw_application]: 'Withdraw admission',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
 
   // Admin:
