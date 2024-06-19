@@ -1,5 +1,5 @@
 import styles from './RecruitmentApplicantsStatus.module.scss';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentAdmissionDto, RecruitmentAdmissionStateDto } from '~/dto';
 import { useEffect, useState } from 'react';
 import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ type RecruitmentApplicantsStatusProps = {
   recruitmentId: number | string | undefined;
   gangId: number | string | undefined;
   positionId: number | string | undefined;
+  updateStateFunction: (id: string, data: RecruitmentAdmissionStateDto) => void;
 };
 
 // TODO add backend to fetch these
@@ -48,14 +49,10 @@ export function RecruitmentApplicantsStatus({
   recruitmentId,
   gangId,
   positionId,
+  updateStateFunction,
 }: RecruitmentApplicantsStatusProps) {
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
-
-  useEffect(() => {
-    setRecruitmentApplicants(applicants);
-  }, [applicants]);
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: true },
@@ -68,25 +65,19 @@ export function RecruitmentApplicantsStatus({
   ];
 
   function updateAdmissions(id: string, field: string, value: string | number | undefined) {
-    setRecruitmentApplicants(
-      recruitmentApplicants.map((element: RecruitmentAdmissionDto) => {
-        if (element.id === id) {
-          switch (field) {
-            case editChoices.update_recruitment_priority:
-              element = { ...element, recruiter_priority: value as number };
-              break;
-            case editChoices.update_recruitment_status:
-              element = { ...element, recruiter_status: value as number };
-              break;
-          }
-        }
-        return element;
-      }),
-    );
-    return value;
+    if (value) {
+      switch (field) {
+        case editChoices.update_recruitment_priority:
+          updateStateFunction(id, { recruiter_priority: value as number });
+          break;
+        case editChoices.update_recruitment_status:
+          updateStateFunction(id, { recruiter_status: value as number });
+          break;
+      }
+    }
   }
 
-  const data = recruitmentApplicants.map(function (admission) {
+  const data = applicants.map(function (admission) {
     return [
       {
         value: admission.user.first_name,

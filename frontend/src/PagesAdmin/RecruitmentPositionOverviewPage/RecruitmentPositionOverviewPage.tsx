@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 
-import { getRecruitmentAdmissionsForGang } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentAdmissionsForGang, updateRecruitmentAdmissionStateForPosition } from '~/api';
+import { RecruitmentAdmissionDto, RecruitmentAdmissionStateDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -12,6 +12,7 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ProcessedApplicants } from './components';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { Text } from '~/Components/Text/Text';
+import { toast } from 'react-toastify';
 
 export function RecruitmentPositionOverviewPage() {
   const { recruitmentId, gangId, positionId } = useParams();
@@ -60,6 +61,47 @@ export function RecruitmentPositionOverviewPage() {
       });
   }, [recruitmentId, gangId, positionId]);
 
+  const updateAdmissionState = (id: string, data: RecruitmentAdmissionStateDto) => {
+    updateRecruitmentAdmissionStateForPosition(id, data)
+      .then((data) => {
+        setRecruitmentApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status == 0 &&
+              recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setWithdrawnApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setRejectedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
+              recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setAcceptedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status == 1 &&
+              recruitmentApplicant.recruitment_position?.toString() == positionId,
+          ),
+        );
+        setShowSpinner(false);
+      })
+      .catch((data) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(data);
+      });
+  };
+
   const title = t(KEY.admin_information_manage_title);
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
@@ -91,6 +133,7 @@ export function RecruitmentPositionOverviewPage() {
         recruitmentId={recruitmentId}
         gangId={gangId}
         positionId={positionId}
+        updateStateFunction={updateAdmissionState}
       />
 
       <div className={styles.sub_container}>
