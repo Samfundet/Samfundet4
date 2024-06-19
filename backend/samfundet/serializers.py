@@ -772,7 +772,7 @@ class InterviewSerializer(CustomBaseSerializer):
         return instance
 
 
-class RecruitmentApplicationForGangSerializer(serializers.ModelSerializer):
+class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
     recruitment_position = RecruitmentPositionForApplicantSerializer()
     recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
     interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)

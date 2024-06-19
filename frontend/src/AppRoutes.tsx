@@ -89,7 +89,10 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
-        <Route path={ROUTES.frontend.recruitment_application_overview} element={<RecruitmentApplicationsOverviewPage />}/>
+        <Route
+          path={ROUTES.frontend.recruitment_application_overview}
+          element={<RecruitmentApplicationsOverviewPage />}
+        />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
         <Route path={ROUTES.frontend.luka} element={<></>} />
