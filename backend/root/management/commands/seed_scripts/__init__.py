@@ -16,10 +16,11 @@ from . import (
     documents,
     textitems,
     recruitment,
-    oganizations,
+    organizations,
     information_pages,
     recruitment_position,
     recruitment_admissions,
+    recruitment_seperate_position,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -42,10 +43,11 @@ SEED_SCRIPTS = [
     ('information_page', information_pages.seed),
     ('textitems', textitems.seed),
     ('blogposts', blogposts.seed),
-    ('organization', oganizations.seed),
+    ('organization', organizations.seed),
     ('merch', merch.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
+    ('recruitment_seperate_position', recruitment_seperate_position.seed),
     ('recruitment_admissions', recruitment_admissions.seed),
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
