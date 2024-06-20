@@ -4,7 +4,10 @@ import { TagDto } from '~/dto';
 import { COLORS } from '~/types';
 import { useClickOutside } from '~/hooks';
 import { isColorDark } from '~/utils';
+import { KEY } from '~/i18n/constants';
+import { useTranslation } from 'react-i18next';
 
+// Used to check if TagSelect "box" is higher than 4.5 rem
 const FOUR_POINT_FIVE_REM = 4.5;
 
 type TagSelectProps = {
@@ -13,6 +16,7 @@ type TagSelectProps = {
 };
 
 export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
+  const { t } = useTranslation();
   // tag options, like in an HTML select element
   // uses set because it is easier to crosscheck tagOptions and selectedTags, I feel the Set api can be easier
   // for humans to read
@@ -84,24 +88,26 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
   // tag representation
 
   const tagElement = (tag: TagDto) => {
-    const backgroundColor = tag.color ? `${tag.color}` : COLORS.orange_ligher;
-
-    const textColor = isColorDark(tag.color) ? COLORS.white : COLORS.black;
-
+    const isSelected = selectedTags.has(tag);
+    const backgroundColor = isSelected ? (tag.color ? `${tag.color}` : COLORS.orange_ligher) : COLORS.grey_4;
+    const textColor = isSelected ? (isColorDark(tag.color) ? COLORS.white : COLORS.black) : COLORS.black;
+    const style = {
+      backgroundColor: backgroundColor,
+      color: textColor,
+    };
+    if (!tagOptionsVisible) {
+      Object.assign(style, {
+        border: `1px solid ${COLORS.black}`,
+      });
+    }
     return (
       <p
-        key={tag.id}
+        key={tag.name}
         className={styles.tag}
         onClick={(e) => toggleTag(tag.name, e)}
         // tags have support for a color in backend, so that they stand out from each other
         // when the user has selected some tags and click outside the container the tags appear to "lock in"
-        style={{
-          backgroundColor: backgroundColor,
-          color: textColor,
-          ...(tagOptionsVisible
-            ? { border: 'none' }
-            : { border: `1px solid ${COLORS.blue_deeper}`, boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.2)' }),
-        }}
+        style={style}
       >
         {tag.name}
       </p>
@@ -122,7 +128,7 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
       !existingTags.some((tag) => tag.name === tagSearch) &&
       !filteredTags.some((tag) => tag.name === tagSearch)
     ) {
-      filteredTags.push({ id: -1, name: tagSearch, color: '' });
+      filteredTags.push({ name: tagSearch, color: '' });
     }
 
     return filteredTags.map((tag) => tagElement(tag));
@@ -149,7 +155,7 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
           value={tagSearch}
           onFocus={() => setTagOptionsVisible(true)}
           className={styles.tagSearch}
-          placeholder={'Søk...'}
+          placeholder={t(KEY.common_search) + '...'}
         />
         {selectedTagsContainer().length > 0 && (
           <div className={styles.selectedContainer} ref={selectedContainerRef}>

@@ -103,7 +103,7 @@ def seed():
         for position in created_positions:
             random_tags = random.sample(all_tags, 2)
             for tag in random_tags:
-                position_tags_to_create.add((position.id, tag.id))
+                position_tags_to_create.add((position.id, tag.name))
 
         # Prepare objects for bulk creation
         position_tags_to_create = [

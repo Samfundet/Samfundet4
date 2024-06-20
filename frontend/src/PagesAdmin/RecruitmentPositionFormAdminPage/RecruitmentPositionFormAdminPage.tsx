@@ -77,7 +77,6 @@ export function RecruitmentPositionFormAdminPage() {
   useEffect(() => {
     getRecruitmentPositionTagList()
       .then((response) => {
-        console.log(response);
         setExcitingTags(response.data);
       })
       .catch((error) => {

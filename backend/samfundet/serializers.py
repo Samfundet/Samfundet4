@@ -605,7 +605,7 @@ class InterviewerSerializer(CustomBaseSerializer):
 class RecruitmentPositionTagSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentPositionTag
-        fields = ['name', 'id', 'color']
+        fields = ['name', 'color']
 
     def _validate_name(self, value: str) -> str:
         if re.search(r'[<>]', value):

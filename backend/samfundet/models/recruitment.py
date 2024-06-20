@@ -88,8 +88,7 @@ class Recruitment(CustomBaseModel):
 
 
 class RecruitmentPositionTag(CustomBaseModel):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100, help_text='Tags for the position')
+    name = models.CharField(max_length=15, primary_key=True, help_text='Tags for the position')
     color = models.CharField(max_length=7, null=True, blank=True)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
@@ -118,7 +117,7 @@ class RecruitmentPosition(CustomBaseModel):
 
     norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting')
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,

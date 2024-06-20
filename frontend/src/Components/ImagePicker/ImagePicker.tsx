@@ -55,6 +55,7 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
             </>
           )}
         </div>
+        {/* TODO tags and other metadata */}
       </div>
       <div className={styles.image_container}>{images.map((image) => renderImage(image))}</div>
     </div>

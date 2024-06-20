@@ -24,7 +24,7 @@
 .tag{
   padding: 0.25rem;
   border-radius: 0.25rem;
-  /* Disable text select */
+  /* Disable text highlight */
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
@@ -54,6 +54,7 @@
     background-color: $grey-0;
   }
 }
+
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .unselectedContainer::-webkit-scrollbar {
@@ -99,7 +100,7 @@
   }
 }
 
-.unselectedContainer > .tag{
+.unselectedContainer > .tag {
   width: 100%;
   border-radius: 0;
 }
