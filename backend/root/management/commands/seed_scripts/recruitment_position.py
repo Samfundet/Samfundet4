@@ -51,21 +51,20 @@ TAGS = [
 ]
 
 
-def seed():
-    yield 0, 'recruitment_positions'
-    gangs = Gang.objects.all()
-    recruitments = Recruitment.objects.all()
-
-    # Fetch all existing tags and create a dictionary with tag names as keys
+def create_tags() -> list:
     existing_tags = {tag.name: tag for tag in RecruitmentPositionTag.objects.all()}
 
     # Create or update tags with the specified color
     for tag_data in TAGS:
-        tag, created = RecruitmentPositionTag.objects.update_or_create(name=tag_data['name'], defaults={'color': tag_data['color']})
+        tag = RecruitmentPositionTag.objects.update_or_create(name=tag_data['name'], defaults={'color': tag_data['color']})[0]
         existing_tags[tag.name] = tag
 
-    all_tags = list(existing_tags.values())
+    return list(existing_tags.values())
 
+
+def create_positions() -> list:
+    recruitments = Recruitment.objects.all()
+    gangs = Gang.objects.all()
     positions_to_create = []
 
     for gang in gangs:
@@ -82,6 +81,15 @@ def seed():
                     }
                 )
                 positions_to_create.append(RecruitmentPosition(**position_data))
+
+    return positions_to_create
+
+
+def seed():
+    yield 0, 'recruitment_positions'
+
+    all_tags = create_tags()
+    positions_to_create = create_positions()
 
     # Use a transaction to ensure atomicity
     with transaction.atomic():
