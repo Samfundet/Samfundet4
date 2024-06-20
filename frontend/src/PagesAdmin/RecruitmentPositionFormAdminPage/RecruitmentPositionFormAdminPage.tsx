@@ -86,10 +86,6 @@ export function RecruitmentPositionFormAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log(newTags);
-  }, [newTags]);
-
   const initialData: Partial<RecruitmentPositionDto> = {
     name_nb: position?.name_nb,
     name_en: position?.name_en,
