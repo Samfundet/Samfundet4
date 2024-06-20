@@ -5,6 +5,7 @@ import { ProgressBar, Button } from '~/Components';
 import { Table, TableRow } from '~/Components/Table';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
+import { toPercentage } from '~/utils';
 
 export function RecruitmentProgression() {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ export function RecruitmentProgression() {
   const [admittedCount, setAdmittedCount] = useState<number>(-1);
   const [rejectionEmailCount, setRejectionEmailCount] = useState<number>(-1);
   const [tableRows, setTableRowsState] = useState<TableRow[]>([]);
+  const ONE_HUNDRED_PERCENT = 1;
 
   const mock_fetched_data = [
     { team: 'Markedsføringsgjenge', applications: 20, processed: 19, admitted: 9, rejected: 10 },
@@ -28,7 +30,7 @@ export function RecruitmentProgression() {
       //TODO: add dynamic data and might need backend features (in ISSUE #1110)
       return;
     }
-
+    //TODO: get calculated data from backend (in ISSUE #1110)
     const totalApps = mock_fetched_data.reduce((sum, current) => sum + current.applications, 0);
     const totalProcessed = mock_fetched_data.reduce((sum, current) => sum + current.processed, 0);
     const totalAdmitted = mock_fetched_data.reduce((sum, current) => sum + current.admitted, 0);
@@ -67,14 +69,7 @@ export function RecruitmentProgression() {
     ]);
     setTableRowsState(rows);
   };
-  const toPercentage = (floatNum: number | undefined) => {
-    if (floatNum) {
-      const percentage = floatNum * 100;
-      return percentage.toString().slice(0, 4) + '%';
-    } else {
-      return 'N/A';
-    }
-  };
+
   return (
     <div className={styles.container}>
       <Text as={'strong'} size={'xl'}>
@@ -111,7 +106,7 @@ export function RecruitmentProgression() {
             {rejectionEmailCount} {t(KEY.recruitment_applicants)} {t(KEY.common_have)} {t(KEY.common_received)}{' '}
             {t(KEY.recruitment_rejection_email)}
           </Text>
-          {progression < 1 ? (
+          {progression < ONE_HUNDRED_PERCENT ? (
             <Text size={'m'} as={'strong'}>
               {t(KEY.common_create)} {t(KEY.recruitment_rejection_email)}: {t(KEY.common_it)} {t(KEY.common_is)}{' '}
               {t(KEY.common_possible)} {t(KEY.common_when)} {t(KEY.common_all)} {t(KEY.recruitment_applications)}{' '}
@@ -119,7 +114,7 @@ export function RecruitmentProgression() {
             </Text>
           ) : (
             <Button
-              theme={'samf'}
+              theme={'green'}
               onClick={() => {
                 alert('Skal navigere til siden hvor man lager avslagsepost');
               }}
