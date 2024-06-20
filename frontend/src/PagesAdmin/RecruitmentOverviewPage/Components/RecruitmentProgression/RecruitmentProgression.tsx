@@ -102,6 +102,7 @@ export function RecruitmentProgression() {
             </ul>
           </Text>
         </div>
+        <hr className={styles.lineDivider} />
         <div className={styles.avslagsepostContainer}>
           <Text size={'l'} as={'strong'}>
             {t(KEY.recruitment_automatic_rejection)}

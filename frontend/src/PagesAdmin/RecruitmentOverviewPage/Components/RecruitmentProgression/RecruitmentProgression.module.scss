@@ -20,8 +20,6 @@
   display: grid;
   grid-template-rows: 1fr 1fr;
   place-items: center;
-  border: 2px solid black;
-  border-radius: 0.15rem;
 }
 
 .progressReport{
@@ -30,8 +28,6 @@
   gap: 1rem;
   margin: 1rem;
   padding: 0.5rem;
-  border: 2px solid black;
-  border-radius: 0.15rem;
 }
 
 .avslagsepostContainer{
@@ -40,6 +36,8 @@
   gap: 1rem;
   margin: 1rem;
   padding: 0.5rem;
-  border: 2px solid black;
-  border-radius: 0.15rem;
+}
+
+.lineDivider{
+  width: 100%;
 }
