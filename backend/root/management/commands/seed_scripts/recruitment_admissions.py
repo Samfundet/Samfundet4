@@ -19,9 +19,10 @@ def seed():
     positions = RecruitmentPosition.objects.all()
     users = User.objects.all()
     created_count = 0
+    admissions_to_create = []
 
     for position_index, position in enumerate(positions):
-        for _ in range(randint(0, 5)):  # Create between 0 and 5 instances for each position
+        for _ in range(randint(1, 15)):  # Create between 1 and 15 instances for each position
             admission_data = ADMISSION_DATA.copy()
             admission_data.update(
                 {
@@ -30,10 +31,11 @@ def seed():
                     'user': users[randint(0, len(users) - 1)],  # random user from all users
                 }
             )
-            _admission, created = RecruitmentAdmission.objects.get_or_create(**admission_data)
+            admissions_to_create.append(RecruitmentAdmission(**admission_data))
+            created_count += 1
 
-            if created:
-                created_count += 1
-            yield (position_index + 1) / len(positions), 'recruitment_admissions'
+        yield (position_index + 1) / len(positions), 'recruitment_admissions'
+
+    RecruitmentAdmission.objects.bulk_create(admissions_to_create)
 
     yield 100, f'Created {created_count} recruitment_admissions'
