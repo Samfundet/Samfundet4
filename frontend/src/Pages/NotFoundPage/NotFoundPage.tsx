@@ -5,9 +5,22 @@ import { SUPPORT_EMAIL } from '~/constants';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useCustomNavigate } from '~/hooks';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const navigate = useCustomNavigate();
+
+  // Hack for recruitment-only mode
+  useEffect(() => {
+    if (pathname === ROUTES.frontend.home) {
+      navigate({ url: ROUTES.frontend.recruitment });
+    }
+  }, [navigate, pathname]);
+
   return (
     <div className={styles.container}>
       <img src={NotFound} className={styles.image} />
