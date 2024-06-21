@@ -22,7 +22,6 @@ export function App() {
 
   return (
     <HelmetProvider>
-      <UserFeedback enabled={true} />
       {goatCounterCode && (
         <Helmet>
           {/* Helmet is linked to <head>. Used to add scripts. */}
