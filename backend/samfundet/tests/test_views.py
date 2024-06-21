@@ -28,6 +28,7 @@ from samfundet.models.recruitment import (
     RecruitmentPosition,
     RecruitmentAdmission,
 )
+from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
@@ -923,6 +924,158 @@ def test_update_admission(
     assert response.status_code == status.HTTP_200_OK
     assert response.data['admission_text'] == post_data2['admission_text']
     # Assert the returned data based on the logic in the view
+
+
+def test_update_admission_recruiter_priority_gang(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user2)
+    fixture_recruitment_admission.user = fixture_user2
+    fixture_recruitment_admission.save()
+    url = reverse(
+        routes.samfundet__recruitment_admission_update_state_gang,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+    ### Assert pre condition ###
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+    # Will assert this will crash when permissions are implemented
+    ### Act 1 Send update NOT_WANTED ###
+    post_data = {'recruiter_priority': RecruitmentPriorityChoices.NOT_WANTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+    ### Act 2 Send update NOT_WANTED ###
+    post_data = {'recruiter_priority': RecruitmentPriorityChoices.RESERVE}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.RESERVE
+    ### Act 3 Send update WANTED ###
+    post_data = {'recruiter_priority': RecruitmentPriorityChoices.WANTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.WANTED
+    ### Act 4 Send update not a choices ###
+    post_data = {'recruiter_priority': (99, 'lol')}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_update_admission_recruiter_status_gang(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user2)
+    fixture_recruitment_admission.user = fixture_user2
+    fixture_recruitment_admission.save()
+    url = reverse(
+        routes.samfundet__recruitment_admission_update_state_gang,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+    ### Assert pre condition ###
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+    # Will assert this will crash when permissions are implemented
+    ### Act 1 Send update NOT_WANTED ###
+    post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_ACCEPTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+    ### Act 2 Send update NOT_WANTED ###
+    post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_REJECTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
+    ### Act 3 Send update WANTED ###
+    post_data = {'recruiter_status': RecruitmentStatusChoices.AUTOMATIC_REJECTION}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+    ### Act 4 Send update not a choices ###
+    post_data = {'recruiter_priority': (99, 'lol')}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_update_admission_recruiter_priority_position(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user2)
+    fixture_recruitment_admission.user = fixture_user2
+    fixture_recruitment_admission.save()
+    url = reverse(
+        routes.samfundet__recruitment_admission_update_state_position,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+    ### Assert pre condition ###
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+    # Will assert this will crash when permissions are implemented
+    ### Act 1 Send update NOT_WANTED ###
+    post_data = {'recruiter_priority': RecruitmentPriorityChoices.NOT_WANTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+    ### Act 2 Send update NOT_WANTED ###
+    post_data = {'recruiter_priority': RecruitmentPriorityChoices.RESERVE}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.RESERVE
+    ### Act 3 Send update WANTED ###
+    post_data = {'recruiter_priority': RecruitmentPriorityChoices.WANTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.WANTED
+    ### Act 4 Send update not a choices ###
+    post_data = {'recruiter_priority': (99, 'lol')}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_update_admission_recruiter_status_position(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user2)
+    fixture_recruitment_admission.user = fixture_user2
+    fixture_recruitment_admission.save()
+    url = reverse(
+        routes.samfundet__recruitment_admission_update_state_position,
+        kwargs={'pk': fixture_recruitment_admission.id},
+    )
+    ### Assert pre condition ###
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+    # Will assert this will crash when permissions are implemented
+    ### Act 1 Send update NOT_WANTED ###
+    post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_ACCEPTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+    ### Act 2 Send update NOT_WANTED ###
+    post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_REJECTED}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
+    ### Act 3 Send update WANTED ###
+    post_data = {'recruiter_status': RecruitmentStatusChoices.AUTOMATIC_REJECTION}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_200_OK
+    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
+    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+    ### Act 4 Send update not a choices ###
+    post_data = {'recruiter_priority': (99, 'lol')}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):

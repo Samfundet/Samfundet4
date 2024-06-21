@@ -8,7 +8,6 @@ from collections import defaultdict
 
 from django.db import models, transaction
 from django.utils import timezone
-from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
@@ -308,7 +307,7 @@ class RecruitmentAdmission(CustomBaseModel):
 
         super().save(*args, **kwargs)
 
-    def update_applicant_state(self) -> QuerySet[RecruitmentAdmission]:
+    def update_applicant_state(self) -> None:
         admissions = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
         # Get top priority
         top_wanted = admissions.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
