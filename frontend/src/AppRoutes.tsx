@@ -74,16 +74,16 @@ import { getGang, getRecruitment, getRecruitmentPosition } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { dbT, lowerCapitalize } from '~/utils';
 
-type RecruitmentLoader = {
-  recruitment: RecruitmentDto | null;
+export type RecruitmentLoader = {
+  recruitment: RecruitmentDto | undefined;
 };
 
-type GangLoader = {
-  gang: GangDto | null;
+export type GangLoader = {
+  gang: GangDto | undefined;
 };
 
-type PositionLoader = {
-  position: RecruitmentPositionDto | null;
+export type PositionLoader = {
+  position: RecruitmentPositionDto | undefined;
 };
 
 async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
@@ -330,6 +330,7 @@ export const router = createBrowserRouter(
           {/* TODO ADD PERMISSIONS */}
           <Route
             element={<Outlet />}
+            id="recruitment"
             loader={recruitmentLoader}
             handle={{
               crumb: ({ recruitment }: RecruitmentLoader) => {
