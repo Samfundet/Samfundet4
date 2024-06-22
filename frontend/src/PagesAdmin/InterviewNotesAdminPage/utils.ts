@@ -10,8 +10,8 @@ export function filterRecruitmentAdmission(
     (admission) =>
       admission.recruitment_position &&
       admission.recruitment_position.toString() === positionId &&
-      admission.interview.id.toString() === interviewId &&
-      admission.interview.interview_time !== null,
+      admission.interview?.id.toString() === interviewId &&
+      admission.interview?.interview_time !== null,
   );
 }
 

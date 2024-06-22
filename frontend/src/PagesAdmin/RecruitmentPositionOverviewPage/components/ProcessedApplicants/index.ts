@@ -1,0 +1,1 @@
+export { ProcessedApplicants } from './ProcessedApplicants';
