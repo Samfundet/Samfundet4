@@ -107,6 +107,10 @@ export function dbT(
   return undefined;
 }
 
+export function getFullName(u: UserDto): string {
+  return `${u.first_name} ${u.last_name}`.trim();
+}
+
 /** Helper to determine if a KeyValue is truthy. */
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];

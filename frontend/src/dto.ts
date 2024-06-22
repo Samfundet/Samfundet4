@@ -12,7 +12,7 @@ export type UserDto = {
   is_active: boolean;
   is_superuser: boolean;
   date_joined: Date;
-  last_login: Date;
+  last_login: Date | null;
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];

@@ -42,6 +42,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_yes]: 'Ja',
+  [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
   [KEY.common_price]: 'Pris',
   [KEY.common_food]: 'Mat',
@@ -70,6 +72,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
+  [KEY.common_users]: 'Brukere',
+  [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
@@ -260,6 +264,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer Saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
+  [KEY.admin_users_last_active]: 'Sist aktiv',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
   [KEY.admin_information_manage_title]: 'Administrer sider',
@@ -374,6 +379,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_yes]: 'Yes',
+  [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
   [KEY.common_price]: 'Price',
   [KEY.common_food]: 'Food',
@@ -403,6 +410,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_users]: 'Users',
+  [KEY.common_active]: 'Active',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -591,6 +600,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',
+  [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',

@@ -35,6 +35,8 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   admin: '/control-panel/',
   admin_impersonate: '/impersonate/',
+  // Users
+  admin_users: '/control-panel/users/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
