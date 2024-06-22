@@ -318,31 +318,15 @@ export const router = createBrowserRouter(
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
           />
-          {/* Specific recruitment */}
           <Route
-            path={ROUTES.frontend.admin_recruitment_users_without_interview}
-            element={<RecruitmentUsersWithoutInterview />}
-            loader={recruitmentLoader}
-            handle={{
-              crumb: ({ recruitment }: RecruitmentLoader) => {
-                if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
-                return (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
-                      urlParams: { recruitmentId: recruitment.id },
-                    })}
-                  >
-                    {t(KEY.recruitment_show_applicants_without_interview)}
-                  </Link>
-                );
-              },
-            }}
+            path={ROUTES.frontend.admin_recruitment_applicant}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
             element={<InterviewNotesPage />}
           />
+          {/* Specific recruitment */}
           {/* TODO ADD PERMISSIONS */}
           <Route
             element={<Outlet />}
@@ -364,6 +348,10 @@ export const router = createBrowserRouter(
             }}
           >
             <Route
+              path={ROUTES.frontend.admin_recruitment_gang_overview}
+              element={<ProtectedRoute perms={[]} Page={RecruitmentGangOverviewPage} />}
+            />
+            <Route
               path={ROUTES.frontend.admin_recruitment_edit}
               element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
               loader={recruitmentLoader}
@@ -383,10 +371,25 @@ export const router = createBrowserRouter(
                 },
               }}
             />
-
             <Route
-              path={ROUTES.frontend.admin_recruitment_gang_overview}
-              element={<ProtectedRoute perms={[]} Page={RecruitmentGangOverviewPage} />}
+              path={ROUTES.frontend.admin_recruitment_users_without_interview}
+              element={<RecruitmentUsersWithoutInterview />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_applicants_without_interview)}
+                    </Link>
+                  );
+                },
+              }}
             />
 
             <Route
@@ -480,10 +483,6 @@ export const router = createBrowserRouter(
             </Route>
           </Route>
         </Route>
-        <Route
-          path={ROUTES.frontend.admin_recruitment_applicant}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
-        />
         {/* Sulten Admin */}
         <Route
           path={ROUTES.frontend.admin_sulten_reservations}
