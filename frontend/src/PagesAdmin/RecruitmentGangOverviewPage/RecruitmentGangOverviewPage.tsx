@@ -10,7 +10,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import type { RecruitmentLoader } from '~/AppRoutes';
+import type { RecruitmentLoader } from '~/router/loaders';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitment } = useRouteLoaderData('recruitment') as RecruitmentLoader;

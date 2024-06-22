@@ -12,7 +12,7 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import styles from './RecruitmentFormAdminPage.module.scss';
-import type { RecruitmentLoader } from '~/AppRoutes';
+import type { RecruitmentLoader } from '~/router/loaders';
 
 type FormType = {
   name_nb: string;

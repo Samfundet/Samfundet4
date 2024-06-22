@@ -1,7 +1,6 @@
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  type LoaderFunctionArgs,
   Outlet,
   Route,
 } from 'react-router-dom';
@@ -62,51 +61,23 @@ import {
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
 } from '~/PagesAdmin';
-import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
-import { PERM } from './permissions';
-import { ROUTES } from './routes';
+import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
+import { PERM } from '~/permissions';
+import { ROUTES } from '~/routes';
 
 import { App } from '~/App';
 import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { getGang, getRecruitment, getRecruitmentPosition } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { dbT, lowerCapitalize } from '~/utils';
-
-export type RecruitmentLoader = {
-  recruitment: RecruitmentDto | undefined;
-};
-
-export type GangLoader = {
-  gang: GangDto | undefined;
-};
-
-export type PositionLoader = {
-  position: RecruitmentPositionDto | undefined;
-};
-
-async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
-  return { recruitment: (await getRecruitment(params.recruitmentId as string)).data };
-}
-
-async function positionLoader({ params }: LoaderFunctionArgs): Promise<PositionLoader> {
-  return { position: (await getRecruitmentPosition(params.positionId as string)).data };
-}
-
-async function gangLoader({ params }: LoaderFunctionArgs): Promise<GangLoader> {
-  return { gang: await getGang(params.gangId as string) };
-}
-
-async function recruitmentGangLoader(params: LoaderFunctionArgs): Promise<RecruitmentLoader & GangLoader> {
-  return { ...(await recruitmentLoader(params)), ...(await gangLoader(params)) };
-}
-
-async function recruitmentGangPositionLoader(
-  params: LoaderFunctionArgs,
-): Promise<RecruitmentLoader & GangLoader & PositionLoader> {
-  return { ...(await recruitmentLoader(params)), ...(await gangLoader(params)), ...(await positionLoader(params)) };
-}
+import {
+  type GangLoader,
+  type PositionLoader,
+  type RecruitmentLoader,
+  recruitmentGangLoader,
+  recruitmentGangPositionLoader,
+  recruitmentLoader,
+} from '~/router/loaders';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
