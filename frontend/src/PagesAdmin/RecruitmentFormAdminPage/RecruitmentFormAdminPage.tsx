@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
@@ -29,12 +29,11 @@ type FormType = {
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { recruitment } = useLoaderData() as { recruitment: RecruitmentDto | null };
 
   // Form data
   const { id } = useParams();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
-  const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>();
 
   useEffect(() => {
     // Fetch organizations.
@@ -46,28 +45,6 @@ export function RecruitmentFormAdminPage() {
       setOrganizationOptions(organizations);
     });
   }, []);
-
-  // Fetch data if edit mode.
-  useEffect(() => {
-    if (id) {
-      getRecruitment(id)
-        .then((data) => {
-          setRecruitment(data.data);
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_recruitment);
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
-        });
-    } else {
-      setShowSpinner(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
 
   const initialData: Partial<FormType> = {
     name_nb: recruitment?.name_nb,
@@ -81,15 +58,6 @@ export function RecruitmentFormAdminPage() {
   };
 
   const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
-
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
 
   function handleOnSubmit(data: FormType) {
     if (id) {

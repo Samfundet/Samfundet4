@@ -1,4 +1,10 @@
-import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  type LoaderFunctionArgs,
+  Outlet,
+  Route,
+} from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
@@ -64,6 +70,43 @@ import { App } from '~/App';
 import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { getGang, getRecruitment, getRecruitmentPosition } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import { dbT, lowerCapitalize } from '~/utils';
+
+type RecruitmentLoader = {
+  recruitment: RecruitmentDto | null;
+};
+
+type GangLoader = {
+  gang: GangDto | null;
+};
+
+type PositionLoader = {
+  position: RecruitmentPositionDto | null;
+};
+
+async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
+  return { recruitment: (await getRecruitment(params.recruitmentId as string)).data };
+}
+
+async function positionLoader({ params }: LoaderFunctionArgs): Promise<PositionLoader> {
+  return { position: (await getRecruitmentPosition(params.positionId as string)).data };
+}
+
+async function gangLoader({ params }: LoaderFunctionArgs): Promise<GangLoader> {
+  return { gang: await getGang(params.gangId as string) };
+}
+
+async function recruitmentGangLoader(params: LoaderFunctionArgs): Promise<RecruitmentLoader & GangLoader> {
+  return { ...(await recruitmentLoader(params)), ...(await gangLoader(params)) };
+}
+
+async function recruitmentGangPositionLoader(
+  params: LoaderFunctionArgs,
+): Promise<RecruitmentLoader & GangLoader & PositionLoader> {
+  return { ...(await recruitmentLoader(params)), ...(await gangLoader(params)), ...(await positionLoader(params)) };
+}
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -275,29 +318,26 @@ export const router = createBrowserRouter(
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
           />
-          <Route
-            path={ROUTES.frontend.admin_recruitment_edit}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
-            loader={({ params }) => {
-              // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-              return { id: params.id };
-            }}
-            handle={{
-              crumb: ({ id }: { id: string }) => (
-                <Link
-                  url={reverse({
-                    pattern: ROUTES.frontend.admin_recruitment_edit,
-                    urlParams: { id },
-                  })}
-                >
-                  {t(KEY.common_edit)}
-                </Link>
-              ),
-            }}
-          />
+          {/* Specific recruitment */}
           <Route
             path={ROUTES.frontend.admin_recruitment_users_without_interview}
             element={<RecruitmentUsersWithoutInterview />}
+            loader={recruitmentLoader}
+            handle={{
+              crumb: ({ recruitment }: RecruitmentLoader) => {
+                if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                return (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+                      urlParams: { recruitmentId: recruitment.id },
+                    })}
+                  >
+                    {t(KEY.recruitment_show_applicants_without_interview)}
+                  </Link>
+                );
+              },
+            }}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
@@ -306,23 +346,44 @@ export const router = createBrowserRouter(
           {/* TODO ADD PERMISSIONS */}
           <Route
             element={<Outlet />}
-            loader={({ params }) => {
-              // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-              return { recruitmentId: params.recruitmentId };
-            }}
+            loader={recruitmentLoader}
             handle={{
-              crumb: ({ recruitmentId }: { recruitmentId: string }) => (
-                <Link
-                  url={reverse({
-                    pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-                    urlParams: { recruitmentId },
-                  })}
-                >
-                  {recruitmentId}
-                </Link>
-              ),
+              crumb: ({ recruitment }: RecruitmentLoader) => {
+                if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                return (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_gang_overview,
+                      urlParams: { recruitmentId: recruitment.id },
+                    })}
+                  >
+                    {dbT(recruitment, 'name')}
+                  </Link>
+                );
+              },
             }}
           >
+            <Route
+              path={ROUTES.frontend.admin_recruitment_edit}
+              element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_edit,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.common_edit)}
+                    </Link>
+                  );
+                },
+              }}
+            />
+
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<ProtectedRoute perms={[]} Page={RecruitmentGangOverviewPage} />}
@@ -330,21 +391,21 @@ export const router = createBrowserRouter(
 
             <Route
               element={<Outlet />}
-              loader={({ params }) => {
-                // TODO: Fetch gang to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-                return { recruitmentId: params.recruitmentId, gangId: params.gangId };
-              }}
+              loader={recruitmentGangLoader}
               handle={{
-                crumb: ({ recruitmentId, gangId }: { recruitmentId: string; gangId: string }) => (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
-                      urlParams: { recruitmentId, gangId },
-                    })}
-                  >
-                    {gangId}
-                  </Link>
-                ),
+                crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
+                  if (!recruitment || !gang) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+                        urlParams: { recruitmentId: recruitment.id, gangId: gang.id },
+                      })}
+                    >
+                      {dbT(gang, 'name')}
+                    </Link>
+                  );
+                },
               }}
             >
               <Route
@@ -354,40 +415,68 @@ export const router = createBrowserRouter(
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_position_create}
                 element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
-              />
-              <Route
-                path={ROUTES.frontend.admin_recruitment_gang_position_edit}
-                element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
-              />
-              <Route
-                path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
-                loader={({ params }) => {
-                  const { recruitmentId, gangId, positionId } = params;
-                  // TODO: Fetch position to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-                  return { recruitmentId, gangId, positionId };
-                }}
+                loader={recruitmentGangLoader}
                 handle={{
-                  crumb: ({
-                    recruitmentId,
-                    gangId,
-                    positionId,
-                  }: {
-                    recruitmentId: string;
-                    gangId: string;
-                    positionId: string;
-                  }) => (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
-                        urlParams: { recruitmentId, gangId, positionId },
-                      })}
-                    >
-                      {positionId}
-                    </Link>
-                  ),
+                  crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
+                    if (!recruitment || !gang) return <span>{t(KEY.common_unknown)}</span>;
+                    return (
+                      <Link
+                        url={reverse({
+                          pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
+                          urlParams: { recruitmentId: recruitment.id, gangId: gang.id },
+                        })}
+                      >
+                        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
+                      </Link>
+                    );
+                  },
                 }}
-                element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
               />
+              {/* Position */}
+              <Route
+                element={<Outlet />}
+                loader={recruitmentGangPositionLoader}
+                handle={{
+                  crumb: ({ recruitment, gang, position }: RecruitmentLoader & GangLoader & PositionLoader) => {
+                    if (!recruitment || !gang || !position) return <span>{t(KEY.common_unknown)}</span>;
+                    return (
+                      <Link
+                        url={reverse({
+                          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
+                          urlParams: { recruitmentId: recruitment.id, gangId: gang.id, positionId: position.id },
+                        })}
+                      >
+                        {dbT(position, 'name')}
+                      </Link>
+                    );
+                  },
+                }}
+              >
+                <Route
+                  path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
+                  element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
+                />
+                <Route
+                  path={ROUTES.frontend.admin_recruitment_gang_position_edit}
+                  element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+                  loader={recruitmentGangPositionLoader}
+                  handle={{
+                    crumb: ({ recruitment, gang, position }: RecruitmentLoader & GangLoader & PositionLoader) => {
+                      if (!recruitment || !gang || !position) return <span>{t(KEY.common_unknown)}</span>;
+                      return (
+                        <Link
+                          url={reverse({
+                            pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
+                            urlParams: { recruitmentId: recruitment.id, gangId: gang.id, positionId: position.id },
+                          })}
+                        >
+                          {t(KEY.common_edit)}
+                        </Link>
+                      );
+                    },
+                  }}
+                />
+              </Route>
             </Route>
           </Route>
         </Route>
