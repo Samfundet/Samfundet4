@@ -22,7 +22,6 @@ def seed():
     yield 0, 'Deleted old recruitmentpositions'
 
     gangs = Gang.objects.all()
-    RecruitmentPosition.objects.all()
     recruitments = Recruitment.objects.all()
     created_count = 0
     for recruitment_index, recruitment in enumerate(recruitments):
