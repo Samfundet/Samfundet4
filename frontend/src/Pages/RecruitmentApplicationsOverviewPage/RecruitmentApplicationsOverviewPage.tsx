@@ -56,38 +56,39 @@ export function RecruitmentApplicationsOverviewPage() {
   ];
 
   function admissionToTableRow(admission: RecruitmentAdmissionDto) {
-    const position = [ {
-      content: (
-        <Link
-          url={reverse({
-            pattern: ROUTES.frontend.recruitment_application,
-            urlParams: {
-              positionID: admission.recruitment_position.id,
-              gangID: admission.recruitment_position.gang.id,
-            },
-          })}
-          className={styles.position_name}
-        >
-          {dbT(admission.recruitment_position, 'name')}
-        </Link>
-      ),
-    }];
-    const notWithdrawn = [      
+    const position = [
+      {
+        content: (
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.recruitment_application,
+              urlParams: {
+                positionID: admission.recruitment_position.id,
+                gangID: admission.recruitment_position.gang.id,
+              },
+            })}
+            className={styles.position_name}
+          >
+            {dbT(admission.recruitment_position, 'name')}
+          </Link>
+        ),
+      },
+    ];
+    const notWithdrawn = [
       niceDateTime(admission.interview?.interview_time),
       admission.interview?.interview_location,
       admission.applicant_priority,
       { content: upDownArrow(admission.id) },
     ];
-    const withdrawn = [ {
-      content: (
-        <Text
-          as="strong"
-          className={styles.withdrawnText}
-        >
-          {t(KEY.recruitment_withdrawn)}
-        </Text>
-      ),
-    }];
+    const withdrawn = [
+      {
+        content: (
+          <Text as="strong" className={styles.withdrawnText}>
+            {t(KEY.recruitment_withdrawn)}
+          </Text>
+        ),
+      },
+    ];
     return [...position, ...(admission.withdrawn ? withdrawn : notWithdrawn)];
   }
 
