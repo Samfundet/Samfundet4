@@ -309,6 +309,12 @@ class RecruitmentAdmission(CustomBaseModel):
 
         super().save(*args, **kwargs)
 
+    def get_total_interviews(self) -> int:
+        return RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
+
+    def get_total_admissions(self) -> int:
+        return RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+
     def update_applicant_state(self) -> None:
         admissions = RecruitmentAdmission.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
         # Get top priority

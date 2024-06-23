@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import csv
 import hmac
 import hashlib
 from typing import Any
@@ -16,7 +17,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponse
 from django.utils import timezone
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
@@ -898,6 +899,61 @@ class ActiveRecruitmentsView(ListAPIView):
         """Returns all active recruitments"""
         # TODO Use is not completed instead of actual_application_deadline__gte
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+
+
+class DownloadRecruitmentAdmissionGangCSV(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request: Request,
+        recruitment_id: int,
+        gang_id: int,
+    ) -> HttpResponse:
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        gang = get_object_or_404(Gang, id=gang_id)
+        admissions = RecruitmentAdmission.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
+
+        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
+        )
+        writer = csv.DictWriter(
+            response,
+            fieldnames=[
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Søkers rangering',
+                'Intervjuer satt',
+            ],
+        )
+        writer.writeheader()
+        for admission in admissions:
+            writer.writerow(
+                {
+                    'Navn': admission.user.get_full_name(),
+                    'Telefon': admission.user.phone_number,
+                    'Epost': admission.user.email,
+                    'Campus': admission.user.campus.name_en if admission.user.campus else '',
+                    'Stilling': admission.recruitment_position.name_nb,
+                    'Intervjutid': admission.interview.interview_time if admission.interview else '',
+                    'Intervjusted': admission.interview.interview_location if admission.interview else '',
+                    'Prioritet': admission.get_recruiter_priority_display(),
+                    'Status': admission.get_recruiter_status_display(),
+                    'Søkers rangering': f'{admission.applicant_priority}/{admission.get_total_admissions()}',
+                    'Intervjuer satt': f'{admission.get_total_interviews()}/{admission.get_total_admissions()}',
+                }
+            )
+
+        return response
 
 
 class InterviewRoomView(ModelViewSet):
