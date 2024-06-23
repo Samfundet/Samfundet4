@@ -76,13 +76,9 @@ export function SaksdokumenterPage() {
       categories &&
       saksdokumenter &&
       categories.map((category, index) => (
-        <>
-          {
-            <Parent content={category || 'category'} key={category || `category${index}`} nestedDepth={0}>
-              {yearMapping(category)}
-            </Parent>
-          }
-        </>
+        <Parent content={category || 'category'} key={category || `category${index}`} nestedDepth={0}>
+          {yearMapping(category)}
+        </Parent>
       ))
     );
   }
