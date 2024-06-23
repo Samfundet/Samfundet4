@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.8.1/schema.json",
   "files": {
-    "ignore": ["**/*.json", "./src/routes/backend.ts"]
+    "ignore": ["**/*.json", "vite.config.ts", "./src/routes/backend.ts"]
   },
   "organizeImports": {
     "enabled": true
@@ -15,5 +15,10 @@
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
   }
 }
