@@ -94,8 +94,8 @@ export const router = createBrowserRouter(
           element={<RecruitmentApplicationsOverviewPage />}
         />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
-        <Route path={ROUTES.frontend.contact} element={<></>} />
-        <Route path={ROUTES.frontend.luka} element={<></>} />
+        <Route path={ROUTES.frontend.contact} element={<div />} />
+        <Route path={ROUTES.frontend.luka} element={<div />} />
       </Route>
       {/*
             ADMIN ROUTES
