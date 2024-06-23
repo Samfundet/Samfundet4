@@ -54,11 +54,12 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
     RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
 
 # Common fields:
@@ -77,7 +78,7 @@ from .models.recruitment import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
@@ -596,6 +597,8 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'organization',
         'visible_from',
         'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
     ]
     search_fields = [
         'name_nb',
@@ -728,6 +731,12 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
 
 
 @admin.register(UserFeedbackModel)

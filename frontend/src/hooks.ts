@@ -183,6 +183,31 @@ export function useIsLightTheme(): boolean {
   return theme === THEME.LIGHT;
 }
 
+/** Returns if primary mouse button is currently pressed down */
+export function useMouseDown(): boolean {
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useEffect(() => {
+    function handleMouseDown() {
+      setMouseDown(true);
+    }
+
+    function handleMouseUp() {
+      setMouseDown(false);
+    }
+
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  return mouseDown;
+}
+
 export function useMousePosition(): { x: number; y: number } {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 

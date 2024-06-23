@@ -27,12 +27,19 @@ export type CampusDto = {
   abbreviation?: string;
 };
 
-export type OccupiedTimeSlotDto = {
-  id?: number;
-  user?: number;
+export type RecruitmentAvailabilityDto = {
+  start_date: string;
+  end_date: string;
+  timeslots: string[];
+};
+
+export type DateTimeslotDto = {
+  [date: string]: string[];
+};
+
+export type OccupiedTimeslotDto = {
   recruitment: number;
-  start_dt: string;
-  end_dt: string;
+  dates: DateTimeslotDto;
 };
 
 export type RecruitmentUserDto = {
