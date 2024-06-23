@@ -27,7 +27,6 @@ export function Navbar() {
   const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [cookies, setCookie, removeCookie] = useCookies();
 
   // Each NavbarItem can have a dropdown menu.
@@ -150,7 +149,7 @@ export function Navbar() {
     </div>
   );
 
-  /* eslint-disable-next-line no-prototype-builtins */
+  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
 
   const userDropdownLinks = (

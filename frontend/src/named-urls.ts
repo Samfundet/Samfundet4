@@ -68,7 +68,6 @@ export const include: Include = (base, routes) => {
       } else {
         // don't allow invalid routes object
         throw new TypeError(
-          // eslint-disable-next-line max-len
           `"${route}" is not valid. A routes object can only contain a string, an object or the "toString" method as values.`,
         );
       }

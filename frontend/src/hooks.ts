@@ -14,7 +14,7 @@ import { LANGUAGES } from './i18n/constants';
 // Make typescript happy.
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     goatcounter: any;
   }
 }

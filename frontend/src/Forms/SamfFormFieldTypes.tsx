@@ -116,7 +116,7 @@ export type GeneratorFunction<T extends FormFieldReturnType> = (args: SamfFormFi
 /**
  * Map of all implemented SamfFormField types to their generator functions.
  * */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const SamfFormGenerators: Record<SamfFormFieldType, GeneratorFunction<any>> = {
   text: makeStandardInputFunction<string>('text'),
   email: makeStandardInputFunction<string>('email'),

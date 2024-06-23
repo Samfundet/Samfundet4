@@ -344,7 +344,7 @@ export type ImagePostDto = ImageDto & {
   file: File;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Tuple = [any, any];
 
 export type KeyValueDto = {

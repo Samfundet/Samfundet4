@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ImageList } from './ImageList';
 
