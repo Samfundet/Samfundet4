@@ -3,6 +3,7 @@ export { AdminPage } from './AdminPage';
 export { ApiTestingPage } from './ApiTestingPage';
 export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { ComponentPage } from './ComponentPage';
+export { ContributorsPage } from './ContributorsPage';
 export { EventPage } from './EventPage';
 export { EventsPage } from './EventsPage';
 export { GroupsPage } from './GroupsPage';
