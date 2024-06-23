@@ -35,6 +35,7 @@ export function Select({
         {children}
         <select onChange={onChange} required={required} className={styles.select}>
           {options?.map((option, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             <option value={option.value} key={index} className={styles.option} selected={option.value === value}>
               {option.label}
             </option>
