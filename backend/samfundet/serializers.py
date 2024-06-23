@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+from typing import TYPE_CHECKING
 from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
@@ -52,13 +53,20 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
+    RecruitmentDateStat,
     RecruitmentPosition,
+    RecruitmentTimeStat,
     RecruitmentAdmission,
+    RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -560,7 +568,34 @@ class MerchSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
+class RecruitmentTimeStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentTimeStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentDateStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentDateStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
+    campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+
+    class Meta:
+        model = RecruitmentCampusStat
+        exclude = ['id', 'recruitment_stats']
+
+    def campus_name(self, stat: RecruitmentCampusStat) -> str:
+        return stat.campus.name_nb if stat.campus else None
+
+
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+    time_stats = RecruitmentTimeStatSerializer(read_only=True, many=True)
+    date_stats = RecruitmentDateStatSerializer(read_only=True, many=True)
+    campus_stats = RecruitmentCampusStatSerializer(read_only=True, many=True)
+
     class Meta:
         model = RecruitmentStatistics
         fields = '__all__'
@@ -571,25 +606,46 @@ class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
 
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
-    recruitment_admission_ids = serializers.SerializerMethodField()
+    admissions = serializers.SerializerMethodField(method_name='get_admissions', read_only=True)
+    admissions_without_interview = serializers.SerializerMethodField(method_name='get_admissions_without_interviews_for_recruitment', read_only=True)
+    top_admission = serializers.SerializerMethodField(method_name='get_top_admission', read_only=True)
     campus = CampusSerializer()
 
     class Meta:
         model = User
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'username',
-            'phone_number',
-            'email',
-            'campus',
-            'recruitment_admission_ids',  # Add this to the fields list
-        ]
+        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'phone_number', 'admissions', 'campus', 'admissions_without_interview', 'top_admission']
 
-    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # This will allow it to filter admissions on recruitment
+        self.recruitment = kwargs.pop('recruitment', None)
+        self.gang = kwargs.pop('gang', None)
+        super().__init__(*args, **kwargs)
+
+    def get_admissions(self, obj: User) -> list[int]:
         """Return list of recruitment admission IDs for the user."""
-        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
+        admissions = RecruitmentAdmission.objects.filter(user=obj)
+        if self.recruitment:
+            admissions = admissions.filter(recruitment=self.recruitment)
+        if self.gang:
+            admissions = admissions.filter(recruitment_position__gang=self.gang)
+        return RecruitmentAdmissionForApplicantSerializer(admissions, many=True).data
+
+    def get_admissions_without_interviews_for_recruitment(self, obj: User) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        admissions = RecruitmentAdmission.objects.filter(user=obj, interview=None)
+        if self.recruitment:
+            admissions = admissions.filter(recruitment=self.recruitment)
+        if self.gang:
+            admissions = admissions.filter(recruitment_position__gang=self.gang)
+        return RecruitmentAdmissionForApplicantSerializer(admissions, many=True).data
+
+    def get_top_admission(self, obj: User) -> list[int]:
+        admissions = RecruitmentAdmission.objects.filter(user=obj)
+        if self.recruitment:
+            admissions = admissions.filter(recruitment=self.recruitment)
+        if self.gang:
+            admissions = admissions.filter(recruitment_position__gang=self.gang)
+        return RecruitmentAdmissionForApplicantSerializer(admissions.order_by('applicant_priority').first()).data
 
 
 class InterviewerSerializer(CustomBaseSerializer):
@@ -732,14 +788,24 @@ class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
         return data
 
 
-class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
+    # Set custom format to remove seconds from start/end times, as they are ignored
+    start_time = serializers.DateTimeField(format='%H:%M')
+    end_time = serializers.DateTimeField(format='%H:%M')
+
     class Meta:
-        model = Occupiedtimeslot
+        model = RecruitmentInterviewAvailability
+        fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+
+class OccupiedTimeslotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OccupiedTimeslot
         fields = '__all__'
 
 
 class ApplicantInfoSerializer(CustomBaseSerializer):
-    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
+    occupied_timeslots = OccupiedTimeslotSerializer(many=True)
 
     class Meta:
         model = User

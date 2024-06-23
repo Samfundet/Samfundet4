@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from guardian import models as guardian_models
 
+from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
+from django.db.models import QuerySet
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
@@ -54,11 +56,12 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
     RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
 
 # Common fields:
@@ -77,7 +80,7 @@ from .models.recruitment import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
@@ -120,7 +123,7 @@ class UserAdmin(CustomGuardedUserAdmin):
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'campus')}),
         (
             _('Permissions'),
             {
@@ -140,7 +143,7 @@ class UserAdmin(CustomGuardedUserAdmin):
             None,
             {
                 'classes': ('wide',),
-                'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+                'fields': ('username', 'email', 'phone_number', 'campus', 'password1', 'password2'),
             },
         ),
     )
@@ -596,6 +599,8 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'organization',
         'visible_from',
         'shown_application_deadline',
+        'reprioritization_deadline_for_applicant',
+        'reprioritization_deadline_for_groups',
     ]
     search_fields = [
         'name_nb',
@@ -700,10 +705,17 @@ class InterviewAdmin(CustomBaseAdmin):
     filter_horizontal = ['interviewers']
 
 
+@admin.action(description='Update stats')
+def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: QuerySet[RecruitmentStatistics]) -> None:
+    for q in queryset:
+        q.save()
+
+
 @admin.register(RecruitmentStatistics)
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_admissions']
     search_fields = ['recruitment']
+    actions = [update_stats]
 
 
 @admin.register(Merch)
@@ -728,6 +740,12 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
 
 
 @admin.register(UserFeedbackModel)

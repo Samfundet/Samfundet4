@@ -17,10 +17,11 @@ import {
   MenuDto,
   MenuItemDto,
   NotificationDto,
-  OccupiedTimeSlotDto,
+  OccupiedTimeslotDto,
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentAdmissionRecruiterDto,
+  RecruitmentAvailabilityDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   RecruitmentUserDto,
@@ -558,8 +559,8 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
 }
 
 export async function getRecruitmentPositionsGang(
-  recruitmentId: string,
-  gangId: number | undefined,
+  recruitmentId: number | string,
+  gangId: number | string | undefined,
 ): Promise<AxiosResponse<RecruitmentPositionDto[]>> {
   const url =
     BACKEND_DOMAIN +
@@ -572,7 +573,19 @@ export async function getRecruitmentPositionsGang(
   return response;
 }
 
-export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+export async function getRecruitmentAvailability(
+  recruitmentId: number,
+): Promise<AxiosResponse<RecruitmentAvailabilityDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_availability,
+      urlParams: { id: recruitmentId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getOccupiedTimeslots(recruitmentId: number): Promise<AxiosResponse<OccupiedTimeslotDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -585,8 +598,8 @@ export async function getOccupiedTimeslots(recruitmentId: number): Promise<Axios
 }
 
 export async function postOccupiedTimeslots(
-  timeslots: OccupiedTimeSlotDto[],
-): Promise<AxiosResponse<OccupiedTimeSlotDto[]>> {
+  timeslots: OccupiedTimeslotDto,
+): Promise<AxiosResponse<OccupiedTimeslotDto>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__occupied_timeslots;
   const response = await axios.post(url, timeslots, { withCredentials: true });
 
@@ -764,18 +777,15 @@ export async function getActiveRecruitments(): Promise<AxiosResponse<Recruitment
 
 export async function getApplicantsWithoutInterviews(
   recruitmentId: string,
+  gangId: string | null = null,
 ): Promise<AxiosResponse<RecruitmentUserDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__applicants_without_interviews,
-      queryParams: {
-        recruitment: recruitmentId,
-      },
+      queryParams: gangId ? { recruitment: recruitmentId, gang: gangId } : { recruitment: recruitmentId },
     });
-  const response = await axios.get(url, { withCredentials: true });
-
-  return response;
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function putRecruitmentAdmission(

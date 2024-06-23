@@ -45,8 +45,8 @@ import {
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentApplicantAdminPage,
-  RecruitmentUsersWithoutInterview,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
@@ -339,8 +339,8 @@ export const router = createBrowserRouter(
               }}
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_users_without_interview}
-              element={<RecruitmentUsersWithoutInterview />}
+              path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
+              element={<RecruitmentUsersWithoutInterviewGangPage />}
               loader={recruitmentLoader}
               handle={{
                 crumb: ({ recruitment }: RecruitmentLoader) => {
@@ -348,7 +348,7 @@ export const router = createBrowserRouter(
                   return (
                     <Link
                       url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+                        pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
                         urlParams: { recruitmentId: recruitment.id },
                       })}
                     >

@@ -13,7 +13,6 @@ import { VENUES } from './data';
 
 export function AboutPage() {
   const { t } = useTranslation();
-
   return (
     <Page>
       <div className={styles.row}>

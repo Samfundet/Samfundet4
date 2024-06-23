@@ -19,7 +19,21 @@ from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
-from samfundet.models.general import Gang, User, Image, Merch, Table, Venue, BlogPost, TextItem, Reservation, Organization, MerchVariation, InformationPage
+from samfundet.models.general import (
+    Gang,
+    User,
+    Image,
+    Merch,
+    Table,
+    Venue,
+    Campus,
+    BlogPost,
+    TextItem,
+    Reservation,
+    Organization,
+    MerchVariation,
+    InformationPage,
+)
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -120,12 +134,15 @@ def fixture_user_pw() -> Iterator[str]:
 
 
 @pytest.fixture
-def fixture_user(fixture_user_pw: str) -> Iterator[User]:
-    user = User.objects.create_user(
-        username='user',
-        email='user@test.com',
-        password=fixture_user_pw,
-    )
+def fixture_campus() -> Iterator[Campus]:
+    campus = Campus.objects.create(name_nb='Samf', name_en='Samf', abbreviation='Samf')
+    yield campus
+    campus.delete()
+
+
+@pytest.fixture
+def fixture_user(fixture_user_pw: str, fixture_campus: Campus) -> Iterator[User]:
+    user = User.objects.create_user(username='user', email='user@test.com', password=fixture_user_pw, campus=fixture_campus)
     yield user
     user.delete()
 
@@ -263,16 +280,16 @@ def fixture_merchvariation(fixture_merch: Merch) -> Iterator[MerchVariation]:
 def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitment]:
     now = timezone.now()
     one_hour = timezone.timedelta(hours=1)
-
+    one_week = timezone.timedelta(days=7)
     # Create a recruitment instance with valid data
     recruitment = Recruitment.objects.create(
         name_nb='Test Recruitment NB',
         name_en='Test Recruitment EN',
         visible_from=now,
-        actual_application_deadline=now + 3 * one_hour,
-        shown_application_deadline=now + one_hour,
-        reprioritization_deadline_for_applicant=now + 4 * one_hour,
-        reprioritization_deadline_for_groups=now + 6 * one_hour,
+        actual_application_deadline=now + 3 * one_hour + one_week,
+        shown_application_deadline=now + one_hour + one_week,
+        reprioritization_deadline_for_applicant=now + 4 * one_hour + one_week,
+        reprioritization_deadline_for_groups=now + 6 * one_hour + one_week,
         organization=fixture_organization,
     )
     yield recruitment
