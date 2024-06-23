@@ -48,6 +48,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_food]: 'Mat',
   [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
+  [KEY.common_not]: 'Ikke',
   [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -78,6 +79,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
+  [KEY.common_cancel]: 'Avbryt',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
@@ -110,6 +112,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
+  [KEY.common_select_all]: 'Velg alle',
+  [KEY.common_unselect_all]: 'Fjern valgte',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
@@ -130,6 +134,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_total]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
+  [KEY.common_loading]: 'Laster inn',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -148,6 +153,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tickets]: 'billetter',
   [KEY.common_contact_information]: 'Kontaktinfo',
   [KEY.common_about_samfundet]: 'Om Samfundet',
+  [KEY.common_processed]: 'Prosessert',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Billett',
@@ -241,6 +247,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recruitment_applicants_without_interview]: 'Søkere uten intervju',
+  [KEY.recruitment_applicants_without_interview_help_text]:
+    'Denne oversikten viser alle søkere som mangler en eller intervjutider på verv de har søkt i denne gjengen. Oversikten fremhever vervet som søkeren har rangert høyest i gjengen, og hvilken rangering den er satt til',
+  [KEY.recruitment_not_applicants_without_interviews]: 'Ingen søkere mangler intervju',
+  [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_admissions]: 'Trukkede søknader',
   [KEY.recruitment_rejected_admissions]: 'Søkere som får automatisk avslag',
   [KEY.recruitment_accepted_admissions]: 'Søkere vi har tatt opp',
@@ -309,7 +320,8 @@ export const nb: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
-  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
+  [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
   // Feedback
@@ -385,6 +397,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_food]: 'Food',
   [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
+  [KEY.common_not]: 'Not',
   [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -409,6 +422,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -431,6 +445,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
+  [KEY.common_select_all]: 'Select all',
+  [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
   [KEY.common_recruitmentposition]: 'Position',
   [KEY.common_about_us]: 'About us',
@@ -467,6 +483,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_total]: 'Total',
   [KEY.common_guests]: 'Guests',
   [KEY.common_occasion]: 'Occasion',
+  [KEY.common_loading]: 'Loading',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -485,6 +502,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tickets]: 'tickets',
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
+  [KEY.common_processed]: 'Processed',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
@@ -579,6 +597,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_processed]: 'Processed',
   [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
+  [KEY.recruitment_applicants_without_interview]: 'Applicants without interview',
+  [KEY.recruitment_applicants_without_interview_help_text]:
+    'This overview show all applicantss which lack interviews for this recruitment and gang. It shows their most desired position in this gang, and that positions rank overall',
+  [KEY.recruitment_not_applicants_without_interviews]: 'No applicants are lacking interviews',
+  [KEY.recruitment_applicant_top_position]: 'Most desired position',
   [KEY.recruitment_withdrawn_admissions]: 'Withdrawn admissions',
   [KEY.recruitment_rejected_admissions]: 'Automatically rejected applicants',
   [KEY.recruitment_accepted_admissions]: 'Applicants we have contacted and accepted',
@@ -650,7 +673,8 @@ export const en: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
-  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
+  [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
 
   // Feedback

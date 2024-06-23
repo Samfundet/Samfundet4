@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from .general import Gang, User, Organization
+from .general import Gang, User, Campus, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 
@@ -86,6 +86,11 @@ class Recruitment(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        super().save(*args, **kwargs)
+        if not self.statistics:
+            RecruitmentStatistics.objects.create(self)
 
 
 class RecruitmentPosition(CustomBaseModel):
@@ -300,9 +305,6 @@ class RecruitmentAdmission(CustomBaseModel):
 
             if shared_interview:
                 self.interview = shared_interview.interview
-            else:
-                # Create a new interview instance if needed
-                self.interview = Interview.objects.create()
         # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
@@ -327,7 +329,24 @@ class RecruitmentAdmission(CustomBaseModel):
                 adm.save()
 
 
-class Occupiedtimeslot(FullCleanSaveMixin):
+class RecruitmentInterviewAvailability(CustomBaseModel):
+    """This models all possible times for interviews for the given recruitment.
+
+    If position is null, this instance will be used to display the possible timeslots applicants may mark as
+    unavailable. There must only exist one such instance per recruitment. If position is set, this will be used for the
+    automatic interview booking logic.
+    """
+
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Which recruitment this availability applies to')
+    position = models.ForeignKey(RecruitmentPosition, on_delete=models.CASCADE, help_text='Which position this availability applies to', null=True, blank=True)
+    start_date = models.DateField(help_text='First possible date for interviews', null=False, blank=False)
+    end_date = models.DateField(help_text='Last possible date for interviews', null=False, blank=False)
+    start_time = models.TimeField(help_text='First possible time of day for interviews', default='08:00:00', null=False, blank=False)
+    end_time = models.TimeField(help_text='Last possible time of day for interviews', default='23:00:00', null=False, blank=False)
+    timeslot_interval = models.PositiveSmallIntegerField(help_text='The time interval (in minutes) between each timeslot', default=30)
+
+
+class OccupiedTimeslot(FullCleanSaveMixin):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -337,11 +356,14 @@ class Occupiedtimeslot(FullCleanSaveMixin):
         related_name='occupied_timeslots',
     )
     # Mostly only used for deletion, and anonymization.
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Occupied timeslots for the users for this recruitment')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Which recruitment this occupancy applies to')
 
     # Start and end time of availability
-    start_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
-    end_dt = models.DateTimeField(help_text='The time of the interview', null=False, blank=False)
+    start_dt = models.DateTimeField(help_text='Start of occupied time', null=False, blank=False)
+    end_dt = models.DateTimeField(help_text='End of occupied time', null=False, blank=False)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]
 
 
 class RecruitmentStatistics(FullCleanSaveMixin):
@@ -353,8 +375,80 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_admissions = self.recruitment.admissions.count()
         self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
-
         super().save(*args, **kwargs)
+        self.generate_time_stats()
+        self.generate_date_stats()
+        self.generate_campus_stats()
 
     def __str__(self) -> str:
         return f'{self.recruitment} stats'
+
+    def generate_time_stats(self) -> None:
+        for h in range(0, 24):
+            time_stat, created = RecruitmentTimeStat.objects.get_or_create(recruitment_stats=self, hour=h)
+            if not created:
+                time_stat.save()
+
+    def generate_date_stats(self) -> None:
+        date = self.recruitment.visible_from
+        while date < self.recruitment.actual_application_deadline:
+            date_stat, created = RecruitmentDateStat.objects.get_or_create(recruitment_stats=self, date=date.strftime('%Y-%m-%d'))
+            if not created:
+                date_stat.save()
+            date += timezone.timedelta(days=1)
+
+    def generate_campus_stats(self) -> None:
+        for campus in Campus.objects.all():
+            campus_stat, created = RecruitmentCampusStat.objects.get_or_create(recruitment_stats=self, campus=campus)
+            if not created:
+                campus_stat.save()
+
+
+class RecruitmentTimeStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='time_stats')
+    hour = models.PositiveIntegerField(null=False, blank=False, verbose_name='Time')
+    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.hour} {self.count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        count = 0
+        for admission in self.recruitment_stats.recruitment.admissions.all():
+            if admission.created_at.hour == self.hour:
+                count += 1
+        self.count = count
+        super().save(*args, **kwargs)
+
+
+class RecruitmentDateStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+    date = models.DateField(null=False, blank=False, verbose_name='Time')
+    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.date} {self.count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        count = 0
+        for admission in self.recruitment_stats.recruitment.admissions.all():
+            if admission.created_at.date() == self.date:
+                count += 1
+        self.count = count
+        super().save(*args, **kwargs)
+
+
+class RecruitmentCampusStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='campus_stats')
+    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+
+    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.campus} {self.count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        self.count = User.objects.filter(
+            id__in=self.recruitment_stats.recruitment.admissions.values_list('user', flat=True).distinct(), campus=self.campus
+        ).count()
+        super().save(*args, **kwargs)

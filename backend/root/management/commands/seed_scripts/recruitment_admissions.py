@@ -16,15 +16,15 @@ ADMISSION_DATA = {
 
 def seed():
     yield 0, 'recruitment_admissions'
-
     RecruitmentAdmission.objects.all().delete()
     yield 0, 'Deleted old admissions'
+
     positions = RecruitmentPosition.objects.all()
     users = User.objects.all()
     created_count = 0
 
     for position_index, position in enumerate(positions):
-        for _ in range(randint(0, 10)):  # Create between 0 and 5 instances for each position
+        for _ in range(randint(0, 10)):  # Create between 0 and 10 instances for each position
             admission_data = ADMISSION_DATA.copy()
             admission_data.update(
                 {

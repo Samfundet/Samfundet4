@@ -120,8 +120,17 @@ export function RecruitmentGangAdminPage() {
       >
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
       </Button>
-      <Button theme="yellow" onClick={() => alert('TODO Add view of applicants without interview for gang')}>
-        {lowerCapitalize(t(KEY.recruitment_show_applicants_without_interview))}
+      <Button
+        theme="yellow"
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
       <Button theme="secondary" onClick={() => alert('TODO Add view of all applicants for gang')}>
         {lowerCapitalize(t(KEY.recruitment_show_all_applicants))}

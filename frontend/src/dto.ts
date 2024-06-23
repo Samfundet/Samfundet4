@@ -27,12 +27,19 @@ export type CampusDto = {
   abbreviation?: string;
 };
 
-export type OccupiedTimeSlotDto = {
-  id?: number;
-  user?: number;
+export type RecruitmentAvailabilityDto = {
+  start_date: string;
+  end_date: string;
+  timeslots: string[];
+};
+
+export type DateTimeslotDto = {
+  [date: string]: string[];
+};
+
+export type OccupiedTimeslotDto = {
   recruitment: number;
-  start_dt: string;
-  end_dt: string;
+  dates: DateTimeslotDto;
 };
 
 export type RecruitmentUserDto = {
@@ -41,9 +48,11 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
+  phone_number?: string;
   campus?: CampusDto;
-  recruitment_admission_ids?: string[];
+  admissions: RecruitmentAdmissionDto[];
+  admissions_without_interview: RecruitmentAdmissionDto[];
+  top_admission: RecruitmentAdmissionDto;
 };
 
 export type HomePageDto = {
