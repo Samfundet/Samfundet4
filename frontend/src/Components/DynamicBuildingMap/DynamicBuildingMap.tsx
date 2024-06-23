@@ -146,6 +146,7 @@ export function DynamicBuildingMap({
 
           {/* This is just a tweaked SVG filter found on the web */}
           {/* No need to know the inner workings of svg, but it adds a nice outline! */}
+          {/* biome-ignore lint/a11y/noSvgWithoutTitle: not visible */}
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
             <filter
               id="filter"
@@ -212,20 +213,20 @@ export function SvgBinding({
 
   // Class/style update
   useEffect(() => {
-    elements.forEach((el) => {
+    for (const el of elements) {
       el.setAttribute('class', className ?? '');
       const oldStyle = el.getAttribute('style') ?? '';
       el.setAttribute('style', `${oldStyle} ${style}`);
-    });
+    }
   }, [elements, style, className]);
 
   // Bind events
   useEffect(() => {
-    elements.forEach((el) => {
+    for (const el of elements) {
       el.onmouseenter = () => onMouseEnter?.();
       el.onmouseleave = () => onMouseLeave?.();
       el.onclick = () => onClick?.();
-    });
+    }
   }, [elements, onMouseEnter, onMouseLeave, onClick]);
 
   // Bind to element
