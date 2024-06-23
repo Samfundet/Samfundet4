@@ -1,0 +1,45 @@
+@import "../../../constants";
+
+@import "../../../mixins";
+
+.container{
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    "chartTitle chartTitle"
+    "vLegend  chart"
+    "hLegend hLegend";
+  padding: 0.25rem;
+  width: fit-content;
+  border: 2px solid $black;
+
+}
+
+.chartTitleContainer{
+  grid-area: chartTitle;
+  @include flex-column-center;
+}
+
+.vLegendContainer{
+  grid-area: vLegend;
+  @include flex-column-center;
+  width: 1rem;
+}
+
+.vAxisLegend{
+  rotate: -90deg;
+}
+
+.chartContainer {
+  grid-area: chart;
+  @include flex-column-center;
+}
+
+.hLegendContainer{
+  grid-area: hLegend;
+  @include flex-column-center;
+  height: 1rem;
+}
+
+
