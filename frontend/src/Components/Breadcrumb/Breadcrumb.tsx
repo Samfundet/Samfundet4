@@ -26,6 +26,7 @@ export function Breadcrumb() {
         <Icon icon="ion:home" className={styles.icon} />
       </Link>
       {crumbs.map((crumb, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <div key={i}>
           <span className={styles.separator}>&gt;</span>
           {crumb}
