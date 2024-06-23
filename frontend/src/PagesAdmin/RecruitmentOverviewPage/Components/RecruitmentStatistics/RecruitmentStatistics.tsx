@@ -1,6 +1,6 @@
 import styles from './RecruitmentStatistics.module.scss';
 import { Text } from '~/Components/Text/Text';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
