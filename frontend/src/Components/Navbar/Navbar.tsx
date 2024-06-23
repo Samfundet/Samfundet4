@@ -4,19 +4,19 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/context/AuthContext';
 import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { getActiveRecruitments, impersonateUser, logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag } from '~/assets';
+import { useAuthContext } from '~/context/AuthContext';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
-import type { RecruitmentDto } from '~/dto';
 
 const scrollDistanceForOpaque = 30;
 

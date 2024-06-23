@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
+import { useAuthContext } from '~/context/AuthContext';
 import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { useTextItem, useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
-import { OccupiedFormModal } from '~/Components/OccupiedForm';
-import { reverse } from '~/named-urls';
-import { useAuthContext } from '~/context/AuthContext';
 
 export function RecruitmentPage() {
   const { user } = useAuthContext();

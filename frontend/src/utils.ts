@@ -1,10 +1,10 @@
+import { format } from 'date-fns';
 import i18next from 'i18next';
 import type { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
 import type { UserDto } from '~/dto';
 import { KEY, type KeyValues } from './i18n/constants';
 import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
-import { format } from 'date-fns';
 
 export type hasPerm = {
   user: UserDto | undefined;

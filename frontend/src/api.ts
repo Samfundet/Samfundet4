@@ -21,19 +21,19 @@ import type {
   OrganizationDto,
   RecruitmentAdmissionDto,
   RecruitmentAdmissionRecruiterDto,
+  RecruitmentAdmissionStateChoicesDto,
+  RecruitmentAdmissionStateDto,
   RecruitmentAvailabilityDto,
   RecruitmentDto,
   RecruitmentPositionDto,
   RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
-  RecruitmentAdmissionStateDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
-  RecruitmentAdmissionStateChoicesDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

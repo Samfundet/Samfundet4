@@ -1,10 +1,10 @@
-import type { TableDto } from '~/dto';
-import type { Column } from './types';
-import styles from './ReservationTableRow.module.scss';
-import { useEffect, useState } from 'react';
-import { Reservation } from '../Reservation/Reservation';
-import { dbT, getTimeObject } from '~/utils';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
+import type { TableDto } from '~/dto';
+import { dbT, getTimeObject } from '~/utils';
+import { Reservation } from '../Reservation/Reservation';
+import styles from './ReservationTableRow.module.scss';
+import type { Column } from './types';
 
 type ReservationTableRowProps = {
   table: TableDto;

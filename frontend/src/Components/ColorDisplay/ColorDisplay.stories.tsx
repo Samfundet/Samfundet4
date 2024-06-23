@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { type ColorKey, COLORS } from '~/types';
+import { COLORS, type ColorKey } from '~/types';
 import { ColorDisplay } from './ColorDisplay';
 
 // Local component config.

@@ -1,15 +1,15 @@
 import { Icon } from '@iconify/react';
-import { useAuthContext } from '~/context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Button, ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
+import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import { getRandomEntryFromList } from '~/utils';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
-import { ROUTES } from '~/routes';
-import { Link } from 'react-router-dom';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
-import { getRandomEntryFromList } from '~/utils';
 
 export function AdminPage() {
   const { t } = useTranslation();

@@ -1,9 +1,9 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getInformationPage } from '~/api';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
+import { getInformationPage } from '~/api';
 import type { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -11,8 +11,8 @@ import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/context/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
+import { useAuthContext } from '~/context/AuthContext';
 import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';

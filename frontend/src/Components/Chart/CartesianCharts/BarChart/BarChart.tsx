@@ -1,12 +1,12 @@
-import type { CartesianChartsColors, CartesianChartProps } from '~/Components/Chart/CartesianCharts/utils/types';
-import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
-import styles from '../CartesianCharts.module.scss';
-import { useIsDarkTheme } from '~/hooks';
-import { Text } from '~/Components/Text/Text';
-import { drawXAxisLabels, drawYAxisLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
-import { drawXDirLines, drawYDirLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
 import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
 import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
+import { drawXAxisLabels, drawYAxisLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
+import { drawXDirLines, drawYDirLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
+import type { CartesianChartProps, CartesianChartsColors } from '~/Components/Chart/CartesianCharts/utils/types';
+import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
+import { Text } from '~/Components/Text/Text';
+import { useIsDarkTheme } from '~/hooks';
+import styles from '../CartesianCharts.module.scss';
 
 export function BarChart({
   data,

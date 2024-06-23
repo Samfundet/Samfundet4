@@ -1,13 +1,13 @@
 import { type MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from './context/AuthContext';
-import { useGlobalContext } from './context/GlobalContextProvider';
 import { getTextItem, putUserPreference } from '~/api';
 import type { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper, THEME, THEME_KEY, type ThemeValue } from './constants';
+import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import { useAuthContext } from './context/AuthContext';
+import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 

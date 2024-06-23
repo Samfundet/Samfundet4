@@ -1,5 +1,5 @@
-import type { Children } from '~/types';
 import classnames from 'classnames';
+import type { Children } from '~/types';
 import styles from './ReservationFormLine.module.scss';
 
 type ReservationFormLineProps = {

@@ -1,9 +1,8 @@
-import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
+import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
-  RecruitmentApplicationsOverviewPage,
   ComponentPage,
   EventPage,
   EventsPage,
@@ -21,6 +20,7 @@ import {
   MembershipPage,
   NotFoundPage,
   RecruitmentAdmissionFormPage,
+  RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -28,6 +28,7 @@ import {
   VenuePage,
 } from '~/Pages';
 import {
+  AdminLayout,
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
   EventCreatorAdminPage,
@@ -36,32 +37,31 @@ import {
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
+  ImpersonateUserAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentApplicantAdminPage,
+  RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterviewGangPage,
-  RecruitmentApplicantAdminPage,
-  SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
-  RecruitmentFormAdminPage,
-  SultenReservationAdminPage,
+  SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
-  AdminLayout,
-  ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
+  SultenReservationAdminPage,
 } from '~/PagesAdmin';
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
 
-import { App } from '~/App';
 import { t } from 'i18next';
+import { App } from '~/App';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 

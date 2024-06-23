@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import styles from './ToolTip.module.scss';
 import classNames from 'classnames';
+import { useState } from 'react';
 import type { Children } from '~/types';
 import { Image } from '../Image';
+import styles from './ToolTip.module.scss';
 
 type AlignmentOptions = 'top' | 'right';
 type DisplayOptions = 'text' | 'image';

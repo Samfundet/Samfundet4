@@ -1,6 +1,6 @@
+import classNames from 'classnames';
 import { type ChangeEvent, useEffect, useState } from 'react';
 import styles from './InputTime.module.scss';
-import classNames from 'classnames';
 
 type InputTimeProps = {
   className?: string;

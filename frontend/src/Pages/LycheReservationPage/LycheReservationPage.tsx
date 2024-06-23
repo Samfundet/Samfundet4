@@ -1,16 +1,16 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
-import { TextItem } from '~/constants/TextItems';
-import styles from './LycheReservationPage.module.scss';
-import { KV } from '~/constants';
-import { useKeyValue, useTextItem } from '~/hooks';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { KV } from '~/constants';
+import { TextItem } from '~/constants/TextItems';
+import { useKeyValue, useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { ReservationFormLine } from './Components';
+import styles from './LycheReservationPage.module.scss';
 
 type FormProps = {
   occasion: string;

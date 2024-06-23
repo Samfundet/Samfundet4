@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RecruitmentWithoutInterviewTable } from '~/Components';
-import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import styles from './RecruitmentUsersWithoutInterviewGangPage.module.scss';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
+import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentUsersWithoutInterviewGangPage.module.scss';
 
 export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();

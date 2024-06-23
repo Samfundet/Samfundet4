@@ -1,7 +1,11 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentAdmissionsForRecruiter } from '~/api';
 import type { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -9,10 +13,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { Table } from '~/Components/Table';
-import classNames from 'classnames';
-import { useParams } from 'react-router-dom';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();

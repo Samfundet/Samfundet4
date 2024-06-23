@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { Button, IconButton, Modal } from '~/Components';
+import type { RecruitmentAdmissionDto } from '~/dto';
 import styles from './WithoutInterview.module.scss';
 import { WithoutInterviewList } from './WithoutInterviewList';
-import type { RecruitmentAdmissionDto } from '~/dto';
-import { Button, IconButton, Modal } from '~/Components';
 
 type WithoutInterviewModalProps = {
   admissions: RecruitmentAdmissionDto[];

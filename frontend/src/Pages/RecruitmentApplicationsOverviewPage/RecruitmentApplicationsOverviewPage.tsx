@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link, Page } from '~/Components';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentAdmissionsForApplicant, putRecruitmentPriorityForUser } from '~/api';
 import type { RecruitmentAdmissionDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
 import styles from './RecruitmentApplicationsOverviewPage.module.scss';
-import { OccupiedFormModal } from '~/Components/OccupiedForm';
-import { reverse } from '~/named-urls';
-import { Text } from '~/Components/Text/Text';
 
 export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();

@@ -10,9 +10,9 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
-import { lowerCapitalize } from '~/utils';
 
 export function GangsFormAdminPage() {
   const navigate = useCustomNavigate();

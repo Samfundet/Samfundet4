@@ -1,14 +1,14 @@
-import styles from './UserFeedback.module.scss';
-import { IconButton, Modal } from '~/Components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { IconButton, Modal } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
-import { useTextItem } from '~/hooks';
 import { TextItem } from '~/constants';
-import { toast } from 'react-toastify';
+import { useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import styles from './UserFeedback.module.scss';
 
 type UserFeedbackProps = {
   enabled: boolean;

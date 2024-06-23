@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useAuthContext } from './AuthContext';
 import { getAllNotifications, getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
+import type { NotificationDto } from '~/dto';
 import { useMouseTrail, useTheme } from '~/hooks';
 import type { Children, KeyValueMap, SetState } from '~/types';
-import type { NotificationDto } from '~/dto';
+import { useAuthContext } from './AuthContext';
 
 /**
  * Define which values the global context can contain.

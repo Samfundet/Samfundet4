@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Image } from './Image';
 import { logoBlack } from '~/assets';
+import { Image } from './Image';
 
 // Local component config.
 export default {

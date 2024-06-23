@@ -1,6 +1,6 @@
-import { useAuthContext } from '~/context/AuthContext';
 import { Carousel, IconButton, ImageCard } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
+import { useAuthContext } from '~/context/AuthContext';
 import type { EventDto, HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';

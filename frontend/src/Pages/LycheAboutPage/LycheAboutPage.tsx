@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
+import { burger, dessert, soup } from '~/assets';
+import { TextItem } from '~/constants';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './LycheAboutPage.module.scss';
-import { TextItem } from '~/constants';
-import { SultenCard } from '~/Components';
-import { burger, soup, dessert } from '~/assets';
 
 export function LycheAboutPage() {
   const { t } = useTranslation();

@@ -1,8 +1,8 @@
 import type {
   CartesianChartProps,
+  CartesianChartSizes,
   CartesianChartsColors,
   CartesianChartsData,
-  CartesianChartSizes,
 } from '~/Components/Chart/CartesianCharts/utils/types';
 
 /**

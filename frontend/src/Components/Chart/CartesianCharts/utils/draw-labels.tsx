@@ -1,4 +1,4 @@
-import type { CartesianChartsData, CartesianChartProps, CartesianChartSizes, CartesianChartsColors } from './types';
+import type { CartesianChartProps, CartesianChartSizes, CartesianChartsColors, CartesianChartsData } from './types';
 
 // processing single label text item
 const labelText = (labelValue: string | number, labelMagnitude?: number, splitLabel?: [number, number]): string => {

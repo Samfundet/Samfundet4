@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getInformationPages } from '~/api';
 import { Link } from '~/Components';
+import { getTranslatedTitle } from '~/Pages/InformationListPage/utils';
+import { getInformationPages } from '~/api';
 import type { InformationPageDto } from '~/dto';
 import { reverse } from '~/named-urls';
-import { getTranslatedTitle } from '~/Pages/InformationListPage/utils';
 import { ROUTES } from '~/routes';
 
 import { toast } from 'react-toastify';

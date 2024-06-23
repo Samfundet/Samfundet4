@@ -1,7 +1,7 @@
+import classNames from 'classnames';
 // @ts-nocheck
 import ReactModal from 'react-modal';
 import styles from './Modal.module.scss';
-import classNames from 'classnames';
 
 /**
  * https://reactcommunity.org/react-modal/#usage

@@ -1,11 +1,11 @@
-import { calculateSectorPath } from './utils/calculateSectorPath';
 import { useEffect, useState } from 'react';
-import { sectorColors } from './utils/sectorColors';
-import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
+import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import styles from './PieChart.module.scss';
-import type { CircularChartProps } from './utils/types';
 import { sizes } from './utils/apperance';
+import { calculateSectorPath } from './utils/calculateSectorPath';
+import { sectorColors } from './utils/sectorColors';
+import type { CircularChartProps } from './utils/types';
 
 const radius = 200;
 const viewboxSize = radius * 2;

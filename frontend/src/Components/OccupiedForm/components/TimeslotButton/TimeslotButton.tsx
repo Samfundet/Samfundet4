@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import styles from './TimeslotButton.module.scss';
 import type React from 'react';
 import type { ReactNode } from 'react';
+import styles from './TimeslotButton.module.scss';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;

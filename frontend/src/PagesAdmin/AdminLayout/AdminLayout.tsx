@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Button, Link, Navbar } from '~/Components';
 import type { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
-import { useMobile } from '~/hooks';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links

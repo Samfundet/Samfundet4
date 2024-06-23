@@ -5,10 +5,10 @@ import { getImages } from '~/api';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
-import { lowerCapitalize } from '~/utils';
 
 export function ImageAdminPage() {
   const [images, setImages] = useState<ImageDto[]>([]);

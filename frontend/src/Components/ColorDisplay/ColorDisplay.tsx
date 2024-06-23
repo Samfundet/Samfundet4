@@ -1,4 +1,4 @@
-import { type ColorKey, COLORS } from '~/types';
+import { COLORS, type ColorKey } from '~/types';
 import styles from './ColorDisplay.module.scss';
 
 type ColorDisplayProps = {

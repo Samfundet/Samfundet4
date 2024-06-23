@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import styles from './MiniCalendar.module.scss';
-import { useTranslation } from 'react-i18next';
-import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, previousMonday } from 'date-fns';
-import classNames from 'classnames';
-import { Button, TimeDisplay } from '~/Components';
-import { SHORT_DAY_I18N_KEYS } from '~/utils';
-import type { CalendarMarker } from '~/types';
 import { Icon } from '@iconify/react';
+import classNames from 'classnames';
+import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, previousMonday } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button, TimeDisplay } from '~/Components';
+import type { CalendarMarker } from '~/types';
+import { SHORT_DAY_I18N_KEYS } from '~/utils';
+import styles from './MiniCalendar.module.scss';
 
 type MiniCalendarProps = {
   /** Decides which month to display */

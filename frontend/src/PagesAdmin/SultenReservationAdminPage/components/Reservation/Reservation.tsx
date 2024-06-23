@@ -1,8 +1,8 @@
 import type { ReservationTableDto } from '~/dto';
 import styles from './Reservation.module.scss';
 
-import { useState } from 'react';
 import classNames from 'classnames';
+import { useState } from 'react';
 
 type ReservationProps = {
   reservation: ReservationTableDto;

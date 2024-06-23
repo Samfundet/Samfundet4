@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/context/AuthContext';
 import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
+import { validEmail, validPhonenumber } from '~/Forms/util';
 import { getUser, register } from '~/api';
+import { useAuthContext } from '~/context/AuthContext';
 import type { RegistrationDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './SignUpPage.module.scss';
-import { validPhonenumber, validEmail } from '~/Forms/util';
 
 type SignUpFormData = {
   username: string;

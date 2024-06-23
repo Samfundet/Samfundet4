@@ -1,18 +1,18 @@
-import styles from './RecruitmentApplicantsStatus.module.scss';
-import type { RecruitmentAdmissionDto } from '~/dto';
 import { useEffect, useState } from 'react';
-import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { Link } from '../Link';
-import { reverse } from '~/named-urls';
-import { ROUTES } from '~/routes';
-import { InputField } from '../InputField';
-import { putRecruitmentAdmissionForGang } from '~/api';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { utcTimestampToLocal } from '~/utils';
 import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
+import { putRecruitmentAdmissionForGang } from '~/api';
+import type { RecruitmentAdmissionDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { utcTimestampToLocal } from '~/utils';
+import { InputField } from '../InputField';
+import { Link } from '../Link';
+import styles from './RecruitmentApplicantsStatus.module.scss';
 
 type RecruitmentApplicantsStatusProps = {
   applicants: RecruitmentAdmissionDto[];

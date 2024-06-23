@@ -1,13 +1,13 @@
-import styles from './RecruitmentWithoutInterviewTable.module.scss';
-import type { RecruitmentUserDto } from '~/dto';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { Link } from '../Link';
-import { ROUTES } from '~/routes';
-import { InputField } from '../InputField';
-import { dbT } from '~/utils';
 import { Table } from '~/Components/Table';
+import type { RecruitmentUserDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
+import { InputField } from '../InputField';
+import { Link } from '../Link';
+import styles from './RecruitmentWithoutInterviewTable.module.scss';
 import { WithoutInterviewModal } from './components';
 
 type RecruitmentWithoutInterviewTableProps = {

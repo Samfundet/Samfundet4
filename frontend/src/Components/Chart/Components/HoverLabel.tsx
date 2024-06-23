@@ -1,4 +1,4 @@
-import { useState, type MouseEvent, useRef } from 'react';
+import { type MouseEvent, useRef, useState } from 'react';
 
 type HoverInfo = {
   value: string;

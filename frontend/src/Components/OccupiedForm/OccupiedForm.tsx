@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { OccupiedTimeslotDto } from '~/dto';
-import styles from './OccupiedForm.module.scss';
-import { KEY } from '~/i18n/constants';
-import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
 import { Trans, useTranslation } from 'react-i18next';
-import { Button } from '../Button';
+import { toast } from 'react-toastify';
 import { MiniCalendar } from '~/Components';
-import type { CalendarMarker } from '~/types';
 import { TimeslotContainer } from '~/Components/OccupiedForm/components';
+import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
+import type { OccupiedTimeslotDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import type { CalendarMarker } from '~/types';
+import { Button } from '../Button';
+import styles from './OccupiedForm.module.scss';
 
 type Props = {
   recruitmentId: number;

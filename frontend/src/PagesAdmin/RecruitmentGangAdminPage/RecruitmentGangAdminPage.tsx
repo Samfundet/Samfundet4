@@ -5,12 +5,12 @@ import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
-import styles from './RecruitmentGangAdminPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentGangAdminPage.module.scss';
 
 export function RecruitmentGangAdminPage() {
   const recruitmentId = useParams().recruitmentId;

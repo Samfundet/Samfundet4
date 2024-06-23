@@ -11,8 +11,8 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import styles from './RecruitmentPositionFormAdminPage.module.scss';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentPositionFormAdminPage.module.scss';
 
 type FormType = {
   name_nb: string;

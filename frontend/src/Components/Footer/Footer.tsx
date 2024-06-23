@@ -1,7 +1,7 @@
+import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Link, Image } from '~/Components';
-import { Icon } from '@iconify/react';
+import { Image, Link } from '~/Components';
 import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
 import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';

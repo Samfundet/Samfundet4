@@ -2,7 +2,7 @@
 //@ts-nocheck
 
 // toggle remove ts-nocheck when developing. It is here because TS freaks out over the function props.
-import { BarChart, LineChart, type CartesianChartProps } from './CartesianCharts';
+import { BarChart, type CartesianChartProps, LineChart } from './CartesianCharts';
 import { type CircularChartProps, PieChart } from './CircularCharts';
 
 // correct typing for each category of chart.

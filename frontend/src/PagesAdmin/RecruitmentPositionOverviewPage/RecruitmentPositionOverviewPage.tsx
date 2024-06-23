@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentAdmissionsForGang } from '~/api';
 import type { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { ProcessedApplicants } from './components';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { Text } from '~/Components/Text/Text';
+import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {
   const { recruitmentId, gangId, positionId } = useParams();

@@ -5,13 +5,13 @@ import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
-import { ROUTES } from '~/routes';
-import { STATUS } from '~/http_status_codes';
 
 export function EventPage() {
   const navigate = useNavigate();

@@ -12,8 +12,8 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './InformationFormAdminPage.module.scss';
 import { lowerCapitalize } from '~/utils';
+import styles from './InformationFormAdminPage.module.scss';
 
 export function InformationFormAdminPage() {
   const { t } = useTranslation();

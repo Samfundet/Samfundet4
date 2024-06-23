@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getFoodCategories, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
@@ -11,10 +12,9 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import styles from './SultenMenuItemFormAdminPage.module.scss';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './SultenMenuItemFormAdminPage.module.scss';
 
 type FormType = {
   name_nb: string;

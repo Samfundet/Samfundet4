@@ -1,5 +1,5 @@
-import { Error } from './Error';
 import type { ComponentStory } from '@storybook/react';
+import { Error } from './Error';
 
 export default {
   title: 'Components/Error',
