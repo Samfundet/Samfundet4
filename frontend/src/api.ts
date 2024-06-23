@@ -777,18 +777,15 @@ export async function getActiveRecruitments(): Promise<AxiosResponse<Recruitment
 
 export async function getApplicantsWithoutInterviews(
   recruitmentId: string,
+  gangId: string | null = null,
 ): Promise<AxiosResponse<RecruitmentUserDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__applicants_without_interviews,
-      queryParams: {
-        recruitment: recruitmentId,
-      },
+      queryParams: gangId ? { recruitment: recruitmentId, gang: gangId } : { recruitment: recruitmentId },
     });
-  const response = await axios.get(url, { withCredentials: true });
-
-  return response;
+  return await axios.get(url, { withCredentials: true });
 }
 
 export async function putRecruitmentAdmission(

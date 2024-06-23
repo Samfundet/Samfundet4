@@ -18,7 +18,7 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 
 from django.http import QueryDict
 from django.utils import timezone
-from django.db.models import Case, When, Count, QuerySet
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
@@ -634,29 +634,24 @@ class RecruitmentPositionsPerGangView(ListAPIView):
         return None
 
 
-class ApplicantsWithoutInterviewsView(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = UserForRecruitmentSerializer
+class ApplicantsWithoutInterviewsView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self) -> QuerySet[User]:
-        """
-        Optionally restricts the returned positions to a given recruitment,
-        by filtering against a `recruitment` query parameter in the URL.
-        """
+    def get(self, request: Request) -> Response:
         recruitment = self.request.query_params.get('recruitment', None)
-        if recruitment is None:
-            return User.objects.none()  # Return an empty queryset instead of None
+        gang = self.request.query_params.get('gang', None)
 
-        # Exclude users who have any admissions for the given recruitment that have an interview_time
-        interview_times_for_recruitment = Case(
-            When(admissions__recruitment=recruitment, then='admissions__interview__interview_time'),
-            default=None,
-            output_field=None,
-        )
-        users_without_interviews = (
-            User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
-        )
-        return users_without_interviews
+        if not recruitment:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Filter based on admissions
+        admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, interview=None)
+        if gang:
+            admissions = admissions.filter(recruitment_position__gang=gang)
+        admissions_without_interviews_user_ids = admissions.values_list('user_id', flat=True)
+        data = User.objects.filter(id__in=admissions_without_interviews_user_ids)
+
+        return Response(data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
 
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):

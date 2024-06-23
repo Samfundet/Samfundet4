@@ -165,7 +165,7 @@ export const KEY = {
   common_tickets: 'common_tickets',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
-
+  common_processed: 'common_processed',
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
@@ -258,6 +258,10 @@ export const KEY = {
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
+  recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
+  recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
+  recruitment_not_applicants_without_interviews: 'recruitment_not_applicants_without_interviews',
+  recruitment_applicant_top_position: 'recruitment_applicant_top_position',
   recruitment_withdrawn_admissions: 'recruitment_withdrawn_admissions',
   recruitment_rejected_admissions: 'recruitment_rejected_admissions',
   recruitment_accepted_admissions: 'recruitment_accepted_admissions',

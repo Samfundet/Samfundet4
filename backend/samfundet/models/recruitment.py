@@ -300,9 +300,6 @@ class RecruitmentAdmission(CustomBaseModel):
 
             if shared_interview:
                 self.interview = shared_interview.interview
-            else:
-                # Create a new interview instance if needed
-                self.interview = Interview.objects.create()
         # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
