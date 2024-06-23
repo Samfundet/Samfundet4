@@ -1,16 +1,17 @@
 import styles from './RecruitmentStatistics.module.scss';
 import { Text } from '~/Components/Text/Text';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
 export function RecruitmentStatistics() {
   const { t } = useTranslation();
   // TODO: add dynamic data and might need backend features (in ISSUE #1110)
-  const [mockRecruitmentStatOne, setMockRecruitmentStatOne] = useState([
+
+  const mockRecruitmentStatOne = [
     { at_date: '28-08-2024', recruitment_applications: 10 },
     { at_date: '25-08-2024', recruitment_applications: 2 },
-  ]);
+  ];
 
   const recruitmentStatisticsContainer = (children: ReactNode, chartTitle: string) => (
     <div className={styles.statisticsContainer}>

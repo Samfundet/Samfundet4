@@ -50,6 +50,7 @@ export function RecruitmentProgression() {
     }
 
     setTableRows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processedApplication, totalApplications]);
 
   const setTableRows = () => {
