@@ -10,12 +10,19 @@ import { ROUTES } from '~/routes';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
+import { Chart } from '~/Components';
 
 export function AboutPage() {
   const { t } = useTranslation();
-
+  const campus_mock_data = [
+    { label: 'Gløshuagen', value: 50 },
+    { label: 'Kalvskinnet', value: 30 },
+    { label: 'DMM', value: 15 },
+    { label: 'Dragvoll', value: 10 },
+  ];
   return (
     <Page>
+      <Chart type={'pie'} data={campus_mock_data} chartTitle={'Campuse'} size={'medium'} legend={'test'} />
       <div className={styles.row}>
         <img src={runderode} alt="Runderode" className={classNames(styles.runderode, styles.box)} />
         <div className={styles.textBox}>
