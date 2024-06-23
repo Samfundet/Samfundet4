@@ -53,12 +53,14 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
     RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
+from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 if TYPE_CHECKING:
     from typing import Any
@@ -756,14 +758,24 @@ class RecruitmentAdmissionForApplicantSerializer(CustomBaseSerializer):
         return data
 
 
-class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
+    # Set custom format to remove seconds from start/end times, as they are ignored
+    start_time = serializers.DateTimeField(format='%H:%M')
+    end_time = serializers.DateTimeField(format='%H:%M')
+
     class Meta:
-        model = Occupiedtimeslot
+        model = RecruitmentInterviewAvailability
+        fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+
+class OccupiedTimeslotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OccupiedTimeslot
         fields = '__all__'
 
 
 class ApplicantInfoSerializer(CustomBaseSerializer):
-    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
+    occupied_timeslots = OccupiedTimeslotSerializer(many=True)
 
     class Meta:
         model = User
@@ -845,6 +857,7 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
     def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+        # More or less this is rough, interview should be its own thing
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
@@ -860,6 +873,11 @@ class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
 
     def get_application_count(self, application: RecruitmentAdmission) -> int:
         return application.user.admissions.filter(recruitment=application.recruitment).count()
+
+
+class RecruitmentAdmissionUpdateForGangSerializer(serializers.Serializer):
+    recruiter_priority = serializers.ChoiceField(choices=RecruitmentPriorityChoices.choices, required=False)
+    recruiter_status = serializers.ChoiceField(choices=RecruitmentStatusChoices.choices, required=False)
 
 
 class UserFeedbackSerializer(serializers.ModelSerializer):
