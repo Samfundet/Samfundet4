@@ -47,6 +47,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_food]: 'Mat',
   [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
+  [KEY.common_not]: 'Ikke',
   [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -77,6 +78,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
+  [KEY.common_cancel]: 'Avbryt',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
@@ -109,6 +111,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
+  [KEY.common_select_all]: 'Velg alle',
+  [KEY.common_unselect_all]: 'Fjern valgte',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
@@ -129,6 +133,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_total]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
+  [KEY.common_loading]: 'Laster inn',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -304,7 +309,8 @@ export const nb: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
-  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
+  [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
   // Feedback
@@ -379,6 +385,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_food]: 'Food',
   [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
+  [KEY.common_not]: 'Not',
   [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -403,6 +410,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -425,6 +433,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
+  [KEY.common_select_all]: 'Select all',
+  [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
   [KEY.common_recruitmentposition]: 'Position',
   [KEY.common_about_us]: 'About us',
@@ -461,6 +471,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_total]: 'Total',
   [KEY.common_guests]: 'Guests',
   [KEY.common_occasion]: 'Occasion',
+  [KEY.common_loading]: 'Loading',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -640,7 +651,8 @@ export const en: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
-  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
+  [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
 
   // Feedback
