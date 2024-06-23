@@ -14,7 +14,7 @@ export function RecruitmentStatistics() {
 
   const recruitmentStatisticsContainer = (children: ReactNode, chartTitle: string) => (
     <div className={styles.statisticsContainer}>
-      <Text as={'strong'} size={'m'}>
+      <Text as="strong" size="m">
         {chartTitle}
       </Text>
       <div className={styles.chartContainer}>{children}</div>
