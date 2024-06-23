@@ -56,7 +56,7 @@ export function AdminLayout() {
 
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
-      <button className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
+      <button type="button" className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
         <Icon icon="mdi:close" width={24} />
       </button>
 
@@ -101,9 +101,9 @@ export function AdminLayout() {
   );
 
   const desktopOpen = (
-    <div className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
+    <button type="button" className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
       <Icon icon="mdi:arrow-right-bold" width={16} className={styles.arrow} />
-    </div>
+    </button>
   );
 
   return (

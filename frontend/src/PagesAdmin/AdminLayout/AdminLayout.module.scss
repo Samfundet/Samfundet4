@@ -185,16 +185,15 @@ $panel-dark-bg: #333333;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: none;
+  border: none;
+
   &:hover {
     background-color: $black-t10;
-    -webkit-transition: background-color 200ms linear;
-    -ms-transition: background-color 200ms linear;
     transition: background-color 200ms linear;
   }
   &:active {
     background-color: $black-t25;
-    -webkit-transition: background-color 1ms linear;
-    -ms-transition: background-color 1ms linear;
     transition: background-color 1ms linear;
   }
 }
