@@ -15,7 +15,8 @@ class RecruitmentStatusChoices(models.IntegerChoices):
     NOT_SET = 0, _('Not Set')
     CALLED_AND_ACCEPTED = 1, _('Called and Accepted')
     CALLED_AND_REJECTED = 2, _('Called and Rejected')
-    AUTOMATIC_REJECTION = 3, _('Automatic Rejection')
+    REJECTION = 3, _('Rejection')
+    AUTOMATIC_REJECTION = 4, _('Automatic Rejection')
 
 
 class EventStatus(models.TextChoices):

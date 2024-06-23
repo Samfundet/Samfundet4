@@ -5,12 +5,13 @@ from typing import Any
 from guardian.shortcuts import assign_perm, remove_perm
 
 from django.dispatch import receiver
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import pre_save, post_save, m2m_changed
 
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import Gang, User, Event, Profile, UserPreference
 from .models.recruitment import Recruitment, RecruitmentAdmission, RecruitmentStatistics
+from .models.model_choices import RecruitmentStatusChoices
 
 
 @receiver(post_save, sender=User)
@@ -76,3 +77,37 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
 def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
     if created:
         instance.recruitment.update_stats()
+
+
+@receiver(pre_save, sender=RecruitmentAdmission)
+def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, instance: RecruitmentAdmission, **kwargs: Any) -> None:  # noqa C901
+    """Whenever an applicant is contacted, set all other admissions to automatic rejection"""
+
+    obj = RecruitmentAdmission.objects.filter(pk=instance.pk).first()
+    if not obj:
+        return
+    # Check if Status is set to called
+    if obj.recruiter_status != instance.recruiter_status:
+        # Check if Status is changed to called, then set all unset to AUTOMATIC_REJECTION
+        if instance.recruiter_status in [
+            RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+            RecruitmentStatusChoices.CALLED_AND_REJECTED,
+        ]:
+            # Set all others to Automatic rejection
+            for other_admission in RecruitmentAdmission.objects.filter(
+                recruitment=obj.recruitment, user=obj.user, recruiter_status=RecruitmentStatusChoices.NOT_SET
+            ).exclude(id=obj.id):
+                other_admission.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+                other_admission.save()
+
+        # Check if status is reverted from called, this will set all all AUTOMATIC_REJECTION back
+        elif obj.recruiter_status in [
+            RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+            RecruitmentStatusChoices.CALLED_AND_REJECTED,
+        ]:
+            # Set all others to Automatic rejection
+            for other_admission in RecruitmentAdmission.objects.filter(
+                recruitment=obj.recruitment, user=obj.user, recruiter_status=RecruitmentStatusChoices.AUTOMATIC_REJECTION
+            ).exclude(id=obj.id):
+                other_admission.recruiter_status = RecruitmentStatusChoices.NOT_SET
+                other_admission.save()
