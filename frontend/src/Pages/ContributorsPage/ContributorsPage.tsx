@@ -3,6 +3,7 @@ import styles from './ContributorsPage.module.scss';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import robines from '~/assets/contributors/robines.jpg';
+import snorre98 from '~/assets/contributors/snorre98.jpg';
 import { type Contributor, ContributorItem } from './components';
 
 const CONTRIBUTORS: Contributor[] = [
@@ -28,7 +29,7 @@ const CONTRIBUTORS: Contributor[] = [
 
   { name: 'Sindre Lothe', github: 'sindrelothe', from: 'V22', to: 'H23' },
 
-  { name: 'Snorre Sæther', github: 'Snorre98', from: 'H22', websjef: { from: 'H24', to: 'V25' } },
+  { name: 'Snorre Sæther', github: 'Snorre98', from: 'H22', picture: snorre98, websjef: { from: 'H24', to: 'V25' } },
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },
   { name: 'Simen Seeberg-Rommetveit', github: 'simensee', from: 'H22' },
 
