@@ -98,6 +98,11 @@
   }
 }
 
+.button_yellow {
+  background-color: $yellow;
+  color: white;
+}
+
 .button_green {
   background-color: $green;
   color: white;
@@ -136,3 +141,22 @@
   font-weight: inherit;
   line-height: inherit;
 }
+
+.button_text {
+  background-color: transparent;
+  border-width: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: $red-samf;
+
+  &:hover:not([disabled]) {
+    filter: brightness(120%);
+    transition: 0.15s;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+

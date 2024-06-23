@@ -17,8 +17,8 @@ import {
   RecruitmentGangOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentApplicantAdminPage,
-  RecruitmentUsersWithoutInterview,
   RecruitmentFormAdminPage,
   AdminLayout,
   ImpersonateUserAdminPage,
@@ -134,8 +134,8 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_users_without_interview}
-            element={<RecruitmentUsersWithoutInterview />}
+            path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
+            element={<RecruitmentUsersWithoutInterviewGangPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}

@@ -48,9 +48,11 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
+  phone_number?: string;
   campus?: CampusDto;
-  recruitment_admission_ids?: string[];
+  admissions: RecruitmentAdmissionDto[];
+  admissions_without_interview: RecruitmentAdmissionDto[];
+  top_admission: RecruitmentAdmissionDto;
 };
 
 export type HomePageDto = {
@@ -412,6 +414,10 @@ export type RecruitmentPositionDto = {
   tags: string;
 
   interviewers?: UserDto[];
+
+  total_applicants?: number;
+  processed_applicants?: number;
+  accepted_applicants?: number;
 };
 
 export type InterviewDto = {
