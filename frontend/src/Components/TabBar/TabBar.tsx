@@ -41,6 +41,7 @@ export function TabBar<T = void>({
         const isSelected = selected !== undefined && tab.key === selected.key;
         return (
           <button
+            type="button"
             className={classNames(styles.tab_button, isSelected && styles.selected)}
             disabled={disabled}
             onClick={(e) => {
