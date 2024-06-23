@@ -10,7 +10,7 @@ export function NotFoundPage() {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
-      <img src={NotFound} className={styles.image} />
+      <img src={NotFound} className={styles.image} alt="Not found" />
       <br />
       <Button rounded={true} theme="outlined" link={ROUTES.frontend.home}>
         <span className={styles.button_text}>{t(KEY.common_back_to_samfundet)}</span>
