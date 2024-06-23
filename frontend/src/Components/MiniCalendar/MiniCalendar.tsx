@@ -111,6 +111,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
           return (
             <button
               key={i}
+              type="button"
               className={classNames({
                 [styles.day]: true,
                 [styles.disabled_day]: !valid,
