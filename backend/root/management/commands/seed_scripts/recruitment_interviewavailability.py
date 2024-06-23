@@ -22,8 +22,7 @@ def seed():
     for i, recruitment in enumerate(recruitments):
         # Default availability for each recruitment. This is what fills out the "unavailability dialog" timeslots
         data = DEFAULT_DATA.copy()
-        data.update({'recruitment': recruitment, 'position': None, 'start_date': recruitment.visible_from,
-                     'end_date': recruitment.shown_application_deadline})
+        data.update({'recruitment': recruitment, 'position': None, 'start_date': recruitment.visible_from, 'end_date': recruitment.shown_application_deadline})
         _, created = RecruitmentInterviewAvailability.objects.get_or_create(**data)
 
         if created:
