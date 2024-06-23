@@ -30,7 +30,9 @@ export function InterviewNotesPage() {
         if (admission.length !== 0) {
           setdisabled(false);
           setRecruitmentAdmission(admission);
-          setInterview(admission[0].interview);
+          if (admission[0].interview) {
+            setInterview(admission[0].interview);
+          }
           setNameUser(getNameUser(admission[0]));
         }
       });
@@ -51,8 +53,10 @@ export function InterviewNotesPage() {
 
   function handleUpdateNotes(value: string) {
     const updatedNotes = value;
-    const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
-    setInterview(updatedInterview);
+    if (recruitmentAdmission[0].interview) {
+      const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
+      setInterview(updatedInterview);
+    }
   }
 
   return (

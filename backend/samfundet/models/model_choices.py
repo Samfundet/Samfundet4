@@ -6,9 +6,9 @@ from django.utils.translation import gettext as _
 
 class RecruitmentPriorityChoices(models.IntegerChoices):
     NOT_SET = 0, _('Not Set')
-    NOT_WANTED = 1, _('Not Wanted')
+    RESERVE = 1, _('Reserve')
     WANTED = 2, _('Wanted')
-    RESERVE = 3, _('Reserve')
+    NOT_WANTED = 3, _('Not Wanted')
 
 
 class RecruitmentStatusChoices(models.IntegerChoices):
@@ -82,3 +82,21 @@ class SaksdokumentCategory(models.TextChoices):
     STYRET = 'STYRET', _('Styret')
     RADET = 'RADET', _('Rådet')
     ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
+
+
+class RecruitmentApplicantStates(models.IntegerChoices):
+    # Mainly a descriptor
+    # The lower, except 0, the least more likely to get this applicant
+    # 0 not set
+    # 1 reserve
+    # 2 wanted
+    NOT_SET = 0, _('Unprocessed by all above on priority')
+    TOP_RESERVED = 1, _('Highest priority, and reserve')
+    TOP_WANTED = 2, _('Highest priority, and wanted')
+    LESS_RESERVE = 3, _('Another position has this on reserve, with higher priority')
+    LESS_RESERVE_RESERVED = 4, _('Another position has this on reserve, with higher priority, but you have reserved')
+    LESS_RESERVE_WANTED = 5, _('Another position has this on reserve, with higher priority, but you have them as wanted')
+    LESS_WANT = 6, _('Another position has this on reserve, with higher priority')
+    LESS_WANT_RESERVED = 7, _('Another position has this on wanted, with higher priority, but you have reserved')
+    LESS_WANT_WANTED = 8, _('Another position has this on wanted, with higher priority, but you have them as wanted')
+    NOT_WANTED = 10, _('Other position has priority')
