@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-import { TimeDuration } from '../TimeDuration';
+import { TimeDuration } from '~/Components';
 import styles from './OpeningHours.module.scss';
 
 type FakeVenue = {
@@ -20,15 +20,15 @@ export function OpeningHours({ venues }: OpeningHoursProps) {
     <div className={styles.container}>
       <h2>{t(KEY.common_opening_hours)}</h2>
       <table className={styles.timeTable}>
-        {venues.map((element, key) => (
-          <tr key={key} className={styles.openingRow}>
+        {venues.map((venue) => (
+          <tr key={venue.name} className={styles.openingRow}>
             <td>
-              <a href={element.url}>
-                <p className={styles.openingHoursText}>{element.name}</p>
+              <a href={venue.url}>
+                <p className={styles.openingHoursText}>{venue.name}</p>
               </a>
             </td>
             <td className={styles.startEnd}>
-              <TimeDuration className={styles.openingHoursText} start={element.start} end={element.end} />
+              <TimeDuration className={styles.openingHoursText} start={venue.start} end={venue.end} />
             </td>
           </tr>
         ))}
