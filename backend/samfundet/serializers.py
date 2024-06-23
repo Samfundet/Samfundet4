@@ -697,7 +697,7 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
         model = RecruitmentApplication
         fields = [
             'id',
-            'admission_text',
+            'application_text',
             'recruitment_position',
             'applicant_priority',
             'withdrawn',
@@ -718,7 +718,7 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
         user = self.context['request'].user
 
         recruitment_application = RecruitmentApplication.objects.create(
-            admission_text=validated_data.get('admission_text'),
+            application_text=validated_data.get('application_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
@@ -783,7 +783,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'id',
             'recruitment',
             'user',
-            'admission_text',
+            'application_text',
             'recruitment_position',
             'recruiter_status',
             'applicant_priority',
@@ -796,7 +796,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'id',
             'recruitment',
             'user',
-            'admission_text',
+            'application_text',
             'recruitment_position',
             'recruiter_status',
             'applicant_priority',
@@ -814,7 +814,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
-    admission_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
+    application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:
         model = RecruitmentApplication

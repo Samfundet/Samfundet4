@@ -420,7 +420,7 @@ export type RecruitmentApplicationDto = {
   id: string;
   interview?: InterviewDto;
   interview_time?: Date;
-  admission_text: string;
+  application_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
@@ -434,8 +434,8 @@ export type RecruitmentApplicationDto = {
 
 export type RecruitmentApplicationRecruiterDto = {
   user: RecruitmentUserDto;
-  admission: RecruitmentApplicationDto;
-  other_admissions: RecruitmentApplicationDto[];
+  application: RecruitmentApplicationDto;
+  other_applications: RecruitmentApplicationDto[];
 };
 
 export type RecruitmentApplicationStateDto = {

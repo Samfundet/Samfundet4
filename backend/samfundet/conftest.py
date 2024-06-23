@@ -346,7 +346,7 @@ def fixture_recruitment_application(
     fixture_recruitment: Recruitment,
 ) -> Iterator[RecruitmentApplication]:
     admission = RecruitmentApplication.objects.create(
-        admission_text='Test admission text',
+        application_text='Test application text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
         user=fixture_user,
@@ -365,7 +365,7 @@ def fixture_recruitment_application2(
     fixture_recruitment: Recruitment,
 ) -> Iterator[RecruitmentApplication]:
     admission2 = RecruitmentApplication.objects.create(
-        admission_text='Test admission text',
+        application_text='Test admission text',
         recruitment_position=fixture_recruitment_position2,
         recruitment=fixture_recruitment,
         user=fixture_user,

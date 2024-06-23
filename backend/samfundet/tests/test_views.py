@@ -880,7 +880,7 @@ def test_recruitment_application_for_applicant(
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 1
-    assert response.data[0]['admission_text'] == fixture_recruitment_application.admission_text
+    assert response.data[0]['application_text'] == fixture_recruitment_application.application_text
     assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_application.recruitment_position.id
 
 
@@ -893,12 +893,12 @@ def test_post_admission(
         routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
-    post_data = {'admission_text': 'test_text'}
+    post_data = {'application_text': 'test_text'}
     ### Act ###
     response: Response = fixture_rest_client.put(path=url, data=post_data)
 
     ### Assert ###
-    assert response.data['admission_text'] == post_data['admission_text']
+    assert response.data['application_text'] == post_data['application_text']
     assert response.status_code == status.HTTP_201_CREATED
     # Assert the returned data based on the logic in the view
 
@@ -913,16 +913,16 @@ def test_update_admission(
         kwargs={'pk': fixture_recruitment_position.id},
     )
     ### Act Send create ###
-    post_data1 = {'admission_text': 'I love samf!'}
+    post_data1 = {'application_text': 'I love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data1)
     ### Assert ###
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data['admission_text'] == post_data1['admission_text']
+    assert response.data['application_text'] == post_data1['application_text']
     ### Act 2 Send update ###
-    post_data2 = {'admission_text': 'No i really love samf!'}
+    post_data2 = {'application_text': 'No i really love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data2)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['admission_text'] == post_data2['admission_text']
+    assert response.data['application_text'] == post_data2['application_text']
     # Assert the returned data based on the logic in the view
 
 
@@ -1095,11 +1095,11 @@ def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, 
         routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
-    post_data1 = {'admission_text': 'I love samf!'}
+    post_data1 = {'application_text': 'I love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data1)
     ### Assert Created ###
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data['admission_text'] == post_data1['admission_text']
+    assert response.data['application_text'] == post_data1['application_text']
     assert response.data['withdrawn'] is False
 
     ### Act 2 Send withdrawal ###
@@ -1128,12 +1128,12 @@ def test_post_admission_overflow(
         kwargs={'pk': fixture_recruitment_position.id},
     )
 
-    post_data = {'admission_text': 'test_text'}
+    post_data = {'application_text': 'test_text'}
     ### Act ###
     response: Response = fixture_rest_client.put(path=url, data=post_data)
 
     ### Assert ###
-    assert response.data['admission_text'] == post_data['admission_text']
+    assert response.data['application_text'] == post_data['application_text']
     assert response.status_code == status.HTTP_201_CREATED
     # Assert the returned data based on the logic in the view
 

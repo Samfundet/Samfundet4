@@ -635,13 +635,13 @@ export async function getRecruitmentApplicationsForApplicant(
 }
 
 export async function getRecruitmentApplicationsForRecruiter(
-  admissionID: string,
+  applicationID: string,
 ): Promise<AxiosResponse<RecruitmentApplicationRecruiterDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_applications_recruiter,
-      urlParams: { admissionId: admissionID },
+      urlParams: { applicationId: applicationID },
     });
   const response = await axios.get(url, { withCredentials: true });
 
@@ -777,7 +777,7 @@ export async function putRecruitmentApplication(
       urlParams: { pk: admissionId },
     });
   const data = {
-    admission_text: admission.admission_text,
+    application_text: admission.application_text,
     recruitment_position: admission.recruitment_position,
   };
   const response = await axios.put(url, data, { withCredentials: true });

@@ -672,7 +672,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         if serializer.is_valid():
             existing_admission = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
             if existing_admission:
-                existing_admission.admission_text = serializer.validated_data['admission_text']
+                existing_admission.application_text = serializer.validated_data['application_text']
                 existing_admission.save()
                 serializer = self.get_serializer(existing_admission)
                 return Response(serializer.data, status=status.HTTP_200_OK)

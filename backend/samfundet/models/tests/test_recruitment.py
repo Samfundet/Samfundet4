@@ -103,7 +103,7 @@ class TestRecruitmentStats:
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         # Check if updated
@@ -120,7 +120,7 @@ class TestRecruitmentStats:
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         assert fixture_recruitment.statistics.total_admissions == 1
@@ -136,7 +136,7 @@ class TestRecruitmentStats:
             user=fixture_user,
             recruitment_position=fixture_recruitment_position_copy,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         # check if only admissions are updated
@@ -155,7 +155,7 @@ class TestRecruitmentStats:
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         assert fixture_recruitment.statistics.total_admissions == 1
@@ -166,7 +166,7 @@ class TestRecruitmentStats:
             user=fixture_user2,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
 
@@ -424,7 +424,7 @@ class TestRecruitmentApplication:
         assert fixture_recruitment_application.applicant_priority == 1
 
         new_admission = RecruitmentApplication.objects.create(
-            admission_text='Test admission text 2',
+            application_text='Test admission text 2',
             recruitment_position=fixture_recruitment_position2,
             recruitment=fixture_recruitment_position2.recruitment,
             user=fixture_recruitment_application.user,

@@ -199,10 +199,10 @@ export const SAMFUNDET_CHANGE_RECRUITMENT = 'samfundet.change_recruitment';
 export const SAMFUNDET_DELETE_RECRUITMENT = 'samfundet.delete_recruitment';
 export const SAMFUNDET_VIEW_RECRUITMENT = 'samfundet.view_recruitment';
 
-export const SAMFUNDET_ADD_RECRUITmentAPPLICATION = 'samfundet.add_recruitmentapplication';
-export const SAMFUNDET_CHANGE_RECRUITmentAPPLICATION = 'samfundet.change_recruitmentapplication';
-export const SAMFUNDET_DELETE_RECRUITmentAPPLICATION = 'samfundet.delete_recruitmentapplication';
-export const SAMFUNDET_VIEW_RECRUITmentAPPLICATION = 'samfundet.view_recruitmentapplication';
+export const SAMFUNDET_ADD_RECRUITMENTAPPLICATION = 'samfundet.add_recruitmentapplication';
+export const SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION = 'samfundet.change_recruitmentapplication';
+export const SAMFUNDET_DELETE_RECRUITMENTAPPLICATION = 'samfundet.delete_recruitmentapplication';
+export const SAMFUNDET_VIEW_RECRUITMENTAPPLICATION = 'samfundet.view_recruitmentapplication';
 
 export const SAMFUNDET_ADD_RECRUITMENTPOSITION = 'samfundet.add_recruitmentposition';
 export const SAMFUNDET_CHANGE_RECRUITMENTPOSITION = 'samfundet.change_recruitmentposition';

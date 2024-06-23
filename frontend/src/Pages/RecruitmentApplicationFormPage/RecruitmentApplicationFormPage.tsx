@@ -24,7 +24,7 @@ import styles from './RecruitmentApplicationFormPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 
 type FormProps = {
-  admission_text: string;
+  application_text: string;
 };
 
 export function RecruitmentApplicationFormPage() {
@@ -204,7 +204,7 @@ export function RecruitmentApplicationFormPage() {
             devMode={false}
           >
             <p className={styles.formLabel}>{t(KEY.recruitment_application)}</p>
-            <SamfFormField field="admission_text" type="text_long" />{' '}
+            <SamfFormField field="application_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
           <div>

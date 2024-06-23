@@ -23,21 +23,21 @@ export function RecruitmentApplicantAdminPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const { admissionID } = useParams();
+  const { applicationID } = useParams();
 
   useEffect(() => {
-    getRecruitmentApplicationsForRecruiter(admissionID as string)
+    getRecruitmentApplicationsForRecruiter(applicationID as string)
       .then((res) => {
-        setRecruitmentApplication(res.data.admission);
+        setRecruitmentApplication(res.data.application);
         setApplicant(res.data.user);
-        setOtherRecruitmentApplication(res.data.other_admissions);
+        setOtherRecruitmentApplication(res.data.other_applications);
         setLoading(false);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-  }, [admissionID, t]);
+  }, [applicationID, t]);
 
   if (loading) {
     return (
@@ -66,7 +66,7 @@ export function RecruitmentApplicantAdminPage() {
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_application)}: {dbT(recruitmentApplication?.recruitment_position, 'name')}
         </Text>
-        <Text>{recruitmentApplication?.admission_text}</Text>
+        <Text>{recruitmentApplication?.application_text}</Text>
       </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
