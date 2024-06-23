@@ -160,11 +160,11 @@ export function RecruitmentAdmissionFormPage() {
             <h2 className={styles.subheader}>
               {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
             </h2>
-            {recruitmentPositionsForGang?.map((pos, index) => {
-              if (pos.id !== recruitmentPosition?.id) {
+            {recruitmentPositionsForGang?.map((pos) => {
+              if (pos.id === recruitmentPosition?.id) {
                 return (
                   <Button
-                    key={index}
+                    key={pos.id}
                     display="pill"
                     theme="outlined"
                     onClick={() => {
