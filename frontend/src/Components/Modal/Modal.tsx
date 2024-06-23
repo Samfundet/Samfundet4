@@ -7,7 +7,11 @@ import styles from './Modal.module.scss';
  * https://reactcommunity.org/react-modal/#usage
  */
 
-export function Modal({ children, className, ...props }: ReactModal.Props) {
+interface ModalProps extends ReactModal.Props {
+  className?: string;
+}
+
+export function Modal({ children, className, ...props }: ModalProps) {
   return (
     <ReactModal
       {...props} // Spread must be first
