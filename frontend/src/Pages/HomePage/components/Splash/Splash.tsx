@@ -71,7 +71,7 @@ export function Splash({ events, showInfo }: SplashProps) {
         setIsAnimating(true);
       }, SLIDE_FREQUENCY);
     }
-  }, [events, setIsAnimating]);
+  }, [events]);
 
   function nextSplash() {
     setIsAnimating(false);
@@ -94,6 +94,7 @@ export function Splash({ events, showInfo }: SplashProps) {
   }
 
   // Start timer when events change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: if events change, the timer should reset
   useEffect(() => {
     startSlideTimer();
   }, [events, startSlideTimer]);
@@ -135,7 +136,9 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_out_reverse]: isAnimating && isBackwards,
         })}
         onAnimationEnd={nextSplash}
+        aria-label="Splash image"
       />
+      {/* biome-ignore lint/a11y/useAltText: bug with this rule... aria-hidden is provided, no label is required */}
       <img
         src={isBackwards ? prevImageUrl : nextImageUrl}
         className={classNames({
@@ -144,6 +147,7 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_in]: isAnimating && !isBackwards,
           [styles.splash_slide_in_reverse]: isAnimating && isBackwards,
         })}
+        aria-hidden="true"
       />
 
       <div className={styles.splash_fade} />
