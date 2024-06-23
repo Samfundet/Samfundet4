@@ -1,7 +1,7 @@
 export { AboutPage } from './AboutPage';
 export { AdminPage } from './AdminPage';
 export { ApiTestingPage } from './ApiTestingPage';
-export { ApplicantApplicationOverviewPage } from './ApplicantApplicationOverviewPage';
+export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { ComponentPage } from './ComponentPage';
 export { EventPage } from './EventPage';
 export { EventsPage } from './EventsPage';
@@ -23,3 +23,4 @@ export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';
 export { SignUpPage } from './SignUpPage';
+export { VenuePage } from './VenuePage';

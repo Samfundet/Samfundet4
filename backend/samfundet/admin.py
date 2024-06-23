@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from guardian import models as guardian_models
 
+from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
+from django.db.models import QuerySet
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
@@ -54,10 +56,12 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
 
 # Common fields:
@@ -76,7 +80,7 @@ from .models.recruitment import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
@@ -119,7 +123,7 @@ class UserAdmin(CustomGuardedUserAdmin):
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'campus')}),
         (
             _('Permissions'),
             {
@@ -139,7 +143,7 @@ class UserAdmin(CustomGuardedUserAdmin):
             None,
             {
                 'classes': ('wide',),
-                'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+                'fields': ('username', 'email', 'phone_number', 'campus', 'password1', 'password2'),
             },
         ),
     )
@@ -585,31 +589,35 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 @admin.register(Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
-        'visible_from',
-        'actual_application_deadline',
-        'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'name_nb',
         'organization',
+        'visible_from',
+        'shown_application_deadline',
     ]
     list_display = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
         'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups',
-        'organization',
     ]
     search_fields = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
         'organization',
     ]
-    list_display_links = ['visible_from']
+    list_display_links = ['name_nb', 'name']
     list_select_related = True
+
+
+@admin.register(RecruitmentSeperatePosition)
+class RecruitmentSeperatePositionAdmin(CustomBaseAdmin):
+    sortable_by = ['name_nb', 'recruitment', 'url']
+    search_fields = ['name_nb', 'recruitment', 'url']
+    list_display_links = ['name_nb']
 
 
 class RecruitmentAdmissionInline(admin.TabularInline):
@@ -638,11 +646,11 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
-    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'admissions_count']
+    search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
-
+    list_display_links = ['id']
     inlines = [RecruitmentAdmissionInline]
 
     def admissions_count(self, obj: RecruitmentPosition) -> int:
@@ -667,6 +675,7 @@ class RecruitmentAdmissionAdmin(CustomBaseAdmin):
         'recruitment',
         'user',
     ]
+    list_display_links = ['recruitment_position']
     list_select_related = True
 
 
@@ -689,17 +698,24 @@ class InterviewRoomAdmin(CustomBaseAdmin):
 
 @admin.register(Interview)
 class InterviewAdmin(CustomBaseAdmin):
-    list_filter = ['id', 'notes']
-    list_display = ['id', 'notes']
-    search_fields = ['id', 'notes']
-    list_display_links = ['id', 'notes']
+    list_filter = ['interview_time', 'interview_location']
+    list_display = ['id', 'interview_time', 'interview_location']
+    search_fields = ['interview_time', 'interview_location']
+    list_display_links = ['id']
     filter_horizontal = ['interviewers']
+
+
+@admin.action(description='Update stats')
+def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: QuerySet[RecruitmentStatistics]) -> None:
+    for q in queryset:
+        q.save()
 
 
 @admin.register(RecruitmentStatistics)
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_admissions']
     search_fields = ['recruitment']
+    actions = [update_stats]
 
 
 @admin.register(Merch)
@@ -724,6 +740,12 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
 
 
 @admin.register(UserFeedbackModel)

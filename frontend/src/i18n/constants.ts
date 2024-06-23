@@ -55,8 +55,12 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_all: 'common_all',
   common_price: 'common_price',
+  common_food: 'common_food',
+  common_preferences: 'common_preferences',
   common_buy: 'common_buy',
+  common_not: 'common_not',
   common_time: 'common_time',
   common_here: 'common_here',
   common_name: 'common_name',
@@ -66,6 +70,7 @@ export const KEY = {
   common_show: 'common_show',
   common_menu: 'common_menu',
   common_table: 'common_table',
+  common_max: 'common_max',
   common_edit: 'common_edit',
   common_card: 'common_card',
   common_tags: 'common_tags',
@@ -73,11 +78,13 @@ export const KEY = {
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
+  common_gangs: 'common_gangs',
   common_event: 'common_event',
   common_login: 'common_login',
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
+  common_cancel: 'common_cancel',
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
@@ -87,6 +94,7 @@ export const KEY = {
   common_create: 'common_create',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_loading: 'common_loading',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_profile: 'common_profile',
@@ -106,6 +114,9 @@ export const KEY = {
   common_password: 'common_password',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
+  common_recruitmentposition: 'common_recruitmentposition',
+  common_not_set: 'common_not_set',
+  common_campus: 'common_campus',
   common_previous: 'common_previous',
   common_required: 'common_required',
   common_not_required: 'common_not_required',
@@ -116,11 +127,14 @@ export const KEY = {
   common_norwegian: 'common_norwegian',
   common_contact_us: 'common_contact_us',
   common_restaurant: 'common_restaurant',
+  common_member: 'common_member',
   common_membership: 'common_membership',
+  common_select_all: 'common_select_all',
   common_information: 'common_information',
   common_description: 'common_description',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
+  common_unselect_all: 'common_unselect_all',
   common_opening_hours: 'common_opening_hours',
   common_general: 'common_general',
   common_long_description: 'common_long_description',
@@ -152,7 +166,7 @@ export const KEY = {
   common_tickets: 'common_tickets',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
-
+  common_processed: 'common_processed',
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
@@ -170,6 +184,7 @@ export const KEY = {
   loginpage_internal_login: 'loginpage_internal_login',
   loginpage_username: 'loginpage_username',
   loginpage_forgotten_password: 'loginpage_forgotten_password',
+  loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
   // GroupsPage:
@@ -184,6 +199,10 @@ export const KEY = {
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
+
+  // InformationPage
+  information_page: 'information_page',
+  information_page_short: 'information_page_short',
 
   // Navbar:
   navbar_map: 'navbar_map',
@@ -203,10 +222,12 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
   recruitment_interview_notes: 'recruitment_interview_notes',
@@ -216,6 +237,7 @@ export const KEY = {
   recruitment_duration: 'recruitment_duration',
   recruitment_admission: 'recruitment_admission',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
+  recruitment_jobtype: 'recruitment_jobtype',
   recruitment_gangmember: 'recruitment_gangmember',
   recruitment_organization: 'recruitment_organization',
   recruitment_applyfor: 'recruitment_applyfor',
@@ -225,6 +247,7 @@ export const KEY = {
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   recruitment_my_applications: 'recruitment_my_applications',
+  recruitment_all_applications: 'recruitment_all_applications',
   recruitment_not_applied: 'recruitment_not_applied',
   recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
   shown_application_deadline: 'shown_application_deadline',
@@ -232,11 +255,29 @@ export const KEY = {
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_admission_letter: 'recrutment_default_admission_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  max_admissions: 'max_admissions',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_show_all_applicants: 'recruitment_show_all_applicants',
+  recruitment_processed: 'recruitment_processed',
+  recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
-
+  recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
+  recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
+  recruitment_not_applicants_without_interviews: 'recruitment_not_applicants_without_interviews',
+  recruitment_applicant_top_position: 'recruitment_applicant_top_position',
+  recruitment_withdrawn_admissions: 'recruitment_withdrawn_admissions',
+  recruitment_rejected_admissions: 'recruitment_rejected_admissions',
+  recruitment_accepted_admissions: 'recruitment_accepted_admissions',
+  recruitment_rejected_admissions_help_text: 'recruitment_rejected_admissions_help_text',
+  recruitment_accepted_admissions_help_text: 'recruitment_accepted_admissions_help_text',
+  recruitment_accepted_admissions_empty_text: 'recruitment_accepted_admissions_empty_text',
+  recruitment_rejected_admissions_empty_text: 'recruitment_rejected_admissions_empty_text ',
+  recruitment_withdrawn_admissions_empty_text: 'recruitment_withdrawn_admissions_empty_text',
+  recruitment_withdrawn: 'recruitment_withdrawn',
+  recruitment_withdraw_admission: 'KEY.recruitment_withdraw_admission',
+  recruitment_withdrawn_message: 'recruitment_withdrawn_message',
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',
@@ -280,6 +321,7 @@ export const KEY = {
 
   // Occupied Recruitment
   occupied_help_text: 'occupied_help_text',
+  occupied_select_time_text: 'occupied_select_time_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
 
@@ -287,6 +329,7 @@ export const KEY = {
   feedback_type: 'feedback_type',
   feedback_type_heading: 'feedback_type_heading',
   feedback_your_feedback: 'feedback_your_feedback',
+  feedback_thank_you_for_feedback: 'feedback_thank_you_for_feedback',
 
   // No category:
   owner: 'owner',
@@ -300,7 +343,6 @@ export const KEY = {
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
   control_panel_title: 'control_panel_title',
-  information_page_short: 'information_page_short',
   inputfile_choose_a_file: 'inputfile_choose_a_file',
   inputfile_no_file_selected: 'inputfile_no_file_selected',
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',

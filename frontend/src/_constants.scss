@@ -6,6 +6,8 @@ $red-samf-faded: #fac7c8;
 $red-lighter: #fff2f0;
 $red-light: #ffcfca;
 $red: #dc1010;
+$salmon: #fa8072;
+$salmon-light: #fab4ac;
 $blue: #337ab7;
 $blue-lighter: #e3f2ff;
 $blue-light: #c4dbf3;
@@ -16,11 +18,13 @@ $turquoise-light: #e2f8f5;
 $turquoise-medium: #9fe9dc;
 $turquoise: #5accb9;
 $turquoise-deep: #288474;
+$yellow: #e0a014;
 $white: #ffffff;
 $black: #000000;
 $black-1: #161616; // small contrast to black
 $grey-5: #f4f4f4;
 $grey-4: #eeeeee;
+$grey-35: #cccccc;
 $grey-3: #999999;
 $grey-2: #777777;
 $grey-1: #555555;
@@ -32,6 +36,12 @@ $orange-ligher: #fffbe6;
 $orange-light: #ffe99e;
 $sulten-orange: #fbb042;
 
+// Recruitment colors
+$rejected: #f9cccd;
+$accepted: #ccf9cd;
+$withdrawn:#bbbbbb;
+$pending: #FFF5BC;
+
 // Transparent colors
 $black-t90: rgba(0, 0, 0, 0.9);
 $black-t75: rgba(0, 0, 0, 0.75);
@@ -42,13 +52,10 @@ $black-t10: rgba(0, 0, 0, 0.1);
 // Theme colors:
 $theme-light-bg: #f5f5f5;
 
-$theme-dark-bg: #202023;
+$theme-dark-bg: #181818;
 $theme-dark-color: #dddddd;
 $theme-dark-input-bg: #242323;
 $theme-dark-input-bg-disabled: #7b7b7b;
-
-$form-bg-dark: #161619;
-$form-border-dark: #1c1919;
 
 // Defaults
 $background-primary: #ffffff;
