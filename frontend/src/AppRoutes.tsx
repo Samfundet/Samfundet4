@@ -59,8 +59,6 @@ import {
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
-import { OrganizationContextProvider } from '~/context/OrgContextProvider';
-
 import { App } from '~/App';
 import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
@@ -88,15 +86,7 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.event} element={<EventPage />} />
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
-
-        <Route
-          path={ROUTES.frontend.recruitment}
-          element={
-            <OrganizationContextProvider>
-              <RecruitmentPage />{' '}
-            </OrganizationContextProvider>
-          }
-        />
+        <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}

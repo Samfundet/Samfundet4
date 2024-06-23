@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Page, SamfundetLogoSpinner, Video, Logo } from '~/Components';
+import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
@@ -12,7 +12,6 @@ import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
 import { useAuthContext } from '~/context/AuthContext';
-import { useOrganizationContext } from '~/context/OrgContextProvider';
 
 export function RecruitmentPage() {
   const { user } = useAuthContext();
@@ -21,18 +20,6 @@ export function RecruitmentPage() {
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
-  const { organizationTheme, changeOrgTheme } = useOrganizationContext();
-
-  const header = (
-    <>
-      {organizationTheme && (
-        <div className={styles.orgHeader} style={{ backgroundColor: organizationTheme.pagePrimaryColor }}>
-          <Logo organization={'uka'} size={'medium'} color={'org-alt-color'} />
-        </div>
-      )}
-      <Button theme={organizationTheme?.buttonTheme}>TETSTTS</Button>
-    </>
-  );
 
   const noadmissions = (
     <div className={styles.no_recruitment_wrapper}>
@@ -66,25 +53,22 @@ export function RecruitmentPage() {
   );
 
   useEffect(() => {
-    const org = 'uka';
     Promise.all([getActiveRecruitmentPositions(), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
         setGangs(gangsRes);
         setLoading(false);
-        changeOrgTheme(org);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, [changeOrgTheme]);
+  }, []);
 
   return (
     <Page className={styles.recruitmentPage}>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        {organizationTheme && header}
         <div className={styles.personalRow}>
           <OccupiedFormModal recruitmentId={1} />
           <Button
