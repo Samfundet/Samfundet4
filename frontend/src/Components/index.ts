@@ -40,6 +40,7 @@ export { ProtectedRoute } from './ProtectedRoute';
 export { PulseEffect } from './PulseEffect';
 export { RadioButton } from './RadioButton';
 export { RecruitmentApplicantsStatus } from './RecruitmentApplicantsStatus';
+export { RecruitmentWithoutInterviewTable } from './RecruitmentWithoutInterviewTable';
 export { SamfOutlet } from './SamfOutlet';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
@@ -62,6 +63,7 @@ export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
 export { PhoneNumberField } from './PhoneNumberField';
 export { ToolTip } from './ToolTip';
+export { Chart } from './Chart';
 
 // Props
 export type { CheckboxProps } from './Checkbox';

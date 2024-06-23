@@ -4,6 +4,7 @@ import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
 import { Day, EventTicketType, EventTicketTypeValue } from './types';
+import { format } from 'date-fns';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -195,6 +196,10 @@ export function niceDateTime(time: string | undefined): string | undefined {
     return dateString.substring(0, dateString.length - 3);
   }
   return time;
+}
+
+export function formatDateYMD(d: Date): string {
+  return format(d, 'yyyy.LL.dd');
 }
 
 /**
