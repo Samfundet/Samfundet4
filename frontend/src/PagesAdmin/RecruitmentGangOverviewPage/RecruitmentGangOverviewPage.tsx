@@ -40,10 +40,24 @@ export function RecruitmentGangOverviewPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>
-      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_recruitment_overview}>
+      <Button
+        theme="success"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_overview,
+          urlParams: { recruitmentId },
+        })}
+      >
         {t(KEY.common_overview)}
       </Button>
-      <Button theme="blue" rounded={true} link={ROUTES.frontend.admin_recruitment_users_without_interview}>
+      <Button
+        theme="blue"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+          urlParams: { recruitmentId },
+        })}
+      >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
       <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
