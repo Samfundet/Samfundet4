@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.8.1/schema.json",
   "files": {
-    "ignore": ["**/*.json", "vite.config.ts", "./src/routes/backend.ts"]
+    "ignore": ["**/*.json", "**/*.config.ts", "./src/routes/backend.ts"]
   },
   "organizeImports": {
     "enabled": true
