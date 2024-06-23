@@ -49,16 +49,16 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
     <div>
       <div className={styles.tableHeader}>
         <div className={styles.dateIterator}>
-          <div className={styles.iterateButton} onClick={() => iterateDay(-1)}>
+          <button type="button" className={styles.iterateButton} onClick={() => iterateDay(-1)}>
             <Icon icon="fe:arrow-left" width={32} />
-          </div>
+          </button>
           <div className={styles.date}>
             <p>{sultenDay.date.toDateString()}</p>
             <Icon icon="mdi:calendar" width={24} />
           </div>
-          <div className={styles.iterateButton} onClick={() => iterateDay(1)}>
+          <button type="button" className={styles.iterateButton} onClick={() => iterateDay(1)}>
             <Icon icon="fe:arrow-right" width={32} />
-          </div>
+          </button>
         </div>
         <div className={styles.buttonsHeader}>
           {today.getDate() !== sultenDay.date.getDate() && (
@@ -72,10 +72,10 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
         </div>
       </div>
       {hoursHeader}
-      {sultenDay.tables?.map((table, index) => {
+      {sultenDay.tables?.map((table) => {
         return (
           <ReservationTableRow
-            key={index}
+            key={table.id}
             table={table}
             start_time={sultenDay.start_time}
             end_time={sultenDay.closing_time}
