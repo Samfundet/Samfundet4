@@ -27,11 +27,12 @@ export function VenuePage() {
           <DynamicBuildingMap highlightKey={highlightKey} onSetHighlight={setHighlight} onClickedVenue={openVenue} />
         </div>
         <div className={styles.venues}>
-          {VENUES.map((image, idx) => {
+          {VENUES.map((image) => {
             const key = image.name.toLowerCase();
             return (
-              <div
-                key={idx}
+              <button
+                type="button"
+                key={key}
                 className={classNames(styles.venue, highlightKey === key && styles.hover)}
                 onClick={() => openVenue(key)}
               >
@@ -42,7 +43,7 @@ export function VenuePage() {
                   onMouseLeave={() => setHighlight(undefined)}
                 />
                 <div className={styles.venue_name}>{image.name}</div>
-              </div>
+              </button>
             );
           })}
         </div>
