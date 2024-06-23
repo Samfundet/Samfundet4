@@ -21,7 +21,7 @@ export function ExpandableHeader({
   showByDefault = false,
 }: ExpandableHeaderProps) {
   const [showChildren, setShowChildren] = useState(showByDefault);
-  const classNames = classnames(className, styles.extendable_header_wrapper, styles.extendable_header);
+  const classNames = classnames(className, styles.extendable_header_wrapper);
   const containerClassNames = classnames(styles.container, {
     [styles.parent]: theme === 'parent',
     [styles.child]: theme === 'child',
@@ -29,12 +29,12 @@ export function ExpandableHeader({
 
   return (
     <div className={containerClassNames}>
-      <div className={classNames} onClick={() => setShowChildren(!showChildren)}>
+      <button type="button" className={classNames} onClick={() => setShowChildren(!showChildren)}>
         <p className={styles.extendable_header_title}>{label}</p>
         <div className={classnames(styles.expandable_header_arrow, showChildren ? styles.open : styles.closed)}>
           &#9660;
         </div>
-      </div>
+      </button>
       {showChildren && children}
     </div>
   );
