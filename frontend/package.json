@@ -19,6 +19,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "yarn run cypress run",
     "biome:check": "biome check .",
+    "biome:ci": "biome ci .",
     "lint:check": "biome lint .",
     "lint:apply": "biome lint --apply .",
     "lint:apply-unsafe": "biome lint --apply-unsafe .",

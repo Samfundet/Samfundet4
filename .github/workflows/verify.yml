@@ -127,7 +127,7 @@ jobs:
         run: yarn install
 
       - name: Run Biome
-        run: yarn run biome:check
+        run: yarn run biome:ci
 
       - name: Run stylelint
         run: yarn run stylelint:check
