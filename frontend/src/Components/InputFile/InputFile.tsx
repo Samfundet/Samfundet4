@@ -99,7 +99,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
           {/* Image/pdf preview. Shows empty preview for pdf type */}
           {(fileType === 'pdf' || preview) && (
             <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-              {preview && <img className={styles.preview} src={preview} />}
+              {preview && <img className={styles.preview} src={preview} alt="Preview" />}
             </div>
           )}
         </div>
