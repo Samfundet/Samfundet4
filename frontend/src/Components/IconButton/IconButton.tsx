@@ -50,6 +50,7 @@ export function IconButton({
 
   return (
     <button
+      type="button"
       onClick={handleOnClick}
       title={title}
       className={classNames(styles.icon_button, className)}
