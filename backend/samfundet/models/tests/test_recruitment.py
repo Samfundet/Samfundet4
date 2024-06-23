@@ -5,7 +5,7 @@ import pytest
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.general import User
+from samfundet.models.general import User, Campus
 from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
@@ -107,6 +107,8 @@ class TestRecruitmentStats:
             applicant_priority=1,
         )
         # Check if updated
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.total_admissions == 1
         assert fixture_recruitment.statistics.total_applicants == 1
 
@@ -123,6 +125,8 @@ class TestRecruitmentStats:
             admission_text='I have applied',
             applicant_priority=1,
         )
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.total_admissions == 1
         assert fixture_recruitment.statistics.total_applicants == 1
 
@@ -139,6 +143,8 @@ class TestRecruitmentStats:
             admission_text='I have applied',
             applicant_priority=1,
         )
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
         # check if only admissions are updated
         assert fixture_recruitment.statistics.total_admissions == 2
         assert fixture_recruitment.statistics.total_applicants == 1
@@ -149,7 +155,6 @@ class TestRecruitmentStats:
         """Check if both applicatats and admissiosn are updated"""
         assert fixture_recruitment.statistics.total_applicants == 0
         assert fixture_recruitment.statistics.total_admissions == 0
-
         # Test for one user
         RecruitmentAdmission.objects.create(
             user=fixture_user,
@@ -158,6 +163,8 @@ class TestRecruitmentStats:
             admission_text='I have applied',
             applicant_priority=1,
         )
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.total_admissions == 1
         assert fixture_recruitment.statistics.total_applicants == 1
 
@@ -169,9 +176,52 @@ class TestRecruitmentStats:
             admission_text='I have applied',
             applicant_priority=1,
         )
-
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.total_admissions == 2
         assert fixture_recruitment.statistics.total_applicants == 2
+
+    def test_recruitmentstats_campus(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment, fixture_campus: Campus
+    ):
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.campus_stats.filter(campus=fixture_campus).first().count == 0
+        RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.campus_stats.filter(campus=fixture_campus).first().count == 1
+
+    def test_recruitmentstats_hour(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
+        adm = RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        assert fixture_recruitment.statistics.time_stats.filter(hour=adm.created_at.hour).first().count == 0
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.time_stats.filter(hour=adm.created_at.hour).first().count == 1
+
+    def test_recruitmentstats_date(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
+        adm = RecruitmentAdmission.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            admission_text='I have applied',
+            applicant_priority=1,
+        )
+        assert fixture_recruitment.statistics.date_stats.filter(date=adm.created_at.strftime('%Y-%m-%d')).first().count == 0
+        # Needs to be manually done
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.date_stats.filter(date=adm.created_at.strftime('%Y-%m-%d')).first().count == 1
 
 
 class TestRecruitmentAdmission:
