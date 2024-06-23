@@ -65,6 +65,7 @@ export function Dropdown<T>({
         {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1} />}
         {options.map((opt, index) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             <option value={index} key={index}>
               {opt.label}
             </option>
