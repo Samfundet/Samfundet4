@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { OccupiedTimeslotDto } from '~/dto';
+import type { OccupiedTimeslotDto } from '~/dto';
 import styles from './OccupiedForm.module.scss';
 import { KEY } from '~/i18n/constants';
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots
 import { Trans, useTranslation } from 'react-i18next';
 import { Button } from '../Button';
 import { MiniCalendar } from '~/Components';
-import { CalendarMarker } from '~/types';
+import type { CalendarMarker } from '~/types';
 import { TimeslotContainer } from '~/Components/OccupiedForm/components';
 
 type Props = {

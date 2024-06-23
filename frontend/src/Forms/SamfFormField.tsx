@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import {
-  FormType,
-  SamfError,
-  SamfFormActionType,
+  type FormType,
+  type SamfError,
+  type SamfFormActionType,
   SamfFormConfigContext,
   SamfFormContext,
-  SamfFormContextType,
+  type SamfFormContextType,
 } from './SamfForm';
 import {
-  FieldProps,
-  GeneratorFunction,
-  SamfFormFieldArgs,
-  SamfFormFieldType,
+  type FieldProps,
+  type GeneratorFunction,
+  type SamfFormFieldArgs,
+  type SamfFormFieldType,
   SamfFormGenerators,
 } from './SamfFormFieldTypes';
 

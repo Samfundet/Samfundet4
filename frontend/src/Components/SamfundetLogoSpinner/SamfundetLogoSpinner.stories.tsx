@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
@@ -9,8 +9,7 @@ export default {
   component: SamfundetLogoSpinner,
 } as ComponentMeta<typeof SamfundetLogoSpinner>;
 
-const Template: ComponentStory<typeof SamfundetLogoSpinner> = function () {
-  return (
+const Template: ComponentStory<typeof SamfundetLogoSpinner> = () => (
     <div style={{ margin: '50px' }}>
       <AuthContextProvider>
         <GlobalContextProvider>
@@ -19,6 +18,5 @@ const Template: ComponentStory<typeof SamfundetLogoSpinner> = function () {
       </AuthContextProvider>
     </div>
   );
-};
 
 export const Basic = Template.bind({});

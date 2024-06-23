@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import { ChangeEvent, ReactElement } from 'react';
+import type { ChangeEvent, ReactElement } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropDownOption<T> = {

@@ -1,4 +1,4 @@
-import { compile, Key, parse } from 'path-to-regexp';
+import { compile, type Key, parse } from 'path-to-regexp';
 
 // Credit: https://github.com/kennedykori/named-urls/blob/master/src/index.ts
 
@@ -11,9 +11,8 @@ export type ExtraFields = {
   star: string;
 };
 
-export interface Include {
-  <dR extends Routes>(path: string, routes: dR): dR & ExtraFields;
-}
+export type Include = 
+  <dR extends Routes>(path: string, routes: dR) => dR & ExtraFields
 
 export type Routes = {
   [path: string]: string | Routes;
@@ -27,10 +26,7 @@ export interface ReverseParams {
   queryParams?: Params;
 }
 
-export interface Reverse {
-  (params: ReverseParams): string;
-  // (pattern: string, params?: ReverseParams, queryParams?: ReverseParams): string;
-}
+export type Reverse = (params: ReverseParams) => string
 
 export type ReverseForce = Reverse;
 

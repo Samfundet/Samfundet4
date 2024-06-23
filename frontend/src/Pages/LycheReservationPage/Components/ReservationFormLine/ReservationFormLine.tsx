@@ -1,4 +1,4 @@
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import classnames from 'classnames';
 import styles from './ReservationFormLine.module.scss';
 

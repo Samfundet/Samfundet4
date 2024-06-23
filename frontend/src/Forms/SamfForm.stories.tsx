@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AuthContextProvider } from '~/context/AuthContext';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { SamfForm, SamfFormProps } from './SamfForm';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { SamfForm, type SamfFormProps } from './SamfForm';
 import { SamfFormField } from './SamfFormField';
 
 // Local component config.
@@ -10,13 +10,11 @@ export default {
   component: SamfForm,
 } as ComponentMeta<typeof SamfForm>;
 
-const Template: ComponentStory<typeof SamfForm> = function (args) {
-  return (
+const Template: ComponentStory<typeof SamfForm> = (args) => (
     <AuthContextProvider>
       <SamfForm<BasicFormProps> {...args} />
     </AuthContextProvider>
   );
-};
 
 function validateShrimp(values: BasicFormProps) {
   const str = values.advanced_field;

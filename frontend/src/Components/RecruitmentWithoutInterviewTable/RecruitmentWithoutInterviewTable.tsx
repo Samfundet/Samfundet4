@@ -1,5 +1,5 @@
 import styles from './RecruitmentWithoutInterviewTable.module.scss';
-import { RecruitmentUserDto } from '~/dto';
+import type { RecruitmentUserDto } from '~/dto';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';

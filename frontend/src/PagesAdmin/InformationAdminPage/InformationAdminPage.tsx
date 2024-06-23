@@ -5,7 +5,7 @@ import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -59,7 +59,7 @@ export function InformationAdminPage() {
     '', // Buttons
   ];
 
-  const data = informationPages.map(function (element) {
+  const data = informationPages.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.information_page_detail,
       urlParams: { slugField: element.slug_field },

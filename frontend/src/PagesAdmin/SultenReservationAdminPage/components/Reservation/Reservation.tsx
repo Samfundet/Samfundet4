@@ -1,4 +1,4 @@
-import { ReservationTableDto } from '~/dto';
+import type { ReservationTableDto } from '~/dto';
 import styles from './Reservation.module.scss';
 
 import { useState } from 'react';

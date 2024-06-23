@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { Link } from '~/Components';
-import { LinkProps } from '~/Components/Link/Link';
+import type { LinkProps } from '~/Components/Link/Link';
 import styles from './IconButton.module.scss';
 
 type IconButtonProps = {

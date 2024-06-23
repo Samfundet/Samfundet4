@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { SultenReservationDayDto } from '~/dto';
+import type { SultenReservationDayDto } from '~/dto';
 import styles from './ReservationTable.module.scss';
 import { KEY } from '~/i18n/constants';
 import { Icon } from '@iconify/react';
@@ -20,8 +20,8 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
   const today = new Date();
 
   useEffect(() => {
-    let hours_iterator = parseInt(sultenDay.start_time.split(':')[0]) + 1;
-    const hours_end = parseInt(sultenDay.closing_time.split(':')[0]) + 1;
+    let hours_iterator = Number.parseInt(sultenDay.start_time.split(':')[0]) + 1;
+    const hours_end = Number.parseInt(sultenDay.closing_time.split(':')[0]) + 1;
 
     const hoursList: string[] = [];
 

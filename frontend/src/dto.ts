@@ -1,5 +1,5 @@
-import { ThemeValue } from '~/constants';
-import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import type { ThemeValue } from '~/constants';
+import type { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;

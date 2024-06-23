@@ -48,9 +48,7 @@ export default {
 // Template for LineChart
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const Template: ComponentStory<typeof Chart> = function (args) {
-  return <Chart {...args} />;
-};
+const Template: ComponentStory<typeof Chart> = (args) => <Chart {...args} />;
 
 export const ApplicantsPerDay = Template.bind({});
 ApplicantsPerDay.args = {};

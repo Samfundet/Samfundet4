@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
-import { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
+import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';

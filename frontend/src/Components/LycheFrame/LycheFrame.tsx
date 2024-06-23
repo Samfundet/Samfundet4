@@ -1,4 +1,4 @@
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './LycheFrame.module.scss';
 
 type LycheFrameProps = {

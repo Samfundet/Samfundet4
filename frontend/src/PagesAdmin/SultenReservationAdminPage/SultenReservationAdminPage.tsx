@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components';
-import { SultenReservationDayDto } from '~/dto';
+import type { SultenReservationDayDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { TABLES_TEST_DATA } from './utils';

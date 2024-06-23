@@ -1,9 +1,9 @@
 import i18next from 'i18next';
-import { CSSProperties } from 'react';
-import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
-import { UserDto } from '~/dto';
-import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketType, EventTicketTypeValue } from './types';
+import type { CSSProperties } from 'react';
+import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
+import type { UserDto } from '~/dto';
+import { KEY, type KeyValues } from './i18n/constants';
+import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
 import { format } from 'date-fns';
 
 export type hasPerm = {
@@ -297,7 +297,7 @@ export function getRandomEntryFromList(entries: unknown[]): unknown {
  */
 export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
-  return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
+  return new Date().setHours(Number.parseInt(timeSplit[0]), Number.parseInt(timeSplit[1]), 0, 0);
 }
 
 /*

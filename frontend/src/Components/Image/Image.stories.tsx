@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Image } from './Image';
 import { logoBlack } from '~/assets';
 
@@ -11,9 +11,7 @@ export default {
   },
 } as ComponentMeta<typeof Image>;
 
-const Template: ComponentStory<typeof Image> = function (args) {
-  return <Image {...args} />;
-};
+const Template: ComponentStory<typeof Image> = (args) => <Image {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {};

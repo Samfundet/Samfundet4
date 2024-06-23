@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Button, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
-import { ClosedPeriodDto } from '~/dto';
+import type { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -71,8 +71,7 @@ export function ClosedPeriodAdminPage() {
             t(KEY.end_time) ?? '',
             '',
           ]}
-          data={closedPeriods.map(function (element) {
-            return [
+          data={closedPeriods.map((element) => [
               element.message_no,
               element.description_no,
               { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
@@ -106,8 +105,7 @@ export function ClosedPeriodAdminPage() {
                   </div>
                 ),
               },
-            ];
-          })}
+            ])}
         />
       </div>
     </AdminPageLayout>

@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { Command } from 'cmdk';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CustomNavigateProps, useCustomNavigate, useIsMetaKeyDown, useTheme } from '~/hooks';
+import { type CustomNavigateProps, useCustomNavigate, useIsMetaKeyDown, useTheme } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import './CommandMenu.scss';

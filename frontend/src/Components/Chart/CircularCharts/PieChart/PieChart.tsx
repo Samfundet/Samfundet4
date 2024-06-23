@@ -4,7 +4,7 @@ import { sectorColors } from './utils/sectorColors';
 import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
 import styles from './PieChart.module.scss';
-import { CircularChartProps } from './utils/types';
+import type { CircularChartProps } from './utils/types';
 import { sizes } from './utils/apperance';
 
 const radius = 200;

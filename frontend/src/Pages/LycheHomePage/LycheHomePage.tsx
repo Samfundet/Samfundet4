@@ -6,7 +6,7 @@ import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { TextItem, VENUE } from '~/constants';
-import { VenueDto } from '~/dto';
+import type { VenueDto } from '~/dto';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';

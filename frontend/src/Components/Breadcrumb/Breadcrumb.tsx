@@ -1,5 +1,5 @@
-import { UIMatch, useMatches } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { type UIMatch, useMatches } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import styles from './Breadcrumb.module.scss';
 import { Link } from '~/Components';
 import { Icon } from '@iconify/react';

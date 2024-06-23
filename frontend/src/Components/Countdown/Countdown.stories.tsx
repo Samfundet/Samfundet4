@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Button } from '~/Components/Button';
 import { Countdown } from './Countdown';
@@ -8,13 +8,11 @@ export default {
   component: Countdown,
 } as ComponentMeta<typeof Countdown>;
 
-const Template: ComponentStory<typeof Countdown> = function (args) {
-  return (
+const Template: ComponentStory<typeof Countdown> = (args) => (
     <Countdown {...args}>
       <Button theme="green">he he he haw, Guilty</Button>
     </Countdown>
   );
-};
 
 export const Basic = Template.bind({});
 Basic.args = {

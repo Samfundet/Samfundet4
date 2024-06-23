@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { useState } from 'react';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './ExpandableHeader.module.scss';
 
 type HeaderThemes = 'parent' | 'child';

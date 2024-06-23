@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
-import {
+import axios, { type AxiosResponse } from 'axios';
+import type {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,

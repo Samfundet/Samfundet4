@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Select.module.scss';
 
 type Option = {
@@ -34,13 +34,11 @@ export function Select({
       <label className={classNames(styles.label, labelClassName)}>
         {children}
         <select onChange={onChange} required={required} className={styles.select}>
-          {options?.map(function (option, index) {
-            return (
+          {options?.map((option, index) => (
               <option value={option.value} key={index} className={styles.option} selected={option.value == value}>
                 {option.label}
               </option>
-            );
-          })}
+            ))}
         </select>
       </label>
       {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}

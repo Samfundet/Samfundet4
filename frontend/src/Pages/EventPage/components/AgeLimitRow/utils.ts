@@ -1,5 +1,5 @@
-import { KEY, KeyValues } from '~/i18n/constants';
-import { EventAgeRestriction, EventAgeRestrictionValue } from '~/types';
+import { KEY, type KeyValues } from '~/i18n/constants';
+import { EventAgeRestriction, type EventAgeRestrictionValue } from '~/types';
 
 /**
  * Gets the translation key for a given age restriction

@@ -1,5 +1,5 @@
 import styles from './Error.module.scss';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 
 interface ErrorProps {
   header: string;

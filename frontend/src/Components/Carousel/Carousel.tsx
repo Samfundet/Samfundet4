@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Skeleton } from '~/Components/Skeleton';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Carousel.module.scss';
 
 type CarouselProps = {

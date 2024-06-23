@@ -20,8 +20,7 @@ export function OpeningHours({ venues }: OpeningHoursProps) {
     <div className={styles.container}>
       <h2>{t(KEY.common_opening_hours)}</h2>
       <table className={styles.timeTable}>
-        {venues.map(function (element, key) {
-          return (
+        {venues.map((element, key) => (
             <tr key={key} className={styles.openingRow}>
               <td>
                 <a href={element.url}>
@@ -32,8 +31,7 @@ export function OpeningHours({ venues }: OpeningHoursProps) {
                 <TimeDuration className={styles.openingHoursText} start={element.start} end={element.end} />
               </td>
             </tr>
-          );
-        })}
+          ))}
       </table>
     </div>
   );

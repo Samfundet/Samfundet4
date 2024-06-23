@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
-import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -49,7 +49,7 @@ export function RecruitmentGangAdminPage() {
     { content: ' ', sortable: false },
   ];
 
-  const data = recruitmentPositions.map(function (recruitmentPosition) {
+  const data = recruitmentPositions.map((recruitmentPosition) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },

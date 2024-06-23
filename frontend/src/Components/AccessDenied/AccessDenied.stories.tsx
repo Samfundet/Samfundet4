@@ -1,4 +1,4 @@
-import { ComponentStory } from '@storybook/react';
+import type { ComponentStory } from '@storybook/react';
 import { AccessDenied } from './AccessDenied';
 
 export default {
@@ -6,8 +6,6 @@ export default {
   component: AccessDenied,
 };
 
-const Template: ComponentStory<typeof AccessDenied> = function () {
-  return <AccessDenied></AccessDenied>;
-};
+const Template: ComponentStory<typeof AccessDenied> = () => <AccessDenied></AccessDenied>;
 
 export const Default = Template.bind({});

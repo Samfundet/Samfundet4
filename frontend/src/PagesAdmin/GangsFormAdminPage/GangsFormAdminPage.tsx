@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
-import { GangDto } from '~/dto';
+import type { GangDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';

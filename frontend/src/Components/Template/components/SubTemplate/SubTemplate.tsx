@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './SubTemplate.module.scss';
 
 type SubTemplateProps = {

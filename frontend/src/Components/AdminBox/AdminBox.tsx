@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { Options, TYPE } from '~/Components/AdminBox/types';
+import { type Options, TYPE } from '~/Components/AdminBox/types';
 import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
 
@@ -35,7 +35,7 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
         </h1>
       </div>
       <div className={styles.options}>
-        {options.map(function (element, key) {
+        {options.map((element, key) => {
           if (element.type == TYPE.ADD) {
             return (
               <Button key={key} theme="success" link={element.url} className={styles.button}>

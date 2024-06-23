@@ -1,4 +1,4 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import type { RecruitmentAdmissionDto } from '~/dto';
 import styles from './ProcessedApplicants.module.scss';
 import { Table } from '~/Components/Table';
 import { KEY } from '~/i18n/constants';
@@ -25,8 +25,7 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  const rows = data.map(function (admission) {
-    return [
+  const rows = data.map((admission) => [
       {
         value: admission.user.first_name,
         content: (
@@ -49,8 +48,7 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
       { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
       { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
       { content: admission.recruiter_status, value: admission.recruiter_status },
-    ];
-  });
+    ]);
 
   const styleType = {
     withdrawn: styles.withdrawn,

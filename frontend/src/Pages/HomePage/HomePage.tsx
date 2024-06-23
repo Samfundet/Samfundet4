@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
-import { HomePageDto, HomePageElementDto } from '~/dto';
+import type { HomePageDto, HomePageElementDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
 

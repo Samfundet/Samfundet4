@@ -6,7 +6,7 @@ import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
-import { RecruitmentPositionDto } from '~/dto';
+import type { RecruitmentPositionDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -102,7 +102,7 @@ export function RecruitmentPositionFormAdminPage() {
 
   function handleOnSubmit(data: RecruitmentPositionDto) {
     const updatedPosition = data;
-    updatedPosition.gang.id = parseInt(gangId ?? '');
+    updatedPosition.gang.id = Number.parseInt(gangId ?? '');
     updatedPosition.recruitment = recruitmentId ?? '';
     updatedPosition.interviewers = [];
     if (positionId) {

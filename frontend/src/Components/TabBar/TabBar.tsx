@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import styles from './TabBar.module.scss';
 
 export type Tab<T = void> = {

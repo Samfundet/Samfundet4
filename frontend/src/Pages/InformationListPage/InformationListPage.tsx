@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getInformationPages } from '~/api';
 import { Link } from '~/Components';
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { getTranslatedTitle } from '~/Pages/InformationListPage/utils';
 import { ROUTES } from '~/routes';

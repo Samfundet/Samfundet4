@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react';
-import { ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
-import { Table, TableRow } from '~/Components/Table';
+import { Table, type TableRow } from '~/Components/Table';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -38,8 +38,7 @@ export function EventsList({ events }: EventsListProps) {
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
     const allEvents = Object.keys(events)
-      .map((k: string) => events[k])
-      .flat();
+      .flatMap((k: string) => events[k]);
     return eventQuery(allEvents, query);
   }
 

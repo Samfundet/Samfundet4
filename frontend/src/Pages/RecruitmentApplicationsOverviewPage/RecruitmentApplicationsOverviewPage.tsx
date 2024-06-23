@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Link, Page } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentAdmissionsForApplicant, putRecruitmentPriorityForUser } from '~/api';
-import { RecruitmentAdmissionDto, UserPriorityDto } from '~/dto';
+import type { RecruitmentAdmissionDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
@@ -133,7 +133,7 @@ export function RecruitmentApplicationsOverviewPage() {
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}
 
-        <OccupiedFormModal recruitmentId={parseInt(recruitmentID ?? '')} />
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
 
         {withdrawnAdmissions.length > 0 && (
           <div className={styles.withdrawnContainer}>

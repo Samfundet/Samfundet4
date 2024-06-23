@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { SubTemplate } from '~/Components/Template/components';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Template.module.scss';
 
 type TemplateProps = {

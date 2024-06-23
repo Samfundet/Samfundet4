@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { BACKEND_DOMAIN } from '~/constants';
-import { ImageDto } from '~/dto';
+import type { ImageDto } from '~/dto';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AdminImage.module.scss';
 

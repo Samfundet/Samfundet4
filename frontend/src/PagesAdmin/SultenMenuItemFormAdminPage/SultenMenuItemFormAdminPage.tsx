@@ -6,13 +6,13 @@ import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getFoodCategories, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
-import { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
+import type { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './SultenMenuItemFormAdminPage.module.scss';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 

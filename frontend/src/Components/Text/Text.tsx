@@ -1,4 +1,4 @@
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import { textSizes } from '~/constants';
 import React from 'react';
 

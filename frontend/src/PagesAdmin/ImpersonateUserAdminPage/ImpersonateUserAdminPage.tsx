@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { InputField } from '~/Components';
 import { getUsers, impersonateUser } from '~/api';
 import bondmusic from '~/assets/memes/jamesbond.mp3';
-import { UserDto } from '~/dto';
+import type { UserDto } from '~/dto';
 import { queryDto } from '~/utils';
 import styles from './ImpersonateUserAdminPage.module.scss';
 

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './List.module.scss';
 
 type ListType = 'ordered' | 'unordered' | 'no_bullets';

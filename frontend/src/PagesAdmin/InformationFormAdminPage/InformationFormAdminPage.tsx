@@ -1,13 +1,13 @@
 import { Icon } from '@iconify/react';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';

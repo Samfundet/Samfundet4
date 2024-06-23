@@ -1,12 +1,13 @@
 import classNames from 'classnames';
-import React, { Dispatch, ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react';
+import type React from 'react';
+import { type Dispatch, type ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components/Button';
 import { usePermission } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
-import { FormFieldReturnType } from './SamfFormFieldTypes';
+import type { FormFieldReturnType } from './SamfFormFieldTypes';
 
 // ---------------------------------- //
 //              Types                 //

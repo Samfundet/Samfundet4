@@ -1,4 +1,4 @@
-import { CartesianChartsColors, CartesianChartProps } from '~/Components/Chart/CartesianCharts/utils/types';
+import type { CartesianChartsColors, CartesianChartProps } from '~/Components/Chart/CartesianCharts/utils/types';
 import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
 import styles from '../CartesianCharts.module.scss';
 import { useIsDarkTheme } from '~/hooks';

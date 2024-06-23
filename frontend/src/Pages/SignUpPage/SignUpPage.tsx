@@ -6,7 +6,7 @@ import { Alert, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, register } from '~/api';
-import { RegistrationDto } from '~/dto';
+import type { RegistrationDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';

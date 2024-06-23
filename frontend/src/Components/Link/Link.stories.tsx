@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Link } from './Link';
 
 // Local component config.
@@ -7,9 +7,7 @@ export default {
   component: Link,
 } as ComponentMeta<typeof Link>;
 
-const Template: ComponentStory<typeof Link> = function (args) {
-  return <Link {...args}></Link>;
-};
+const Template: ComponentStory<typeof Link> = (args) => <Link {...args}></Link>;
 
 export const Default = Template.bind({});
 Default.args = {

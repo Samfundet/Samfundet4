@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SpinningBorder } from './SpinningBorder';
 
 // Local component config.
@@ -8,8 +8,7 @@ export default {
   args: {},
 } as ComponentMeta<typeof SpinningBorder>;
 
-const Template: ComponentStory<typeof SpinningBorder> = function (args) {
-  return (
+const Template: ComponentStory<typeof SpinningBorder> = (args) => (
     <>
       <SpinningBorder {...args}>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea error nihil accusamus sunt deleniti soluta a quod
@@ -17,7 +16,6 @@ const Template: ComponentStory<typeof SpinningBorder> = function (args) {
       </SpinningBorder>
     </>
   );
-};
 
 export const Basic = Template.bind({});
 Basic.args = {};

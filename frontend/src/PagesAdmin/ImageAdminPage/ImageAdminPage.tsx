@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ImageQuery } from '~/Components';
 import { getImages } from '~/api';
-import { ImageDto } from '~/dto';
+import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -46,9 +46,7 @@ export function ImageAdminPage() {
         <ImageQuery allImages={allImages} setImages={setImages} />
       </div>
       <div className={styles.imageContainer}>
-        {displayImages.map(function (element) {
-          return <AdminImage key={element.id} image={element} className={styles.imageBox} />;
-        })}
+        {displayImages.map((element) => <AdminImage key={element.id} image={element} className={styles.imageBox} />)}
         {/* TODO pagination or translation */}
         {images.length > displayImages.length && <i>And {images.length - displayImages.length} more...</i>}
       </div>

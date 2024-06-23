@@ -1,5 +1,5 @@
-import { TableDto } from '~/dto';
-import { Column } from './types';
+import type { TableDto } from '~/dto';
+import type { Column } from './types';
 import styles from './ReservationTableRow.module.scss';
 import { useEffect, useState } from 'react';
 import { Reservation } from '../Reservation/Reservation';

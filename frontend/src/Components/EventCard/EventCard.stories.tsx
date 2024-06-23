@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { kitteh } from '~/assets';
 import { EventCard } from './EventCard';
 
@@ -25,12 +25,9 @@ export default {
   ],
 } as ComponentMeta<typeof EventCard>;
 
-const OneEvent: ComponentStory<typeof EventCard> = function (args) {
-  return <EventCard {...args} />;
-};
+const OneEvent: ComponentStory<typeof EventCard> = (args) => <EventCard {...args} />;
 
-const ManyEvents: ComponentStory<typeof EventCard> = function (args) {
-  return (
+const ManyEvents: ComponentStory<typeof EventCard> = (args) => (
     <>
       {Array(8)
         .fill(1)
@@ -39,7 +36,6 @@ const ManyEvents: ComponentStory<typeof EventCard> = function (args) {
         ))}
     </>
   );
-};
 
 export const Basic = OneEvent.bind({});
 

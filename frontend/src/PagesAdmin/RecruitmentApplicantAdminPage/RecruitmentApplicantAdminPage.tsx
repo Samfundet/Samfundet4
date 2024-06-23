@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { getRecruitmentAdmissionsForRecruiter } from '~/api';
-import { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
+import type { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -79,8 +79,7 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data={otherRecruitmentAdmission.map(function (element) {
-            return [
+          data={otherRecruitmentAdmission.map((element) => [
               {
                 content: (
                   <Link
@@ -110,8 +109,7 @@ export function RecruitmentApplicantAdminPage() {
               },
               element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
               element.interview_time ? element.interview_time : t(KEY.common_not_set),
-            ];
-          })}
+            ])}
         />
       </div>
     </Page>

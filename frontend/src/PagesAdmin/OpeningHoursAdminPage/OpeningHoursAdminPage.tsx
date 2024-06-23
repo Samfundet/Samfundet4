@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { InputTime } from '~/Components';
 import { getVenues, putVenue } from '~/api';
-import { VenueDto } from '~/dto';
+import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS } from '~/types';
 import { getDayKey } from '~/utils';

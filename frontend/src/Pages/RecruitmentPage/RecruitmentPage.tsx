@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { useTextItem, useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';

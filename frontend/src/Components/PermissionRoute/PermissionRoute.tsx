@@ -1,6 +1,6 @@
 import { useAuthContext } from '~/context/AuthContext';
 import { AccessDenied } from '~/Components';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import { hasPerm } from '~/utils';
 
 type PermissionRouteProps = {

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ContentCard } from './ContentCard';
 
 export default {
@@ -6,9 +6,7 @@ export default {
   component: ContentCard,
 } as ComponentMeta<typeof ContentCard>;
 
-const Template: ComponentStory<typeof ContentCard> = function (args) {
-  return <ContentCard {...args} />;
-};
+const Template: ComponentStory<typeof ContentCard> = (args) => <ContentCard {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

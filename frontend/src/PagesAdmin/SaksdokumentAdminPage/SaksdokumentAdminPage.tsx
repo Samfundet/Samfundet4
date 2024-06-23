@@ -7,7 +7,7 @@ import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getSaksdokumenter } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { SaksdokumentDto } from '~/dto';
+import type { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

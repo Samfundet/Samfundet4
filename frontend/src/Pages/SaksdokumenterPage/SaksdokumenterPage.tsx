@@ -11,7 +11,7 @@ import {
   monthValueToString,
 } from '~/Components/ExpandableList/utils';
 import { getSaksdokumenter } from '~/api';
-import { SaksdokumentDto } from '~/dto';
+import type { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './SaksdokumenterPage.module.scss';

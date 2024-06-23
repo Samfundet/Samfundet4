@@ -6,7 +6,7 @@ import { Button, CrudButtons, Link } from '~/Components';
 import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
-import { RecruitmentDto } from '~/dto';
+import type { RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -41,7 +41,7 @@ export function RecruitmentAdminPage() {
     '', // Buttons
   ];
 
-  const data = recruitments.map(function (element) {
+  const data = recruitments.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_overview,
       urlParams: { recruitmentId: element.id },

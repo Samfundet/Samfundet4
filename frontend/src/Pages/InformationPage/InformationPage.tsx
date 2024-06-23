@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { Page } from '~/Components/Page';
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

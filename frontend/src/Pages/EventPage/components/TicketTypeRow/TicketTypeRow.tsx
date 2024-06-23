@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
 import { dbT, getTicketTypeKey } from '~/utils';

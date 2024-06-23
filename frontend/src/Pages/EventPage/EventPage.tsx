@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';

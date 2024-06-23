@@ -13,7 +13,7 @@ import {
   putRecruitmentAdmission,
   withdrawRecruitmentAdmissionApplicant,
 } from '~/api';
-import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
+import type { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';

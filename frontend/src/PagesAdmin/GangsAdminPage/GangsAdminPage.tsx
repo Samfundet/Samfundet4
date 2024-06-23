@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
 import { getGangList } from '~/api';
-import { GangTypeDto } from '~/dto';
+import type { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -53,8 +53,7 @@ export function GangsAdminPage() {
 
   const tableData =
     currentGangType &&
-    currentGangType.gangs.map(function (element2) {
-      return [
+    currentGangType.gangs.map((element2) => [
         dbT(element2, 'name'),
         element2.abbreviation,
         element2.webpage,
@@ -72,8 +71,7 @@ export function GangsAdminPage() {
             />
           ),
         },
-      ];
-    });
+      ]);
 
   const title = t(KEY.adminpage_gangs_title);
   const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;

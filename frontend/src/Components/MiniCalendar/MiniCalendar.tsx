@@ -5,7 +5,7 @@ import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, pre
 import classNames from 'classnames';
 import { Button, TimeDisplay } from '~/Components';
 import { SHORT_DAY_I18N_KEYS } from '~/utils';
-import { CalendarMarker } from '~/types';
+import type { CalendarMarker } from '~/types';
 import { Icon } from '@iconify/react';
 
 type MiniCalendarProps = {

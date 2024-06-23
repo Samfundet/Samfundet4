@@ -1,8 +1,8 @@
 import { default as classnames } from 'classnames';
 import { Link } from 'react-router-dom';
-import { ButtonType, Children } from '~/types';
+import type { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
-import { ButtonDisplay, ButtonTheme } from './types';
+import type { ButtonDisplay, ButtonTheme } from './types';
 import { displayToStyleMap, themeToStyleMap } from './utils';
 
 type ButtonProps = {

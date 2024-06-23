@@ -1,5 +1,5 @@
 import styles from './RecruitmentApplicantsStatus.module.scss';
-import { RecruitmentAdmissionDto } from '~/dto';
+import type { RecruitmentAdmissionDto } from '~/dto';
 import { useEffect, useState } from 'react';
 import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ import { InputField } from '../InputField';
 import { putRecruitmentAdmissionForGang } from '~/api';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { utcTimestampToLocal } from '~/utils';
-import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 
 type RecruitmentApplicantsStatusProps = {
@@ -86,8 +86,7 @@ export function RecruitmentApplicantsStatus({
     return value;
   }
 
-  const data = recruitmentApplicants.map(function (admission) {
-    return [
+  const data = recruitmentApplicants.map((admission) => [
       {
         value: admission.user.first_name,
         content: (
@@ -182,8 +181,7 @@ export function RecruitmentApplicantsStatus({
           />
         ),
       },
-    ];
-  });
+    ]);
 
   return (
     <Table

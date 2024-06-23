@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Alert } from './Alert';
 
 // Local component config.
@@ -10,8 +10,7 @@ export default {
   },
 } as ComponentMeta<typeof Alert>;
 
-const TypesTemplate: ComponentStory<typeof Alert> = function (args) {
-  return (
+const TypesTemplate: ComponentStory<typeof Alert> = (args) => (
     <>
       <Alert {...args} type="info" />
       <Alert {...args} type="success" />
@@ -20,10 +19,8 @@ const TypesTemplate: ComponentStory<typeof Alert> = function (args) {
       <Alert {...args} type="samf" />
     </>
   );
-};
 
-const AlignTemplate: ComponentStory<typeof Alert> = function (args) {
-  return (
+const AlignTemplate: ComponentStory<typeof Alert> = (args) => (
     <>
       <Alert {...args} />
       <Alert {...args} closable={true} />
@@ -31,7 +28,6 @@ const AlignTemplate: ComponentStory<typeof Alert> = function (args) {
       <Alert {...args} closable={true} title={'Example Title'} />
     </>
   );
-};
 
 export const AllTypes = TypesTemplate.bind({});
 

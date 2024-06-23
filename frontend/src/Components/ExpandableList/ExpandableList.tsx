@@ -1,4 +1,4 @@
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import { useExpandableListContext } from './components/ExpandableListContextProvider/ExpandableListContextProvider';
 import styles from './ExpandableList.module.scss';
 

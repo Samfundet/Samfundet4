@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGangs } from '~/api';
-import { GangDto } from '~/dto';
+import type { GangDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -27,7 +27,7 @@ export function RecruitmentGangOverviewPage() {
   const tableColumns = [{ content: t(KEY.common_gang), sortable: true }];
 
   // TODO: Only show gangs that user has access to, and only show gangs that are recruiting
-  const data = allGangs.map(function (gang) {
+  const data = allGangs.map((gang) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },

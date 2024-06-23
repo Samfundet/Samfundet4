@@ -1,4 +1,4 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import type { RecruitmentAdmissionDto } from '~/dto';
 import styles from './WithoutInterview.module.scss';
 import { Link } from '~/Components';
 import { dbT } from '~/utils';

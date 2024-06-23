@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { ThemeSwitch } from './ThemeSwitch';
@@ -9,8 +9,7 @@ export default {
   component: ThemeSwitch,
 } as ComponentMeta<typeof ThemeSwitch>;
 
-const Template: ComponentStory<typeof ThemeSwitch> = function (args) {
-  return (
+const Template: ComponentStory<typeof ThemeSwitch> = (args) => (
     <>
       <AuthContextProvider>
         <GlobalContextProvider>
@@ -19,7 +18,6 @@ const Template: ComponentStory<typeof ThemeSwitch> = function (args) {
       </AuthContextProvider>
     </>
   );
-};
 
 export const Basic = Template.bind({});
 Basic.args = {};

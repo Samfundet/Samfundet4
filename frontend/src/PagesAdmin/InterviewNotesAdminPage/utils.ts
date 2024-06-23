@@ -1,4 +1,4 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import type { RecruitmentAdmissionDto } from '~/dto';
 
 /** Filtrer recruitmentadmission based on positionId, InterviewId and interview time */
 export function filterRecruitmentAdmission(

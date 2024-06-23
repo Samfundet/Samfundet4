@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
 import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionInterview } from '~/api';
-import { InterviewDto, RecruitmentAdmissionDto } from '~/dto';
+import type { InterviewDto, RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';

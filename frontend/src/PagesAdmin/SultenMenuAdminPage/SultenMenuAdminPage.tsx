@@ -5,7 +5,7 @@ import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getMenuItems, getMenus } from '~/api';
-import { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
+import type { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';

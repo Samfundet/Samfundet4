@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getEventGroups, getVenues } from '~/api';
-import { EventDto, EventGroupDto, VenueDto } from '~/dto';
+import type { EventDto, EventGroupDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { SetState } from '~/types';
+import type { SetState } from '~/types';
 import { Dropdown } from '../Dropdown';
-import { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropDownOption } from '../Dropdown/Dropdown';
 import { InputField } from '../InputField';
 import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';

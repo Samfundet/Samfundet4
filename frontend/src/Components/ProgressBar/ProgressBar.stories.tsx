@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProgressBar } from './ProgressBar';
 
 // Local component config.
@@ -7,9 +7,7 @@ export default {
   component: ProgressBar,
 } as ComponentMeta<typeof ProgressBar>;
 
-const Template: ComponentStory<typeof ProgressBar> = function (args) {
-  return <ProgressBar {...args}></ProgressBar>;
-};
+const Template: ComponentStory<typeof ProgressBar> = (args) => <ProgressBar {...args}></ProgressBar>;
 
 export const Low = Template.bind({});
 Low.args = {

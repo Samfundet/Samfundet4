@@ -2,7 +2,7 @@
 // import { useAuthContext } from '~/context/AuthContext';
 // import { hasPerm } from '~/utils';
 // import { ROUTES } from '~/routes';
-import { ElementType } from 'react';
+import type { ElementType } from 'react';
 import { ROUTES } from '~/routes';
 
 type ProtectedRouteProps = {

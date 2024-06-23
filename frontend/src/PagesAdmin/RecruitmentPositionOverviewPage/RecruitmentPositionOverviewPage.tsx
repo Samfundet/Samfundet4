@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 
 import { getRecruitmentAdmissionsForGang } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import type { RecruitmentAdmissionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

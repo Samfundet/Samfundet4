@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ReservationFormLine } from './Components';
 
 type FormProps = {

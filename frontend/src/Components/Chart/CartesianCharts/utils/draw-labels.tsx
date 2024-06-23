@@ -1,8 +1,8 @@
-import { CartesianChartsData, CartesianChartProps, CartesianChartSizes, CartesianChartsColors } from './types';
+import type { CartesianChartsData, CartesianChartProps, CartesianChartSizes, CartesianChartsColors } from './types';
 
 // processing single label text item
 const labelText = (labelValue: string | number, labelMagnitude?: number, splitLabel?: [number, number]): string => {
-  let labelText: string = '';
+  let labelText = '';
 
   if (labelMagnitude && typeof labelValue === 'number' && (labelMagnitude % 10 === 0 || labelMagnitude === 1)) {
     // Divide the label value by the magnitude and convert to string

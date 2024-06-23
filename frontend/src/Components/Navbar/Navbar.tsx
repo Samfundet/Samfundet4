@@ -16,7 +16,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY, LANGUAGES } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
-import { RecruitmentDto } from '~/dto';
+import type { RecruitmentDto } from '~/dto';
 
 const scrollDistanceForOpaque = 30;
 

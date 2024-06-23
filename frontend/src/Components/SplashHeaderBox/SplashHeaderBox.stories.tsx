@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { SplashHeaderBox } from './SplashHeaderBox';
@@ -9,8 +9,7 @@ export default {
   component: SplashHeaderBox,
 } as ComponentMeta<typeof SplashHeaderBox>;
 
-const Template: ComponentStory<typeof SplashHeaderBox> = function (args) {
-  return (
+const Template: ComponentStory<typeof SplashHeaderBox> = (args) => (
     <>
       <AuthContextProvider>
         <GlobalContextProvider>
@@ -19,7 +18,6 @@ const Template: ComponentStory<typeof SplashHeaderBox> = function (args) {
       </AuthContextProvider>
     </>
   );
-};
 
 export const Basic = Template.bind({});
 Basic.args = {};

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { InputFile } from './InputFile';
 
 export default {
@@ -6,13 +6,11 @@ export default {
   component: InputFile,
 } as ComponentMeta<typeof InputFile>;
 
-const Template: ComponentStory<typeof InputFile> = function (args) {
-  return (
+const Template: ComponentStory<typeof InputFile> = (args) => (
     <form>
       <InputFile {...args} />
     </form>
   );
-};
 
 export const ImageSelect = Template.bind({});
 ImageSelect.args = {

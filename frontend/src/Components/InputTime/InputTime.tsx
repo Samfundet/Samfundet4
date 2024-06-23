@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import styles from './InputTime.module.scss';
 import classNames from 'classnames';
 
@@ -32,7 +32,7 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
     const inputName = e.target.getAttribute('name');
     let numericValue = e.target.value.replace(/[^0-9]/g, '').trim();
     if (numericValue.length > 2) numericValue = numericValue.slice(1, 3);
-    const parsedValue = parseInt(numericValue, 10);
+    const parsedValue = Number.parseInt(numericValue, 10);
     if (inputName === 'hour') {
       numericValue = parsedValue > 23 ? '23' : numericValue;
       // Regex for 00-23, allowing for values without 0 padding

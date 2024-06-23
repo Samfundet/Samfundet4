@@ -1,8 +1,8 @@
 import {
-  CSSProperties,
-  FunctionComponent,
-  ReactNode,
-  SVGProps,
+  type CSSProperties,
+  type FunctionComponent,
+  type ReactNode,
+  type SVGProps,
   createContext,
   useContext,
   useEffect,
