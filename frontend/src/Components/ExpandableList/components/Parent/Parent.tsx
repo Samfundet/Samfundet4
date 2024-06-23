@@ -33,10 +33,10 @@ export function Parent({ content, children, onClick, nestedDepth }: ParentProps)
   return (
     <>
       {isVisible && (
-        <div className={classNames(styles.item, styles.parent)} onClick={handleClick}>
+        <button type="button" className={classNames(styles.item, styles.parent)} onClick={handleClick}>
           <div>{content}</div>
           <div>{'>'}</div>
-        </div>
+        </button>
       )}
 
       {showChildren && children}
