@@ -1,4 +1,4 @@
-import { IsfitLogo, SamfundetLogo, UKALogo } from './components';
+import { IsfitLogo, SamfundetLogo, UkaLogo } from './components';
 import { OrganizationTypeValue } from '~/types';
 
 export type LogoPalette = {
@@ -17,7 +17,7 @@ export function Logo({ organization, color, size }: LogoProps) {
     case 'samfundet':
       return <SamfundetLogo color={color} size={size} />;
     case 'uka':
-      return <UKALogo color={color} size={size} />;
+      return <UkaLogo color={color} size={size} />;
     case 'isfit':
       return <IsfitLogo color={color} size={size} />;
   }
