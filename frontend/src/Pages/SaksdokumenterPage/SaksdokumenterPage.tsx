@@ -22,6 +22,7 @@ export function SaksdokumenterPage() {
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getSaksdokumenter()
       .then((data) => {
@@ -33,7 +34,6 @@ export function SaksdokumenterPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function saksdokumentList(

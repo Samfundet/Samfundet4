@@ -26,6 +26,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const [timeslots, setTimeslots] = useState<string[]>([]);
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (!recruitmentId) {
       return;
@@ -51,7 +52,6 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
         console.error(error);
       })
       .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   function save() {

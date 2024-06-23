@@ -23,6 +23,7 @@ export function GangsAdminPage() {
 
   // Stuff to do on first render.
   // TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getGangList()
       .then((data) => {
@@ -38,7 +39,6 @@ export function GangsAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {

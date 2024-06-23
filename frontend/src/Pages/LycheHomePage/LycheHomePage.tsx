@@ -20,6 +20,7 @@ export function LycheHomePage() {
   const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getVenues()
       .then((data) => {
@@ -31,7 +32,6 @@ export function LycheHomePage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

@@ -25,6 +25,7 @@ export function GangsFormAdminPage() {
 
   //TODO add permissions on render
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getGang(id)
@@ -41,7 +42,6 @@ export function GangsFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function handleOnSubmit(data: GangDto) {

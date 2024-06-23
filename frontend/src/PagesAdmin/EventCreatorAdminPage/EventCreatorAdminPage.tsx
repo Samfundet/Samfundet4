@@ -72,6 +72,7 @@ export function EventCreatorAdminPage() {
   ];
 
   //Fetch event data using the event ID
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
   useEffect(() => {
     if (id) {
       getEvent(id)
@@ -88,7 +89,6 @@ export function EventCreatorAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // ================================== //

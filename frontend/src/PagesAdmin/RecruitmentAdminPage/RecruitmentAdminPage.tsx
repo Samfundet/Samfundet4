@@ -21,6 +21,7 @@ export function RecruitmentAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getAllRecruitments()
       .then((data) => {
@@ -31,7 +32,6 @@ export function RecruitmentAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tableColumns = [

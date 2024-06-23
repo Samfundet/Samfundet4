@@ -34,8 +34,8 @@ export function ClosedPeriodFormAdminPage() {
   const { id } = useParams();
 
   // Stuff to do on first render.
-  //TODO add permissions on render
-
+  // TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     // TODO add fix on no id on editpage
     if (id === undefined) {
@@ -64,7 +64,6 @@ export function ClosedPeriodFormAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(data);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function handleOnSubmit(data: formType) {

@@ -22,6 +22,7 @@ export function SultenMenuAdminPage() {
   const { t } = useTranslation();
 
   // Get Menus and Menuitems
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     Promise.all([
       getMenuItems()
@@ -43,7 +44,6 @@ export function SultenMenuAdminPage() {
     ]).then(() => {
       setShowSpinner(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tableMenuItemsColumns = [

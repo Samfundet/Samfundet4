@@ -19,6 +19,7 @@ export function GroupsPage() {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getGangList()
       .then((data) => {
@@ -28,7 +29,6 @@ export function GroupsPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -95,6 +95,7 @@ export function SultenMenuItemFormAdminPage() {
     ]);
   }, [t]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getMenuItem(id)
@@ -111,7 +112,6 @@ export function SultenMenuItemFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Guards.

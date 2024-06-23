@@ -20,7 +20,8 @@ export function InformationAdminPage() {
   const { t } = useTranslation();
 
   // Stuff to do on first render.
-  //TODO add permissions on render
+  // TODO: add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getInformationPages()
       .then((data) => {
@@ -31,7 +32,6 @@ export function InformationAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deletePage(slug_field: string | undefined) {

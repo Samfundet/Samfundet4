@@ -37,10 +37,9 @@ export function EventsAdminPage() {
 
   // Stuff to do on first render.
   // TODO add permissions on render
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     getEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deleteSelectedEvent(id: number) {

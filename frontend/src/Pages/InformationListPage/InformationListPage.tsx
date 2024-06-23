@@ -20,6 +20,7 @@ export function InformationListPage() {
   const { i18n, t } = useTranslation();
 
   // Stuff to do on first render.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getInformationPages()
       .then((data) => setPages(data))
@@ -27,7 +28,6 @@ export function InformationListPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

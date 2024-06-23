@@ -20,6 +20,7 @@ export function OpeningHoursAdminPage() {
   const venueRef = useRef(venues);
 
   // Get venues
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getVenues()
       .then((venues) => {
@@ -32,7 +33,6 @@ export function OpeningHoursAdminPage() {
         console.error(error);
         setIsLoading(false);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save venue change.

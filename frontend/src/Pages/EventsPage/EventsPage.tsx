@@ -12,6 +12,7 @@ export function EventsPage() {
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getEventsPerDay()
       .then((data) => {
@@ -22,7 +23,6 @@ export function EventsPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (showSpinner) {

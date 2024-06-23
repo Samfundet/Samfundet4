@@ -48,6 +48,7 @@ export function RecruitmentFormAdminPage() {
   }, []);
 
   // Fetch data if edit mode.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getRecruitment(id)
@@ -66,7 +67,6 @@ export function RecruitmentFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const initialData: Partial<FormType> = {

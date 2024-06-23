@@ -18,6 +18,7 @@ export function SultenReservationAdminPage() {
 
   const today = new Date();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setDayInfo({
       ...dayInfo,
@@ -27,7 +28,6 @@ export function SultenReservationAdminPage() {
       tables: TABLES_TEST_DATA,
     });
     setShowSpinner(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function dateIterator(days: number) {

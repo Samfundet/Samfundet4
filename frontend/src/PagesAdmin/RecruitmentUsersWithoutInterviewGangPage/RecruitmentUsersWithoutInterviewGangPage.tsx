@@ -23,6 +23,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
       getApplicantsWithoutInterviews(recruitmentId, gangId)
@@ -35,9 +36,9 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           console.error(error);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (gangId) {
       getGang(gangId)
@@ -51,9 +52,9 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gangId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId) {
       getRecruitment(recruitmentId)
@@ -69,7 +70,6 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           console.error(data);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   const title = t(KEY.recruitment_applicants_without_interview);

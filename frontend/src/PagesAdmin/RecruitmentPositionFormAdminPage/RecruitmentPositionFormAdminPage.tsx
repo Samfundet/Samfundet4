@@ -45,6 +45,7 @@ export function RecruitmentPositionFormAdminPage() {
   const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
 
   // Fetch data if edit mode.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (positionId) {
       getRecruitmentPosition(positionId)
@@ -63,7 +64,6 @@ export function RecruitmentPositionFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positionId]);
 
   const initialData: Partial<RecruitmentPositionDto> = {

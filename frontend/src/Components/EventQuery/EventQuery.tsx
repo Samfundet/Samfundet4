@@ -6,7 +6,7 @@ import { KEY } from '~/i18n/constants';
 import type { SetState } from '~/types';
 import { Dropdown } from '../Dropdown';
 import type { DropDownOption } from '../Dropdown/Dropdown';
-import { InputField } from '../InputField';
+import { InputField } from '~/Components';
 import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';
 
@@ -27,7 +27,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
   const [selectedVenue, setSelectedVenue] = useState<VenueDto>();
   const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto>();
 
-  /* eslint-disable react-hooks/exhaustive-deps */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     getVenues()
       .then((data) => setVenues(data))
@@ -37,6 +37,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       .catch(console.error);
   }, [allEvents]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setEvents(eventQuery(allEvents, search, selectedVenue));
   }, [search, selectedVenue, selectedEventGroup]);

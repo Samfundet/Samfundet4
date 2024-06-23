@@ -36,6 +36,7 @@ export function InformationFormAdminPage() {
   const [languageTab, setLanguageTab] = useState<Tab>(languageTabs[0]);
 
   // Fetch data if edit mode.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
@@ -54,7 +55,6 @@ export function InformationFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slugField]);
 
   // Loading.

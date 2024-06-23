@@ -24,6 +24,7 @@ export function SaksdokumentFormAdminPage() {
   const { id } = useParams();
   const [saksdok, setSaksdok] = useState<SaksdokumentDto>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getSaksdokument(id)
@@ -42,7 +43,6 @@ export function SaksdokumentFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Only set fields used in form

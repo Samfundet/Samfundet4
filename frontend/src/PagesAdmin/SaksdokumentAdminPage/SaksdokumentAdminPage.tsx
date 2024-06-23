@@ -24,6 +24,7 @@ export function SaksdokumentAdminPage() {
   const { t } = useTranslation();
 
   // Get documents
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getSaksdokumenter()
       .then((data) => {
@@ -34,7 +35,6 @@ export function SaksdokumentAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Filtered
