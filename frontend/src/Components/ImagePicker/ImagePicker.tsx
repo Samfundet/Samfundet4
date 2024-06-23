@@ -30,7 +30,8 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
   function renderImage(image: ImageDto): Children {
     const isSelected = selected?.id === image.id;
     return (
-      <div
+      <button
+        type="button"
         key={image.id}
         className={classNames(styles.image, isSelected && styles.selected_image)}
         onClick={() => select(image)}
