@@ -34,7 +34,7 @@ export function Button({
   preventDefault = false,
   ...props
 }: ButtonProps) {
-  const isPure = theme === 'pure';
+  const isPure = theme === 'pure' || theme == 'text';
 
   const classNames = classnames(
     !isPure && styles.button,

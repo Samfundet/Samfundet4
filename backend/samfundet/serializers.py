@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+from typing import TYPE_CHECKING
 from collections import defaultdict
 
 from guardian.models import UserObjectPermission, GroupObjectPermission
@@ -53,13 +54,19 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    RecruitmentDateStat,
     RecruitmentPosition,
+    RecruitmentTimeStat,
+    RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentApplication,
     RecruitmentSeperatePosition,
     RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -561,7 +568,34 @@ class MerchSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
+class RecruitmentTimeStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentTimeStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentDateStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentDateStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
+    campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+
+    class Meta:
+        model = RecruitmentCampusStat
+        exclude = ['id', 'recruitment_stats']
+
+    def campus_name(self, stat: RecruitmentCampusStat) -> str:
+        return stat.campus.name_nb if stat.campus else None
+
+
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+    time_stats = RecruitmentTimeStatSerializer(read_only=True, many=True)
+    date_stats = RecruitmentDateStatSerializer(read_only=True, many=True)
+    campus_stats = RecruitmentCampusStatSerializer(read_only=True, many=True)
+
     class Meta:
         model = RecruitmentStatistics
         fields = '__all__'
@@ -573,6 +607,9 @@ class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     recruitment_application_ids = serializers.SerializerMethodField()
+    applications = serializers.SerializerMethodField(method_name='get_applications', read_only=True)
+    admissions_without_interview = serializers.SerializerMethodField(method_name='get_applications_without_interviews_for_recruitment', read_only=True)
+    top_admission = serializers.SerializerMethodField(method_name='get_top_application', read_only=True)
     campus = CampusSerializer()
 
     class Meta:
@@ -591,6 +628,50 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
     def get_recruitment_application_ids(self, obj: User) -> list[int]:
         """Return list of recruitment admission IDs for the user."""
         return RecruitmentApplication.objects.filter(user=obj).values_list('id', flat=True)
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'phone_number',
+            'applications',
+            'campus',
+            'applications_without_interview',
+            'top_admission',
+        ]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # This will allow it to filter admissions on recruitment
+        self.recruitment = kwargs.pop('recruitment', None)
+        self.gang = kwargs.pop('gang', None)
+        super().__init__(*args, **kwargs)
+
+    def get_applications(self, obj: User) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        admissions = RecruitmentApplication.objects.filter(user=obj)
+        if self.recruitment:
+            admissions = admissions.filter(recruitment=self.recruitment)
+        if self.gang:
+            admissions = admissions.filter(recruitment_position__gang=self.gang)
+        return RecruitmentApplicationForApplicantSerializer(admissions, many=True).data
+
+    def get_applications_without_interviews_for_recruitment(self, obj: User) -> list[int]:
+        """Return list of recruitment admission IDs for the user."""
+        admissions = RecruitmentApplication.objects.filter(user=obj, interview=None)
+        if self.recruitment:
+            admissions = admissions.filter(recruitment=self.recruitment)
+        if self.gang:
+            admissions = admissions.filter(recruitment_position__gang=self.gang)
+        return RecruitmentApplicationForApplicantSerializer(admissions, many=True).data
+
+    def get_top_admission(self, obj: User) -> list[int]:
+        admissions = RecruitmentApplication.objects.filter(user=obj)
+        if self.recruitment:
+            admissions = admissions.filter(recruitment=self.recruitment)
+        if self.gang:
+            admissions = admissions.filter(recruitment_position__gang=self.gang)
+        return RecruitmentAForApplicantSerializer(admissions.order_by('applicant_priority').first()).data
 
 
 class InterviewerSerializer(CustomBaseSerializer):

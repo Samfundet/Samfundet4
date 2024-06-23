@@ -19,6 +19,7 @@ def seed():
 
     RecruitmentApplication.objects.all().delete()
     yield 0, 'Deleted old admissions'
+
     positions = RecruitmentPosition.objects.all()
     users = User.objects.all()
     created_count = 0

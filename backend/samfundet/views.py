@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import csv
 import hmac
 import hashlib
 from typing import Any
@@ -16,9 +17,9 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponse
 from django.utils import timezone
-from django.db.models import Case, When, Count, QuerySet
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
@@ -586,6 +587,13 @@ class RecruitmentStatisticsView(ModelViewSet):
     serializer_class = RecruitmentStatisticsSerializer
     queryset = RecruitmentStatistics.objects.all()
 
+    def retrieve(self, request: Request, pk: int) -> Response:
+        stats = get_object_or_404(self.queryset, pk=pk)
+        stats.save()
+        stats = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(stats)
+        return Response(serializer.data)
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
@@ -634,29 +642,24 @@ class RecruitmentPositionsPerGangView(ListAPIView):
         return None
 
 
-class ApplicantsWithoutInterviewsView(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = UserForRecruitmentSerializer
+class ApplicantsWithoutInterviewsView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self) -> QuerySet[User]:
-        """
-        Optionally restricts the returned positions to a given recruitment,
-        by filtering against a `recruitment` query parameter in the URL.
-        """
+    def get(self, request: Request) -> Response:
         recruitment = self.request.query_params.get('recruitment', None)
-        if recruitment is None:
-            return User.objects.none()  # Return an empty queryset instead of None
+        gang = self.request.query_params.get('gang', None)
 
-        # Exclude users who have any admissions for the given recruitment that have an interview_time
-        interview_times_for_recruitment = Case(
-            When(admissions__recruitment=recruitment, then='admissions__interview__interview_time'),
-            default=None,
-            output_field=None,
-        )
-        users_without_interviews = (
-            User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
-        )
-        return users_without_interviews
+        if not recruitment:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Filter based on admissions
+        admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, interview=None)
+        if gang:
+            admissions = admissions.filter(recruitment_position__gang=gang)
+        admissions_without_interviews_user_ids = admissions.values_list('user_id', flat=True)
+        data = User.objects.filter(id__in=admissions_without_interviews_user_ids)
+
+        return Response(data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
 
 
 class RecruitmentApplicationForApplicantView(ModelViewSet):
@@ -896,6 +899,61 @@ class ActiveRecruitmentsView(ListAPIView):
         """Returns all active recruitments"""
         # TODO Use is not completed instead of actual_application_deadline__gte
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+
+
+class DownloadRecruitmentAdmissionGangCSV(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request: Request,
+        recruitment_id: int,
+        gang_id: int,
+    ) -> HttpResponse:
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        gang = get_object_or_404(Gang, id=gang_id)
+        admissions = RecruitmentAdmission.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
+
+        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
+        )
+        writer = csv.DictWriter(
+            response,
+            fieldnames=[
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Søkers rangering',
+                'Intervjuer satt',
+            ],
+        )
+        writer.writeheader()
+        for admission in admissions:
+            writer.writerow(
+                {
+                    'Navn': admission.user.get_full_name(),
+                    'Telefon': admission.user.phone_number,
+                    'Epost': admission.user.email,
+                    'Campus': admission.user.campus.name_en if admission.user.campus else '',
+                    'Stilling': admission.recruitment_position.name_nb,
+                    'Intervjutid': admission.interview.interview_time if admission.interview else '',
+                    'Intervjusted': admission.interview.interview_location if admission.interview else '',
+                    'Prioritet': admission.get_recruiter_priority_display(),
+                    'Status': admission.get_recruiter_status_display(),
+                    'Søkers rangering': f'{admission.applicant_priority}/{admission.get_total_admissions()}',
+                    'Intervjuer satt': f'{admission.get_total_interviews()}/{admission.get_total_admissions()}',
+                }
+            )
+
+        return response
 
 
 class InterviewRoomView(ModelViewSet):
