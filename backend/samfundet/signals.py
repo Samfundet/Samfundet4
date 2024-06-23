@@ -76,3 +76,19 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
 def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
     if created:
         instance.recruitment.update_stats()
+
+
+@receiver(post_save, sender=RecruitmentAdmission)
+def admission_interview_set(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
+    """
+    Checks if an admission gets an interview set, and if it is in a shared group
+    Will then set all admissions for same interview group which has no interview by saving
+    Saving is done to affect then other possibly changed fields
+    """
+    if not created:
+        interview_group = instance.recruitment_position.shared_interview_group
+        interview = instance.interview
+        if interview and interview_group:
+            for admission in RecruitmentAdmission.objects.filter(user=instance.user, recruitment_position__in=interview_group.positions.all()):
+                if admission.interview is None:
+                    admission.save()

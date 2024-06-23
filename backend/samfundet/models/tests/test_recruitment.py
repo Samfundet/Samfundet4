@@ -6,7 +6,14 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from samfundet.models.general import User
-from samfundet.models.recruitment import Recruitment, Organization, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import (
+    Interview,
+    Recruitment,
+    Organization,
+    RecruitmentPosition,
+    RecruitmentAdmission,
+    RecruitmentPositionSharedInterviewGroup,
+)
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
@@ -172,6 +179,80 @@ class TestRecruitmentStats:
 
         assert fixture_recruitment.statistics.total_admissions == 2
         assert fixture_recruitment.statistics.total_applicants == 2
+
+
+class TestRecruitmentInterview:
+    def test_interview_group_autoadd_on_create(
+        self,
+        fixture_recruitment: Recruitment,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment_admission: RecruitmentAdmission,
+    ):
+        # assert initial state
+        assert fixture_recruitment_position.shared_interview_group is None
+        assert fixture_recruitment_admission.interview is None
+        assert fixture_recruitment_position.shared_interview_group is None
+        assert fixture_recruitment_position2.shared_interview_group is None
+
+        # setup interview group
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        fixture_recruitment_position.shared_interview_group = shared_group
+        fixture_recruitment_position2.shared_interview_group = shared_group
+        fixture_recruitment_position.save()
+        fixture_recruitment_position2.save()
+        assert fixture_recruitment_position.shared_interview_group == shared_group
+        assert fixture_recruitment_position.shared_interview_group == fixture_recruitment_position2.shared_interview_group
+
+        # Give admission an interview
+        interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Eurovision 2024')
+        fixture_recruitment_admission.interview = interview
+        fixture_recruitment_admission.save()
+        assert fixture_recruitment_admission.interview == interview
+
+        # Check if new admission for shared group has same interview on create
+        new_admission = RecruitmentAdmission.objects.create(
+            user=fixture_recruitment_admission.user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment_admission.recruitment,
+            admission_text='I already have an interview!',
+        )
+        assert new_admission.interview == interview
+
+    def test_interview_group_autoset_on_set(
+        self,
+        fixture_recruitment: Recruitment,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment_admission: RecruitmentAdmission,
+        fixture_recruitment_admission2: RecruitmentAdmission,
+    ):
+        # assert initial state
+        assert fixture_recruitment_position.shared_interview_group is None
+        assert fixture_recruitment_admission.interview is None
+        assert fixture_recruitment_position.shared_interview_group is None
+        assert fixture_recruitment_position2.shared_interview_group is None
+        assert fixture_recruitment_admission.recruitment_position == fixture_recruitment_position
+        assert fixture_recruitment_admission2.recruitment_position == fixture_recruitment_position2
+
+        # setup interview group
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        fixture_recruitment_position.shared_interview_group = shared_group
+        fixture_recruitment_position2.shared_interview_group = shared_group
+        fixture_recruitment_position.save()
+        fixture_recruitment_position2.save()
+        assert fixture_recruitment_position.shared_interview_group == shared_group
+        assert fixture_recruitment_position.shared_interview_group == fixture_recruitment_position2.shared_interview_group
+
+        # Give admission an interview
+        interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Eurovision 2024')
+        fixture_recruitment_admission.interview = interview
+        fixture_recruitment_admission.save()
+        assert fixture_recruitment_admission.interview == interview
+
+        # check if other admission has saved that new admission
+        fixture_recruitment_admission2 = RecruitmentAdmission.objects.get(pk=fixture_recruitment_admission2.pk)
+        assert fixture_recruitment_admission2.interview == interview
 
 
 class TestRecruitmentAdmission:
