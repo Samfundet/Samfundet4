@@ -64,8 +64,8 @@ export function Navbar() {
   }, []);
 
   const languageButton = (
-    <button className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
-      <img src={otherFlag} className={styles.language_flag} />
+    <button type="button" className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
+      <img src={otherFlag} className={styles.language_flag} alt="Flag" />
     </button>
   );
 
@@ -95,6 +95,7 @@ export function Navbar() {
       >
         {t(KEY.common_membership)}
       </Link>
+      {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_opening_hours)}
       </a>
@@ -112,6 +113,7 @@ export function Navbar() {
       >
         {t(KEY.navbar_photos)}
       </a>
+      {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.navbar_nybygg)}
       </a>
@@ -267,7 +269,7 @@ export function Navbar() {
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
           <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
-            <img src={logoWhite} id={styles.navbar_logo_img} />
+            <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>

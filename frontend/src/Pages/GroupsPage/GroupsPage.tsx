@@ -37,8 +37,8 @@ export function GroupsPage() {
           <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>
           <p className={styles.description}>{t(KEY.groupspage_gangs_text)}</p>
         </div>
-        {groups.map((element: GangTypeDto, key: number) => (
-          <div key={key} className={styles.groups}>
+        {groups.map((element: GangTypeDto) => (
+          <div key={element.id} className={styles.groups}>
             <div className={styles.groupsTitle}>{dbT(element, 'title')}</div>
             <ImageList
               textMaxLength={12}
