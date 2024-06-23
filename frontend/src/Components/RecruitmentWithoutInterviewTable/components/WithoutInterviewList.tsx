@@ -1,4 +1,4 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto } from '~/dto';
 import styles from './WithoutInterview.module.scss';
 import { Link } from '~/Components';
 import { dbT } from '~/utils';
@@ -9,10 +9,10 @@ import { Table } from '~/Components/Table';
 import { reverse } from '~/named-urls';
 
 type WithoutInterviewListProps = {
-  admissions: RecruitmentAdmissionDto[];
+  applications: RecruitmentApplicationDto[];
 };
 
-export function WithoutInterviewList({ admissions }: WithoutInterviewListProps) {
+export function WithoutInterviewList({ applications }: WithoutInterviewListProps) {
   const { t } = useTranslation();
 
   const tableColumns = [
@@ -20,29 +20,29 @@ export function WithoutInterviewList({ admissions }: WithoutInterviewListProps) 
     { content: t(KEY.recruitment_priority), sortable: true },
   ];
 
-  function admissionToRow(admission: RecruitmentAdmissionDto) {
+  function applicationToRow(application: RecruitmentApplicationDto) {
     return [
       {
-        value: dbT(admission.recruitment_position, 'name'),
+        value: dbT(application.recruitment_position, 'name'),
         content: (
           <Link
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                admissionID: admission.id,
+                applicationID: application.id,
               },
             })}
           >
-            {dbT(admission.recruitment_position, 'name')}
+            {dbT(application.recruitment_position, 'name')}
           </Link>
         ),
       },
-      admission.applicant_priority,
+      application.applicant_priority,
     ];
   }
   return (
     <div className={styles.container}>
-      <Table columns={tableColumns} data={admissions.map((admission) => admissionToRow(admission))} />
+      <Table columns={tableColumns} data={applications.map((application) => applicationToRow(application))} />
     </div>
   );
 }

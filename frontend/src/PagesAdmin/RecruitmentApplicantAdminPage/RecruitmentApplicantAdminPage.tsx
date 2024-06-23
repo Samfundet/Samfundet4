@@ -88,7 +88,7 @@ export function RecruitmentApplicantAdminPage() {
                     url={reverse({
                       pattern: ROUTES.frontend.admin_recruitment_applicant,
                       urlParams: {
-                        admissionID: element.id,
+                        applicationID: element.id,
                       },
                     })}
                   >

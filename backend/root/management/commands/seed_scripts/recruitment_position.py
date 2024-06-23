@@ -10,8 +10,8 @@ from samfundet.models.recruitment import Recruitment, RecruitmentPosition
 # Some example data to use for the new RecruitmentPosition instances
 POSITION_DATA = {
     'is_funksjonaer_position': False,
-    'default_admission_letter_nb': 'Default Admission Letter NB',
-    'default_admission_letter_en': 'Default Admission Letter EN',
+    'default_application_letter_nb': 'Default Application Letter NB',
+    'default_application_letter_en': 'Default Application Letter EN',
     'tags': 'tag1,tag2',
 }
 

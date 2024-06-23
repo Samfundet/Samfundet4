@@ -94,11 +94,11 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics
 
     def test_recruitmentstats_update_signal(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
-        """Check if statistics are updated on new admissions"""
-        assert fixture_recruitment.statistics.total_admissions == 0
+        """Check if statistics are updated on new applications"""
+        assert fixture_recruitment.statistics.total_applications == 0
         assert fixture_recruitment.statistics.total_applicants == 0
 
-        # Creat new admission
+        # Creat new application
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
@@ -109,15 +109,15 @@ class TestRecruitmentStats:
         # Check if updated
         # Needs to be manually done
         fixture_recruitment.statistics.save()
-        assert fixture_recruitment.statistics.total_admissions == 1
+        assert fixture_recruitment.statistics.total_applications == 1
         assert fixture_recruitment.statistics.total_applicants == 1
 
     def test_recruitmentstats_multiple_applications_single_user(
         self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
     ):
-        """Check if only admissions are updated if same user creates an additional admission"""
+        """Check if only applications are updated if same user creates an additional application"""
         assert fixture_recruitment.statistics.total_applicants == 0
-        assert fixture_recruitment.statistics.total_admissions == 0
+        assert fixture_recruitment.statistics.total_applications == 0
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
@@ -127,15 +127,15 @@ class TestRecruitmentStats:
         )
         # Needs to be manually done
         fixture_recruitment.statistics.save()
-        assert fixture_recruitment.statistics.total_admissions == 1
+        assert fixture_recruitment.statistics.total_applications == 1
         assert fixture_recruitment.statistics.total_applicants == 1
 
-        # Create simple copy of a new position for new admission
+        # Create simple copy of a new position for new application
         fixture_recruitment_position_copy = fixture_recruitment_position
         fixture_recruitment_position.pk = None
         fixture_recruitment_position_copy.save()
 
-        # create new admission for same user
+        # create new application for same user
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position_copy,
@@ -145,8 +145,8 @@ class TestRecruitmentStats:
         )
         # Needs to be manually done
         fixture_recruitment.statistics.save()
-        # check if only admissions are updated
-        assert fixture_recruitment.statistics.total_admissions == 2
+        # check if only applications are updated
+        assert fixture_recruitment.statistics.total_applications == 2
         assert fixture_recruitment.statistics.total_applicants == 1
 
     def test_recruitmentstats_multiple_applications_multiple_users(
@@ -154,7 +154,7 @@ class TestRecruitmentStats:
     ):
         """Check if both applicatats and admissiosn are updated"""
         assert fixture_recruitment.statistics.total_applicants == 0
-        assert fixture_recruitment.statistics.total_admissions == 0
+        assert fixture_recruitment.statistics.total_applications == 0
         # Test for one user
         RecruitmentApplication.objects.create(
             user=fixture_user,
@@ -165,7 +165,7 @@ class TestRecruitmentStats:
         )
         # Needs to be manually done
         fixture_recruitment.statistics.save()
-        assert fixture_recruitment.statistics.total_admissions == 1
+        assert fixture_recruitment.statistics.total_applications == 1
         assert fixture_recruitment.statistics.total_applicants == 1
 
         # Test for both for extra user
@@ -178,7 +178,7 @@ class TestRecruitmentStats:
         )
         # Needs to be manually done
         fixture_recruitment.statistics.save()
-        assert fixture_recruitment.statistics.total_admissions == 2
+        assert fixture_recruitment.statistics.total_applications == 2
         assert fixture_recruitment.statistics.total_applicants == 2
 
     def test_recruitmentstats_campus(
@@ -186,11 +186,11 @@ class TestRecruitmentStats:
     ):
         fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.campus_stats.filter(campus=fixture_campus).first().count == 0
-        RecruitmentAdmission.objects.create(
+        RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         # Needs to be manually done
@@ -198,11 +198,11 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics.campus_stats.filter(campus=fixture_campus).first().count == 1
 
     def test_recruitmentstats_hour(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
-        adm = RecruitmentAdmission.objects.create(
+        adm = RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         assert fixture_recruitment.statistics.time_stats.filter(hour=adm.created_at.hour).first().count == 0
@@ -211,11 +211,11 @@ class TestRecruitmentStats:
         assert fixture_recruitment.statistics.time_stats.filter(hour=adm.created_at.hour).first().count == 1
 
     def test_recruitmentstats_date(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
-        adm = RecruitmentAdmission.objects.create(
+        adm = RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
             recruitment=fixture_recruitment,
-            admission_text='I have applied',
+            application_text='I have applied',
             applicant_priority=1,
         )
         assert fixture_recruitment.statistics.date_stats.filter(date=adm.created_at.strftime('%Y-%m-%d')).first().count == 0
@@ -266,8 +266,8 @@ class TestRecruitmentApplication:
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
         """
-        Tests for each state where one admission is wanted,
-        and how that affects other admissions state
+        Tests for each state where one application is wanted,
+        and how that affects other applications state
         Possible states tested here are:
         - WANTED is above all others, others are unset
         - WANTED is above all others, others are reserved
@@ -346,8 +346,8 @@ class TestRecruitmentApplication:
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
         """
-        Tests for each state where one admission is wanted,
-        and how that affects other admissions state
+        Tests for each state where one application is wanted,
+        and how that affects other applications state
         Possible states tested here are:
         - RESERVE is above all others, others are unset
         - RESERVE is above all others, others are reserved
@@ -469,14 +469,14 @@ class TestRecruitmentApplication:
         assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
 
     def test_auto_newest_lowest_pri(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_position2: RecruitmentPosition):
-        """Tests that the newest admission gets automatically the lowest applicant priority"""
+        """Tests that the newest application gets automatically the lowest applicant priority"""
         # intial priority
         assert fixture_recruitment_application.applicant_priority == 1
 
-        new_admission = RecruitmentApplication.objects.create(
-            application_text='Test admission text 2',
+        new_application = RecruitmentApplication.objects.create(
+            application_text='Test application text 2',
             recruitment_position=fixture_recruitment_position2,
             recruitment=fixture_recruitment_position2.recruitment,
             user=fixture_recruitment_application.user,
         )
-        assert new_admission.applicant_priority == 2
+        assert new_application.applicant_priority == 2

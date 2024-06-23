@@ -95,42 +95,42 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_admissions)}({acceptedApplicants.length})
+          {t(KEY.recruitment_accepted_applications)}({acceptedApplicants.length})
         </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_accepted_admissions_help_text)}</Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
           <ProcessedApplicants data={acceptedApplicants} type="accepted" />
         ) : (
           <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_accepted_admissions_empty_text)}
+            {t(KEY.recruitment_accepted_applications_empty_text)}
           </Text>
         )}
       </div>
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_rejected_admissions)}({rejectedApplicants.length})
+          {t(KEY.recruitment_rejected_applications)}({rejectedApplicants.length})
         </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_rejected_admissions_help_text)}</Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
           <ProcessedApplicants data={rejectedApplicants} type="rejected" />
         ) : (
           <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_rejected_admissions_empty_text)}
+            {t(KEY.recruitment_rejected_applications_empty_text)}
           </Text>
         )}
       </div>
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_withdrawn_admissions)}({withdrawnApplicants.length})
+          {t(KEY.recruitment_withdrawn_applications)}({withdrawnApplicants.length})
         </Text>
         {withdrawnApplicants.length > 0 ? (
           <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />
         ) : (
           <Text as="i" className={styles.subText}>
             {' '}
-            {t(KEY.recruitment_withdrawn_admissions_empty_text)}
+            {t(KEY.recruitment_withdrawn_applications_empty_text)}
           </Text>
         )}
       </div>

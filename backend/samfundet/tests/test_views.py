@@ -851,7 +851,7 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     fixture_rest_client.force_authenticate(user=fixture_superuser)
     url = reverse(routes.samfundet__applicants_without_interviews)
 
-    # Setting the interview time for the user's admission
+    # Setting the interview time for the user's application
     interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Bogstad')
     fixture_recruitment_application.interview = interview
     fixture_recruitment_application.save()
@@ -885,7 +885,7 @@ def test_recruitment_application_for_applicant(
     assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_application.recruitment_position.id
 
 
-def test_post_admission(
+def test_post_application(
     fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
 ):
     ### Arrange ###
@@ -904,7 +904,7 @@ def test_post_admission(
     # Assert the returned data based on the logic in the view
 
 
-def test_update_admission(
+def test_update_application(
     fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
 ):
     ### Arrange ###
@@ -927,7 +927,7 @@ def test_update_admission(
     # Assert the returned data based on the logic in the view
 
 
-def test_update_admission_recruiter_priority_gang(
+def test_update_application_recruiter_priority_gang(
     fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
@@ -965,7 +965,7 @@ def test_update_admission_recruiter_priority_gang(
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_update_admission_recruiter_status_gang(
+def test_update_application_recruiter_status_gang(
     fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
@@ -1003,7 +1003,7 @@ def test_update_admission_recruiter_status_gang(
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_update_admission_recruiter_priority_position(
+def test_update_application_recruiter_priority_position(
     fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
@@ -1041,7 +1041,7 @@ def test_update_admission_recruiter_priority_position(
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_update_admission_recruiter_status_position(
+def test_update_application_recruiter_status_position(
     fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
@@ -1079,13 +1079,13 @@ def test_update_admission_recruiter_status_position(
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):
+def test_withdraw_application(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
 
     # Cant withdraw if not applied
     url = reverse(
-        routes.samfundet__recruitment_withdraw_admission,
+        routes.samfundet__recruitment_withdraw_application,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     response: Response = fixture_rest_client.put(path=url)
@@ -1105,7 +1105,7 @@ def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, 
 
     ### Act 2 Send withdrawal ###
     url = reverse(
-        routes.samfundet__recruitment_withdraw_admission,
+        routes.samfundet__recruitment_withdraw_application,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     response: Response = fixture_rest_client.put(path=url)
@@ -1113,7 +1113,7 @@ def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, 
     assert response.data['withdrawn'] is True
 
 
-def test_post_admission_overflow(
+def test_post_application_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,
     fixture_recruitment: Recruitment,
@@ -1121,7 +1121,7 @@ def test_post_admission_overflow(
     fixture_recruitment_position2: RecruitmentPosition,
 ):
     ### Arrange ###
-    fixture_recruitment.max_admissions = 1
+    fixture_recruitment.max_applications = 1
     fixture_recruitment.save()
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(
@@ -1138,7 +1138,7 @@ def test_post_admission_overflow(
     assert response.status_code == status.HTTP_201_CREATED
     # Assert the returned data based on the logic in the view
 
-    # Test then for too many admissions for user
+    # Test then for too many applications for user
     url = reverse(
         routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position2.id},
@@ -1147,7 +1147,7 @@ def test_post_admission_overflow(
     response2: Response = fixture_rest_client.put(path=url, data=post_data)
     ### Assert ###
     assert response2.status_code == status.HTTP_400_BAD_REQUEST
-    assert RecruitmentApplication.TOO_MANY_ADMISSIONS_ERROR in response2.data['recruitment']
+    assert RecruitmentApplication.TOO_MANY_APPLICATIONS_ERROR in response2.data['recruitment']
 
 
 def test_recruitment_application_update_pri_up(

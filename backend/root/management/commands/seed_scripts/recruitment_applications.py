@@ -18,7 +18,7 @@ def seed():
     yield 0, 'recruitment_applications'
 
     RecruitmentApplication.objects.all().delete()
-    yield 0, 'Deleted old admissions'
+    yield 0, 'Deleted old applications'
 
     positions = RecruitmentPosition.objects.all()
     users = User.objects.all()

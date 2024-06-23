@@ -7,14 +7,14 @@ export function filterRecruitmentApplication(
   interviewId: string,
 ): RecruitmentApplicationDto[] {
   return recruitmentApplications.filter(
-    (admission) =>
-      admission.recruitment_position &&
-      admission.recruitment_position.toString() === positionId &&
-      admission.interview?.id.toString() === interviewId &&
-      admission.interview?.interview_time !== null,
+    (application) =>
+      application.recruitment_position &&
+      application.recruitment_position.toString() === positionId &&
+      application.interview?.id.toString() === interviewId &&
+      application.interview?.interview_time !== null,
   );
 }
 
-export function getNameUser(admission: RecruitmentApplicationDto): string {
-  return admission.user.first_name ? admission.user.first_name + ' ' + admission.user.last_name : '';
+export function getNameUser(application: RecruitmentApplicationDto): string {
+  return application.user.first_name ? application.user.first_name + ' ' + application.user.last_name : '';
 }

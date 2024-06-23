@@ -91,7 +91,7 @@ export function ApiTestingPage() {
         className={styles.btn}
         onClick={() => getRecruitmentApplicationsForApplicant('1').then(console.log).catch(console.error)}
       >
-        get Rec admissions for user
+        get Rec applications for user
       </Button>
 
       <Button
@@ -99,7 +99,7 @@ export function ApiTestingPage() {
         className={styles.btn}
         onClick={() => getRecruitmentApplicationsForGang('1', '1').then(console.log).catch(console.error)}
       >
-        get Rec admissions for gang
+        get Rec applications for gang
       </Button>
       <Button
         theme="samf"

@@ -376,7 +376,7 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
-  max_admissions?: number;
+  max_applications?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
   seperate_positions?: RecruitmentSeperatePositionDto[];
 };
@@ -406,8 +406,8 @@ export type RecruitmentPositionDto = {
 
   norwegian_applicants_only: boolean;
 
-  default_admission_letter_nb: string;
-  default_admission_letter_en: string;
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
 
   gang: GangDto;
   recruitment: string;
@@ -443,7 +443,7 @@ export type RecruitmentApplicationDto = {
   recruiter_status?: number;
   created_at: string;
   withdrawn: boolean;
-  admission_count?: number;
+  application_count?: number;
 };
 
 export type RecruitmentApplicationRecruiterDto = {

@@ -97,9 +97,9 @@ urlpatterns = [
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path(
-        'recruitment-download-gang-admission-csv/<int:recruitment_id>/<int:gang_id>',
-        views.DownloadRecruitmentAdmissionGangCSV.as_view(),
-        name='recruitment_download_gang_admission_csv',
+        'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
+        views.DownloadRecruitmentApplicationGangCSV.as_view(),
+        name='recruitment_download_gang_application_csv',
     ),
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),

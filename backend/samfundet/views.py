@@ -652,12 +652,12 @@ class ApplicantsWithoutInterviewsView(APIView):
         if not recruitment:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Filter based on admissions
-        admissions = RecruitmentAdmission.objects.filter(recruitment=recruitment, interview=None)
+        # Filter based on applications
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview=None)
         if gang:
-            admissions = admissions.filter(recruitment_position__gang=gang)
-        admissions_without_interviews_user_ids = admissions.values_list('user_id', flat=True)
-        data = User.objects.filter(id__in=admissions_without_interviews_user_ids)
+            applications = applications.filter(recruitment_position__gang=gang)
+        applications_without_interviews_user_ids = applications.values_list('user_id', flat=True)
+        data = User.objects.filter(id__in=applications_without_interviews_user_ids)
 
         return Response(data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
 
@@ -675,28 +675,28 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         data['user'] = request.user.pk
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            existing_admission = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
-            if existing_admission:
-                existing_admission.application_text = serializer.validated_data['application_text']
-                existing_admission.save()
-                serializer = self.get_serializer(existing_admission)
+            existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+            if existing_application:
+                existing_application.application_text = serializer.validated_data['application_text']
+                existing_application.save()
+                serializer = self.get_serializer(existing_application)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        admission = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
+        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
 
         user_id = request.query_params.get('user_id')
         if user_id:
             # TODO: Add permissions
-            admission = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
-        serializer = self.get_serializer(admission)
+            application = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
+        serializer = self.get_serializer(application)
         return Response(serializer.data)
 
     def list(self, request: Request) -> Response:
-        """Returns a list of all the admissions for a user for a specified recruitment"""
+        """Returns a list of all the applications for a user for a specified recruitment"""
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')
 
@@ -705,18 +705,18 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        admissions = RecruitmentApplication.objects.filter(
+        applications = RecruitmentApplication.objects.filter(
             recruitment=recruitment,
             user=request.user,
         )
 
         if user_id:
             # TODO: Add permissions
-            admissions = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
+            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
         else:
-            admissions = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
 
-        serializer = self.get_serializer(admissions, many=True)
+        serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
 
@@ -724,12 +724,12 @@ class RecruitmentApplicationWithdrawApplicantView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: int) -> Response:
-        # Checks if user has admission for position
-        admission = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user=request.user)
-        # Withdraw if ha admission
-        admission.withdrawn = True
-        admission.save()
-        serializer = RecruitmentApplicationForApplicantSerializer(admission)
+        # Checks if user has applied for position
+        application = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user=request.user)
+        # Withdraw if applied
+        application.withdrawn = True
+        application.save()
+        serializer = RecruitmentApplicationForApplicantSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -749,15 +749,15 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
             return Response(direction.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Dont think we need any extra perms in this view, admin should not be able to change priority
-        admission = get_object_or_404(
+        application = get_object_or_404(
             RecruitmentApplication,
             id=pk,
             user=request.user,
         )
-        admission.update_priority(direction)
+        application.update_priority(direction)
         serializer = RecruitmentApplicationForApplicantSerializer(
             RecruitmentApplication.objects.filter(
-                recruitment=admission.recruitment,
+                recruitment=application.recruitment,
                 user=request.user,
             ).order_by('applicant_priority'),
             many=True,
@@ -786,15 +786,15 @@ class RecruitmentApplicationForGangView(ModelViewSet):
         gang = get_object_or_404(Gang, id=gang_id)
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        admissions = RecruitmentApplication.objects.filter(
+        applications = RecruitmentApplication.objects.filter(
             recruitment_position__gang=gang,
-            recruitment=recruitment,  # only include admissions related to the specified recruitment
+            recruitment=recruitment,  # only include applications related to the specified recruitment
         )
 
-        # check permissions for each admission
-        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=admissions)
+        # check permissions for each application
+        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
 
-        serializer = self.get_serializer(admissions, many=True)
+        serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
 
@@ -871,14 +871,14 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
 
         position = get_object_or_404(RecruitmentPosition, id=pk)
 
-        admissions = RecruitmentApplication.objects.filter(
+        applications = RecruitmentApplication.objects.filter(
             recruitment_position=position,
         )
 
-        # check permissions for each admission
-        admissions = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=admissions)
+        # check permissions for each application
+        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
 
-        serializer = self.get_serializer(admissions, many=True)
+        serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
 
@@ -901,7 +901,7 @@ class ActiveRecruitmentsView(ListAPIView):
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
 
 
-class DownloadRecruitmentAdmissionGangCSV(APIView):
+class DownloadRecruitmentApplicationGangCSV(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(
@@ -912,7 +912,7 @@ class DownloadRecruitmentAdmissionGangCSV(APIView):
     ) -> HttpResponse:
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         gang = get_object_or_404(Gang, id=gang_id)
-        admissions = RecruitmentAdmission.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
+        applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
         filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
         response = HttpResponse(
@@ -936,20 +936,20 @@ class DownloadRecruitmentAdmissionGangCSV(APIView):
             ],
         )
         writer.writeheader()
-        for admission in admissions:
+        for application in applications:
             writer.writerow(
                 {
-                    'Navn': admission.user.get_full_name(),
-                    'Telefon': admission.user.phone_number,
-                    'Epost': admission.user.email,
-                    'Campus': admission.user.campus.name_en if admission.user.campus else '',
-                    'Stilling': admission.recruitment_position.name_nb,
-                    'Intervjutid': admission.interview.interview_time if admission.interview else '',
-                    'Intervjusted': admission.interview.interview_location if admission.interview else '',
-                    'Prioritet': admission.get_recruiter_priority_display(),
-                    'Status': admission.get_recruiter_status_display(),
-                    'Søkers rangering': f'{admission.applicant_priority}/{admission.get_total_admissions()}',
-                    'Intervjuer satt': f'{admission.get_total_interviews()}/{admission.get_total_admissions()}',
+                    'Navn': application.user.get_full_name(),
+                    'Telefon': application.user.phone_number,
+                    'Epost': application.user.email,
+                    'Campus': application.user.campus.name_en if application.user.campus else '',
+                    'Stilling': application.recruitment_position.name_nb,
+                    'Intervjutid': application.interview.interview_time if application.interview else '',
+                    'Intervjusted': application.interview.interview_location if application.interview else '',
+                    'Prioritet': application.get_recruiter_priority_display(),
+                    'Status': application.get_recruiter_status_display(),
+                    'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
                 }
             )
 
@@ -974,14 +974,14 @@ class InterviewRoomView(ModelViewSet):
 class RecruitmentApplicationForRecruitersView(APIView):
     permission_classes = [IsAuthenticated]  # TODO correct perms
 
-    def get(self, request: Request, admission_id: str) -> Response:
-        admission = get_object_or_404(RecruitmentApplication, id=admission_id)
-        other_admissions = RecruitmentApplication.objects.filter(user=admission.user, recruitment=admission.recruitment).order_by('applicant_priority')
+    def get(self, request: Request, application_id: str) -> Response:
+        application = get_object_or_404(RecruitmentApplication, id=application_id)
+        other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
         return Response(
             data={
-                'admission': RecruitmentApplicationForRecruiterSerializer(instance=admission).data,
-                'user': UserForRecruitmentSerializer(instance=admission.user).data,
-                'other_admissions': RecruitmentApplicationForRecruiterSerializer(other_admissions, many=True).data,
+                'application': RecruitmentApplicationForRecruiterSerializer(instance=application).data,
+                'user': UserForRecruitmentSerializer(instance=application.user).data,
+                'other_applications': RecruitmentApplicationForRecruiterSerializer(other_applications, many=True).data,
             }
         )
 

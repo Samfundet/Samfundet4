@@ -624,15 +624,15 @@ class RecruitmentApplicationInline(admin.TabularInline):
     """
     Inline admin interface for RecruitmentApplication.
 
-    Displays a link to the detailed admin page of each admission along with its user and applicant priority.
+    Displays a link to the detailed admin page of each application along with its user and applicant priority.
     """
 
     model = RecruitmentApplication
     extra = 0
-    readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
-    fields = ['linked_admission_text', 'user', 'applicant_priority']
+    readonly_fields = ['linked_application_text', 'user', 'applicant_priority']
+    fields = ['linked_application_text', 'user', 'applicant_priority']
 
-    def linked_admission_text(self, obj: RecruitmentApplication) -> str:
+    def linked_application_text(self, obj: RecruitmentApplication) -> str:
         """Returns a clickable link leading to the admin change page of the RecruitmentApplication instance."""
         url = reverse(admin__samfundet_recruitmentapplication_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.application_text)
@@ -646,7 +646,7 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'admissions_count']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'applications_count']
     search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
@@ -654,8 +654,8 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
     list_display_links = ['id']
     inlines = [RecruitmentApplicationInline]
 
-    def admissions_count(self, obj: RecruitmentPosition) -> int:
-        count = obj.admissions.all().count()
+    def applications_count(self, obj: RecruitmentPosition) -> int:
+        count = obj.applications.all().count()
         return count
 
 
@@ -714,7 +714,7 @@ def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: Qu
 
 @admin.register(RecruitmentStatistics)
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
-    list_display = ['recruitment', 'total_applicants', 'total_admissions']
+    list_display = ['recruitment', 'total_applicants', 'total_applications']
     search_fields = ['recruitment']
     actions = [update_stats]
 

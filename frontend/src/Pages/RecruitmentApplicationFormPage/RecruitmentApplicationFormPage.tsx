@@ -71,7 +71,7 @@ export function RecruitmentApplicationFormPage() {
     );
   }, [recruitmentPosition]);
 
-  function withdrawAdmission() {
+  function withdrawApplication() {
     if (positionID) {
       withdrawRecruitmentApplicationApplicant(positionID)
         .then(() => {
@@ -190,7 +190,7 @@ export function RecruitmentApplicationFormPage() {
                 {t(KEY.recruitment_withdrawn_message)}
               </Text>
             ) : (
-              <Button theme="samf" display="basic" onClick={() => withdrawAdmission()}>
+              <Button theme="samf" display="basic" onClick={() => withdrawApplication()}>
                 {t(KEY.recruitment_withdraw_application)}
               </Button>
             )}

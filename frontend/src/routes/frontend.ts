@@ -78,7 +78,7 @@ export const ROUTES_FRONTEND = {
   admin_sulten_menuitem_create: '/control-panel/lyche/menuitems/create',
   admin_sulten_menuitem_edit: '/control-panel/lyche/menuitems/edit/:id',
   admin_sulten_reservations: '/control-panel/lyche/reservations',
-  admin_recruitment_applicant: '/control-panel/recruitment/view-applicant/:admissionID/',
+  admin_recruitment_applicant: '/control-panel/recruitment/view-applicant/:applicationID/',
   // ==================== //
   //      Development     //
   // ==================== //

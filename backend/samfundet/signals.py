@@ -73,6 +73,6 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
 
 
 @receiver(post_save, sender=RecruitmentApplication)
-def admission_created(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
+def application_created(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
     if created:
         instance.recruitment.update_stats()

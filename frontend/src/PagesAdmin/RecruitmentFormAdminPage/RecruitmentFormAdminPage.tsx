@@ -176,7 +176,7 @@ export function RecruitmentFormAdminPage() {
             />
           </div>
           <div className={styles.row}>
-            <SamfFormField field="max_admissions" type="number" label={t(KEY.max_admissions) ?? ''} />
+            <SamfFormField field="max_applications" type="number" label={t(KEY.max_applications) ?? ''} />
             <SamfFormField
               field="organization"
               type="options"

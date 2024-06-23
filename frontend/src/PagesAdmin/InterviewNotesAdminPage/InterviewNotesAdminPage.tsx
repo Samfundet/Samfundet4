@@ -26,14 +26,14 @@ export function InterviewNotesPage() {
   useEffect(() => {
     if (positionId && recruitmentId && gangId && interviewId) {
       getRecruitmentApplicationsForGang(gangId, recruitmentId).then((response) => {
-        const admission = filterRecruitmentApplication(response.data, positionId, interviewId);
-        if (admission.length !== 0) {
+        const application = filterRecruitmentApplication(response.data, positionId, interviewId);
+        if (application.length !== 0) {
           setdisabled(false);
-          setRecruitmentApplication(admission);
-          if (admission[0].interview) {
-            setInterview(admission[0].interview);
+          setRecruitmentApplication(application);
+          if (application[0].interview) {
+            setInterview(application[0].interview);
           }
-          setNameUser(getNameUser(admission[0]));
+          setNameUser(getNameUser(application[0]));
         }
       });
     }
