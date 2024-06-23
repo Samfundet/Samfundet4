@@ -126,7 +126,7 @@ export function ComponentPage() {
         <SnowflakesOverlay />
         <h2>
           <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
-            <img src={norwegianFlag} />
+            <img src={norwegianFlag} alt="Flag" />
           </Countdown>
         </h2>
       </div>
