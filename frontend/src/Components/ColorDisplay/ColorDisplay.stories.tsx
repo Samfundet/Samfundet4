@@ -10,8 +10,8 @@ export default {
 
 const ListTemplate: ComponentStory<typeof ColorDisplay> = () => (
   <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-    {Object.keys(COLORS).map((key, index) => (
-      <ColorDisplay key={index} color={key as ColorKey} />
+    {Object.keys(COLORS).map((key) => (
+      <ColorDisplay key={key} color={key as ColorKey} />
     ))}
   </div>
 );

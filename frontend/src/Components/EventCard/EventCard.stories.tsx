@@ -32,6 +32,7 @@ const ManyEvents: ComponentStory<typeof EventCard> = (args) => (
     {Array(8)
       .fill(1)
       .map((_, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <EventCard key={i} {...args} />
       ))}
   </>
