@@ -14,6 +14,7 @@ type TemplateProps = {
  */
 export function Template({ className, children, onClick }: TemplateProps) {
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: only used for demo...
     <div onClick={onClick} className={classnames(styles.template, className)}>
       <SubTemplate>{children}</SubTemplate>
     </div>
