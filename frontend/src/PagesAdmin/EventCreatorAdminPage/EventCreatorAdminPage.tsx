@@ -257,7 +257,7 @@ export function EventCreatorAdminPage() {
 
     // Create label
     const label = (
-      <div className={styles.tab_label}>
+      <div className={styles.tab_label} key={step.key}>
         <Icon
           icon={icon}
           className={classNames(styles.tab_icon, valid && styles.done, error && styles.error)}
