@@ -43,19 +43,22 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
                 {element.text}
               </Button>
             );
-          }if (element.type === TYPE.MANAGE) {
+          }
+          if (element.type === TYPE.MANAGE) {
             return (
               <Button key={key} theme="outlined" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
-          }if (element.type === TYPE.EDIT) {
+          }
+          if (element.type === TYPE.EDIT) {
             return (
               <Button key={key} theme="blue" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
-          }if (element.type === TYPE.STEAL) {
+          }
+          if (element.type === TYPE.STEAL) {
             return (
               <form key={key} className={styles.search} action={element.url} method="post">
                 <div style={{ flex: 1 }}>
@@ -66,13 +69,15 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
                 </Button>
               </form>
             );
-          }if (element.type === TYPE.INFO) {
+          }
+          if (element.type === TYPE.INFO) {
             return (
               <p key={key} className={styles.text}>
                 {element.text}
               </p>
             );
-          }if (element.type === TYPE.KILROY) {
+          }
+          if (element.type === TYPE.KILROY) {
             return <div key={key} className={styles.KILROY} />;
           }
         })}

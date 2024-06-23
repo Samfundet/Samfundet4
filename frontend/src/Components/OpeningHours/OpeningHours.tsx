@@ -21,17 +21,17 @@ export function OpeningHours({ venues }: OpeningHoursProps) {
       <h2>{t(KEY.common_opening_hours)}</h2>
       <table className={styles.timeTable}>
         {venues.map((element, key) => (
-            <tr key={key} className={styles.openingRow}>
-              <td>
-                <a href={element.url}>
-                  <p className={styles.openingHoursText}>{element.name}</p>
-                </a>
-              </td>
-              <td className={styles.startEnd}>
-                <TimeDuration className={styles.openingHoursText} start={element.start} end={element.end} />
-              </td>
-            </tr>
-          ))}
+          <tr key={key} className={styles.openingRow}>
+            <td>
+              <a href={element.url}>
+                <p className={styles.openingHoursText}>{element.name}</p>
+              </a>
+            </td>
+            <td className={styles.startEnd}>
+              <TimeDuration className={styles.openingHoursText} start={element.start} end={element.end} />
+            </td>
+          </tr>
+        ))}
       </table>
     </div>
   );

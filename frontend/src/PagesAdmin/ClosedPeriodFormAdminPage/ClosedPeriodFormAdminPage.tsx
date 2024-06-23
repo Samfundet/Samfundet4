@@ -84,16 +84,8 @@ export function ClosedPeriodFormAdminPage() {
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
-          <SamfFormField
-            field="message_no"
-            type="text_long"
-            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
-          />
-          <SamfFormField
-            field="message_en"
-            type="text_long"
-            label={`${labelMessage} (${t(KEY.common_english)})`}
-          />
+          <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
+          <SamfFormField field="message_en" type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
         </div>
         <div className={styles.row}>
           <SamfFormField

@@ -87,101 +87,101 @@ export function RecruitmentApplicantsStatus({
   }
 
   const data = recruitmentApplicants.map((admission) => [
-      {
-        value: admission.user.first_name,
-        content: (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_applicant,
-              urlParams: {
-                admissionID: admission.id,
-              },
-            })}
-            className={styles.text}
-          >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
-          </Link>
-        ),
-      },
-      {
-        value: admission.applicant_priority,
-        content: (
-          <div className={styles.text}>
-            {admission.applicant_priority} / {admission?.admission_count}
-          </div>
-        ),
-      },
-      {
-        value: admission.interview?.interview_time,
-        content: (
-          <InputField
-            inputClassName={styles.input}
-            value={admission.interview?.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_time, value)}
-            type="datetime-local"
-          />
-        ),
-      },
-      {
-        value: admission.interview?.interview_location,
-        content: (
-          <InputField
-            inputClassName={styles.input}
-            value={admission.interview?.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_location, value)}
-          />
-        ),
-      },
-      {
-        value: admission.recruiter_priority,
-        content: (
-          <Dropdown
-            initialValue={admission.recruiter_priority}
-            disableIcon={true}
-            classNameSelect={styles.dropdown}
-            options={priorityOptions}
-            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_priority, value)}
-          />
-        ),
-      },
-      {
-        value: admission.recruiter_status,
-        content: (
-          <Dropdown
-            initialValue={admission.recruiter_status}
-            disableIcon={true}
-            classNameSelect={styles.dropdown}
-            options={statusOptions}
-            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_status, value)}
-          />
-        ),
-      },
-      {
-        content: (
-          <CrudButtons
-            onView={
-              admission.interview?.interview_time != null
-                ? () => {
-                    navigate({
-                      url: reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-                        urlParams: {
-                          recruitmentId: recruitmentId,
-                          gangId: gangId,
-                          positionId: positionId,
-                          interviewId: admission.interview?.id,
-                        },
-                      }),
-                    });
-                  }
-                : undefined
-            }
-          />
-        ),
-      },
-    ]);
+    {
+      value: admission.user.first_name,
+      content: (
+        <Link
+          url={reverse({
+            pattern: ROUTES.frontend.admin_recruitment_applicant,
+            urlParams: {
+              admissionID: admission.id,
+            },
+          })}
+          className={styles.text}
+        >
+          {`${admission.user.first_name} ${admission.user.last_name}`}
+        </Link>
+      ),
+    },
+    {
+      value: admission.applicant_priority,
+      content: (
+        <div className={styles.text}>
+          {admission.applicant_priority} / {admission?.admission_count}
+        </div>
+      ),
+    },
+    {
+      value: admission.interview?.interview_time,
+      content: (
+        <InputField
+          inputClassName={styles.input}
+          value={admission.interview?.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
+          onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+          onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_time, value)}
+          type="datetime-local"
+        />
+      ),
+    },
+    {
+      value: admission.interview?.interview_location,
+      content: (
+        <InputField
+          inputClassName={styles.input}
+          value={admission.interview?.interview_location ?? ''}
+          onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
+          onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_location, value)}
+        />
+      ),
+    },
+    {
+      value: admission.recruiter_priority,
+      content: (
+        <Dropdown
+          initialValue={admission.recruiter_priority}
+          disableIcon={true}
+          classNameSelect={styles.dropdown}
+          options={priorityOptions}
+          onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_priority, value)}
+        />
+      ),
+    },
+    {
+      value: admission.recruiter_status,
+      content: (
+        <Dropdown
+          initialValue={admission.recruiter_status}
+          disableIcon={true}
+          classNameSelect={styles.dropdown}
+          options={statusOptions}
+          onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_status, value)}
+        />
+      ),
+    },
+    {
+      content: (
+        <CrudButtons
+          onView={
+            admission.interview?.interview_time != null
+              ? () => {
+                  navigate({
+                    url: reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
+                      urlParams: {
+                        recruitmentId: recruitmentId,
+                        gangId: gangId,
+                        positionId: positionId,
+                        interviewId: admission.interview?.id,
+                      },
+                    }),
+                  });
+                }
+              : undefined
+          }
+        />
+      ),
+    },
+  ]);
 
   return (
     <Table

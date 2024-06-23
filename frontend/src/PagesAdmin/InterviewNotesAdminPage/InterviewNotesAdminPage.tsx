@@ -65,11 +65,7 @@ export function InterviewNotesPage() {
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}
         </label>
-        <TextAreaField
-          value={interview ? interview.notes : ' '}
-          onChange={handleUpdateNotes}
-          disabled={!editingMode}
-        />
+        <TextAreaField value={interview ? interview.notes : ' '} onChange={handleUpdateNotes} disabled={!editingMode} />
         <Button theme="samf" rounded={true} className={styles.button} onClick={handleEditSave} disabled={disabled}>
           {editingMode ? t(KEY.common_save) : t(KEY.common_edit)}
         </Button>

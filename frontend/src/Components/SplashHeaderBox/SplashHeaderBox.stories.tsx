@@ -10,14 +10,14 @@ export default {
 } as ComponentMeta<typeof SplashHeaderBox>;
 
 const Template: ComponentStory<typeof SplashHeaderBox> = (args) => (
-    <>
-      <AuthContextProvider>
-        <GlobalContextProvider>
-          <SplashHeaderBox {...args} />
-        </GlobalContextProvider>
-      </AuthContextProvider>
-    </>
-  );
+  <>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <SplashHeaderBox {...args} />
+      </GlobalContextProvider>
+    </AuthContextProvider>
+  </>
+);
 
 export const Basic = Template.bind({});
 Basic.args = {};

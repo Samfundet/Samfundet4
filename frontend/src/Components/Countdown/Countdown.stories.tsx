@@ -9,10 +9,10 @@ export default {
 } as ComponentMeta<typeof Countdown>;
 
 const Template: ComponentStory<typeof Countdown> = (args) => (
-    <Countdown {...args}>
-      <Button theme="green">he he he haw, Guilty</Button>
-    </Countdown>
-  );
+  <Countdown {...args}>
+    <Button theme="green">he he he haw, Guilty</Button>
+  </Countdown>
+);
 
 export const Basic = Template.bind({});
 Basic.args = {

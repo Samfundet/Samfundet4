@@ -28,14 +28,14 @@ export default {
 const OneEvent: ComponentStory<typeof EventCard> = (args) => <EventCard {...args} />;
 
 const ManyEvents: ComponentStory<typeof EventCard> = (args) => (
-    <>
-      {Array(8)
-        .fill(1)
-        .map((_, i) => (
-          <EventCard key={i} {...args} />
-        ))}
-    </>
-  );
+  <>
+    {Array(8)
+      .fill(1)
+      .map((_, i) => (
+        <EventCard key={i} {...args} />
+      ))}
+  </>
+);
 
 export const Basic = OneEvent.bind({});
 

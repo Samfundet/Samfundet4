@@ -72,40 +72,40 @@ export function ClosedPeriodAdminPage() {
             '',
           ]}
           data={closedPeriods.map((element) => [
-              element.message_no,
-              element.description_no,
-              { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
-              { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
-              {
-                content: (
-                  <div>
-                    <Button
-                      theme="blue"
-                      display="block"
-                      className={styles.smallButtons}
-                      link={reverse({
-                        pattern: ROUTES.frontend.admin_closed_edit,
-                        urlParams: { id: element.id },
-                      })}
-                    >
-                      {t(KEY.common_edit)}
-                    </Button>
-                    <Button
-                      theme="samf"
-                      display="block"
-                      className={styles.smallButtons}
-                      onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
-                          deleteSelectedEvent(element.id);
-                        }
-                      }}
-                    >
-                      {t(KEY.common_delete)}
-                    </Button>{' '}
-                  </div>
-                ),
-              },
-            ])}
+            element.message_no,
+            element.description_no,
+            { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
+            { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
+            {
+              content: (
+                <div>
+                  <Button
+                    theme="blue"
+                    display="block"
+                    className={styles.smallButtons}
+                    link={reverse({
+                      pattern: ROUTES.frontend.admin_closed_edit,
+                      urlParams: { id: element.id },
+                    })}
+                  >
+                    {t(KEY.common_edit)}
+                  </Button>
+                  <Button
+                    theme="samf"
+                    display="block"
+                    className={styles.smallButtons}
+                    onClick={() => {
+                      if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
+                        deleteSelectedEvent(element.id);
+                      }
+                    }}
+                  >
+                    {t(KEY.common_delete)}
+                  </Button>{' '}
+                </div>
+              ),
+            },
+          ])}
         />
       </div>
     </AdminPageLayout>

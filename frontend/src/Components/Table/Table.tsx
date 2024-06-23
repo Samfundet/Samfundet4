@@ -165,38 +165,38 @@ export function Table({
         <thead className={headerClassName}>
           <tr>
             {columns?.map((col, index) => {
-                if (isColumnSortable(col)) {
-                  return (
-                    <th
-                      key={index}
-                      className={classNames(headerColumnClassName, styles.sortable_th)}
-                      onClick={() => sort(index)}
-                    >
-                      {getColumnContent(col)}
-                      {!isHideSortButton(col) && (
-                        <span className={styles.sort_icons}>
-                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
-                        </span>
-                      )}
-                    </th>
-                  );
-                }
-                  return (
-                    <th className={headerColumnClassName} key={index}>
-                      {getColumnContent(col)}
-                    </th>
-                  );
-              })}
+              if (isColumnSortable(col)) {
+                return (
+                  <th
+                    key={index}
+                    className={classNames(headerColumnClassName, styles.sortable_th)}
+                    onClick={() => sort(index)}
+                  >
+                    {getColumnContent(col)}
+                    {!isHideSortButton(col) && (
+                      <span className={styles.sort_icons}>
+                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
+                      </span>
+                    )}
+                  </th>
+                );
+              }
+              return (
+                <th className={headerColumnClassName} key={index}>
+                  {getColumnContent(col)}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
             <tr className={bodyRowClassName} key={index1}>
               {row?.map((cell, index2) => (
-                  <td className={cellClassName} key={index2}>
-                    {getCellContent(cell ?? '')}
-                  </td>
-                ))}
+                <td className={cellClassName} key={index2}>
+                  {getCellContent(cell ?? '')}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

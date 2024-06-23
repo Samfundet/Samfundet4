@@ -8,11 +8,11 @@ export default {
 } as ComponentMeta<typeof NotificationBadge>;
 
 const ExampleStory: ComponentStory<typeof NotificationBadge> = (args) => (
-    <>
-      <br />
-      <NotificationBadge {...args} />
-    </>
-  );
+  <>
+    <br />
+    <NotificationBadge {...args} />
+  </>
+);
 
 export const Basic = ExampleStory.bind({});
 Basic.args = {};

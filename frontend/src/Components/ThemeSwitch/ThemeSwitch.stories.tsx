@@ -10,14 +10,14 @@ export default {
 } as ComponentMeta<typeof ThemeSwitch>;
 
 const Template: ComponentStory<typeof ThemeSwitch> = (args) => (
-    <>
-      <AuthContextProvider>
-        <GlobalContextProvider>
-          <ThemeSwitch {...args} />
-        </GlobalContextProvider>
-      </AuthContextProvider>
-    </>
-  );
+  <>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <ThemeSwitch {...args} />
+      </GlobalContextProvider>
+    </AuthContextProvider>
+  </>
+);
 
 export const Basic = Template.bind({});
 Basic.args = {};

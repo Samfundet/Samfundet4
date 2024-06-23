@@ -9,13 +9,13 @@ export default {
 } as ComponentMeta<typeof SpinningBorder>;
 
 const Template: ComponentStory<typeof SpinningBorder> = (args) => (
-    <>
-      <SpinningBorder {...args}>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea error nihil accusamus sunt deleniti soluta a quod
-        nisi quasi rerum, ducimus doloribus, in aspernatur reiciendis quibusdam corporis laborum. Magnam, eligendi.
-      </SpinningBorder>
-    </>
-  );
+  <>
+    <SpinningBorder {...args}>
+      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea error nihil accusamus sunt deleniti soluta a quod
+      nisi quasi rerum, ducimus doloribus, in aspernatur reiciendis quibusdam corporis laborum. Magnam, eligendi.
+    </SpinningBorder>
+  </>
+);
 
 export const Basic = Template.bind({});
 Basic.args = {};

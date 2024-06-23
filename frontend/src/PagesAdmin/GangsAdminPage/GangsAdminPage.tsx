@@ -51,26 +51,25 @@ export function GangsAdminPage() {
 
   const currentGangType = currentGangTypeTab?.value;
 
-  const tableData =
-    currentGangType?.gangs.map((element2) => [
-        dbT(element2, 'name'),
-        element2.abbreviation,
-        element2.webpage,
-        {
-          content: (
-            <CrudButtons
-              onEdit={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.admin_gangs_edit,
-                    urlParams: { id: element2.id },
-                  }),
-                );
-              }}
-            />
-          ),
-        },
-      ]);
+  const tableData = currentGangType?.gangs.map((element2) => [
+    dbT(element2, 'name'),
+    element2.abbreviation,
+    element2.webpage,
+    {
+      content: (
+        <CrudButtons
+          onEdit={() => {
+            navigate(
+              reverse({
+                pattern: ROUTES.frontend.admin_gangs_edit,
+                urlParams: { id: element2.id },
+              }),
+            );
+          }}
+        />
+      ),
+    },
+  ]);
 
   const title = t(KEY.adminpage_gangs_title);
   const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;

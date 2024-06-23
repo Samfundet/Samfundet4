@@ -7,11 +7,11 @@ export default {
 } as ComponentMeta<typeof PhoneNumberField>;
 
 const Template: ComponentStory<typeof PhoneNumberField> = (args) => (
-    <form>
-      <fieldset>
-        <PhoneNumberField {...args} />
-      </fieldset>
-    </form>
-  );
+  <form>
+    <fieldset>
+      <PhoneNumberField {...args} />
+    </fieldset>
+  </form>
+);
 
 export const Basic = Template.bind({});

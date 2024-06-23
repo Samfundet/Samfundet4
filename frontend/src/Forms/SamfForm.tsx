@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import type React from 'react';
-import { type Dispatch, type ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react'
+import { type Dispatch, type ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components/Button';
 import { usePermission } from '~/hooks';

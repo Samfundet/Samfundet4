@@ -26,29 +26,29 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
   ];
 
   const rows = data.map((admission) => [
-      {
-        value: admission.user.first_name,
-        content: (
-          <Link
-            key={admission.user.id}
-            target={'backend'}
-            url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_applicant,
-              urlParams: {
-                admissionID: admission.id,
-              },
-            })}
-          >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
-          </Link>
-        ),
-      },
-      { content: admission.user?.phone_number, value: admission.user?.phone_number },
-      { content: admission.user?.email, value: admission.user?.email },
-      { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
-      { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
-      { content: admission.recruiter_status, value: admission.recruiter_status },
-    ]);
+    {
+      value: admission.user.first_name,
+      content: (
+        <Link
+          key={admission.user.id}
+          target={'backend'}
+          url={reverse({
+            pattern: ROUTES.frontend.admin_recruitment_applicant,
+            urlParams: {
+              admissionID: admission.id,
+            },
+          })}
+        >
+          {`${admission.user.first_name} ${admission.user.last_name}`}
+        </Link>
+      ),
+    },
+    { content: admission.user?.phone_number, value: admission.user?.phone_number },
+    { content: admission.user?.email, value: admission.user?.email },
+    { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
+    { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
+    { content: admission.recruiter_status, value: admission.recruiter_status },
+  ]);
 
   const styleType = {
     withdrawn: styles.withdrawn,

@@ -14,11 +14,11 @@ export default {
 const TemplateSingular: ComponentStory<typeof ExpandableHeader> = (args) => <ExpandableHeader {...args} />;
 
 const TemplateMultiple: ComponentStory<typeof ExpandableHeader> = (args) => (
-    <>
-      <ExpandableHeader {...args} />
-      <ExpandableHeader {...args} />
-    </>
-  );
+  <>
+    <ExpandableHeader {...args} />
+    <ExpandableHeader {...args} />
+  </>
+);
 
 export const Basic = TemplateSingular.bind({});
 Basic.args = { children: <div>Peek-a-Boo</div> };

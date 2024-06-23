@@ -11,10 +11,10 @@ export default {
 } as ComponentMeta<typeof SamfForm>;
 
 const Template: ComponentStory<typeof SamfForm> = (args) => (
-    <AuthContextProvider>
-      <SamfForm<BasicFormProps> {...args} />
-    </AuthContextProvider>
-  );
+  <AuthContextProvider>
+    <SamfForm<BasicFormProps> {...args} />
+  </AuthContextProvider>
+);
 
 function validateShrimp(values: BasicFormProps) {
   const str = values.advanced_field;

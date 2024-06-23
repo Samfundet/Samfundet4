@@ -35,10 +35,10 @@ export function Select({
         {children}
         <select onChange={onChange} required={required} className={styles.select}>
           {options?.map((option, index) => (
-              <option value={option.value} key={index} className={styles.option} selected={option.value === value}>
-                {option.label}
-              </option>
-            ))}
+            <option value={option.value} key={index} className={styles.option} selected={option.value === value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       </label>
       {error && error.length > 0 && <div className={styles.error_text}>{error}</div>}

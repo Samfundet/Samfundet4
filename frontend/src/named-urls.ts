@@ -11,8 +11,7 @@ export type ExtraFields = {
   star: string;
 };
 
-export type Include = 
-  <dR extends Routes>(path: string, routes: dR) => dR & ExtraFields
+export type Include = <dR extends Routes>(path: string, routes: dR) => dR & ExtraFields;
 
 export type Routes = {
   [path: string]: string | Routes;
@@ -26,7 +25,7 @@ export interface ReverseParams {
   queryParams?: Params;
 }
 
-export type Reverse = (params: ReverseParams) => string
+export type Reverse = (params: ReverseParams) => string;
 
 export type ReverseForce = Reverse;
 

@@ -80,36 +80,36 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_interview_time),
           ]}
           data={otherRecruitmentAdmission.map((element) => [
-              {
-                content: (
-                  <Link
-                    target={'frontend'}
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_recruitment_applicant,
-                      urlParams: {
-                        admissionID: element.id,
-                      },
-                    })}
-                  >
-                    {dbT(element.recruitment_position, 'name')}
-                  </Link>
-                ),
-              },
-              {
-                content: (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.information_page_detail,
-                      urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
-                    })}
-                  >
-                    {dbT(element.recruitment_position.gang, 'name')}
-                  </Link>
-                ),
-              },
-              element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
-              element.interview_time ? element.interview_time : t(KEY.common_not_set),
-            ])}
+            {
+              content: (
+                <Link
+                  target={'frontend'}
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_applicant,
+                    urlParams: {
+                      admissionID: element.id,
+                    },
+                  })}
+                >
+                  {dbT(element.recruitment_position, 'name')}
+                </Link>
+              ),
+            },
+            {
+              content: (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.information_page_detail,
+                    urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
+                  })}
+                >
+                  {dbT(element.recruitment_position.gang, 'name')}
+                </Link>
+              ),
+            },
+            element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
+            element.interview_time ? element.interview_time : t(KEY.common_not_set),
+          ])}
         />
       </div>
     </Page>

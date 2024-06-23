@@ -46,7 +46,9 @@ export function ImageAdminPage() {
         <ImageQuery allImages={allImages} setImages={setImages} />
       </div>
       <div className={styles.imageContainer}>
-        {displayImages.map((element) => <AdminImage key={element.id} image={element} className={styles.imageBox} />)}
+        {displayImages.map((element) => (
+          <AdminImage key={element.id} image={element} className={styles.imageBox} />
+        ))}
         {/* TODO pagination or translation */}
         {images.length > displayImages.length && <i>And {images.length - displayImages.length} more...</i>}
       </div>

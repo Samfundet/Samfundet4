@@ -11,12 +11,12 @@ export default {
 } as ComponentMeta<typeof PulseEffect>;
 
 const Template: ComponentStory<typeof PulseEffect> = (args) => (
-    <AuthContextProvider>
-      <GlobalContextProvider>
-        <PulseEffect {...args} />
-      </GlobalContextProvider>
-    </AuthContextProvider>
-  );
+  <AuthContextProvider>
+    <GlobalContextProvider>
+      <PulseEffect {...args} />
+    </GlobalContextProvider>
+  </AuthContextProvider>
+);
 
 export const ShortChild = Template.bind({});
 ShortChild.args = {

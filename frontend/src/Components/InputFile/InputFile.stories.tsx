@@ -7,10 +7,10 @@ export default {
 } as ComponentMeta<typeof InputFile>;
 
 const Template: ComponentStory<typeof InputFile> = (args) => (
-    <form>
-      <InputFile {...args} />
-    </form>
-  );
+  <form>
+    <InputFile {...args} />
+  </form>
+);
 
 export const ImageSelect = Template.bind({});
 ImageSelect.args = {

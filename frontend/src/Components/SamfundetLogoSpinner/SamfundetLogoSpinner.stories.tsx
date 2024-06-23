@@ -10,13 +10,13 @@ export default {
 } as ComponentMeta<typeof SamfundetLogoSpinner>;
 
 const Template: ComponentStory<typeof SamfundetLogoSpinner> = () => (
-    <div style={{ margin: '50px' }}>
-      <AuthContextProvider>
-        <GlobalContextProvider>
-          <SamfundetLogoSpinner />
-        </GlobalContextProvider>
-      </AuthContextProvider>
-    </div>
-  );
+  <div style={{ margin: '50px' }}>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <SamfundetLogoSpinner />
+      </GlobalContextProvider>
+    </AuthContextProvider>
+  </div>
+);
 
 export const Basic = Template.bind({});
