@@ -25,6 +25,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
     return (
       <Carousel className={wrapperClass} spacing={spacing}>
         {Array.from({ length: skeletonCount }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value we can use here
           <ImageCard key={i} isSkeleton />
         ))}
       </Carousel>
