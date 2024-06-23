@@ -23,6 +23,7 @@ export function Carousel({
 }: CarouselProps) {
   const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
+      // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
       <div className={classNames(styles.itemContainer, itemContainerClass)} key={idx}>
         {child}
       </div>
