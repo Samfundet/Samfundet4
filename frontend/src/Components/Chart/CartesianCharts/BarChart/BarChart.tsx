@@ -50,6 +50,7 @@ export function BarChart({
     const yPosition = svgHeight - barHeight - bottomPadding; // Leave space for labels
     const bar = (
       <rect
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         key={index}
         x={xPosition}
         y={yPosition}
@@ -104,6 +105,7 @@ export function BarChart({
       </div>
       <div className={styles.chartContainer}>
         <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
+          <title>Bar chart</title>
           {hasYDirLines && // executes if vertical lines prop is true
             drawYDirLines(
               data,

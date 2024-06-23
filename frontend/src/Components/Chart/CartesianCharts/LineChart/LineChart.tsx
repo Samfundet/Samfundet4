@@ -55,6 +55,7 @@ export function LineChart({
    * */
   const dataPoints = data.map((item, index) => (
     <circle
+      // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
       key={index}
       cx={lineCoordinates[index].x}
       cy={lineCoordinates[index].y}
@@ -106,6 +107,7 @@ export function LineChart({
       </div>
       <div className={styles.chartContainer}>
         <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
+          <title>Line chart</title>
           {hasYDirLines && // executes if vertical lines prop is true
             drawYDirLines(
               data,

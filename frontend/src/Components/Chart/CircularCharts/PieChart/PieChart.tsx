@@ -28,6 +28,7 @@ export function PieChart({ data: initialData, chartTitle, size, legend }: Circul
   }, [initialData]);
 
   const labels = dataWithColors.map((entry, index) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
     <div key={index} className={styles.labelWrapper}>
       <div className={styles.labelColor} style={{ backgroundColor: entry.color }} />
       <Text as={'p'} size={'m'}>
@@ -48,11 +49,13 @@ export function PieChart({ data: initialData, chartTitle, size, legend }: Circul
         style={{ minHeight: sizes[size].cHeight, minWidth: sizes[size].cWith }}
         viewBox={`-${0} -${0} ${viewboxSize} ${viewboxSize}`}
       >
+        <title>Pie chart</title>
         {dataWithColors?.map((entry, index) => {
           const pathDescription = calculateSectorPath(entry.value, total, radius, accumulatedAngle);
           accumulatedAngle += (entry.value / total) * 2 * Math.PI;
           return (
             <path
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               key={index}
               d={pathDescription}
               fill={entry.color}

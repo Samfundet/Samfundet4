@@ -39,7 +39,7 @@ function calculateDimensions(
   const datapointWidth = (chartWidth - totalDataPointPadding) / entryCount;
 
   // Calculate xLabelFreq dynamically based on the size of the chart
-  let xLabelFreq;
+  let xLabelFreq: number;
   if (size === 'large' || size === 'xlarge') {
     xLabelFreq = Math.max(1, Math.ceil(entryCount / 7));
   } else if (size === 'medium') {

@@ -80,6 +80,7 @@ export function drawXAxisLabels(
     if (index % xLabelFreq === 0 || index === data.length - 1 || index === 0) {
       return (
         <text
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           key={index}
           x={getX(index)}
           y={svgHeight - xLabelsMargin}
