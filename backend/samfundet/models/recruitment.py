@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from .general import Gang, User, Organization
+from .general import Gang, User, Campus, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 
@@ -86,6 +86,11 @@ class Recruitment(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'Recruitment: {self.name_en} at {self.organization}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        super().save(*args, **kwargs)
+        if not self.statistics:
+            RecruitmentStatistics.objects.create(self)
 
 
 class RecruitmentPosition(CustomBaseModel):
@@ -370,8 +375,80 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_admissions = self.recruitment.admissions.count()
         self.total_applicants = self.recruitment.admissions.values('user').distinct().count()
-
         super().save(*args, **kwargs)
+        self.generate_time_stats()
+        self.generate_date_stats()
+        self.generate_campus_stats()
 
     def __str__(self) -> str:
         return f'{self.recruitment} stats'
+
+    def generate_time_stats(self) -> None:
+        for h in range(0, 24):
+            time_stat, created = RecruitmentTimeStat.objects.get_or_create(recruitment_stats=self, hour=h)
+            if not created:
+                time_stat.save()
+
+    def generate_date_stats(self) -> None:
+        date = self.recruitment.visible_from
+        while date < self.recruitment.actual_application_deadline:
+            date_stat, created = RecruitmentDateStat.objects.get_or_create(recruitment_stats=self, date=date.strftime('%Y-%m-%d'))
+            if not created:
+                date_stat.save()
+            date += timezone.timedelta(days=1)
+
+    def generate_campus_stats(self) -> None:
+        for campus in Campus.objects.all():
+            campus_stat, created = RecruitmentCampusStat.objects.get_or_create(recruitment_stats=self, campus=campus)
+            if not created:
+                campus_stat.save()
+
+
+class RecruitmentTimeStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='time_stats')
+    hour = models.PositiveIntegerField(null=False, blank=False, verbose_name='Time')
+    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.hour} {self.count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        count = 0
+        for admission in self.recruitment_stats.recruitment.admissions.all():
+            if admission.created_at.hour == self.hour:
+                count += 1
+        self.count = count
+        super().save(*args, **kwargs)
+
+
+class RecruitmentDateStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+    date = models.DateField(null=False, blank=False, verbose_name='Time')
+    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.date} {self.count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        count = 0
+        for admission in self.recruitment_stats.recruitment.admissions.all():
+            if admission.created_at.date() == self.date:
+                count += 1
+        self.count = count
+        super().save(*args, **kwargs)
+
+
+class RecruitmentCampusStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='campus_stats')
+    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+
+    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.campus} {self.count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        self.count = User.objects.filter(
+            id__in=self.recruitment_stats.recruitment.admissions.values_list('user', flat=True).distinct(), campus=self.campus
+        ).count()
+        super().save(*args, **kwargs)

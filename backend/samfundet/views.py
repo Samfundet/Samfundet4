@@ -586,6 +586,13 @@ class RecruitmentStatisticsView(ModelViewSet):
     serializer_class = RecruitmentStatisticsSerializer
     queryset = RecruitmentStatistics.objects.all()
 
+    def retrieve(self, request: Request, pk: int) -> Response:
+        stats = get_object_or_404(self.queryset, pk=pk)
+        stats.save()
+        stats = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(stats)
+        return Response(serializer.data)
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
