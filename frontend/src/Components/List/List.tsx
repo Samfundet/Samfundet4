@@ -15,6 +15,7 @@ export function List({ items, type = 'unordered', classNameList, classNameListEn
   const listItems = (
     <>
       {items?.map((element, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <li key={index} className={classNameListEntries}>
           {element}
         </li>
