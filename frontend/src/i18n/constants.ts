@@ -174,7 +174,6 @@ export const KEY = {
   common_or: 'common_or',
   common_an: 'common_an',
   common_will: 'common_will',
-  common_all: 'common_all',
   common_would: 'common_would',
   common_there: 'common_there',
   common_what: 'common_what',
@@ -206,7 +205,6 @@ export const KEY = {
   common_tickets: 'common_tickets',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
-  common_processed: 'common_processed',
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
