@@ -52,11 +52,12 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
     RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -732,14 +733,24 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
         return data
 
 
-class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
+    # Set custom format to remove seconds from start/end times, as they are ignored
+    start_time = serializers.DateTimeField(format='%H:%M')
+    end_time = serializers.DateTimeField(format='%H:%M')
+
     class Meta:
-        model = Occupiedtimeslot
+        model = RecruitmentInterviewAvailability
+        fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+
+class OccupiedTimeslotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OccupiedTimeslot
         fields = '__all__'
 
 
 class ApplicantInfoSerializer(CustomBaseSerializer):
-    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
+    occupied_timeslots = OccupiedTimeslotSerializer(many=True)
 
     class Meta:
         model = User

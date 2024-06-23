@@ -34,7 +34,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from .utils import event_query
+from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
     TagSerializer,
@@ -69,13 +69,14 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    OccupiedtimeslotSerializer,
+    OccupiedTimeslotSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
@@ -112,10 +113,11 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -932,27 +934,81 @@ class InterviewView(ModelViewSet):
     queryset = Interview.objects.all()
 
 
-class OccupiedtimeslotView(ListCreateAPIView):
-    model = Occupiedtimeslot
-    serializer_class = OccupiedtimeslotSerializer
+class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
+    model = RecruitmentInterviewAvailability
+    serializer_class = RecruitmentInterviewAvailabilitySerializer
+    queryset = RecruitmentInterviewAvailability.objects.all()
 
-    def get_queryset(self) -> QuerySet[Occupiedtimeslot]:
-        recruitment = self.request.query_params.get('recruitment', Recruitment.objects.order_by('-actual_application_deadline').first())
-        return Occupiedtimeslot.objects.filter(recruitment=recruitment, user=self.request.user.id)
+
+class RecruitmentAvailabilityView(APIView):
+    model = RecruitmentInterviewAvailability
+    serializer_class = RecruitmentInterviewAvailabilitySerializer
+
+    def get(self, request: Request, **kwargs: int) -> Response:
+        recruitment = kwargs.get('id')
+        availability = get_object_or_404(RecruitmentInterviewAvailability, recruitment__id=recruitment)
+
+        start_time = availability.start_time
+        end_time = availability.end_time
+        interval = availability.timeslot_interval
+
+        timeslots = generate_timeslots(start_time, end_time, interval)
+
+        return Response(
+            {
+                'start_date': availability.start_date,
+                'end_date': availability.end_date,
+                'timeslots': timeslots,
+            }
+        )
+
+
+class OccupiedTimeslotView(ListCreateAPIView):
+    model = OccupiedTimeslot
+    serializer_class = OccupiedTimeslotSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id)
+
+        dates: dict[str, list[str]] = {}
+        for occupied in occupied_timeslots:
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
+
+            if date_string in dates:
+                dates[date_string].append(time_string)
+            else:
+                dates[date_string] = [time_string]
+
+        return Response(
+            {
+                'recruitment': recruitment.id,
+                'dates': dates,
+            }
+        )
 
     def create(self, request: Request) -> Response:
-        for p in request.data:
-            p['user'] = request.user.id
-        # TODO Could maybe need a check for saving own, not allowing to save others to themselves
-        serializer = self.get_serializer(data=request.data, many=True)
-        if serializer.is_valid():
-            # Uses set functionality, but tries to reduce transactions
-            Occupiedtimeslot.objects.filter(user=request.user, recruitment=request.data[0]['recruitment']).delete()
-            serializer.save()
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        if 'recruitment' not in request.data or not request.data['recruitment']:
+            return Response({'error': 'recruitment is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if 'dates' not in request.data or not request.data['recruitment']:
+            return Response({'error': 'dates is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=request.data['recruitment'])
+        availability = RecruitmentInterviewAvailability.objects.filter(recruitment__id=recruitment.id).first()
+
+        occupied_timeslots = get_occupied_timeslots_from_request(request.data['dates'], request.user, availability, recruitment)
+
+        # If we've reached this point, all provided timeslots are valid
+
+        # First delete all user's previous occupied timeslots
+        OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id).delete()
+        OccupiedTimeslot.objects.bulk_create(occupied_timeslots)
+
+        return Response({'message': 'Successfully updated occupied timeslots'})
 
 
 class UserFeedbackView(CreateAPIView):
