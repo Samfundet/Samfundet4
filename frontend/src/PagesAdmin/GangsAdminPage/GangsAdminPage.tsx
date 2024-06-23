@@ -52,8 +52,7 @@ export function GangsAdminPage() {
   const currentGangType = currentGangTypeTab?.value;
 
   const tableData =
-    currentGangType &&
-    currentGangType.gangs.map((element2) => [
+    currentGangType?.gangs.map((element2) => [
         dbT(element2, 'name'),
         element2.abbreviation,
         element2.webpage,
@@ -83,8 +82,8 @@ export function GangsAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab}></TabBar>
-      <br></br>
+      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab} />
+      <br />
       {currentGangType && (
         <>
           <Table

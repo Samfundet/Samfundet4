@@ -16,7 +16,7 @@ export function SultenNavbar() {
   const { t, i18n } = useTranslation();
   const isDesktop = useDesktop();
   const [showMobileNavigation, setMobileNavigation] = useState(false);
-  const isNorwegian = i18n.language == LANGUAGES.NB;
+  const isNorwegian = i18n.language === LANGUAGES.NB;
   const navigate = useNavigate();
   const scrollY = useScrollY();
 
@@ -93,7 +93,7 @@ export function SultenNavbar() {
       className={styles.language_flag}
       src={isNorwegian ? norwegianFlag : englishFlag}
       onClick={changeLanguage}
-    ></img>
+    />
   );
 
   const navigationPopup = (
@@ -116,7 +116,7 @@ export function SultenNavbar() {
             setMobileNavigation(false);
           }}
           className={isScrolledNavbar || !isDesktop ? styles.sulten_logo_small : styles.sulten_logo_big}
-        ></img>
+        />
         {isDesktop && rightItems}
         {calendarIcon}
         {isDesktop && languageFlag}

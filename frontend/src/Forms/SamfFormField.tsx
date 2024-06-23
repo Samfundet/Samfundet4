@@ -147,7 +147,7 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
     // Set value using form hook
     setValue(newValue);
     // Notify parrent component of change
-    onChange && onChange(newValue);
+    onChange?.(newValue);
   }
 
   // When form is submitted, trigger an update in this field

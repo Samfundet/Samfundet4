@@ -35,7 +35,7 @@ export function Select({
         {children}
         <select onChange={onChange} required={required} className={styles.select}>
           {options?.map((option, index) => (
-              <option value={option.value} key={index} className={styles.option} selected={option.value == value}>
+              <option value={option.value} key={index} className={styles.option} selected={option.value === value}>
                 {option.label}
               </option>
             ))}

@@ -38,7 +38,7 @@ export function SultenCard({
       alt={imageAlt}
       className={smallCard ? styles.smallcard_image : styles.card_image}
       loading="lazy"
-    ></img>
+    />
   );
 
   // position image to the right, not at the bottom if mobile
@@ -48,7 +48,7 @@ export function SultenCard({
       alt={imageAlt}
       className={smallCard ? styles.smallcard_image : styles.card_image}
       loading="lazy"
-    ></img>
+    />
   );
 
   const cardButton = buttonText && (

@@ -40,8 +40,8 @@ export function Carousel({
         <div className={styles.navContainer}>
           <div className={classNames(styles.button, styles.left)}>{'<'}</div>
         </div>
-        <div className={classNames(styles.navButton, styles.left)}></div>
-        <div className={styles.scroller} style={{ gap: (spacing ? spacing : 0.2) + 'em' }}>
+        <div className={classNames(styles.navButton, styles.left)} />
+        <div className={styles.scroller} style={{ gap: `${spacing ? spacing : 0.2}em` }}>
           {wrappedChildren}
         </div>
         <div className={styles.navContainer}>

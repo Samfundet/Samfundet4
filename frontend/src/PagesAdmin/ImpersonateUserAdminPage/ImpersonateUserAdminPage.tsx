@@ -28,7 +28,7 @@ export function ImpersonateUserAdminPage() {
   const displayUsers = queryDto(query, users, ['username', 'first_name', 'last_name', 'email']).slice(0, 10);
 
   function verboseUserName(user: UserDto): string {
-    if ((user.first_name + user.last_name).length == 0) {
+    if ((user.first_name + user.last_name).length === 0) {
       return 'No name';
     }
     return `${user.first_name} ${user.last_name}`;

@@ -73,7 +73,7 @@ export function Navbar() {
   // Return profile button for navbar if logged in.
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
-      <Icon icon="material-symbols:person"></Icon>
+      <Icon icon="material-symbols:person" />
       <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
       </Link>
@@ -257,7 +257,7 @@ export function Navbar() {
           </div>
           <ThemeSwitch />
         </div>
-        <br></br>
+        <br />
         {user && mobileProfileButton}
       </nav>
     </>

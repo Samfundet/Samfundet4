@@ -7,7 +7,7 @@ export default {
   component: ProgressBar,
 } as ComponentMeta<typeof ProgressBar>;
 
-const Template: ComponentStory<typeof ProgressBar> = (args) => <ProgressBar {...args}></ProgressBar>;
+const Template: ComponentStory<typeof ProgressBar> = (args) => <ProgressBar {...args} />;
 
 export const Low = Template.bind({});
 Low.args = {

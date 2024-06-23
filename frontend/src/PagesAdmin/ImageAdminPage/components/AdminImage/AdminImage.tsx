@@ -12,7 +12,7 @@ type AdminImageProps = {
 export function AdminImage({ image, className }: AdminImageProps) {
   const TAGS = image.tags
     .map((tag) => {
-      return ' ' + tag.name;
+      return ` ${tag.name}`;
     })
     .toString();
   return (

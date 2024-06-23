@@ -25,13 +25,13 @@ export function Footer() {
           <h1 className={styles.header}>{t(KEY.common_sponsor)}</h1>
           <div className={styles.row_collapse}>
             <Link className={styles.sponsor_logo} target="external" url="https://www.trondheim.kommune.no/">
-              <Image src={trondhemSponsor} className={styles.images}></Image>
+              <Image src={trondhemSponsor} className={styles.images} />
             </Link>
             <Link className={styles.sponsor_logo} target="external" url="https://kulturrom.no/">
-              <Image src={kulturromSponsor} className={styles.images}></Image>
+              <Image src={kulturromSponsor} className={styles.images} />
             </Link>
             <Link className={styles.sponsor_logo} target="external" url="https://reitan.no/no">
-              <Image src={reitanSponsor} className={styles.images}></Image>
+              <Image src={reitanSponsor} className={styles.images} />
             </Link>
           </div>
         </div>
@@ -39,10 +39,10 @@ export function Footer() {
           <h1 className={styles.header}>{t(KEY.common_festivals)}</h1>
           <div className={styles.row}>
             <Link target="external" url="https://www.uka.no/">
-              <Image src={ukaWhite} className={styles.images}></Image>
+              <Image src={ukaWhite} className={styles.images} />
             </Link>
             <Link target="external" url="https://www.isfit.org/">
-              <Image src={isfit} className={styles.images}></Image>
+              <Image src={isfit} className={styles.images} />
             </Link>
           </div>
         </div>

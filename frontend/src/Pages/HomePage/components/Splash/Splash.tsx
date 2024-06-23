@@ -62,7 +62,7 @@ export function Splash({ events, showInfo }: SplashProps) {
 
   const startSlideTimer = useCallback(() => {
     // Cancel previous if any
-    if (slideTimeout.current != undefined) {
+    if (slideTimeout.current !== undefined) {
       clearTimeout(slideTimeout.current);
     }
     // Start new timeout
@@ -146,7 +146,7 @@ export function Splash({ events, showInfo }: SplashProps) {
         })}
       />
 
-      <div className={styles.splash_fade}></div>
+      <div className={styles.splash_fade} />
     </div>
   );
 }

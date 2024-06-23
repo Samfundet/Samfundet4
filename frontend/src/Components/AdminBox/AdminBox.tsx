@@ -30,32 +30,32 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
     <div className={classNames(styles.applet)}>
       <div className={styles.top}>
         <h1 className={styles.header}>
-          {icon && <Icon icon={icon} inline={true}></Icon>}
+          {icon && <Icon icon={icon} inline={true} />}
           {title}
         </h1>
       </div>
       <div className={styles.options}>
         {options.map((element, key) => {
-          if (element.type == TYPE.ADD) {
+          if (element.type === TYPE.ADD) {
             return (
               <Button key={key} theme="success" link={element.url} className={styles.button}>
                 {' '}
                 {element.text}
               </Button>
             );
-          } else if (element.type == TYPE.MANAGE) {
+          }if (element.type === TYPE.MANAGE) {
             return (
               <Button key={key} theme="outlined" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
-          } else if (element.type == TYPE.EDIT) {
+          }if (element.type === TYPE.EDIT) {
             return (
               <Button key={key} theme="blue" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
-          } else if (element.type == TYPE.STEAL) {
+          }if (element.type === TYPE.STEAL) {
             return (
               <form key={key} className={styles.search} action={element.url} method="post">
                 <div style={{ flex: 1 }}>
@@ -66,14 +66,14 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
                 </Button>
               </form>
             );
-          } else if (element.type == TYPE.INFO) {
+          }if (element.type === TYPE.INFO) {
             return (
               <p key={key} className={styles.text}>
                 {element.text}
               </p>
             );
-          } else if (element.type == TYPE.KILROY) {
-            return <div key={key} className={styles.KILROY}></div>;
+          }if (element.type === TYPE.KILROY) {
+            return <div key={key} className={styles.KILROY} />;
           }
         })}
       </div>

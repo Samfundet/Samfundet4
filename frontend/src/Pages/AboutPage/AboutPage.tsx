@@ -55,7 +55,7 @@ export function AboutPage() {
         {VENUES.images.map((image, idx) => {
           return (
             <div key={idx}>
-              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)}></div>
+              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)} />
               <div className={styles.venue_name}>{image.name}</div>
             </div>
           );

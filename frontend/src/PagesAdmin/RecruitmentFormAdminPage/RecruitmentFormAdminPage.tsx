@@ -117,7 +117,7 @@ export function RecruitmentFormAdminPage() {
 
   // TODO: Add validation for the dates
   return (
-    <AdminPageLayout title={t(KEY.common_create) + ' ' + t(KEY.common_recruitment)} header={true} showBackButton={true}>
+    <AdminPageLayout title={`${t(KEY.common_create)} ${t(KEY.common_recruitment)}`} header={true} showBackButton={true}>
       <div className={styles.wrapper}>
         <SamfForm<FormType>
           onSubmit={handleOnSubmit}
@@ -129,13 +129,13 @@ export function RecruitmentFormAdminPage() {
             <SamfFormField<string, FormType>
               field="name_nb"
               type="text"
-              label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+              label={`${t(KEY.common_name)} ${t(KEY.common_english)}`}
               required={true}
             />
             <SamfFormField<string, FormType>
               field="name_en"
               type="text"
-              label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+              label={`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}
               required={true}
             />
           </div>

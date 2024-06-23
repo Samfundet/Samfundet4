@@ -6,7 +6,7 @@ export default {
   comonent: Error,
 };
 
-const Template: ComponentStory<typeof Error> = (args) => <Error {...args}></Error>;
+const Template: ComponentStory<typeof Error> = (args) => <Error {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

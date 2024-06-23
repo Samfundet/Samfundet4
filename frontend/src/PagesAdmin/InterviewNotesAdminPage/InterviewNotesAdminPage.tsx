@@ -69,7 +69,7 @@ export function InterviewNotesPage() {
           value={interview ? interview.notes : ' '}
           onChange={handleUpdateNotes}
           disabled={!editingMode}
-        ></TextAreaField>
+        />
         <Button theme="samf" rounded={true} className={styles.button} onClick={handleEditSave} disabled={disabled}>
           {editingMode ? t(KEY.common_save) : t(KEY.common_edit)}
         </Button>

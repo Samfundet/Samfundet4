@@ -124,11 +124,11 @@ export function RecruitmentApplicationsOverviewPage() {
             {t(KEY.common_go_back)}
           </Button>
           <h1 className={styles.header}>{t(KEY.recruitment_my_applications)}</h1>
-          <div className={styles.empty_div}></div>
+          <div className={styles.empty_div} />
         </div>
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
         {admissions.length > 0 ? (
-          <Table data={admissions.map(admissionToTableRow)} columns={tableColumns} defaultSortColumn={3}></Table>
+          <Table data={admissions.map(admissionToTableRow)} columns={tableColumns} defaultSortColumn={3} />
         ) : (
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}

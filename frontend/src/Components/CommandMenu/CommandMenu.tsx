@@ -48,7 +48,7 @@ export function CommandMenu({ openKey = 'k' }: CommandMenuProps) {
 
   return (
     <>
-      <div className={'command-menu'} ref={container}></div>
+      <div className={'command-menu'} ref={container} />
       <Command.Dialog
         open={open}
         onOpenChange={setOpen}

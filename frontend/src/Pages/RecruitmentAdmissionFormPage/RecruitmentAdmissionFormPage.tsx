@@ -117,7 +117,7 @@ export function RecruitmentAdmissionFormPage() {
     );
   }
 
-  if (!positionID || isNaN(Number(positionID))) {
+  if (!positionID || Number.isNaN(Number(positionID))) {
     return (
       <Page>
         <div className={styles.container}>
@@ -128,7 +128,7 @@ export function RecruitmentAdmissionFormPage() {
     );
   }
 
-  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_admission);
+  const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_admission)}`;
 
   return (
     <Page>

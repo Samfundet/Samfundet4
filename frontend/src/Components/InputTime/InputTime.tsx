@@ -38,14 +38,14 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
       // Regex for 00-23, allowing for values without 0 padding
       if (/^(2[0-3]|[0-1]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
         setHour(numericValue);
-        onChange?.(numericValue.padStart(2, '0') + ':' + minute.padStart(2, '0'));
+        onChange?.(`${numericValue.padStart(2, '0')}:${minute.padStart(2, '0')}`);
       }
     } else if (inputName === 'minute') {
       numericValue = parsedValue > 59 ? '59' : e.target.value;
       // Regex for 00-59, allowing for values without 0 padding
       if (/^([0-5]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
         setMinute(numericValue);
-        onChange?.(hour.padStart(2, '0') + ':' + numericValue.padStart(2, '0'));
+        onChange?.(`${hour.padStart(2, '0')}:${numericValue.padStart(2, '0')}`);
       }
     }
   }

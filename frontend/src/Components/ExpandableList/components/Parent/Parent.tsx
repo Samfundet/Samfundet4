@@ -16,13 +16,13 @@ export function Parent({ content, children, onClick, nestedDepth }: ParentProps)
   const [isVisible, setIsVisible] = useState(false);
 
   function handleClick() {
-    onClick && onClick();
+    onClick?.();
     setShowChildren(true);
     setDepth(depth ? depth + 1 : 1);
   }
 
   useEffect(() => {
-    if (depth == nestedDepth) {
+    if (depth === nestedDepth) {
       setShowChildren(false);
       setIsVisible(true);
     } else {

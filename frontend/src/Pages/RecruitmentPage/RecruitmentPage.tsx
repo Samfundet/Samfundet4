@@ -68,7 +68,7 @@ export function RecruitmentPage() {
   return (
     <Page>
       <div className={styles.container}>
-        <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
+        <Video embedId="-nYQb8_TvQ4" className={styles.video} />
         {user ? (
           <div className={styles.personalRow}>
             <OccupiedFormModal recruitmentId={1} />

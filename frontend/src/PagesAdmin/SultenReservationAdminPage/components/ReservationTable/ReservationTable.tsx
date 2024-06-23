@@ -26,7 +26,7 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
     const hoursList: string[] = [];
 
     while (hours_iterator < hours_end) {
-      hoursList.push(hours_iterator.toString().padStart(2, '0') + ':00');
+      hoursList.push(`${hours_iterator.toString().padStart(2, '0')}:00`);
       hours_iterator += 1;
     }
     setHours(hoursList);
@@ -61,7 +61,7 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
           </div>
         </div>
         <div className={styles.buttonsHeader}>
-          {today.getDate() != sultenDay.date.getDate() && (
+          {today.getDate() !== sultenDay.date.getDate() && (
             <Button theme="secondary" onClick={() => goToToday()}>
               {t(KEY.common_today)}
             </Button>

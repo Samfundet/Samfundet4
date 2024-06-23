@@ -45,7 +45,7 @@ export function SaksdokumentAdminPage() {
     // Filter by match all keywords.
     return documents.filter((doc) => {
       for (const kw of keywords) {
-        if (doc.title_nb?.toLowerCase().indexOf(kw) == -1) return false;
+        if (doc.title_nb?.toLowerCase().indexOf(kw) === -1) return false;
       }
       return true;
     });

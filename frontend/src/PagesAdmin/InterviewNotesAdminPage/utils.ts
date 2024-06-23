@@ -16,5 +16,5 @@ export function filterRecruitmentAdmission(
 }
 
 export function getNameUser(admission: RecruitmentAdmissionDto): string {
-  return admission.user.first_name ? admission.user.first_name + ' ' + admission.user.last_name : '';
+  return admission.user.first_name ? `${admission.user.first_name} ${admission.user.last_name}` : '';
 }

@@ -23,7 +23,7 @@ export function WithoutInterviewModal({ admissions, admissions_without_interview
           className={styles.close}
           icon="mdi:close"
           onClick={() => setWithoutInterviewModal(false)}
-        ></IconButton>
+        />
         <WithoutInterviewList admissions={admissions_without_interview} />
       </Modal>
     </>

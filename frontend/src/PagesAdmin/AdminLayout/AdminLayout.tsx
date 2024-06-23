@@ -29,7 +29,7 @@ export function AdminLayout() {
       if (applet.url === undefined) return <></>;
 
       // Create panel item
-      const selected = location.pathname.toLowerCase().indexOf(applet.url) != -1;
+      const selected = location.pathname.toLowerCase().indexOf(applet.url) !== -1;
       return (
         <Link
           key={index}
@@ -71,7 +71,7 @@ export function AdminLayout() {
         <Icon icon="mdi:person" />
         {t(KEY.common_profile)}
       </Link>
-      <br></br>
+      <br />
       {/* Applets */}
       {appletCategories.map((category) => {
         return (
@@ -81,7 +81,7 @@ export function AdminLayout() {
           </React.Fragment>
         );
       })}
-      <br></br>
+      <br />
       {/* TODO help/faq */}
       <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
         <Icon icon="material-symbols:question-mark-rounded" />

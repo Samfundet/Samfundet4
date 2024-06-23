@@ -26,7 +26,7 @@ export function OccupiedFormModal({ recruitmentId = 1 }: OccupiedFormModalProps)
           <button className={styles.close_btn} title="Close" onClick={() => setOpen(false)}>
             <Icon icon="octicon:x-24" width={24} />
           </button>
-          <OccupiedForm recruitmentId={recruitmentId} onCancel={() => setOpen(false)}></OccupiedForm>
+          <OccupiedForm recruitmentId={recruitmentId} onCancel={() => setOpen(false)} />
         </>
       </Modal>
     </>

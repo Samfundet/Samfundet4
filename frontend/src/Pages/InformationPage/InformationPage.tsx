@@ -73,7 +73,7 @@ export function InformationPage() {
             <Icon icon="mdi:pencil" />
             {lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.information_page_short)}`)}
           </Button>
-          <br></br>
+          <br />
         </>
       )}
       <SamfMarkdown>{`# ${title} \n ${text}`}</SamfMarkdown>

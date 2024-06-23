@@ -79,7 +79,7 @@ export function dbT(
 ): string | undefined {
   if (model === undefined) return undefined;
 
-  const fieldName = field + '_' + language;
+  const fieldName = `${field}_${language}`;
   const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
   if (hasFieldName) {
     const value = model[fieldName];
@@ -191,7 +191,7 @@ export function utcTimestampToLocal(time: string | undefined): string {
  */
 export function niceDateTime(time: string | undefined): string | undefined {
   const date = new Date(time ?? '');
-  if (!isNaN(date.getTime())) {
+  if (!Number.isNaN(date.getTime())) {
     const dateString = date.toUTCString();
     return dateString.substring(0, dateString.length - 3);
   }
@@ -268,8 +268,8 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   //
   const dot = document.createElement('div');
   dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
-  dot.style.left = e.clientX + window.pageXOffset + 'px';
-  dot.style.top = e.clientY + window.pageYOffset + 'px';
+  dot.style.left = `${e.clientX + window.pageXOffset}px`;
+  dot.style.top = `${e.clientY + window.pageYOffset}px`;
   return dot;
 }
 

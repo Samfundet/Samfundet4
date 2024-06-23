@@ -126,12 +126,12 @@ export function Table({
   }
 
   function getSortableIcon(column: number): string {
-    if (sortColumn != column) return 'carbon:chevron-sort';
+    if (sortColumn !== column) return 'carbon:chevron-sort';
     return sortInverse ? 'carbon:chevron-up' : 'carbon:chevron-down';
   }
 
   function getIconClass(column: number): string {
-    if (sortColumn != column) return styles.icon;
+    if (sortColumn !== column) return styles.icon;
     return classNames(styles.icon, styles.active_icon);
   }
 
@@ -164,8 +164,7 @@ export function Table({
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
           <tr>
-            {columns &&
-              columns?.map((col, index) => {
+            {columns?.map((col, index) => {
                 if (isColumnSortable(col)) {
                   return (
                     <th
@@ -176,26 +175,24 @@ export function Table({
                       {getColumnContent(col)}
                       {!isHideSortButton(col) && (
                         <span className={styles.sort_icons}>
-                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
+                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
                         </span>
                       )}
                     </th>
                   );
-                } else {
+                }
                   return (
                     <th className={headerColumnClassName} key={index}>
                       {getColumnContent(col)}
                     </th>
                   );
-                }
               })}
           </tr>
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
             <tr className={bodyRowClassName} key={index1}>
-              {row &&
-                row.map((cell, index2) => (
+              {row?.map((cell, index2) => (
                   <td className={cellClassName} key={index2}>
                     {getCellContent(cell ?? '')}
                   </td>

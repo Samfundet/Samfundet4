@@ -58,7 +58,7 @@ export function SultenMenuAdminPage() {
     return [
       dbT(menuItem, 'name'),
       menuItem.food_category ? dbT(menuItem.food_category as FoodCategoryDto, 'name') : '',
-      (menuItem.price_member + '/' + menuItem.price) as string,
+      (`${menuItem.price_member}/${menuItem.price}`) as string,
       {
         content: (
           <CrudButtons

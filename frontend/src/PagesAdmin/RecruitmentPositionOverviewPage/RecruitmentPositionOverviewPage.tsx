@@ -30,30 +30,30 @@ export function RecruitmentPositionOverviewPage() {
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 0 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruiter_status === 0 &&
+              recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setWithdrawnApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setRejectedApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
-              (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+              recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setAcceptedApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 1 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruiter_status === 1 &&
+              recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setShowSpinner(false);

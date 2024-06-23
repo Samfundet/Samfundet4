@@ -53,8 +53,8 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
   function userToTableRow(user: RecruitmentUserDto) {
     return [
       {
-        value: user.first_name + ' ' + user.last_name,
-        content: <Link url={ROUTES.frontend.recruitment_application}>{user.first_name + ' ' + user.last_name}</Link>,
+        value: `${user.first_name} ${user.last_name}`,
+        content: <Link url={ROUTES.frontend.recruitment_application}>{`${user.first_name} ${user.last_name}`}</Link>,
       },
       user.email,
       user.phone_number,

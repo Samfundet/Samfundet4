@@ -30,13 +30,13 @@ export function HomePage() {
     switch (element.variation) {
       case 'carousel': {
         if (element.events.length > 0) return <EventCarousel key={key} element={element} />;
-        return <div key={key}></div>;
+        return <div key={key} />;
       }
       case 'large-card':
         return <LargeCard key={key} element={element} />;
     }
     console.error(`Unknown home page element kind '${element.variation}'`);
-    return <div key={key}></div>;
+    return <div key={key} />;
   }
 
   const skeleton = (

@@ -62,7 +62,7 @@ export function Dropdown<T>({
         disabled={disabled}
         defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
+        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1} />}
         {options.map((opt, index) => {
           return (
             <option value={index} key={index}>

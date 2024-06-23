@@ -58,7 +58,7 @@ export function PieChart({ data: initialData, chartTitle, size, legend }: Circul
               fill={entry.color}
               stroke={'#fff'}
               strokeWidth={'1'}
-              onMouseEnter={(event) => handleMouseEnter(event, entry.label + ': ' + entry.value.toString())}
+              onMouseEnter={(event) => handleMouseEnter(event, `${entry.label}: ${entry.value.toString()}`)}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             />

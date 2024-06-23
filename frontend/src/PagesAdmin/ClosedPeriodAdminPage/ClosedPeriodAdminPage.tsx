@@ -66,7 +66,7 @@ export function ClosedPeriodAdminPage() {
         <Table
           columns={[
             t(KEY.common_message) ?? '',
-            'Event ' + t(KEY.common_message),
+            `Event ${t(KEY.common_message)}`,
             t(KEY.start_time) ?? '',
             t(KEY.end_time) ?? '',
             '',

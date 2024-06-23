@@ -112,7 +112,7 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
       (newQueryParams, queryParamKey) => {
         const value = queryParams[queryParamKey];
         if (value === undefined) return newQueryParams;
-        return Object.assign(newQueryParams, { [queryParamKey]: value + '' }); // Converts number to string.
+        return Object.assign(newQueryParams, { [queryParamKey]: `${value}` }); // Converts number to string.
       },
       {},
     );

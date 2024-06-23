@@ -240,7 +240,7 @@ export function SamfForm<T extends FormType>({
         {Object.keys(state.errors).map((field) => (
           <div
             key={field}
-            className={classNames(styles.debug_row, state.errors[field as keyof T] != false && styles.debug_error)}
+            className={classNames(styles.debug_row, state.errors[field as keyof T] !== false && styles.debug_error)}
           >
             {field}: {JSON.stringify(state.errors[field as keyof T])}
           </div>
@@ -280,7 +280,7 @@ export function SamfForm<T extends FormType>({
           )}
           {canDebug && (
             <>
-              <br></br>
+              <br />
               <Button preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
                 Debug
               </Button>

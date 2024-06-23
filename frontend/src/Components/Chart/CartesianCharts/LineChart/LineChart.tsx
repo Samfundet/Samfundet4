@@ -60,7 +60,7 @@ export function LineChart({
       cy={lineCoordinates[index].y}
       r={4} // radius of point
       fill={colors.bar}
-      onMouseEnter={(event) => handleMouseEnter(event, item.label + ': ' + item.value.toString())}
+      onMouseEnter={(event) => handleMouseEnter(event, `${item.label}: ${item.value.toString()}`)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     />

@@ -6,6 +6,6 @@ export default {
   component: AccessDenied,
 };
 
-const Template: ComponentStory<typeof AccessDenied> = () => <AccessDenied></AccessDenied>;
+const Template: ComponentStory<typeof AccessDenied> = () => <AccessDenied />;
 
 export const Default = Template.bind({});

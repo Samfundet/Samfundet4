@@ -61,7 +61,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
   };
 
   const horizontalPreview = fileType === 'pdf';
-  const typePreviewClass = 'preview_' + fileType.toLowerCase();
+  const typePreviewClass = `preview_${fileType.toLowerCase()}`;
   const fileSizeMb = ((selectedFile?.size ?? 0) / 1024 / 1024).toFixed(2);
   const isError = error !== false;
 

@@ -38,7 +38,7 @@ export function RadioButton({
         checked={checked}
         disabled={disabled}
       />
-      <div className={styles.circle}></div>
+      <div className={styles.circle} />
       {children}
     </label>
   );

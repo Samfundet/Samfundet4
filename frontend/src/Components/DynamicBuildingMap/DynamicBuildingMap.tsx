@@ -109,7 +109,7 @@ export function DynamicBuildingMap({
     setLoading(true);
     const importIcon = async () => {
       try {
-        MapSvgRef.current = (await import(`./map.svg`)).ReactComponent;
+        MapSvgRef.current = (await import('./map.svg')).ReactComponent;
       } catch (err) {
         console.log(err);
       } finally {

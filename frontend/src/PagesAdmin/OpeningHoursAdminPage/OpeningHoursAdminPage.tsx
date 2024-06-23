@@ -105,13 +105,13 @@ export function OpeningHoursAdminPage() {
                       value={venue[openField]}
                       onChange={() => handleOnChange(venue, openField)}
                       onBlur={(formattedTime) => saveVenue(venue, openField, formattedTime)}
-                    ></InputTime>
+                    />
                     <p>-</p>
                     <InputTime
                       value={venue[closeField]}
                       onChange={() => handleOnChange(venue, closeField)}
                       onBlur={(formattedTime) => saveVenue(venue, closeField, formattedTime)}
-                    ></InputTime>
+                    />
                   </div>
                 </div>
               );

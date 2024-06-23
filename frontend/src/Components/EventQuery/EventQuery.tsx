@@ -61,13 +61,13 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
         options={venueOptions}
         onChange={(venue) => setSelectedVenue(venue)}
         className={styles.element}
-        defaultValue={{ label: t(KEY.common_choose) + ' ' + t(KEY.common_venue), value: undefined }}
+        defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.common_venue)}`, value: undefined }}
       />
       <Dropdown<EventGroupDto | undefined>
         options={eventGroupOptions}
         onChange={(group) => setSelectedEventGroup(group)}
         className={styles.element}
-        defaultValue={{ label: t(KEY.common_choose) + ' ' + t(KEY.event_type), value: undefined }}
+        defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.event_type)}`, value: undefined }}
       />
     </div>
   );

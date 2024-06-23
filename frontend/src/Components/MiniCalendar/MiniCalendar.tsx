@@ -124,7 +124,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
               disabled={!valid}
             >
               {d.getDate()}
-              {marker && <div className={`${styles.marker} ${marker.className}`}></div>}
+              {marker && <div className={`${styles.marker} ${marker.className}`} />}
             </button>
           );
         })}

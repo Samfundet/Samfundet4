@@ -89,28 +89,28 @@ export function ClosedPeriodFormAdminPage() {
             field="message_no"
             type="text_long"
             label={`${labelMessage} (${t(KEY.common_norwegian)})`}
-          ></SamfFormField>
+          />
           <SamfFormField
             field="message_en"
             type="text_long"
             label={`${labelMessage} (${t(KEY.common_english)})`}
-          ></SamfFormField>
+          />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_no"
             type="text_long"
             label={`${labelDescription} (${t(KEY.common_norwegian)})`}
-          ></SamfFormField>
+          />
           <SamfFormField
             field="description_en"
             type="text_long"
             label={`${labelDescription} (${t(KEY.common_english)})`}
-          ></SamfFormField>
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
+          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
         </div>
       </SamfForm>
     </AdminPageLayout>

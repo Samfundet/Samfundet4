@@ -11,12 +11,12 @@ export default {
   },
 } as ComponentMeta<typeof ExpandableHeader>;
 
-const TemplateSingular: ComponentStory<typeof ExpandableHeader> = (args) => <ExpandableHeader {...args}></ExpandableHeader>;
+const TemplateSingular: ComponentStory<typeof ExpandableHeader> = (args) => <ExpandableHeader {...args} />;
 
 const TemplateMultiple: ComponentStory<typeof ExpandableHeader> = (args) => (
     <>
-      <ExpandableHeader {...args}></ExpandableHeader>
-      <ExpandableHeader {...args}></ExpandableHeader>
+      <ExpandableHeader {...args} />
+      <ExpandableHeader {...args} />
     </>
   );
 

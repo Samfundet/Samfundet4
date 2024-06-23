@@ -33,7 +33,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
     const nextId = lastTicket.id + 1;
     onSetCustomTickets?.([
       ...customTickets,
-      { id: nextId, name_nb: `Ny billett`, name_en: `New ticket`, price: lastTicket.price },
+      { id: nextId, name_nb: 'Ny billett', name_en: 'New ticket', price: lastTicket.price },
     ]);
   }
 
@@ -116,7 +116,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
         <div className={styles.add_custom_ticket}>
           <Button rounded={true} theme="green" preventDefault={true} onClick={newTicket}>
             Legg til billett
-            <Icon icon="mdi:plus"></Icon>
+            <Icon icon="mdi:plus" />
           </Button>
         </div>
       </div>

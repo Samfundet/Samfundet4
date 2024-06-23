@@ -27,7 +27,7 @@ export function TicketTypeRow({ event }: TicketTypeRowProps) {
           <td className={styles.table_element_left}>{index === 0 ? 'BILLETT' : <>&nbsp;</>}</td>
           <td className={styles.table_element_right}>
             <b> {dbT(ticket, 'name')} </b>
-            <br></br>
+            <br />
             <span> {ticket.price},- </span>
           </td>
         </tr>

@@ -56,7 +56,7 @@ export function BarChart({
         width={datapointWidth}
         height={barHeight}
         fill={colors.bar}
-        onMouseEnter={(event) => handleMouseEnter(event, item.label + ': ' + item.value)}
+        onMouseEnter={(event) => handleMouseEnter(event, `${item.label}: ${item.value}`)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       />

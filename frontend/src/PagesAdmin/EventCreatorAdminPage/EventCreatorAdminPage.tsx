@@ -234,7 +234,7 @@ export function EventCreatorAdminPage() {
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(JSON.stringify(error.response.data));
-        console.error('FAIL: ' + JSON.stringify(error));
+        console.error(`FAIL: ${JSON.stringify(error)}`);
       });
   }
 
@@ -347,7 +347,7 @@ export function EventCreatorAdminPage() {
           devMode={false}
           initialData={event as FormType} //TODO: BURDE VÆRE INITIAL EVENT ?
         >
-          {step.key == 'summary' ? eventPreview : <></>}
+          {step.key === 'summary' ? eventPreview : <></>}
           {step.template}
         </SamfForm>
       </div>
@@ -363,7 +363,7 @@ export function EventCreatorAdminPage() {
             {t(KEY.common_previous)}
           </Button>
         ) : (
-          <div></div>
+          <div />
         )}
         {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
@@ -388,7 +388,7 @@ export function EventCreatorAdminPage() {
         vertical={false}
         spaceBetween={true}
       />
-      <br></br>
+      <br />
       <div className={styles.form_container}>
         {/* Render form */}
         {allForms}

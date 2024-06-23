@@ -18,7 +18,7 @@ export function TimeslotButton({ active, children, showDot = true, ...props }: P
       type="button"
       {...props}
     >
-      {showDot && <div className={styles.dot}></div>}
+      {showDot && <div className={styles.dot} />}
       <span>{children}</span>
     </button>
   );

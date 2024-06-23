@@ -68,7 +68,7 @@ export function RecruitmentGangAdminPage() {
       {
         value: recruitmentPosition.processed_applicants,
         content:
-          recruitmentPosition.total_applicants == recruitmentPosition.processed_applicants
+          recruitmentPosition.total_applicants === recruitmentPosition.processed_applicants
             ? t(KEY.common_all)
             : recruitmentPosition.processed_applicants,
       },
@@ -104,7 +104,7 @@ export function RecruitmentGangAdminPage() {
     ];
   });
 
-  const title = dbT(gang, 'name') + ' - ' + recruitment?.organization + ' - ' + dbT(recruitment, 'name');
+  const title = `${dbT(gang, 'name')} - ${recruitment?.organization} - ${dbT(recruitment, 'name')}`;
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <div className={styles.headerRow}>

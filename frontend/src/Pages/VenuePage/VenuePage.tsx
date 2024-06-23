@@ -40,7 +40,7 @@ export function VenuePage() {
                   style={backgroundImageFromUrl(image.src)}
                   onMouseEnter={() => setHighlight(key)}
                   onMouseLeave={() => setHighlight(undefined)}
-                ></div>
+                />
                 <div className={styles.venue_name}>{image.name}</div>
               </div>
             );

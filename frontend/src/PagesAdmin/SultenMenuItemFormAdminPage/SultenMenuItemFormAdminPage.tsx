@@ -56,7 +56,7 @@ export function SultenMenuItemFormAdminPage() {
   };
 
   const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
-  const title = (id ? t(KEY.common_edit) : t(KEY.common_create)) + ' ' + lowerCapitalize(`${t(KEY.sulten_dishes)}`);
+  const title = `${id ? t(KEY.common_edit) : t(KEY.common_create)} ${lowerCapitalize(`${t(KEY.sulten_dishes)}`)}`;
 
   // Fetch data if edit mode.
 
@@ -166,25 +166,25 @@ export function SultenMenuItemFormAdminPage() {
             field="name_nb"
             required={true}
             type="text"
-            label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+            label={`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}
           />
           <SamfFormField
             field="name_en"
             required={true}
             type="text"
-            label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+            label={`${t(KEY.common_name)} ${t(KEY.common_english)}`}
           />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_nb"
             type="text_long"
-            label={t(KEY.common_description) + ' ' + t(KEY.common_norwegian)}
+            label={`${t(KEY.common_description)} ${t(KEY.common_norwegian)}`}
           />
           <SamfFormField
             field="description_en"
             type="text_long"
-            label={t(KEY.common_description) + ' ' + t(KEY.common_english)}
+            label={`${t(KEY.common_description)} ${t(KEY.common_english)}`}
           />
         </div>
         <div className={styles.row}>
@@ -193,7 +193,7 @@ export function SultenMenuItemFormAdminPage() {
             field="price_member"
             required={true}
             type="number"
-            label={t(KEY.common_price) + ' ' + t(KEY.common_member)}
+            label={`${t(KEY.common_price)} ${t(KEY.common_member)}`}
           />
           <SamfFormField
             field="food_category"
@@ -205,7 +205,7 @@ export function SultenMenuItemFormAdminPage() {
           <SamfFormField
             field="food_preferences"
             type="options"
-            label={t(KEY.common_food) + ' ' + t(KEY.common_preferences)}
+            label={`${t(KEY.common_food)} ${t(KEY.common_preferences)}`}
             options={foodPreferenceOptions}
           />
         </div>
