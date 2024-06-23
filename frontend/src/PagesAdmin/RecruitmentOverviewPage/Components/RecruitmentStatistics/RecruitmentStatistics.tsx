@@ -6,24 +6,11 @@ import { KEY } from '~/i18n/constants';
 
 export function RecruitmentStatistics() {
   const { t } = useTranslation();
+  // TODO: add dynamic data and might need backend features (in ISSUE #1110)
   const [mockRecruitmentStatOne, setMockRecruitmentStatOne] = useState([
     { at_date: '28-08-2024', recruitment_applications: 10 },
     { at_date: '25-08-2024', recruitment_applications: 2 },
   ]);
-
-  useEffect(() => {
-    //TODO: add dynamic data and might need backend features (in ISSUE #1110)
-    setMockRecruitmentStatOne([
-      {
-        at_date: '28-08-2024---PLACEHOLDER',
-        recruitment_applications: 10,
-      },
-      {
-        at_date: '25-08-2024 ---- PLACEHOLDER',
-        recruitment_applications: 2,
-      },
-    ]);
-  }, []);
 
   const recruitmentStatisticsContainer = (children: ReactNode, chartTitle: string) => (
     <div className={styles.statisticsContainer}>
