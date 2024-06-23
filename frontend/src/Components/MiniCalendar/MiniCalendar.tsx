@@ -102,7 +102,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
       {monthHeader}
       {daysHeader}
       <div className={styles.grid}>
-        {days.map((d, i) => {
+        {days.map((d) => {
           const valid = dateValid(d);
           const isSelected = selectedDate?.toDateString() === d.toDateString();
           const marker = getMarker(d);
@@ -110,7 +110,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
 
           return (
             <button
-              key={i}
+              key={d.toISOString()}
               type="button"
               className={classNames({
                 [styles.day]: true,
