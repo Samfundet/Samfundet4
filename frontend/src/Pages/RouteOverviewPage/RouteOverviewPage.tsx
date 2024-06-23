@@ -26,9 +26,7 @@ export function RouteOverviewPage() {
               const displayName = showName ? routeName : route;
               return (
                 <span key={route}>
-                  <Link url={route}>
-                    {displayName}
-                  </Link>
+                  <Link url={route}>{displayName}</Link>
                   <br />
                 </span>
               );

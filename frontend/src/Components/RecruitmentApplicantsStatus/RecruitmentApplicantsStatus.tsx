@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { InputField } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
@@ -10,7 +11,6 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
-import { InputField } from '~/Components';
 import { Link } from '../Link';
 import styles from './RecruitmentApplicantsStatus.module.scss';
 

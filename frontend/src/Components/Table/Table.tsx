@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
-import type { Children } from '~/types';
 import { TimeDisplay } from '~/Components';
+import type { Children } from '~/types';
 import styles from './Table.module.scss';
 
 // Supported cell values for sorting
