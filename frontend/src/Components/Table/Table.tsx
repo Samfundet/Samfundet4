@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
 import type { Children } from '~/types';
-import { TimeDisplay } from '../TimeDisplay';
+import { TimeDisplay } from '~/Components';
 import styles from './Table.module.scss';
 
 // Supported cell values for sorting
@@ -168,9 +168,18 @@ export function Table({
               if (isColumnSortable(col)) {
                 return (
                   <th
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sort(index);
+                      }
+                    }}
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
+                    tabIndex={0}
                   >
                     {getColumnContent(col)}
                     {!isHideSortButton(col) && (
@@ -182,6 +191,7 @@ export function Table({
                 );
               }
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -191,8 +201,10 @@ export function Table({
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             <tr className={bodyRowClassName} key={index1}>
               {row?.map((cell, index2) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
                 <td className={cellClassName} key={index2}>
                   {getCellContent(cell ?? '')}
                 </td>
