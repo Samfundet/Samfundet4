@@ -34,6 +34,7 @@ export function LycheContactPage() {
               src={ROUTES.other.streetview_lyche}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
+              title="Google street view"
             />
           </div>
         </div>
