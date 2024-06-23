@@ -214,6 +214,7 @@ export function SamfForm<T extends FormType>({
   }, [state.values, onChange]);
 
   // Allert parent of changes in form validity
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     onValidityChanged?.(allValid);
   }, [state.errors, allValid, onValidityChanged]);

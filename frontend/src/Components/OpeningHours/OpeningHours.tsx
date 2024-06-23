@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 import { TimeDuration } from '~/Components';
+import { KEY } from '~/i18n/constants';
 import styles from './OpeningHours.module.scss';
 
 type FakeVenue = {
