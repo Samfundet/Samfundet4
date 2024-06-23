@@ -9,6 +9,7 @@
   border-radius: 0.25em;
   background-color: $blue;
   cursor: pointer;
+  border: none;
   &:hover { 
     filter: brightness(1.1);
     -webkit-filter: brightness(1.1);

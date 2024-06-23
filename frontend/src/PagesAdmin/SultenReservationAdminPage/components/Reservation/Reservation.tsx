@@ -11,7 +11,8 @@ type ReservationProps = {
 export function Reservation({ reservation }: ReservationProps) {
   const [hover, setHover] = useState<boolean>(false);
   return (
-    <div
+    <button
+      type="button"
       className={styles.reservationContainer}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
@@ -22,6 +23,6 @@ export function Reservation({ reservation }: ReservationProps) {
         <p>{reservation.start_time}</p>
         <p>{reservation.end_time}</p>
       </div>
-    </div>
+    </button>
   );
 }
