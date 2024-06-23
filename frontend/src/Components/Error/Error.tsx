@@ -7,6 +7,7 @@ interface ErrorProps {
   children?: Children;
 }
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames:
 export function Error({ header, message, children }: ErrorProps) {
   return (
     <div>
