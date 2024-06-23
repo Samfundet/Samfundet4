@@ -774,41 +774,42 @@ class DownloadRecruitmentAdmissionGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         admissions = RecruitmentAdmission.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
+        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
         response = HttpResponse(
             content_type='text/csv',
-            headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
         )
         writer = csv.DictWriter(
             response,
             fieldnames=[
-                'navn',
-                'telefon',
-                'email',
-                'campus',
-                'stilling',
-                'intervjutid',
-                'intervjusted',
-                'prioritet',
-                'status',
-                'søkers_rangering',
-                'intervjuer_satt',
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Søkers rangering',
+                'Intervjuer satt',
             ],
         )
         writer.writeheader()
         for admission in admissions:
             writer.writerow(
                 {
-                    'navn': admission.user.get_full_name(),
-                    'telefon': admission.user.phone_number,
-                    'email': admission.user.email,
-                    'campus': admission.user.campus.name_en if admission.user.campus else '',
-                    'stilling': admission.recruitment_position.name_nb,
-                    'intervjutid': admission.interview.interview_time if admission.interview else '',
-                    'intervjusted': admission.interview.interview_location if admission.interview else '',
-                    'prioritet': admission.get_recruiter_priority_display(),
-                    'status': admission.get_recruiter_status_display(),
-                    'søkers_rangering': f'{admission.applicant_priority}/{admission.get_total_admissions()}',
-                    'intervjuer_satt': f'{admission.get_total_interviews()}/{admission.get_total_admissions()}',
+                    'Navn': admission.user.get_full_name(),
+                    'Telefon': admission.user.phone_number,
+                    'Epost': admission.user.email,
+                    'Campus': admission.user.campus.name_en if admission.user.campus else '',
+                    'Stilling': admission.recruitment_position.name_nb,
+                    'Intervjutid': admission.interview.interview_time if admission.interview else '',
+                    'Intervjusted': admission.interview.interview_location if admission.interview else '',
+                    'Prioritet': admission.get_recruiter_priority_display(),
+                    'Status': admission.get_recruiter_status_display(),
+                    'Søkers rangering': f'{admission.applicant_priority}/{admission.get_total_admissions()}',
+                    'Intervjuer satt': f'{admission.get_total_interviews()}/{admission.get_total_admissions()}',
                 }
             )
 
