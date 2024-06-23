@@ -43,6 +43,7 @@ export const nb: Record<KeyValues, string> = {
 
   // Other common
   [KEY.common_to]: 'Til',
+  [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
   [KEY.common_food]: 'Mat',
   [KEY.common_preferences]: 'Preferanser',
@@ -222,6 +223,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_admission]: 'Søknad',
+  [KEY.recruitment_jobtype]: 'Stillingstype',
   [KEY.recruitment_funksjonaer]: 'Funksjonær',
   [KEY.recruitment_gangmember]: 'Gjengmedlem',
   [KEY.recruitment_applyfor]: 'Søk på dette vervet',
@@ -241,6 +243,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
+  [KEY.recruitment_processed]: 'Behandlet',
+  [KEY.recruitment_accepted_applicants]: 'Tatt opp',
+  [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
   [KEY.recruitment_applicants_without_interview]: 'Søkere uten intervju',
   [KEY.recruitment_applicants_without_interview_help_text]:
@@ -387,6 +392,7 @@ export const en: Record<KeyValues, string> = {
 
   // No category:
   [KEY.common_to]: 'To',
+  [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
   [KEY.common_food]: 'Food',
   [KEY.common_preferences]: 'Preferences',
@@ -567,6 +573,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_admission]: 'Admission',
+  [KEY.recruitment_jobtype]: 'Job type',
   [KEY.recruitment_funksjonaer]: 'Functionary',
   [KEY.recruitment_gangmember]: 'Gangmember',
   [KEY.recruitment_applyfor]: 'Apply for this position',
@@ -585,7 +592,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.max_admissions]: 'Max admissions per user',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
+  [KEY.recruitment_show_all_applicants]: 'Show all applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
+  [KEY.recruitment_processed]: 'Processed',
+  [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
   [KEY.recruitment_applicants_without_interview]: 'Applicants without interview',
   [KEY.recruitment_applicants_without_interview_help_text]:
