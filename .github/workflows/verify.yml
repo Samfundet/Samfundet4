@@ -126,8 +126,8 @@ jobs:
       - name: Install modules
         run: yarn install
 
-      - name: Run ESLint
-        run: yarn run eslint:check
+      - name: Run Biome
+        run: yarn run biome:check
 
       - name: Run stylelint
         run: yarn run stylelint:check
