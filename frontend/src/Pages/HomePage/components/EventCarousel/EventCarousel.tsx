@@ -1,4 +1,4 @@
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { Carousel, IconButton, ImageCard } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto, HomePageElementDto } from '~/dto';

@@ -54,10 +54,12 @@ from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
     RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentSeperatePosition,
+    RecruitmentInterviewAvailability,
 )
 
 # Common fields:
@@ -76,7 +78,7 @@ from .models.recruitment import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
@@ -585,31 +587,35 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 @admin.register(Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
-        'visible_from',
-        'actual_application_deadline',
-        'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'name_nb',
         'organization',
+        'visible_from',
+        'shown_application_deadline',
     ]
     list_display = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
         'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups',
-        'organization',
     ]
     search_fields = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
         'organization',
     ]
-    list_display_links = ['visible_from']
+    list_display_links = ['name_nb', 'name']
     list_select_related = True
+
+
+@admin.register(RecruitmentSeperatePosition)
+class RecruitmentSeperatePositionAdmin(CustomBaseAdmin):
+    sortable_by = ['name_nb', 'recruitment', 'url']
+    search_fields = ['name_nb', 'recruitment', 'url']
+    list_display_links = ['name_nb']
 
 
 class RecruitmentAdmissionInline(admin.TabularInline):
@@ -638,11 +644,11 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
-    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'admissions_count']
+    search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
-
+    list_display_links = ['id']
     inlines = [RecruitmentAdmissionInline]
 
     def admissions_count(self, obj: RecruitmentPosition) -> int:
@@ -667,6 +673,7 @@ class RecruitmentAdmissionAdmin(CustomBaseAdmin):
         'recruitment',
         'user',
     ]
+    list_display_links = ['recruitment_position']
     list_select_related = True
 
 
@@ -689,10 +696,10 @@ class InterviewRoomAdmin(CustomBaseAdmin):
 
 @admin.register(Interview)
 class InterviewAdmin(CustomBaseAdmin):
-    list_filter = ['id', 'notes']
-    list_display = ['id', 'notes']
-    search_fields = ['id', 'notes']
-    list_display_links = ['id', 'notes']
+    list_filter = ['interview_time', 'interview_location']
+    list_display = ['id', 'interview_time', 'interview_location']
+    search_fields = ['interview_time', 'interview_location']
+    list_display_links = ['id']
     filter_horizontal = ['interviewers']
 
 
@@ -724,6 +731,12 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
 
 
 @admin.register(UserFeedbackModel)

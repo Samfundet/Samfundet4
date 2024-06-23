@@ -1,13 +1,13 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useAuthContext } from './context/AuthContext';
+import { useGlobalContext } from './context/GlobalContextProvider';
 import { getTextItem, putUserPreference } from '~/api';
 import { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper, THEME, THEME_KEY, ThemeValue } from './constants';
 import { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/constants';
 
@@ -183,6 +183,31 @@ export function useIsLightTheme(): boolean {
   return theme === THEME.LIGHT;
 }
 
+/** Returns if primary mouse button is currently pressed down */
+export function useMouseDown(): boolean {
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useEffect(() => {
+    function handleMouseDown() {
+      setMouseDown(true);
+    }
+
+    function handleMouseUp() {
+      setMouseDown(false);
+    }
+
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  return mouseDown;
+}
+
 export function useMousePosition(): { x: number; y: number } {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -344,11 +369,11 @@ export function useClickOutside<T extends Node>(
 export type CustomNavigateProps = {
   isMetaDown?: boolean;
   event?: React.MouseEvent;
-  url: string;
+  url: string | number;
   linkTarget?: LinkTarget;
 };
 
-export type CustomNavigateFn = (props: CustomNavigateProps) => void;
+export type CustomNavigateFn = (props: CustomNavigateProps, direction?: number) => void;
 
 /**
  * Custom navigation hook to correctly navigate in different environments.
@@ -360,7 +385,6 @@ export function useCustomNavigate(): CustomNavigateFn {
 
   function handleClick({ event, isMetaDown, url, linkTarget = 'frontend' }: CustomNavigateProps) {
     const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
-
     // Stop default <a> tag onClick handling. We want custom behaviour depending on the target.
     event?.preventDefault();
 
@@ -375,10 +399,9 @@ export function useCustomNavigate(): CustomNavigateFn {
      * True if ctrl or cmd click.
      */
     const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
-
     // React navigation.
     if (linkTarget === 'frontend' && !isCmdClick) {
-      navigate(finalUrl);
+      navigate(typeof url === 'number' ? url : finalUrl);
     }
     // Normal change of href to trigger reload.
     else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
@@ -418,4 +441,24 @@ export function useIsMetaKeyDown(): boolean {
   }, []);
 
   return isDown;
+}
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(
+    () => {
+      // Update debounced value after delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+      // Cancel the timeout if value changes (also on delay change or unmount)
+      // This is how we prevent debounced value from updating if value is changed
+      // within the delay period. Timeout gets cleared and restarted.
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    [value, delay], // Only re-call effect if value or delay changes
+  );
+  return debouncedValue;
 }

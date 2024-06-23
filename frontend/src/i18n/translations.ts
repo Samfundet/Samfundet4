@@ -1,7 +1,337 @@
 /* eslint-disable max-len */
 import { KEY, KeyValues } from '~/i18n/constants';
 
-export const nb: Record<KeyValues, string> = {
+export const nb: {
+  [KEY.common_update_successful]: string;
+  [KEY.common_rent_services]: string;
+  [KEY.common_been]: string;
+  [KEY.recruitment_interview_location]: string;
+  [KEY.command_menu_no_results]: string;
+  [KEY.recruitment_volunteerfor]: string;
+  [KEY.common_long_description]: string;
+  [KEY.common_save]: string;
+  [KEY.reprioritization_deadline_for_groups]: string;
+  [KEY.common_send]: string;
+  [KEY.common_delete_successful]: string;
+  [KEY.command_menu_shortcut_closed]: string;
+  [KEY.common_register]: string;
+  [KEY.common_campus]: string;
+  [KEY.common_day_monday_short]: string;
+  [KEY.common_tickets]: string;
+  [KEY.command_menu_group_actions]: string;
+  [KEY.last_updated]: string;
+  [KEY.recruitment_rejected_admissions_help_text]: string;
+  [KEY.admin_closed_period_edit_period]: string;
+  [KEY.command_menu_label]: string;
+  [KEY.feedback_thank_you_for_feedback]: string;
+  [KEY.common_sent]: string;
+  [KEY.information_page]: string;
+  [KEY.common_do]: string;
+  [KEY.sulten_reservation_form_find_times]: string;
+  [KEY.common_new_building]: string;
+  [KEY.command_menu_shortcut_events]: string;
+  [KEY.common_preferences]: string;
+  [KEY.common_would]: string;
+  [KEY.common_ticket_type_registration]: string;
+  [KEY.common_missing]: string;
+  [KEY.common_general]: string;
+  [KEY.recruitment_all_applications]: string;
+  [KEY.common_restaurant]: string;
+  [KEY.common_that]: string;
+  [KEY.common_from]: string;
+  [KEY.common_to]: string;
+  [KEY.recruitment_duration]: string;
+  [KEY.command_menu_shortcut_about_samfundet]: string;
+  [KEY.admin_closed_period_new_period]: string;
+  [KEY.loginpage_forgotten_password]: string;
+  [KEY.common_film_club]: string;
+  [KEY.recruitment_withdrawn_message]: string;
+  [KEY.common_when]: string;
+  [KEY.command_menu_shortcut_create_event]: string;
+  [KEY.admin_saksdokumenter_cannot_reupload]: string;
+  [KEY.admin_closed_period_title]: string;
+  [KEY.recruitment_interview_notes]: string;
+  [KEY.recruitment_overview]: string;
+  [KEY.common_by]: string;
+  [KEY.mix]: string;
+  [KEY.common_save_successful]: string;
+  [KEY.feedback_type_heading]: string;
+  [KEY.recruitment_organization]: string;
+  [KEY.common_click_here]: string;
+  [KEY.eventsadminpage_successful_delete_toast]: string;
+  [KEY.common_unselect_all]: string;
+  [KEY.occupied_help_text]: string;
+  [KEY.common_month_april]: string;
+  [KEY.common_more_info]: string;
+  [KEY.common_be]: string;
+  [KEY.recruitment_applicant]: string;
+  [KEY.admin_images_create]: string;
+  [KEY.common_today]: string;
+  [KEY.common_overview]: string;
+  [KEY.common_festivals]: string;
+  [KEY.inputfile_choose_a_file]: string;
+  [KEY.common_menu]: string;
+  [KEY.common_about_us]: string;
+  [KEY.common_month_december]: string;
+  [KEY.common_an]: string;
+  [KEY.common_sulten]: string;
+  [KEY.common_sponsor]: string;
+  [KEY.recruitment_admitted]: string;
+  [KEY.admin_organizer]: string;
+  [KEY.recruitment_number_of_applications]: string;
+  [KEY.common_going]: string;
+  [KEY.common_as]: string;
+  [KEY.recruitment_applyfor]: string;
+  [KEY.recruitment_withdrawn]: string;
+  [KEY.common_password]: string;
+  [KEY.common_at]: string;
+  [KEY.common_total]: string;
+  [KEY.common_have]: string;
+  [KEY.common_day_monday]: string;
+  [KEY.recruitment_accepted_admissions_empty_text]: string;
+  [KEY.feedback_type]: string;
+  [KEY.common_title]: string;
+  [KEY.common_the]: string;
+  [KEY.recruitment_my_applications]: string;
+  [KEY.common_here]: string;
+  [KEY.common_venue]: string;
+  [KEY.navbar_nybygg]: string;
+  [KEY.recruitment_not_applied]: string;
+  [KEY.common_in]: string;
+  [KEY.common_day_sunday]: string;
+  [KEY.common_is]: string;
+  [KEY.common_it]: string;
+  [KEY.reprioritization_deadline_for_applicant]: string;
+  [KEY.recruitment_recruiter_priority]: string;
+  [KEY.common_there]: string;
+  [KEY.common_tobe]: string;
+  [KEY.adminpage_gangs_create]: string;
+  [KEY.common_the_groups_at_samfundet]: string;
+  [KEY.common_description]: string;
+  [KEY.command_menu_shortcut_venues]: string;
+  [KEY.max_admissions]: string;
+  [KEY.common_are]: string;
+  [KEY.admin_information_confirm_cancel]: string;
+  [KEY.sulten_reservation_form_remember_closing]: string;
+  [KEY.common_phonenumber]: string;
+  [KEY.common_opening_hours]: string;
+  [KEY.loginpage_passwords_must_match]: string;
+  [KEY.sulten_what_is_lyche]: string;
+  [KEY.common_price]: string;
+  [KEY.recruitment_applyforhelp]: string;
+  [KEY.common_gang]: string;
+  [KEY.sulten_lyche_goal]: string;
+  [KEY.admin_saksdokument]: string;
+  [KEY.common_tags]: string;
+  [KEY.common_norwegian]: string;
+  [KEY.common_buy]: string;
+  [KEY.recruitment_administrate]: string;
+  [KEY.common_day_friday_short]: string;
+  [KEY.command_menu_shortcut_lyche]: string;
+  [KEY.recruitment_withdrawn_admissions]: string;
+  [KEY.start_time]: string;
+  [KEY.common_but]: string;
+  [KEY.common_overview_map]: string;
+  [KEY.actual_application_deadlin]: string;
+  [KEY.common_date]: string;
+  [KEY.adminpage_gangs_title]: string;
+  [KEY.recruitment_applications]: string;
+  [KEY.sulten_reservation_form_more_than_8_help]: string;
+  [KEY.common_come_back_later]: string;
+  [KEY.recruitment_withdrawn_admissions_empty_text]: string;
+  [KEY.recruitment_show_unprocessed_applicants]: string;
+  [KEY.common_has]: string;
+  [KEY.common_position]: string;
+  [KEY.common_ticket_type_billig]: string;
+  [KEY.common_not]: string;
+  [KEY.common_ticket_type_free]: string;
+  [KEY.owner]: string;
+  [KEY.common_edit]: string;
+  [KEY.common_cancel]: string;
+  [KEY.common_will]: string;
+  [KEY.loginpage_username]: string;
+  [KEY.groupspage_gangs_text]: string;
+  [KEY.admin_opening_hours_hint]: string;
+  [KEY.common_venues]: string;
+  [KEY.common_for]: string;
+  [KEY.common_image]: string;
+  [KEY.common_not_set]: string;
+  [KEY.recruitment_rejected_admissions]: string;
+  [KEY.common_received]: string;
+  [KEY.recruitment_tags]: string;
+  [KEY.admin_images_title]: string;
+  [KEY.recruitment_accepted_admissions_help_text]: string;
+  [KEY.common_choose]: string;
+  [KEY.common_email]: string;
+  [KEY.common_creation_successful]: string;
+  [KEY.common_not_required]: string;
+  [KEY.common_month_october]: string;
+  [KEY.common_login]: string;
+  [KEY.feedback_your_feedback]: string;
+  [KEY.common_month_march]: string;
+  [KEY.notfoundpage_contact_prompt]: string;
+  [KEY.none]: string;
+  [KEY.common_occasion]: string;
+  [KEY.common_month_may]: string;
+  [KEY.recruitment_will_be_anonymized]: string;
+  [KEY.common_month_september]: string;
+  [KEY.common_username]: string;
+  [KEY.event_type]: string;
+  [KEY.common_day_saturday]: string;
+  [KEY.common_see_in_django_admin]: string;
+  [KEY.common_rejected]: string;
+  [KEY.recruitment_statistics]: string;
+  [KEY.command_menu_action_change_theme]: string;
+  [KEY.admin_gangsadminpage_webpage]: string;
+  [KEY.common_name]: string;
+  [KEY.common_and]: string;
+  [KEY.common_count]: string;
+  [KEY.common_day_sunday_short]: string;
+  [KEY.common_month_february]: string;
+  [KEY.sulten_reservation_form_occasion_help]: string;
+  [KEY.eighteen]: string;
+  [KEY.recruitment_visible_from]: string;
+  [KEY.common_month_november]: string;
+  [KEY.recruitment_priority]: string;
+  [KEY.loginpage_internal_login]: string;
+  [KEY.common_membership]: string;
+  [KEY.recruitment_show_applicants_without_interview]: string;
+  [KEY.navbar_photos]: string;
+  [KEY.admin_information_manage_title]: string;
+  [KEY.control_panel_title]: string;
+  [KEY.occupied_show]: string;
+  [KEY.common_create]: string;
+  [KEY.common_recruitmentposition]: string;
+  [KEY.form_confirm]: string;
+  [KEY.common_our_history]: string;
+  [KEY.admin_gangsadminpage_abbreviation]: string;
+  [KEY.common_search]: string;
+  [KEY.common_required]: string;
+  [KEY.common_you]: string;
+  [KEY.admin_saksdokumenter_title]: string;
+  [KEY.admin_steal_identity]: string;
+  [KEY.common_go_back]: string;
+  [KEY.common_something_went_wrong]: string;
+  [KEY.sulten_page_about_us]: string;
+  [KEY.sulten_dishes]: string;
+  [KEY.common_open]: string;
+  [KEY.command_menu_shortcut_home]: string;
+  [KEY.twenty]: string;
+  [KEY.common_ticket_type_custom]: string;
+  [KEY.sulten_lyche_about_menu]: string;
+  [KEY.common_month_august]: string;
+  [KEY.common_tomorrow]: string;
+  [KEY.common_receive]: string;
+  [KEY.common_privacy_policy]: string;
+  [KEY.command_menu_shortcut_admin]: string;
+  [KEY.common_lastname]: string;
+  [KEY.end_time]: string;
+  [KEY.inputfile_no_file_selected]: string;
+  [KEY.common_previous]: string;
+  [KEY.we_use_cookies]: string;
+  [KEY.common_food]: string;
+  [KEY.common_contact_information]: string;
+  [KEY.shown_application_deadline]: string;
+  [KEY.common_the_society_meeting]: string;
+  [KEY.recruitment_otherpositions]: string;
+  [KEY.common_about_the_organisation]: string;
+  [KEY.control_panel_faq]: string;
+  [KEY.common_next]: string;
+  [KEY.common_facilitation]: string;
+  [KEY.loginpage_register]: string;
+  [KEY.recruitment_position]: string;
+  [KEY.common_information]: string;
+  [KEY.recruitment_admission]: string;
+  [KEY.recruitment_application]: string;
+  [KEY.recruitment_interview_time]: string;
+  [KEY.recruitment_recruiter_status]: string;
+  [KEY.common_day_thursday]: string;
+  [KEY.common_max]: string;
+  [KEY.common_loading]: string;
+  [KEY.common_logout]: string;
+  [KEY.common_show]: string;
+  [KEY.common_ticket_type_included]: string;
+  [KEY.command_menu_shortcut_opening_hours]: string;
+  [KEY.common_member]: string;
+  [KEY.common_day_tuesday]: string;
+  [KEY.command_menu_input_placeholder]: string;
+  [KEY.common_get]: string;
+  [KEY.admin_events_recently_edited]: string;
+  [KEY.common_profile]: string;
+  [KEY.saksdokumentpage_publication_date]: string;
+  [KEY.common_gangs]: string;
+  [KEY.common_reservation]: string;
+  [KEY.invalid_phonenumber]: string;
+  [KEY.common_firstname]: string;
+  [KEY.common_select_all]: string;
+  [KEY.recruitment_automatic_rejection]: string;
+  [KEY.common_ticket_type]: string;
+  [KEY.command_menu_shortcut_recruitment]: string;
+  [KEY.information_page_short]: string;
+  [KEY.recruitment_norwegian_applicants_only]: string;
+  [KEY.recruitment_withdraw_admission]: string;
+  [KEY.common_day_wednesday]: string;
+  [KEY.common_volunteer]: string;
+  [KEY.common_press]: string;
+  [KEY.occupied_title]: string;
+  [KEY.common_month_january]: string;
+  [KEY.common_on]: string;
+  [KEY.common_whatsup]: string;
+  [KEY.common_or]: string;
+  [KEY.common_age_limit]: string;
+  [KEY.common_english]: string;
+  [KEY.recrutment_default_admission_letter]: string;
+  [KEY.admin_sultenmenu_title]: string;
+  [KEY.common_month_june]: string;
+  [KEY.common_day_tuesday_short]: string;
+  [KEY.common_recruitment]: string;
+  [KEY.common_back_to_samfundet]: string;
+  [KEY.navbar_map]: string;
+  [KEY.sulten_page_see_menu]: string;
+  [KEY.common_short_description]: string;
+  [KEY.common_volunteering]: string;
+  [KEY.loginpage_login_failed]: string;
+  [KEY.recruitment_accepted_admissions]: string;
+  [KEY.common_events]: string;
+  [KEY.command_menu_group_shortcuts]: string;
+  [KEY.common_contact]: string;
+  [KEY.common_all]: string;
+  [KEY.common_contact_us]: string;
+  [KEY.recruitment_applications_processed]: string;
+  [KEY.sulten_page_book_table]: string;
+  [KEY.common_day_thursday_short]: string;
+  [KEY.common_day_wednesday_short]: string;
+  [KEY.common_card]: string;
+  [KEY.common_of]: string;
+  [KEY.occupied_select_time_text]: string;
+  [KEY.common_with]: string;
+  [KEY.common_about_samfundet]: string;
+  [KEY.venuepage_title]: string;
+  [KEY.common_what]: string;
+  [KEY.sulten_page_more_about_us]: string;
+  [KEY.common_message]: string;
+  [KEY.admin_information_confirm_delete]: string;
+  [KEY.common_delete]: string;
+  [KEY.common_day_friday]: string;
+  [KEY.groupspage_gangs_title]: string;
+  [KEY.common_time]: string;
+  [KEY.common_documents]: string;
+  [KEY.recruitment_rejected_admissions_empty_text]: string;
+  [KEY.common_possible]: string;
+  [KEY.recruitment_progression]: string;
+  [KEY.common_repeat]: string;
+  [KEY.common_event]: string;
+  [KEY.common_processed]: string;
+  [KEY.common_month_july]: string;
+  [KEY.recruitment_gangmember]: string;
+  [KEY.common_day_saturday_short]: string;
+  [KEY.common_guests]: string;
+  [KEY.command_menu_shortcut_control_panel]: string;
+  [KEY.recruitment_rejection_email]: string;
+  [KEY.common_table]: string;
+  [KEY.recruitment_funksjonaer]: string;
+  [KEY.category]: string;
+} = {
   // ==================== //
   //        Common        //
   // ==================== //
@@ -44,7 +374,10 @@ export const nb: Record<KeyValues, string> = {
   // Other common
   [KEY.common_to]: 'Til',
   [KEY.common_price]: 'Pris',
+  [KEY.common_food]: 'Mat',
+  [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
+  [KEY.common_not]: 'Ikke',
   [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -59,8 +392,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_table]: 'Bord',
+  [KEY.common_gangs]: 'Gjenger',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_table]: 'Tabell',
+  [KEY.common_max]: 'Maks',
   [KEY.common_card]: 'Kort',
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_image]: 'Bilde',
@@ -74,6 +409,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
+  [KEY.common_cancel]: 'Avbryt',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
@@ -95,15 +431,19 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_required]: 'Påkrevd',
   [KEY.common_not_required]: 'Ikke påkrevd',
   [KEY.common_overview]: 'Oversikt',
+  [KEY.common_recruitmentposition]: 'Verv',
   [KEY.common_volunteer]: 'Opptak',
   [KEY.common_age_limit]: 'Aldersgrense',
   [KEY.common_festivals]: 'Festivaler',
   [KEY.common_more_info]: 'Mer info',
   [KEY.common_norwegian]: 'Norsk',
   [KEY.common_firstname]: 'Fornavn',
+  [KEY.common_member]: 'Medlem',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
+  [KEY.common_select_all]: 'Velg alle',
+  [KEY.common_unselect_all]: 'Fjern valgte',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
@@ -125,6 +465,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_count]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
+  [KEY.common_loading]: 'Laster inn',
   [KEY.common_has]: 'har',
   [KEY.common_have]: 'har',
   [KEY.common_been]: 'blitt',
@@ -199,6 +540,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
   [KEY.loginpage_internal_login]: 'Logg inn som intern',
+  [KEY.loginpage_passwords_must_match]: 'Passordene må være like',
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
@@ -223,6 +565,10 @@ export const nb: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
+  // InformationPage
+  [KEY.information_page]: 'Informasjonsside',
+  [KEY.information_page_short]: 'Side',
+
   // Navbar:
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
@@ -231,8 +577,8 @@ export const nb: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_applicant]: 'Søker',
-  [KEY.recruitment_applicants]: 'søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
+  [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
   [KEY.recruitment_interview_time]: 'Intervjutid',
@@ -241,6 +587,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_priority]: 'Søkers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.common_not_set]: 'Ikke satt',
+  [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_admission]: 'Opptak',
   [KEY.recruitment_admitted]: 'tatt opp',
@@ -259,6 +607,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_admission_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.max_admissions]: 'Maks søknader per bruker',
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
@@ -272,6 +621,19 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_applications_processed]: 'søknader behandlet',
   [KEY.recruitment_automatic_rejection]: 'Automatisk avslag',
   [KEY.recruitment_rejection_email]: 'avslagsmail',
+  [KEY.recruitment_withdrawn_admissions]: 'Trukkede søknader',
+  [KEY.recruitment_rejected_admissions]: 'Søkere som får automatisk avslag',
+  [KEY.recruitment_accepted_admissions]: 'Søkere vi har tatt opp',
+  [KEY.recruitment_rejected_admissions_help_text]:
+    'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_accepted_admissions_help_text]:
+    'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
+  [KEY.recruitment_accepted_admissions_empty_text]: 'Ingen søkere er markert som kontaktet.',
+  [KEY.recruitment_rejected_admissions_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
+  [KEY.recruitment_withdrawn_admissions_empty_text]: 'Ingen trekte søknader.',
+  [KEY.recruitment_withdrawn]: 'Trukket',
+  [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
+  [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -327,13 +689,15 @@ export const nb: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
-  [KEY.occupied_help_text]: 'Vennligst anngi tider hvor du er utilgjenngelig',
+  [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
+  [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
   [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
+  [KEY.feedback_thank_you_for_feedback]: 'Takk for din tilbakemelding',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -399,7 +763,10 @@ export const en: Record<KeyValues, string> = {
   // No category:
   [KEY.common_to]: 'To',
   [KEY.common_price]: 'Price',
+  [KEY.common_food]: 'Food',
+  [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
+  [KEY.common_not]: 'Not',
   [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -416,13 +783,16 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_menu]: 'Menu',
   [KEY.common_name]: 'Name',
   [KEY.common_next]: 'Next',
-  [KEY.common_gang]: 'Group',
+  [KEY.common_gang]: 'Gang',
+  [KEY.common_gangs]: 'Gangs',
   [KEY.common_table]: 'Table',
+  [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -445,7 +815,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
-  [KEY.common_overview]: 'Oversikt',
+  [KEY.common_select_all]: 'Select all',
+  [KEY.common_unselect_all]: 'Unselect all',
+  [KEY.common_overview]: 'Overview',
+  [KEY.common_recruitmentposition]: 'Position',
   [KEY.common_about_us]: 'About us',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
@@ -457,6 +830,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_norwegian]: 'Norwegian',
   [KEY.common_username]: 'Brukernavn',
   [KEY.common_volunteer]: 'Volunteer',
+  [KEY.common_member]: 'Member',
   [KEY.common_membership]: 'Membership',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Contact us',
@@ -520,6 +894,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_possible]: 'possible',
   [KEY.common_when]: 'when',
   [KEY.common_come_back_later]: 'Come back later',
+  [KEY.common_loading]: 'Loading',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -555,6 +930,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.loginpage_internal_login]: 'Log in as internal',
   [KEY.loginpage_username]: 'Username',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
+  [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
   // GroupsPage:
@@ -578,6 +954,10 @@ export const en: Record<KeyValues, string> = {
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publication date',
 
+  // InformationPage
+  [KEY.information_page]: 'Information page',
+  [KEY.information_page_short]: 'Page',
+
   // Navbar:
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
@@ -587,7 +967,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'a volunteer position',
   [KEY.recruitment_applicant]: 'Applicant',
+  [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',
+  [KEY.recruitment_all_applications]: 'All applications',
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
@@ -597,6 +979,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_priority]: 'Applicants priority',
   [KEY.recruitment_recruiter_priority]: 'Priority',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.common_not_set]: 'Not set',
+  [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Duration',
   [KEY.recruitment_admission]: 'Admission',
   [KEY.recruitment_funksjonaer]: 'Functionary',
@@ -614,6 +998,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_admission_letter]: 'Default admission letter',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
+  [KEY.max_admissions]: 'Max admissions per user',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_norwegian_applicants_only]: 'Norwegian speaking applicants only',
@@ -628,10 +1013,23 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_applications_processed]: 'applications processed',
   [KEY.recruitment_automatic_rejection]: 'Automatic rejection',
   [KEY.recruitment_rejection_email]: 'rejection email',
+  [KEY.recruitment_withdrawn_admissions]: 'Withdrawn admissions',
+  [KEY.recruitment_rejected_admissions]: 'Automatically rejected applicants',
+  [KEY.recruitment_accepted_admissions]: 'Applicants we have contacted and accepted',
+  [KEY.recruitment_rejected_admissions_help_text]:
+    'These will get an automatic rejection email if they are not accepted for a different position',
+  [KEY.recruitment_accepted_admissions_help_text]:
+    'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
+  [KEY.recruitment_accepted_admissions_empty_text]: 'No applicants are marked as contacted.',
+  [KEY.recruitment_rejected_admissions_empty_text]: 'No applicants are marked to receive an automatic rejection email.',
+  [KEY.recruitment_withdrawn_admissions_empty_text]: 'No withdrawn applications.',
+  [KEY.recruitment_withdrawn]: 'Withdrawn',
+  [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
+  [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
-  [KEY.admin_saksdokument]: 'case document',
+  [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
   [KEY.admin_steal_identity]: 'Steal identity',
@@ -686,13 +1084,15 @@ export const en: Record<KeyValues, string> = {
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
-  [KEY.occupied_help_text]: 'Please indicate times when you are unavailable',
+  [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
+  [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
+  [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
   // No category:
   [KEY.owner]: 'Owner',
