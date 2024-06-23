@@ -32,10 +32,10 @@ export function InformationListPage() {
 
   return (
     <div className={styles.wrapper}>
-      {pages.map((page, i) => {
+      {pages.map((page) => {
         return (
           <Link
-            key={i}
+            key={page.slug_field}
             url={reverse({
               pattern: ROUTES.frontend.information_page_detail,
               urlParams: { slugField: page.slug_field },
