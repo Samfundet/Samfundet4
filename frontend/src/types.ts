@@ -132,7 +132,7 @@ export type CalendarMarker = {
 };
 
 export const OrganizationType = {
-  SAMF: 'samfundet',
+  SAMFUNDET: 'samfundet',
   UKA: 'uka',
   ISFIT: 'isfit',
 } as const;
