@@ -349,6 +349,7 @@ export function useClickOutside<T extends Node>(
   event: 'mousedown' | 'mouseup' = 'mousedown',
 ): MutableRefObject<T | null> {
   const ref = useRef<T>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     function handleClickOutside(evt: MouseEvent) {
       if (evt.target instanceof Element) {
