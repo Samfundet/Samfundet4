@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 
 // toggle remove ts-nocheck when developing. It is here because TS freaks out over the function props.

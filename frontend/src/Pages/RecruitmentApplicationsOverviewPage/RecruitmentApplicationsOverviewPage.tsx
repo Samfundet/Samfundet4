@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

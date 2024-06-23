@@ -70,7 +70,6 @@ function calculateDimensions(
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function dimensions(sizes: CartesianChartSizes, size: CartesianChartProps['size'], data: CartesianChartsData[]) {
   return calculateDimensions(sizes, size, data);
 }
