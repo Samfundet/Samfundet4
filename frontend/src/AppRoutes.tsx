@@ -59,7 +59,7 @@ import {
 import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from './Components';
 import { PERM } from './permissions';
 import { ROUTES } from './routes';
-import { OrganizationContextProvider } from '~/OrgContextProvider';
+import { OrganizationContextProvider } from '~/context/OrgContextProvider';
 
 import { App } from '~/App';
 import { t } from 'i18next';

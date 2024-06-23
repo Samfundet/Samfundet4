@@ -12,7 +12,7 @@ import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
 import { useAuthContext } from '~/context/AuthContext';
-import { useOrganizationContext } from '~/OrgContextProvider';
+import { useOrganizationContext } from '~/context/OrgContextProvider';
 
 export function RecruitmentPage() {
   const { user } = useAuthContext();

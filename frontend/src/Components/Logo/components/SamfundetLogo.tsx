@@ -6,7 +6,7 @@ type SamfLogoProps = {
   size: LogoProps['size'];
 };
 
-export function SamfLogo({ color, size }: SamfLogoProps) {
+export function SamfundetLogo({ color, size }: SamfLogoProps) {
   const logoColor = (color: string): LogoPalette => {
     switch (color) {
       case 'org-color':
