@@ -131,14 +131,16 @@ export function RecruitmentGangAdminPage() {
       >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-      <Button         theme="outlined"
-        rounded={true}
+      <Button
+        theme="outlined"
         link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,           
+          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,
           urlParams: {
             gangId: gangId,
             recruitmentId: recruitmentId,
-          },>
+          },
+        })}
+      >
         {lowerCapitalize(t(KEY.recruitment_show_all_applicants))}
       </Button>
     </div>

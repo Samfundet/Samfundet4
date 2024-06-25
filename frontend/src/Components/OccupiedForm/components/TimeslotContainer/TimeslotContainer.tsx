@@ -25,7 +25,7 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange, ...props 
 
   useEffect(() => {
     onChange?.(selectedTimeslots);
-  }, [selectedTimeslots]);
+  }, [selectedTimeslots, onChange]);
 
   function toggleTimeslot(date: Date, timeslot: string) {
     const dayString = formatDateYMD(date);
