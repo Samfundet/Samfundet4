@@ -614,7 +614,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-       fields = [
+        fields = [
             'id',
             'first_name',
             'last_name',
