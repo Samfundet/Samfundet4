@@ -614,15 +614,18 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+       fields = [
             'id',
             'first_name',
             'last_name',
             'username',
-            'phone_number',
             'email',
+            'phone_number',
+            'applications',
             'campus',
-            'recruitment_application_ids',  # Add this to the fields list
+            'applications_without_interview',
+            'top_application',
+            'recruitment_application_ids',
         ]
 
     def get_recruitment_application_ids(self, obj: User) -> list[int]:
