@@ -671,7 +671,7 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             applications = applications.filter(recruitment=self.recruitment)
         if self.gang:
             applications = applications.filter(recruitment_position__gang=self.gang)
-        return RecruitmentAForApplicantSerializer(applications.order_by('applicant_priority').first()).data
+        return RecruitmentApplicationForApplicantSerializer(applications.order_by('applicant_priority').first()).data
 
 
 class InterviewerSerializer(CustomBaseSerializer):
