@@ -606,7 +606,6 @@ class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
 
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
-    recruitment_application_ids = serializers.SerializerMethodField()
     applications = serializers.SerializerMethodField(method_name='get_applications', read_only=True)
     applications_without_interview = serializers.SerializerMethodField(method_name='get_applications_without_interviews_for_recruitment', read_only=True)
     top_application = serializers.SerializerMethodField(method_name='get_top_application', read_only=True)
@@ -626,22 +625,6 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'applications_without_interview',
             'top_application',
             'recruitment_application_ids',
-        ]
-
-    def get_recruitment_application_ids(self, obj: User) -> list[int]:
-        """Return list of recruitment application IDs for the user."""
-        return RecruitmentApplication.objects.filter(user=obj).values_list('id', flat=True)
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'username',
-            'email',
-            'phone_number',
-            'applications',
-            'campus',
-            'applications_without_interview',
-            'top_application',
         ]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
