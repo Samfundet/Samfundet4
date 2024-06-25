@@ -16,7 +16,6 @@ APPLICATION_DATA = {
 
 def seed():
     yield 0, 'recruitment_applications'
-
     RecruitmentApplication.objects.all().delete()
     yield 0, 'Deleted old applications'
 

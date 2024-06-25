@@ -624,7 +624,6 @@ class UserForRecruitmentSerializer(serializers.ModelSerializer):
             'campus',
             'applications_without_interview',
             'top_application',
-            'recruitment_application_ids',
         ]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

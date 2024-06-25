@@ -321,18 +321,18 @@ class RecruitmentApplication(CustomBaseModel):
         top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
         top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
         with transaction.atomic():
-            for adm in applications:
+            for application in applications:
                 # I hate conditionals, so instead of checking all forms of condtions
                 # I use memory array indexing formula (col+row_size*row) for matrixes, to index into state
                 has_priority = 0
-                if top_reserved and top_reserved.applicant_priority < adm.applicant_priority:
+                if top_reserved and top_reserved.applicant_priority < application.applicant_priority:
                     has_priority = 1
-                if top_wanted and top_wanted.applicant_priority < adm.applicant_priority:
+                if top_wanted and top_wanted.applicant_priority < application.applicant_priority:
                     has_priority = 2
-                adm.applicant_state = adm.recruiter_priority + 3 * has_priority
-                if adm.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
-                    adm.applicant_state = RecruitmentApplicantStates.NOT_WANTED
-                adm.save()
+                application.applicant_state = application.recruiter_priority + 3 * has_priority
+                if application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
+                    application.applicant_state = RecruitmentApplicantStates.NOT_WANTED
+                application.save()
 
 
 class RecruitmentInterviewAvailability(CustomBaseModel):
