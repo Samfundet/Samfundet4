@@ -474,7 +474,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Occupiedtimeslot',
+            name='OccupiedTimeslot',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('start_dt', models.DateTimeField(help_text='The time of the interview')),

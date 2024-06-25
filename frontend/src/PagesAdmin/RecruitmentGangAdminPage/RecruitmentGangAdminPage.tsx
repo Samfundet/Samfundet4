@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentPositions } from '~/api';
-import { RecruitmentPositionDto } from '~/dto';
+import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
+import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import styles from './RecruitmentGangAdminPage.module.scss';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -14,20 +15,38 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
+  const [gang, setGang] = useState<GangDto>();
+  const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
 
   useEffect(() => {
-    recruitmentId &&
-      getRecruitmentPositions(recruitmentId).then((data) => {
-        // TODO: Make this filtering happen on the backend
-        setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang.id.toString() == gangId));
+    if (recruitmentId && gangId) {
+      Promise.allSettled([
+        getRecruitmentPositionsGang(recruitmentId, gangId).then((data) => {
+          setRecruitmentPositions(data.data);
+        }),
+        getGang(gangId).then((data) => {
+          setGang(data);
+        }),
+        getRecruitment(recruitmentId).then((data) => {
+          setRecruitment(data.data);
+        }),
+      ]).then(() => {
         setShowSpinner(false);
       });
+    }
   }, [recruitmentId, gangId]);
 
-  const tableColumns = [{ content: t(KEY.recruitment_position), sortable: true }];
+  const tableColumns = [
+    { content: t(KEY.recruitment_position), sortable: true },
+    { content: t(KEY.recruitment_jobtype), sortable: true },
+    { content: t(KEY.recruitment_applicants), sortable: true },
+    { content: t(KEY.recruitment_processed), sortable: true },
+    { content: t(KEY.recruitment_accepted_applicants), sortable: true },
+    { content: ' ', sortable: false },
+  ];
 
   const data = recruitmentPositions.map(function (recruitmentPosition) {
     const pageUrl = reverse({
@@ -39,10 +58,32 @@ export function RecruitmentGangAdminPage() {
         content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
       },
       {
+        value: recruitmentPosition.is_funksjonaer_position,
+        content: recruitmentPosition.is_funksjonaer_position
+          ? t(KEY.recruitment_funksjonaer)
+          : t(KEY.recruitment_gangmember),
+      },
+      { value: recruitmentPosition.total_applicants, content: recruitmentPosition.total_applicants },
+      {
+        value: recruitmentPosition.processed_applicants,
+        content:
+          recruitmentPosition.total_applicants == recruitmentPosition.processed_applicants
+            ? t(KEY.common_all)
+            : recruitmentPosition.processed_applicants,
+      },
+      { value: recruitmentPosition.accepted_applicants, content: recruitmentPosition.accepted_applicants },
+      {
         content: (
           <CrudButtons
             onView={() => {
-              navigate(ROUTES.frontend.recruitment);
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.recruitment_application,
+                  urlParams: {
+                    positionID: recruitmentPosition.id,
+                  },
+                }),
+              );
             }}
             onEdit={() => {
               navigate(
@@ -62,13 +103,12 @@ export function RecruitmentGangAdminPage() {
     ];
   });
 
-  const title = t(KEY.admin_information_manage_title);
+  const title = dbT(gang, 'name') + ' - ' + recruitment?.organization + ' - ' + dbT(recruitment, 'name');
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <>
+    <div className={styles.headerRow}>
       <Button
         theme="success"
-        rounded={true}
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
           urlParams: {
@@ -80,19 +120,28 @@ export function RecruitmentGangAdminPage() {
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
       </Button>
       <Button
-        theme="outlined"
-        rounded={true}
+        theme="yellow"
         link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,
+          pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
           urlParams: {
             gangId: gangId,
             recruitmentId: recruitmentId,
           },
         })}
       >
-        {lowerCapitalize(`${t(KEY.recruitment_all_admissions)}`)}
+        {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-    </>
+      <Button         theme="outlined"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,           
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },>
+        {lowerCapitalize(t(KEY.recruitment_show_all_applicants))}
+      </Button>
+    </div>
   );
 
   return (

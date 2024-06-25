@@ -43,9 +43,6 @@ export function RecruitmentGangOverviewPage() {
       <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.common_overview)}
       </Button>
-      <Button theme="blue" rounded={true} link={ROUTES.frontend.admin_recruitment_users_without_interview}>
-        {t(KEY.recruitment_show_applicants_without_interview)}
-      </Button>
       <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.recruitment_show_unprocessed_applicants)}
       </Button>
