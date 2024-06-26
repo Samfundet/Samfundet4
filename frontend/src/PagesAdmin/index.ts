@@ -19,7 +19,7 @@ export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';
 export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPage';
-export { RecruitmentUsersWithoutInterview } from './RecruitmentUsersWithoutInterview';
+export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentApplicantAdminPage } from './RecruitmentApplicantAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
