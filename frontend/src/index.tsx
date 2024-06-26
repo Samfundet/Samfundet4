@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { AuthContextProvider } from '~/context/AuthContext';
 import '~/global.scss';
 import { RouterProvider } from 'react-router-dom';
-import { router } from '~/AppRoutes';
+import { router } from '~/router/router';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { reportWebVitals } from '~/reportWebVitals';
 
