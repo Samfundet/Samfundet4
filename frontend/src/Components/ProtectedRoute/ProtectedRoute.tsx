@@ -25,7 +25,7 @@ export function ProtectedRoute({
   requirePermissions,
   obj,
   requiresStaff = false,
-  redirectPath = ROUTES.frontend.home, // TODO ADD 403?
+  redirectPath = ROUTES.frontend.home,
   element,
 }: ProtectedRouteProps) {
   const { user } = useAuthContext();
@@ -35,6 +35,7 @@ export function ProtectedRoute({
     return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
   }
 
+  // TODO: Redirect to access denied page if we don't have permission
   // If permissions is provided but authState=false, hasPermissions returns false, so we navigate away
   if (requirePermissions !== undefined && !hasPermissions(user, requirePermissions, obj)) {
     return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
