@@ -55,6 +55,7 @@ export const KEY = {
 
   // No category:
   common_to: 'common_to',
+  common_all: 'common_all',
   common_price: 'common_price',
   common_food: 'common_food',
   common_preferences: 'common_preferences',
@@ -103,6 +104,7 @@ export const KEY = {
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
   common_contact: 'common_contact',
+  common_unknown: 'common_unknown',
   common_sponsor: 'common_sponsors',
   common_username: 'common_username',
   common_lastname: 'common_lastname',
@@ -168,7 +170,7 @@ export const KEY = {
   common_tickets: 'common_tickets',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
-
+  common_processed: 'common_processed',
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
@@ -243,6 +245,7 @@ export const KEY = {
   recruitment_duration: 'recruitment_duration',
   recruitment_admission: 'recruitment_admission',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
+  recruitment_jobtype: 'recruitment_jobtype',
   recruitment_gangmember: 'recruitment_gangmember',
   recruitment_organization: 'recruitment_organization',
   recruitment_applyfor: 'recruitment_applyfor',
@@ -264,7 +267,14 @@ export const KEY = {
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_show_all_applicants: 'recruitment_show_all_applicants',
+  recruitment_processed: 'recruitment_processed',
+  recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
+  recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
+  recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
+  recruitment_not_applicants_without_interviews: 'recruitment_not_applicants_without_interviews',
+  recruitment_applicant_top_position: 'recruitment_applicant_top_position',
   recruitment_withdrawn_admissions: 'recruitment_withdrawn_admissions',
   recruitment_rejected_admissions: 'recruitment_rejected_admissions',
   recruitment_accepted_admissions: 'recruitment_accepted_admissions',
