@@ -46,6 +46,19 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   return false;
 }
 
+// Checks if user has ALL provided permissions
+export function hasPermissions(user: UserDto | null | undefined, permissions: string[] | undefined, obj?: string | number) {
+  if (!user || !permissions) return false;
+
+  for (const permission of permissions) {
+    if (!hasPerm({ user, permission, obj })) {
+      return false;
+    }
+  }
+  // Because of how JS treats empty lists as truthy, if permissions is an empty list, we'll return true here
+  return true;
+}
+
 // ------------------------------
 
 export function getGlobalBackgroundColor(): string {
