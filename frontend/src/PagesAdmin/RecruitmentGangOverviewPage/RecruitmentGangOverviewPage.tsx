@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGangs } from '~/api';
@@ -10,9 +10,11 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import type { RecruitmentLoader } from '~/router/loaders';
 
 export function RecruitmentGangOverviewPage() {
-  const recruitmentId = useParams().recruitmentId;
+  const { recruitment } = useRouteLoaderData('recruitment') as RecruitmentLoader;
+  const { recruitmentId } = useParams();
   const [allGangs, setAllGangs] = useState<GangDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -36,7 +38,7 @@ export function RecruitmentGangOverviewPage() {
     return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }];
   });
 
-  const title = t(KEY.admin_information_manage_title);
+  const title = dbT(recruitment, 'name') || t(KEY.common_unknown);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>
@@ -45,6 +47,16 @@ export function RecruitmentGangOverviewPage() {
       </Button>
       <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
         {t(KEY.recruitment_show_unprocessed_applicants)}
+      </Button>
+      <Button
+        theme="white"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_edit,
+          urlParams: { recruitmentId },
+        })}
+      >
+        {t(KEY.common_edit)}
       </Button>
     </>
   );

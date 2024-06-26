@@ -102,6 +102,7 @@ export const KEY = {
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
   common_contact: 'common_contact',
+  common_unknown: 'common_unknown',
   common_sponsor: 'common_sponsors',
   common_username: 'common_username',
   common_lastname: 'common_lastname',
