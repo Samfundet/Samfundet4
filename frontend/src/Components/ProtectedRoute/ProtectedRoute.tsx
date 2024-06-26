@@ -1,11 +1,11 @@
 import { type ReactNode } from 'react';
 import { ROUTES } from '~/routes';
-import { useAuthContext } from "~/context/AuthContext";
-import { Navigate, useLocation } from "react-router-dom";
-import { hasPermissions } from "~/utils";
+import { useAuthContext } from '~/context/AuthContext';
+import { Navigate, useLocation } from 'react-router-dom';
+import { hasPermissions } from '~/utils';
 
 type ProtectedRouteProps = {
-  authState: boolean, // require user to be either logged in (true) or logged out (false)
+  authState: boolean; // require user to be either logged in (true) or logged out (false)
   requirePermissions?: string[] | undefined; // user must have ALL provided permissions in this list
   obj?: string | number; // for permission checking
   redirectPath?: string; // path to redirect to if auth state or permissions are not valid

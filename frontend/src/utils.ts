@@ -47,7 +47,11 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
 }
 
 // Checks if user has ALL provided permissions
-export function hasPermissions(user: UserDto | null | undefined, permissions: string[] | undefined, obj?: string | number) {
+export function hasPermissions(
+  user: UserDto | null | undefined,
+  permissions: string[] | undefined,
+  obj?: string | number,
+): boolean {
   if (!user || !permissions) return false;
 
   for (const permission of permissions) {

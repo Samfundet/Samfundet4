@@ -11,7 +11,7 @@ import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
 import { useMobile } from '~/hooks';
-import { useAuthContext } from "~/context/AuthContext";
+import { useAuthContext } from '~/context/AuthContext';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
