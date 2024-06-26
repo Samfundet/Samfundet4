@@ -40,6 +40,9 @@ router.register('merch', views.MerchView, 'merch')
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
+router.register('recruitment-admisisons-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
+router.register('recruitment-admisisons-for-group', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_group')
+router.register('recruitment-admisisons-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
 router.register('recruitment-admissions-for-applicant', views.RecruitmentAdmissionForApplicantView, 'recruitment_admissions_for_applicant')
 router.register('recruitment-admissions-for-position', views.RecruitmentAdmissionForRecruitmentPositionView, 'recruitment_admissions_for_position')
 router.register('recruitment-admissions-for-gang', views.RecruitmentAdmissionForGangView, 'recruitment_admissions_for_gang')
@@ -70,12 +73,34 @@ urlpatterns = [
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
     path(
+        'recruitment-admission-states-choices',
+        views.RecruitmentAdmissionStateChoicesView.as_view(),
+        name='recruitment_admission_states_choices',
+    ),
+    path(
+        'recruitment-admission-update-state-gang/<slug:pk>/',
+        views.RecruitmentAdmissionForGangUpdateStateView.as_view(),
+        name='recruitment_admission_update_state_gang',
+    ),
+    path(
+        'recruitment-admission-update-state-position/<slug:pk>/',
+        views.RecruitmentAdmissionForPositionUpdateStateView.as_view(),
+        name='recruitment_admission_update_state_position',
+    ),
+    path(
         'recruitment-admissions-recruiter/<str:admission_id>/', views.RecruitmentAdmissionForRecruitersView.as_view(), name='recruitment_admissions_recruiter'
     ),
     path('recruitment-withdraw-admission/<int:pk>/', views.RecruitmentAdmissionWithdrawApplicantView.as_view(), name='recruitment_withdraw_admission'),
     path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentAdmissionApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
-    path('occupiedtimeslot/', views.OccupiedtimeslotView.as_view(), name='occupied_timeslots'),
+    path(
+        'recruitment-download-gang-admission-csv/<int:recruitment_id>/<int:gang_id>',
+        views.DownloadRecruitmentAdmissionGangCSV.as_view(),
+        name='recruitment_download_gang_admission_csv',
+    ),
+    path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
+    path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
+    path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
 ]

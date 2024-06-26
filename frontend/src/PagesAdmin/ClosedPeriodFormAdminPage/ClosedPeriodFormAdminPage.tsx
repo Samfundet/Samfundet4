@@ -109,8 +109,8 @@ export function ClosedPeriodFormAdminPage() {
           ></SamfFormField>
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date_time" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="date_time" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
+          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
       </SamfForm>
     </AdminPageLayout>

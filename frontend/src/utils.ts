@@ -4,6 +4,7 @@ import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
 import { Day, EventTicketType, EventTicketTypeValue } from './types';
+import { format } from 'date-fns';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -197,6 +198,10 @@ export function niceDateTime(time: string | undefined): string | undefined {
   return time;
 }
 
+export function formatDateYMD(d: Date): string {
+  return format(d, 'yyyy.LL.dd');
+}
+
 /**
  * Generic query function for DTOs. Returns elements from array matching query.
  * @param query String query to search with
@@ -294,6 +299,15 @@ export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
   return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
 }
+
+export const toPercentage = (floatNum: number | undefined): string => {
+  if (floatNum) {
+    const percentage = floatNum * 100;
+    return percentage.toString().slice(0, 4) + '%';
+  } else {
+    return 'N/A';
+  }
+};
 
 /*
 export function immutableSet(list: unknown[], oldValue: unknown, newValue: unknown) {
