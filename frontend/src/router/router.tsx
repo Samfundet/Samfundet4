@@ -112,7 +112,7 @@ export const router = createBrowserRouter(
       */}
       <Route
         handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
-        element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}
+        element={<AdminLayout />}
       >
         {/* TODO PERMISSION FOR IMPERSONATE */}
         <Route
