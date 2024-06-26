@@ -52,6 +52,7 @@ import {
   RecruitmentFormAdminPage,
   SultenReservationAdminPage,
   SultenMenuAdminPage,
+  RecruitmentOverviewPage,
   AdminLayout,
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
@@ -278,6 +279,10 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_recruitment}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_overview}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_create}
