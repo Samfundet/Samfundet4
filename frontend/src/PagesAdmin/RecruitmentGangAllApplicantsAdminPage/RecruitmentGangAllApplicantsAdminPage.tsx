@@ -108,11 +108,13 @@ export function RecruitmentGangAllApplicantsAdminPage() {
       admission.recruiter_status,
     ];
   });
+
   const downloadCSV = () => {
     if (recruitmentId && gangId) {
       downloadCSVGangRecruitment(recruitmentId, gangId);
     }
-  }
+  };
+
   const title = t(KEY.recruitment_all_admissions);
   const header = (
     <div className={styles.header}>

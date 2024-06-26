@@ -703,10 +703,7 @@ export async function getRecruitmentAdmissionsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function downloadCSVGangRecruitment(
-  recruitmentId: string,
-  gangId: string,
-): Promise<void> {
+export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: string): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -716,13 +713,12 @@ export async function downloadCSVGangRecruitment(
         recruitmentId: recruitmentId,
       },
     });
-  axios.defaults.headers.expo
-  await axios.get(url, { withCredentials: true, responseType: 'blob'}).then((response) => {
+
+  await axios.get(url, { withCredentials: true, responseType: 'blob' }).then((response) => {
     // TODO fix axios expose header of file name
     saveAs(response.data);
   });
 }
-
 
 export async function getRecruitmentAdmissionsForRecruitmentPosition(
   recruitmentPositionId: string,
