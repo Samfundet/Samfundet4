@@ -1,53 +1,47 @@
-// import { Navigate, useLocation } from 'react-router-dom';
-// import { useAuthContext } from '~/context/AuthContext';
-// import { hasPerm } from '~/utils';
-// import { ROUTES } from '~/routes';
-import { ElementType } from 'react';
+import { type ReactNode } from 'react';
 import { ROUTES } from '~/routes';
+import { useAuthContext } from "~/context/AuthContext";
+import { Navigate, useLocation } from "react-router-dom";
+import { hasPermissions } from "~/utils";
 
 type ProtectedRouteProps = {
-  Page: ElementType;
-  permissions?: string[] | undefined;
-  redirectPath?: string;
-  requiresStaff?: boolean;
+  authState: boolean, // require user to be either logged in (true) or logged out (false)
+  requirePermissions?: string[] | undefined; // user must have ALL provided permissions in this list
+  obj?: string | number; // for permission checking
+  redirectPath?: string; // path to redirect to if auth state or permissions are not valid
+  requiresStaff?: boolean; // requires user to have is_staff flag
+  element: ReactNode; // If protection passes, this element is returned
 };
 
 /**
  * Router component, to be used inside element of a route, and page that is requested
- * Allows for setting up routes that requires authentication, permissions, and staff
- * @param {ElementType} Page - The page to be rendered
- * @param {UserDto | undefined} user - the current user, undefined if not logged in
- * @param {string[] | undefined} perms - list of permissions needed to access page, undefined if not needed
- * @param {string} redirectPath - redirect to specific page if wanted
- * @param {boolean} requiresStaff: - if staff permissions are required for page
+ * Allows for setting up routes that requires authentication, permissions, and staff.
+ *
+ * This assumes auth is already loaded. If it's not, then auth will likely be null.
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export function ProtectedRoute({
-  Page,
-  permissions,
-  redirectPath = ROUTES.frontend.home, // TODO ADD 403?
+  authState,
+  requirePermissions,
+  obj,
   requiresStaff = false,
+  redirectPath = ROUTES.frontend.home, // TODO ADD 403?
+  element,
 }: ProtectedRouteProps) {
-  return <Page />;
+  const { user } = useAuthContext();
+  const location = useLocation();
 
-  // TODO: fix
-  // const location = useLocation();
-  // const { user } = useAuthContext(); //TODO ADD LOADER FOR AUTHCONTEXT
+  if ((authState && !user) || (!authState && user)) {
+    return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
+  }
 
-  // if (!user) {
-  //   return <Navigate to={ROUTES.frontend.login} replace state={{ from: location }} />;
-  // }
-  // if (requiresStaff && !user?.is_staff) {
-  //   return <Navigate to={redirectPath} replace />; // Replace replace current navigation head instead of pushing it
-  // }
-  // if (perms) {
-  //   for (const permission of perms) {
-  //     if (!hasPerm({ permission: permission, user: user })) {
-  //       return <Navigate to={redirectPath} replace />;
-  //     }
-  //   }
-  // }
-  // return <Page />;
+  // If permissions is provided but authState=false, hasPermissions returns false, so we navigate away
+  if (requirePermissions !== undefined && !hasPermissions(user, requirePermissions, obj)) {
+    return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
+  }
+  if (requiresStaff && !user?.is_staff) {
+    return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
+  }
+
+  return element;
 }
