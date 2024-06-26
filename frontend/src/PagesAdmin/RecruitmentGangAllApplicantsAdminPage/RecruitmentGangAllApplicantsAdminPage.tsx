@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentAdmissionsForGang } from '~/api';
+import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentAdmissionsForGang } from '~/api';
 import { GangDto, RecruitmentAdmissionDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -108,14 +108,18 @@ export function RecruitmentGangAllApplicantsAdminPage() {
       admission.recruiter_status,
     ];
   });
-
+  const downloadCSV = () => {
+    if (recruitmentId && gangId) {
+      downloadCSVGangRecruitment(recruitmentId, gangId);
+    }
+  }
   const title = t(KEY.recruitment_all_admissions);
   const header = (
     <div className={styles.header}>
       <Text as="strong" size="m" className={styles.headerBold}>
         {dbT(gang, 'name')} - {dbT(recruitment, 'name')}
       </Text>
-      <Button theme="outlined" display="pill" onClick={() => alert('TODO add export to csv')}>
+      <Button theme="outlined" display="pill" onClick={() => downloadCSV()}>
         {t(KEY.recrutment_export_to_csv)}
       </Button>
     </div>

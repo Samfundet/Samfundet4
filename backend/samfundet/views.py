@@ -917,7 +917,7 @@ class DownloadRecruitmentAdmissionGangCSV(APIView):
         filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
         response = HttpResponse(
             content_type='text/csv',
-            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"', 'lol': "bloody cunt"},
         )
         writer = csv.DictWriter(
             response,
