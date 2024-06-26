@@ -8,11 +8,11 @@ import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import type { OrganizationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
-import styles from './RecruitmentFormAdminPage.module.scss';
 import type { RecruitmentLoader } from '~/router/loaders';
+import { ROUTES } from '~/routes';
+import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentFormAdminPage.module.scss';
 
 type FormType = {
   name_nb: string;
