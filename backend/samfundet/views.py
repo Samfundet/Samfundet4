@@ -75,6 +75,7 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentForRecruiterSerializer,
     RecruitmentAdmissionForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentAdmissionForApplicantSerializer,
@@ -578,6 +579,13 @@ class AssignGroupView(APIView):
 class RecruitmentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
+    queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentForRecruiterView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentForRecruiterSerializer
     queryset = Recruitment.objects.all()
 
 
