@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { saveAs } from 'file-saver';
 import {
   ClosedPeriodDto,
   EventDto,
@@ -687,8 +688,8 @@ export async function getRecruitmentAdmissionForApplicant(
 }
 
 export async function getRecruitmentAdmissionsForGang(
-  gangId: string,
   recruitmentId: string,
+  gangId: string,
 ): Promise<AxiosResponse<RecruitmentAdmissionDto[]>> {
   const url =
     BACKEND_DOMAIN +
@@ -700,6 +701,23 @@ export async function getRecruitmentAdmissionsForGang(
       },
     });
   return await axios.get(url, { withCredentials: true });
+}
+
+export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: string): Promise<void> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_download_gang_admission_csv,
+      urlParams: {
+        gangId: gangId,
+        recruitmentId: recruitmentId,
+      },
+    });
+
+  await axios.get(url, { withCredentials: true, responseType: 'blob' }).then((response) => {
+    // TODO fix axios expose header of file name
+    saveAs(response.data);
+  });
 }
 
 export async function getRecruitmentAdmissionsForRecruitmentPosition(

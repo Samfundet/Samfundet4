@@ -264,9 +264,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recrutment_export_to_csv]: 'Eksporter alle søknader til CSV',
+  [KEY.recruitment_all_admissions]: 'Alle søknader',
   [KEY.recruitment_application]: 'Søknad',
   [KEY.recruitment_applications]: 'søknader',
-  [KEY.recruitment_position]: 'verv',
   [KEY.recruitment_progression]: 'Opptak fremgang',
   [KEY.recruitment_overview]: 'Opptak oversikt',
   [KEY.recruitment_statistics]: 'Opptak statistikk',
@@ -291,7 +292,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_admission]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
-
+  [KEY.recruitment_no_current_positions]: 'Denne gjengen har ingen åpne stillinger for dette opptaket',
+  [KEY.recruitment_no_current_admissions_position]: 'Denne stilling har ennå ikke fått noen søknader',
+  [KEY.recruitment_no_current_admissions_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -640,7 +643,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_processed]: 'Processed',
   [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
-  [KEY.recruitment_applicants]: 'applicants',
+  [KEY.recrutment_export_to_csv]: 'Export all admissions to CSV',
+  [KEY.recruitment_all_admissions]: 'All admissions',
   [KEY.recruitment_progression]: 'Recruitment progression',
   [KEY.recruitment_overview]: 'Recruitment overview',
   [KEY.recruitment_application]: 'Application',
@@ -668,7 +672,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_admission]: 'Withdraw admission',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your admission to this position',
-
+  [KEY.recruitment_no_current_positions]: 'This gang does not have any available positions for this recruitment',
+  [KEY.recruitment_no_current_admissions_position]: 'This gang has no current applicants',
+  [KEY.recruitment_no_current_admissions_gang]: 'This gang has no current applicants',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',

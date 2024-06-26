@@ -13,8 +13,7 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentGangAdminPage() {
-  const recruitmentId = useParams().recruitmentId;
-  const gangId = useParams().gangId;
+  const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
@@ -132,7 +131,16 @@ export function RecruitmentGangAdminPage() {
       >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-      <Button theme="secondary" onClick={() => alert('TODO Add view of all applicants for gang')}>
+      <Button
+        theme="outlined"
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
         {lowerCapitalize(t(KEY.recruitment_show_all_applicants))}
       </Button>
     </div>

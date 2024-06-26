@@ -1,0 +1,27 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.header {
+  display: block;
+}
+
+.headerBold {
+  margin-bottom: 1em;
+}
+
+.cellStyle {
+  font-size: 0.8em;
+}
+
+.headerCol {
+  color: $white;
+  background-color: $red-samf;
+  font-size: 0.9em;
+
+  &:hover:not([disabled]) {
+    background-color: $red-samf;
+    filter: brightness(120%);
+    transition: 0.15s;
+  }
+}

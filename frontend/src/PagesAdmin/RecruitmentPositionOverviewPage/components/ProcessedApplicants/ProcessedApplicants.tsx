@@ -32,7 +32,6 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
         content: (
           <Link
             key={admission.user.id}
-            target={'backend'}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
