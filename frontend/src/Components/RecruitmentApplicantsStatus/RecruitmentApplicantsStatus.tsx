@@ -86,10 +86,28 @@ export function RecruitmentApplicantsStatus({
     return value;
   }
 
+  function getStatusStyle(status: number | undefined) {
+    if (typeof status !== 'undefined') {
+      return [
+        styles.pending,
+        styles.top_reserve,
+        styles.top_wanted,
+        styles.less_reserve,
+        styles.less_reserve_wanted,
+        styles.less_reserve_reserve,
+        styles.less_wanted,
+        styles.less_wanted_wanted,
+        styles.less_wanted_reserve,
+      ][status];
+    }
+  }
+
   const data = recruitmentApplicants.map(function (admission) {
+    const admissionStatusStyle = getStatusStyle(admission?.applicant_state);
     return [
       {
         value: admission.user.first_name,
+        style: admissionStatusStyle,
         content: (
           <Link
             url={reverse({
@@ -106,6 +124,7 @@ export function RecruitmentApplicantsStatus({
       },
       {
         value: admission.applicant_priority,
+        style: admissionStatusStyle,
         content: (
           <div className={styles.text}>
             {admission.applicant_priority} / {admission?.admission_count}
@@ -114,6 +133,7 @@ export function RecruitmentApplicantsStatus({
       },
       {
         value: admission.interview?.interview_time,
+        style: admissionStatusStyle,
         content: (
           <InputField
             inputClassName={styles.input}
@@ -126,6 +146,7 @@ export function RecruitmentApplicantsStatus({
       },
       {
         value: admission.interview?.interview_location,
+        style: admissionStatusStyle,
         content: (
           <InputField
             inputClassName={styles.input}
@@ -137,6 +158,7 @@ export function RecruitmentApplicantsStatus({
       },
       {
         value: admission.recruiter_priority,
+        style: admissionStatusStyle,
         content: (
           <Dropdown
             initialValue={admission.recruiter_priority}
@@ -149,6 +171,7 @@ export function RecruitmentApplicantsStatus({
       },
       {
         value: admission.recruiter_status,
+        style: admissionStatusStyle,
         content: (
           <Dropdown
             initialValue={admission.recruiter_status}
@@ -160,6 +183,7 @@ export function RecruitmentApplicantsStatus({
         ),
       },
       {
+        style: admissionStatusStyle,
         content: (
           <CrudButtons
             onView={
