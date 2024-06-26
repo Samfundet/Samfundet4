@@ -7,7 +7,7 @@ import { ROUTES } from '~/routes';
 
 type ProtectedRouteProps = {
   Page: ElementType;
-  perms?: string[] | undefined;
+  permissions?: string[] | undefined;
   redirectPath?: string;
   requiresStaff?: boolean;
 };
@@ -26,7 +26,7 @@ type ProtectedRouteProps = {
 
 export function ProtectedRoute({
   Page,
-  perms,
+  permissions,
   redirectPath = ROUTES.frontend.home, // TODO ADD 403?
   requiresStaff = false,
 }: ProtectedRouteProps) {

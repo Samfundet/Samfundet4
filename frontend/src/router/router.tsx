@@ -112,16 +112,16 @@ export const router = createBrowserRouter(
       */}
       <Route
         handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
-        element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}
+        element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}
       >
         {/* TODO PERMISSION FOR IMPERSONATE */}
         <Route
           path={ROUTES.frontend.admin_impersonate}
-          element={<ProtectedRoute perms={[]} Page={ImpersonateUserAdminPage} />}
+          element={<ProtectedRoute permissions={[]} Page={ImpersonateUserAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
         />
         {/* Gangs */}
         <Route
@@ -130,16 +130,16 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_gangs}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={GangsAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_GANG]} Page={GangsAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_gangs_create}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs_create}>{t(KEY.common_create)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_gangs_edit}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
             loader={({ params }) => {
               // TODO: Fetch gang to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
               return { id: params.id };
@@ -165,17 +165,17 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_events}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_EVENT]} Page={EventsAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_events_create}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events_create}>{t(KEY.common_create)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_EVENT]} Page={EventCreatorAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_events_edit}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events_edit}>{t(KEY.common_edit)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_EVENT]} Page={EventCreatorAdminPage} />}
           />
         </Route>
         {/*
@@ -185,13 +185,13 @@ export const router = createBrowserRouter(
         <Route
           path={ROUTES.frontend.admin_information}
           handle={{ crumb: () => <Link url={ROUTES.frontend.admin_information}>{t(KEY.information_page)}</Link> }}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]} Page={InformationAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]} Page={InformationAdminPage} />}
         />
         {/* Opening hours, TODO ADD OPENING HOURS PERMISSIONS*/}
         <Route
           path={ROUTES.frontend.admin_opening_hours}
           handle={{ crumb: () => <Link url={ROUTES.frontend.admin_opening_hours}>{t(KEY.common_opening_hours)}</Link> }}
-          element={<ProtectedRoute perms={[]} Page={OpeningHoursAdminPage} />}
+          element={<ProtectedRoute permissions={[]} Page={OpeningHoursAdminPage} />}
         />
         {/* Closed period */}
         <Route
@@ -202,17 +202,17 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_closed}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_CLOSEDPERIOD]} Page={ClosedPeriodAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_CLOSEDPERIOD]} Page={ClosedPeriodAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_closed_create}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_closed_create}>{t(KEY.common_create)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_closed_edit}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_closed_edit}>{t(KEY.common_edit)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]} Page={ClosedPeriodFormAdminPage} />}
           />
         </Route>
         {/* Images */}
@@ -222,12 +222,12 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_images}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_IMAGE]} Page={ImageAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_IMAGE]} Page={ImageAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_images_create}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_images_create}>{t(KEY.common_create)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_IMAGE]} Page={ImageFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_IMAGE]} Page={ImageFormAdminPage} />}
           />
         </Route>
         {/* Saksdokumenter */}
@@ -237,19 +237,19 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_saksdokumenter}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]} Page={SaksdokumentAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]} Page={SaksdokumentAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_saksdokumenter_create}
             handle={{
               crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter_create}>{t(KEY.common_create)}</Link>,
             }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_saksdokumenter_edit}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter_edit}>{t(KEY.common_edit)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]} Page={SaksdokumentFormAdminPage} />}
           />
         </Route>
         <Route
@@ -261,15 +261,15 @@ export const router = createBrowserRouter(
               </Link>
             ),
           }}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_MENU]} Page={SultenMenuAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_sulten_menuitem_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_sulten_menuitem_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_MENUITEM]} Page={SultenMenuItemFormAdminPage} />}
         />
         {/* Recruitment */}
         <Route
@@ -278,20 +278,20 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_recruitment}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_overview}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_create}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
+            element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
@@ -321,11 +321,11 @@ export const router = createBrowserRouter(
           >
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
-              element={<ProtectedRoute perms={[]} Page={RecruitmentGangOverviewPage} />}
+              element={<ProtectedRoute permissions={[]} Page={RecruitmentGangOverviewPage} />}
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_edit}
-              element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+              element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
               loader={recruitmentLoader}
               handle={{
                 crumb: ({ recruitment }: RecruitmentLoader) => {
@@ -385,11 +385,11 @@ export const router = createBrowserRouter(
             >
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_position_overview}
-                element={<ProtectedRoute perms={[]} Page={RecruitmentGangAdminPage} />}
+                element={<ProtectedRoute permissions={[]} Page={RecruitmentGangAdminPage} />}
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_position_create}
-                element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+                element={<ProtectedRoute permissions={[]} Page={RecruitmentPositionFormAdminPage} />}
                 loader={recruitmentGangLoader}
                 handle={{
                   crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
@@ -429,11 +429,11 @@ export const router = createBrowserRouter(
               >
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
-                  element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
+                  element={<ProtectedRoute permissions={[]} Page={RecruitmentPositionOverviewPage} />}
                 />
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_edit}
-                  element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+                  element={<ProtectedRoute permissions={[]} Page={RecruitmentPositionFormAdminPage} />}
                   loader={recruitmentGangPositionLoader}
                   handle={{
                     crumb: ({ recruitment, gang, position }: RecruitmentLoader & GangLoader & PositionLoader) => {
@@ -458,7 +458,7 @@ export const router = createBrowserRouter(
         {/* Sulten Admin */}
         <Route
           path={ROUTES.frontend.admin_sulten_reservations}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_VIEW_RESERVATION]} Page={SultenReservationAdminPage} />}
         />
         {/*
         Info pages
@@ -466,11 +466,11 @@ export const router = createBrowserRouter(
       */}
         <Route
           path={ROUTES.frontend.admin_information_create}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_ADD_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
         />
         <Route
           path={ROUTES.frontend.admin_information_edit}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
+          element={<ProtectedRoute permissions={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]} Page={InformationFormAdminPage} />}
         />
       </Route>
       {/*
