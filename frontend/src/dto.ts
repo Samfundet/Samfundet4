@@ -441,6 +441,7 @@ export type RecruitmentApplicationDto = {
   applicant_priority: number;
   recruiter_priority?: number | string;
   recruiter_status?: number;
+  applicant_state?: number;
   created_at: string;
   withdrawn: boolean;
   application_count?: number;
