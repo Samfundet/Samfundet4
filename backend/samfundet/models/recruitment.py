@@ -197,7 +197,7 @@ class Interview(CustomBaseModel):
 
 class RecruitmentApplication(CustomBaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    application_text = models.TextField(help_text='Description text for the application')
+    application_text = models.TextField(help_text='Application text')
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='applications'
     )
