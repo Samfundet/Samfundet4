@@ -10,7 +10,7 @@ from django.db.models.signals import post_save, m2m_changed
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import Gang, User, Event, Profile, UserPreference
-from .models.recruitment import Recruitment, RecruitmentStatistics, RecruitmentApplication
+from .models.recruitment import Recruitment, RecruitmentStatistics
 
 
 @receiver(post_save, sender=User)
