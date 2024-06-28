@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import styles from './WithoutInterview.module.scss';
 import { WithoutInterviewList } from './WithoutInterviewList';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto } from '~/dto';
 import { Button, IconButton, Modal } from '~/Components';
 
 type WithoutInterviewModalProps = {
-  admissions: RecruitmentAdmissionDto[];
-  admissions_without_interview: RecruitmentAdmissionDto[];
+  applications: RecruitmentApplicationDto[];
+  applications_without_interview: RecruitmentApplicationDto[];
 };
 
-export function WithoutInterviewModal({ admissions, admissions_without_interview }: WithoutInterviewModalProps) {
+export function WithoutInterviewModal({ applications, applications_without_interview }: WithoutInterviewModalProps) {
   const [withoutInterviewModal, setWithoutInterviewModal] = useState(false);
 
   return (
     <>
       <Button theme="text" onClick={() => setWithoutInterviewModal(true)}>
-        {admissions.length - admissions_without_interview.length} / {admissions.length}
+        {applications.length - applications_without_interview.length} / {applications.length}
       </Button>
       <Modal isOpen={withoutInterviewModal}>
         <IconButton
@@ -24,7 +24,7 @@ export function WithoutInterviewModal({ admissions, admissions_without_interview
           icon="mdi:close"
           onClick={() => setWithoutInterviewModal(false)}
         ></IconButton>
-        <WithoutInterviewList admissions={admissions_without_interview} />
+        <WithoutInterviewList applications={applications_without_interview} />
       </Modal>
     </>
   );

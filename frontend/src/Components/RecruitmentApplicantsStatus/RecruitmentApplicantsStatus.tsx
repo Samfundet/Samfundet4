@@ -1,5 +1,5 @@
 import styles from './RecruitmentApplicantsStatus.module.scss';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto } from '~/dto';
 import { useEffect, useState } from 'react';
 import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
@@ -8,14 +8,14 @@ import { Link } from '../Link';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { InputField } from '../InputField';
-import { putRecruitmentAdmissionForGang } from '~/api';
+import { putRecruitmentApplicationForGang } from '~/api';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { utcTimestampToLocal } from '~/utils';
 import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 
 type RecruitmentApplicantsStatusProps = {
-  applicants: RecruitmentAdmissionDto[];
+  applicants: RecruitmentApplicationDto[];
   recruitmentId: number | string | undefined;
   gangId: number | string | undefined;
   positionId: number | string | undefined;
@@ -49,7 +49,7 @@ export function RecruitmentApplicantsStatus({
   gangId,
   positionId,
 }: RecruitmentApplicantsStatusProps) {
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
@@ -67,9 +67,9 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
-  function updateAdmissions(id: string, field: string, value: string | number | undefined) {
+  function updateApplications(id: string, field: string, value: string | number | undefined) {
     setRecruitmentApplicants(
-      recruitmentApplicants.map((element: RecruitmentAdmissionDto) => {
+      recruitmentApplicants.map((element: RecruitmentApplicationDto) => {
         if (element.id === id) {
           switch (field) {
             case editChoices.update_recruitment_priority:
@@ -102,92 +102,94 @@ export function RecruitmentApplicantsStatus({
     }
   }
 
-  const data = recruitmentApplicants.map(function (admission) {
-    const admissionStatusStyle = getStatusStyle(admission?.applicant_state);
+  const data = recruitmentApplicants.map(function (application) {
+    const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     return [
       {
-        value: admission.user.first_name,
-        style: admissionStatusStyle,
+        value: application.user.first_name,
+        style: applicationStatusStyle,
         content: (
           <Link
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                admissionID: admission.id,
+                applicationID: application.id,
               },
             })}
             className={styles.text}
           >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
+            {`${application.user.first_name} ${application.user.last_name}`}
           </Link>
         ),
       },
       {
-        value: admission.applicant_priority,
-        style: admissionStatusStyle,
+        value: application.applicant_priority,
+        style: applicationStatusStyle,
         content: (
           <div className={styles.text}>
-            {admission.applicant_priority} / {admission?.admission_count}
+            {application.applicant_priority} / {application?.application_count}
           </div>
         ),
       },
       {
-        value: admission.interview?.interview_time,
-        style: admissionStatusStyle,
+        value: application.interview?.interview_time,
+        style: applicationStatusStyle,
         content: (
           <InputField
             inputClassName={styles.input}
-            value={admission.interview?.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_time, value)}
+            value={
+              application.interview?.interview_time ? utcTimestampToLocal(application.interview.interview_time) : ''
+            }
+            onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
+            onChange={(value: string) => updateApplications(application.id, editChoices.update_time, value)}
             type="datetime-local"
           />
         ),
       },
       {
-        value: admission.interview?.interview_location,
-        style: admissionStatusStyle,
+        value: application.interview?.interview_location,
+        style: applicationStatusStyle,
         content: (
           <InputField
             inputClassName={styles.input}
-            value={admission.interview?.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_location, value)}
+            value={application.interview?.interview_location ?? ''}
+            onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
+            onChange={(value: string) => updateApplications(application.id, editChoices.update_location, value)}
           />
         ),
       },
       {
-        value: admission.recruiter_priority,
-        style: admissionStatusStyle,
+        value: application.recruiter_priority,
+        style: applicationStatusStyle,
         content: (
           <Dropdown
-            initialValue={admission.recruiter_priority}
+            initialValue={application.recruiter_priority}
             disableIcon={true}
             classNameSelect={styles.dropdown}
             options={priorityOptions}
-            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_priority, value)}
+            onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
           />
         ),
       },
       {
-        value: admission.recruiter_status,
-        style: admissionStatusStyle,
+        value: application.recruiter_status,
+        style: applicationStatusStyle,
         content: (
           <Dropdown
-            initialValue={admission.recruiter_status}
+            initialValue={application.recruiter_status}
             disableIcon={true}
             classNameSelect={styles.dropdown}
             options={statusOptions}
-            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_status, value)}
+            onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
           />
         ),
       },
       {
-        style: admissionStatusStyle,
+        style: applicationStatusStyle,
         content: (
           <CrudButtons
             onView={
-              admission.interview?.interview_time != null
+              application.interview?.interview_time != null
                 ? () => {
                     navigate({
                       url: reverse({
@@ -196,7 +198,7 @@ export function RecruitmentApplicantsStatus({
                           recruitmentId: recruitmentId,
                           gangId: gangId,
                           positionId: positionId,
-                          interviewId: admission.interview?.id,
+                          interviewId: application.interview?.id,
                         },
                       }),
                     });
