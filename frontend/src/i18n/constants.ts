@@ -248,7 +248,6 @@ export const KEY = {
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
   recruitment_duration: 'recruitment_duration',
-  recruitment_application: 'recruitment_application',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_jobtype: 'recruitment_jobtype',
   recruitment_gangmember: 'recruitment_gangmember',
