@@ -362,7 +362,7 @@ def fixture_recruitment_application(
     fixture_recruitment_position: RecruitmentPosition,
     fixture_recruitment: Recruitment,
 ) -> Iterator[RecruitmentApplication]:
-    applications = RecruitmentApplication.objects.create(
+    application = RecruitmentApplication.objects.create(
         application_text='Test application text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
@@ -371,8 +371,8 @@ def fixture_recruitment_application(
         recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
         recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
-    yield applications
-    applications.delete()
+    yield application
+    application.delete()
 
 
 @pytest.fixture
