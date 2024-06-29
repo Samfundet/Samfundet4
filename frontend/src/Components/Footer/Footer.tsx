@@ -100,7 +100,7 @@ export function Footer() {
       </div>
 
       <Link url={ROUTES.frontend.contributors} plain className={styles.contributors_link}>
-        Utviklet av MG::Web
+        {t(KEY.footer_developed_by)}
       </Link>
     </div>
   );
