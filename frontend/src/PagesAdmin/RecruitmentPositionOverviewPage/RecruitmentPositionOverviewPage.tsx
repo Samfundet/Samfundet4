@@ -11,6 +11,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
+import { useTitle } from '~/hooks';
 import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {
@@ -60,7 +61,8 @@ export function RecruitmentPositionOverviewPage() {
       });
   }, [recruitmentId, gangId, positionId]);
 
-  const title = t(KEY.admin_information_manage_title);
+  const title = t(KEY.recruitment_administrate_applications);
+  useTitle(title);
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
     urlParams: {

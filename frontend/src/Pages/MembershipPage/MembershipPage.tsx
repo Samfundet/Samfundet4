@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components/Page';
 import { TextItem } from '~/constants';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './MembershipPage.module.scss';
 
 export function MembershipPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.common_membership));
 
   return (
     <Page>

@@ -5,8 +5,8 @@ import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getMenuItems, getMenus } from '~/api';
+import { useTitle, useCustomNavigate } from '~/hooks';
 import type { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -20,6 +20,7 @@ export function SultenMenuAdminPage() {
   const [menus, setMenus] = useState<MenuDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.admin_sultenmenu_title));
 
   // Get Menus and Menuitems
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist

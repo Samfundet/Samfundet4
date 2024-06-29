@@ -7,6 +7,7 @@ import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getSaksdokumenter } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
+import { useTitle } from '~/hooks';
 import type { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -22,6 +23,7 @@ export function SaksdokumentAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { t } = useTranslation();
+  useTitle(t(KEY.admin_saksdokumenter_title));
 
   // Get documents
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist

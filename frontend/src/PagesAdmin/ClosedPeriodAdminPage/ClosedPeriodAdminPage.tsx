@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { Button, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
+import { useTitle } from '~/hooks';
 import type { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,6 +16,7 @@ export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.command_menu_shortcut_closed));
 
   const getAllClosedPeriods = useCallback(() => {
     setShowSpinner(true);

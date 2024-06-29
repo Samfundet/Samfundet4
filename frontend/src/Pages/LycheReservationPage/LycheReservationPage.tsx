@@ -6,8 +6,8 @@ import { SultenPage } from '~/Components/SultenPage';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { KV } from '~/constants';
+import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { TextItem } from '~/constants/TextItems';
-import { useKeyValue, useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ReservationFormLine } from './Components';
 import styles from './LycheReservationPage.module.scss';
@@ -26,6 +26,7 @@ type FormProps = {
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.common_reservation), t(KEY.common_sulten));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);

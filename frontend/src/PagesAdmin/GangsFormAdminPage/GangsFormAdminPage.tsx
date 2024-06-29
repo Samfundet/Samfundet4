@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import type { GangDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -56,6 +56,7 @@ export function GangsFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
+  useTitle(title);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components';
+import { useTitle } from '~/hooks';
 import type { SultenReservationDayDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -12,6 +13,7 @@ export function SultenReservationAdminPage() {
   const [dayInfo, setDayInfo] = useState<SultenReservationDayDto>({} as SultenReservationDayDto);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.recruitment_administrate_reservations));
 
   // Stuff to do on first render.
   // TODO add permissions on render

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
+import { useTitle } from '~/hooks';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -21,6 +22,8 @@ export function RecruitmentGangAdminPage() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = `${dbT(gang, 'name')} - ${recruitment?.organization} - ${dbT(recruitment, 'name')}`;
+  useTitle(title);
 
   useEffect(() => {
     if (recruitmentId && gangId) {
@@ -104,7 +107,6 @@ export function RecruitmentGangAdminPage() {
     ];
   });
 
-  const title = `${dbT(gang, 'name')} - ${recruitment?.organization} - ${dbT(recruitment, 'name')}`;
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <div className={styles.headerRow}>

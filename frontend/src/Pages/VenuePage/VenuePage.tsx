@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { DynamicBuildingMap } from '~/Components/DynamicBuildingMap';
 import { Page } from '~/Components/Page';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './VenuePage.module.scss';
@@ -12,7 +13,7 @@ import { VENUES } from './data';
 export function VenuePage() {
   const { t } = useTranslation();
   const [highlightKey, setHighlight] = useState<string | undefined>(undefined);
-
+  useTitle(t(KEY.venuepage_title));
   function openVenue(key?: string) {
     if (key !== undefined) {
       toast.error(`TODO Open venue '${key}'`);

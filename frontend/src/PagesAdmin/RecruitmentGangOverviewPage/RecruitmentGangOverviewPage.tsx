@@ -4,6 +4,7 @@ import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGangs } from '~/api';
+import { useTitle } from '~/hooks';
 import type { GangDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -18,6 +19,8 @@ export function RecruitmentGangOverviewPage() {
   const [allGangs, setAllGangs] = useState<GangDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = dbT(recruitment, 'name') || t(KEY.common_unknown);
+  useTitle(title);
 
   useEffect(() => {
     getGangs().then((data) => {
@@ -38,7 +41,6 @@ export function RecruitmentGangOverviewPage() {
     return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }];
   });
 
-  const title = dbT(recruitment, 'name') || t(KEY.common_unknown);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>

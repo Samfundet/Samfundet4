@@ -4,9 +4,9 @@ import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
-import { useAuthContext } from '~/context/AuthContext';
 import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { useCustomNavigate, useTextItem } from '~/hooks';
+import { useAuthContext } from '~/context/AuthContext';
+import { useTextItem, useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -20,6 +20,7 @@ export function RecruitmentPage() {
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
+  useTitle(t(KEY.common_recruitment));
 
   const noAdmissions = (
     <div className={styles.no_recruitment_wrapper}>

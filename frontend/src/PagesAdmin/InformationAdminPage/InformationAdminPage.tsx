@@ -5,8 +5,8 @@ import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import type { InformationPageDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -18,6 +18,7 @@ export function InformationAdminPage() {
   const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.admin_information_manage_title));
 
   // Stuff to do on first render.
   // TODO: add permissions on render

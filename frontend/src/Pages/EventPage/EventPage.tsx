@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
+import { useTitle } from '~/hooks';
 import type { EventDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -19,6 +20,8 @@ export function EventPage() {
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+
+  useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {

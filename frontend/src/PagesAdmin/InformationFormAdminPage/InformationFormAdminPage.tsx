@@ -7,8 +7,8 @@ import { Button, SamfundetLogoSpinner } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import type { InformationPageDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -34,6 +34,12 @@ export function InformationFormAdminPage() {
     text_en: 'Write your text on the left side.',
   });
   const [languageTab, setLanguageTab] = useState<Tab>(languageTabs[0]);
+
+  //Title setup
+  const title = slugField
+    ? t(KEY.common_edit)
+    : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`);
+  useTitle(title);
 
   // Fetch data if edit mode.
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
@@ -129,9 +135,7 @@ export function InformationFormAdminPage() {
     <div className={styles.wrapper}>
       {/* Header tools */}
       <div className={styles.header_container}>
-        <div className={styles.logo_container}>
-          {slugField ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}
-        </div>
+        <div className={styles.logo_container}>{title}</div>
         <Button
           rounded={true}
           theme="white"

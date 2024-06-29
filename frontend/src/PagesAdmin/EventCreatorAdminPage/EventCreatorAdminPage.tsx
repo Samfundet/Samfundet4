@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { t } from 'i18next';
 import { type ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -11,8 +10,8 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
+import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import type { EventDto, ImageDto } from '~/dto';
-import { useCustomNavigate, usePrevious } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,6 +20,7 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
+import { useTranslation } from 'react-i18next';
 
 type EventCreatorStep = {
   key: string; // Unique key.
@@ -54,6 +54,7 @@ type FormType = {
   publish_dt: string;
 };
 export function EventCreatorAdminPage() {
+  const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -379,6 +380,7 @@ export function EventCreatorAdminPage() {
   );
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
+  useTitle(title);
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       <TabBar

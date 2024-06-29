@@ -3,12 +3,13 @@ import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
 import { burger, dessert, soup } from '~/assets';
 import { TextItem } from '~/constants';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './LycheAboutPage.module.scss';
 
 export function LycheAboutPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.sulten_page_about_us), '');
 
   const aboutCardWhatIsLyche = (
     <SultenCard

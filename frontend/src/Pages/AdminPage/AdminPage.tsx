@@ -8,12 +8,14 @@ import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { getRandomEntryFromList } from '~/utils';
+import { useTitle } from '~/hooks';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
 
 export function AdminPage() {
   const { t } = useTranslation();
   const { user } = useAuthContext();
+  useTitle(t(KEY.command_menu_shortcut_control_panel));
 
   const WISEWORD = getRandomEntryFromList(WISEWORDS) as string;
 
