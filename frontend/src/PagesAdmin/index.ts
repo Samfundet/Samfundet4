@@ -26,4 +26,5 @@ export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
 export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';
 export { SultenMenuItemFormAdminPage } from './SultenMenuItemFormAdminPage';
+export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
 export { UsersAdminPage } from './UsersAdminPage';

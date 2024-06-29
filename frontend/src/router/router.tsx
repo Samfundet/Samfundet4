@@ -20,7 +20,7 @@ import {
   LycheReservationPage,
   MembershipPage,
   NotFoundPage,
-  RecruitmentAdmissionFormPage,
+  RecruitmentApplicationFormPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
@@ -52,6 +52,7 @@ import {
   RecruitmentFormAdminPage,
   SultenReservationAdminPage,
   SultenMenuAdminPage,
+  RecruitmentOverviewPage,
   AdminLayout,
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
@@ -98,7 +99,7 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
-        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}
           element={<RecruitmentApplicationsOverviewPage />}
@@ -289,6 +290,10 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_recruitment}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_overview}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_create}

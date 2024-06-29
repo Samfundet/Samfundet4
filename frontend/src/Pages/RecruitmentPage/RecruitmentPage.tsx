@@ -21,7 +21,7 @@ export function RecruitmentPage() {
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
 
-  const noadmissions = (
+  const noAdmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
         <h1 className={styles.header}>{useTextItem(TextItem.no_recruitment_text)}</h1>
@@ -105,7 +105,7 @@ export function RecruitmentPage() {
         ) : recruitmentPositions ? (
           <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
         ) : (
-          noadmissions
+          noAdmissions
         )}
       </div>
     </Page>

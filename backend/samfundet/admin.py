@@ -13,7 +13,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentadmission_change
+from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentapplication_change
 from root.custom_classes.admin_classes import (
     CustomBaseAdmin,
     CustomGuardedUserAdmin,
@@ -58,8 +58,8 @@ from .models.recruitment import (
     InterviewRoom,
     OccupiedTimeslot,
     RecruitmentPosition,
-    RecruitmentAdmission,
     RecruitmentStatistics,
+    RecruitmentApplication,
     RecruitmentSeperatePosition,
     RecruitmentInterviewAvailability,
 )
@@ -620,22 +620,22 @@ class RecruitmentSeperatePositionAdmin(CustomBaseAdmin):
     list_display_links = ['name_nb']
 
 
-class RecruitmentAdmissionInline(admin.TabularInline):
+class RecruitmentApplicationInline(admin.TabularInline):
     """
-    Inline admin interface for RecruitmentAdmission.
+    Inline admin interface for RecruitmentApplication.
 
-    Displays a link to the detailed admin page of each admission along with its user and applicant priority.
+    Displays a link to the detailed admin page of each application along with its user and applicant priority.
     """
 
-    model = RecruitmentAdmission
+    model = RecruitmentApplication
     extra = 0
-    readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
-    fields = ['linked_admission_text', 'user', 'applicant_priority']
+    readonly_fields = ['linked_application_text', 'user', 'applicant_priority']
+    fields = ['linked_application_text', 'user', 'applicant_priority']
 
-    def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
-        """Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance."""
-        url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
-        return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
+    def linked_application_text(self, obj: RecruitmentApplication) -> str:
+        """Returns a clickable link leading to the admin change page of the RecruitmentApplication instance."""
+        url = reverse(admin__samfundet_recruitmentapplication_change, args=[obj.pk])
+        return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.application_text)
 
 
 @admin.register(RecruitmentPosition)
@@ -646,20 +646,21 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'admissions_count']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'applications_count']
     search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
-    list_display_links = ['id']
-    inlines = [RecruitmentAdmissionInline]
 
-    def admissions_count(self, obj: RecruitmentPosition) -> int:
-        count = obj.admissions.all().count()
+    list_display_links = ['id']
+    inlines = [RecruitmentApplicationInline]
+
+    def applications_count(self, obj: RecruitmentPosition) -> int:
+        count = obj.applications.all().count()
         return count
 
 
-@admin.register(RecruitmentAdmission)
-class RecruitmentAdmissionAdmin(CustomBaseAdmin):
+@admin.register(RecruitmentApplication)
+class RecruitmentApplicationAdmin(CustomBaseAdmin):
     sortable_by = [
         'recruitment_position',
         'recruitment',
@@ -713,7 +714,7 @@ def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: Qu
 
 @admin.register(RecruitmentStatistics)
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
-    list_display = ['recruitment', 'total_applicants', 'total_admissions']
+    list_display = ['recruitment', 'total_applicants', 'total_applications']
     search_fields = ['recruitment']
     actions = [update_stats]
 

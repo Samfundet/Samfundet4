@@ -36,8 +36,8 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
         user.first_name,
         user.last_name,
         user.email,
-        user.top_admission.recruitment_position.name_nb,
-        user.top_admission.recruitment_position.name_en,
+        user.top_application.recruitment_position.name_nb,
+        user.top_application.recruitment_position.name_en,
       ]
         .join(' ')
         .toLowerCase();
@@ -58,14 +58,14 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
       },
       user.email,
       user.phone_number,
-      dbT(user.top_admission.recruitment_position, 'name'),
-      user.admissions ? user.admissions.length : 0,
+      dbT(user.top_application.recruitment_position, 'name'),
+      user.applications ? user.applications.length : 0,
       {
-        value: user.admissions_without_interview ? user.admissions_without_interview.length : 0,
+        value: user.applications_without_interview ? user.applications_without_interview.length : 0,
         content: (
           <WithoutInterviewModal
-            admissions_without_interview={user.admissions_without_interview}
-            admissions={user.admissions}
+            applications_without_interview={user.applications_without_interview}
+            applications={user.applications}
           />
         ),
       },
