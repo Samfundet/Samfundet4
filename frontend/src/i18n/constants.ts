@@ -101,7 +101,6 @@ export const KEY = {
   common_loading: 'common_loading',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
-  common_active: 'common_active',
   common_profile: 'common_profile',
   common_message: 'common_message',
   common_english: 'common_english',
