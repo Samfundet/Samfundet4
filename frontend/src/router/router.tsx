@@ -1,4 +1,5 @@
 import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
   AdminPage,
@@ -47,25 +48,23 @@ import {
   RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterviewGangPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
-  SultenReservationAdminPage,
   SultenMenuAdminPage,
-  RecruitmentOverviewPage,
   SultenMenuItemFormAdminPage,
+  SultenReservationAdminPage,
 } from '~/PagesAdmin';
-import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
-import { App } from '~/App';
 import { t } from 'i18next';
+import { App } from '~/App';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { dbT, lowerCapitalize } from '~/utils';
 import {
   type GangLoader,
   type PositionLoader,
@@ -74,6 +73,7 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
 } from '~/router/loaders';
+import { dbT, lowerCapitalize } from '~/utils';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

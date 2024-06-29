@@ -1,5 +1,5 @@
-import { Link } from '~/Components';
 import { useTranslation } from 'react-i18next';
+import { Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';

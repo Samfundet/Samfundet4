@@ -1,10 +1,10 @@
-import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
-import { RecruitmentProgression } from './Components/RecruitmentProgression';
-import { ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { KEY } from '~/i18n/constants';
+import { RecruitmentProgression } from './Components/RecruitmentProgression';
+import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
 
 export function RecruitmentOverviewPage() {
   const { t } = useTranslation();

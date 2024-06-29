@@ -1,8 +1,8 @@
-import styles from './RecruitmentStatistics.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Text } from '~/Components/Text/Text';
 import { KEY } from '~/i18n/constants';
+import styles from './RecruitmentStatistics.module.scss';
 
 export function RecruitmentStatistics() {
   const { t } = useTranslation();
