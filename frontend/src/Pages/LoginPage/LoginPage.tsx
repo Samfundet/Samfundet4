@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { Page } from '~/Components';
@@ -24,18 +24,12 @@ export function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const location = useLocation();
   const { from } = location.state || {};
-  const { user, setUser } = useAuthContext();
+  const { setUser } = useAuthContext();
   const navigate = useCustomNavigate();
 
   useTitle(t(KEY.common_login));
 
   const fallbackUrl = typeof from === 'undefined' ? ROUTES.frontend.home : from.pathname;
-
-  useEffect(() => {
-    if (user) {
-      navigate({ url: fallbackUrl });
-    }
-  }, [user, fallbackUrl, navigate]);
 
   function handleLogin(formData: FormProps) {
     setSubmitting(true);

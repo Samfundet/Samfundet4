@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Alert, Page } from '~/Components';
@@ -27,16 +27,10 @@ type SignUpFormData = {
 export function SignUpPage() {
   const { t } = useTranslation();
   const [loginFailed, setLoginFailed] = useState(false);
-  const { user, setUser } = useAuthContext();
+  const { setUser } = useAuthContext();
   const navigate = useCustomNavigate();
 
   useTitle(t(KEY.loginpage_register));
-
-  useEffect(() => {
-    if (user !== undefined) {
-      navigate({ url: ROUTES.frontend.home });
-    }
-  }, [user, navigate]);
 
   function handleRegistration(formData: SignUpFormData) {
     register({ ...formData } as RegistrationDto)

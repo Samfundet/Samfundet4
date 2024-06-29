@@ -1,12 +1,11 @@
-import { AccessDenied } from '~/Components';
-import { useAuthContext } from '~/context/AuthContext';
-import type { Children } from '~/types';
-import { hasPerm } from '~/utils';
+import { ProtectedRoute } from '~/Components';
+import type { ReactNode } from 'react';
 
 type PermissionRouteProps = {
-  permission: string;
+  required?: string[];
   obj?: string | number;
-  children: Children;
+  requiresStaff?: boolean;
+  element: ReactNode;
 };
 
 /**
@@ -19,18 +18,24 @@ type PermissionRouteProps = {
  * Example:
  * ```ts
  * <Route
- *    path={'some/path/'}
+ *    path="/some/path/"
  *    element={
  *      <PermissionRoute
- *        permission='view_something_permission'
- *          <SomePage />
- *      <PermissionRoute />
+ *        required={["some_permission"]}
+ *        element={<SomePage />}
+ *      />
  *    }
  * />
  * ```
  */
-export function PermissionRoute({ permission, obj, children }: PermissionRouteProps) {
-  const { user } = useAuthContext();
-  const hasPermission = hasPerm({ user, permission, obj });
-  return hasPermission ? <>{children}</> : <AccessDenied />;
+export function PermissionRoute({ element, required, obj, requiresStaff }: PermissionRouteProps) {
+  return (
+    <ProtectedRoute
+      authState={true}
+      requirePermissions={required}
+      requiresStaff={requiresStaff}
+      obj={obj}
+      element={element}
+    />
+  );
 }
