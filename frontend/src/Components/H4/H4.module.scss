@@ -1,0 +1,10 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.header {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  letter-spacing: -0.05rem;
+  font-weight: 600;
+}
