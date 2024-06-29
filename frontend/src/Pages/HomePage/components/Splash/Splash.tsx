@@ -136,8 +136,7 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_out_reverse]: isAnimating && isBackwards,
         })}
         onAnimationEnd={nextSplash}
-        // biome-ignore lint/a11y/noRedundantAlt: hard to describe otherwise
-        alt="Splash image"
+        alt=""
       />
       <img
         src={isBackwards ? prevImageUrl : nextImageUrl}
@@ -147,7 +146,7 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_in]: isAnimating && !isBackwards,
           [styles.splash_slide_in_reverse]: isAnimating && isBackwards,
         })}
-        alt="Next splash image"
+        alt=""
         aria-hidden="true"
       />
 
