@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { getActiveRecruitments, impersonateUser, logout } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag } from '~/assets';
 import { useDesktop, useScrollY } from '~/hooks';
@@ -89,9 +89,13 @@ export function Navbar() {
       >
         {t(KEY.common_general)}
       </Link>
-      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
+      <Link
+        url={ROUTES.frontend.membership}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.common_membership)}
-      </a>
+      </Link>
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_opening_hours)}
       </a>

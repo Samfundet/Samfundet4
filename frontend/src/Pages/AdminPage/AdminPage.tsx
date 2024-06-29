@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { Button, ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
 import { ROUTES } from '~/routes';

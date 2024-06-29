@@ -48,6 +48,8 @@ export const COLORS = {
   red_lighter: '#fff2f0',
   red_light: '#ffcfca',
   red: '#dc1010',
+  salmon: '#fa8072',
+  salmon_light: '#fab4ac',
   sulten_orange: '#fbb042',
 
   // Transparent colors
@@ -119,3 +121,8 @@ export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.REGISTRATION,
   EventTicketType.CUSTOM,
 ];
+
+export type CalendarMarker = {
+  date: Date;
+  className?: string;
+};

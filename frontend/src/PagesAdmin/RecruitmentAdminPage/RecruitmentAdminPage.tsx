@@ -66,7 +66,7 @@ export function RecruitmentAdminPage() {
               navigate(
                 reverse({
                   pattern: ROUTES.frontend.admin_recruitment_edit,
-                  urlParams: { id: element.id },
+                  urlParams: { recruitmentId: element.id },
                 }),
               );
             }}

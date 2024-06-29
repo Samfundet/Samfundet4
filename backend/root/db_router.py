@@ -2,6 +2,7 @@
 Handles routing for databases (which database should be used for which model).
 All models use the default database except billig models.
 """
+
 from __future__ import annotations
 
 from typing import Any

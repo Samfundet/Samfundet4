@@ -10,6 +10,7 @@ from django.db.models.signals import post_save, m2m_changed
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import Gang, User, Event, Profile, UserPreference
+from .models.recruitment import Recruitment, RecruitmentStatistics
 
 
 @receiver(post_save, sender=User)
@@ -62,3 +63,10 @@ def update_editor_permissions(  # noqa: C901
                 if gang.gang_leader_group:
                     assign_perm(perm=SAMFUNDET_CHANGE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
                     assign_perm(perm=SAMFUNDET_DELETE_EVENT, user_or_group=gang.gang_leader_group, obj=instance)
+
+
+@receiver(post_save, sender=Recruitment)
+def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *, created: bool, **kwargs: Any) -> None:
+    """Ensures stats are created when an recruitment is created"""
+    if created:
+        RecruitmentStatistics.objects.get_or_create(recruitment=instance)

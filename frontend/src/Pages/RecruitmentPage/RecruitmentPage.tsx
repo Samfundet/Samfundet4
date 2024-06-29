@@ -11,15 +11,17 @@ import { GangTypeContainer } from './Components';
 import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
+import { useAuthContext } from '~/context/AuthContext';
 
 export function RecruitmentPage() {
+  const { user } = useAuthContext();
   const navigate = useCustomNavigate();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
 
-  const noadmissions = (
+  const noAdmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
         <h1 className={styles.header}>{useTextItem(TextItem.no_recruitment_text)}</h1>
@@ -67,28 +69,43 @@ export function RecruitmentPage() {
     <Page>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        <div className={styles.personalRow}>
-          <OccupiedFormModal recruitmentId={1} />
-          <Button
-            theme="samf"
-            onClick={() => {
-              navigate({
-                url: reverse({
-                  pattern: ROUTES.frontend.recruitment_application_overview,
-                  urlParams: { recruitmentID: 1 },
-                }),
-              });
-            }}
-          >
-            {t(KEY.recruitment_organization)}
-          </Button>
-        </div>
+        {user ? (
+          <div className={styles.personalRow}>
+            <OccupiedFormModal recruitmentId={1} />
+            <Button
+              theme="samf"
+              onClick={() => {
+                navigate({
+                  url: reverse({
+                    pattern: ROUTES.frontend.recruitment_application_overview,
+                    urlParams: { recruitmentID: 1 },
+                  }),
+                });
+              }}
+            >
+              {t(KEY.recruitment_my_applications)}
+            </Button>
+          </div>
+        ) : (
+          <div>
+            <Button
+              theme="samf"
+              onClick={() =>
+                navigate({
+                  url: ROUTES.frontend.login,
+                })
+              }
+            >
+              {t(KEY.common_login)}
+            </Button>
+          </div>
+        )}
         {loading ? (
           <SamfundetLogoSpinner />
         ) : recruitmentPositions ? (
           <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
         ) : (
-          noadmissions
+          noAdmissions
         )}
       </div>
     </Page>

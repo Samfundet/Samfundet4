@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
-import { ClosedPeriodDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -14,12 +13,22 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
+type formType = {
+  message_no: string;
+  message_en: string;
+  description_no: string;
+  description_en: string;
+  start_dt: Date;
+  end_dt: Date;
+};
+
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [closedPeriod, setClosedPeriod] = useState<ClosedPeriodDto | undefined>(undefined);
+  // const [closedPeriod, setClosedPeriod] = useState<ClosedPeriodDto | undefined>(undefined); For posting
+  const [initialData, setInitialData] = useState<formType | undefined>(undefined);
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
@@ -36,7 +45,15 @@ export function ClosedPeriodFormAdminPage() {
 
     getClosedPeriod(id)
       .then((data) => {
-        setClosedPeriod(data);
+        // setClosedPeriod(data); For posting
+        setInitialData({
+          message_no: data.message_no,
+          message_en: data.message_en,
+          description_no: data.description_no,
+          description_en: data.description_en,
+          start_dt: new Date(data.start_dt),
+          end_dt: new Date(data.end_dt),
+        });
         setShowSpinner(false);
       })
       .catch((data: AxiosError) => {
@@ -50,7 +67,7 @@ export function ClosedPeriodFormAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  function handleOnSubmit(data: ClosedPeriodDto) {
+  function handleOnSubmit(data: formType) {
     if (id !== undefined) {
       // TODO patch data
     } else {
@@ -67,34 +84,34 @@ export function ClosedPeriodFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
-      <SamfForm onSubmit={handleOnSubmit} initialData={closedPeriod}>
+      <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
           <SamfFormField
             field="message_no"
-            type="text-long"
+            type="text_long"
             label={`${labelMessage} (${t(KEY.common_norwegian)})`}
           ></SamfFormField>
           <SamfFormField
             field="message_en"
-            type="text-long"
+            type="text_long"
             label={`${labelMessage} (${t(KEY.common_english)})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_no"
-            type="text-long"
+            type="text_long"
             label={`${labelDescription} (${t(KEY.common_norwegian)})`}
           ></SamfFormField>
           <SamfFormField
             field="description_en"
-            type="text-long"
+            type="text_long"
             label={`${labelDescription} (${t(KEY.common_english)})`}
           ></SamfFormField>
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="datetime" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="datetime" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
+          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
       </SamfForm>
     </AdminPageLayout>

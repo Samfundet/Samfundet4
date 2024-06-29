@@ -128,14 +128,14 @@ export function SaksdokumentFormAdminPage() {
           />
           <SamfFormField
             field="publication_date"
-            type="datetime"
+            type="date_time"
             required={true}
             label={`${t(KEY.saksdokumentpage_publication_date)}`}
           />
         </div>
         <div className={styles.input_row}>
           {/* File upload */}
-          {id === undefined && <SamfFormField type="upload-pdf" field="file" />}
+          {id === undefined && <SamfFormField type="upload_pdf" field="file" />}
           {id !== undefined && (
             <div className={styles.cannot_reupload}>{t(KEY.admin_saksdokumenter_cannot_reupload)}</div>
           )}

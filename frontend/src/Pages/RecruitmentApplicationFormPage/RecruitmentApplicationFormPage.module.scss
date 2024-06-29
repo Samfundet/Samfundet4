@@ -1,0 +1,62 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  @mixin for-tablet-only {
+    width: 100%;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.textcontainer {
+  flex: 5;
+}
+
+.otherposition {
+  flex: 1;
+  padding: 2em;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 2em;
+}
+
+.subheader {
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.text {
+  margin-bottom: 2em;
+}
+
+.formContainer {
+  background-color: $red-samf;
+}
+
+.formLabel {
+  margin-bottom: 0.5em;
+}
+
+.withdrawnContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 0.4em;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.withdrawnText {
+  color: $red-samf;
+}

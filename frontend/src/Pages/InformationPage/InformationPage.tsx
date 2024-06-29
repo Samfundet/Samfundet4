@@ -11,12 +11,12 @@ import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
+import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
-import { STATUS } from '~/http_status_codes';
 
 /**
  * Renders information page using markdown
@@ -41,7 +41,7 @@ export function InformationPage() {
           console.error(error);
         });
     }
-  }, [slugField]);
+  }, [navigate, slugField]);
 
   // Text and title
   const text = dbT(page, 'text') ?? '';

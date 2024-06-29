@@ -1,24 +1,35 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
+import { TextItem } from '~/constants/TextItems';
+import styles from './LycheReservationPage.module.scss';
+import { KV } from '~/constants';
+import { useKeyValue, useTextItem, useTitle  } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { KV } from '~/constants';
-import { TextItem } from '~/constants/TextItems';
-import { ReservationDto } from '~/dto';
-import { useKeyValue, useTextItem, useTitle } from '~/hooks';
-import { KEY } from '~/i18n/constants';
+import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { lowerCapitalize } from '~/utils';
 import { ReservationFormLine } from './Components';
-import styles from './LycheReservationPage.module.scss';
+
+type FormProps = {
+  occasion: string;
+  guest_count: number;
+  reservation_date: Date;
+  start_time: string;
+  name: string;
+  phonenumber: string;
+  email: string;
+  additional_info: string;
+  agree: boolean;
+};
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
   useTitle(lowerCapitalize(`${t(KEY.common_sulten)} ${t(KEY.common_reservation)}`));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
-  const [reservation, setReservation] = useState<ReservationDto>();
+  const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
 
   const occasionOptions: DropDownOption<string>[] = [
@@ -40,20 +51,19 @@ export function LycheReservationPage() {
     { value: 4, label: '4' },
   ];
 
-  function checkAvailableDate(data: ReservationDto) {
-    setReservation({ ...reservation, ...data } as ReservationDto);
+  function checkAvailableDate(data: FormProps) {
+    setReservation({ ...reservation, ...data });
     setAvailableDate(true);
   }
 
-  function submit(data: ReservationDto) {
-    console.log({ ...reservation, data });
+  function submit(data: FormProps) {
+    console.log({ ...reservation, ...data });
   }
   const findAvailableDateStage = (
     <SamfForm
       className={styles.formContainer}
+      validateOn="submit"
       onSubmit={checkAvailableDate}
-      submitButtonTheme="lyche"
-      submitButtonDisplay="block"
       submitText={t(KEY.sulten_reservation_form_find_times)}
     >
       <ReservationFormLine
@@ -61,54 +71,58 @@ export function LycheReservationPage() {
         help_text={t(KEY.sulten_reservation_form_occasion_help) + '*'}
         underline={true}
       >
-        <SamfFormField type="options" options={occasionOptions} field="occasion" required={true} />
+        <SamfFormField<string, FormProps> type="options" options={occasionOptions} field="occasion" required={true} />
       </ReservationFormLine>
       <ReservationFormLine
-        label={t(KEY.common_total) + ' ' + t(KEY.common_guests) + '*'}
+        label={t(KEY.common_count) + ' ' + t(KEY.common_guests) + '*'}
         help_text={t(KEY.sulten_reservation_form_more_than_8_help)}
         underline={true}
       >
-        <SamfFormField type="options" options={occupancyOptions} field="guest_count" required={true} />
+        <SamfFormField<number, FormProps>
+          type="options"
+          options={occupancyOptions}
+          field="guest_count"
+          required={true}
+        />
       </ReservationFormLine>
       <ReservationFormLine label={t(KEY.common_date) + '*'} underline={true}>
-        <SamfFormField type="date" options={occupancyOptions} field="reservation_date" required={true} />
+        <SamfFormField<Date, FormProps> type="date" field="reservation_date" required={true} />
       </ReservationFormLine>
     </SamfForm>
   );
 
   const reserveStage = (
     <SamfForm
+      validateOn="submit"
       className={styles.formContainer}
       onSubmit={submit}
-      submitButtonTheme="lyche"
-      submitButtonDisplay="block"
       submitText={t(KEY.sulten_reservation_form_find_times)}
     >
       <div className={styles.reservation_info}>
         <p className={styles.text}>
-          {t(KEY.common_date)} {reservation?.reservation_date as string}
+          {t(KEY.common_date)} {reservation?.reservation_date?.toString()}
         </p>
         <p className={styles.text}>
           {t(KEY.common_guests)} {reservation?.guest_count}
         </p>
       </div>
       <ReservationFormLine label={t(KEY.common_time) + '*'}>
-        <SamfFormField type="options" options={hoursOptions} field="start_time" required={true} />
+        <SamfFormField<string, FormProps> type="options" options={hoursOptions} field="start_time" required={true} />
       </ReservationFormLine>
       <ReservationFormLine label={t(KEY.common_name) + '*'}>
-        <SamfFormField type="text" field="name" required={true} />
+        <SamfFormField<string, FormProps> type="text" field="name" required={true} />
       </ReservationFormLine>
       <ReservationFormLine label={t(KEY.common_phonenumber) + '*'}>
-        <SamfFormField type="text" field="phonenumber" required={true} />
+        <SamfFormField<string, FormProps> type="text" field="phonenumber" required={true} />
       </ReservationFormLine>
       <ReservationFormLine label={t(KEY.common_email) + '*'} underline={true}>
-        <SamfFormField type="email" field="email" required={true} />
+        <SamfFormField<string, FormProps> type="email" field="email" required={true} />
       </ReservationFormLine>
       <ReservationFormLine label={t(KEY.common_message)}>
-        <SamfFormField type="text" field="additional_info" required={false} />
+        <SamfFormField<string, FormProps> type="text" field="additional_info" required={false} />
       </ReservationFormLine>
       <div className={styles.check_box}>
-        <SamfFormField
+        <SamfFormField<boolean, FormProps>
           type="checkbox"
           field="agree"
           label={useTextItem(TextItem.sulten_reservation_policy) + '*'}
