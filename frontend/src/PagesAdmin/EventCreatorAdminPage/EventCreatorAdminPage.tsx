@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { t } from 'i18next';
 import { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -21,6 +20,7 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
+import { useTranslation } from "react-i18next";
 
 type EventCreatorStep = {
   key: string; // Unique key.
@@ -54,6 +54,7 @@ type FormType = {
   publish_dt: string;
 };
 export function EventCreatorAdminPage() {
+  const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);

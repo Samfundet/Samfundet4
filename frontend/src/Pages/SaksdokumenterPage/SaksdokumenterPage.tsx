@@ -13,14 +13,17 @@ import {
 import { getSaksdokumenter } from '~/api';
 import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import styles from './SaksdokumenterPage.module.scss';
+import { useTitle } from "~/hooks";
 
 export function SaksdokumenterPage() {
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
+
+  useTitle(lowerCapitalize(t(KEY.common_documents)));
 
   useEffect(() => {
     getSaksdokumenter()

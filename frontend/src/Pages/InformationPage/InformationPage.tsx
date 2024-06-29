@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
@@ -17,11 +16,13 @@ import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
+import { useTranslation } from "react-i18next";
 
 /**
  * Renders information page using markdown
  */
 export function InformationPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { user } = useAuthContext();

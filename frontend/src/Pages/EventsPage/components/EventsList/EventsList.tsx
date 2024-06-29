@@ -7,7 +7,7 @@ import { ImageCard } from '~/Components/ImageCard';
 import { Table, TableRow } from '~/Components/Table';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
-import { useDesktop, useTitle } from '~/hooks';
+import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -24,7 +24,6 @@ export function EventsList({ events }: EventsListProps) {
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
   const isDesktop = useDesktop();
-  useTitle(t(KEY.common_events));
 
   const eventColumns = [
     { content: t(KEY.common_title), sortable: true },

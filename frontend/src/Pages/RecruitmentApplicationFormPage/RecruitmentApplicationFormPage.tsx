@@ -14,7 +14,7 @@ import {
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -41,6 +41,8 @@ export function RecruitmentApplicationFormPage() {
   const [loading, setLoading] = useState(true);
 
   const { positionID } = useParams();
+
+  useTitle(recruitmentPosition ? dbT(recruitmentPosition, 'name') as string : '');
 
   useEffect(() => {
     Promise.allSettled([

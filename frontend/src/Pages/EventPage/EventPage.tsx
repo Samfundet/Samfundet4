@@ -20,7 +20,8 @@ export function EventPage() {
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  useTitle(t(KEY.common_events));
+
+  useTitle(event && (dbT(event, 'title')) || t(KEY.common_event));
 
   useEffect(() => {
     if (id) {
