@@ -446,8 +446,10 @@ export function useIsMetaKeyDown(): boolean {
 
 export function useTitle(title: string, suffix = 'Samfundet'): void {
   const initialTitle = document.title;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: initialTitle does not need to be in deplist
   useEffect(() => {
-    document.title = title ? `${title}${suffix ? ' - ' + suffix : ''}` : suffix;
+    const delimitedSuffix = suffix ? ` - ${suffix}` : '';
+    document.title = title ? title + delimitedSuffix : suffix;
 
     return () => {
       document.title = initialTitle;

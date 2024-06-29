@@ -30,6 +30,7 @@ export function InformationPage() {
   const { slugField } = useParams();
 
   // Fetch page data
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
@@ -42,7 +43,6 @@ export function InformationPage() {
           console.error(error);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, slugField]);
 
   // Text and title
