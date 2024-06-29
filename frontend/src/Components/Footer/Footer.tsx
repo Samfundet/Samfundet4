@@ -5,6 +5,7 @@ import { Image, Link } from '~/Components';
 import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
 import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';
+import { ROUTES } from '~/routes';
 
 export function Footer() {
   const { t } = useTranslation();
@@ -69,6 +70,9 @@ export function Footer() {
           </Link>
         </p>
       </div>
+      <Link url={ROUTES.frontend.contributors} plain className={styles.contributors_link}>
+        Utviklet av MG::Web
+      </Link>
     </div>
   );
 }

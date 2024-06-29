@@ -92,3 +92,14 @@
   color: $grey-5;
   font-weight: 100;
 }
+
+.contributors_link {
+  font-size: 0.75rem;
+  color: $grey-4;
+  opacity: 0.8;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
