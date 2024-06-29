@@ -26,6 +26,7 @@ export function RecruitmentStatistics() {
     // this will render charts with recruitment data. For now a placeholder. Implement charts w. data in #1110
     return mockRecruitmentStatOne?.map((stat, index) =>
       recruitmentStatisticsContainer(
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <Text key={index}>{`Date: ${stat.at_date}, Applications: ${stat.recruitment_applications}`}</Text>,
         'PLACEHOLDER CHART TITLE',
       ),

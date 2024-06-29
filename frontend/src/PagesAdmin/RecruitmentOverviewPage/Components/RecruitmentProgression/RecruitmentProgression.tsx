@@ -120,7 +120,7 @@ export function RecruitmentProgression() {
                 alert('Skal navigere til siden hvor man lager avslagsepost');
               }}
             >
-              {t(KEY.common_create) + ' ' + t(KEY.recruitment_rejection_email)}
+              {`${t(KEY.common_create)} ${t(KEY.recruitment_rejection_email)}`}
               {/*TODO: IN ISSUE #1110, navigate to "create e-mail page"*/}
             </Button>
           )}

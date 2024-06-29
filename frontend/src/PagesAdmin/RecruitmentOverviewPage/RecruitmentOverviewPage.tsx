@@ -19,7 +19,7 @@ export function RecruitmentOverviewPage() {
     { key: 2, label: t(KEY.recruitment_statistics), value: <RecruitmentStatistics /> },
   ];
   return (
-    <AdminPageLayout title={t(KEY.recruitment_overview) + ': ' + RECRUITMENT_TITLE_PLACEHOLDER}>
+    <AdminPageLayout title={`${t(KEY.recruitment_overview)}: ${RECRUITMENT_TITLE_PLACEHOLDER}`}>
       <TabBar tabs={tabs} selected={currentTab} onSetTab={setCurrentTab} />
       {currentTab?.value}
     </AdminPageLayout>

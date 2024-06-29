@@ -303,10 +303,9 @@ export function getTimeObject(time: string): number {
 export const toPercentage = (floatNum: number | undefined): string => {
   if (floatNum) {
     const percentage = floatNum * 100;
-    return percentage.toString().slice(0, 4) + '%';
-  } else {
-    return 'N/A';
+    return `${percentage.toString().slice(0, 4)}%`;
   }
+  return 'N/A';
 };
 
 /*
