@@ -6,11 +6,14 @@ import { getEventsPerDay } from '~/api';
 import { KEY } from '~/i18n/constants';
 import styles from './EventsPage.module.scss';
 import { EventsList } from './components/EventsList';
+import { useTitle } from '~/hooks';
 
 export function EventsPage() {
   const { t } = useTranslation();
   const [events, setEvents] = useState({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+
+  useTitle(t(KEY.common_events));
 
   useEffect(() => {
     getEventsPerDay()
