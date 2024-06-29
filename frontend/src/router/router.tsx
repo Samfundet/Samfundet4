@@ -26,6 +26,7 @@ import {
   SaksdokumenterPage,
   SignUpPage,
   VenuePage,
+  ContributorsPage,
 } from '~/Pages';
 import {
   ClosedPeriodAdminPage,
@@ -100,6 +101,7 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.event} element={<EventPage />} />
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
+        <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route

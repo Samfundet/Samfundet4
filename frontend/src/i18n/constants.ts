@@ -63,6 +63,7 @@ export const KEY = {
   common_preferences: 'common_preferences',
   common_buy: 'common_buy',
   common_not: 'common_not',
+  common_now: 'common_now',
   common_time: 'common_time',
   common_here: 'common_here',
   common_name: 'common_name',
@@ -86,6 +87,7 @@ export const KEY = {
   common_image: 'common_image',
   common_title: 'common_title',
   common_venue: 'common_venue',
+  common_active: 'common_active',
   common_cancel: 'common_cancel',
   common_events: 'common_events',
   common_repeat: 'common_repeat',
@@ -139,6 +141,7 @@ export const KEY = {
   common_description: 'common_description',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
+  common_contributors: 'common_contributors',
   common_unselect_all: 'common_unselect_all',
   common_opening_hours: 'common_opening_hours',
   common_general: 'common_general',
@@ -203,6 +206,10 @@ export const KEY = {
   loginpage_forgotten_password: 'loginpage_forgotten_password',
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
+
+  contributors_page_title: 'contributors_page_title',
+  contributors_page_text: 'contributors_page_text',
+  contributors_page_past_developers: 'contributors_page_past_developers',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',

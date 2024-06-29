@@ -16,6 +16,7 @@ export const ROUTES_FRONTEND = {
   saksdokumenter: '/saksdokumenter/',
   membership: '/membership',
   luka: '/luka',
+  contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
