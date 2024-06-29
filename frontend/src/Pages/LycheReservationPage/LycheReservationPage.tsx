@@ -10,7 +10,6 @@ import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { lowerCapitalize } from '~/utils';
 import { ReservationFormLine } from './Components';
 
 type FormProps = {
@@ -27,7 +26,7 @@ type FormProps = {
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
-  useTitle(lowerCapitalize(`${t(KEY.common_sulten)} ${t(KEY.common_reservation)}`));
+  useTitle(t(KEY.common_reservation), t(KEY.common_sulten));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);

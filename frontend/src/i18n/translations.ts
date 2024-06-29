@@ -376,6 +376,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
+  [KEY.notfoundpage_title]: 'Side ikke funnet',
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
@@ -761,5 +762,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
+  [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
 };

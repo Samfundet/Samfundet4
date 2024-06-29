@@ -9,7 +9,7 @@ import styles from './LycheAboutPage.module.scss';
 
 export function LycheAboutPage() {
   const { t } = useTranslation();
-  useTitle(t(KEY.sulten_page_about_us));
+  useTitle(t(KEY.sulten_page_about_us), '');
 
   const aboutCardWhatIsLyche = (
     <SultenCard

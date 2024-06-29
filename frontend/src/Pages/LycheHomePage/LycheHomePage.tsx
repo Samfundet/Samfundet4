@@ -19,7 +19,7 @@ export function LycheHomePage() {
   const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
   const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
   const [loading, setLoading] = useState(true);
-  useTitle(t(KEY.common_sulten));
+  useTitle('', t(KEY.common_sulten));
 
   useEffect(() => {
     getVenues()

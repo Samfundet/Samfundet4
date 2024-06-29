@@ -13,7 +13,7 @@ import { VENUES } from './data';
 
 export function AboutPage() {
   const { t } = useTranslation();
-  useTitle(t(KEY.command_menu_shortcut_about_samfundet));
+  useTitle(t(KEY.command_menu_shortcut_about_samfundet), '');
 
   return (
     <Page>

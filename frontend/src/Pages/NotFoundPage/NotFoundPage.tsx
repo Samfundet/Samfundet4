@@ -5,9 +5,11 @@ import { SUPPORT_EMAIL } from '~/constants';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
+import { useTitle } from "~/hooks";
 
 export function NotFoundPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.notfoundpage_title));
   return (
     <div className={styles.container}>
       <img src={NotFound} className={styles.image} />

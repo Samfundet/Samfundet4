@@ -443,10 +443,10 @@ export function useIsMetaKeyDown(): boolean {
   return isDown;
 }
 
-export function useTitle(title: string): void {
+export function useTitle(title: string, suffix: string = 'Samfundet'): void {
   useEffect(() => {
-    document.title = `Samfundet | ${title}`;
-  }, [title]);
+    document.title = title ? `${title}${suffix ? ' - '  + suffix : ''}` : suffix;
+  }, [title, suffix]);
 }
 
 export function useDebounce<T>(value: T, delay: number): T {

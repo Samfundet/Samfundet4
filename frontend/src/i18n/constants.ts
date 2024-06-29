@@ -371,6 +371,7 @@ export const KEY = {
   control_panel_title: 'control_panel_title',
   inputfile_choose_a_file: 'inputfile_choose_a_file',
   inputfile_no_file_selected: 'inputfile_no_file_selected',
+  notfoundpage_title: 'notfoundpage_title',
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
