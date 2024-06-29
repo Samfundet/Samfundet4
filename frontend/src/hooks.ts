@@ -444,8 +444,13 @@ export function useIsMetaKeyDown(): boolean {
 }
 
 export function useTitle(title: string, suffix: string = 'Samfundet'): void {
+  const initialTitle = document.title;
   useEffect(() => {
-    document.title = title ? `${title}${suffix ? ' - '  + suffix : ''}` : suffix;
+    document.title = title ? `${title}${suffix ? ' - ' + suffix : ''}` : suffix;
+
+    return () => {
+      document.title = initialTitle;
+    }
   }, [title, suffix]);
 }
 
