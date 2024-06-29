@@ -11,6 +11,7 @@ import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
 import { useMobile } from '~/hooks';
+import { useAuthContext } from '~/context/AuthContext';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
@@ -22,6 +23,7 @@ export function AdminLayout() {
   const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
   const location = useLocation();
+  const { loading: authLoading } = useAuthContext();
 
   const makeAppletShortcut = useCallback(
     (applet: Applet, index: number) => {
@@ -109,14 +111,16 @@ export function AdminLayout() {
   return (
     <div>
       <Navbar />
-      <div className={styles.wrapper}>
-        {panel}
-        {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
-        {/* Content */}
-        <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
-          <Outlet />
+      {!authLoading && (
+        <div className={styles.wrapper}>
+          {panel}
+          {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
+          {/* Content */}
+          <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
+            <Outlet />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
