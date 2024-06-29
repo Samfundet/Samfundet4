@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Button, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
-import { ClosedPeriodDto } from '~/dto';
+import type { ClosedPeriodDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -68,48 +68,46 @@ export function ClosedPeriodAdminPage() {
         <Table
           columns={[
             t(KEY.common_message) ?? '',
-            'Event ' + t(KEY.common_message),
+            `Event ${t(KEY.common_message)}`,
             t(KEY.start_time) ?? '',
             t(KEY.end_time) ?? '',
             '',
           ]}
-          data={closedPeriods.map(function (element) {
-            return [
-              element.message_no,
-              element.description_no,
-              { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
-              { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
-              {
-                content: (
-                  <div>
-                    <Button
-                      theme="blue"
-                      display="block"
-                      className={styles.smallButtons}
-                      link={reverse({
-                        pattern: ROUTES.frontend.admin_closed_edit,
-                        urlParams: { id: element.id },
-                      })}
-                    >
-                      {t(KEY.common_edit)}
-                    </Button>
-                    <Button
-                      theme="samf"
-                      display="block"
-                      className={styles.smallButtons}
-                      onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
-                          deleteSelectedEvent(element.id);
-                        }
-                      }}
-                    >
-                      {t(KEY.common_delete)}
-                    </Button>{' '}
-                  </div>
-                ),
-              },
-            ];
-          })}
+          data={closedPeriods.map((element) => [
+            element.message_no,
+            element.description_no,
+            { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
+            { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
+            {
+              content: (
+                <div>
+                  <Button
+                    theme="blue"
+                    display="block"
+                    className={styles.smallButtons}
+                    link={reverse({
+                      pattern: ROUTES.frontend.admin_closed_edit,
+                      urlParams: { id: element.id },
+                    })}
+                  >
+                    {t(KEY.common_edit)}
+                  </Button>
+                  <Button
+                    theme="samf"
+                    display="block"
+                    className={styles.smallButtons}
+                    onClick={() => {
+                      if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
+                        deleteSelectedEvent(element.id);
+                      }
+                    }}
+                  >
+                    {t(KEY.common_delete)}
+                  </Button>{' '}
+                </div>
+              ),
+            },
+          ])}
         />
       </div>
     </AdminPageLayout>

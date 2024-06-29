@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AdminBox } from './AdminBox';
 
 // Local component config.
@@ -7,9 +7,7 @@ export default {
   component: AdminBox,
 } as ComponentMeta<typeof AdminBox>;
 
-const Template: ComponentStory<typeof AdminBox> = function (args) {
-  return <AdminBox {...args} />;
-};
+const Template: ComponentStory<typeof AdminBox> = (args) => <AdminBox {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

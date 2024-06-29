@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForGang } from '~/api';
-import { RecruitmentApplicationDto } from '~/dto';
+import type { RecruitmentApplicationDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { ProcessedApplicants } from './components';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { useTitle } from '~/hooks';
+import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {
   const { recruitmentId, gangId, positionId } = useParams();
@@ -31,30 +31,30 @@ export function RecruitmentPositionOverviewPage() {
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 0 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruiter_status === 0 &&
+              recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setWithdrawnApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setRejectedApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
-              (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+              recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setAcceptedApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 1 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruiter_status === 1 &&
+              recruitmentApplicant.recruitment_position?.toString() === positionId,
           ),
         );
         setShowSpinner(false);

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Skeleton } from '~/Components';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';

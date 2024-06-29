@@ -1,4 +1,4 @@
-import { ReservationTableDto } from '~/dto';
+import type { ReservationTableDto } from '~/dto';
 export const TABLES_TEST_DATA = [
   {
     id: 1,

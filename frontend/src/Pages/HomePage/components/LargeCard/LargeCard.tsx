@@ -1,6 +1,6 @@
 import { ContentCard } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
-import { HomePageElementDto } from '~/dto';
+import type { HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';

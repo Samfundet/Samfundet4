@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getUser } from '~/api';
-import { UserDto } from '~/dto';
-import { Children, SetState } from '~/types';
+import type { UserDto } from '~/dto';
+import type { Children, SetState } from '~/types';
 
 type AuthContextProps = {
   user: UserDto | undefined;

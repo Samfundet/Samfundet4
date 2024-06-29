@@ -35,6 +35,7 @@ export function ImageList({ images, size, textClassName, textMaxLength }: ImageL
   return (
     <div className={styles.container}>
       {images.map((element, key) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <a key={key} className={styles.imageBox} href={element.url}>
           <div className={styles.imageMask} style={{ width: size, height: size }}>
             <Image src={element.src} className={styles.image} alt={element.alt} />

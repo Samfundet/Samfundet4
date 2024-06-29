@@ -1,26 +1,26 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, ImageCard } from '~/Components';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto, ImageDto } from '~/dto';
+import type { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { Children, EventAgeRestrictionValue, EventTicketTypeValue } from '~/types';
+import type { Children, EventAgeRestrictionValue, EventTicketTypeValue } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
-import { useTranslation } from 'react-i18next';
 
 type EventCreatorStep = {
   key: string; // Unique key.
@@ -73,6 +73,7 @@ export function EventCreatorAdminPage() {
   ];
 
   //Fetch event data using the event ID
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
   useEffect(() => {
     if (id) {
       getEvent(id)
@@ -89,7 +90,6 @@ export function EventCreatorAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // ================================== //
@@ -235,7 +235,7 @@ export function EventCreatorAdminPage() {
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(JSON.stringify(error.response.data));
-        console.error('FAIL: ' + JSON.stringify(error));
+        console.error(`FAIL: ${JSON.stringify(error)}`);
       });
   }
 
@@ -258,7 +258,7 @@ export function EventCreatorAdminPage() {
 
     // Create label
     const label = (
-      <div className={styles.tab_label}>
+      <div className={styles.tab_label} key={step.key}>
         <Icon
           icon={icon}
           className={classNames(styles.tab_icon, valid && styles.done, error && styles.error)}
@@ -348,7 +348,7 @@ export function EventCreatorAdminPage() {
           devMode={false}
           initialData={event as FormType} //TODO: BURDE VÆRE INITIAL EVENT ?
         >
-          {step.key == 'summary' ? eventPreview : <></>}
+          {step.key === 'summary' ? eventPreview : <></>}
           {step.template}
         </SamfForm>
       </div>
@@ -364,7 +364,7 @@ export function EventCreatorAdminPage() {
             {t(KEY.common_previous)}
           </Button>
         ) : (
-          <div></div>
+          <div />
         )}
         {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
@@ -390,7 +390,7 @@ export function EventCreatorAdminPage() {
         vertical={false}
         spaceBetween={true}
       />
-      <br></br>
+      <br />
       <div className={styles.form_container}>
         {/* Render form */}
         {allForms}

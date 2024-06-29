@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './RadioButton.module.scss';
 
 type RadioButtonProps = {
@@ -38,7 +38,7 @@ export function RadioButton({
         checked={checked}
         disabled={disabled}
       />
-      <div className={styles.circle}></div>
+      <div className={styles.circle} />
       {children}
     </label>
   );

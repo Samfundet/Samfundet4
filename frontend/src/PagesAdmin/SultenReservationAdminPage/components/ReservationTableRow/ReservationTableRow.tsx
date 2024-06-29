@@ -1,10 +1,10 @@
-import { TableDto } from '~/dto';
-import { Column } from './types';
-import styles from './ReservationTableRow.module.scss';
-import { useEffect, useState } from 'react';
-import { Reservation } from '../Reservation/Reservation';
-import { dbT, getTimeObject } from '~/utils';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
+import type { TableDto } from '~/dto';
+import { dbT, getTimeObject } from '~/utils';
+import { Reservation } from '../Reservation/Reservation';
+import styles from './ReservationTableRow.module.scss';
+import type { Column } from './types';
 
 type ReservationTableRowProps = {
   table: TableDto;
@@ -21,16 +21,17 @@ export function ReservationTableRow({ table, start_time, end_time }: Reservation
     const end_dt = getTimeObject(end_time);
     const colList: Column[] = [];
     const quarterSecounds = 900000;
-    table.reservations
-      ?.sort((r1, r2) => r1.start_time.localeCompare(r2.start_time))
-      .forEach((reservation) => {
-        /*
-          Method for creating an array with
-          Reservation and its timespan
-          with a width, which is how many whole quarters there is in a timespan
-          Will get spaces for each reservation, and its width
 
-          To be used for display and setting width of columns
+    const sortedReservations = table.reservations?.sort((r1, r2) => r1.start_time.localeCompare(r2.start_time));
+    if (sortedReservations) {
+      for (const reservation of sortedReservations) {
+        /*
+        Method for creating an array with
+        Reservation and its timespan
+        with a width, which is how many whole quarters there is in a timespan
+        Will get spaces for each reservation, and its width
+
+        To be used for display and setting width of columns
         */
         const res_start_dt = getTimeObject(reservation.start_time);
         const res_end_dt = getTimeObject(reservation.end_time);
@@ -48,7 +49,9 @@ export function ReservationTableRow({ table, start_time, end_time }: Reservation
           reservation: reservation,
         });
         start_dt = res_end_dt;
-      });
+      }
+    }
+
     // add empty size at end
     colList.push({ size: Math.floor((end_dt - start_dt) / 900000) });
     setCols(colList);
@@ -65,6 +68,7 @@ export function ReservationTableRow({ table, start_time, end_time }: Reservation
         </div>
       </div>
       {cols.map((col, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: Have no other unique value to use here
         <div className={styles.time} key={index} style={{ flex: col.size }}>
           {col.reservation && <Reservation reservation={col.reservation} />}
         </div>

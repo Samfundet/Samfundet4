@@ -1,4 +1,4 @@
-import { CircularChartSizes } from '~/Components/Chart/CircularCharts/PieChart/utils/types';
+import type { CircularChartSizes } from '~/Components/Chart/CircularCharts/PieChart/utils/types';
 
 export const sizes: CircularChartSizes = {
   small: { cWith: 325, cHeight: 325, horizontalPadding: 25 },

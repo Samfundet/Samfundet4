@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { kitteh } from '~/assets';
 import { COLORS } from '~/types';
 import { Infobox } from './Infobox';
@@ -14,9 +14,7 @@ export default {
     bgColor: COLORS.red_samf,
   },
 } as ComponentMeta<typeof Infobox>;
-const Template: ComponentStory<typeof Infobox> = function (args) {
-  return <Infobox {...args} />;
-};
+const Template: ComponentStory<typeof Infobox> = (args) => <Infobox {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {};

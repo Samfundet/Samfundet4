@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { Children, COLORS } from '~/types';
+import { COLORS, type Children } from '~/types';
 import { getGlobalBackgroundColor } from '~/utils';
 import styles from './SpinningBorder.module.scss';
 

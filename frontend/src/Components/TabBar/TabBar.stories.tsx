@@ -1,6 +1,6 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ReactElement, useState } from 'react';
-import { Tab, TabBar, TabBarProps } from './TabBar';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { type ReactElement, useState } from 'react';
+import { type Tab, TabBar, type TabBarProps } from './TabBar';
 
 export default {
   title: 'Components/TabBar',

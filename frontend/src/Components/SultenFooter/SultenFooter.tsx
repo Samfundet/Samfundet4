@@ -13,7 +13,7 @@ export function SultenFooter() {
       <h2 className={styles.header}>Lyche</h2>
       <div className={styles.footer_item}>
         <a href={ROUTES.other.sulten_instagram}>
-          <Icon icon="ph:instagram-logo-light" className={styles.icon}></Icon>
+          <Icon icon="ph:instagram-logo-light" className={styles.icon} />
         </a>
         <a className={styles.footer_link} href={ROUTES.other.sulten_instagram}>
           lychekjokkenogbar
@@ -21,7 +21,7 @@ export function SultenFooter() {
       </div>
       <div className={styles.footer_item}>
         <a href={`mailto:${sultenMail}`}>
-          <Icon icon="material-symbols:mail" className={styles.icon}></Icon>
+          <Icon icon="material-symbols:mail" className={styles.icon} />
         </a>
         <a className={styles.footer_link} href={`mailto:${sultenMail}`}>
           {sultenMail}
@@ -29,7 +29,7 @@ export function SultenFooter() {
       </div>
       <div className={styles.footer_item}>
         <a href={ROUTES.other.maps_elgsetergate_1}>
-          <Icon icon="mdi:address-marker-outline" className={styles.icon}></Icon>
+          <Icon icon="mdi:address-marker-outline" className={styles.icon} />
         </a>
         <a className={styles.footer_link} href={ROUTES.other.maps_elgsetergate_1}>
           {sultenAdress}

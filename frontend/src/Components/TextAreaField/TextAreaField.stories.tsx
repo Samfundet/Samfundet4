@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { TextAreaField } from './TextAreaField';
 
 export default {
@@ -7,9 +7,7 @@ export default {
   component: TextAreaField,
 } as ComponentMeta<typeof TextAreaField>;
 
-const Template: ComponentStory<typeof TextAreaField> = function (args) {
-  return <TextAreaField {...args} />;
-};
+const Template: ComponentStory<typeof TextAreaField> = (args) => <TextAreaField {...args} />;
 
 export const Basic = Template.bind({});
 

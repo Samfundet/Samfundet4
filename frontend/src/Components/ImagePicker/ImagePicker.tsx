@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { getImages } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { ImageDto } from '~/dto';
-import { Children } from '~/types';
+import type { ImageDto } from '~/dto';
+import type { Children } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './ImagePicker.module.scss';
 
@@ -30,7 +30,8 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
   function renderImage(image: ImageDto): Children {
     const isSelected = selected?.id === image.id;
     return (
-      <div
+      <button
+        type="button"
         key={image.id}
         className={classNames(styles.image, isSelected && styles.selected_image)}
         onClick={() => select(image)}

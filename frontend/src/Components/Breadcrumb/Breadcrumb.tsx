@@ -1,9 +1,9 @@
-import { UIMatch, useMatches } from 'react-router-dom';
-import { ReactNode } from 'react';
-import styles from './Breadcrumb.module.scss';
-import { Link } from '~/Components';
 import { Icon } from '@iconify/react';
+import type { ReactNode } from 'react';
+import { type UIMatch, useMatches } from 'react-router-dom';
+import { Link } from '~/Components';
 import { ROUTES } from '~/routes';
+import styles from './Breadcrumb.module.scss';
 
 type HandleWithCrumb = {
   crumb: (data?: unknown) => ReactNode;
@@ -26,6 +26,7 @@ export function Breadcrumb() {
         <Icon icon="ion:home" className={styles.icon} />
       </Link>
       {crumbs.map((crumb, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <div key={i}>
           <span className={styles.separator}>&gt;</span>
           {crumb}

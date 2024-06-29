@@ -1,12 +1,12 @@
-import { CartesianChartsColors, CartesianChartProps } from '~/Components/Chart/CartesianCharts/utils/types';
-import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
-import styles from '../CartesianCharts.module.scss';
-import { useIsDarkTheme } from '~/hooks';
-import { Text } from '~/Components/Text/Text';
-import { drawXAxisLabels, drawYAxisLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
-import { drawXDirLines, drawYDirLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
 import { palette, sizes } from '~/Components/Chart/CartesianCharts/utils/apperance';
 import { dimensions } from '~/Components/Chart/CartesianCharts/utils/dimensions';
+import { drawXAxisLabels, drawYAxisLabels } from '~/Components/Chart/CartesianCharts/utils/draw-labels';
+import { drawXDirLines, drawYDirLines } from '~/Components/Chart/CartesianCharts/utils/draw-lines';
+import type { CartesianChartProps, CartesianChartsColors } from '~/Components/Chart/CartesianCharts/utils/types';
+import { HoverLabel, useHoverLabel } from '~/Components/Chart/Components/HoverLabel';
+import { Text } from '~/Components/Text/Text';
+import { useIsDarkTheme } from '~/hooks';
+import styles from '../CartesianCharts.module.scss';
 
 export function BarChart({
   data,
@@ -50,13 +50,14 @@ export function BarChart({
     const yPosition = svgHeight - barHeight - bottomPadding; // Leave space for labels
     const bar = (
       <rect
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         key={index}
         x={xPosition}
         y={yPosition}
         width={datapointWidth}
         height={barHeight}
         fill={colors.bar}
-        onMouseEnter={(event) => handleMouseEnter(event, item.label + ': ' + item.value)}
+        onMouseEnter={(event) => handleMouseEnter(event, `${item.label}: ${item.value}`)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       />
@@ -104,6 +105,7 @@ export function BarChart({
       </div>
       <div className={styles.chartContainer}>
         <svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
+          <title>Bar chart</title>
           {hasYDirLines && // executes if vertical lines prop is true
             drawYDirLines(
               data,

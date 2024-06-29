@@ -1,7 +1,7 @@
-import { Button } from '../Button';
 import { useTranslation } from 'react-i18next';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { Button } from '../Button';
 
 type BackButtonProps = {
   url?: string;

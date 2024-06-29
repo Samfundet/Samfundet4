@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { EventCustomTicketDto, EventDto } from '~/dto';
+import type { EventCustomTicketDto, EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { ALL_TICKET_TYPES, EventTicketTypeValue } from '~/types';
+import { ALL_TICKET_TYPES, type EventTicketTypeValue } from '~/types';
 import { getTicketTypeKey } from '~/utils';
 import { CustomTicketEditor } from './CustomTicketEditor';
 

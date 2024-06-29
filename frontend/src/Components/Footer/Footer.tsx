@@ -1,11 +1,11 @@
+import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Link, Image } from '~/Components';
-import { Icon } from '@iconify/react';
+import { Image, Link } from '~/Components';
 import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
 import { KEY } from '~/i18n/constants';
-import styles from './Footer.module.scss';
 import { ROUTES } from '~/routes';
+import styles from './Footer.module.scss';
 
 export function Footer() {
   const { t } = useTranslation();
@@ -26,13 +26,13 @@ export function Footer() {
           <h1 className={styles.header}>{t(KEY.common_sponsor)}</h1>
           <div className={styles.row_collapse}>
             <Link className={styles.sponsor_logo} target="external" url="https://www.trondheim.kommune.no/">
-              <Image src={trondhemSponsor} className={styles.images}></Image>
+              <Image src={trondhemSponsor} className={styles.images} />
             </Link>
             <Link className={styles.sponsor_logo} target="external" url="https://kulturrom.no/">
-              <Image src={kulturromSponsor} className={styles.images}></Image>
+              <Image src={kulturromSponsor} className={styles.images} />
             </Link>
             <Link className={styles.sponsor_logo} target="external" url="https://reitan.no/no">
-              <Image src={reitanSponsor} className={styles.images}></Image>
+              <Image src={reitanSponsor} className={styles.images} />
             </Link>
           </div>
         </div>
@@ -40,10 +40,10 @@ export function Footer() {
           <h1 className={styles.header}>{t(KEY.common_festivals)}</h1>
           <div className={styles.row}>
             <Link target="external" url="https://www.uka.no/">
-              <Image src={ukaWhite} className={styles.images}></Image>
+              <Image src={ukaWhite} className={styles.images} />
             </Link>
             <Link target="external" url="https://www.isfit.org/">
-              <Image src={isfit} className={styles.images}></Image>
+              <Image src={isfit} className={styles.images} />
             </Link>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SultenFooter } from './SultenFooter';
 
 export default {
@@ -14,8 +14,6 @@ export default {
   ],
 } as ComponentMeta<typeof SultenFooter>;
 
-const OneEvent: ComponentStory<typeof SultenFooter> = function () {
-  return <SultenFooter />;
-};
+const OneEvent: ComponentStory<typeof SultenFooter> = () => <SultenFooter />;
 
 export const Basic = OneEvent.bind({});

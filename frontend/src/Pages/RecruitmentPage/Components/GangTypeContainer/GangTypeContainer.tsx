@@ -1,4 +1,4 @@
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { GangPosition } from '..';
 
 type GangTypeProps = {

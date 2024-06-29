@@ -10,13 +10,11 @@
     "esbenp.prettier-vscode",
     "alexcvzz.vscode-sqlite",
     "batisteo.vscode-django",
-    "dbaeumer.vscode-eslint",
     "ms-python.vscode-pylance",
     "editorconfig.editorconfig",
     "yzhang.markdown-all-in-one",
     "stylelint.vscode-stylelint",
     "ms-python.mypy-type-checker",
-    "rvest.vs-code-prettier-eslint",
     "visualstudioexptteam.vscodeintellicode"
   ]
 }

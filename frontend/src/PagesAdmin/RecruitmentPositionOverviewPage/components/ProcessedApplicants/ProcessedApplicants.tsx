@@ -1,11 +1,11 @@
-import { RecruitmentApplicationDto } from '~/dto';
-import styles from './ProcessedApplicants.module.scss';
-import { Table } from '~/Components/Table';
-import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { Link } from '~/Components';
+import { Table } from '~/Components/Table';
+import type { RecruitmentApplicationDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import styles from './ProcessedApplicants.module.scss';
 
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
 
@@ -25,32 +25,30 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  const rows = data.map(function (application) {
-    return [
-      {
-        value: application.user.first_name,
-        content: (
-          <Link
-            key={application.user.id}
-            target={'backend'}
-            url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_applicant,
-              urlParams: {
-                applicationID: application.id,
-              },
-            })}
-          >
-            {`${application.user.first_name} ${application.user.last_name}`}
-          </Link>
-        ),
-      },
-      { content: application.user?.phone_number, value: application.user?.phone_number },
-      { content: application.user?.email, value: application.user?.email },
-      { content: application.interview?.interview_time, value: application.interview?.interview_time },
-      { content: application.interview?.interview_location, value: application.interview?.interview_location },
-      { content: application.recruiter_status, value: application.recruiter_status },
-    ];
-  });
+  const rows = data.map((application) => [
+    {
+      value: application.user.first_name,
+      content: (
+        <Link
+          key={application.user.id}
+          target={'backend'}
+          url={reverse({
+            pattern: ROUTES.frontend.admin_recruitment_applicant,
+            urlParams: {
+              applicationID: application.id,
+            },
+          })}
+        >
+          {`${application.user.first_name} ${application.user.last_name}`}
+        </Link>
+      ),
+    },
+    { content: application.user?.phone_number, value: application.user?.phone_number },
+    { content: application.user?.email, value: application.user?.email },
+    { content: application.interview?.interview_time, value: application.interview?.interview_time },
+    { content: application.interview?.interview_location, value: application.interview?.interview_location },
+    { content: application.recruiter_status, value: application.recruiter_status },
+  ]);
 
   const styleType = {
     withdrawn: styles.withdrawn,

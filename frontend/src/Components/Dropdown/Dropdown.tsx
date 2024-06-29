@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import { ChangeEvent, ReactElement } from 'react';
+import type { ChangeEvent, ReactElement } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropDownOption<T> = {
@@ -62,9 +62,10 @@ export function Dropdown<T>({
         disabled={disabled}
         defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
+        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1} />}
         {options.map((opt, index) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             <option value={index} key={index}>
               {opt.label}
             </option>

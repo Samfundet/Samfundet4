@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Table } from './Table';
 
 // Local component config.
@@ -11,9 +11,7 @@ export default {
   },
 } as ComponentMeta<typeof Table>;
 
-const Template: ComponentStory<typeof Table> = function (args) {
-  return <Table {...args}></Table>;
-};
+const Template: ComponentStory<typeof Table> = (args) => <Table {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

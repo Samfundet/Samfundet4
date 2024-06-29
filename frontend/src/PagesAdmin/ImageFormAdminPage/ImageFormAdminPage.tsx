@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getImage, postImage } from '~/api';
-import { ImagePostDto } from '~/dto';
+import type { ImagePostDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -32,6 +32,7 @@ export function ImageFormAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getImage(id)
@@ -49,8 +50,7 @@ export function ImageFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, setImage]);
+  }, [id]);
 
   async function handleOnSubmit(data: FormType) {
     setShowSpinner(true);

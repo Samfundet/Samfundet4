@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuthContext } from '~/context/AuthContext';
 import { Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, login } from '~/api';
+import { useAuthContext } from '~/context/AuthContext';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './LoginPage.module.scss';
 import { lowerCapitalize } from '~/utils';
+import styles from './LoginPage.module.scss';
 
 type FormProps = {
   username: string;

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { InputField } from '~/Components/InputField';
 import { Button } from '../Button';
-import { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropDownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
 import { exists, searchFilter } from './utils';
 

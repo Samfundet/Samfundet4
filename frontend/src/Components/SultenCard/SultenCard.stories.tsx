@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { front_lyche } from '~/assets';
 import { SultenCard } from './SultenCard';
 
@@ -11,9 +11,7 @@ export default {
   },
 } as ComponentMeta<typeof SultenCard>;
 
-const Template: ComponentStory<typeof SultenCard> = function (args) {
-  return <SultenCard {...args}>Submit</SultenCard>;
-};
+const Template: ComponentStory<typeof SultenCard> = (args) => <SultenCard {...args}>Submit</SultenCard>;
 
 export const Basic = Template.bind({});
 Basic.args = {

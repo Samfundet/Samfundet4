@@ -1,5 +1,5 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react';
-import { KV } from '~/constants';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { KV } from '~/constants';
 /** Module for global generic types. */
 
 /** Type for home page element. */

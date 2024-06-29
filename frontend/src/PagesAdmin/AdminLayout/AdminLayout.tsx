@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Button, Link, Navbar } from '~/Components';
-import { Applet } from '~/Components/AdminBox/types';
+import type { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { useAuthContext } from '~/context/AuthContext';
+import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
-import { useMobile } from '~/hooks';
-import { useAuthContext } from '~/context/AuthContext';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
@@ -31,7 +31,7 @@ export function AdminLayout() {
       if (applet.url === undefined) return <></>;
 
       // Create panel item
-      const selected = location.pathname.toLowerCase().indexOf(applet.url) != -1;
+      const selected = location.pathname.toLowerCase().indexOf(applet.url) !== -1;
       return (
         <Link
           key={index}
@@ -58,7 +58,7 @@ export function AdminLayout() {
 
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
-      <button className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
+      <button type="button" className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
         <Icon icon="mdi:close" width={24} />
       </button>
 
@@ -73,7 +73,7 @@ export function AdminLayout() {
         <Icon icon="mdi:person" />
         {t(KEY.common_profile)}
       </Link>
-      <br></br>
+      <br />
       {/* Applets */}
       {appletCategories.map((category) => {
         return (
@@ -83,7 +83,7 @@ export function AdminLayout() {
           </React.Fragment>
         );
       })}
-      <br></br>
+      <br />
       {/* TODO help/faq */}
       <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
         <Icon icon="material-symbols:question-mark-rounded" />
@@ -103,9 +103,9 @@ export function AdminLayout() {
   );
 
   const desktopOpen = (
-    <div className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
+    <button type="button" className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
       <Icon icon="mdi:arrow-right-bold" width={16} className={styles.arrow} />
-    </div>
+    </button>
   );
 
   return (

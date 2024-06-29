@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import {
-  FormType,
-  SamfError,
-  SamfFormActionType,
+  type FormType,
+  type SamfError,
+  type SamfFormActionType,
   SamfFormConfigContext,
   SamfFormContext,
-  SamfFormContextType,
+  type SamfFormContextType,
 } from './SamfForm';
 import {
-  FieldProps,
-  GeneratorFunction,
-  SamfFormFieldArgs,
-  SamfFormFieldType,
+  type FieldProps,
+  type GeneratorFunction,
+  type SamfFormFieldArgs,
+  type SamfFormFieldType,
   SamfFormGenerators,
 } from './SamfFormFieldTypes';
 
@@ -147,36 +147,36 @@ export function SamfFormField<U extends T[keyof T], T extends FormType>({
     // Set value using form hook
     setValue(newValue);
     // Notify parrent component of change
-    onChange && onChange(newValue);
+    onChange?.(newValue);
   }
 
   // When form is submitted, trigger an update in this field
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (state.didSubmit) {
       setIsInit(false);
       setValue(localValue, 'submit');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.didSubmit]);
 
   // Display current error when isInit is disabled
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!isInit) {
       setDisplayError(localError);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInit]);
 
   // Update error on any change in the form
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setValue(localValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.values, localValue, required, validator]);
 
   // Trigger init on first render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setValue(localValue, 'init');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ---------------------------------- //

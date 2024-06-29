@@ -1,5 +1,5 @@
 import { COLORS } from '~/types';
-import { CartesianChartPalette, CartesianChartSizes } from './types';
+import type { CartesianChartPalette, CartesianChartSizes } from './types';
 
 /*
  * Sizes of the cartesian charts.

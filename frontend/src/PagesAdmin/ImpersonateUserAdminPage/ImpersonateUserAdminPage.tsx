@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { InputField } from '~/Components';
 import { getUsers, impersonateUser } from '~/api';
 import bondmusic from '~/assets/memes/jamesbond.mp3';
-import { UserDto } from '~/dto';
+import type { UserDto } from '~/dto';
 import { queryDto } from '~/utils';
 import styles from './ImpersonateUserAdminPage.module.scss';
 
@@ -28,7 +28,7 @@ export function ImpersonateUserAdminPage() {
   const displayUsers = queryDto(query, users, ['username', 'first_name', 'last_name', 'email']).slice(0, 10);
 
   function verboseUserName(user: UserDto): string {
-    if ((user.first_name + user.last_name).length == 0) {
+    if ((user.first_name + user.last_name).length === 0) {
       return 'No name';
     }
     return `${user.first_name} ${user.last_name}`;
@@ -52,6 +52,7 @@ export function ImpersonateUserAdminPage() {
             <span>Secret Agent Mode</span>
             <Icon icon="icons8:spy" inline={true} />
           </div>
+          {/* biome-ignore lint/a11y/useMediaCaption: no captions for james bond music... */}
           <audio controls autoPlay>
             <source src={bondmusic} type="audio/mp3" />
           </audio>
@@ -60,7 +61,7 @@ export function ImpersonateUserAdminPage() {
           <InputField<string> inputClassName={styles.inputClass} placeholder={'Search...'} onChange={setQuery} />
           <div className={styles.userList}>
             {displayUsers.map((u) => (
-              <button className={styles.userItem} onClick={() => impersonate(u)} key={u.id}>
+              <button type="button" className={styles.userItem} onClick={() => impersonate(u)} key={u.id}>
                 <span>{verboseUserName(u)}</span>
                 <span className={styles.email}>{u.email}</span>
               </button>

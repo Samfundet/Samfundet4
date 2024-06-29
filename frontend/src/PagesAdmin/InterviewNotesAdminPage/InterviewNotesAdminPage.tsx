@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
 import { getRecruitmentApplicationsForGang, putRecruitmentApplicationInterview } from '~/api';
-import { InterviewDto, RecruitmentApplicationDto } from '~/dto';
+import type { InterviewDto, RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
@@ -65,11 +65,7 @@ export function InterviewNotesPage() {
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}
         </label>
-        <TextAreaField
-          value={interview ? interview.notes : ' '}
-          onChange={handleUpdateNotes}
-          disabled={!editingMode}
-        ></TextAreaField>
+        <TextAreaField value={interview ? interview.notes : ' '} onChange={handleUpdateNotes} disabled={!editingMode} />
         <Button theme="samf" rounded={true} className={styles.button} onClick={handleEditSave} disabled={disabled}>
           {editingMode ? t(KEY.common_save) : t(KEY.common_edit)}
         </Button>

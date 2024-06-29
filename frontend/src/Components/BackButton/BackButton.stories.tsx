@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { BackButton } from './BackButton';
 
 // Local component config.
@@ -10,8 +10,6 @@ export default {
   },
 } as ComponentMeta<typeof BackButton>;
 
-const Template: ComponentStory<typeof BackButton> = function () {
-  return <BackButton />;
-};
+const Template: ComponentStory<typeof BackButton> = () => <BackButton />;
 
 export const BackButtonTemplate = Template.bind({});

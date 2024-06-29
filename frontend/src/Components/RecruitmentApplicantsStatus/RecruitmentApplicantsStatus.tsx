@@ -1,18 +1,18 @@
-import styles from './RecruitmentApplicantsStatus.module.scss';
-import { RecruitmentApplicationDto } from '~/dto';
 import { useEffect, useState } from 'react';
-import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
+import { InputField } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { Table } from '~/Components/Table';
+import { putRecruitmentApplicationForGang } from '~/api';
+import type { RecruitmentApplicationDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { Link } from '../Link';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { InputField } from '../InputField';
-import { putRecruitmentApplicationForGang } from '~/api';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { utcTimestampToLocal } from '~/utils';
-import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
-import { Table } from '~/Components/Table';
+import { Link } from '../Link';
+import styles from './RecruitmentApplicantsStatus.module.scss';
 
 type RecruitmentApplicantsStatusProps = {
   applicants: RecruitmentApplicationDto[];
@@ -73,11 +73,9 @@ export function RecruitmentApplicantsStatus({
         if (element.id === id) {
           switch (field) {
             case editChoices.update_recruitment_priority:
-              element = { ...element, recruiter_priority: value as number };
-              break;
+              return { ...element, recruiter_priority: value as number };
             case editChoices.update_recruitment_status:
-              element = { ...element, recruiter_status: value as number };
-              break;
+              return { ...element, recruiter_status: value as number };
           }
         }
         return element;
@@ -102,7 +100,7 @@ export function RecruitmentApplicantsStatus({
     }
   }
 
-  const data = recruitmentApplicants.map(function (application) {
+  const data = recruitmentApplicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     return [
       {

@@ -1,16 +1,16 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
-import { TextItem } from '~/constants/TextItems';
-import styles from './LycheReservationPage.module.scss';
-import { KV } from '~/constants';
-import { useKeyValue, useTextItem, useTitle } from '~/hooks';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { KV } from '~/constants';
+import { TextItem } from '~/constants/TextItems';
+import { useKeyValue, useTextItem, useTitle } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { ReservationFormLine } from './Components';
+import styles from './LycheReservationPage.module.scss';
 
 type FormProps = {
   occasion: string;
@@ -67,13 +67,13 @@ export function LycheReservationPage() {
     >
       <ReservationFormLine
         label={t(KEY.common_occasion)}
-        help_text={t(KEY.sulten_reservation_form_occasion_help) + '*'}
+        help_text={`${t(KEY.sulten_reservation_form_occasion_help)}*`}
         underline={true}
       >
         <SamfFormField<string, FormProps> type="options" options={occasionOptions} field="occasion" required={true} />
       </ReservationFormLine>
       <ReservationFormLine
-        label={t(KEY.common_count) + ' ' + t(KEY.common_guests) + '*'}
+        label={`${t(KEY.common_count)} ${t(KEY.common_guests)}*`}
         help_text={t(KEY.sulten_reservation_form_more_than_8_help)}
         underline={true}
       >
@@ -84,7 +84,7 @@ export function LycheReservationPage() {
           required={true}
         />
       </ReservationFormLine>
-      <ReservationFormLine label={t(KEY.common_date) + '*'} underline={true}>
+      <ReservationFormLine label={`${t(KEY.common_date)}*`} underline={true}>
         <SamfFormField<Date, FormProps> type="date" field="reservation_date" required={true} />
       </ReservationFormLine>
     </SamfForm>
@@ -105,16 +105,16 @@ export function LycheReservationPage() {
           {t(KEY.common_guests)} {reservation?.guest_count}
         </p>
       </div>
-      <ReservationFormLine label={t(KEY.common_time) + '*'}>
+      <ReservationFormLine label={`${t(KEY.common_time)}*`}>
         <SamfFormField<string, FormProps> type="options" options={hoursOptions} field="start_time" required={true} />
       </ReservationFormLine>
-      <ReservationFormLine label={t(KEY.common_name) + '*'}>
+      <ReservationFormLine label={`${t(KEY.common_name)}*`}>
         <SamfFormField<string, FormProps> type="text" field="name" required={true} />
       </ReservationFormLine>
-      <ReservationFormLine label={t(KEY.common_phonenumber) + '*'}>
+      <ReservationFormLine label={`${t(KEY.common_phonenumber)}*`}>
         <SamfFormField<string, FormProps> type="text" field="phonenumber" required={true} />
       </ReservationFormLine>
-      <ReservationFormLine label={t(KEY.common_email) + '*'} underline={true}>
+      <ReservationFormLine label={`${t(KEY.common_email)}*`} underline={true}>
         <SamfFormField<string, FormProps> type="email" field="email" required={true} />
       </ReservationFormLine>
       <ReservationFormLine label={t(KEY.common_message)}>
@@ -124,7 +124,7 @@ export function LycheReservationPage() {
         <SamfFormField<boolean, FormProps>
           type="checkbox"
           field="agree"
-          label={useTextItem(TextItem.sulten_reservation_policy) + '*'}
+          label={`${useTextItem(TextItem.sulten_reservation_policy)}*`}
           required={true}
         />
       </div>

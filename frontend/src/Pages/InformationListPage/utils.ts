@@ -1,4 +1,4 @@
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { LANGUAGES } from '~/i18n/constants';
 
 export function getTranslatedTitle(page: InformationPageDto | undefined, language: string): string | undefined {

@@ -18,7 +18,7 @@ export function SplashHeaderBox({ className }: SplashHeaderBoxProps) {
 
   const containerScrollSpeed = 0.05;
   const containerTranslation = scrollY * containerScrollSpeed;
-  const containerTransform = 'translateY(' + containerTranslation + 'px)';
+  const containerTransform = `translateY(${containerTranslation}px)`;
 
   return (
     <div className={classnames(styles.container, className)} style={{ transform: containerTransform }} id={id}>

@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
+import { type ChangeEvent, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { TimeDisplay } from '../TimeDisplay';
@@ -61,7 +61,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
   };
 
   const horizontalPreview = fileType === 'pdf';
-  const typePreviewClass = 'preview_' + fileType.toLowerCase();
+  const typePreviewClass = `preview_${fileType.toLowerCase()}`;
   const fileSizeMb = ((selectedFile?.size ?? 0) / 1024 / 1024).toFixed(2);
   const isError = error !== false;
 
@@ -99,7 +99,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
           {/* Image/pdf preview. Shows empty preview for pdf type */}
           {(fileType === 'pdf' || preview) && (
             <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-              {preview && <img className={styles.preview} src={preview} />}
+              {preview && <img className={styles.preview} src={preview} alt="Preview" />}
             </div>
           )}
         </div>

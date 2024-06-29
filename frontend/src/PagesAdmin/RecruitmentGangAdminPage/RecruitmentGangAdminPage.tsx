@@ -4,14 +4,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
-import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
-import styles from './RecruitmentGangAdminPage.module.scss';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentGangAdminPage.module.scss';
 
 export function RecruitmentGangAdminPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -22,7 +22,7 @@ export function RecruitmentGangAdminPage() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  const title = dbT(gang, 'name') + ' - ' + recruitment?.organization + ' - ' + dbT(recruitment, 'name');
+  const title = `${dbT(gang, 'name')} - ${recruitment?.organization} - ${dbT(recruitment, 'name')}`;
   useTitle(title);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function RecruitmentGangAdminPage() {
     { content: ' ', sortable: false },
   ];
 
-  const data = recruitmentPositions.map(function (recruitmentPosition) {
+  const data = recruitmentPositions.map((recruitmentPosition) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },
@@ -71,7 +71,7 @@ export function RecruitmentGangAdminPage() {
       {
         value: recruitmentPosition.processed_applicants,
         content:
-          recruitmentPosition.total_applicants == recruitmentPosition.processed_applicants
+          recruitmentPosition.total_applicants === recruitmentPosition.processed_applicants
             ? t(KEY.common_all)
             : recruitmentPosition.processed_applicants,
       },

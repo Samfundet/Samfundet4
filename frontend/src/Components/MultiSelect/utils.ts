@@ -1,4 +1,4 @@
-import { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropDownOption } from '../Dropdown/Dropdown';
 
 export function searchFilter<T>(item: DropDownOption<T>, q: string): boolean {
   return item.label.toLowerCase().includes(q.toLowerCase());

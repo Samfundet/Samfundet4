@@ -1,8 +1,0 @@
-**/templates/
-**/static/
-**/staticroot/
-**/venv/
-**/.venv/
-**/.pytest_cache
-.yapfignore
-**/src/routes/backend.ts

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const groups = [
   {
     title: 'Styrende organ',

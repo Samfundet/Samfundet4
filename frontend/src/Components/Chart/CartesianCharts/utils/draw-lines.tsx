@@ -1,8 +1,8 @@
-import {
+import type {
   CartesianChartProps,
+  CartesianChartSizes,
   CartesianChartsColors,
   CartesianChartsData,
-  CartesianChartSizes,
 } from '~/Components/Chart/CartesianCharts/utils/types';
 
 /**
@@ -57,6 +57,7 @@ export function drawYDirLines(
     if (index % hLabelFreq === 0 || index === data.length - 1 || index === 0) {
       return (
         <line
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           key={index}
           x1={getX(index)}
           x2={getX(index)}

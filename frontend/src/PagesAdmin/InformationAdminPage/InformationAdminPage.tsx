@@ -5,7 +5,7 @@ import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -21,7 +21,8 @@ export function InformationAdminPage() {
   useTitle(t(KEY.admin_information_manage_title));
 
   // Stuff to do on first render.
-  //TODO add permissions on render
+  // TODO: add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getInformationPages()
       .then((data) => {
@@ -32,7 +33,6 @@ export function InformationAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function deletePage(slug_field: string | undefined) {
@@ -60,7 +60,7 @@ export function InformationAdminPage() {
     '', // Buttons
   ];
 
-  const data = informationPages.map(function (element) {
+  const data = informationPages.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.information_page_detail,
       urlParams: { slugField: element.slug_field },

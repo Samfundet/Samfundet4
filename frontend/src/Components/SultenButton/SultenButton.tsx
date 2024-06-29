@@ -1,6 +1,6 @@
 import { default as classnames } from 'classnames';
 import { Link } from 'react-router-dom';
-import { ButtonType, Children } from '~/types';
+import type { ButtonType, Children } from '~/types';
 import styles from './SultenButton.module.scss';
 
 type ButtonProps = {

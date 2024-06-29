@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ToolTip } from './ToolTip';
 
 export default {
@@ -6,9 +6,7 @@ export default {
   component: ToolTip,
   args: {},
 } as ComponentMeta<typeof ToolTip>;
-const Template: ComponentStory<typeof ToolTip> = function (args) {
-  return <ToolTip {...args}>Hover on me!</ToolTip>;
-};
+const Template: ComponentStory<typeof ToolTip> = (args) => <ToolTip {...args}>Hover on me!</ToolTip>;
 
 export const Basic = Template.bind({});
 Basic.args = {

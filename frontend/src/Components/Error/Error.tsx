@@ -1,5 +1,5 @@
+import type { Children } from '~/types';
 import styles from './Error.module.scss';
-import { Children } from '~/types';
 
 interface ErrorProps {
   header: string;
@@ -7,6 +7,7 @@ interface ErrorProps {
   children?: Children;
 }
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames:
 export function Error({ header, message, children }: ErrorProps) {
   return (
     <div>

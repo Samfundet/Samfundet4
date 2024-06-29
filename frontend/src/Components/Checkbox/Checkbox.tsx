@@ -40,7 +40,7 @@ export function Checkbox({
 
   return (
     <label className={styles.checkbox}>
-      {alignment == 'left' && label}
+      {alignment === 'left' && label}
       <input
         className={classNames(styles.checkbox__input, className)}
         type="checkbox"
@@ -49,8 +49,8 @@ export function Checkbox({
         disabled={disabled}
         checked={isChecked}
       />
-      <div className={styles.checkbox__box}></div>
-      {alignment == 'right' && label}
+      <div className={styles.checkbox__box} />
+      {alignment === 'right' && label}
     </label>
   );
 }

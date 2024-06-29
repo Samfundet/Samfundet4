@@ -4,14 +4,14 @@ import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGangs } from '~/api';
-import { GangDto } from '~/dto';
+import type { GangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import type { RecruitmentLoader } from '~/router/loaders';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitment } = useRouteLoaderData('recruitment') as RecruitmentLoader;
@@ -32,7 +32,7 @@ export function RecruitmentGangOverviewPage() {
   const tableColumns = [{ content: t(KEY.common_gang), sortable: true }];
 
   // TODO: Only show gangs that user has access to, and only show gangs that are recruiting. ISSUE #1121
-  const data = allGangs.map(function (gang) {
+  const data = allGangs.map((gang) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },

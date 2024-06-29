@@ -1,10 +1,10 @@
-import styles from './TimeslotContainer.module.scss';
-import { formatDateYMD, lowerCapitalize } from '~/utils';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { TimeslotButton } from '~/Components/OccupiedForm/components';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { TimeslotButton } from '~/Components/OccupiedForm/components';
 import { useMouseDown } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { formatDateYMD, lowerCapitalize } from '~/utils';
+import styles from './TimeslotContainer.module.scss';
 
 type Props = {
   selectedDate: Date | null;

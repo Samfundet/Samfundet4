@@ -1,8 +1,8 @@
-import styles from './RecruitmentStatistics.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Text } from '~/Components/Text/Text';
 import { KEY } from '~/i18n/constants';
+import styles from './RecruitmentStatistics.module.scss';
 
 export function RecruitmentStatistics() {
   const { t } = useTranslation();
@@ -26,6 +26,7 @@ export function RecruitmentStatistics() {
     // this will render charts with recruitment data. For now a placeholder. Implement charts w. data in #1110
     return mockRecruitmentStatOne?.map((stat, index) =>
       recruitmentStatisticsContainer(
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <Text key={index}>{`Date: ${stat.at_date}, Applications: ${stat.recruitment_applications}`}</Text>,
         'PLACEHOLDER CHART TITLE',
       ),

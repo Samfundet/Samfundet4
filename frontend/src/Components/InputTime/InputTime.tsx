@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import styles from './InputTime.module.scss';
 import classNames from 'classnames';
+import { type ChangeEvent, useEffect, useState } from 'react';
+import styles from './InputTime.module.scss';
 
 type InputTimeProps = {
   className?: string;
@@ -32,20 +32,20 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
     const inputName = e.target.getAttribute('name');
     let numericValue = e.target.value.replace(/[^0-9]/g, '').trim();
     if (numericValue.length > 2) numericValue = numericValue.slice(1, 3);
-    const parsedValue = parseInt(numericValue, 10);
+    const parsedValue = Number.parseInt(numericValue, 10);
     if (inputName === 'hour') {
       numericValue = parsedValue > 23 ? '23' : numericValue;
       // Regex for 00-23, allowing for values without 0 padding
       if (/^(2[0-3]|[0-1]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
         setHour(numericValue);
-        onChange?.(numericValue.padStart(2, '0') + ':' + minute.padStart(2, '0'));
+        onChange?.(`${numericValue.padStart(2, '0')}:${minute.padStart(2, '0')}`);
       }
     } else if (inputName === 'minute') {
       numericValue = parsedValue > 59 ? '59' : e.target.value;
       // Regex for 00-59, allowing for values without 0 padding
       if (/^([0-5]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
         setMinute(numericValue);
-        onChange?.(hour.padStart(2, '0') + ':' + numericValue.padStart(2, '0'));
+        onChange?.(`${hour.padStart(2, '0')}:${numericValue.padStart(2, '0')}`);
       }
     }
   }

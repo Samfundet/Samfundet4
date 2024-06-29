@@ -1,11 +1,11 @@
-import { calculateSectorPath } from './utils/calculateSectorPath';
 import { useEffect, useState } from 'react';
-import { sectorColors } from './utils/sectorColors';
-import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import { Text } from '~/Components/Text/Text';
+import { HoverLabel, useHoverLabel } from '../../Components/HoverLabel';
 import styles from './PieChart.module.scss';
-import { CircularChartProps } from './utils/types';
 import { sizes } from './utils/apperance';
+import { calculateSectorPath } from './utils/calculateSectorPath';
+import { sectorColors } from './utils/sectorColors';
+import type { CircularChartProps } from './utils/types';
 
 const radius = 200;
 const viewboxSize = radius * 2;
@@ -28,6 +28,7 @@ export function PieChart({ data: initialData, chartTitle, size, legend }: Circul
   }, [initialData]);
 
   const labels = dataWithColors.map((entry, index) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
     <div key={index} className={styles.labelWrapper}>
       <div className={styles.labelColor} style={{ backgroundColor: entry.color }} />
       <Text as={'p'} size={'m'}>
@@ -48,17 +49,19 @@ export function PieChart({ data: initialData, chartTitle, size, legend }: Circul
         style={{ minHeight: sizes[size].cHeight, minWidth: sizes[size].cWith }}
         viewBox={`-${0} -${0} ${viewboxSize} ${viewboxSize}`}
       >
+        <title>Pie chart</title>
         {dataWithColors?.map((entry, index) => {
           const pathDescription = calculateSectorPath(entry.value, total, radius, accumulatedAngle);
           accumulatedAngle += (entry.value / total) * 2 * Math.PI;
           return (
             <path
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               key={index}
               d={pathDescription}
               fill={entry.color}
               stroke={'#fff'}
               strokeWidth={'1'}
-              onMouseEnter={(event) => handleMouseEnter(event, entry.label + ': ' + entry.value.toString())}
+              onMouseEnter={(event) => handleMouseEnter(event, `${entry.label}: ${entry.value.toString()}`)}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             />

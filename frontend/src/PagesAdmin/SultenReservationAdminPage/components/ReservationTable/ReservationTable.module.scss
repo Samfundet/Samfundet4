@@ -41,6 +41,8 @@
   justify-content: center;
   color: $white;
   cursor: pointer;
+  background: none;
+  border: none;
   &:hover { 
     filter: brightness(0.5);
     -webkit-filter: brightness(0.5);

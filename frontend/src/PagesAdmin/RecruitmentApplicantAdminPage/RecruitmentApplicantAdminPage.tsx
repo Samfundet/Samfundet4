@@ -1,18 +1,18 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForRecruiter } from '~/api';
-import { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { Table } from '~/Components/Table';
-import classNames from 'classnames';
-import { useParams } from 'react-router-dom';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
@@ -79,39 +79,37 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data={otherRecruitmentApplication.map(function (element) {
-            return [
-              {
-                content: (
-                  <Link
-                    target={'frontend'}
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_recruitment_applicant,
-                      urlParams: {
-                        applicationID: element.id,
-                      },
-                    })}
-                  >
-                    {dbT(element.recruitment_position, 'name')}
-                  </Link>
-                ),
-              },
-              {
-                content: (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.information_page_detail,
-                      urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
-                    })}
-                  >
-                    {dbT(element.recruitment_position.gang, 'name')}
-                  </Link>
-                ),
-              },
-              element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
-              element.interview_time ? element.interview_time : t(KEY.common_not_set),
-            ];
-          })}
+          data={otherRecruitmentApplication.map((element) => [
+            {
+              content: (
+                <Link
+                  target={'frontend'}
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_applicant,
+                    urlParams: {
+                      applicationID: element.id,
+                    },
+                  })}
+                >
+                  {dbT(element.recruitment_position, 'name')}
+                </Link>
+              ),
+            },
+            {
+              content: (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.information_page_detail,
+                    urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
+                  })}
+                >
+                  {dbT(element.recruitment_position.gang, 'name')}
+                </Link>
+              ),
+            },
+            element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
+            element.interview_time ? element.interview_time : t(KEY.common_not_set),
+          ])}
         />
       </div>
     </Page>

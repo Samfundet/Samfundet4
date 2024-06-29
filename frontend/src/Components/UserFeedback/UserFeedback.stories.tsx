@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { UserFeedback } from '~/Components/UserFeedback/UserFeedback';
 
 // Local component config.
