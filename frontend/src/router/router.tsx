@@ -170,7 +170,7 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_users}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_USER]} Page={UsersAdminPage} />}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_USER]} element={<UsersAdminPage />} />}
           />
         </Route>
         {/* Events */}
