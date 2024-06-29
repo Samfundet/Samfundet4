@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '~/context/AuthContext';
@@ -7,7 +7,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, register } from '~/api';
 import { RegistrationDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -27,14 +27,10 @@ type SignUpFormData = {
 export function SignUpPage() {
   const { t } = useTranslation();
   const [loginFailed, setLoginFailed] = useState(false);
-  const { user, setUser } = useAuthContext();
+  const { setUser } = useAuthContext();
   const navigate = useCustomNavigate();
 
-  useEffect(() => {
-    if (user !== undefined) {
-      navigate({ url: ROUTES.frontend.home });
-    }
-  }, [user, navigate]);
+  useTitle(t(KEY.loginpage_register));
 
   function handleRegistration(formData: SignUpFormData) {
     register({ ...formData } as RegistrationDto)
