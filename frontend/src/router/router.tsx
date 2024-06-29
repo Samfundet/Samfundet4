@@ -24,7 +24,7 @@ import {
   AdminLayout,
   ImpersonateUserAdminPage,
 } from '~/PagesAdmin';
-import { Link, ProtectedRoute, SamfOutlet } from '~/Components';
+import { Link, PermissionRoute, ProtectedRoute, SamfOutlet } from '~/Components';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
@@ -49,8 +49,10 @@ export const router = createBrowserRouter(
         {/*
           PUBLIC ROUTES
         */}
-        <Route path={ROUTES.frontend.login} element={<LoginPage />} />
-        <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
+        <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
+          <Route path={ROUTES.frontend.login} element={<LoginPage />} />
+          <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
+        </Route>
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
@@ -63,16 +65,16 @@ export const router = createBrowserRouter(
       */}
       <Route
         handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
-        element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminLayout} />}
+        element={<AdminLayout />}
       >
         {/* TODO PERMISSION FOR IMPERSONATE */}
         <Route
           path={ROUTES.frontend.admin_impersonate}
-          element={<ProtectedRoute perms={[]} Page={ImpersonateUserAdminPage} />}
+          element={<PermissionRoute required={[]} element={<ImpersonateUserAdminPage />} />}
         />
         <Route
           path={ROUTES.frontend.admin}
-          element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={AdminPage} />}
+          element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_GANG]} element={<AdminPage />} />}
         />
         {/* Gangs */}
         <Route
@@ -81,16 +83,16 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_gangs}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_GANG]} Page={GangsAdminPage} />}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_GANG]} element={<GangsAdminPage />} />}
           />
           <Route
             path={ROUTES.frontend.admin_gangs_create}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs_create}>{t(KEY.common_create)}</Link> }}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_GANG]} Page={GangsFormAdminPage} />}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_GANG]} element={<GangsFormAdminPage />} />}
           />
           <Route
             path={ROUTES.frontend.admin_gangs_edit}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_GANG]} Page={GangsFormAdminPage} />}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_GANG]} element={<GangsFormAdminPage />} />}
             loader={({ params }) => {
               // TODO: Fetch gang to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
               return { id: params.id };
@@ -116,20 +118,31 @@ export const router = createBrowserRouter(
         >
           <Route
             path={ROUTES.frontend.admin_recruitment}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+            element={
+              <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentAdminPage />} />
+            }
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_overview}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
+            element={
+              <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
+            }
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_create}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_ADD_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+            element={
+              <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentApplicantAdminPage} />}
+            element={
+              <PermissionRoute
+                required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                element={<RecruitmentApplicantAdminPage />}
+              />
+            }
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
@@ -159,11 +172,16 @@ export const router = createBrowserRouter(
           >
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
-              element={<ProtectedRoute perms={[]} Page={RecruitmentGangOverviewPage} />}
+              element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_edit}
-              element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]}
+                  element={<RecruitmentFormAdminPage />}
+                />
+              }
               loader={recruitmentLoader}
               handle={{
                 crumb: ({ recruitment }: RecruitmentLoader) => {
@@ -223,11 +241,11 @@ export const router = createBrowserRouter(
             >
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_position_overview}
-                element={<ProtectedRoute perms={[]} Page={RecruitmentGangAdminPage} />}
+                element={<PermissionRoute required={[]} element={<RecruitmentGangAdminPage />} />}
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_position_create}
-                element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+                element={<PermissionRoute required={[]} element={<RecruitmentPositionFormAdminPage />} />}
                 loader={recruitmentGangLoader}
                 handle={{
                   crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
@@ -267,11 +285,11 @@ export const router = createBrowserRouter(
               >
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
-                  element={<ProtectedRoute perms={[]} Page={RecruitmentPositionOverviewPage} />}
+                  element={<PermissionRoute required={[]} element={<RecruitmentPositionOverviewPage />} />}
                 />
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_edit}
-                  element={<ProtectedRoute perms={[]} Page={RecruitmentPositionFormAdminPage} />}
+                  element={<PermissionRoute required={[]} element={<RecruitmentPositionFormAdminPage />} />}
                   loader={recruitmentGangPositionLoader}
                   handle={{
                     crumb: ({ recruitment, gang, position }: RecruitmentLoader & GangLoader & PositionLoader) => {
