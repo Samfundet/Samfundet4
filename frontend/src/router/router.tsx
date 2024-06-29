@@ -7,6 +7,7 @@ import {
   RecruitmentApplicationFormPage,
   RecruitmentPage,
   SignUpPage,
+  ContributorsPage,
 } from '~/Pages';
 import {
   GangsAdminPage,
@@ -53,6 +54,7 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.login} element={<LoginPage />} />
           <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
         </Route>
+        <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
