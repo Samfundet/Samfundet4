@@ -1,20 +1,20 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto } from '~/dto';
 
-/** Filtrer recruitmentadmission based on positionId, InterviewId and interview time */
-export function filterRecruitmentAdmission(
-  recruitmentAdmissions: RecruitmentAdmissionDto[],
+/** Filtrer recruitmentApplication based on positionId, InterviewId and interview time */
+export function filterRecruitmentApplication(
+  recruitmentApplications: RecruitmentApplicationDto[],
   positionId: string,
   interviewId: string,
-): RecruitmentAdmissionDto[] {
-  return recruitmentAdmissions.filter(
-    (admission) =>
-      admission.recruitment_position &&
-      admission.recruitment_position.toString() === positionId &&
-      admission.interview?.id.toString() === interviewId &&
-      admission.interview?.interview_time !== null,
+): RecruitmentApplicationDto[] {
+  return recruitmentApplications.filter(
+    (application) =>
+      application.recruitment_position &&
+      application.recruitment_position.toString() === positionId &&
+      application.interview?.id.toString() === interviewId &&
+      application.interview?.interview_time !== null,
   );
 }
 
-export function getNameUser(admission: RecruitmentAdmissionDto): string {
-  return admission.user.first_name ? admission.user.first_name + ' ' + admission.user.last_name : '';
+export function getNameUser(application: RecruitmentApplicationDto): string {
+  return application.user.first_name ? application.user.first_name + ' ' + application.user.last_name : '';
 }
