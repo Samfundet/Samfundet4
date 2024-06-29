@@ -11,13 +11,13 @@ import {
   trondheim,
   trondheimWhite,
   uka,
-  ukaWhite
+  ukaWhite,
 } from '~/assets';
 import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';
 import { ROUTES } from '~/routes';
-import { useGlobalContext } from "~/context/GlobalContextProvider";
-import { THEME } from "~/constants";
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { THEME } from '~/constants';
 
 export function Footer() {
   const { t } = useTranslation();
