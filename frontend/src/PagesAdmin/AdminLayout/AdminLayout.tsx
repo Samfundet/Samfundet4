@@ -6,12 +6,12 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Button, Link, Navbar } from '~/Components';
 import type { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
-import { useAuthContext } from '~/context/AuthContext';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links

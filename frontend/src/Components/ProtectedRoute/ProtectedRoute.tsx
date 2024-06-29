@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { ROUTES } from '~/routes';
-import { useAuthContext } from '~/context/AuthContext';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useAuthContext } from '~/context/AuthContext';
+import { ROUTES } from '~/routes';
 import { hasPermissions } from '~/utils';
 
 type ProtectedRouteProps = {

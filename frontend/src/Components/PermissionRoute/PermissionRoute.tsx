@@ -1,5 +1,5 @@
-import { ProtectedRoute } from '~/Components';
 import type { ReactNode } from 'react';
+import { ProtectedRoute } from '~/Components';
 
 type PermissionRouteProps = {
   required?: string[];
