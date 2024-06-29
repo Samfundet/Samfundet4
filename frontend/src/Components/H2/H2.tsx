@@ -7,7 +7,5 @@ interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
 }
 
 export function H2({ className, ...props }: Props) {
-  return (
-    <h2 className={classNames(styles.header, className)} {...props} />
-  );
+  return <h2 className={classNames(styles.header, className)} {...props} />;
 }
