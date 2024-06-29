@@ -8,6 +8,7 @@ import styles from './NotFoundPage.module.scss';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useCustomNavigate } from '~/hooks';
+import { useTitle } from '~/hooks';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ export function NotFoundPage() {
     }
   }, [navigate, pathname]);
 
+  useTitle(t(KEY.notfoundpage_title));
   return (
     <div className={styles.container}>
       <img src={NotFound} className={styles.image} />
