@@ -9,6 +9,7 @@ import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { useTitle } from '~/hooks';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import styles from './RecruitmentFormAdminPage.module.scss';
@@ -61,6 +62,8 @@ export function RecruitmentFormAdminPage() {
   const title = recruitmentId
     ? `${t(KEY.common_edit)} ${dbT(data?.recruitment, 'name')}`
     : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_recruitment)}`);
+
+  useTitle(title);
 
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
