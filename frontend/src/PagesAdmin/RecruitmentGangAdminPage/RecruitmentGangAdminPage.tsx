@@ -23,7 +23,7 @@ export function RecruitmentGangAdminPage() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  const title = dbT(gang, 'name') + ' - ' + organization?.name + ' - ' + dbT(recruitment, 'name');
+  const title = `${organization?.name} - ${dbT(recruitment, 'name')} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
   useEffect(() => {
