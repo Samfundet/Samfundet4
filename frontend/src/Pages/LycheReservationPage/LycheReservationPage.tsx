@@ -3,7 +3,7 @@ import { SultenPage } from '~/Components/SultenPage';
 import { TextItem } from '~/constants/TextItems';
 import styles from './LycheReservationPage.module.scss';
 import { KV } from '~/constants';
-import { useKeyValue, useTextItem } from '~/hooks';
+import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
@@ -26,6 +26,7 @@ type FormProps = {
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.common_reservation), t(KEY.common_sulten));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
