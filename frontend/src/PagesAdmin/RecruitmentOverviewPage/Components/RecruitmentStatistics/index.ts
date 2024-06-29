@@ -1,0 +1,1 @@
+export { RecruitmentStatistics } from './RecruitmentStatistics';
