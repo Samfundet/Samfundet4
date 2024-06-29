@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
-import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter  } from '~/api';
+import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter } from '~/api';
 import { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
