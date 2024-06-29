@@ -6,12 +6,12 @@ import { Button, RecruitmentApplicantsStatus } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForGang } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { useTitle } from '~/hooks';
 import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {

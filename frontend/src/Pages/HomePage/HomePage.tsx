@@ -4,11 +4,11 @@ import { toast } from 'react-toastify';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
 import type { HomePageDto, HomePageElementDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
-import { useTitle } from '~/hooks';
 
 export function HomePage() {
   const [homePage, setHomePage] = useState<HomePageDto>();

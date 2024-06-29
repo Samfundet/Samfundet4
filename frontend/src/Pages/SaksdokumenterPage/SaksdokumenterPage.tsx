@@ -12,10 +12,10 @@ import {
 } from '~/Components/ExpandableList/utils';
 import { getSaksdokumenter } from '~/api';
 import type { SaksdokumentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT, lowerCapitalize } from '~/utils';
 import styles from './SaksdokumenterPage.module.scss';
-import { useTitle } from '~/hooks';
 
 export function SaksdokumenterPage() {
   const [loading, setLoading] = useState(true);

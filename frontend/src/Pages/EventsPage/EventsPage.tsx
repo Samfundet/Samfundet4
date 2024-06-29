@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEventsPerDay } from '~/api';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './EventsPage.module.scss';
 import { EventsList } from './components/EventsList';
-import { useTitle } from '~/hooks';
 
 export function EventsPage() {
   const { t } = useTranslation();

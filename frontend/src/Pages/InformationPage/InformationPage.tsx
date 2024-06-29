@@ -9,6 +9,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { useAuthContext } from '~/context/AuthContext';
@@ -16,7 +17,6 @@ import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
-import { useTranslation } from 'react-i18next';
 
 /**
  * Renders information page using markdown

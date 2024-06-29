@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { type ReactElement, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, ImageCard } from '~/Components';
@@ -10,8 +11,8 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import type { EventDto, ImageDto } from '~/dto';
+import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -20,7 +21,6 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
-import { useTranslation } from 'react-i18next';
 
 type EventCreatorStep = {
   key: string; // Unique key.
