@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
 import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';
-import { ROUTES } from "~/routes";
+import { ROUTES } from '~/routes';
 
 export function Footer() {
   const { t } = useTranslation();
