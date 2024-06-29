@@ -15,7 +15,7 @@ import { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT, lowerCapitalize } from '~/utils';
 import styles from './SaksdokumenterPage.module.scss';
-import { useTitle } from "~/hooks";
+import { useTitle } from '~/hooks';
 
 export function SaksdokumenterPage() {
   const [loading, setLoading] = useState(true);

@@ -42,7 +42,7 @@ export function RecruitmentApplicationFormPage() {
 
   const { positionID } = useParams();
 
-  useTitle(recruitmentPosition ? dbT(recruitmentPosition, 'name') as string : '');
+  useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
   useEffect(() => {
     Promise.allSettled([

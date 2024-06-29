@@ -5,7 +5,7 @@ import { SUPPORT_EMAIL } from '~/constants';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
-import { useTitle } from "~/hooks";
+import { useTitle } from '~/hooks';
 
 export function NotFoundPage() {
   const { t } = useTranslation();

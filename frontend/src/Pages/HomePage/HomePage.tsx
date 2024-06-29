@@ -8,7 +8,7 @@ import { KEY } from '~/i18n/constants';
 import { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
-import { useTitle } from "~/hooks";
+import { useTitle } from '~/hooks';
 
 export function HomePage() {
   const [homePage, setHomePage] = useState<HomePageDto>();

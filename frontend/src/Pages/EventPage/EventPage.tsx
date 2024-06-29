@@ -21,7 +21,7 @@ export function EventPage() {
   const [event, setEvent] = useState<EventDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
-  useTitle(event && (dbT(event, 'title')) || t(KEY.common_event));
+  useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
 
   useEffect(() => {
     if (id) {

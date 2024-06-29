@@ -450,7 +450,8 @@ export function useTitle(title: string, suffix: string = 'Samfundet'): void {
 
     return () => {
       document.title = initialTitle;
-    }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, suffix]);
 }
 

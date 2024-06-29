@@ -3,7 +3,7 @@ import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export function LycheMenuPage() {
   const { t } = useTranslation();

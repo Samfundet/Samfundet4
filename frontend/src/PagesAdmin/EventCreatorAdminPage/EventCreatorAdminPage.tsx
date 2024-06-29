@@ -20,7 +20,7 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { PaymentForm } from './components/PaymentForm';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 type EventCreatorStep = {
   key: string; // Unique key.

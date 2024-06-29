@@ -6,7 +6,7 @@ import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LycheContactPage.module.scss';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export function LycheContactPage() {
   const { t } = useTranslation();

@@ -16,7 +16,7 @@ import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders information page using markdown
@@ -42,6 +42,7 @@ export function InformationPage() {
           console.error(error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, slugField]);
 
   // Text and title
