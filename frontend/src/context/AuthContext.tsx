@@ -6,6 +6,7 @@ import type { Children, SetState } from '~/types';
 type AuthContextProps = {
   user: UserDto | undefined;
   setUser: SetState<UserDto | undefined>;
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -27,20 +28,25 @@ type AuthContextProviderProps = {
 
 export function AuthContextProvider({ children, enabled = true }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDto>();
+  const [loading, setLoading] = useState(true);
 
   // Stuff to do on first render.
   useEffect(() => {
     if (!enabled) return;
 
+    setLoading(true);
+
     // Always attempt to load user on first render.
     getUser()
       .then((user) => setUser(user))
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [enabled]);
 
   const contextValue: AuthContextProps = {
-    user: user,
-    setUser: setUser,
+    user,
+    setUser,
+    loading,
   };
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

@@ -300,6 +300,15 @@ export function getTimeObject(time: string): number {
   return new Date().setHours(Number.parseInt(timeSplit[0]), Number.parseInt(timeSplit[1]), 0, 0);
 }
 
+export const toPercentage = (floatNum: number | undefined): string => {
+  if (floatNum) {
+    const percentage = floatNum * 100;
+    return percentage.toString().slice(0, 4) + '%';
+  } else {
+    return 'N/A';
+  }
+};
+
 /*
 export function immutableSet(list: unknown[], oldValue: unknown, newValue: unknown) {
   return list.map((element: unknown) => {

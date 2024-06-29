@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentAdmissionsForRecruiter } from '~/api';
-import type { RecruitmentAdmissionDto, RecruitmentUserDto } from '~/dto';
+import { getRecruitmentApplicationsForRecruiter } from '~/api';
+import type { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -17,27 +17,27 @@ import styles from './RecruitmentApplicantAdminPage.module.scss';
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
 
-  const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
-  const [otherRecruitmentAdmission, setOtherRecruitmentAdmission] = useState<RecruitmentAdmissionDto[]>([]);
+  const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
+  const [otherRecruitmentApplication, setOtherRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
   const [applicant, setApplicant] = useState<RecruitmentUserDto>();
 
   const [loading, setLoading] = useState(true);
 
-  const { admissionID } = useParams();
+  const { applicationID } = useParams();
 
   useEffect(() => {
-    getRecruitmentAdmissionsForRecruiter(admissionID as string)
+    getRecruitmentApplicationsForRecruiter(applicationID as string)
       .then((res) => {
-        setRecruitmentAdmission(res.data.admission);
+        setRecruitmentApplication(res.data.application);
         setApplicant(res.data.user);
-        setOtherRecruitmentAdmission(res.data.other_admissions);
+        setOtherRecruitmentApplication(res.data.other_applications);
         setLoading(false);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-  }, [admissionID, t]);
+  }, [applicationID, t]);
 
   if (loading) {
     return (
@@ -64,9 +64,9 @@ export function RecruitmentApplicantAdminPage() {
       </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
-          {t(KEY.recruitment_admission)}: {dbT(recruitmentAdmission?.recruitment_position, 'name')}
+          {t(KEY.recruitment_application)}: {dbT(recruitmentApplication?.recruitment_position, 'name')}
         </Text>
-        <Text>{recruitmentAdmission?.admission_text}</Text>
+        <Text>{recruitmentApplication?.application_text}</Text>
       </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
@@ -79,7 +79,7 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data={otherRecruitmentAdmission.map((element) => [
+          data={otherRecruitmentApplication.map((element) => [
             {
               content: (
                 <Link
@@ -87,7 +87,7 @@ export function RecruitmentApplicantAdminPage() {
                   url={reverse({
                     pattern: ROUTES.frontend.admin_recruitment_applicant,
                     urlParams: {
-                      admissionID: element.id,
+                      applicationID: element.id,
                     },
                   })}
                 >

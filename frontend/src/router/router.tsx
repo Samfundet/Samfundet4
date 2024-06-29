@@ -1,5 +1,4 @@
 import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
-import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
   AdminPage,
@@ -20,7 +19,7 @@ import {
   LycheReservationPage,
   MembershipPage,
   NotFoundPage,
-  RecruitmentAdmissionFormPage,
+  RecruitmentApplicationFormPage,
   RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
   RouteOverviewPage,
@@ -53,17 +52,20 @@ import {
   RecruitmentUsersWithoutInterviewGangPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
-  SultenMenuAdminPage,
-  SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
+  SultenMenuAdminPage,
+  RecruitmentOverviewPage,
+  SultenMenuItemFormAdminPage,
 } from '~/PagesAdmin';
+import { Link, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
-import { t } from 'i18next';
 import { App } from '~/App';
+import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { dbT, lowerCapitalize } from '~/utils';
 import {
   type GangLoader,
   type PositionLoader,
@@ -72,7 +74,6 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
 } from '~/router/loaders';
-import { dbT, lowerCapitalize } from '~/utils';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -97,7 +98,7 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
-        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentAdmissionFormPage />} />
+        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}
           element={<RecruitmentApplicationsOverviewPage />}
@@ -278,6 +279,10 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_recruitment}
             element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentAdminPage} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_overview}
+            element={<ProtectedRoute perms={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} Page={RecruitmentOverviewPage} />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_create}

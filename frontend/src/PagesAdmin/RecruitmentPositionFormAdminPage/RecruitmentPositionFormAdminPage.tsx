@@ -28,8 +28,8 @@ type FormType = {
 
   is_funksjonaer_position: boolean;
 
-  default_admission_letter_nb: string;
-  default_admission_letter_en: string;
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
 
   tags: string;
 };
@@ -78,8 +78,8 @@ export function RecruitmentPositionFormAdminPage() {
 
     norwegian_applicants_only: position?.norwegian_applicants_only || false,
 
-    default_admission_letter_nb: position?.default_admission_letter_nb,
-    default_admission_letter_en: position?.default_admission_letter_en,
+    default_application_letter_nb: position?.default_application_letter_nb,
+    default_application_letter_en: position?.default_application_letter_en,
     is_funksjonaer_position: position?.is_funksjonaer_position || false,
 
     tags: position?.tags,
@@ -213,15 +213,15 @@ export function RecruitmentPositionFormAdminPage() {
             </div>
             <div className={styles.row}>
               <SamfFormField<string, FormType>
-                field="default_admission_letter_nb"
+                field="default_application_letter_nb"
                 type="text_long"
-                label={`${t(KEY.recrutment_default_admission_letter)} ${t(KEY.common_norwegian)}`}
+                label={`${t(KEY.recrutment_default_application_letter)} ${t(KEY.common_norwegian)}`}
                 required={true}
               />
               <SamfFormField<string, FormType>
-                field="default_admission_letter_en"
+                field="default_application_letter_en"
                 type="text_long"
-                label={`${t(KEY.recrutment_default_admission_letter)} ${t(KEY.common_english)}`}
+                label={`${t(KEY.recrutment_default_application_letter)} ${t(KEY.common_english)}`}
                 required={!norwegianApplicantsOnly}
               />
             </div>
