@@ -21,6 +21,7 @@ type TableCell = {
   // Content in cell, eg <b>24 hours</b>
   // If missing, uses value instead.
   content?: Children;
+  style?: string;
 };
 
 // Type shorthands
@@ -149,6 +150,16 @@ export function Table({
     return cell.toString();
   }
 
+  function getCellStyle(cell: TableCell | TableCellValue) {
+    if (typeof cell === 'object') {
+      const style = (cell as TableCell).style;
+      if (style !== undefined) {
+        return style;
+      }
+    }
+    return null;
+  }
+
   function getColumnContent(col?: TableColumn | string) {
     if (col === undefined) {
       return '';
@@ -196,7 +207,7 @@ export function Table({
             <tr className={bodyRowClassName} key={index1}>
               {row &&
                 row.map((cell, index2) => (
-                  <td className={cellClassName} key={index2}>
+                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
                     {getCellContent(cell ?? '')}
                   </td>
                 ))}

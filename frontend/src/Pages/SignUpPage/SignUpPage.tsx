@@ -7,7 +7,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, register } from '~/api';
 import { RegistrationDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -29,6 +29,8 @@ export function SignUpPage() {
   const [loginFailed, setLoginFailed] = useState(false);
   const { user, setUser } = useAuthContext();
   const navigate = useCustomNavigate();
+
+  useTitle(t(KEY.loginpage_register));
 
   useEffect(() => {
     if (user !== undefined) {
