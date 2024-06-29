@@ -57,7 +57,7 @@ import {
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
 } from '~/PagesAdmin';
-import { Link, PermissionRoute, SamfOutlet, SultenOutlet } from '~/Components';
+import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
@@ -87,8 +87,10 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
         <Route path={ROUTES.frontend.health} element={<HealthPage />} />
         <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
-        <Route path={ROUTES.frontend.login} element={<LoginPage />} />
-        <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
+        <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
+          <Route path={ROUTES.frontend.login} element={<LoginPage />} />
+          <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
+        </Route>
         <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
         <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
         <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
