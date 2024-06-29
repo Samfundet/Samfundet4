@@ -1,7 +1,6 @@
 export { AboutPage } from './AboutPage';
 export { AdminPage } from './AdminPage';
 export { ApiTestingPage } from './ApiTestingPage';
-export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { ComponentPage } from './ComponentPage';
 export { EventPage } from './EventPage';
 export { EventsPage } from './EventsPage';
@@ -18,7 +17,8 @@ export { LycheMenuPage } from './LycheMenuPage';
 export { LycheReservationPage } from './LycheReservationPage';
 export { MembershipPage } from './MembershipPage';
 export { NotFoundPage } from './NotFoundPage';
-export { RecruitmentAdmissionFormPage } from './RecruitmentAdmissionFormPage';
+export { RecruitmentApplicationFormPage } from './RecruitmentApplicationFormPage';
+export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';

@@ -34,7 +34,7 @@ from samfundet.models.general import (
     MerchVariation,
     InformationPage,
 )
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 """
@@ -306,8 +306,8 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
         long_description_nb='Long Description NB',
         long_description_en='Long Description EN',
         is_funksjonaer_position=False,
-        default_admission_letter_nb='Default Admission Letter NB',
-        default_admission_letter_en='Default Admission Letter EN',
+        default_application_letter_nb='Default Application Letter NB',
+        default_application_letter_en='Default Application Letter EN',
         tags='tag1,tag2',
         gang=fixture_gang,
         recruitment=fixture_recruitment,
@@ -326,8 +326,8 @@ def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang
         long_description_nb='Long Description NB 2',
         long_description_en='Long Description EN 2',
         is_funksjonaer_position=False,
-        default_admission_letter_nb='Default Admission Letter NB 2',
-        default_admission_letter_en='Default Admission Letter EN 2',
+        default_application_letter_nb='Default Application Letter NB 2',
+        default_application_letter_en='Default Application Letter EN 2',
         tags='tag1,tag2',
         gang=fixture_gang,
         recruitment=fixture_recruitment,
@@ -357,13 +357,13 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(
+def fixture_recruitment_application(
     fixture_user: User,
     fixture_recruitment_position: RecruitmentPosition,
     fixture_recruitment: Recruitment,
-) -> Iterator[RecruitmentAdmission]:
-    admission = RecruitmentAdmission.objects.create(
-        admission_text='Test admission text',
+) -> Iterator[RecruitmentApplication]:
+    application = RecruitmentApplication.objects.create(
+        application_text='Test application text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
         user=fixture_user,
@@ -371,18 +371,18 @@ def fixture_recruitment_admission(
         recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
         recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
-    yield admission
-    admission.delete()
+    yield application
+    application.delete()
 
 
 @pytest.fixture
-def fixture_recruitment_admission2(
+def fixture_recruitment_application2(
     fixture_user: User,
     fixture_recruitment_position2: RecruitmentPosition,
     fixture_recruitment: Recruitment,
-) -> Iterator[RecruitmentAdmission]:
-    admission2 = RecruitmentAdmission.objects.create(
-        admission_text='Test admission text',
+) -> Iterator[RecruitmentApplication]:
+    application2 = RecruitmentApplication.objects.create(
+        application_text='Test application text',
         recruitment_position=fixture_recruitment_position2,
         recruitment=fixture_recruitment,
         user=fixture_user,
@@ -390,8 +390,8 @@ def fixture_recruitment_admission2(
         recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
         recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
-    yield admission2
-    admission2.delete()
+    yield application2
+    application2.delete()
 
 
 @pytest.fixture

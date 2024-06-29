@@ -7,27 +7,27 @@ import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentAdmissionForApplicant,
+  getRecruitmentApplicationsForRecruiter,
   getRecruitmentPosition,
   getRecruitmentPositionsGang,
-  putRecruitmentAdmission,
-  withdrawRecruitmentAdmissionApplicant,
+  putRecruitmentApplication,
+  withdrawRecruitmentApplicationApplicant,
 } from '~/api';
-import { RecruitmentAdmissionDto, RecruitmentPositionDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './RecruitmentAdmissionFormPage.module.scss';
+import styles from './RecruitmentApplicationFormPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 
 type FormProps = {
-  admission_text: string;
+  application_text: string;
 };
 
-export function RecruitmentAdmissionFormPage() {
+export function RecruitmentApplicationFormPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
   const standardNavigate = useNavigate();
@@ -36,11 +36,13 @@ export function RecruitmentAdmissionFormPage() {
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
 
-  const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto>();
+  const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
 
   const [loading, setLoading] = useState(true);
 
   const { positionID } = useParams();
+
+  useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
   useEffect(() => {
     Promise.allSettled([
@@ -55,8 +57,8 @@ export function RecruitmentAdmissionFormPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-      getRecruitmentAdmissionForApplicant(positionID as string).then((res) => {
-        setRecruitmentAdmission(res.data);
+      getRecruitmentApplicationsForRecruiter(positionID as string).then((res) => {
+        setRecruitmentApplication(res.data.application);
       }),
     ]).then(() => {
       setLoading(false);
@@ -71,9 +73,9 @@ export function RecruitmentAdmissionFormPage() {
     );
   }, [recruitmentPosition]);
 
-  function withdrawAdmission() {
+  function withdrawApplication() {
     if (positionID) {
-      withdrawRecruitmentAdmissionApplicant(positionID)
+      withdrawRecruitmentApplicationApplicant(positionID)
         .then(() => {
           navigate({
             url: reverse({
@@ -92,7 +94,7 @@ export function RecruitmentAdmissionFormPage() {
   }
 
   function handleOnSubmit(data: FormProps) {
-    putRecruitmentAdmission(data as Partial<RecruitmentAdmissionDto>, positionID ? +positionID : 1)
+    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionID ? +positionID : 1)
       .then(() => {
         navigate({
           url: reverse({
@@ -121,7 +123,7 @@ export function RecruitmentAdmissionFormPage() {
     return (
       <Page>
         <div className={styles.container}>
-          <h1>{t(KEY.recruitment_admission)}</h1>
+          <h1>{t(KEY.recruitment_application)}</h1>
           <p>The position id is invalid, please enter another position id</p>
         </div>
       </Page>
@@ -183,28 +185,28 @@ export function RecruitmentAdmissionFormPage() {
             })}
           </div>
         </div>
-        {recruitmentAdmission && (
+        {recruitmentApplication && (
           <div className={styles.withdrawnContainer}>
-            {recruitmentAdmission?.withdrawn ? (
+            {recruitmentApplication?.withdrawn ? (
               <Text size="l" as="i" className={styles.withdrawnText}>
                 {t(KEY.recruitment_withdrawn_message)}
               </Text>
             ) : (
-              <Button theme="samf" display="basic" onClick={() => withdrawAdmission()}>
-                {t(KEY.recruitment_withdraw_admission)}
+              <Button theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                {t(KEY.recruitment_withdraw_application)}
               </Button>
             )}
           </div>
         )}
         {user ? (
           <SamfForm
-            initialData={recruitmentAdmission as FormProps}
+            initialData={recruitmentApplication as FormProps}
             onSubmit={handleOnSubmit}
             submitText={submitText}
             devMode={false}
           >
-            <p className={styles.formLabel}>{t(KEY.recruitment_admission)}</p>
-            <SamfFormField field="admission_text" type="text_long" />{' '}
+            <p className={styles.formLabel}>{t(KEY.recruitment_application)}</p>
+            <SamfFormField field="application_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
           <div>

@@ -6,7 +6,7 @@ import { Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, login } from '~/api';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -26,6 +26,8 @@ export function LoginPage() {
   const { from } = location.state || {};
   const { setUser } = useAuthContext();
   const navigate = useCustomNavigate();
+
+  useTitle(t(KEY.common_login));
 
   const fallbackUrl = typeof from === 'undefined' ? ROUTES.frontend.home : from.pathname;
 

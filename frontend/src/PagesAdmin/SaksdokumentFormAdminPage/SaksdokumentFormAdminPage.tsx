@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getSaksdokument, postSaksdokument, putSaksdokument } from '~/api';
 import { SaksdokumentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -96,6 +97,7 @@ export function SaksdokumentFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
+  useTitle(title);
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
       {/* Document form */}
