@@ -7,8 +7,7 @@ import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useCustomNavigate } from '~/hooks';
-import { useTitle } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 
 export function NotFoundPage() {
   const { t } = useTranslation();

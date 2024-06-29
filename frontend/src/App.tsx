@@ -6,7 +6,7 @@ import { useGoatCounter, useIsDarkTheme } from '~/hooks';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // Neccessary import for translations.
-import { CommandMenu, UserFeedback, useScrollToTop } from './Components';
+import { CommandMenu, useScrollToTop } from './Components';
 import './i18n/i18n';
 import { CommandSprut } from '~/Components/CommandSprut/CommandSprut';
 
