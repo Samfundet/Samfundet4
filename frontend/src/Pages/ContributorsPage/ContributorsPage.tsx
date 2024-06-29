@@ -1,13 +1,12 @@
-import { Page } from '~/Components';
-import styles from './ContributorsPage.module.scss';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
+import { Page } from '~/Components';
 import robines from '~/assets/contributors/robines.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
+import { KEY } from '~/i18n/constants';
+import styles from './ContributorsPage.module.scss';
 import { type Contributor, ContributorItem } from './components';
 
-/* eslint-disable max-len */
-// prettier-ignore
+// biome-ignore format: array should not be formatted
 const CONTRIBUTORS: Contributor[] = [
   // H17
   { name: 'Kevin Kristiansen', github: 'KevinKristiansen', from: 'H17', to: 'V20', websjef: { from: 'V18', to: 'H18' } },
@@ -41,7 +40,6 @@ const CONTRIBUTORS: Contributor[] = [
   // V24
   { name: 'Emil Solberg', github: 'emsoraffa', from: 'H24' },
 ];
-/* eslint-enable max-len */
 
 export function ContributorsPage() {
   const { t } = useTranslation();
@@ -66,7 +64,7 @@ export function ContributorsPage() {
           <ContributorItem key={c.name} contributor={c} />
         ))}
       </div>
-      <div></div>
+      <div />
     </Page>
   );
 }

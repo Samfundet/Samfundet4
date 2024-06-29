@@ -5,6 +5,7 @@ import {
   AdminPage,
   ApiTestingPage,
   ComponentPage,
+  ContributorsPage,
   EventPage,
   EventsPage,
   GroupsPage,
@@ -27,7 +28,6 @@ import {
   SaksdokumenterPage,
   SignUpPage,
   VenuePage,
-  ContributorsPage,
 } from '~/Pages';
 import {
   AdminLayout,

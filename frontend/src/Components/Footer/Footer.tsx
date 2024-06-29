@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Image, Link } from '~/Components';
 import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
 import { KEY } from '~/i18n/constants';
-import styles from './Footer.module.scss';
 import { ROUTES } from '~/routes';
+import styles from './Footer.module.scss';
 
 export function Footer() {
   const { t } = useTranslation();
