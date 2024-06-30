@@ -45,50 +45,12 @@ GANGS = {
     },
     'UKA': {
         '': [
-            ('Admin', None, [
-                'Digital Innovasjon',
-                'HMS',
-                'HR',
-                'ITK',
-                'Logistikk',
-                'Velferd'
-            ]),
-            ('Arena', None, [
-                'Arrangement',
-                'Baccarat',
-                'Serveringen',
-                'Telt',
-                'Vertskapet Dødens Dal'
-            ]),
-            ('Drift', None, [
-                'Byggeprosjektet',
-                'KSG',
-                'Selskap',
-                'Vertskapet Huset'
-            ]),
-            ('Kultur', None, [
-                'Event',
-                'FK',
-                'HusU',
-                'Regi',
-                'Revy',
-                'SaSp',
-                'VK'
-            ]),
-            ('PR', None, [
-                'Film og Foto',
-                'Grafikken',
-                'Markedsføringen',
-                'Næringsliv',
-                'Presse',
-                'UKEsenderen',
-                'Profileringen'
-            ]),
-            ('Økonomi', None, [
-                'Budsjett',
-                'Regnskap',
-                'Salget'
-            ]),
+            ('Admin', None, ['Digital Innovasjon', 'HMS', 'HR', 'ITK', 'Logistikk', 'Velferd']),
+            ('Arena', None, ['Arrangement', 'Baccarat', 'Serveringen', 'Telt', 'Vertskapet Dødens Dal']),
+            ('Drift', None, ['Byggeprosjektet', 'KSG', 'Selskap', 'Vertskapet Huset']),
+            ('Kultur', None, ['Event', 'FK', 'HusU', 'Regi', 'Revy', 'SaSp', 'VK']),
+            ('PR', None, ['Film og Foto', 'Grafikken', 'Markedsføringen', 'Næringsliv', 'Presse', 'UKEsenderen', 'Profileringen']),
+            ('Økonomi', None, ['Budsjett', 'Regnskap', 'Salget']),
         ]
     },
     'ISFiT': {
@@ -101,7 +63,7 @@ GANGS = {
             ('Organizational Resources', 'OR', []),
             ('Human Resources', 'HR', []),
         ]
-    }
+    },
 }
 
 
@@ -116,7 +78,7 @@ def seed():
 
         for gang_type in GANGS[org]:
             gtype = None
-            if gang_type != "":
+            if gang_type != '':
                 gtype, _ = GangType.objects.get_or_create(title_nb=gang_type)
 
             for gang in GANGS[org][gang_type]:
