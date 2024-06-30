@@ -807,6 +807,16 @@ export async function withdrawRecruitmentApplicationApplicant(positionId: number
   return response;
 }
 
+export async function withdrawRecruitmentApplicationRecruiter(id: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_withdraw_application_recruiter,
+      urlParams: { pk: id },
+    });
+  return await axios.put(url, {}, { withCredentials: true });
+}
+
 export async function putRecruitmentApplicationInterview(
   interviewId: string | number,
   interview: Partial<InterviewDto>,
