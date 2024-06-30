@@ -81,7 +81,7 @@ export function RecruitmentGangOverviewPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner} showBackButton={true}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );
