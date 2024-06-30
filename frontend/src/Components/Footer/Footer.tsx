@@ -1,78 +1,119 @@
-import { default as classNames } from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Link, Image } from '~/Components';
+import { Link } from '~/Components';
 import { Icon } from '@iconify/react';
-import { isfit, kulturromSponsor, reitanSponsor, trondhemSponsor, ukaWhite } from '~/assets';
+import {
+  isfit,
+  isfitWhite,
+  kulturrom,
+  kulturromWhite,
+  reitan,
+  reitanWhite,
+  trondheim,
+  trondheimWhite,
+  uka,
+  ukaWhite,
+} from '~/assets';
 import { KEY } from '~/i18n/constants';
 import styles from './Footer.module.scss';
 import { ROUTES } from '~/routes';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { THEME } from '~/constants';
 
 export function Footer() {
   const { t } = useTranslation();
 
-  return (
-    <div className={styles.footer_container}>
-      <div className={styles.main_row}>
-        <div className={classNames(styles.col, styles.column)}>
-          <h1 className={styles.header}>{t(KEY.common_contact)}</h1>
-          <div>
-            <p>© Studentersamfundet i Trondhjem 2023</p>
-            <p>Org.nr: 970 088 466</p>
-            <p>Elgeseter gate 1</p>
-            <p>7030</p>
-          </div>
-        </div>
-        <div className={classNames(styles.col_2, styles.column)}>
-          <h1 className={styles.header}>{t(KEY.common_sponsor)}</h1>
-          <div className={styles.row_collapse}>
-            <Link className={styles.sponsor_logo} target="external" url="https://www.trondheim.kommune.no/">
-              <Image src={trondhemSponsor} className={styles.images}></Image>
-            </Link>
-            <Link className={styles.sponsor_logo} target="external" url="https://kulturrom.no/">
-              <Image src={kulturromSponsor} className={styles.images}></Image>
-            </Link>
-            <Link className={styles.sponsor_logo} target="external" url="https://reitan.no/no">
-              <Image src={reitanSponsor} className={styles.images}></Image>
-            </Link>
-          </div>
-        </div>
-        <div className={classNames(styles.col, styles.column)}>
-          <h1 className={styles.header}>{t(KEY.common_festivals)}</h1>
-          <div className={styles.row}>
-            <Link target="external" url="https://www.uka.no/">
-              <Image src={ukaWhite} className={styles.images}></Image>
-            </Link>
-            <Link target="external" url="https://www.isfit.org/">
-              <Image src={isfit} className={styles.images}></Image>
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className={styles.row}>
-        <Link target="external" url="https://www.facebook.com/samfundet">
-          <Icon className={styles.icon} color="white" icon="bi:facebook" width={40} />
-        </Link>
-        <Link target="external" url="https://www.instagram.com/samfundet/">
-          <Icon className={styles.icon} color="white" icon="bi:instagram" width={40} />
-        </Link>
-        <Link target="external" url="https://www.tiktok.com/@samfundet">
-          <Icon className={styles.icon} color="white" icon="bi:tiktok" width={40} />
-        </Link>
-        <Link target="external" url="https://www.snapchat.com/add/samfundet">
-          <Icon className={styles.icon} color="white" icon="bi:snapchat" width={40} />
-        </Link>
-      </div>
-      <div className={styles.cookies}>
-        <p>
-          {t(KEY.we_use_cookies)}{' '}
-          <Link style={{ color: 'white' }} target="external" url="https://www.whatarecookies.com/">
-            {t(KEY.common_here)}
+  const { theme } = useGlobalContext();
+
+  const iconColor = theme === THEME.DARK ? 'white' : 'black';
+  const trondheimLogo = theme === THEME.DARK ? trondheimWhite : trondheim;
+  const kulturromLogo = theme === THEME.DARK ? kulturromWhite : kulturrom;
+  const reitanLogo = theme === THEME.DARK ? reitanWhite : reitan;
+  const ukaLogo = theme === THEME.DARK ? ukaWhite : uka;
+  const isfitLogo = theme === THEME.DARK ? isfitWhite : isfit;
+
+  const sponsorsAndOrgs = (
+    <div className={styles.sponsors_and_orgs}>
+      <div>
+        <h2 className={styles.header}>{t(KEY.common_sponsor)}</h2>
+        <div className={styles.logo_row}>
+          <Link className={styles.logo_link} target="external" url="https://www.trondheim.kommune.no/">
+            <img src={trondheimLogo} className={styles.logo} alt="Trondheim Kommune" />
           </Link>
-        </p>
+          <Link className={styles.logo_link} target="external" url="https://kulturrom.no/">
+            <img src={kulturromLogo} className={styles.logo} style={{ padding: '0.5rem 0' }} alt="Kulturrom" />
+          </Link>
+          <Link className={styles.logo_link} target="external" url="https://reitan.no/no">
+            <img src={reitanLogo} className={styles.logo} alt="Reitan" />
+          </Link>
+        </div>
       </div>
-      <Link url={ROUTES.frontend.contributors} plain className={styles.contributors_link}>
-        Utviklet av MG::Web
+      <div>
+        <h2 className={styles.header}>{t(KEY.common_festivals)}</h2>
+        <div className={styles.logo_row}>
+          <Link className={styles.logo_link} target="external" url="https://www.uka.no/">
+            <img src={ukaLogo} className={styles.logo} style={{ padding: '0.75rem 0' }} alt="UKA" />
+          </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.isfit.org/">
+            <img src={isfitLogo} className={styles.logo} alt="ISFiT" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+
+  const contact = (
+    <div className={styles.contact}>
+      <h2 className={styles.header}>{t(KEY.common_contact)}</h2>
+      <div>
+        <p>© Studentersamfundet i Trondhjem 2023</p>
+        <p>Org.nr: 970 088 466</p>
+        <p>Elgeseter gate 1</p>
+        <p>7030</p>
+      </div>
+    </div>
+  );
+
+  const socials = (
+    <div className={styles.socials}>
+      <Link target="external" url="https://www.facebook.com/samfundet">
+        <Icon color={iconColor} icon="bi:facebook" width={20} />
       </Link>
+      <Link target="external" url="https://www.instagram.com/samfundet/">
+        <Icon color={iconColor} icon="bi:instagram" width={20} />
+      </Link>
+      <Link target="external" url="https://www.tiktok.com/@samfundet">
+        <Icon color={iconColor} icon="bi:tiktok" width={20} />
+      </Link>
+      <Link target="external" url="https://www.snapchat.com/add/samfundet">
+        <Icon color={iconColor} icon="bi:snapchat" width={20} />
+      </Link>
+    </div>
+  );
+
+  const extraInfo = (
+    <div className={styles.extra_info}>
+      <div>
+        {t(KEY.we_use_cookies)}{' '}
+        <Link target="external" url="https://www.whatarecookies.com/">
+          {t(KEY.common_here)}
+        </Link>
+      </div>
+
+      <Link url={ROUTES.frontend.contributors} plain className={styles.contributors_link}>
+        {t(KEY.footer_developed_by)}
+      </Link>
+    </div>
+  );
+
+  return (
+    <div className={styles.container}>
+      {sponsorsAndOrgs}
+
+      <div className={styles.main_footer}>
+        {contact}
+        {socials}
+        {extraInfo}
+      </div>
     </div>
   );
 }
