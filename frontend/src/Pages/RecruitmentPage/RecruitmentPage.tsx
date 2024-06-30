@@ -70,22 +70,6 @@ export function RecruitmentPage() {
     <Page className={styles.recruitmentPage}>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        <div className={styles.personalRow}>
-          <OccupiedFormModal recruitmentId={1} />
-          <Button
-            theme="samf"
-            onClick={() => {
-              navigate({
-                url: reverse({
-                  pattern: ROUTES.frontend.recruitment_application_overview,
-                  urlParams: { recruitmentID: 1 },
-                }),
-              });
-            }}
-          >
-            {t(KEY.recruitment_organization)}
-          </Button>
-        </div>
         {user ? (
           <div className={styles.personalRow}>
             <OccupiedFormModal recruitmentId={1} />
