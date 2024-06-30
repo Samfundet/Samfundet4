@@ -831,6 +831,15 @@ export async function putRecruitmentApplicationInterview(
   return response;
 }
 
+export async function getRecruitmentStats(id: string): Promise<AxiosResponse<RecruitmentDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_stats_detail, urlParams: { pk: id } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });

@@ -1,12 +1,21 @@
 import styles from './RecruitmentStatistics.module.scss';
 import { Text } from '~/Components/Text/Text';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
+import { getRecruitmentStats } from '~/api';
+import { useParams } from 'react-router-dom';
 
 export function RecruitmentStatistics() {
+  const { recruitmentId } = useParams();
   const { t } = useTranslation();
   // TODO: add dynamic data and might need backend features (in ISSUE #1110)
+
+  useEffect(() => {
+    if (recruitmentId) {
+      getRecruitmentStats(recruitmentId);
+    }
+  }, [recruitmentId]);
 
   const mockRecruitmentStatOne = [
     { at_date: '28-08-2024', recruitment_applications: 10 },
