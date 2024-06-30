@@ -57,6 +57,7 @@ import {
   AdminLayout,
   ImpersonateUserAdminPage,
   SultenMenuItemFormAdminPage,
+  UsersAdminPage,
 } from '~/PagesAdmin';
 import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
@@ -160,6 +161,16 @@ export const router = createBrowserRouter(
                 </Link>
               ),
             }}
+          />
+        </Route>
+        {/* Users */}
+        <Route
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_users}>{t(KEY.common_users)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_users}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_USER]} element={<UsersAdminPage />} />}
           />
         </Route>
         {/* Events */}
