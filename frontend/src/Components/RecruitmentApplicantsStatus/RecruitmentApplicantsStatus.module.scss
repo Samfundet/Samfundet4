@@ -32,11 +32,42 @@
 
 .rows {
   padding: 0.1em 0.2em;
+}
+
+.pending {
   background-color: $pending;
 }
 
-.rows_pending {
-  background-color: $pending;
+.top_reserve {
+  background-color: $topreserve;
+}
+
+.top_wanted {
+  background-color: $topwanted;
+}
+
+.less_reserve {
+  background-color: $lessreserve;
+}
+
+.less_reserve_wanted {
+  background-color: $lessreservewanted;
+}
+
+.less_reserve_reserve {
+  background-color: $lessreservereserve;
+}
+
+.less_wanted {
+  background-color: $lesswanted;
+}
+
+.less_wanted_wanted {
+  background-color: $lesswantedwanted;
+}
+
+.less_wanted_reserve {
+  background-color: $lesswantedreserve;
 }
 
 .table {

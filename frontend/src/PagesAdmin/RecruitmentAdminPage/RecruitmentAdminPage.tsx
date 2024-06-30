@@ -7,6 +7,7 @@ import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
 import { RecruitmentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -18,6 +19,8 @@ export function RecruitmentAdminPage() {
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = t(KEY.recruitment_administrate);
+  useTitle(title);
 
   // Stuff to do on first render.
   //TODO add permissions on render
@@ -73,7 +76,6 @@ export function RecruitmentAdminPage() {
     ];
   });
 
-  const title = t(KEY.recruitment_administrate);
   const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
   const header = (
     <>

@@ -46,6 +46,23 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   return false;
 }
 
+// Checks if user has ALL provided permissions
+export function hasPermissions(
+  user: UserDto | null | undefined,
+  permissions: string[] | undefined,
+  obj?: string | number,
+): boolean {
+  if (!user || !permissions) return false;
+
+  for (const permission of permissions) {
+    if (!hasPerm({ user, permission, obj })) {
+      return false;
+    }
+  }
+  // Because of how JS treats empty lists as truthy, if permissions is an empty list, we'll return true here
+  return true;
+}
+
 // ------------------------------
 
 export function getGlobalBackgroundColor(): string {
@@ -299,6 +316,15 @@ export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
   return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
 }
+
+export const toPercentage = (floatNum: number | undefined): string => {
+  if (floatNum) {
+    const percentage = floatNum * 100;
+    return percentage.toString().slice(0, 4) + '%';
+  } else {
+    return 'N/A';
+  }
+};
 
 /*
 export function immutableSet(list: unknown[], oldValue: unknown, newValue: unknown) {

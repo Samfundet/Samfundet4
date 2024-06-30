@@ -16,6 +16,7 @@ export const ROUTES_FRONTEND = {
   saksdokumenter: '/saksdokumenter/',
   membership: '/membership',
   luka: '/luka',
+  contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
@@ -64,6 +65,8 @@ export const ROUTES_FRONTEND = {
   admin_recruitment: '/control-panel/recruitment/',
   admin_recruitment_edit: '/control-panel/recruitment/edit/:recruitmentId',
   admin_recruitment_create: '/control-panel/recruitment/create/',
+  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-admissions/',
+  admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
@@ -78,7 +81,7 @@ export const ROUTES_FRONTEND = {
   admin_sulten_menuitem_create: '/control-panel/lyche/menuitems/create',
   admin_sulten_menuitem_edit: '/control-panel/lyche/menuitems/edit/:id',
   admin_sulten_reservations: '/control-panel/lyche/reservations',
-  admin_recruitment_applicant: '/control-panel/recruitment/view-applicant/:admissionID/',
+  admin_recruitment_applicant: '/control-panel/recruitment/view-applicant/:applicationID/',
   // ==================== //
   //      Development     //
   // ==================== //

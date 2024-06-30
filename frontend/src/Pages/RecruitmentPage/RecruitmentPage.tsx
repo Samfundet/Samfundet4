@@ -4,7 +4,7 @@ import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
 import { getActiveRecruitmentPositions, getGangList } from '~/api';
 import { TextItem } from '~/constants';
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { useTextItem, useCustomNavigate } from '~/hooks';
+import { useTextItem, useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { GangTypeContainer } from './Components';
@@ -20,8 +20,9 @@ export function RecruitmentPage() {
   const [loading, setLoading] = useState(true);
   const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
+  useTitle(t(KEY.common_recruitment));
 
-  const noadmissions = (
+  const noAdmissions = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
         <h1 className={styles.header}>{useTextItem(TextItem.no_recruitment_text)}</h1>
@@ -121,7 +122,7 @@ export function RecruitmentPage() {
         ) : recruitmentPositions ? (
           <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
         ) : (
-          noadmissions
+          noAdmissions
         )}
       </div>
     </Page>

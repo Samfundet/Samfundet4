@@ -8,6 +8,7 @@ import { Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
 import { getGangList } from '~/api';
 import { GangTypeDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -20,6 +21,7 @@ export function GangsAdminPage() {
   const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.adminpage_gangs_title));
 
   // Stuff to do on first render.
   // TODO add permissions on render
