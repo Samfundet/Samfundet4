@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+from random import sample
 
 from django.db import transaction
 
@@ -10,7 +11,6 @@ from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentPositionTag
 
 # Some example data to use for the new RecruitmentPosition instances
-
 POSITION_DATA = {
     'is_funksjonaer_position': False,
     'default_application_letter_nb': 'Default Application Letter NB',
@@ -38,15 +38,21 @@ def create_tags() -> list:
     return list(existing_tags.values())
 
 
-def create_positions() -> list:
-    recruitments = Recruitment.objects.all()
+def seed():
+    yield 0, 'recruitment_positions'
+    RecruitmentPosition.objects.all().delete()
+    yield 0, 'Deleted old recruitment positions'
+
     gangs = Gang.objects.all()
+    recruitments = Recruitment.objects.all()
+    created_count = 0
+    all_tags = create_tags()
+
     positions_to_create = []
 
-    for gang in gangs:
-        number_of_positions = random.randint(1, 12)
-        for recruitment in recruitments:
-            for i in range(number_of_positions):
+    for recruitment_index, recruitment in enumerate(recruitments):
+        for gang_index, gang in enumerate(sample(list(gangs), 6)):
+            for i in range(2):  # Create 2 instances for each gang and recruitment
                 position_data = POSITION_DATA.copy()
                 position_data.update(
                     {
@@ -62,16 +68,6 @@ def create_positions() -> list:
                 )
                 positions_to_create.append(RecruitmentPosition(**position_data))
 
-    return positions_to_create
-
-
-def seed():
-    yield 0, 'recruitment_positions'
-
-    all_tags = create_tags()
-    positions_to_create = create_positions()
-
-    # Use a transaction to ensure atomicity
     with transaction.atomic():
         RecruitmentPosition.objects.bulk_create(positions_to_create)
 
@@ -95,4 +91,4 @@ def seed():
 
     created_count = len(positions_to_create)
 
-    yield 100, f'Created {created_count} recruitment_positions'
+    yield 100, f'Created {created_count} recruitment positions'

@@ -1013,12 +1013,7 @@ class Migration(migrations.Migration):
                 ('default_application_letter_nb', models.TextField(help_text='Default application letter for the position')),
                 ('default_application_letter_en', models.TextField(blank=True, help_text='Default application letter for the position', null=True)),
                 ('norwegian_applicants_only', models.BooleanField(default=False, help_text='Is this position only for Norwegian applicants?')),
-                (
-                    'created_by',
-                    models.ForeignKey(
-                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
-                    ),
-                ),
+                ('tags', models.CharField(help_text='Tags for the position', max_length=100)),
                 (
                     'created_by',
                     models.ForeignKey(
@@ -1199,13 +1194,6 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
-        migrations.AddField(
-            model_name='recruitmentposition',
-            name='tags',
-            field=models.ManyToManyField(
-                blank=True, help_text='tags associated with this position', related_name='position_tags', to='samfundet.recruitmentpositiontag'
-            ),
-        ),
         migrations.CreateModel(
             name='RecruitmentSeperatePosition',
             fields=[
@@ -1370,7 +1358,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Venue',
+            name='Booking',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('version', models.PositiveIntegerField(blank=True, default=0, editable=False, null=True)),
@@ -1400,14 +1388,9 @@ class Migration(migrations.Migration):
                 ('tables', models.ManyToManyField(blank=True, to='samfundet.table')),
             ],
             options={
-                'verbose_name': 'Venue',
-                'verbose_name_plural': 'Venues',
+                'verbose_name': 'Booking',
+                'verbose_name_plural': 'Bookings',
             },
-        ),
-        migrations.AddField(
-            model_name='table',
-            name='venue',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.venue'),
         ),
         migrations.CreateModel(
             name='Tag',
