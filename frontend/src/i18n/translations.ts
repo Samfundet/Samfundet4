@@ -49,6 +49,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_not]: 'Ikke',
+  [KEY.common_now]: 'Nå',
   [KEY.common_time]: 'Tid',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -68,6 +69,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_max]: 'Maks',
   [KEY.common_card]: 'Kort',
   [KEY.common_tags]: 'Merkelapper',
+  [KEY.common_contributors]: 'Bidragsytere',
   [KEY.common_image]: 'Bilde',
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
@@ -84,6 +86,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
   [KEY.common_sulten]: 'Lyche',
+  [KEY.common_active]: 'Aktiv',
   [KEY.common_missing]: 'Mangler',
   [KEY.common_contact]: 'Kontakt',
   [KEY.common_english]: 'Engelsk',
@@ -189,6 +192,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.loginpage_passwords_must_match]: 'Passordene må være like',
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
+
+  // ContributorsPage
+  [KEY.contributors_page_title]: 'De frivillige som utvikler Samfundet.no',
+  [KEY.contributors_page_text]: 'Samfundet.no utvikles av MG::Web, som er en seksjon i Markedsføringsgjengen.',
+  [KEY.contributors_page_past_developers]: 'Tidligere utviklere',
 
   // GroupsPage:
   [KEY.groupspage_gangs_text]:
@@ -430,6 +438,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
   [KEY.common_not]: 'Not',
+  [KEY.common_now]: 'Now',
   [KEY.common_time]: 'Time',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -464,6 +473,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_go_back]: 'Go back',
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_search]: 'Search',
+  [KEY.common_active]: 'Active',
   [KEY.common_choose]: 'Choose',
   [KEY.common_missing]: 'Missing',
   [KEY.common_message]: 'Message',
@@ -501,6 +511,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_information]: 'Information',
   [KEY.common_recruitment]: 'Recruitment',
   [KEY.common_reservation]: 'Reservation',
+  [KEY.common_contributors]: 'Contributors',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_general]: 'General',
   [KEY.common_long_description]: 'Long description',
@@ -584,6 +595,10 @@ export const en: Record<KeyValues, string> = {
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
+
+  [KEY.contributors_page_title]: 'The volunteers developing Samfundet.no',
+  [KEY.contributors_page_text]: 'Samfundet.no is developed by MG::Web, which is a section of Markedsføringsgjengen.',
+  [KEY.contributors_page_past_developers]: 'Past developers',
 
   // GangsAdminPage:
   [KEY.admin_gangsadminpage_webpage]: 'Webpage',
