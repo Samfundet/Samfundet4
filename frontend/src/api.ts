@@ -352,6 +352,14 @@ export async function getOrganizations(): Promise<OrganizationDto[]> {
   return response.data;
 }
 
+export async function getOrganization(id: number): Promise<OrganizationDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__organizations_detail, urlParams: { pk: id } });
+  const response = await axios.get<OrganizationDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getGangList(): Promise<GangTypeDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
