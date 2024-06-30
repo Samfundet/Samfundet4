@@ -483,9 +483,9 @@ export type RecruitmentStatsDto = {
   recruitment?: number;
   total_applicants: number;
   total_applications: number;
-  time_stats?: RecruitmentTimeStatDto[];
-  date_stats?: RecruitmentDateStatDto[];
-  campus_stats?: RecruitmentCampusStatDto[];
+  time_stats: RecruitmentTimeStatDto[];
+  date_stats: RecruitmentDateStatDto[];
+  campus_stats: RecruitmentCampusStatDto[];
 };
 
 export type FeedbackDto = {

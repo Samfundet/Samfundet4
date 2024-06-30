@@ -310,6 +310,9 @@ export const KEY = {
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
 
+  recruitment_stats_hours_header: 'recruitment_stats_hours_header',
+  recruitment_stats_campus_header: 'recruitment_stats_campus_header',
+  recruitment_stats_date_header: 'recruitment_stats_date_header',
   // Admin:
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',

@@ -302,6 +302,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_stats_hours_header]: 'Antall søkere per time',
+  [KEY.recruitment_stats_campus_header]: 'Antall søkere per campus',
+  [KEY.recruitment_stats_date_header]: 'Antall søkere per dag',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -692,6 +695,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_stats_hours_header]: 'Total applicants per hour',
+  [KEY.recruitment_stats_campus_header]: 'Total applicants per campus',
+  [KEY.recruitment_stats_date_header]: 'Total applicants per day',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
