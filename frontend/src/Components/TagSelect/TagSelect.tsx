@@ -85,8 +85,6 @@ export function TagSelect({ currentTagOptions, exportTags }: TagSelectProps) {
     setTagSearch('');
   };
 
-  // tag representation
-
   const tagElement = (tag: TagDto) => {
     const isSelected = selectedTags.has(tag);
     const backgroundColor = isSelected ? (tag.color ? `${tag.color}` : COLORS.orange_ligher) : COLORS.grey_4;
