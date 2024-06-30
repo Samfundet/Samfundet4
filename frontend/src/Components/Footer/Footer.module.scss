@@ -14,9 +14,7 @@
   padding: 1em;
   
   @include theme-dark {
-    /* stylelint-disable-next-line function-no-unknown */
-    background-color: darken($red-samf, 35%);
-
+    background: $black;
   }
 }
 
@@ -93,4 +91,15 @@
   font-size: 0.75em;
   color: $grey-5;
   font-weight: 100;
+}
+
+.contributors_link {
+  font-size: 0.75rem;
+  color: $grey-4;
+  opacity: 0.8;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

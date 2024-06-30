@@ -8,6 +8,7 @@ import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import { EventDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -21,6 +22,7 @@ export function EventsAdminPage() {
   const [allEvents, setAllEvents] = useState<EventDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t, i18n } = useTranslation();
+  useTitle(t(KEY.admin_events_administrate));
 
   function getEvents() {
     getEventsUpcomming()
@@ -106,7 +108,7 @@ export function EventsAdminPage() {
     ];
   });
 
-  const title = lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_event)}`);
+  const title = t(KEY.admin_events_administrate);
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>

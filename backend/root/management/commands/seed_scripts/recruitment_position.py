@@ -4,42 +4,18 @@ import random
 
 from django.db import transaction
 
+from root.utils.samfundet_random import words
+
 from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentPositionTag
 
 # Some example data to use for the new RecruitmentPosition instances
-POSITION_DATA_1 = {
-    'short_description_nb': 'Kreativ utvikler',
-    'short_description_en': 'Creative Developer EN',
-    'long_description_nb': 'Du vil være ansvarlig for å utvikle og implemetere kreative ideer for å forbedre våre tjenester',
-    'long_description_en': 'You will be responsible for developing and implementing creative ideas to improve our services.',
+
+POSITION_DATA = {
     'is_funksjonaer_position': False,
-    'default_admission_letter_nb': 'Standard søkandstekst...',
-    'default_admission_letter_en': 'Default application text...',
+    'default_application_letter_nb': 'Default Application Letter NB',
+    'default_application_letter_en': 'Default Application Letter EN',
 }
-
-POSITION_DATA_2 = {
-    'short_description_nb': 'Event Maestro NB',
-    'short_description_en': 'Event Maestro EN',
-    'long_description_nb': 'Du vil orkestrere og administrere våre store hendelser, samtidig som du sørger for at alt går på skinner',
-    'long_description_en': 'You will orchestrate and manage our grand events, ensuring everything runs smoothly.',
-    'is_funksjonaer_position': False,
-    'default_admission_letter_nb': 'Standard søkandstekst...',
-    'default_admission_letter_en': 'Default application text...',
-}
-
-POSITION_DATA_3 = {
-    'short_description_nb': 'Web trollmann',
-    'short_description_en': 'Web Wizard',
-    'long_description_nb': 'Du vil fortrylle vårt publikum med fengslende CSS på tvers av ulike nettlesere.',
-    'long_description_en': 'You will enchant our audience with captivating CSS across various web-browsers.',
-    'is_funksjonaer_position': True,
-    'default_admission_letter_nb': 'Standard søkandstekst...',
-    'default_admission_letter_en': 'Default application text...',
-}
-
-# List of mock positions data
-POSITION_DATA_LIST = [POSITION_DATA_1, POSITION_DATA_2, POSITION_DATA_3]
 
 TAGS = [
     {'name': 'web', 'color': '#33cccc'},
@@ -71,11 +47,15 @@ def create_positions() -> list:
         number_of_positions = random.randint(1, 12)
         for recruitment in recruitments:
             for i in range(number_of_positions):
-                position_data = random.choice(POSITION_DATA_LIST).copy()
+                position_data = POSITION_DATA.copy()
                 position_data.update(
                     {
                         'name_nb': f'{gang.abbreviation} stilling {i}',
                         'name_en': f'{gang.abbreviation} position {i}',
+                        'short_description_nb': words(3),
+                        'short_description_en': words(3),
+                        'long_description_nb': words(20),
+                        'long_description_en': words(20),
                         'gang': gang,
                         'recruitment': recruitment,
                     }

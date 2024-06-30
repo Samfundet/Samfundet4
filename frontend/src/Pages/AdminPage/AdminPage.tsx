@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { Button, ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
 import { ROUTES } from '~/routes';
@@ -10,10 +10,12 @@ import { Link } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { getRandomEntryFromList } from '~/utils';
+import { useTitle } from '~/hooks';
 
 export function AdminPage() {
   const { t } = useTranslation();
   const { user } = useAuthContext();
+  useTitle(t(KEY.command_menu_shortcut_control_panel));
 
   const WISEWORD = getRandomEntryFromList(WISEWORDS) as string;
 

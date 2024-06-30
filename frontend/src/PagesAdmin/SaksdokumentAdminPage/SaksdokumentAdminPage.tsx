@@ -8,6 +8,7 @@ import { Table } from '~/Components/Table';
 import { getSaksdokumenter } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import { SaksdokumentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -22,6 +23,7 @@ export function SaksdokumentAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { t } = useTranslation();
+  useTitle(t(KEY.admin_saksdokumenter_title));
 
   // Get documents
   useEffect(() => {
