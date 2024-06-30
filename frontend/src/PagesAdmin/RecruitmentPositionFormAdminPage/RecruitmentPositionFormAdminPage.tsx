@@ -142,11 +142,7 @@ export function RecruitmentPositionFormAdminPage() {
   }
   return (
     <>
-      <AdminPageLayout
-        title={t(KEY.common_create) + ' ' + t(KEY.recruitment_position)}
-        header={true}
-        showBackButton={true}
-      >
+      <AdminPageLayout title={t(KEY.common_create) + ' ' + t(KEY.recruitment_position)} header={true}>
         <div className={styles.wrapper}>
           <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
             <div className={styles.row}>
