@@ -77,7 +77,7 @@ export function ImageFormAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm<FormType>
         onSubmit={handleOnSubmit}
         //onChange={handleOnChange}

@@ -232,6 +232,8 @@ export const KEY = {
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
 
+  footer_developed_by: 'footer_developed_by',
+
   // Sulten / Lyche:
   sulten_dishes: 'sulten_dishes',
   sulten_lyche_goal: 'sulten_lyche_goal',
