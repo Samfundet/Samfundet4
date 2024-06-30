@@ -67,7 +67,7 @@ GANGS = {
 }
 
 
-def seed():
+def seed():  # noqa: C901
     total_gangs = sum(len(gangs) for org in GANGS for gangs in GANGS[org])
     created_count = 0
 
