@@ -840,7 +840,6 @@ export async function getRecruitmentStats(id: string): Promise<AxiosResponse<Rec
   return response;
 }
 
-
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });

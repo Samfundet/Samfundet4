@@ -1,6 +1,6 @@
 import styles from './RecruitmentStatistics.module.scss';
 import { Text } from '~/Components/Text/Text';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { getRecruitmentStats } from '~/api';
@@ -27,12 +27,6 @@ export function RecruitmentStatistics() {
         });
     }
   }, [recruitmentId, t]);
-
-  const recruitmentStatisticsContainer = (children: ReactNode) => (
-    <div className={styles.statisticsContainer}>
-      <div className={styles.chartContainer}>{children}</div>
-    </div>
-  );
 
   return (
     <div className={styles.container}>
