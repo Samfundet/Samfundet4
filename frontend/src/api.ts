@@ -366,6 +366,15 @@ export async function getGang(id: string | number): Promise<GangDto> {
   return response.data;
 }
 
+export async function getGangsByOrganization(id: string | number): Promise<GangDto[]> {
+  const url = BACKEND_DOMAIN + reverse({
+    pattern: ROUTES.backend.samfundet__organizations_gangs,
+    urlParams: { pk: id }
+  });
+  const response = await axios.get<GangDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function getGangs(): Promise<GangDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_list });
   const response = await axios.get<GangDto[]>(url, { withCredentials: true });
