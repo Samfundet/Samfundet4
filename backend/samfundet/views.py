@@ -9,12 +9,12 @@ from typing import Any
 from guardian.shortcuts import get_objects_for_user
 
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -263,7 +263,7 @@ class OrganizationView(ModelViewSet):
     queryset = Organization.objects.all()
 
     @action(detail=True, methods=['get'])
-    def gangs(self, request, **kwargs):
+    def gangs(self, request: Request, **kwargs) -> Response:
         organization = self.get_object()
         gangs = Gang.objects.filter(organization=organization)
         serializer = GangSerializer(gangs, many=True)
