@@ -6,6 +6,8 @@
   margin-top: 2rem;
   @include flex-column-center;
   gap:2rem;
+  padding-left: 2em;
+  padding-right: 2em;
 }
 
 .subContainer{
@@ -13,16 +15,4 @@
   grid-template-columns: auto auto;
   gap: 2rem;
 }
-
-.statisticsContainer{
-  width: 32rem;
-  height: 32rem;
-  border: 2px solid black;
-  border-radius: 0.15rem;
-  display: grid;
-  grid-template-rows: auto auto;
-  justify-content: center;
-  padding: 0.5rem;
-}
-
 
