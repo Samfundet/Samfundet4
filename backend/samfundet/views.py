@@ -75,6 +75,7 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentPositionTagSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentInterviewAvailabilitySerializer,
@@ -118,6 +119,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentPositionTag,
     RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
@@ -598,8 +600,8 @@ class RecruitmentStatisticsView(ModelViewSet):
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
     permission_classes = [AllowAny]
-    serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
+    serializer_class = RecruitmentPositionSerializer
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -1102,3 +1104,44 @@ class UserFeedbackView(CreateAPIView):
         )
 
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class RecruitmentPositionTagView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionTagSerializer
+    queryset = RecruitmentPositionTag.objects.all()
+
+    def create(self, request: Request, *args: tuple, **kwargs: dict) -> Response:
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        tag, created = RecruitmentPositionTag.objects.get_or_create(name=data.get('name'))
+
+        if not created:
+            return Response({'message': 'Tag already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'position_id' in data:
+            try:
+                position = RecruitmentPosition.objects.get(id=data['position_id'])
+                position.tags.add(tag)
+            except RecruitmentPosition.DoesNotExist:
+                return Response({'message': 'Position not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
+
+class RecruitmentPositionByTagView(ListAPIView):
+    """View used to get recruitment positions by multiple tag ids"""
+
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentPositionSerializer
+
+    def get_queryset(self) -> Response:
+        queryset = RecruitmentPosition.objects.all()
+        tag_ids = self.request.query_params.get('id', None)
+        if tag_ids:
+            # tags are provided as a string, where tags are separated by comma.
+            tag_ids_list = [tag_id.strip() for tag_id in tag_ids.split(',')]
+            queryset = queryset.filter(tags__id__in=tag_ids_list).distinct()
+        return queryset

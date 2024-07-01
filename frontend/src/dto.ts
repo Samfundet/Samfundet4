@@ -328,7 +328,6 @@ export type ClosedPeriodDto = {
 };
 
 export type TagDto = {
-  id: number;
   name: string;
   color: string;
 };

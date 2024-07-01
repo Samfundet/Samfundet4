@@ -525,6 +525,8 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_applications_for_position_detail: '/api/recruitment-applications-for-position/:pk/',
   samfundet__interview_list: '/api/interview/',
   samfundet__interview_detail: '/api/interview/:pk/',
+  samfundet__recruitment_positions_tag_list: '/api/recruitment-positions-tag/',
+  samfundet__recruitment_positions_tag_detail: '/api/recruitment-positions-tag/:pk/',
   samfundet__api_root: '/api/',
   samfundet__csrf: '/csrf/',
   samfundet__login: '/login/',
@@ -558,6 +560,8 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_interview_availability: '/recruitment-interview-availability/',
   samfundet__recruitment_availability: '/recruitment/:id/availability/',
   samfundet__feedback: '/feedback/',
+  samfundet__recruitment_position_put_tags: '/recruitment-position-put-tags/',
+  samfundet__recruitment_positions_by_tags: '/recruitment-positions-by-tags/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
