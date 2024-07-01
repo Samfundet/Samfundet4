@@ -263,7 +263,7 @@ class OrganizationView(ModelViewSet):
     queryset = Organization.objects.all()
 
     @action(detail=True, methods=['get'])
-    def gangs(self, request: Request, **kwargs) -> Response:
+    def gangs(self, request: Request, **kwargs: Any) -> Response:
         organization = self.get_object()
         gangs = Gang.objects.filter(organization=organization)
         serializer = GangSerializer(gangs, many=True)

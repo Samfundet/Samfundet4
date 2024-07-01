@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGangs, getGangsByOrganization } from '~/api';
+import { getGangsByOrganization } from '~/api';
 import { GangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -30,7 +30,7 @@ export function RecruitmentGangOverviewPage() {
       setGangs(data);
       setLoading(false);
     });
-  }, []);
+  }, [recruitment]);
 
   const tableColumns = [{ content: t(KEY.common_gang), sortable: true }];
 
