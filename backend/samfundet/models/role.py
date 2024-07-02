@@ -12,7 +12,7 @@ class Role(models.Model):
     permissions = models.ManyToManyField('auth.Permission')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
