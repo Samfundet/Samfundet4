@@ -67,7 +67,7 @@ export function RecruitmentPage() {
   }, []);
 
   return (
-    <Page>
+    <Page className={styles.recruitmentPage}>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
         {user ? (

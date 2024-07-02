@@ -11,7 +11,7 @@
   color: black;
   font-weight: 800;
   font-size: 2rem;
-  margin-bottom: 0.3em;
+  margin-bottom: 0.5rem;
   letter-spacing: -0.05rem;
 
   @include theme-dark {
@@ -34,6 +34,7 @@
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 0.25rem;
 }
 
 .info {
@@ -58,7 +59,7 @@
 
 .active_period {
   font-size: 0.8125rem;
-  margin-left: 0.25rem;
+  margin: 0.25rem 0;
   color: $grey-3;
 
   @include theme-dark {

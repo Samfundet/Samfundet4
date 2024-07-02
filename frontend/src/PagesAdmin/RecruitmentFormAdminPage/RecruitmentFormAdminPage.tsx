@@ -93,7 +93,7 @@ export function RecruitmentFormAdminPage() {
 
   // TODO: Add validation for the dates
   return (
-    <AdminPageLayout title={title} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} header={true}>
       <div className={styles.wrapper}>
         <SamfForm<FormType>
           onSubmit={handleOnSubmit}

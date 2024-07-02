@@ -59,7 +59,7 @@ export function GangsFormAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm
         initialData={gang}
         onSubmit={handleOnSubmit}

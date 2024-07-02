@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.min.css';
 // Neccessary import for translations.
 import { CommandMenu, useScrollToTop } from './Components';
 import './i18n/i18n';
-import { CommandSprut } from '~/Components/CommandSprut/CommandSprut';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
@@ -35,7 +34,6 @@ export function App() {
         </Helmet>
       )}
       <CommandMenu />
-      <CommandSprut />
       <Outlet />
       {/* Move down from navbar. */}
       <ToastContainer style={{ marginTop: '45px' }} theme={isDarkTheme ? 'dark' : 'light'} />
