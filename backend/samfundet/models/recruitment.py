@@ -32,6 +32,9 @@ class Recruitment(CustomBaseModel):
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.organization.resolve_org(return_id=return_id)
+
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
@@ -127,6 +130,14 @@ class RecruitmentPosition(CustomBaseModel):
 
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            return self.gang_id
+        return self.gang
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.gang.resolve_org(return_id=return_id)
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
@@ -350,6 +361,9 @@ class RecruitmentInterviewAvailability(CustomBaseModel):
     start_time = models.TimeField(help_text='First possible time of day for interviews', default='08:00:00', null=False, blank=False)
     end_time = models.TimeField(help_text='Last possible time of day for interviews', default='23:00:00', null=False, blank=False)
     timeslot_interval = models.PositiveSmallIntegerField(help_text='The time interval (in minutes) between each timeslot', default=30)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
 
 
 class OccupiedTimeslot(FullCleanSaveMixin):

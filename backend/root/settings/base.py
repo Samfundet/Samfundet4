@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'root',  # Register to enable management.commands.
     'samfundet',
+    'samfundet.roleauth'
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,7 @@ WSGI_APPLICATION = 'root.wsgi.application'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # default
+    'samfundet.roleauth.backend.RoleAuthBackend',
 ]
 
 # Password validation

@@ -22,6 +22,7 @@ from django.contrib.auth.models import Group, AbstractUser
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
+from samfundet.models.role import Role
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
@@ -131,6 +132,8 @@ class User(AbstractUser):
         null=True,
         on_delete=models.PROTECT,
     )
+
+    roles = models.ManyToManyField(Role, blank=True, related_name='users')
 
     class Meta:
         permissions = [
@@ -328,6 +331,16 @@ class Gang(CustomBaseModel):
     class Meta:
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            return self.organization_id
+        return self.organization
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            return self.id
+        return self
 
     def __str__(self) -> str:
         return f'{self.gang_type} - {self.name_nb}'
