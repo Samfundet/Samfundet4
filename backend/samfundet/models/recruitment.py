@@ -33,7 +33,10 @@ class Recruitment(CustomBaseModel):
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        return self.organization.resolve_org(return_id=return_id)
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -133,6 +136,7 @@ class RecruitmentPosition(CustomBaseModel):
 
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
         if return_id:
+            # noinspection PyTypeChecker
             return self.gang_id
         return self.gang
 
@@ -166,6 +170,9 @@ class RecruitmentSeperatePosition(CustomBaseModel):
         blank=True,
     )
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
     def __str__(self) -> str:
         return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
 
@@ -180,6 +187,15 @@ class InterviewRoom(CustomBaseModel):
 
     def __str__(self) -> str:
         return self.name
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.gang_id
+        return self.gang
 
     def clean(self) -> None:
         super().clean()
@@ -204,6 +220,12 @@ class Interview(CustomBaseModel):
     )
     interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.room.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        return self.room.resolve_gang(return_id=return_id)
 
 
 class RecruitmentApplication(CustomBaseModel):
@@ -235,6 +257,12 @@ class RecruitmentApplication(CustomBaseModel):
     applicant_state = models.IntegerField(
         choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text='The state of the applicant for the recruiter'
     )
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        return self.recruitment_position.resolve_gang(return_id=return_id)
 
     def organize_priorities(self) -> None:
         """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
@@ -385,12 +413,18 @@ class OccupiedTimeslot(FullCleanSaveMixin):
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
 
 class RecruitmentStatistics(FullCleanSaveMixin):
     recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
 
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applications')
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
@@ -432,6 +466,9 @@ class RecruitmentTimeStat(models.Model):
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.hour} {self.count}'
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
+
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
         for application in self.recruitment_stats.recruitment.applications.all():
@@ -448,6 +485,9 @@ class RecruitmentDateStat(models.Model):
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.date} {self.count}'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
@@ -466,6 +506,9 @@ class RecruitmentCampusStat(models.Model):
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.campus} {self.count}'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.count = User.objects.filter(
