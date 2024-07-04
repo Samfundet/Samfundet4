@@ -166,7 +166,7 @@ class GroupAdmin(CustomGuardedGroupAdmin):
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ['name', 'content_type']
+    list_display = ('name',)
     filter_horizontal = ['permissions']
 
 
