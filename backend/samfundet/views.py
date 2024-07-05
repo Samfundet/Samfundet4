@@ -981,7 +981,8 @@ class InterviewRoomView(ModelViewSet):
             raise PermissionDenied
         return super().retrieve(request=request, pk=pk)
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    # noinspection PyMethodOverriding
+    def list(self, request: Request) -> Response:
         recruitment = request.query_params.get('recruitment')
         if not recruitment:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1020,7 +1021,8 @@ class InterviewView(ModelViewSet):
             raise PermissionDenied
         return super().retrieve(request=request, pk=pk)
 
-    def list(self, request: Request, **kwargs) -> Response:
+    # noinspection PyMethodOverriding
+    def list(self, request: Request) -> Response:
         interviews = [interview for interview in self.get_queryset() if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)]
         serializer = self.get_serializer(interviews, many=True)
         return Response(serializer.data)
