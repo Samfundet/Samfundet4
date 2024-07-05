@@ -423,9 +423,6 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applications')
 
-    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        return self.recruitment.resolve_org(return_id=return_id)
-
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
         self.total_applicants = self.recruitment.applications.values('user').distinct().count()
@@ -436,6 +433,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'{self.recruitment} stats'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
 
     def generate_time_stats(self) -> None:
         for h in range(0, 24):
@@ -466,9 +466,6 @@ class RecruitmentTimeStat(models.Model):
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.hour} {self.count}'
 
-    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        return self.recruitment_stats.resolve_org(return_id=return_id)
-
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
         for application in self.recruitment_stats.recruitment.applications.all():
@@ -476,6 +473,9 @@ class RecruitmentTimeStat(models.Model):
                 count += 1
         self.count = count
         super().save(*args, **kwargs)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
 
 
 class RecruitmentDateStat(models.Model):
@@ -486,9 +486,6 @@ class RecruitmentDateStat(models.Model):
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.date} {self.count}'
 
-    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        return self.recruitment_stats.resolve_org(return_id=return_id)
-
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
         for application in self.recruitment_stats.recruitment.applications.all():
@@ -496,6 +493,9 @@ class RecruitmentDateStat(models.Model):
                 count += 1
         self.count = count
         super().save(*args, **kwargs)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
 
 
 class RecruitmentCampusStat(models.Model):
@@ -507,11 +507,11 @@ class RecruitmentCampusStat(models.Model):
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.campus} {self.count}'
 
-    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        return self.recruitment_stats.resolve_org(return_id=return_id)
-
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.count = User.objects.filter(
             id__in=self.recruitment_stats.recruitment.applications.values_list('user', flat=True).distinct(), campus=self.campus
         ).count()
         super().save(*args, **kwargs)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
