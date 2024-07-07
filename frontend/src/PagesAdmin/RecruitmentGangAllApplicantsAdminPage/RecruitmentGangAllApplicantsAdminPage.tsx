@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentAdmissionsForGang } from '~/api';
-import { GangDto, RecruitmentAdmissionDto, RecruitmentDto } from '~/dto';
+import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
+import { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
@@ -20,14 +20,14 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [gang, setGang] = useState<GangDto>();
-  const [admissions, setAdmissions] = useState<RecruitmentAdmissionDto[]>([]);
+  const [admissions, setAdmissions] = useState<RecruitmentApplicationDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
     if (recruitmentId && gangId) {
-      getRecruitmentAdmissionsForGang(recruitmentId, gangId)
+      getRecruitmentApplicationsForGang(recruitmentId, gangId)
         .then((response) => {
           setAdmissions(response.data);
           setShowSpinner(false);

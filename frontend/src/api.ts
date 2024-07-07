@@ -676,11 +676,11 @@ export async function putRecruitmentPriorityForUser(
 
 export async function getRecruitmentApplicantForApplicant(
   recruitment_position: string,
-): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+): Promise<AxiosResponse<RecruitmentApplicationDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_admissions_for_applicant_detail,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_detail,
       urlParams: { pk: recruitment_position },
     });
   return await axios.get(url, { withCredentials: true });
