@@ -20,7 +20,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [gang, setGang] = useState<GangDto>();
-  const [admissions, setAdmissions] = useState<RecruitmentApplicationDto[]>([]);
+  const [applications, setApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     if (recruitmentId && gangId) {
       getRecruitmentApplicationsForGang(recruitmentId, gangId)
         .then((response) => {
-          setAdmissions(response.data);
+          setApplications(response.data);
           setShowSpinner(false);
         })
         .catch((error) => {
@@ -84,28 +84,28 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  const data = admissions.map(function (admission) {
-    const admissionURL = reverse({
+  const data = applications.map(function (application) {
+    const applicationURL = reverse({
       pattern: ROUTES.frontend.admin_recruitment_applicant,
       urlParams: {
-        admissionID: admission.id,
+        applicationID: application.id,
       },
     });
 
     return [
       {
         content: (
-          <Link url={admissionURL}>
-            {admission.user.first_name} {admission.user.last_name}
+          <Link url={applicationURL}>
+            {application.user.first_name} {application.user.last_name}
           </Link>
         ),
       },
-      admission.user.email,
-      admission.user?.phone_number,
-      { content: <Link url={admissionURL}>{dbT(admission.recruitment_position, 'name')}</Link> },
-      admission.interview?.interview_time,
-      admission.interview?.interview_location,
-      admission.recruiter_status,
+      application.user.email,
+      application.user?.phone_number,
+      { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
+      application.interview?.interview_time,
+      application.interview?.interview_location,
+      application.recruiter_status,
     ];
   });
 
@@ -115,7 +115,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     }
   };
 
-  const title = t(KEY.recruitment_all_admissions);
+  const title = t(KEY.recruitment_all_applications);
   const header = (
     <div className={styles.header}>
       <Text as="strong" size="m" className={styles.headerBold}>
@@ -129,7 +129,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
 
   return (
     <AdminPageLayout title={title} header={header} loading={showSpinner}>
-      {admissions.length > 0 ? (
+      {applications.length > 0 ? (
         <Table
           columns={tableColumns}
           data={data}
@@ -137,7 +137,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
           cellClassName={styles.cellStyle}
         />
       ) : (
-        <Text>{t(KEY.recruitment_no_current_admissions_gang)}</Text>
+        <Text>{t(KEY.recruitment_no_current_applications_gang)}</Text>
       )}
     </AdminPageLayout>
   );

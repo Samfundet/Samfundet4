@@ -136,7 +136,7 @@ export function RecruitmentGangAdminPage() {
       <Button
         theme="outlined"
         link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_all_admissions,
+          pattern: ROUTES.frontend.admin_recruitment_gang_all_applications,
           urlParams: {
             gangId: gangId,
             recruitmentId: recruitmentId,

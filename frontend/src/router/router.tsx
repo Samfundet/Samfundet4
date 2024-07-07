@@ -347,7 +347,7 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_gang_all_admissions}
+            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
             element={<RecruitmentGangAllApplicantsAdminPage />}
           />
           <Route
