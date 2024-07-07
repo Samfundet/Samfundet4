@@ -5,6 +5,7 @@ import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getMenuItems, getMenus } from '~/api';
+import { useTitle, useCustomNavigate } from '~/hooks';
 import { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -12,7 +13,6 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SultenMenuAdminPage.module.scss';
 import { reverse } from '~/named-urls';
-import { useCustomNavigate } from '~/hooks';
 
 export function SultenMenuAdminPage() {
   const navigate = useCustomNavigate();
@@ -20,6 +20,7 @@ export function SultenMenuAdminPage() {
   const [menus, setMenus] = useState<MenuDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.admin_sultenmenu_title));
 
   // Get Menus and Menuitems
   useEffect(() => {

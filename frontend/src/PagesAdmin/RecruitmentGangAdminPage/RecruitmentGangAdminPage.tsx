@@ -6,6 +6,7 @@ import { Table } from '~/Components/Table';
 import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
 import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -20,6 +21,8 @@ export function RecruitmentGangAdminPage() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = dbT(gang, 'name') + ' - ' + recruitment?.organization + ' - ' + dbT(recruitment, 'name');
+  useTitle(title);
 
   useEffect(() => {
     if (recruitmentId && gangId) {
@@ -103,7 +106,6 @@ export function RecruitmentGangAdminPage() {
     ];
   });
 
-  const title = dbT(gang, 'name') + ' - ' + recruitment?.organization + ' - ' + dbT(recruitment, 'name');
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <div className={styles.headerRow}>
@@ -147,7 +149,7 @@ export function RecruitmentGangAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner} showBackButton={true}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );

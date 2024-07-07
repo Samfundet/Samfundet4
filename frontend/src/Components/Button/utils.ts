@@ -14,6 +14,8 @@ export const themeToStyleMap = {
   black: styles.button_black,
   white: styles.button_white,
   green: styles.button_green,
+  uka: styles.button_uka,
+  isfit: styles.button_isfit,
   yellow: styles.button_yellow,
 } as const;
 

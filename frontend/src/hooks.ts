@@ -443,6 +443,18 @@ export function useIsMetaKeyDown(): boolean {
   return isDown;
 }
 
+export function useTitle(title: string, suffix: string = 'Samfundet'): void {
+  const initialTitle = document.title;
+  useEffect(() => {
+    document.title = title ? `${title}${suffix ? ' - ' + suffix : ''}` : suffix;
+
+    return () => {
+      document.title = initialTitle;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, suffix]);
+}
+
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
   useEffect(
