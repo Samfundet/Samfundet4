@@ -776,6 +776,7 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
         )
         return Response(serializer.data)
 
+
 class RecruitmentApplicationSetInterviewView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = InterviewSerializer

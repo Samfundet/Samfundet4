@@ -634,9 +634,9 @@ export async function putRecruitmentPosition(
 }
 
 export async function setRecruitmentApplicationInterview(
-  admissionId: number,
+  admissionId: string,
   data: InterviewDto,
-): Promise<AxiosResponse<RecruitmentAdmissionDto>> {
+): Promise<AxiosResponse<RecruitmentApplicationDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({

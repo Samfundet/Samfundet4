@@ -6,10 +6,10 @@ import { InterviewForm } from './InterviewForm';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto } from '~/dto';
 
 type InterviewFormModalProps = {
-  admission: RecruitmentAdmissionDto;
+  admission: RecruitmentApplicationDto;
 };
 export function InterviewFormModal({ admission }: InterviewFormModalProps) {
   const { t } = useTranslation();
