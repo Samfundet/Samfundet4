@@ -326,7 +326,9 @@ export const router = createBrowserRouter(
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_edit}
-            element={<ProtectedRoute perms={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} Page={RecruitmentFormAdminPage} />}
+            element={
+              <PermissionRoute required={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
+            }
             loader={({ params }) => {
               // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
               return { id: params.id };
