@@ -803,6 +803,20 @@ export async function putRecruitmentApplication(
   return response;
 }
 
+export async function getRecruitmentApplicationForPosition(
+  positionId: string,
+): Promise<AxiosResponse<RecruitmentApplicationDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_detail,
+      urlParams: { pk: positionId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function withdrawRecruitmentApplicationApplicant(positionId: number | string): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
@@ -813,6 +827,16 @@ export async function withdrawRecruitmentApplicationApplicant(positionId: number
   const response = await axios.put(url, {}, { withCredentials: true });
 
   return response;
+}
+
+export async function withdrawRecruitmentApplicationRecruiter(id: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_withdraw_application_recruiter,
+      urlParams: { pk: id },
+    });
+  return await axios.put(url, {}, { withCredentials: true });
 }
 
 export async function putRecruitmentApplicationInterview(

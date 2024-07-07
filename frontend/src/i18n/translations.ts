@@ -228,6 +228,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
 
+  [KEY.footer_developed_by]: 'Utviklet av MG::Web',
+
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
@@ -615,6 +617,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+
+  [KEY.footer_developed_by]: 'Developed by MG::Web',
 
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',

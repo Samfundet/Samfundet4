@@ -390,15 +390,15 @@ export const router = createBrowserRouter(
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
               element={<RecruitmentUsersWithoutInterviewGangPage />}
-              loader={recruitmentLoader}
+              loader={recruitmentGangLoader}
               handle={{
-                crumb: ({ recruitment }: RecruitmentLoader) => {
-                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
+                  if (!recruitment || !gang) return <span>{t(KEY.common_unknown)}</span>;
                   return (
                     <Link
                       url={reverse({
                         pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
-                        urlParams: { recruitmentId: recruitment.id },
+                        urlParams: { recruitmentId: recruitment.id, gangId: gang.id },
                       })}
                     >
                       {t(KEY.recruitment_show_applicants_without_interview)}

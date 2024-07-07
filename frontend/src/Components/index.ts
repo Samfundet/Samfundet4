@@ -64,6 +64,7 @@ export { Video } from './Video';
 export { PhoneNumberField } from './PhoneNumberField';
 export { ToolTip } from './ToolTip';
 export { Chart } from './Chart';
+export { Logo } from './Logo';
 
 // Props
 export type { CheckboxProps } from './Checkbox';

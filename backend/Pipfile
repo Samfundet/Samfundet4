@@ -18,6 +18,7 @@ name = "pypi"
 "pipenv:rm" = "pipenv --rm" # Completely remove virtual environment.
 "pipenv:shell" = "pipenv shell" # Opens a shell within the virtual environment.
 "ruff:check" = "pipenv run ruff check ." # Run ruff check linter on project.
+"ruff:apply" = "pipenv run ruff check --fix ." # Apply ruff linter on project
 "ruff:format:check" = "pipenv run ruff format --check ." # Dry-run ruff format on all files in the project.
 "ruff:format:apply" = "pipenv run ruff format ." # Apply ruff format on all files in the project.
 "mypy:run" = "pipenv run mypy --config-file mypy.ini ."

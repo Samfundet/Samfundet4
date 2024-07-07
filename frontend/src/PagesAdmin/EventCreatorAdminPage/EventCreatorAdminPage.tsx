@@ -382,7 +382,7 @@ export function EventCreatorAdminPage() {
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
   useTitle(title);
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}
