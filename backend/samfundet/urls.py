@@ -69,7 +69,8 @@ urlpatterns = [
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
-    path('recruitment-gang/<int:pk>/', views.RecruitmentGangView.as_view(), name='recruitment_gang'),
+    path('recruitment-gang/<int:recruitment_id>/', views.RecruitmentGangsView.as_view(), name='recruitment_gangs'),
+    path('recruitment-gang/<int:recruitment_id>/<int:gang_id>/', views.RecruitmentGangView.as_view(), name='recruitment_gang'),
     path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
     path(
         'recruitment-application-states-choices',

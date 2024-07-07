@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
+import { getGangRecruitment, getRecruitment } from '~/api';
 import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
 import { useTitle } from '~/hooks';
@@ -14,9 +14,8 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentGangAdminPage() {
-  const recruitmentId = useParams().recruitmentId;
-  const gangId = useParams().gangId;
   const navigate = useNavigate();
+  const { recruitmentId, gangId } = useParams();
   const [gang, setGang] = useState<GangDto>();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
@@ -28,10 +27,8 @@ export function RecruitmentGangAdminPage() {
   useEffect(() => {
     if (recruitmentId && gangId) {
       Promise.allSettled([
-        getRecruitmentPositionsGang(recruitmentId, gangId).then((data) => {
-          setRecruitmentPositions(data.data);
-        }),
-        getGang(gangId).then((data) => {
+        getGangRecruitment(recruitmentId, gangId).then((data) => {
+          setRecruitmentPositions(data.recruitment_positions);
           setGang(data);
         }),
         getRecruitment(recruitmentId).then((data) => {

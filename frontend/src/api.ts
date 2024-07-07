@@ -375,8 +375,25 @@ export async function getGangs(): Promise<GangDto[]> {
 }
 
 export async function getGangsRecruitment(id: string | number): Promise<GangRecruitmentDto[]> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_gang, urlParams: { pk: id } });
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_gangs, urlParams: { recruitmentId: id } });
   const response = await axios.get<GangRecruitmentDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getGangRecruitment(
+  recruitmentId: string | number,
+  gangId: string | number,
+): Promise<GangRecruitmentDto> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_gang,
+      urlParams: { recruitmentId: recruitmentId, gangId: gangId },
+    });
+  const response = await axios.get<GangRecruitmentDto>(url, { withCredentials: true });
 
   return response.data;
 }

@@ -721,13 +721,24 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         return Response(serializer.data)
 
 
+class RecruitmentGangsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int) -> Response:
+        # Checks if user has admission for position
+        recruitment = get_object_or_404(Recruitment, pk=recruitment_id)
+        serializer = RecruitmentGangSerializer(Gang.objects.all(), recruitment=recruitment, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class RecruitmentGangView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request, pk: int) -> Response:
+    def get(self, request: Request, recruitment_id: int, gang_id: int) -> Response:
         # Checks if user has admission for position
-        recruitment = get_object_or_404(Recruitment, pk=pk)
-        serializer = RecruitmentGangSerializer(Gang.objects.all(), recruitment=recruitment, many=True)
+        recruitment = get_object_or_404(Recruitment, pk=recruitment_id)
+        gang = get_object_or_404(Gang, pk=gang_id)
+        serializer = RecruitmentGangSerializer(gang, recruitment=recruitment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
