@@ -1,4 +1,4 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto } from '~/dto';
 import styles from './ProcessedApplicants.module.scss';
 import { Table } from '~/Components/Table';
 import { KEY } from '~/i18n/constants';
@@ -10,7 +10,7 @@ import { ROUTES } from '~/routes';
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
 
 type ProcessedApplicantsProps = {
-  data: RecruitmentAdmissionDto[];
+  data: RecruitmentApplicationDto[];
   type: ProcessedType;
 };
 
@@ -25,29 +25,29 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  const rows = data.map(function (admission) {
+  const rows = data.map(function (application) {
     return [
       {
-        value: admission.user.first_name,
+        value: application.user.first_name,
         content: (
           <Link
-            key={admission.user.id}
+            key={application.user.id}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                admissionID: admission.id,
+                applicationID: application.id,
               },
             })}
           >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
+            {`${application.user.first_name} ${application.user.last_name}`}
           </Link>
         ),
       },
-      { content: admission.user?.phone_number, value: admission.user?.phone_number },
-      { content: admission.user?.email, value: admission.user?.email },
-      { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
-      { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
-      { content: admission.recruiter_status, value: admission.recruiter_status },
+      { content: application.user?.phone_number, value: application.user?.phone_number },
+      { content: application.user?.email, value: application.user?.email },
+      { content: application.interview?.interview_time, value: application.interview?.interview_time },
+      { content: application.interview?.interview_location, value: application.interview?.interview_location },
+      { content: application.recruiter_status, value: application.recruiter_status },
     ];
   });
 

@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 
-import { getRecruitmentAdmissionsForGang } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentApplicationsForGang } from '~/api';
+import { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -12,20 +12,21 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ProcessedApplicants } from './components';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { Text } from '~/Components/Text/Text';
+import { useTitle } from '~/hooks';
 
 export function RecruitmentPositionOverviewPage() {
   const { recruitmentId, gangId, positionId } = useParams();
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
-  const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentAdmissionDto[]>([]);
-  const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentAdmissionDto[]>([]);
-  const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
 
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   useEffect(() => {
     recruitmentId &&
       gangId &&
-      getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((data) => {
+      getRecruitmentApplicationsForGang(gangId, recruitmentId).then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
@@ -60,7 +61,8 @@ export function RecruitmentPositionOverviewPage() {
       });
   }, [recruitmentId, gangId, positionId]);
 
-  const title = t(KEY.admin_information_manage_title);
+  const title = t(KEY.recruitment_administrate_applications);
+  useTitle(title);
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
     urlParams: {
@@ -95,42 +97,42 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_admissions)}({acceptedApplicants.length})
+          {t(KEY.recruitment_accepted_applications)}({acceptedApplicants.length})
         </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_accepted_admissions_help_text)}</Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
           <ProcessedApplicants data={acceptedApplicants} type="accepted" />
         ) : (
           <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_accepted_admissions_empty_text)}
+            {t(KEY.recruitment_accepted_applications_empty_text)}
           </Text>
         )}
       </div>
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_rejected_admissions)}({rejectedApplicants.length})
+          {t(KEY.recruitment_rejected_applications)}({rejectedApplicants.length})
         </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_rejected_admissions_help_text)}</Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
           <ProcessedApplicants data={rejectedApplicants} type="rejected" />
         ) : (
           <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_rejected_admissions_empty_text)}
+            {t(KEY.recruitment_rejected_applications_empty_text)}
           </Text>
         )}
       </div>
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_withdrawn_admissions)}({withdrawnApplicants.length})
+          {t(KEY.recruitment_withdrawn_applications)}({withdrawnApplicants.length})
         </Text>
         {withdrawnApplicants.length > 0 ? (
           <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />
         ) : (
           <Text as="i" className={styles.subText}>
             {' '}
-            {t(KEY.recruitment_withdrawn_admissions_empty_text)}
+            {t(KEY.recruitment_withdrawn_applications_empty_text)}
           </Text>
         )}
       </div>

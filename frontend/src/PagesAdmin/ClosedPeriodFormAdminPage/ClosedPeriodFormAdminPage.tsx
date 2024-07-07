@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -80,9 +80,10 @@ export function ClosedPeriodFormAdminPage() {
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
+  useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
           <SamfFormField
