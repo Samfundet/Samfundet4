@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getOrganizations, getRecruitment, postRecruitment, putRecruitment } from '~/api';
+import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { useTitle } from '~/hooks';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { utcTimestampToLocal } from '~/utils';
+import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import styles from './RecruitmentFormAdminPage.module.scss';
+import type { RecruitmentLoader } from '~/router/loaders';
 
 type FormType = {
   name_nb: string;
@@ -29,12 +29,11 @@ type FormType = {
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
 
   // Form data
-  const { id } = useParams();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const { recruitmentId } = useParams();
   const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
-  const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>();
 
   useEffect(() => {
     // Fetch organizations.
@@ -47,54 +46,31 @@ export function RecruitmentFormAdminPage() {
     });
   }, []);
 
-  // Fetch data if edit mode.
-  useEffect(() => {
-    if (id) {
-      getRecruitment(id)
-        .then((data) => {
-          setRecruitment(data.data);
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_recruitment);
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
-        });
-    } else {
-      setShowSpinner(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
   const initialData: Partial<FormType> = {
-    name_nb: recruitment?.name_nb,
-    name_en: recruitment?.name_en,
-    visible_from: utcTimestampToLocal(recruitment?.visible_from),
-    actual_application_deadline: utcTimestampToLocal(recruitment?.actual_application_deadline),
-    shown_application_deadline: utcTimestampToLocal(recruitment?.shown_application_deadline),
-    reprioritization_deadline_for_applicant: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_applicant),
-    reprioritization_deadline_for_groups: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_groups),
-    organization: recruitment?.organization,
+    name_nb: data?.recruitment?.name_nb,
+    name_en: data?.recruitment?.name_en,
+    visible_from: utcTimestampToLocal(data?.recruitment?.visible_from),
+    actual_application_deadline: utcTimestampToLocal(data?.recruitment?.actual_application_deadline),
+    shown_application_deadline: utcTimestampToLocal(data?.recruitment?.shown_application_deadline),
+    reprioritization_deadline_for_applicant: utcTimestampToLocal(
+      data?.recruitment?.reprioritization_deadline_for_applicant,
+    ),
+    reprioritization_deadline_for_groups: utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups),
+    organization: data?.recruitment?.organization,
   };
 
-  const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
+  const title = recruitmentId
+    ? `${t(KEY.common_edit)} ${dbT(data?.recruitment, 'name')}`
+    : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_recruitment)}`);
 
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  useTitle(title);
+
+  const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
   function handleOnSubmit(data: FormType) {
-    if (id) {
+    if (recruitmentId) {
       // Update page.
-      putRecruitment(id, data as RecruitmentDto)
+      putRecruitment(recruitmentId, data as RecruitmentDto)
         .then(() => {
           toast.success(t(KEY.common_update_successful));
         })
@@ -117,7 +93,7 @@ export function RecruitmentFormAdminPage() {
 
   // TODO: Add validation for the dates
   return (
-    <AdminPageLayout title={t(KEY.common_create) + ' ' + t(KEY.common_recruitment)} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} header={true}>
       <div className={styles.wrapper}>
         <SamfForm<FormType>
           onSubmit={handleOnSubmit}
@@ -176,7 +152,7 @@ export function RecruitmentFormAdminPage() {
             />
           </div>
           <div className={styles.row}>
-            <SamfFormField field="max_admissions" type="number" label={t(KEY.max_admissions) ?? ''} />
+            <SamfFormField field="max_applications" type="number" label={t(KEY.max_applications) ?? ''} />
             <SamfFormField
               field="organization"
               type="options"

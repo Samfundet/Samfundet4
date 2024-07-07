@@ -19,7 +19,9 @@ from . import (
     organizations,
     information_pages,
     recruitment_position,
-    recruitment_admissions,
+    recruitment_applications,
+    recruitment_seperate_position,
+    recruitment_interviewavailability,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -46,7 +48,9 @@ SEED_SCRIPTS = [
     ('merch', merch.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
-    ('recruitment_admissions', recruitment_admissions.seed),
+    ('recruitment_interviewavailability', recruitment_interviewavailability.seed),
+    ('recruitment_seperate_position', recruitment_seperate_position.seed),
+    ('recruitment_applications', recruitment_applications.seed),
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]

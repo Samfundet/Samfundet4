@@ -4,7 +4,7 @@ import { Button, Carousel, Link } from '~/Components';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
 import { TextItem } from '~/constants';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { backgroundImageFromUrl } from '~/utils';
@@ -13,6 +13,7 @@ import { VENUES } from './data';
 
 export function AboutPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.command_menu_shortcut_about_samfundet), '');
 
   return (
     <Page>

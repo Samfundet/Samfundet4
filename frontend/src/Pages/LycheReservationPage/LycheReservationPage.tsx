@@ -3,7 +3,7 @@ import { SultenPage } from '~/Components/SultenPage';
 import { TextItem } from '~/constants/TextItems';
 import styles from './LycheReservationPage.module.scss';
 import { KV } from '~/constants';
-import { useKeyValue, useTextItem } from '~/hooks';
+import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
@@ -26,6 +26,7 @@ type FormProps = {
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.common_reservation), t(KEY.common_sulten));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
   const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
@@ -72,7 +73,7 @@ export function LycheReservationPage() {
         <SamfFormField<string, FormProps> type="options" options={occasionOptions} field="occasion" required={true} />
       </ReservationFormLine>
       <ReservationFormLine
-        label={t(KEY.common_total) + ' ' + t(KEY.common_guests) + '*'}
+        label={t(KEY.common_count) + ' ' + t(KEY.common_guests) + '*'}
         help_text={t(KEY.sulten_reservation_form_more_than_8_help)}
         underline={true}
       >

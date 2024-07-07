@@ -183,6 +183,31 @@ export function useIsLightTheme(): boolean {
   return theme === THEME.LIGHT;
 }
 
+/** Returns if primary mouse button is currently pressed down */
+export function useMouseDown(): boolean {
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useEffect(() => {
+    function handleMouseDown() {
+      setMouseDown(true);
+    }
+
+    function handleMouseUp() {
+      setMouseDown(false);
+    }
+
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  return mouseDown;
+}
+
 export function useMousePosition(): { x: number; y: number } {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -416,6 +441,18 @@ export function useIsMetaKeyDown(): boolean {
   }, []);
 
   return isDown;
+}
+
+export function useTitle(title: string, suffix: string = 'Samfundet'): void {
+  const initialTitle = document.title;
+  useEffect(() => {
+    document.title = title ? `${title}${suffix ? ' - ' + suffix : ''}` : suffix;
+
+    return () => {
+      document.title = initialTitle;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, suffix]);
 }
 
 export function useDebounce<T>(value: T, delay: number): T {

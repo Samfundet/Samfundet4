@@ -4,6 +4,7 @@ import styles from './Button.module.scss';
 export const themeToStyleMap = {
   basic: styles.button_basic,
   pure: styles.pure,
+  text: styles.button_text,
   samf: styles.button_samf,
   lyche: styles.button_lyche,
   secondary: styles.button_secondary,
@@ -13,6 +14,9 @@ export const themeToStyleMap = {
   black: styles.button_black,
   white: styles.button_white,
   green: styles.button_green,
+  uka: styles.button_uka,
+  isfit: styles.button_isfit,
+  yellow: styles.button_yellow,
 } as const;
 
 /**
