@@ -9,29 +9,63 @@
   padding: 0.5em;
 }
 
+.date_container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+
+  @include for-mobile-down {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}
+
+.occupied_modal {
+  min-width: auto;
+}
+
+.partly_busy {
+  background: $sulten-orange;
+}
+
+.fully_busy {
+  background: $red;
+}
+
 .add {
   margin-left: 1em;
   margin-right: 1em;
 }
 
-.occupiedHeader {
+.title {
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
-.occupiedText {
-  font-size: 0.8em;
+.subtitle {
+  margin: 1rem 0 2rem;
 }
 
-.row {
+.button_row {
   display: flex;
   flex-direction: row;
-  gap: 1em;
+  gap: 12rem;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
 }
 
-.close {
+.close_btn {
   position: absolute;
-  top: 1em;
-  right: 1em;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: none;
+  padding: 5px;
+  border: 0;
+  cursor: pointer;
+  color: $grey-1;
+
+  &:hover {
+    color: $black;
+  }
 }

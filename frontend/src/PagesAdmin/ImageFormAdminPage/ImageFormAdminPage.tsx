@@ -6,13 +6,19 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getImage, postImage } from '~/api';
 import { ImagePostDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageFormAdminPage.module.scss';
+
+type FormType = {
+  title: string;
+  tag_string: string;
+  file: File;
+};
 
 export function ImageFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -46,13 +52,13 @@ export function ImageFormAdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, setImage]);
 
-  async function handleOnSubmit(data: ImagePostDto) {
+  async function handleOnSubmit(data: FormType) {
     setShowSpinner(true);
     if (id !== undefined) {
       // TODO patch
       setShowSpinner(false);
     } else {
-      postImage(data)
+      postImage(data as ImagePostDto)
         .then(() => {
           // Success!
           navigate({ url: ROUTES.frontend.admin_images });
@@ -68,20 +74,27 @@ export function ImageFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
   const title = id ? lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
+  useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
-      <SamfForm onSubmit={handleOnSubmit} onChange={setImage} submitText={submitText} validateOn="submit">
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
+      <SamfForm<FormType>
+        onSubmit={handleOnSubmit}
+        //onChange={handleOnChange}
+        submitText={submitText}
+        validateOn="submit"
+      >
         <div className={styles.input_row}>
-          <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} />
+          <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} required={true} />
           {/* TODO helpText "Merkelapper må være separert med ', ', f.ex 'lapp1, lapp2, lapp3'" */}
           <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
           {/* TODO create file picker input type */}
         </div>
         <SamfFormField
           field="file"
-          type="upload-image"
+          type="upload_image"
           label={lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_image)}`)}
+          required={true}
         />
         <p>
           {JSON.stringify(image.file)}

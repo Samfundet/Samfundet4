@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getInformationPage } from '~/api';
@@ -11,17 +10,19 @@ import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/AuthContext';
+import { useAuthContext } from '~/context/AuthContext';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders information page using markdown
  */
 export function InformationPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { user } = useAuthContext();
@@ -41,6 +42,7 @@ export function InformationPage() {
           console.error(error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, slugField]);
 
   // Text and title
