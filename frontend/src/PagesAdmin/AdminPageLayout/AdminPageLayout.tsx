@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import { Breadcrumb, BackButton, IconButton, SamfundetLogoSpinner } from '~/Components';
+import { Breadcrumb, IconButton, SamfundetLogoSpinner } from '~/Components';
 import { COLORS } from '~/types';
 import styles from './AdminPageLayout.module.scss';
 
@@ -9,20 +9,12 @@ type AdminPageLayoutProps = {
   header?: ReactNode;
   loading?: boolean;
   children: ReactNode;
-  showBackButton?: boolean;
 };
 
 /**
  * Simple wrapper for admin pages to keep them consistent.
  */
-export function AdminPageLayout({
-  title,
-  backendUrl,
-  header,
-  loading,
-  children,
-  showBackButton = false,
-}: AdminPageLayoutProps) {
+export function AdminPageLayout({ title, backendUrl, header, loading, children }: AdminPageLayoutProps) {
   useEffect(() => {
     // Scroll to top on page change
     window.scrollTo(0, 0);
@@ -45,12 +37,7 @@ export function AdminPageLayout({
             />
           )}
         </div>
-        {header && (
-          <div className={styles.header_container}>
-            {showBackButton && <BackButton />}
-            {header}
-          </div>
-        )}
+        {header && <div className={styles.header_container}>{header}</div>}
       </div>
       <div className={styles.content_container}>
         {loading && (

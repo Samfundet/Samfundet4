@@ -7,6 +7,7 @@ export type UserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number?: string;
   is_staff: boolean;
   is_active: boolean;
   is_superuser: boolean;
@@ -19,12 +20,26 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
-export type OccupiedTimeSlotDto = {
-  id?: number;
-  user?: number;
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+};
+
+export type RecruitmentAvailabilityDto = {
+  start_date: string;
+  end_date: string;
+  timeslots: string[];
+};
+
+export type DateTimeslotDto = {
+  [date: string]: string[];
+};
+
+export type OccupiedTimeslotDto = {
   recruitment: number;
-  start_dt: string;
-  end_dt: string;
+  dates: DateTimeslotDto;
 };
 
 export type RecruitmentUserDto = {
@@ -33,7 +48,12 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  recruitment_admission_ids?: string[];
+  phone_number?: string;
+  campus?: CampusDto;
+  recruitment_application_ids?: string[];
+  applications: RecruitmentApplicationDto[];
+  applications_without_interview: RecruitmentApplicationDto[];
+  top_application: RecruitmentApplicationDto;
 };
 
 export type HomePageDto = {
@@ -356,8 +376,15 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
-  max_admissions?: number;
+  max_applications?: number;
   organization: 'samfundet' | 'isfit' | 'uka';
+  seperate_positions?: RecruitmentSeperatePositionDto[];
+};
+
+export type RecruitmentSeperatePositionDto = {
+  name_nb: string;
+  name_en: string;
+  url: string;
 };
 
 export type UserPriorityDto = {
@@ -379,8 +406,8 @@ export type RecruitmentPositionDto = {
 
   norwegian_applicants_only: boolean;
 
-  default_admission_letter_nb: string;
-  default_admission_letter_en: string;
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
 
   gang: GangDto;
   recruitment: string;
@@ -388,6 +415,10 @@ export type RecruitmentPositionDto = {
   tags: string;
 
   interviewers?: UserDto[];
+
+  total_applicants?: number;
+  processed_applicants?: number;
+  accepted_applicants?: number;
 };
 
 export type InterviewDto = {
@@ -399,19 +430,37 @@ export type InterviewDto = {
   interviewers?: UserDto[];
 };
 
-export type RecruitmentAdmissionDto = {
+export type RecruitmentApplicationDto = {
   id: string;
-  interview: InterviewDto;
-  admission_text: string;
+  interview?: InterviewDto;
+  interview_time?: Date;
+  application_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number;
+  recruiter_priority?: number | string;
   recruiter_status?: number;
+  applicant_state?: number;
   created_at: string;
   withdrawn: boolean;
-  admission_count?: number;
+  application_count?: number;
+};
+
+export type RecruitmentApplicationRecruiterDto = {
+  user: RecruitmentUserDto;
+  application: RecruitmentApplicationDto;
+  other_applications: RecruitmentApplicationDto[];
+};
+
+export type RecruitmentApplicationStateDto = {
+  recruiter_priority?: number;
+  recruiter_status?: number;
+};
+
+export type RecruitmentApplicationStateChoicesDto = {
+  recruiter_priority: [number, string][];
+  recruiter_status: [number, string][];
 };
 
 export type FeedbackDto = {
