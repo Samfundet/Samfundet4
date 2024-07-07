@@ -9,9 +9,10 @@ import { Button } from '../Button';
 import { RecruitmentApplicationDto } from '~/dto';
 
 type InterviewFormModalProps = {
-  admission: RecruitmentApplicationDto;
+  application: RecruitmentApplicationDto;
 };
-export function InterviewFormModal({ admission }: InterviewFormModalProps) {
+
+export function InterviewFormModal({ application }: InterviewFormModalProps) {
   const { t } = useTranslation();
   const [interviewModal, setInterviewModal] = useState(false);
 
@@ -28,7 +29,7 @@ export function InterviewFormModal({ admission }: InterviewFormModalProps) {
             icon="mdi:close"
             onClick={() => setInterviewModal(false)}
           />
-          <InterviewForm admission={admission} />
+          <InterviewForm application={application} />
         </>
       </Modal>
     </>
