@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import { saveAs } from 'file-saver';
 import {
   ClosedPeriodDto,
   EventDto,
@@ -713,11 +712,7 @@ export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: 
         recruitmentId: recruitmentId,
       },
     });
-
-  await axios.get(url, { withCredentials: true, responseType: 'blob' }).then((response) => {
-    // TODO fix axios expose header of file name
-    saveAs(response.data);
-  });
+    window.open(url)
 }
 
 export async function getRecruitmentAdmissionsForRecruitmentPosition(
