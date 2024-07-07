@@ -92,6 +92,11 @@ urlpatterns = [
     ),
     path('recruitment-withdraw-application/<int:pk>/', views.RecruitmentApplicationWithdrawApplicantView.as_view(), name='recruitment_withdraw_application'),
     path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentApplicationApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
+    path(
+        'recruitment-withdraw-application-recruiter/<slug:pk>/',
+        views.RecruitmentApplicationWithdrawRecruiterView.as_view(),
+        name='recruitment_withdraw_application_recruiter',
+    ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
     path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
     path(
