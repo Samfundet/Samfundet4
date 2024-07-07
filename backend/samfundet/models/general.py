@@ -133,8 +133,6 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
     )
 
-    roles = models.ManyToManyField(Role, blank=True, related_name='users')
-
     class Meta:
         permissions = [
             ('debug', 'Can view debug mode'),
