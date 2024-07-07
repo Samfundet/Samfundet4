@@ -12,6 +12,8 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { toast } from 'react-toastify';
+import { STATUS } from '~/http_status_codes';
 
 export function RecruitmentGangAdminPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -31,12 +33,26 @@ export function RecruitmentGangAdminPage() {
         getRecruitmentPositionsGang(recruitmentId, gangId).then((data) => {
           setRecruitmentPositions(data.data);
         }),
-        getGang(gangId).then((data) => {
-          setGang(data);
-        }),
-        getRecruitment(recruitmentId).then((data) => {
-          setRecruitment(data.data);
-        }),
+        getGang(gangId)
+          .then((data) => {
+            setGang(data);
+          })
+          .catch((data) => {
+            if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+              navigate(ROUTES.frontend.not_found, { replace: true });
+            }
+            toast.error(t(KEY.common_something_went_wrong));
+          }),
+        getRecruitment(recruitmentId)
+          .then((data) => {
+            setRecruitment(data.data);
+          })
+          .catch((data) => {
+            if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+              navigate(ROUTES.frontend.not_found, { replace: true });
+            }
+            toast.error(t(KEY.common_something_went_wrong));
+          }),
       ]).then(() => {
         setShowSpinner(false);
       });
