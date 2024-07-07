@@ -14,8 +14,8 @@ type InterviewFormProps = {
 };
 
 type FormType = {
-  interview_time: string
-  interview_location: string
+  interview_time: string;
+  interview_location: string;
 };
 
 export function InterviewForm({ application }: InterviewFormProps) {
