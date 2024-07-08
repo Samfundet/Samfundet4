@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentPositionsGang } from '~/api';
-import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGang } from '~/api';
+import { GangDto, type OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -21,10 +21,11 @@ export function RecruitmentGangAdminPage() {
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
+  const [organization, setOrganization] = useState<OrganizationDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  const title = dbT(gang, 'name') + ' - ' + recruitment?.organization + ' - ' + dbT(recruitment, 'name');
+  const title = `${organization?.name} - ${dbT(recruitment, 'name')} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
   useEffect(() => {
@@ -33,30 +34,25 @@ export function RecruitmentGangAdminPage() {
         getRecruitmentPositionsGang(recruitmentId, gangId).then((data) => {
           setRecruitmentPositions(data.data);
         }),
-        getGang(gangId)
-          .then((data) => {
-            setGang(data);
-          })
-          .catch((data) => {
-            if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-              navigate(ROUTES.frontend.not_found, { replace: true });
-            }
-            toast.error(t(KEY.common_something_went_wrong));
-          }),
-        getRecruitment(recruitmentId)
-          .then((data) => {
-            setRecruitment(data.data);
-          })
-          .catch((data) => {
-            if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-              navigate(ROUTES.frontend.not_found, { replace: true });
-            }
-            toast.error(t(KEY.common_something_went_wrong));
-          }),
-      ]).then(() => {
-        setShowSpinner(false);
-      });
+        getGang(gangId).then((data) => {
+          setGang(data);
+        }),
+        getRecruitment(recruitmentId).then(async (data) => {
+          setRecruitment(data.data);
+          await getOrganization(data.data.organization).then(setOrganization);
+        }),
+      ])
+        .then(() => {
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
   const tableColumns = [

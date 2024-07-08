@@ -47,7 +47,8 @@ export function InterviewNotesPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-  }, [recruitmentId, positionId, gangId, interviewId, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recruitmentId, positionId, gangId, interviewId]);
 
   async function handleEditSave() {
     if (editingMode && interview) {
