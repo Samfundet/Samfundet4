@@ -402,7 +402,7 @@ export function useCustomNavigate(): CustomNavigateFn {
     const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
     // React navigation.
     if (linkTarget === 'frontend' && !isCmdClick) {
-      navigate(typeof url === 'number' ? url : finalUrl, { replace: replace });
+      navigate(typeof url === 'number' ? url : finalUrl, { replace });
     }
     // Normal change of href to trigger reload.
     else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
