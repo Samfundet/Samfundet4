@@ -100,8 +100,8 @@ export function RecruitmentGangAllApplicantsAdminPage() {
           </Link>
         ),
       },
-      application.user.email,
       application.user?.phone_number,
+      application.user.email,
       { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
       application.interview?.interview_time,
       application.interview?.interview_location,
