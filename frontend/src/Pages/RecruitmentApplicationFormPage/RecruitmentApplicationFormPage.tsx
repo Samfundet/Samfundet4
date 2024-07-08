@@ -7,7 +7,7 @@ import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
-  getRecruitmentApplicationsForRecruiter,
+  getRecruitmentApplicationForPosition,
   getRecruitmentPosition,
   getRecruitmentPositionsGang,
   putRecruitmentApplication,
@@ -57,8 +57,9 @@ export function RecruitmentApplicationFormPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-      getRecruitmentApplicationsForRecruiter(positionID as string).then((res) => {
-        setRecruitmentApplication(res.data.application);
+      getRecruitmentApplicationForPosition(positionID as string).then((res) => {
+        setRecruitmentApplication(res.data);
+        console.log(res.data);
       }),
     ]).then(() => {
       setLoading(false);
@@ -113,7 +114,7 @@ export function RecruitmentApplicationFormPage() {
 
   if (loading) {
     return (
-      <div>
+      <div className={styles.spinner_container}>
         <SamfundetLogoSpinner />
       </div>
     );
@@ -136,9 +137,9 @@ export function RecruitmentApplicationFormPage() {
     <Page>
       <div className={styles.container}>
         <div className={styles.row}>
-          <div className={styles.textcontainer}>
+          <div className={styles.text_container}>
             <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
-            <h2 className={styles.subheader}>
+            <h2 className={styles.sub_header}>
               {t(KEY.recruitment_volunteerfor)}{' '}
               <i>
                 {recruitmentPosition?.is_funksjonaer_position
@@ -155,11 +156,11 @@ export function RecruitmentApplicationFormPage() {
               </Link>
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
-            <h2 className={styles.subheader}>{t(KEY.recruitment_applyfor)}</h2>
+            <h2 className={styles.sub_header}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
-          <div className={styles.otherpositions}>
-            <h2 className={styles.subheader}>
+          <div className={styles.other_positions}>
+            <h2 className={styles.sub_header}>
               {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
             </h2>
             {recruitmentPositionsForGang?.map((pos, index) => {
@@ -186,10 +187,10 @@ export function RecruitmentApplicationFormPage() {
           </div>
         </div>
         {recruitmentApplication && (
-          <div className={styles.withdrawnContainer}>
+          <div className={styles.withdrawn_container}>
             {recruitmentApplication?.withdrawn ? (
-              <Text size="l" as="i" className={styles.withdrawnText}>
-                {t(KEY.recruitment_withdrawn_message)}
+              <Text size="l" as="i" className={styles.withdrawn_text}>
+                {t(KEY.recruitment_withdrawn_message)}:
               </Text>
             ) : (
               <Button theme="samf" display="basic" onClick={() => withdrawApplication()}>
@@ -205,7 +206,7 @@ export function RecruitmentApplicationFormPage() {
             submitText={submitText}
             devMode={false}
           >
-            <p className={styles.formLabel}>{t(KEY.recruitment_application)}</p>
+            <h2 className={styles.label}>{t(KEY.recruitment_application)}:</h2>
             <SamfFormField field="application_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
