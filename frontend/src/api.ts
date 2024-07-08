@@ -634,14 +634,14 @@ export async function putRecruitmentPosition(
 }
 
 export async function setRecruitmentApplicationInterview(
-  admissionId: string,
+  applicationId: string,
   data: InterviewDto,
 ): Promise<AxiosResponse<RecruitmentApplicationDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_set_interview,
-      urlParams: { pk: admissionId },
+      urlParams: { pk: applicationId },
     });
   return await axios.put(url, data, { withCredentials: true });
 }
