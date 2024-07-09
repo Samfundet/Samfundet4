@@ -506,6 +506,7 @@ export const ROUTES_BACKEND = {
   samfundet__key_value_detail: '/api/key-value/:key/',
   samfundet__organizations_list: '/api/organizations/',
   samfundet__organizations_detail: '/api/organizations/:pk/',
+  samfundet__organizations_gangs: '/api/organizations/:pk/gangs/',
   samfundet__merch_list: '/api/merch/',
   samfundet__merch_detail: '/api/merch/:pk/',
   samfundet__recruitment_list: '/api/recruitment/',
