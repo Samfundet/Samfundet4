@@ -1,0 +1,37 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: .2em;
+  padding: 0.5em;
+}
+
+.add {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.occupiedHeader {
+  font-weight: 700;
+}
+
+.occupiedText {
+  font-size: 0.8em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+}
+
+.close {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}

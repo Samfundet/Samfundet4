@@ -422,11 +422,11 @@ export type RecruitmentPositionDto = {
 };
 
 export type InterviewDto = {
-  id: number;
+  id?: number;
   interview_time: string;
   interview_location: string;
-  room: string;
-  notes: string;
+  room?: string;
+  notes?: string;
   interviewers?: UserDto[];
 };
 

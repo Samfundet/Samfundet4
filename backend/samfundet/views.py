@@ -785,6 +785,31 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
         return Response(serializer.data)
 
 
+class RecruitmentApplicationSetInterviewView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InterviewSerializer
+
+    def put(self, request: Request, pk: str) -> Response:
+        application = get_object_or_404(RecruitmentApplication, id=pk)
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            existing_interview = application.interview
+            if existing_interview:
+                existing_interview.interview_location = serializer.validated_data['interview_location']
+                existing_interview.interview_time = serializer.validated_data['interview_time']
+                existing_interview.save()
+                application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
+                return Response(application_serializer.data, status=status.HTTP_200_OK)
+
+            new_interview = serializer.save()
+            application.interview = new_interview
+            application.save()
+            application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
+            return Response(application_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class RecruitmentApplicationForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
