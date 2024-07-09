@@ -53,8 +53,10 @@ export function InterviewNotesPage() {
   async function handleEditSave() {
     if (editingMode && interview) {
       try {
-        await putRecruitmentApplicationInterview(interview.id, interview);
-        toast.success(t(KEY.common_save_successful));
+        if (interview.id) {
+          await putRecruitmentApplicationInterview(interview.id, interview);
+          toast.success(t(KEY.common_save_successful));
+        }
       } catch (error) {
         toast.error(t(KEY.common_something_went_wrong));
       }

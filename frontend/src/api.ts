@@ -648,6 +648,19 @@ export async function putRecruitmentPosition(
   return response;
 }
 
+export async function setRecruitmentApplicationInterview(
+  applicationId: string,
+  data: InterviewDto,
+): Promise<AxiosResponse<RecruitmentApplicationDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_set_interview,
+      urlParams: { pk: applicationId },
+    });
+  return await axios.put(url, data, { withCredentials: true });
+}
+
 export async function getRecruitmentApplicationsForApplicant(
   recruitmentId: string,
 ): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
