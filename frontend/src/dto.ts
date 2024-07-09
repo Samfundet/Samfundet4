@@ -310,6 +310,10 @@ export type GangDto = {
   info_page?: number;
 };
 
+export type RecruitmentGangDto = GangDto & {
+  recruitment_positions: number;
+};
+
 export type GangTypeDto = {
   id: number;
   title_nb: string;

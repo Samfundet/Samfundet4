@@ -25,6 +25,7 @@ import {
   RecruitmentApplicationStateDto,
   RecruitmentAvailabilityDto,
   RecruitmentDto,
+  type RecruitmentGangDto,
   RecruitmentPositionDto,
   RecruitmentUserDto,
   RegistrationDto,
@@ -371,6 +372,12 @@ export async function getGang(id: string | number): Promise<GangDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
   const response = await axios.get<GangDto>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export async function getRecruitmentGangs(id: string | number): Promise<RecruitmentGangDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_gangs, urlParams: { pk: id } });
+  const response = await axios.get<RecruitmentGangDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
