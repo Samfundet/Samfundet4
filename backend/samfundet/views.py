@@ -1139,9 +1139,9 @@ class RecruitmentPositionByTagView(ListAPIView):
 
     def get_queryset(self) -> Response:
         queryset = RecruitmentPosition.objects.all()
-        tag_ids = self.request.query_params.get('id', None)
-        if tag_ids:
+        tag_names = self.request.query_params.get('name', None)
+        if tag_names:
             # tags are provided as a string, where tags are separated by comma.
-            tag_ids_list = [tag_id.strip() for tag_id in tag_ids.split(',')]
-            queryset = queryset.filter(tags__id__in=tag_ids_list).distinct()
+            tag_names_list = [tag_name.strip() for tag_name in tag_names.split(',')]
+            queryset = queryset.filter(tags__id__in=tag_names_list).distinct()
         return queryset
