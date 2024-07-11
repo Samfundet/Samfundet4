@@ -248,6 +248,7 @@ export const KEY = {
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
+  recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_applicants: 'recruitment_applicants',

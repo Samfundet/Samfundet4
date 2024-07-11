@@ -233,6 +233,7 @@ export const nb: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
+  [KEY.recruitment_positions]: 'Stillinger',
   [KEY.recruitment_applicant]: 'Søker',
   [KEY.recruitment_applicants]: 'Søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
@@ -624,6 +625,7 @@ export const en: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
+  [KEY.recruitment_positions]: 'Positions',
   [KEY.recruitment_applicant]: 'Applicant',
   [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',

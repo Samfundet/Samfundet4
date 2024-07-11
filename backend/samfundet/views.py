@@ -71,6 +71,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
@@ -587,6 +588,13 @@ class RecruitmentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def gangs(self, request: Request, **kwargs: Any) -> Response:
+        recruitment = self.get_object()
+        gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
+        serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
+        return Response(serializer.data)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
