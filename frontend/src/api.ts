@@ -27,6 +27,7 @@ import {
   RecruitmentDto,
   type RecruitmentGangDto,
   RecruitmentPositionDto,
+  RecruitmentStatsDto,
   RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
@@ -877,6 +878,14 @@ export async function putRecruitmentApplicationInterview(
       urlParams: { pk: interviewId.toString() },
     });
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
+  return response;
+}
+
+export async function getRecruitmentStats(id: string): Promise<AxiosResponse<RecruitmentStatsDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_stats_detail, urlParams: { pk: id } });
+  const response = await axios.get(url, { withCredentials: true });
+
   return response;
 }
 
