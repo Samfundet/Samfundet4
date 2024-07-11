@@ -54,6 +54,8 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_yes: 'common_yes',
+  common_no: 'common_no',
   common_to: 'common_to',
   common_all: 'common_all',
   common_price: 'common_price',
@@ -109,6 +111,7 @@ export const KEY = {
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
+  common_users: 'common_users',
   common_email: 'common_email',
   common_total: 'common_total',
   common_guests: 'common_guests',
@@ -248,7 +251,9 @@ export const KEY = {
   // Recruitment:
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
+  recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_interview_set: 'recruitment_interview_set',
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
@@ -313,6 +318,7 @@ export const KEY = {
   recruitment_rejection_email: 'recruitment_rejection_email',
 
   // Admin:
+  admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',
   admin_saksdokument: 'admin_saksdokument',
   admin_images_title: 'admin_images_title',

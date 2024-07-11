@@ -42,6 +42,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_yes]: 'Ja',
+  [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
   [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
@@ -74,6 +76,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
+  [KEY.common_users]: 'Brukere',
+  [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
@@ -233,12 +237,14 @@ export const nb: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
+  [KEY.recruitment_positions]: 'Stillinger',
   [KEY.recruitment_applicant]: 'Søker',
   [KEY.recruitment_applicants]: 'Søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
@@ -315,6 +321,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
+  [KEY.admin_users_last_active]: 'Sist aktiv',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_events_administrate]: 'Administrer arrangementer',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
@@ -433,6 +440,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_yes]: 'Yes',
+  [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
   [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
@@ -465,6 +474,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_users]: 'Users',
+  [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
@@ -623,6 +634,7 @@ export const en: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
+  [KEY.recruitment_positions]: 'Positions',
   [KEY.recruitment_applicant]: 'Applicant',
   [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',
@@ -630,6 +642,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
   [KEY.recruitment_interview_notes]: 'Interview notes',
@@ -705,6 +718,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',
+  [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',
