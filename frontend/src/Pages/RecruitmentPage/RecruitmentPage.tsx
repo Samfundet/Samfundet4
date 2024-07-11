@@ -22,7 +22,7 @@ export function RecruitmentPage() {
   const { t } = useTranslation();
   useTitle(t(KEY.common_recruitment));
 
-  const noAdmissions = (
+  const noApplications = (
     <div className={styles.no_recruitment_wrapper}>
       <div>
         <h1 className={styles.header}>{useTextItem(TextItem.no_recruitment_text)}</h1>
@@ -106,7 +106,7 @@ export function RecruitmentPage() {
         ) : recruitmentPositions ? (
           <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
         ) : (
-          noAdmissions
+          noApplications
         )}
       </div>
     </Page>
