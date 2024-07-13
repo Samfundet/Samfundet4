@@ -12,7 +12,7 @@ export type UserDto = {
   is_active: boolean;
   is_superuser: boolean;
   date_joined: Date;
-  last_login: Date;
+  last_login: Date | null;
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];
@@ -308,6 +308,10 @@ export type GangDto = {
   logo?: string;
   gang_type?: number;
   info_page?: number;
+};
+
+export type RecruitmentGangDto = GangDto & {
+  recruitment_positions: number;
 };
 
 export type GangTypeDto = {

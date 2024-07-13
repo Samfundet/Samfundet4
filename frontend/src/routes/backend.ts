@@ -511,6 +511,7 @@ export const ROUTES_BACKEND = {
   samfundet__merch_detail: '/api/merch/:pk/',
   samfundet__recruitment_list: '/api/recruitment/',
   samfundet__recruitment_detail: '/api/recruitment/:pk/',
+  samfundet__recruitment_gangs: '/api/recruitment/:pk/gangs/',
   samfundet__recruitment_stats_list: '/api/recruitment-stats/',
   samfundet__recruitment_stats_detail: '/api/recruitment-stats/:pk/',
   samfundet__recruitment_position_list: '/api/recruitment-position/',

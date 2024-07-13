@@ -413,6 +413,24 @@ class GangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class RecruitmentGangSerializer(CustomBaseSerializer):
+    recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
+
+    class Meta:
+        model = Gang
+        fields = '__all__'
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # This will allow it to filter admissions on recruitment
+        self.recruitment = kwargs.pop('recruitment', None)
+        self.gang = kwargs.pop('gang', None)
+        super().__init__(*args, **kwargs)
+
+    def get_positions_count(self, obj: Gang) -> list[int]:
+        """Return total number of positions for this gang's recruitment."""
+        return RecruitmentPosition.objects.filter(recruitment=self.recruitment, gang=obj).count()
+
+
 class GangTypeSerializer(CustomBaseSerializer):
     gangs = GangSerializer(read_only=True, many=True)
 
