@@ -41,7 +41,7 @@ export function ImageFormAdminPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_images });
+            navigate({ url: ROUTES.frontend.admin_images, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);

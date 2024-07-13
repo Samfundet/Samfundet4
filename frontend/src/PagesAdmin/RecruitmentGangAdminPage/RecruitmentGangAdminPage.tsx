@@ -12,6 +12,8 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { toast } from 'react-toastify';
+import { STATUS } from '~/http_status_codes';
 
 export function RecruitmentGangAdminPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -39,10 +41,18 @@ export function RecruitmentGangAdminPage() {
           setRecruitment(data.data);
           await getOrganization(data.data.organization).then(setOrganization);
         }),
-      ]).then(() => {
-        setShowSpinner(false);
-      });
+      ])
+        .then(() => {
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
   const tableColumns = [

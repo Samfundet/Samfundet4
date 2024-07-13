@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 
 import { getRecruitmentApplicationsForGang } from '~/api';
@@ -13,8 +13,11 @@ import { ProcessedApplicants } from './components';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
+import { toast } from 'react-toastify';
 
 export function RecruitmentPositionOverviewPage() {
+  const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
   const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentApplicationDto[]>([]);
@@ -26,40 +29,47 @@ export function RecruitmentPositionOverviewPage() {
   useEffect(() => {
     recruitmentId &&
       gangId &&
-      getRecruitmentApplicationsForGang(gangId, recruitmentId).then((data) => {
-        setRecruitmentApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 0 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
-          ),
-        );
-        setWithdrawnApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
-          ),
-        );
-        setRejectedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
-          ),
-        );
-        setAcceptedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 1 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
-          ),
-        );
-        setShowSpinner(false);
-      });
-  }, [recruitmentId, gangId, positionId]);
+      getRecruitmentApplicationsForGang(gangId, recruitmentId)
+        .then((data) => {
+          setRecruitmentApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status == 0 &&
+                recruitmentApplicant.recruitment_position?.toString() == positionId,
+            ),
+          );
+          setWithdrawnApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+            ),
+          );
+          setRejectedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
+                recruitmentApplicant.recruitment_position?.toString() == positionId,
+            ),
+          );
+          setAcceptedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status == 1 &&
+                recruitmentApplicant.recruitment_position?.toString() == positionId,
+            ),
+          );
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+  }, [recruitmentId, gangId, positionId, navigate, t]);
 
   const title = t(KEY.recruitment_administrate_applications);
   useTitle(title);
