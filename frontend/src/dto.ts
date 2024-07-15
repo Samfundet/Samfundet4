@@ -12,7 +12,7 @@ export type UserDto = {
   is_active: boolean;
   is_superuser: boolean;
   date_joined: Date;
-  last_login: Date;
+  last_login: Date | null;
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];
@@ -310,6 +310,10 @@ export type GangDto = {
   info_page?: number;
 };
 
+export type RecruitmentGangDto = GangDto & {
+  recruitment_positions: number;
+};
+
 export type GangTypeDto = {
   id: number;
   title_nb: string;
@@ -377,7 +381,7 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
-  organization: 'samfundet' | 'isfit' | 'uka';
+  organization: number;
   seperate_positions?: RecruitmentSeperatePositionDto[];
 };
 
@@ -422,11 +426,11 @@ export type RecruitmentPositionDto = {
 };
 
 export type InterviewDto = {
-  id: number;
+  id?: number;
   interview_time: string;
   interview_location: string;
-  room: string;
-  notes: string;
+  room?: string;
+  notes?: string;
   interviewers?: UserDto[];
 };
 
