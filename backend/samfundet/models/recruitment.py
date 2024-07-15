@@ -261,6 +261,7 @@ class RecruitmentApplication(CustomBaseModel):
                 break
         self.organize_priorities()
 
+    REAPPLY_TOO_MANY_APPLICATIONS_ERROR = 'Can not reapply application, too many active application'
     TOO_MANY_APPLICATIONS_ERROR = 'Too many applications for recruitment'
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
@@ -269,11 +270,16 @@ class RecruitmentApplication(CustomBaseModel):
 
         # If there is max applications, check if applicant have applied to not to many
         # Cant use not self.pk, due to UUID generating it before save.
-        if self.recruitment.max_applications and not RecruitmentApplication.objects.filter(pk=self.pk).first():
+        if self.recruitment.max_applications:
             user_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
             if user_applications_count >= self.recruitment.max_applications:
-                errors['recruitment'].append(self.TOO_MANY_APPLICATIONS_ERROR)
-
+                if not current_application:
+                    # attempts to create new application when too many applications
+                    errors['recruitment'].append(self.TOO_MANY_APPLICATIONS_ERROR)
+                elif current_application.withdrawn and not self.withdrawn:
+                    # If it attempts to withdraw, when to many active applications
+                    errors['recruitment'].append(self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
         raise ValidationError(errors)
 
     def __str__(self) -> str:
