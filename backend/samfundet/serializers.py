@@ -54,6 +54,7 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    InterviewTimeblock,
     RecruitmentDateStat,
     RecruitmentPosition,
     RecruitmentTimeStat,
@@ -830,6 +831,12 @@ class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
 class OccupiedTimeslotSerializer(serializers.ModelSerializer):
     class Meta:
         model = OccupiedTimeslot
+        fields = '__all__'
+
+
+class GenerateInterviewBlocksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InterviewTimeblock
         fields = '__all__'
 
 

@@ -5,6 +5,7 @@ import csv
 import hmac
 import hashlib
 from typing import Any
+from datetime import datetime, timedelta
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -117,6 +118,7 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    InterviewTimeblock,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
@@ -1120,6 +1122,80 @@ class OccupiedTimeslotView(ListCreateAPIView):
         OccupiedTimeslot.objects.bulk_create(occupied_timeslots)
 
         return Response({'message': 'Successfully updated occupied timeslots'})
+
+
+"""
+
+
+asdasd adl akløda køadl ksøløaldk 
+
+"""
+
+
+class GenerateInterviewBlocksView(APIView):
+    """Generate interview time blocks based on availability."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        recruitment_id = request.data.get('recruitment_id')
+        position_id = request.data.get('position_id')
+
+        if not recruitment_id or not position_id:
+            return Response({'error': 'recruitment_id and position_id fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            availability = RecruitmentInterviewAvailability.objects.get(recruitment_id=recruitment_id, position_id=position_id)
+        except RecruitmentInterviewAvailability.DoesNotExist:
+            return Response({'error': 'Availability not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        self.generate_time_blocks(availability)
+
+        return Response({'status': 'success'}, status=status.HTTP_200_OK)
+
+    def generate_time_blocks(self, availability):
+        start_date = availability.start_date
+        end_date = availability.end_date
+        start_time = availability.start_time
+        end_time = availability.end_time
+        interval = availability.timeslot_interval
+
+        date_range = self.generate_date_range(start_date, end_date)
+
+        # Generate time blocks for each date
+        for date in date_range:
+            print('doing something')
+            time_blocks = self.generate_time_intervals(date, start_time, end_time, interval)
+            for start_dt, end_dt in time_blocks:
+                rating = self.calculate_rating(availability, start_dt, end_dt)
+                InterviewTimeblock.objects.create(recruitment_position=availability.position, date=date, start_dt=start_dt, end_dt=end_dt, rating=rating)
+
+    def generate_date_range(self, start_date, end_date):
+        current_date = start_date
+        date_range = []
+        while current_date <= end_date:
+            date_range.append(current_date)
+            current_date += timedelta(days=1)
+        return date_range
+
+    def generate_time_intervals(self, date, start_time, end_time, interval):
+        start_dt = datetime.combine(date, start_time)
+        end_dt = datetime.combine(date, end_time)
+        current_dt = start_dt
+        time_blocks = []
+        while current_dt < end_dt:
+            next_dt = current_dt + timedelta(minutes=interval)
+            if next_dt <= end_dt:
+                time_blocks.append((current_dt, next_dt))
+            current_dt = next_dt
+        return time_blocks
+
+    def calculate_rating(self, availability, start_dt, end_dt):
+        occupied_slots = OccupiedTimeslot.objects.filter(recruitment=availability.recruitment, start_dt__lt=end_dt, end_dt__gt=start_dt)
+        unavailable_count = occupied_slots.count()
+        block_length = (end_dt - start_dt).total_seconds() / 3600  # Convert to hours
+        rating = max(0, 1 - unavailable_count) + block_length * 0.25
+        return rating
 
 
 class UserFeedbackView(CreateAPIView):
