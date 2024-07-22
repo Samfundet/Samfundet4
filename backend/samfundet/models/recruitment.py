@@ -372,6 +372,17 @@ class OccupiedTimeslot(FullCleanSaveMixin):
         constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]
 
 
+class InterviewTimeblock(CustomBaseModel):
+    recruitment_position = models.ForeignKey(
+        RecruitmentPosition, on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='applications'
+    )
+    date = models.DateField(help_text='Block date', null=False, blank=False)
+    start_dt = models.DateTimeField(help_text='Block start time', null=False, blank=False)
+    end_dt = models.DateTimeField(help_text='Block end time', null=False, blank=False)
+    rating = models.FloatField(help_text='Rating used for optimizing interview time')
+    available_interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers in this time block', blank=True, related_name='interviews')
+
+
 class RecruitmentStatistics(FullCleanSaveMixin):
     recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
 
