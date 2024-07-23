@@ -1124,14 +1124,6 @@ class OccupiedTimeslotView(ListCreateAPIView):
         return Response({'message': 'Successfully updated occupied timeslots'})
 
 
-"""
-
-
-asdasd adl akløda køadl ksøløaldk 
-
-"""
-
-
 class GenerateInterviewBlocksView(APIView):
     """Generate interview time blocks based on availability."""
 
@@ -1193,7 +1185,7 @@ class GenerateInterviewBlocksView(APIView):
     def calculate_rating(self, availability, start_dt, end_dt):
         occupied_slots = OccupiedTimeslot.objects.filter(recruitment=availability.recruitment, start_dt__lt=end_dt, end_dt__gt=start_dt)
         unavailable_count = occupied_slots.count()
-        block_length = (end_dt - start_dt).total_seconds() / 3600  # Convert to hours
+        block_length = (end_dt - start_dt).total_seconds() / 3600
         rating = max(0, 1 - unavailable_count) + block_length * 0.25
         return rating
 
