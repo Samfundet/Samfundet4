@@ -911,6 +911,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    recruitment_position = RecruitmentPositionSerializer(read_only=True)
     application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:
