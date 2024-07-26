@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { THEME } from '~/constants';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { Children } from '~/types';
 import styles from './PulseEffect.module.scss';
 

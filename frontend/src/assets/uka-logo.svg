@@ -1,32 +1,42 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--style={{ fill: logoColor(color).primary, fillOpacity: 1, fillRule: 'nonzero', stroke: 'none' }}-->
 <svg
-   version="1.1"
-   id="svg2"
-   width="374.71866"
-   height="105.21306"
-   viewBox="0 0 374.71866 105.21306"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <g
-     id="g8"
-     transform="matrix(1.3333333,0,0,-1.3333333,0,105.21306)">
-    <g
-       id="g10"
-       transform="scale(0.1)">
-      <path
-         d="m 772.324,788.77 0.024,-394.676 C 772.348,163.738 580.039,0 386.293,0 193.145,0 0,163.738 0,394.094 v 395.004 l 344.121,-0.207 v -352.25 c 0,-21.211 20.258,-42.547 41.418,-42.547 21.078,0 42.766,21.336 42.766,42.547 v 352.32 l 344.043,-0.207 -0.024,0.016 v 0"
-         style="fill:#fffdf0;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="path12" />
-      <path
-         d="M 1727.7,0 H 1361.01 L 1202.1,260.305 V 0 H 856.559 V 788.77 H 1202.1 V 527.852 L 1361.01,788.82 1727.7,788.77 1493.37,394.094 1727.7,0"
-         style="fill:#fffdf0;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="path14" />
-      <path
-         d="M 2535.72,788.82 H 2044.03 L 1769.33,0 h 387.74 L 2289.58,393.566 2422.73,0 h 387.66 l -274.67,788.82"
-         style="fill:#fffdf0;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="path16" />
-    </g>
-  </g>
+    version="1.1"
+    viewBox="0 0 200 56.16"
+    id="uka-logo"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+<defs id="defs3" />
+    <path
+        d="M 0.001708,0.02333813 0,28.109347 c 0,16.392639 13.685131,28.044594 27.472521,28.044594
+               13.744836,0 27.489458,-11.651955 27.489458,-28.044594 V -3.8710894e-6 L 30.473573,0.01472613
+                V 25.081608 c 0,1.509422 -1.441604,3.027738 -2.947396,3.027738 -1.499957,0 -3.043322,-1.518316
+                 -3.043322,-3.027738 V 0.00974513 L 0,0.02447513 l 0.001708,-0.0011 v 0"
+        id="uka-U"
+        fill="currentColor"
+        fill-opacity="1"
+        stroke="none"
+        stroke-opacity="1"
+        fill-rule="nonzero"
+        />
+    <path
+        d="M 122.94693,56.144049 H 96.85246 L 85.544076,37.620174 V 56.144049 H 60.954617 V 0.01344613
+                   H 85.544076 V 18.580942 L 96.85246,0.00988813 l 26.09447,0.0036 -16.67545,28.08600887
+                   16.67545,28.044594"
+        id="uka-K"
+        fill="currentColor"
+        fill-opacity="1"
+        stroke="none"
+        stroke-opacity="1"
+        fill-rule="nonzero"
+    />
+    <path
+        d="M 180.4474,0.00988813 H 145.45766 L 125.90941,56.144049 h 27.59242 l
+                   9.4297,-28.00702 9.47525,28.00702 h 27.58674 L 180.4474,0.00988813"
+        id="uka-A"
+        fill="currentColor"
+        fill-opacity="1"
+        stroke="none"
+        stroke-opacity="1"
+        fill-rule="nonzero"
+        />
 </svg>

@@ -6,13 +6,13 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getGang } from '~/api';
 import { GangDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
-import { lowerCapitalize } from '~/utils';
 
 export function GangsFormAdminPage() {
   const navigate = useCustomNavigate();
@@ -34,7 +34,7 @@ export function GangsFormAdminPage() {
         })
         .catch((data) => {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_gangs });
+            navigate({ url: ROUTES.frontend.admin_gangs, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
@@ -56,9 +56,10 @@ export function GangsFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
+  useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm
         initialData={gang}
         onSubmit={handleOnSubmit}

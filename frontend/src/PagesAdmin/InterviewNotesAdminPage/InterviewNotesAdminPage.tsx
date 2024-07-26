@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionInterview } from '~/api';
-import { InterviewDto, RecruitmentAdmissionDto } from '~/dto';
+import { getRecruitmentApplicationsForGang, putRecruitmentApplicationInterview } from '~/api';
+import { InterviewDto, RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
-import { filterRecruitmentAdmission, getNameUser } from './utils';
+import { filterRecruitmentApplication, getNameUser } from './utils';
+import { ROUTES } from '~/routes';
+import { STATUS } from '~/http_status_codes';
 
 export function InterviewNotesPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -17,31 +19,44 @@ export function InterviewNotesPage() {
   const positionId = useParams().positionId;
   const interviewId = useParams().interviewId;
   const [editingMode, setEditingMode] = useState(false);
-  const [recruitmentAdmission, setRecruitmentAdmission] = useState<RecruitmentAdmissionDto[]>([]);
+  const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
   const [interview, setInterview] = useState<InterviewDto | null>(null);
   const [disabled, setdisabled] = useState<boolean>(true);
   const [nameUser, setNameUser] = useState<string>('');
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (positionId && recruitmentId && gangId && interviewId) {
-      getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((response) => {
-        const admission = filterRecruitmentAdmission(response.data, positionId, interviewId);
-        if (admission.length !== 0) {
-          setdisabled(false);
-          setRecruitmentAdmission(admission);
-          setInterview(admission[0].interview);
-          setNameUser(getNameUser(admission[0]));
-        }
-      });
+      getRecruitmentApplicationsForGang(gangId, recruitmentId)
+        .then((response) => {
+          const application = filterRecruitmentApplication(response.data, positionId, interviewId);
+          if (application.length !== 0) {
+            setdisabled(false);
+            setRecruitmentApplication(application);
+            if (application[0].interview) {
+              setInterview(application[0].interview);
+            }
+            setNameUser(getNameUser(application[0]));
+          }
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, positionId, gangId, interviewId]);
 
   async function handleEditSave() {
     if (editingMode && interview) {
       try {
-        await putRecruitmentAdmissionInterview(interview.id, interview);
-        toast.success(t(KEY.common_save_successful));
+        if (interview.id) {
+          await putRecruitmentApplicationInterview(interview.id, interview);
+          toast.success(t(KEY.common_save_successful));
+        }
       } catch (error) {
         toast.error(t(KEY.common_something_went_wrong));
       }
@@ -51,12 +66,14 @@ export function InterviewNotesPage() {
 
   function handleUpdateNotes(value: string) {
     const updatedNotes = value;
-    const updatedInterview: InterviewDto = { ...recruitmentAdmission[0].interview, notes: updatedNotes };
-    setInterview(updatedInterview);
+    if (recruitmentApplication[0].interview) {
+      const updatedInterview: InterviewDto = { ...recruitmentApplication[0].interview, notes: updatedNotes };
+      setInterview(updatedInterview);
+    }
   }
 
   return (
-    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={true} showBackButton={true}>
+    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={true}>
       <div className={styles.container}>
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}
