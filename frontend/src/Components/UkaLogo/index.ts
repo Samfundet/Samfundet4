@@ -1,1 +1,0 @@
-export { UkaLogo } from './UkaLogo';

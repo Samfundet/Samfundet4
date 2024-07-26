@@ -72,9 +72,6 @@ export { ToolTip } from './ToolTip';
 export { InterviewFormModal } from './InterviewForm';
 export { Chart } from './Chart';
 export { Logo } from './Logo';
-export { SamfLogo } from './SamfLogo';
-export { UkaLogo } from './UkaLogo';
-export { IsfitLogo } from './IsfitLogo';
 
 // Props
 export type { CheckboxProps } from './Checkbox';

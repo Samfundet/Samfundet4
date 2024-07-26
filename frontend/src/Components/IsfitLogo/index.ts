@@ -1,1 +1,0 @@
-export { IsfitLogo } from './IsfitLogo';

@@ -12,7 +12,7 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
       case 'org-color':
         return { primary: COLORS.white, secondary: COLORS.blue_isfit };
       case 'org-alt-color':
-        return { primary: COLORS.blue_isfit, secondary: COLORS.white };
+        return { primary: COLORS.blue_isfit, secondary: COLORS.black };
       case 'dark':
         return { primary: COLORS.black };
       case 'light':
