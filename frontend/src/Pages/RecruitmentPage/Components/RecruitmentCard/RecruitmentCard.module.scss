@@ -43,7 +43,7 @@
   gap: 1.5rem;
 }
 
-.cardSamf{
+.SamfundetCard{
   @extend .card;
   border-color: $red-samf;
   .cardHeader{
@@ -51,7 +51,7 @@
   }
 }
 
-.cardUKA{
+.UKACard{
   @extend .card;
   border-color: #150b59;
   .cardHeader{
@@ -59,7 +59,7 @@
   }
 }
 
-.cardISFIT{
+.ISFiTCard{
   @extend .card;
   border-color: #0099cc;
   .cardHeader{
@@ -91,4 +91,8 @@
   display: grid;
   grid-template-columns: auto;
   gap: 0.5rem;
+}
+
+.timeDisplay {
+  display: inline-block;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
-import { getActiveRecruitmentPositions, getGangList } from '~/api';
+import { getActiveRecruitmentPositions, getActiveRecruitments, getGangList } from '~/api';
 import { TextItem } from '~/constants';
 import { GangTypeDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTextItem, useCustomNavigate, useTitle } from '~/hooks';
@@ -16,44 +16,28 @@ import { useAuthContext } from '~/context/AuthContext';
 export function RecruitmentPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
-  const [recruitments, setRecruitments] = useState<Partial<RecruitmentDto>[]>([]);
+  //  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
+  const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [gangTypes, setGangs] = useState<GangTypeDto[]>();
+  // const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
   useTitle(t(KEY.common_recruitment));
+
+  useEffect(() => {
+    getActiveRecruitments()
+      .then((response) => {
+        setRecruitments(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
 
   /**
    * TODO: issue #1114, update recruitment data.
    * */
-  useEffect(() => {
-    const mock_data: object[] = [
-      {
-        id: '1',
-        name_nb: 'Opptak',
-        name_en: 'Recruitment_name_placeholder',
-        shown_application_deadline: '25. august, 2069',
-        reprioritization_deadline_for_applicant: '4. september, 2069',
-        organization: 'samfundet',
-      },
-      {
-        id: '2',
-        name_nb: 'Opptak_navn_2_placeholder',
-        name_en: 'Recruitment_name_2_placeholder',
-        shown_application_deadline: '15. januar, 2069',
-        reprioritization_deadline_for_applicant: '4. september, 2069',
-        organization: 'uka',
-      },
-      {
-        id: '3',
-        name_nb: 'Mangler ompr. frist med vilje',
-        name_en: 'Recruitment_name_3_placeholder',
-        shown_application_deadline: '15. januar, 2069',
-        organization: 'isfit',
-      },
-    ];
-    setRecruitments(mock_data);
-  }, []);
 
   const NO_RECRUITMENTS = (
     <div className={styles.no_recruitment_wrapper}>
@@ -86,7 +70,7 @@ export function RecruitmentPage() {
     </div>
   );
 
-  useEffect(() => {
+  /*  useEffect(() => {
     Promise.all([getActiveRecruitmentPositions(), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
@@ -97,14 +81,14 @@ export function RecruitmentPage() {
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, []);
+  }, []);*/
 
   return (
     <Page className={styles.recruitmentPage}>
       <div className={styles.container}>
         <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
         <div className={styles.cardContainer}>
-          {recruitments.map((recruitment: Partial<RecruitmentDto>) => (
+          {recruitments.map((recruitment: RecruitmentDto) => (
             <RecruitmentCard
               key={recruitment.id}
               recruitment_id={recruitment.id}
@@ -112,8 +96,7 @@ export function RecruitmentPage() {
               recruitment_name_en={recruitment.name_en}
               shown_application_deadline={recruitment.shown_application_deadline}
               reprioritization_deadline_for_applicant={recruitment.reprioritization_deadline_for_applicant}
-              recruitment_organization={recruitment.organization}
-              isAuthenticated={!!user}
+              organization_id={recruitment.organization}
             />
           ))}
         </div>
@@ -148,13 +131,14 @@ export function RecruitmentPage() {
             </Button>
           </div>
         )}
-        {loading ? (
+        {/*
+          loading ? (
           <SamfundetLogoSpinner />
         ) : recruitmentPositions ? (
           <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
         ) : (
           NO_RECRUITMENTS
-        )}
+        )*/}
       </div>
     </Page>
   );

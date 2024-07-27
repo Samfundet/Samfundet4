@@ -1,11 +1,14 @@
 import styles from './RecruitmentCard.module.scss';
-import { RecruitmentDto } from '~/dto';
 import { Text } from '~/Components/Text/Text';
 import { useTranslation } from 'react-i18next';
 import { useDesktop, useIsDarkTheme } from '~/hooks';
-import { Button, Logo } from '~/Components';
+import { Button, Logo, TimeDisplay } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
+import { useEffect, useState } from 'react';
+import { getOrganization } from '~/api';
+import { useAuthContext } from '~/context/AuthContext';
+import { OrgNameTypeValue, OrgNameType } from '~/types';
 
 type RecruitmentCardProps = {
   recruitment_id?: string;
@@ -13,22 +16,22 @@ type RecruitmentCardProps = {
   recruitment_name_en?: string;
   shown_application_deadline?: string;
   reprioritization_deadline_for_applicant?: string;
-  recruitment_organization?: RecruitmentDto['organization'];
+  organization_id: number;
   isAuthenticated?: boolean;
 };
 
-const organizationInformation = {
-  samfundet: {
-    orgStyle: styles.cardSamf,
-    name: 'Samfundet',
+const CARD_STYLE = {
+  [OrgNameType.SAMFUNDET_NAME]: {
+    orgStyle: styles.SamfundetCard,
   },
-  uka: {
-    orgStyle: styles.cardUKA,
-    name: 'UKA',
+  [OrgNameType.UKA_NAME]: {
+    orgStyle: styles.UKACard,
   },
-  isfit: {
-    orgStyle: styles.cardISFIT,
-    name: 'ISFiT',
+  [OrgNameType.ISFIT_NAME]: {
+    orgStyle: styles.ISFiTCard,
+  },
+  [OrgNameType.FALLBACK]: {
+    orgStyle: styles.card,
   },
 };
 
@@ -38,33 +41,40 @@ export function RecruitmentCard({
   recruitment_name_en = 'N/A',
   shown_application_deadline = 'N/A',
   reprioritization_deadline_for_applicant = 'N/A',
-  recruitment_organization,
-  isAuthenticated = false,
+  organization_id,
 }: RecruitmentCardProps) {
   const { i18n } = useTranslation();
   const isDesktop = useDesktop();
   const isDarkTheme = useIsDarkTheme();
+  const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    getOrganization(organization_id)
+      .then((response) => {
+        if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
+          setOrganizationName(response.name as OrgNameTypeValue);
+        } else {
+          setOrganizationName(OrgNameType.FALLBACK);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setOrganizationName(OrgNameType.FALLBACK);
+      });
+  }, [organization_id]);
 
   const applicationCardButtons = (
     <>
-      {/*TODO: issue #1114: navigate to correct organization recruitment*/}
       <Button
         theme={'green'}
         onClick={() => {
-          alert(
-            'SKAL NAVIGERE TIL OVERSIKT OVER VERV FOR ' +
-              recruitment_organization +
-              ' { id: ' +
-              recruitment_id +
-              ' }' +
-              ' opptak',
-          );
+          alert('SKAL NAVIGERE TIL OVERSIKT OVER VERV FOR ');
         }}
       >
-        {'Søk verv hos ' + organizationInformation[recruitment_organization].name ?? 'Søk verv'}
+        {'Søk verv hos ' + (organizationName ?? 'N/A')}
       </Button>
-      {/*TODO: issue #1114: navigate to users application overview page*/}
-      {isAuthenticated && (
+      {user && (
         <Button theme={'blue'} onClick={() => alert('IMPLEMENTER NAVIGASJON TIL BRUKERENS SØKNADER')}>
           Dine søknader
         </Button>
@@ -83,44 +93,53 @@ export function RecruitmentCard({
       <Text size={'m'} as={'p'}>
         <Text size={'m'} as={'strong'}>
           {t(KEY.recruitment_organization)}
-        </Text>{' '}
-        - {organizationInformation[recruitment_organization].name ?? 'N/A'}
+        </Text>
+        {organizationName}
       </Text>
       <Text size={'m'} as={'p'}>
         <Text size={'m'} as={'strong'}>
           {t(KEY.application_deadline)}:
-        </Text>{' '}
-        - {shown_application_deadline}
+        </Text>
+        <TimeDisplay timestamp={shown_application_deadline} displayType="nice-date" className={styles.timeDisplay} />
+        {', '}
+        <TimeDisplay timestamp={shown_application_deadline} displayType="time" className={styles.timeDisplay} />
       </Text>
       <Text size={'m'} as={'p'}>
         <Text size={'m'} as={'strong'}>
           {t(KEY.reprioritization_deadline_for_applicant)}:
-        </Text>{' '}
-        - {reprioritization_deadline_for_applicant}
+        </Text>
+        <TimeDisplay
+          timestamp={reprioritization_deadline_for_applicant}
+          displayType="nice-date"
+          className={styles.timeDisplay}
+        />
+        {', '}
+        <TimeDisplay
+          timestamp={reprioritization_deadline_for_applicant}
+          displayType="time"
+          className={styles.timeDisplay}
+        />
       </Text>
     </>
   );
 
   return (
-    <div key={recruitment_id} className={organizationInformation[recruitment_organization].orgStyle ?? styles.card}>
+    <div key={recruitment_id} className={CARD_STYLE[organizationName].orgStyle}>
       <div className={styles.cardHeader}>{cardHeaderText}</div>
       <div className={styles.cardContent}>
         <div className={styles.cardItemFirst}>
           <div className={styles.textContainer}>{cardContentText}</div>
           {!isDesktop && (
             <div className={styles.cardItemSecond}>
-              {' '}
-              <Logo
-                color={isDarkTheme ? 'light' : 'org-color'}
-                organization={recruitment_organization}
-                size={'xsmall'}
-              />
+              {organizationName && (
+                <Logo color={isDarkTheme ? 'light' : 'org-color'} organization={organizationName} size={'xsmall'} />
+              )}
             </div>
           )}
         </div>
         {isDesktop && (
           <div className={styles.cardItemSecond}>
-            <Logo color={isDarkTheme ? 'light' : 'org-color'} organization={recruitment_organization} size={'small'} />
+            <Logo color={isDarkTheme ? 'light' : 'org-color'} organization={organizationName} size={'small'} />
             <div className={styles.buttonContainer}>{applicationCardButtons}</div>
           </div>
         )}
