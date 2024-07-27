@@ -109,7 +109,7 @@ export const router = createBrowserRouter(
           path={ROUTES.frontend.recruitment_application_overview}
           element={<RecruitmentApplicationsOverviewPage />}
         />
-        <Route path={ROUTES.frontend.organization_recruitment_list} element={<OrganizationRecruitmentPage />} />
+        <Route path={ROUTES.frontend.organization_recruitment} element={<OrganizationRecruitmentPage />} />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
         <Route path={ROUTES.frontend.luka} element={<></>} />

@@ -106,13 +106,15 @@ export function OrganizationRecruitmentPage() {
         <div className={styles.openPositionsContainer}>
           <RecruitmentTabs />
         </div>
-        {loading ? (
+        <GangTypeContainer recruitmentID={recruitmentID} />
+        {/*
+          loading ? (
           <SamfundetLogoSpinner />
         ) : recruitmentPositions ? (
-          <GangTypeContainer gangTypes={recruitingGangTypes} recruitmentPositions={recruitmentPositions} />
+          <GangTypeContainer recruitmentID={recruitmentID} />
         ) : (
           <NoPositions />
-        )}
+        )*/}
       </div>
     </Page>
   );

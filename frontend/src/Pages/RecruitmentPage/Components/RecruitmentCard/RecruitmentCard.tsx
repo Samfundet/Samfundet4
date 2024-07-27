@@ -75,7 +75,12 @@ export function RecruitmentCard({
       <Button
         theme={'green'}
         onClick={() => {
-          alert('SKAL NAVIGERE TIL OVERSIKT OVER VERV FOR ');
+          navigate({
+            url: reverse({
+              pattern: ROUTES.frontend.organization_recruitment,
+              urlParams: { recruitmentID: recruitment_id },
+            }),
+          });
         }}
       >
         {'Søk verv hos ' + (organizationName ?? 'N/A')}
