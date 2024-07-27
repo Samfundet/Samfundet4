@@ -4,7 +4,7 @@ import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
 import { getGangList } from '~/api';
 import { GangsTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangsTabs/GangsTabs';
-import { NoPositions } from '~/Pages/OrganizationRecruitmentPage/Components/NoPositions/NoPositions';
+import { NoPositions } from '~/Pages/RecruitmentPage/Components/NoPositions/NoPositions';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import styles from './RecruitmentTabs.module.scss';

@@ -5,7 +5,7 @@ import { getActiveRecruitments } from '~/api';
 import { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { RecruitmentCard } from './Components';
+import { RecruitmentCard, NoPositions } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
 export function RecruitmentPage() {
@@ -32,7 +32,7 @@ export function RecruitmentPage() {
         <div className={styles.cardContainer}>
           {loading ? (
             <SamfundetLogoSpinner />
-          ) : (
+          ) : recruitments && recruitments.length > 0 ? (
             recruitments.map((recruitment: RecruitmentDto) => (
               <RecruitmentCard
                 key={recruitment.id}
@@ -44,6 +44,8 @@ export function RecruitmentPage() {
                 organization_id={recruitment.organization}
               />
             ))
+          ) : (
+            <NoPositions />
           )}
         </div>
       </div>

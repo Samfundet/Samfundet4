@@ -1,14 +1,12 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
-import { Text, Page, Video, Logo, OccupiedFormModal, SamfundetLogoSpinner } from '~/Components';
+import { Text, Page, Video, Logo, OccupiedFormModal, RadioButton } from '~/Components';
 import { COLORS, OrganizationTypeValue, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
-import { RecruitmentTabs, GangTypeContainer, NoPositions } from './Components';
+import { RecruitmentTabs, GangTypeContainer } from './Components';
 import { useParams } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
-import { getActiveRecruitmentPositions, getGangList } from '~/api';
-import { useEffect, useState } from 'react';
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import { useState } from 'react';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
@@ -16,26 +14,21 @@ export function OrganizationRecruitmentPage() {
   const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
   const recruitmentParam = useParams();
   const recruitmentID: number = +recruitmentParam;
-  const [loading, setLoading] = useState(true);
+  const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
+  const [viewGangCategories, setViewGangCategories] = useState<boolean>(false);
   const { t } = useTranslation();
-  /*
-   * part of dropdown:
-   * */
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
-  const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
 
-  useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList()])
-      .then(([recruitmentRes, gangsRes]) => {
-        setRecruitmentPositions(recruitmentRes.data);
-        setRecruitingGangs(gangsRes);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }, []);
+  function toggleViewAll() {
+    const toggledValue = !viewAllPositions;
+    setViewGangCategories(false);
+    setViewAllPositions(toggledValue);
+  }
+
+  function toggleViewGangCategories() {
+    const toggleValue = !viewGangCategories;
+    setViewAllPositions(false);
+    setViewGangCategories(toggleValue);
+  }
 
   return (
     <Page>
@@ -104,17 +97,24 @@ export function OrganizationRecruitmentPage() {
         </div>
         <OccupiedFormModal recruitmentId={recruitmentID} />
         <div className={styles.openPositionsContainer}>
-          <RecruitmentTabs />
+          <div className={styles.displayOptionsWrapper}>
+            <Text size={'l'} as={'p'}>
+              Vis verv:
+            </Text>
+            <hr className={styles.displayOptionsDivider}></hr>
+            <div className={styles.displayOptions}>
+              <RadioButton checked={viewAllPositions} onChange={toggleViewAll}>
+                Alle
+              </RadioButton>
+              <RadioButton checked={viewGangCategories} onChange={toggleViewGangCategories}>
+                Kategorisert etter gjeng
+              </RadioButton>
+            </div>
+          </div>
+
+          {viewAllPositions && <GangTypeContainer recruitmentID={recruitmentID} />}
+          {viewGangCategories && <RecruitmentTabs />}
         </div>
-        <GangTypeContainer recruitmentID={recruitmentID} />
-        {/*
-          loading ? (
-          <SamfundetLogoSpinner />
-        ) : recruitmentPositions ? (
-          <GangTypeContainer recruitmentID={recruitmentID} />
-        ) : (
-          <NoPositions />
-        )*/}
       </div>
     </Page>
   );
