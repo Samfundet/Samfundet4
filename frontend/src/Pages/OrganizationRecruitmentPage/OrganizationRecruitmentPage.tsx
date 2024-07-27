@@ -12,8 +12,8 @@ export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
   const organization: OrganizationTypeValue = 'samfundet'; // TODO: DO IN ISSUE #1114. Make this dynamic
   const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
-  const recruitmentParam = useParams();
-  const recruitmentID: number = +recruitmentParam;
+  const { recruitmentID } = useParams();
+  const recruitmentIDNumber: number = +recruitmentID;
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const [viewGangCategories, setViewGangCategories] = useState<boolean>(false);
   const { t } = useTranslation();
@@ -95,7 +95,7 @@ export function OrganizationRecruitmentPage() {
             }
           </Text>
         </div>
-        <OccupiedFormModal recruitmentId={recruitmentID} />
+        <OccupiedFormModal recruitmentId={recruitmentIDNumber} />
         <div className={styles.openPositionsContainer}>
           <div className={styles.displayOptionsWrapper}>
             <Text size={'l'} as={'p'}>

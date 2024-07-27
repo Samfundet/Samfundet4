@@ -1,21 +1,22 @@
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { GangPositionDropdown } from '../GangPositionDropdown';
 import { useEffect, useState } from 'react';
-import { getActiveRecruitmentPositions, getGangList } from '~/api';
+import { getGangList, getRecruitmentPositions } from '~/api';
 import { SamfundetLogoSpinner, Text } from '~/Components';
 
 type GangTypeContainerProps = {
-  recruitmentID: number;
+  recruitmentID: string;
 };
 
 // TODO: get positions for correct recruitment DO IN ISSUE #1114.
-export function GangTypeContainer({ recruitmentID = 1 }: GangTypeContainerProps) {
+export function GangTypeContainer({ recruitmentID = '1' }: GangTypeContainerProps) {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList()])
+    console.log(recruitmentID);
+    Promise.all([getRecruitmentPositions(recruitmentID), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
         setRecruitingGangs(gangsRes);
@@ -25,7 +26,7 @@ export function GangTypeContainer({ recruitmentID = 1 }: GangTypeContainerProps)
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, []);
+  }, [recruitmentID]);
   return loading ? (
     <SamfundetLogoSpinner />
   ) : (
