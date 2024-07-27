@@ -3,14 +3,14 @@ import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './GangPosition.module.scss';
+import styles from './GangPositionDropdown.module.scss';
 
 type GangItemProps = {
   type: GangTypeDto;
   recruitmentPositions?: RecruitmentPositionDto[];
 };
 
-export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
+export function GangPositionDropdown({ type, recruitmentPositions }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
       const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);

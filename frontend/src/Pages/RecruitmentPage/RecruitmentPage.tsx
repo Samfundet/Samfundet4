@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Page, SamfundetLogoSpinner, Video } from '~/Components';
-import { getActiveRecruitmentPositions, getActiveRecruitments, getGangList } from '~/api';
-import { TextItem } from '~/constants';
-import { GangTypeDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
-import { useTextItem, useCustomNavigate, useTitle } from '~/hooks';
+import { Button, Page, Video } from '~/Components';
+import { getActiveRecruitments } from '~/api';
+import { RecruitmentDto } from '~/dto';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { GangTypeContainer, RecruitmentCard } from './Components';
+import { RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { reverse } from '~/named-urls';
@@ -16,10 +15,8 @@ import { useAuthContext } from '~/context/AuthContext';
 export function RecruitmentPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
-  //  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
   const [loading, setLoading] = useState(true);
-  // const [gangTypes, setGangs] = useState<GangTypeDto[]>();
   const { t } = useTranslation();
   useTitle(t(KEY.common_recruitment));
 
@@ -34,54 +31,6 @@ export function RecruitmentPage() {
         setLoading(false);
       });
   }, []);
-
-  /**
-   * TODO: issue #1114, update recruitment data.
-   * */
-
-  const NO_RECRUITMENTS = (
-    <div className={styles.no_recruitment_wrapper}>
-      <div>
-        <h1 className={styles.header}>{useTextItem(TextItem.no_recruitment_text)}</h1>
-      </div>
-
-      <div className={styles.info}>
-        <p>
-          <br />
-          {useTextItem(TextItem.no_recruitment_text_0)}
-          <br />
-          {useTextItem(TextItem.no_recruitment_text_1)}
-          <br />
-          {useTextItem(TextItem.no_recruitment_text_2)}
-          <br />
-          <br />
-          {useTextItem(TextItem.no_recruitment_text_3)}
-          <br />
-          {useTextItem(TextItem.no_recruitment_text_4)}{' '}
-          <strong>
-            <a className={styles.link} href={ROUTES.frontend.contact}>
-              {t(KEY.common_click_here)}
-            </a>
-          </strong>
-          <br />
-          {useTextItem(TextItem.no_recruitment_text_5)}
-        </p>
-      </div>
-    </div>
-  );
-
-  /*  useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList()])
-      .then(([recruitmentRes, gangsRes]) => {
-        setRecruitmentPositions(recruitmentRes.data);
-        setGangs(gangsRes);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }, []);*/
 
   return (
     <Page className={styles.recruitmentPage}>
@@ -131,14 +80,6 @@ export function RecruitmentPage() {
             </Button>
           </div>
         )}
-        {/*
-          loading ? (
-          <SamfundetLogoSpinner />
-        ) : recruitmentPositions ? (
-          <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
-        ) : (
-          NO_RECRUITMENTS
-        )*/}
       </div>
     </Page>
   );

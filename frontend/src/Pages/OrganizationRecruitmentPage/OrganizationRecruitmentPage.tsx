@@ -1,12 +1,14 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
-import { Text, Page, Video, Logo } from '~/Components';
+import { Text, Page, Video, Logo, OccupiedFormModal, SamfundetLogoSpinner } from '~/Components';
 import { COLORS, OrganizationTypeValue, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
-import { RecruitmentTabs } from '~/Pages/OrganizationRecruitmentPage/Components/RecruitmentTabs/RecruitmentTabs';
-import { OccupiedFormModal } from '~/Components/OccupiedForm';
+import { RecruitmentTabs, GangTypeContainer, NoPositions } from './Components';
 import { useParams } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
+import { getActiveRecruitmentPositions, getGangList } from '~/api';
+import { useEffect, useState } from 'react';
+import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
@@ -14,9 +16,26 @@ export function OrganizationRecruitmentPage() {
   const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
   const recruitmentParam = useParams();
   const recruitmentID: number = +recruitmentParam;
+  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
+  /*
+   * part of dropdown:
+   * */
+  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
+  const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
 
-  //TODO: IN ISSUE #689. Create organization style theme.
+  useEffect(() => {
+    Promise.all([getActiveRecruitmentPositions(), getGangList()])
+      .then(([recruitmentRes, gangsRes]) => {
+        setRecruitmentPositions(recruitmentRes.data);
+        setRecruitingGangs(gangsRes);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Page>
@@ -87,6 +106,13 @@ export function OrganizationRecruitmentPage() {
         <div className={styles.openPositionsContainer}>
           <RecruitmentTabs />
         </div>
+        {loading ? (
+          <SamfundetLogoSpinner />
+        ) : recruitmentPositions ? (
+          <GangTypeContainer gangTypes={recruitingGangTypes} recruitmentPositions={recruitmentPositions} />
+        ) : (
+          <NoPositions />
+        )}
       </div>
     </Page>
   );

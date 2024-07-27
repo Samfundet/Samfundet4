@@ -1,5 +1,5 @@
 import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { GangPosition } from '..';
+import { GangPositionDropdown } from '../GangPositionDropdown';
 
 type GangTypeProps = {
   gangTypes?: GangTypeDto[];
@@ -10,7 +10,7 @@ export function GangTypeContainer({ gangTypes, recruitmentPositions }: GangTypeP
   return (
     <>
       {gangTypes?.map((gangType) => (
-        <GangPosition key={gangType.id} type={gangType} recruitmentPositions={recruitmentPositions} />
+        <GangPositionDropdown key={gangType.id} type={gangType} recruitmentPositions={recruitmentPositions} />
       ))}
     </>
   );
