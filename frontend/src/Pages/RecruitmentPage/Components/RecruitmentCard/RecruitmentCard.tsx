@@ -1,14 +1,16 @@
 import styles from './RecruitmentCard.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { useTranslation } from 'react-i18next';
-import { useDesktop, useIsDarkTheme } from '~/hooks';
-import { Button, Logo, TimeDisplay } from '~/Components';
+import { useCustomNavigate, useDesktop, useIsDarkTheme } from '~/hooks';
+import { Button, Logo, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { getOrganization } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
 import { OrgNameTypeValue, OrgNameType } from '~/types';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 
 type RecruitmentCardProps = {
   recruitment_id?: string;
@@ -47,6 +49,8 @@ export function RecruitmentCard({
   const isDesktop = useDesktop();
   const isDarkTheme = useIsDarkTheme();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useCustomNavigate();
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -57,10 +61,12 @@ export function RecruitmentCard({
         } else {
           setOrganizationName(OrgNameType.FALLBACK);
         }
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setOrganizationName(OrgNameType.FALLBACK);
+        setLoading(false);
       });
   }, [organization_id]);
 
@@ -74,9 +80,30 @@ export function RecruitmentCard({
       >
         {'Søk verv hos ' + (organizationName ?? 'N/A')}
       </Button>
-      {user && (
-        <Button theme={'blue'} onClick={() => alert('IMPLEMENTER NAVIGASJON TIL BRUKERENS SØKNADER')}>
-          Dine søknader
+      {user ? (
+        <Button
+          theme="samf"
+          onClick={() => {
+            navigate({
+              url: reverse({
+                pattern: ROUTES.frontend.recruitment_application_overview,
+                urlParams: { recruitmentID: recruitment_id },
+              }),
+            });
+          }}
+        >
+          {t(KEY.recruitment_my_applications)}
+        </Button>
+      ) : (
+        <Button
+          theme="samf"
+          onClick={() =>
+            navigate({
+              url: ROUTES.frontend.login,
+            })
+          }
+        >
+          {t(KEY.common_login)}
         </Button>
       )}
     </>
@@ -123,7 +150,9 @@ export function RecruitmentCard({
     </>
   );
 
-  return (
+  return loading ? (
+    <SamfundetLogoSpinner />
+  ) : (
     <div key={recruitment_id} className={CARD_STYLE[organizationName].orgStyle}>
       <div className={styles.cardHeader}>{cardHeaderText}</div>
       <div className={styles.cardContent}>
