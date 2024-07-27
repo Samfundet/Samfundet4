@@ -75,6 +75,8 @@ export { Logo } from './Logo';
 export { TabBar } from './TabBar';
 export { Text } from './Text';
 export { Table } from './Table';
+export { OccupiedFormModal } from './OccupiedForm';
+export { OccupiedForm } from './OccupiedForm';
 
 // Props
 export type { CheckboxProps } from './Checkbox';
