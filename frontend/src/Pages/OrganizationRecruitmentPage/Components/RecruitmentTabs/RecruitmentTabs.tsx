@@ -40,7 +40,7 @@ export function RecruitmentTabs() {
 
   const gangTypeTabs: Tab<GangTypeDto>[] = gangCategories.map((gangType) => ({
     key: gangType.id,
-    label: dbT(gangType, 'title') ?? 'N/A -- NOT IN SEED DB! DATA',
+    label: dbT(gangType, 'title') ?? 'N/A',
     value: gangType,
   }));
 
