@@ -84,10 +84,10 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
     <div className={styles.recruitmentTableContainer}>
       {loading ? (
         <SamfundetLogoSpinner />
-      ) : positions ? (
+      ) : positions.length > 0 ? (
         <Table columns={tableColumns} data={tableData} />
       ) : (
-        <Text as={'strong'} size={'xl'}>
+        <Text as={'strong'} size={'l'}>
           {t(KEY.recruitment_no_positions)}
         </Text>
       )}

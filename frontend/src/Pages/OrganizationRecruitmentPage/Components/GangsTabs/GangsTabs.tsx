@@ -13,7 +13,7 @@ type GangTabsProps = {
 };
 
 export function GangsTabs({ currentGangCategory }: GangTabsProps) {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState<Tab<GangDto>>();
   const [gangs, setGangs] = useState<GangDto[]>([]);
   const isDesktop = useDesktop();
@@ -23,7 +23,6 @@ export function GangsTabs({ currentGangCategory }: GangTabsProps) {
     if (!currentGangCategory.value) {
       return;
     }
-    setLoading(true);
     setGangs(currentGangCategory.value.gangs);
     if (gangs.length > 0) {
       const initialTab: Tab<GangDto> = {
