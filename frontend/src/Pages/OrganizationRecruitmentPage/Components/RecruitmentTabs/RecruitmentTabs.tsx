@@ -18,14 +18,15 @@ export function RecruitmentTabs() {
   useEffect(() => {
     setLoading(true);
     getGangList()
-      //TODO: DO IN ISSUE #1121, only get gang types recruiting.
+      //TODO: DO IN ISSUE #1121, only get GANG TYPES recruiting in "this" recruitment.
       // also, this API call should probably be renamed "getGangCategoryList"
+      // THIS CAN ALSO BE USED IN GangsTypeContainer/GangPositionDropdown
       .then((response) => {
         setGangCategories(response);
         if (response.length > 0) {
           const initialTab: Tab<GangTypeDto> = {
             key: response[0].id,
-            label: dbT(response[0], 'title') ?? 'N/A -- NOT IN SEED DATA!',
+            label: dbT(response[0], 'title') ?? 'N/A',
             value: response[0],
           };
           setCurrentTab(initialTab);

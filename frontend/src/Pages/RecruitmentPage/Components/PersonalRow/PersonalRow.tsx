@@ -9,16 +9,16 @@ import { useAuthContext } from '~/context/AuthContext';
 type PersonalRowProps = {
   recruitmentID: string;
   organizationName: string;
-  showDisplayBtn?: boolean;
+  showRecruitmentBtn?: boolean;
 };
 
-export function PersonalRow({ recruitmentID, organizationName, showDisplayBtn = true }: PersonalRowProps) {
+export function PersonalRow({ recruitmentID, organizationName, showRecruitmentBtn = true }: PersonalRowProps) {
   const navigate = useCustomNavigate();
   const { user } = useAuthContext();
 
   return (
     <>
-      {showDisplayBtn && (
+      {showRecruitmentBtn && (
         <Button
           theme="green"
           onClick={() => {

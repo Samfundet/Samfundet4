@@ -100,7 +100,11 @@ export function OrganizationRecruitmentPage() {
             {recruitmentID && (
               <>
                 <OccupiedFormModal recruitmentId={+recruitmentID} />
-                <PersonalRow recruitmentID={recruitmentID} organizationName={organizationName} showDisplayBtn={false} />
+                <PersonalRow
+                  recruitmentID={recruitmentID}
+                  organizationName={organizationName}
+                  showRecruitmentBtn={false}
+                />
               </>
             )}
           </div>
