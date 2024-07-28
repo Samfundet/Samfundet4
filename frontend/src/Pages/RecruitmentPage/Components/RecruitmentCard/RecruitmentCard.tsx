@@ -1,16 +1,14 @@
 import styles from './RecruitmentCard.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { useTranslation } from 'react-i18next';
-import { useCustomNavigate, useDesktop, useIsDarkTheme } from '~/hooks';
-import { Button, Logo, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
+import { useDesktop, useIsDarkTheme } from '~/hooks';
+import { Logo, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { getOrganization } from '~/api';
-import { useAuthContext } from '~/context/AuthContext';
 import { OrgNameTypeValue, OrgNameType } from '~/types';
-import { reverse } from '~/named-urls';
-import { ROUTES } from '~/routes';
+import { PersonalRow } from '~/Pages/RecruitmentPage/Components/PersonalRow/PersonalRow';
 
 type RecruitmentCardProps = {
   recruitment_id?: string;
@@ -50,8 +48,6 @@ export function RecruitmentCard({
   const isDarkTheme = useIsDarkTheme();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useCustomNavigate();
-  const { user } = useAuthContext();
 
   useEffect(() => {
     getOrganization(organization_id)
@@ -68,50 +64,6 @@ export function RecruitmentCard({
       });
     setLoading(false);
   }, [organization_id]);
-
-  const applicationCardButtons = (
-    <>
-      <Button
-        theme={'green'}
-        onClick={() => {
-          navigate({
-            url: reverse({
-              pattern: ROUTES.frontend.organization_recruitment,
-              urlParams: { recruitmentID: recruitment_id },
-            }),
-          });
-        }}
-      >
-        {'Søk verv hos ' + (organizationName ?? 'N/A')}
-      </Button>
-      {user ? (
-        <Button
-          theme="samf"
-          onClick={() => {
-            navigate({
-              url: reverse({
-                pattern: ROUTES.frontend.recruitment_application_overview,
-                urlParams: { recruitmentID: recruitment_id },
-              }),
-            });
-          }}
-        >
-          {t(KEY.recruitment_my_applications)}
-        </Button>
-      ) : (
-        <Button
-          theme="samf"
-          onClick={() =>
-            navigate({
-              url: ROUTES.frontend.login,
-            })
-          }
-        >
-          {t(KEY.common_login)}
-        </Button>
-      )}
-    </>
-  );
 
   const cardHeaderText = (
     <Text size={isDesktop ? 'l' : 'm'} as="strong">
@@ -173,10 +125,17 @@ export function RecruitmentCard({
         {isDesktop && (
           <div className={styles.cardItemSecond}>
             <Logo color={isDarkTheme ? 'light' : 'org-color'} organization={organizationName} size={'small'} />
-            <div className={styles.buttonContainer}>{applicationCardButtons}</div>
+            <div className={styles.buttonContainer}>
+              <PersonalRow recruitmentID={recruitment_id} organizationName={organizationName} />
+            </div>
           </div>
         )}
-        {!isDesktop && <div className={styles.buttonContainer}>{applicationCardButtons}</div>}
+        {!isDesktop && (
+          <div className={styles.buttonContainer}>
+            {' '}
+            <PersonalRow recruitmentID={recruitment_id} organizationName={organizationName} />
+          </div>
+        )}
       </div>
     </div>
   );

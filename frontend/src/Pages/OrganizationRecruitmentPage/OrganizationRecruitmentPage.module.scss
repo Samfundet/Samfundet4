@@ -9,13 +9,14 @@
 }
 
 .organizationHeader{
-  width: 40vw;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  width: 100%;
   min-width: fit-content;
   color: white;
   padding: 1rem;
   border-radius: 0.15rem;
-  @include flex-row;
-  gap: 5rem;
   @include for-tablet-down{
     width: 80vw;
   }
@@ -64,22 +65,33 @@
   gap: 2rem;
 }
 
+.filterButton {
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  border-bottom: none;
+  padding: 0.25rem;
+  background: none;
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 .displayOptionsWrapper{
   width: 50vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid black;
-  border-radius: 0.25rem;
-
+  border: 1px solid black;
 }
 
 .displayOptions{
   width: 50%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 5rem;
   padding: 1rem;
 
   @include for-tablet-down{
@@ -87,6 +99,10 @@
   }
 }
 
-.displayOptionsDivider{
-  width: 50%;
+.personalRow {
+  @include flex-row-center;
+  gap: 1rem;
 }
+
+
+

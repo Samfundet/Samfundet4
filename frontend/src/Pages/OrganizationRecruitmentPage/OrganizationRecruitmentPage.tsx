@@ -1,11 +1,12 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
+import { RecruitmentTabs, GangTypeContainer } from './Components';
 import { Text, Page, Video, Logo, OccupiedFormModal, RadioButton, SamfundetLogoSpinner } from '~/Components';
+import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { OrgNameType, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
-import { RecruitmentTabs, GangTypeContainer } from './Components';
 import { useParams } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
@@ -17,9 +18,9 @@ export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
   const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
   const { recruitmentID } = useParams<{ recruitmentID: string }>();
-
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const [viewGangCategories, setViewGangCategories] = useState<boolean>(false);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
@@ -80,11 +81,11 @@ export function OrganizationRecruitmentPage() {
         <div className={styles.container}>
           <div className={styles.organizationHeader} style={{ backgroundColor: organizationTheme?.pagePrimaryColor }}>
             <Logo organization={organizationName} color={'light'} size={'small'} />
-
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
               {dbT(recruitment, 'name')}
             </Text>
           </div>
+
           {embededId ? (
             <>
               <Video embedId={embededId} className={styles.video}></Video>
@@ -104,21 +105,47 @@ export function OrganizationRecruitmentPage() {
               {t(KEY.recruitment_open_position_at)} {organizationName}
             </Text>
           </div>
-          {recruitmentID && <OccupiedFormModal recruitmentId={+recruitmentID} />}
-
+          <div className={styles.personalRow}>
+            {recruitmentID && (
+              <>
+                <OccupiedFormModal recruitmentId={+recruitmentID} />
+                <PersonalRow recruitmentID={recruitmentID} organizationName={organizationName} showDisplayBtn={false} />
+              </>
+            )}
+          </div>
           <div className={styles.openPositionsContainer}>
-            <div className={styles.displayOptionsWrapper}>
-              <Text size={'l'} as={'p'}>
-                {t(KEY.common_show)} {t(KEY.recruitment_position)}
-              </Text>
-              <hr className={styles.displayOptionsDivider}></hr>
-              <div className={styles.displayOptions}>
-                <RadioButton checked={viewAllPositions} onChange={toggleViewAll}>
-                  {t(KEY.common_all)}
-                </RadioButton>
-                <RadioButton checked={viewGangCategories} onChange={toggleViewGangCategories}>
-                  {t(KEY.recruitment_position_categorized_by_gang)}
-                </RadioButton>
+            <div>
+              <button
+                className={styles.filterButton}
+                onClick={() => {
+                  setShowFilter(!showFilter);
+                }}
+              >
+                {t(KEY.common_filter)}
+              </button>
+              <div className={styles.displayOptionsWrapper}>
+                {showFilter && (
+                  <>
+                    <div className={styles.displayOptions}>
+                      <RadioButton
+                        checked={viewAllPositions}
+                        onChange={toggleViewAll}
+                        className={styles.filterRadioButton}
+                      >
+                        {t(KEY.common_all) + ' ' + t(KEY.recruitment_position)}
+                      </RadioButton>
+                      <RadioButton
+                        checked={viewGangCategories}
+                        onChange={toggleViewGangCategories}
+                        className={styles.filterRadioButton}
+                      >
+                        {lowerCapitalize(t(KEY.recruitment_position)) +
+                          ' ' +
+                          t(KEY.recruitment_position_categorized_by_gang)}
+                      </RadioButton>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             {recruitmentID &&

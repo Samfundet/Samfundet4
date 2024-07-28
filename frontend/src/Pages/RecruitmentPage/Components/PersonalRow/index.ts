@@ -1,0 +1,1 @@
+export { PersonalRow } from './PersonalRow';

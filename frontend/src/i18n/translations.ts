@@ -158,6 +158,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_when]: 'når',
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -314,8 +315,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
-  [KEY.recruitment_open_position_at]: 'Åpne stillinger hos',
-  [KEY.recruitment_position_categorized_by_gang]: 'Kategorisert på gjeng',
+  [KEY.recruitment_open_position_at]: 'Åpne verv hos',
+  [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -561,6 +562,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_when]: 'when',
   [KEY.common_come_back_later]: 'Come back later',
   [KEY.common_loading]: 'Loading',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -720,7 +722,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
   [KEY.recruitment_open_position_at]: 'Open positions at',
-  [KEY.recruitment_position_categorized_by_gang]: 'Categorized by gang',
+  [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
