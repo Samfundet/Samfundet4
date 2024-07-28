@@ -1,12 +1,12 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
 import { RecruitmentTabs, GangTypeContainer } from './Components';
-import { Text, Page, Video, Logo, OccupiedFormModal, RadioButton, SamfundetLogoSpinner } from '~/Components';
+import { Text, Page, Video, Logo, OccupiedFormModal, SamfundetLogoSpinner, ToggleSwitch } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { OrgNameType, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
 import { useParams } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
-import { dbT, lowerCapitalize } from '~/utils';
+import { dbT } from '~/utils';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
@@ -19,8 +19,6 @@ export function OrganizationRecruitmentPage() {
   const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
   const { recruitmentID } = useParams<{ recruitmentID: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
-  const [viewGangCategories, setViewGangCategories] = useState<boolean>(false);
-  const [showFilter, setShowFilter] = useState<boolean>(false);
   const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
@@ -63,14 +61,7 @@ export function OrganizationRecruitmentPage() {
 
   function toggleViewAll() {
     const toggledValue = !viewAllPositions;
-    setViewGangCategories(false);
     setViewAllPositions(toggledValue);
-  }
-
-  function toggleViewGangCategories() {
-    const toggleValue = !viewGangCategories;
-    setViewAllPositions(false);
-    setViewGangCategories(toggleValue);
   }
 
   return (
@@ -114,39 +105,9 @@ export function OrganizationRecruitmentPage() {
             )}
           </div>
           <div className={styles.openPositionsContainer}>
-            <div>
-              <button
-                className={styles.filterButton}
-                onClick={() => {
-                  setShowFilter(!showFilter);
-                }}
-              >
-                {t(KEY.common_filter)}
-              </button>
-              <div className={styles.displayOptionsWrapper}>
-                {showFilter && (
-                  <>
-                    <div className={styles.displayOptions}>
-                      <RadioButton
-                        checked={viewAllPositions}
-                        onChange={toggleViewAll}
-                        className={styles.filterRadioButton}
-                      >
-                        {t(KEY.common_all) + ' ' + t(KEY.recruitment_position)}
-                      </RadioButton>
-                      <RadioButton
-                        checked={viewGangCategories}
-                        onChange={toggleViewGangCategories}
-                        className={styles.filterRadioButton}
-                      >
-                        {lowerCapitalize(t(KEY.recruitment_position)) +
-                          ' ' +
-                          t(KEY.recruitment_position_categorized_by_gang)}
-                      </RadioButton>
-                    </div>
-                  </>
-                )}
-              </div>
+            <div className={styles.displayOptionsContainer}>
+              <ToggleSwitch checked={viewAllPositions} onChange={toggleViewAll} />
+              <Text>Placeholder for tag-autocomplete search</Text>
             </div>
             {recruitmentID &&
               (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}

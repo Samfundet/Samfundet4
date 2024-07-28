@@ -2,7 +2,7 @@ import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { GangPositionDropdown } from '../GangPositionDropdown';
 import { useEffect, useState } from 'react';
 import { getGangList, getRecruitmentPositions } from '~/api';
-import { SamfundetLogoSpinner, Text } from '~/Components';
+import { SamfundetLogoSpinner } from '~/Components';
 
 type GangTypeContainerProps = {
   recruitmentID: string;
@@ -29,7 +29,6 @@ export function GangTypeContainer({ recruitmentID = '1' }: GangTypeContainerProp
     <SamfundetLogoSpinner />
   ) : (
     <>
-      <Text>Placeholder for tag-search</Text>
       {recruitingGangTypes?.map((gangType) => (
         <GangPositionDropdown key={gangType.id} type={gangType} recruitmentPositions={recruitmentPositions} />
       ))}

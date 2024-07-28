@@ -65,38 +65,13 @@
   gap: 2rem;
 }
 
-.filterButton {
-  border-top: 2px solid black;
-  border-right: 2px solid black;
-  border-left: 2px solid black;
-  border-bottom: none;
-  padding: 0.25rem;
-  background: none;
-  &:hover{
-    cursor: pointer;
-  }
-}
-
-.displayOptionsWrapper{
+.displayOptionsContainer{
   width: 50vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto auto;
   justify-content: center;
-  border: 1px solid black;
-}
-
-.displayOptions{
-  width: 50%;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5rem;
-  padding: 1rem;
-
-  @include for-tablet-down{
-    flex-direction: column;
-  }
+  gap: 2rem;
 }
 
 .personalRow {
