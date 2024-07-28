@@ -151,7 +151,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_it]: 'det',
   [KEY.common_not]: 'ikke',
   [KEY.common_will]: 'vil',
-  [KEY.common_all]: 'alle',
   [KEY.common_get]: 'få',
   [KEY.common_received]: 'mottat',
   [KEY.common_is]: 'er',
@@ -315,6 +314,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_open_position_at]: 'Åpne stillinger hos',
+  [KEY.recruitment_position_categorized_by_gang]: 'Kategorisert på gjeng',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -553,7 +554,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_it]: 'it',
   [KEY.common_not]: 'not',
   [KEY.common_will]: 'will',
-  [KEY.common_all]: 'all',
   [KEY.common_get]: 'get',
   [KEY.common_received]: 'received',
   [KEY.common_is]: 'is',
@@ -719,6 +719,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_open_position_at]: 'Open positions at',
+  [KEY.recruitment_position_categorized_by_gang]: 'Categorized by gang',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',

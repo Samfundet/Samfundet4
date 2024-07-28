@@ -168,6 +168,7 @@ export const KEY = {
   common_when: 'common_when',
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
+
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -321,6 +322,8 @@ export const KEY = {
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
+  recruitment_open_position_at: 'recruitment_open_position_at',
+  recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',

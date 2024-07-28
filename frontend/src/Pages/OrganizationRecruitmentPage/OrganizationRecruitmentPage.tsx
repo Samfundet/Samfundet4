@@ -4,8 +4,9 @@ import { OrgNameType, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
 import { RecruitmentTabs, GangTypeContainer } from './Components';
 import { useParams } from 'react-router-dom';
-//import { KEY } from '~/i18n/constants';
-//import { useTranslation } from 'react-i18next';
+import { KEY } from '~/i18n/constants';
+import { dbT } from '~/utils';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import { RecruitmentDto } from '~/dto';
@@ -19,7 +20,7 @@ export function OrganizationRecruitmentPage() {
 
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const [viewGangCategories, setViewGangCategories] = useState<boolean>(false);
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
@@ -81,7 +82,7 @@ export function OrganizationRecruitmentPage() {
             <Logo organization={organizationName} color={'light'} size={'small'} />
 
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-              {recruitment?.name_nb}
+              {dbT(recruitment, 'name')}
             </Text>
           </div>
           {embededId ? (
@@ -100,7 +101,7 @@ export function OrganizationRecruitmentPage() {
             )}
           >
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-              Åpne stillinger hos {organizationName}
+              {t(KEY.recruitment_open_position_at)} {organizationName}
             </Text>
           </div>
           {recruitmentID && <OccupiedFormModal recruitmentId={+recruitmentID} />}
@@ -108,15 +109,15 @@ export function OrganizationRecruitmentPage() {
           <div className={styles.openPositionsContainer}>
             <div className={styles.displayOptionsWrapper}>
               <Text size={'l'} as={'p'}>
-                Vis verv:
+                {t(KEY.common_show)} {t(KEY.recruitment_position)}
               </Text>
               <hr className={styles.displayOptionsDivider}></hr>
               <div className={styles.displayOptions}>
                 <RadioButton checked={viewAllPositions} onChange={toggleViewAll}>
-                  Alle
+                  {t(KEY.common_all)}
                 </RadioButton>
                 <RadioButton checked={viewGangCategories} onChange={toggleViewGangCategories}>
-                  Kategorisert etter gjeng
+                  {t(KEY.recruitment_position_categorized_by_gang)}
                 </RadioButton>
               </div>
             </div>
