@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import { RecruitmentDto } from '~/dto';
 import { getOrganization, getRecruitment } from '~/api';
+import classNames from 'classnames';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
@@ -91,15 +92,12 @@ export function OrganizationRecruitmentPage() {
             <></>
           )}
           <div
-            className={
-              organizationName === 'Samfundet'
-                ? styles.samfRecruitment
-                : organizationName === 'UKA'
-                ? styles.ukaRecruitment
-                : organizationName === 'ISFiT'
-                ? styles.isfitRecruitment
-                : styles.basicRecruitment
-            }
+            className={classNames(
+              organizationName === 'Samfundet' && styles.samfRecruitment,
+              organizationName === 'UKA' && styles.ukaRecruitment,
+              organizationName === 'ISFiT' && styles.isfitRecruitment,
+              styles.basicRecruitment,
+            )}
           >
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
               Åpne stillinger hos {organizationName}
