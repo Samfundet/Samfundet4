@@ -4,8 +4,8 @@ import { OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
 import { RecruitmentTabs, GangTypeContainer } from './Components';
 import { useParams } from 'react-router-dom';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
+//import { KEY } from '~/i18n/constants';
+//import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import { RecruitmentDto } from '~/dto';
@@ -28,7 +28,6 @@ export function OrganizationRecruitmentPage() {
     getRecruitment(recruitmentID)
       .then((response) => {
         setRecruitment(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);

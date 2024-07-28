@@ -61,13 +61,12 @@ export function RecruitmentCard({
         } else {
           setOrganizationName(OrgNameType.FALLBACK);
         }
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setOrganizationName(OrgNameType.FALLBACK);
-        setLoading(false);
       });
+    setLoading(false);
   }, [organization_id]);
 
   const applicationCardButtons = (
