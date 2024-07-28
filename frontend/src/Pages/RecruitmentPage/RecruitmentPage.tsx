@@ -18,12 +18,11 @@ export function RecruitmentPage() {
     getActiveRecruitments()
       .then((response) => {
         setRecruitments(response.data);
-        setLoading(false);
       })
       .catch((error) => {
         console.log('Error fetching data:', error);
-        setLoading(false);
       });
+    setLoading(false);
   }, []);
 
   return (

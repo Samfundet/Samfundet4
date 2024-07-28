@@ -1,6 +1,6 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
 import { Text, Page, Video, Logo, OccupiedFormModal, RadioButton, SamfundetLogoSpinner } from '~/Components';
-import { OrgNameTypeValue } from '~/types';
+import { OrgNameType, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
 import { RecruitmentTabs, GangTypeContainer } from './Components';
 import { useParams } from 'react-router-dom';
@@ -14,41 +14,48 @@ import { getOrganization, getRecruitment } from '~/api';
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
   const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1114. Make this dynamic
-  const { recruitmentID } = useParams();
-  const recruitmentIDNumber: number = +recruitmentID;
+  const { recruitmentID } = useParams<{ recruitmentID: string }>();
+
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const [viewGangCategories, setViewGangCategories] = useState<boolean>(false);
   // const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>('fallback');
+  const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getRecruitment(recruitmentID)
-      .then((response) => {
-        setRecruitment(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (recruitment?.organization) {
+    if (recruitmentID) {
+      getRecruitment(recruitmentID)
+        .then((response) => {
+          setRecruitment(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [recruitmentID]);
+
+  useEffect(() => {
+    if (recruitment) {
       getOrganization(recruitment.organization)
         .then((response) => {
-          setOrganizationName(response.name);
-          console.log(response.name);
+          if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
+            setOrganizationName(response.name as OrgNameTypeValue);
+          }
         })
         .catch((error) => {
           console.log(error);
+          setOrganizationName(OrgNameType.FALLBACK);
         });
     }
-    if (organizationTheme) {
-      setLoading(false);
-    }
-  }, [recruitmentID, recruitment?.organization, organizationTheme]);
+    setLoading(false);
+  }, [recruitment]);
 
   useEffect(() => {
-    changeOrgTheme(organizationName);
+    if (organizationName) {
+      changeOrgTheme(organizationName);
+    }
   }, [organizationName, changeOrgTheme]);
 
   function toggleViewAll() {
@@ -98,7 +105,8 @@ export function OrganizationRecruitmentPage() {
               Åpne stillinger hos {organizationName}
             </Text>
           </div>
-          <OccupiedFormModal recruitmentId={recruitmentIDNumber} />
+          {recruitmentID && <OccupiedFormModal recruitmentId={+recruitmentID} />}
+
           <div className={styles.openPositionsContainer}>
             <div className={styles.displayOptionsWrapper}>
               <Text size={'l'} as={'p'}>
@@ -114,9 +122,8 @@ export function OrganizationRecruitmentPage() {
                 </RadioButton>
               </div>
             </div>
-
-            {viewAllPositions && <GangTypeContainer recruitmentID={recruitmentID} />}
-            {viewGangCategories && <RecruitmentTabs />}
+            {recruitmentID &&
+              (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
           </div>
         </div>
       )}

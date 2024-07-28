@@ -138,7 +138,7 @@ export const OrgNameType = {
   SAMFUNDET_NAME: 'Samfundet',
   ISFIT_NAME: 'ISFiT',
   UKA_NAME: 'UKA',
-  FALLBACK: 'fallback',
+  FALLBACK: 'External organization',
 } as const;
 
 export type OrgNameTypeValue = (typeof OrgNameType)[keyof typeof OrgNameType];

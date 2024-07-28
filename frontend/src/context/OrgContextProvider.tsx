@@ -2,25 +2,25 @@ import { createContext, Dispatch, SetStateAction, useContext, useEffect, useStat
 import { Children, COLORS, OrganizationTheme, OrgNameType, OrgNameTypeValue } from '~/types';
 
 export const organizationThemes: Record<OrgNameTypeValue, OrganizationTheme> = {
-  Samfundet: {
+  [OrgNameType.SAMFUNDET_NAME]: {
     organizationName: OrgNameType.SAMFUNDET_NAME,
     pagePrimaryColor: COLORS.red_samf,
     pageSecondaryColor: COLORS.background_primary,
     buttonTheme: 'samf',
   },
-  UKA: {
+  [OrgNameType.UKA_NAME]: {
     organizationName: OrgNameType.UKA_NAME,
     pagePrimaryColor: COLORS.blue_uka,
     pageSecondaryColor: COLORS.bisque_uka,
     buttonTheme: 'uka',
   },
-  ISFiT: {
+  [OrgNameType.ISFIT_NAME]: {
     organizationName: OrgNameType.ISFIT_NAME,
     pagePrimaryColor: COLORS.blue_isfit,
     pageSecondaryColor: COLORS.background_primary,
     buttonTheme: 'isfit',
   },
-  fallback: {
+  [OrgNameType.FALLBACK]: {
     organizationName: OrgNameType.SAMFUNDET_NAME,
     pagePrimaryColor: COLORS.red_samf,
     pageSecondaryColor: COLORS.background_primary,
