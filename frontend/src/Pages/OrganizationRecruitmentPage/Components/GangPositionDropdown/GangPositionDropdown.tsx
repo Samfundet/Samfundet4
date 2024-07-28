@@ -10,6 +10,8 @@ type GangItemProps = {
   recruitmentPositions?: RecruitmentPositionDto[];
 };
 
+//TODO: DO IN ISSUE #1121, only get gang types recruiting from backend
+// TODO: so the filtering shpuld be done from the backend
 export function GangPositionDropdown({ type, recruitmentPositions }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {

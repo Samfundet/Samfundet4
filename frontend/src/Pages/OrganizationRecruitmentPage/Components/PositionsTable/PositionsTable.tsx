@@ -9,6 +9,7 @@ import styles from './PositionsTable.module.scss';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { dbT } from '~/utils';
+import { useOrganizationContext } from '~/context/OrgContextProvider';
 
 type PositionsTableProps = {
   currentSelectedGang: GangDto | undefined;
@@ -21,6 +22,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const navigate = useNavigate();
   const { t } = useTranslation();
   const recruitmentID = useParams().recruitmentID;
+  const { organizationTheme } = useOrganizationContext();
 
   useEffect(() => {
     if (!currentSelectedGang || !recruitmentID) {
@@ -52,7 +54,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
       {
         content: (
           <Button
-            theme={'samf'}
+            theme={organizationTheme?.buttonTheme}
             className={styles.positionButton}
             disabled={loading}
             onClick={() => {

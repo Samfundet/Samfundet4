@@ -8,14 +8,12 @@ type GangTypeContainerProps = {
   recruitmentID: string;
 };
 
-// TODO: get positions for correct recruitment DO IN ISSUE #1114.
 export function GangTypeContainer({ recruitmentID = '1' }: GangTypeContainerProps) {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(recruitmentID);
     Promise.all([getRecruitmentPositions(recruitmentID), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
