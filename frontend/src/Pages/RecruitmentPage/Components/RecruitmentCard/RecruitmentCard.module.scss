@@ -3,49 +3,73 @@
 @import "src/mixins";
 
 .card{
-  border: 4px solid $black;
   display: grid;
-  grid-template-rows: auto auto;
-  border-radius: 0.50rem;
+  grid-template-areas:
+  "header logo"
+  "text logo"
+  "text buttons";
+  gap: 1.5rem;
+  border-radius: 14px;
   padding: 0.5rem 1.5rem 0.5rem 1.5rem;
   width: 100%;
   min-height: 300px;
+  border: 4px solid $black;
 
   @include theme-light {
-    box-shadow: 2px 2px 10px 2px $black-t25;
+    box-shadow: 2px 0 10px 2px $black-t25;
   }
+
   @include theme-dark {
     background-color: $black-t75;
   }
+
   @include for-tablet-down {
-    display: grid;
-    grid-template-rows: auto auto;
+    grid-template-areas:
+    "header header"
+    "text logo"
+    "buttons buttons";
   }
 }
 
 .cardHeader{
-  margin: 0 0 1rem 0;
+  grid-area: header;
 }
 
-.cardContent{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap:2rem;
-
-  @include for-tablet-down {
-    grid-template-columns: 1fr;
-  }
-}
-
-.textContainer {
+.cardText {
+  grid-area: text;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+.cardLogo {
+  grid-area: logo;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include for-tablet-down {
+    align-items: start;
+  }
+}
+
+.personalRow {
+  grid-area: buttons;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  justify-content: stretch;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .SamfundetCard{
   @extend .card;
   border-color: $red-samf;
+
   .cardHeader{
     border-bottom: 2px solid $red-samf;
   }
@@ -53,44 +77,18 @@
 
 .UKACard{
   @extend .card;
-  border-color: #150b59;
+  border-color: $blue_uka;
   .cardHeader{
-    border-bottom: 2px solid #150b59;
+    border-bottom: 2px solid $blue_uka;
   }
 }
 
 .ISFiTCard{
   @extend .card;
-  border-color: #0099cc;
+  border-color: $blue_isfit;
   .cardHeader{
-    border-bottom: 2px solid #0099cc;
+    border-bottom: 2px solid $blue_isfit;
   }
-}
-
-.cardItemFirst{
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  @include for-tablet-down{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-}
-
-.cardItemSecond{
-  @extend .cardItemFirst;
-  align-items: end;
-  @include for-tablet-down{
-    display: flex;
-    align-items: flex-end;
-  }
-}
-
-.buttonContainer{
-  display: grid;
-  grid-template-columns: auto;
-  gap: 0.5rem;
 }
 
 .timeDisplay {

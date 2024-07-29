@@ -111,31 +111,18 @@ export function RecruitmentCard({
   ) : (
     <div key={recruitment_id} className={CARD_STYLE[organizationName].orgStyle}>
       <div className={styles.cardHeader}>{cardHeaderText}</div>
-      <div className={styles.cardContent}>
-        <div className={styles.cardItemFirst}>
-          <div className={styles.textContainer}>{cardContentText}</div>
-          {!isDesktop && (
-            <div className={styles.cardItemSecond}>
-              {organizationName && (
-                <Logo color={isDarkTheme ? 'light' : 'org-color'} organization={organizationName} size={'xsmall'} />
-              )}
-            </div>
-          )}
-        </div>
-        {isDesktop && (
-          <div className={styles.cardItemSecond}>
-            <Logo color={isDarkTheme ? 'light' : 'org-color'} organization={organizationName} size={'small'} />
-            <div className={styles.buttonContainer}>
-              <PersonalRow recruitmentID={recruitment_id} organizationName={organizationName} />
-            </div>
-          </div>
+      <div className={styles.cardText}>{cardContentText}</div>
+      <div className={styles.cardLogo}>
+        {organizationName && (
+          <Logo
+            color={isDarkTheme ? 'light' : 'org-color'}
+            organization={organizationName}
+            size={isDesktop ? 'small' : 'xsmall'}
+          />
         )}
-        {!isDesktop && (
-          <div className={styles.buttonContainer}>
-            {' '}
-            <PersonalRow recruitmentID={recruitment_id} organizationName={organizationName} />
-          </div>
-        )}
+      </div>
+      <div className={styles.personalRow}>
+        <PersonalRow recruitmentID={recruitment_id} organizationName={organizationName} />
       </div>
     </div>
   );
