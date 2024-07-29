@@ -64,4 +64,8 @@
     align-items: center;
     justify-content: center;
     gap:2rem;
+    width: 720px;
+  @include for-tablet-down{
+    width: 22rem;
+  }
 }

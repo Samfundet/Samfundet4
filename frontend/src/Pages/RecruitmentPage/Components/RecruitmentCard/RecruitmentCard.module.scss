@@ -8,7 +8,8 @@
   grid-template-rows: auto auto;
   border-radius: 0.50rem;
   padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-  width: 45rem;
+  width: 100%;
+  min-height: 300px;
 
   @include theme-light {
     box-shadow: 2px 2px 10px 2px $black-t25;
@@ -19,7 +20,6 @@
   @include for-tablet-down {
     display: grid;
     grid-template-rows: auto auto;
-    width: 22rem;
   }
 }
 
