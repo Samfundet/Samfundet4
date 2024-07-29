@@ -30,7 +30,7 @@ export function PersonalRow({ recruitmentID, organizationName, showRecruitmentBt
             });
           }}
         >
-          {t(KEY.recruitment_open_position_at) + ' ' + (organizationName ?? 'N/A')}
+          {t(KEY.recruitment_apply_for) + ' ' + (organizationName ?? 'N/A')}
         </Button>
       )}
       {user ? (

@@ -323,7 +323,7 @@ export const KEY = {
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
-  recruitment_open_position_at: 'recruitment_open_position_at',
+  recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
 
   // Admin:

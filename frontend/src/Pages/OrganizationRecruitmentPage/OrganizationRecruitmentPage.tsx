@@ -93,7 +93,7 @@ export function OrganizationRecruitmentPage() {
             )}
           >
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-              {t(KEY.recruitment_open_position_at)} {organizationName}
+              {t(KEY.recruitment_apply_for)} {organizationName}
             </Text>
           </div>
           <div className={styles.personalRow}>
