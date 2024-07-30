@@ -73,22 +73,22 @@ export function RecruitmentCard({
 
   const cardContentText = (
     <>
-      <Text size={'m'} as={'p'}>
-        <Text size={'m'} as={'strong'}>
+      <Text size="m" as="p">
+        <Text size="m" as="strong">
           {t(KEY.recruitment_organization)}
         </Text>
         {organizationName}
       </Text>
-      <Text size={'m'} as={'p'}>
-        <Text size={'m'} as={'strong'}>
+      <Text size="m" as="p">
+        <Text size="m" as="strong">
           {t(KEY.application_deadline)}:
         </Text>
         <TimeDisplay timestamp={shown_application_deadline} displayType="nice-date" className={styles.timeDisplay} />
         {', '}
         <TimeDisplay timestamp={shown_application_deadline} displayType="time" className={styles.timeDisplay} />
       </Text>
-      <Text size={'m'} as={'p'}>
-        <Text size={'m'} as={'strong'}>
+      <Text size="m" as="p">
+        <Text size="m" as="strong">
           {t(KEY.reprioritization_deadline_for_applicant)}:
         </Text>
         <TimeDisplay
