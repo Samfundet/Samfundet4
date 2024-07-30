@@ -7,6 +7,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { RecruitmentCard, NoPositions } from './Components';
 import styles from './RecruitmentPage.module.scss';
+import { dbT } from '~/utils';
 
 export function RecruitmentPage() {
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
@@ -36,8 +37,7 @@ export function RecruitmentPage() {
               <RecruitmentCard
                 key={recruitment.id}
                 recruitment_id={recruitment.id}
-                recruitment_name_nb={recruitment.name_nb}
-                recruitment_name_en={recruitment.name_en}
+                recruitment_name={dbT(recruitment, 'name')}
                 shown_application_deadline={recruitment.shown_application_deadline}
                 reprioritization_deadline_for_applicant={recruitment.reprioritization_deadline_for_applicant}
                 organization_id={recruitment.organization}

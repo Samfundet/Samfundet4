@@ -18,6 +18,7 @@
 
 .gang_header {
   background-color: $red_samf;
+  color: white;
   font-size: 17px;
   font-weight: 400;
   @include theme-dark{

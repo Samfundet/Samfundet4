@@ -1,6 +1,5 @@
 import styles from './RecruitmentCard.module.scss';
 import { Text } from '~/Components/Text/Text';
-import { useTranslation } from 'react-i18next';
 import { useDesktop, useIsDarkTheme } from '~/hooks';
 import { Logo, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { KEY } from '~/i18n/constants';
@@ -12,8 +11,7 @@ import { PersonalRow } from '~/Pages/RecruitmentPage/Components/PersonalRow/Pers
 
 type RecruitmentCardProps = {
   recruitment_id?: string;
-  recruitment_name_nb?: string;
-  recruitment_name_en?: string;
+  recruitment_name?: string;
   shown_application_deadline?: string;
   reprioritization_deadline_for_applicant?: string;
   organization_id: number;
@@ -37,13 +35,11 @@ const CARD_STYLE = {
 
 export function RecruitmentCard({
   recruitment_id = '-1',
-  recruitment_name_nb = 'N/A',
-  recruitment_name_en = 'N/A',
+  recruitment_name = 'N/A',
   shown_application_deadline = 'N/A',
   reprioritization_deadline_for_applicant = 'N/A',
   organization_id,
 }: RecruitmentCardProps) {
-  const { i18n } = useTranslation();
   const isDesktop = useDesktop();
   const isDarkTheme = useIsDarkTheme();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
@@ -67,7 +63,7 @@ export function RecruitmentCard({
 
   const cardHeaderText = (
     <Text size={isDesktop ? 'l' : 'm'} as="strong">
-      {i18n.language === 'nb' ? recruitment_name_nb : recruitment_name_en}
+      {recruitment_name}
     </Text>
   );
 
