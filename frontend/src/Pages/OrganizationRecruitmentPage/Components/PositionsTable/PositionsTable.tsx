@@ -67,7 +67,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
       },
       {
         content: (
-          <Text as={'p'} size={'m'}>
+          <Text as="p" size="m">
             {' '}
             {dbT(item, 'short_description') ?? 'N/A'}
           </Text>
