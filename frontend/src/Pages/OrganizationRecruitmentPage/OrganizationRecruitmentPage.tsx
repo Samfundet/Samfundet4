@@ -16,7 +16,7 @@ import classNames from 'classnames';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const embededId = '-nYQb8_TvQ4'; // TODO: DO IN ISSUE #1121. Make this dynamic
+  const embededId = '-nYQb8_TvQ4'; // TODO: Make this dynamic DO IN ISSUE #1121 for backend. #1274 for frontend
   const { recruitmentID } = useParams<{ recruitmentID: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
