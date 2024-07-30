@@ -87,7 +87,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
       ) : positions.length > 0 ? (
         <Table columns={tableColumns} data={tableData} />
       ) : (
-        <Text as={'strong'} size={'l'}>
+        <Text as="strong" size="l">
           {t(KEY.recruitment_no_positions)}
         </Text>
       )}
