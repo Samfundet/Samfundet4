@@ -72,6 +72,7 @@ export { ToolTip } from './ToolTip';
 export { InterviewFormModal } from './InterviewForm';
 export { Chart } from './Chart';
 export { Logo } from './Logo';
+export { TagSelect } from './TagSelect';
 
 // Props
 export type { CheckboxProps } from './Checkbox';
