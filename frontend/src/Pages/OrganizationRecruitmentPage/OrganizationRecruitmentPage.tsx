@@ -65,18 +65,17 @@ export function OrganizationRecruitmentPage() {
   }
 
   return (
-    <Page>
+    <Page className={styles.recruitmentPage}>
       {loading ? (
         <SamfundetLogoSpinner />
       ) : (
         <div className={styles.container}>
           <div className={styles.organizationHeader} style={{ backgroundColor: organizationTheme?.pagePrimaryColor }}>
-            <Logo organization={organizationName} color={'light'} size={'small'} />
+            <Logo organization={organizationName} color={'light'} size={isDesktop ? 'small' : 'xsmall'} />
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
               {dbT(recruitment, 'name')}
             </Text>
           </div>
-
           {embededId ? (
             <>
               <Video embedId={embededId} className={styles.video}></Video>
@@ -86,10 +85,10 @@ export function OrganizationRecruitmentPage() {
           )}
           <div
             className={classNames(
-              organizationName === 'Samfundet' && styles.samfRecruitment,
-              organizationName === 'UKA' && styles.ukaRecruitment,
-              organizationName === 'ISFiT' && styles.isfitRecruitment,
-              styles.basicRecruitment,
+              organizationName === 'Samfundet' && styles.samfRecruitmentSubHeader,
+              organizationName === 'UKA' && styles.ukaRecruitmentSubHeader,
+              organizationName === 'ISFiT' && styles.isfitRecruitmentSubHeader,
+              styles.basicRecruitmentSubHeader,
             )}
           >
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
@@ -108,8 +107,8 @@ export function OrganizationRecruitmentPage() {
               </>
             )}
           </div>
-          <div className={styles.openPositionsContainer}>
-            <div className={styles.displayOptionsContainer}>
+          <div className={styles.openPositionsWrapper}>
+            <div className={styles.optionsContainer}>
               <ToggleSwitch checked={viewAllPositions} onChange={toggleViewAll} />
               <Text>Placeholder for tag-autocomplete search</Text>
             </div>

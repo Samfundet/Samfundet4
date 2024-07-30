@@ -2,10 +2,14 @@
 
 @import 'src/mixins';
 
-.container {
-  margin: 2rem;
+.recruitmentPage {
   @include flex-column-center;
+}
+.container {
+  @include flex-column-center;
+  width: 85%;
   gap: 2rem;
+  margin: 1rem;
 }
 
 .organizationHeader{
@@ -13,69 +17,57 @@
   grid-template-columns: auto auto;
   align-items: center;
   width: 100%;
-  min-width: fit-content;
-  color: white;
-  padding: 1rem;
+  padding: 0.25rem;
   border-radius: 0.15rem;
-  @include for-tablet-down{
-    width: 80vw;
-  }
 }
 
 .video {
-  width: 40vw;
+  width: 50%;
   aspect-ratio: 16 / 9;
-  border-width: 0;
+  border: none;
   @include for-tablet-down{
-    width: 80vw;
+    width: 80%;
   }
 }
 
-.basicRecruitment{
-  width: 40vw;
-  min-width: fit-content;
-  color: black;
-  padding: 1rem;
-  border-radius: 0.15rem;
+.basicRecruitmentSubHeader{
   @include flex-row-center;
-  gap: 5rem;
-  @include for-tablet-down{
-    width: 80vw;
-  }
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.15rem;
+  text-align: center;
 }
 
-.samfRecruitment{
-  @extend .basicRecruitment;
+.samfRecruitmentSubHeader{
+  @extend .basicRecruitmentSubHeader;
   color: white;
   background-color: $red-samf;
 }
 
-.ukaRecruitment{
-  @extend .samfRecruitment;
-  background-color: $blue-uka;
-}
+.optionsContainer{
+  @include flex-row-center;
+  gap: 1rem;
 
-.isfitRecruitment{
-  @extend .samfRecruitment;
-  background-color: $blue-isfit;
-}
-
-.openPositionsContainer {
-  @include  flex-column-center;
-  gap: 2rem;
-}
-
-.displayOptionsContainer{
-  width: 50vw;
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
 }
 
 .personalRow {
   @include flex-row-center;
+  gap: 1rem;
+}
+
+.ukaRecruitmentSubHeader{
+  @extend .samfRecruitmentSubHeader;
+  background-color: $blue-uka;
+}
+
+.isfitRecruitmentSubHeader{
+  @extend .samfRecruitmentSubHeader;
+  background-color: $blue-isfit;
+}
+
+.openPositionsWrapper {
+  @include  flex-column-center;
+  width: 100%;
   gap: 1rem;
 }
 
