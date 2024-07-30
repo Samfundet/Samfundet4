@@ -26,7 +26,7 @@ export function RecruitmentPage() {
   }, []);
 
   return (
-    <Page className={styles.recruitmentPage}>
+    <Page>
       <div className={styles.container}>
         <div className={styles.cardContainer}>
           {loading ? (
