@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentGangs, withdrawRecruitmentApplicationRecruiter } from '~/api';
+import { getRecruitmentGangs } from '~/api';
 import { type RecruitmentGangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
