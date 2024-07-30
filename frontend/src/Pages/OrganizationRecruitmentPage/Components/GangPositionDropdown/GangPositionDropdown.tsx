@@ -3,14 +3,16 @@ import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './GangPosition.module.scss';
+import styles from './GangPositionDropdown.module.scss';
 
 type GangItemProps = {
   type: GangTypeDto;
   recruitmentPositions?: RecruitmentPositionDto[];
 };
 
-export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
+//TODO: DO IN ISSUE #1121, only get gang types recruiting from backend
+// TODO: so the filtering should be done from the backend
+export function GangPositionDropdown({ type, recruitmentPositions }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
       const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);
@@ -19,7 +21,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
           <ExpandableHeader
             showByDefault={true}
             key={gang.id}
-            label={dbT(gang, 'name')}
+            label={dbT(gang, 'name') ?? 'N/A'}
             className={styles.gang_header}
             theme="child"
           >
@@ -32,7 +34,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                   })}
                   className={styles.position_name}
                 >
-                  {dbT(pos, 'name')}
+                  {dbT(pos, 'name') ?? 'N/A'}
                 </Link>
                 <Link
                   url={reverse({
@@ -41,7 +43,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                   })}
                   className={styles.position_short_desc}
                 >
-                  {dbT(pos, 'short_description')}
+                  {dbT(pos, 'short_description') ?? 'N/A'}
                 </Link>
               </div>
             ))}
@@ -54,7 +56,12 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
 
   if (filteredGangs.length > 0) {
     return (
-      <ExpandableHeader showByDefault={true} key={type.id} label={dbT(type, 'title')} className={styles.type_header}>
+      <ExpandableHeader
+        showByDefault={true}
+        key={type.id}
+        label={dbT(type, 'title') ?? 'N/A'}
+        className={styles.type_header}
+      >
         {filteredGangs}
       </ExpandableHeader>
     );

@@ -72,6 +72,11 @@ export { ToolTip } from './ToolTip';
 export { InterviewFormModal } from './InterviewForm';
 export { Chart } from './Chart';
 export { Logo } from './Logo';
+export { TabBar } from './TabBar';
+export { Text } from './Text';
+export { Table } from './Table';
+export { OccupiedFormModal } from './OccupiedForm';
+export { OccupiedForm } from './OccupiedForm';
 
 // Props
 export type { CheckboxProps } from './Checkbox';
@@ -80,3 +85,5 @@ export type { ImagePickerProps } from './ImagePicker/ImagePicker';
 export type { InputFieldProps } from './InputField';
 export type { InputFileProps } from './InputFile';
 export type { TextAreaFieldProps } from './TextAreaField';
+export type { Tab } from './TabBar';
+export type { TableRow } from './Table';
