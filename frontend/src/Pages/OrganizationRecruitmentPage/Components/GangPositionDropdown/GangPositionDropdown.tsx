@@ -21,7 +21,7 @@ export function GangPositionDropdown({ type, recruitmentPositions }: GangItemPro
           <ExpandableHeader
             showByDefault={true}
             key={gang.id}
-            label={dbT(gang, 'name')}
+            label={dbT(gang, 'name') ?? 'N/A'}
             className={styles.gang_header}
             theme="child"
           >
@@ -34,7 +34,7 @@ export function GangPositionDropdown({ type, recruitmentPositions }: GangItemPro
                   })}
                   className={styles.position_name}
                 >
-                  {dbT(pos, 'name')}
+                  {dbT(pos, 'name') ?? 'N/A'}
                 </Link>
                 <Link
                   url={reverse({
@@ -43,7 +43,7 @@ export function GangPositionDropdown({ type, recruitmentPositions }: GangItemPro
                   })}
                   className={styles.position_short_desc}
                 >
-                  {dbT(pos, 'short_description')}
+                  {dbT(pos, 'short_description') ?? 'N/A'}
                 </Link>
               </div>
             ))}
@@ -56,7 +56,12 @@ export function GangPositionDropdown({ type, recruitmentPositions }: GangItemPro
 
   if (filteredGangs.length > 0) {
     return (
-      <ExpandableHeader showByDefault={true} key={type.id} label={dbT(type, 'title')} className={styles.type_header}>
+      <ExpandableHeader
+        showByDefault={true}
+        key={type.id}
+        label={dbT(type, 'title') ?? 'N/A'}
+        className={styles.type_header}
+      >
         {filteredGangs}
       </ExpandableHeader>
     );

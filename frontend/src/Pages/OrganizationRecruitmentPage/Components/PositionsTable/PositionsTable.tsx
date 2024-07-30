@@ -21,15 +21,15 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const [positions, setPositions] = useState<RecruitmentPositionDto[]>([]);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const recruitmentID = useParams().recruitmentID;
+  const recruitmentID = useParams();
   const { organizationTheme } = useOrganizationContext();
 
   useEffect(() => {
-    if (!currentSelectedGang || !recruitmentID) {
+    if (!currentSelectedGang || !recruitmentID.recruitmentID) {
       return;
     }
     setLoading(true);
-    getRecruitmentPositionsGang(recruitmentID, currentSelectedGang.id)
+    getRecruitmentPositionsGang(recruitmentID.recruitmentID, currentSelectedGang.id)
       .then((response) => {
         setPositions(response.data);
         setLoading(false);
@@ -61,7 +61,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
               navigate(positionPageURL);
             }}
           >
-            {dbT(item, 'name')}
+            {dbT(item, 'name') ?? 'N/A'}
           </Button>
         ),
       },
@@ -69,7 +69,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
         content: (
           <Text as={'p'} size={'m'}>
             {' '}
-            {dbT(item, 'short_description')}
+            {dbT(item, 'short_description') ?? 'N/A'}
           </Text>
         ),
       },

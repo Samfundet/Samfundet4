@@ -8,7 +8,7 @@ type GangTypeContainerProps = {
   recruitmentID: string;
 };
 
-export function GangTypeContainer({ recruitmentID = '1' }: GangTypeContainerProps) {
+export function GangTypeContainer({ recruitmentID = '-1' }: GangTypeContainerProps) {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
   const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,6 +25,7 @@ export function GangTypeContainer({ recruitmentID = '1' }: GangTypeContainerProp
         setLoading(false);
       });
   }, [recruitmentID]);
+
   return loading ? (
     <SamfundetLogoSpinner />
   ) : (
