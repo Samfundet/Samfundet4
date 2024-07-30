@@ -110,7 +110,8 @@ export function OrganizationRecruitmentPage() {
           <div className={styles.openPositionsWrapper}>
             <div className={styles.optionsContainer}>
               <ToggleSwitch checked={viewAllPositions} onChange={toggleViewAll} />
-              <Text>Placeholder for tag-autocomplete search</Text>
+              <Text>Placeholder for tag-autocomplete search </Text>
+              {/*^^^ issue #1275 */}
             </div>
             {recruitmentID &&
               (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
