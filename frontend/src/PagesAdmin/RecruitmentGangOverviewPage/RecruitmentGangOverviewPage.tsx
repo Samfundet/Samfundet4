@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentGangs } from '~/api';
+import { getRecruitmentGangs, withdrawRecruitmentApplicationRecruiter } from '~/api';
 import { type RecruitmentGangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -23,10 +23,10 @@ export function RecruitmentGangOverviewPage() {
   useTitle(title);
 
   useEffect(() => {
-    if (!recruitment?.organization) {
+    if (!recruitment?.id) {
       return;
     }
-    getRecruitmentGangs(recruitment.organization).then((data) => {
+    getRecruitmentGangs(recruitment.id).then((data) => {
       setGangs(data);
       setLoading(false);
     });
