@@ -65,7 +65,7 @@ export function GangsTabs({ currentGangCategory }: GangTabsProps) {
           <PositionsTable currentSelectedGang={currentTab?.value} setLoading={setChildLoading} loading={isLoading} />
         </>
       ) : (
-        <Text as={'strong'} size={'l'}>
+        <Text as="strong" size="l">
           {t(KEY.recruitment_no_gangs)}
         </Text>
       )}
