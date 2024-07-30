@@ -71,8 +71,8 @@ export function OrganizationRecruitmentPage() {
       ) : (
         <div className={styles.container}>
           <div className={styles.organizationHeader} style={{ backgroundColor: organizationTheme?.pagePrimaryColor }}>
-            <Logo organization={organizationName} color={'light'} size={isDesktop ? 'small' : 'xsmall'} />
-            <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
+            <Logo organization={organizationName} color="light" size={isDesktop ? 'small' : 'xsmall'} />
+            <Text as="strong" size={isDesktop ? 'xl' : 'l'}>
               {dbT(recruitment, 'name')}
             </Text>
           </div>
