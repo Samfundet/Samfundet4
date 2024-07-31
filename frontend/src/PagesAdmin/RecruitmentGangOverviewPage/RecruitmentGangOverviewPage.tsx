@@ -23,10 +23,10 @@ export function RecruitmentGangOverviewPage() {
   useTitle(title);
 
   useEffect(() => {
-    if (!recruitment?.organization) {
+    if (!recruitment?.id) {
       return;
     }
-    getRecruitmentGangs(recruitment.organization).then((data) => {
+    getRecruitmentGangs(recruitment.id).then((data) => {
       setGangs(data);
       setLoading(false);
     });

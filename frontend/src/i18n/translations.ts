@@ -151,7 +151,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_it]: 'det',
   [KEY.common_not]: 'ikke',
   [KEY.common_will]: 'vil',
-  [KEY.common_all]: 'alle',
   [KEY.common_get]: 'få',
   [KEY.common_received]: 'mottat',
   [KEY.common_is]: 'er',
@@ -159,6 +158,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_when]: 'når',
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -247,6 +247,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
+  [KEY.recruitment_no_positions]: 'Ingen verv',
+  [KEY.recruitment_active]: 'Pågående opptak',
+  [KEY.recruitment_no_gangs]: 'Ingen gjenger',
+  [KEY.recruitment_no_active]: 'Ingen aktive opptak',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
   [KEY.recruitment_priority]: 'Søkers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
@@ -283,6 +287,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.application_deadline]: 'Søknadsfrist',
   [KEY.recruitment_application]: 'Søknad',
   [KEY.recruitment_applications]: 'søknader',
   [KEY.recruitment_position]: 'verv',
@@ -310,6 +315,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_apply_for]: 'Søk verv hos',
+  [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -548,7 +555,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_it]: 'it',
   [KEY.common_not]: 'not',
   [KEY.common_will]: 'will',
-  [KEY.common_all]: 'all',
   [KEY.common_get]: 'get',
   [KEY.common_received]: 'received',
   [KEY.common_is]: 'is',
@@ -556,6 +562,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_when]: 'when',
   [KEY.common_come_back_later]: 'Come back later',
   [KEY.common_loading]: 'Loading',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -661,6 +668,10 @@ export const en: Record<KeyValues, string> = {
     ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
+  [KEY.recruitment_no_positions]: 'No positions',
+  [KEY.recruitment_active]: 'Active recruitments',
+  [KEY.recruitment_no_gangs]: 'No gangs',
+  [KEY.recruitment_no_active]: 'No active recruitments',
   [KEY.recruitment_organization]: 'Organization',
   [KEY.recruitment_visible_from]: 'Visible from',
   [KEY.recruitment_administrate]: 'Administrate recruitment',
@@ -680,6 +691,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_processed]: 'Processed',
   [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
+  [KEY.application_deadline]: 'Application deadline',
   [KEY.recruitment_applicants]: 'applicants',
   [KEY.recruitment_progression]: 'Recruitment progression',
   [KEY.recruitment_overview]: 'Recruitment overview',
@@ -709,6 +721,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_apply_for]: 'Apply for position at',
+  [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
