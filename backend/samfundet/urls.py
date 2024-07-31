@@ -6,6 +6,7 @@ from rest_framework import routers
 from django.urls import path, include
 
 from . import views
+from .views import GenerateInterviewBlocksView
 
 # End: imports -----------------------------------------------------------------
 
@@ -109,4 +110,5 @@ urlpatterns = [
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
+    path('generate-interview-blocks/', GenerateInterviewBlocksView.as_view(), name='generate_interview_blocks'),
 ]
