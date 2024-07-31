@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
@@ -695,11 +694,6 @@ class RecruitmentPositionTagSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentPositionTag
         fields = ['name', 'color']
-
-    def _validate_name(self, value: str) -> str:
-        if re.search(r'[<>]', value):
-            raise ValidationError('Invalid tag name') from None
-        return value
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):
