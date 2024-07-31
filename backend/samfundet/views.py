@@ -1122,11 +1122,8 @@ class RecruitmentPositionTagView(ModelViewSet):
             return Response({'message': 'Tag already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
         if 'position_id' in data:
-            try:
-                position = RecruitmentPosition.objects.get(id=data['position_id'])
-                position.tags.add(tag)
-            except RecruitmentPosition.DoesNotExist:
-                return Response({'message': 'Position not found'}, status=status.HTTP_404_NOT_FOUND)
+            position = get_object_or_404(RecruitmentPosition, id=data['position_id'])
+            position.tags.add(tag)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 
