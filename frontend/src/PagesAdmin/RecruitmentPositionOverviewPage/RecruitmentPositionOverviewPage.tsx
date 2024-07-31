@@ -15,6 +15,7 @@ import { Text } from '~/Components/Text/Text';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { toast } from 'react-toastify';
+import { lowerCapitalize } from "~/utils";
 
 export function RecruitmentPositionOverviewPage() {
   const navigate = useNavigate();
@@ -98,6 +99,9 @@ export function RecruitmentPositionOverviewPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Text size="l" as="strong" className={styles.subHeader}>
+        {lowerCapitalize(t(KEY.recruitment_applications))} ({recruitmentApplicants.length})
+      </Text>
       <RecruitmentApplicantsStatus
         applicants={recruitmentApplicants}
         recruitmentId={recruitmentId}
@@ -107,7 +111,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_applications)}({acceptedApplicants.length})
+          {t(KEY.recruitment_accepted_applications)} ({acceptedApplicants.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
@@ -121,7 +125,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_rejected_applications)}({rejectedApplicants.length})
+          {t(KEY.recruitment_rejected_applications)} ({rejectedApplicants.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
@@ -135,7 +139,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_withdrawn_applications)}({withdrawnApplicants.length})
+          {t(KEY.recruitment_withdrawn_applications)} ({withdrawnApplicants.length})
         </Text>
         {withdrawnApplicants.length > 0 ? (
           <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />
