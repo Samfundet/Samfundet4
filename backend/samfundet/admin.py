@@ -134,7 +134,6 @@ class UserAdmin(CustomGuardedUserAdmin):
                     'is_staff',
                     'is_superuser',
                     'groups',
-                    'roles',
                     'user_permissions',
                 ),
             },

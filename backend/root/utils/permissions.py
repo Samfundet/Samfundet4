@@ -47,13 +47,6 @@ GUARDIAN_DELETE_USEROBJECTPERMISSION = 'guardian.delete_userobjectpermission'
 GUARDIAN_VIEW_USEROBJECTPERMISSION = 'guardian.view_userobjectpermission'
 ### End: guardian ###
 
-### roleauth ###
-ROLEAUTH_ADD_ROLE = 'roleauth.add_role'
-ROLEAUTH_CHANGE_ROLE = 'roleauth.change_role'
-ROLEAUTH_DELETE_ROLE = 'roleauth.delete_role'
-ROLEAUTH_VIEW_ROLE = 'roleauth.view_role'
-### End: roleauth ###
-
 ### samfundet ###
 SAMFUNDET_ADD_BILLIGEVENT = 'samfundet.add_billigevent'
 SAMFUNDET_CHANGE_BILLIGEVENT = 'samfundet.change_billigevent'
@@ -296,6 +289,21 @@ SAMFUNDET_ADD_USERFEEDBACKMODEL = 'samfundet.add_userfeedbackmodel'
 SAMFUNDET_CHANGE_USERFEEDBACKMODEL = 'samfundet.change_userfeedbackmodel'
 SAMFUNDET_DELETE_USERFEEDBACKMODEL = 'samfundet.delete_userfeedbackmodel'
 SAMFUNDET_VIEW_USERFEEDBACKMODEL = 'samfundet.view_userfeedbackmodel'
+
+SAMFUNDET_ADD_USERGANGROLE = 'samfundet.add_usergangrole'
+SAMFUNDET_CHANGE_USERGANGROLE = 'samfundet.change_usergangrole'
+SAMFUNDET_DELETE_USERGANGROLE = 'samfundet.delete_usergangrole'
+SAMFUNDET_VIEW_USERGANGROLE = 'samfundet.view_usergangrole'
+
+SAMFUNDET_ADD_USERGANGSECTIONROLE = 'samfundet.add_usergangsectionrole'
+SAMFUNDET_CHANGE_USERGANGSECTIONROLE = 'samfundet.change_usergangsectionrole'
+SAMFUNDET_DELETE_USERGANGSECTIONROLE = 'samfundet.delete_usergangsectionrole'
+SAMFUNDET_VIEW_USERGANGSECTIONROLE = 'samfundet.view_usergangsectionrole'
+
+SAMFUNDET_ADD_USERORGROLE = 'samfundet.add_userorgrole'
+SAMFUNDET_CHANGE_USERORGROLE = 'samfundet.change_userorgrole'
+SAMFUNDET_DELETE_USERORGROLE = 'samfundet.delete_userorgrole'
+SAMFUNDET_VIEW_USERORGROLE = 'samfundet.view_userorgrole'
 
 SAMFUNDET_ADD_USERPREFERENCE = 'samfundet.add_userpreference'
 SAMFUNDET_CHANGE_USERPREFERENCE = 'samfundet.change_userpreference'
