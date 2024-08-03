@@ -129,6 +129,7 @@ WSGI_APPLICATION = 'root.wsgi.application'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # default
+    'samfundet.backend.RoleAuthBackend',
 ]
 
 # Password validation

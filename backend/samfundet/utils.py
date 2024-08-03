@@ -3,10 +3,12 @@ from __future__ import annotations
 import datetime
 
 from django.http import QueryDict
-from django.db.models import Q
+from django.db.models import Q, Model
 from django.utils.timezone import make_aware
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 from .models import User
 from .models.event import Event
@@ -90,3 +92,10 @@ def get_occupied_timeslots_from_request(
                 occupied_timeslots.append(OccupiedTimeslot(user=user, recruitment=recruitment, start_dt=start_date, end_dt=end_date))
 
     return occupied_timeslots
+
+
+def get_perm(*, perm: str, model: type[Model]) -> Permission:
+    codename = perm.split('.')[1]
+    content_type = ContentType.objects.get_for_model(model=model)
+    permission = Permission.objects.get(codename=codename, content_type=content_type)
+    return permission

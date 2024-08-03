@@ -32,6 +32,12 @@ class Recruitment(CustomBaseModel):
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
+
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 
@@ -128,6 +134,15 @@ class RecruitmentPosition(CustomBaseModel):
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.gang_id
+        return self.gang
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.gang.resolve_org(return_id=return_id)
+
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
@@ -155,6 +170,9 @@ class RecruitmentSeperatePosition(CustomBaseModel):
         blank=True,
     )
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
     def __str__(self) -> str:
         return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
 
@@ -169,6 +187,15 @@ class InterviewRoom(CustomBaseModel):
 
     def __str__(self) -> str:
         return self.name
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.gang_id
+        return self.gang
 
     def clean(self) -> None:
         super().clean()
@@ -193,6 +220,12 @@ class Interview(CustomBaseModel):
     )
     interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.room.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        return self.room.resolve_gang(return_id=return_id)
 
 
 class RecruitmentApplication(CustomBaseModel):
@@ -224,6 +257,12 @@ class RecruitmentApplication(CustomBaseModel):
     applicant_state = models.IntegerField(
         choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text='The state of the applicant for the recruiter'
     )
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        return self.recruitment_position.resolve_gang(return_id=return_id)
 
     def organize_priorities(self) -> None:
         """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
@@ -351,6 +390,9 @@ class RecruitmentInterviewAvailability(CustomBaseModel):
     end_time = models.TimeField(help_text='Last possible time of day for interviews', default='23:00:00', null=False, blank=False)
     timeslot_interval = models.PositiveSmallIntegerField(help_text='The time interval (in minutes) between each timeslot', default=30)
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
 
 class OccupiedTimeslot(FullCleanSaveMixin):
     user = models.ForeignKey(
@@ -371,6 +413,9 @@ class OccupiedTimeslot(FullCleanSaveMixin):
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
+
 
 class RecruitmentStatistics(FullCleanSaveMixin):
     recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
@@ -388,6 +433,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'{self.recruitment} stats'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment.resolve_org(return_id=return_id)
 
     def generate_time_stats(self) -> None:
         for h in range(0, 24):
@@ -426,6 +474,9 @@ class RecruitmentTimeStat(models.Model):
         self.count = count
         super().save(*args, **kwargs)
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
+
 
 class RecruitmentDateStat(models.Model):
     recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
@@ -443,6 +494,9 @@ class RecruitmentDateStat(models.Model):
         self.count = count
         super().save(*args, **kwargs)
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)
+
 
 class RecruitmentCampusStat(models.Model):
     recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='campus_stats')
@@ -458,3 +512,6 @@ class RecruitmentCampusStat(models.Model):
             id__in=self.recruitment_stats.recruitment.applications.values_list('user', flat=True).distinct(), campus=self.campus
         ).count()
         super().save(*args, **kwargs)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.recruitment_stats.resolve_org(return_id=return_id)

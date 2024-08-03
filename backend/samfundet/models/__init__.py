@@ -12,12 +12,16 @@ from .general import (
     User,
     Image,
     Profile,
+    GangSection,
+    Organization,
     UserPreference,
 )
 
 __all__ = [
     'User',
     'Gang',
+    'GangSection',
+    'Organization',
     'Event',
     'Image',
     'Profile',

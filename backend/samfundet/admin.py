@@ -21,6 +21,8 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 
+from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
+
 from .models.event import Event, EventGroup, EventRegistration
 from .models.general import (
     Tag,
@@ -159,6 +161,27 @@ class GroupAdmin(CustomGuardedGroupAdmin):
     def members(self, obj: Group) -> int:
         n: int = obj.user_set.all().count()
         return n
+
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    filter_horizontal = ['permissions']
+
+
+@admin.register(UserOrgRole)
+class UserOrgRoleAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'obj')
+
+
+@admin.register(UserGangRole)
+class UserGangRoleAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'obj')
+
+
+@admin.register(UserGangSectionRole)
+class UserGangSectionRoleAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'obj')
 
 
 @admin.register(Permission)
