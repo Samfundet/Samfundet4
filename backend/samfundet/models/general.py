@@ -22,7 +22,6 @@ from django.contrib.auth.models import Group, AbstractUser
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.role import Role
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
