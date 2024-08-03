@@ -21,6 +21,7 @@ export const ROUTES_FRONTEND = {
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentID/',
   contact: '/contact',
   // ==================== //
   //        Sulten        //
@@ -36,6 +37,8 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   admin: '/control-panel/',
   admin_impersonate: '/impersonate/',
+  // Users
+  admin_users: '/control-panel/users/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
@@ -65,7 +68,7 @@ export const ROUTES_FRONTEND = {
   admin_recruitment: '/control-panel/recruitment/',
   admin_recruitment_edit: '/control-panel/recruitment/edit/:recruitmentId',
   admin_recruitment_create: '/control-panel/recruitment/create/',
-  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-admissions/',
+  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',

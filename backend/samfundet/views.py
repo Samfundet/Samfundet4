@@ -14,6 +14,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -71,6 +72,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
@@ -261,6 +263,13 @@ class OrganizationView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def gangs(self, request: Request, **kwargs: Any) -> Response:
+        organization = self.get_object()
+        gangs = Gang.objects.filter(organization=organization)
+        serializer = GangSerializer(gangs, many=True)
+        return Response(serializer.data)
 
 
 class GangView(ModelViewSet):
@@ -581,6 +590,13 @@ class RecruitmentView(ModelViewSet):
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 
+    @action(detail=True, methods=['get'])
+    def gangs(self, request: Request, **kwargs: Any) -> Response:
+        recruitment = self.get_object()
+        gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
+        serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
+        return Response(serializer.data)
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
@@ -776,6 +792,31 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
             many=True,
         )
         return Response(serializer.data)
+
+
+class RecruitmentApplicationSetInterviewView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InterviewSerializer
+
+    def put(self, request: Request, pk: str) -> Response:
+        application = get_object_or_404(RecruitmentApplication, id=pk)
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            existing_interview = application.interview
+            if existing_interview:
+                existing_interview.interview_location = serializer.validated_data['interview_location']
+                existing_interview.interview_time = serializer.validated_data['interview_time']
+                existing_interview.save()
+                application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
+                return Response(application_serializer.data, status=status.HTTP_200_OK)
+
+            new_interview = serializer.save()
+            application.interview = new_interview
+            application.save()
+            application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
+            return Response(application_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RecruitmentApplicationForGangView(ModelViewSet):

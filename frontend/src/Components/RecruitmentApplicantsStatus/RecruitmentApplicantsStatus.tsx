@@ -7,7 +7,7 @@ import { KEY } from '~/i18n/constants';
 import { Link } from '../Link';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { InputField } from '../InputField';
+import { InputField } from '~/Components';
 import { putRecruitmentApplicationForGang } from '~/api';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { utcTimestampToLocal } from '~/utils';

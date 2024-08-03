@@ -42,6 +42,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_yes]: 'Ja',
+  [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
   [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
@@ -74,6 +76,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
+  [KEY.common_users]: 'Brukere',
+  [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
@@ -147,7 +151,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_it]: 'det',
   [KEY.common_not]: 'ikke',
   [KEY.common_will]: 'vil',
-  [KEY.common_all]: 'alle',
   [KEY.common_get]: 'få',
   [KEY.common_received]: 'mottat',
   [KEY.common_is]: 'er',
@@ -155,6 +158,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_when]: 'når',
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -233,14 +237,20 @@ export const nb: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
+  [KEY.recruitment_positions]: 'Stillinger',
   [KEY.recruitment_applicant]: 'Søker',
   [KEY.recruitment_applicants]: 'Søkere',
   [KEY.recruitment_my_applications]: 'Mine søknader',
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
+  [KEY.recruitment_no_positions]: 'Ingen verv',
+  [KEY.recruitment_active]: 'Pågående opptak',
+  [KEY.recruitment_no_gangs]: 'Ingen gjenger',
+  [KEY.recruitment_no_active]: 'Ingen aktive opptak',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
   [KEY.recruitment_priority]: 'Søkers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
@@ -277,6 +287,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.application_deadline]: 'Søknadsfrist',
   [KEY.recruitment_application]: 'Søknad',
   [KEY.recruitment_applications]: 'søknader',
   [KEY.recruitment_position]: 'verv',
@@ -304,6 +315,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_apply_for]: 'Søk verv hos',
+  [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -315,6 +328,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_saksdokumenter_title]: 'Administrer saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
+  [KEY.admin_users_last_active]: 'Sist aktiv',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_events_administrate]: 'Administrer arrangementer',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
@@ -433,6 +447,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_yes]: 'Yes',
+  [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
   [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
@@ -465,6 +481,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
+  [KEY.common_users]: 'Users',
+  [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
   [KEY.common_events]: 'Events',
@@ -537,7 +555,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_it]: 'it',
   [KEY.common_not]: 'not',
   [KEY.common_will]: 'will',
-  [KEY.common_all]: 'all',
   [KEY.common_get]: 'get',
   [KEY.common_received]: 'received',
   [KEY.common_is]: 'is',
@@ -545,6 +562,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_when]: 'when',
   [KEY.common_come_back_later]: 'Come back later',
   [KEY.common_loading]: 'Loading',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -623,6 +641,7 @@ export const en: Record<KeyValues, string> = {
   // Recruitment:
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
+  [KEY.recruitment_positions]: 'Positions',
   [KEY.recruitment_applicant]: 'Applicant',
   [KEY.recruitment_applicants]: 'Applicants',
   [KEY.recruitment_my_applications]: 'My applications',
@@ -630,6 +649,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
   [KEY.recruitment_interview_notes]: 'Interview notes',
@@ -648,6 +668,10 @@ export const en: Record<KeyValues, string> = {
     ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
+  [KEY.recruitment_no_positions]: 'No positions',
+  [KEY.recruitment_active]: 'Active recruitments',
+  [KEY.recruitment_no_gangs]: 'No gangs',
+  [KEY.recruitment_no_active]: 'No active recruitments',
   [KEY.recruitment_organization]: 'Organization',
   [KEY.recruitment_visible_from]: 'Visible from',
   [KEY.recruitment_administrate]: 'Administrate recruitment',
@@ -667,6 +691,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_processed]: 'Processed',
   [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
+  [KEY.application_deadline]: 'Application deadline',
   [KEY.recruitment_applicants]: 'applicants',
   [KEY.recruitment_progression]: 'Recruitment progression',
   [KEY.recruitment_overview]: 'Recruitment overview',
@@ -696,6 +721,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_apply_for]: 'Apply for position at',
+  [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
@@ -705,6 +732,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',
+  [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_saksdokumenter_title]: 'Manage Documents',

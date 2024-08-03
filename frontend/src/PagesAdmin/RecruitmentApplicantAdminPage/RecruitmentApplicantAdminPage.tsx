@@ -12,11 +12,12 @@ import styles from './RecruitmentApplicantAdminPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { Table } from '~/Components/Table';
 import classNames from 'classnames';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { STATUS } from '~/http_status_codes';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
   const [otherRecruitmentApplication, setOtherRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
   const [applicant, setApplicant] = useState<RecruitmentUserDto>();
@@ -33,11 +34,13 @@ export function RecruitmentApplicantAdminPage() {
         setOtherRecruitmentApplication(res.data.other_applications);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((data) => {
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.not_found, { replace: true });
+        }
         toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
       });
-  }, [applicationID, t]);
+  }, [applicationID, t, navigate]);
 
   const adminWithdraw = () => {
     if (recruitmentApplication) {

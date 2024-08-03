@@ -133,18 +133,12 @@ export type CalendarMarker = {
   className?: string;
 };
 
-export const OrganizationType = {
-  SAMFUNDET: 'samfundet',
-  UKA: 'uka',
-  ISFIT: 'isfit',
-} as const;
-
-export type OrganizationTypeValue = (typeof OrganizationType)[keyof typeof OrganizationType];
-
+/*Names must be equal to what is found in the database*/
 export const OrgNameType = {
   SAMFUNDET_NAME: 'Samfundet',
   ISFIT_NAME: 'ISFiT',
   UKA_NAME: 'UKA',
+  FALLBACK: 'External organization',
 } as const;
 
 export type OrgNameTypeValue = (typeof OrgNameType)[keyof typeof OrgNameType];
