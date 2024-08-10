@@ -95,7 +95,7 @@ def get_occupied_timeslots_from_request(
 
 
 def get_perm(*, perm: str, model: type[Model]) -> Permission:
-    codename = perm.split('.')[1]
+    codename = perm.split('.')[1] if '.' in perm else perm
     content_type = ContentType.objects.get_for_model(model=model)
     permission = Permission.objects.get(codename=codename, content_type=content_type)
     return permission
