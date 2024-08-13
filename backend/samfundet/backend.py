@@ -20,18 +20,30 @@ class RoleAuthBackend(BaseBackend):
         permission = get_perm(perm=perm, model=obj)
 
         if hasattr(obj, 'resolve_org'):
-            org_id = obj.resolve_org(return_id=True)
-            if org_id is not None:
-                return UserOrgRole.objects.filter(user=user_obj, obj__id=org_id, role__permissions=permission).exists()
+            try:
+                org_id = obj.resolve_org(return_id=True)
+                if org_id is not None and UserOrgRole.objects.filter(user=user_obj, obj__id=org_id,
+                                                                     role__permissions=permission).exists():
+                    return True
+            except NotImplementedError:
+                pass
 
         if hasattr(obj, 'resolve_gang'):
-            gang_id = obj.resolve_gang(return_id=True)
-            if gang_id is not None:
-                return UserGangRole.objects.filter(user=user_obj, obj__id=gang_id, role__permissions=permission).exists()
+            try:
+                gang_id = obj.resolve_gang(return_id=True)
+                if gang_id is not None and UserGangRole.objects.filter(user=user_obj, obj__id=gang_id,
+                                                                       role__permissions=permission).exists():
+                    return True
+            except NotImplementedError:
+                pass
 
         if hasattr(obj, 'resolve_section'):
-            section_id = obj.resolve_section(return_id=True)
-            if section_id is not None:
-                return UserGangSectionRole.objects.filter(user=user_obj, obj__id=section_id, role__permissions=permission).exists()
+            try:
+                section_id = obj.resolve_section(return_id=True)
+                if section_id is not None and UserGangSectionRole.objects.filter(user=user_obj, obj__id=section_id,
+                                                                                 role__permissions=permission).exists():
+                    return True
+            except NotImplementedError:
+                pass
 
         return False
