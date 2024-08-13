@@ -20,27 +20,18 @@ class RoleAuthBackend(BaseBackend):
         permission = get_perm(perm=perm, model=obj)
 
         if hasattr(obj, 'resolve_org'):
-            try:
-                org_id = obj.resolve_org(return_id=True)
-                if org_id is not None and UserOrgRole.objects.filter(user=user_obj, obj__id=org_id, role__permissions=permission).exists():
-                    return True
-            except NotImplementedError:
-                pass
+            org_id = obj.resolve_org(return_id=True)
+            if org_id is not None and UserOrgRole.objects.filter(user=user_obj, obj__id=org_id, role__permissions=permission).exists():
+                return True
 
         if hasattr(obj, 'resolve_gang'):
-            try:
-                gang_id = obj.resolve_gang(return_id=True)
-                if gang_id is not None and UserGangRole.objects.filter(user=user_obj, obj__id=gang_id, role__permissions=permission).exists():
-                    return True
-            except NotImplementedError:
-                pass
+            gang_id = obj.resolve_gang(return_id=True)
+            if gang_id is not None and UserGangRole.objects.filter(user=user_obj, obj__id=gang_id, role__permissions=permission).exists():
+                return True
 
         if hasattr(obj, 'resolve_section'):
-            try:
-                section_id = obj.resolve_section(return_id=True)
-                if section_id is not None and UserGangSectionRole.objects.filter(user=user_obj, obj__id=section_id, role__permissions=permission).exists():
-                    return True
-            except NotImplementedError:
-                pass
+            section_id = obj.resolve_section(return_id=True)
+            if section_id is not None and UserGangSectionRole.objects.filter(user=user_obj, obj__id=section_id, role__permissions=permission).exists():
+                return True
 
         return False

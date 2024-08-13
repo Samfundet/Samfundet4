@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 import copy
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from rest_framework import serializers
 
@@ -14,9 +14,6 @@ from django.db.models import DEFERRED, Model
 from root.constants import request_contextvar
 
 LOG = logging.getLogger(__name__)
-
-if TYPE_CHECKING:
-    from samfundet.models import Gang, GangSection, Organization
 
 
 class FieldTrackerMixin(Model):
@@ -183,38 +180,7 @@ class FullCleanSaveMixin(Model):
         super().save(*args, **kwargs)
 
 
-class RoleMixin:
-    """To be a part of the Role system, at least one of these functions must be implemented."""
-
-    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        """
-        There are often multiple paths to requested resource, typically in many-to-many relationships.
-        Resolving must be done manually
-
-        :param return_id: May be used to implement resolver without redundant db instance fetching
-        """
-        raise NotImplementedError('Intentionally not implemented: ambiguous resource')
-
-    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
-        """
-        There are often multiple paths to requested resource, typically in many-to-many relationships.
-        Resolving must be done manually
-
-        :param return_id: May be used to implement resolver without redundant db instance fetching
-        """
-        raise NotImplementedError('Intentionally not implemented: ambiguous resource')
-
-    def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
-        """
-        There are often multiple paths to requested resource, typically in many-to-many relationships.
-        Resolving must be done manually
-
-        :param return_id: May be used to implement resolver without redundant db instance fetching
-        """
-        raise NotImplementedError('Intentionally not implemented: ambiguous resource')
-
-
-class CustomBaseModel(RoleMixin, FullCleanSaveMixin):
+class CustomBaseModel(FullCleanSaveMixin):
     """
     Basic model which will contains necessary version info of a model:
     With by who and when it was updated and created.
