@@ -175,6 +175,7 @@ class Event(CustomBaseModel):
     start_dt = models.DateTimeField(blank=False, null=False)
     duration = models.PositiveIntegerField(blank=False, null=False)
     publish_dt = models.DateTimeField(blank=False, null=False)
+    doors_time = models.TimeField(blank=True, null=True)
 
     # ======================== #
     #      Ticket Related      #
