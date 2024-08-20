@@ -1,0 +1,76 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.recruitmentPage {
+  @include flex-column-center;
+}
+
+.container {
+  @include flex-column-center;
+  width: 85%;
+  gap: 2rem;
+  margin: 1rem;
+}
+
+.organizationHeader{
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.15rem;
+}
+
+.video {
+  width: 50%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  @include for-tablet-down{
+    width: 80%;
+  }
+}
+
+.basicRecruitmentSubHeader{
+  @include flex-row-center;
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.15rem;
+  text-align: center;
+}
+
+.samfRecruitmentSubHeader{
+  @extend .basicRecruitmentSubHeader;
+  color: white;
+  background-color: $red-samf;
+}
+
+.optionsContainer{
+  @include flex-row-center;
+  gap: 1rem;
+
+}
+
+.personalRow {
+  @include flex-row-center;
+  gap: 1rem;
+}
+
+.ukaRecruitmentSubHeader{
+  @extend .samfRecruitmentSubHeader;
+  background-color: $blue-uka;
+}
+
+.isfitRecruitmentSubHeader{
+  @extend .samfRecruitmentSubHeader;
+  background-color: $blue-isfit;
+}
+
+.openPositionsWrapper {
+  @include  flex-column-center;
+  width: 100%;
+  gap: 1rem;
+}
+
+
+

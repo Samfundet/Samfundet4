@@ -1,65 +1,68 @@
-import { useEffect, useState } from 'react';
-import { OccupiedTimeSlotDto } from '~/dto';
+import { useEffect, useMemo, useState } from 'react';
+import { OccupiedTimeslotDto } from '~/dto';
 import styles from './OccupiedForm.module.scss';
 import { KEY } from '~/i18n/constants';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, postOccupiedTimeslots } from '~/api';
-import { useTranslation } from 'react-i18next';
+import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
+import { Trans, useTranslation } from 'react-i18next';
 import { Button } from '../Button';
-import { Icon } from '@iconify/react';
-import { OccupiedLine } from './Components';
+import { MiniCalendar } from '~/Components';
+import { CalendarMarker } from '~/types';
+import { TimeslotContainer } from '~/Components/OccupiedForm/components';
 
-type OccupiedFormProps = {
+type Props = {
   recruitmentId: number;
+  onCancel?: () => void;
 };
 
-export function OccupiedForm({ recruitmentId = 1 }: OccupiedFormProps) {
+export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const { t } = useTranslation();
-  const [occupiedTimeslots, setOccupiedTimeslots] = useState<OccupiedTimeSlotDto[]>([]);
+
+  const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [minDate, setMinDate] = useState(new Date('2024-01-16'));
+  const [maxDate, setMaxDate] = useState(new Date('2024-01-24'));
+
+  const [timeslots, setTimeslots] = useState<string[]>([]);
+  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
-    if (recruitmentId) {
-      getOccupiedTimeslots(recruitmentId)
-        .then((res) => {
-          setOccupiedTimeslots(res.data);
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
-        });
+    if (!recruitmentId) {
+      return;
     }
+    setLoading(true);
+
+    Promise.allSettled([
+      getRecruitmentAvailability(recruitmentId).then((response) => {
+        if (!response.data) {
+          toast.error(t(KEY.common_something_went_wrong));
+          return;
+        }
+        setMinDate(new Date(response.data.start_date));
+        setMaxDate(new Date(response.data.end_date));
+        setTimeslots(response.data.timeslots);
+      }),
+      getOccupiedTimeslots(recruitmentId).then((res) => {
+        setSelectedTimeslots(res.data.dates);
+      }),
+    ])
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      })
+      .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
-  function updateTimeslots(key: number, newTimeslot: OccupiedTimeSlotDto) {
-    setOccupiedTimeslots(
-      occupiedTimeslots.map((element: OccupiedTimeSlotDto, index: number) => {
-        if (key === index) {
-          return newTimeslot;
-        } else {
-          return element;
-        }
-      }),
-    );
-  }
+  function save() {
+    const data: OccupiedTimeslotDto = {
+      recruitment: recruitmentId,
+      dates: selectedTimeslots,
+    };
 
-  function deleteTimeslot(key: number) {
-    setOccupiedTimeslots(occupiedTimeslots.filter((element: OccupiedTimeSlotDto, index: number) => key !== index));
-  }
-
-  function createTimeSlot() {
-    setOccupiedTimeslots([...occupiedTimeslots, {} as OccupiedTimeSlotDto]);
-  }
-
-  function sendTimeslots() {
-    postOccupiedTimeslots(
-      occupiedTimeslots.map((element) => {
-        return { ...element, recruitment: recruitmentId };
-      }),
-    )
-      .then((res) => {
+    postOccupiedTimeslots(data)
+      .then(() => {
         toast.success(t(KEY.common_update_successful));
-        setOccupiedTimeslots(res.data);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
@@ -67,31 +70,66 @@ export function OccupiedForm({ recruitmentId = 1 }: OccupiedFormProps) {
       });
   }
 
+  const markers = useMemo(() => {
+    const x: CalendarMarker[] = [];
+
+    for (const d in selectedTimeslots) {
+      if (selectedTimeslots[d]) {
+        if (selectedTimeslots[d].length === timeslots.length) {
+          x.push({
+            date: new Date(d),
+            className: styles.fully_busy,
+          });
+        } else if (selectedTimeslots[d].length > 0) {
+          x.push({
+            date: new Date(d),
+            className: styles.partly_busy,
+          });
+        }
+      }
+    }
+    return x;
+  }, [timeslots, selectedTimeslots]);
+
   return (
     <div className={styles.container}>
-      <div>
-        <h3 className={styles.occupiedHeader}>{t(KEY.occupied_title)}</h3>
-        <small className={styles.occupiedText}>{t(KEY.occupied_help_text)}</small>
-      </div>
-      <div className={styles.formContainer}>
-        {occupiedTimeslots?.map((element, index) => (
-          <OccupiedLine
-            timeslot={element}
-            index={index}
-            key={index}
-            onDelete={deleteTimeslot}
-            onChange={updateTimeslots}
-          />
-        ))}
-      </div>
-      <div className={styles.row}>
-        <Button display="block" theme="green" onClick={() => sendTimeslots()}>
-          {t(KEY.common_save)}
-        </Button>
-        <Button className={styles.add} theme="blue" onClick={() => createTimeSlot()}>
-          <Icon icon="mdi:plus"></Icon>
-        </Button>
-      </div>
+      <h3 className={styles.title}>{t(KEY.occupied_title)}</h3>
+
+      {loading ? (
+        <span className={styles.subtitle}>{t(KEY.common_loading)}...</span>
+      ) : (
+        <>
+          <span className={styles.subtitle}>
+            <Trans i18nKey={KEY.occupied_help_text} />
+          </span>
+          <div className={styles.date_container}>
+            <MiniCalendar
+              minDate={minDate}
+              maxDate={maxDate}
+              baseDate={minDate}
+              onChange={(date: Date | null) => setSelectedDate(date)}
+              displayLabel={true}
+              markers={markers}
+            />
+
+            <TimeslotContainer
+              selectedDate={selectedDate}
+              timeslots={timeslots}
+              onChange={(slots) => setSelectedTimeslots(slots)}
+              selectedTimeslots={selectedTimeslots}
+            />
+          </div>
+
+          <div className={styles.button_row}>
+            <Button display="block" theme="secondary" onClick={() => onCancel?.()}>
+              {t(KEY.common_cancel)}
+            </Button>
+            <Button display="block" theme="samf" onClick={save}>
+              {t(KEY.common_save)}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

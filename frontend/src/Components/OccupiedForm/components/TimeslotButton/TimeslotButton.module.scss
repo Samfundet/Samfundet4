@@ -1,0 +1,37 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.timeslot {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid $grey-3;
+  color: $grey-3;
+  cursor: pointer;
+  background: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.dot {
+  $size: 4px;
+  width: $size;
+  height: $size;
+  border-radius: $size;
+  display: inline-block;
+  background: $grey-3;
+}
+
+.timeslot_active {
+  border-color: $red;
+  color: $red;
+
+  .dot {
+    background: $red;
+  }
+}
+
