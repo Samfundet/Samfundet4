@@ -1,5 +1,5 @@
 import { IsfitLogo, SamfundetLogo, UkaLogo } from './components';
-import { OrganizationTypeValue } from '~/types';
+import { OrgNameTypeValue } from '~/types';
 
 export type LogoPalette = {
   primary: string;
@@ -7,18 +7,18 @@ export type LogoPalette = {
 };
 
 export type LogoProps = {
-  organization: OrganizationTypeValue;
+  organization: OrgNameTypeValue;
   color: 'org-color' | 'dark' | 'light' | 'org-alt-color';
   size: 'xsmall' | 'small' | 'medium' | 'large';
 };
 
 export function Logo({ organization, color, size }: LogoProps) {
   switch (organization) {
-    case 'samfundet':
+    case 'Samfundet':
       return <SamfundetLogo color={color} size={size} />;
-    case 'uka':
+    case 'UKA':
       return <UkaLogo color={color} size={size} />;
-    case 'isfit':
+    case 'ISFiT':
       return <IsfitLogo color={color} size={size} />;
   }
 }

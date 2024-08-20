@@ -168,6 +168,8 @@ export const KEY = {
   common_when: 'common_when',
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
+  common_filter: 'common_filter',
+
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -257,6 +259,10 @@ export const KEY = {
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
+  recruitment_no_positions: 'recruitment_no_positions',
+  recruitment_no_gangs: 'recruitment_no_gangs',
+  recruitment_active: 'recruitment_active',
+  recruitment_no_active: 'recruitment_no_active',
   recruitment_interview_notes: 'recruitment_interview_notes',
   recruitment_priority: 'recruitment_priority',
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
@@ -293,6 +299,7 @@ export const KEY = {
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
   recrutment_export_to_csv: 'recrutment_export_to_csv',
+  application_deadline: 'application_deadline',
   recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
   recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
   recruitment_not_applicants_without_interviews: 'recruitment_not_applicants_without_interviews',
@@ -320,6 +327,8 @@ export const KEY = {
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
+  recruitment_apply_for: 'recruitment_apply_for',
+  recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
