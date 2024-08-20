@@ -79,11 +79,11 @@ from .serializers import (
     RecruitmentStatisticsSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
-    RecruitmentPositionForApplicantSerializer,
 )
 from .models.event import Event, EventGroup
 from .models.general import (
