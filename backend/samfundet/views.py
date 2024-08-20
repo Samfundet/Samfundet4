@@ -79,6 +79,7 @@ from .serializers import (
     RecruitmentStatisticsSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
@@ -613,12 +614,18 @@ class RecruitmentStatisticsView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionForApplicantView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
 class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
@@ -642,8 +649,25 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentPositionsPerGangView(ListAPIView):
+class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
     permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        gang = self.request.query_params.get('gang', None)
+        if recruitment is not None and gang is not None:
+            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
+        return None
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerGangForGangView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
 
     def get_queryset(self) -> Response | None:
@@ -937,7 +961,7 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
 
 class ActiveRecruitmentPositionsView(ListAPIView):
     permission_classes = [AllowAny]
-    serializer_class = RecruitmentPositionSerializer
+    serializer_class = RecruitmentPositionForApplicantSerializer
 
     def get_queryset(self) -> Response:
         """Returns all active recruitment positions."""
