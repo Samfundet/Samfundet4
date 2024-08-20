@@ -273,7 +273,9 @@ class TestRecruitmentApplicationStatus:
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
         assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
 
-    def test_check_autorejection_sets_nothing(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+    def test_check_autorejection_sets_nothing(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
         assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.NOT_SET
 
