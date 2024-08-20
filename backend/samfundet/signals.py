@@ -10,7 +10,7 @@ from django.db.models.signals import pre_save, post_save, m2m_changed
 from samfundet.permissions import SAMFUNDET_CHANGE_EVENT, SAMFUNDET_DELETE_EVENT
 
 from .models import Gang, User, Event, Profile, UserPreference
-from .models.recruitment import Recruitment, RecruitmentAdmission, RecruitmentStatistics
+from .models.recruitment import Recruitment, RecruitmentApplication, RecruitmentStatistics
 from .models.model_choices import RecruitmentStatusChoices
 
 
@@ -73,17 +73,17 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
         RecruitmentStatistics.objects.get_or_create(recruitment=instance)
 
 
-@receiver(post_save, sender=RecruitmentAdmission)
-def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
+@receiver(post_save, sender=RecruitmentApplication)
+def application_created(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
     if created:
         instance.recruitment.update_stats()
 
 
-@receiver(pre_save, sender=RecruitmentAdmission)
-def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, instance: RecruitmentAdmission, **kwargs: Any) -> None:  # noqa C901
-    """Whenever an applicant is contacted, set all other admissions to automatic rejection"""
+@receiver(pre_save, sender=RecruitmentApplication)
+def application_applicant_rejected_or_accepted(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs: Any) -> None:  # noqa C901
+    """Whenever an applicant is contacted, set all other applications to automatic rejection"""
 
-    obj = RecruitmentAdmission.objects.filter(pk=instance.pk).first()
+    obj = RecruitmentApplication.objects.filter(pk=instance.pk).first()
     if not obj:
         return
     # Check if Status is set to called
@@ -94,11 +94,11 @@ def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, insta
             RecruitmentStatusChoices.CALLED_AND_REJECTED,
         ]:
             # Set all others to Automatic rejection
-            for other_admission in RecruitmentAdmission.objects.filter(
+            for other_application in RecruitmentApplication.objects.filter(
                 recruitment=obj.recruitment, user=obj.user, recruiter_status=RecruitmentStatusChoices.NOT_SET
             ).exclude(id=obj.id):
-                other_admission.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
-                other_admission.save()
+                other_application.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+                other_application.save()
 
         # Check if status is reverted from called, this will set all all AUTOMATIC_REJECTION back
         elif obj.recruiter_status in [
@@ -106,8 +106,8 @@ def admission_applicant_rejected_or_accepted(sender: RecruitmentAdmission, insta
             RecruitmentStatusChoices.CALLED_AND_REJECTED,
         ]:
             # Set all others to Automatic rejection
-            for other_admission in RecruitmentAdmission.objects.filter(
+            for other_application in RecruitmentApplication.objects.filter(
                 recruitment=obj.recruitment, user=obj.user, recruiter_status=RecruitmentStatusChoices.AUTOMATIC_REJECTION
             ).exclude(id=obj.id):
-                other_admission.recruiter_status = RecruitmentStatusChoices.NOT_SET
-                other_admission.save()
+                other_application.recruiter_status = RecruitmentStatusChoices.NOT_SET
+                other_application.save()
