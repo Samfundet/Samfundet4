@@ -26,6 +26,9 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
+
+from django.core.mail import send_mail
+
 from root.constants import (
     XCSRFTOKEN,
     AUTH_BACKEND,
@@ -631,26 +634,41 @@ class ApplicantsWithoutInterviewsView(ListAPIView):
             User.objects.filter(admissions__recruitment=recruitment).annotate(num_interviews=Count(interview_times_for_recruitment)).filter(num_interviews=0)
         )
         return users_without_interviews
-    
-class RejectedApplicantsView(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = UserForRecruitmentSerializer
 
-    def get_queryset(self) -> QuerySet[User]:
+class SendRejectionMail(APIView):
+    #TODO: change from mail placeholder.
+    def post(self, request: Request) -> Response:
+        subject = request.query_params.get('subject')
+        text = request.query_params.get('text')
+
+        rejected_user_mails = self.get_rejected_user_mails()
+
+        send_mail(
+            subject,
+            text,
+            "no-reply@samfundet.no",
+            [rejected_user_mails],
+            fail_silently=False,
+        )
+    def get_rejected_user_mails(self) -> QuerySet[User]:
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is None:
             return User.objects.none()  # Return an empty queryset instead of None
 
-        # Exculde users who have gotten any offers
-        recuiter_status_for_user = Case(
+        # Exclude users who have gotten offers
+        recruitment_status_for_user = Case(
             When(admissions__recruitment=recruitment, then='admissions__recuiter_status'),
             default=None,
             output_field=None,
         )
         rejected_users = (
-            User.objects.filter(admissions__recruitment=recruitment).annotate(num_offers=Count(recuiter_status_for_user!=3)).filter(num_offers=0)
+            User.objects.filter(admissions__recruitment=recruitment).annotate(num_offers=Count(recruitment_status_for_user != 3)).filter(num_offers=0)
         )
-        return rejected_users
+
+        emails = rejected_users.values_list('email', flat=True)
+        return emails
+    
+
 
 
 class RecruitmentAdmissionForApplicantView(ModelViewSet):
