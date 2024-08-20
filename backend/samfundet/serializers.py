@@ -421,7 +421,7 @@ class RecruitmentGangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # This will allow it to filter admissions on recruitment
+        # This will allow it to filter applications on recruitment
         self.recruitment = kwargs.pop('recruitment', None)
         self.gang = kwargs.pop('gang', None)
         super().__init__(*args, **kwargs)
