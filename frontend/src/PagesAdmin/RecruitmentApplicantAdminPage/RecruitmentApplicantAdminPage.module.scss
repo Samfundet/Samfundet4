@@ -19,3 +19,14 @@
 .textBottom {
   margin: 0.2em;
 }
+
+.withdrawContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.withdrawnText {
+  color: $red-samf;
+}
+

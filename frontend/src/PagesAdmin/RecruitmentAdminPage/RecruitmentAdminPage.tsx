@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
-import { getAllRecruitments } from '~/api';
-import { RecruitmentDto } from '~/dto';
+import { getAllRecruitments, getOrganizations } from '~/api';
+import { type OrganizationDto, RecruitmentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -16,21 +17,32 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 export function RecruitmentAdminPage() {
   const navigate = useNavigate();
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
+  const [organizations, setOrganizations] = useState<Record<number, OrganizationDto>>({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = t(KEY.recruitment_administrate);
+  useTitle(title);
 
   // Stuff to do on first render.
   //TODO add permissions on render
   useEffect(() => {
-    getAllRecruitments()
-      .then((data) => {
+    Promise.allSettled([
+      getAllRecruitments().then((data) => {
         setRecruitments(data.data);
-        setShowSpinner(false);
-      })
+      }),
+      getOrganizations().then((data) => {
+        const orgs: Record<number, OrganizationDto> = {};
+        for (const organization of data) {
+          orgs[organization.id] = organization;
+        }
+        setOrganizations(orgs);
+      }),
+    ])
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
-      });
+      })
+      .finally(() => setShowSpinner(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -51,7 +63,7 @@ export function RecruitmentAdminPage() {
         content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>,
         value: ROUTES.frontend.recruitment,
       },
-      element.organization,
+      organizations[element.organization].name || t(KEY.common_unknown),
       `${getFormattedDate(element.visible_from)}-${getFormattedDate(element.reprioritization_deadline_for_groups)}`,
       {
         content: (
@@ -63,7 +75,7 @@ export function RecruitmentAdminPage() {
               navigate(
                 reverse({
                   pattern: ROUTES.frontend.admin_recruitment_edit,
-                  urlParams: { id: element.id },
+                  urlParams: { recruitmentId: element.id },
                 }),
               );
             }}
@@ -73,7 +85,6 @@ export function RecruitmentAdminPage() {
     ];
   });
 
-  const title = t(KEY.recruitment_administrate);
   const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
   const header = (
     <>

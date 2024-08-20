@@ -72,7 +72,6 @@ def create_recruitment_statistics(sender: Recruitment, instance: Recruitment, *,
     if created:
         RecruitmentStatistics.objects.get_or_create(recruitment=instance)
 
-
 @receiver(post_save, sender=RecruitmentAdmission)
 def admission_created(sender: RecruitmentAdmission, instance: RecruitmentAdmission, *, created: bool, **kwargs: Any) -> None:
     if created:

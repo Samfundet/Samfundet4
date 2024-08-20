@@ -24,9 +24,10 @@ from samfundet.models.general import (
     InformationPage,
 )
 from samfundet.models.recruitment import (
+    Interview,
     Recruitment,
     RecruitmentPosition,
-    RecruitmentAdmission,
+    RecruitmentApplication,
 )
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -821,7 +822,7 @@ def test_get_applicants_without_interviews(
     fixture_superuser: User,
     fixture_recruitment: Recruitment,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
@@ -844,16 +845,16 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     fixture_superuser: User,
     fixture_recruitment: Recruitment,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
     url = reverse(routes.samfundet__applicants_without_interviews)
 
-    # Setting the interview time for the user's admission
-    fixture_recruitment_admission.interview.interview_time = timezone.now()
-    fixture_recruitment_admission.interview.save()
-    fixture_recruitment_admission.save()
+    # Setting the interview time for the user's application
+    interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Bogstad')
+    fixture_recruitment_application.interview = interview
+    fixture_recruitment_application.save()
 
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
@@ -863,15 +864,15 @@ def test_get_applicants_without_interviews_when_interview_is_set(
     assert len(response.data) == 0
 
 
-def test_recruitment_admission_for_applicant(
+def test_recruitment_application_for_applicant(
     fixture_rest_client: APIClient,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
     fixture_recruitment: Recruitment,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
-    url = reverse(routes.samfundet__recruitment_admissions_for_applicant_list)
+    url = reverse(routes.samfundet__recruitment_applications_for_applicant_list)
 
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
@@ -880,211 +881,211 @@ def test_recruitment_admission_for_applicant(
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 1
-    assert response.data[0]['admission_text'] == fixture_recruitment_admission.admission_text
-    assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_admission.recruitment_position.id
+    assert response.data[0]['application_text'] == fixture_recruitment_application.application_text
+    assert response.data[0]['recruitment_position']['id'] == fixture_recruitment_application.recruitment_position.id
 
 
-def test_post_admission(
+def test_post_application(
     fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
-    post_data = {'admission_text': 'test_text'}
+    post_data = {'application_text': 'test_text'}
     ### Act ###
     response: Response = fixture_rest_client.put(path=url, data=post_data)
 
     ### Assert ###
-    assert response.data['admission_text'] == post_data['admission_text']
+    assert response.data['application_text'] == post_data['application_text']
     assert response.status_code == status.HTTP_201_CREATED
     # Assert the returned data based on the logic in the view
 
 
-def test_update_admission(
+def test_update_application(
     fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     ### Act Send create ###
-    post_data1 = {'admission_text': 'I love samf!'}
+    post_data1 = {'application_text': 'I love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data1)
     ### Assert ###
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data['admission_text'] == post_data1['admission_text']
+    assert response.data['application_text'] == post_data1['application_text']
     ### Act 2 Send update ###
-    post_data2 = {'admission_text': 'No i really love samf!'}
+    post_data2 = {'application_text': 'No i really love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data2)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['admission_text'] == post_data2['admission_text']
+    assert response.data['application_text'] == post_data2['application_text']
     # Assert the returned data based on the logic in the view
 
 
-def test_update_admission_recruiter_priority_gang(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+def test_update_application_recruiter_priority_gang(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user2)
-    fixture_recruitment_admission.user = fixture_user2
-    fixture_recruitment_admission.save()
+    fixture_recruitment_application.user = fixture_user2
+    fixture_recruitment_application.save()
     url = reverse(
-        routes.samfundet__recruitment_admission_update_state_gang,
-        kwargs={'pk': fixture_recruitment_admission.id},
+        routes.samfundet__recruitment_application_update_state_gang,
+        kwargs={'pk': fixture_recruitment_application.id},
     )
     ### Assert pre condition ###
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
     # Will assert this will crash when permissions are implemented
     ### Act 1 Send update NOT_WANTED ###
     post_data = {'recruiter_priority': RecruitmentPriorityChoices.NOT_WANTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
     ### Act 2 Send update NOT_WANTED ###
     post_data = {'recruiter_priority': RecruitmentPriorityChoices.RESERVE}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.RESERVE
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.RESERVE
     ### Act 3 Send update WANTED ###
     post_data = {'recruiter_priority': RecruitmentPriorityChoices.WANTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.WANTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.WANTED
     ### Act 4 Send update not a choices ###
     post_data = {'recruiter_priority': (99, 'lol')}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_update_admission_recruiter_status_gang(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+def test_update_application_recruiter_status_gang(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user2)
-    fixture_recruitment_admission.user = fixture_user2
-    fixture_recruitment_admission.save()
+    fixture_recruitment_application.user = fixture_user2
+    fixture_recruitment_application.save()
     url = reverse(
-        routes.samfundet__recruitment_admission_update_state_gang,
-        kwargs={'pk': fixture_recruitment_admission.id},
+        routes.samfundet__recruitment_application_update_state_gang,
+        kwargs={'pk': fixture_recruitment_application.id},
     )
     ### Assert pre condition ###
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
     # Will assert this will crash when permissions are implemented
     ### Act 1 Send update NOT_WANTED ###
     post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_ACCEPTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
     ### Act 2 Send update NOT_WANTED ###
     post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_REJECTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
     ### Act 3 Send update WANTED ###
     post_data = {'recruiter_status': RecruitmentStatusChoices.AUTOMATIC_REJECTION}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
     ### Act 4 Send update not a choices ###
     post_data = {'recruiter_priority': (99, 'lol')}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_update_admission_recruiter_priority_position(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+def test_update_application_recruiter_priority_position(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user2)
-    fixture_recruitment_admission.user = fixture_user2
-    fixture_recruitment_admission.save()
+    fixture_recruitment_application.user = fixture_user2
+    fixture_recruitment_application.save()
     url = reverse(
-        routes.samfundet__recruitment_admission_update_state_position,
-        kwargs={'pk': fixture_recruitment_admission.id},
+        routes.samfundet__recruitment_application_update_state_position,
+        kwargs={'pk': fixture_recruitment_application.id},
     )
     ### Assert pre condition ###
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
     # Will assert this will crash when permissions are implemented
     ### Act 1 Send update NOT_WANTED ###
     post_data = {'recruiter_priority': RecruitmentPriorityChoices.NOT_WANTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
     ### Act 2 Send update NOT_WANTED ###
     post_data = {'recruiter_priority': RecruitmentPriorityChoices.RESERVE}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.RESERVE
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.RESERVE
     ### Act 3 Send update WANTED ###
     post_data = {'recruiter_priority': RecruitmentPriorityChoices.WANTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_priority == RecruitmentPriorityChoices.WANTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.WANTED
     ### Act 4 Send update not a choices ###
     post_data = {'recruiter_priority': (99, 'lol')}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_update_admission_recruiter_status_position(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_admission: RecruitmentAdmission
+def test_update_application_recruiter_status_position(
+    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user2)
-    fixture_recruitment_admission.user = fixture_user2
-    fixture_recruitment_admission.save()
+    fixture_recruitment_application.user = fixture_user2
+    fixture_recruitment_application.save()
     url = reverse(
-        routes.samfundet__recruitment_admission_update_state_position,
-        kwargs={'pk': fixture_recruitment_admission.id},
+        routes.samfundet__recruitment_application_update_state_position,
+        kwargs={'pk': fixture_recruitment_application.id},
     )
     ### Assert pre condition ###
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.NOT_SET
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
     # Will assert this will crash when permissions are implemented
     ### Act 1 Send update NOT_WANTED ###
     post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_ACCEPTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
     ### Act 2 Send update NOT_WANTED ###
     post_data = {'recruiter_status': RecruitmentStatusChoices.CALLED_AND_REJECTED}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.CALLED_AND_REJECTED
     ### Act 3 Send update WANTED ###
     post_data = {'recruiter_status': RecruitmentStatusChoices.AUTOMATIC_REJECTION}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_200_OK
-    fixture_recruitment_admission = RecruitmentAdmission.objects.get(id=fixture_recruitment_admission.id)
-    assert fixture_recruitment_admission.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+    fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+    assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
     ### Act 4 Send update not a choices ###
     post_data = {'recruiter_priority': (99, 'lol')}
     response: Response = fixture_rest_client.put(path=url, data=post_data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):
+def test_withdraw_application(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_position: RecruitmentPosition):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
 
     # Cant withdraw if not applied
     url = reverse(
-        routes.samfundet__recruitment_withdraw_admission,
+        routes.samfundet__recruitment_withdraw_application,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     response: Response = fixture_rest_client.put(path=url)
@@ -1092,19 +1093,19 @@ def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, 
 
     ### Act Send create ###
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
-    post_data1 = {'admission_text': 'I love samf!'}
+    post_data1 = {'application_text': 'I love samf!'}
     response: Response = fixture_rest_client.put(path=url, data=post_data1)
     ### Assert Created ###
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.data['admission_text'] == post_data1['admission_text']
+    assert response.data['application_text'] == post_data1['application_text']
     assert response.data['withdrawn'] is False
 
     ### Act 2 Send withdrawal ###
     url = reverse(
-        routes.samfundet__recruitment_withdraw_admission,
+        routes.samfundet__recruitment_withdraw_application,
         kwargs={'pk': fixture_recruitment_position.id},
     )
     response: Response = fixture_rest_client.put(path=url)
@@ -1112,7 +1113,26 @@ def test_withdraw_admission(fixture_rest_client: APIClient, fixture_user: User, 
     assert response.data['withdrawn'] is True
 
 
-def test_post_admission_overflow(
+def test_withdraw_application_recruiter(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_application: RecruitmentApplication):
+    # TODO Add Permissions tests later for this
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+
+    # check if not originally withdrawn
+    assert not fixture_recruitment_application.withdrawn
+
+    ### Act 2 Send withdrawal ###
+    url = reverse(
+        routes.samfundet__recruitment_withdraw_application_recruiter,
+        kwargs={'pk': fixture_recruitment_application.id},
+    )
+    response: Response = fixture_rest_client.put(path=url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['withdrawn'] is True
+    assert RecruitmentApplication.objects.get(pk=fixture_recruitment_application.id)
+
+
+def test_post_application_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,
     fixture_recruitment: Recruitment,
@@ -1120,49 +1140,49 @@ def test_post_admission_overflow(
     fixture_recruitment_position2: RecruitmentPosition,
 ):
     ### Arrange ###
-    fixture_recruitment.max_admissions = 1
+    fixture_recruitment.max_applications = 1
     fixture_recruitment.save()
     fixture_rest_client.force_authenticate(user=fixture_user)
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position.id},
     )
 
-    post_data = {'admission_text': 'test_text'}
+    post_data = {'application_text': 'test_text'}
     ### Act ###
     response: Response = fixture_rest_client.put(path=url, data=post_data)
 
     ### Assert ###
-    assert response.data['admission_text'] == post_data['admission_text']
+    assert response.data['application_text'] == post_data['application_text']
     assert response.status_code == status.HTTP_201_CREATED
     # Assert the returned data based on the logic in the view
 
-    # Test then for too many admissions for user
+    # Test then for too many applications for user
     url = reverse(
-        routes.samfundet__recruitment_admissions_for_applicant_detail,
+        routes.samfundet__recruitment_applications_for_applicant_detail,
         kwargs={'pk': fixture_recruitment_position2.id},
     )
     ### Act ###
     response2: Response = fixture_rest_client.put(path=url, data=post_data)
     ### Assert ###
     assert response2.status_code == status.HTTP_400_BAD_REQUEST
-    assert RecruitmentAdmission.TOO_MANY_ADMISSIONS_ERROR in response2.data['recruitment']
+    assert RecruitmentApplication.TOO_MANY_APPLICATIONS_ERROR in response2.data['recruitment']
 
 
-def test_recruitment_admission_update_pri_up(
+def test_recruitment_application_update_pri_up(
     fixture_rest_client: APIClient,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
-    fixture_recruitment_admission2: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
+    fixture_recruitment_application2: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
-    assert fixture_recruitment_admission.applicant_priority == 1
-    assert fixture_recruitment_admission2.applicant_priority == 2
+    assert fixture_recruitment_application.applicant_priority == 1
+    assert fixture_recruitment_application2.applicant_priority == 2
 
     url = reverse(
         routes.samfundet__recruitment_user_priority_update,
-        kwargs={'pk': fixture_recruitment_admission2.id},
+        kwargs={'pk': fixture_recruitment_application2.id},
     )
 
     ### Act ###
@@ -1172,26 +1192,26 @@ def test_recruitment_admission_update_pri_up(
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 2
-    assert response.data[0]['id'] == str(fixture_recruitment_admission2.pk)
+    assert response.data[0]['id'] == str(fixture_recruitment_application2.pk)
     assert response.data[0]['applicant_priority'] == 1
-    assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
+    assert response.data[1]['id'] == str(fixture_recruitment_application.pk)
     assert response.data[1]['applicant_priority'] == 2
 
 
-def test_recruitment_admission_update_pri_down(
+def test_recruitment_application_update_pri_down(
     fixture_rest_client: APIClient,
     fixture_user: User,
-    fixture_recruitment_admission: RecruitmentAdmission,
-    fixture_recruitment_admission2: RecruitmentAdmission,
+    fixture_recruitment_application: RecruitmentApplication,
+    fixture_recruitment_application2: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user)
-    assert fixture_recruitment_admission.applicant_priority == 1
-    assert fixture_recruitment_admission2.applicant_priority == 2
+    assert fixture_recruitment_application.applicant_priority == 1
+    assert fixture_recruitment_application2.applicant_priority == 2
 
     url = reverse(
         routes.samfundet__recruitment_user_priority_update,
-        kwargs={'pk': fixture_recruitment_admission.id},
+        kwargs={'pk': fixture_recruitment_application.id},
     )
 
     ### Act ###
@@ -1201,7 +1221,7 @@ def test_recruitment_admission_update_pri_down(
     assert response.status_code == status.HTTP_200_OK
     # Assert the returned data based on the logic in the view
     assert len(response.data) == 2
-    assert response.data[0]['id'] == str(fixture_recruitment_admission2.pk)
+    assert response.data[0]['id'] == str(fixture_recruitment_application2.pk)
     assert response.data[0]['applicant_priority'] == 1
-    assert response.data[1]['id'] == str(fixture_recruitment_admission.pk)
+    assert response.data[1]['id'] == str(fixture_recruitment_application.pk)
     assert response.data[1]['applicant_priority'] == 2
