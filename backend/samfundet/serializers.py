@@ -421,7 +421,7 @@ class RecruitmentGangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # This will allow it to filter admissions on recruitment
+        # This will allow it to filter applications on recruitment
         self.recruitment = kwargs.pop('recruitment', None)
         self.gang = kwargs.pop('gang', None)
         super().__init__(*args, **kwargs)
@@ -930,6 +930,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    recruitment_position = RecruitmentPositionSerializer(read_only=True)
     application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:
