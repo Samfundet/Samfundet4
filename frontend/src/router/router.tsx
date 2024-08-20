@@ -57,6 +57,7 @@ import {
   RecruitmentOverviewPage,
   AdminLayout,
   ImpersonateUserAdminPage,
+  RecruitmentGangAllApplicantsAdminPage,
   SultenMenuItemFormAdminPage,
   UsersAdminPage,
 } from '~/PagesAdmin';
@@ -335,6 +336,36 @@ export const router = createBrowserRouter(
               <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
             }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_edit}
+            element={
+              <PermissionRoute required={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
+            }
+            loader={({ params }) => {
+              // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
+              return { id: params.id };
+            }}
+            handle={{
+              crumb: ({ id }: { id: string }) => (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_edit,
+                    urlParams: { id },
+                  })}
+                >
+                  {t(KEY.common_edit)}
+                </Link>
+              ),
+            }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+            element={<RecruitmentGangAllApplicantsAdminPage />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
+            element={<RecruitmentUsersWithoutInterviewGangPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}
