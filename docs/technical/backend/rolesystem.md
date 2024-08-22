@@ -25,6 +25,30 @@ by multiple orgs/gangs/sections.
 >
 > Example: A Recruitment is owned by an organization, therefore `resolve_org` returns that organization.
 
+Here's an example implementation of `resolve_org` for the Recruitment model:
+
+```python
+class Recruitment(CustomBaseModel):
+    ...
+    organization = models.ForeignKey(to=Organization)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            return self.organization_id
+        return self.organization
+```
+
+And another example, showing how models can just call each other's resolvers to greatly simplify things:
+
+```python
+class RecruitmentPosition(CustomBaseModel):
+    ...
+    gang = models.ForeignKey(to=Gang)
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.gang.resolve_org(return_id=return_id)
+```
+
 ## Role
 
 A Role simply contains a name and a list of permissions. An "Interviewer" Role may for example contain permissions
@@ -35,6 +59,9 @@ related to interviews, interview rooms, applications, etc.
 To tie users together to roles, we use either `UserOrgRole`/`UserGangRole`/`UserGangSectionRole`. These models contain
 three fields: user, role, and object. For `UserOrgRole`, the obj will be an instance of Organization, for `UserGangRole`
 it'll be an instance of Gang, and for `UserGangSectionRole` it'll be an instance of a GangSection.
+
+To reiterate: if we create a `UserOrgRole` instance, it gives the user all of the role's permissions for the given
+organization.
 
 ## Inheritance
 
