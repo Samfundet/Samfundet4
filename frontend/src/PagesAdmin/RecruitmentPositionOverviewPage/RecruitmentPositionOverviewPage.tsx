@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
-
-import { getRecruitmentApplicationsForGang, updateRecruitmentAdmissionStateForPosition } from '~/api';
-import { RecruitmentApplicationDto , RecruitmentAdmissionStateDto } from '~/dto';
+import { getRecruitmentApplicationsForGang, updateRecruitmentApplicationStateForPosition } from '~/api';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -36,13 +35,13 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status == 0 &&
-                recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setWithdrawnApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setRejectedApplicants(
@@ -50,7 +49,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-                recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setAcceptedApplicants(
@@ -58,34 +57,34 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status == 1 &&
-                recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setShowSpinner(false);
         })
         .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          if (data.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.not_found, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
   }, [recruitmentId, gangId, positionId, navigate, t]);
 
-  const updateAdmissionState = (id: string, data: RecruitmentAdmissionStateDto) => {
-    updateRecruitmentAdmissionStateForPosition(id, data)
+  const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
+    updateRecruitmentApplicationStateForPosition(id, data)
       .then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
               recruitmentApplicant.recruiter_status == 0 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruitment_position?.id == positionId,
           ),
         );
         setWithdrawnApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id == positionId,
           ),
         );
         setRejectedApplicants(
@@ -93,7 +92,7 @@ export function RecruitmentPositionOverviewPage() {
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
               (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruitment_position?.id == positionId,
           ),
         );
         setAcceptedApplicants(
@@ -101,7 +100,7 @@ export function RecruitmentPositionOverviewPage() {
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
               recruitmentApplicant.recruiter_status == 1 &&
-              recruitmentApplicant.recruitment_position?.toString() == positionId,
+              recruitmentApplicant.recruitment_position?.id == positionId,
           ),
         );
         setShowSpinner(false);
@@ -145,7 +144,7 @@ export function RecruitmentPositionOverviewPage() {
         recruitmentId={recruitmentId}
         gangId={gangId}
         positionId={positionId}
-        updateStateFunction={updateAdmissionState}
+        updateStateFunction={updateApplicationState}
       />
 
       <div className={styles.sub_container}>
@@ -154,7 +153,7 @@ export function RecruitmentPositionOverviewPage() {
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
-          <ProcessedApplicants data={acceptedApplicants} type="accepted" revertStateFunction={updateAdmissionState} />
+          <ProcessedApplicants data={acceptedApplicants} type="accepted" revertStateFunction={updateApplicationState} />
         ) : (
           <Text as="i" className={styles.subText}>
             {t(KEY.recruitment_accepted_applications_empty_text)}
@@ -168,7 +167,7 @@ export function RecruitmentPositionOverviewPage() {
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
-          <ProcessedApplicants data={rejectedApplicants} type="rejected" revertStateFunction={updateAdmissionState} />
+          <ProcessedApplicants data={rejectedApplicants} type="rejected" revertStateFunction={updateApplicationState} />
         ) : (
           <Text as="i" className={styles.subText}>
             {t(KEY.recruitment_rejected_applications_empty_text)}

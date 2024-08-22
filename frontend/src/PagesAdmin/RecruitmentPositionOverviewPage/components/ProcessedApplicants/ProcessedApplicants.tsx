@@ -1,4 +1,4 @@
-import { RecruitmentApplicationDto, RecruitmentAdmissionStateDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import styles from './ProcessedApplicants.module.scss';
 import { Table } from '~/Components/Table';
 import { KEY } from '~/i18n/constants';
@@ -11,7 +11,7 @@ type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
 
 type ProcessedApplicantsProps = {
   data: RecruitmentApplicationDto[];
-  revertStateFunction?: (id: string, data: RecruitmentAdmissionStateDto) => void;
+  revertStateFunction?: (id: string, data: RecruitmentApplicationStateDto) => void;
   type: ProcessedType;
 };
 
@@ -43,24 +43,23 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
             {`${application.user.first_name} ${application.user.last_name}`}
           </Link>
         ),
-        value: admission.user.first_name,
       },
-      { content: admission.user?.phone_number, value: admission.user?.phone_number },
-      { content: admission.user?.email, value: admission.user?.email },
-      { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
-      { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
-      { content: admission.recruiter_status, value: admission.recruiter_status },
+      { content: application.user?.phone_number, value: application.user?.phone_number },
+      { content: application.user?.email, value: application.user?.email },
+      { content: application.interview?.interview_time, value: application.interview?.interview_time },
+      { content: application.interview?.interview_location, value: application.interview?.interview_location },
+      { content: application.recruiter_status, value: application.recruiter_status },
       revertStateFunction && {
         content: (
           <Button
             display="pill"
             theme="outlined"
-            onClick={() => revertStateFunction(admission.id, { recruiter_status: 0 })}
+            onClick={() => revertStateFunction(application.id, { recruiter_status: 0 })}
           >
             {t(KEY.recruitment_revert_status)}
           </Button>
         ),
-        value: admission.recruiter_status,
+        value: application.recruiter_status,
       },
     ];
   });

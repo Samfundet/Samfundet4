@@ -1,5 +1,5 @@
 import styles from './RecruitmentApplicantsStatus.module.scss';
-import { RecruitmentApplicationDto, RecruitmentAdmissionStateDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
@@ -18,15 +18,15 @@ type RecruitmentApplicantsStatusProps = {
   recruitmentId: number | string | undefined;
   gangId: number | string | undefined;
   positionId: number | string | undefined;
-  updateStateFunction: (id: string, data: RecruitmentAdmissionStateDto) => void;
+  updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
 };
 
 // TODO add backend to fetch these
 const priorityOptions: DropDownOption<number>[] = [
   { label: 'Not Set', value: 0 },
-  { label: 'Not Wanted', value: 1 },
+  { label: 'Reserve', value: 1 },
   { label: 'Wanted', value: 2 },
-  { label: 'Reserve', value: 3 },
+  { label: 'Not Wanted', value: 3 },
 ];
 
 const statusOptions: DropDownOption<number>[] = [
@@ -62,8 +62,8 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: true },
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
- 
-  function updateAdmissions(id: string, field: string, value: string | number | undefined) {
+
+  function updateApplications(id: string, field: string, value: string | number | undefined) {
     if (value) {
       switch (field) {
         case editChoices.update_recruitment_priority:
@@ -75,7 +75,6 @@ export function RecruitmentApplicantsStatus({
       }
     }
   }
-
 
   function getStatusStyle(status: number | undefined) {
     if (typeof status !== 'undefined') {
@@ -89,11 +88,13 @@ export function RecruitmentApplicantsStatus({
         styles.less_wanted,
         styles.less_wanted_wanted,
         styles.less_wanted_reserve,
+        styles.pending,
+        styles.pending,
       ][status];
     }
   }
 
-    const data = applicants.map(function (admission) {
+  const data = applicants.map(function (application) {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     return [
       {
@@ -144,7 +145,7 @@ export function RecruitmentApplicantsStatus({
           <InputField
             inputClassName={styles.input}
             value={application.interview?.interview_location ?? ''}
-            onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
+            onBlur={() => putRecruitmentApplicationForGang(application.id, application)}
             onChange={(value: string) => updateApplications(application.id, editChoices.update_location, value)}
           />
         ),
