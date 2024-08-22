@@ -36,13 +36,13 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status == 0 &&
-                recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setWithdrawnApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setRejectedApplicants(
@@ -50,7 +50,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-                recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setAcceptedApplicants(
@@ -58,7 +58,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status == 1 &&
-                recruitmentApplicant.recruitment_position?.toString() == positionId,
+                recruitmentApplicant.recruitment_position?.id == positionId,
             ),
           );
           setShowSpinner(false);
