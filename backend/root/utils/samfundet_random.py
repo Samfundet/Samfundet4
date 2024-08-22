@@ -32,7 +32,7 @@ samf_words = [
     ('Eksamen', 'Exam'),
     ('NTNU', 'NTNU'),
     ('Gløsinger', 'Glossies'),
-    ('Opptak', 'Admission'),
+    ('Opptak', 'Recruitment'),
     ('STØNT', 'Weirdos'),
     ('Web', 'Web'),
     ('Redda', 'Redda'),

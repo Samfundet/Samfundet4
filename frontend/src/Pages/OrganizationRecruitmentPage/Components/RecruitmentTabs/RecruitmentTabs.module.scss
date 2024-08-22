@@ -1,0 +1,9 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.recruitmentTabsContainer{
+  @include flex-column-center;
+  width: 100%;
+  gap: 1rem;
+}

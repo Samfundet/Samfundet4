@@ -1,32 +1,32 @@
 import styles from './RecruitmentApplicantsStatus.module.scss';
-import { RecruitmentAdmissionDto } from '~/dto';
-import { useEffect, useState } from 'react';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { Link } from '../Link';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { InputField } from '../InputField';
-import { putRecruitmentAdmissionForGang } from '~/api';
+import { InputField } from '~/Components';
+import { putRecruitmentApplicationForGang } from '~/api';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { utcTimestampToLocal } from '~/utils';
 import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 
 type RecruitmentApplicantsStatusProps = {
-  applicants: RecruitmentAdmissionDto[];
+  applicants: RecruitmentApplicationDto[];
   recruitmentId: number | string | undefined;
   gangId: number | string | undefined;
   positionId: number | string | undefined;
+  updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
 };
 
 // TODO add backend to fetch these
 const priorityOptions: DropDownOption<number>[] = [
   { label: 'Not Set', value: 0 },
-  { label: 'Not Wanted', value: 1 },
+  { label: 'Reserve', value: 1 },
   { label: 'Wanted', value: 2 },
-  { label: 'Reserve', value: 3 },
+  { label: 'Not Wanted', value: 3 },
 ];
 
 const statusOptions: DropDownOption<number>[] = [
@@ -48,14 +48,10 @@ export function RecruitmentApplicantsStatus({
   recruitmentId,
   gangId,
   positionId,
+  updateStateFunction,
 }: RecruitmentApplicantsStatusProps) {
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
-
-  useEffect(() => {
-    setRecruitmentApplicants(applicants);
-  }, [applicants]);
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: true },
@@ -67,103 +63,125 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
-  function updateAdmissions(id: string, field: string, value: string | number | undefined) {
-    setRecruitmentApplicants(
-      recruitmentApplicants.map((element: RecruitmentAdmissionDto) => {
-        if (element.id === id) {
-          switch (field) {
-            case editChoices.update_recruitment_priority:
-              element = { ...element, recruiter_priority: value as number };
-              break;
-            case editChoices.update_recruitment_status:
-              element = { ...element, recruiter_status: value as number };
-              break;
-          }
-        }
-        return element;
-      }),
-    );
-    return value;
+  function updateApplications(id: string, field: string, value: string | number | undefined) {
+    if (value) {
+      switch (field) {
+        case editChoices.update_recruitment_priority:
+          updateStateFunction(id, { recruiter_priority: value as number });
+          break;
+        case editChoices.update_recruitment_status:
+          updateStateFunction(id, { recruiter_status: value as number });
+          break;
+      }
+    }
   }
 
-  const data = recruitmentApplicants.map(function (admission) {
+  function getStatusStyle(status: number | undefined) {
+    if (typeof status !== 'undefined') {
+      return [
+        styles.pending,
+        styles.top_reserve,
+        styles.top_wanted,
+        styles.less_reserve,
+        styles.less_reserve_wanted,
+        styles.less_reserve_reserve,
+        styles.less_wanted,
+        styles.less_wanted_wanted,
+        styles.less_wanted_reserve,
+        styles.pending,
+        styles.pending,
+      ][status];
+    }
+  }
+
+  const data = applicants.map(function (application) {
+    const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     return [
       {
-        value: admission.user.first_name,
+        value: application.user.first_name,
+        style: applicationStatusStyle,
         content: (
           <Link
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                admissionID: admission.id,
+                applicationID: application.id,
               },
             })}
             className={styles.text}
           >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
+            {`${application.user.first_name} ${application.user.last_name}`}
           </Link>
         ),
       },
       {
-        value: admission.applicant_priority,
+        value: application.applicant_priority,
+        style: applicationStatusStyle,
         content: (
           <div className={styles.text}>
-            {admission.applicant_priority} / {admission?.admission_count}
+            {application.applicant_priority} / {application?.application_count}
           </div>
         ),
       },
       {
-        value: admission.interview?.interview_time,
+        value: application.interview?.interview_time,
+        style: applicationStatusStyle,
         content: (
           <InputField
             inputClassName={styles.input}
-            value={admission.interview?.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_time, value)}
+            value={
+              application.interview?.interview_time ? utcTimestampToLocal(application.interview.interview_time) : ''
+            }
+            onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
+            onChange={(value: string) => updateApplications(application.id, editChoices.update_time, value)}
             type="datetime-local"
           />
         ),
       },
       {
-        value: admission.interview?.interview_location,
+        value: application.interview?.interview_location,
+        style: applicationStatusStyle,
         content: (
           <InputField
             inputClassName={styles.input}
-            value={admission.interview?.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => updateAdmissions(admission.id, editChoices.update_location, value)}
+            value={application.interview?.interview_location ?? ''}
+            onBlur={() => putRecruitmentApplicationForGang(application.id, application)}
+            onChange={(value: string) => updateApplications(application.id, editChoices.update_location, value)}
           />
         ),
       },
       {
-        value: admission.recruiter_priority,
+        value: application.recruiter_priority,
+        style: applicationStatusStyle,
         content: (
           <Dropdown
-            initialValue={admission.recruiter_priority}
+            initialValue={application.recruiter_priority}
             disableIcon={true}
             classNameSelect={styles.dropdown}
             options={priorityOptions}
-            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_priority, value)}
+            onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
           />
         ),
       },
       {
-        value: admission.recruiter_status,
+        value: application.recruiter_status,
+        style: applicationStatusStyle,
         content: (
           <Dropdown
-            initialValue={admission.recruiter_status}
+            initialValue={application.recruiter_status}
             disableIcon={true}
             classNameSelect={styles.dropdown}
             options={statusOptions}
-            onChange={(value) => updateAdmissions(admission.id, editChoices.update_recruitment_status, value)}
+            onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
           />
         ),
       },
       {
+        style: applicationStatusStyle,
         content: (
           <CrudButtons
             onView={
-              admission.interview?.interview_time != null
+              application.interview?.interview_time != null
                 ? () => {
                     navigate({
                       url: reverse({
@@ -172,7 +190,7 @@ export function RecruitmentApplicantsStatus({
                           recruitmentId: recruitmentId,
                           gangId: gangId,
                           positionId: positionId,
-                          interviewId: admission.interview?.id,
+                          interviewId: application.interview?.id,
                         },
                       }),
                     });

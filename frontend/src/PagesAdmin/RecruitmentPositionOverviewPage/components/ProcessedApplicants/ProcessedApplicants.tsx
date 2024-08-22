@@ -1,20 +1,21 @@
-import { RecruitmentAdmissionDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import styles from './ProcessedApplicants.module.scss';
 import { Table } from '~/Components/Table';
 import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
-import { Link } from '~/Components';
+import { Button, Link } from '~/Components';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
 
 type ProcessedApplicantsProps = {
-  data: RecruitmentAdmissionDto[];
+  data: RecruitmentApplicationDto[];
+  revertStateFunction?: (id: string, data: RecruitmentApplicationStateDto) => void;
   type: ProcessedType;
 };
 
-export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
+export function ProcessedApplicants({ data, type, revertStateFunction }: ProcessedApplicantsProps) {
   const { t } = useTranslation();
   const columns = [
     { content: t(KEY.common_name), sortable: true },
@@ -23,32 +24,43 @@ export function ProcessedApplicants({ data, type }: ProcessedApplicantsProps) {
     { content: t(KEY.recruitment_interview_time), sortable: true },
     { content: t(KEY.recruitment_interview_location), sortable: true },
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
+    revertStateFunction && { content: '', sortable: false },
   ];
 
-  const rows = data.map(function (admission) {
+  const rows = data.map(function (application) {
     return [
       {
-        value: admission.user.first_name,
         content: (
           <Link
-            key={admission.user.id}
-            target={'backend'}
+            key={application.user.id}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                admissionID: admission.id,
+                applicationID: application.id,
               },
             })}
           >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
+            {`${application.user.first_name} ${application.user.last_name}`}
           </Link>
         ),
       },
-      { content: admission.user?.phone_number, value: admission.user?.phone_number },
-      { content: admission.user?.email, value: admission.user?.email },
-      { content: admission.interview?.interview_time, value: admission.interview?.interview_time },
-      { content: admission.interview?.interview_location, value: admission.interview?.interview_location },
-      { content: admission.recruiter_status, value: admission.recruiter_status },
+      { content: application.user?.phone_number, value: application.user?.phone_number },
+      { content: application.user?.email, value: application.user?.email },
+      { content: application.interview?.interview_time, value: application.interview?.interview_time },
+      { content: application.interview?.interview_location, value: application.interview?.interview_location },
+      { content: application.recruiter_status, value: application.recruiter_status },
+      revertStateFunction && {
+        content: (
+          <Button
+            display="pill"
+            theme="outlined"
+            onClick={() => revertStateFunction(application.id, { recruiter_status: 0 })}
+          >
+            {t(KEY.recruitment_revert_status)}
+          </Button>
+        ),
+        value: application.recruiter_status,
+      },
     ];
   });
 

@@ -3,32 +3,65 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getRecruitmentPositions } from '~/api';
-import { RecruitmentPositionDto } from '~/dto';
+import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
+import { GangDto, type OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import styles from './RecruitmentGangAdminPage.module.scss';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { toast } from 'react-toastify';
+import { STATUS } from '~/http_status_codes';
 
 export function RecruitmentGangAdminPage() {
-  const recruitmentId = useParams().recruitmentId;
-  const gangId = useParams().gangId;
+  const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
+  const [gang, setGang] = useState<GangDto>();
+  const [recruitment, setRecruitment] = useState<RecruitmentDto>();
+  const [organization, setOrganization] = useState<OrganizationDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const title = `${organization?.name} - ${dbT(recruitment, 'name')} - ${dbT(gang, 'name')}`;
+  useTitle(title);
 
   useEffect(() => {
-    recruitmentId &&
-      getRecruitmentPositions(recruitmentId).then((data) => {
-        // TODO: Make this filtering happen on the backend
-        setRecruitmentPositions(data.data.filter((recruitment) => recruitment.gang.id.toString() == gangId));
-        setShowSpinner(false);
-      });
+    if (recruitmentId && gangId) {
+      Promise.allSettled([
+        getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
+          setRecruitmentPositions(data.data);
+        }),
+        getGang(gangId).then((data) => {
+          setGang(data);
+        }),
+        getRecruitment(recruitmentId).then(async (data) => {
+          setRecruitment(data.data);
+          await getOrganization(data.data.organization).then(setOrganization);
+        }),
+      ])
+        .then(() => {
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
-  const tableColumns = [{ content: t(KEY.recruitment_position), sortable: true }];
+  const tableColumns = [
+    { content: t(KEY.recruitment_position), sortable: true },
+    { content: t(KEY.recruitment_jobtype), sortable: true },
+    { content: t(KEY.recruitment_applicants), sortable: true },
+    { content: t(KEY.recruitment_processed), sortable: true },
+    { content: t(KEY.recruitment_accepted_applicants), sortable: true },
+    { content: ' ', sortable: false },
+  ];
 
   const data = recruitmentPositions.map(function (recruitmentPosition) {
     const pageUrl = reverse({
@@ -40,10 +73,32 @@ export function RecruitmentGangAdminPage() {
         content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
       },
       {
+        value: recruitmentPosition.is_funksjonaer_position,
+        content: recruitmentPosition.is_funksjonaer_position
+          ? t(KEY.recruitment_funksjonaer)
+          : t(KEY.recruitment_gangmember),
+      },
+      { value: recruitmentPosition.total_applicants, content: recruitmentPosition.total_applicants },
+      {
+        value: recruitmentPosition.processed_applicants,
+        content:
+          recruitmentPosition.total_applicants == recruitmentPosition.processed_applicants
+            ? t(KEY.common_all)
+            : recruitmentPosition.processed_applicants,
+      },
+      { value: recruitmentPosition.accepted_applicants, content: recruitmentPosition.accepted_applicants },
+      {
         content: (
           <CrudButtons
             onView={() => {
-              navigate(ROUTES.frontend.recruitment);
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.recruitment_application,
+                  urlParams: {
+                    positionID: recruitmentPosition.id,
+                  },
+                }),
+              );
             }}
             onEdit={() => {
               navigate(
@@ -63,13 +118,11 @@ export function RecruitmentGangAdminPage() {
     ];
   });
 
-  const title = t(KEY.admin_information_manage_title);
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
-    <>
+    <div className={styles.headerRow}>
       <Button
         theme="success"
-        rounded={true}
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
           urlParams: {
@@ -81,8 +134,7 @@ export function RecruitmentGangAdminPage() {
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
       </Button>
       <Button
-        theme="blue"
-        rounded={true}
+        theme="yellow"
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
           urlParams: {
@@ -93,11 +145,23 @@ export function RecruitmentGangAdminPage() {
       >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-    </>
+      <Button
+        theme="outlined"
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_all_applications,
+          urlParams: {
+            gangId: gangId,
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {lowerCapitalize(t(KEY.recruitment_show_all_applicants))}
+      </Button>
+    </div>
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner} showBackButton={true}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );
