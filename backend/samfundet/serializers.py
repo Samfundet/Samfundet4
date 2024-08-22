@@ -60,7 +60,7 @@ from .models.recruitment import (
     RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentApplication,
-    RecruitmentSeperatePosition,
+    RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
@@ -692,18 +692,20 @@ class InterviewerSerializer(CustomBaseSerializer):
         ]
 
 
-class RecruitmentSeperatePositionSerializer(CustomBaseSerializer):
+class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
-        model = RecruitmentSeperatePosition
+        model = RecruitmentSeparatePosition
         fields = [
             'name_nb',
             'name_en',
+            'description_nb',
+            'description_en',
             'url',
         ]
 
 
 class RecruitmentSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeperatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recruitment

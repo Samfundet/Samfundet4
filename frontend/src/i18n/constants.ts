@@ -342,6 +342,7 @@ export const KEY = {
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
+  recruitment_gangs_with_separate_positions: 'recruitment_gangs_with_separate_positions',
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',
