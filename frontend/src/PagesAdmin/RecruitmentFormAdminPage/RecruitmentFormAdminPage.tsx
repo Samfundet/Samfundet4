@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { SamfForm } from '~/Forms/SamfForm';
+import { SamfError, SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
@@ -24,7 +24,20 @@ type FormType = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: number;
+  promo_video: string;
 };
+
+function youtubeLinkValidator(state: FormType): SamfError {
+  const link = state.promo_video;
+  var regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/
+  if (link && !link.match(regex)) {
+    return "Not valid youtbue link"
+  }
+  
+  return true;
+}
+
+
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
@@ -160,6 +173,9 @@ export function RecruitmentFormAdminPage() {
               options={organizationOptions}
               required={true}
             />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField field="promo_video" type="text" label={t(KEY.promo_media)} validator={youtubeLinkValidator}/>
           </div>
         </SamfForm>
       </div>
