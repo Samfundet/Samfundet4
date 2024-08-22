@@ -862,7 +862,20 @@ export async function getApplicantsWithoutInterviews(
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__applicants_without_interviews,
+      urlParams: { pk: recruitmentId },
       queryParams: gangId ? { recruitment: recruitmentId, gang: gangId } : { recruitment: recruitmentId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getApplicantsWithoutThreeInterviewCriteria(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUserDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__applicants_without_three_interview_criteria,
+      urlParams: { pk: recruitmentId },
     });
   return await axios.get(url, { withCredentials: true });
 }

@@ -323,6 +323,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
   [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -758,7 +761,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
-
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // CommandMenu:
   [KEY.command_menu_label]: 'Global command menu',
   [KEY.command_menu_no_results]: 'No results',

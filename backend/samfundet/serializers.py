@@ -68,6 +68,9 @@ from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityC
 if TYPE_CHECKING:
     from typing import Any
 
+if TYPE_CHECKING:
+    from typing import Any
+
 
 class TagSerializer(CustomBaseSerializer):
     class Meta:
