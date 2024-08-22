@@ -1,6 +1,6 @@
 import { GangDto, RecruitmentPositionDto } from '~/dto';
 import { useEffect, useState } from 'react';
-import { getRecruitmentPositionsGang } from '~/api';
+import { getRecruitmentPositionsGangForApplicant } from '~/api';
 import { Button, SamfundetLogoSpinner, Text, Table } from '~/Components';
 import { ROUTES } from '~/routes';
 import { reverse } from '~/named-urls';
@@ -29,7 +29,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
       return;
     }
     setLoading(true);
-    getRecruitmentPositionsGang(recruitmentID.recruitmentID, currentSelectedGang.id)
+    getRecruitmentPositionsGangForApplicant(recruitmentID.recruitmentID, currentSelectedGang.id)
       .then((response) => {
         setPositions(response.data);
         setLoading(false);

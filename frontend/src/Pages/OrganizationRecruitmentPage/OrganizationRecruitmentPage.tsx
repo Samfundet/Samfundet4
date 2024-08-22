@@ -1,5 +1,5 @@
 import styles from './OrganizationRecruitmentPage.module.scss';
-import { RecruitmentTabs, GangTypeContainer } from './Components';
+import { RecruitmentTabs, GangTypeContainer, GangSeparatePositions } from './Components';
 import { Text, Page, Video, Logo, OccupiedFormModal, SamfundetLogoSpinner, ToggleSwitch } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { OrgNameType, OrgNameTypeValue } from '~/types';
@@ -115,6 +115,9 @@ export function OrganizationRecruitmentPage() {
             </div>
             {recruitmentID &&
               (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
+            {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
+              <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
+            )}
           </div>
         </div>
       )}

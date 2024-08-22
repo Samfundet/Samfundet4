@@ -62,7 +62,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
-    RecruitmentSeperatePosition,
+    RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
 )
 
@@ -636,8 +636,8 @@ class RecruitmentAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(RecruitmentSeperatePosition)
-class RecruitmentSeperatePositionAdmin(CustomBaseAdmin):
+@admin.register(RecruitmentSeparatePosition)
+class RecruitmentSeparatePositionAdmin(CustomBaseAdmin):
     sortable_by = ['name_nb', 'recruitment', 'url']
     search_fields = ['name_nb', 'recruitment', 'url']
     list_display_links = ['name_nb']
