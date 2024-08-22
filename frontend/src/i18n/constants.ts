@@ -315,6 +315,7 @@ export const KEY = {
   recruitment_withdrawn: 'recruitment_withdrawn',
   recruitment_withdraw_application: 'KEY.recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_revert_status: 'recruitment_revert_status',
   recruitment_no_current_positions: 'recruitment_no_current_positions',
   recruitment_no_current_applications_position: 'recruitment_no_current_applications_position',
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
@@ -329,7 +330,6 @@ export const KEY = {
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
-
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',
