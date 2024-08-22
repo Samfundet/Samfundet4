@@ -140,17 +140,19 @@ class RecruitmentPosition(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
-class RecruitmentSeperatePosition(CustomBaseModel):
+class RecruitmentSeparatePosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
+    description_nb = models.CharField(max_length=100, help_text='Short description of the position (NB)', null=True, blank=True)
+    description_en = models.CharField(max_length=100, help_text='Short description of the position (EN)', null=True, blank=True)
 
-    url = models.URLField(help_text='URL to website of seperate recruitment')
+    url = models.URLField(help_text='URL to website of separate recruitment')
 
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
         help_text='The recruitment that is recruiting',
-        related_name='seperate_positions',
+        related_name='separate_positions',
         null=True,
         blank=True,
     )
@@ -261,6 +263,7 @@ class RecruitmentApplication(CustomBaseModel):
                 break
         self.organize_priorities()
 
+    REAPPLY_TOO_MANY_APPLICATIONS_ERROR = 'Can not reapply application, too many active application'
     TOO_MANY_APPLICATIONS_ERROR = 'Too many applications for recruitment'
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
@@ -269,11 +272,16 @@ class RecruitmentApplication(CustomBaseModel):
 
         # If there is max applications, check if applicant have applied to not to many
         # Cant use not self.pk, due to UUID generating it before save.
-        if self.recruitment.max_applications and not RecruitmentApplication.objects.filter(pk=self.pk).first():
+        if self.recruitment.max_applications:
             user_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
             if user_applications_count >= self.recruitment.max_applications:
-                errors['recruitment'].append(self.TOO_MANY_APPLICATIONS_ERROR)
-
+                if not current_application:
+                    # attempts to create new application when too many applications
+                    errors['recruitment'].append(self.TOO_MANY_APPLICATIONS_ERROR)
+                elif current_application.withdrawn and not self.withdrawn:
+                    # If it attempts to withdraw, when to many active applications
+                    errors['recruitment'].append(self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
         raise ValidationError(errors)
 
     def __str__(self) -> str:
@@ -296,6 +304,7 @@ class RecruitmentApplication(CustomBaseModel):
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+
         if not self.interview:
             # Check if there is already an interview for the same user in shared positions
             shared_interview_positions = self.recruitment_position.shared_interview_positions.all()

@@ -8,9 +8,9 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getRecruitmentApplicationForPosition,
-  getRecruitmentPosition,
-  getRecruitmentPositionsGang,
   putRecruitmentApplication,
+  getRecruitmentPositionForApplicant,
+  getRecruitmentPositionsGangForApplicant,
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
@@ -46,7 +46,7 @@ export function RecruitmentApplicationFormPage() {
 
   useEffect(() => {
     Promise.allSettled([
-      getRecruitmentPosition(positionID as string)
+      getRecruitmentPositionForApplicant(positionID as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
         })
@@ -67,11 +67,12 @@ export function RecruitmentApplicationFormPage() {
   }, [positionID, standardNavigate, t]);
 
   useEffect(() => {
-    getRecruitmentPositionsGang(recruitmentPosition?.recruitment as string, recruitmentPosition?.gang.id).then(
-      (res) => {
-        setRecruitmentPositionsForGang(res.data);
-      },
-    );
+    getRecruitmentPositionsGangForApplicant(
+      recruitmentPosition?.recruitment as string,
+      recruitmentPosition?.gang.id,
+    ).then((res) => {
+      setRecruitmentPositionsForGang(res.data);
+    });
   }, [recruitmentPosition]);
 
   function withdrawApplication() {

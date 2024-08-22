@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import robines from '~/assets/contributors/robines.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
+import simenProffen from '~/assets/contributors/SimenProffen.jpg';
 import { type Contributor, ContributorItem } from './components';
 
 /* eslint-disable max-len */
@@ -25,6 +26,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Mathias Aas', github: 'Mathias-a', from: 'H21', websjef: { from: 'H22', to: 'V23' } },
   // V22
   { name: 'Sindre Lothe', github: 'sindrelothe', from: 'V22', to: 'H23' },
+  { name: 'Simen Myrrusten', github: 'nemisis84', from: 'V22', picture: simenProffen},
   // H22
   { name: 'Snorre Sæther', github: 'Snorre98', from: 'H22', picture: snorre98, websjef: { from: 'H24', to: 'V25' } },
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },

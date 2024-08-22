@@ -382,10 +382,10 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
   organization: number;
-  seperate_positions?: RecruitmentSeperatePositionDto[];
+  separate_positions?: RecruitmentSeparatePositionDto[];
 };
 
-export type RecruitmentSeperatePositionDto = {
+export type RecruitmentSeparatePositionDto = {
   name_nb: string;
   name_en: string;
   url: string;
