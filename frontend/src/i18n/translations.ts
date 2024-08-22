@@ -727,7 +727,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
   [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
   [KEY.recruitment_three_interviews_criteria_header]:
-  'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+    'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
