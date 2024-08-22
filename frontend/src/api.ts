@@ -864,7 +864,6 @@ export async function getApplicantsWithoutInterviews(
       pattern: ROUTES.backend.samfundet__applicants_without_interviews,
       urlParams: { pk: recruitmentId },
       queryParams: gangId ? { recruitment: recruitmentId, gang: gangId } : { recruitment: recruitmentId },
-
     });
   return await axios.get(url, { withCredentials: true });
 }

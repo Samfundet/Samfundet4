@@ -318,6 +318,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
   [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -723,6 +726,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
   [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
+  [KEY.recruitment_three_interviews_criteria_header]:
+  'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',

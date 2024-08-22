@@ -681,6 +681,7 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         return None
 
+
 class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -694,6 +695,7 @@ class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
         ).filter(interview_count__lt=3, application_count__gte=3)
 
         return Response(data=UserForRecruitmentSerializer(data, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
+
 
 class ApplicantsWithoutInterviewsView(APIView):
     permission_classes = [IsAuthenticated]
