@@ -23,7 +23,7 @@ jobs:
       run:
         working-directory: ./backend
     env:
-      PIPENV_VENV_IN_PROJECT: 1
+      POETRY_VIRTUALENVS_IN_PROJECT: 1
       ENV: development
       SECRET_KEY: NOT SET
       DJANGO_SETTINGS_MODULE: root.settings
@@ -46,28 +46,28 @@ jobs:
           PY=$(which python)
           echo $PY
           python -m pip install --upgrade pip
-          python -m pip install pipenv
-          python -m pipenv install --dev --deploy --python $PY
+          python -m pip install poetry
+          python -m poetry install
 
       - name: Check ruff format
-        run: python -m pipenv run ruff:format:check
+        run: python -m poetry run ruff format --check .
 
       - name: Verify migrations
         run: |
-          python -m pipenv run migrations:verify
-          python -m pipenv run migrations:apply
+          python -m poetry run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
+          python -m poetry run python manage.py migrate
 
       - name: Run tests
-        run: python -m pipenv run pytest:run
+        run: python -m poetry run pytest
 
       - name: Run ruff
-        run: python -m pipenv run ruff:check
+        run: python -m poetry run ruff check .
 
       - name: Run mypy
-        run: python -m pipenv run mypy:run
+        run: python -m poetry run mypy --config-file mypy.ini .
 
       - name: Run seeds
-        run: python -m pipenv run seed:run
+        run: python -m poetry run python manage.py seed
 
   job_verify_docker:
     name: Verify docker
@@ -104,7 +104,7 @@ jobs:
           docker compose exec storybook echo
 
       - name: Seed backend for Cypress tests
-        run: docker compose exec backend pipenv run python manage.py seed_cypress
+        run: docker compose exec backend poetry run python manage.py seed_cypress
 
       # - name: Run cypress
       #   run: docker compose up cypress
