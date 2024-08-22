@@ -14,6 +14,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -70,6 +71,7 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
+    RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
@@ -77,6 +79,7 @@ from .serializers import (
     RecruitmentStatisticsSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
@@ -260,6 +263,13 @@ class OrganizationView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def gangs(self, request: Request, **kwargs: Any) -> Response:
+        organization = self.get_object()
+        gangs = Gang.objects.filter(organization=organization)
+        serializer = GangSerializer(gangs, many=True)
+        return Response(serializer.data)
 
 
 class GangView(ModelViewSet):
@@ -580,6 +590,13 @@ class RecruitmentView(ModelViewSet):
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 
+    @action(detail=True, methods=['get'])
+    def gangs(self, request: Request, **kwargs: Any) -> Response:
+        recruitment = self.get_object()
+        gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
+        serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
+        return Response(serializer.data)
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
@@ -597,12 +614,18 @@ class RecruitmentStatisticsView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionForApplicantView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
 class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
@@ -626,8 +649,25 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentPositionsPerGangView(ListAPIView):
+class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
     permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        gang = self.request.query_params.get('gang', None)
+        if recruitment is not None and gang is not None:
+            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
+        return None
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerGangForGangView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
 
     def get_queryset(self) -> Response | None:
@@ -777,6 +817,31 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
         return Response(serializer.data)
 
 
+class RecruitmentApplicationSetInterviewView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InterviewSerializer
+
+    def put(self, request: Request, pk: str) -> Response:
+        application = get_object_or_404(RecruitmentApplication, id=pk)
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            existing_interview = application.interview
+            if existing_interview:
+                existing_interview.interview_location = serializer.validated_data['interview_location']
+                existing_interview.interview_time = serializer.validated_data['interview_time']
+                existing_interview.save()
+                application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
+                return Response(application_serializer.data, status=status.HTTP_200_OK)
+
+            new_interview = serializer.save()
+            application.interview = new_interview
+            application.save()
+            application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
+            return Response(application_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class RecruitmentApplicationForGangView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
@@ -896,7 +961,7 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
 
 class ActiveRecruitmentPositionsView(ListAPIView):
     permission_classes = [AllowAny]
-    serializer_class = RecruitmentPositionSerializer
+    serializer_class = RecruitmentPositionForApplicantSerializer
 
     def get_queryset(self) -> Response:
         """Returns all active recruitment positions."""

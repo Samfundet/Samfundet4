@@ -12,7 +12,7 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
       case 'org-color':
         return { primary: COLORS.white, secondary: COLORS.blue_isfit };
       case 'org-alt-color':
-        return { primary: COLORS.blue_isfit, secondary: COLORS.white };
+        return { primary: COLORS.blue_isfit, secondary: COLORS.black };
       case 'dark':
         return { primary: COLORS.black };
       case 'light':
@@ -42,8 +42,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-I-dot-1"
         fill={logoColor(color).primary ?? logoColor(color).secondary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="M 10.706327,7.978845 A 10.090732,10.090732 0 0 0 0.61546996,18.069705 10.090732,10.090732 0 0 0
      10.706327,28.160565 10.090732,10.090732 0 0 0 20.797184,18.069705 10.090732,10.090732 0 0 0 10.706327,7.978845 Z"
@@ -52,8 +52,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-I-bar-1"
         fill={logoColor(color).primary ?? logoColor(color).secondary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="M 2.673742,41.786085 V 126.79071 H 18.987475 V 41.786085 Z"
       />
@@ -61,8 +61,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-S"
         fill={logoColor(color).primary ?? logoColor(color).secondary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="m 72.159425,40.227005 c -0.58103,0.001 -1.12469,0.0132 -1.61954,0.0382 -0.98969,0.0501
       -1.78412,0.15467 -2.71094,0.25735 -0.92683,0.10267 -1.98585,0.20341
@@ -156,8 +156,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-F"
         fill={logoColor(color).secondary ?? logoColor(color).primary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="m 165.7072,1.525495 v 5.2e-4 c -0.45069,-0.005 -0.86496,0.0344 -1.32085,0.0543 -0.30463,0.0632
       -0.61738,0.11165 -0.91467,0.20205 -0.55149,0.13915 -1.10268,0.2784 -1.65416,0.41755 -0.6763,0.19109
@@ -227,8 +227,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-I-dot-2"
         fill={logoColor(color).primary ?? logoColor(color).secondary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="m 202.87082,8.143695 a 10.090732,10.090732 0 0 0 -10.09085,10.09086 10.090732,10.090732 0 0 0
      10.09085,10.09034 10.090732,10.090732 0 0 0 10.09086,-10.09034 10.090732,10.090732 0 0 0 -10.09086,-10.09086 z"
@@ -237,8 +237,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-I-bar-2"
         fill={logoColor(color).primary ?? logoColor(color).secondary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="m 194.83876,41.950415 v 85.004625 h 16.31321 V 41.950415 Z"
       />
@@ -246,8 +246,8 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
         id="isfit-T"
         fill={logoColor(color).primary ?? logoColor(color).secondary}
         fillOpacity="1"
-        stroke="none"
-        strokeWidth="0.384336"
+        stroke="black"
+        strokeWidth="0.4"
         strokeOpacity="1"
         d="m 257.23701,21.795055 -15.76751,4.53254 h -0.11575 v 0.0336 l -0.007,0.002 h 0.007
       v 15.64194 h -13.78418 v 11.9972 h 13.78418 v 43.98802 c 0,2e-5 -0.002,-10e-6 -0.002,0

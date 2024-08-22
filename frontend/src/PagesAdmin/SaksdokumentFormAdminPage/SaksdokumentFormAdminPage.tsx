@@ -34,9 +34,8 @@ export function SaksdokumentFormAdminPage() {
         })
         .catch((data) => {
           console.error(data);
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin);
+            navigate(ROUTES.frontend.admin_saksdokumenter, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });

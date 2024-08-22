@@ -1,0 +1,1 @@
+export { RecruitmentGangAllApplicantsAdminPage } from './RecruitmentGangAllApplicantsAdminPage';
