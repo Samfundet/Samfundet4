@@ -17,7 +17,7 @@ export type Options = {
   type: TypeValue;
 };
 
-/**  One category of applets (e.g. general, admission) */
+/**  One category of applets (e.g. general, application) */
 export type AppletCategory = {
   title_en: string;
   title_nb: string;

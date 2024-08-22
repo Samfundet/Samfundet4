@@ -1,0 +1,1 @@
+export { RecruitmentWithoutInterviewTable } from './RecruitmentWithoutInterviewTable';

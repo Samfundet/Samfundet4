@@ -6,7 +6,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getImage, postImage } from '~/api';
 import { ImagePostDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -41,7 +41,7 @@ export function ImageFormAdminPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_images });
+            navigate({ url: ROUTES.frontend.admin_images, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
@@ -74,9 +74,10 @@ export function ImageFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
   const title = id ? lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`) : t(KEY.admin_images_create);
+  useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm<FormType>
         onSubmit={handleOnSubmit}
         //onChange={handleOnChange}
