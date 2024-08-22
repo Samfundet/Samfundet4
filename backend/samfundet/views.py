@@ -698,12 +698,9 @@ class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
 class ApplicantsWithoutInterviewsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request) -> Response:
-        recruitment = self.request.query_params.get('recruitment', None)
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = pk
         gang = self.request.query_params.get('gang', None)
-
-        if not recruitment:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Filter based on applications
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview=None)
