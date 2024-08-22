@@ -140,17 +140,19 @@ class RecruitmentPosition(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
-class RecruitmentSeperatePosition(CustomBaseModel):
+class RecruitmentSeparatePosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
+    description_nb = models.CharField(max_length=100, help_text='Short description of the position (NB)', null=True, blank=True)
+    description_en = models.CharField(max_length=100, help_text='Short description of the position (EN)', null=True, blank=True)
 
-    url = models.URLField(help_text='URL to website of seperate recruitment')
+    url = models.URLField(help_text='URL to website of separate recruitment')
 
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
         help_text='The recruitment that is recruiting',
-        related_name='seperate_positions',
+        related_name='separate_positions',
         null=True,
         blank=True,
     )

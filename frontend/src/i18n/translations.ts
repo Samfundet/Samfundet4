@@ -321,6 +321,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_no_current_applications_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
 
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
@@ -732,7 +733,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
-
+  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
