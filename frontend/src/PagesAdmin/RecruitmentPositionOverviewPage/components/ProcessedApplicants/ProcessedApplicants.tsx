@@ -1,4 +1,4 @@
-import { RecruitmentAdmissionDto, RecruitmentAdmissionStateDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentAdmissionStateDto } from '~/dto';
 import styles from './ProcessedApplicants.module.scss';
 import { Table } from '~/Components/Table';
 import { KEY } from '~/i18n/constants';
@@ -10,7 +10,7 @@ import { ROUTES } from '~/routes';
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
 
 type ProcessedApplicantsProps = {
-  data: RecruitmentAdmissionDto[];
+  data: RecruitmentApplicationDto[];
   revertStateFunction?: (id: string, data: RecruitmentAdmissionStateDto) => void;
   type: ProcessedType;
 };
@@ -27,21 +27,20 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     revertStateFunction && { content: '', sortable: false },
   ];
 
-  const rows = data.map(function (admission) {
+  const rows = data.map(function (application) {
     return [
       {
         content: (
           <Link
-            key={admission.user.id}
-            target={'backend'}
+            key={application.user.id}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_applicant,
               urlParams: {
-                admissionID: admission.id,
+                applicationID: application.id,
               },
             })}
           >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
+            {`${application.user.first_name} ${application.user.last_name}`}
           </Link>
         ),
         value: admission.user.first_name,

@@ -1,0 +1,14 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.recruitmentTableContainer{
+  @include flex-column-center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.positionButton {
+  @include flex-row-center;
+  width: 100%;
+}
