@@ -1169,6 +1169,53 @@ def test_post_application_overflow(
     assert RecruitmentApplication.TOO_MANY_APPLICATIONS_ERROR in response2.data['recruitment']
 
 
+def test_post_recruitment_reapply_overflow(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_recruitment.max_applications = 1
+    fixture_recruitment.save()
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    # Send first admission
+    url = reverse(
+        routes.samfundet__recruitment_applications_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data = {'application_text': 'test_text'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    # Withdraw first admission
+    url_withdraw = reverse(
+        routes.samfundet__recruitment_withdraw_application,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    response: Response = fixture_rest_client.put(path=url_withdraw)
+    assert response.status_code == status.HTTP_200_OK
+
+    ### Send next admission
+    url = reverse(
+        routes.samfundet__recruitment_applications_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position2.id},
+    )
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    ## Reapply the first admission
+    url = reverse(
+        routes.samfundet__recruitment_applications_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data = {'application_text': 'test_text'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    # Add check of error when reapply endpoint is added
+
+
 def test_recruitment_application_update_pri_up(
     fixture_rest_client: APIClient,
     fixture_user: User,
