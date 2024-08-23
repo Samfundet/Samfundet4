@@ -697,38 +697,40 @@ class TestRecruitmentApplicationStatus:
         )
         assert new_application.applicant_priority == 2
 
-    def test_recruitment_progress_no_admissions(self, fixture_recruitment: Recruitment):
-        assert RecruitmentAdmission.objects.filter(recruitment=fixture_recruitment).count() == 0
+    def test_recruitment_progress_no_applications(self, fixture_recruitment: Recruitment):
+        assert RecruitmentApplication.objects.filter(recruitment=fixture_recruitment).count() == 0
         assert fixture_recruitment.recruitment_progress() == 1
 
-    def test_recruitment_progress_admission_no_progress(self, fixture_recruitment: Recruitment, fixture_recruitment_admission: RecruitmentAdmission):
-        assert RecruitmentAdmission.objects.filter(recruitment=fixture_recruitment).count() == 1
+    def test_recruitment_progress_application_no_progress(self, fixture_recruitment: Recruitment, fixture_recruitment_application: RecruitmentApplication):
+        assert RecruitmentApplication.objects.filter(recruitment=fixture_recruitment).count() == 1
         assert fixture_recruitment.recruitment_progress() == 0
 
-    def test_recruitment_progress_admission_complete_progress(self, fixture_recruitment: Recruitment, fixture_recruitment_admission: RecruitmentAdmission):
-        assert RecruitmentAdmission.objects.filter(recruitment=fixture_recruitment).count() == 1
-        assert fixture_recruitment.recruitment_progress() == 0
-        fixture_recruitment_admission.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
-        fixture_recruitment_admission.save()
-        assert fixture_recruitment.recruitment_progress() == 1
-
-    def test_recruitment_progress_admissions_multiple_new_updates_progress(
-        self, fixture_recruitment: Recruitment, fixture_recruitment_admission: RecruitmentAdmission, fixture_user2: User
+    def test_recruitment_progress_application_complete_progress(
+        self, fixture_recruitment: Recruitment, fixture_recruitment_application: RecruitmentApplication
     ):
-        assert RecruitmentAdmission.objects.filter(recruitment=fixture_recruitment).count() == 1
+        assert RecruitmentApplication.objects.filter(recruitment=fixture_recruitment).count() == 1
         assert fixture_recruitment.recruitment_progress() == 0
-        fixture_recruitment_admission.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
-        fixture_recruitment_admission.save()
+        fixture_recruitment_application.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        fixture_recruitment_application.save()
         assert fixture_recruitment.recruitment_progress() == 1
 
-        new_admission = RecruitmentAdmission.objects.create(
-            admission_text='Test admission text 2',
-            recruitment_position=fixture_recruitment_admission.recruitment_position,
-            recruitment=fixture_recruitment_admission.recruitment,
+    def test_recruitment_progress_applications_multiple_new_updates_progress(
+        self, fixture_recruitment: Recruitment, fixture_recruitment_application: RecruitmentApplication, fixture_user2: User
+    ):
+        assert RecruitmentApplication.objects.filter(recruitment=fixture_recruitment).count() == 1
+        assert fixture_recruitment.recruitment_progress() == 0
+        fixture_recruitment_application.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        fixture_recruitment_application.save()
+        assert fixture_recruitment.recruitment_progress() == 1
+
+        new_application = RecruitmentApplication.objects.create(
+            application_text='Test application text 2',
+            recruitment_position=fixture_recruitment_application.recruitment_position,
+            recruitment=fixture_recruitment_application.recruitment,
             user=fixture_user2,
         )
         assert fixture_recruitment.recruitment_progress() != 1
 
-        new_admission.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
-        new_admission.save()
+        new_application.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        new_application.save()
         assert fixture_recruitment.recruitment_progress() == 1
