@@ -19,8 +19,10 @@ from . import (
     organizations,
     information_pages,
     recruitment_position,
-    recruitment_admissions,
-    recruitment_seperate_position,
+    recruitment_applications,
+    recruitment_occupied_time,
+    recruitment_separate_position,
+    recruitment_interviewavailability,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -34,6 +36,7 @@ SEED_SCRIPTS = [
     ('campus', campus.seed),
     ('users', users.seed),
     ('images', images.seed),
+    ('organization', organizations.seed),
     ('gang', gangs.seed),
     ('venue', venues.seed),
     ('event', events.seed),
@@ -43,12 +46,13 @@ SEED_SCRIPTS = [
     ('information_page', information_pages.seed),
     ('textitems', textitems.seed),
     ('blogposts', blogposts.seed),
-    ('organization', organizations.seed),
     ('merch', merch.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
-    ('recruitment_seperate_position', recruitment_seperate_position.seed),
-    ('recruitment_admissions', recruitment_admissions.seed),
+    ('recruitment_interviewavailability', recruitment_interviewavailability.seed),
+    ('recruitment_separate_position', recruitment_separate_position.seed),
+    ('recruitment_applications', recruitment_applications.seed),
+    ('recruitment_occupied_time', recruitment_occupied_time.seed),
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]

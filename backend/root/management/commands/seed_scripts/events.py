@@ -22,7 +22,7 @@ from samfundet.models.event import (
 from samfundet.models.general import Venue
 
 # Number of events
-COUNT = 300
+COUNT = 50
 
 # Event time as offset plus/minus today
 DAY_RANGE = 365 // 2

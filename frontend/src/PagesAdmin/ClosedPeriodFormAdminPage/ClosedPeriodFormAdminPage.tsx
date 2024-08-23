@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod } from '~/api';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -59,7 +59,7 @@ export function ClosedPeriodFormAdminPage() {
       .catch((data: AxiosError) => {
         // TODO add error pop up message?
         if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate({ url: ROUTES.frontend.admin_gangs });
+          navigate({ url: ROUTES.frontend.admin_closed, replace: true });
         }
         toast.error(t(KEY.common_something_went_wrong));
         console.error(data);
@@ -80,9 +80,10 @@ export function ClosedPeriodFormAdminPage() {
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
   const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
+  useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
           <SamfFormField
@@ -109,8 +110,8 @@ export function ClosedPeriodFormAdminPage() {
           ></SamfFormField>
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date_time" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="date_time" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
+          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
         </div>
       </SamfForm>
     </AdminPageLayout>

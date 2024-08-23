@@ -1,0 +1,73 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  @mixin for-tablet-only {
+    width: 100%;
+  }
+}
+
+.spinner_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4em
+}
+
+.row {
+  display: flex;
+  @include for-mobile-down {
+    flex-direction: column;
+  }
+}
+
+.text_container {
+  flex: 6;
+}
+
+.other_positions {
+  flex: 1;
+  margin-bottom: 1em;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 2em;
+}
+
+.sub_header {
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.label {
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+.text {
+  margin-bottom: 2em;
+}
+
+.form_container {
+  background-color: $red-samf;
+}
+
+.withdrawn_container {
+  display: flex;
+  flex-direction: row;
+  padding: 0.4em;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.withdrawn_cext {
+  color: $red-samf;
+}

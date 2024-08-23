@@ -1,0 +1,68 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.container {
+  padding: 2rem 0.75rem;
+}
+
+.header {
+  align-content: center;
+  color: black;
+  font-weight: 800;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.05rem;
+
+  @include theme-dark {
+    color: $theme-dark-color;
+  }
+}
+
+.contributors {
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 1.5rem;
+  flex-flow: wrap;
+  justify-content: center;
+}
+
+.avatar {
+  width: 8rem;
+  height: 8rem;
+  display: inline-block;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 0.25rem;
+}
+
+.info {
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.contributor {
+  text-align: center;
+  width: 150px;
+  max-width: 100%;
+}
+
+.websjef_icon {
+  color: $grey-3;
+}
+
+.active_period {
+  font-size: 0.8125rem;
+  margin: 0.25rem 0;
+  color: $grey-3;
+
+  @include theme-dark {
+    color: $grey-2;
+  }
+}

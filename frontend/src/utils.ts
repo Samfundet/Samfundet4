@@ -4,6 +4,7 @@ import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
 import { KEY, KeyValues } from './i18n/constants';
 import { Day, EventTicketType, EventTicketTypeValue } from './types';
+import { format } from 'date-fns';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -43,6 +44,23 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
 
   // Nothing found.
   return false;
+}
+
+// Checks if user has ALL provided permissions
+export function hasPermissions(
+  user: UserDto | null | undefined,
+  permissions: string[] | undefined,
+  obj?: string | number,
+): boolean {
+  if (!user || !permissions) return false;
+
+  for (const permission of permissions) {
+    if (!hasPerm({ user, permission, obj })) {
+      return false;
+    }
+  }
+  // Because of how JS treats empty lists as truthy, if permissions is an empty list, we'll return true here
+  return true;
 }
 
 // ------------------------------
@@ -105,6 +123,10 @@ export function dbT(
   // Instead of failing silently, page will fail to load. Fallback to empty string.
   // throw Error(`Object ${model} does not have the any of the fields '${field}' or '${fieldName}'`);
   return undefined;
+}
+
+export function getFullName(u: UserDto): string {
+  return `${u.first_name} ${u.last_name}`.trim();
 }
 
 /** Helper to determine if a KeyValue is truthy. */
@@ -195,6 +217,10 @@ export function niceDateTime(time: string | undefined): string | undefined {
     return dateString.substring(0, dateString.length - 3);
   }
   return time;
+}
+
+export function formatDateYMD(d: Date): string {
+  return format(d, 'yyyy.LL.dd');
 }
 
 /**
@@ -294,6 +320,15 @@ export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
   return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
 }
+
+export const toPercentage = (floatNum: number | undefined): string => {
+  if (floatNum) {
+    const percentage = floatNum * 100;
+    return percentage.toString().slice(0, 4) + '%';
+  } else {
+    return 'N/A';
+  }
+};
 
 /*
 export function immutableSet(list: unknown[], oldValue: unknown, newValue: unknown) {
