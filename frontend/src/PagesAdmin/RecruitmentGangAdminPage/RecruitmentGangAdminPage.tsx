@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGang } from '~/api';
+import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
 import { GangDto, type OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
 import { useTitle } from '~/hooks';
@@ -30,7 +30,7 @@ export function RecruitmentGangAdminPage() {
   useEffect(() => {
     if (recruitmentId && gangId) {
       Promise.allSettled([
-        getRecruitmentPositionsGang(recruitmentId, gangId).then((data) => {
+        getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
           setRecruitmentPositions(data.data);
         }),
         getGang(gangId).then((data) => {
