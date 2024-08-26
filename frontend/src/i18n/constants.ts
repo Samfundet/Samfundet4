@@ -299,6 +299,7 @@ export const KEY = {
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
   recrutment_export_to_csv: 'recrutment_export_to_csv',
+  recruitment_gangs_with_separate_positions: 'recruitment_gangs_with_separate_positions',
   application_deadline: 'application_deadline',
   recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
   recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
@@ -315,6 +316,9 @@ export const KEY = {
   recruitment_withdrawn: 'recruitment_withdrawn',
   recruitment_withdraw_application: 'KEY.recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_three_interviews_criteria_button: 'recruitment_three_interviews_criteria_button',
+  recruitment_three_interviews_criteria_header: 'recruitment_three_interviews_criteria_header',
+  recruitment_revert_status: 'recruitment_revert_status',
   recruitment_no_current_positions: 'recruitment_no_current_positions',
   recruitment_no_current_applications_position: 'recruitment_no_current_applications_position',
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
@@ -329,7 +333,6 @@ export const KEY = {
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
-
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',

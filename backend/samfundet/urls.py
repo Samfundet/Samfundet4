@@ -105,7 +105,12 @@ urlpatterns = [
         name='recruitment_withdraw_application_recruiter',
     ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
-    path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
+    path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
+    path(
+        'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
+        views.ApplicantsWithoutThreeInterviewsCriteriaView.as_view(),
+        name='applicants_without_three_interview_criteria',
+    ),
     path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
         views.DownloadRecruitmentApplicationGangCSV.as_view(),

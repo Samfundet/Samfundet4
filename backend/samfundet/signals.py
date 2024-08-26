@@ -79,6 +79,22 @@ def application_created(sender: RecruitmentApplication, instance: RecruitmentApp
         instance.recruitment.update_stats()
 
 
+@receiver(post_save, sender=RecruitmentApplication)
+def application_interview_set(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
+    """
+    Checks if an application gets an interview set, and if it is in a shared group
+    Will then set all applications for same interview group which has no interview by saving
+    Saving is done to affect then other possibly changed fields
+    """
+    if not created:
+        interview_group = instance.recruitment_position.shared_interview_group
+        interview = instance.interview
+        if interview and interview_group:
+            for application in RecruitmentApplication.objects.filter(user=instance.user, recruitment_position__in=interview_group.positions.all()):
+                if application.interview is None:
+                    application.save()
+
+
 @receiver(pre_save, sender=RecruitmentApplication)
 def application_applicant_rejected_or_accepted(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs: Any) -> None:  # noqa C901
     """Whenever an applicant is contacted, set all other applications to automatic rejection"""

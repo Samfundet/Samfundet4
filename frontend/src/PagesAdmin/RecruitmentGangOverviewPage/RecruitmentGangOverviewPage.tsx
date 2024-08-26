@@ -61,6 +61,18 @@ export function RecruitmentGangOverviewPage() {
         {t(KEY.common_overview)}
       </Button>
       <Button
+        theme="samf"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_users_three_interview_criteria,
+          urlParams: {
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {t(KEY.recruitment_three_interviews_criteria_button)}
+      </Button>
+      <Button
         theme="blue"
         rounded={true}
         link={reverse({

@@ -233,10 +233,10 @@ export const SAMFUNDET_CHANGE_RECRUITMENTPOSITION = 'samfundet.change_recruitmen
 export const SAMFUNDET_DELETE_RECRUITMENTPOSITION = 'samfundet.delete_recruitmentposition';
 export const SAMFUNDET_VIEW_RECRUITMENTPOSITION = 'samfundet.view_recruitmentposition';
 
-export const SAMFUNDET_ADD_RECRUITMENTSEPERATEPOSITION = 'samfundet.add_recruitmentseperateposition';
-export const SAMFUNDET_CHANGE_RECRUITMENTSEPERATEPOSITION = 'samfundet.change_recruitmentseperateposition';
-export const SAMFUNDET_DELETE_RECRUITMENTSEPERATEPOSITION = 'samfundet.delete_recruitmentseperateposition';
-export const SAMFUNDET_VIEW_RECRUITMENTSEPERATEPOSITION = 'samfundet.view_recruitmentseperateposition';
+export const SAMFUNDET_ADD_RECRUITMENTSEPERATEPOSITION = 'samfundet.add_recruitmentseparateposition';
+export const SAMFUNDET_CHANGE_RECRUITMENTSEPERATEPOSITION = 'samfundet.change_recruitmentseparateposition';
+export const SAMFUNDET_DELETE_RECRUITMENTSEPERATEPOSITION = 'samfundet.delete_recruitmentseparateposition';
+export const SAMFUNDET_VIEW_RECRUITMENTSEPERATEPOSITION = 'samfundet.view_recruitmentseparateposition';
 
 export const SAMFUNDET_ADD_RECRUITMENTSTATISTICS = 'samfundet.add_recruitmentstatistics';
 export const SAMFUNDET_CHANGE_RECRUITMENTSTATISTICS = 'samfundet.change_recruitmentstatistics';
