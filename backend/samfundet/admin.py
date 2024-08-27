@@ -21,7 +21,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 
-from .models.event import Event, EventGroup, EventRegistration
+from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
     Tag,
     Gang,
@@ -753,6 +753,12 @@ class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
 class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
+
+
+@admin.register(PurchaseFeedbackModel)
+class PurchaseFeedbackAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['title']
+    list_display = ['user', 'title']
 
 
 ### End: Our models ###
