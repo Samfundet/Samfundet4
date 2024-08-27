@@ -102,6 +102,26 @@ def seed():
             'text_nb': 'Reservasjonssystemet vårt er fortsatt under utvikling, og vi ber om forbehold om at feil kan forekomme. Klikk her for å bestille via epost: ',
             'text_en': 'Our reservation system is still under development, and reservation errors may therefore occur. Click here to order via email: ',
         },
+        {
+            'key': 'error_recruitment_form_1',
+            'text_nb': 'Vist søknadfrist kan ikke være før opptaket blir synlig',
+            'text_en':  'Displayed deadline cannot be before the recruitment becomes visible',
+        },
+        {
+            'key': 'error_recruitment_form_2',
+            'text_nb': 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
+            'text_en':  'Actual deadline cannot be before the displayed deadline',
+        },
+        {
+            'key': 'error_recruitment_form_3',
+            'text_nb': 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
+            'text_en':  ' Reprioritization deadline cannot be before the actual deadline',
+        },
+        {
+            'key': 'error_recruitment_form_4',
+            'text_nb': 'Flaggefrist kan ikke være før omprioriteringsfrist',
+            'text_en':  'Group reprioritization deadline cannot be before the reprioritization deadline',
+        },
         # Membership
         {
             'key': 'membership',

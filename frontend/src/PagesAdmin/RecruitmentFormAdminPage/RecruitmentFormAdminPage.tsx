@@ -6,8 +6,9 @@ import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
+import { TextItem } from '~/constants';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
-import { useTitle } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
@@ -67,8 +68,15 @@ export function RecruitmentFormAdminPage() {
 
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
+  const errorMessages = {
+    error_recruitment_form_1: useTextItem(TextItem.error_recruitment_form_1) || 'Default error message 1',
+    error_recruitment_form_2: useTextItem(TextItem.error_recruitment_form_2) || 'Default error message 2',
+    error_recruitment_form_3: useTextItem(TextItem.error_recruitment_form_3) || 'Default error message 3',
+    error_recruitment_form_4: useTextItem(TextItem.error_recruitment_form_4) || 'Default error message 4',
+  };
+
   function handleOnSubmit(data: FormType) {
-    const errors = validateForm(data);
+    const errors = validateForm(data, errorMessages);
     if (Object.keys(errors).length > 0) {
       Object.values(errors).forEach((error) => toast.error(error));
       return;
@@ -90,14 +98,13 @@ export function RecruitmentFormAdminPage() {
           navigate(ROUTES.frontend.admin_recruitment);
           toast.success(t(KEY.common_creation_successful));
         })
-        .catch((error) => {
-          error.message;
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
   }
 
-  function validateForm(data: FormType) {
+  function validateForm(data: FormType, errorMessages: Record<string, string>) {
     const errors: Partial<FormType> = {};
 
     const visibleFrom = new Date(data.visible_from);
@@ -107,16 +114,16 @@ export function RecruitmentFormAdminPage() {
     const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
 
     if (shownApplicationDeadline < visibleFrom) {
-      errors.shown_application_deadline = 'Vist søknadfrist kan ikke være før opptaket blir synlig';
+      errors.shown_application_deadline = errorMessages.error_recruitment_form_1;
     }
     if (actualApplicationDeadline < shownApplicationDeadline) {
-      errors.actual_application_deadline = 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist';
+      errors.actual_application_deadline = errorMessages.error_recruitment_form_2;
     }
     if (reprioritizationDeadlineForApplicant < actualApplicationDeadline) {
-      errors.reprioritization_deadline_for_applicant = 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist';
+      errors.reprioritization_deadline_for_applicant = errorMessages.error_recruitment_form_3;
     }
     if (reprioritizationDeadlineForGroups < reprioritizationDeadlineForApplicant) {
-      errors.reprioritization_deadline_for_groups = 'Flaggefrist kan ikke være før omprioriteringsfrist';
+      errors.reprioritization_deadline_for_groups = errorMessages.error_recruitment_form_4;
     }
     return errors;
   }

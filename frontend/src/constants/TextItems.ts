@@ -37,6 +37,10 @@ export const TextItem = {
   no_recruitment_text_3: 'no_recruitment_text_3',
   no_recruitment_text_4: 'no_recruitment_text_4',
   no_recruitment_text_5: 'no_recruitment_text_5',
+  error_recruitment_form_1: 'error_recruitment_form_1',
+  error_recruitment_form_2: 'error_recruitment_form_2',
+  error_recruitment_form_3: 'error_recruitment_form_3',
+  error_recruitment_form_4: 'error_recruitment_form_4',
 
   //Membership
   membership: 'membership',
