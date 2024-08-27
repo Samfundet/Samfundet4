@@ -90,7 +90,8 @@ export function RecruitmentFormAdminPage() {
           navigate(ROUTES.frontend.admin_recruitment);
           toast.success(t(KEY.common_creation_successful));
         })
-        .catch(() => {
+        .catch((error) => {
+          error.message;
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
@@ -108,25 +109,15 @@ export function RecruitmentFormAdminPage() {
     if (shownApplicationDeadline < visibleFrom) {
       errors.shown_application_deadline = 'Vist søknadfrist kan ikke være før opptaket blir synlig';
     }
-    if (actualApplicationDeadline < visibleFrom) {
-      errors.actual_application_deadline = 'Fakitsk søknadsfrist kan ikke være før opptaket blir synlig';
-    }
-    if (reprioritizationDeadlineForApplicant < visibleFrom) {
-      errors.reprioritization_deadline_for_applicant = 'Omprioriteringsfrist kan ikke være før opptaket blir synlig';
-    }
-    if (reprioritizationDeadlineForGroups < visibleFrom) {
-      errors.reprioritization_deadline_for_groups = 'Flaggefrist kan ikke være før opptaket blir synlig';
-    }
     if (actualApplicationDeadline < shownApplicationDeadline) {
       errors.actual_application_deadline = 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist';
     }
     if (reprioritizationDeadlineForApplicant < actualApplicationDeadline) {
       errors.reprioritization_deadline_for_applicant = 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist';
     }
-    if (reprioritizationDeadlineForApplicant < shownApplicationDeadline) {
-      errors.reprioritization_deadline_for_applicant = 'Omprioriteringsfrist kan ikke være før vist søknadsfrist';
+    if (reprioritizationDeadlineForGroups < reprioritizationDeadlineForApplicant) {
+      errors.reprioritization_deadline_for_groups = 'Flaggefrist kan ikke være før omprioriteringsfrist';
     }
-
     return errors;
   }
 
