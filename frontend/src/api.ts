@@ -35,6 +35,7 @@ import {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
+  PurchaseFeedbackDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -947,6 +948,15 @@ export async function putRecruitmentApplicationInterview(
     });
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
+}
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promise<PurchaseFeedbackDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__purchase_feedback;
+  const response = await axios.post<PurchaseFeedbackDto>(url, feedback, { withCredentials: true });
+  return response.data;
 }
 
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
