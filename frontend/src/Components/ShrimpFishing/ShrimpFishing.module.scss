@@ -1,0 +1,57 @@
+@use 'sass:math';
+
+.container {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.moving-container {
+  all: unset;
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  animation: moveAround 5s linear infinite;
+}
+
+.offsetContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+@keyframes moveAround {
+  0% {
+    left: 0;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.scoreText {
+  position: absolute;
+  top: 90%;
+  left: 20%;
+  font-size: 30px;
+  color: orange;
+  // opacity 0.2 black background
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.gameOverText {
+  position: absolute;
+  top: calc(50% - 48px);
+  left: 50%;
+  font-size: 48px;
+  color: red;
+}
