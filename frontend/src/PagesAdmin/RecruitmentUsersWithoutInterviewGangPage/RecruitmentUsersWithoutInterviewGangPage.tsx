@@ -24,7 +24,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const navigate = useCustomNavigate();
 
   useEffect(() => {
-    if (recruitmentId && gangId) {
+    if (recruitmentId) {
       getApplicantsWithoutInterviews(recruitmentId, gangId)
         .then((response) => {
           setUsers(response.data);
@@ -36,7 +36,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recruitmentId, gangId]);
+  }, [gangId, recruitmentId]);
 
   useEffect(() => {
     if (gangId) {

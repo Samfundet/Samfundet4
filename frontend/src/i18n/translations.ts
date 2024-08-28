@@ -288,10 +288,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
+  [KEY.recrutment_export_to_csv]: 'Eksporter alle søknader til CSV',
+  [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.application_deadline]: 'Søknadsfrist',
   [KEY.recruitment_application]: 'Søknad',
   [KEY.recruitment_applications]: 'søknader',
-  [KEY.recruitment_position]: 'verv',
   [KEY.recruitment_progression]: 'Opptak fremgang',
   [KEY.recruitment_overview]: 'Opptak oversikt',
   [KEY.recruitment_statistics]: 'Opptak statistikk',
@@ -316,9 +317,16 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_revert_status]: 'Fjern Status',
+  [KEY.recruitment_no_current_positions]: 'Denne gjengen har ingen åpne stillinger for dette opptaket',
+  [KEY.recruitment_no_current_applications_position]: 'Denne stilling har ennå ikke fått noen søknader',
+  [KEY.recruitment_no_current_applications_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
-
+  [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -693,6 +701,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_processed]: 'Processed',
   [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
+  [KEY.recrutment_export_to_csv]: 'Export all applications to CSV',
+  [KEY.recruitment_all_applications]: 'All applications',
   [KEY.application_deadline]: 'Application deadline',
   [KEY.recruitment_applicants]: 'applicants',
   [KEY.recruitment_progression]: 'Recruitment progression',
@@ -721,11 +731,16 @@ export const en: Record<KeyValues, string> = {
     'No applicants are marked to receive an automatic rejection email.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
+  [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_revert_status]: 'Revert status',
+  [KEY.recruitment_no_current_positions]: 'This gang does not have any available positions for this recruitment',
+  [KEY.recruitment_no_current_applications_position]: 'This gang has no current applicants',
+  [KEY.recruitment_no_current_applications_gang]: 'This gang has no current applicants',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
-
+  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate application',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
@@ -748,7 +763,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
-
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // CommandMenu:
   [KEY.command_menu_label]: 'Global command menu',
   [KEY.command_menu_no_results]: 'No results',

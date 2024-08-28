@@ -383,10 +383,10 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
   organization: number;
-  seperate_positions?: RecruitmentSeperatePositionDto[];
+  separate_positions?: RecruitmentSeparatePositionDto[];
 };
 
-export type RecruitmentSeperatePositionDto = {
+export type RecruitmentSeparatePositionDto = {
   name_nb: string;
   name_en: string;
   url: string;
@@ -466,6 +466,18 @@ export type RecruitmentApplicationStateDto = {
 export type RecruitmentApplicationStateChoicesDto = {
   recruiter_priority: [number, string][];
   recruiter_status: [number, string][];
+};
+
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, string>;
 };
 
 export type FeedbackDto = {
