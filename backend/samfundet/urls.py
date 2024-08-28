@@ -40,6 +40,7 @@ router.register('merch', views.MerchView, 'merch')
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
+router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
 router.register('recruitment-applications-for-group', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_group')
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
@@ -69,7 +70,13 @@ urlpatterns = [
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
-    path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
+    path(
+        'recruitment-positions-gang-for-applicant/',
+        views.RecruitmentPositionsPerGangForApplicantView.as_view(),
+        name='recruitment_positions_gang_for_applicants',
+    ),
+    path('recruitment-positions-gang-for-gangs/', views.RecruitmentPositionsPerGangForGangView.as_view(), name='recruitment_positions_gang_for_gangs'),
+    path('recruitment-set-interview/<slug:pk>/', views.RecruitmentApplicationSetInterviewView.as_view(), name='recruitment_set_interview'),
     path(
         'recruitment-application-states-choices',
         views.RecruitmentApplicationStateChoicesView.as_view(),
@@ -98,7 +105,12 @@ urlpatterns = [
         name='recruitment_withdraw_application_recruiter',
     ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
-    path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
+    path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
+    path(
+        'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
+        views.ApplicantsWithoutThreeInterviewsCriteriaView.as_view(),
+        name='applicants_without_three_interview_criteria',
+    ),
     path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
         views.DownloadRecruitmentApplicationGangCSV.as_view(),
@@ -108,4 +120,5 @@ urlpatterns = [
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
+    path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
 ]

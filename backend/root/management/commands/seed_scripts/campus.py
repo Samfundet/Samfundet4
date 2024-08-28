@@ -62,11 +62,10 @@ CAMPUS = [
 
 
 def seed():
-    Campus.objects.all().delete()
     yield 0, 'Deleted old campus'
 
     for i, campus in enumerate(CAMPUS):
-        Campus.objects.create(**campus)
+        Campus.objects.get_or_create(**campus)
         yield i / len(CAMPUS), 'Creating venues'
 
     yield 100, f'Created {len(Campus.objects.all())} venues'

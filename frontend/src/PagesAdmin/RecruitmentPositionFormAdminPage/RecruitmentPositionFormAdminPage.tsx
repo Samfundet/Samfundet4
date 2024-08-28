@@ -53,12 +53,16 @@ export function RecruitmentPositionFormAdminPage() {
           setShowSpinner(false);
         })
         .catch((data) => {
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_recruitment);
+            navigate(
+              reverse({
+                pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+                urlParams: { recruitmentId: recruitmentId, gangId: gangId },
+              }),
+              { replace: true },
+            );
           }
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
         });
     } else {
       setShowSpinner(false);

@@ -82,7 +82,7 @@ export function EventCreatorAdminPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_events });
+            navigate({ url: ROUTES.frontend.admin_events, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
