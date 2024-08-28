@@ -6,9 +6,8 @@ import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
-import { TextItem } from '~/constants';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
-import { useTextItem, useTitle } from '~/hooks';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
@@ -68,15 +67,8 @@ export function RecruitmentFormAdminPage() {
 
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
-  const errorMessages = {
-    error_recruitment_form_1: useTextItem(TextItem.error_recruitment_form_1) || t(KEY.common_something_went_wrong),
-    error_recruitment_form_2: useTextItem(TextItem.error_recruitment_form_2) || t(KEY.common_something_went_wrong),
-    error_recruitment_form_3: useTextItem(TextItem.error_recruitment_form_3) || t(KEY.common_something_went_wrong),
-    error_recruitment_form_4: useTextItem(TextItem.error_recruitment_form_4) || t(KEY.common_something_went_wrong),
-  };
-
   function handleOnSubmit(data: FormType) {
-    const errors = validateForm(data, errorMessages);
+    const errors = validateForm(data);
     if (Object.keys(errors).length > 0) {
       Object.values(errors).forEach((error) => toast.error(error));
       return;
@@ -104,7 +96,7 @@ export function RecruitmentFormAdminPage() {
     }
   }
 
-  function validateForm(data: FormType, errorMessages: Record<string, string>) {
+  function validateForm(data: FormType) {
     const errors: Partial<FormType> = {};
 
     const visibleFrom = new Date(data.visible_from);
@@ -114,16 +106,16 @@ export function RecruitmentFormAdminPage() {
     const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
 
     if (shownApplicationDeadline < visibleFrom) {
-      errors.shown_application_deadline = errorMessages.error_recruitment_form_1;
+      errors.shown_application_deadline = t(KEY.error_recruitment_form_1);
     }
     if (actualApplicationDeadline < shownApplicationDeadline) {
-      errors.actual_application_deadline = errorMessages.error_recruitment_form_2;
+      errors.actual_application_deadline = t(KEY.error_recruitment_form_2);
     }
     if (reprioritizationDeadlineForApplicant < actualApplicationDeadline) {
-      errors.reprioritization_deadline_for_applicant = errorMessages.error_recruitment_form_3;
+      errors.reprioritization_deadline_for_applicant = t(KEY.error_recruitment_form_3);
     }
     if (reprioritizationDeadlineForGroups < reprioritizationDeadlineForApplicant) {
-      errors.reprioritization_deadline_for_groups = errorMessages.error_recruitment_form_4;
+      errors.reprioritization_deadline_for_groups = t(KEY.error_recruitment_form_4);
     }
     return errors;
   }
