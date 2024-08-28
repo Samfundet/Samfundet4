@@ -69,10 +69,10 @@ export function RecruitmentFormAdminPage() {
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
   const errorMessages = {
-    error_recruitment_form_1: useTextItem(TextItem.error_recruitment_form_1) || 'Default error message 1',
-    error_recruitment_form_2: useTextItem(TextItem.error_recruitment_form_2) || 'Default error message 2',
-    error_recruitment_form_3: useTextItem(TextItem.error_recruitment_form_3) || 'Default error message 3',
-    error_recruitment_form_4: useTextItem(TextItem.error_recruitment_form_4) || 'Default error message 4',
+    error_recruitment_form_1: useTextItem(TextItem.error_recruitment_form_1) || t(KEY.common_something_went_wrong),
+    error_recruitment_form_2: useTextItem(TextItem.error_recruitment_form_2) || t(KEY.common_something_went_wrong),
+    error_recruitment_form_3: useTextItem(TextItem.error_recruitment_form_3) || t(KEY.common_something_went_wrong),
+    error_recruitment_form_4: useTextItem(TextItem.error_recruitment_form_4) || t(KEY.common_something_went_wrong),
   };
 
   function handleOnSubmit(data: FormType) {
