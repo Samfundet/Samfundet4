@@ -11,10 +11,10 @@ const Template: ComponentStory<typeof Logo> = function (args) {
 };
 
 export const Samf = Template.bind({});
-Samf.args = { color: 'org-color', size: 'medium', organization: 'samfundet' };
+Samf.args = { color: 'org-color', size: 'medium', organization: 'Samfundet' };
 
 export const Uka = Template.bind({});
-Uka.args = { color: 'org-color', size: 'medium', organization: 'uka' };
+Uka.args = { color: 'org-color', size: 'medium', organization: 'UKA' };
 
 export const Isfit = Template.bind({});
-Isfit.args = { color: 'org-color', size: 'medium', organization: 'isfit' };
+Isfit.args = { color: 'org-color', size: 'medium', organization: 'ISFiT' };

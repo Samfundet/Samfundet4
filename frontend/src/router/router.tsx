@@ -27,6 +27,7 @@ import {
   SignUpPage,
   VenuePage,
   ContributorsPage,
+  OrganizationRecruitmentPage,
 } from '~/Pages';
 import {
   ClosedPeriodAdminPage,
@@ -47,6 +48,7 @@ import {
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterviewGangPage,
+  RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RecruitmentApplicantAdminPage,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
@@ -56,7 +58,9 @@ import {
   RecruitmentOverviewPage,
   AdminLayout,
   ImpersonateUserAdminPage,
+  RecruitmentGangAllApplicantsAdminPage,
   SultenMenuItemFormAdminPage,
+  UsersAdminPage,
 } from '~/PagesAdmin';
 import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
@@ -107,6 +111,7 @@ export const router = createBrowserRouter(
           path={ROUTES.frontend.recruitment_application_overview}
           element={<RecruitmentApplicationsOverviewPage />}
         />
+        <Route path={ROUTES.frontend.organization_recruitment} element={<OrganizationRecruitmentPage />} />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
         <Route path={ROUTES.frontend.contact} element={<></>} />
         <Route path={ROUTES.frontend.luka} element={<></>} />
@@ -160,6 +165,16 @@ export const router = createBrowserRouter(
                 </Link>
               ),
             }}
+          />
+        </Route>
+        {/* Users */}
+        <Route
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_users}>{t(KEY.common_users)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_users}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_USER]} element={<UsersAdminPage />} />}
           />
         </Route>
         {/* Events */}
@@ -322,6 +337,44 @@ export const router = createBrowserRouter(
               <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
             }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_edit}
+            element={
+              <PermissionRoute required={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
+            }
+            loader={({ params }) => {
+              // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
+              return { id: params.id };
+            }}
+            handle={{
+              crumb: ({ id }: { id: string }) => (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_edit,
+                    urlParams: { id },
+                  })}
+                >
+                  {t(KEY.common_edit)}
+                </Link>
+              ),
+            }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+            element={<RecruitmentGangAllApplicantsAdminPage />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_users_without_interview}
+            element={<RecruitmentUsersWithoutInterviewGangPage />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
+            element={<RecruitmentUsersWithoutInterviewGangPage />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
+            element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}

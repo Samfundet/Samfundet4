@@ -45,7 +45,7 @@ def seed():
         {
             'key': 'volunteering',
             'text_nb': 'Det meste av arbeid på Studentersamfundet i Trondhjem gjøres gjennom dugnad av studenter. Arbeidet er organisert i enheter som kalles gjenger. Potensielle nye medlemmer må søke den aktuelle gjengen om opptak, og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.',
-            'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called groups. Prospective new members must apply to the appropriate group for admission and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
+            'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called groups. Prospective new members must apply to the appropriate group for application and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
         },
         {
             'key': 'the_society_meeting',
@@ -302,6 +302,41 @@ def seed():
             'key': 'sulten_reservation_policy',
             'text_nb': 'Jeg godtar Samfundets personværnserklæring.',
             'text_en': "I agree to Samfundet's privacy policy.",
+        },
+        {
+            'key': 'purchase_feedback_title',
+            'text_nb': 'Hvor hørte du om dette arrangementet?',
+            'text_en': 'Where did you hear about this event?',
+        },
+        {
+            'key': 'purchase_feedback_alternative_1',
+            'text_nb': 'samfundet.no',
+            'text_en': 'samfundet.no',
+        },
+        {
+            'key': 'purchase_feedback_alternative_2',
+            'text_nb': 'venner',
+            'text_en': 'friends',
+        },
+        {
+            'key': 'purchase_feedback_alternative_3',
+            'text_nb': 'plakat',
+            'text_en': 'poster',
+        },
+        {
+            'key': 'purchase_feedback_alternative_4',
+            'text_nb': 'sosiale medier',
+            'text_en': 'social media',
+        },
+        {
+            'key': 'purchase_feedback_question_1',
+            'text_nb': 'andre steder:',
+            'text_en': 'other places:',
+        },
+        {
+            'key': 'purchase_feedback_question_2',
+            'text_nb': 'Har du noen øvrige kommentarer til arrangementet?',
+            'text_en': 'Do you have any other feedback in regards to the event?',
         },
     ]
 
