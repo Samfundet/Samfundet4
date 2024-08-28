@@ -292,9 +292,22 @@ class EventRegistrationAdmin(CustomGuardedModelAdmin):
 class EventAdmin(CustomBaseAdmin):
     # ordering = []
 
-    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'doors_time']
     list_filter = ['event_group']
-    list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
+    list_display = [
+        'id',
+        '__str__',
+        'title_nb',
+        'title_en',
+        'host',
+        'location',
+        'event_group',
+        'publish_dt',
+        'doors_time',
+        'start_dt',
+        'created_at',
+        'updated_at',
+    ]
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
     filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
