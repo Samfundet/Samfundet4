@@ -105,22 +105,22 @@ def seed():
         {
             'key': 'error_recruitment_form_1',
             'text_nb': 'Vist søknadfrist kan ikke være før opptaket blir synlig',
-            'text_en':  'Displayed deadline cannot be before the recruitment becomes visible',
+            'text_en': 'Displayed deadline cannot be before the recruitment becomes visible',
         },
         {
             'key': 'error_recruitment_form_2',
             'text_nb': 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
-            'text_en':  'Actual deadline cannot be before the displayed deadline',
+            'text_en': 'Actual deadline cannot be before the displayed deadline',
         },
         {
             'key': 'error_recruitment_form_3',
             'text_nb': 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
-            'text_en':  ' Reprioritization deadline cannot be before the actual deadline',
+            'text_en': ' Reprioritization deadline cannot be before the actual deadline',
         },
         {
             'key': 'error_recruitment_form_4',
             'text_nb': 'Flaggefrist kan ikke være før omprioriteringsfrist',
-            'text_en':  'Group reprioritization deadline cannot be before the reprioritization deadline',
+            'text_en': 'Group reprioritization deadline cannot be before the reprioritization deadline',
         },
         # Membership
         {
