@@ -80,4 +80,12 @@ export const TextItem = {
   // Feedback
   feedback_helper_text: 'feedback_helper_text',
   feedback_want_contact_text: 'feedback_want_contact_text',
+  // Purchase Feedback
+  purchase_feedback_title: 'purchase_feedback_title',
+  purchase_feedback_alternative_1: 'purchase_feedback_alternative_1',
+  purchase_feedback_alternative_2: 'purchase_feedback_alternative_2',
+  purchase_feedback_alternative_3: 'purchase_feedback_alternative_3',
+  purchase_feedback_alternative_4: 'purchase_feedback_alternative_4',
+  purchase_feedback_question_1: 'purchase_feedback_question_1',
+  purchase_feedback_question_2: 'purchase_feedback_question_2',
 } as const;
