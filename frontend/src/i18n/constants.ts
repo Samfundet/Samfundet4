@@ -132,6 +132,7 @@ export const KEY = {
   common_volunteer: 'common_volunteer',
   common_norwegian: 'common_norwegian',
   common_contact_us: 'common_contact_us',
+  common_doors_date: 'common_doors_date',
   common_restaurant: 'common_restaurant',
   common_member: 'common_member',
   common_membership: 'common_membership',
