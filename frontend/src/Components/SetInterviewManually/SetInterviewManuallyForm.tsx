@@ -1,20 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
+import { getOccupiedTimeslots, getRecruitmentAvailability } from '~/api'; //postOccupiedTimeslots removed this
 import { MiniCalendar, TimeslotContainer } from '~/Components';
-import { OccupiedTimeslotDto } from '~/dto';
+// import { OccupiedTimeslotDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { CalendarMarker } from '~/types';
 import { Button } from '../Button';
-import styles from './OccupiedForm.module.scss';
+import styles from './SetInterviewManually.module.scss';
 
 type Props = {
   recruitmentId: number;
   onCancel?: () => void;
 };
 
-export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
+export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props) {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,6 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const [timeslots, setTimeslots] = useState<string[]>([]);
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (!recruitmentId) {
       return;
@@ -51,22 +50,22 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
         console.error(error);
       })
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   function save() {
-    const data: OccupiedTimeslotDto = {
-      recruitment: recruitmentId,
-      dates: selectedTimeslots,
-    };
-
-    postOccupiedTimeslots(data)
-      .then(() => {
-        toast.success(t(KEY.common_update_successful));
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
+    // const data: OccupiedTimeslotDto = {
+    //   recruitment: recruitmentId,
+    //   dates: selectedTimeslots,
+    // };
+    // postOccupiedTimeslots(data)
+    //   .then(() => {
+    //     toast.success(t(KEY.common_update_successful));
+    //   })
+    //   .catch((error) => {
+    //     toast.error(t(KEY.common_something_went_wrong));
+    //     console.error(error);
+    //   });
   }
 
   const markers = useMemo(() => {
@@ -92,14 +91,14 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>{t(KEY.occupied_title)}</h3>
+      <h3 className={styles.title}>{t(KEY.recruitment_interview_set)}</h3>
 
       {loading ? (
         <span className={styles.subtitle}>{t(KEY.common_loading)}...</span>
       ) : (
         <>
           <span className={styles.subtitle}>
-            <Trans i18nKey={KEY.occupied_help_text} />
+            <Trans i18nKey={KEY.recruitment_choose_interview_time} />
           </span>
           <div className={styles.date_container}>
             <MiniCalendar

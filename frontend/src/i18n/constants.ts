@@ -353,6 +353,7 @@ export const KEY = {
   error_recruitment_form_2: 'error_recruitment_form_2',
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
+  recruitment_choose_interview_time: 'recruitment_choose_interview_time',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',

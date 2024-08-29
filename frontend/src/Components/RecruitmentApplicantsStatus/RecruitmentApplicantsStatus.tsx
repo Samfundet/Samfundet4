@@ -1,16 +1,17 @@
 import { useTranslation } from 'react-i18next';
+import { putRecruitmentApplicationForGang } from '~/api';
 import { InputField } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
-import { putRecruitmentApplicationForGang } from '~/api';
-import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { Link } from '../Link';
+import { SetInterviewManuallyModal } from '../SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
 
 type RecruitmentApplicantsStatusProps = {
@@ -61,6 +62,7 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: true },
     { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: true },
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
+    { content: t(KEY.recruitment_interview_set), sortable: false, hideSortButton: true },
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
@@ -199,6 +201,11 @@ export function RecruitmentApplicantsStatus({
             }
           />
         ),
+      },
+      {
+        value: 'Sett intervju manuelt',
+        style: applicationStatusStyle,
+        content: <SetInterviewManuallyModal recruitmentId={Number(recruitmentId) || 0} isButtonRounded={true} />,
       },
     ];
   });
