@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
-import { Button, Link } from '~/Components';
+import { Button, Link, OccupiedFormModal } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentGangs } from '~/api';
 import { type RecruitmentGangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import type { RecruitmentLoader } from '~/router/loaders';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitment } = useRouteLoaderData('recruitment') as RecruitmentLoader;
@@ -61,6 +61,18 @@ export function RecruitmentGangOverviewPage() {
         {t(KEY.common_overview)}
       </Button>
       <Button
+        theme="samf"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_users_three_interview_criteria,
+          urlParams: {
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {t(KEY.recruitment_three_interviews_criteria_button)}
+      </Button>
+      <Button
         theme="blue"
         rounded={true}
         link={reverse({
@@ -83,6 +95,7 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.common_edit)}
       </Button>
+      {recruitmentId && <OccupiedFormModal recruitmentId={parseInt(recruitmentId)} isButtonRounded={true} />}
     </>
   );
 

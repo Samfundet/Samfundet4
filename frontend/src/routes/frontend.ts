@@ -23,6 +23,9 @@ export const ROUTES_FRONTEND = {
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
   organization_recruitment: '/recruitment/:recruitmentID/',
   contact: '/contact',
+  // Purchase callback:
+  purchase_callback: '/purchase-callback/:eventId',
+
   // ==================== //
   //        Sulten        //
   // ==================== //
@@ -68,6 +71,8 @@ export const ROUTES_FRONTEND = {
   admin_recruitment: '/control-panel/recruitment/',
   admin_recruitment_edit: '/control-panel/recruitment/edit/:recruitmentId',
   admin_recruitment_create: '/control-panel/recruitment/create/',
+  admin_recruitment_users_three_interview_criteria:
+    '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',

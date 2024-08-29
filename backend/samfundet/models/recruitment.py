@@ -93,6 +93,20 @@ class Recruitment(CustomBaseModel):
             RecruitmentStatistics.objects.create(self)
 
 
+class RecruitmentPositionSharedInterviewGroup(CustomBaseModel):
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='The recruitment that is recruiting',
+        related_name='interview_groups',
+        null=False,
+        blank=True,
+    )
+
+    def __str__(self) -> str:
+        return f'{self.recruitment} Interviewgroup {self.id}'
+
+
 class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
     name_en = models.CharField(max_length=100, help_text='Name of the position')
@@ -120,7 +134,14 @@ class RecruitmentPosition(CustomBaseModel):
         blank=True,
     )
 
-    shared_interview_positions = models.ManyToManyField('self', symmetrical=True, blank=True, help_text='Positions with shared interview')
+    shared_interview_group = models.ForeignKey(
+        RecruitmentPositionSharedInterviewGroup,
+        null=True,
+        blank=True,
+        related_name='positions',
+        on_delete=models.SET_NULL,
+        help_text='Shared interviewgroup for position',
+    )
 
     # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
@@ -212,7 +233,6 @@ class RecruitmentApplication(CustomBaseModel):
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the application', related_name='applications'
     )
-
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its application
     recruiter_priority = models.IntegerField(
@@ -304,17 +324,14 @@ class RecruitmentApplication(CustomBaseModel):
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
-
-        if not self.interview:
-            # Check if there is already an interview for the same user in shared positions
-            shared_interview_positions = self.recruitment_position.shared_interview_positions.all()
+        if not self.interview and self.recruitment_position.shared_interview_group:
             shared_interview = (
-                RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=shared_interview_positions).exclude(interview=None).first()
+                RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=self.recruitment_position.shared_interview_group.positions.all())
+                .exclude(interview=None)
+                .first()
             )
-
             if shared_interview:
                 self.interview = shared_interview.interview
-        # Auto set not wanted when withdrawn
 
         super().save(*args, **kwargs)
 
