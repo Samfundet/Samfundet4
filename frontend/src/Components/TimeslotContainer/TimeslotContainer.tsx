@@ -10,7 +10,7 @@ type Props = {
   timeslots: string[];
   onChange?: (timeslots: Record<string, string[]>) => void;
   activeTimeslots?: Record<string, string[]>; //De røde timeslotsene ( "occupied" )
-  selectedTimeslot?: string | null;
+  selectedTimeslot?: Record<string, string[]>; //Den ene grønne timesloten ( "selected" )
   disabledTimeslots?: Record<string, string[]>; //De grå timeslotsene ( "disabled" )
   selectMultiple: boolean;
   hasDisabledTimeslots: boolean;
@@ -27,7 +27,8 @@ export function TimeslotContainer({
   const { t } = useTranslation();
 
   const [activeTimeslots, setActiveTimeslots] = useState<Record<string, string[]>>(props.activeTimeslots || {});
-  const [selectedTimeslot, setSelectedTimeslot] = useState<string | null>(null);
+  const disabledTimeslots = props.disabledTimeslots;
+  const [selectedTimeslot, setSelectedTimeslot] = useState<Record<string, string[]>>(props.selectedTimeslot || {});
 
   // Click & drag functionality
   const mouseDown = useMouseDown();
@@ -36,8 +37,8 @@ export function TimeslotContainer({
 
   useEffect(() => {
     if (!selectMultiple) {
-      if (selectedTimeslot) {
-        onChange?.({ [formatDateYMD(selectedDate!)]: [selectedTimeslot] });
+      if (selectedDate && selectedTimeslot[formatDateYMD(selectedDate)]) {
+        onChange?.(selectedTimeslot);
       }
     } else {
       onChange?.(activeTimeslots);
@@ -45,11 +46,15 @@ export function TimeslotContainer({
   }, [onChange, activeTimeslots, selectedTimeslot, selectedDate, selectMultiple]);
 
   function toggleTimeslot(date: Date, timeslot: string) {
-    if (hasDisabledTimeslots && props.disabledTimeslots) {
-      if (props.disabledTimeslots[formatDateYMD(date)]?.includes(timeslot)) return;
+    if (hasDisabledTimeslots && disabledTimeslots) {
+      if (disabledTimeslots[formatDateYMD(date)]?.includes(timeslot)) return;
     }
     if (!selectMultiple) {
-      setSelectedTimeslot(timeslot === selectedTimeslot ? null : timeslot);
+      if (isTimeslotSelected(date, timeslot)) {
+        setSelectedTimeslot({ [formatDateYMD(date)]: [] });
+      } else {
+        setSelectedTimeslot({ [formatDateYMD(date)]: [timeslot] });
+      }
     } else {
       const dayString = formatDateYMD(date);
       const copy = { ...activeTimeslots };
@@ -94,13 +99,18 @@ export function TimeslotContainer({
 
   function isTimeslotSelected(date: Date, timeslot: string) {
     const x = activeTimeslots[formatDateYMD(date)];
-    return !(!x || !x.find((s) => s === timeslot));
+    return x ? x.includes(timeslot) : false;
   }
 
   function isTimeslotDisabled(date: Date, timeslot: string) {
-    if (!props.disabledTimeslots) return;
-    const x = props.disabledTimeslots[formatDateYMD(date)];
-    return !(!x || !x.find((s) => s === timeslot));
+    if (!disabledTimeslots) return;
+    const x = disabledTimeslots[formatDateYMD(date)];
+    return x ? x.includes(timeslot) : false;
+  }
+
+  function isOnlyTimeSlot(date: Date, timeslot: string) {
+    if (!selectedTimeslot || selectMultiple) return;
+    return selectedTimeslot[formatDateYMD(date)]?.includes(timeslot);
   }
 
   function isAllSelected(date: Date) {
@@ -119,7 +129,7 @@ export function TimeslotContainer({
   }
 
   function onMouseEnter(date: Date, timeslot: string) {
-    if (!mouseDown || selectMultiple) return;
+    if (!mouseDown || !selectMultiple) return;
     if (dragSetSelected) {
       selectTimeslot(date, timeslot);
     } else {
@@ -133,11 +143,11 @@ export function TimeslotContainer({
 
   return (
     <div className={styles.container}>
-      {t(KEY.occupied_select_time_text)}:
       <div className={styles.timeslots}>
         {timeslots.map((timeslot) => {
           const active = isTimeslotSelected(selectedDate, timeslot);
           const disabled = isTimeslotDisabled(selectedDate, timeslot);
+          const onlyOneChosen = isOnlyTimeSlot(selectedDate, timeslot);
 
           return (
             <TimeslotButton
@@ -149,20 +159,23 @@ export function TimeslotContainer({
                 setDragSetSelected(!active);
               }}
               onMouseEnter={() => onMouseEnter(selectedDate, timeslot)}
+              onlyOneValid={onlyOneChosen}
             >
               {timeslot}
             </TimeslotButton>
           );
         })}
       </div>
-      <TimeslotButton
-        active={isAllSelected(selectedDate)}
-        disabled={false}
-        onClick={() => toggleSelectAll(selectedDate)}
-        showDot={false}
-      >
-        {isAllSelected(selectedDate) ? t(KEY.common_unselect_all) : t(KEY.common_select_all)}
-      </TimeslotButton>
+      {selectMultiple && (
+        <TimeslotButton
+          active={isAllSelected(selectedDate)}
+          disabled={false}
+          onClick={() => toggleSelectAll(selectedDate)}
+          showDot={false}
+        >
+          {isAllSelected(selectedDate) ? t(KEY.common_unselect_all) : t(KEY.common_select_all)}
+        </TimeslotButton>
+      )}
     </div>
   );
 }
