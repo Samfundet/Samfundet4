@@ -78,7 +78,7 @@ We use a tool called [Docker](https://www.docker.com/), which allows for running
 
 If you are new to web development you might not have experience with dependencies. Dependencies are packages or modules that are required for a web development project to run properly and package managers are software that manage these packages and dependencies.
 
-For our Python-based development, we primarily use pyenv and pipenv. Pyenv allows us to manage multiple versions of Python on the same system, while pipenv helps us create and manage the backend virtual environment for our project.
+For our Python-based development, we primarily use pyenv and poetry. Pyenv allows us to manage multiple versions of Python on the same system, while poetry helps us create and manage the backend virtual environment for our project.
 
 For frontend development, we use Node.js as a JavaScript runtime, and we rely on tools like npm and Yarn for managing dependencies. To install Node.js in WSL🪟🐧 follow the [9-step Windows Learn guide](https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl#install-wsl-2) and make sure you also follow prompts given by the terminal as you install Node.js this way.
 
