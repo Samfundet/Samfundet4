@@ -2,12 +2,14 @@ import { use } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { LANGUAGES } from './constants';
 import { en, nb } from './translations';
+import translationEN from './zod/en/zod.json';
+import translationNB from './zod/nb/zod.json';
 
 export const defaultNS = 'common';
 
 export const resources = {
-  [LANGUAGES.NB]: { [defaultNS]: nb },
-  [LANGUAGES.EN]: { [defaultNS]: en },
+  [LANGUAGES.NB]: { [defaultNS]: nb, zod: translationNB },
+  [LANGUAGES.EN]: { [defaultNS]: en, zod: translationEN },
 };
 
 const devSetting = process.env.NODE_ENV === 'development';
