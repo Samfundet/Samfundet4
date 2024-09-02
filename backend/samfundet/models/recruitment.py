@@ -501,7 +501,7 @@ class RecruitmentGangStat(models.Model):
     applicant_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
 
     def __str__(self) -> str:
-        return f'{self.recruitment_stats} {self.gang} {self.count}'
+        return f'{self.recruitment_stats} {self.gang} {self.application_count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         applications = RecruitmentApplication.objects.filter(recruitment=self.recruitment_stats.recruitment, recruitment_position__gang=self.gang)

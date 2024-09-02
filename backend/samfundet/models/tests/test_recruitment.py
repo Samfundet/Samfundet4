@@ -306,9 +306,13 @@ class TestRecruitmentInterview:
         fixture_recruitment_application2 = RecruitmentApplication.objects.get(pk=fixture_recruitment_application2.pk)
         assert fixture_recruitment_application2.interview == interview
 
+
+class TestRecruitmentGangStat:
     def test_recruitmentstats_gang_single_application_single_gang(
         self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
     ):
+        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
+
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
@@ -316,16 +320,13 @@ class TestRecruitmentInterview:
             application_text='I have applied',
             applicant_priority=1,
         )
-
-        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
-        # Needs to be manually done
-        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().applicant_count == 1
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().application_count == 1
 
     def test_recruitmentstats_gang_two_applications_two_users_single_gang(
         self, fixture_user: User, fixture_user2: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
     ):
+        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
@@ -342,9 +343,6 @@ class TestRecruitmentInterview:
             applicant_priority=1,
         )
 
-        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
-        # Needs to be manually done
-        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().applicant_count == 2
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().application_count == 2
 
@@ -358,6 +356,11 @@ class TestRecruitmentInterview:
     ):
         fixture_recruitment_position2.gang = fixture_gang2
         fixture_recruitment_position2.save()
+
+        assert fixture_recruitment_position2.gang != fixture_recruitment_position.gang
+        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
+        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position2.gang).first() is None
+
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
@@ -372,11 +375,7 @@ class TestRecruitmentInterview:
             application_text='I have applied',
             applicant_priority=2,
         )
-        assert fixture_recruitment_position2.gang != fixture_recruitment_position.gang
-        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
-        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position2.gang).first() is None
-        # Needs to be manually done
-        fixture_recruitment.statistics.save()
+
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().applicant_count == 1
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().application_count == 1
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position2.gang).first().applicant_count == 1
@@ -389,6 +388,7 @@ class TestRecruitmentInterview:
         fixture_recruitment_position2: RecruitmentPosition,
         fixture_recruitment: Recruitment,
     ):
+        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
         RecruitmentApplication.objects.create(
             user=fixture_user,
             recruitment_position=fixture_recruitment_position,
@@ -403,9 +403,6 @@ class TestRecruitmentInterview:
             application_text='I have applied',
             applicant_priority=2,
         )
-        assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first() is None
-        # Needs to be manually done
-        fixture_recruitment.statistics.save()
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().applicant_count == 1
         assert fixture_recruitment.statistics.gang_stats.filter(gang=fixture_recruitment_position.gang).first().application_count == 2
 
