@@ -7,6 +7,7 @@ import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOver
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
+import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -15,6 +16,12 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
+      <div>
+        <H1>Example form</H1>
+
+        <ExampleForm />
+      </div>
+
       <H1>Heading 1</H1>
       <H2>Heading 2</H2>
       <H3>Heading 3</H3>
