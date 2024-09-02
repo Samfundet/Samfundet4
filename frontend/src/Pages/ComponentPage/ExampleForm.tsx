@@ -68,11 +68,11 @@ export function ExampleForm() {
         <FormField
           control={form.control}
           name="organization"
-          render={({ field: { ref, ...fieldProps } }) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Organisasjon</FormLabel>
               <FormControl>
-                <Dropdown options={organizations} disabled={submitting} {...fieldProps} />
+                <Dropdown options={organizations} disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
