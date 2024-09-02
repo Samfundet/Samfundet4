@@ -1,0 +1,29 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.input_field {
+  @include rounded-lighter;
+  padding: 0.75rem 1rem;
+  border: 1px solid $grey-35;
+  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
+  outline: none;
+  font-weight: initial;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  &:focus {
+    border-color: $grey-3;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  &.error {
+    border: 1px solid $red;
+  }
+
+  @include theme-dark {
+    border-color: $grey-0;
+    &:focus {
+      border-color: $grey-1;
+      outline: 1px solid rgba(255, 255, 255, 0.6);
+    }
+  }
+}
