@@ -29,3 +29,12 @@
     }
   }
 }
+
+// Hide up and down buttons unless hover/focus
+.number_input {
+  -webkit-appearance: textfield;
+
+  &:hover, &:focus {
+    -moz-appearance: initial;
+  }
+}
