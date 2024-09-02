@@ -13,6 +13,7 @@ export function ExampleForm() {
     username: USERNAME,
     password: PASSWORD,
     organization: z.string().nullish().optional().or(z.literal('')),
+    duration: z.number().min(15).max(60),
   });
 
   const form = useForm<z.infer<typeof schema>>({
@@ -21,6 +22,7 @@ export function ExampleForm() {
       username: '',
       password: '',
       organization: 'uka',
+      duration: 15,
     },
   });
 
@@ -73,6 +75,19 @@ export function ExampleForm() {
               <FormLabel>Organisasjon</FormLabel>
               <FormControl>
                 <Dropdown options={organizations} disabled={submitting} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Varighet</FormLabel>
+              <FormControl>
+                <Input type="number" disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
