@@ -87,7 +87,12 @@ export const FormLabel = React.forwardRef<
   const { error, formItemId } = useFormField();
 
   return (
-    <label ref={ref} className={classNames(error && styles.error, className)} htmlFor={formItemId} {...props} />
+    <label
+      ref={ref}
+      className={classNames(styles.label, error && styles.error, className)}
+      htmlFor={formItemId}
+      {...props}
+    />
   );
 });
 FormLabel.displayName = 'FormLabel';
