@@ -3,7 +3,18 @@ import { z } from 'zod';
 import { PASSWORD, USERNAME } from '~/schema/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { Button, Dropdown, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input
+} from '~/Components';
 
 export function ExampleForm() {
   const [submitting, setSubmitting] = useState(false);
@@ -14,6 +25,7 @@ export function ExampleForm() {
     password: PASSWORD,
     organization: z.string().nullish().optional().or(z.literal('')),
     duration: z.number().min(15).max(60),
+    confirm: z.boolean(),
   });
 
   const form = useForm<z.infer<typeof schema>>({
@@ -23,13 +35,14 @@ export function ExampleForm() {
       password: '',
       organization: 'uka',
       duration: 15,
+      confirm: false,
     },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
     setSubmitting(true);
     setSerialized(JSON.stringify(values));
-    setTimeout(() => setSubmitting(false), 1000);
+    setTimeout(() => setSubmitting(false), 600);
   }
 
   const organizations = [
@@ -48,7 +61,7 @@ export function ExampleForm() {
             <FormItem>
               <FormLabel>Brukernavn</FormLabel>
               <FormControl>
-                <Input disabled={submitting} {...field} />
+                <Input disabled={submitting} autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -88,6 +101,19 @@ export function ExampleForm() {
               <FormLabel>Varighet</FormLabel>
               <FormControl>
                 <Input type="number" disabled={submitting} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirm"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bekreft</FormLabel>
+              <FormControl>
+                <Checkbox checked={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
