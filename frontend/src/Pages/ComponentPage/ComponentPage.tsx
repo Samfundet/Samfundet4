@@ -97,7 +97,7 @@ export function ComponentPage() {
         <Checkbox checked disabled />
       </div>
       <div>
-      <h2>Radiobuttons:</h2>
+        <h2>Radiobuttons:</h2>
         <RadioButton>Unchecked</RadioButton>
         <br />
         <RadioButton defaultChecked>Checked</RadioButton>

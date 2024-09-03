@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import {
   Checkbox,
   CheckboxProps,
@@ -178,10 +178,8 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
     <Checkbox
       {...(args.props as CheckboxProps)}
       checked={safeVal}
-      label={args.label}
       className={styles.input_element}
-      onChange={args.onChange}
-      error={args.error}
+      onChange={(e) => args.onChange((e as React.ChangeEvent<HTMLInputElement>).target.checked)}
     />
   );
 }
