@@ -23,7 +23,7 @@ export function ExampleForm() {
   const schema = z.object({
     username: USERNAME,
     password: PASSWORD,
-    organization: z.string().nullish().optional().or(z.literal('')),
+    organization: z.string().nullish().optional(),
     duration: z.number().min(15).max(60),
     confirm: z.boolean(),
   });

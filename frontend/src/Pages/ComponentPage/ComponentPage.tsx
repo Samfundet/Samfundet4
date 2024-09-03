@@ -88,14 +88,16 @@ export function ComponentPage() {
       </div>
       <div>
         <h2>Checkboxes:</h2>
-        <Checkbox label="Unchecked" />
+        <Checkbox />
         <br />
-        <Checkbox label="Checked" />
+        <Checkbox checked />
         <br />
-        <Checkbox label="Disabled" disabled />
+        <Checkbox disabled />
+        <br />
+        <Checkbox checked disabled />
       </div>
       <div>
-        <h2>Radiobuttons:</h2>
+      <h2>Radiobuttons:</h2>
         <RadioButton>Unchecked</RadioButton>
         <br />
         <RadioButton defaultChecked>Checked</RadioButton>
