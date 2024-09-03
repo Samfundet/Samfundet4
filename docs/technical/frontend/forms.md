@@ -14,7 +14,7 @@ The following is a template for using forms in Samf4:
 ```tsx
 // Define a type for form data:
 type FormData = {
-  varName: returnType;
+  name: String;
   // Add more fields
 }
 
@@ -27,7 +27,8 @@ const submitFunction = (data: FormData) => {
 function YourComponent() {
   return (
     <SamfForm<FormData> onSubmit={submitFunction}>
-      <!-- Your form fields -->
+        <SamfFormField<Formdata, String> field="name" type="text" label="Enter name" />
+        <!-- Add more fields -->
     </SamfForm>
   )
 }
@@ -84,14 +85,47 @@ SamfFormField is a generic react component that makes it easy to create form fie
 
 ## Props
 
+**type: SamfFormFieldType** - The type of input field. This can be any of the types described in the [SamfFormFieldType](../../../frontend/src/Forms/SamfFormFieldTypes.tsx) union.
+
+**field: keyof T** - A refrerence to the field in the form data. This is used to set the value of the field in the form data.
+
+**required?: boolean** - Whether the field is required. Default is false.
+
+**label?: string** - The label of the field. This is displayed above the input field.
+
+**hidden?: boolean** - Whether the field is hidden. Default is false.
+
+**validator?: (state: T) => SamfError** - A custom validation function. This function should return an error in the form of 'true' or an error message if the field is invalid, otherwise it should return 'false'. The state parameter is the current state of the entire form data. This is useful for validating fields that depend on other fields.
+
+**options?: DropDownOption<unknown>[]** - A list of options for dropdown inputs.
+
+**defaultOption?: DropDownOption<unknown>** - The default option for dropdown inputs.
+
+**onChange?: (value: U) => void** - The function to call when the field value changes. The value parameter is the new value of the field.
+
+**props?: FieldProps** - Additional props to pass to the input field. This is useful for setting things like placeholder, min, max, step etc.
+
 ## Field types
 
 ## Usage
 
 ## Types
 
+The formField component is type generic, so you can easily create form fields for any kind of data. The type parameter don't affect the realtime behavior of the form as the types are removed when TS is compiled to JS. They are however useful for type checking, development, documentation and debugging. It is recommended to use the type parameter to specify the type of data the form field is handling. SamfFormField has the following types paramaters:
+
+**T** - The type of data the form is handling. This will define the argument of the [validator](#props) function. This will also limit the fields that can be used in the [field](#props) property to the fields of the type.
+
+**U** - The type of data the field is handling. This will define the expected initial data and the data passed to the [onChange](#props) function. This will also limit the [field](#props) property to keys in **T** corresponding to this type.
+
 ## Field error
 
+The field component will display an error message if the field is invalid. This is determened by the following logic:
+
+<center>
+    <img src="field_error_logic.png" alt="Field error"/>
+</center>
+
+////////////////////////////////////////////////////////////////
 The form automatically handles validation and UI for you, so you only have to specify things like field names, input type and labels:
 
 ```html
