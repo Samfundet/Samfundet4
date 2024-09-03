@@ -18,9 +18,11 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
+from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
-from django.db.models import Q, Count, QuerySet
+from django.core.mail import send_mail
+from django.db.models import Q, Case, When, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
@@ -28,10 +30,6 @@ from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
-
-from django.conf import settings
-
-from django.core.mail import send_mail
 
 from root.constants import (
     XCSRFTOKEN,
@@ -693,20 +691,23 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
 
 
 class SendRejectionMailView(APIView):
-    # TODO: change from mail placeholder.
     def post(self, request: Request) -> Response:
-        subject = request.query_params.get('subject')
-        text = request.query_params.get('text')
+        try:
+            subject = request.query_params.get('subject')
+            text = request.query_params.get('text')
 
-        rejected_user_mails = self.get_rejected_user_mails()
+            rejected_user_mails = self.get_rejected_user_mails()
 
-        send_mail(
-            subject,
-            text,
-            settings.EMAIL_HOST_USER,
-            [rejected_user_mails],
-            fail_silently=False,
-        )
+            send_mail(
+                subject,
+                text,
+                settings.EMAIL_HOST_USER,
+                [rejected_user_mails],
+                fail_silently=False,
+            )
+            return Response(status=status.HTTP_200_OK)
+        except Exception:
+            return Response('An error occurred.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get_rejected_user_mails(self) -> QuerySet[User]:
         recruitment = self.request.query_params.get('recruitment', None)
