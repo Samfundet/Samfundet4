@@ -29,6 +29,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
+from django.conf import settings
 
 from django.core.mail import send_mail
 
@@ -690,8 +691,9 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         return None
 
-class SendRejectionMail(APIView):
-    #TODO: change from mail placeholder.
+
+class SendRejectionMailView(APIView):
+    # TODO: change from mail placeholder.
     def post(self, request: Request) -> Response:
         subject = request.query_params.get('subject')
         text = request.query_params.get('text')
@@ -701,10 +703,11 @@ class SendRejectionMail(APIView):
         send_mail(
             subject,
             text,
-            "no-reply@samfundet.no",
+            settings.EMAIL_HOST_USER,
             [rejected_user_mails],
             fail_silently=False,
         )
+
     def get_rejected_user_mails(self) -> QuerySet[User]:
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is None:
@@ -722,8 +725,6 @@ class SendRejectionMail(APIView):
 
         emails = rejected_users.values_list('email', flat=True)
         return emails
-    
-
 
 
 class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
