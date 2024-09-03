@@ -40,13 +40,20 @@ export function Dropdown<T>({
    * the onChange callback is provided with the respective DropDownOption
    * @param e Standard onChange HTML event for dropdown
    */
-  function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = (e?.currentTarget.value ?? 0) as number;
-    if (choice >= 0 && choice <= options.length) {
+  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
+    const choice = parseInt(e.currentTarget.value, 10);
+    if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
-    } else {
-      onChange?.(defaultValue?.value ?? undefined);
     }
+  }
+
+  
+  function getSelectedIndex(): number {
+    if (initialValue !== undefined) {
+      const index = options.findIndex(opt => opt.value === initialValue);
+      return index !== -1 ? index : 0;
+    }
+    return 0; // Default to the first option 
   }
   return (
     <label className={classnames(className, styles.select_wrapper)}>
@@ -60,16 +67,13 @@ export function Dropdown<T>({
         )}
         onChange={handleChange}
         disabled={disabled}
-        defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
+        value={getSelectedIndex()}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
-        {options.map((opt, index) => {
-          return (
-            <option value={index} key={index}>
-              {opt.label}
-            </option>
-          );
-        })}
+        {options.map((opt, index) => (
+          <option value={index} key={index}>
+            {opt.label}
+          </option>
+        ))}
       </select>
       {!disableIcon && (
         <div className={styles.arrow_container}>
