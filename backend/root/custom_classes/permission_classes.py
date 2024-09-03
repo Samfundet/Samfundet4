@@ -14,11 +14,11 @@ if TYPE_CHECKING:
 
 
 class SuperUserPermission(BasePermission):
-    def has_permission(self, request: Request, view: APIView) -> bool:  # noqa: PLR0917
+    def has_permission(self, request: Request, view: APIView) -> bool:
         user: User = request.user
         return user.is_active and user.is_superuser
 
-    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:  # noqa: PLR0917
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return self.has_permission(request=request, view=view)
 
 
@@ -35,7 +35,7 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
         'DELETE': ['%(app_label)s.delete_%(model_name)s'],
     }
 
-    def has_permission(self, request: Request, view: APIView) -> bool:  # noqa: PLR0917
+    def has_permission(self, request: Request, view: APIView) -> bool:
         queryset: QuerySet = self._queryset(view)
         model_cls: Model = queryset.model
         user: User = request.user

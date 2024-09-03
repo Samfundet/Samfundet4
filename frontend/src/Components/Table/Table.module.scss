@@ -35,7 +35,7 @@ $sort-icon-color-dark: #bbbbbb;
   background-color: $table-bg;
   color: $table-font-color;
   border-radius: .25em;
-
+  overflow: hidden;
   @include theme-dark {
     background-color: $table-bg-dark;
     color: $table-font-color-dark;

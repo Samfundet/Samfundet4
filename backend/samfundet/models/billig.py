@@ -49,12 +49,6 @@ class BilligEvent(models.Model):
     Note that this model must use billig column names.
     """
 
-    class Meta:
-        managed = False
-        verbose_name = 'BilligEvent'
-        verbose_name_plural = 'BilligEvents'
-        db_table = 'billig.event'
-
     # The primary billig event id, used as foreign key in billig ticket groups
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='event')
 
@@ -68,6 +62,15 @@ class BilligEvent(models.Model):
     # to a list field 'ticket_groups' not defined here.
     # See 'related_field' in BilligTicketGroup
 
+    class Meta:
+        managed = False
+        verbose_name = 'BilligEvent'
+        verbose_name_plural = 'BilligEvents'
+        db_table = 'billig.event'
+
+    def __str__(self) -> str:
+        return self.name
+
     # ======================== #
     #       Utilities          #
     # ======================== #
@@ -78,12 +81,12 @@ class BilligEvent(models.Model):
 
     @property
     def is_sold_out(self) -> bool:
-        return all([ticket.is_sold_out for ticket in self.ticket_groups.all()])
+        return all(ticket.is_sold_out for ticket in self.ticket_groups.all())
 
     @property
     def is_almost_sold_out(self) -> bool:
-        total_tickets = sum([ticket.num for ticket in self.ticket_groups.all()])
-        total_sold = sum([ticket.num_sold for ticket in self.ticket_groups.all()])
+        total_tickets = sum(ticket.num for ticket in self.ticket_groups.all())
+        total_sold = sum(ticket.num_sold for ticket in self.ticket_groups.all())
         return total_sold / total_tickets >= LIMIT_FOR_ALMOST_SOLD_OUT
 
     @staticmethod
@@ -108,12 +111,6 @@ class BilligTicketGroup(models.Model):
     may have something like "Dinner and concert" or "Just the concert"
     """
 
-    class Meta:
-        managed = False
-        verbose_name = 'BilligTicketGroup'
-        verbose_name_plural = 'BilligTicketGroups'
-        db_table = 'billig.ticket_group'
-
     # The primary billig ticket group id
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='ticket_group')
     name = models.CharField(max_length=140, blank=False, null=False, db_column='ticket_group_name')
@@ -135,6 +132,15 @@ class BilligTicketGroup(models.Model):
 
     # Maximum amount allowed to buy
     ticket_limit = models.PositiveIntegerField(blank=False, null=False)
+
+    class Meta:
+        managed = False
+        verbose_name = 'BilligTicketGroup'
+        verbose_name_plural = 'BilligTicketGroups'
+        db_table = 'billig.ticket_group'
+
+    def __str__(self) -> str:
+        return self.name
 
     # ======================== #
     #       Utilities          #
@@ -166,12 +172,6 @@ class BilligPriceGroup(models.Model):
     for member/not a member, but sometimes billig is set up with more than this.
     """
 
-    class Meta:
-        managed = False
-        verbose_name = 'BilligPriceGroup'
-        verbose_name_plural = 'BilligPriceGroups'
-        db_table = 'billig.price_group'
-
     # The primary id of the billig price group (named price_group in billig db)
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='price_group')
     name = models.CharField(max_length=140, blank=False, null=False, db_column='price_group_name')
@@ -192,3 +192,12 @@ class BilligPriceGroup(models.Model):
     membership_needed = models.BooleanField(blank=False, null=False)
     netsale = models.BooleanField(blank=False, null=False)
     price = models.IntegerField(blank=False, null=False)
+
+    class Meta:
+        managed = False
+        verbose_name = 'BilligPriceGroup'
+        verbose_name_plural = 'BilligPriceGroups'
+        db_table = 'billig.price_group'
+
+    def __str__(self) -> str:
+        return self.name

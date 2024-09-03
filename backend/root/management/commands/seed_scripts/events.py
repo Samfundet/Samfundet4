@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import random
-from typing import Tuple
 
 from django.db import transaction
 from django.utils import timezone
@@ -23,7 +22,7 @@ from samfundet.models.event import (
 from samfundet.models.general import Venue
 
 # Number of events
-COUNT = 300
+COUNT = 50
 
 # Event time as offset plus/minus today
 DAY_RANGE = 365 // 2
@@ -73,7 +72,7 @@ VENUES = Venue.objects.all()
 IMAGES = Image.objects.all()
 
 
-def create_event_ticket_type(capacity) -> Tuple[str, dict]:
+def create_event_ticket_type(capacity) -> tuple[str, dict]:
     ticket_type = random.choices(list(TICKET_TYPES.keys()), weights=list(TICKET_TYPES.values()), k=1)[0]
     ticket_type_data: dict = {}
     # Registration type, register some number of users/emails
@@ -113,7 +112,7 @@ def dummy_metadata() -> dict:
     }
 
 
-def do_seed():
+def do_seed():  # noqa: C901
     Event.objects.all().delete()
     EventGroup.objects.all().delete()
     EventCustomTicket.objects.all().delete()
@@ -188,5 +187,4 @@ def do_seed():
 def seed():
     # Seed with transaction (much faster)
     with transaction.atomic():
-        for seed in do_seed():
-            yield seed
+        yield from do_seed()

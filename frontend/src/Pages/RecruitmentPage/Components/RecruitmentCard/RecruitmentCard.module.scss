@@ -1,0 +1,96 @@
+@import 'src/constants';
+
+@import "src/mixins";
+
+.card{
+  display: grid;
+  grid-template-areas:
+  "header logo"
+  "text logo"
+  "text buttons";
+  gap: 1.5rem;
+  border-radius: 14px;
+  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  width: 100%;
+  min-height: 300px;
+  border: 4px solid $black;
+
+  @include theme-light {
+    box-shadow: 2px 0 10px 2px $black-t25;
+  }
+
+  @include theme-dark {
+    background-color: $black-t75;
+  }
+
+  @include for-tablet-down {
+    grid-template-areas:
+    "header header"
+    "text logo"
+    "buttons buttons";
+  }
+}
+
+.cardHeader{
+  grid-area: header;
+}
+
+.cardText {
+  grid-area: text;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cardLogo {
+  grid-area: logo;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include for-tablet-down {
+    align-items: start;
+  }
+}
+
+.personalRow {
+  grid-area: buttons;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  justify-content: stretch;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.SamfundetCard{
+  @extend .card;
+  border-color: $red-samf;
+
+  .cardHeader{
+    border-bottom: 2px solid $red-samf;
+  }
+}
+
+.UKACard{
+  @extend .card;
+  border-color: $blue_uka;
+  .cardHeader{
+    border-bottom: 2px solid $blue_uka;
+  }
+}
+
+.ISFiTCard{
+  @extend .card;
+  border-color: $blue_isfit;
+  .cardHeader{
+    border-bottom: 2px solid $blue_isfit;
+  }
+}
+
+.timeDisplay {
+  display: inline-block;
+}

@@ -1,5 +1,5 @@
 import { ThemeValue } from '~/constants';
-import { EventAgeRestriction, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -7,11 +7,12 @@ export type UserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number?: string;
   is_staff: boolean;
   is_active: boolean;
   is_superuser: boolean;
   date_joined: Date;
-  last_login: Date;
+  last_login: Date | null;
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];
@@ -19,12 +20,26 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
-export type OccupiedTimeSlotDto = {
-  id?: number;
-  user?: number;
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+};
+
+export type RecruitmentAvailabilityDto = {
+  start_date: string;
+  end_date: string;
+  timeslots: string[];
+};
+
+export type DateTimeslotDto = {
+  [date: string]: string[];
+};
+
+export type OccupiedTimeslotDto = {
   recruitment: number;
-  start_dt: string;
-  end_dt: string;
+  dates: DateTimeslotDto;
 };
 
 export type RecruitmentUserDto = {
@@ -33,7 +48,12 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  recruitment_admission_ids?: string[];
+  phone_number?: string;
+  campus?: CampusDto;
+  recruitment_application_ids?: string[];
+  applications: RecruitmentApplicationDto[];
+  applications_without_interview: RecruitmentApplicationDto[];
+  top_application: RecruitmentApplicationDto;
 };
 
 export type HomePageDto = {
@@ -123,7 +143,7 @@ export type EventDto = {
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
-  age_restriction: EventAgeRestriction;
+  age_restriction: EventAgeRestrictionValue;
   location: string;
   category: string;
   host: string;
@@ -134,6 +154,7 @@ export type EventDto = {
   duration: number;
   end_dt: string;
   publish_dt: string;
+  doors_time?: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
   ticket_type: EventTicketTypeValue;
@@ -144,6 +165,7 @@ export type EventDto = {
   // Write only:
   // Used to create new event with using id of existing imagedto
   image?: ImageDto;
+  capacity?: number;
 };
 
 export type EventGroupDto = {
@@ -173,7 +195,14 @@ export type InformationPageDto = {
   text_en?: string;
 };
 
+export type ReservationTableDto = {
+  name: string;
+  start_time: string;
+  end_time: string;
+};
+
 export type TableDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -181,9 +210,11 @@ export type TableDto = {
   description_en?: string;
 
   seating?: number;
+  reservations?: ReservationTableDto[];
 };
 
 export type FoodPreferenceDto = {
+  id: number;
   name_nb?: string;
   name_en?: string;
 };
@@ -196,6 +227,7 @@ export type FoodCategoryDto = {
 };
 
 export type MenuItemDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -206,8 +238,8 @@ export type MenuItemDto = {
   price_member?: number;
 
   order?: number;
-  food_preferences?: FoodPreferenceDto[];
-  food_category: FoodCategoryDto;
+  food_preferences?: FoodPreferenceDto[] | number[];
+  food_category: FoodCategoryDto | number;
 };
 
 export type MenuDto = {
@@ -228,10 +260,10 @@ export type ReservationDto = {
   start_time: string;
   end_time?: string;
   // Needed for first part
-  venue: number;
-  reservation_date: string;
-  guest_count: number;
-  occasion: string;
+  venue?: number;
+  reservation_date?: string;
+  guest_count?: number;
+  occasion?: string;
   // Maybe ignore and use different dto?
   // internal_message?: string;
 };
@@ -277,6 +309,10 @@ export type GangDto = {
   logo?: string;
   gang_type?: number;
   info_page?: number;
+};
+
+export type RecruitmentGangDto = GangDto & {
+  recruitment_positions: number;
 };
 
 export type GangTypeDto = {
@@ -332,8 +368,12 @@ export type NotificationDto = {
   // TODO: There are more fields than this.
 };
 
+// ############################################################
+//                       Recruitment
+// ############################################################
+
 export type RecruitmentDto = {
-  id: string | undefined;
+  id?: string;
   name_nb: string;
   name_en: string;
   visible_from: string;
@@ -341,7 +381,19 @@ export type RecruitmentDto = {
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
-  organization: 'samfundet' | 'isfit' | 'uka';
+  max_applications?: number;
+  organization: number;
+  separate_positions?: RecruitmentSeparatePositionDto[];
+};
+
+export type RecruitmentSeparatePositionDto = {
+  name_nb: string;
+  name_en: string;
+  url: string;
+};
+
+export type UserPriorityDto = {
+  direction: number;
 };
 
 export type RecruitmentPositionDto = {
@@ -359,8 +411,8 @@ export type RecruitmentPositionDto = {
 
   norwegian_applicants_only: boolean;
 
-  default_admission_letter_nb: string;
-  default_admission_letter_en: string;
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
 
   gang: GangDto;
   recruitment: string;
@@ -368,26 +420,85 @@ export type RecruitmentPositionDto = {
   tags: string;
 
   interviewers?: UserDto[];
+
+  total_applicants?: number;
+  processed_applicants?: number;
+  accepted_applicants?: number;
 };
 
 export type InterviewDto = {
-  id: number;
+  id?: number;
   interview_time: string;
   interview_location: string;
-  room: string;
-  notes: string;
+  room?: string;
+  notes?: string;
+  interviewers?: UserDto[];
 };
 
-export type RecruitmentAdmissionDto = {
-  id: number;
-  interview: InterviewDto;
-  admission_text: string;
-  recruitment_position?: number;
+export type RecruitmentApplicationDto = {
+  id: string;
+  interview?: InterviewDto;
+  interview_time?: Date;
+  application_text: string;
+  recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number;
+  recruiter_priority?: number | string;
   recruiter_status?: number;
+  applicant_state?: number;
   created_at: string;
   withdrawn: boolean;
+  application_count?: number;
+};
+
+export type RecruitmentApplicationRecruiterDto = {
+  user: RecruitmentUserDto;
+  application: RecruitmentApplicationDto;
+  other_applications: RecruitmentApplicationDto[];
+};
+
+export type RecruitmentApplicationStateDto = {
+  recruiter_priority?: number;
+  recruiter_status?: number;
+};
+
+export type RecruitmentApplicationStateChoicesDto = {
+  recruiter_priority: [number, string][];
+  recruiter_status: [number, string][];
+};
+
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, string>;
+};
+
+export type FeedbackDto = {
+  text: string;
+  screen_resolution: string;
+  path: string;
+  contact_email?: string;
+};
+
+export type SultenReservationDayDto = {
+  date: Date;
+  start_time: string;
+  closing_time: string;
+  tables: TableDto[];
+};
+
+export type RegistrationDto = {
+  username: string;
+  email: string;
+  phone_number: string;
+  firstname: string;
+  lastname: string;
+  password: string;
 };

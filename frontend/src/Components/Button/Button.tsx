@@ -25,6 +25,7 @@ export function Button({
   theme = 'basic',
   display = 'basic',
   rounded = false,
+  type = 'button',
   link,
   onClick,
   disabled,
@@ -33,7 +34,7 @@ export function Button({
   preventDefault = false,
   ...props
 }: ButtonProps) {
-  const isPure = theme === 'pure';
+  const isPure = theme === 'pure' || theme == 'text';
 
   const classNames = classnames(
     !isPure && styles.button,
@@ -57,7 +58,7 @@ export function Button({
           {children}
         </Link>
       ) : (
-        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames} {...props}>
+        <button name={name} onClick={handleOnClick} disabled={disabled} className={classNames} type={type} {...props}>
           {children}
         </button>
       )}

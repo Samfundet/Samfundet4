@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getSaksdokument, postSaksdokument, putSaksdokument } from '~/api';
 import { SaksdokumentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -34,9 +34,8 @@ export function SaksdokumentFormAdminPage() {
         })
         .catch((data) => {
           console.error(data);
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin);
+            navigate(ROUTES.frontend.admin_saksdokumenter, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
@@ -97,8 +96,9 @@ export function SaksdokumentFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
+  useTitle(title);
   return (
-    <AdminPageLayout title={title} loading={showSpinner}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       {/* Document form */}
       <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
         {/* Name */}
@@ -127,14 +127,14 @@ export function SaksdokumentFormAdminPage() {
           />
           <SamfFormField
             field="publication_date"
-            type="datetime"
+            type="date_time"
             required={true}
             label={`${t(KEY.saksdokumentpage_publication_date)}`}
           />
         </div>
         <div className={styles.input_row}>
           {/* File upload */}
-          {id === undefined && <SamfFormField type="upload-pdf" field="file" />}
+          {id === undefined && <SamfFormField type="upload_pdf" field="file" />}
           {id !== undefined && (
             <div className={styles.cannot_reupload}>{t(KEY.admin_saksdokumenter_cannot_reupload)}</div>
           )}

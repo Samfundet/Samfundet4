@@ -2,24 +2,33 @@ from __future__ import annotations
 
 from guardian import models as guardian_models
 
+from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
+from django.db.models import QuerySet
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
-from root.utils.routes import admin__samfundet_recruitmentadmission_change
-from root.custom_classes.admin_classes import CustomBaseAdmin, CustomGuardedUserAdmin, CustomGuardedGroupAdmin, CustomGuardedModelAdmin
+from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentapplication_change
+from root.custom_classes.admin_classes import (
+    CustomBaseAdmin,
+    CustomGuardedUserAdmin,
+    CustomGuardedGroupAdmin,
+    CustomGuardedModelAdmin,
+)
 
-from .models.event import Event, EventGroup, EventRegistration
+from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
     Tag,
     Gang,
     Menu,
     User,
     Image,
+    Merch,
     Table,
     Venue,
     Campus,
@@ -31,22 +40,28 @@ from .models.general import (
     KeyValue,
     MenuItem,
     TextItem,
+    GangSection,
     Reservation,
     ClosedPeriod,
     FoodCategory,
     Organization,
     Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
     Recruitment,
     InterviewRoom,
-    Occupiedtimeslot,
+    OccupiedTimeslot,
     RecruitmentPosition,
-    RecruitmentAdmission,
+    RecruitmentStatistics,
+    RecruitmentApplication,
+    RecruitmentSeparatePosition,
+    RecruitmentInterviewAvailability,
 )
 
 # Common fields:
@@ -65,12 +80,25 @@ from .models.recruitment import (
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
 # Just for testing TODO remove when done
-admin.site.register(Occupiedtimeslot)
+admin.site.register(OccupiedTimeslot)
 
 
 @admin.register(User)
 class UserAdmin(CustomGuardedUserAdmin):
-    sortable_by = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'updated_at']
+    sortable_by = [
+        'id',
+        'username',
+        'email',
+        'phone_number',
+        'first_name',
+        'last_name',
+        'is_active',
+        'is_staff',
+        'is_superuser',
+        'last_login',
+        'date_joined',
+        'updated_at',
+    ]
     list_display = [
         'id',
         'username',
@@ -92,6 +120,33 @@ class UserAdmin(CustomGuardedUserAdmin):
     def group_memberships(self, obj: User) -> int:
         n: int = obj.groups.all().count()
         return n
+
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'campus')}),
+        (
+            _('Permissions'),
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                ),
+            },
+        ),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': ('username', 'email', 'phone_number', 'campus', 'password1', 'password2'),
+            },
+        ),
+    )
 
 
 @admin.register(Group)
@@ -237,9 +292,22 @@ class EventRegistrationAdmin(CustomGuardedModelAdmin):
 class EventAdmin(CustomBaseAdmin):
     # ordering = []
 
-    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'doors_time']
     list_filter = ['event_group']
-    list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
+    list_display = [
+        'id',
+        '__str__',
+        'title_nb',
+        'title_en',
+        'host',
+        'location',
+        'event_group',
+        'publish_dt',
+        'doors_time',
+        'start_dt',
+        'created_at',
+        'updated_at',
+    ]
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
     filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
@@ -336,6 +404,21 @@ class GangTypeAdmin(CustomBaseAdmin):
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
+
+
+@admin.register(GangSection)
+class GangSectionAdmin(CustomBaseAdmin):
+    def gang_link(self, obj: GangSection) -> str:
+        link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
+        return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)
+
+    sortable_by = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
+    list_filter = ['gang']
+    list_display = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
+    search_fields = ['id', 'name_nb']
+    list_display_links = ['id', 'name_nb']
+    list_select_related = True
+    related_links = ['gang']
 
 
 @admin.register(InformationPage)
@@ -519,49 +602,53 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
 @admin.register(Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
-        'visible_from',
-        'actual_application_deadline',
-        'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'name_nb',
         'organization',
+        'visible_from',
+        'shown_application_deadline',
     ]
     list_display = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
         'reprioritization_deadline_for_applicant',
         'reprioritization_deadline_for_groups',
-        'organization',
     ]
     search_fields = [
+        'name_nb',
+        'organization',
         'visible_from',
-        'actual_application_deadline',
         'shown_application_deadline',
-        'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
         'organization',
     ]
-    list_display_links = ['visible_from']
+    list_display_links = ['name_nb', 'name']
     list_select_related = True
 
 
-class RecruitmentAdmissionInline(admin.TabularInline):
-    """
-    Inline admin interface for RecruitmentAdmission.
+@admin.register(RecruitmentSeparatePosition)
+class RecruitmentSeparatePositionAdmin(CustomBaseAdmin):
+    sortable_by = ['name_nb', 'recruitment', 'url']
+    search_fields = ['name_nb', 'recruitment', 'url']
+    list_display_links = ['name_nb']
 
-    Displays a link to the detailed admin page of each admission along with its user and applicant priority.
+
+class RecruitmentApplicationInline(admin.TabularInline):
+    """
+    Inline admin interface for RecruitmentApplication.
+
+    Displays a link to the detailed admin page of each application along with its user and applicant priority.
     """
 
-    model = RecruitmentAdmission
+    model = RecruitmentApplication
     extra = 0
-    readonly_fields = ['linked_admission_text', 'user', 'applicant_priority']
-    fields = ['linked_admission_text', 'user', 'applicant_priority']
+    readonly_fields = ['linked_application_text', 'user', 'applicant_priority']
+    fields = ['linked_application_text', 'user', 'applicant_priority']
 
-    def linked_admission_text(self, obj: RecruitmentAdmission) -> str:
-        """Returns a clickable link leading to the admin change page of the RecruitmentAdmission instance."""
-        url = reverse(admin__samfundet_recruitmentadmission_change, args=[obj.pk])
-        return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.admission_text)
+    def linked_application_text(self, obj: RecruitmentApplication) -> str:
+        """Returns a clickable link leading to the admin change page of the RecruitmentApplication instance."""
+        url = reverse(admin__samfundet_recruitmentapplication_change, args=[obj.pk])
+        return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.application_text)
 
 
 @admin.register(RecruitmentPosition)
@@ -572,38 +659,37 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         'gang',
         'id',
     ]
-    list_display = ['name_nb', 'is_funksjonaer_position', 'gang', 'id', 'admissions_count']
-    search_fields = ['name_nb', 'is_funksjonaer_position', 'gang', 'id']
+    list_display = ['id', 'name_nb', 'is_funksjonaer_position', 'gang', 'applications_count']
+    search_fields = ['id', 'name_nb', 'is_funksjonaer_position', 'gang']
     filter_horizontal = ['interviewers']
     list_select_related = True
 
-    inlines = [RecruitmentAdmissionInline]
+    list_display_links = ['id']
+    inlines = [RecruitmentApplicationInline]
 
-    def admissions_count(self, obj: RecruitmentPosition) -> int:
-        count = obj.admissions.all().count()
+    def applications_count(self, obj: RecruitmentPosition) -> int:
+        count = obj.applications.all().count()
         return count
 
 
-@admin.register(RecruitmentAdmission)
-class RecruitmentAdmissionAdmin(CustomBaseAdmin):
+@admin.register(RecruitmentApplication)
+class RecruitmentApplicationAdmin(CustomBaseAdmin):
     sortable_by = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     list_display = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
     search_fields = [
-        'id',
         'recruitment_position',
         'recruitment',
         'user',
     ]
+    list_display_links = ['recruitment_position']
     list_select_related = True
 
 
@@ -626,10 +712,66 @@ class InterviewRoomAdmin(CustomBaseAdmin):
 
 @admin.register(Interview)
 class InterviewAdmin(CustomBaseAdmin):
-    list_filter = ['id', 'notes']
-    list_display = ['id', 'notes']
-    search_fields = ['id', 'notes']
-    list_display_links = ['id', 'notes']
+    list_filter = ['interview_time', 'interview_location']
+    list_display = ['id', 'interview_time', 'interview_location']
+    search_fields = ['interview_time', 'interview_location']
+    list_display_links = ['id']
+    filter_horizontal = ['interviewers']
+
+
+@admin.action(description='Update stats')
+def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: QuerySet[RecruitmentStatistics]) -> None:
+    for q in queryset:
+        q.save()
+
+
+@admin.register(RecruitmentStatistics)
+class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
+    list_display = ['recruitment', 'total_applicants', 'total_applications']
+    search_fields = ['recruitment']
+    actions = [update_stats]
+
+
+@admin.register(Merch)
+class MerchAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'name_nb', 'base_price']
+    # list_filter = []
+    list_display = ['name_nb', 'base_price']
+    search_fields = ['name_nb']
+    # filter_horizontal = []
+    list_display_links = ['name_nb']
+    # autocomplete_fields = []
+
+
+@admin.register(MerchVariation)
+class MerchVariationAdmin(CustomGuardedModelAdmin):
+    # ordering = []
+    sortable_by = ['id', 'specification']
+    # list_filter = []
+    list_display = ['id', '__str__', 'specification']
+    search_fields = ['id', 'specification']
+    # filter_horizontal = []
+    list_display_links = ['id', '__str__']
+    # autocomplete_fields = []
+
+
+@admin.register(RecruitmentInterviewAvailability)
+class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
+    list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+    list_display_links = ['recruitment', 'position']
+
+
+@admin.register(UserFeedbackModel)
+class UserFeedbackAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['date', 'path']
+    list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
+
+
+@admin.register(PurchaseFeedbackModel)
+class PurchaseFeedbackAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['title']
+    list_display = ['user', 'title']
 
 
 ### End: Our models ###

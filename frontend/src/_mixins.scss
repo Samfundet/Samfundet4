@@ -157,6 +157,10 @@ Usage:
   border-radius: 1em;
 }
 
+@mixin rounded-lighter {
+  border-radius: 0.5rem;
+}
+
 @mixin rounded-light {
   border-radius: 0.75em;
 }

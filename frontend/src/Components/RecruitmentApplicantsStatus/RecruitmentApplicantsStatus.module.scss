@@ -1,0 +1,81 @@
+@import 'src/constants';
+
+.dropdown {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  background-color: $white;
+  border-radius: 0;
+  font-size: 0.7em;
+}
+
+.input {
+  font-size: 0.7em;
+  border-radius:0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.text {
+  font-size: 0.7em;
+  padding: 0;
+}
+
+.header {
+  font-size: 0.7em;
+  background-color: $grey-3;
+  color: $black;
+  &:hover {
+    background-color: $grey-2;
+    color: $black;
+  }
+}
+
+.rows {
+  padding: 0.1em 0.2em;
+}
+
+.pending {
+  background-color: $pending;
+}
+
+.top_reserve {
+  background-color: $topreserve;
+}
+
+.top_wanted {
+  background-color: $topwanted;
+}
+
+.less_reserve {
+  background-color: $lessreserve;
+}
+
+.less_reserve_wanted {
+  background-color: $lessreservewanted;
+}
+
+.less_reserve_reserve {
+  background-color: $lessreservereserve;
+}
+
+.less_wanted {
+  background-color: $lesswanted;
+}
+
+.less_wanted_wanted {
+  background-color: $lesswantedwanted;
+}
+
+.less_wanted_reserve {
+  background-color: $lesswantedreserve;
+}
+
+.table {
+  border-color: $grey-0;
+  border-width: 2.2em;
+}
+
+.tableRow {
+  border-color: $grey-3;
+  border-width: 0.01em;
+}
