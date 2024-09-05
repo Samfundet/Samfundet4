@@ -70,7 +70,14 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-      <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
+      <Button
+        theme="white"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
+          urlParams: { recruitmentId },
+        })}
+      >
         {t(KEY.recruitment_show_unprocessed_applicants)}
       </Button>
       <Button

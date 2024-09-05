@@ -280,6 +280,7 @@ export const KEY = {
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',
   recruitment_administrate_applications: 'recruitment_administrate_applications',
+  recruitment_unprocessed_applicants: 'recruitment_unprocessed_applicants',
   recruitment_administrate_reservations: 'recruitment_administrate_reservations',
   recruitment_my_applications: 'recruitment_my_applications',
   recruitment_all_applications: 'recruitment_all_applications',
