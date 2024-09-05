@@ -146,6 +146,7 @@ export function RecruitmentPositionOverviewPage() {
         positionId={positionId}
         updateStateFunction={updateApplicationState}
       />
+
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
           {t(KEY.recruitment_accepted_applications)}({acceptedApplicants.length})
@@ -159,6 +160,7 @@ export function RecruitmentPositionOverviewPage() {
           </Text>
         )}
       </div>
+
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
           {t(KEY.recruitment_rejected_applications)}({rejectedApplicants.length})
@@ -172,6 +174,7 @@ export function RecruitmentPositionOverviewPage() {
           </Text>
         )}
       </div>
+
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
           {t(KEY.recruitment_withdrawn_applications)}({withdrawnApplicants.length})
