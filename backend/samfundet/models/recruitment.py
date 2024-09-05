@@ -417,6 +417,7 @@ class RecruitmentStatistics(FullCleanSaveMixin):
         self.generate_time_stats()
         self.generate_date_stats()
         self.generate_campus_stats()
+        self.generate_gang_stats()
 
     def __str__(self) -> str:
         return f'{self.recruitment} stats'
@@ -440,6 +441,12 @@ class RecruitmentStatistics(FullCleanSaveMixin):
             campus_stat, created = RecruitmentCampusStat.objects.get_or_create(recruitment_stats=self, campus=campus)
             if not created:
                 campus_stat.save()
+
+    def generate_gang_stats(self) -> None:
+        for gang in Gang.objects.filter(id__in=self.recruitment.positions.values_list('gang', flat=True)):
+            gang_stat, created = RecruitmentGangStat.objects.get_or_create(recruitment_stats=self, gang=gang)
+            if not created:
+                gang_stat.save()
 
 
 class RecruitmentTimeStat(models.Model):
@@ -489,4 +496,21 @@ class RecruitmentCampusStat(models.Model):
         self.count = User.objects.filter(
             id__in=self.recruitment_stats.recruitment.applications.values_list('user', flat=True).distinct(), campus=self.campus
         ).count()
+        super().save(*args, **kwargs)
+
+
+class RecruitmentGangStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='gang_stats')
+    gang = models.ForeignKey(Gang, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+
+    application_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+    applicant_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.gang} {self.application_count}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        applications = RecruitmentApplication.objects.filter(recruitment=self.recruitment_stats.recruitment, recruitment_position__gang=self.gang)
+        self.application_count = applications.count()
+        self.applicant_count = applications.values_list('user', flat=True).distinct().count()
         super().save(*args, **kwargs)
