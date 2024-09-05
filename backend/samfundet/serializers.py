@@ -721,7 +721,7 @@ class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
         model = Recruitment
         fields = '__all__'
 
-    def get_interview_time(self, instance: Recruitment) -> float:
+    def get_recruitment_progress(self, instance: Recruitment) -> float:
         return instance.recruitment_progress()
 
 
