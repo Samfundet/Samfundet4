@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
-from .models.event import Event, EventGroup, EventCustomTicket
+from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
@@ -55,6 +55,7 @@ from .models.recruitment import (
     InterviewRoom,
     OccupiedTimeslot,
     RecruitmentDateStat,
+    RecruitmentGangStat,
     RecruitmentPosition,
     RecruitmentTimeStat,
     RecruitmentCampusStat,
@@ -612,10 +613,22 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
         return stat.campus.name_nb if stat.campus else None
 
 
+class RecruitmentGangStatSerializer(serializers.ModelSerializer):
+    gang = serializers.SerializerMethodField(method_name='gang_name', read_only=True)
+
+    class Meta:
+        model = RecruitmentGangStat
+        exclude = ['id', 'recruitment_stats']
+
+    def gang_name(self, stat: RecruitmentGangStat) -> str:
+        return stat.gang.name_nb
+
+
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
     time_stats = RecruitmentTimeStatSerializer(read_only=True, many=True)
     date_stats = RecruitmentDateStatSerializer(read_only=True, many=True)
     campus_stats = RecruitmentCampusStatSerializer(read_only=True, many=True)
+    gang_stats = RecruitmentGangStatSerializer(read_only=True, many=True)
 
     class Meta:
         model = RecruitmentStatistics
@@ -992,3 +1005,40 @@ class UserFeedbackSerializer(serializers.ModelSerializer):
             'contact_email': {'required': False},
             'screen_resolution': {'required': False},
         }
+
+
+class PurchaseFeedbackAlternativeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseFeedbackAlternative
+        fields = ['alternative', 'selected']
+
+
+class PurchaseFeedbackQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseFeedbackQuestion
+        fields = ['question', 'answer']
+
+
+class PurchaseFeedbackSerializer(serializers.ModelSerializer):
+    alternatives = serializers.DictField(child=serializers.CharField())
+    responses = serializers.DictField(child=serializers.CharField())
+
+    class Meta:
+        model = PurchaseFeedbackModel
+        fields = ['event', 'title', 'alternatives', 'responses']
+
+    def create(self, validated_data: dict) -> PurchaseFeedbackModel:
+        alternatives_data = validated_data.pop('alternatives')
+        responses_data = validated_data.pop('responses')
+
+        event = validated_data.pop('event')
+
+        purchase_feedback = PurchaseFeedbackModel.objects.create(event=event, **validated_data)
+
+        for alternative, selected in alternatives_data.items():
+            PurchaseFeedbackAlternative.objects.create(form=purchase_feedback, alternative=alternative, selected=selected)
+
+        for question, answer in responses_data.items():
+            PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
+
+        return purchase_feedback

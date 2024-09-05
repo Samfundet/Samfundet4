@@ -132,6 +132,7 @@ export const KEY = {
   common_volunteer: 'common_volunteer',
   common_norwegian: 'common_norwegian',
   common_contact_us: 'common_contact_us',
+  common_doors_date: 'common_doors_date',
   common_restaurant: 'common_restaurant',
   common_member: 'common_member',
   common_membership: 'common_membership',
@@ -333,6 +334,11 @@ export const KEY = {
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
+  error_recruitment_form_1: 'error_recruitment_form_1',
+  error_recruitment_form_2: 'error_recruitment_form_2',
+  error_recruitment_form_3: 'error_recruitment_form_3',
+  error_recruitment_form_4: 'error_recruitment_form_4',
+
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',

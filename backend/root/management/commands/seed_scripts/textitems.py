@@ -303,6 +303,41 @@ def seed():
             'text_nb': 'Jeg godtar Samfundets personværnserklæring.',
             'text_en': "I agree to Samfundet's privacy policy.",
         },
+        {
+            'key': 'purchase_feedback_title',
+            'text_nb': 'Hvor hørte du om dette arrangementet?',
+            'text_en': 'Where did you hear about this event?',
+        },
+        {
+            'key': 'purchase_feedback_alternative_1',
+            'text_nb': 'samfundet.no',
+            'text_en': 'samfundet.no',
+        },
+        {
+            'key': 'purchase_feedback_alternative_2',
+            'text_nb': 'venner',
+            'text_en': 'friends',
+        },
+        {
+            'key': 'purchase_feedback_alternative_3',
+            'text_nb': 'plakat',
+            'text_en': 'poster',
+        },
+        {
+            'key': 'purchase_feedback_alternative_4',
+            'text_nb': 'sosiale medier',
+            'text_en': 'social media',
+        },
+        {
+            'key': 'purchase_feedback_question_1',
+            'text_nb': 'andre steder:',
+            'text_en': 'other places:',
+        },
+        {
+            'key': 'purchase_feedback_question_2',
+            'text_nb': 'Har du noen øvrige kommentarer til arrangementet?',
+            'text_en': 'Do you have any other feedback in regards to the event?',
+        },
     ]
 
     TextItem.objects.all().delete()
