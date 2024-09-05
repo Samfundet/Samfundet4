@@ -32,6 +32,12 @@ class Recruitment(CustomBaseModel):
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
 
+    def recruitment_progress(self) -> float:
+        applications = RecruitmentApplication.objects.filter(recruitment=self)
+        if applications.count() == 0:
+            return 1
+        return applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET).count() / applications.count()
+
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
 

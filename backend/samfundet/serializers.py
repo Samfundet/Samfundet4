@@ -725,6 +725,19 @@ class RecruitmentSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
+    seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
+    statistics = RecruitmentStatisticsSerializer(read_only=True)
+
+    class Meta:
+        model = Recruitment
+        fields = '__all__'
+
+    def get_recruitment_progress(self, instance: Recruitment) -> float:
+        return instance.recruitment_progress()
+
+
 class RecruitmentPositionSerializer(CustomBaseSerializer):
     total_applicants = serializers.SerializerMethodField(method_name='get_total_applicants', read_only=True)
     processed_applicants = serializers.SerializerMethodField(method_name='get_processed_applicants', read_only=True)
