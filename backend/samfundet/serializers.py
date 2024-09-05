@@ -55,6 +55,7 @@ from .models.recruitment import (
     InterviewRoom,
     OccupiedTimeslot,
     RecruitmentDateStat,
+    RecruitmentGangStat,
     RecruitmentPosition,
     RecruitmentTimeStat,
     RecruitmentCampusStat,
@@ -612,10 +613,22 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
         return stat.campus.name_nb if stat.campus else None
 
 
+class RecruitmentGangStatSerializer(serializers.ModelSerializer):
+    gang = serializers.SerializerMethodField(method_name='gang_name', read_only=True)
+
+    class Meta:
+        model = RecruitmentGangStat
+        exclude = ['id', 'recruitment_stats']
+
+    def gang_name(self, stat: RecruitmentGangStat) -> str:
+        return stat.gang.name_nb
+
+
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
     time_stats = RecruitmentTimeStatSerializer(read_only=True, many=True)
     date_stats = RecruitmentDateStatSerializer(read_only=True, many=True)
     campus_stats = RecruitmentCampusStatSerializer(read_only=True, many=True)
+    gang_stats = RecruitmentGangStatSerializer(read_only=True, many=True)
 
     class Meta:
         model = RecruitmentStatistics
