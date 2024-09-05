@@ -53,6 +53,7 @@ import {
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
+  RecruitmentOpenToOtherPositionsPage,
   SultenReservationAdminPage,
   SultenMenuAdminPage,
   RecruitmentOverviewPage,
@@ -375,6 +376,16 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
             element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_open_to_other_positions}
+            element={
+              <PermissionRoute
+                required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                element={<RecruitmentOpenToOtherPositionsPage />}
+              />
+            }
+            //TODO: crumb
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}

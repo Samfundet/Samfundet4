@@ -89,6 +89,16 @@ export function RecruitmentGangOverviewPage() {
         theme="white"
         rounded={true}
         link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_open_to_other_positions,
+          urlParams: { recruitmentId },
+        })}
+      >
+        {t(KEY.recruitment_applicants_open_to_other_positions)}
+      </Button>
+      <Button
+        theme="white"
+        rounded={true}
+        link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_edit,
           urlParams: { recruitmentId },
         })}
