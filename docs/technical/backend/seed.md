@@ -26,7 +26,7 @@ I find this very long and messy, so I prefer to have a terminal window inside th
 After docker container is running:
 
 - 1) Open shell in Docker container: `docker compose exec backend bash`
-- 2) Enable pipenv: `pipenv shell` 
+- 2) Enable poetry: `poetry shell` 
 - 3) Run seed script: `python manage.py seed`
 
 

@@ -48,6 +48,7 @@ import {
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterviewGangPage,
+  RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RecruitmentApplicantAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   SaksdokumentFormAdminPage,
@@ -365,12 +366,16 @@ export const router = createBrowserRouter(
             element={<RecruitmentGangAllApplicantsAdminPage />}
           />
           <Route
+            path={ROUTES.frontend.admin_recruitment_users_without_interview}
+            element={<RecruitmentUsersWithoutInterviewGangPage />}
+          />
+          <Route
             path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
             element={<RecruitmentUsersWithoutInterviewGangPage />}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
-            element={<RecruitmentUnprocessedApplicantsPage />}
+            path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
+            element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}

@@ -118,6 +118,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_firstname]: 'Fornavn',
   [KEY.common_member]: 'Medlem',
   [KEY.common_membership]: 'Medlemskap',
+  [KEY.common_doors_date]: 'Dørene åpner',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
   [KEY.common_select_all]: 'Velg alle',
@@ -322,6 +323,15 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_no_current_applications_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.error_recruitment_form_1]: 'Vist søknadfrist kan ikke være før opptaket blir synlig',
+  [KEY.error_recruitment_form_2]: 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
+  [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
+  [KEY.error_recruitment_form_4]: 'Flaggefrist kan ikke være før omprioriteringsfrist',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
+
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -538,6 +548,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contributors]: 'Contributors',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_general]: 'General',
+  [KEY.common_doors_date]: 'Doors',
   [KEY.common_long_description]: 'Long description',
   [KEY.common_short_description]: 'Short description',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
@@ -734,6 +745,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
+  [KEY.error_recruitment_form_1]: 'Displayed deadline cannot be before the recruitment becomes visible',
+  [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
+  [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
+  [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate application',
+
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
@@ -756,7 +774,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
-
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // CommandMenu:
   [KEY.command_menu_label]: 'Global command menu',
   [KEY.command_menu_no_results]: 'No results',

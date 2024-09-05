@@ -1,23 +1,24 @@
+import { Icon } from '@iconify/react';
 import { useState } from 'react';
-import styles from './OccupiedForm.module.scss';
-import { Modal } from '../Modal';
-import { OccupiedForm } from './OccupiedForm';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import { Icon } from '@iconify/react';
+import { Modal } from '../Modal';
+import { OccupiedForm } from './OccupiedForm';
+import styles from './OccupiedForm.module.scss';
 
 type OccupiedFormModalProps = {
   recruitmentId: number;
+  isButtonRounded?: boolean;
 };
 
-export function OccupiedFormModal({ recruitmentId = 1 }: OccupiedFormModalProps) {
+export function OccupiedFormModal({ recruitmentId = 1, isButtonRounded = false }: OccupiedFormModalProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Button theme="samf" onClick={() => setOpen(true)}>
+      <Button theme="samf" rounded={isButtonRounded} onClick={() => setOpen(true)}>
         {t(KEY.occupied_show)}
       </Button>
 
