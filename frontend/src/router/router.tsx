@@ -385,7 +385,13 @@ export const router = createBrowserRouter(
                 element={<RecruitmentOpenToOtherPositionsPage />}
               />
             }
-            //TODO: crumb
+            handle={{
+              crumb: () => (
+                <Link url={ROUTES.frontend.admin_recruitment_open_to_other_positions}>
+                  {t(KEY.recruitment_applicants_open_to_other_positions)}
+                </Link>
+              ),
+            }}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_applicant}
