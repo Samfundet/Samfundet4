@@ -378,6 +378,10 @@ export const router = createBrowserRouter(
             element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
           />
           <Route
+            path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
+            element={<RecruitmentUnprocessedApplicantsPage />}
+          />
+          <Route
             path={ROUTES.frontend.admin_recruitment_applicant}
             element={
               <PermissionRoute

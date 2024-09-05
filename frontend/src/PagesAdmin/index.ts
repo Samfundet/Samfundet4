@@ -22,6 +22,7 @@ export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
 export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPage';
+export { RecruitmentUnprocessedApplicantsPage } from './RecruitmentUnprocessedApplicantsPage';
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
