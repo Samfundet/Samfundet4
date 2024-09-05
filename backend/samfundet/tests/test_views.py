@@ -857,11 +857,10 @@ def test_get_applicants_without_interviews_when_interview_is_set(
         kwargs={'pk': fixture_recruitment.id},
     )
 
-    # Setting the interview time for the user's application
-    interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Bogstad')
-    fixture_recruitment_application.interview = interview
+    fixture_recruitment_application.interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Stallen')
     fixture_recruitment_application.save()
 
+    assert fixture_recruitment_application.interview is not None
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
 

@@ -154,6 +154,7 @@ export type EventDto = {
   duration: number;
   end_dt: string;
   publish_dt: string;
+  doors_time?: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
   ticket_type: EventTicketTypeValue;
@@ -383,6 +384,7 @@ export type RecruitmentDto = {
   max_applications?: number;
   organization: number;
   separate_positions?: RecruitmentSeparatePositionDto[];
+  recruitment_progress?: number;
 };
 
 export type RecruitmentSeparatePositionDto = {
@@ -465,6 +467,18 @@ export type RecruitmentApplicationStateDto = {
 export type RecruitmentApplicationStateChoicesDto = {
   recruiter_priority: [number, string][];
   recruiter_status: [number, string][];
+};
+
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, string>;
 };
 
 export type FeedbackDto = {

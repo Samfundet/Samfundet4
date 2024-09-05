@@ -15,10 +15,10 @@ import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
+  const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
