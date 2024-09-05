@@ -1,19 +1,69 @@
+/**
+ * Shrimp fishing game
+ *
+ * Important note: This is a MG::WEB pride project, which implies that.
+ * external sources such as AI assistants, libraries, and frameworks are not allowed.
+ * CoPilot is allowed, however only as completion, not by instruction, this includes comments in code.
+ *
+ * The original Shrimp Fishing game was created by @evgiz in V22, on Samf3
+ * This version is a continuation of the original game, by @Mathias-a in H24, on Samf4
+ */
 /* eslint-disable max-len */
 import { useEffect, useRef, useState } from 'react';
 import shrimpFishingStyles from './ShrimpFishing.module.scss';
+
+const SHRIMP_COUNT = 3;
 
 export function ShrimpFishing() {
   const [showGameOver, setShowGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [shrimpSpeed, setShrimpSpeed] = useState<number>(10);
   const [sharkSpeed, setSharkSpeed] = useState(10);
+  const [shrimps, setShrimps] = useState<MovingItemProps[]>();
+  const [friedShrimps, setFriedShrimps] = useState<MovingItemProps[]>();
+
+  function generateShrimps() {
+    const shrimps = Array.from({ length: SHRIMP_COUNT }, (_, index) => ({
+      id: `shrimp-${index}`,
+      speed: shrimpSpeed,
+      onClick: () => {
+        setScore((oldScore) => oldScore + 1);
+        setShrimps((oldShrimps) => oldShrimps?.filter((shrimp) => shrimp.id !== `shrimp-${index}`));
+      },
+    }));
+    setShrimps(shrimps);
+  }
+
+  function generateFriedShrimps() {
+    const friedShrimps = Array.from({ length: SHRIMP_COUNT }, (_, index) => ({
+      id: `fried-${index}`,
+      speed: shrimpSpeed,
+      onClick: () => {
+        setScore((oldScore) => oldScore + 5);
+        setFriedShrimps((oldFriedShrimps) => oldFriedShrimps?.filter((shrimp) => shrimp.id !== `fried-${index}`));
+      },
+    }));
+    setFriedShrimps(friedShrimps);
+  }
+
+  useEffect(() => {
+    generateShrimps();
+    generateFriedShrimps();
+  }, []);
 
   return (
     <div className={shrimpFishingStyles['container']}>
+      {!showGameOver && <>
       <div className={shrimpFishingStyles['offsetContainer']}>
-        <FriedShrimpButton speed={shrimpSpeed} onClick={() => setScore((oldScore) => oldScore + 5)} />
-        <ShrimpButton speed={shrimpSpeed} onClick={() => setScore((oldScore) => oldScore + 1)} />
-        <SharkButton speed={sharkSpeed} onClick={() => setShowGameOver(true)} />
+        {friedShrimps?.map((shrimp) => (
+          <FriedShrimpButton key={shrimp.id} id={shrimp.id} speed={shrimp.speed} onClick={shrimp.onClick} />
+        ))}
+        {shrimps?.map((shrimp) => (
+          <ShrimpButton key={shrimp.id} id={shrimp.id} speed={shrimp.speed} onClick={shrimp.onClick} />
+        ))}
+        <SharkButton id={'shark-1'} speed={sharkSpeed} onClick={() => setShowGameOver(true)} />
+        </>
+      }
         <h1 className={shrimpFishingStyles['scoreText']}>Score: {score}</h1>
         <h1 className={shrimpFishingStyles['gameOverText']}>{showGameOver && 'Game Over'}</h1>
       </div>
@@ -22,6 +72,7 @@ export function ShrimpFishing() {
 }
 
 type MovingItemProps = {
+  id: string;
   speed: number;
   onClick?: () => void;
 };
