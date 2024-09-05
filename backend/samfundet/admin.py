@@ -23,7 +23,7 @@ from root.custom_classes.admin_classes import (
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 
-from .models.event import Event, EventGroup, EventRegistration
+from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
     Tag,
     Gang,
