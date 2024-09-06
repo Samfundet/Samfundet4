@@ -10,7 +10,7 @@ export function filterRecruitmentApplication(
     (application) =>
       application.recruitment_position &&
       application.recruitment_position.toString() === positionId &&
-      application.interview?.id.toString() === interviewId &&
+      application.interview?.id?.toString() === interviewId &&
       application.interview?.interview_time !== null,
   );
 }

@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { InputField } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
-import { Table } from '~/Components/Table';
-import { putRecruitmentApplicationForGang } from '~/api';
-import type { RecruitmentApplicationDto } from '~/dto';
+import styles from './RecruitmentApplicantsStatus.module.scss';
+import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
+import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
+import { Link } from '../Link';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { InputField } from '~/Components';
+import { putRecruitmentApplicationForGang } from '~/api';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { utcTimestampToLocal } from '~/utils';
-import { Link } from '../Link';
-import styles from './RecruitmentApplicantsStatus.module.scss';
+import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { Table } from '~/Components/Table';
 
 type RecruitmentApplicantsStatusProps = {
   applicants: RecruitmentApplicationDto[];
   recruitmentId: number | string | undefined;
   gangId: number | string | undefined;
   positionId: number | string | undefined;
+  updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
 };
 
 // TODO add backend to fetch these
 const priorityOptions: DropDownOption<number>[] = [
   { label: 'Not Set', value: 0 },
-  { label: 'Not Wanted', value: 1 },
+  { label: 'Reserve', value: 1 },
   { label: 'Wanted', value: 2 },
-  { label: 'Reserve', value: 3 },
+  { label: 'Not Wanted', value: 3 },
 ];
 
 const statusOptions: DropDownOption<number>[] = [
@@ -48,14 +48,10 @@ export function RecruitmentApplicantsStatus({
   recruitmentId,
   gangId,
   positionId,
+  updateStateFunction,
 }: RecruitmentApplicantsStatusProps) {
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
-
-  useEffect(() => {
-    setRecruitmentApplicants(applicants);
-  }, [applicants]);
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: true },
@@ -68,20 +64,16 @@ export function RecruitmentApplicantsStatus({
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
-    setRecruitmentApplicants(
-      recruitmentApplicants.map((element: RecruitmentApplicationDto) => {
-        if (element.id === id) {
-          switch (field) {
-            case editChoices.update_recruitment_priority:
-              return { ...element, recruiter_priority: value as number };
-            case editChoices.update_recruitment_status:
-              return { ...element, recruiter_status: value as number };
-          }
-        }
-        return element;
-      }),
-    );
-    return value;
+    if (value) {
+      switch (field) {
+        case editChoices.update_recruitment_priority:
+          updateStateFunction(id, { recruiter_priority: value as number });
+          break;
+        case editChoices.update_recruitment_status:
+          updateStateFunction(id, { recruiter_status: value as number });
+          break;
+      }
+    }
   }
 
   function getStatusStyle(status: number | undefined) {
@@ -96,11 +88,13 @@ export function RecruitmentApplicantsStatus({
         styles.less_wanted,
         styles.less_wanted_wanted,
         styles.less_wanted_reserve,
+        styles.pending,
+        styles.pending,
       ][status];
     }
   }
 
-  const data = recruitmentApplicants.map((application) => {
+  const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     return [
       {
@@ -151,7 +145,7 @@ export function RecruitmentApplicantsStatus({
           <InputField
             inputClassName={styles.input}
             value={application.interview?.interview_location ?? ''}
-            onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
+            onBlur={() => putRecruitmentApplicationForGang(application.id, application)}
             onChange={(value: string) => updateApplications(application.id, editChoices.update_location, value)}
           />
         ),

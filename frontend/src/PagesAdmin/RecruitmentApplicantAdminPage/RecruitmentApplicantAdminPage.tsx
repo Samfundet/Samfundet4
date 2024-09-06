@@ -1,22 +1,23 @@
-import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BackButton, Link, Page, SamfundetLogoSpinner } from '~/Components';
-import { Table } from '~/Components/Table';
-import { Text } from '~/Components/Text/Text';
-import { getRecruitmentApplicationsForRecruiter } from '~/api';
-import type { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
+import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter } from '~/api';
+import { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
+import { Text } from '~/Components/Text/Text';
+import { Table } from '~/Components/Table';
+import classNames from 'classnames';
+import { useNavigate, useParams } from 'react-router-dom';
+import { STATUS } from '~/http_status_codes';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
   const [otherRecruitmentApplication, setOtherRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
   const [applicant, setApplicant] = useState<RecruitmentUserDto>();
@@ -33,11 +34,26 @@ export function RecruitmentApplicantAdminPage() {
         setOtherRecruitmentApplication(res.data.other_applications);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((data) => {
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.not_found, { replace: true });
+        }
         toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
       });
-  }, [applicationID, t]);
+  }, [applicationID, t, navigate]);
+
+  const adminWithdraw = () => {
+    if (recruitmentApplication) {
+      withdrawRecruitmentApplicationRecruiter(recruitmentApplication.id)
+        .then((response) => {
+          setRecruitmentApplication(response.data);
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    }
+  };
 
   if (loading) {
     return (
@@ -68,48 +84,66 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Text>{recruitmentApplication?.application_text}</Text>
       </div>
+      <div className={styles.withdrawContainer}>
+        {recruitmentApplication?.withdrawn ? (
+          <Text as="i" size="l" className={styles.withdrawnText}>
+            {t(KEY.recruitment_withdrawn)}
+          </Text>
+        ) : (
+          <Button theme="samf" onClick={adminWithdraw}>
+            {t(KEY.recruitment_withdraw_application)}
+          </Button>
+        )}
+      </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_all_applications)}
         </Text>
         <Table
           columns={[
+            '#',
             t(KEY.common_recruitmentposition),
             t(KEY.common_gang),
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data={otherRecruitmentApplication.map((element) => [
-            {
-              content: (
-                <Link
-                  target={'frontend'}
-                  url={reverse({
-                    pattern: ROUTES.frontend.admin_recruitment_applicant,
-                    urlParams: {
-                      applicationID: element.id,
-                    },
-                  })}
-                >
-                  {dbT(element.recruitment_position, 'name')}
-                </Link>
-              ),
-            },
-            {
-              content: (
-                <Link
-                  url={reverse({
-                    pattern: ROUTES.frontend.information_page_detail,
-                    urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
-                  })}
-                >
-                  {dbT(element.recruitment_position.gang, 'name')}
-                </Link>
-              ),
-            },
-            element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
-            element.interview_time ? element.interview_time : t(KEY.common_not_set),
-          ])}
+          data={otherRecruitmentApplication.map((element) => {
+            return [
+              {
+                sortable: true,
+                content: element.applicant_priority,
+              },
+              {
+                content: (
+                  <Link
+                    target={'frontend'}
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_applicant,
+                      urlParams: {
+                        applicationID: element.id,
+                      },
+                    })}
+                  >
+                    {dbT(element.recruitment_position, 'name')}
+                  </Link>
+                ),
+              },
+              {
+                content: (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.information_page_detail,
+                      urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
+                    })}
+                  >
+                    {dbT(element.recruitment_position.gang, 'name')}
+                  </Link>
+                ),
+              },
+              element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
+              element.interview_time ? element.interview_time : t(KEY.common_not_set),
+            ];
+          })}
         />
       </div>
     </Page>

@@ -13,6 +13,7 @@ export type TabBarProps<T = void> = {
   selected?: Tab<T>;
   vertical?: boolean;
   spaceBetween?: boolean;
+  spaceAround?: boolean;
   disabled?: boolean;
   compact?: boolean;
   onSetTab?(tab: Tab<T>): void;
@@ -23,6 +24,7 @@ export function TabBar<T = void>({
   selected,
   vertical = false,
   spaceBetween = false,
+  spaceAround = false,
   compact = false,
   onSetTab,
   disabled = false,
@@ -35,6 +37,7 @@ export function TabBar<T = void>({
         vertical && styles.vertical,
         spaceBetween && styles.space_between,
         disabled && styles.disabled,
+        spaceAround && styles.space_around,
       )}
     >
       {tabs.map((tab: Tab<T>) => {

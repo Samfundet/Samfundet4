@@ -35,7 +35,7 @@ export function GangsFormAdminPage() {
         })
         .catch((data) => {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_gangs });
+            navigate({ url: ROUTES.frontend.admin_gangs, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
@@ -59,7 +59,7 @@ export function GangsFormAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm
         initialData={gang}
         onSubmit={handleOnSubmit}

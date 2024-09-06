@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
@@ -10,6 +10,8 @@ import { KEY } from '~/i18n/constants';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
 import { filterRecruitmentApplication, getNameUser } from './utils';
+import { ROUTES } from '~/routes';
+import { STATUS } from '~/http_status_codes';
 
 export function InterviewNotesPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -22,28 +24,39 @@ export function InterviewNotesPage() {
   const [disabled, setdisabled] = useState<boolean>(true);
   const [nameUser, setNameUser] = useState<string>('');
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (positionId && recruitmentId && gangId && interviewId) {
-      getRecruitmentApplicationsForGang(gangId, recruitmentId).then((response) => {
-        const application = filterRecruitmentApplication(response.data, positionId, interviewId);
-        if (application.length !== 0) {
-          setdisabled(false);
-          setRecruitmentApplication(application);
-          if (application[0].interview) {
-            setInterview(application[0].interview);
+      getRecruitmentApplicationsForGang(gangId, recruitmentId)
+        .then((response) => {
+          const application = filterRecruitmentApplication(response.data, positionId, interviewId);
+          if (application.length !== 0) {
+            setdisabled(false);
+            setRecruitmentApplication(application);
+            if (application[0].interview) {
+              setInterview(application[0].interview);
+            }
+            setNameUser(getNameUser(application[0]));
           }
-          setNameUser(getNameUser(application[0]));
-        }
-      });
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, positionId, gangId, interviewId]);
 
   async function handleEditSave() {
     if (editingMode && interview) {
       try {
-        await putRecruitmentApplicationInterview(interview.id, interview);
-        toast.success(t(KEY.common_save_successful));
+        if (interview.id) {
+          await putRecruitmentApplicationInterview(interview.id, interview);
+          toast.success(t(KEY.common_save_successful));
+        }
       } catch (error) {
         toast.error(t(KEY.common_something_went_wrong));
       }
@@ -60,7 +73,7 @@ export function InterviewNotesPage() {
   }
 
   return (
-    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={true} showBackButton={true}>
+    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={true}>
       <div className={styles.container}>
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}

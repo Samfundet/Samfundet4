@@ -59,7 +59,7 @@ export function ClosedPeriodFormAdminPage() {
       .catch((data: AxiosError) => {
         // TODO add error pop up message?
         if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate({ url: ROUTES.frontend.admin_gangs });
+          navigate({ url: ROUTES.frontend.admin_closed, replace: true });
         }
         toast.error(t(KEY.common_something_went_wrong));
         console.error(data);
@@ -82,7 +82,7 @@ export function ClosedPeriodFormAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
           <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />

@@ -53,10 +53,9 @@ export function InformationFormAdminPage() {
         .catch((data) => {
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_information });
+            navigate({ url: ROUTES.frontend.admin_information, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
         });
     } else {
       setShowSpinner(false);

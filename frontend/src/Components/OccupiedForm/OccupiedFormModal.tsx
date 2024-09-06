@@ -9,15 +9,16 @@ import styles from './OccupiedForm.module.scss';
 
 type OccupiedFormModalProps = {
   recruitmentId: number;
+  isButtonRounded?: boolean;
 };
 
-export function OccupiedFormModal({ recruitmentId = 1 }: OccupiedFormModalProps) {
+export function OccupiedFormModal({ recruitmentId = 1, isButtonRounded = false }: OccupiedFormModalProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Button theme="samf" onClick={() => setOpen(true)}>
+      <Button theme="samf" rounded={isButtonRounded} onClick={() => setOpen(true)}>
         {t(KEY.occupied_show)}
       </Button>
 

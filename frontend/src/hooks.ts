@@ -372,6 +372,7 @@ export type CustomNavigateProps = {
   event?: React.MouseEvent;
   url: string | number;
   linkTarget?: LinkTarget;
+  replace?: boolean;
 };
 
 export type CustomNavigateFn = (props: CustomNavigateProps, direction?: number) => void;
@@ -384,7 +385,7 @@ export function useCustomNavigate(): CustomNavigateFn {
   const navigate = useNavigate();
   const { setIsMobileNavigation } = useGlobalContext();
 
-  function handleClick({ event, isMetaDown, url, linkTarget = 'frontend' }: CustomNavigateProps) {
+  function handleClick({ event, isMetaDown, url, replace = false, linkTarget = 'frontend' }: CustomNavigateProps) {
     const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
     // Stop default <a> tag onClick handling. We want custom behaviour depending on the target.
     event?.preventDefault();
@@ -402,7 +403,7 @@ export function useCustomNavigate(): CustomNavigateFn {
     const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
     // React navigation.
     if (linkTarget === 'frontend' && !isCmdClick) {
-      navigate(typeof url === 'number' ? url : finalUrl);
+      navigate(typeof url === 'number' ? url : finalUrl, { replace });
     }
     // Normal change of href to trigger reload.
     else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;

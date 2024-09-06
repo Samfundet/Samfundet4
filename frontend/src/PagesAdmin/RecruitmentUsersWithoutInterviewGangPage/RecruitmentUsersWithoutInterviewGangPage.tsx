@@ -25,7 +25,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
-    if (recruitmentId && gangId) {
+    if (recruitmentId) {
       getApplicantsWithoutInterviews(recruitmentId, gangId)
         .then((response) => {
           setUsers(response.data);
@@ -36,7 +36,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           console.error(error);
         });
     }
-  }, [recruitmentId, gangId]);
+  }, [gangId, recruitmentId]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
@@ -47,7 +47,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
         })
         .catch((data) => {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_gangs });
+            navigate({ url: ROUTES.frontend.not_found, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
@@ -64,7 +64,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
         .catch((data) => {
           // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_recruitment });
+            navigate({ url: ROUTES.frontend.not_found, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(data);

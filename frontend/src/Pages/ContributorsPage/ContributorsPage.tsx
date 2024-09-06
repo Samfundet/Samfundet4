@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components';
 import robines from '~/assets/contributors/robines.jpg';
+import sygard from '~/assets/contributors/sygard.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
+import simenProffen from '~/assets/contributors/SimenProffen.jpg';
 import { KEY } from '~/i18n/constants';
 import styles from './ContributorsPage.module.scss';
 import { type Contributor, ContributorItem } from './components';
@@ -16,7 +18,7 @@ const CONTRIBUTORS: Contributor[] = [
   // V20
   { name: 'Marcus Frenje', github: 'Frenje123', from: 'V20' },
   // H20
-  { name: 'Magnus Øvre Sygard', github: 'magsyg', from: 'H20' },
+  { name: 'Magnus Øvre Sygard', github: 'magsyg', picture:sygard, from: 'H20' },
   { name: 'Snorre Skjellestad Kristiansen', github: 'snorrekr', from: 'H20', websjef: { from: 'H21', to: 'V22' } },
   // V21
   { name: 'Johanne Dybevik', github: 'JohanneD', from: 'V21', to: 'V24' },
@@ -24,6 +26,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Mathias Aas', github: 'Mathias-a', from: 'H21', websjef: { from: 'H22', to: 'V23' } },
   // V22
   { name: 'Sindre Lothe', github: 'sindrelothe', from: 'V22', to: 'H23' },
+  { name: 'Simen Myrrusten', github: 'nemisis84', from: 'V22', picture: simenProffen},
   // H22
   { name: 'Snorre Sæther', github: 'Snorre98', from: 'H22', picture: snorre98, websjef: { from: 'H24', to: 'V25' } },
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },

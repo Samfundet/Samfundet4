@@ -15,10 +15,10 @@ import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
+  const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
@@ -33,7 +33,7 @@ export function EventPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found);
+            navigate(ROUTES.frontend.not_found, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);

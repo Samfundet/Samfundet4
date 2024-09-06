@@ -315,7 +315,7 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
 
     # Install python virtual environment with dependencies.
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install virtual python environment (pyenv, pipenv)?" "pyenv install ; python -m pip install pipenv ; PIPENV_VENV_IN_PROJECT=1 python -m pipenv install --python $(cat backend/.python-version)" "$X_INTERACTIVE"
+    do_action "$BOT: Install virtual python environment (pyenv, poetry)?" "pyenv install ; python -m pip install poetry ; POETRY_VIRTUALENVS_IN_PROJECT=1 python -m poetry install --python $(cat backend/.python-version)" "$X_INTERACTIVE"
 
     # Build project.
     echo ; echo ; echo ; echo "================================================================================================================"
@@ -368,6 +368,6 @@ if [ "$?" == 0 ]; then
 fi
 
 # echo "You can now run these commands to start the project:"
-# echo "    python -m pipenv run python manage.py collectstatic"
-# echo "    python -m pipenv run python manage.py migrate"
-# echo "    python -m pipenv run python manage.py runserver"
+# echo "    python -m poetry run python manage.py collectstatic"
+# echo "    python -m poetry run python manage.py migrate"
+# echo "    python -m poetry run python manage.py runserver"

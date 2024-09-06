@@ -105,7 +105,7 @@ export function SultenMenuItemFormAdminPage() {
         })
         .catch((data) => {
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_sulten_menu);
+            navigate(ROUTES.frontend.admin_sulten_menu, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
