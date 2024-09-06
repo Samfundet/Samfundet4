@@ -35,7 +35,6 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
-from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
