@@ -14,6 +14,17 @@ Organizational level, then Gang level, and finally the Gang Section level. This 
 permission for an object on the Organizational level, they also have it on the Gang and Gang Section levels. And if a
 user has it on the Gang level, they also have it on the Gang Section level.
 
+## Real-world example
+
+Before we get into the technical details of the system, it's important to know how the system is used, so here's a
+real-world example.
+
+Say we have a "Interviewer" role. This role gives permissions to view and manage interviews in a recruitment. If the
+user is given this role on the Organization level, it means they are able to manage absolutely all interviews for gangs
+and sections which belong to the organization. If they are given the role on the Gang level, they are able to manage all
+interviews for the gang and the gang's sections. And finally, if they are given the role on the Gang Section level, they
+are only able to manage interviews belonging to the gang section.
+
 ## Organization/Gang/Section resolvers
 
 For the auth backend to know what organization an object belongs to, models need to implement
