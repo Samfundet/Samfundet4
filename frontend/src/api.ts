@@ -26,7 +26,7 @@ import type {
   RecruitmentApplicationStateDto,
   RecruitmentAvailabilityDto,
   RecruitmentDto,
-  type RecruitmentGangDto,
+  RecruitmentGangDto,
   RecruitmentPositionDto,
   RecruitmentUserDto,
   RegistrationDto,
