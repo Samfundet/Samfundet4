@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
-import { GangDto, type OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
-import styles from './RecruitmentGangAdminPage.module.scss';
+import type { GangDto, OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { toast } from 'react-toastify';
-import { STATUS } from '~/http_status_codes';
+import styles from './RecruitmentGangAdminPage.module.scss';
 
 export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
@@ -27,6 +27,7 @@ export function RecruitmentGangAdminPage() {
   const title = `${organization?.name} - ${dbT(recruitment, 'name')} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
       Promise.allSettled([
@@ -51,7 +52,6 @@ export function RecruitmentGangAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
   const tableColumns = [

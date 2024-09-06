@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RecruitmentWithoutInterviewTable } from '~/Components';
-import { getApplicantsWithoutThreeInterviewCriteria, getRecruitment } from '~/api';
-import { RecruitmentDto, RecruitmentUserDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import styles from './RecruitmentUsersWithoutThreeInterviewCriteriaPage.module.scss';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
+import { getApplicantsWithoutThreeInterviewCriteria, getRecruitment } from '~/api';
+import type { RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentUsersWithoutThreeInterviewCriteriaPage.module.scss';
 
 export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const { recruitmentId } = useParams();
@@ -22,6 +22,7 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (recruitmentId) {
       getApplicantsWithoutThreeInterviewCriteria(recruitmentId)
@@ -34,9 +35,9 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
           console.error(error);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId) {
       getRecruitment(recruitmentId)
@@ -52,7 +53,6 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
           console.error(data);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   const title = t(KEY.recruitment_three_interviews_criteria_header);

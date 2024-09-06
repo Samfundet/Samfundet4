@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Page, SamfundetLogoSpinner } from '~/Components';
 import { getActiveRecruitments } from '~/api';
-import { RecruitmentDto } from '~/dto';
+import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { RecruitmentCard, NoPositions } from './Components';
-import styles from './RecruitmentPage.module.scss';
 import { dbT } from '~/utils';
+import { NoPositions, RecruitmentCard } from './Components';
+import styles from './RecruitmentPage.module.scss';
 
 export function RecruitmentPage() {
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);

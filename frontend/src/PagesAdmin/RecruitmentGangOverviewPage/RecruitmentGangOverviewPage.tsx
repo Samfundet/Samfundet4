@@ -4,7 +4,7 @@ import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link, OccupiedFormModal } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentGangs } from '~/api';
-import { type RecruitmentGangDto } from '~/dto';
+import type { RecruitmentGangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -95,7 +95,7 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.common_edit)}
       </Button>
-      {recruitmentId && <OccupiedFormModal recruitmentId={parseInt(recruitmentId)} isButtonRounded={true} />}
+      {recruitmentId && <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} isButtonRounded={true} />}
     </>
   );
 

@@ -4,9 +4,9 @@ import { AuthContextProvider } from '~/context/AuthContext';
 import '~/global.scss';
 import { RouterProvider } from 'react-router-dom';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
+import { OrganizationContextProvider } from '~/context/OrgContextProvider';
 import { reportWebVitals } from '~/reportWebVitals';
 import { router } from '~/router/router';
-import { OrganizationContextProvider } from '~/context/OrgContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

@@ -1,8 +1,8 @@
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { GangPositionDropdown } from '../GangPositionDropdown';
 import { useEffect, useState } from 'react';
-import { getGangList, getRecruitmentPositions } from '~/api';
 import { SamfundetLogoSpinner } from '~/Components';
+import { getGangList, getRecruitmentPositions } from '~/api';
+import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import { GangPositionDropdown } from '../GangPositionDropdown';
 
 type GangTypeContainerProps = {
   recruitmentID: string;

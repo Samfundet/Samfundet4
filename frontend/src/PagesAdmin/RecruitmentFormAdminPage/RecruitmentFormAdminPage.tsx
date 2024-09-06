@@ -6,7 +6,7 @@ import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
-import { OrganizationDto, RecruitmentDto } from '~/dto';
+import type { OrganizationDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
@@ -70,7 +70,9 @@ export function RecruitmentFormAdminPage() {
   function handleOnSubmit(data: FormType) {
     const errors = validateForm(data);
     if (Object.keys(errors).length > 0) {
-      Object.values(errors).forEach((error) => toast.error(error));
+      for (const error of Object.values(errors)) {
+        toast.error(error);
+      }
       return;
     }
     if (recruitmentId) {

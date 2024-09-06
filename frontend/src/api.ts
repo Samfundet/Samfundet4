@@ -19,6 +19,7 @@ import type {
   NotificationDto,
   OccupiedTimeslotDto,
   OrganizationDto,
+  PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
   RecruitmentApplicationStateChoicesDto,
@@ -35,7 +36,6 @@ import type {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
-  PurchaseFeedbackDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

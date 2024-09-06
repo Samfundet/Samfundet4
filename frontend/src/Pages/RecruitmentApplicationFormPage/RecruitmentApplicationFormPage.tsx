@@ -8,9 +8,9 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getRecruitmentApplicationForPosition,
-  putRecruitmentApplication,
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
+  putRecruitmentApplication,
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';

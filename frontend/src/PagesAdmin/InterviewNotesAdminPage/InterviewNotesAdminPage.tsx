@@ -6,12 +6,12 @@ import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
 import { getRecruitmentApplicationsForGang, putRecruitmentApplicationInterview } from '~/api';
 import type { InterviewDto, RecruitmentApplicationDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InterviewNotesAdminPage.module.scss';
 import { filterRecruitmentApplication, getNameUser } from './utils';
-import { ROUTES } from '~/routes';
-import { STATUS } from '~/http_status_codes';
 
 export function InterviewNotesPage() {
   const recruitmentId = useParams().recruitmentId;
@@ -26,6 +26,7 @@ export function InterviewNotesPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (positionId && recruitmentId && gangId && interviewId) {
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
@@ -47,7 +48,6 @@ export function InterviewNotesPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, positionId, gangId, interviewId]);
 
   async function handleEditSave() {

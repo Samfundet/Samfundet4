@@ -1,10 +1,11 @@
-import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
+import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
-  RecruitmentApplicationsOverviewPage,
   ComponentPage,
+  ContributorsPage,
   EventPage,
   EventsPage,
   GroupsPage,
@@ -20,16 +21,17 @@ import {
   LycheReservationPage,
   MembershipPage,
   NotFoundPage,
+  OrganizationRecruitmentPage,
   RecruitmentApplicationFormPage,
+  RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
   VenuePage,
-  ContributorsPage,
-  OrganizationRecruitmentPage,
 } from '~/Pages';
 import {
+  AdminLayout,
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
   EventCreatorAdminPage,
@@ -38,39 +40,36 @@ import {
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
+  ImpersonateUserAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentApplicantAdminPage,
+  RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
+  RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
-  RecruitmentApplicantAdminPage,
-  SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
-  RecruitmentFormAdminPage,
-  SultenReservationAdminPage,
+  SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
-  RecruitmentOverviewPage,
-  AdminLayout,
-  ImpersonateUserAdminPage,
-  RecruitmentGangAllApplicantsAdminPage,
   SultenMenuItemFormAdminPage,
+  SultenReservationAdminPage,
   UsersAdminPage,
 } from '~/PagesAdmin';
-import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
-import { App } from '~/App';
 import { t } from 'i18next';
+import { App } from '~/App';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { dbT, lowerCapitalize } from '~/utils';
 import {
   type GangLoader,
   type PositionLoader,
@@ -79,6 +78,7 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
 } from '~/router/loaders';
+import { dbT, lowerCapitalize } from '~/utils';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

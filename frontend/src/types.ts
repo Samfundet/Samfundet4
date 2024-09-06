@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { themeToStyleMap } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
-import { themeToStyleMap } from '~/Components/Button/utils';
 /** Module for global generic types. */
 
 /** Type for home page element. */

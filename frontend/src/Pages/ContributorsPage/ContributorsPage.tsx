@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components';
-import robines from '~/assets/contributors/robines.jpg';
-import sygard from '~/assets/contributors/sygard.jpg';
-import snorre98 from '~/assets/contributors/snorre98.jpg';
 import simenProffen from '~/assets/contributors/SimenProffen.jpg';
+import robines from '~/assets/contributors/robines.jpg';
+import snorre98 from '~/assets/contributors/snorre98.jpg';
+import sygard from '~/assets/contributors/sygard.jpg';
 import { KEY } from '~/i18n/constants';
 import styles from './ContributorsPage.module.scss';
 import { type Contributor, ContributorItem } from './components';
