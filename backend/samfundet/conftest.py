@@ -17,7 +17,6 @@ from django.contrib.contenttypes.models import ContentType
 import root.management.commands.seed_scripts.billig as billig_seed
 from root.settings import BASE_DIR
 
-from samfundet.backend import RoleAuthBackend
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.role import Role
 from samfundet.models.event import Event
@@ -289,11 +288,6 @@ def fixture_role() -> Iterator[Role]:
     )
     yield role
     role.delete()
-
-
-@pytest.fixture
-def fixture_role_auth_backend() -> RoleAuthBackend:
-    return RoleAuthBackend()
 
 
 @pytest.fixture
