@@ -230,6 +230,13 @@ def fixture_organization() -> Iterator[Organization]:
 
 
 @pytest.fixture
+def fixture_organization2() -> Iterator[Organization]:
+    organization = Organization.objects.create(name='UKA')
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
 def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
     organization = Gang.objects.create(
         name_nb='Gang',
@@ -242,12 +249,12 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
 
 
 @pytest.fixture
-def fixture_gang2(fixture_organization: Organization) -> Iterator[Gang]:
+def fixture_gang2(fixture_organization2: Organization) -> Iterator[Gang]:
     organization = Gang.objects.create(
         name_nb='Gang 2',
         name_en='Gang 2',
         abbreviation='G2',
-        organization=fixture_organization,
+        organization=fixture_organization2,
     )
     yield organization
     organization.delete()
