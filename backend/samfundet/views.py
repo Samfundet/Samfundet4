@@ -1065,22 +1065,12 @@ class InterviewRoomView(ModelViewSet):
     serializer_class = InterviewRoomSerializer
     queryset = InterviewRoom.objects.all()
 
-    # noinspection PyMethodOverriding
-    def retrieve(self, request: Request, pk: int) -> Response:
-        room = get_object_or_404(InterviewRoom, pk=pk)
-        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room):
-            raise PermissionDenied
-        return super().retrieve(request=request, pk=pk)
-
-    # noinspection PyMethodOverriding
     def list(self, request: Request) -> Response:
         recruitment = request.query_params.get('recruitment')
         if not recruitment:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_rooms = [
-            room for room in InterviewRoom.objects.filter(recruitment__id=recruitment) if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room)
-        ]
+        filtered_rooms = InterviewRoom.objects.filter(recruitment__id=recruitment)
         serialized_rooms = self.get_serializer(filtered_rooms, many=True)
         return Response(serialized_rooms.data)
 
@@ -1105,19 +1095,6 @@ class InterviewView(ModelViewSet):
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
 
-    # noinspection PyMethodOverriding
-    def retrieve(self, request: Request, pk: int) -> Response:
-        interview = get_object_or_404(Interview, pk=pk)
-        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview):
-            raise PermissionDenied
-        return super().retrieve(request=request, pk=pk)
-
-    # noinspection PyMethodOverriding
-    def list(self, request: Request) -> Response:
-        interviews = [interview for interview in self.get_queryset() if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)]
-        serializer = self.get_serializer(interviews, many=True)
-        return Response(serializer.data)
-
 
 class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
     model = RecruitmentInterviewAvailability
@@ -1126,12 +1103,12 @@ class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
 
 
 class RecruitmentAvailabilityView(APIView):
-    permission_classes = [IsAuthenticated]
     model = RecruitmentInterviewAvailability
     serializer_class = RecruitmentInterviewAvailabilitySerializer
 
     def get(self, request: Request, **kwargs: int) -> Response:
-        availability = get_object_or_404(RecruitmentInterviewAvailability, recruitment__id=kwargs.get('id'))
+        recruitment = kwargs.get('id')
+        availability = get_object_or_404(RecruitmentInterviewAvailability, recruitment__id=recruitment)
 
         start_time = availability.start_time
         end_time = availability.end_time
