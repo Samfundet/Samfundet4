@@ -32,7 +32,7 @@ the `resolve_org`/`resolve_gang`/`resolve_section` methods. The purpose of these
 org/gang/section the object belongs to. Models implementing these methods may not have ambiguous ownership, or be owned
 by multiple orgs/gangs/sections.
 
-> Example: The Tag model doesn't implement these methods, as they aren't "owned" by anybody
+> Example: The Venue model doesn't implement these methods, as they aren't "owned" by anybody
 >
 > Example: A Recruitment is owned by an organization, therefore `resolve_org` returns that organization.
 
