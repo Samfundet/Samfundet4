@@ -272,6 +272,17 @@ def fixture_gang_section(fixture_gang: Gang) -> Iterator[GangSection]:
 
 
 @pytest.fixture
+def fixture_gang_section2(fixture_gang2: Gang) -> Iterator[GangSection]:
+    gang_section = GangSection.objects.create(
+        name_nb='Test Gang Section 2',
+        name_en='Test Gang Section 2',
+        gang=fixture_gang2,
+    )
+    yield gang_section
+    gang_section.delete()
+
+
+@pytest.fixture
 def fixture_role() -> Iterator[Role]:
     role = Role.objects.create(
         name='Test Role',
