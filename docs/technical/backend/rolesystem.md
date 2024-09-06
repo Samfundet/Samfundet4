@@ -25,6 +25,10 @@ by multiple orgs/gangs/sections.
 >
 > Example: A Recruitment is owned by an organization, therefore `resolve_org` returns that organization.
 
+These resolver methods only have a single parameter: `return_id`. The purpose of this argument is to avoid having to
+unnecessarily fetch a whole instance from the database, when we only need the ID. All models which implement the
+resolvers must respect this argument if possible.
+
 Here's an example implementation of `resolve_org` for the Recruitment model:
 
 ```python
