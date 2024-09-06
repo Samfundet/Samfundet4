@@ -5,12 +5,12 @@
 - [🐍 Python](#-python)
   - [🐍 Pyenv: Install python](#-pyenv-install-python)
   - [🐍 Python: Call submodule of Python](#-python-call-submodule-of-python)
-  - [🐍 Python: Install pipenv](#-python-install-pipenv)
-  - [🐍 Pipenv: Install virtual environment with dependencies](#-pipenv-install-virtual-environment-with-dependencies)
-  - [🐍 Pipenv: Install package](#-pipenv-install-package)
-  - [🐍 Pipenv: Uninstall package](#-pipenv-uninstall-package)
-  - [🐍 Pipenv: Activate virtual environment](#-pipenv-activate-virtual-environment)
-  - [🐍 Pipenv: Run command inside virtual environment](#-pipenv-run-command-inside-virtual-environment)
+  - [🐍 Python: Install poetry](#-python-install-poetry)
+  - [🐍 poetry: Install virtual environment with dependencies](#-poetry-install-virtual-environment-with-dependencies)
+  - [🐍 poetry: Install package](#-poetry-install-package)
+  - [🐍 poetry: Uninstall package](#-poetry-uninstall-package)
+  - [🐍 poetry: Activate virtual environment](#-poetry-activate-virtual-environment)
+  - [🐍 poetry: Run command inside virtual environment](#-poetry-run-command-inside-virtual-environment)
   - [🐍 Django: Show all commands](#-django-show-all-commands)
   - [🐍 Django: Run command](#-django-run-command)
   - [🐍 Django: Makemigrations](#-django-makemigrations)
@@ -63,60 +63,60 @@ python -m <module>
 ```
 ```bash
 # Example:
-python -m pipenv
+python -m poetry
 ```
 
 <br>
 <br>
 
-### 🐍 Python: Install pipenv
+### 🐍 Python: Install poetry
 ```bash
-python -m pip install pipenv
+python -m pip install poetry
 ```
 
 <br>
 <br>
 
-### 🐍 Pipenv: Install virtual environment with dependencies
+### 🐍 Poetry: Install virtual environment with dependencies
 > Must run inside same directory as [Pipfile](/backend/Pipfile).
 ```bash
-PIPENV_VENV_IN_PROJECT=1 python -m pipenv install
+POETRY_VIRTUALENVS_IN_PROJECT=1 python -m poetry install
 ```
 
 <br>
 <br>
 
-### 🐍 Pipenv: Install package
+### 🐍 Poetry: Install package
 ```bash
-python -m pipenv install <package>
+python -m poetry install <package>
 ```
 
 <br>
 <br>
 
-### 🐍 Pipenv: Uninstall package
+### 🐍 Poetry: Uninstall package
 ```bash
-python -m pipenv uninstall <package>
+python -m poetry uninstall <package>
 ```
 
 <br>
 <br>
 
-### 🐍 Pipenv: Activate virtual environment
+### 🐍 Poetry: Activate virtual environment
 ```bash
-python -m pipenv shell
+python -m poetry shell
 ```
 
 <br>
 <br>
 
-### 🐍 Pipenv: Run command inside virtual environment
+### 🐍 Poetry: Run command inside virtual environment
 ```bash
-python -m pipenv run <command>
+python -m poetry run <command>
 ```
 ```bash
 # Example:
-python -m pipenv run python -V
+python -m poetry run python -V
 ```
 
 <br>
@@ -124,7 +124,7 @@ python -m pipenv run python -V
 
 ### 🐍 Django: Show all commands
 ```bash
-python -m pipenv run python manage.py
+python -m poetry run python manage.py
 ```
 
 <br>
@@ -133,11 +133,11 @@ python -m pipenv run python manage.py
 ### 🐍 Django: Run command
 ```bash
 # Locally:
-python -m pipenv run python manage.py <command>
+python -m poetry run python manage.py <command>
 ```
 ```bash
 # Inside container:
-docker compose exec backend python -m pipenv run python manage.py <command>
+docker compose exec backend python -m poetry run python manage.py <command>
 ```
 
 <br>
@@ -146,7 +146,7 @@ docker compose exec backend python -m pipenv run python manage.py <command>
 ### 🐍 Django: Makemigrations
 ```bash
 # Locally: 
-python -m pipenv run python manage.py makemigrations
+python -m poetry run python manage.py makemigrations
 ```
 
 <br>
@@ -155,7 +155,7 @@ python -m pipenv run python manage.py makemigrations
 ### 🐍 Django: Migrate
 ```bash
 # Locally: 
-python -m pipenv run python manage.py makemigrations
+python -m poetry run python manage.py makemigrations
 ```
 
 <br>
@@ -163,7 +163,7 @@ python -m pipenv run python manage.py makemigrations
 
 ### 🐍 Django: Start server
 ```bash
-python -m pipenv run python manage.py runserver
+python -m poetry run python manage.py runserver
 ```
 
 <br>
@@ -171,7 +171,7 @@ python -m pipenv run python manage.py runserver
 
 ### 🐍 Django: Show all urls
 ```bash
-python -m pipenv run python manage.py show_urls -f table
+python -m poetry run python manage.py show_urls -f table
 ```
 
 <br>
@@ -179,7 +179,7 @@ python -m pipenv run python manage.py show_urls -f table
 
 ### 🐍 Django: Collect all staticfiles
 ```bash
-python -m pipenv run python manage.py collectstatic
+python -m poetry run python manage.py collectstatic
 ```
 
 <br>
@@ -187,7 +187,7 @@ python -m pipenv run python manage.py collectstatic
 
 ### 🐍 Django: Open shell
 ```bash
-python -m pipenv run python manage.py shell_plus
+python -m poetry run python manage.py shell_plus
 ```
 
 <br>
@@ -195,7 +195,7 @@ python -m pipenv run python manage.py shell_plus
 
 ### 🐍 Django: Collect all staticfiles
 ```bash
-python -m pipenv run python manage.py collectstatic
+python -m poetry run python manage.py collectstatic
 ```
 
 <br>

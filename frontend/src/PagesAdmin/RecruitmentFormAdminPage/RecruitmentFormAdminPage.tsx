@@ -7,13 +7,13 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
 import { useTitle } from '~/hooks';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
-import styles from './RecruitmentFormAdminPage.module.scss';
+import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
+import { ROUTES } from '~/routes';
+import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentFormAdminPage.module.scss';
 
 type FormType = {
   name_nb: string;
@@ -68,6 +68,11 @@ export function RecruitmentFormAdminPage() {
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
   function handleOnSubmit(data: FormType) {
+    const errors = validateForm(data);
+    if (Object.keys(errors).length > 0) {
+      Object.values(errors).forEach((error) => toast.error(error));
+      return;
+    }
     if (recruitmentId) {
       // Update page.
       putRecruitment(recruitmentId, data as RecruitmentDto)
@@ -89,6 +94,30 @@ export function RecruitmentFormAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
+  }
+
+  function validateForm(data: FormType) {
+    const errors: Partial<FormType> = {};
+
+    const visibleFrom = new Date(data.visible_from);
+    const shownApplicationDeadline = new Date(data.shown_application_deadline);
+    const actualApplicationDeadline = new Date(data.actual_application_deadline);
+    const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
+    const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
+
+    if (shownApplicationDeadline < visibleFrom) {
+      errors.shown_application_deadline = t(KEY.error_recruitment_form_1);
+    }
+    if (actualApplicationDeadline < shownApplicationDeadline) {
+      errors.actual_application_deadline = t(KEY.error_recruitment_form_2);
+    }
+    if (reprioritizationDeadlineForApplicant < actualApplicationDeadline) {
+      errors.reprioritization_deadline_for_applicant = t(KEY.error_recruitment_form_3);
+    }
+    if (reprioritizationDeadlineForGroups < reprioritizationDeadlineForApplicant) {
+      errors.reprioritization_deadline_for_groups = t(KEY.error_recruitment_form_4);
+    }
+    return errors;
   }
 
   // TODO: Add validation for the dates

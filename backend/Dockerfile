@@ -14,10 +14,9 @@ EXPOSE 5678
 #     Environment variables      #
 ##################################
 # Docker-compose should configure env vars in '.docker.env'.
-ENV PIPENV_DONT_LOAD_ENV=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PIPENV_VENV_IN_PROJECT=1
+ENV POETRY_VIRTUALENVS_IN_PROJECT=1
 
 ##################################
 #      System dependencies       #
@@ -34,11 +33,11 @@ RUN export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
 ################################## 
 RUN echo 'alias la="ls -la"' >> ~/.bashrc
 # Useful alias shortcuts for django.
-RUN echo 'alias migrate="pipenv run python /app/manage.py migrate"' >> ~/.bashrc
-RUN echo 'alias makemigrations="pipenv run python /app/manage.py makemigrations"' >> ~/.bashrc
-RUN echo 'alias seed="pipenv run python /app/manage.py seed"' >> ~/.bashrc
-RUN echo 'alias collectstatic="pipenv run python /app/manage.py collectstatic --noinput"' >> ~/.bashrc
-RUN echo 'alias pipeline="pipenv run /app/run-pipeline.sh"' >> ~/.bashrc
+RUN echo 'alias migrate="poetry run python /app/manage.py migrate"' >> ~/.bashrc
+RUN echo 'alias makemigrations="poetry run python /app/manage.py makemigrations"' >> ~/.bashrc
+RUN echo 'alias seed="poetry run python /app/manage.py seed"' >> ~/.bashrc
+RUN echo 'alias collectstatic="poetry run python /app/manage.py collectstatic --noinput"' >> ~/.bashrc
+RUN echo 'alias pipeline="poetry run /app/run-pipeline.sh"' >> ~/.bashrc
 
 
 # Make directories.
@@ -47,15 +46,15 @@ WORKDIR /app
 
 # Prepare virtual environment.
 RUN mkdir .venv
-RUN python -m pip install pipenv
+RUN python -m pip install poetry
 
 # Install venv dependecies.
-COPY Pipfile Pipfile.lock ./
-RUN python -m pipenv install --dev --deploy
+COPY pyproject.toml poetry.lock* ./
+RUN python -m poetry install
 
 # Copy remaining.
 COPY . /app
 
 # Start.
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

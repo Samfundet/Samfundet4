@@ -40,8 +40,8 @@ cd ..
 ##################################
 
 cd backend || exit
-pipenv run pipenv:sync-prod
-pipenv run migrations:apply
-pipenv run static:collect
+poetry install --sync
+poetry run python manage.py migrate
+poetry run python manage.py collectstatic --noinput
 touch reload # Trigger restart of uwsgi server.
 cd ..

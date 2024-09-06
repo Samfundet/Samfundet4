@@ -20,6 +20,8 @@ export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPage';
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
+export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
+export { RecruitmentGangAllApplicantsAdminPage } from './RecruitmentGangAllApplicantsAdminPage';
 export { RecruitmentApplicantAdminPage } from './RecruitmentApplicantAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

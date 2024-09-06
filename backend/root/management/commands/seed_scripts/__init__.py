@@ -21,7 +21,7 @@ from . import (
     recruitment_position,
     recruitment_applications,
     recruitment_occupied_time,
-    recruitment_seperate_position,
+    recruitment_separate_position,
     recruitment_interviewavailability,
 )
 
@@ -50,7 +50,7 @@ SEED_SCRIPTS = [
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
     ('recruitment_interviewavailability', recruitment_interviewavailability.seed),
-    ('recruitment_seperate_position', recruitment_seperate_position.seed),
+    ('recruitment_separate_position', recruitment_separate_position.seed),
     ('recruitment_applications', recruitment_applications.seed),
     ('recruitment_occupied_time', recruitment_occupied_time.seed),
     # Example seed (not run unless targeted specifically)
