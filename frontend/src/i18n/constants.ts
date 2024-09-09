@@ -54,6 +54,7 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_manage: 'common_manage',
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',

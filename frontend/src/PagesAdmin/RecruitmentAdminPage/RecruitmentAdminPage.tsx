@@ -68,6 +68,14 @@ export function RecruitmentAdminPage() {
       {
         content: (
           <CrudButtons
+            onManage={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_recruiter_dashboard,
+                  urlParams: { recruitmentId: element.id },
+                }),
+              );
+            }}
             onView={() => {
               navigate(ROUTES.frontend.recruitment);
             }}

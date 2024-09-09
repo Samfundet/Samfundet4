@@ -42,6 +42,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
   [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
@@ -459,6 +460,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
   [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
