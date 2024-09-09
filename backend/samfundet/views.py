@@ -716,9 +716,15 @@ class RecruitmentRecruiterDashboardView(APIView):
 
     def get(self, request: Request, pk: int) -> Response:
         recruitment = get_object_or_404(Recruitment, pk=pk)
-        
-        interviews = Interview.objects.filter(recruitment=recruitment, interviewers__in=[request.user.id])
-        return Response(data={"recruitment":RecruitmentSerializer(recruitment).data, "interviews": InterviewSerializer(interviews, many=True).data}, status=status.HTTP_200_OK)
+        applications = RecruitmentApplication.objects.exclude(interview=None).filter(recruitment=recruitment, interview__interviewers__in=[request.user])
+        return Response(
+            data={
+                'recruitment': RecruitmentSerializer(recruitment).data,
+                'applications': RecruitmentApplicationForGangSerializer(applications, many=True).data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 class ApplicantsWithoutInterviewsView(APIView):
     permission_classes = [IsAuthenticated]
