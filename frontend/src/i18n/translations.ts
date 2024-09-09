@@ -327,7 +327,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_three_interviews_criteria_header]:
     'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
-
+  [KEY.recruitment_dashboard_description]:
+    'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -739,7 +740,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
-
+  [KEY.recruitment_dashboard_description]:
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',

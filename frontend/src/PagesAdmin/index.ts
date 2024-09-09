@@ -30,3 +30,5 @@ export { SultenMenuAdminPage } from './SultenMenuAdminPage';
 export { SultenMenuItemFormAdminPage } from './SultenMenuItemFormAdminPage';
 export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
 export { UsersAdminPage } from './UsersAdminPage';
+export { RecruitmentRecruiterDashboardPage } from './RecruitmentRecruiterDashboardPage';
+

@@ -326,6 +326,7 @@ export const KEY = {
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
   recruitment_progression: 'recruitment_progression',
   recruitment_overview: 'recruitment_overview',
+  recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
   recruitment_statistics: 'recruitment_statistics',
