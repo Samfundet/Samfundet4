@@ -32,80 +32,73 @@ function limitToRange(value: number, min: number, max: number) {
 export function ShrimpFishing() {
   const [showGameOver, setShowGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [shrimpSpeed, setShrimpSpeed] = useState<number>(1);
-  const [sharkSpeed, setSharkSpeed] = useState(100);
+  const [shrimpSpeed, setShrimpSpeed] = useState<number>(10);
+  const [sharkSpeed, setSharkSpeed] = useState(10);
   const [shrimps, setShrimps] = useState<MovingItemProps[]>();
   const [friedShrimps, setFriedShrimps] = useState<MovingItemProps[]>();
   const [shrimpCount, setShrimpCount] = useState(SHRIMP_COUNT + FRIED_SHRIMP_COUNT);
 
-  // function generateShrimps() {
-  //   const shrimps = Array.from({ length: SHRIMP_COUNT }, (_, index) => ({
-  //     id: `shrimp-${index}`,
-  //     speed: shrimpSpeed,
-  //     onClick: () => {
-  //       setScore((oldScore) => oldScore + 1);
-  //       // setShrimpCount((oldShrimpCount) => oldShrimpCount - 1);
-  //       // setShrimps((oldShrimps) => oldShrimps?.filter((shrimp) => shrimp.id !== `shrimp-${index}`));
-  //     },
-  //   }));
-  //   setShrimps(shrimps);
-  // }
-
-  // function generateFriedShrimps() {
-  //   const friedShrimps = Array.from({ length: FRIED_SHRIMP_COUNT }, (_, index) => ({
-  //     id: `fried-${index}`,
-  //     speed: shrimpSpeed,
-  //     onClick: () => {
-  //       setScore((oldScore) => oldScore + 5);
-  //       // setShrimpCount((oldShrimpCount) => oldShrimpCount - 1);
-  //       // setFriedShrimps((oldFriedShrimps) => oldFriedShrimps?.filter((shrimp) => shrimp.id !== `fried-${index}`));
-  //     },
-  //   }));
-  //   setFriedShrimps(friedShrimps);
-  // }
-
-  // useEffect(() => {
-  //   generateShrimps();
-  //   generateFriedShrimps();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (shrimpCount === 0) {
-  //     setShowGameOver(true);
-  //   }
-  // }, [shrimpCount]);
-
-  function Gameplay() {
-    if (showGameOver) {
-      return null;
-    }
-
-    return (
-      <>
-        {/* {friedShrimps?.map((shrimp) => (
-          <FriedShrimpButton key={shrimp.id} id={shrimp.id} speed={shrimp.speed} onClick={shrimp.onClick} />
-        ))}
-
-        {shrimps?.map((shrimp) => (
-          <ShrimpButton
-            key={shrimp.id}
-            id={shrimp.id}
-            speed={shrimp.speed}
-            onClick={shrimp.onClick}
-            eaten={shrimp.onClick}
-          />
-        ))} */}
-        <ShrimpButton id={'shrimp-1'} speed={shrimpSpeed} onClick={() => setScore((old) => old + 1)} />
-
-        <SharkButton id={'shark-1'} speed={sharkSpeed} onClick={() => setShowGameOver(true)} />
-      </>
-    );
+  function generateShrimps() {
+    const shrimps = Array.from({ length: SHRIMP_COUNT }, (_, index) => ({
+      id: `shrimp-${index}`,
+      speed: shrimpSpeed,
+      onClick: () => {
+        setScore((oldScore) => oldScore + 1);
+        // setShrimpCount((oldShrimpCount) => oldShrimpCount - 1);
+        setShrimps((oldShrimps) => oldShrimps?.filter((shrimp) => shrimp.id !== `shrimp-${index}`));
+      },
+    }));
+    setShrimps(shrimps);
   }
+
+  function generateFriedShrimps() {
+    const friedShrimps = Array.from({ length: FRIED_SHRIMP_COUNT }, (_, index) => ({
+      id: `fried-${index}`,
+      speed: shrimpSpeed,
+      onClick: () => {
+        setScore((oldScore) => oldScore + 5);
+        // setShrimpCount((oldShrimpCount) => oldShrimpCount - 1);
+        setFriedShrimps((oldFriedShrimps) => oldFriedShrimps?.filter((shrimp) => shrimp.id !== `fried-${index}`));
+      },
+    }));
+    setFriedShrimps(friedShrimps);
+  }
+
+  useEffect(() => {
+    generateShrimps();
+    generateFriedShrimps();
+  }, []);
+
+  useEffect(() => {
+    if (shrimpCount === 0) {
+      setShowGameOver(true);
+    }
+  }, [shrimpCount]);
+
+  const gameplay = !showGameOver && (
+    <>
+      {friedShrimps?.map((shrimp) => (
+        <FriedShrimpButton key={shrimp.id} id={shrimp.id} speed={shrimp.speed} onClick={shrimp.onClick} />
+      ))}
+
+      {shrimps?.map((shrimp) => (
+        <ShrimpButton
+          key={shrimp.id}
+          id={shrimp.id}
+          speed={shrimp.speed}
+          onClick={shrimp.onClick}
+          eaten={shrimp.onClick}
+        />
+      ))}
+
+      <SharkButton id={'shark-1'} speed={sharkSpeed} onClick={() => setShowGameOver(true)} />
+    </>
+  );
 
   return (
     <div className={shrimpFishingStyles['container']}>
       <div className={shrimpFishingStyles['offsetContainer']}>
-        <Gameplay />
+        {gameplay}
         <h1 className={shrimpFishingStyles['scoreText']}>Score: {score}</h1>
         <h1 className={shrimpFishingStyles['gameOverText']}>{showGameOver && 'Game Over'}</h1>
       </div>
