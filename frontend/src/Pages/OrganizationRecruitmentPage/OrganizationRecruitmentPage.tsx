@@ -1,22 +1,21 @@
-import styles from './OrganizationRecruitmentPage.module.scss';
-import { RecruitmentTabs, GangTypeContainer } from './Components';
-import { Text, Page, Video, Logo, OccupiedFormModal, SamfundetLogoSpinner, ToggleSwitch } from '~/Components';
-import { PersonalRow } from '~/Pages/RecruitmentPage';
-import { OrgNameType, OrgNameTypeValue } from '~/types';
-import { useDesktop } from '~/hooks';
-import { useParams } from 'react-router-dom';
-import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
-import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { getOrganization, getRecruitment } from '~/api';
+import { Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, ToggleSwitch, Video } from '~/Components';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import { RecruitmentDto } from '~/dto';
-import { getOrganization, getRecruitment } from '~/api';
-import classNames from 'classnames';
+import { useDesktop } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { PersonalRow } from '~/Pages/RecruitmentPage';
+import { OrgNameType, OrgNameTypeValue } from '~/types';
+import { dbT } from '~/utils';
+import { GangTypeContainer, RecruitmentTabs } from './Components';
+import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const embededId = '-nYQb8_TvQ4'; // TODO: Make this dynamic DO IN ISSUE #1121 for backend. #1274 for frontend
   const { recruitmentID } = useParams<{ recruitmentID: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -76,9 +75,9 @@ export function OrganizationRecruitmentPage() {
               {dbT(recruitment, 'name')}
             </Text>
           </div>
-          {embededId ? (
+          {recruitment?.promo_media ? (
             <>
-              <Video embedId={embededId} className={styles.video}></Video>
+              <Video embedId={recruitment.promo_media} className={styles.video}></Video>
             </>
           ) : (
             <></>
