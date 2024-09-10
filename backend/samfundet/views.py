@@ -73,10 +73,12 @@ from .serializers import (
     InformationPageSerializer,
     RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
+    PurchaseFeedbackSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentForRecruiterSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentPositionForApplicantSerializer,
@@ -85,7 +87,12 @@ from .serializers import (
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
 )
-from .models.event import Event, EventGroup
+from .models.event import (
+    Event,
+    EventGroup,
+    PurchaseFeedbackQuestion,
+    PurchaseFeedbackAlternative,
+)
 from .models.general import (
     Tag,
     Gang,
@@ -596,6 +603,13 @@ class RecruitmentView(ModelViewSet):
         gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
         serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
         return Response(serializer.data)
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentForRecruiterView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentForRecruiterSerializer
+    queryset = Recruitment.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -1178,4 +1192,32 @@ class UserFeedbackView(CreateAPIView):
             contact_email=data.get('contact_email'),
         )
 
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class PurchaseFeedbackView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PurchaseFeedbackSerializer
+
+    def post(self, request: Request) -> Response:
+        request.data['event'] = request.data.pop('eventId')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        purchase_model = serializer.save(user=request.user)
+
+        alternatives = request.data.get('alternatives', {})
+        for alternative, selected in alternatives.items():
+            PurchaseFeedbackAlternative.objects.create(
+                alternative=alternative,
+                selected=selected,
+                form=purchase_model,
+            )
+
+        questions = request.data.get('questions', {})
+        for question, answer in questions.items():
+            PurchaseFeedbackQuestion.objects.create(
+                question=question,
+                answer=answer,
+                form=purchase_model,
+            )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
