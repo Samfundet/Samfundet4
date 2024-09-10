@@ -11,7 +11,7 @@ import { KEY } from '~/i18n/constants';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { OrgNameType, OrgNameTypeValue } from '~/types';
 import { dbT } from '~/utils';
-import { GangTypeContainer, RecruitmentTabs } from './Components';
+import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
@@ -114,6 +114,9 @@ export function OrganizationRecruitmentPage() {
             </div>
             {recruitmentID &&
               (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
+            {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
+              <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
+            )}
           </div>
         </div>
       )}

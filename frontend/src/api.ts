@@ -35,6 +35,7 @@ import {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
+  PurchaseFeedbackDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -862,7 +863,20 @@ export async function getApplicantsWithoutInterviews(
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__applicants_without_interviews,
+      urlParams: { pk: recruitmentId },
       queryParams: gangId ? { recruitment: recruitmentId, gang: gangId } : { recruitment: recruitmentId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getApplicantsWithoutThreeInterviewCriteria(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUserDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__applicants_without_three_interview_criteria,
+      urlParams: { pk: recruitmentId },
     });
   return await axios.get(url, { withCredentials: true });
 }
@@ -934,6 +948,15 @@ export async function putRecruitmentApplicationInterview(
     });
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
+}
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promise<PurchaseFeedbackDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__purchase_feedback;
+  const response = await axios.post<PurchaseFeedbackDto>(url, feedback, { withCredentials: true });
+  return response.data;
 }
 
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
