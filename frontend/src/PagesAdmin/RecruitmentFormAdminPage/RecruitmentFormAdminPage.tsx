@@ -11,7 +11,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
 
@@ -56,10 +56,7 @@ export function RecruitmentFormAdminPage() {
       data?.recruitment?.reprioritization_deadline_for_applicant,
     ),
     reprioritization_deadline_for_groups: utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups),
-    organization:
-      typeof data?.recruitment?.organization === 'number'
-        ? data?.recruitment?.organization
-        : data?.recruitment?.organization.id,
+    organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id'),
   };
 
   const title = recruitmentId

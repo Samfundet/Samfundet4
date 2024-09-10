@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { Text } from '~/Components/Text/Text';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
-import { dbT } from '~/utils';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 
 export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const { recruitmentId } = useParams();
@@ -58,9 +58,7 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const title = t(KEY.recruitment_three_interviews_criteria_header);
   const header = (
     <div className={styles.header}>
-      <Text>
-        {typeof recruitment?.organization !== 'number' ? recruitment?.organization.name : recruitment?.organization}
-      </Text>
+      <Text>{getObjectFieldOrNumber<string>(recruitment?.organization, 'name')}</Text>
       <Text>{dbT(recruitment, 'name')}</Text>
     </div>
   );

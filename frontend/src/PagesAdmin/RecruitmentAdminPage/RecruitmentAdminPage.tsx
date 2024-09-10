@@ -11,7 +11,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentAdminPage() {
@@ -54,7 +54,7 @@ export function RecruitmentAdminPage() {
         content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>,
         value: ROUTES.frontend.recruitment,
       },
-      typeof element.organization !== 'number' ? element.organization.name : element.organization,
+      getObjectFieldOrNumber<string>(data?.recruitment?.organization, 'name'),
       `${getFormattedDate(element.visible_from)}-${getFormattedDate(element.reprioritization_deadline_for_groups)}`,
       {
         content: (

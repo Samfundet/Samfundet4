@@ -354,7 +354,7 @@ export async function getOrganizations(): Promise<OrganizationDto[]> {
   return response.data;
 }
 
-export async function getOrganization(id: number): Promise<OrganizationDto> {
+export async function getOrganization(id: number | undefined): Promise<OrganizationDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__organizations_detail, urlParams: { pk: id } });
   const response = await axios.get<OrganizationDto>(url, { withCredentials: true });

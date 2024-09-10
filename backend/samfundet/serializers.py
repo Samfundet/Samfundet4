@@ -719,6 +719,7 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
 
 class RecruitmentSerializer(CustomBaseSerializer):
     separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Recruitment
         fields = '__all__'
@@ -727,6 +728,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
         data = super().to_representation(instance)
         data['organization'] = OrganizationSerializer(instance.organization).data
         return data
+
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
     seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
