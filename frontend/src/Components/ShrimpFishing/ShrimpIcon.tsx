@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export function ShrimpIcon() {
   return (
     <svg

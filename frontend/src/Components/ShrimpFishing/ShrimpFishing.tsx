@@ -8,7 +8,6 @@
  * The original Shrimp Fishing game was created by @evgiz in V22, on Samf3
  * This version is a continuation of the original game, by @Mathias-a in H24, on Samf4
  */
-/* eslint-disable max-len */
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { FriedShrimpIcon } from './FriedShrimpIcon';
