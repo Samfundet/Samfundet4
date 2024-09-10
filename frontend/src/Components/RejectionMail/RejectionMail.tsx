@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../Button';
 import { InputField } from '../InputField';
@@ -16,10 +16,10 @@ export function RejectionMail() {
   function handleSubmit() {
     if (recruitmentId) {
       postRejectionMail(recruitmentId, { subject, text });
-      toast.success("Email sent!");
+      toast.success('Email sent!');
     } else {
       toast.error(t(KEY.common_something_went_wrong));
-      console.error("Recruitment id cannot be null");
+      console.error('Recruitment id cannot be null');
     }
   }
 

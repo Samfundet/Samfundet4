@@ -229,7 +229,7 @@ export type FoodCategoryDto = {
 export type MailDto = {
   subject: string;
   text: string;
-}
+};
 
 export type MenuItemDto = {
   id?: number;

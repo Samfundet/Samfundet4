@@ -211,6 +211,7 @@ from root.custom_classes.request_context_filter import RequestContextFilter  # n
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
+TEST_EMAIL_FILE = BASE_DIR / 'logs' / 'test_email.txt'
 
 LOGGING = {
     'version': 1,

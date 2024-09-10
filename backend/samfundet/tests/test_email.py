@@ -6,6 +6,7 @@ from django.test import TestCase, Client
 from django.test import override_settings
 from unittest.mock import patch
 from django.core import mail
+from root.settings.base import TEST_EMAIL_FILE
 from samfundet.views import SendRejectionMailView
 
 
@@ -32,7 +33,7 @@ def test_send_email_and_save_to_file():
     assert email.body == message
 
     # Writing email to a file for inspection
-    with open('/backend/logs/test_email.txt', 'w') as f:
+    with open(TEST_EMAIL_FILE, 'w') as f:
         f.write(f'Subject: {email.subject}\n')
         f.write(f'From: {email.from_email}\n')
         f.write(f"To: {', '.join(email.to)}\n")
