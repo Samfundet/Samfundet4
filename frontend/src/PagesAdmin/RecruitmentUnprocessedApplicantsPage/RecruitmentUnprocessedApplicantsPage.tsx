@@ -1,11 +1,12 @@
 import { useTitle } from '~/hooks';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { t } from 'i18next';
 import { KEY } from '~/i18n/constants';
 import { Button, Table } from '~/Components';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const data = [
   ['John Doe', 'High', 'john.doe@example.com', 'Frontend Developer', 'vil ha'],
@@ -17,9 +18,11 @@ const data = [
 ];
 
 export function RecruitmentUnprocessedApplicantsPage() {
+  const { t } = useTranslation();
   const { recruitmentId } = useParams();
   const title = t(KEY.recruitment_unprocessed_applicants);
   useTitle(title);
+  useEffect(() => {}, [t]);
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
