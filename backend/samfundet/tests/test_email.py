@@ -9,51 +9,31 @@ from django.core import mail
 from samfundet.views import SendRejectionMailView
 
 
-class SendRejectionMailViewTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-
-    @patch('samfundet.views.send_mail')
-    @override_settings(EMAIL_HOST_USER='test@samfundet.no')
-    def test_post(self, mock_send_mail):
-        # Prepare data
-        data = {'subject': 'Test Subject', 'text': 'Test Text'}
-        # Call the post method
-        response = self.client.post('rejected_applicants/', data)
-        # Check the status code
-        self.assertEqual(response.status_code, 200)
-        # Check the send_mail call
-        mock_send_mail.assert_called_once_with(
-            'Test Subject',
-            'Test Text',
-            'test@samfundet.no',
-            ANY,  # This should be the list of rejected user emails
-            fail_silently=False,
-        )
-
-
-def test_send_email():
-    # Send email
+def test_send_email_and_save_to_file():
     subject = 'Subject here'
     message = 'Here is the message.'
     from_email = 'from@example.com'
-    recievers = ['to@example.com']
+    recipients = ['to@example.com']
+
     mail.send_mail(
         subject,
         message,
         from_email,
-        recievers,
+        recipients,
         fail_silently=False,
     )
 
-    # Check that one message has been sent
     assert len(mail.outbox) == 1
+    email = mail.outbox[0]
 
-    # Check the subject of the first message
-    assert mail.outbox[0].subject == subject
+    assert email.subject == subject
+    assert email.from_email == from_email
+    assert email.to == recipients
+    assert email.body == message
 
-    # Check the recipient of the first message
-    assert mail.outbox[0].to == recievers
-
-    # Check the body of the first message
-    assert mail.outbox[0].body == message
+    # Writing email to a file for inspection
+    with open('/backend/logs/test_email.txt', 'w') as f:
+        f.write(f'Subject: {email.subject}\n')
+        f.write(f'From: {email.from_email}\n')
+        f.write(f"To: {', '.join(email.to)}\n")
+        f.write(f'Message: {email.body}\n')

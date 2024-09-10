@@ -712,7 +712,7 @@ class SendRejectionMailView(APIView):
     def get_rejected_user_mails(self) -> QuerySet[User]:
         recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is None:
-            return User.objects.none()  # Return an empty queryset instead of None
+            return User.objects.none()
 
         # Exclude users who have gotten offers
         recruitment_status_for_user = Case(
