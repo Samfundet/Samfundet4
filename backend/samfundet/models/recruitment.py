@@ -3,7 +3,6 @@
 #
 from __future__ import annotations
 
-import re
 import uuid
 from collections import defaultdict
 
@@ -93,14 +92,6 @@ class Recruitment(CustomBaseModel):
         super().save(*args, **kwargs)
         if not self.statistics:
             RecruitmentStatistics.objects.create(self)
-
-    def process_promo_media(self, promo_media: str| None) -> str | None:
-        if (promo_media is None):
-            return None
-        match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', promo_media)
-        if (match):
-            return match.group(3)
-        raise ValidationError("Invalid youtube url")
 
 class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
