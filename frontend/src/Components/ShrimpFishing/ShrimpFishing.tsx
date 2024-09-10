@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Shrimp fishing game
  *
@@ -43,6 +44,7 @@ export function ShrimpFishing() {
   const [showGameOver, setShowGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [shrimpSpeed, setShrimpSpeed] = useState<number>(3);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [sharkSpeed, setSharkSpeed] = useState(3);
   const [shrimps, setShrimps] = useState<MovingItemProps[]>();
   const [friedShrimps, setFriedShrimps] = useState<MovingItemProps[]>();
@@ -81,6 +83,7 @@ export function ShrimpFishing() {
   useEffect(() => {
     generateShrimps();
     generateFriedShrimps();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -164,6 +167,7 @@ export function ShrimpButton({ speed, onClick, eaten, sharkPosition }: MovingIte
     ) {
       eaten();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sharkPosition]);
 
   return (
@@ -204,6 +208,7 @@ export function SharkButton({ speed, onClick, setSharkPosition }: MovingItemProp
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speed]);
 
   return (
