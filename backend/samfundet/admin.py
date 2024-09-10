@@ -21,7 +21,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedModelAdmin,
 )
 
-from .models.event import Event, EventGroup, EventRegistration
+from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
     Tag,
     Gang,
@@ -292,9 +292,22 @@ class EventRegistrationAdmin(CustomGuardedModelAdmin):
 class EventAdmin(CustomBaseAdmin):
     # ordering = []
 
-    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'doors_time']
     list_filter = ['event_group']
-    list_display = ['id', '__str__', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'publish_dt', 'start_dt', 'created_at', 'updated_at']
+    list_display = [
+        'id',
+        '__str__',
+        'title_nb',
+        'title_en',
+        'host',
+        'location',
+        'event_group',
+        'publish_dt',
+        'doors_time',
+        'start_dt',
+        'created_at',
+        'updated_at',
+    ]
     search_fields = ['id', 'title_nb', 'title_en', 'host', 'location']
     filter_horizontal = ['editors']
     list_display_links = ['id', '__str__']
@@ -753,6 +766,12 @@ class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
 class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']
+
+
+@admin.register(PurchaseFeedbackModel)
+class PurchaseFeedbackAdmin(CustomGuardedModelAdmin):
+    sortable_by = ['title']
+    list_display = ['user', 'title']
 
 
 ### End: Our models ###
