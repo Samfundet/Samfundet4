@@ -56,7 +56,10 @@ export function RecruitmentFormAdminPage() {
       data?.recruitment?.reprioritization_deadline_for_applicant,
     ),
     reprioritization_deadline_for_groups: utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups),
-    organization: data?.recruitment?.organization,
+    organization:
+      typeof data?.recruitment?.organization === 'number'
+        ? data?.recruitment?.organization
+        : data?.recruitment?.organization.id,
   };
 
   const title = recruitmentId

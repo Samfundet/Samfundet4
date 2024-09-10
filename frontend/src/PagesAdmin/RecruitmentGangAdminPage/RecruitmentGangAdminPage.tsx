@@ -20,7 +20,6 @@ export function RecruitmentGangAdminPage() {
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [organization, setOrganization] = useState<OrganizationDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -38,7 +37,6 @@ export function RecruitmentGangAdminPage() {
         }),
         getRecruitment(recruitmentId).then(async (data) => {
           setRecruitment(data.data);
-          await getOrganization(data.data.organization).then(setOrganization);
         }),
       ])
         .then(() => {

@@ -59,8 +59,9 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const header = (
     <div className={styles.header}>
       <Text>
-        {recruitment?.organization} - {dbT(recruitment, 'name')}
+        {typeof recruitment?.organization !== 'number' ? recruitment?.organization.name : recruitment?.organization}
       </Text>
+      <Text>{dbT(recruitment, 'name')}</Text>
     </div>
   );
   return (

@@ -40,7 +40,9 @@ export function RecruitmentPage() {
                 recruitment_name={dbT(recruitment, 'name')}
                 shown_application_deadline={recruitment.shown_application_deadline}
                 reprioritization_deadline_for_applicant={recruitment.reprioritization_deadline_for_applicant}
-                organization_id={recruitment.organization}
+                organization_id={
+                  typeof recruitment.organization === 'number' ? recruitment.organization : recruitment.organization.id
+                }
               />
             ))
           ) : (

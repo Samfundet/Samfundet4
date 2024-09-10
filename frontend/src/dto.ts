@@ -382,7 +382,7 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
-  organization: number;
+  organization: number | OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
   recruitment_progress?: number;
 };

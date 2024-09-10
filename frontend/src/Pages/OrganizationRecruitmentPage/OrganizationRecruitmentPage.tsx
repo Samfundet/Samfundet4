@@ -39,7 +39,9 @@ export function OrganizationRecruitmentPage() {
 
   useEffect(() => {
     if (recruitment) {
-      getOrganization(recruitment.organization)
+      getOrganization(
+        typeof recruitment.organization === 'number' ? recruitment.organization : recruitment.organization.id,
+      )
         .then((response) => {
           if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
             setOrganizationName(response.name as OrgNameTypeValue);
