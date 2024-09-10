@@ -716,7 +716,7 @@ class RecruitmentRecruiterDashboardView(APIView):
 
     def get(self, request: Request, pk: int) -> Response:
         recruitment = get_object_or_404(Recruitment, pk=pk)
-        applications = RecruitmentApplication.objects.exclude(interview=None).filter(recruitment=recruitment, interview__interviewers__in=[request.user])
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview__interviewers__in=[request.user])
         return Response(
             data={
                 'recruitment': RecruitmentSerializer(recruitment).data,
