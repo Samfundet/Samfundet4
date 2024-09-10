@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
@@ -701,10 +702,19 @@ class RecruitmentSeperatePositionSerializer(CustomBaseSerializer):
 
 class RecruitmentSerializer(CustomBaseSerializer):
     seperate_positions = RecruitmentSeperatePositionSerializer(many=True, read_only=True)
+    promo_media = serializers.CharField(max_length=100)
 
     class Meta:
         model = Recruitment
         fields = '__all__'
+
+    def validate_promo_media(self, value: str | None) -> str | None:
+        if (value is None):
+            return None
+        match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', value)
+        if (match):
+            return match.group(3)
+        raise ValidationError("Invalid youtube url")
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):

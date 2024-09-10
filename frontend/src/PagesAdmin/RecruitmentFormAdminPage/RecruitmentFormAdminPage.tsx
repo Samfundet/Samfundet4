@@ -24,20 +24,17 @@ type FormType = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: number;
-  promo_video: string;
+  promo_media: string;
 };
 
 function youtubeLinkValidator(state: FormType): SamfError {
-  const link = state.promo_video;
-  var regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/
+  const link = state.promo_media;
+  const regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/;
   if (link && !link.match(regex)) {
-    return "Not valid youtbue link"
+    return 'Not valid youtbue link';
   }
-  
   return true;
 }
-
-
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
@@ -175,7 +172,12 @@ export function RecruitmentFormAdminPage() {
             />
           </div>
           <div className={styles.row}>
-            <SamfFormField field="promo_video" type="text" label={t(KEY.promo_media)} validator={youtubeLinkValidator}/>
+            <SamfFormField
+              field="promo_media"
+              type="text"
+              label={t(KEY.promo_media)}
+              validator={youtubeLinkValidator}
+            />
           </div>
         </SamfForm>
       </div>

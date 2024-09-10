@@ -383,7 +383,7 @@ export type RecruitmentDto = {
   max_applications?: number;
   organization: number;
   seperate_positions?: RecruitmentSeperatePositionDto[];
-  promo_video?: string;
+  promo_media?: string;
 };
 
 export type RecruitmentSeperatePositionDto = {

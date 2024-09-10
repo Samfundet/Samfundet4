@@ -3,6 +3,7 @@
 #
 from __future__ import annotations
 
+import re
 import uuid
 from collections import defaultdict
 
@@ -31,6 +32,7 @@ class Recruitment(CustomBaseModel):
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
+    promo_media = models.CharField(max_length=11 ,help_text='Youtube video id', null=True, default=None)
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -92,6 +94,13 @@ class Recruitment(CustomBaseModel):
         if not self.statistics:
             RecruitmentStatistics.objects.create(self)
 
+    def process_promo_media(self, promo_media: str| None) -> str | None:
+        if (promo_media is None):
+            return None
+        match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', promo_media)
+        if (match):
+            return match.group(3)
+        raise ValidationError("Invalid youtube url")
 
 class RecruitmentPosition(CustomBaseModel):
     name_nb = models.CharField(max_length=100, help_text='Name of the position')
