@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { BackButton, Button, H2, H3, Link, OccupiedFormModal, Page, SamfundetLogoSpinner } from '~/Components';
-import {
-  getRecruitmentApplicationsForRecruiter,
-  getRecruitmentRecruiterDashboard,
-  withdrawRecruitmentApplicationRecruiter,
-} from '~/api';
-import {
-  RecruitmentApplicationDto,
-  RecruitmentApplicationRecruiterDto,
-  RecruitmentDto,
-  RecruitmentUserDto,
-} from '~/dto';
+import { H2, Link, OccupiedFormModal } from '~/Components';
+import { getRecruitmentRecruiterDashboard } from '~/api';
+import { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -20,8 +11,7 @@ import { dbT } from '~/utils';
 import styles from './RecruitmentRecruiterDashboardPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { Table } from '~/Components/Table';
-import classNames from 'classnames';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { STATUS } from '~/http_status_codes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { useCustomNavigate } from '~/hooks';
@@ -53,7 +43,7 @@ export function RecruitmentRecruiterDashboardPage() {
     }
   }, [navigate, recruitmentId, t]);
 
-  const title = t(KEY.recruitment_overview);
+  const title = `${t(KEY.recruitment_overview)} - ${recruitment?.organization} - ${dbT(recruitment, 'name')}`;
   const header = (
     <div className={styles.header}>
       <Text>{t(KEY.recruitment_dashboard_description)}</Text>
