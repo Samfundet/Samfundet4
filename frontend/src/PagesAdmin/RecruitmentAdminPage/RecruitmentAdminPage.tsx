@@ -54,8 +54,14 @@ export function RecruitmentAdminPage() {
         content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>,
         value: ROUTES.frontend.recruitment,
       },
-      getObjectFieldOrNumber<string>(data?.recruitment?.organization, 'name'),
-      `${getFormattedDate(element.visible_from)}-${getFormattedDate(element.reprioritization_deadline_for_groups)}`,
+      {
+        content: getObjectFieldOrNumber<string>(element?.organization, 'name'),
+      },
+      {
+        content: `${getFormattedDate(element.visible_from)}-${getFormattedDate(
+          element.reprioritization_deadline_for_groups,
+        )}`,
+      },
       {
         content: (
           <CrudButtons
