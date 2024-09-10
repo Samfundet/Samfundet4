@@ -540,7 +540,6 @@ export const ROUTES_BACKEND = {
   samfundet__interview_list: '/api/interview/',
   samfundet__interview_detail: '/api/interview/:pk/',
   samfundet__api_root: '/api/',
-  samfundet__api_root: '/api/:format',
   samfundet__csrf: '/csrf/',
   samfundet__login: '/login/',
   samfundet__register: '/register/',
