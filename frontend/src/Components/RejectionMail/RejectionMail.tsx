@@ -3,27 +3,24 @@ import { useParams } from 'react-router-dom';
 import { Button } from '../Button';
 import { InputField } from '../InputField';
 import { TextAreaField } from '../TextAreaField';
-import { getRejectedApplicants } from '~/api';
-import { UserDto } from '~/dto';
+import { postRejectionMail } from '~/api';
+import { toast } from 'react-toastify';
+import { t } from 'i18next';
+import { KEY } from '~/i18n/constants';
 
 export function RejectionMail() {
   const [text, setText] = useState('');
   const [subject, setSubject] = useState('');
   const recruitmentId = useParams().recruitmentId;
-  const [rejectedUsers, setRejectedUsers] = useState<UserDto[]>([]);
-
-  useEffect(() => {
-    if (recruitmentId) {
-      getRejectedApplicants(recruitmentId).then((response) => {
-        console.log(response.data);
-        setRejectedUsers(response.data);
-      });
-    }
-  }, [recruitmentId]);
 
   function handleSubmit() {
-    console.log('Text: ' + text);
-    console.log('subject: ' + subject);
+    if (recruitmentId) {
+      postRejectionMail(recruitmentId, { subject, text });
+      toast.success("Email sent!");
+    } else {
+      toast.error(t(KEY.common_something_went_wrong));
+      console.error("Recruitment id cannot be null");
+    }
   }
 
   return (

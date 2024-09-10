@@ -36,6 +36,7 @@ import {
   UserPriorityDto,
   VenueDto,
   PurchaseFeedbackDto,
+  MailDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -966,7 +967,7 @@ export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResp
   return response;
 }
 
-export async function getRejectedApplicants(recruitmentId: string): Promise<AxiosResponse<UserDto[]>> {
+export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -975,7 +976,7 @@ export async function getRejectedApplicants(recruitmentId: string): Promise<Axio
         recruitment: recruitmentId,
       },
     });
-  const response = await axios.get(url, { withCredentials: true });
+  const response = await axios.post(url, rejectionMail, { withCredentials: true });
 
   return response;
 }

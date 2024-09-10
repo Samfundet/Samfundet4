@@ -701,38 +701,30 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
 class SendRejectionMailView(APIView):
     def post(self, request: Request) -> Response:
         try:
-            subject = request.query_params.get('subject')
-            text = request.query_params.get('text')
+            subject = request.data.get('subject')
+            text = request.data.get('text')
 
-            rejected_user_mails = self.get_rejected_user_mails()
+            rejected_user_mails = self.get_rejected_user_mails(request)
 
             send_mail(
                 subject,
                 text,
                 settings.EMAIL_HOST_USER,
-                [rejected_user_mails],
+                rejected_user_mails,
                 fail_silently=False,
             )
             return Response(status=status.HTTP_200_OK)
-        except Exception:
-            return Response('An error occurred.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get_rejected_user_mails(self) -> QuerySet[User]:
-        recruitment = self.request.query_params.get('recruitment', None)
+    def get_rejected_user_mails(self, request: Request):
+        recruitment = request.data.get('recruitment')
         if recruitment is None:
-            return User.objects.none()
+            return []
 
-        # Exclude users who have gotten offers
-        recruitment_status_for_user = Case(
-            When(admissions__recruitment=recruitment, then='admissions__recuiter_status'),
-            default=None,
-            output_field=None,
-        )
-        rejected_users = (
-            User.objects.filter(admissions__recruitment=recruitment).annotate(num_offers=Count(recruitment_status_for_user != 3)).filter(num_offers=0)
-        )
+        rejected_users = User.objects.filter(admissions__recruitment=recruitment, admissions__recuiter_status__ne=3)
 
-        emails = rejected_users.values_list('email', flat=True)
+        emails = list(rejected_users.values_list('email', flat=True))
         return emails
 
 
