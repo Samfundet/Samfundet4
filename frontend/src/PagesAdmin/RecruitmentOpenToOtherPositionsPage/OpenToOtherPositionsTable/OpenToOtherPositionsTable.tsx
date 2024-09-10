@@ -1,3 +1,4 @@
+import { Table } from '~/Components';
 import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
 
 type OpenTableProps = {
@@ -14,24 +15,16 @@ export function OpenToOtherPositionsTable({ firstName, lastName, phoneNumber, em
   applications.forEach((application) => {
     positions.push(application.recruitment_position);
   });
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>{firstName + lastName}</th>
-          <th>{phoneNumber}</th>
-          <th>{email}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {positions.map((position, index) => (
-          <tr key={index}>
-            <td></td>
-            <td>{position.gang.name_en}</td>
-            <td>{position.name_en}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+
+  const tableColumns = [
+    { content: firstName + lastName, sortable: true },
+    { content: phoneNumber, sortable: true },
+    { content: email, sortable: true },
+  ];
+
+  function positionToTableRow(position: RecruitmentPositionDto) {
+    return ['', position.gang.name_en, position.name_en];
+  }
+
+  return <Table columns={tableColumns} data={positions.map((position) => positionToTableRow(position))}></Table>;
 }
