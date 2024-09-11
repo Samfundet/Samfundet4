@@ -78,6 +78,7 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentForRecruiterSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentPositionForApplicantSerializer,
@@ -602,6 +603,13 @@ class RecruitmentView(ModelViewSet):
         gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
         serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
         return Response(serializer.data)
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentForRecruiterView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentForRecruiterSerializer
+    queryset = Recruitment.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

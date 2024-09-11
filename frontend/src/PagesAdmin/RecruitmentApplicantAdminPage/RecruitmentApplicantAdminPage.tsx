@@ -101,6 +101,7 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Table
           columns={[
+            '#',
             t(KEY.common_recruitmentposition),
             t(KEY.common_gang),
             t(KEY.recruitment_recruiter_status),
@@ -108,6 +109,10 @@ export function RecruitmentApplicantAdminPage() {
           ]}
           data={otherRecruitmentApplication.map(function (element) {
             return [
+              {
+                sortable: true,
+                content: element.applicant_priority,
+              },
               {
                 content: (
                   <Link
