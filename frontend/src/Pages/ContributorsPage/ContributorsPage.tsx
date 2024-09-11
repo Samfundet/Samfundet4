@@ -3,6 +3,7 @@ import styles from './ContributorsPage.module.scss';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import robines from '~/assets/contributors/robines.jpg';
+import sygard from '~/assets/contributors/sygard.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
 import simenProffen from '~/assets/contributors/SimenProffen.jpg';
 import { type Contributor, ContributorItem } from './components';
@@ -18,7 +19,7 @@ const CONTRIBUTORS: Contributor[] = [
   // V20
   { name: 'Marcus Frenje', github: 'Frenje123', from: 'V20' },
   // H20
-  { name: 'Magnus Øvre Sygard', github: 'magsyg', from: 'H20' },
+  { name: 'Magnus Øvre Sygard', github: 'magsyg', picture:sygard, from: 'H20' },
   { name: 'Snorre Skjellestad Kristiansen', github: 'snorrekr', from: 'H20', websjef: { from: 'H21', to: 'V22' } },
   // V21
   { name: 'Johanne Dybevik', github: 'JohanneD', from: 'V21', to: 'V24' },

@@ -384,6 +384,7 @@ export type RecruitmentDto = {
   max_applications?: number;
   organization: number;
   separate_positions?: RecruitmentSeparatePositionDto[];
+  recruitment_progress?: number;
 };
 
 export type RecruitmentSeparatePositionDto = {
