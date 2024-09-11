@@ -137,15 +137,14 @@ max-positional-args = 1
 max-complexity = 5
 
 [tool.poetry]
-name = "backend"
-version = "0.1.0"
-description = "Package manager for python"
-authors = ["Mathias Aas <mathias.aas123@gmail.com>"]
-readme = "README.md"
+# Backend is not a package to publish.
+# https://python-poetry.org/docs/pyproject/
+# https://python-poetry.org/docs/basic-usage/#operating-modes
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "3.11.2"
-django = "5.0.2"
+django = "5.0.8"
 django-extensions = "^3.2.3"
 django-environ = "^0.11.2"
 djangorestframework = "^3.15.2"

@@ -7,6 +7,7 @@ import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOver
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
+import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -139,6 +140,7 @@ export function ComponentPage() {
           </Countdown>
         </h2>
       </div>
+      <ShrimpFishing />
     </div>
   );
 }
