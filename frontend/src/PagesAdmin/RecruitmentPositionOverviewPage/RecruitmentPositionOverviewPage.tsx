@@ -14,7 +14,7 @@ import { Text } from '~/Components/Text/Text';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { toast } from 'react-toastify';
-import { lowerCapitalize } from "~/utils";
+import { lowerCapitalize } from '~/utils';
 
 export function RecruitmentPositionOverviewPage() {
   const navigate = useNavigate();
