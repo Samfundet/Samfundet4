@@ -73,6 +73,7 @@ export const KEY = {
   common_show: 'common_show',
   common_menu: 'common_menu',
   common_table: 'common_table',
+  common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
   common_card: 'common_card',
