@@ -9,13 +9,25 @@ type Props = {
   selectedDate: Date | null;
   timeslots: string[];
   onChange?: (timeslots: Record<string, string[]>) => void;
-  selectedTimeslots?: Record<string, string[]>;
+  activeTimeslots?: Record<string, string[]>; //De røde timeslotsene ( "occupied" )
+  selectedTimeslot?: string | null;
+  disabledTimeslots?: Record<string, string[]>; //De grå timeslotsene ( "disabled" )
+  selectMultiple: boolean;
+  hasDisabledTimeslots: boolean;
 };
 
-export function TimeslotContainer({ selectedDate, timeslots, onChange, ...props }: Props) {
+export function TimeslotContainer({
+  selectedDate,
+  timeslots,
+  onChange,
+  selectMultiple,
+  hasDisabledTimeslots,
+  ...props
+}: Props) {
   const { t } = useTranslation();
 
-  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>(props.selectedTimeslots || {});
+  const [activeTimeslots, setActiveTimeslots] = useState<Record<string, string[]>>(props.activeTimeslots || {});
+  const [selectedTimeslot, setSelectedTimeslot] = useState<string | null>(null);
 
   // Click & drag functionality
   const mouseDown = useMouseDown();
@@ -23,72 +35,91 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange, ...props 
   const [dragSetSelected, setDragSetSelected] = useState(false);
 
   useEffect(() => {
-    onChange?.(selectedTimeslots);
-  }, [onChange, selectedTimeslots]);
-
-  function toggleTimeslot(date: Date, timeslot: string) {
-    const dayString = formatDateYMD(date);
-    const copy = { ...selectedTimeslots };
-    if (selectedTimeslots[dayString]) {
-      if (copy[dayString].includes(timeslot)) {
-        copy[dayString] = copy[dayString].filter((s) => s !== timeslot);
-        if (copy[dayString].length === 0) {
-          delete copy[dayString];
-        }
-      } else {
-        copy[dayString].push(timeslot);
+    if (!selectMultiple) {
+      if (selectedTimeslot) {
+        onChange?.({ [formatDateYMD(selectedDate!)]: [selectedTimeslot] });
       }
     } else {
-      copy[dayString] = [timeslot];
+      onChange?.(activeTimeslots);
     }
-    setSelectedTimeslots(copy);
+  }, [onChange, activeTimeslots, selectedTimeslot, selectedDate, selectMultiple]);
+
+  function toggleTimeslot(date: Date, timeslot: string) {
+    if (hasDisabledTimeslots && props.disabledTimeslots) {
+      if (props.disabledTimeslots[formatDateYMD(date)]?.includes(timeslot)) return;
+    }
+    if (!selectMultiple) {
+      setSelectedTimeslot(timeslot === selectedTimeslot ? null : timeslot);
+    } else {
+      const dayString = formatDateYMD(date);
+      const copy = { ...activeTimeslots };
+      if (activeTimeslots[dayString]) {
+        if (copy[dayString].includes(timeslot)) {
+          copy[dayString] = copy[dayString].filter((s) => s !== timeslot);
+          if (copy[dayString].length === 0) {
+            delete copy[dayString];
+          }
+        } else {
+          copy[dayString].push(timeslot);
+        }
+      } else {
+        copy[dayString] = [timeslot];
+      }
+      setActiveTimeslots(copy);
+    }
   }
 
   function selectTimeslot(date: Date, timeslot: string) {
     if (isTimeslotSelected(date, timeslot)) return;
     const dayString = formatDateYMD(date);
-    const copy = { ...selectedTimeslots };
+    const copy = { ...activeTimeslots };
     if (copy[dayString]) {
       copy[dayString].push(timeslot);
     } else {
       copy[dayString] = [timeslot];
     }
-    setSelectedTimeslots(copy);
+    setActiveTimeslots(copy);
   }
 
   function unselectTimeslot(date: Date, timeslot: string) {
     if (!isTimeslotSelected(date, timeslot)) return;
     const dayString = formatDateYMD(date);
-    const copy = { ...selectedTimeslots };
+    const copy = { ...activeTimeslots };
     copy[dayString] = copy[dayString].filter((s) => s !== timeslot);
     if (copy[dayString].length === 0) {
       delete copy[dayString];
     }
-    setSelectedTimeslots(copy);
+    setActiveTimeslots(copy);
   }
 
   function isTimeslotSelected(date: Date, timeslot: string) {
-    const x = selectedTimeslots[formatDateYMD(date)];
+    const x = activeTimeslots[formatDateYMD(date)];
+    return !(!x || !x.find((s) => s === timeslot));
+  }
+
+  function isTimeslotDisabled(date: Date, timeslot: string) {
+    if (!props.disabledTimeslots) return;
+    const x = props.disabledTimeslots[formatDateYMD(date)];
     return !(!x || !x.find((s) => s === timeslot));
   }
 
   function isAllSelected(date: Date) {
-    const selectedLength = selectedTimeslots[formatDateYMD(date)]?.length || 0;
+    const selectedLength = activeTimeslots[formatDateYMD(date)]?.length || 0;
     return selectedLength === timeslots.length;
   }
 
   function toggleSelectAll(date: Date) {
-    const slots = { ...selectedTimeslots };
+    const slots = { ...activeTimeslots };
     if (isAllSelected(date)) {
       delete slots[formatDateYMD(date)];
     } else {
       slots[formatDateYMD(date)] = timeslots;
     }
-    setSelectedTimeslots(slots);
+    setActiveTimeslots(slots);
   }
 
   function onMouseEnter(date: Date, timeslot: string) {
-    if (!mouseDown) return;
+    if (!mouseDown || selectMultiple) return;
     if (dragSetSelected) {
       selectTimeslot(date, timeslot);
     } else {
@@ -106,11 +137,13 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange, ...props 
       <div className={styles.timeslots}>
         {timeslots.map((timeslot) => {
           const active = isTimeslotSelected(selectedDate, timeslot);
+          const disabled = isTimeslotDisabled(selectedDate, timeslot);
 
           return (
             <TimeslotButton
               key={timeslot}
               active={active}
+              disabled={disabled || false}
               onMouseDown={() => {
                 toggleTimeslot(selectedDate, timeslot);
                 setDragSetSelected(!active);
@@ -124,6 +157,7 @@ export function TimeslotContainer({ selectedDate, timeslots, onChange, ...props 
       </div>
       <TimeslotButton
         active={isAllSelected(selectedDate)}
+        disabled={false}
         onClick={() => toggleSelectAll(selectedDate)}
         showDot={false}
       >

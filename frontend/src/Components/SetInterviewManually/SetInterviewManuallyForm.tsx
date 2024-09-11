@@ -114,7 +114,9 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
               selectedDate={selectedDate}
               timeslots={timeslots}
               onChange={(slots) => setSelectedTimeslots(slots)}
-              selectedTimeslots={selectedTimeslots}
+              disabledTimeslots={selectedTimeslots}
+              hasDisabledTimeslots={true}
+              selectMultiple={false}
             />
           </div>
 

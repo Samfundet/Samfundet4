@@ -34,3 +34,13 @@
     background: $red;
   }
 }
+
+.timeslot_disabled {
+  border-color: $grey-0;
+  color: $grey-0;
+  cursor: not-allowed;
+
+  .dot {
+    background: $grey-0;
+  }
+}
