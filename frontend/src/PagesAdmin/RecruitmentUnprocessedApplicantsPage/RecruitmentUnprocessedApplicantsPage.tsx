@@ -24,6 +24,9 @@ export function RecruitmentUnprocessedApplicantsPage() {
   useTitle(title);
   useEffect(() => {}, [t]);
 
+  // Count the total number of rows
+  const totalRows = data.length;
+
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_priority), sortable: true, hideSortButton: false },
@@ -33,16 +36,22 @@ export function RecruitmentUnprocessedApplicantsPage() {
   ];
 
   const header = (
-    <Button
-      theme="success"
-      rounded={true}
-      link={reverse({
-        pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-        urlParams: { recruitmentId: recruitmentId },
-      })}
-    >
-      {t(KEY.common_go_back)}
-    </Button>
+    <>
+      <Button
+        theme="success"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_gang_overview,
+          urlParams: { recruitmentId: recruitmentId },
+        })}
+      >
+        {t(KEY.common_go_back)}
+      </Button>
+      {/* Display the total number of applicants */}
+      <p>
+        {t(KEY.recruitment_applicants)}: {totalRows}
+      </p>
+    </>
   );
 
   return (
@@ -51,5 +60,3 @@ export function RecruitmentUnprocessedApplicantsPage() {
     </AdminPageLayout>
   );
 }
-
-// Use sorted table to display all unprocessed applicants. Look in storybook to find component.
