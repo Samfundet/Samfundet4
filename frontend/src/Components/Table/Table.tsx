@@ -25,7 +25,10 @@ type TableCell = {
 };
 
 // Type shorthands
-export type TableRow = Array<TableCell | TableCellValue | undefined>;
+type TableRow = {
+  cells: Array<TableCell | TableCellValue | undefined>;
+  childTable?: TableProps;
+};
 type TableDataType = TableRow[];
 
 type TableProps = {
@@ -55,6 +58,7 @@ export function Table({
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
 
   function sort(column: number) {
     if (sortColumn === column) {
@@ -86,8 +90,8 @@ export function Table({
     }
 
     return [...data].sort((rowA, rowB) => {
-      const cellA = getCellValue(rowA[sortColumn] ?? '');
-      const cellB = getCellValue(rowB[sortColumn] ?? '');
+      const cellA = getCellValue(rowA.cells[sortColumn] ?? '');
+      const cellB = getCellValue(rowB.cells[sortColumn] ?? '');
 
       // Not same type, force sort as string type
       if (typeof cellA !== typeof cellB) {
@@ -204,14 +208,27 @@ export function Table({
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
-            <tr className={bodyRowClassName} key={index1}>
-              {row &&
-                row.map((cell, index2) => (
-                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
-                    {getCellContent(cell ?? '')}
+            <>
+              <tr
+                className={bodyRowClassName}
+                key={index1}
+                onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
+              >
+                {row &&
+                  row.cells.map((cell, index2) => (
+                    <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
+                      {getCellContent(cell ?? '')}
+                    </td>
+                  ))}
+              </tr>
+              {row.childTable !== undefined && isOpen === index1 && (
+                <tr className={styles.childTable}>
+                  <td colSpan={row.cells.length}>
+                    <Table {...row.childTable} />
                   </td>
-                ))}
-            </tr>
+                </tr>
+              )}
+            </>
           ))}
         </tbody>
       </table>

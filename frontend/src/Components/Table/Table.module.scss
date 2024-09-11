@@ -34,7 +34,7 @@ $sort-icon-color-dark: #bbbbbb;
   text-align: left;
   background-color: $table-bg;
   color: $table-font-color;
-  border-radius: .25em;
+  border-radius: 0.25em;
   overflow: hidden;
   @include theme-dark {
     background-color: $table-bg-dark;
@@ -66,7 +66,6 @@ tbody {
       background-color: $table-bg-hover-dark;
     }
   }
-
 }
 
 td {
@@ -122,6 +121,10 @@ th {
       color: $sort-icon-color-dark;
     }
   }
+}
+
+.childTable {
+  background-color: $red-samf;
 }
 
 /* stylelint-enable */
