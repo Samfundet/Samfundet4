@@ -38,6 +38,7 @@ RUN echo 'alias makemigrations="poetry run python /app/manage.py makemigrations"
 RUN echo 'alias seed="poetry run python /app/manage.py seed"' >> ~/.bashrc
 RUN echo 'alias collectstatic="poetry run python /app/manage.py collectstatic --noinput"' >> ~/.bashrc
 RUN echo 'alias pipeline="poetry run /app/run-pipeline.sh"' >> ~/.bashrc
+RUN echo 'source aliases.sh' >> ~/.bashrc
 
 
 # Make directories.
@@ -50,7 +51,7 @@ RUN python -m pip install poetry
 
 # Install venv dependecies.
 COPY pyproject.toml poetry.lock* ./
-RUN python -m poetry install
+RUN python -m poetry install --sync
 
 # Copy remaining.
 COPY . /app

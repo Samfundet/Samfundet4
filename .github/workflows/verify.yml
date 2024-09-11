@@ -40,6 +40,9 @@ jobs:
         with:
           python-version: '3.11.2' # From file: '.python-version'
 
+      - name: Source aliases
+        run: source aliases.sh
+
       - name: Install dependencies
         run: |
           python -V
@@ -47,27 +50,27 @@ jobs:
           echo $PY
           python -m pip install --upgrade pip
           python -m pip install poetry
-          python -m poetry install
+          poetry-sync-pipeline
 
       - name: Check ruff format
-        run: python -m poetry run ruff format --check .
+        run: poetry-run-ruff-format-check
 
       - name: Verify migrations
         run: |
-          python -m poetry run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
-          python -m poetry run python manage.py migrate
+          poetry-run-migrations-verify
+          poetry-run-migrations-apply
 
       - name: Run tests
-        run: python -m poetry run pytest
+        run: poetry-run-pytest
 
       - name: Run ruff
-        run: python -m poetry run ruff check .
+        run: poetry-run-ruff-check
 
       - name: Run mypy
-        run: python -m poetry run mypy --config-file mypy.ini .
+        run: poetry-run-mypy
 
       - name: Run seeds
-        run: python -m poetry run python manage.py seed
+        run: poetry-run-seed
 
   job_verify_docker:
     name: Verify docker
