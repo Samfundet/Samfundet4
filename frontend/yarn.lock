@@ -10669,7 +10669,7 @@ __metadata:
     i18next: ^23.5.1
     i18next-browser-languagedetector: ^7.1.0
     path: ^0.12.7
-    path-to-regexp: ^6.2.1
+    path-to-regexp: ^8.0.0
     postcss: ^8.4.31
     prettier: ^3.0.3
     prop-types: ^15.8.1
@@ -15190,10 +15190,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-to-regexp@npm:^6.2.1":
-  version: 6.2.1
-  resolution: "path-to-regexp@npm:6.2.1"
-  checksum: f0227af8284ea13300f4293ba111e3635142f976d4197f14d5ad1f124aebd9118783dd2e5f1fe16f7273743cc3dbeddfb7493f237bb27c10fdae07020cc9b698
+"path-to-regexp@npm:^8.0.0":
+  version: 8.1.0
+  resolution: "path-to-regexp@npm:8.1.0"
+  checksum: 982b784f8dff704c04c79dc3e26d51d2dba340e6bd513a8bdc48559a8543d730547d9d2355122166171eb509236e7524802ed643f8a77d527e12c69ffc74f97f
   languageName: node
   linkType: hard
 
