@@ -826,7 +826,10 @@ def test_get_applicants_without_interviews(
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__applicants_without_interviews)
+    url = reverse(
+        routes.samfundet__applicants_without_interviews,
+        kwargs={'pk': fixture_recruitment.id},
+    )
 
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
@@ -849,13 +852,15 @@ def test_get_applicants_without_interviews_when_interview_is_set(
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_superuser)
-    url = reverse(routes.samfundet__applicants_without_interviews)
+    url = reverse(
+        routes.samfundet__applicants_without_interviews,
+        kwargs={'pk': fixture_recruitment.id},
+    )
 
-    # Setting the interview time for the user's application
-    interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Bogstad')
-    fixture_recruitment_application.interview = interview
+    fixture_recruitment_application.interview = Interview.objects.create(interview_time=timezone.now(), interview_location='Stallen')
     fixture_recruitment_application.save()
 
+    assert fixture_recruitment_application.interview is not None
     ### Act ###
     response: Response = fixture_rest_client.get(path=url, data={'recruitment': fixture_recruitment.id})
 
@@ -1113,6 +1118,25 @@ def test_withdraw_application(fixture_rest_client: APIClient, fixture_user: User
     assert response.data['withdrawn'] is True
 
 
+def test_withdraw_application_recruiter(fixture_rest_client: APIClient, fixture_user: User, fixture_recruitment_application: RecruitmentApplication):
+    # TODO Add Permissions tests later for this
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+
+    # check if not originally withdrawn
+    assert not fixture_recruitment_application.withdrawn
+
+    ### Act 2 Send withdrawal ###
+    url = reverse(
+        routes.samfundet__recruitment_withdraw_application_recruiter,
+        kwargs={'pk': fixture_recruitment_application.id},
+    )
+    response: Response = fixture_rest_client.put(path=url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['withdrawn'] is True
+    assert RecruitmentApplication.objects.get(pk=fixture_recruitment_application.id)
+
+
 def test_post_application_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,
@@ -1148,6 +1172,53 @@ def test_post_application_overflow(
     ### Assert ###
     assert response2.status_code == status.HTTP_400_BAD_REQUEST
     assert RecruitmentApplication.TOO_MANY_APPLICATIONS_ERROR in response2.data['recruitment']
+
+
+def test_post_recruitment_reapply_overflow(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    ### Arrange ###
+    fixture_recruitment.max_applications = 1
+    fixture_recruitment.save()
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    # Send first application
+    url = reverse(
+        routes.samfundet__recruitment_applications_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data = {'application_text': 'test_text'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    # Withdraw first application
+    url_withdraw = reverse(
+        routes.samfundet__recruitment_withdraw_application,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    response: Response = fixture_rest_client.put(path=url_withdraw)
+    assert response.status_code == status.HTTP_200_OK
+
+    ### Send next application
+    url = reverse(
+        routes.samfundet__recruitment_applications_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position2.id},
+    )
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    ## Reapply the first application
+    url = reverse(
+        routes.samfundet__recruitment_applications_for_applicant_detail,
+        kwargs={'pk': fixture_recruitment_position.id},
+    )
+    post_data = {'application_text': 'test_text'}
+    response: Response = fixture_rest_client.put(path=url, data=post_data)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    # Add check of error when reapply endpoint is added
 
 
 def test_recruitment_application_update_pri_up(

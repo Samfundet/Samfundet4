@@ -8,6 +8,13 @@ export const appletCategories: AppletCategory[] = [
     title_nb: 'Generelt',
     applets: [
       {
+        title_nb: 'Brukere',
+        title_en: 'Users',
+        perm: PERM.SAMFUNDET_VIEW_USER,
+        icon: 'mdi:person-search',
+        url: ROUTES.frontend.admin_users,
+      },
+      {
         title_nb: 'Gjenger',
         title_en: 'Gangs',
         perm: PERM.SAMFUNDET_ADD_GANG,
@@ -18,7 +25,7 @@ export const appletCategories: AppletCategory[] = [
         title_nb: 'Opptak',
         title_en: 'Recruitment',
         perm: PERM.SAMFUNDET_ADD_RECRUITMENT,
-        icon: 'mdi:person-search',
+        icon: 'mdi:briefcase-search',
         url: ROUTES.frontend.admin_recruitment,
       },
     ],
