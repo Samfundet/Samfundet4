@@ -41,7 +41,8 @@ jobs:
           python-version: '3.11.2' # From file: '.python-version'
 
       - name: Source aliases
-        run: source aliases.sh
+        # https://github.com/actions/toolkit/issues/766#issuecomment-928305811
+        run: shopt -s expand_aliases && source aliases.sh
 
       - name: Install dependencies
         run: |
