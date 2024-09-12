@@ -50,6 +50,7 @@ import {
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RecruitmentApplicantAdminPage,
+  RecruitmentUnprocessedApplicantsPage,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
@@ -416,6 +417,26 @@ export const router = createBrowserRouter(
               },
             }}
           >
+            <Route
+              path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
+              element={<RecruitmentUnprocessedApplicantsPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_unprocessed_applicants)}
+                    </Link>
+                  );
+                },
+              }}
+            />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}
