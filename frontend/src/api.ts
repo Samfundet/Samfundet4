@@ -19,6 +19,7 @@ import {
   NotificationDto,
   OccupiedTimeslotDto,
   OrganizationDto,
+  PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
   RecruitmentApplicationStateChoicesDto,
@@ -35,12 +36,15 @@ import {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
-  PurchaseFeedbackDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
 
+/**
+ * Used to fetch a CSRF token.
+ * @returns response containing CSRF token
+ */
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
   const response = await axios.get(url, { withCredentials: true });
