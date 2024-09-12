@@ -125,6 +125,27 @@ export function dbT(
   return undefined;
 }
 
+/**
+ * Checks if a field is an object or a number
+ * Returns a number if the field is an object, or a specified object field
+ * Type of field if it is an object must be specified
+ * @param field The field to be checked
+ * @param objectFieldName The potential fieldname that the object has
+ * @returns value of object field or number
+ */
+export function getObjectFieldOrNumber<T>(
+  field: Record<string, unknown> | number | undefined,
+  objectFieldName: string,
+): number | undefined | T {
+  if (field === undefined) return undefined;
+  if (typeof field === 'number') return field;
+  const hasFieldName = Object.prototype.hasOwnProperty.call(field, objectFieldName);
+  if (hasFieldName) {
+    return field[objectFieldName] as T;
+  }
+  return undefined;
+}
+
 export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }

@@ -6,7 +6,7 @@ import { OrgNameType, OrgNameTypeValue } from '~/types';
 import { useDesktop } from '~/hooks';
 import { useParams } from 'react-router-dom';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
@@ -39,7 +39,7 @@ export function OrganizationRecruitmentPage() {
 
   useEffect(() => {
     if (recruitment) {
-      getOrganization(recruitment.organization)
+      getOrganization(getObjectFieldOrNumber<number>(recruitment.organization, 'id'))
         .then((response) => {
           if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
             setOrganizationName(response.name as OrgNameTypeValue);
