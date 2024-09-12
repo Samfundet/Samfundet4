@@ -1,11 +1,12 @@
-import { Page } from '~/Components';
-import styles from './ContributorsPage.module.scss';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import robines from '~/assets/contributors/robines.jpg';
-import sygard from '~/assets/contributors/sygard.jpg';
-import snorre98 from '~/assets/contributors/snorre98.jpg';
+import { Page } from '~/Components';
 import simenProffen from '~/assets/contributors/SimenProffen.jpg';
+import amaliejvik from '~/assets/contributors/amaliejvik.jpeg';
+import robines from '~/assets/contributors/robines.jpg';
+import snorre98 from '~/assets/contributors/snorre98.jpg';
+import sygard from '~/assets/contributors/sygard.jpg';
+import { KEY } from '~/i18n/constants';
+import styles from './ContributorsPage.module.scss';
 import { type Contributor, ContributorItem } from './components';
 
 /* eslint-disable max-len */
@@ -37,7 +38,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Johanne Grønlien Gjedrem', github: 'johannegg', from: 'V23' },
   { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23' },
   // H23
-  { name: 'Amalie Johansen Vik', github: 'amaliejvik', from: 'H23' },
+  { name: 'Amalie Johansen Vik', github: 'amaliejvik', from: 'H23', picture: amaliejvik },
   { name: 'Marion Lystad', github: 'marionlys', from: 'H23' },
   { name: 'Heidi Herfindal Rasmussen', github: 'hei98', from: 'H23' },
   { name: 'Erik Hoff', github: 'aTrueYety', from: 'H23' },
