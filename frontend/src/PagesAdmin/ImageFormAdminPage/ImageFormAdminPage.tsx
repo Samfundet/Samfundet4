@@ -41,7 +41,7 @@ export function ImageFormAdminPage() {
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_images });
+            navigate({ url: ROUTES.frontend.admin_images, replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
@@ -77,7 +77,7 @@ export function ImageFormAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm<FormType>
         onSubmit={handleOnSubmit}
         //onChange={handleOnChange}

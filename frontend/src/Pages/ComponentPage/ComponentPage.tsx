@@ -1,4 +1,4 @@
-import { Button, Countdown, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
+import { Button, Countdown, H1, H2, H3, H4, H5, H6, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -7,6 +7,7 @@ import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOver
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
+import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -15,6 +16,15 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
+      <H1>Heading 1</H1>
+      <H2>Heading 2</H2>
+      <H3>Heading 3</H3>
+      <H4>Heading 4</H4>
+      <H5>Heading 5</H5>
+      <H6>Heading 6</H6>
+
+      <br />
+
       <MultiSelect
         options={[
           {
@@ -130,6 +140,7 @@ export function ComponentPage() {
           </Countdown>
         </h2>
       </div>
+      <ShrimpFishing />
     </div>
   );
 }

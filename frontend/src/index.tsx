@@ -6,14 +6,17 @@ import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { reportWebVitals } from '~/reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '~/router/router';
+import { OrganizationContextProvider } from '~/context/OrgContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <AuthContextProvider>
     <GlobalContextProvider>
-      <React.StrictMode>
-        <RouterProvider router={router} />
-      </React.StrictMode>
+      <OrganizationContextProvider>
+        <React.StrictMode>
+          <RouterProvider router={router} />
+        </React.StrictMode>
+      </OrganizationContextProvider>
     </GlobalContextProvider>
   </AuthContextProvider>,
 );

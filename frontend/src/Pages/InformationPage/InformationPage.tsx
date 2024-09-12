@@ -36,7 +36,7 @@ export function InformationPage() {
         .then((data) => setPage(data))
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found);
+            navigate(ROUTES.frontend.not_found, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);

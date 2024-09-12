@@ -12,7 +12,7 @@ export type UserDto = {
   is_active: boolean;
   is_superuser: boolean;
   date_joined: Date;
-  last_login: Date;
+  last_login: Date | null;
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];
@@ -154,6 +154,7 @@ export type EventDto = {
   duration: number;
   end_dt: string;
   publish_dt: string;
+  doors_time?: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
   ticket_type: EventTicketTypeValue;
@@ -310,6 +311,10 @@ export type GangDto = {
   info_page?: number;
 };
 
+export type RecruitmentGangDto = GangDto & {
+  recruitment_positions: number;
+};
+
 export type GangTypeDto = {
   id: number;
   title_nb: string;
@@ -376,11 +381,12 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
-  organization: 'samfundet' | 'isfit' | 'uka';
-  seperate_positions?: RecruitmentSeperatePositionDto[];
+  organization: number;
+  separate_positions?: RecruitmentSeparatePositionDto[];
+  recruitment_progress?: number;
 };
 
-export type RecruitmentSeperatePositionDto = {
+export type RecruitmentSeparatePositionDto = {
   name_nb: string;
   name_en: string;
   url: string;
@@ -421,11 +427,11 @@ export type RecruitmentPositionDto = {
 };
 
 export type InterviewDto = {
-  id: number;
+  id?: number;
   interview_time: string;
   interview_location: string;
-  room: string;
-  notes: string;
+  room?: string;
+  notes?: string;
   interviewers?: UserDto[];
 };
 
@@ -460,6 +466,18 @@ export type RecruitmentApplicationStateDto = {
 export type RecruitmentApplicationStateChoicesDto = {
   recruiter_priority: [number, string][];
   recruiter_status: [number, string][];
+};
+
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, string>;
 };
 
 export type FeedbackDto = {

@@ -19,21 +19,20 @@ export { default as burger } from './diggf4353.jpg';
 export { default as dessert } from './diggf5743.jpg';
 export { default as profileIcon } from './user.png';
 
-// Medias
-export { default as tikTokLogo } from './tiktok_logo.png';
-export { default as facebookLogo } from './facebook_logo.png';
-export { default as instagramLogo } from './instagram_logo.png';
-export { default as snapchatLogo } from './snapchat_logo.png';
-
 // Sponsors
-export { default as reitanSponsor } from './reitan_sponsor.png';
-export { default as kulturromSponsor } from './kulturrom_sponsor.png';
-export { default as trondhemSponsor } from './trondheim_sponsor.png';
+export { default as reitan } from './logos/reitan.png';
+export { default as reitanWhite } from './logos/reitan_white.png';
+export { default as kulturrom } from './logos/kulturrom.png';
+export { default as kulturromWhite } from './logos/kulturrom_white.png';
+export { default as trondheim } from './logos/trondheim_kommune.svg';
+export { default as trondheimWhite } from './logos/trondheim_kommune_white.svg';
 
 // Festivals
-export { default as uka } from './uka.png';
-export { default as ukaWhite } from './uka_white.png';
-export { default as isfit } from './isfit.png';
+export { default as uka } from './logos/uka.png';
+export { default as ukaWhite } from './logos/uka_white.png';
+export { default as isfit } from './logos/isfit.png';
+export { default as isfitWhite } from './logos/isfit_white.png';
+
 // Venues
 export { default as bodegaen } from './venues/bodegaen.jpg';
 export { default as daglighallen } from './venues/daglighallen.jpg';

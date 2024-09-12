@@ -34,9 +34,8 @@ export function SaksdokumentFormAdminPage() {
         })
         .catch((data) => {
           console.error(data);
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin);
+            navigate(ROUTES.frontend.admin_saksdokumenter, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
@@ -99,7 +98,7 @@ export function SaksdokumentFormAdminPage() {
   const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`);
   useTitle(title);
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true} showBackButton={true}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       {/* Document form */}
       <SamfForm initialData={initialData} onSubmit={handleOnSubmit} submitText={submitText}>
         {/* Name */}
