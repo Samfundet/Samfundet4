@@ -42,6 +42,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
   [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
@@ -243,6 +244,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
@@ -328,7 +331,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_three_interviews_criteria_header]:
     'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
-
+  [KEY.recruitment_dashboard_description]:
+    'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -457,6 +461,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
   [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
@@ -658,6 +663,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_no_interviews]: 'No interviews',
   [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
@@ -741,7 +748,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
-
+  [KEY.recruitment_dashboard_description]:
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',

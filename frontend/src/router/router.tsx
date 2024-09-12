@@ -80,6 +80,7 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
 } from '~/router/loaders';
+import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -360,6 +361,10 @@ export const router = createBrowserRouter(
                 </Link>
               ),
             }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
+            element={<RecruitmentRecruiterDashboardPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_all_applications}
