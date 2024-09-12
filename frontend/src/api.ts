@@ -355,7 +355,7 @@ export async function getOrganizations(): Promise<OrganizationDto[]> {
   return response.data;
 }
 
-export async function getOrganization(id: number): Promise<OrganizationDto> {
+export async function getOrganization(id: number | undefined): Promise<OrganizationDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__organizations_detail, urlParams: { pk: id } });
   const response = await axios.get<OrganizationDto>(url, { withCredentials: true });
@@ -686,6 +686,13 @@ export async function putRecruitmentPosition(
     reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
   const response = await axios.put<RecruitmentPositionDto>(url, recruitment, { withCredentials: true });
   return response;
+}
+
+export async function getRecruitmentRecruiterDashboard(recruitmentId: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_recruiter_dashboard, urlParams: { pk: recruitmentId } });
+  return await axios.get<RecruitmentPositionDto>(url, { withCredentials: true });
 }
 
 export async function setRecruitmentApplicationInterview(

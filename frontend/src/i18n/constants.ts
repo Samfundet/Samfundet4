@@ -54,6 +54,7 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_manage: 'common_manage',
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
@@ -73,6 +74,7 @@ export const KEY = {
   common_show: 'common_show',
   common_menu: 'common_menu',
   common_table: 'common_table',
+  common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
   common_card: 'common_card',
@@ -256,6 +258,8 @@ export const KEY = {
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_interviews: 'recruitment_interviews',
+  recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
@@ -281,6 +285,7 @@ export const KEY = {
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',
   recruitment_administrate_applications: 'recruitment_administrate_applications',
+  recruitment_unprocessed_applicants: 'recruitment_unprocessed_applicants',
   recruitment_administrate_reservations: 'recruitment_administrate_reservations',
   recruitment_my_applications: 'recruitment_my_applications',
   recruitment_all_applications: 'recruitment_all_applications',
@@ -325,6 +330,7 @@ export const KEY = {
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
   recruitment_progression: 'recruitment_progression',
   recruitment_overview: 'recruitment_overview',
+  recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
   recruitment_statistics: 'recruitment_statistics',
@@ -337,6 +343,11 @@ export const KEY = {
   recruitment_stats_date_header: 'recruitment_stats_date_header',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
+  error_recruitment_form_1: 'error_recruitment_form_1',
+  error_recruitment_form_2: 'error_recruitment_form_2',
+  error_recruitment_form_3: 'error_recruitment_form_3',
+  error_recruitment_form_4: 'error_recruitment_form_4',
+
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',
