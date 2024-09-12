@@ -371,10 +371,6 @@ export const router = createBrowserRouter(
             element={<RecruitmentGangAllApplicantsAdminPage />}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_users_without_interview}
-            element={<RecruitmentUsersWithoutInterviewGangPage />}
-          />
-          <Route
             path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
             element={<RecruitmentUsersWithoutInterviewGangPage />}
           />
@@ -432,6 +428,26 @@ export const router = createBrowserRouter(
                       })}
                     >
                       {t(KEY.recruitment_show_unprocessed_applicants)}
+                    </Link>
+                  );
+                },
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_users_without_interview}
+              element={<RecruitmentUsersWithoutInterviewGangPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_applicants_without_interview)}
                     </Link>
                   );
                 },
