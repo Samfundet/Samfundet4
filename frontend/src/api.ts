@@ -687,6 +687,13 @@ export async function putRecruitmentPosition(
   return response;
 }
 
+export async function getRecruitmentRecruiterDashboard(recruitmentId: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_recruiter_dashboard, urlParams: { pk: recruitmentId } });
+  return await axios.get<RecruitmentPositionDto>(url, { withCredentials: true });
+}
+
 export async function setRecruitmentApplicationInterview(
   applicationId: string,
   data: InterviewDto,
