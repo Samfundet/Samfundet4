@@ -1,12 +1,41 @@
-#!/bin/env sh
+#!/bin/bash
 
+##########################
+#         README:        #
+##########################
+# This is a list of all commands commonly used in the project.
+# Preferably this list should be echaustive, but not all environments are alias fiendly (e.g. Dockerfile and non-interactive-shell)
+# If you find yourself running a command repeatedly, consider adding it here to share with other developers.
+
+# Pros:
+# + Overview of possible commands.
+# + Easier to search and find commands used in the project.
+# + Autocomplete in terminal, shorter, and easier to use.
+# + Ensure developers actually use the same commands.
+# + Compatible with "all" tools and package managers.
+
+# Cons:
+# - Without more setup, must be sourced manually.
+# - Slight risk of overriding personal aliases.
+
+# Run this to apply aliases:
 # source aliases.sh
+
+
+##########################
+#        _setup:         #
+##########################
+# Enable aliases in CI/CD environments, only available in bash. https://github.com/actions/toolkit/issues/766#issuecomment-928305811
+shopt -s expand_aliases
+
 
 ##########################
 #          misc:         #
 ##########################
 alias git-has-change='git diff --quiet' # <filepath>
 alias la='ls -la'
+alias pip-upgrade='python -m pip install --upgrade pip'
+alias pip-install-poetry='python -m pip install poetry'
 
 
 ##########################
