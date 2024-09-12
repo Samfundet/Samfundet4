@@ -469,6 +469,31 @@ export type RecruitmentApplicationStateChoicesDto = {
   recruiter_status: [number, string][];
 };
 
+export type RecruitmentTimeStatDto = {
+  hour: number;
+  count: number;
+};
+
+export type RecruitmentDateStatDto = {
+  date: string;
+  count: number;
+};
+
+export type RecruitmentCampusStatDto = {
+  campus: string;
+  count: number;
+};
+
+export type RecruitmentStatsDto = {
+  id?: number;
+  recruitment?: number;
+  total_applicants: number;
+  total_applications: number;
+  time_stats: RecruitmentTimeStatDto[];
+  date_stats: RecruitmentDateStatDto[];
+  campus_stats: RecruitmentCampusStatDto[];
+};
+
 // ############################################################
 //                       Purchase Feedback
 // ############################################################
