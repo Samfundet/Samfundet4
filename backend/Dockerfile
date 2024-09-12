@@ -22,10 +22,11 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=1
 #      System dependencies       #
 ##################################
 # sqlite3: dependency for billig development database.
-# gcc, libpq-dev: psycopg-dependencies.
+# gcc, libpq-dev, python3-dev: psycopg-dependencies.
 RUN set -eux && \
     apt-get update && \
-    apt-get install -y --no-install-recommends sqlite3 gcc libpq-dev -y && \
+    apt-get install -y --no-install-recommends sqlite3 gcc libpq-dev python3-dev && \
+    python -m pip install poetry && \
     rm -rf /var/lib/apt/lists/* && \
     export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
 
@@ -48,11 +49,8 @@ RUN mkdir /app
 WORKDIR /app
 
 # Prepare virtual environment.
-RUN mkdir .venv && python -m pip install poetry
-
-# Install venv dependecies.
 COPY pyproject.toml poetry.lock* ./
-RUN python -m poetry install --sync
+RUN mkdir .venv && poetry install --sync
 
 # Copy remaining.
 COPY . /app
