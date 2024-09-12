@@ -50,6 +50,7 @@ import {
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RecruitmentApplicantAdminPage,
+  RecruitmentUnprocessedApplicantsPage,
   SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
   RecruitmentFormAdminPage,
@@ -79,6 +80,7 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
 } from '~/router/loaders';
+import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -361,12 +363,12 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
-            element={<RecruitmentGangAllApplicantsAdminPage />}
+            path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
+            element={<RecruitmentRecruiterDashboardPage />}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_users_without_interview}
-            element={<RecruitmentUsersWithoutInterviewGangPage />}
+            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+            element={<RecruitmentGangAllApplicantsAdminPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
@@ -411,6 +413,46 @@ export const router = createBrowserRouter(
               },
             }}
           >
+            <Route
+              path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
+              element={<RecruitmentUnprocessedApplicantsPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_unprocessed_applicants)}
+                    </Link>
+                  );
+                },
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_users_without_interview}
+              element={<RecruitmentUsersWithoutInterviewGangPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_applicants_without_interview)}
+                    </Link>
+                  );
+                },
+              }}
+            />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}

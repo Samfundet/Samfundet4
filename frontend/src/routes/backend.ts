@@ -570,6 +570,7 @@ export const ROUTES_BACKEND = {
   samfundet__active_recruitment_positions: '/active-recruitment-positions/',
   samfundet__applicants_without_interviews: '/recruitment-applicants-without-interviews/:pk/',
   samfundet__applicants_without_three_interview_criteria: '/recruitment-applicants-without-three-interview-criteria/:pk/',
+  samfundet__recruitment_recruiter_dashboard: '/recruitment-recruiter-dashboard/:pk/',
   samfundet__recruitment_download_gang_application_csv: '/recruitment-download-gang-application-csv/:recruitmentId/:gangId',
   samfundet__occupied_timeslots: '/occupiedtimeslot/',
   samfundet__recruitment_interview_availability: '/recruitment-interview-availability/',
@@ -578,4 +579,4 @@ export const ROUTES_BACKEND = {
   samfundet__purchase_feedback: '/purchase-feedback/',
   static__path: '/static/:path',
   media__path: '/media/:path',
-}
+} as const;
