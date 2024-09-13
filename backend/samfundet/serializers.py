@@ -709,6 +709,7 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentSeparatePosition
         fields = [
+            'id',
             'recruitment',
             'name_nb',
             'name_en',

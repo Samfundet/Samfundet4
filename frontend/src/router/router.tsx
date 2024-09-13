@@ -77,9 +77,11 @@ import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
+  SeparatePositionLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  separatePositionLoader,
 } from '~/router/loaders';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 
@@ -434,6 +436,32 @@ export const router = createBrowserRouter(
                       })}
                     >
                       {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
+                    </Link>
+                  );
+                },
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_gang_separateposition_edit}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_RECRUITMENTSEPERATEPOSITION]}
+                  element={<RecruitmentSeparatePositionFormAdminPage />}
+                />
+              }
+              loader={separatePositionLoader}
+              handle={{
+                crumb: ({ recruitment, separatePosition }: RecruitmentLoader & SeparatePositionLoader) => {
+                  if (!recruitment || !separatePosition) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_edit,
+                        urlParams: { recruitmentId: recruitment.id, separatePositionId: separatePosition.id },
+                      })}
+                    >
+                      {t(KEY.common_edit)} {t(KEY.recruitment_gangs_with_separate_positions)} -{' '}
+                      {dbT(separatePosition, 'name')}
                     </Link>
                   );
                 },
