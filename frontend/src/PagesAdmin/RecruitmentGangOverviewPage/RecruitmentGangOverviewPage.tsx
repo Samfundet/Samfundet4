@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
-import { Button, CrudButtons, H3, Link, OccupiedFormModal, Tab, TabBar } from '~/Components';
+import { Button, CrudButtons, Link, OccupiedFormModal, Tab, TabBar } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteRecruitmentSeparatePosition, getRecruitmentGangs } from '~/api';
 import { type RecruitmentGangDto } from '~/dto';
@@ -12,8 +12,6 @@ import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { RecruitmentProgression } from '../RecruitmentOverviewPage/Components/RecruitmentProgression';
-import { RecruitmentStatistics } from '../RecruitmentOverviewPage/Components/RecruitmentStatistics';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitment } = useRouteLoaderData('recruitment') as RecruitmentLoader;
