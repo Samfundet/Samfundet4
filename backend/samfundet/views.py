@@ -648,6 +648,7 @@ class RecruitmentSeparatePositionView(ModelViewSet):
     serializer_class = RecruitmentSeparatePositionSerializer
     queryset = RecruitmentSeparatePosition.objects.all()
 
+
 class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
