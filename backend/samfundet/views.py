@@ -39,6 +39,7 @@ from root.constants import (
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
+    RecruitmentSeparatePositionSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -126,6 +127,7 @@ from .models.recruitment import (
     InterviewRoom,
     OccupiedTimeslot,
     RecruitmentPosition,
+    RecruitmentSeparatePosition,
     RecruitmentStatistics,
     RecruitmentApplication,
     RecruitmentInterviewAvailability,
@@ -639,6 +641,12 @@ class RecruitmentPositionForApplicantView(ModelViewSet):
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
 
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSeparatePositionView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentSeparatePositionSerializer
+    queryset = RecruitmentSeparatePosition.objects.all()
 
 class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
