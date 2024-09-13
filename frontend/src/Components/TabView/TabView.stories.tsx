@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { TabView, TabViewProps } from './TabView';
 
 export default {
-  title: 'Components/TabBar',
+  title: 'Components/TabView',
   component: TabView,
 } as ComponentMeta<typeof TabView>;
 
