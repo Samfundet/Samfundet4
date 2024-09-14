@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Your Project API
+  title: Samfundet4 API
   version: 1.0.0
-  description: Your project description
+  description: Samfundet4 is the new webpage of Studentersamfundet in Trondhjem
 paths:
   /active-recruitment-positions/:
     get:
