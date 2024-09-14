@@ -183,8 +183,8 @@ REST_FRAMEWORK = {
 ### End: DRF ###
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
+    'TITLE': 'Samfundet4 API',
+    'DESCRIPTION': 'Samfundet4 is the new webpage of Studentersamfundet in Trondhjem',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
