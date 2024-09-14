@@ -1,8 +1,8 @@
 # imports
 from __future__ import annotations
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework import routers
-
 from django.urls import path, include
 
 from . import views
@@ -48,9 +48,7 @@ router.register('recruitment-applications-for-gang', views.RecruitmentApplicatio
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
 
-app_name = 'samfundet'
-
-urlpatterns = [
+samfundet_patterns = [
     path('api/', include(router.urls)),
     path('csrf/', views.CsrfView.as_view(), name='csrf'),
     path('login/', views.LoginView.as_view(), name='login'),
@@ -127,4 +125,11 @@ urlpatterns = [
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
+]
+
+urlpatterns = [
+    path('', include((samfundet_patterns, 'samfundet'))),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

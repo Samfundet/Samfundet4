@@ -156,6 +156,7 @@ gunicorn = "23.*"
 django-admin-autocomplete-filter = "0.*"
 django-notifications-hq = "1.*"
 psycopg = { extras = ["c"], version = "*" }
+drf-spectacular = "^0.27.2"
 
 
 [tool.poetry.group.dev.dependencies]

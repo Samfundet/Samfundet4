@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'root',  # Register to enable management.commands.
     'samfundet',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -177,8 +178,17 @@ REST_FRAMEWORK = {
         'root.custom_classes.permission_classes.SuperUserPermission',
         # 'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 ### End: DRF ###
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 ### django-guardian ###
 INSTALLED_APPS += [
