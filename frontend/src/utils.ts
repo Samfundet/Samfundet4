@@ -1,10 +1,11 @@
+import { format } from 'date-fns';
 import i18next from 'i18next';
 import { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
 import { UserDto } from '~/dto';
-import { KEY, KeyValues } from './i18n/constants';
+import { KEY } from './i18n/constants';
+import type { TranslationKeys } from './i18n/types';
 import { Day, EventTicketType, EventTicketTypeValue } from './types';
-import { format } from 'date-fns';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -159,7 +160,7 @@ export function isTruthy(value = ''): boolean {
 /**
  * Gets the translation key for a given day
  */
-export function getDayKey(day: Day): KeyValues {
+export function getDayKey(day: Day): TranslationKeys {
   switch (day) {
     case 'monday':
       return KEY.common_day_monday;
@@ -191,7 +192,7 @@ export const SHORT_DAY_I18N_KEYS = [
 /**
  * Gets the translation key for a given price group
  */
-export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
+export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationKeys {
   switch (ticketType) {
     case EventTicketType.FREE:
       return KEY.common_ticket_type_free;
