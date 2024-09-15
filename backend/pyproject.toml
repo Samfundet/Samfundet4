@@ -154,7 +154,6 @@ django-guardian = "2.*"
 pillow = "10.*"
 gunicorn = "23.*"
 django-admin-autocomplete-filter = "0.*"
-django-notifications-hq = "1.*"
 psycopg = { extras = ["c"], version = "*" }
 
 

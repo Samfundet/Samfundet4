@@ -359,15 +359,6 @@ export type KeyValueDto = {
   value: string;
 };
 
-export type NotificationDto = {
-  id: number;
-  slug: string;
-  actor: string;
-  verb: string;
-  recipient: string;
-  // TODO: There are more fields than this.
-};
-
 // ############################################################
 //                       Recruitment
 // ############################################################
