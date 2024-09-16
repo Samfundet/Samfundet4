@@ -1,15 +1,16 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from './context/AuthContext';
-import { useGlobalContext } from './context/GlobalContextProvider';
+import { toast } from 'react-toastify';
 import { getTextItem, putUserPreference } from '~/api';
 import { Key, SetState } from '~/types';
-import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
+import { createDot, dbT, hasPerm, isTruthy, lowerCapitalize, updateBodyThemeClass } from '~/utils';
 import { LinkTarget } from './Components/Link/Link';
 import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper, THEME, THEME_KEY, ThemeValue } from './constants';
+import { useAuthContext } from './context/AuthContext';
+import { useGlobalContext } from './context/GlobalContextProvider';
 import { TextItemDto } from './dto';
-import { LANGUAGES } from './i18n/constants';
+import { KEY, LANGUAGES } from './i18n/constants';
 
 // Make typescript happy.
 declare global {
@@ -475,3 +476,242 @@ export function useDebounce<T>(value: T, delay: number): T {
   );
   return debouncedValue;
 }
+
+/* ===================================================
+ * CRUD-operation hooks
+ */
+
+type FetchFunction<T> = () => Promise<T>;
+
+interface UseReadResult<T> {
+  response: T | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+export function useRead<T>(fetchFunction: FetchFunction<T>): UseReadResult<T> {
+  const [response, setResponse] = useState<T | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isMounted.current) return;
+      setLoading(true);
+      try {
+        const result = await fetchFunction();
+        if (isMounted.current) {
+          setResponse(result);
+          setError(null);
+        }
+      } catch (err) {
+        if (isMounted.current) {
+          setError(err instanceof Error ? err : new Error('An error occurred'));
+          setResponse(null);
+        }
+      } finally {
+        if (isMounted.current) {
+          setLoading(false);
+        }
+      }
+    };
+    fetchData();
+    return () => {
+      isMounted.current = false;
+    };
+  }, [fetchFunction]);
+
+  return { response, loading, error };
+}
+
+/* --== Delete ==-- */
+
+type DeleteFunction<T> = (item: T) => Promise<void>;
+
+interface UseDeleteOptions<T> {
+  onDeleteSuccess: (deletedItem: T) => void;
+  confirmMessage?: (item: T) => string;
+  successMessage?: (item: T) => string;
+  errorMessage?: (item: T, error: Error) => string;
+}
+
+/**
+ * Helper function to get a display name for an object.
+ * It tries to find a suitable property to use as a name, falling back to generic labels if needed.
+ * @param item - The object to get a display name for
+ * @returns A string representation of the item's name, or "object" if it does not have a name or title
+ */
+function getItemDisplayName<T extends object>(item: T): string {
+  // Check for a 'name' property first
+  if ('name' in item && typeof item.name === 'string') {
+    return item.name;
+  }
+  // If no 'name', check for a 'title' property
+  if ('title' in item && typeof item.title === 'string') {
+    return item.title;
+  }
+  // If no 'name' or 'title', use the 'id' with a prefix
+  if ('id' in item) {
+    return `${typeof item === 'object' ? 'Object' : 'Item'} ${String(item.id)}`;
+  }
+  // If all else fails, just return 'object'
+  return 'object';
+}
+
+/**
+ * Custom hook for handling delete operations with confirmation and feedback.
+ * @param deleteApiCall - The function to call to perform the delete operation
+ * @param options - Configuration options for the delete operation
+ * @returns A function that can be called to initiate the delete process
+ */
+export function useDelete<T extends { id: number | string }>(
+  deleteApiCall: DeleteFunction<T>,
+  options: UseDeleteOptions<T>,
+): (item: T) => Promise<void> {
+  const { t } = useTranslation();
+
+  //  Memoized delete handler function
+  const handleDelete = useCallback(
+    async (item: T): Promise<void> => {
+      // Get a display name for the item, using dbT if available, otherwise fall back to getItemDisplayName
+      const itemName = dbT(item, 'name') || getItemDisplayName(item);
+      // Create a confirmation message, using a custom one if provided, otherwise use a default
+      const confirmMsg = options.confirmMessage
+        ? options.confirmMessage(item)
+        : `${lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`)} ${itemName}`;
+
+      // Show a confirmation dialog
+      if (window.confirm(confirmMsg)) {
+        try {
+          // Attempt to delete the item
+          await deleteApiCall(item);
+          // If successful, call the onDeleteSuccess callback
+          options.onDeleteSuccess(item);
+          // Show a success toast, using a custom message if provided, otherwise use a default
+          const successMsg = options.successMessage ? options.successMessage(item) : t(KEY.common_delete_successful);
+          toast.success(successMsg);
+        } catch (error) {
+          // Show an error toast, using a custom message if provided, otherwise use a default
+          console.error('Error deleting item:', error);
+          const errorMsg = options.errorMessage
+            ? options.errorMessage(item, error instanceof Error ? error : new Error(String(error)))
+            : t(KEY.common_something_went_wrong);
+          toast.error(errorMsg);
+        }
+      }
+    },
+    [deleteApiCall, options, t], // Dependencies for the useCallback hook
+  );
+
+  // Return the delete handler function
+  return handleDelete;
+}
+
+/* --== Update ==-- */
+
+type UpdateFunction<T> = (id: string | number, data: Partial<T>) => Promise<T>;
+
+interface UseUpdateOptions<T> {
+  onSuccess?: (updatedItem: T) => void;
+  successMessage?: string;
+  errorMessage?: string;
+}
+
+interface UseUpdateResult<T> {
+  update: (id: string | number, data: Partial<T>) => Promise<T | null>;
+  loading: boolean;
+  error: Error | null;
+}
+
+/**
+ * Custom hook for handling update operations with feedback.
+ * @param updateApiCall - The function to call to perform the update operation
+ * @param options - Configuration options for the update operation
+ * @returns An object with the update function, loading state, and error state
+ */
+export function useUpdate<T extends { id: string | number }>(
+  updateApiCall: UpdateFunction<T>,
+  options: UseUpdateOptions<T> = {},
+): UseUpdateResult<T> {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const { t } = useTranslation();
+
+  const update = useCallback(
+    async (id: string | number, data: Partial<T>): Promise<T | null> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const updatedItem = await updateApiCall(id, data);
+        setLoading(false);
+        toast.success(options.successMessage || t(KEY.common_update_successful));
+        options.onSuccess?.(updatedItem);
+        return updatedItem;
+      } catch (err) {
+        setLoading(false);
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(new Error(errorMessage));
+        toast.error(options.errorMessage || t(KEY.common_something_went_wrong));
+        return null;
+      }
+    },
+    [updateApiCall, options, t],
+  );
+
+  return { update, loading, error };
+}
+
+/* --== Create ==-- */
+type CreateFunction<T> = (data: T) => Promise<T>;
+
+interface UseCreateOptions<T> {
+  onSuccess?: (createdItem: T) => void;
+  successMessage?: string;
+  errorMessage?: string;
+}
+
+interface UseCreateResult<T> {
+  create: (data: T) => Promise<T | null>;
+  loading: boolean;
+  error: Error | null;
+}
+
+/**
+ * Custom hook for handling create operations with feedback.
+ * @param createApiCall - The function to call to perform the create operation
+ * @param options - Configuration options for the create operation
+ * @returns An object with the create function, loading state, and error state
+ */
+export function useCreate<T>(createApiCall: CreateFunction<T>, options: UseCreateOptions<T> = {}): UseCreateResult<T> {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const { t } = useTranslation();
+
+  const create = useCallback(
+    async (data: T): Promise<T | null> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const createdItem = await createApiCall(data);
+        setLoading(false);
+        toast.success(options.successMessage || t(KEY.common_creation_successful));
+        options.onSuccess?.(createdItem);
+        return createdItem;
+      } catch (err) {
+        setLoading(false);
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(new Error(errorMessage));
+        toast.error(options.errorMessage || t(KEY.common_something_went_wrong));
+        return null;
+      }
+    },
+    [createApiCall, options, t],
+  );
+
+  return { create, loading, error };
+}
+
+/**
+ * ====================================================
+ */

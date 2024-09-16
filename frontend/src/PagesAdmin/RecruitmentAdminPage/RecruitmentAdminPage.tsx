@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
 import { RecruitmentDto } from '~/dto';
-import { useTitle } from '~/hooks';
+import { useRead, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -24,18 +24,31 @@ export function RecruitmentAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
+
+  const memoizedGetAllRecruitments = useCallback(getAllRecruitments, []);
+
+  // Direct API call
   useEffect(() => {
     getAllRecruitments()
       .then((data) => {
         setRecruitments(data.data);
+        console.log('Direct API call result:', data.data);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
+        console.error('Direct API call error:', error);
       })
       .finally(() => setShowSpinner(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [t]);
+
+  // useRead hook with memoized function
+  const { response, loading, error } = useRead(memoizedGetAllRecruitments);
+
+  useEffect(() => {
+    console.log('useRead response:', response);
+    console.log('useRead loading:', loading);
+    console.log('useRead error:', error);
+  }, [response, loading, error]);
 
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
