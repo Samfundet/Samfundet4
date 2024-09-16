@@ -162,7 +162,7 @@ export function RecruitmentFormAdminPage() {
             <SamfFormField
               field="actual_application_deadline"
               type="date_time"
-              label={t(KEY.actual_application_deadlin) ?? ''}
+              label={t(KEY.actual_application_deadline) ?? ''}
               required={true}
             />
           </div>
