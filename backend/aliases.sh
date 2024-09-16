@@ -4,8 +4,10 @@
 #         README:        #
 ##########################
 # This is a list of all commands commonly used in the project.
-# Preferably this list should be echaustive, but not all environments are alias fiendly (e.g. Dockerfile and non-interactive-shell)
+# It was made because poetry doesn't support builtin alias like Pipfile and package.json. Seemed better than installing 3rd party alias tool.
+# Preferably this list should be used in all scenarios, but not all environments are alias fiendly (e.g. Dockerfile and non-interactive-shell).
 # If you find yourself running a command repeatedly, consider adding it here to share with other developers.
+
 
 # Pros:
 # + Overview of possible commands.
