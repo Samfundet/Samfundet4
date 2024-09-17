@@ -1,7 +1,7 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, CrudButtons, Link, OccupiedFormModal, Tab, TabBar } from '~/Components';
+import { Button, CrudButtons, Link, OccupiedFormModal, Tab, TabView } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteRecruitmentSeparatePosition, getRecruitment, getRecruitmentGangs } from '~/api';
 import { RecruitmentDto, RecruitmentSeparatePositionDto, type RecruitmentGangDto } from '~/dto';
@@ -167,7 +167,8 @@ export function RecruitmentGangOverviewPage() {
     </>
   );
 
-  const tabs: Tab<ReactNode>[] = [
+  // TODO: Fix rerender
+  const tabs: Tab<ReactElement>[] = [
     { key: 1, label: t(KEY.common_gangs), value: <Table columns={tableGangColumns} data={tableGangData} /> },
     {
       key: 2,
@@ -176,12 +177,9 @@ export function RecruitmentGangOverviewPage() {
     },
   ];
 
-  const [currentTab, setCurrentTab] = useState<Tab<ReactNode>>(tabs[0]);
-
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={loading}>
-      <TabBar tabs={tabs} selected={currentTab} onSetTab={setCurrentTab} />
-      {currentTab?.value}
+      <TabView tabs={tabs} />
     </AdminPageLayout>
   );
 }

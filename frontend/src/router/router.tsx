@@ -420,7 +420,7 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_recruitment_gang_separateposition_create}
               element={
                 <PermissionRoute
-                  required={[PERM.SAMFUNDET_ADD_RECRUITMENTSEPERATEPOSITION]}
+                  required={[PERM.SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION]}
                   element={<RecruitmentSeparatePositionFormAdminPage />}
                 />
               }
