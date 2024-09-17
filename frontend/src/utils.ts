@@ -3,7 +3,8 @@ import i18next from 'i18next';
 import type { CSSProperties } from 'react';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
 import type { UserDto } from '~/dto';
-import { KEY, type KeyValues } from './i18n/constants';
+import { KEY } from './i18n/constants';
+import type { TranslationKeys } from './i18n/types';
 import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
 
 export type hasPerm = {
@@ -125,6 +126,27 @@ export function dbT(
   return undefined;
 }
 
+/**
+ * Checks if a field is an object or a number
+ * Returns a number if the field is an object, or a specified object field
+ * Type of field if it is an object must be specified
+ * @param field The field to be checked
+ * @param objectFieldName The potential fieldname that the object has
+ * @returns value of object field or number
+ */
+export function getObjectFieldOrNumber<T>(
+  field: Record<string, unknown> | number | undefined,
+  objectFieldName: string,
+): number | undefined | T {
+  if (field === undefined) return undefined;
+  if (typeof field === 'number') return field;
+  const hasFieldName = Object.prototype.hasOwnProperty.call(field, objectFieldName);
+  if (hasFieldName) {
+    return field[objectFieldName] as T;
+  }
+  return undefined;
+}
+
 export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
@@ -138,7 +160,7 @@ export function isTruthy(value = ''): boolean {
 /**
  * Gets the translation key for a given day
  */
-export function getDayKey(day: Day): KeyValues {
+export function getDayKey(day: Day): TranslationKeys {
   switch (day) {
     case 'monday':
       return KEY.common_day_monday;
@@ -170,7 +192,7 @@ export const SHORT_DAY_I18N_KEYS = [
 /**
  * Gets the translation key for a given price group
  */
-export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
+export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationKeys {
   switch (ticketType) {
     case EventTicketType.FREE:
       return KEY.common_ticket_type_free;

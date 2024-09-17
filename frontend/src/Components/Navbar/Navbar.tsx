@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
+import { Button, Link, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
 import { getActiveRecruitments, impersonateUser, logout } from '~/api';
@@ -14,14 +14,15 @@ import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
-import { KEY, LANGUAGES } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
+import { LANGUAGES } from '~/i18n/types';
 
 const scrollDistanceForOpaque = 30;
 
 export function Navbar() {
-  const { isMobileNavigation, setIsMobileNavigation, notifications } = useGlobalContext();
+  const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
   const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
@@ -274,7 +275,6 @@ export function Navbar() {
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
             <ThemeSwitch />
-            <NotificationBadge number={notifications.length || undefined} onClick={() => console.log(1)} />
             {languageButton}
             {loginButton}
             {profileButton}

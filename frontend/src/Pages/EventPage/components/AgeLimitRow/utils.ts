@@ -1,10 +1,11 @@
-import { KEY, type KeyValues } from '~/i18n/constants';
-import { EventAgeRestriction, type EventAgeRestrictionValue } from '~/types';
+import { KEY } from '~/i18n/constants';
+import type { TranslationKeys } from '~/i18n/types';
+import { EventAgeRestriction, EventAgeRestrictionValue } from '~/types';
 
 /**
  * Gets the translation key for a given age restriction
  */
-export function getEventAgeRestrictionKey(ageRestriction: EventAgeRestrictionValue): KeyValues {
+export function getEventAgeRestrictionKey(ageRestriction: EventAgeRestrictionValue): TranslationKeys {
   switch (ageRestriction) {
     case EventAgeRestriction.NONE:
       return KEY.none;

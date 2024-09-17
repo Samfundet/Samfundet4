@@ -1,4 +1,4 @@
-import { type Key, compile, parse } from 'path-to-regexp';
+import { compile, type Key, ParamData, parse } from 'path-to-regexp';
 
 // Credit: https://github.com/kennedykori/named-urls/blob/master/src/index.ts
 
@@ -78,7 +78,7 @@ export const include: Include = (base, routes) => {
 /**
  * Helper to reverse patterns and inject params.
  */
-function compileWithParams<P extends Params>(pattern: string, params: P) {
+function compileWithParams<P extends ParamData>(pattern: string, params: P) {
   const reversed = compile<P>(pattern);
 
   return reversed(params);
@@ -102,8 +102,14 @@ function compileWithParams<P extends Params>(pattern: string, params: P) {
  */
 export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) => {
   try {
+    // tostring all number values in urlParams
+    const urlParamsStringified = Object.keys(urlParams).reduce<Record<string, string>>((newUrlParams, urlParamKey) => {
+      const value = urlParams[urlParamKey];
+      return Object.assign(newUrlParams, { [urlParamKey]: value + '' }); // Converts number to string.
+    }, {});
+
     // Compile pattern with params, e.g.: '/some/:param/' => '/some/replaced/'
-    const compiledRoute = compileWithParams(pattern, urlParams);
+    const compiledRoute = compileWithParams(pattern, urlParamsStringified);
 
     // Strip undefined values and convert to string.
     // Needed because URLSearchParams only accepts Record<string,string>.
@@ -135,7 +141,7 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
 
       // Find expected params.
       const tokens = parse(pattern)
-        .filter((token) => typeof token === 'object')
+        .tokens.filter((token) => typeof token === 'object')
         .map((token) => {
           return (token as Key).name; // We have filtered on objects, we know this is a Key.
         });
@@ -152,9 +158,14 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
 
 export const reverseForce: ReverseForce = ({ pattern, urlParams = {} }) => {
   try {
-    return compileWithParams(pattern, urlParams);
+    // tostring all number values in urlParams
+    const urlParamsStringified = Object.keys(urlParams).reduce<Record<string, string>>((newUrlParams, urlParamKey) => {
+      const value = urlParams[urlParamKey];
+      return Object.assign(newUrlParams, { [urlParamKey]: value + '' }); // Converts number to string.
+    }, {});
+    return compileWithParams(pattern, urlParamsStringified);
   } catch (err) {
-    const tokens = parse(pattern);
+    const tokens = parse(pattern).tokens;
 
     return tokens.filter((token: unknown) => typeof token === 'string').join('');
   }

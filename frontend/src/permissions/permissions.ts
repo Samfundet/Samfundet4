@@ -203,6 +203,21 @@ export const SAMFUNDET_CHANGE_PROFILE = 'samfundet.change_profile';
 export const SAMFUNDET_DELETE_PROFILE = 'samfundet.delete_profile';
 export const SAMFUNDET_VIEW_PROFILE = 'samfundet.view_profile';
 
+export const SAMFUNDET_ADD_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.add_purchasefeedbackalternative';
+export const SAMFUNDET_CHANGE_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.change_purchasefeedbackalternative';
+export const SAMFUNDET_DELETE_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.delete_purchasefeedbackalternative';
+export const SAMFUNDET_VIEW_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.view_purchasefeedbackalternative';
+
+export const SAMFUNDET_ADD_PURCHASEFEEDBACKMODEL = 'samfundet.add_purchasefeedbackmodel';
+export const SAMFUNDET_CHANGE_PURCHASEFEEDBACKMODEL = 'samfundet.change_purchasefeedbackmodel';
+export const SAMFUNDET_DELETE_PURCHASEFEEDBACKMODEL = 'samfundet.delete_purchasefeedbackmodel';
+export const SAMFUNDET_VIEW_PURCHASEFEEDBACKMODEL = 'samfundet.view_purchasefeedbackmodel';
+
+export const SAMFUNDET_ADD_PURCHASEFEEDBACKQUESTION = 'samfundet.add_purchasefeedbackquestion';
+export const SAMFUNDET_CHANGE_PURCHASEFEEDBACKQUESTION = 'samfundet.change_purchasefeedbackquestion';
+export const SAMFUNDET_DELETE_PURCHASEFEEDBACKQUESTION = 'samfundet.delete_purchasefeedbackquestion';
+export const SAMFUNDET_VIEW_PURCHASEFEEDBACKQUESTION = 'samfundet.view_purchasefeedbackquestion';
+
 export const SAMFUNDET_ADD_RECRUITMENT = 'samfundet.add_recruitment';
 export const SAMFUNDET_CHANGE_RECRUITMENT = 'samfundet.change_recruitment';
 export const SAMFUNDET_DELETE_RECRUITMENT = 'samfundet.delete_recruitment';
@@ -223,6 +238,11 @@ export const SAMFUNDET_CHANGE_RECRUITMENTDATESTAT = 'samfundet.change_recruitmen
 export const SAMFUNDET_DELETE_RECRUITMENTDATESTAT = 'samfundet.delete_recruitmentdatestat';
 export const SAMFUNDET_VIEW_RECRUITMENTDATESTAT = 'samfundet.view_recruitmentdatestat';
 
+export const SAMFUNDET_ADD_RECRUITMENTGANGSTAT = 'samfundet.add_recruitmentgangstat';
+export const SAMFUNDET_CHANGE_RECRUITMENTGANGSTAT = 'samfundet.change_recruitmentgangstat';
+export const SAMFUNDET_DELETE_RECRUITMENTGANGSTAT = 'samfundet.delete_recruitmentgangstat';
+export const SAMFUNDET_VIEW_RECRUITMENTGANGSTAT = 'samfundet.view_recruitmentgangstat';
+
 export const SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY = 'samfundet.add_recruitmentinterviewavailability';
 export const SAMFUNDET_CHANGE_RECRUITMENTINTERVIEWAVAILABILITY = 'samfundet.change_recruitmentinterviewavailability';
 export const SAMFUNDET_DELETE_RECRUITMENTINTERVIEWAVAILABILITY = 'samfundet.delete_recruitmentinterviewavailability';
@@ -233,10 +253,19 @@ export const SAMFUNDET_CHANGE_RECRUITMENTPOSITION = 'samfundet.change_recruitmen
 export const SAMFUNDET_DELETE_RECRUITMENTPOSITION = 'samfundet.delete_recruitmentposition';
 export const SAMFUNDET_VIEW_RECRUITMENTPOSITION = 'samfundet.view_recruitmentposition';
 
-export const SAMFUNDET_ADD_RECRUITMENTSEPERATEPOSITION = 'samfundet.add_recruitmentseparateposition';
-export const SAMFUNDET_CHANGE_RECRUITMENTSEPERATEPOSITION = 'samfundet.change_recruitmentseparateposition';
-export const SAMFUNDET_DELETE_RECRUITMENTSEPERATEPOSITION = 'samfundet.delete_recruitmentseparateposition';
-export const SAMFUNDET_VIEW_RECRUITMENTSEPERATEPOSITION = 'samfundet.view_recruitmentseparateposition';
+export const SAMFUNDET_ADD_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.add_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_CHANGE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.change_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_DELETE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.delete_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_VIEW_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.view_recruitmentpositionsharedinterviewgroup';
+
+export const SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION = 'samfundet.add_recruitmentseparateposition';
+export const SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION = 'samfundet.change_recruitmentseparateposition';
+export const SAMFUNDET_DELETE_RECRUITMENTSEPARATEPOSITION = 'samfundet.delete_recruitmentseparateposition';
+export const SAMFUNDET_VIEW_RECRUITMENTSEPARATEPOSITION = 'samfundet.view_recruitmentseparateposition';
 
 export const SAMFUNDET_ADD_RECRUITMENTSTATISTICS = 'samfundet.add_recruitmentstatistics';
 export const SAMFUNDET_CHANGE_RECRUITMENTSTATISTICS = 'samfundet.change_recruitmentstatistics';

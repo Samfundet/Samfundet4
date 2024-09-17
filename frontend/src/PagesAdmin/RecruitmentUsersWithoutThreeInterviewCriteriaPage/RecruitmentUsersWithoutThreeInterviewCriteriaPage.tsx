@@ -10,9 +10,9 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentUsersWithoutThreeInterviewCriteriaPage.module.scss';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 
 export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const { recruitmentId } = useParams();
@@ -58,9 +58,8 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const title = t(KEY.recruitment_three_interviews_criteria_header);
   const header = (
     <div className={styles.header}>
-      <Text>
-        {recruitment?.organization} - {dbT(recruitment, 'name')}
-      </Text>
+      <Text>{getObjectFieldOrNumber<string>(recruitment?.organization, 'name')}</Text>
+      <Text>{dbT(recruitment, 'name')}</Text>
     </div>
   );
   return (

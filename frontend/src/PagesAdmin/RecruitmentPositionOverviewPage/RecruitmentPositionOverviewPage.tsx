@@ -13,6 +13,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
+import { lowerCapitalize } from '~/utils';
 import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {
@@ -139,6 +140,9 @@ export function RecruitmentPositionOverviewPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Text size="l" as="strong" className={styles.subHeader}>
+        {lowerCapitalize(t(KEY.recruitment_applications))} ({recruitmentApplicants.length})
+      </Text>
       <RecruitmentApplicantsStatus
         applicants={recruitmentApplicants}
         recruitmentId={recruitmentId}
@@ -149,7 +153,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_applications)}({acceptedApplicants.length})
+          {t(KEY.recruitment_accepted_applications)} ({acceptedApplicants.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
@@ -163,7 +167,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_rejected_applications)}({rejectedApplicants.length})
+          {t(KEY.recruitment_rejected_applications)} ({rejectedApplicants.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
@@ -177,7 +181,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_withdrawn_applications)}({withdrawnApplicants.length})
+          {t(KEY.recruitment_withdrawn_applications)} ({withdrawnApplicants.length})
         </Text>
         {withdrawnApplicants.length > 0 ? (
           <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />

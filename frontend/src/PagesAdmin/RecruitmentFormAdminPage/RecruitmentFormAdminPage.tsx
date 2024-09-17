@@ -11,7 +11,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
 
@@ -56,7 +56,7 @@ export function RecruitmentFormAdminPage() {
       data?.recruitment?.reprioritization_deadline_for_applicant,
     ),
     reprioritization_deadline_for_groups: utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups),
-    organization: data?.recruitment?.organization,
+    organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id'),
   };
 
   const title = recruitmentId
@@ -164,7 +164,7 @@ export function RecruitmentFormAdminPage() {
             <SamfFormField
               field="actual_application_deadline"
               type="date_time"
-              label={t(KEY.actual_application_deadlin) ?? ''}
+              label={t(KEY.actual_application_deadline) ?? ''}
               required={true}
             />
           </div>

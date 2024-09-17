@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getAllNotifications, getCsrfToken, getKeyValues, putUserPreference } from '~/api';
+import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
-import type { NotificationDto } from '~/dto';
 import { useMouseTrail, useTheme } from '~/hooks';
 import type { Children, KeyValueMap, SetState } from '~/types';
 import { useAuthContext } from './AuthContext';
@@ -31,7 +30,6 @@ type GlobalContextProps = {
   setIsMobileNavigation: SetState<boolean>;
 
   keyValues: KeyValueMap;
-  notifications: NotificationDto[];
 };
 
 /**
@@ -67,7 +65,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   // =================================== //
 
   const [keyValues, setKeyValues] = useState<KeyValueMap>(new Map());
-  const [notifications, setNotifications] = useState<NotificationDto[]>([]);
 
   const { theme, setTheme, switchTheme } = useTheme();
 
@@ -106,11 +103,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
       // Transform KeyValue[] response to Map of [key,value] entries.
       const keyValueMap = new Map(response.data.map((kv) => [kv.key, kv.value ?? '']));
       setKeyValues(keyValueMap);
-    });
-
-    // Load notifications.
-    getAllNotifications().then((response) => {
-      setNotifications(response.data.all_list);
     });
   }, [enabled]);
 
@@ -154,7 +146,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
 
   /** Populated global context values. */
   const globalContextValues: GlobalContextProps = {
-    notifications,
     theme,
     setTheme,
     switchTheme,

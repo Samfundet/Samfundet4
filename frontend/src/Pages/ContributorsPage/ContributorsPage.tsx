@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components';
+import amaliejvik from '~/assets/contributors/amaliejvik.jpeg';
 import simenProffen from '~/assets/contributors/SimenProffen.jpg';
 import robines from '~/assets/contributors/robines.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
@@ -36,7 +37,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Johanne Grønlien Gjedrem', github: 'johannegg', from: 'V23' },
   { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23' },
   // H23
-  { name: 'Amalie Johansen Vik', github: 'amaliejvik', from: 'H23' },
+  { name: 'Amalie Johansen Vik', github: 'amaliejvik', from: 'H23', picture: amaliejvik },
   { name: 'Marion Lystad', github: 'marionlys', from: 'H23' },
   { name: 'Heidi Herfindal Rasmussen', github: 'hei98', from: 'H23' },
   { name: 'Erik Hoff', github: 'aTrueYety', from: 'H23' },

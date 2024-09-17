@@ -1,5 +1,5 @@
 import type { InformationPageDto } from '~/dto';
-import { LANGUAGES } from '~/i18n/constants';
+import { LANGUAGES } from '~/i18n/types';
 
 export function getTranslatedTitle(page: InformationPageDto | undefined, language: string): string | undefined {
   let title = undefined;
