@@ -105,7 +105,7 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
     // tostring all number values in urlParams
     const urlParamsStringified = Object.keys(urlParams).reduce<Record<string, string>>((newUrlParams, urlParamKey) => {
       const value = urlParams[urlParamKey];
-      return Object.assign(newUrlParams, { [urlParamKey]: value + '' }); // Converts number to string.
+      return Object.assign(newUrlParams, { [urlParamKey]: `${value}` }); // Converts number to string.
     }, {});
 
     // Compile pattern with params, e.g.: '/some/:param/' => '/some/replaced/'
@@ -161,7 +161,7 @@ export const reverseForce: ReverseForce = ({ pattern, urlParams = {} }) => {
     // tostring all number values in urlParams
     const urlParamsStringified = Object.keys(urlParams).reduce<Record<string, string>>((newUrlParams, urlParamKey) => {
       const value = urlParams[urlParamKey];
-      return Object.assign(newUrlParams, { [urlParamKey]: value + '' }); // Converts number to string.
+      return Object.assign(newUrlParams, { [urlParamKey]: `${value}` }); // Converts number to string.
     }, {});
     return compileWithParams(pattern, urlParamsStringified);
   } catch (err) {
