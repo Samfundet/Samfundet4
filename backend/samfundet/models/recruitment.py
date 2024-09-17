@@ -429,10 +429,12 @@ class RecruitmentStatistics(FullCleanSaveMixin):
         self.total_accepted = (
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
         )
-
-        self.average_gang_diversity = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
-        self.average_applicant_applications = self.total_applications / self.total_applicants
-
+        if self.total_applicants > 0:
+            self.average_gang_diversity = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
+            self.average_applicant_applications = self.total_applications / self.total_applicants  if self.total_applicants > 0 else 0
+        else:
+            self.average_gang_diversity = 0
+            self.average_applicant_applications = 0
         super().save(*args, **kwargs)
         self.generate_time_stats()
         self.generate_date_stats()
@@ -538,7 +540,7 @@ class RecruitmentGangStat(models.Model):
         self.application_count = applications.count()
         self.applicant_count = applications.values('user').distinct().count()
 
-        self.average_priority = applications.aggregate(models.Avg('priority'))
+        self.average_priority = applications.aggregate(models.Avg('applicant_priority'))['applicant_priority__avg'] if len(applications) > 0 else 0
         self.total_accepted = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
         self.total_rejected = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED).values('user').distinct().count()
         super().save(*args, **kwargs)
