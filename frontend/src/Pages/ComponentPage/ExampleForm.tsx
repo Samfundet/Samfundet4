@@ -25,7 +25,7 @@ export function ExampleForm() {
     password: PASSWORD,
     organization: z.string().nullish().optional(),
     duration: z.number().min(15).max(60),
-    confirm: z.boolean(),
+    confirm: z.boolean().refine((v) => v, 'Påkrevd'),
   });
 
   const form = useForm<z.infer<typeof schema>>({
