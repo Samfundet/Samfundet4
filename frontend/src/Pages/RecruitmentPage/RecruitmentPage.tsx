@@ -5,9 +5,9 @@ import { getActiveRecruitments } from '~/api';
 import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { RecruitmentCard, NoPositions } from './Components';
-import styles from './RecruitmentPage.module.scss';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
+import { NoPositions, RecruitmentCard } from './Components';
+import styles from './RecruitmentPage.module.scss';
 
 export function RecruitmentPage() {
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);

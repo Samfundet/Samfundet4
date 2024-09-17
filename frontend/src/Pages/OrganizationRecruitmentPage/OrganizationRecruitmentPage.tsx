@@ -9,8 +9,8 @@ import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 

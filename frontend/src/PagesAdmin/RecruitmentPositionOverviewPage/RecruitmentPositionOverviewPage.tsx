@@ -11,9 +11,9 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { lowerCapitalize } from '~/utils';
 import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {

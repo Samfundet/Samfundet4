@@ -1,4 +1,4 @@
-import { compile, type Key, ParamData, parse } from 'path-to-regexp';
+import { type Key, type ParamData, compile, parse } from 'path-to-regexp';
 
 // Credit: https://github.com/kennedykori/named-urls/blob/master/src/index.ts
 

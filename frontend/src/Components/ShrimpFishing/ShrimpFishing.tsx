@@ -142,7 +142,7 @@ export function ShrimpButton({ speed, onClick, eaten, sharkPosition }: MovingIte
     const interval = setInterval(() => {
       if (shrimpRef.current) {
         const deltaPositionY = randomIntFromInterval(-10, 10);
-        const newPositionY = limitToRange(parseFloat(shrimpRef.current.style.top) + deltaPositionY, 0, 100);
+        const newPositionY = limitToRange(Number.parseFloat(shrimpRef.current.style.top) + deltaPositionY, 0, 100);
         shrimpRef.current.style.transitionDuration = `${speed}s`;
         shrimpRef.current.style.top = `${newPositionY}%`;
       }
@@ -162,7 +162,7 @@ export function ShrimpButton({ speed, onClick, eaten, sharkPosition }: MovingIte
       sharkPosition &&
       yCord &&
       xCord &&
-      Math.abs(parseFloat(yCord) - sharkPosition[0]) < 10
+      Math.abs(Number.parseFloat(yCord) - sharkPosition[0]) < 10
       // Math.abs(parseFloat(xCord) - sharkPosition[1]) < 10
     ) {
       eaten();
@@ -195,7 +195,7 @@ export function SharkButton({ speed, onClick, setSharkPosition }: MovingItemProp
     const interval = setInterval(() => {
       if (sharkRef.current) {
         const [newPositionX, newPositionY] = randomNewPosition(
-          [parseFloat(sharkRef.current.style.left), parseFloat(sharkRef.current.style.top)],
+          [Number.parseFloat(sharkRef.current.style.left), Number.parseFloat(sharkRef.current.style.top)],
           10,
         );
         sharkRef.current.style.transitionDuration = `${speed}s`;

@@ -10,9 +10,9 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentUsersWithoutThreeInterviewCriteriaPage.module.scss';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
 
 export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const { recruitmentId } = useParams();
