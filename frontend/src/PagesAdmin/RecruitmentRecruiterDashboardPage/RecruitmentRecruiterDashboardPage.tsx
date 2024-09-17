@@ -7,7 +7,7 @@ import { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 import styles from './RecruitmentRecruiterDashboardPage.module.scss';
 import { Text } from '~/Components/Text/Text';
 import { Table } from '~/Components/Table';
@@ -46,7 +46,10 @@ export function RecruitmentRecruiterDashboardPage() {
     return <></>;
   }
 
-  const title = `${t(KEY.recruitment_overview)} - ${recruitment?.organization} - ${dbT(recruitment, 'name')}`;
+  const title = `${t(KEY.recruitment_overview)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
+    recruitment,
+    'name',
+  )}`;
   const header = (
     <div className={styles.header}>
       <Text>{t(KEY.recruitment_dashboard_description)}</Text>
