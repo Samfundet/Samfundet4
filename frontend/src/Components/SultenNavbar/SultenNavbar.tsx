@@ -6,7 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SamfundetLogo } from '~/Components';
 import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
 import { useDesktop, useScrollY } from '~/hooks';
-import { KEY, LANGUAGES } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
+import { LANGUAGES } from '~/i18n/types';
 import { ROUTES } from '~/routes';
 import styles from './SultenNavbar.module.scss';
 
