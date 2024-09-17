@@ -1,14 +1,14 @@
-import styles from './RecruitmentStatistics.module.scss';
-import { Text } from '~/Components/Text/Text';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { getRecruitmentStats } from '~/api';
 import { useParams } from 'react-router-dom';
-import { RecruitmentStatsDto } from '~/dto';
 import { toast } from 'react-toastify';
 import { Chart } from '~/Components';
 import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
+import { getRecruitmentStats } from '~/api';
+import type { RecruitmentStatsDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import styles from './RecruitmentStatistics.module.scss';
 
 export function RecruitmentStatistics() {
   const { recruitmentId } = useParams();

@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import { ChangeEvent, ReactElement } from 'react';
+import type { ChangeEvent, ReactElement } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropDownOption<T> = {
@@ -41,7 +41,7 @@ export function Dropdown<T>({
    * @param e Standard onChange HTML event for dropdown
    */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = parseInt(e?.currentTarget.value ?? '0', 10);
+    const choice = Number.parseInt(e?.currentTarget.value ?? '0', 10);
     if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
     } else {
@@ -70,6 +70,7 @@ export function Dropdown<T>({
         defaultValue={initialIndex}
       >
         {options.map((opt, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <option value={index} key={index}>
             {opt.label}
           </option>

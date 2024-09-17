@@ -2,8 +2,8 @@ import { Icon } from '@iconify/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, InputField } from '~/Components';
-import { Table, TableRow } from '~/Components/Table';
-import { EventCustomTicketDto } from '~/dto';
+import { Table, type TableRow } from '~/Components/Table';
+import type { EventCustomTicketDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
 import styles from './CustomTicketEditor.module.scss';
@@ -33,7 +33,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
     const nextId = lastTicket.id + 1;
     onSetCustomTickets?.([
       ...customTickets,
-      { id: nextId, name_nb: `Ny billett`, name_en: `New ticket`, price: lastTicket.price },
+      { id: nextId, name_nb: 'Ny billett', name_en: 'New ticket', price: lastTicket.price },
     ]);
   }
 
@@ -116,7 +116,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
         <div className={styles.add_custom_ticket}>
           <Button rounded={true} theme="green" preventDefault={true} onClick={newTicket}>
             Legg til billett
-            <Icon icon="mdi:plus"></Icon>
+            <Icon icon="mdi:plus" />
           </Button>
         </div>
       </div>

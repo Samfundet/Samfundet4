@@ -1,4 +1,4 @@
-import { MirrorKeys, TranslationKeys } from './types';
+import type { MirrorKeys, TranslationKeys } from './types';
 
 /**
  * Mapping of every existing translation key.

@@ -1,4 +1,4 @@
-import { AppletCategory } from '~/Components/AdminBox/types';
+import type { AppletCategory } from '~/Components/AdminBox/types';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 

@@ -25,6 +25,7 @@ export function MapSvg({ style, className }: MapSvgProps) {
         ...style,
       }}
     >
+      <title>Venue map</title>
       <g transform="matrix(1,0,0,1,-247.552,-1383.35)">
         <g id="bodegaen" transform="matrix(0.841987,0,0,1,865.255,1480.11)">
           <g id="body">

@@ -48,17 +48,16 @@ export const PLURAL = {
 ```
  */
 export function prepareTranslations(translations: Translations): i18nTranslations {
-  const output = Object.entries(translations).reduce((acc, [key, value]) => {
+  return Object.entries(translations).reduce((acc, [key, value]) => {
     if (typeof value === 'object') {
       const subKeys = Object.keys(value) as Plural[];
-      subKeys.forEach((subKey) => {
+      for (const subKey of subKeys) {
         const newKey = `${key}_${subKey}`;
         acc[newKey] = value[subKey] as string;
-      });
+      }
     } else {
       acc[key] = value;
     }
     return acc;
   }, {} as i18nTranslations);
-  return output;
 }
