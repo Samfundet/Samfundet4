@@ -77,7 +77,7 @@ import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
-  SeparatePositionLoader,
+  type SeparatePositionLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,

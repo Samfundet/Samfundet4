@@ -37,12 +37,12 @@ export function RecruitmentSeparatePositionFormAdminPage() {
   useEffect(() => {
     if (separatePositionId) {
       getRecruitmentSeparatePosition(separatePositionId)
-        .then((data) => {
-          setSeparatePosition(data.data);
+        .then((response) => {
+          setSeparatePosition(response.data);
           setShowSpinner(false);
         })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+        .catch((response) => {
+          if (response.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(
               reverse({
                 pattern: ROUTES.frontend.admin_recruitment_gang_overview,

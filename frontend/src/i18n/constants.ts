@@ -173,7 +173,7 @@ export const KEY = {
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
   common_filter: 'common_filter',
-
+  common_administrate: 'common_administrate',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
