@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { getOccupiedTimeslots, getRecruitmentAvailability } from '~/api'; //postOccupiedTimeslots removed this
-import { MiniCalendar, TimeslotContainer } from '~/Components';
+import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
 // import { OccupiedTimeslotDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { CalendarMarker } from '~/types';
@@ -24,6 +24,7 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
 
   const [timeslots, setTimeslots] = useState<string[]>([]);
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
+  const [location, setLocation] = useState<string>('');
 
   useEffect(() => {
     if (!recruitmentId) {
@@ -54,18 +55,18 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
   }, [recruitmentId]);
 
   function save() {
-    // const data: OccupiedTimeslotDto = {
-    //   recruitment: recruitmentId,
-    //   dates: selectedTimeslots,
-    // };
-    // postOccupiedTimeslots(data)
-    //   .then(() => {
-    //     toast.success(t(KEY.common_update_successful));
-    //   })
-    //   .catch((error) => {
-    //     toast.error(t(KEY.common_something_went_wrong));
-    //     console.error(error);
-    //   });
+    //   const data: OccupiedTimeslotDto = {
+    //     recruitment: recruitmentId,
+    //     dates: selectedTimeslots,
+    //   };
+    //   postOccupiedTimeslots(data)
+    //     .then(() => {
+    //       toast.success(t(KEY.common_update_successful));
+    //     })
+    //     .catch((error) => {
+    //       toast.error(t(KEY.common_something_went_wrong));
+    //       console.error(error);
+    // });
   }
 
   const markers = useMemo(() => {
@@ -119,6 +120,13 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
               selectMultiple={false}
             />
           </div>
+          <span className={styles.choose_location_text}>{t(KEY.recruitment_choose_interview_location)}</span>
+          <InputField
+            type="text"
+            inputClassName={styles.input_field}
+            value={location}
+            onChange={(value) => setLocation(value as string)}
+          ></InputField>
 
           <div className={styles.button_row}>
             <Button display="block" theme="secondary" onClick={() => onCancel?.()}>

@@ -27,7 +27,7 @@ export function TimeslotContainer({
   const { t } = useTranslation();
 
   const [activeTimeslots, setActiveTimeslots] = useState<Record<string, string[]>>(props.activeTimeslots || {});
-  const disabledTimeslots = props.disabledTimeslots;
+  const [disabledTimeslots, setDisabledTimeslots] = useState<Record<string, string[]>>(props.disabledTimeslots || {});
   const [selectedTimeslot, setSelectedTimeslot] = useState<Record<string, string[]>>(props.selectedTimeslot || {});
 
   // Click & drag functionality
@@ -143,6 +143,7 @@ export function TimeslotContainer({
 
   return (
     <div className={styles.container}>
+      {t(KEY.occupied_select_time_text)}:
       <div className={styles.timeslots}>
         {timeslots.map((timeslot) => {
           const active = isTimeslotSelected(selectedDate, timeslot);
