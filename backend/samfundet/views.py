@@ -39,7 +39,6 @@ from root.constants import (
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
-    RecruitmentShowUnprocessedApplicationsSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -87,6 +86,7 @@ from .serializers import (
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
+    RecruitmentShowUnprocessedApplicationsSerializer,
 )
 from .models.event import (
     Event,
