@@ -410,9 +410,28 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applications')
 
+    # Total withdrawn applications
+    total_withdrawn = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total Withdrawn applications')
+
+    # Total accepted applicants
+    total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
+
+    # Average amount of different gangs an applicant applies for
+    average_gang_diversity = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+
+    # Average amount of applications for an applicant
+    average_applicant_applications = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+
+
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
         self.total_applicants = self.recruitment.applications.values('user').distinct().count()
+        self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
+        self.total_accepted = self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+
+        self.average_gang_diversity = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
+        self.average_applicant_applications = self.total_applications / self.total_applicants
+
         super().save(*args, **kwargs)
         self.generate_time_stats()
         self.generate_date_stats()
