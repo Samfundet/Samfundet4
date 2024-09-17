@@ -430,7 +430,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
         )
         if self.total_applicants > 0:
-            self.average_gangs_applied_to_per_applicant = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
+            self.average_gangs_applied_to_per_applicant = (
+                self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
+            )
             self.average_applications_per_applicant = self.total_applications / self.total_applicants if self.total_applicants > 0 else 0
         else:
             self.average_gangs_applied_to_per_applicant = 0
