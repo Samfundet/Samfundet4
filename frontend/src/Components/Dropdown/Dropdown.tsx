@@ -49,9 +49,10 @@ export function Dropdown<T>({
     }
   }
 
-  const initialIndex = initialValue !== undefined
-    ? options.findIndex((opt) => opt.value === initialValue)
-    : defaultValue
+  const initialIndex =
+    initialValue !== undefined
+      ? options.findIndex((opt) => opt.value === initialValue)
+      : defaultValue
       ? options.findIndex((opt) => opt.value === defaultValue.value)
       : 0;
 
