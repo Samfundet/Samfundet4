@@ -38,6 +38,7 @@ router.register('merch', views.MerchView, 'merch')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
+router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
@@ -110,6 +111,11 @@ urlpatterns = [
         'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
         views.ApplicantsWithoutThreeInterviewsCriteriaView.as_view(),
         name='applicants_without_three_interview_criteria',
+    ),
+    path(
+        'recruitment-recruiter-dashboard/<int:pk>/',
+        views.RecruitmentRecruiterDashboardView.as_view(),
+        name='recruitment_recruiter_dashboard',
     ),
     path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
