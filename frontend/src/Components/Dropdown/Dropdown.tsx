@@ -41,7 +41,7 @@ export function Dropdown<T>({
    * @param e Standard onChange HTML event for dropdown
    */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = parseInt(e?.currentTarget.value ?? '0', 10);
+    const choice = Number.parseInt(e?.currentTarget.value ?? '0', 10);
     if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
     } else {
