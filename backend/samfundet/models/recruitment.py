@@ -431,7 +431,7 @@ class RecruitmentStatistics(FullCleanSaveMixin):
         )
         if self.total_applicants > 0:
             self.average_gang_diversity = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
-            self.average_applicant_applications = self.total_applications / self.total_applicants  if self.total_applicants > 0 else 0
+            self.average_applicant_applications = self.total_applications / self.total_applicants if self.total_applicants > 0 else 0
         else:
             self.average_gang_diversity = 0
             self.average_applicant_applications = 0
@@ -510,6 +510,7 @@ class RecruitmentCampusStat(models.Model):
     campus = models.ForeignKey(Campus, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
 
     count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+    applicant_percentage = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name='Percentages of enrolled students applied for campus')
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.campus} {self.count}'
@@ -518,7 +519,18 @@ class RecruitmentCampusStat(models.Model):
         self.count = User.objects.filter(
             id__in=self.recruitment_stats.recruitment.applications.values_list('user', flat=True).distinct(), campus=self.campus
         ).count()
+        self.applicant_percentage = self.count / (self.campus.total_students if self.campus.total_students else 1)
         super().save(*args, **kwargs)
+
+    def normalized_applicant_percentage(self) -> float:
+        applicant_percentages = list(
+            RecruitmentCampusStat.objects.filter(recruitment_stats=self.ecruitment_stats).values_list('applicant_percentage', flat=True)
+        )
+        max_percent = max(applicant_percentages)
+        min_percent = min(applicant_percentages)
+        if max_percent - min_percent == 0:
+            return 0
+        return (self.applicant_percentage - min_percent) / (max_percent - min_percent)
 
 
 class RecruitmentGangStat(models.Model):
