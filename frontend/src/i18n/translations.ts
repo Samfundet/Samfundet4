@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-import { KEY, KeyValues } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
+import { prepareTranslations } from './utils';
 
-export const nb: Record<KeyValues, string> = {
+export const nb = prepareTranslations({
   // ==================== //
   //        Common        //
   // ==================== //
@@ -279,7 +280,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
-  [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
+  [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_application_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
@@ -422,9 +423,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
-};
+});
 
-export const en: Record<KeyValues, string> = {
+export const en = prepareTranslations({
   // ==================== //
   //        Common        //
   // ==================== //
@@ -700,7 +701,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
   [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
-  [KEY.actual_application_deadlin]: 'Actual deadline',
+  [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_application_letter]: 'Default application letter',
@@ -746,7 +747,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_no_current_applications_position]: 'This gang has no current applicants',
   [KEY.recruitment_no_current_applications_gang]: 'This gang has no current applicants',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
-  [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
   [KEY.recruitment_stats_hours_header]: 'Total applicants per hour',
   [KEY.recruitment_stats_campus_header]: 'Total applicants per campus',
   [KEY.recruitment_stats_date_header]: 'Total applicants per day',
@@ -847,4 +847,4 @@ export const en: Record<KeyValues, string> = {
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
-};
+});
