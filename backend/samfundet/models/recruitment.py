@@ -417,10 +417,10 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
 
     # Average amount of different gangs an applicant applies for
-    average_gang_diversity = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+    average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
     # Average amount of applications for an applicant
-    average_applicant_applications = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+    average_applications_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
@@ -430,11 +430,11 @@ class RecruitmentStatistics(FullCleanSaveMixin):
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
         )
         if self.total_applicants > 0:
-            self.average_gang_diversity = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
-            self.average_applicant_applications = self.total_applications / self.total_applicants if self.total_applicants > 0 else 0
+            self.average_gangs_applied_to_per_applicant = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
+            self.average_applications_per_applicant = self.total_applications / self.total_applicants if self.total_applicants > 0 else 0
         else:
-            self.average_gang_diversity = 0
-            self.average_applicant_applications = 0
+            self.average_gangs_applied_to_per_applicant = 0
+            self.average_applications_per_applicant = 0
         super().save(*args, **kwargs)
         self.generate_time_stats()
         self.generate_date_stats()

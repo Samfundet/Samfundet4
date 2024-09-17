@@ -49,14 +49,14 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="recruitmentstatistics",
-            name="average_applicant_applications",
+            name="average_applications_per_applicant",
             field=models.FloatField(
                 blank=True, null=True, verbose_name="Gang diversity"
             ),
         ),
         migrations.AddField(
             model_name="recruitmentstatistics",
-            name="average_gang_diversity",
+            name="average_gangs_applied_to_per_applicant",
             field=models.FloatField(
                 blank=True, null=True, verbose_name="Gang diversity"
             ),
