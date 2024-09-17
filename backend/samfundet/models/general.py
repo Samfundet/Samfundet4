@@ -11,7 +11,6 @@ from datetime import date, time, datetime, timedelta
 from collections import defaultdict
 
 from guardian.shortcuts import assign_perm
-from notifications.base.models import AbstractNotification
 
 from django.db import models
 from django.utils import timezone
@@ -31,11 +30,6 @@ if TYPE_CHECKING:
     from typing import Any
 
     from django.db.models import Model
-
-
-class Notification(AbstractNotification):
-    class Meta(AbstractNotification.Meta):
-        abstract = False
 
 
 class Tag(CustomBaseModel):
