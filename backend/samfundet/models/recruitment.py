@@ -422,12 +422,13 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     # Average amount of applications for an applicant
     average_applicant_applications = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
-
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
         self.total_applicants = self.recruitment.applications.values('user').distinct().count()
         self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
-        self.total_accepted = self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        self.total_accepted = (
+            self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        )
 
         self.average_gang_diversity = self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
         self.average_applicant_applications = self.total_applications / self.total_applicants
@@ -525,11 +526,19 @@ class RecruitmentGangStat(models.Model):
     application_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
     applicant_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
 
+    average_priority = models.FloatField(null=True, blank=True, verbose_name='Average priority')
+    total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted')
+    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total called and rejected')
+
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.gang} {self.application_count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         applications = RecruitmentApplication.objects.filter(recruitment=self.recruitment_stats.recruitment, recruitment_position__gang=self.gang)
         self.application_count = applications.count()
-        self.applicant_count = applications.values_list('user', flat=True).distinct().count()
+        self.applicant_count = applications.values('user').distinct().count()
+
+        self.average_priority = applications.aggregate(models.Avg('priority'))
+        self.total_accepted = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        self.total_rejected = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED).values('user').distinct().count()
         super().save(*args, **kwargs)
