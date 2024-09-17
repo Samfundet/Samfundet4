@@ -1,5 +1,5 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { TabView, TabViewProps } from './TabView';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { TabView, type TabViewProps } from './TabView';
 
 export default {
   title: 'Components/TabView',
