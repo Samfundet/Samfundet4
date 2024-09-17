@@ -39,6 +39,7 @@ from root.constants import (
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
+    RecruitmentShowUnprocessedApplicationsSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -693,6 +694,25 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
         gang = self.request.query_params.get('gang', None)
         if recruitment is not None and gang is not None:
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
+        return None
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentUnprocessedApplicationsPerRecruitment(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentShowUnprocessedApplicationsSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentApplication.objects.filter(
+                recruitment=recruitment,
+                recruiter_status=RecruitmentStatusChoices.NOT_SET,
+            )
         return None
 
 
