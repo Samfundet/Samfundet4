@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
-import { GangDto, type OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import { getGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
+import { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import styles from './RecruitmentGangAdminPage.module.scss';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { toast } from 'react-toastify';
 import { STATUS } from '~/http_status_codes';
@@ -20,11 +20,13 @@ export function RecruitmentGangAdminPage() {
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [organization, setOrganization] = useState<OrganizationDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  const title = `${organization?.name} - ${dbT(recruitment, 'name')} - ${dbT(gang, 'name')}`;
+  const title = `${getObjectFieldOrNumber<string>(recruitment?.organization, 'name')} - ${dbT(
+    recruitment,
+    'name',
+  )} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
   useEffect(() => {
@@ -38,7 +40,6 @@ export function RecruitmentGangAdminPage() {
         }),
         getRecruitment(recruitmentId).then(async (data) => {
           setRecruitment(data.data);
-          await getOrganization(data.data.organization).then(setOrganization);
         }),
       ])
         .then(() => {

@@ -31,3 +31,4 @@ export { SultenMenuAdminPage } from './SultenMenuAdminPage';
 export { SultenMenuItemFormAdminPage } from './SultenMenuItemFormAdminPage';
 export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { UsersAdminPage } from './UsersAdminPage';
+export { RecruitmentRecruiterDashboardPage } from './RecruitmentRecruiterDashboardPage';

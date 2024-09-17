@@ -42,32 +42,41 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -V
-          PY=$(which python)
-          echo $PY
-          python -m pip install --upgrade pip
-          python -m pip install poetry
-          python -m poetry install
+          source aliases.sh
+          pip-upgrade
+          pip-install-poetry
+          poetry-sync-pipeline
+
+      - name: Run ruff
+        run: |
+          source aliases.sh
+          poetry-run-ruff-check
 
       - name: Check ruff format
-        run: python -m poetry run ruff format --check .
+        run: |
+          source aliases.sh
+          poetry-run-ruff-format-check
 
       - name: Verify migrations
         run: |
-          python -m poetry run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
-          python -m poetry run python manage.py migrate
+          source aliases.sh
+          poetry-run-migrations-verify
+          poetry-run-migrations-apply
 
       - name: Run tests
-        run: python -m poetry run pytest
-
-      - name: Run ruff
-        run: python -m poetry run ruff check .
+        run: |
+          source aliases.sh
+          poetry-run-pytest-run
 
       - name: Run mypy
-        run: python -m poetry run mypy --config-file mypy.ini .
+        run: |
+          source aliases.sh
+          poetry-run-mypy-run
 
       - name: Run seeds
-        run: python -m poetry run python manage.py seed
+        run: |
+          source aliases.sh
+          poetry-run-seed
 
   job_verify_docker:
     name: Verify docker

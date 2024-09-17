@@ -118,6 +118,11 @@ urlpatterns = [
         name='applicants_without_three_interview_criteria',
     ),
     path(
+        'recruitment-recruiter-dashboard/<int:pk>/',
+        views.RecruitmentRecruiterDashboardView.as_view(),
+        name='recruitment_recruiter_dashboard',
+    ),
+    path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
         views.DownloadRecruitmentApplicationGangCSV.as_view(),
         name='recruitment_download_gang_application_csv',

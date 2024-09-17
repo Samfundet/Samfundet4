@@ -59,6 +59,13 @@ def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageEl
 def generate() -> dict[str, Any]:  # noqa: C901
     elements: list[HomePageElement] = []
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
+    # Optimize DB queries by:
+    # - select_related (FK and OTO) to perform an SQL JOIN, fetching related 'image' data in the same query.
+    # - prefetch_related (MTM and reverse FK) to fetch related objects in separate queries and join in Python.
+    # Reduces the number of DB queries.
+    prefetch = ['custom_tickets', 'editors']
+    select = ['image']
+    upcoming_events = upcoming_events.select_related(*select).prefetch_related(*prefetch)
 
     # Splash events
     # TODO we should make a datamodel for this

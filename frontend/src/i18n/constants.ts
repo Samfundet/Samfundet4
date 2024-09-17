@@ -1,3 +1,5 @@
+import { MirrorKeys, TranslationKeys } from './types';
+
 /**
  * Mapping of every existing translation key.
  *
@@ -54,6 +56,7 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_manage: 'common_manage',
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
@@ -108,7 +111,7 @@ export const KEY = {
   common_whatsup: 'common_whatsup',
   common_contact: 'common_contact',
   common_unknown: 'common_unknown',
-  common_sponsor: 'common_sponsors',
+  common_sponsor: 'common_sponsor',
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
@@ -157,8 +160,8 @@ export const KEY = {
   common_something_went_wrong: 'common_something_went_wrong',
   common_click_here: 'common_click_here',
   common_have: 'common_have',
-  common_been: 'been',
-  common_processed: 'processed',
+  common_been: 'common_been',
+  common_processed: 'common_processed',
   common_rejected: 'common_rejected',
   common_it: 'common_it',
   common_will: 'common_will',
@@ -179,7 +182,7 @@ export const KEY = {
   common_film_club: 'common_film_club',
   common_privacy_policy: 'common_privacy_policy',
   common_facilitation: 'common_facilitation',
-  common_the_groups_at_samfundet: 'commong_the_groups_at_samfundet',
+  common_the_groups_at_samfundet: 'common_the_groups_at_samfundet',
   common_volunteering: 'common_volunteering',
   common_overview_map: 'common_overview_map',
   common_new_building: 'common_new_building',
@@ -257,6 +260,8 @@ export const KEY = {
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_interviews: 'recruitment_interviews',
+  recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
@@ -277,7 +282,7 @@ export const KEY = {
   recruitment_applyfor: 'recruitment_applyfor',
   recruitment_applyforhelp: 'recruitment_applyforhelp',
   recruitment_volunteerfor: 'recruitment_volunteerfor',
-  recruitment_otherpositions: 'KEY.recruitment_otherpositions',
+  recruitment_otherpositions: 'recruitment_otherpositions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',
@@ -289,7 +294,7 @@ export const KEY = {
   recruitment_not_applied: 'recruitment_not_applied',
   recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
   shown_application_deadline: 'shown_application_deadline',
-  actual_application_deadlin: 'actual_application_deadline',
+  actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_application_letter: 'recrutment_default_application_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
@@ -314,10 +319,10 @@ export const KEY = {
   recruitment_rejected_applications_help_text: 'recruitment_rejected_applications_help_text',
   recruitment_accepted_applications_help_text: 'recruitment_accepted_applications_help_text',
   recruitment_accepted_applications_empty_text: 'recruitment_accepted_applications_empty_text',
-  recruitment_rejected_applications_empty_text: 'recruitment_rejected_applications_empty_text ',
+  recruitment_rejected_applications_empty_text: 'recruitment_rejected_applications_empty_text',
   recruitment_withdrawn_applications_empty_text: 'recruitment_withdrawn_applications_empty_text',
   recruitment_withdrawn: 'recruitment_withdrawn',
-  recruitment_withdraw_application: 'KEY.recruitment_withdraw_application',
+  recruitment_withdraw_application: 'recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
   recruitment_three_interviews_criteria_button: 'recruitment_three_interviews_criteria_button',
   recruitment_three_interviews_criteria_header: 'recruitment_three_interviews_criteria_header',
@@ -327,6 +332,7 @@ export const KEY = {
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
   recruitment_progression: 'recruitment_progression',
   recruitment_overview: 'recruitment_overview',
+  recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
   recruitment_statistics: 'recruitment_statistics',
@@ -334,6 +340,9 @@ export const KEY = {
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
+  recruitment_stats_hours_header: 'recruitment_stats_hours_header',
+  recruitment_stats_campus_header: 'recruitment_stats_campus_header',
+  recruitment_stats_date_header: 'recruitment_stats_date_header',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
   error_recruitment_form_1: 'error_recruitment_form_1',
@@ -348,8 +357,8 @@ export const KEY = {
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
   admin_steal_identity: 'admin_steal_identity',
-  adminpage_gangs_title: 'admin_gangs_title',
-  adminpage_gangs_create: 'admin_gangs_create',
+  adminpage_gangs_title: 'adminpage_gangs_title',
+  adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
@@ -416,17 +425,8 @@ export const KEY = {
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
 } as const;
 
-/**
- * Types used for type-proofing translations.
- * Reveals errors in translations.ts if some keys are not translated.
- */
-export type KeyKeys = keyof typeof KEY;
-export type KeyValues = (typeof KEY)[KeyKeys];
-
-export const LANGUAGES = {
-  NB: 'nb',
-  EN: 'en',
-} as const;
-
-export type LanguageKey = keyof typeof LANGUAGES;
-export type LanguageValue = (typeof LANGUAGES)[LanguageKey];
+// This will ensure that each value matches the key exactly.
+// Very similar to validateKeyEqualsValue.
+// Fortunately this is in typescript and will protect the pipeline.
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+KEY as MirrorKeys<TranslationKeys>;
