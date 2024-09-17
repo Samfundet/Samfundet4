@@ -11,7 +11,7 @@ export type DropDownOption<T> = {
 export type DropdownProps<T> = {
   className?: string;
   classNameSelect?: string;
-  defaultValue?: DropDownOption<T>; // issue 1089
+  defaultValue?: DropDownOption<T>;
   initialValue?: T;
   disableIcon?: boolean;
   options?: DropDownOption<T>[];
@@ -41,12 +41,19 @@ export function Dropdown<T>({
    * @param e Standard onChange HTML event for dropdown
    */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = (e?.currentTarget.value ?? 0) as number;
-    if (choice >= 0 && choice <= options.length) {
+    const choice = parseInt(e?.currentTarget.value ?? '0', 10);
+    if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
     } else {
-      onChange?.(defaultValue?.value ?? undefined);
+      onChange?.(defaultValue?.value ?? options[0]?.value);
     }
+  }
+
+  let initialIndex = 0;
+  if (initialValue !== undefined) {
+    initialIndex = options.findIndex((opt) => opt.value === initialValue);
+  } else if (defaultValue) {
+    initialIndex = options.findIndex((opt) => opt.value === defaultValue.value);
   }
   return (
     <label className={classnames(className, styles.select_wrapper)}>
@@ -60,17 +67,14 @@ export function Dropdown<T>({
         )}
         onChange={handleChange}
         disabled={disabled}
-        defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
+        defaultValue={initialIndex}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1} />}
-        {options.map((opt, index) => {
-          return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-            <option value={index} key={index}>
-              {opt.label}
-            </option>
-          );
-        })}
+        {options.map((opt, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+          <option value={index} key={index}>
+            {opt.label}
+          </option>
+        ))}
       </select>
       {!disableIcon && (
         <div className={styles.arrow_container}>

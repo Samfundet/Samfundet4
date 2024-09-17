@@ -1,17 +1,8 @@
-import {
-  type CSSProperties,
-  type FunctionComponent,
-  type ReactNode,
-  type SVGProps,
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { type CSSProperties, type ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import classNames from 'classnames';
 import styles from './DynamicBuildingMap.module.scss';
+import { MapSvg } from './MapSvg';
 
 // ===================================== //
 //              Component                //
@@ -99,76 +90,54 @@ export function DynamicBuildingMap({
     overflow: 'visible',
   };
 
-  // Need to load svg async this way to ensure it is
-  // in the DOM before we try SVG binders. The default
-  // import as react component does not work as it does the
-  // async in the background.
-  const MapSvgRef = useRef<FunctionComponent<SVGProps<SVGSVGElement>>>();
-  const [, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    const importIcon = async () => {
-      try {
-        MapSvgRef.current = (await import('./map.svg')).ReactComponent;
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    importIcon();
-  }, []);
-  const LoadedSvgMap = MapSvgRef.current;
-
   // Render DOM
   return (
     <div ref={containerRef} style={containerStyle}>
-      {LoadedSvgMap !== undefined && (
-        <>
-          <LoadedSvgMap style={{ pointerEvents: 'none', overflow: 'visible' }} className={styles.svg} />
-          <SvgParentContext.Provider value={containerRef.current}>
-            {/* Round bois */}
-            {bindVenue('storsalen')}
-            {bindVenue('rundhallen')}
-            {bindVenue('bodegaen')}
+      <>
+        <MapSvg style={{ pointerEvents: 'none', overflow: 'visible' }} className={styles.svg} />
+        {/* <MapSvg  /> */}
+        <SvgParentContext.Provider value={containerRef.current}>
+          {/* Round bois */}
+          {bindVenue('storsalen')}
+          {bindVenue('rundhallen')}
+          {bindVenue('bodegaen')}
 
-            {/* Vertical stack to the south */}
-            {bindVenue('klubben')}
-            {bindVenue('edgar', classNames({ [styles.hidden]: isHovering('rundhallen') }))}
-            {bindVenue('lyche', classNames({ [styles.hidden]: isHovering('bodegaen') }))}
-            {bindVenue('strossa', classNames({ [styles.hidden]: isHovering('bodegaen') }))}
+          {/* Vertical stack to the south */}
+          {bindVenue('klubben')}
+          {bindVenue('edgar', classNames({ [styles.hidden]: isHovering('rundhallen') }))}
+          {bindVenue('lyche', classNames({ [styles.hidden]: isHovering('bodegaen') }))}
+          {bindVenue('strossa', classNames({ [styles.hidden]: isHovering('bodegaen') }))}
 
-            {/* Others */}
-            {bindVenue('selskapssiden')}
-            {bindVenue('daglighallen')}
-            {bindVenue('knaus')}
-          </SvgParentContext.Provider>
+          {/* Others */}
+          {bindVenue('selskapssiden')}
+          {bindVenue('daglighallen')}
+          {bindVenue('knaus')}
+        </SvgParentContext.Provider>
 
-          {/* This is just a tweaked SVG filter found on the web */}
-          {/* No need to know the inner workings of svg, but it adds a nice outline! */}
-          {/* biome-ignore lint/a11y/noSvgWithoutTitle: not visible */}
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-            <filter
-              id="filter"
-              x="-20%"
-              y="-20%"
-              width="140%"
-              height="140%"
-              filterUnits="objectBoundingBox"
-              primitiveUnits="userSpaceOnUse"
-              colorInterpolationFilters="linearRGB"
-            >
-              <feMorphology operator="dilate" radius="60 60" in="SourceAlpha" result="morphology" />
-              <feFlood floodColor="#222" floodOpacity="1" result="flood" />
-              <feComposite in="flood" in2="morphology" operator="in" result="composite" />
-              <feMerge result="merge">
-                <feMergeNode in="composite" result="mergeNode" />
-                <feMergeNode in="SourceGraphic" result="mergeNode2" />
-              </feMerge>
-            </filter>
-          </svg>
-        </>
-      )}
+        {/* This is just a tweaked SVG filter found on the web */}
+        {/* No need to know the inner workings of svg, but it adds a nice outline! */}
+        {/* biome-ignore lint/a11y/noSvgWithoutTitle: not visible */}
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+          <filter
+            id="filter"
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+            filterUnits="objectBoundingBox"
+            primitiveUnits="userSpaceOnUse"
+            colorInterpolationFilters="linearRGB"
+          >
+            <feMorphology operator="dilate" radius="60 60" in="SourceAlpha" result="morphology" />
+            <feFlood floodColor="#222" floodOpacity="1" result="flood" />
+            <feComposite in="flood" in2="morphology" operator="in" result="composite" />
+            <feMerge result="merge">
+              <feMergeNode in="composite" result="mergeNode" />
+              <feMergeNode in="SourceGraphic" result="mergeNode2" />
+            </feMerge>
+          </filter>
+        </svg>
+      </>
     </div>
   );
 }
