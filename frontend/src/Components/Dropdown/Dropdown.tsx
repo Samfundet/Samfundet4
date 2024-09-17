@@ -49,13 +49,12 @@ export function Dropdown<T>({
     }
   }
 
-  const initialIndex =
-    initialValue !== undefined
-      ? options.findIndex((opt) => opt.value === initialValue)
-      : defaultValue
-      ? options.findIndex((opt) => opt.value === defaultValue.value)
-      : 0;
-
+  let initialIndex = 0;
+  if (initialValue !== undefined) {
+    initialIndex = options.findIndex((opt) => opt.value === initialValue);
+  } else if (defaultValue) {
+    initialIndex = options.findIndex((opt) => opt.value === defaultValue.value);
+  }
   return (
     <label className={classnames(className, styles.select_wrapper)}>
       {label}
