@@ -1,5 +1,5 @@
 # For cypress dependencies use cypress image, eg. cypress/base:19
-FROM node:20-bullseye-slim
+FROM node:21-slim
 EXPOSE 3000
 WORKDIR /app
 
