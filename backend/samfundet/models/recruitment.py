@@ -185,7 +185,7 @@ class RecruitmentSeparatePosition(CustomBaseModel):
     )
 
     def __str__(self) -> str:
-        return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
+        return f'Separate recruitment: {self.name_nb} ({self.recruitment})'
 
 
 class InterviewRoom(CustomBaseModel):

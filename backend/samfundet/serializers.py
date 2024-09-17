@@ -733,7 +733,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
 
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 
