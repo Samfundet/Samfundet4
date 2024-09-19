@@ -26,7 +26,7 @@ export { RecruitmentRecruiterDashboardPage } from './RecruitmentRecruiterDashboa
 export { RecruitmentUnprocessedApplicantsPage } from './RecruitmentUnprocessedApplicantsPage';
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
-export { RoomAdminPage } from './RoomAdminPage';
+export { CreateInterviewRoomPage, RoomAdminPage } from './RoomAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';

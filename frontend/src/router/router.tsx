@@ -34,6 +34,7 @@ import {
   AdminLayout,
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
+  CreateInterviewRoomPage,
   EventCreatorAdminPage,
   EventsAdminPage,
   GangsAdminPage,
@@ -57,6 +58,7 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
+  RoomAdminPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
@@ -70,7 +72,6 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
-import { RoomAdminPage } from '~/PagesAdmin/RoomAdminPage/RoomAdminPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
@@ -455,7 +456,8 @@ export const router = createBrowserRouter(
                 },
               }}
             />
-            <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<RoomAdminPage />} />
+            <Route path={ROUTES.frontend.admin_recruitment_room_overview} element={<RoomAdminPage />} />
+            <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<CreateInterviewRoomPage />} />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}

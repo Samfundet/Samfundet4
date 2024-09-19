@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router-dom';
-import { Table } from '~/Components';
+import { Button, Table } from '~/Components';
 import { getInterviewRoomsForRecruitment } from '~/api';
 import type { InterviewRoomDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 
 export function RoomAdminPage() {
   const [interviewRooms, setInterviewRooms] = useState<InterviewRoomDto[] | undefined>();
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (data?.recruitment?.id) {
@@ -39,5 +42,12 @@ export function RoomAdminPage() {
     room.gang !== undefined ? room.gang : 'N/A',
   ]);
 
-  return <Table columns={columns} data={tableData} defaultSortColumn={0} />;
+  return (
+    <>
+      <Button link="" theme="samf">
+        {t([KEY.common_create])}
+      </Button>
+      <Table columns={columns} data={tableData} defaultSortColumn={0} />
+    </>
+  );
 }

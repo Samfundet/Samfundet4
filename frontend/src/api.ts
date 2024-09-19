@@ -895,8 +895,13 @@ export async function putRecruitmentApplicationInterview(
   return response;
 }
 
+// ############################################################
+//                       Interview rooms
+// ############################################################
 
-export async function getInterviewRoomsForRecruitment(recruitmentId: string): Promise<AxiosResponse<InterviewRoomDto[]>> {
+export async function getInterviewRoomsForRecruitment(
+  recruitmentId: string,
+): Promise<AxiosResponse<InterviewRoomDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -904,6 +909,11 @@ export async function getInterviewRoomsForRecruitment(recruitmentId: string): Pr
       queryParams: { recruitment: recruitmentId },
     });
   return await axios.get(url, { withCredentials: true });
+}
+
+export async function postInterviewRoom(data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__interview_rooms_list;
+  return await axios.post(url, data, { withCredentials: true });
 }
 
 // ############################################################
