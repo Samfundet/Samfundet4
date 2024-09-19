@@ -23,10 +23,13 @@ export function RecruitmentPositionOverviewPage() {
   const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  
+  const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
 
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   useEffect(() => {
+    // getRecruitmentApplicationStateChoices
     recruitmentId &&
       gangId &&
       getRecruitmentApplicationsForGang(gangId, recruitmentId)

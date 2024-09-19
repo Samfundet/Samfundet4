@@ -526,7 +526,7 @@ class RecruitmentCampusStat(models.Model):
 
     def normalized_applicant_percentage(self) -> float:
         applicant_percentages = list(
-            RecruitmentCampusStat.objects.filter(recruitment_stats=self.ecruitment_stats).values_list('applicant_percentage', flat=True)
+            RecruitmentCampusStat.objects.filter(recruitment_stats=self.recruitment_stats).values_list('applicant_percentage', flat=True)
         )
         max_percent = max(applicant_percentages)
         min_percent = min(applicant_percentages)

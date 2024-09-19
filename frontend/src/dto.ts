@@ -387,7 +387,7 @@ export type RecruitmentSeparatePositionDto = {
 export type UserPriorityDto = {
   direction: number;
 };
-
+f
 export type RecruitmentPositionDto = {
   id: string;
   name_nb: string;
@@ -473,6 +473,16 @@ export type RecruitmentDateStatDto = {
 export type RecruitmentCampusStatDto = {
   campus: string;
   count: number;
+  applicant_percentage: number;
+};
+
+export type RecruitmentGangStatDto = {
+  gang: string;
+  application_count: number;
+  applicant_count: number;
+  average_priority: number;
+  total_accepted: number;
+  total_rejected: number;
 };
 
 export type RecruitmentStatsDto = {
@@ -480,8 +490,13 @@ export type RecruitmentStatsDto = {
   recruitment?: number;
   total_applicants: number;
   total_applications: number;
+  total_withdrawn: number;
+  total_accepted: number;
+  average_gangs_applied_to_per_applicant: number;
+  average_applications_per_applicant: number;
   time_stats: RecruitmentTimeStatDto[];
   date_stats: RecruitmentDateStatDto[];
+  gang_stats: RecruitmentGangDto[];
   campus_stats: RecruitmentCampusStatDto[];
 };
 
