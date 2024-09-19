@@ -67,6 +67,7 @@ export { SultenNavbar } from './SultenNavbar';
 export { SultenOutlet } from './SultenOutlet';
 export { TabBar } from './TabBar';
 export { Table } from './Table';
+export { TabView } from './TabView';
 export { Text } from './Text';
 export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
