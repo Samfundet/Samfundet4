@@ -205,7 +205,13 @@ export function RecruitmentApplicantsStatus({
       {
         value: 'Sett intervju manuelt',
         style: applicationStatusStyle,
-        content: <SetInterviewManuallyModal recruitmentId={Number(recruitmentId) || 0} isButtonRounded={true} />,
+        content: (
+          <SetInterviewManuallyModal
+            recruitmentId={Number(recruitmentId) || 0}
+            isButtonRounded={true}
+            applicationId={application.id}
+          />
+        ),
       },
     ];
   });

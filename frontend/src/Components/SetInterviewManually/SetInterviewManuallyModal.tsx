@@ -10,9 +10,14 @@ import { SetInterviewManuallyForm } from './SetInterviewManuallyForm';
 type OccupiedFormModalProps = {
   recruitmentId: number;
   isButtonRounded?: boolean;
+  applicationId: string;
 };
 
-export function SetInterviewManuallyModal({ recruitmentId = 1, isButtonRounded = false }: OccupiedFormModalProps) {
+export function SetInterviewManuallyModal({
+  recruitmentId = 1,
+  isButtonRounded = false,
+  applicationId,
+}: OccupiedFormModalProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -30,6 +35,7 @@ export function SetInterviewManuallyModal({ recruitmentId = 1, isButtonRounded =
           <SetInterviewManuallyForm
             recruitmentId={recruitmentId}
             onCancel={() => setOpen(false)}
+            applicationId={applicationId}
           ></SetInterviewManuallyForm>
         </>
       </Modal>

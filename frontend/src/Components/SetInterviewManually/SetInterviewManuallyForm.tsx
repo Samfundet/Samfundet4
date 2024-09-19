@@ -12,9 +12,10 @@ import styles from './SetInterviewManually.module.scss';
 type Props = {
   recruitmentId: number;
   onCancel?: () => void;
+  applicationId: string;
 };
 
-export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props) {
+export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicationId }: Props) {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,8 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
   const [maxDate, setMaxDate] = useState(new Date('2024-01-24'));
 
   const [timeslots, setTimeslots] = useState<string[]>([]);
-  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
+  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({}); //Opptatt timeslots
+  const [interviewTimeslot, setInterviewTimeslot] = useState<Record<string, string[]>>({}); //Intervju timeslot
   const [location, setLocation] = useState<string>('');
 
   useEffect(() => {
@@ -54,7 +56,28 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
+  function convertToDateObject(dateTimeDict: Record<string, string[]>): Date | null {
+    const dateKey = Object.keys(dateTimeDict)[0];
+    const timeValue = dateTimeDict[dateKey][0];
+
+    if (!dateKey || !timeValue) {
+      return null;
+    }
+
+    // Split the date and time strings
+    const [year, month, day] = dateKey.split('.').map(Number);
+    const [hours, minutes] = timeValue.split(':').map(Number);
+
+    // Create and return the Date object
+    return new Date(year, month - 1, day, hours, minutes);
+  }
+
   function save() {
+    const data: CreateInterviewDto = {
+      application_id: applicationId,
+      interview_time: convertToDateObject(interviewTimeslot),
+      interview_location: location,
+    };
     //   const data: OccupiedTimeslotDto = {
     //     recruitment: recruitmentId,
     //     dates: selectedTimeslots,
@@ -90,6 +113,9 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
     return x;
   }, [timeslots, selectedTimeslots]);
 
+  // console.log('Intervjutid:' + interviewTimeslot, 'Intervjulokasjon:' + location, 'ApplicationId:' + applicationId);
+  console.log(interviewTimeslot);
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>{t(KEY.recruitment_interview_set)}</h3>
@@ -114,7 +140,7 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel }: Props)
             <TimeslotContainer
               selectedDate={selectedDate}
               timeslots={timeslots}
-              onChange={(slots) => setSelectedTimeslots(slots)}
+              onChange={(slots) => setInterviewTimeslot(slots)}
               disabledTimeslots={selectedTimeslots}
               hasDisabledTimeslots={true}
               selectMultiple={false}

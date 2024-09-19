@@ -547,6 +547,12 @@ export type InterviewRoomDto = {
   gang?: number;
 };
 
+export type CreateInterviewDto = {
+  application_id: string;
+  interview_time: Date;
+  interview_location: string;
+};
+
 // ############################################################
 //                       Purchase Feedback
 // ############################################################
