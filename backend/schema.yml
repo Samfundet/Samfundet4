@@ -5349,6 +5349,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/Interview'
           description: ''
+  /recruitment-show-unprocessed-applicants/:
+    get:
+      operationId: recruitment_show_unprocessed_applicants_list
+      tags:
+      - recruitment-show-unprocessed-applicants
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecruitmentShowUnprocessedApplications'
+          description: ''
   /recruitment-user-priority-update/{id}/:
     put:
       operationId: recruitment_user_priority_update_update
@@ -9246,6 +9262,30 @@ components:
           $ref: '#/components/schemas/RecruiterPriorityEnum'
         recruiter_status:
           $ref: '#/components/schemas/RecruiterStatusEnum'
+    RecruitmentBasicUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone_number:
+          type: string
+          pattern: ^\+?\s*(\d\s*){8,15}$
+          maxLength: 15
+      required:
+      - email
+      - id
+      - phone_number
     RecruitmentCampusStat:
       type: object
       properties:
@@ -9612,6 +9652,24 @@ components:
       - name_en
       - name_nb
       - short_description_nb
+    RecruitmentRecruitmentPosition:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name_nb:
+          type: string
+          description: Name of the position
+          maxLength: 100
+        name_en:
+          type: string
+          description: Name of the position
+          maxLength: 100
+      required:
+      - id
+      - name_en
+      - name_nb
     RecruitmentSeparatePosition:
       type: object
       description: |-
@@ -9646,6 +9704,61 @@ components:
       - name_en
       - name_nb
       - url
+    RecruitmentShowUnprocessedApplications:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        recruitment:
+          type: integer
+          readOnly: true
+          description: The recruitment that is recruiting
+        user:
+          allOf:
+          - $ref: '#/components/schemas/RecruitmentBasicUser'
+          readOnly: true
+        applicant_priority:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: The priority of the application
+        recruitment_position:
+          allOf:
+          - $ref: '#/components/schemas/RecruitmentRecruitmentPosition'
+          readOnly: true
+        recruiter_status:
+          allOf:
+          - $ref: '#/components/schemas/RecruiterStatusEnum'
+          readOnly: true
+          description: |-
+            The status of the application
+
+            * `0` - Not Set
+            * `1` - Called and Accepted
+            * `2` - Called and Rejected
+            * `3` - Rejection
+            * `4` - Automatic Rejection
+        recruiter_priority:
+          allOf:
+          - $ref: '#/components/schemas/RecruiterPriorityEnum'
+          readOnly: true
+          description: |-
+            The priority of the application
+
+            * `0` - Not Set
+            * `1` - Reserve
+            * `2` - Wanted
+            * `3` - Not Wanted
+      required:
+      - applicant_priority
+      - id
+      - recruiter_priority
+      - recruiter_status
+      - recruitment
+      - recruitment_position
+      - user
     RecruitmentStatistics:
       type: object
       properties:
