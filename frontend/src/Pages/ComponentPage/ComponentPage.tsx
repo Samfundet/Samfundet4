@@ -3,11 +3,11 @@ import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
 import { MultiSelect } from '~/Components/MultiSelect';
+import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
-import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -136,7 +136,7 @@ export function ComponentPage() {
         <SnowflakesOverlay />
         <h2>
           <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
-            <img src={norwegianFlag}></img>
+            <img src={norwegianFlag} alt="Flag" />
           </Countdown>
         </h2>
       </div>

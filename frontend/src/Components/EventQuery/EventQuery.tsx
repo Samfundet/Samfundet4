@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { InputField } from '~/Components';
 import { getEventGroups, getVenues } from '~/api';
-import { EventDto, EventGroupDto, VenueDto } from '~/dto';
+import type { EventDto, EventGroupDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { SetState } from '~/types';
+import type { SetState } from '~/types';
 import { Dropdown } from '../Dropdown';
-import { DropDownOption } from '../Dropdown/Dropdown';
-import { InputField } from '../InputField';
+import type { DropDownOption } from '../Dropdown/Dropdown';
 import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';
 
@@ -27,7 +27,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
   const [selectedVenue, setSelectedVenue] = useState<VenueDto>();
   const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto>();
 
-  /* eslint-disable react-hooks/exhaustive-deps */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     getVenues()
       .then((data) => setVenues(data))
@@ -37,6 +37,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       .catch(console.error);
   }, [allEvents]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setEvents(eventQuery(allEvents, search, selectedVenue));
   }, [search, selectedVenue, selectedEventGroup]);
@@ -61,13 +62,13 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
         options={venueOptions}
         onChange={(venue) => setSelectedVenue(venue)}
         className={styles.element}
-        defaultValue={{ label: t(KEY.common_choose) + ' ' + t(KEY.common_venue), value: undefined }}
+        defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.common_venue)}`, value: undefined }}
       />
       <Dropdown<EventGroupDto | undefined>
         options={eventGroupOptions}
         onChange={(group) => setSelectedEventGroup(group)}
         className={styles.element}
-        defaultValue={{ label: t(KEY.common_choose) + ' ' + t(KEY.event_type), value: undefined }}
+        defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.event_type)}`, value: undefined }}
       />
     </div>
   );

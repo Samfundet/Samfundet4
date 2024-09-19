@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
 import { SECOND_MILLIS } from '~/constants';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Countdown.module.scss';
 import { calculateTimeLeft, hasReachedTargetDate } from './utils';
 

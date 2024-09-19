@@ -12,6 +12,7 @@ export function FriedShrimpIcon() {
       xmlns="http://www.w3.org/2000/svg"
       className="h-full w-full"
     >
+      <title>Fried Shrimp</title>
       <rect
         width="512"
         height="512"
@@ -23,7 +24,8 @@ export function FriedShrimpIcon() {
         strokeWidth="0"
         strokeOpacity="100%"
         paintOrder="stroke"
-      ></rect>
+      />
+      {/* biome-ignore lint/a11y/noSvgWithoutTitle: title already provided above */}
       <svg
         width="256px"
         height="256px"

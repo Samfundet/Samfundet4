@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { List } from './List';
 
 // Local component config.
@@ -8,9 +8,7 @@ export default {
   args: {},
 } as ComponentMeta<typeof List>;
 
-const Template: ComponentStory<typeof List> = function (args) {
-  return <List {...args} />;
-};
+const Template: ComponentStory<typeof List> = (args) => <List {...args} />;
 
 export const Unordered = Template.bind({});
 Unordered.args = { items: [<div key={1}>{'First element'}</div>, <div key={2}>{'Second element'}</div>] };

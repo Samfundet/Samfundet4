@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { BACKEND_DOMAIN } from '~/constants';
-import { ImageDto } from '~/dto';
+import type { ImageDto } from '~/dto';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AdminImage.module.scss';
 
@@ -12,7 +12,7 @@ type AdminImageProps = {
 export function AdminImage({ image, className }: AdminImageProps) {
   const TAGS = image.tags
     .map((tag) => {
-      return ' ' + tag.name;
+      return ` ${tag.name}`;
     })
     .toString();
   return (

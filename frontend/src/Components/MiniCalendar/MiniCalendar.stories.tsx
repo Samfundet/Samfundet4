@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { MiniCalendar } from '~/Components';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: MiniCalendar,
 } as ComponentMeta<typeof MiniCalendar>;
 
-const Template: ComponentStory<typeof MiniCalendar> = function (args) {
+const Template: ComponentStory<typeof MiniCalendar> = (args) => {
   const minDate = new Date(args.minDate as unknown as number);
   const maxDate = new Date(args.maxDate as unknown as number);
   return <MiniCalendar {...args} minDate={minDate} maxDate={maxDate} />;

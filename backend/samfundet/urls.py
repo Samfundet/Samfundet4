@@ -72,6 +72,11 @@ samfundet_patterns = [
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path(
+        'recruitment-show-unprocessed-applicants/',
+        views.RecruitmentUnprocessedApplicationsPerRecruitment.as_view(),
+        name='recruitment_show_unprocessed_applicants',
+    ),
+    path(
         'recruitment-positions-gang-for-applicant/',
         views.RecruitmentPositionsPerGangForApplicantView.as_view(),
         name='recruitment_positions_gang_for_applicants',

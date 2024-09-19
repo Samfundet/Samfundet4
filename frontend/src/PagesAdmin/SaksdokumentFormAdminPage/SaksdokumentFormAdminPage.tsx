@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getSaksdokument, postSaksdokument, putSaksdokument } from '~/api';
-import { SaksdokumentDto } from '~/dto';
+import type { SaksdokumentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -25,6 +25,7 @@ export function SaksdokumentFormAdminPage() {
   const { id } = useParams();
   const [saksdok, setSaksdok] = useState<SaksdokumentDto>();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getSaksdokument(id)
@@ -42,7 +43,6 @@ export function SaksdokumentFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Only set fields used in form

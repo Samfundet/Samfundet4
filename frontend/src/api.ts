@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
-import {
+import axios, { type AxiosResponse } from 'axios';
+import type {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
@@ -16,16 +16,16 @@ import {
   KeyValueDto,
   MenuDto,
   MenuItemDto,
-  NotificationDto,
   OccupiedTimeslotDto,
   OrganizationDto,
+  PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
   RecruitmentApplicationStateChoicesDto,
   RecruitmentApplicationStateDto,
   RecruitmentAvailabilityDto,
   RecruitmentDto,
-  type RecruitmentGangDto,
+  RecruitmentGangDto,
   RecruitmentPositionDto,
   RecruitmentStatsDto,
   RecruitmentUserDto,
@@ -36,7 +36,6 @@ import {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
-  PurchaseFeedbackDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -88,7 +87,7 @@ export async function getUser(): Promise<UserDto> {
 export async function impersonateUser(user?: UserDto): Promise<boolean> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
   const response = await axios.post(url, { user_id: user?.id }, { withCredentials: true });
-  return response.status == 200;
+  return response.status === 200;
 }
 
 export async function getUsers(): Promise<UserDto[]> {
@@ -473,69 +472,6 @@ export async function putImage(id: string | number, data: Partial<ImageDto>): Pr
 export function getKeyValues(): Promise<AxiosResponse<KeyValueDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__key_value_list;
   const response = axios.get<KeyValueDto[]>(url);
-  return response;
-}
-
-// ############################################################
-//                       Notifications
-// ############################################################
-
-type AllNotificationsResponse = {
-  all_count: number;
-  all_list: NotificationDto[];
-};
-export function getAllNotifications(): Promise<AxiosResponse<AllNotificationsResponse>> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_all_notification_list;
-  const response = axios.get<AllNotificationsResponse>(url, { withCredentials: true });
-  return response;
-}
-
-type UnreadNotificationsResponse = {
-  unread_count: number;
-  unread_list: NotificationDto[];
-};
-export function getUnreadNotifications(): Promise<AxiosResponse<UnreadNotificationsResponse>> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__live_unread_notification_list;
-  const response = axios.get<UnreadNotificationsResponse>(url, { withCredentials: true });
-  return response;
-}
-
-export function markAllAsRead(): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.notifications__mark_all_as_read;
-  const response = axios.get(url, { withCredentials: true });
-  return response;
-}
-
-export function markAsRead(slug: string): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.notifications__mark_as_read,
-      urlParams: { slug },
-    });
-  const response = axios.get(url, { withCredentials: true });
-  return response;
-}
-
-export function markAsUnread(slug: string): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.notifications__mark_as_unread,
-      urlParams: { slug },
-    });
-  const response = axios.get(url, { withCredentials: true });
-  return response;
-}
-
-export function deleteNotification(slug: string): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.notifications__delete,
-      urlParams: { slug },
-    });
-  const response = axios.get(url, { withCredentials: true });
   return response;
 }
 

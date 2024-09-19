@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
+import { Button } from '~/Components';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useIsDarkTheme } from '~/hooks';
 import styles from './ThemeSwitch.module.scss';
-import { Button } from '~/Components';
 
 type ThemeSwitchProps = {
   className?: string;

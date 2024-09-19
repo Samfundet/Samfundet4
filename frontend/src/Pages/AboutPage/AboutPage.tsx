@@ -54,10 +54,10 @@ export function AboutPage() {
       <h2 className={styles.header2}>{t(KEY.common_venues)}</h2>
 
       <Carousel spacing={1.5} header>
-        {VENUES.images.map((image, idx) => {
+        {VENUES.images.map((image) => {
           return (
-            <div key={idx}>
-              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)}></div>
+            <div key={image.name}>
+              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)} />
               <div className={styles.venue_name}>{image.name}</div>
             </div>
           );

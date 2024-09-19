@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DynamicBuildingMap } from './DynamicBuildingMap';
 
 // Local component config.
@@ -10,8 +10,6 @@ export default {
   },
 } as ComponentMeta<typeof DynamicBuildingMap>;
 
-const Template: ComponentStory<typeof DynamicBuildingMap> = function () {
-  return <DynamicBuildingMap />;
-};
+const Template: ComponentStory<typeof DynamicBuildingMap> = () => <DynamicBuildingMap />;
 
 export const Basic = Template.bind({});
