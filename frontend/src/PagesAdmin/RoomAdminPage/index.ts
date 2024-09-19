@@ -1,0 +1,1 @@
+export { RoomAdminPage } from './RoomAdminPage';

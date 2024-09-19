@@ -70,6 +70,7 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
+import { RoomAdminPage } from '~/PagesAdmin/RoomAdminPage/RoomAdminPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
@@ -433,6 +434,7 @@ export const router = createBrowserRouter(
                 },
               }}
             />
+
             <Route
               path={ROUTES.frontend.admin_recruitment_users_without_interview}
               element={<RecruitmentUsersWithoutInterviewGangPage />}
@@ -453,6 +455,7 @@ export const router = createBrowserRouter(
                 },
               }}
             />
+            <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<RoomAdminPage />} />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}

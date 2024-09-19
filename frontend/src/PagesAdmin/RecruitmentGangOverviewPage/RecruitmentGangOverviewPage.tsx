@@ -102,6 +102,18 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.common_edit)}
       </Button>
+      <Button 
+      theme="samf"
+      rounded={true}
+      link={
+        reverse({
+          pattern: ROUTES.frontend.admin_recruitment_room_create,
+          urlParams: { recruitmentId },
+        })
+      }>
+        {t(KEY.recruitment_create_room)}
+      </Button>
+      
       {recruitmentId && <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} isButtonRounded={true} />}
     </>
   );
