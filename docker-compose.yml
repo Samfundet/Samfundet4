@@ -24,7 +24,13 @@ services:
       context: ./frontend
     image: samfundet-frontend
     volumes:
-      - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
+      # Share project code between host machine and container to enable reload on changes.
+      # Excellent solution when component needs files/folders from outside context.
+      - ./biome.jsonc:/biome.jsonc
+      - ./frontend/src:/app/src 
+      - ./frontend/biome.jsonc:/app/biome.jsonc
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/index.html:/app/index.html
     env_file:
       - ./frontend/.env.docker # Environment for frontend docker
     environment:
