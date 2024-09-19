@@ -1,11 +1,11 @@
-import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { Tab } from '~/Components/TabBar/TabBar';
-import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
-import { RecruitmentProgression } from './Components/RecruitmentProgression';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 import { TabView } from '~/Components';
+import type { Tab } from '~/Components/TabBar/TabBar';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
+import { KEY } from '~/i18n/constants';
+import { RecruitmentProgression } from './Components/RecruitmentProgression';
+import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
 
 export function RecruitmentOverviewPage() {
   const { t } = useTranslation();
@@ -15,7 +15,7 @@ export function RecruitmentOverviewPage() {
     { key: 2, label: t(KEY.recruitment_statistics), value: <RecruitmentStatistics /> },
   ];
   return (
-    <AdminPageLayout title={t(KEY.recruitment_overview) + ': ' + RECRUITMENT_TITLE_PLACEHOLDER}>
+    <AdminPageLayout title={`${t(KEY.recruitment_overview)}: ${RECRUITMENT_TITLE_PLACEHOLDER}`}>
       <TabView tabs={tabs} />
     </AdminPageLayout>
   );

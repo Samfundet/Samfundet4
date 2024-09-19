@@ -1,0 +1,10 @@
+{
+  /*
+    Biome currently doesn't have a 'configPath' setting in VSCode.
+    It only recognises config located in workspace root.
+    Our config is therefore located at root of repo,
+    and extended here to support both directories (including docker container).
+  */
+  "extends": ["../biome.jsonc"], // Available in container through docker-compose volume.
+  "$schema": "node_modules/@biomejs/biome/configuration_schema.json"
+}

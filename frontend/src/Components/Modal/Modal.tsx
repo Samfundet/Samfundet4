@@ -1,14 +1,17 @@
-/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+import classNames from 'classnames';
 // @ts-nocheck
 import ReactModal from 'react-modal';
 import styles from './Modal.module.scss';
-import classNames from 'classnames';
 
 /**
  * https://reactcommunity.org/react-modal/#usage
  */
 
-export function Modal({ children, className, ...props }: ReactModal.Props) {
+interface ModalProps extends ReactModal.Props {
+  className?: string;
+}
+
+export function Modal({ children, className, ...props }: ModalProps) {
   return (
     <ReactModal
       {...props} // Spread must be first

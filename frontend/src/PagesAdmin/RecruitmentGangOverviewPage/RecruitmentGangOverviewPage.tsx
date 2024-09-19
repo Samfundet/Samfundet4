@@ -4,7 +4,7 @@ import { useParams, useRouteLoaderData } from 'react-router-dom';
 import { Button, Link, OccupiedFormModal } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentGangs } from '~/api';
-import { type RecruitmentGangDto } from '~/dto';
+import type { RecruitmentGangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -38,7 +38,7 @@ export function RecruitmentGangOverviewPage() {
   ];
 
   // TODO: Only show gangs that user has access to, and only show gangs that are recruiting. ISSUE #1121
-  const data = gangs.map(function (gang) {
+  const data = gangs.map((gang) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
@@ -102,7 +102,7 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.common_edit)}
       </Button>
-      {recruitmentId && <OccupiedFormModal recruitmentId={parseInt(recruitmentId)} isButtonRounded={true} />}
+      {recruitmentId && <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} isButtonRounded={true} />}
     </>
   );
 

@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
-import { SultenReservationDayDto } from '~/dto';
-import styles from './ReservationTable.module.scss';
-import { KEY } from '~/i18n/constants';
 import { Icon } from '@iconify/react';
-import { Button } from '~/Components';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button } from '~/Components';
+import type { SultenReservationDayDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { ReservationTableRow } from '../ReservationTableRow';
+import styles from './ReservationTable.module.scss';
 
 type ReservationTableProps = {
   sultenDay: SultenReservationDayDto;
@@ -20,13 +20,13 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
   const today = new Date();
 
   useEffect(() => {
-    let hours_iterator = parseInt(sultenDay.start_time.split(':')[0]) + 1;
-    const hours_end = parseInt(sultenDay.closing_time.split(':')[0]) + 1;
+    let hours_iterator = Number.parseInt(sultenDay.start_time.split(':')[0]) + 1;
+    const hours_end = Number.parseInt(sultenDay.closing_time.split(':')[0]) + 1;
 
     const hoursList: string[] = [];
 
     while (hours_iterator < hours_end) {
-      hoursList.push(hours_iterator.toString().padStart(2, '0') + ':00');
+      hoursList.push(`${hours_iterator.toString().padStart(2, '0')}:00`);
       hours_iterator += 1;
     }
     setHours(hoursList);
@@ -49,19 +49,19 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
     <div>
       <div className={styles.tableHeader}>
         <div className={styles.dateIterator}>
-          <div className={styles.iterateButton} onClick={() => iterateDay(-1)}>
+          <button type="button" className={styles.iterateButton} onClick={() => iterateDay(-1)}>
             <Icon icon="fe:arrow-left" width={32} />
-          </div>
+          </button>
           <div className={styles.date}>
             <p>{sultenDay.date.toDateString()}</p>
             <Icon icon="mdi:calendar" width={24} />
           </div>
-          <div className={styles.iterateButton} onClick={() => iterateDay(1)}>
+          <button type="button" className={styles.iterateButton} onClick={() => iterateDay(1)}>
             <Icon icon="fe:arrow-right" width={32} />
-          </div>
+          </button>
         </div>
         <div className={styles.buttonsHeader}>
-          {today.getDate() != sultenDay.date.getDate() && (
+          {today.getDate() !== sultenDay.date.getDate() && (
             <Button theme="secondary" onClick={() => goToToday()}>
               {t(KEY.common_today)}
             </Button>
@@ -72,10 +72,10 @@ export function ReservationTable({ sultenDay, iterateDay, goToToday }: Reservati
         </div>
       </div>
       {hoursHeader}
-      {sultenDay.tables?.map((table, index) => {
+      {sultenDay.tables?.map((table) => {
         return (
           <ReservationTableRow
-            key={index}
+            key={table.id}
             table={table}
             start_time={sultenDay.start_time}
             end_time={sultenDay.closing_time}

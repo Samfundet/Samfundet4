@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { AuthContextProvider } from '~/context/AuthContext';
 import '~/global.scss';
-import { GlobalContextProvider } from '~/context/GlobalContextProvider';
-import { reportWebVitals } from '~/reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
-import { router } from '~/router/router';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { OrganizationContextProvider } from '~/context/OrgContextProvider';
+import { reportWebVitals } from '~/reportWebVitals';
+import { router } from '~/router/router';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
