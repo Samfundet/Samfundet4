@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability } from '~/api'; //postOccupiedTimeslots removed this
+import { getOccupiedTimeslots, getRecruitmentAvailability, postInterview } from '~/api'; //postOccupiedTimeslots removed this
 import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
 // import { OccupiedTimeslotDto } from '~/dto';
+import { CreateInterviewDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { CalendarMarker } from '~/types';
 import { Button } from '../Button';
@@ -56,13 +57,9 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicat
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
-  function convertToDateObject(dateTimeDict: Record<string, string[]>): Date | null {
+  function convertToDateObject(dateTimeDict: Record<string, string[]>): Date  {
     const dateKey = Object.keys(dateTimeDict)[0];
     const timeValue = dateTimeDict[dateKey][0];
-
-    if (!dateKey || !timeValue) {
-      return null;
-    }
 
     // Split the date and time strings
     const [year, month, day] = dateKey.split('.').map(Number);
@@ -74,22 +71,19 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicat
 
   function save() {
     const data: CreateInterviewDto = {
-      application_id: applicationId,
       interview_time: convertToDateObject(interviewTimeslot),
       interview_location: location,
+      applications : [applicationId]
     };
-    //   const data: OccupiedTimeslotDto = {
-    //     recruitment: recruitmentId,
-    //     dates: selectedTimeslots,
-    //   };
-    //   postOccupiedTimeslots(data)
-    //     .then(() => {
-    //       toast.success(t(KEY.common_update_successful));
-    //     })
-    //     .catch((error) => {
-    //       toast.error(t(KEY.common_something_went_wrong));
-    //       console.error(error);
-    // });
+  
+      postInterview(data)
+        .then(() => {
+          toast.success(t(KEY.common_update_successful));
+        })
+        .catch((error) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(error);
+    });
   }
 
   const markers = useMemo(() => {

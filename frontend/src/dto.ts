@@ -548,7 +548,6 @@ export type InterviewRoomDto = {
 };
 
 export type CreateInterviewDto = {
-  application_id: string;
   interview_time: Date;
   interview_location: string;
 };

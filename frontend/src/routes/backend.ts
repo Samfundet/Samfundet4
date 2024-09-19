@@ -648,6 +648,7 @@ export const ROUTES_BACKEND = {
   samfundet__check_reservation: '/check-reservation/',
   samfundet__active_recruitments: '/active-recruitments/',
   samfundet__recruitment_positions: '/recruitment-positions/',
+  samfundet__recruitment_show_unprocessed_applicants: '/recruitment-show-unprocessed-applicants/',
   samfundet__recruitment_positions_gang_for_applicants: '/recruitment-positions-gang-for-applicant/',
   samfundet__recruitment_positions_gang_for_gangs: '/recruitment-positions-gang-for-gangs/',
   samfundet__recruitment_set_interview: '/recruitment-set-interview/:pk/',
