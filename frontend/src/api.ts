@@ -911,9 +911,27 @@ export async function getInterviewRoomsForRecruitment(
   return await axios.get(url, { withCredentials: true });
 }
 
+export async function getInterviewRoom(id: string): Promise<AxiosResponse<InterviewRoomDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.get(url, { withCredentials: true });
+}
+
 export async function postInterviewRoom(data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__interview_rooms_list;
   return await axios.post(url, data, { withCredentials: true });
+}
+
+export async function putInterviewRoom(id: string, data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.put(url, data, { withCredentials: true });
+}
+
+export async function deleteInterviewRoom(id: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.delete(url, { withCredentials: true });
 }
 
 // ############################################################

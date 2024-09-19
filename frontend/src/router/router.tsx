@@ -458,6 +458,7 @@ export const router = createBrowserRouter(
             />
             <Route path={ROUTES.frontend.admin_recruitment_room_overview} element={<RoomAdminPage />} />
             <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<CreateInterviewRoomPage />} />
+            <Route path={ROUTES.frontend.admin_recruitment_room_edit} element={<CreateInterviewRoomPage />} />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}
