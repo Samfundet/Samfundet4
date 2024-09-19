@@ -1,0 +1,56 @@
+name: 🚀 Feature Request
+description: Suggest an idea for this project
+title: "[FEATURE] <title>"
+labels: ["enhancement", "Needs Triage"]
+body:
+- type: checkboxes
+  attributes:
+    label: Is there an existing feature request for this?
+    description: Please search to see if a feature request already exists for the feature you are suggesting.
+    options:
+    - label: I have searched the existing feature requests
+      required: true
+- type: textarea
+  attributes:
+    label: Problem Statement
+    description: Is your feature request related to a problem? Please describe.
+    placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Proposed Solution
+    description: Describe the solution you'd like
+    placeholder: A clear and concise description of what you want to happen.
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Alternatives Considered
+    description: Describe alternatives you've considered
+    placeholder: A clear and concise description of any alternative solutions or features you've considered.
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Additional Context
+    description: Add any other context or screenshots about the feature request here.
+  validations:
+    required: false
+- type: dropdown
+  attributes:
+    label: Priority
+    description: How important is this feature to you?
+    options:
+      - Nice to have
+      - Important
+      - Critical
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Potential Impact
+    description: What positive outcomes could result from implementing this feature?
+    placeholder: Describe the potential benefits for users, the project, or other stakeholders.
+  validations:
+    required: false
