@@ -13,6 +13,7 @@ import type {
   ImagePostDto,
   InformationPageDto,
   InterviewDto,
+  InterviewRoomDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -893,6 +894,18 @@ export async function putRecruitmentApplicationInterview(
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
 }
+
+
+export async function getInterviewRoomsForRecruitment(recruitmentId: string): Promise<AxiosResponse<InterviewRoomDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_rooms_list,
+      queryParams: { recruitment: recruitmentId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 // ############################################################
 //                       Purchase Feedback
 // ############################################################
