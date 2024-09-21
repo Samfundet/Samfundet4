@@ -11,14 +11,15 @@
     "vLegend  chart"
     "hLegend hLegend";
   padding: 0.25rem;
+  height: fit-content;
   width: fit-content;
   border: 2px solid $black;
-
 }
 
 .chartTitleContainer{
   grid-area: chartTitle;
   @include flex-column-center;
+  padding: 0;
 }
 
 .vLegendContainer{

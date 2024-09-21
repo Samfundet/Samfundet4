@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ImageList } from './ImageList';
 
 // Local component config.
@@ -8,9 +7,7 @@ export default {
   component: ImageList,
 } as ComponentMeta<typeof ImageList>;
 
-const Template: ComponentStory<typeof ImageList> = function (args) {
-  return <ImageList {...args} />;
-};
+const Template: ComponentStory<typeof ImageList> = (args) => <ImageList {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

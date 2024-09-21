@@ -1,10 +1,11 @@
-import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
+import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
-  RecruitmentApplicationsOverviewPage,
   ComponentPage,
+  ContributorsPage,
   EventPage,
   EventsPage,
   GroupsPage,
@@ -20,16 +21,17 @@ import {
   LycheReservationPage,
   MembershipPage,
   NotFoundPage,
+  OrganizationRecruitmentPage,
   RecruitmentApplicationFormPage,
+  RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
   VenuePage,
-  ContributorsPage,
-  OrganizationRecruitmentPage,
 } from '~/Pages';
 import {
+  AdminLayout,
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
   EventCreatorAdminPage,
@@ -38,39 +40,38 @@ import {
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
+  ImpersonateUserAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentApplicantAdminPage,
+  RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
+  RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
-  RecruitmentApplicantAdminPage,
-  SaksdokumentFormAdminPage,
   SaksdokumentAdminPage,
-  RecruitmentFormAdminPage,
-  SultenReservationAdminPage,
+  SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
-  RecruitmentOverviewPage,
-  AdminLayout,
-  ImpersonateUserAdminPage,
-  RecruitmentGangAllApplicantsAdminPage,
   SultenMenuItemFormAdminPage,
+  SultenReservationAdminPage,
   UsersAdminPage,
 } from '~/PagesAdmin';
-import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
-import { App } from '~/App';
 import { t } from 'i18next';
+import { App } from '~/App';
+import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { dbT, lowerCapitalize } from '~/utils';
 import {
   type GangLoader,
   type PositionLoader,
@@ -79,6 +80,7 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
 } from '~/router/loaders';
+import { dbT, lowerCapitalize } from '~/utils';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -113,8 +115,8 @@ export const router = createBrowserRouter(
         />
         <Route path={ROUTES.frontend.organization_recruitment} element={<OrganizationRecruitmentPage />} />
         <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
-        <Route path={ROUTES.frontend.contact} element={<></>} />
-        <Route path={ROUTES.frontend.luka} element={<></>} />
+        <Route path={ROUTES.frontend.contact} element={<div />} />
+        <Route path={ROUTES.frontend.luka} element={<div />} />
       </Route>
       {/*
             ADMIN ROUTES
@@ -361,12 +363,12 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
-            element={<RecruitmentGangAllApplicantsAdminPage />}
+            path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
+            element={<RecruitmentRecruiterDashboardPage />}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_users_without_interview}
-            element={<RecruitmentUsersWithoutInterviewGangPage />}
+            path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+            element={<RecruitmentGangAllApplicantsAdminPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
@@ -411,6 +413,46 @@ export const router = createBrowserRouter(
               },
             }}
           >
+            <Route
+              path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
+              element={<RecruitmentUnprocessedApplicantsPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_unprocessed_applicants)}
+                    </Link>
+                  );
+                },
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_users_without_interview}
+              element={<RecruitmentUsersWithoutInterviewGangPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.recruitment_show_applicants_without_interview)}
+                    </Link>
+                  );
+                },
+              }}
+            />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_overview}
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}

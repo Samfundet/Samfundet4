@@ -1,4 +1,4 @@
-import { SamfError } from './SamfForm';
+import type { SamfError } from './SamfForm';
 
 // isse 1091
 

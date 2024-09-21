@@ -1,14 +1,13 @@
+import type { ComponentStory } from '@storybook/react';
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
 import { Error } from './Error';
-import { ComponentStory } from '@storybook/react';
 
 export default {
   title: 'Components/Error',
   comonent: Error,
 };
 
-const Template: ComponentStory<typeof Error> = function (args) {
-  return <Error {...args}></Error>;
-};
+const Template: ComponentStory<typeof Error> = (args) => <Error {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

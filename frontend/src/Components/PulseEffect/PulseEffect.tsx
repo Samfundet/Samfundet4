@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './PulseEffect.module.scss';
 
 type PulseEffectProps = {

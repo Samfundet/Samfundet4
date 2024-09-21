@@ -72,6 +72,11 @@ urlpatterns = [
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path(
+        'recruitment-show-unprocessed-applicants/',
+        views.RecruitmentUnprocessedApplicationsPerRecruitment.as_view(),
+        name='recruitment_show_unprocessed_applicants',
+    ),
+    path(
         'recruitment-positions-gang-for-applicant/',
         views.RecruitmentPositionsPerGangForApplicantView.as_view(),
         name='recruitment_positions_gang_for_applicants',
@@ -112,6 +117,11 @@ urlpatterns = [
         'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
         views.ApplicantsWithoutThreeInterviewsCriteriaView.as_view(),
         name='applicants_without_three_interview_criteria',
+    ),
+    path(
+        'recruitment-recruiter-dashboard/<int:pk>/',
+        views.RecruitmentRecruiterDashboardView.as_view(),
+        name='recruitment_recruiter_dashboard',
     ),
     path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import styles from './TabBar.module.scss';
 
 export type Tab<T = void> = {
@@ -44,6 +44,7 @@ export function TabBar<T = void>({
         const isSelected = selected !== undefined && tab.key === selected.key;
         return (
           <button
+            type="button"
             className={classNames(styles.tab_button, isSelected && styles.selected)}
             disabled={disabled}
             onClick={(e) => {

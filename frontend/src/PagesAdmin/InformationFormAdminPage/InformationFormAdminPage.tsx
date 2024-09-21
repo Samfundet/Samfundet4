@@ -1,13 +1,13 @@
 import { Icon } from '@iconify/react';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
-import { InformationPageDto } from '~/dto';
+import type { InformationPageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -42,6 +42,7 @@ export function InformationFormAdminPage() {
   useTitle(title);
 
   // Fetch data if edit mode.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
@@ -59,7 +60,6 @@ export function InformationFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slugField]);
 
   // Loading.

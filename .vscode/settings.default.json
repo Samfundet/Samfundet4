@@ -29,20 +29,13 @@
   // ================================
   //             Frontend
   // ================================
-  "eslint.enable": true,
-  "eslint.format.enable": true,
   "html.format.enable": false,
-  "prettier.configPath": "frontend/.prettierrc.js",
-  "prettier.ignorePath": "frontend/.prettierignore",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript][javascriptreact][typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
       "source.fixAll": "always",
       "source.organizeImports": "always"
     }
   },
-  "eslint.workingDirectories": ["frontend"],
   "[css][scss]": {
     "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },

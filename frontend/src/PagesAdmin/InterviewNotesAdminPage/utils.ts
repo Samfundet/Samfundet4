@@ -1,4 +1,4 @@
-import { RecruitmentApplicationDto } from '~/dto';
+import type { RecruitmentApplicationDto } from '~/dto';
 
 /** Filtrer recruitmentApplication based on positionId, InterviewId and interview time */
 export function filterRecruitmentApplication(
@@ -16,5 +16,5 @@ export function filterRecruitmentApplication(
 }
 
 export function getNameUser(application: RecruitmentApplicationDto): string {
-  return application.user.first_name ? application.user.first_name + ' ' + application.user.last_name : '';
+  return application.user.first_name ? `${application.user.first_name} ${application.user.last_name}` : '';
 }
