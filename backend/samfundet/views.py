@@ -22,7 +22,7 @@ from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.db.models import Q, Case, When, Count, QuerySet
+from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
@@ -704,7 +704,12 @@ class SendRejectionMailView(APIView):
             subject = request.data.get('subject')
             text = request.data.get('text')
 
-            rejected_user_mails = self.get_rejected_user_mails(request)
+            recruitment = request.data.get('recruitment')
+            if recruitment is None:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            rejected_users = User.objects.filter(admissions__recruitment=recruitment, admissions__recuiter_status__ne=3)
+            rejected_user_mails = list(rejected_users.values_list('email', flat=True))
 
             send_mail(
                 subject,
@@ -716,16 +721,6 @@ class SendRejectionMailView(APIView):
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def get_rejected_user_mails(self, request: Request):
-        recruitment = request.data.get('recruitment')
-        if recruitment is None:
-            return []
-
-        rejected_users = User.objects.filter(admissions__recruitment=recruitment, admissions__recuiter_status__ne=3)
-
-        emails = list(rejected_users.values_list('email', flat=True))
-        return emails
 
 
 class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):

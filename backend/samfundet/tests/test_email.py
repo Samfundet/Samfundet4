@@ -2,12 +2,7 @@ from __future__ import annotations
 
 from django.core import mail
 
-from django.test import TestCase, Client
-from django.test import override_settings
-from unittest.mock import patch
-from django.core import mail
 from root.settings.base import TEST_EMAIL_FILE
-from samfundet.views import SendRejectionMailView
 
 
 def test_send_email_and_save_to_file():
