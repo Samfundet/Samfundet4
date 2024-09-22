@@ -78,4 +78,3 @@ alias poetry-run-collectstatic='poetry run python manage.py collectstatic --noin
 alias poetry-run-pytest-run='poetry run pytest' # Run pytest on project.
 alias poetry-run-pipeline='poetry-mypy-run && poetry-ruff-check && poetry-ruff-format-check && poetry-migrations-verify && poetry-pytest-run' # Run all checks in pipeline.
 alias poetry-run-seed='poetry run python manage.py seed' # Apply seed of database.
-alias poetry-run-spect='poetry run python manage.py spectacular --color --file schema.yml'
