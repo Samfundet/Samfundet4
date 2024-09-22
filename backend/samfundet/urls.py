@@ -49,11 +49,6 @@ router.register('recruitment-applications-for-gang', views.RecruitmentApplicatio
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
 
-# router.register('schema', SpectacularAPIView, 'schema')
-# router.register('swagger-ui', SpectacularSwaggerView, 'swagger_ui')
-# router.register('redoc', SpectacularRedocView, 'redoc')
-
-
 app_name = 'samfundet'
 
 urlpatterns = [
