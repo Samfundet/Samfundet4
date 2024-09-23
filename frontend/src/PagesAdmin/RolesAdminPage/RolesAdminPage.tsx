@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { CrudButtons } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import type { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { lowerCapitalize } from "~/utils";
-import { CrudButtons } from "~/Components";
-import { useNavigate } from "react-router-dom";
+import { lowerCapitalize } from '~/utils';
 
 export function RolesAdminPage() {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ export function RolesAdminPage() {
     { content: t(KEY.common_name), sortable: true },
     { content: lowerCapitalize(`${t(KEY.common_count)} ${t(KEY.common_permissions)}`), sortable: true },
     { content: lowerCapitalize(`${t(KEY.common_count)} ${t(KEY.common_users)}`), sortable: true },
-    { content: '' }
+    { content: '' },
   ];
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
@@ -52,9 +52,7 @@ export function RolesAdminPage() {
           value: 0,
         },
         {
-          content: (
-            <CrudButtons onEdit={() => navigate('#')} />
-          )
+          content: <CrudButtons onEdit={() => navigate('#')} />,
         },
       ];
     });

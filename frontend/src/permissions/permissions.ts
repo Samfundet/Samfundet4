@@ -248,10 +248,14 @@ export const SAMFUNDET_CHANGE_RECRUITMENTPOSITION = 'samfundet.change_recruitmen
 export const SAMFUNDET_DELETE_RECRUITMENTPOSITION = 'samfundet.delete_recruitmentposition';
 export const SAMFUNDET_VIEW_RECRUITMENTPOSITION = 'samfundet.view_recruitmentposition';
 
-export const SAMFUNDET_ADD_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.add_recruitmentpositionsharedinterviewgroup';
-export const SAMFUNDET_CHANGE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.change_recruitmentpositionsharedinterviewgroup';
-export const SAMFUNDET_DELETE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.delete_recruitmentpositionsharedinterviewgroup';
-export const SAMFUNDET_VIEW_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.view_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_ADD_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.add_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_CHANGE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.change_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_DELETE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.delete_recruitmentpositionsharedinterviewgroup';
+export const SAMFUNDET_VIEW_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP =
+  'samfundet.view_recruitmentpositionsharedinterviewgroup';
 
 export const SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION = 'samfundet.add_recruitmentseparateposition';
 export const SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION = 'samfundet.change_recruitmentseparateposition';
