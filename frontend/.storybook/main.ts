@@ -1,4 +1,3 @@
-/* eslint-disable import/no-default-export */
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {

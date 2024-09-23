@@ -1,31 +1,37 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
-import { Children, COLORS, OrganizationTheme, OrganizationTypeValue, OrgNameType } from '~/types';
+import { type Dispatch, type SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { COLORS, type Children, OrgNameType, type OrgNameTypeValue, type OrganizationTheme } from '~/types';
 
-export const organizationThemes: Record<OrganizationTypeValue, OrganizationTheme> = {
-  samfundet: {
+export const organizationThemes: Record<OrgNameTypeValue, OrganizationTheme> = {
+  [OrgNameType.SAMFUNDET_NAME]: {
     organizationName: OrgNameType.SAMFUNDET_NAME,
     pagePrimaryColor: COLORS.red_samf,
     pageSecondaryColor: COLORS.background_primary,
     buttonTheme: 'samf',
   },
-  uka: {
+  [OrgNameType.UKA_NAME]: {
     organizationName: OrgNameType.UKA_NAME,
     pagePrimaryColor: COLORS.blue_uka,
     pageSecondaryColor: COLORS.bisque_uka,
     buttonTheme: 'uka',
   },
-  isfit: {
+  [OrgNameType.ISFIT_NAME]: {
     organizationName: OrgNameType.ISFIT_NAME,
     pagePrimaryColor: COLORS.blue_isfit,
     pageSecondaryColor: COLORS.background_primary,
     buttonTheme: 'isfit',
+  },
+  [OrgNameType.FALLBACK]: {
+    organizationName: OrgNameType.SAMFUNDET_NAME,
+    pagePrimaryColor: COLORS.red_samf,
+    pageSecondaryColor: COLORS.background_primary,
+    buttonTheme: 'samf',
   },
 };
 
 type OrganizationContextProps = {
   organizationTheme: OrganizationTheme | null;
   setOrganizationTheme: Dispatch<SetStateAction<OrganizationTheme | null>>;
-  changeOrgTheme: (newThemeKey: OrganizationTypeValue) => void;
+  changeOrgTheme: (newThemeKey: OrgNameTypeValue) => void;
 };
 const OrganizationContext = createContext<OrganizationContextProps | undefined>(undefined);
 
@@ -40,7 +46,7 @@ export function useOrganizationContext() {
 type OrganizationContextProviderProps = {
   enabled?: boolean;
   children: Children;
-  organization?: OrganizationTypeValue;
+  organization?: OrgNameTypeValue;
 };
 
 export function OrganizationContextProvider({
@@ -57,7 +63,7 @@ export function OrganizationContextProvider({
     setOrganizationTheme(organizationThemes[organization]);
   }, [enabled, organization]);
 
-  const changeOrgTheme = (newThemeKey: OrganizationTypeValue) => {
+  const changeOrgTheme = (newThemeKey: OrgNameTypeValue) => {
     const newTheme = organizationThemes[newThemeKey];
     if (newTheme) {
       setOrganizationTheme(newTheme);

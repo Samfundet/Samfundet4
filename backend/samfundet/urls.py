@@ -1,6 +1,8 @@
 # imports
 from __future__ import annotations
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 from rest_framework import routers
 
 from django.urls import path, include
@@ -9,7 +11,6 @@ from . import views
 from .views import GenerateInterviewBlocksView
 
 # End: imports -----------------------------------------------------------------
-
 router = routers.DefaultRouter()
 router.register('images', views.ImageView, 'images')
 router.register('tags', views.TagView, 'tags')
@@ -39,8 +40,10 @@ router.register('merch', views.MerchView, 'merch')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
+router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
+router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
 router.register('recruitment-applications-for-group', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_group')
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
@@ -51,6 +54,9 @@ app_name = 'samfundet'
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
     path('csrf/', views.CsrfView.as_view(), name='csrf'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
@@ -70,7 +76,17 @@ urlpatterns = [
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
-    path('recruitment-positions-gang/', views.RecruitmentPositionsPerGangView.as_view(), name='recruitment_positions_gang'),
+    path(
+        'recruitment-show-unprocessed-applicants/',
+        views.RecruitmentUnprocessedApplicationsPerRecruitment.as_view(),
+        name='recruitment_show_unprocessed_applicants',
+    ),
+    path(
+        'recruitment-positions-gang-for-applicant/',
+        views.RecruitmentPositionsPerGangForApplicantView.as_view(),
+        name='recruitment_positions_gang_for_applicants',
+    ),
+    path('recruitment-positions-gang-for-gangs/', views.RecruitmentPositionsPerGangForGangView.as_view(), name='recruitment_positions_gang_for_gangs'),
     path('recruitment-set-interview/<slug:pk>/', views.RecruitmentApplicationSetInterviewView.as_view(), name='recruitment_set_interview'),
     path(
         'recruitment-application-states-choices',
@@ -100,7 +116,17 @@ urlpatterns = [
         name='recruitment_withdraw_application_recruiter',
     ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
-    path('applicants-without-interviews/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews/'),
+    path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
+    path(
+        'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
+        views.ApplicantsWithoutThreeInterviewsCriteriaView.as_view(),
+        name='applicants_without_three_interview_criteria',
+    ),
+    path(
+        'recruitment-recruiter-dashboard/<int:pk>/',
+        views.RecruitmentRecruiterDashboardView.as_view(),
+        name='recruitment_recruiter_dashboard',
+    ),
     path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
         views.DownloadRecruitmentApplicationGangCSV.as_view(),
@@ -111,4 +137,5 @@ urlpatterns = [
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('generate-interview-blocks/', GenerateInterviewBlocksView.as_view(), name='generate_interview_blocks'),
+    path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
 ]

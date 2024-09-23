@@ -21,7 +21,11 @@ export const ROUTES_FRONTEND = {
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/position/:positionID/',
   recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentID/',
   contact: '/contact',
+  // Purchase callback:
+  purchase_callback: '/purchase-callback/:eventId',
+
   // ==================== //
   //        Sulten        //
   // ==================== //
@@ -67,18 +71,24 @@ export const ROUTES_FRONTEND = {
   admin_recruitment: '/control-panel/recruitment/',
   admin_recruitment_edit: '/control-panel/recruitment/edit/:recruitmentId',
   admin_recruitment_create: '/control-panel/recruitment/create/',
+  admin_recruitment_users_three_interview_criteria:
+    '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
   admin_recruitment_gang_position_edit: '/control-panel/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
+  admin_recruitment_recruiter_dashboard: '/control-panel/recruitment/:recruitmentId/recruiter/dashboard/',
+
   admin_recruitment_gang_position_applicants_overview:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId',
   admin_recruitment_gang_position_applicants_interview_notes:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/interview-notes/:interviewId',
+  admin_recruitment_gang_all_applications: '/control-panel/recruitment/:recruitmentId/:gangId/all-applications/',
   admin_recruitment_gang_users_without_interview:
     '/control-panel/recruitment/:recruitmentId/:gangId/users-without-interviews/',
+  admin_recruitment_show_unprocessed_applicants: '/control-panel/recruitment/:recruitmentId/unprocessed-applicants/',
   admin_sulten_menu: '/control-panel/lyche/menu',
   admin_sulten_menuitem_create: '/control-panel/lyche/menuitems/create',
   admin_sulten_menuitem_edit: '/control-panel/lyche/menuitems/edit/:id',

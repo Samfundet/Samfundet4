@@ -135,3 +135,39 @@ max-positional-args = 1
 
 [tool.ruff.lint.mccabe]
 max-complexity = 5
+
+[tool.poetry]
+# Backend is not a package to publish.
+# https://python-poetry.org/docs/pyproject/
+# https://python-poetry.org/docs/basic-usage/#operating-modes
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "3.11.2"
+django = "5.1.*"
+django-extensions = "3.*"
+django-environ = "0.*"
+djangorestframework = "3.*"
+django-cors-headers = "4.*"
+dataclasses-json = "0.*"
+django-guardian = "2.*"
+pillow = "10.*"
+gunicorn = "23.*"
+django-admin-autocomplete-filter = "0.*"
+psycopg = { extras = ["c"], version = "*" }
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "1.*"
+ruff = "0.*"
+bandit = "1.*"
+pillow = "10.*"
+debugpy = "1.*"
+requests = "2.*"
+pytest = "8.*"
+pytest-django = "4.*"
+drf-spectacular = "0.27.*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

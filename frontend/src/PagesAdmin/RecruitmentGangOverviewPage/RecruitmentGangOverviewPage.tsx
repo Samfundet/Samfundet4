@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useRouteLoaderData } from 'react-router-dom';
-import { Button, Link } from '~/Components';
+import { Button, Link, OccupiedFormModal } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentGangs } from '~/api';
-import { type RecruitmentGangDto } from '~/dto';
+import type { RecruitmentGangDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import type { RecruitmentLoader } from '~/router/loaders';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitment } = useRouteLoaderData('recruitment') as RecruitmentLoader;
@@ -23,10 +23,10 @@ export function RecruitmentGangOverviewPage() {
   useTitle(title);
 
   useEffect(() => {
-    if (!recruitment?.organization) {
+    if (!recruitment?.id) {
       return;
     }
-    getRecruitmentGangs(recruitment.organization).then((data) => {
+    getRecruitmentGangs(recruitment.id).then((data) => {
       setGangs(data);
       setLoading(false);
     });
@@ -38,7 +38,7 @@ export function RecruitmentGangOverviewPage() {
   ];
 
   // TODO: Only show gangs that user has access to, and only show gangs that are recruiting. ISSUE #1121
-  const data = gangs.map(function (gang) {
+  const data = gangs.map((gang) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
@@ -61,6 +61,18 @@ export function RecruitmentGangOverviewPage() {
         {t(KEY.common_overview)}
       </Button>
       <Button
+        theme="samf"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_users_three_interview_criteria,
+          urlParams: {
+            recruitmentId: recruitmentId,
+          },
+        })}
+      >
+        {t(KEY.recruitment_three_interviews_criteria_button)}
+      </Button>
+      <Button
         theme="blue"
         rounded={true}
         link={reverse({
@@ -70,7 +82,14 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
-      <Button theme="white" rounded={true} link={ROUTES.frontend.admin_information_create}>
+      <Button
+        theme="white"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
+          urlParams: { recruitmentId },
+        })}
+      >
         {t(KEY.recruitment_show_unprocessed_applicants)}
       </Button>
       <Button
@@ -83,6 +102,7 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.common_edit)}
       </Button>
+      {recruitmentId && <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} isButtonRounded={true} />}
     </>
   );
 

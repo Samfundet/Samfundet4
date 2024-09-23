@@ -40,8 +40,9 @@ cd ..
 ##################################
 
 cd backend || exit
-pipenv run pipenv:sync-prod
-pipenv run migrations:apply
-pipenv run static:collect
+source aliases.sh
+poetry-sync-prod
+poetry-migrate-apply
+poetry-run-collectstatic
 touch reload # Trigger restart of uwsgi server.
 cd ..

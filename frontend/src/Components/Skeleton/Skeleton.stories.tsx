@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Skeleton } from './Skeleton';
 
 // Local component config.
@@ -27,9 +27,7 @@ export default {
   },
 } as ComponentMeta<typeof Skeleton>;
 
-const Template: ComponentStory<typeof Skeleton> = function (args) {
-  return <Skeleton {...args} />;
-};
+const Template: ComponentStory<typeof Skeleton> = (args) => <Skeleton {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {};

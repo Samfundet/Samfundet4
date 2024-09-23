@@ -21,7 +21,7 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
-from django.db.models import QuerySet
+from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
@@ -74,18 +74,27 @@ from .serializers import (
     InformationPageSerializer,
     RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
+    PurchaseFeedbackSerializer,
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentForRecruiterSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
+    RecruitmentShowUnprocessedApplicationsSerializer,
 )
-from .models.event import Event, EventGroup
+from .models.event import (
+    Event,
+    EventGroup,
+    PurchaseFeedbackQuestion,
+    PurchaseFeedbackAlternative,
+)
 from .models.general import (
     Tag,
     Gang,
@@ -600,6 +609,13 @@ class RecruitmentView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentForRecruiterView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentForRecruiterSerializer
+    queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
     permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
     serializer_class = RecruitmentStatisticsSerializer
@@ -615,12 +631,18 @@ class RecruitmentStatisticsView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionForApplicantView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+    queryset = RecruitmentPosition.objects.all()
+
+
 class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
@@ -644,8 +666,25 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentPositionsPerGangView(ListAPIView):
+class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
     permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        gang = self.request.query_params.get('gang', None)
+        if recruitment is not None and gang is not None:
+            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
+        return None
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentPositionsPerGangForGangView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
 
     def get_queryset(self) -> Response | None:
@@ -660,15 +699,61 @@ class RecruitmentPositionsPerGangView(ListAPIView):
         return None
 
 
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentUnprocessedApplicationsPerRecruitment(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentShowUnprocessedApplicationsSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentApplication.objects.filter(
+                recruitment=recruitment,
+                recruiter_status=RecruitmentStatusChoices.NOT_SET,
+            )
+        return None
+
+
+class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = get_object_or_404(Recruitment, pk=pk)
+
+        # Filter based on applications > 3 and with less than 3 interview set
+        data = User.objects.annotate(
+            application_count=Count('applications', filter=Q(applications__recruitment=recruitment)),
+            interview_count=Count('applications', filter=Q(applications__recruitment=recruitment, applications__interview__isnull=False)),
+        ).filter(interview_count__lt=3, application_count__gte=3)
+
+        return Response(data=UserForRecruitmentSerializer(data, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
+
+
+class RecruitmentRecruiterDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = get_object_or_404(Recruitment, pk=pk)
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview__interviewers__in=[request.user])
+        return Response(
+            data={
+                'recruitment': RecruitmentSerializer(recruitment).data,
+                'applications': RecruitmentApplicationForGangSerializer(applications, many=True).data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
 class ApplicantsWithoutInterviewsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request) -> Response:
-        recruitment = self.request.query_params.get('recruitment', None)
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = pk
         gang = self.request.query_params.get('gang', None)
-
-        if not recruitment:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Filter based on applications
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview=None)
@@ -939,7 +1024,7 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
 
 class ActiveRecruitmentPositionsView(ListAPIView):
     permission_classes = [AllowAny]
-    serializer_class = RecruitmentPositionSerializer
+    serializer_class = RecruitmentPositionForApplicantSerializer
 
     def get_queryset(self) -> Response:
         """Returns all active recruitment positions."""
@@ -1210,4 +1295,32 @@ class UserFeedbackView(CreateAPIView):
             contact_email=data.get('contact_email'),
         )
 
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class PurchaseFeedbackView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PurchaseFeedbackSerializer
+
+    def post(self, request: Request) -> Response:
+        request.data['event'] = request.data.pop('eventId')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        purchase_model = serializer.save(user=request.user)
+
+        alternatives = request.data.get('alternatives', {})
+        for alternative, selected in alternatives.items():
+            PurchaseFeedbackAlternative.objects.create(
+                alternative=alternative,
+                selected=selected,
+                form=purchase_model,
+            )
+
+        questions = request.data.get('questions', {})
+        for question, answer in questions.items():
+            PurchaseFeedbackQuestion.objects.create(
+                question=question,
+                answer=answer,
+                form=purchase_model,
+            )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})

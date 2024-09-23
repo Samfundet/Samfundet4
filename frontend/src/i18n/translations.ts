@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-import { KEY, KeyValues } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
+import { prepareTranslations } from './utils';
 
-export const nb: Record<KeyValues, string> = {
+export const nb = prepareTranslations({
   // ==================== //
   //        Common        //
   // ==================== //
@@ -42,6 +43,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
   [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
@@ -67,7 +69,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_table]: 'Bord',
   [KEY.common_gangs]: 'Gjenger',
   [KEY.common_edit]: 'Rediger',
-  [KEY.common_table]: 'Tabell',
+  [KEY.common_sheet]: 'Tabell',
   [KEY.common_max]: 'Maks',
   [KEY.common_card]: 'Kort',
   [KEY.common_tags]: 'Merkelapper',
@@ -90,7 +92,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
   [KEY.common_sulten]: 'Lyche',
-  [KEY.common_active]: 'Aktiv',
   [KEY.common_missing]: 'Mangler',
   [KEY.common_contact]: 'Kontakt',
   [KEY.common_english]: 'Engelsk',
@@ -118,6 +119,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_firstname]: 'Fornavn',
   [KEY.common_member]: 'Medlem',
   [KEY.common_membership]: 'Medlemskap',
+  [KEY.common_doors_date]: 'Dørene åpner',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
   [KEY.common_select_all]: 'Velg alle',
@@ -149,9 +151,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_processed]: 'behandlet',
   [KEY.common_rejected]: 'avvist',
   [KEY.common_it]: 'det',
-  [KEY.common_not]: 'ikke',
   [KEY.common_will]: 'vil',
-  [KEY.common_all]: 'alle',
   [KEY.common_get]: 'få',
   [KEY.common_received]: 'mottat',
   [KEY.common_is]: 'er',
@@ -159,6 +159,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_when]: 'når',
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -244,9 +245,15 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
+  [KEY.recruitment_no_positions]: 'Ingen verv',
+  [KEY.recruitment_active]: 'Pågående opptak',
+  [KEY.recruitment_no_gangs]: 'Ingen gjenger',
+  [KEY.recruitment_no_active]: 'Ingen aktive opptak',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
   [KEY.recruitment_priority]: 'Søkers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
@@ -269,9 +276,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_administrate]: 'Administrer opptak',
   [KEY.recruitment_administrate_positions]: 'Administrer stillinger',
   [KEY.recruitment_administrate_applications]: 'Administrer søknader',
+  [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
-  [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
+  [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_application_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
@@ -283,9 +291,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_accepted_applicants]: 'Tatt opp',
   [KEY.recruitment_show_all_applicants]: 'Vis alle søkere',
   [KEY.recruitment_show_applicants_without_interview]: 'Vis søkere uten et intervju',
-  [KEY.recruitment_application]: 'Søknad',
+  [KEY.recrutment_export_to_csv]: 'Eksporter alle søknader til CSV',
+  [KEY.application_deadline]: 'Søknadsfrist',
   [KEY.recruitment_applications]: 'søknader',
-  [KEY.recruitment_position]: 'verv',
   [KEY.recruitment_progression]: 'Opptak fremgang',
   [KEY.recruitment_overview]: 'Opptak oversikt',
   [KEY.recruitment_statistics]: 'Opptak statistikk',
@@ -310,7 +318,25 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
-
+  [KEY.recruitment_stats_hours_header]: 'Antall søkere per time',
+  [KEY.recruitment_stats_campus_header]: 'Antall søkere per campus',
+  [KEY.recruitment_stats_date_header]: 'Antall søkere per dag',
+  [KEY.recruitment_revert_status]: 'Fjern Status',
+  [KEY.recruitment_no_current_positions]: 'Denne gjengen har ingen åpne stillinger for dette opptaket',
+  [KEY.recruitment_no_current_applications_position]: 'Denne stilling har ennå ikke fått noen søknader',
+  [KEY.recruitment_no_current_applications_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
+  [KEY.recruitment_apply_for]: 'Søk verv hos',
+  [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.error_recruitment_form_1]: 'Vist søknadfrist kan ikke være før opptaket blir synlig',
+  [KEY.error_recruitment_form_2]: 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
+  [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
+  [KEY.error_recruitment_form_4]: 'Flaggefrist kan ikke være før omprioriteringsfrist',
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
+  [KEY.recruitment_dashboard_description]:
+    'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -389,7 +415,6 @@ export const nb: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.information_page_short]: 'Side',
   [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
@@ -397,9 +422,9 @@ export const nb: Record<KeyValues, string> = {
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
-};
+});
 
-export const en: Record<KeyValues, string> = {
+export const en = prepareTranslations({
   // ==================== //
   //        Common        //
   // ==================== //
@@ -440,6 +465,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
   [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
@@ -460,6 +486,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_edit]: 'Edit',
   [KEY.common_show]: 'Show',
   [KEY.common_table]: 'Table',
+  [KEY.common_sheet]: 'Table',
   [KEY.common_card]: 'Cards',
   [KEY.common_tags]: 'Tags',
   [KEY.common_menu]: 'Menu',
@@ -467,7 +494,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_next]: 'Next',
   [KEY.common_gang]: 'Gang',
   [KEY.common_gangs]: 'Gangs',
-  [KEY.common_table]: 'Table',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
@@ -486,7 +512,6 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_go_back]: 'Go back',
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_search]: 'Search',
-  [KEY.common_active]: 'Active',
   [KEY.common_choose]: 'Choose',
   [KEY.common_missing]: 'Missing',
   [KEY.common_message]: 'Message',
@@ -527,6 +552,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contributors]: 'Contributors',
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_general]: 'General',
+  [KEY.common_doors_date]: 'Doors',
   [KEY.common_long_description]: 'Long description',
   [KEY.common_short_description]: 'Short description',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
@@ -546,9 +572,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_be]: 'be',
   [KEY.common_rejected]: 'rejected',
   [KEY.common_it]: 'it',
-  [KEY.common_not]: 'not',
   [KEY.common_will]: 'will',
-  [KEY.common_all]: 'all',
   [KEY.common_get]: 'get',
   [KEY.common_received]: 'received',
   [KEY.common_is]: 'is',
@@ -556,6 +580,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_when]: 'when',
   [KEY.common_come_back_later]: 'Come back later',
   [KEY.common_loading]: 'Loading',
+  [KEY.common_filter]: 'Filter',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -642,6 +667,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_no_interviews]: 'No interviews',
   [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
@@ -661,13 +688,18 @@ export const en: Record<KeyValues, string> = {
     ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
+  [KEY.recruitment_no_positions]: 'No positions',
+  [KEY.recruitment_active]: 'Active recruitments',
+  [KEY.recruitment_no_gangs]: 'No gangs',
+  [KEY.recruitment_no_active]: 'No active recruitments',
   [KEY.recruitment_organization]: 'Organization',
   [KEY.recruitment_visible_from]: 'Visible from',
   [KEY.recruitment_administrate]: 'Administrate recruitment',
   [KEY.recruitment_administrate_positions]: 'Administrate positions',
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
+  [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
-  [KEY.actual_application_deadlin]: 'Actual deadline',
+  [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_application_letter]: 'Default application letter',
@@ -680,10 +712,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_processed]: 'Processed',
   [KEY.recruitment_accepted_applicants]: 'Accepted',
   [KEY.recruitment_show_applicants_without_interview]: 'Show applicants without an interview',
-  [KEY.recruitment_applicants]: 'applicants',
+  [KEY.recrutment_export_to_csv]: 'Export all applications to CSV',
+  [KEY.application_deadline]: 'Application deadline',
   [KEY.recruitment_progression]: 'Recruitment progression',
   [KEY.recruitment_overview]: 'Recruitment overview',
-  [KEY.recruitment_application]: 'Application',
   [KEY.recruitment_admitted]: 'admitted',
   [KEY.recruitment_statistics]: 'Recruitment statistics',
   [KEY.recruitment_applications]: 'applications',
@@ -707,9 +739,24 @@ export const en: Record<KeyValues, string> = {
     'No applicants are marked to receive an automatic rejection email.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
-  [KEY.recruitment_withdraw_application]: 'Withdraw application',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
-
+  [KEY.recruitment_revert_status]: 'Revert status',
+  [KEY.recruitment_no_current_positions]: 'This gang does not have any available positions for this recruitment',
+  [KEY.recruitment_no_current_applications_position]: 'This gang has no current applicants',
+  [KEY.recruitment_no_current_applications_gang]: 'This gang has no current applicants',
+  [KEY.recruitment_withdraw_application]: 'Withdraw application',
+  [KEY.recruitment_stats_hours_header]: 'Total applicants per hour',
+  [KEY.recruitment_stats_campus_header]: 'Total applicants per campus',
+  [KEY.recruitment_stats_date_header]: 'Total applicants per day',
+  [KEY.recruitment_apply_for]: 'Apply for position at',
+  [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
+  [KEY.error_recruitment_form_1]: 'Displayed deadline cannot be before the recruitment becomes visible',
+  [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
+  [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
+  [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
+  [KEY.recruitment_dashboard_description]:
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
@@ -732,7 +779,9 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
-
+  [KEY.recruitment_three_interviews_criteria_header]:
+    'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+  [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // CommandMenu:
   [KEY.command_menu_label]: 'Global command menu',
   [KEY.command_menu_no_results]: 'No results',
@@ -792,9 +841,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
   [KEY.invalid_phonenumber]: 'Not a valid phone number',
-  [KEY.information_page_short]: 'Page',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
-};
+});

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Logo } from './Logo';
 
 export default {
@@ -6,15 +6,13 @@ export default {
   component: Logo,
 } as ComponentMeta<typeof Logo>;
 
-const Template: ComponentStory<typeof Logo> = function (args) {
-  return <Logo {...args} />;
-};
+const Template: ComponentStory<typeof Logo> = (args) => <Logo {...args} />;
 
 export const Samf = Template.bind({});
-Samf.args = { color: 'org-color', size: 'medium', organization: 'samfundet' };
+Samf.args = { color: 'org-color', size: 'medium', organization: 'Samfundet' };
 
 export const Uka = Template.bind({});
-Uka.args = { color: 'org-color', size: 'medium', organization: 'uka' };
+Uka.args = { color: 'org-color', size: 'medium', organization: 'UKA' };
 
 export const Isfit = Template.bind({});
-Isfit.args = { color: 'org-color', size: 'medium', organization: 'isfit' };
+Isfit.args = { color: 'org-color', size: 'medium', organization: 'ISFiT' };

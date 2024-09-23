@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -15,14 +15,15 @@ import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventDto>();
+  const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (id) {
       getEvent(id)
@@ -38,7 +39,6 @@ export function EventPage() {
           console.error(error);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (showSpinner) {
