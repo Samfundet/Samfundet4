@@ -273,6 +273,11 @@ class Organization(CustomBaseModel):
         verbose_name = 'Organization'
         verbose_name_plural = 'Organizations'
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            return self.id
+        return self
+
     def __str__(self) -> str:
         return self.name
 
@@ -323,6 +328,17 @@ class Gang(CustomBaseModel):
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            return self.id
+        return self
+
     def __str__(self) -> str:
         return f'{self.gang_type} - {self.name_nb}'
 
@@ -332,6 +348,20 @@ class GangSection(CustomBaseModel):
     name_en = models.CharField(max_length=64, blank=True, verbose_name='Navn Engelsk')
     logo = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Logo')
     gang = models.ForeignKey(Gang, blank=False, null=False, related_name='gang', on_delete=models.PROTECT, verbose_name='Gjeng')
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.gang.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.gang_id
+        return self.gang
+
+    def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
+        if return_id:
+            return self.id
+        return self
 
     def __str__(self) -> str:
         return f'{self.gang.name_nb} - {self.name_nb}'
