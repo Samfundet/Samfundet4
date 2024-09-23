@@ -14,6 +14,7 @@
 
 - [Billig (payment system)](/docs/technical/backend/billig.md)
 - [Seed scripts](/docs/technical/backend/seed.md)
+- [Role System](/docs/technical/backend/rolesystem.md)
 
 ### Pipelines & Deployment
 - [Pipeline (mypy, eslint, tsc, ...)](/docs/technical/pipeline.md)
