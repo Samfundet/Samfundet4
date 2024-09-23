@@ -278,6 +278,11 @@ SAMFUNDET_CHANGE_RESERVATION = 'samfundet.change_reservation'
 SAMFUNDET_DELETE_RESERVATION = 'samfundet.delete_reservation'
 SAMFUNDET_VIEW_RESERVATION = 'samfundet.view_reservation'
 
+SAMFUNDET_ADD_ROLE = 'samfundet.add_role'
+SAMFUNDET_CHANGE_ROLE = 'samfundet.change_role'
+SAMFUNDET_DELETE_ROLE = 'samfundet.delete_role'
+SAMFUNDET_VIEW_ROLE = 'samfundet.view_role'
+
 SAMFUNDET_ADD_SAKSDOKUMENT = 'samfundet.add_saksdokument'
 SAMFUNDET_CHANGE_SAKSDOKUMENT = 'samfundet.change_saksdokument'
 SAMFUNDET_DELETE_SAKSDOKUMENT = 'samfundet.delete_saksdokument'
@@ -309,6 +314,21 @@ SAMFUNDET_ADD_USERFEEDBACKMODEL = 'samfundet.add_userfeedbackmodel'
 SAMFUNDET_CHANGE_USERFEEDBACKMODEL = 'samfundet.change_userfeedbackmodel'
 SAMFUNDET_DELETE_USERFEEDBACKMODEL = 'samfundet.delete_userfeedbackmodel'
 SAMFUNDET_VIEW_USERFEEDBACKMODEL = 'samfundet.view_userfeedbackmodel'
+
+SAMFUNDET_ADD_USERGANGROLE = 'samfundet.add_usergangrole'
+SAMFUNDET_CHANGE_USERGANGROLE = 'samfundet.change_usergangrole'
+SAMFUNDET_DELETE_USERGANGROLE = 'samfundet.delete_usergangrole'
+SAMFUNDET_VIEW_USERGANGROLE = 'samfundet.view_usergangrole'
+
+SAMFUNDET_ADD_USERGANGSECTIONROLE = 'samfundet.add_usergangsectionrole'
+SAMFUNDET_CHANGE_USERGANGSECTIONROLE = 'samfundet.change_usergangsectionrole'
+SAMFUNDET_DELETE_USERGANGSECTIONROLE = 'samfundet.delete_usergangsectionrole'
+SAMFUNDET_VIEW_USERGANGSECTIONROLE = 'samfundet.view_usergangsectionrole'
+
+SAMFUNDET_ADD_USERORGROLE = 'samfundet.add_userorgrole'
+SAMFUNDET_CHANGE_USERORGROLE = 'samfundet.change_userorgrole'
+SAMFUNDET_DELETE_USERORGROLE = 'samfundet.delete_userorgrole'
+SAMFUNDET_VIEW_USERORGROLE = 'samfundet.view_userorgrole'
 
 SAMFUNDET_ADD_USERPREFERENCE = 'samfundet.add_userpreference'
 SAMFUNDET_CHANGE_USERPREFERENCE = 'samfundet.change_userpreference'
