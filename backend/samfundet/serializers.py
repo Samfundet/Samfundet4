@@ -889,7 +889,7 @@ class OccupiedTimeslotSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class GenerateInterviewBlocksSerializer(serializers.ModelSerializer):
+class InterviewTimeblockSerializer(serializers.ModelSerializer):
     class Meta:
         model = InterviewTimeblock
         fields = '__all__'

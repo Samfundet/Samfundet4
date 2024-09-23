@@ -8,7 +8,6 @@ from rest_framework import routers
 from django.urls import path, include
 
 from . import views
-from .views import GenerateInterviewBlocksView
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
@@ -49,6 +48,7 @@ router.register('recruitment-applications-for-group', views.RecruitmentApplicati
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
+router.register('interview-timeblocks', views.InterviewTimeblockView, 'interview_timeblock')
 
 app_name = 'samfundet'
 
@@ -136,6 +136,6 @@ urlpatterns = [
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
-    path('generate-interview-blocks/', GenerateInterviewBlocksView.as_view(), name='generate_interview_blocks'),
+    # path('generate-interview-blocks/<int:pk>', views.GenerateInterviewTimeblocksView.as_view(), name='generate_interview_blocks'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
 ]
