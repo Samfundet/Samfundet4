@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react';
-import { ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
-import { Table, TableRow } from '~/Components/Table';
+import { Table, type TableRow } from '~/Components/Table';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -37,49 +37,38 @@ export function EventsList({ events }: EventsListProps) {
 
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
-    const allEvents = Object.keys(events)
-      .map((k: string) => events[k])
-      .flat();
+    const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
     return eventQuery(allEvents, query);
   }
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    const rows: TableRow[] = [];
-
-    filteredEvents().forEach((event: EventDto) => {
-      rows.push([
-        {
-          content: (
-            <Link
-              url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
-              className={styles.link}
-            >
-              {dbT(event, 'title')}
-            </Link>
-          ),
-          value: dbT(event, 'title') ?? '',
-        },
-        {
-          content: <TimeDisplay timestamp={event.start_dt} displayType="event-date" />,
-          value: new Date(event.start_dt),
-        },
-        { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(event.start_dt) },
-        { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
-        event.location,
-        event.category,
-        event.ticket_type,
-      ]);
-    });
-
-    return rows;
+    return filteredEvents().map((event) => [
+      {
+        content: (
+          <Link url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })} className={styles.link}>
+            {dbT(event, 'title')}
+          </Link>
+        ),
+        value: dbT(event, 'title') ?? '',
+      },
+      {
+        content: <TimeDisplay timestamp={event.start_dt} displayType="event-date" />,
+        value: new Date(event.start_dt),
+      },
+      { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(event.start_dt) },
+      { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
+      event.location,
+      event.category,
+      event.ticket_type,
+    ]);
   }
 
   function getEventCards(): ReactNode[] {
-    return filteredEvents().map((event: EventDto, key: number) => {
+    return filteredEvents().map((event: EventDto) => {
       const time_display = <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />;
       return (
-        <div className={styles.event_container} key={key}>
+        <div className={styles.event_container} key={event.id}>
           <ImageCard
             date={event.start_dt.toString()}
             imageUrl={BACKEND_DOMAIN + event.image_url}

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useCustomNavigate } from '~/hooks';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Link.module.scss';
 
 export type LinkTarget = 'frontend' | 'backend' | 'external' | 'email';

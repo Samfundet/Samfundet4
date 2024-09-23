@@ -1,6 +1,6 @@
-import { Children } from '~/types';
-import { textSizes } from '~/constants';
 import React from 'react';
+import { textSizes } from '~/constants';
+import type { Children } from '~/types';
 
 type textProps = {
   children?: Children;

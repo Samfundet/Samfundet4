@@ -38,7 +38,7 @@ export function Alert({
               className={styles.closeButton}
               onClick={() => {
                 setClosed(true);
-                onClose && onClose();
+                onClose?.();
               }}
             >
               x

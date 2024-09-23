@@ -1,11 +1,11 @@
 import { format } from 'date-fns';
 import i18next from 'i18next';
-import { CSSProperties } from 'react';
-import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
-import { UserDto } from '~/dto';
+import type { CSSProperties } from 'react';
+import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
+import type { UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
-import { Day, EventTicketType, EventTicketTypeValue } from './types';
+import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -97,7 +97,7 @@ export function dbT(
 ): string | undefined {
   if (model === undefined) return undefined;
 
-  const fieldName = field + '_' + language;
+  const fieldName = `${field}_${language}`;
   const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
   if (hasFieldName) {
     const value = model[fieldName];
@@ -234,7 +234,7 @@ export function utcTimestampToLocal(time: string | undefined): string {
  */
 export function niceDateTime(time: string | undefined): string | undefined {
   const date = new Date(time ?? '');
-  if (!isNaN(date.getTime())) {
+  if (!Number.isNaN(date.getTime())) {
     const dateString = date.toUTCString();
     return dateString.substring(0, dateString.length - 3);
   }
@@ -311,8 +311,8 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   //
   const dot = document.createElement('div');
   dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
-  dot.style.left = e.clientX + window.pageXOffset + 'px';
-  dot.style.top = e.clientY + window.pageYOffset + 'px';
+  dot.style.left = `${e.clientX + window.pageXOffset}px`;
+  dot.style.top = `${e.clientY + window.pageYOffset}px`;
   return dot;
 }
 
@@ -340,16 +340,15 @@ export function getRandomEntryFromList(entries: unknown[]): unknown {
  */
 export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
-  return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
+  return new Date().setHours(Number.parseInt(timeSplit[0]), Number.parseInt(timeSplit[1]), 0, 0);
 }
 
 export const toPercentage = (floatNum: number | undefined): string => {
   if (floatNum) {
     const percentage = floatNum * 100;
-    return percentage.toString().slice(0, 4) + '%';
-  } else {
-    return 'N/A';
+    return `${percentage.toString().slice(0, 4)}%`;
   }
+  return 'N/A';
 };
 
 /*

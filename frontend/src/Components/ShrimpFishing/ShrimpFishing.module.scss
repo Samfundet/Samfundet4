@@ -10,7 +10,7 @@
   left: 0;
 }
 
-.moving-container {
+.moving_container {
   all: unset;
   position: absolute;
   width: 150px;
@@ -22,7 +22,7 @@
   }
 }
 
-.offsetContainer {
+.offset_container {
   position: relative;
   width: 100%;
   height: 100%;
@@ -60,7 +60,7 @@
   }
 }
 
-.scoreText {
+.score_text {
   position: absolute;
   top: 90%;
   left: 20%;
@@ -72,7 +72,7 @@
   box-sizing: border-box;
 }
 
-.gameOverText {
+.game_over_text {
   position: absolute;
   top: calc(50% - 48px);
   left: 50%;

@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { SubTemplate } from '~/Components/Template/components';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Template.module.scss';
 
 type TemplateProps = {
@@ -14,6 +14,7 @@ type TemplateProps = {
  */
 export function Template({ className, children, onClick }: TemplateProps) {
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: only used for demo...
     <div onClick={onClick} className={classnames(styles.template, className)}>
       <SubTemplate>{children}</SubTemplate>
     </div>

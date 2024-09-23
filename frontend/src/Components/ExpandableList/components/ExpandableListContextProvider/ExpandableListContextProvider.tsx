@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { Children, SetState } from '~/types';
+import type { Children, SetState } from '~/types';
 
 type ExpandableListContextProps = {
   depth: number;

@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { Button, IconButton, Modal } from '~/Components';
+import type { RecruitmentApplicationDto } from '~/dto';
 import styles from './WithoutInterview.module.scss';
 import { WithoutInterviewList } from './WithoutInterviewList';
-import { RecruitmentApplicationDto } from '~/dto';
-import { Button, IconButton, Modal } from '~/Components';
 
 type WithoutInterviewModalProps = {
   applications: RecruitmentApplicationDto[];
@@ -23,7 +23,7 @@ export function WithoutInterviewModal({ applications, applications_without_inter
           className={styles.close}
           icon="mdi:close"
           onClick={() => setWithoutInterviewModal(false)}
-        ></IconButton>
+        />
         <WithoutInterviewList applications={applications_without_interview} />
       </Modal>
     </>

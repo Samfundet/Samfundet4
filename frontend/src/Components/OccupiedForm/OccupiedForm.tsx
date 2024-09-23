@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { OccupiedTimeslotDto } from '~/dto';
-import styles from './OccupiedForm.module.scss';
-import { KEY } from '~/i18n/constants';
-import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
 import { Trans, useTranslation } from 'react-i18next';
-import { Button } from '../Button';
+import { toast } from 'react-toastify';
 import { MiniCalendar } from '~/Components';
-import { CalendarMarker } from '~/types';
 import { TimeslotContainer } from '~/Components/OccupiedForm/components';
+import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
+import type { OccupiedTimeslotDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import type { CalendarMarker } from '~/types';
+import { Button } from '../Button';
+import styles from './OccupiedForm.module.scss';
 
 type Props = {
   recruitmentId: number;
@@ -26,6 +26,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const [timeslots, setTimeslots] = useState<string[]>([]);
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (!recruitmentId) {
       return;
@@ -51,7 +52,6 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
         console.error(error);
       })
       .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   function save() {
