@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'root',  # Register to enable management.commands.
     'samfundet',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -178,8 +179,17 @@ REST_FRAMEWORK = {
         'root.custom_classes.permission_classes.SuperUserPermission',
         # 'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 ### End: DRF ###
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Samfundet4 API',
+    'DESCRIPTION': 'Samfundet4 is the new webpage of Studentersamfundet in Trondhjem',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 ### django-guardian ###
 INSTALLED_APPS += [
