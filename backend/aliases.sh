@@ -76,5 +76,5 @@ alias poetry-run-migrations-apply='poetry run python manage.py migrate' # Apply 
 alias poetry-run-collectstatic='poetry run python manage.py collectstatic --noinput' # Collect static files from apps to root of project.
 
 alias poetry-run-pytest-run='poetry run pytest' # Run pytest on project.
-alias poetry-run-pipeline='poetry-mypy-run && poetry-ruff-check && poetry-ruff-format-check && poetry-migrations-verify && poetry-pytest-run' # Run all checks in pipeline.
+alias poetry-run-pipeline='poetry-run-mypy-run && poetry-run-ruff-check && poetry-run-ruff-format-check && poetry-run-migrations-verify && poetry-run-pytest-run' # Run all checks in pipeline.
 alias poetry-run-seed='poetry run python manage.py seed' # Apply seed of database.
