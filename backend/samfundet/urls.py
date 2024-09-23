@@ -136,6 +136,6 @@ urlpatterns = [
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
-    # path('generate-interview-blocks/<int:pk>', views.GenerateInterviewTimeblocksView.as_view(), name='generate_interview_blocks'),
+    path('generate-interview-blocks/<int:pk>', views.GenerateInterviewTimeblocksView.as_view(), name='generate_interview_blocks'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
 ]

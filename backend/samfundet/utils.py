@@ -104,10 +104,7 @@ def get_perm(*, perm: str, model: type[Model]) -> Permission:
 
 def generate_interview_timeblocks(recruitment_id):
     recruitment = Recruitment.objects.get(id=recruitment_id)
-
-    # Delete existing time blocks for this recruitment
     InterviewTimeblock.objects.filter(recruitment_position__recruitment=recruitment).delete()
-
     positions = RecruitmentPosition.objects.filter(recruitment=recruitment)
     block_count = 0
 
@@ -116,7 +113,6 @@ def generate_interview_timeblocks(recruitment_id):
         end_date = recruitment.actual_application_deadline.date()
         start_time = time(8, 0)  # 8:00 AM
         end_time = time(20, 0)  # 8:00 PM
-        interval_minutes = 30
 
         current_date = start_date
         while current_date <= end_date:
@@ -124,19 +120,18 @@ def generate_interview_timeblocks(recruitment_id):
             end_datetime = timezone.make_aware(datetime.combine(current_date, end_time))
 
             while current_datetime < end_datetime:
-                next_datetime = current_datetime + timedelta(minutes=interval_minutes)
+                next_datetime, available_interviewers = find_next_change(position, recruitment, current_datetime, end_datetime)
 
-                available_interviewers = position.interviewers.exclude(
-                    occupied_timeslots__recruitment=recruitment, occupied_timeslots__start_dt__lt=next_datetime, occupied_timeslots__end_dt__gt=current_datetime
-                )
+                if next_datetime == current_datetime:
+                    # No change in availability, move to next 30-minute slot
+                    next_datetime = current_datetime + timedelta(minutes=30)
 
-                rating = calculate_rating(recruitment, position, current_datetime, next_datetime, available_interviewers.count())
+                rating = calculate_rating(recruitment, position, current_datetime, next_datetime, len(available_interviewers))
 
                 InterviewTimeblock.objects.create(
                     recruitment_position=position, date=current_date, start_dt=current_datetime, end_dt=next_datetime, rating=rating
                 )
                 block_count += 1
-
                 current_datetime = next_datetime
 
             current_date += timedelta(days=1)
@@ -144,10 +139,35 @@ def generate_interview_timeblocks(recruitment_id):
     return block_count
 
 
+def find_next_change(position, recruitment, start_dt, end_dt):
+    current_dt = start_dt
+    step = timedelta(minutes=30)
+    current_interviewers = set(
+        position.interviewers.exclude(
+            occupied_timeslots__recruitment=recruitment, occupied_timeslots__start_dt__lte=current_dt, occupied_timeslots__end_dt__gt=current_dt
+        )
+    )
+
+    while current_dt < end_dt:
+        next_dt = current_dt + step
+        next_interviewers = set(
+            position.interviewers.exclude(
+                occupied_timeslots__recruitment=recruitment, occupied_timeslots__start_dt__lt=next_dt, occupied_timeslots__end_dt__gt=current_dt
+            )
+        )
+
+        if next_interviewers != current_interviewers:
+            return current_dt, current_interviewers
+
+        current_dt = next_dt
+        current_interviewers = next_interviewers
+
+    return end_dt, current_interviewers
+
+
 def calculate_rating(recruitment, position, start_dt, end_dt, available_interviewers_count):
     block_length = (end_dt - start_dt).total_seconds() / 3600  # in hours
     occupied_slots = OccupiedTimeslot.objects.filter(recruitment=recruitment, start_dt__lt=end_dt, end_dt__gt=start_dt).count()
 
-    # You can adjust these weights based on your preferences
     rating = (available_interviewers_count * 2) + (block_length * 0.5) - (occupied_slots * 1)
     return max(0, rating)  # Ensure the rating is not negative
