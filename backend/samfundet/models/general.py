@@ -16,7 +16,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import Group, AbstractUser
+from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
@@ -314,15 +314,6 @@ class Gang(CustomBaseModel):
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
-
-    # Gang related permission groups
-    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
-    event_admin_group = models.OneToOneField(
-        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
-    )
-    recruitment_admin_group = models.OneToOneField(
-        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
-    )
 
     class Meta:
         verbose_name = 'Gang'
