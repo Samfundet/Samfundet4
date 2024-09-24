@@ -32,6 +32,7 @@ export function RecruitmentPositionOverviewPage() {
     // getRecruitmentApplicationStateChoices
     recruitmentId &&
       gangId &&
+      positionId &&  
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((data) => {
           setRecruitmentApplicants(
@@ -39,13 +40,13 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status === 0 &&
-                recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setWithdrawnApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setRejectedApplicants(
@@ -53,7 +54,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
-                recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setAcceptedApplicants(
@@ -61,7 +62,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status === 1 &&
-                recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setShowSpinner(false);
@@ -75,6 +76,7 @@ export function RecruitmentPositionOverviewPage() {
   }, [recruitmentId, gangId, positionId, navigate, t]);
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
+    positionId &&  
     updateRecruitmentApplicationStateForPosition(id, data)
       .then((data) => {
         setRecruitmentApplicants(
@@ -82,13 +84,13 @@ export function RecruitmentPositionOverviewPage() {
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
               recruitmentApplicant.recruiter_status === 0 &&
-              recruitmentApplicant.recruitment_position?.id === positionId,
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
           ),
         );
         setWithdrawnApplicants(
           data.data.filter(
             (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === positionId,
+              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
           ),
         );
         setRejectedApplicants(
@@ -96,7 +98,7 @@ export function RecruitmentPositionOverviewPage() {
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
               (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
-              recruitmentApplicant.recruitment_position?.id === positionId,
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
           ),
         );
         setAcceptedApplicants(
@@ -104,7 +106,7 @@ export function RecruitmentPositionOverviewPage() {
             (recruitmentApplicant) =>
               !recruitmentApplicant.withdrawn &&
               recruitmentApplicant.recruiter_status === 1 &&
-              recruitmentApplicant.recruitment_position?.id === positionId,
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
           ),
         );
         setShowSpinner(false);
