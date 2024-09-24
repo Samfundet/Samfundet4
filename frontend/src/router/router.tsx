@@ -54,6 +54,7 @@ import {
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentSeparatePositionFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
@@ -64,7 +65,6 @@ import {
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
   UsersAdminPage,
-  RecruitmentSeparatePositionFormAdminPage,
 } from '~/PagesAdmin';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';

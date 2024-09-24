@@ -1,6 +1,6 @@
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto } from '~/dto';
 import type { LoaderFunctionArgs } from 'react-router-dom';
 import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto } from '~/dto';
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;

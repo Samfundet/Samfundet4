@@ -1,10 +1,10 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, CrudButtons, Link, OccupiedFormModal, Tab, TabView } from '~/Components';
+import { Button, CrudButtons, Link, OccupiedFormModal, type Tab, TabView } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteRecruitmentSeparatePosition, getRecruitment, getRecruitmentGangs } from '~/api';
-import { RecruitmentDto, RecruitmentSeparatePositionDto, type RecruitmentGangDto } from '~/dto';
+import type { RecruitmentDto, RecruitmentGangDto, RecruitmentSeparatePositionDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -46,7 +46,7 @@ export function RecruitmentGangOverviewPage() {
   ];
 
   // TODO: Only show gangs that user has access to, and only show gangs that are recruiting. ISSUE #1121
-  const tableGangData = gangs.map(function (gang) {
+  const tableGangData = gangs.map((gang) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
@@ -74,7 +74,7 @@ export function RecruitmentGangOverviewPage() {
     }
   }
 
-  const tableSeparatePositionData = recruitment?.separate_positions?.map(function (separate_position) {
+  const tableSeparatePositionData = recruitment?.separate_positions?.map((separate_position) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_edit,
       urlParams: { recruitmentId: recruitmentId, separatePositionId: separate_position.id },
@@ -163,7 +163,7 @@ export function RecruitmentGangOverviewPage() {
       >
         {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
       </Button>
-      {recruitmentId && <OccupiedFormModal recruitmentId={parseInt(recruitmentId)} isButtonRounded={true} />}
+      {recruitmentId && <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} isButtonRounded={true} />}
     </>
   );
 

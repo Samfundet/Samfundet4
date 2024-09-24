@@ -27,6 +27,7 @@ import type {
   RecruitmentDto,
   RecruitmentGangDto,
   RecruitmentPositionDto,
+  RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
   RecruitmentUserDto,
   RegistrationDto,
@@ -36,7 +37,6 @@ import type {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
-  RecruitmentSeparatePositionDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

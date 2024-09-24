@@ -6,13 +6,13 @@ import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentSeparatePosition, postRecruitmentSeparatePosition, putRecruitmentSeparatePosition } from '~/api';
-import { RecruitmentSeparatePositionDto } from '~/dto';
+import type { RecruitmentSeparatePositionDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import styles from './RecruitmentSeparatePositionFormAdminPage.module.scss';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentSeparatePositionFormAdminPage.module.scss';
 
 type FormType = {
   name_nb: string;
