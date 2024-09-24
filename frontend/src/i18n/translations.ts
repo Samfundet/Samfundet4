@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
   [KEY.common_no]: 'Nei',
@@ -162,7 +163,7 @@ export const nb = prepareTranslations({
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
   [KEY.common_filter]: 'Filter',
-
+  [KEY.common_administrate]: 'Administrer',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -467,6 +468,7 @@ export const en = prepareTranslations({
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
   [KEY.common_no]: 'No',
@@ -604,7 +606,7 @@ export const en = prepareTranslations({
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_processed]: 'Processed',
-
+  [KEY.common_administrate]: 'Administrate',
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
   [KEY.common_ticket_type_free]: 'Free',
