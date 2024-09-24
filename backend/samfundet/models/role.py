@@ -10,7 +10,7 @@ from root.utils.mixins import CustomBaseModel
 class Role(CustomBaseModel):
     name = models.CharField(max_length=255)
     permissions = models.ManyToManyField('auth.Permission')
-    content_type = models.ForeignKey(ContentType, null=True, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name
