@@ -59,6 +59,7 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
+  RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
