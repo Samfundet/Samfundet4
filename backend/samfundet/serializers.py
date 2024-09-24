@@ -57,13 +57,13 @@ from .models.recruitment import (
     RecruitmentDateStat,
     RecruitmentGangStat,
     RecruitmentPosition,
-    RecruitmentPositionSharedInterviewGroup,
     RecruitmentTimeStat,
     RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentApplication,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -815,7 +815,6 @@ class ApplicantInterviewSerializer(serializers.ModelSerializer):
             'interview_location',
         ]
 
-
 class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
     gang = GangSerializer()
 
@@ -836,7 +835,6 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'recruitment',
         ]
 
-
 class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSerializer):
     positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
 
@@ -849,7 +847,6 @@ class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSeriali
             'name_en',
             'name_nb',
         ]
-
 
 class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
     interview = ApplicantInterviewSerializer(read_only=True)
