@@ -23,6 +23,7 @@ from . import (
     recruitment_occupied_time,
     recruitment_separate_position,
     recruitment_interviewavailability,
+    recruitment_sharedinterviewgroups,
 )
 
 # Insert seed scripts here (in order of priority)
@@ -49,6 +50,7 @@ SEED_SCRIPTS = [
     ('merch', merch.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
+    ('recruitment_position_shared_interview', recruitment_sharedinterviewgroups.seed),
     ('recruitment_interviewavailability', recruitment_interviewavailability.seed),
     ('recruitment_separate_position', recruitment_separate_position.seed),
     ('recruitment_applications', recruitment_applications.seed),

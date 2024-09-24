@@ -57,6 +57,7 @@ from .models.recruitment import (
     RecruitmentDateStat,
     RecruitmentGangStat,
     RecruitmentPosition,
+    RecruitmentPositionSharedInterviewGroup,
     RecruitmentTimeStat,
     RecruitmentCampusStat,
     RecruitmentStatistics,
@@ -833,6 +834,20 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'default_application_letter_en',
             'gang',
             'recruitment',
+        ]
+
+
+class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSerializer):
+    positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = RecruitmentPositionSharedInterviewGroup
+        fields = [
+            'id',
+            'recruitment',
+            'positions',
+            'name_en',
+            'name_nb',
         ]
 
 

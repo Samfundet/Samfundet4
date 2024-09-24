@@ -266,6 +266,7 @@ export const KEY = {
   recruitment_interviews: 'recruitment_interviews',
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
+  recruitment_interview_group: 'recruitment_interview_group',
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',

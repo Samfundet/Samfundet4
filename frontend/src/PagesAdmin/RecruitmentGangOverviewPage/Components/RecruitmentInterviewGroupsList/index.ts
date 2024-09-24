@@ -1,0 +1,1 @@
+export { RecruitmentInterviewGroupsList } from './RecruitmentInterviewGroupsList';

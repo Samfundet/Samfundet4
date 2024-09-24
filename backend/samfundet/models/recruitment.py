@@ -115,8 +115,11 @@ class RecruitmentPositionSharedInterviewGroup(CustomBaseModel):
         blank=True,
     )
 
+    name_nb = models.CharField(max_length=100, null=False, blank=False, help_text='Name of the recruitmentgroup (NB)')
+    name_en = models.CharField(max_length=100, null=False, blank=False, help_text='Name of the recruitmentgroup (EN)')
+
     def __str__(self) -> str:
-        return f'{self.recruitment} Interviewgroup {", ".join(list(self.positions.values_list("name_nb", flat=True)))}'
+        return f'{self.recruitment} Interviewgroup {self.name_nb} {", ".join(list(self.positions.values_list("name_nb", flat=True)))}'
 
 
 class RecruitmentPosition(CustomBaseModel):

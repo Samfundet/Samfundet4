@@ -421,6 +421,14 @@ export type RecruitmentSeparatePositionDto = {
   recruitment?: string;
 };
 
+export type RecruitmentSharedInterviewGroupDto = {
+  id?: number;
+  recruitment?: string;
+  name_nb: string;
+  name_en: string;
+  positions: RecruitmentPositionDto[];
+};
+
 export type UserPriorityDto = {
   direction: number;
 };

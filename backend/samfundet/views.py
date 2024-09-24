@@ -39,6 +39,7 @@ from root.constants import (
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
+    RecruitmentPositionSharedInterviewGroupSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -128,6 +129,7 @@ from .models.recruitment import (
     InterviewRoom,
     OccupiedTimeslot,
     RecruitmentPosition,
+    RecruitmentPositionSharedInterviewGroup,
     RecruitmentStatistics,
     RecruitmentApplication,
     RecruitmentSeparatePosition,
@@ -1046,6 +1048,20 @@ class ActiveRecruitmentsView(ListAPIView):
         """Returns all active recruitments"""
         # TODO Use is not completed instead of actual_application_deadline__gte
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
+
+
+class RecruitmentInterviewGroupView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request: Request,
+        recruitment_id: int,
+    ) -> HttpResponse:
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        interview_groups = RecruitmentPositionSharedInterviewGroup.objects.filter(recruitment=recruitment)
+
+        return Response(data=RecruitmentPositionSharedInterviewGroupSerializer(interview_groups, many=True).data, status=status.HTTP_200_OK)
 
 
 class DownloadRecruitmentApplicationGangCSV(APIView):

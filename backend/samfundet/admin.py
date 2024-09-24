@@ -673,6 +673,7 @@ class RecruitmentApplicationInline(admin.TabularInline):
         url = reverse(admin__samfundet_recruitmentapplication_change, args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.application_text)
 
+
 @admin.register(RecruitmentPosition)
 class RecruitmentPositionAdmin(CustomBaseAdmin):
     sortable_by = [
@@ -714,18 +715,25 @@ class RecruitmentApplicationAdmin(CustomBaseAdmin):
     list_display_links = ['recruitment_position']
     list_select_related = True
 
+
 @admin.register(RecruitmentPositionSharedInterviewGroup)
 class RecruitmentPositionSharedInterviewGroupAdmin(CustomBaseAdmin):
     sortable_by = [
         'recruitment',
+        'name_en',
+        'name_nb',
         '__str__',
     ]
     list_display = [
         'recruitment',
+        'name_en',
+        'name_nb',
         '__str__',
     ]
     search_fields = [
         'recruitment',
+        'name_en',
+        'name_nb',
         '__str__',
     ]
 
