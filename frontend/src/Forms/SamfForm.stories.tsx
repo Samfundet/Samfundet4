@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { AuthContextProvider } from '~/context/AuthContext';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { SamfForm, SamfFormProps } from './SamfForm';
+import { SamfForm, type SamfFormProps } from './SamfForm';
 import { SamfFormField } from './SamfFormField';
 
 // Local component config.
@@ -10,23 +10,21 @@ export default {
   component: SamfForm,
 } as ComponentMeta<typeof SamfForm>;
 
-const Template: ComponentStory<typeof SamfForm> = function (args) {
-  return (
-    <AuthContextProvider>
-      <SamfForm<BasicFormProps> {...args} />
-    </AuthContextProvider>
-  );
-};
+const Template: ComponentStory<typeof SamfForm> = (args) => (
+  <AuthContextProvider>
+    <SamfForm<BasicFormProps> {...args} />
+  </AuthContextProvider>
+);
 
 function validateShrimp(values: BasicFormProps) {
   const str = values.advanced_field;
-  if (str && str.toLowerCase().includes('reke')) return true;
+  if (str?.toLowerCase().includes('reke')) return true;
   return "Feltet må inneholde 'reke'";
 }
 
 function validate69(values: BasicFormProps) {
   const num = values.number_field;
-  if (num == 69) return true;
+  if (num === 69) return true;
   return 'Tallet må være 69';
 }
 
@@ -58,7 +56,7 @@ Basic.args = {
   submitTextProp: 'Demo',
   devMode: true,
   onSubmit: (values: BasicFormProps) => {
-    alert('Data that could be posted: ' + JSON.stringify(values));
+    alert(`Data that could be posted: ${JSON.stringify(values)}`);
   },
   initialData,
   validateOn: 'change',

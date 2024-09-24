@@ -604,6 +604,7 @@ class RecruitmentDateStatSerializer(serializers.ModelSerializer):
 
 class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
     campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+    applicant_percentage = serializers.SerializerMethodField(method_name='get_applicant_percentage', read_only=True)
 
     class Meta:
         model = RecruitmentCampusStat
@@ -611,6 +612,9 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
         return stat.campus.name_nb if stat.campus else None
+
+    def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
+        return stat.normalized_applicant_percentage()
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
@@ -962,6 +966,47 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
 
     def get_interview_time(self, instance: RecruitmentApplication) -> str | None:
         return instance.interview.interview_time if instance.interview else None
+
+
+class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number']
+
+
+class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+
+    def get_recruitment_position(self, instance: RecruitmentApplication) -> str:
+        return instance.recruitment_position.name_nb
 
 
 class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):

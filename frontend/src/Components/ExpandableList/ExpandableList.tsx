@@ -1,6 +1,6 @@
-import { Children } from '~/types';
-import { useExpandableListContext } from './components/ExpandableListContextProvider/ExpandableListContextProvider';
+import type { Children } from '~/types';
 import styles from './ExpandableList.module.scss';
+import { useExpandableListContext } from './components/ExpandableListContextProvider/ExpandableListContextProvider';
 
 type ExpandableListProps = {
   children: Children;
@@ -12,7 +12,7 @@ export function ExpandableList({ children }: ExpandableListProps) {
   const { depth, setDepth } = useExpandableListContext();
   const depthNotZero = depth > 0;
 
-  function decreseDepth() {
+  function decreaseDepth() {
     if (depth > 0) {
       setDepth(depth - 1);
     }
@@ -22,14 +22,9 @@ export function ExpandableList({ children }: ExpandableListProps) {
     <div className={styles.content_container}>
       <div className={styles.header}>
         {depthNotZero && (
-          <div
-            className={styles.back_button}
-            onClick={() => {
-              decreseDepth();
-            }}
-          >
+          <button type="button" className={styles.back_button} onClick={decreaseDepth}>
             ↩︎
-          </div>
+          </button>
         )}
         <h3>Saksdokumenter</h3>
       </div>

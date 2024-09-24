@@ -1,4 +1,4 @@
-import { MirrorKeys, TranslationKeys } from './types';
+import type { MirrorKeys, TranslationKeys } from './types';
 
 /**
  * Mapping of every existing translation key.
@@ -119,6 +119,7 @@ export const KEY = {
   common_users: 'common_users',
   common_email: 'common_email',
   common_total: 'common_total',
+  common_roles: 'common_roles',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
@@ -139,6 +140,7 @@ export const KEY = {
   common_contact_us: 'common_contact_us',
   common_doors_date: 'common_doors_date',
   common_restaurant: 'common_restaurant',
+  common_permissions: 'common_permissions',
   common_member: 'common_member',
   common_membership: 'common_membership',
   common_select_all: 'common_select_all',

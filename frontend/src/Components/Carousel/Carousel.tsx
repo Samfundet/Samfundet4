@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Skeleton } from '~/Components/Skeleton';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Carousel.module.scss';
 
 type CarouselProps = {
@@ -23,6 +23,7 @@ export function Carousel({
 }: CarouselProps) {
   const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
+      // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
       <div className={classNames(styles.itemContainer, itemContainerClass)} key={idx}>
         {child}
       </div>
@@ -40,8 +41,8 @@ export function Carousel({
         <div className={styles.navContainer}>
           <div className={classNames(styles.button, styles.left)}>{'<'}</div>
         </div>
-        <div className={classNames(styles.navButton, styles.left)}></div>
-        <div className={styles.scroller} style={{ gap: (spacing ? spacing : 0.2) + 'em' }}>
+        <div className={classNames(styles.navButton, styles.left)} />
+        <div className={styles.scroller} style={{ gap: `${spacing ? spacing : 0.2}em` }}>
           {wrappedChildren}
         </div>
         <div className={styles.navContainer}>

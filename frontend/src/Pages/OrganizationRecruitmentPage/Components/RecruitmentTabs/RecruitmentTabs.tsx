@@ -1,12 +1,12 @@
-import { GangTypeDto } from '~/dto';
-import { SamfundetLogoSpinner, Tab, TabBar, Text } from '~/Components';
-import { dbT } from '~/utils';
 import { useEffect, useState } from 'react';
-import { getGangList } from '~/api';
+import { useTranslation } from 'react-i18next';
+import { SamfundetLogoSpinner, type Tab, TabBar, Text } from '~/Components';
 import { GangsTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangsTabs/GangsTabs';
 import { NoPositions } from '~/Pages/RecruitmentPage/Components/NoPositions/NoPositions';
+import { getGangList } from '~/api';
+import type { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
+import { dbT } from '~/utils';
 import styles from './RecruitmentTabs.module.scss';
 
 export function RecruitmentTabs() {
@@ -56,7 +56,7 @@ export function RecruitmentTabs() {
       ) : currentTab ? (
         <>
           <Text size={'l'} as={'strong'}>
-            {t(KEY.common_gang) + ' ' + t(KEY.category)}
+            {`${t(KEY.common_gang)} ${t(KEY.category)}`}
           </Text>
           <TabBar
             tabs={gangTypeTabs}

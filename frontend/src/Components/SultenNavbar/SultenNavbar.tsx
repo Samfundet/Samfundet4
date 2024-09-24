@@ -17,7 +17,7 @@ export function SultenNavbar() {
   const { t, i18n } = useTranslation();
   const isDesktop = useDesktop();
   const [showMobileNavigation, setMobileNavigation] = useState(false);
-  const isNorwegian = i18n.language == LANGUAGES.NB;
+  const isNorwegian = i18n.language === LANGUAGES.NB;
   const navigate = useNavigate();
   const scrollY = useScrollY();
 
@@ -67,7 +67,7 @@ export function SultenNavbar() {
   );
 
   const hamburgerMenu = (
-    <div onClick={() => setMobileNavigation(!showMobileNavigation)} className={styles.hamburger}>
+    <button type="button" onClick={() => setMobileNavigation(!showMobileNavigation)} className={styles.hamburger}>
       <div className={classNames(styles.navbar_hamburger_line, styles.top, showMobileNavigation && styles.top_open)} />
       <div
         className={classNames(styles.navbar_hamburger_line, styles.middle, showMobileNavigation && styles.middle_open)}
@@ -75,7 +75,7 @@ export function SultenNavbar() {
       <div
         className={classNames(styles.navbar_hamburger_line, styles.bottom, showMobileNavigation && styles.bottom_open)}
       />
-    </div>
+    </button>
   );
 
   const calendarIcon = (
@@ -90,11 +90,9 @@ export function SultenNavbar() {
   );
 
   const languageFlag = (
-    <img
-      className={styles.language_flag}
-      src={isNorwegian ? norwegianFlag : englishFlag}
-      onClick={changeLanguage}
-    ></img>
+    <button type="button" className={styles.flag_button} onClick={changeLanguage}>
+      <img className={styles.language_flag} src={isNorwegian ? norwegianFlag : englishFlag} alt="Flag" />
+    </button>
   );
 
   const navigationPopup = (
@@ -110,14 +108,18 @@ export function SultenNavbar() {
       <div className={styles.navbar_menu}>
         {hamburgerMenu}
         {isDesktop && leftItems}
-        <img
-          src={lycheLogo}
+        <Link
+          to={ROUTES.frontend.sulten}
           onClick={() => {
-            navigate(ROUTES.frontend.sulten);
             setMobileNavigation(false);
           }}
-          className={isScrolledNavbar || !isDesktop ? styles.sulten_logo_small : styles.sulten_logo_big}
-        ></img>
+        >
+          <img
+            src={lycheLogo}
+            className={isScrolledNavbar || !isDesktop ? styles.sulten_logo_small : styles.sulten_logo_big}
+            alt="Lyche logo"
+          />
+        </Link>
         {isDesktop && rightItems}
         {calendarIcon}
         {isDesktop && languageFlag}

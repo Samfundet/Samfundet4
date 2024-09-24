@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { InputTime } from '~/Components';
 import { getVenues, putVenue } from '~/api';
-import { VenueDto } from '~/dto';
+import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS } from '~/types';
@@ -21,6 +21,7 @@ export function OpeningHoursAdminPage() {
   const venueRef = useRef(venues);
 
   // Get venues
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getVenues()
       .then((venues) => {
@@ -33,7 +34,6 @@ export function OpeningHoursAdminPage() {
         console.error(error);
         setIsLoading(false);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save venue change.
@@ -106,13 +106,13 @@ export function OpeningHoursAdminPage() {
                       value={venue[openField]}
                       onChange={() => handleOnChange(venue, openField)}
                       onBlur={(formattedTime) => saveVenue(venue, openField, formattedTime)}
-                    ></InputTime>
+                    />
                     <p>-</p>
                     <InputTime
                       value={venue[closeField]}
                       onChange={() => handleOnChange(venue, closeField)}
                       onBlur={(formattedTime) => saveVenue(venue, closeField, formattedTime)}
-                    ></InputTime>
+                    />
                   </div>
                 </div>
               );

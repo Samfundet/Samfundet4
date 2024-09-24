@@ -25,6 +25,7 @@ export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPa
 export { RecruitmentUnprocessedApplicantsPage } from './RecruitmentUnprocessedApplicantsPage';
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
+export { RolesAdminPage } from './RolesAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';

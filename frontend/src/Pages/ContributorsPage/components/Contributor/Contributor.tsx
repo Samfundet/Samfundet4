@@ -1,12 +1,12 @@
-import styles from '~/Pages/ContributorsPage/ContributorsPage.module.scss';
-import { KEY } from '~/i18n/constants';
 import { Icon } from '@iconify/react';
-import { Link } from '~/Components';
 import { useTranslation } from 'react-i18next';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { Link } from '~/Components';
+import styles from '~/Pages/ContributorsPage/ContributorsPage.module.scss';
 import lightAvatar from '~/assets/contributors/default.svg';
 import darkAvatar from '~/assets/contributors/default_dark.svg';
 import { THEME } from '~/constants';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { KEY } from '~/i18n/constants';
 
 export type Contributor = {
   name: string;
