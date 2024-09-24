@@ -81,6 +81,9 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
   admin_recruitment_gang_position_edit: '/control-panel/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
+  admin_recruitment_gang_separateposition_create: '/control-panel/recruitment/:recruitmentId/separateposition/create',
+  admin_recruitment_gang_separateposition_edit:
+    '/control-panel/recruitment/:recruitmentId/separateposition/edit/:separatePositionId',
   admin_recruitment_recruiter_dashboard: '/control-panel/recruitment/:recruitmentId/recruiter/dashboard/',
 
   admin_recruitment_gang_position_applicants_overview:
