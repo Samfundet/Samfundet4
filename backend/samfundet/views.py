@@ -39,7 +39,6 @@ from root.constants import (
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
-    RecruitmentPositionSharedInterviewGroupSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -89,6 +88,7 @@ from .serializers import (
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
     RecruitmentShowUnprocessedApplicationsSerializer,
+    RecruitmentPositionSharedInterviewGroupSerializer,
 )
 from .models.event import (
     Event,
@@ -129,11 +129,11 @@ from .models.recruitment import (
     InterviewRoom,
     OccupiedTimeslot,
     RecruitmentPosition,
-    RecruitmentPositionSharedInterviewGroup,
     RecruitmentStatistics,
     RecruitmentApplication,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
