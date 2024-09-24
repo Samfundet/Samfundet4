@@ -1,13 +1,13 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { NotFound } from '~/assets';
 import { SUPPORT_EMAIL } from '~/constants';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useCustomNavigate, useTitle } from '~/hooks';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
