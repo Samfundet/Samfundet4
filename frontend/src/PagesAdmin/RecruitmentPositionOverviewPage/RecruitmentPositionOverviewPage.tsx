@@ -32,7 +32,7 @@ export function RecruitmentPositionOverviewPage() {
     // getRecruitmentApplicationStateChoices
     recruitmentId &&
       gangId &&
-      positionId &&  
+      positionId &&
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((data) => {
           setRecruitmentApplicants(
@@ -46,7 +46,8 @@ export function RecruitmentPositionOverviewPage() {
           setWithdrawnApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setRejectedApplicants(
@@ -76,45 +77,46 @@ export function RecruitmentPositionOverviewPage() {
   }, [recruitmentId, gangId, positionId, navigate, t]);
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
-    positionId &&  
-    updateRecruitmentApplicationStateForPosition(id, data)
-      .then((data) => {
-        setRecruitmentApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 0 &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
-        );
-        setWithdrawnApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
-        );
-        setRejectedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
-        );
-        setAcceptedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 1 &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
-        );
-        setShowSpinner(false);
-      })
-      .catch((data) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(data);
-      });
+    positionId &&
+      updateRecruitmentApplicationStateForPosition(id, data)
+        .then((data) => {
+          setRecruitmentApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 0 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setWithdrawnApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setRejectedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setAcceptedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 1 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(data);
+        });
   };
 
   const title = t(KEY.recruitment_administrate_applications);
