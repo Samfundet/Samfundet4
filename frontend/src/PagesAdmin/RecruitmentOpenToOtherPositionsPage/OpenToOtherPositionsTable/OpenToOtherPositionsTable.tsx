@@ -1,30 +1,43 @@
+import { t } from 'i18next';
 import { Table } from '~/Components';
-import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
+import { RecruitmentApplicationDto, RecruitmentPositionDto, RecruitmentUserDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 
 type OpenTableProps = {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  applications: RecruitmentApplicationDto[];
+  applicants: RecruitmentUserDto[];
 };
 
-export function OpenToOtherPositionsTable({ firstName, lastName, phoneNumber, email, applications }: OpenTableProps) {
-  const positions: RecruitmentPositionDto[] = [];
-
-  applications.forEach((application) => {
-    positions.push(application.recruitment_position);
-  });
-
+export function OpenToOtherPositionsTable({ applicants }: OpenTableProps) {
   const tableColumns = [
-    { content: firstName + lastName, sortable: true },
-    { content: phoneNumber, sortable: true },
-    { content: email, sortable: true },
+    { content: t(KEY.common_name), sortable: true },
+    { content: t(KEY.common_phonenumber), sortable: true },
+    { content: t(KEY.common_email), sortable: true },
   ];
 
   function positionToTableRow(position: RecruitmentPositionDto) {
     return ['', position.gang.name_en, position.name_en];
   }
 
-  return <Table columns={tableColumns} data={positions.map((position) => positionToTableRow(position))}></Table>;
+  const data = applicants.map((applicant) => {
+    return {
+      cells: [
+        { value: applicant.first_name + ' ' + applicant.last_name },
+        { value: applicant.phone_number },
+        { value: applicant.email },
+      ],
+      childTable: {
+        columns: [
+          { content: t(KEY.common_gang), sortable: true },
+          { content: t(KEY.recruitment_position), sortable: true },
+        ],
+        data: applicant.applications.map((application: RecruitmentApplicationDto) => {
+          return {
+            cells: positionToTableRow(application.recruitment_position),
+          };
+        }),
+      },
+    };
+  });
+
+  return <Table columns={tableColumns} data={data}></Table>;
 }
