@@ -37,7 +37,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from .utils import event_query, generate_timeslots, generate_interview_timeblocks, get_occupied_timeslots_from_request
+from .utils import allocate_interviews_for_position, event_query, generate_timeslots, generate_interview_timeblocks, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .serializers import (
     InterviewTimeblockSerializer,
@@ -1281,3 +1281,24 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class AllocateInterviewsForPositionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk):
+        try:
+            # Get the specific recruitment position
+            position = get_object_or_404(RecruitmentPosition, id=pk)
+
+            # Allocate interviews for the position (method explained below)
+            interview_count = allocate_interviews_for_position(position)
+
+            return Response(
+                {'message': f'Interviews allocated successfully for position {pk}.', 'interviews_allocated': interview_count},
+                status=status.HTTP_200_OK,
+            )
+        except RecruitmentPosition.DoesNotExist:
+            return Response({'error': f'Recruitment position with id {pk} does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': f'Failed to allocate interviews: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

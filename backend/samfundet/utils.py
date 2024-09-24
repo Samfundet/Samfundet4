@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import defaultdict
 from datetime import datetime, time, timedelta
 
 from django.http import QueryDict
@@ -13,7 +14,15 @@ from django.contrib.contenttypes.models import ContentType
 
 from .models import User
 from .models.event import Event
-from .models.recruitment import Recruitment, OccupiedTimeslot, InterviewTimeblock, RecruitmentPosition, RecruitmentInterviewAvailability
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    OccupiedTimeslot,
+    InterviewTimeblock,
+    RecruitmentApplication,
+    RecruitmentPosition,
+    RecruitmentInterviewAvailability,
+)
 
 ###
 
@@ -190,7 +199,110 @@ def generate_blocks(position, start_dt, end_dt, unavailability, interval):
     return blocks
 
 
-def calculate_rating(start_dt, end_dt, available_interviewers_count):
-    block_length = (end_dt - start_dt).total_seconds() / 3600
-    rating = (available_interviewers_count * 2) + (block_length * 0.5)
-    return max(0, rating)
+def allocate_interviews_for_position(position):
+    # Get the time blocks for the specific position, sorted by rating
+    timeblocks = InterviewTimeblock.objects.filter(recruitment_position=position).order_by('-rating')
+
+    # Fetch all active applications for the position
+    applications = RecruitmentApplication.objects.filter(recruitment_position=position, withdrawn=False)
+
+    # Prepare unavailability data for applicants and interviewers
+    applicant_unavailability = defaultdict(list)
+    interviewer_unavailability = defaultdict(list)
+
+    # Collect unavailability for each applicant
+    for slot in OccupiedTimeslot.objects.filter(recruitment=position.recruitment):
+        applicant_unavailability[slot.user.id].append((slot.start_dt, slot.end_dt))
+
+    # Collect unavailability for each interviewer
+    for interview in Interview.objects.filter(interviewers__in=position.interviewers.all()):
+        for interviewer in interview.interviewers.all():
+            interviewer_unavailability[interviewer.id].append(
+                (interview.interview_time, interview.interview_time + timedelta(minutes=30))
+            )  # Assuming 30-minute interviews
+
+    assigned_interviews = set()  # Track assigned interviews
+
+    # Count interviews allocated
+    interview_count = 0
+
+    # Iterate over each time block
+    for block in timeblocks:
+        # Loop through the applicants for this position
+        for application in applications:
+            applicant = application.user
+
+            # Skip applicants that already have an interview
+            if application.id in assigned_interviews:
+                continue
+
+            # Check if the applicant is available for this block and interviewers are free
+            available_interviewers = get_available_interviewers(block.available_interviewers.all(), block.start_dt, block.end_dt, interviewer_unavailability)
+
+            if available_interviewers and is_applicant_available(applicant, block.start_dt, block.end_dt, applicant_unavailability):
+                # Create and assign an interview
+                interview = Interview.objects.create(
+                    interview_time=block.start_dt,
+                    interview_location=f'Location for {position.name_en}',
+                    room=None,  # Set the room if required
+                )
+                interview.interviewers.set(available_interviewers)  # Assign only available interviewers
+                interview.save()
+
+                # Link the interview to the application
+                application.interview = interview
+                application.save()
+
+                # Mark this time as occupied for the applicant
+                assigned_interviews.add(application.id)
+                mark_applicant_unavailable(applicant, block.start_dt, block.end_dt)
+
+                # Mark interviewers as occupied
+                mark_interviewers_unavailable(available_interviewers, block.start_dt, block.end_dt, interviewer_unavailability)
+
+                interview_count += 1
+
+    return interview_count
+
+
+def is_applicant_available(applicant, start_dt, end_dt, unavailability):
+    """Check if the applicant is available during the given time block."""
+    for unavail_start, unavail_end in unavailability.get(applicant.id, []):
+        if unavail_start < end_dt and unavail_end > start_dt:
+            return False  # Applicant is unavailable during this time
+    return True
+
+
+def mark_applicant_unavailable(applicant, start_dt, end_dt):
+    """Mark the applicant's timeslot as occupied."""
+    OccupiedTimeslot.objects.create(
+        user=applicant,
+        recruitment=applicant.applications.first().recruitment,  # Assuming a valid recruitment exists
+        start_dt=start_dt,
+        end_dt=end_dt,
+    )
+
+
+def get_available_interviewers(interviewers, start_dt, end_dt, interviewer_unavailability):
+    """Return a list of available interviewers who are free during the time block."""
+    available_interviewers = []
+
+    for interviewer in interviewers:
+        if is_interviewer_available(interviewer, start_dt, end_dt, interviewer_unavailability):
+            available_interviewers.append(interviewer)
+
+    return available_interviewers
+
+
+def is_interviewer_available(interviewer, start_dt, end_dt, unavailability):
+    """Check if the interviewer is available during the given time block."""
+    for unavail_start, unavail_end in unavailability.get(interviewer.id, []):
+        if unavail_start < end_dt and unavail_end > start_dt:
+            return False  # Interviewer is unavailable during this time
+    return True
+
+
+def mark_interviewers_unavailable(interviewers, start_dt, end_dt, unavailability):
+    """Mark the interviewers as unavailable for the given time block."""
+    for interviewer in interviewers:
+        unavailability[interviewer.id].append((start_dt, end_dt))

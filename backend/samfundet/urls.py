@@ -138,4 +138,5 @@ urlpatterns = [
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('generate-interview-blocks/<int:pk>', views.GenerateInterviewTimeblocksView.as_view(), name='generate_interview_blocks'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
+    path('allocate-interviews/<int:pk>', views.AllocateInterviewsForPositionView.as_view(), name='allocated_interviews'),
 ]
