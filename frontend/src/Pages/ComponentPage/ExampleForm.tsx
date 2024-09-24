@@ -16,17 +16,17 @@ import {
 } from '~/Components';
 import { PASSWORD, USERNAME } from '~/schema/user';
 
+const schema = z.object({
+  username: USERNAME,
+  password: PASSWORD,
+  organization: z.string().nullish().optional(),
+  duration: z.number().min(15).max(60),
+  confirm: z.boolean().refine((v) => v, 'Påkrevd'),
+});
+
 export function ExampleForm() {
   const [submitting, setSubmitting] = useState(false);
   const [serialized, setSerialized] = useState('');
-
-  const schema = z.object({
-    username: USERNAME,
-    password: PASSWORD,
-    organization: z.string().nullish().optional(),
-    duration: z.number().min(15).max(60),
-    confirm: z.boolean().refine((v) => v, 'Påkrevd'),
-  });
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
