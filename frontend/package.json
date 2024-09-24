@@ -24,7 +24,6 @@
     "build-storybook-dev": "storybook build",
     "cypress:open": "cypress open",
     "cypress:run": "yarn run cypress run",
-
     "biome//": "echo Biome is configured for entire repo.",
     "biome:check": "biome check",
     "biome:ci": "biome ci",
@@ -34,7 +33,6 @@
     "lint:fix-unsafe": "biome lint --write --unsafe",
     "format:check": "biome format",
     "format:fix": "biome format --write",
-
     "stylelint:check": "stylelint --config .stylelintrc src/**/*.{css,scss}",
     "tsc:check": "tsc",
     "tsc:watch": "tsc --watch",
@@ -44,9 +42,9 @@
     "@babel/core": "^7.23.2",
     "@babel/plugin-syntax-flow": "^7.22.5",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
-    "axios": "^1.7.4",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "axios": "^1.7.4",
     "classnames": "^2.3.2",
     "cmdk": "^0.2.0",
     "cypress-fail-on-console-error": "^5.0.1",

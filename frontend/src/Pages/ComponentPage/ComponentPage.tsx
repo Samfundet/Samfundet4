@@ -5,10 +5,10 @@ import { List } from '~/Components/List';
 import { MultiSelect } from '~/Components/MultiSelect';
 import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
+import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
-import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 
 /**
  * Page to render all components for easy overview and debug purposes.

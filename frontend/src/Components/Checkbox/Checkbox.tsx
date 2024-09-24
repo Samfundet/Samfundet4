@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import styles from './Checkbox.module.scss';
 import React from 'react';
+import styles from './Checkbox.module.scss';
 
 export type CheckboxProps = {
   name?: string;
@@ -14,7 +14,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ cla
   return (
     <label className={styles.checkbox}>
       <input type="checkbox" ref={ref} className={classNames(styles.checkbox__input, className)} {...props} />
-      <div className={styles.checkbox__box}></div>
+      <div className={styles.checkbox__box} />
     </label>
   );
 });

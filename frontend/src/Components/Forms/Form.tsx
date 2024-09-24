@@ -9,8 +9,8 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
-import styles from './Forms.module.scss';
 import classNames from 'classnames';
+import styles from './Forms.module.scss';
 
 export const Form = FormProvider;
 

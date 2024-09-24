@@ -1,4 +1,5 @@
-import React, { type ReactElement } from 'react';
+import type React from 'react';
+import type { ReactElement } from 'react';
 import {
   Checkbox,
   type CheckboxProps,

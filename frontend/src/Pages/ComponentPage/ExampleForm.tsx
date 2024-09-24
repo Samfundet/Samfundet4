@@ -1,8 +1,7 @@
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { PASSWORD, USERNAME } from '~/schema/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import {
   Button,
   Checkbox,
@@ -15,6 +14,7 @@ import {
   FormMessage,
   Input,
 } from '~/Components';
+import { PASSWORD, USERNAME } from '~/schema/user';
 
 export function ExampleForm() {
   const [submitting, setSubmitting] = useState(false);
