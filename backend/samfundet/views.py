@@ -1213,7 +1213,7 @@ class OccupiedTimeslotView(ListCreateAPIView):
 class GenerateInterviewTimeblocksView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk):
+    def get(self, request: Request, pk):
         try:
             recruitment = get_object_or_404(Recruitment, id=pk)
             block_count = generate_interview_timeblocks(recruitment.id)
@@ -1227,7 +1227,7 @@ class GenerateInterviewTimeblocksView(APIView):
 
 
 class InterviewTimeblockView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Corrected spelling
     serializer_class = InterviewTimeblockSerializer
     queryset = InterviewTimeblock.objects.all()
 

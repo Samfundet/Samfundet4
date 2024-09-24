@@ -105,69 +105,92 @@ def get_perm(*, perm: str, model: type[Model]) -> Permission:
 def generate_interview_timeblocks(recruitment_id):
     recruitment = Recruitment.objects.get(id=recruitment_id)
     InterviewTimeblock.objects.filter(recruitment_position__recruitment=recruitment).delete()
+
     positions = RecruitmentPosition.objects.filter(recruitment=recruitment)
     block_count = 0
 
     for position in positions:
+        # Add this check here
+        # if not position.interviewers.exists():
+        #    print(f'No interviewers assigned to position {position.id}')
+        #    continue
+
         start_date = recruitment.visible_from.date()
         end_date = recruitment.actual_application_deadline.date()
         start_time = time(8, 0)  # 8:00 AM
         end_time = time(20, 0)  # 8:00 PM
+        interval = timedelta(minutes=30)  # 30-minute intervals
 
         current_date = start_date
         while current_date <= end_date:
             current_datetime = timezone.make_aware(datetime.combine(current_date, start_time))
             end_datetime = timezone.make_aware(datetime.combine(current_date, end_time))
 
-            while current_datetime < end_datetime:
-                next_datetime, available_interviewers = find_next_change(position, recruitment, current_datetime, end_datetime)
+            unavailability = get_unavailability(
+                recruitment
+                # , current_datetime, end_datetime, position
+            )
+            blocks = generate_blocks(position, current_datetime, end_datetime, unavailability, interval)
 
-                if next_datetime == current_datetime:
-                    # No change in availability, move to next 30-minute slot
-                    next_datetime = current_datetime + timedelta(minutes=30)
-
-                rating = calculate_rating(recruitment, position, current_datetime, next_datetime, len(available_interviewers))
-
-                InterviewTimeblock.objects.create(
-                    recruitment_position=position, date=current_date, start_dt=current_datetime, end_dt=next_datetime, rating=rating
+            for block in blocks:
+                interview_block = InterviewTimeblock.objects.create(
+                    recruitment_position=position,
+                    date=current_date,
+                    start_dt=block['start'],
+                    end_dt=block['end'],
+                    rating=calculate_rating(block['start'], block['end'], len(block['available_interviewers'])),
                 )
+                interview_block.available_interviewers.set(block['available_interviewers'])
                 block_count += 1
-                current_datetime = next_datetime
 
             current_date += timedelta(days=1)
 
     return block_count
 
 
-def find_next_change(position, recruitment, start_dt, end_dt):
+def get_unavailability(recruitment):
+    # Fetch all OccupiedTimeslot objects for the given recruitment
+    occupied_timeslots = OccupiedTimeslot.objects.filter(
+        recruitment=recruitment
+        # , user__in=position.interviewers.all(), start_dt__lt=end_dt, end_dt__gt=start_dt
+    ).order_by('start_dt')
+
+    # Loop through the queryset and print field values for each object
+    # for slot in occupied_timeslots:
+    #    print(f'OccupiedTimeslot ID: {slot.id}, User: {slot.user}, Start: {slot.start_dt}, End: {slot.end_dt}, Recruitment: {slot.recruitment}')
+
+    return occupied_timeslots
+
+
+def generate_blocks(position, start_dt, end_dt, unavailability, interval):
+    all_interviewers = set(position.interviewers.all())  # All interviewers for this position
+    blocks = []
     current_dt = start_dt
-    step = timedelta(minutes=30)
-    current_interviewers = set(
-        position.interviewers.exclude(
-            occupied_timeslots__recruitment=recruitment, occupied_timeslots__start_dt__lte=current_dt, occupied_timeslots__end_dt__gt=current_dt
-        )
-    )
 
     while current_dt < end_dt:
-        next_dt = current_dt + step
-        next_interviewers = set(
-            position.interviewers.exclude(
-                occupied_timeslots__recruitment=recruitment, occupied_timeslots__start_dt__lt=next_dt, occupied_timeslots__end_dt__gt=current_dt
-            )
-        )
+        block_end = min(current_dt + interval, end_dt)
+        available_interviewers = all_interviewers.copy()
 
-        if next_interviewers != current_interviewers:
-            return current_dt, current_interviewers
+        # Iterate through unavailability slots to check if any interviewers are unavailable
+        for slot in unavailability:
+            if slot.start_dt < block_end and slot.end_dt > current_dt:
+                # Remove the unavailable interviewer for this block
+                available_interviewers.discard(slot.user)
 
-        current_dt = next_dt
-        current_interviewers = next_interviewers
+        # Always create a new block if interviewers change
+        if not blocks or len(blocks[-1]['available_interviewers']) != len(available_interviewers):
+            # Create a new block when interviewer availability changes
+            blocks.append({'start': current_dt, 'end': block_end, 'available_interviewers': available_interviewers})
+        else:
+            # Extend the last block if interviewer availability hasn't changed
+            blocks[-1]['end'] = block_end
 
-    return end_dt, current_interviewers
+        current_dt = block_end
+
+    return blocks
 
 
-def calculate_rating(recruitment, position, start_dt, end_dt, available_interviewers_count):
-    block_length = (end_dt - start_dt).total_seconds() / 3600  # in hours
-    occupied_slots = OccupiedTimeslot.objects.filter(recruitment=recruitment, start_dt__lt=end_dt, end_dt__gt=start_dt).count()
-
-    rating = (available_interviewers_count * 2) + (block_length * 0.5) - (occupied_slots * 1)
-    return max(0, rating)  # Ensure the rating is not negative
+def calculate_rating(start_dt, end_dt, available_interviewers_count):
+    block_length = (end_dt - start_dt).total_seconds() / 3600
+    rating = (available_interviewers_count * 2) + (block_length * 0.5)
+    return max(0, rating)
