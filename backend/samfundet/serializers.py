@@ -18,6 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .models.role import Role
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
@@ -481,6 +482,12 @@ class MenuSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Menu
+        fields = '__all__'
+
+
+class RoleSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Role
         fields = '__all__'
 
 
