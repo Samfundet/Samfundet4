@@ -437,7 +437,7 @@ export const router = createBrowserRouter(
                       urlParams: { recruitmentId: recruitment?.id },
                     })}
                   >
-                    {t(KEY.recruitment_overview)}
+                    {t(KEY.recruitment_recruiter_dashboard)}
                   </Link>
                 ),
               }}
