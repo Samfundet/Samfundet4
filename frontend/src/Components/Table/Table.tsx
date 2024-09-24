@@ -43,6 +43,7 @@ type TableProps = {
   // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
   defaultSortColumn?: number;
+  isChildTable?: boolean;
 };
 
 export function Table({
@@ -55,6 +56,7 @@ export function Table({
   columns,
   data,
   defaultSortColumn = -1,
+  isChildTable,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
@@ -174,11 +176,17 @@ export function Table({
     return col;
   }
 
+  function hasChildTable(data: TableDataType): boolean {
+    return data.some((row) => row.childTable !== undefined);
+  }
+
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
           <tr>
+            {(hasChildTable(data) || isChildTable) && <th></th>}
+
             {columns &&
               columns?.map((col, index) => {
                 if (isColumnSortable(col)) {
@@ -214,6 +222,11 @@ export function Table({
                 key={index1}
                 onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
               >
+                {row.childTable !== undefined && (
+                  <td className={classNames(cellClassName)} key={`arrow-${index1}`}>
+                    <Icon icon={isOpen === index1 ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
+                  </td>
+                )}
                 {row &&
                   row.cells.map((cell, index2) => (
                     <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
@@ -223,8 +236,8 @@ export function Table({
               </tr>
               {row.childTable !== undefined && isOpen === index1 && (
                 <tr className={styles.childTable}>
-                  <td colSpan={row.cells.length}>
-                    <Table {...row.childTable} />
+                  <td colSpan={row.cells.length + 1} className={cellClassName}>
+                    <Table {...row.childTable} isChildTable />
                   </td>
                 </tr>
               )}

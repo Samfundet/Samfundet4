@@ -47,16 +47,7 @@ export function RecruitmentOpenToOtherPositionsPage() {
   return (
     <>
       <AdminPageLayout title={t(KEY.recruitment_applicants_open_to_other_positions)} header={header}>
-        {users.map((user) => (
-          <OpenToOtherPositionsTable
-            key={user.id}
-            firstName={user.first_name}
-            lastName={user.last_name}
-            phoneNumber={user.phone_number || ''}
-            email={user.email}
-            applications={user.applications}
-          ></OpenToOtherPositionsTable>
-        ))}
+        <OpenToOtherPositionsTable applicants={users}></OpenToOtherPositionsTable>
       </AdminPageLayout>
     </>
   );
