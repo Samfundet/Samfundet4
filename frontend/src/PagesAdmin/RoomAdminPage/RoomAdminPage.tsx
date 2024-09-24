@@ -71,11 +71,11 @@ export function RoomAdminPage() {
 
   return (
     <>
-      <Button 
+      <Button
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_room_create,
           urlParams: { recruitmentId: data?.recruitment?.id },
-        })} 
+        })}
         theme="samf"
       >
         {t(KEY.common_create)}
