@@ -54,7 +54,9 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Heidi Herfindal Rasmussen', github: 'hei98', from: 'H23' },
   { name: 'Erik Hoff', github: 'aTrueYety', from: 'H23' },
   // V24
-  { name: 'Emil Solberg', github: 'emsoraffa', from: 'H24' },
+  { name: 'Emil Solberg', github: 'emsoraffa', from: 'V24' },
+  // H24
+  { name: 'Anders Meyer Hegre', github: 'andsamfu', from: 'H24'},
   { name: 'Lida Victoria Johnsen', github: 'lidavic', from: 'H24' },
 ];
 
