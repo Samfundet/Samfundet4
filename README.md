@@ -10,6 +10,7 @@
 - [Technologies used on Samf4 🤖](/docs/technical/Samf4Tech.md)
 - [Project Specific Commands](/docs/docker-project-specific-commands.md)
 - [Useful Docker aliases](/docs/docker-project-specific-commands.md)
+- [🌐 API documentation](/docs/api-docs.md)
 
 ## Installation
 

@@ -166,6 +166,7 @@ debugpy = "1.*"
 requests = "2.*"
 pytest = "8.*"
 pytest-django = "4.*"
+drf-spectacular = "0.27.*"
 
 [build-system]
 requires = ["poetry-core"]

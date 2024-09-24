@@ -322,6 +322,14 @@ export type GangTypeDto = {
   gangs: GangDto[];
 };
 
+export type GangSectionDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  logo?: string;
+  gang: GangDto;
+};
+
 export type ClosedPeriodDto = {
   id: number;
   message_no: string;
@@ -357,6 +365,31 @@ export type KeyValueDto = {
   id: number;
   key: string;
   value: string;
+};
+
+// ############################################################
+//                       Roles
+// ############################################################
+
+export type RoleDto = {
+  id: number;
+  name: string;
+  permissions: string[];
+};
+
+export type UserGangRoleDto = {
+  id: number;
+  obj: GangDto;
+};
+
+export type UserGangSectionRoleDto = {
+  id: number;
+  obj: GangSectionDto;
+};
+
+export type UserOrganizationRoleDto = {
+  id: number;
+  obj: OrganizationDto;
 };
 
 // ############################################################
