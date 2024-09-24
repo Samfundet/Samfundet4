@@ -23,6 +23,7 @@ export function SamfundetLogo({ className }: SamfundetLogoProps) {
           This makes size changes and proportions easy to work with.
           The classname are carefully selected to be easily targetable.
       --> */}
+      <title>Samfundet Logo</title>
 
       <g className="outer">
         <g className="corners">

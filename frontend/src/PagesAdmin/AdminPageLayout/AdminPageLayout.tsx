@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import { Breadcrumb, IconButton, SamfundetLogoSpinner } from '~/Components';
 import { COLORS } from '~/types';
 import styles from './AdminPageLayout.module.scss';

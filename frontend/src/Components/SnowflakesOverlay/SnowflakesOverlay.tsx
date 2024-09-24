@@ -26,6 +26,7 @@ export function SnowflakesOverlay({ intensity = 'low' }: SnowflakesOverlayProps)
   return (
     <div className={styles.snowflakes} aria-hidden="true">
       {snowflakes.map((symbol, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
         <div key={index} className={styles.snowflake}>
           {symbol}
         </div>

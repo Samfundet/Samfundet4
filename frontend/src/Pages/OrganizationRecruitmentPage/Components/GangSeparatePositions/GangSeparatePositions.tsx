@@ -1,9 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { ExpandableHeader, Link, Text } from '~/Components';
-import { RecruitmentSeparatePositionDto } from '~/dto';
+import type { RecruitmentSeparatePositionDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './GangSeparatePositions.module.scss';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
 
 type GangSeparatePositionsProps = {
   recruitmentSeparatePositions: RecruitmentSeparatePositionDto[];

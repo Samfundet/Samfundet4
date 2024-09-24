@@ -1,27 +1,22 @@
-import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
-import { RecruitmentProgression } from './Components/RecruitmentProgression';
-import { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TabView } from '~/Components';
+import type { Tab } from '~/Components/TabBar/TabBar';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { KEY } from '~/i18n/constants';
+import { RecruitmentProgression } from './Components/RecruitmentProgression';
+import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
 
 export function RecruitmentOverviewPage() {
   const { t } = useTranslation();
-  const [currentTab, setCurrentTab] = useState<Tab<ReactNode>>({
-    key: 1,
-    label: t(KEY.recruitment_progression),
-    value: <RecruitmentProgression />,
-  });
   const RECRUITMENT_TITLE_PLACEHOLDER: string = 'PLACEHOLDER-RECRUITMENT-TITLE';
   const tabs: Tab<ReactNode>[] = [
     { key: 1, label: t(KEY.recruitment_progression), value: <RecruitmentProgression /> },
     { key: 2, label: t(KEY.recruitment_statistics), value: <RecruitmentStatistics /> },
   ];
   return (
-    <AdminPageLayout title={t(KEY.recruitment_overview) + ': ' + RECRUITMENT_TITLE_PLACEHOLDER}>
-      <TabBar tabs={tabs} selected={currentTab} onSetTab={setCurrentTab} />
-      {currentTab?.value}
+    <AdminPageLayout title={`${t(KEY.recruitment_overview)}: ${RECRUITMENT_TITLE_PLACEHOLDER}`}>
+      <TabView tabs={tabs} />
     </AdminPageLayout>
   );
 }

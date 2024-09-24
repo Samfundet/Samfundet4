@@ -24,12 +24,12 @@ export function NotFoundPage() {
   useTitle(t(KEY.notfoundpage_title));
   return (
     <div className={styles.container}>
-      <img src={NotFound} className={styles.image} />
-      <br></br>
+      <img src={NotFound} className={styles.image} alt="Not found" />
+      <br />
       <Button rounded={true} theme="outlined" link={ROUTES.frontend.home}>
         <span className={styles.button_text}>{t(KEY.common_back_to_samfundet)}</span>
       </Button>
-      <br></br>
+      <br />
       <i className={styles.text}>
         {t(KEY.notfoundpage_contact_prompt)}{' '}
         <Link url={`mailto:${SUPPORT_EMAIL}`} target="email">

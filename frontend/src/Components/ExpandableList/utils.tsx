@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { SaksdokumentDto } from '~/dto';
+import type { SaksdokumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 
 export function monthValueToString(month: number | '' | undefined) {

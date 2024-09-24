@@ -724,6 +724,11 @@ class RecruitmentSerializer(CustomBaseSerializer):
         model = Recruitment
         fields = '__all__'
 
+    def to_representation(self, instance: Recruitment) -> dict:
+        data = super().to_representation(instance)
+        data['organization'] = OrganizationSerializer(instance.organization).data
+        return data
+
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
     seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
@@ -955,6 +960,47 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
 
     def get_interview_time(self, instance: RecruitmentApplication) -> str | None:
         return instance.interview.interview_time if instance.interview else None
+
+
+class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number']
+
+
+class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+
+    def get_recruitment_position(self, instance: RecruitmentApplication) -> str:
+        return instance.recruitment_position.name_nb
 
 
 class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
