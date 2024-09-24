@@ -57,7 +57,7 @@ export function RecruitmentSeparatePositionFormAdminPage() {
       setShowSpinner(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [separatePositionId]);
+  }, [separatePositionId, navigate, recruitmentId, t]);
 
   const initialData: Partial<RecruitmentSeparatePositionDto> = {
     name_nb: separatePosition?.name_nb,
@@ -117,35 +117,35 @@ export function RecruitmentSeparatePositionFormAdminPage() {
   }
   return (
     <>
-      <AdminPageLayout title={t(KEY.common_create) + ' ' + t(KEY.recruitment_position)} header={true}>
+      <AdminPageLayout title={`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`} header={true}>
         <div className={styles.wrapper}>
           <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
             <div className={styles.row}>
               <SamfFormField<string, FormType>
                 field="name_nb"
                 type="text"
-                label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+                label={`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}
                 required={true}
               />
               <SamfFormField<string, FormType>
                 field="name_en"
                 type="text"
                 required={true}
-                label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+                label={`${t(KEY.common_name)} ${t(KEY.common_english)}`}
               />
             </div>
             <div className={styles.row}>
               <SamfFormField<string, FormType>
                 field="description_nb"
                 type="text_long"
-                label={t(KEY.common_short_description) + ' ' + t(KEY.common_norwegian)}
+                label={`${t(KEY.common_short_description)} ${t(KEY.common_norwegian)}`}
                 required={true}
               />
               <SamfFormField<string, FormType>
                 field="description_en"
                 required={true}
                 type="text_long"
-                label={t(KEY.common_short_description) + ' ' + t(KEY.common_english)}
+                label={`${t(KEY.common_short_description)} ${t(KEY.common_english)}`}
               />
             </div>
             <div className={styles.row}>
