@@ -80,68 +80,8 @@ export function Navbar() {
     </div>
   );
 
-  const infoLinks = (
-    <>
-      <Link
-        url={ROUTES.frontend.about}
-        className={styles.navbar_dropdown_link}
-        onAfterClick={() => setExpandedDropdown('')}
-      >
-        {t(KEY.common_general)}
-      </Link>
-      <Link
-        url={ROUTES.frontend.membership}
-        className={styles.navbar_dropdown_link}
-        onAfterClick={() => setExpandedDropdown('')}
-      >
-        {t(KEY.common_membership)}
-      </Link>
-      {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
-      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
-        {t(KEY.common_opening_hours)}
-      </a>
-      <Link
-        url={ROUTES.frontend.venues}
-        className={styles.navbar_dropdown_link}
-        onAfterClick={() => setExpandedDropdown('')}
-      >
-        {t(KEY.navbar_map)}
-      </Link>
-      <a
-        href={ROUTES.other.foto_samfundet_no}
-        className={styles.navbar_dropdown_link}
-        onClick={() => setExpandedDropdown('')}
-      >
-        {t(KEY.navbar_photos)}
-      </a>
-      {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
-      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
-        {t(KEY.navbar_nybygg)}
-      </a>
-    </>
-  );
-
   const navbarHeaders = (
     <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
-      <NavbarItem
-        setExpandedDropdown={setExpandedDropdown}
-        expandedDropdown={expandedDropdown}
-        route={ROUTES.frontend.events}
-        label={t(KEY.common_event)}
-      />
-      <NavbarItem
-        setExpandedDropdown={setExpandedDropdown}
-        expandedDropdown={expandedDropdown}
-        route={'#'}
-        label={t(KEY.common_information)}
-        dropdownLinks={infoLinks}
-      />
-      <NavbarItem
-        setExpandedDropdown={setExpandedDropdown}
-        expandedDropdown={expandedDropdown}
-        route={ROUTES.frontend.sulten}
-        label={t(KEY.common_restaurant)}
-      />
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
@@ -269,7 +209,7 @@ export function Navbar() {
     <>
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
-          <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
+          <Link url={ROUTES.frontend.recruitment} className={styles.navbar_logo}>
             <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
           </Link>
           {isDesktop && navbarHeaders}
