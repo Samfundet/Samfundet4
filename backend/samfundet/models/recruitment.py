@@ -203,7 +203,7 @@ class RecruitmentSeparatePosition(CustomBaseModel):
         return self.recruitment.resolve_org(return_id=return_id)
 
     def __str__(self) -> str:
-        return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
+        return f'Separate recruitment: {self.name_nb} ({self.recruitment})'
 
 
 class InterviewRoom(CustomBaseModel):

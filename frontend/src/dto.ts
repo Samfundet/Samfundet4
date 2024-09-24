@@ -412,9 +412,13 @@ export type RecruitmentDto = {
 };
 
 export type RecruitmentSeparatePositionDto = {
+  id?: number;
   name_nb: string;
   name_en: string;
+  description_nb: string;
+  description_en: string;
   url: string;
+  recruitment?: string;
 };
 
 export type UserPriorityDto = {
