@@ -10451,7 +10451,7 @@ __metadata:
     stylelint-config-standard-scss: "npm:^11.0.0"
     stylelint-scss: "npm:^5.2.1"
     typescript: "npm:^5.2.2"
-    vite: "npm:^4.5.3"
+    vite: "npm:^4.5.5"
     vite-plugin-svgr: "npm:^4.1.0"
     web-vitals: "npm:^3.5.0"
   languageName: unknown
@@ -19702,9 +19702,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.5.3":
-  version: 4.5.3
-  resolution: "vite@npm:4.5.3"
+"vite@npm:^4.5.5":
+  version: 4.5.5
+  resolution: "vite@npm:4.5.5"
   dependencies:
     esbuild: "npm:^0.18.10"
     fsevents: "npm:~2.3.2"
@@ -19738,7 +19738,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/caeb1eecc0a8e0865782899e2f83d2993a9816562badc1c8291316d80d49b82f12038abd8cb8b8c627b6f369f58dfb25972ef4517d5e6e1b6e1bf7ee5b63a8a6
+  checksum: 10c0/cde5a1d80ae61b2c0b2e2a04938e10aa8821a4c2c625f1dcd6eff179f0c9ce98a5b3c8fd62b54a81299568f7747fff4d35ffecc0e7f7ff34d76124d94a24ce9b
   languageName: node
   linkType: hard
 

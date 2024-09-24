@@ -56,6 +56,7 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_url: 'common_url',
   common_manage: 'common_manage',
   common_yes: 'common_yes',
   common_no: 'common_no',
@@ -118,6 +119,7 @@ export const KEY = {
   common_users: 'common_users',
   common_email: 'common_email',
   common_total: 'common_total',
+  common_roles: 'common_roles',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
@@ -138,6 +140,7 @@ export const KEY = {
   common_contact_us: 'common_contact_us',
   common_doors_date: 'common_doors_date',
   common_restaurant: 'common_restaurant',
+  common_permissions: 'common_permissions',
   common_member: 'common_member',
   common_membership: 'common_membership',
   common_select_all: 'common_select_all',
@@ -174,7 +177,7 @@ export const KEY = {
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
   common_filter: 'common_filter',
-
+  common_administrate: 'common_administrate',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',

@@ -55,6 +55,7 @@ import {
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentSeparatePositionFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
@@ -78,9 +79,11 @@ import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
+  type SeparatePositionLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
 
@@ -179,6 +182,16 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_users}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_USER]} element={<UsersAdminPage />} />}
+          />
+        </Route>
+        {/* Roles */}
+        <Route
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_roles}>{t(KEY.common_roles)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_roles}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
           />
         </Route>
         {/* Events */}
@@ -415,6 +428,57 @@ export const router = createBrowserRouter(
               },
             }}
           >
+            <Route
+              path={ROUTES.frontend.admin_recruitment_gang_separateposition_create}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION]}
+                  element={<RecruitmentSeparatePositionFormAdminPage />}
+                />
+              }
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => {
+                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_create,
+                        urlParams: { recruitmentId: recruitment.id },
+                      })}
+                    >
+                      {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
+                    </Link>
+                  );
+                },
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_gang_separateposition_edit}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION]}
+                  element={<RecruitmentSeparatePositionFormAdminPage />}
+                />
+              }
+              loader={separatePositionLoader}
+              handle={{
+                crumb: ({ recruitment, separatePosition }: RecruitmentLoader & SeparatePositionLoader) => {
+                  if (!recruitment || !separatePosition) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_edit,
+                        urlParams: { recruitmentId: recruitment.id, separatePositionId: separatePosition.id },
+                      })}
+                    >
+                      {t(KEY.common_edit)} {t(KEY.recruitment_gangs_with_separate_positions)} -{' '}
+                      {dbT(separatePosition, 'name')}
+                    </Link>
+                  );
+                },
+              }}
+            />
             <Route
               path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
               element={<RecruitmentUnprocessedApplicantsPage />}

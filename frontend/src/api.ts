@@ -28,6 +28,7 @@ import type {
   RecruitmentDto,
   RecruitmentGangDto,
   RecruitmentPositionDto,
+  RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
   RecruitmentUserDto,
   RegistrationDto,
@@ -623,6 +624,49 @@ export async function putRecruitmentPosition(
     reverse({ pattern: ROUTES.backend.samfundet__recruitment_position_detail, urlParams: { pk: positionId } });
   const response = await axios.put<RecruitmentPositionDto>(url, recruitment, { withCredentials: true });
   return response;
+}
+
+export async function getRecruitmentSeparatePosition(
+  separatePositionId: string,
+): Promise<AxiosResponse<RecruitmentSeparatePositionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_separateposition_detail,
+      urlParams: { pk: separatePositionId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function postRecruitmentSeparatePosition(
+  recruitmentSeparatePosition: RecruitmentSeparatePositionDto,
+): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_separateposition_list;
+
+  return await axios.post(url, recruitmentSeparatePosition, { withCredentials: true });
+}
+
+export async function putRecruitmentSeparatePosition(
+  separatePositionId: string,
+  recruitmentSeparatePosition: Partial<RecruitmentSeparatePositionDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_separateposition_detail,
+      urlParams: { pk: separatePositionId },
+    });
+  return await axios.put<RecruitmentPositionDto>(url, recruitmentSeparatePosition, { withCredentials: true });
+}
+
+export async function deleteRecruitmentSeparatePosition(separatePositionId: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_separateposition_detail,
+      urlParams: { pk: separatePositionId },
+    });
+  return await axios.delete<RecruitmentPositionDto>(url, { withCredentials: true });
 }
 
 export async function getRecruitmentRecruiterDashboard(recruitmentId: string): Promise<AxiosResponse> {
