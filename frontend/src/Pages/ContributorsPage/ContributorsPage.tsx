@@ -43,6 +43,8 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Erik Hoff', github: 'aTrueYety', from: 'H23' },
   // V24
   { name: 'Emil Solberg', github: 'emsoraffa', from: 'H24' },
+  // H24
+  { name: 'Anders Meyer Hegre', github: 'andsamfu', from: 'H24'},
 ];
 
 export function ContributorsPage() {
