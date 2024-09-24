@@ -81,6 +81,7 @@ from .serializers import (
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentForRecruiterSerializer,
+    RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentPositionForApplicantSerializer,
@@ -131,6 +132,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
@@ -647,6 +649,13 @@ class RecruitmentPositionForApplicantView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSeparatePositionView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentSeparatePositionSerializer
+    queryset = RecruitmentSeparatePosition.objects.all()
 
 
 class RecruitmentApplicationView(ModelViewSet):
