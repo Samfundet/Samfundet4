@@ -42,6 +42,8 @@ export const ROUTES_FRONTEND = {
   admin_impersonate: '/impersonate/',
   // Users
   admin_users: '/control-panel/users/',
+  // Roles
+  admin_roles: '/control-panel/roles/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',

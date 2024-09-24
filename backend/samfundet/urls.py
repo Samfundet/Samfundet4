@@ -1,6 +1,8 @@
 # imports
 from __future__ import annotations
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 from rest_framework import routers
 
 from django.urls import path, include
@@ -8,7 +10,6 @@ from django.urls import path, include
 from . import views
 
 # End: imports -----------------------------------------------------------------
-
 router = routers.DefaultRouter()
 router.register('images', views.ImageView, 'images')
 router.register('tags', views.TagView, 'tags')
@@ -52,6 +53,9 @@ app_name = 'samfundet'
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
     path('csrf/', views.CsrfView.as_view(), name='csrf'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
