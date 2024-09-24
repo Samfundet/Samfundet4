@@ -14,6 +14,7 @@ import type {
   InformationPageDto,
   InterviewDto,
   KeyValueDto,
+  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -36,8 +37,6 @@ import type {
   UserPreferenceDto,
   UserPriorityDto,
   VenueDto,
-  PurchaseFeedbackDto,
-  MailDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

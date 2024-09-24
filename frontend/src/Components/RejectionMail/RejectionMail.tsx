@@ -1,12 +1,12 @@
+import { t } from 'i18next';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { postRejectionMail } from '~/api';
+import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
 import { InputField } from '../InputField';
 import { TextAreaField } from '../TextAreaField';
-import { postRejectionMail } from '~/api';
-import { toast } from 'react-toastify';
-import { t } from 'i18next';
-import { KEY } from '~/i18n/constants';
 
 export function RejectionMail() {
   const [text, setText] = useState('');
