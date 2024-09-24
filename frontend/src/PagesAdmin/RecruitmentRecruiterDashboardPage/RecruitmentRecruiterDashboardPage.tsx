@@ -24,8 +24,9 @@ export function RecruitmentRecruiterDashboardPage() {
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>();
   const [loading, setLoading] = useState(true);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate must not be in deplist
   useEffect(() => {
-    if (recruitmentId) {
+    if (!recruitmentId) return;
       getRecruitmentRecruiterDashboard(recruitmentId)
         .then((resp) => {
           setRecruitment(resp.data.recruitment);
@@ -38,8 +39,7 @@ export function RecruitmentRecruiterDashboardPage() {
             navigate({ url: ROUTES.frontend.not_found });
           }
         });
-    }
-  }, [navigate, recruitmentId, t]);
+  }, [recruitmentId, t]);
 
   if (!recruitmentId) {
     navigate({ url: ROUTES.frontend.not_found });
