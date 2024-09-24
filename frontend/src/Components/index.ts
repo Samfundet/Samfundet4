@@ -75,6 +75,7 @@ export { InterviewFormModal } from './InterviewForm';
 export { Chart } from './Chart';
 export { Logo } from './Logo';
 export { TabBar } from './TabBar';
+export { TabView } from './TabView';
 export { Text } from './Text';
 export { Table } from './Table';
 export { OccupiedFormModal } from './OccupiedForm';

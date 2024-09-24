@@ -1,23 +1,23 @@
-import React, { ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 import {
   Checkbox,
-  CheckboxProps,
+  type CheckboxProps,
   Dropdown,
-  DropdownProps,
+  type DropdownProps,
   InputField,
-  InputFieldProps,
+  type InputFieldProps,
   InputFile,
-  InputFileProps,
+  type InputFileProps,
   PhoneNumberField,
   TextAreaField,
-  TextAreaFieldProps,
+  type TextAreaFieldProps,
 } from '~/Components';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { ImagePicker, ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
-import { InputFieldType } from '~/Components/InputField/InputField';
-import { InputFileType } from '~/Components/InputFile/InputFile';
-import { ImageDto } from '~/dto';
-import { SamfError } from './SamfForm';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { ImagePicker, type ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
+import type { InputFieldType } from '~/Components/InputField/InputField';
+import type { InputFileType } from '~/Components/InputFile/InputFile';
+import type { ImageDto } from '~/dto';
+import type { SamfError } from './SamfForm';
 import styles from './SamfForm.module.scss';
 
 // ---------------------------------- //
@@ -116,7 +116,7 @@ export type GeneratorFunction<T extends FormFieldReturnType> = (args: SamfFormFi
 /**
  * Map of all implemented SamfFormField types to their generator functions.
  * */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const SamfFormGenerators: Record<SamfFormFieldType, GeneratorFunction<any>> = {
   text: makeStandardInputFunction<string>('text'),
   email: makeStandardInputFunction<string>('email'),

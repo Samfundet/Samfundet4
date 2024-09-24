@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { TimeDuration } from './TimeDuration';
 
 export default {
@@ -6,9 +6,7 @@ export default {
   component: TimeDuration,
 } as ComponentMeta<typeof TimeDuration>;
 
-const Template: ComponentStory<typeof TimeDuration> = function (args) {
-  return <TimeDuration {...args} />;
-};
+const Template: ComponentStory<typeof TimeDuration> = (args) => <TimeDuration {...args} />;
 
 const now = new Date().toISOString();
 

@@ -1,9 +1,9 @@
 import { use } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { LANGUAGES } from './constants';
 import { en, nb } from './translations';
 import translationEN from './zod/en/zod.json';
 import translationNB from './zod/nb/zod.json';
+import { LANGUAGES } from './types';
 
 export const defaultNS = 'common';
 

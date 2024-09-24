@@ -1,4 +1,4 @@
-import { LogoProps, LogoPalette } from '~/Components/Logo/Logo';
+import type { LogoPalette, LogoProps } from '~/Components/Logo/Logo';
 import { COLORS } from '~/types';
 
 type SamfLogoProps = {
@@ -39,6 +39,7 @@ export function SamfundetLogo({ color, size }: SamfLogoProps) {
       fill="none"
       overflow="visible"
     >
+      <title>Samfundet Logo</title>
       <g className="outer">
         <g className="corners">
           <g transform="translate(0,0) rotate(0)" className="corner-top-left">

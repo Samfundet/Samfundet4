@@ -1,5 +1,5 @@
-import { ThemeValue } from '~/constants';
-import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import type { ThemeValue } from '~/constants';
+import type { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -322,6 +322,14 @@ export type GangTypeDto = {
   gangs: GangDto[];
 };
 
+export type GangSectionDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  logo?: string;
+  gang: GangDto;
+};
+
 export type ClosedPeriodDto = {
   id: number;
   message_no: string;
@@ -350,7 +358,7 @@ export type ImagePostDto = ImageDto & {
   file: File;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Tuple = [any, any];
 
 export type KeyValueDto = {
@@ -359,13 +367,29 @@ export type KeyValueDto = {
   value: string;
 };
 
-export type NotificationDto = {
+// ############################################################
+//                       Roles
+// ############################################################
+
+export type RoleDto = {
   id: number;
-  slug: string;
-  actor: string;
-  verb: string;
-  recipient: string;
-  // TODO: There are more fields than this.
+  name: string;
+  permissions: string[];
+};
+
+export type UserGangRoleDto = {
+  id: number;
+  obj: GangDto;
+};
+
+export type UserGangSectionRoleDto = {
+  id: number;
+  obj: GangSectionDto;
+};
+
+export type UserOrganizationRoleDto = {
+  id: number;
+  obj: OrganizationDto;
 };
 
 // ############################################################
@@ -382,8 +406,9 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
-  organization: number;
+  organization: number | OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
+  recruitment_progress?: number;
 };
 
 export type RecruitmentSeparatePositionDto = {
@@ -466,6 +491,31 @@ export type RecruitmentApplicationStateDto = {
 export type RecruitmentApplicationStateChoicesDto = {
   recruiter_priority: [number, string][];
   recruiter_status: [number, string][];
+};
+
+export type RecruitmentTimeStatDto = {
+  hour: number;
+  count: number;
+};
+
+export type RecruitmentDateStatDto = {
+  date: string;
+  count: number;
+};
+
+export type RecruitmentCampusStatDto = {
+  campus: string;
+  count: number;
+};
+
+export type RecruitmentStatsDto = {
+  id?: number;
+  recruitment?: number;
+  total_applicants: number;
+  total_applications: number;
+  time_stats: RecruitmentTimeStatDto[];
+  date_stats: RecruitmentDateStatDto[];
+  campus_stats: RecruitmentCampusStatDto[];
 };
 
 // ############################################################
