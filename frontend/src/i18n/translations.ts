@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.common_tomorrow]: 'I morgen',
 
   // Other common
+  [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
   [KEY.common_no]: 'Nei',
@@ -162,7 +163,7 @@ export const nb = prepareTranslations({
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
   [KEY.common_filter]: 'Filter',
-
+  [KEY.common_administrate]: 'Administrer',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -359,6 +360,7 @@ export const nb = prepareTranslations({
   [KEY.admin_information_confirm_delete]: 'Er du sikker du vil slette denne informasjonssiden?',
   [KEY.admin_information_confirm_cancel]: 'Er du sikker på at du vil gå tilbake uten å lagre?',
   [KEY.admin_gangsadminpage_abbreviation]: 'Forkortelse',
+  [KEY.recruitment_create_room]: 'Opprett rom',
 
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
@@ -467,6 +469,7 @@ export const en = prepareTranslations({
   [KEY.common_tomorrow]: 'Tomorrow',
 
   // No category:
+  [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
   [KEY.common_no]: 'No',
@@ -604,7 +607,7 @@ export const en = prepareTranslations({
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_processed]: 'Processed',
-
+  [KEY.common_administrate]: 'Administrate',
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
   [KEY.common_ticket_type_free]: 'Free',
@@ -761,6 +764,8 @@ export const en = prepareTranslations({
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
   [KEY.recruitment_dashboard_description]:
     'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
+  [KEY.recruitment_create_room]: 'Create room',
+
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',

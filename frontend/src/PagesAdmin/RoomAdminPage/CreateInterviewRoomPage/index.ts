@@ -1,0 +1,1 @@
+export { CreateInterviewRoomPage } from './CreateInterviewRoomPage';

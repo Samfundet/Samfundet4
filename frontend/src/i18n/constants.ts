@@ -56,6 +56,7 @@ export const KEY = {
   common_tomorrow: 'common_tomorrow',
 
   // No category:
+  common_url: 'common_url',
   common_manage: 'common_manage',
   common_yes: 'common_yes',
   common_no: 'common_no',
@@ -176,7 +177,7 @@ export const KEY = {
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
   common_filter: 'common_filter',
-
+  common_administrate: 'common_administrate',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -295,6 +296,7 @@ export const KEY = {
   recruitment_all_applications: 'recruitment_all_applications',
   recruitment_not_applied: 'recruitment_not_applied',
   recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
+  recruitment_create_room: 'recruitment_create_room',
   shown_application_deadline: 'shown_application_deadline',
   actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',

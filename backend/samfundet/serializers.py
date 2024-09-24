@@ -604,6 +604,7 @@ class RecruitmentDateStatSerializer(serializers.ModelSerializer):
 
 class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
     campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+    applicant_percentage = serializers.SerializerMethodField(method_name='get_applicant_percentage', read_only=True)
 
     class Meta:
         model = RecruitmentCampusStat
@@ -611,6 +612,9 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
         return stat.campus.name_nb if stat.campus else None
+
+    def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
+        return stat.normalized_applicant_percentage()
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
@@ -709,6 +713,8 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentSeparatePosition
         fields = [
+            'id',
+            'recruitment',
             'name_nb',
             'name_en',
             'description_nb',
@@ -731,7 +737,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
 
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 

@@ -13,6 +13,7 @@ import type {
   ImagePostDto,
   InformationPageDto,
   InterviewDto,
+  InterviewRoomDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -27,6 +28,7 @@ import type {
   RecruitmentDto,
   RecruitmentGangDto,
   RecruitmentPositionDto,
+  RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
   RecruitmentUserDto,
   RegistrationDto,
@@ -624,6 +626,49 @@ export async function putRecruitmentPosition(
   return response;
 }
 
+export async function getRecruitmentSeparatePosition(
+  separatePositionId: string,
+): Promise<AxiosResponse<RecruitmentSeparatePositionDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_separateposition_detail,
+      urlParams: { pk: separatePositionId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function postRecruitmentSeparatePosition(
+  recruitmentSeparatePosition: RecruitmentSeparatePositionDto,
+): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_separateposition_list;
+
+  return await axios.post(url, recruitmentSeparatePosition, { withCredentials: true });
+}
+
+export async function putRecruitmentSeparatePosition(
+  separatePositionId: string,
+  recruitmentSeparatePosition: Partial<RecruitmentSeparatePositionDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_separateposition_detail,
+      urlParams: { pk: separatePositionId },
+    });
+  return await axios.put<RecruitmentPositionDto>(url, recruitmentSeparatePosition, { withCredentials: true });
+}
+
+export async function deleteRecruitmentSeparatePosition(separatePositionId: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_separateposition_detail,
+      urlParams: { pk: separatePositionId },
+    });
+  return await axios.delete<RecruitmentPositionDto>(url, { withCredentials: true });
+}
+
 export async function getRecruitmentRecruiterDashboard(recruitmentId: string): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
@@ -893,6 +938,46 @@ export async function putRecruitmentApplicationInterview(
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
 }
+
+// ############################################################
+//                       Interview rooms
+// ############################################################
+
+export async function getInterviewRoomsForRecruitment(
+  recruitmentId: string,
+): Promise<AxiosResponse<InterviewRoomDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_rooms_list,
+      queryParams: { recruitment: recruitmentId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getInterviewRoom(id: string): Promise<AxiosResponse<InterviewRoomDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function postInterviewRoom(data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__interview_rooms_list;
+  return await axios.post(url, data, { withCredentials: true });
+}
+
+export async function putInterviewRoom(id: string, data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.put(url, data, { withCredentials: true });
+}
+
+export async function deleteInterviewRoom(id: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.delete(url, { withCredentials: true });
+}
+
 // ############################################################
 //                       Purchase Feedback
 // ############################################################

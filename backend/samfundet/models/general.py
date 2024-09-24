@@ -86,6 +86,7 @@ class Campus(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=False, null=False)
     name_en = models.CharField(max_length=64, unique=True, blank=False, null=False)
     abbreviation = models.CharField(max_length=10, blank=True, null=True)
+    total_students = models.PositiveIntegerField(null=False, blank=False, default=1, verbose_name='Total students enrolled')
 
     def __str__(self) -> str:
         if not self.abbreviation:
