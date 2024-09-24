@@ -68,44 +68,46 @@ export function EventsAdminPage() {
   ];
 
   const data = events.map(function (event: EventDto) {
-    return [
-      dbT(event, 'title', i18n.language) as string,
-      { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
-      event.category,
-      event.host,
-      event.location,
-      t(getTicketTypeKey(event.ticket_type)),
-      {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.event,
-                  urlParams: { id: event.id },
-                }),
-              );
-            }}
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_events_edit,
-                  urlParams: { id: event.id },
-                }),
-              );
-            }}
-            onDelete={() => {
-              // TODO custom modal confirm
-              const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
-              if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
-                // TODO toast component? A bit too easy to delete events
-                deleteSelectedEvent(event.id);
-              }
-            }}
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        dbT(event, 'title', i18n.language) as string,
+        { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
+        event.category,
+        event.host,
+        event.location,
+        t(getTicketTypeKey(event.ticket_type)),
+        {
+          content: (
+            <CrudButtons
+              onView={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.event,
+                    urlParams: { id: event.id },
+                  }),
+                );
+              }}
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_events_edit,
+                    urlParams: { id: event.id },
+                  }),
+                );
+              }}
+              onDelete={() => {
+                // TODO custom modal confirm
+                const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
+                if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
+                  // TODO toast component? A bit too easy to delete events
+                  deleteSelectedEvent(event.id);
+                }
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const title = t(KEY.admin_events_administrate);

@@ -56,25 +56,27 @@ export function GangsAdminPage() {
   const tableData =
     currentGangType &&
     currentGangType.gangs.map(function (element2) {
-      return [
-        dbT(element2, 'name'),
-        element2.abbreviation,
-        element2.webpage,
-        {
-          content: (
-            <CrudButtons
-              onEdit={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.admin_gangs_edit,
-                    urlParams: { id: element2.id },
-                  }),
-                );
-              }}
-            />
-          ),
-        },
-      ];
+      return {
+        cells: [
+          dbT(element2, 'name'),
+          element2.abbreviation,
+          element2.webpage,
+          {
+            content: (
+              <CrudButtons
+                onEdit={() => {
+                  navigate(
+                    reverse({
+                      pattern: ROUTES.frontend.admin_gangs_edit,
+                      urlParams: { id: element2.id },
+                    }),
+                  );
+                }}
+              />
+            ),
+          },
+        ],
+      };
     });
 
   const title = t(KEY.adminpage_gangs_title);

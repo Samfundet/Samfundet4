@@ -106,7 +106,7 @@ export function SaksdokumentAdminPage() {
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <InputField icon="mdi:search" onChange={setSearchQuery} />
       <div className={styles.table_container}>
-        <Table columns={tableColumns} data={filterDocuments().map((doc) => documentTableRow(doc))} />
+        <Table columns={tableColumns} data={filterDocuments().map((doc) => ({ cells: documentTableRow(doc) }))} />
       </div>
     </AdminPageLayout>
   );

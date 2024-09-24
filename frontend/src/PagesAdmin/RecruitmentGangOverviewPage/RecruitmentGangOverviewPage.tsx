@@ -44,7 +44,9 @@ export function RecruitmentGangOverviewPage() {
       urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
     });
 
-    return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions];
+    return {
+      cells: [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions],
+    };
   });
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
