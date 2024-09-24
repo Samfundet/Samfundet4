@@ -420,7 +420,7 @@ export type RecruitmentSeparatePositionDto = {
 export type UserPriorityDto = {
   direction: number;
 };
-f;
+
 export type RecruitmentPositionDto = {
   id: string;
   name_nb: string;

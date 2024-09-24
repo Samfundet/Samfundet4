@@ -592,7 +592,6 @@ class RecruitmentCampusStat(models.Model):
         return self.recruitment_stats.resolve_org(return_id=return_id)
 
 
-
 class RecruitmentGangStat(models.Model):
     recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='gang_stats')
     gang = models.ForeignKey(Gang, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
