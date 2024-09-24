@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from django.db import models
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 from root.utils.mixins import CustomBaseModel
 
 
-class Role(models.Model):
+class Role(CustomBaseModel):
     name = models.CharField(max_length=255)
     permissions = models.ManyToManyField('auth.Permission')
+    content_type = models.ForeignKey(ContentType, null=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name
