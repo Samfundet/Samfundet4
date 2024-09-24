@@ -426,7 +426,7 @@ export type UserPriorityDto = {
 };
 
 export type RecruitmentPositionDto = {
-  id: string;
+  id: number;
   name_nb: string;
   name_en: string;
 
