@@ -38,10 +38,12 @@ from root.constants import (
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
+from .models.role import Role
 from .serializers import (
     TagSerializer,
     GangSerializer,
     MenuSerializer,
+    RoleSerializer,
     UserSerializer,
     EventSerializer,
     GroupSerializer,
@@ -310,6 +312,12 @@ class BlogPostView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.all()
+
+
+class RoleView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RoleSerializer
+    queryset = Role.objects.all()
 
 
 # =============================== #
