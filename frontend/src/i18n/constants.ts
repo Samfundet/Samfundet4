@@ -296,6 +296,7 @@ export const KEY = {
   recruitment_all_applications: 'recruitment_all_applications',
   recruitment_not_applied: 'recruitment_not_applied',
   recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
+  recruitment_create_room: 'recruitment_create_room',
   shown_application_deadline: 'shown_application_deadline',
   actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',

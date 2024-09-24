@@ -154,6 +154,16 @@ export function RecruitmentGangOverviewPage() {
         {t(KEY.common_edit)}
       </Button>
       <Button
+        theme="samf"
+        rounded={true}
+        link={reverse({
+          pattern: ROUTES.frontend.admin_recruitment_room_overview,
+          urlParams: { recruitmentId },
+        })}
+      >
+        {t(KEY.recruitment_create_room)}
+      </Button>
+      <Button
         theme="success"
         rounded={true}
         link={reverse({
