@@ -36,7 +36,7 @@ _Run typescript compiler check_
 yarn run tsc:check
 ```
 
-[For more useful commands see here](../../frontend/package.json)
+Didnt find what you were looking for? See all backend commands [here](../../frontend/package.json)
 
 ## Backend
 
@@ -86,4 +86,4 @@ _Run seed_
 poetry run python manage.py seed
 ```
 
-[For more useful commands see here](../../backend/aliases.sh)
+Didnt find what you were looking for? See all frontend commands [here](../../backend/aliases.sh)
