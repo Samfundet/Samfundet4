@@ -455,9 +455,33 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
     total_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applications')
 
+    # Total withdrawn applications
+    total_withdrawn = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total Withdrawn applications')
+
+    # Total accepted applicants
+    total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
+
+    # Average amount of different gangs an applicant applies for
+    average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+
+    # Average amount of applications for an applicant
+    average_applications_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
         self.total_applicants = self.recruitment.applications.values('user').distinct().count()
+        self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
+        self.total_accepted = (
+            self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        )
+        if self.total_applicants > 0:
+            self.average_gangs_applied_to_per_applicant = (
+                self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
+            )
+            self.average_applications_per_applicant = self.total_applications / self.total_applicants if self.total_applicants > 0 else 0
+        else:
+            self.average_gangs_applied_to_per_applicant = 0
+            self.average_applications_per_applicant = 0
         super().save(*args, **kwargs)
         self.generate_time_stats()
         self.generate_date_stats()
@@ -542,6 +566,7 @@ class RecruitmentCampusStat(models.Model):
     campus = models.ForeignKey(Campus, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
 
     count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+    applicant_percentage = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name='Percentages of enrolled students applied for campus')
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.campus} {self.count}'
@@ -550,7 +575,18 @@ class RecruitmentCampusStat(models.Model):
         self.count = User.objects.filter(
             id__in=self.recruitment_stats.recruitment.applications.values_list('user', flat=True).distinct(), campus=self.campus
         ).count()
+        self.applicant_percentage = self.count / (self.campus.total_students if self.campus.total_students else 1)
         super().save(*args, **kwargs)
+
+    def normalized_applicant_percentage(self) -> float:
+        applicant_percentages = list(
+            RecruitmentCampusStat.objects.filter(recruitment_stats=self.recruitment_stats).values_list('applicant_percentage', flat=True)
+        )
+        max_percent = max(applicant_percentages)
+        min_percent = min(applicant_percentages)
+        if max_percent - min_percent == 0:
+            return 0
+        return (self.applicant_percentage - min_percent) / (max_percent - min_percent)
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment_stats.resolve_org(return_id=return_id)
@@ -563,11 +599,19 @@ class RecruitmentGangStat(models.Model):
     application_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
     applicant_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
 
+    average_priority = models.FloatField(null=True, blank=True, verbose_name='Average priority')
+    total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted')
+    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total called and rejected')
+
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.gang} {self.application_count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         applications = RecruitmentApplication.objects.filter(recruitment=self.recruitment_stats.recruitment, recruitment_position__gang=self.gang)
         self.application_count = applications.count()
-        self.applicant_count = applications.values_list('user', flat=True).distinct().count()
+        self.applicant_count = applications.values('user').distinct().count()
+
+        self.average_priority = applications.aggregate(models.Avg('applicant_priority'))['applicant_priority__avg'] if len(applications) > 0 else 0
+        self.total_accepted = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        self.total_rejected = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED).values('user').distinct().count()
         super().save(*args, **kwargs)
