@@ -57,6 +57,7 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
+  RolesAdminPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
@@ -177,6 +178,16 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_users}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_USER]} element={<UsersAdminPage />} />}
+          />
+        </Route>
+        {/* Roles */}
+        <Route
+          element={<Outlet />}
+          handle={{ crumb: () => <Link url={ROUTES.frontend.admin_roles}>{t(KEY.common_roles)}</Link> }}
+        >
+          <Route
+            path={ROUTES.frontend.admin_roles}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
           />
         </Route>
         {/* Events */}
