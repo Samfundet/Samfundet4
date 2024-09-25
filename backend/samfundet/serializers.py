@@ -18,6 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .models.role import Role
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
@@ -485,6 +486,12 @@ class MenuSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class RoleSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -605,6 +612,7 @@ class RecruitmentDateStatSerializer(serializers.ModelSerializer):
 
 class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
     campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+    applicant_percentage = serializers.SerializerMethodField(method_name='get_applicant_percentage', read_only=True)
 
     class Meta:
         model = RecruitmentCampusStat
@@ -612,6 +620,9 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
         return stat.campus.name_nb if stat.campus else None
+
+    def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
+        return stat.normalized_applicant_percentage()
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
@@ -710,6 +721,8 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentSeparatePosition
         fields = [
+            'id',
+            'recruitment',
             'name_nb',
             'name_en',
             'description_nb',
@@ -732,7 +745,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
 
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 
