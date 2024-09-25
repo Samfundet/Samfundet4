@@ -38,10 +38,12 @@ from root.constants import (
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
+from .models.role import Role
 from .serializers import (
     TagSerializer,
     GangSerializer,
     MenuSerializer,
+    RoleSerializer,
     UserSerializer,
     EventSerializer,
     GroupSerializer,
@@ -79,6 +81,7 @@ from .serializers import (
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentForRecruiterSerializer,
+    RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentPositionForApplicantSerializer,
@@ -129,6 +132,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
@@ -308,6 +312,12 @@ class BlogPostView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.all()
+
+
+class RoleView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RoleSerializer
+    queryset = Role.objects.all()
 
 
 # =============================== #
@@ -639,6 +649,13 @@ class RecruitmentPositionForApplicantView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSeparatePositionView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentSeparatePositionSerializer
+    queryset = RecruitmentSeparatePosition.objects.all()
 
 
 class RecruitmentApplicationView(ModelViewSet):

@@ -24,11 +24,15 @@ export function RecruitmentPositionOverviewPage() {
   const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
 
+  const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
+
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   useEffect(() => {
+    // getRecruitmentApplicationStateChoices
     recruitmentId &&
       gangId &&
+      positionId &&
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((data) => {
           setRecruitmentApplicants(
@@ -36,13 +40,14 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status === 0 &&
-                recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setWithdrawnApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setRejectedApplicants(
@@ -50,7 +55,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
-                recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setAcceptedApplicants(
@@ -58,7 +63,7 @@ export function RecruitmentPositionOverviewPage() {
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
                 recruitmentApplicant.recruiter_status === 1 &&
-                recruitmentApplicant.recruitment_position?.id === positionId,
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setShowSpinner(false);
@@ -72,44 +77,46 @@ export function RecruitmentPositionOverviewPage() {
   }, [recruitmentId, gangId, positionId, navigate, t]);
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
-    updateRecruitmentApplicationStateForPosition(id, data)
-      .then((data) => {
-        setRecruitmentApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 0 &&
-              recruitmentApplicant.recruitment_position?.id === positionId,
-          ),
-        );
-        setWithdrawnApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id === positionId,
-          ),
-        );
-        setRejectedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
-              recruitmentApplicant.recruitment_position?.id === positionId,
-          ),
-        );
-        setAcceptedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 1 &&
-              recruitmentApplicant.recruitment_position?.id === positionId,
-          ),
-        );
-        setShowSpinner(false);
-      })
-      .catch((data) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(data);
-      });
+    positionId &&
+      updateRecruitmentApplicationStateForPosition(id, data)
+        .then((data) => {
+          setRecruitmentApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 0 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setWithdrawnApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setRejectedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setAcceptedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 1 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(data);
+        });
   };
 
   const title = t(KEY.recruitment_administrate_applications);

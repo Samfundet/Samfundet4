@@ -412,9 +412,13 @@ export type RecruitmentDto = {
 };
 
 export type RecruitmentSeparatePositionDto = {
+  id?: number;
   name_nb: string;
   name_en: string;
+  description_nb: string;
+  description_en: string;
   url: string;
+  recruitment?: string;
 };
 
 export type UserPriorityDto = {
@@ -422,7 +426,7 @@ export type UserPriorityDto = {
 };
 
 export type RecruitmentPositionDto = {
-  id: string;
+  id: number;
   name_nb: string;
   name_en: string;
 
@@ -506,6 +510,16 @@ export type RecruitmentDateStatDto = {
 export type RecruitmentCampusStatDto = {
   campus: string;
   count: number;
+  applicant_percentage: number;
+};
+
+export type RecruitmentGangStatDto = {
+  gang: string;
+  application_count: number;
+  applicant_count: number;
+  average_priority: number;
+  total_accepted: number;
+  total_rejected: number;
 };
 
 export type RecruitmentStatsDto = {
@@ -513,9 +527,24 @@ export type RecruitmentStatsDto = {
   recruitment?: number;
   total_applicants: number;
   total_applications: number;
+  total_withdrawn: number;
+  total_accepted: number;
+  average_gangs_applied_to_per_applicant: number;
+  average_applications_per_applicant: number;
   time_stats: RecruitmentTimeStatDto[];
   date_stats: RecruitmentDateStatDto[];
+  gang_stats: RecruitmentGangDto[];
   campus_stats: RecruitmentCampusStatDto[];
+};
+
+export type InterviewRoomDto = {
+  id: number;
+  name: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+  recruitment: string;
+  gang?: number;
 };
 
 // ############################################################
