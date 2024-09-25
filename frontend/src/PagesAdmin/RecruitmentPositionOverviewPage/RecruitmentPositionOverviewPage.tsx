@@ -35,6 +35,7 @@ export function RecruitmentPositionOverviewPage() {
       positionId &&
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((data) => {
+          console.log(data.data)
           setRecruitmentApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
