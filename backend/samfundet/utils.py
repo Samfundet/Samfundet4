@@ -119,30 +119,26 @@ def generate_interview_timeblocks(recruitment_id):
     positions = RecruitmentPosition.objects.filter(recruitment=recruitment)
     block_count = 0
 
-    for position in positions:
-        # Add this check here
-        # if not position.interviewers.exists():
-        #    print(f'No interviewers assigned to position {position.id}')
-        #    continue
+    current_date = timezone.now().date()  # Get the current date
 
-        start_date = recruitment.visible_from.date()
+    for position in positions:
+        start_date = max(recruitment.visible_from.date(), current_date)  # Use the later of visible_from or current date
         end_date = recruitment.actual_application_deadline.date()
-        start_time = time(8, 0)  # 8:00 AM
-        end_time = time(20, 0)  # 8:00 PM
-        interval = timedelta(minutes=30)  # 30-minute intervals
+        # create a timeframe for any day, for when interviews can be held.
+        start_time = time(14, 0)  # TODO: decide if these should be modefialbe. Might want want to set this timeframe in some other way.
+        end_time = time(23, 0)  #  TODO: -- "" --
+        interval = timedelta(minutes=30)  # 30-minute intervals. TODO: decide if this is needed.
 
         current_date = start_date
         while current_date <= end_date:
             current_datetime = timezone.make_aware(datetime.combine(current_date, start_time))
             end_datetime = timezone.make_aware(datetime.combine(current_date, end_time))
 
-            unavailability = get_unavailability(
-                recruitment
-                # , current_datetime, end_datetime, position
-            )
+            unavailability = get_unavailability(recruitment)
             blocks = generate_blocks(position, current_datetime, end_datetime, unavailability, interval)
 
             for block in blocks:
+                # adds the blocks to the database. TODO: check if this can be done in a more efficient way, maybe bulk add?
                 interview_block = InterviewTimeblock.objects.create(
                     recruitment_position=position,
                     date=current_date,
@@ -160,20 +156,16 @@ def generate_interview_timeblocks(recruitment_id):
 
 def get_unavailability(recruitment):
     # Fetch all OccupiedTimeslot objects for the given recruitment
-    occupied_timeslots = OccupiedTimeslot.objects.filter(
-        recruitment=recruitment
-        # , user__in=position.interviewers.all(), start_dt__lt=end_dt, end_dt__gt=start_dt
-    ).order_by('start_dt')
-
-    # Loop through the queryset and print field values for each object
-    # for slot in occupied_timeslots:
-    #    print(f'OccupiedTimeslot ID: {slot.id}, User: {slot.user}, Start: {slot.start_dt}, End: {slot.end_dt}, Recruitment: {slot.recruitment}')
+    occupied_timeslots = OccupiedTimeslot.objects.filter(recruitment=recruitment).order_by('start_dt')
 
     return occupied_timeslots
 
 
+# this function generates timeblocks. If you want to understand interview time blocks read the documentation. # TODO: add documentation.
 def generate_blocks(position, start_dt, end_dt, unavailability, interval):
-    all_interviewers = set(position.interviewers.all())  # All interviewers for this position
+    all_interviewers = set(
+        position.interviewers.all()
+    )  # All interviewers for this position. TODO: decide if we want to have a predefined set of POSSIBLE interviewers for some position
     blocks = []
     current_dt = start_dt
 
@@ -187,7 +179,7 @@ def generate_blocks(position, start_dt, end_dt, unavailability, interval):
                 # Remove the unavailable interviewer for this block
                 available_interviewers.discard(slot.user)
 
-        # Always create a new block if interviewers change
+        # Always create a new block if available interviewers change. #TODO add print statements to check if this acctually works as expected.
         if not blocks or len(blocks[-1]['available_interviewers']) != len(available_interviewers):
             # Create a new block when interviewer availability changes
             blocks.append({'start': current_dt, 'end': block_end, 'available_interviewers': available_interviewers})
@@ -200,15 +192,11 @@ def generate_blocks(position, start_dt, end_dt, unavailability, interval):
     return blocks
 
 
-from datetime import timedelta
-
-
 def allocate_interviews_for_position(position, limit_to_first_applicant=False) -> int:
-    print(f'Starting allocation for position: {position.name_en}')
-
     # Define interview duration
     interview_duration = timedelta(minutes=30)
 
+    # want the higest rated earliest blocks first. If all blocks are equaly rated the earliest block will be first.
     timeblocks = sorted(InterviewTimeblock.objects.filter(recruitment_position=position), key=lambda block: (-block.rating, block.start_dt))
     if not timeblocks:
         raise NoTimeBlocksAvailableError(f'No available time blocks for position: {position.name_en}')
@@ -225,7 +213,7 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
     for slot in OccupiedTimeslot.objects.filter(recruitment=position.recruitment):
         applicant_unavailability[slot.user.id].append((slot.start_dt, slot.end_dt))
 
-    # Collect unavailability for each interviewer and existing interviews
+    # Collect unavailability for each interviewer and existing interviews. #TODO check if this is needed, we allready have interview time blocks, which is an abstraction of interviewers availability.
     existing_interviews = Interview.objects.filter(applications__recruitment_position=position)
     for interview in existing_interviews:
         for interviewer in interview.interviewers.all():
@@ -234,16 +222,20 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
         for interviewer in position.interviewers.all():
             interviewer_unavailability[interviewer.id].append((interview.interview_time, interview.interview_time + interview_duration))
 
-    interview_count = 0
+    interview_count = 0  # TODO remove, it is only used to check if something happens. Add better exceptions insted
     all_applicants_unavailable = True
-    current_time = timezone.now() + timedelta(hours=24)  # Ensure interviews are at least 24 hours in the future
+    current_time = timezone.now() + timedelta(
+        hours=24
+    )  # TODO: find out if 24h is needed. Ensure interviews are at least 24 hours in the future. Interviews should be planned well in advance.
 
-    future_blocks = [block for block in timeblocks if block.end_dt > current_time]
+    future_blocks = [block for block in timeblocks if block.end_dt > current_time]  # for checking if there are any timeslots available.
     if not future_blocks:
         raise NoFutureTimeSlotsError(f'No time slots available at least 24 hours in the future for position: {position.name_en}')
 
     for block in future_blocks:
-        block_start = max(block.start_dt, current_time)
+        block_start = max(
+            block.start_dt, current_time
+        )  # TODO: check if this is to specific. Do we care about seting interviews from "this monent" when interviews onlt can be allocated 24h in advance?
         current_time = block_start
 
         while current_time + interview_duration <= block.end_dt and applications:
@@ -251,7 +243,7 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
 
             # Check if this time slot is already occupied by an existing interview
             if any(interview.interview_time == current_time for interview in existing_interviews):
-                print(f'  Slot {current_time} - {interview_end_time} already has an interview')
+                # TODO: replace print with a good exception. print(f'  Slot {current_time} - {interview_end_time} already has an interview')
                 current_time += interview_duration
                 continue
 
@@ -260,20 +252,19 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
             )
 
             if not available_interviewers:
-                print(f'  No available interviewers for slot: {current_time} - {interview_end_time}')
+                # TODO: replace print with a good exception. print(f'  No available interviewers for slot: {current_time} - {interview_end_time}')
                 current_time += interview_duration
                 continue
 
             for application in applications[:]:
                 applicant = application.user
-                print(f'  Checking applicant: {applicant.username}')
 
                 if is_applicant_available(applicant, current_time, interview_end_time, applicant_unavailability):
                     all_applicants_unavailable = False
                     # Create and assign a new interview
                     interview = Interview.objects.create(
                         interview_time=current_time,
-                        interview_location=f'Location for {position.name_en}',
+                        interview_location=f'Location for {position.name_en}',  # TODO: set inteview room dependent on what rooms are available in the DB at the time of the intrerview
                         room=None,  # Set the room if required
                     )
                     interview.interviewers.set(available_interviewers)
@@ -283,7 +274,8 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
                     application.interview = interview
                     application.save()
 
-                    # Mark this time as occupied for the applicant and interviewers
+                    # Mark this time of interview as occupied for the applicant and interviewers.
+                    # Applicants are given a 2 hour buffer after interviews to avoid time conflict with other positions.
                     mark_applicant_unavailable(applicant, current_time, interview_end_time)
                     mark_interviewers_unavailable(available_interviewers, current_time, interview_end_time, interviewer_unavailability)
 
@@ -292,9 +284,10 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
 
                     interview_count += 1
                     applications.remove(application)
-                    print(f'  Allocated interview for {applicant.username} at {current_time}')
+                    # TODO: Create a Exception for informing of what interviews was created in a HTTP response ??? print(f'  Allocated interview for {applicant.username} at {current_time}')
 
                     if limit_to_first_applicant:
+                        # TODO remove this conditional with "limit to first applicant". It was used for testing.
                         return interview_count
 
                     break
@@ -317,7 +310,7 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
             f'Not enough time blocks to accommodate all applications for position: {position.name_en}. Allocated {interview_count} interviews.'
         )
 
-    return interview_count
+    return interview_count  # TODO, decide if this is needed
 
 
 def calculate_rating(start_dt, end_dt, available_interviewers_count) -> int:
@@ -334,13 +327,14 @@ def is_applicant_available(applicant, start_dt, end_dt, unavailability) -> bool:
     return True
 
 
-def mark_applicant_unavailable(applicant, start_dt, end_dt) -> None:
-    """Mark the applicant's timeslot as occupied."""
+def mark_applicant_unavailable(applicant, start_dt, end_dt, buffer_hours=2):
+    """Mark the applicant's timeslot as occupied, including a buffer period after the interview."""
+    buffer_end = end_dt + timedelta(hours=buffer_hours)
     OccupiedTimeslot.objects.create(
         user=applicant,
-        recruitment=applicant.applications.first().recruitment,  # Assuming a valid recruitment exists
+        recruitment=applicant.applications.first().recruitment,
         start_dt=start_dt,
-        end_dt=end_dt,
+        end_dt=buffer_end,
     )
 
 
