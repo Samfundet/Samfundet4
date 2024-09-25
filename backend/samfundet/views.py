@@ -6,6 +6,7 @@ import hmac
 import hashlib
 from typing import Any
 from datetime import datetime, timedelta
+from .exceptions import *
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -1303,19 +1304,27 @@ class PurchaseFeedbackView(CreateAPIView):
 class AllocateInterviewsForPositionView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request, pk):
+    def get(self, request, pk):
         try:
-            # Get the specific recruitment position
             position = get_object_or_404(RecruitmentPosition, id=pk)
-
-            # Allocate interviews for the position (method explained below)
             interview_count = allocate_interviews_for_position(position)
-
             return Response(
                 {'message': f'Interviews allocated successfully for position {pk}.', 'interviews_allocated': interview_count},
                 status=status.HTTP_200_OK,
             )
+        except NoTimeBlocksAvailableError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except NoApplicationsWithoutInterviewsError as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except NoAvailableInterviewersError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except AllApplicantsUnavailableError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except InsufficientTimeBlocksError as e:
+            return Response({'error': str(e), 'partial_allocation': True}, status=status.HTTP_206_PARTIAL_CONTENT)
+        except NoFutureTimeSlotsError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except RecruitmentPosition.DoesNotExist:
             return Response({'error': f'Recruitment position with id {pk} does not exist.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': f'Failed to allocate interviews: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'An unexpected error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

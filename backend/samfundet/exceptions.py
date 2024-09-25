@@ -35,3 +35,9 @@ class InsufficientTimeBlocksError(InterviewAllocationError):
     """Raised when there are not enough time blocks to accommodate all applications."""
 
     pass
+
+
+class NoFutureTimeSlotsError(InterviewAllocationError):
+    """Raised when there are no time slots available at least 24 hours in the future."""
+
+    pass
