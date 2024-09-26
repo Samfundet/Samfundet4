@@ -81,10 +81,11 @@ import {
   type PositionLoader,
   type RecruitmentLoader,
   type SeparatePositionLoader,
+  gangLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
-  separatePositionLoader, gangLoader,
+  separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
 
