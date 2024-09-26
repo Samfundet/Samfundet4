@@ -1,7 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 import type {
   ClosedPeriodDto,
-  CreateInterviewDto,
   EventDto,
   EventGroupDto,
   FeedbackDto,
@@ -979,7 +978,7 @@ export async function deleteInterviewRoom(id: string): Promise<AxiosResponse> {
   return await axios.delete(url, { withCredentials: true });
 }
 
-export async function postInterview(interviewObject: CreateInterviewDto): Promise<AxiosResponse<CreateInterviewDto>> {
+export async function postInterview(interviewObject: InterviewDto): Promise<AxiosResponse<InterviewDto>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__interview_list;
   const response = await axios.post(url, interviewObject, { withCredentials: true });
   return response;

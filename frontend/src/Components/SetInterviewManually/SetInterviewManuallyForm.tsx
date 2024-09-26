@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability, postInterview } from '~/api'; //postOccupiedTimeslots removed this
+import {
+  getOccupiedTimeslots,
+  getRecruitmentAvailability,
+  postInterview,
+  setRecruitmentApplicationInterview,
+} from '~/api';
 import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
-// import { OccupiedTimeslotDto } from '~/dto';
-import { CreateInterviewDto } from '~/dto';
+import { InterviewDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { CalendarMarker } from '~/types';
 import { Button } from '../Button';
@@ -57,7 +61,7 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicat
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
-  function convertToDateObject(dateTimeDict: Record<string, string[]>): Date  {
+  function convertToDateObject(dateTimeDict: Record<string, string[]>): Date {
     const dateKey = Object.keys(dateTimeDict)[0];
     const timeValue = dateTimeDict[dateKey][0];
 
@@ -70,20 +74,30 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicat
   }
 
   function save() {
-    const data: CreateInterviewDto = {
-      interview_time: convertToDateObject(interviewTimeslot),
+    const data1: InterviewDto = {
+      interview_time: convertToDateObject(interviewTimeslot).toISOString(),
       interview_location: location,
-      applications : [applicationId]
     };
-  
-      postInterview(data)
-        .then(() => {
-          toast.success(t(KEY.common_update_successful));
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
-    });
+
+    postInterview(data1)
+      .then((response) => {
+        const createdInterview = response.data;
+        console.log('Created interview:', createdInterview);
+
+        const interviewData: InterviewDto = {
+          interview_time: createdInterview.interview_time,
+          interview_location: createdInterview.interview_location,
+        };
+
+        return setRecruitmentApplicationInterview(applicationId, interviewData);
+      })
+      .then(() => {
+        toast.success(t(KEY.common_update_successful));
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
   }
 
   const markers = useMemo(() => {
@@ -106,9 +120,6 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicat
     }
     return x;
   }, [timeslots, selectedTimeslots]);
-
-  // console.log('Intervjutid:' + interviewTimeslot, 'Intervjulokasjon:' + location, 'ApplicationId:' + applicationId);
-  console.log(interviewTimeslot);
 
   return (
     <div className={styles.container}>

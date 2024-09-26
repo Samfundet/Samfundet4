@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { formatDateYMD, lowerCapitalize } from '~/utils';
-import { TimeslotButton } from '../TimeslotButton';
+import { TimeslotButton } from './components/TimeslotButton';
+import styles from './TimeslotContainer.module.scss';
 
 type Props = {
   selectedDate: Date | null;
