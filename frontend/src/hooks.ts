@@ -6,11 +6,11 @@ import type { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/types';
-import type { TextItemValue } from './constants/TextItems';
 
 // Make typescript happy.
 declare global {
