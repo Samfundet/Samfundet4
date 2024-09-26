@@ -1,19 +1,19 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter } from '~/api';
-import { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { Table } from '~/Components/Table';
-import classNames from 'classnames';
-import { useNavigate, useParams } from 'react-router-dom';
-import { STATUS } from '~/http_status_codes';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
@@ -108,14 +108,19 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Table
           columns={[
+            '#',
             t(KEY.common_recruitmentposition),
             t(KEY.common_gang),
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data={otherRecruitmentApplication.map(function (element) {
+          data={otherRecruitmentApplication.map((element) => {
             return {
               cells: [
+              {
+                sortable: true,
+                content: element.applicant_priority,
+              },
                 {
                   content: (
                     <Link

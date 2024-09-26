@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
 import { getGangList } from '~/api';
-import { GangTypeDto } from '~/dto';
+import type { GangTypeDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -25,6 +25,7 @@ export function GangsAdminPage() {
 
   // Stuff to do on first render.
   // TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getGangList()
       .then((data) => {
@@ -40,7 +41,6 @@ export function GangsAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
@@ -53,31 +53,27 @@ export function GangsAdminPage() {
 
   const currentGangType = currentGangTypeTab?.value;
 
-  const tableData =
-    currentGangType &&
-    currentGangType.gangs.map(function (element2) {
-      return {
-        cells: [
-          dbT(element2, 'name'),
-          element2.abbreviation,
-          element2.webpage,
-          {
-            content: (
-              <CrudButtons
-                onEdit={() => {
-                  navigate(
-                    reverse({
-                      pattern: ROUTES.frontend.admin_gangs_edit,
-                      urlParams: { id: element2.id },
-                    }),
-                  );
-                }}
-              />
-            ),
-          },
-        ],
-      };
-    });
+  const tableData = currentGangType?.gangs.map((element2) => ({
+    cells: [
+      dbT(element2, 'name'),
+      element2.abbreviation,
+      element2.webpage,
+      {
+        content: (
+          <CrudButtons
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_gangs_edit,
+                  urlParams: { id: element2.id },
+                }),
+              );
+            }}
+          />
+        ),
+      },
+    ],
+  }));
 
   const title = t(KEY.adminpage_gangs_title);
   const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
@@ -89,8 +85,8 @@ export function GangsAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab}></TabBar>
-      <br></br>
+      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab} />
+      <br />
       {currentGangType && (
         <>
           <Table

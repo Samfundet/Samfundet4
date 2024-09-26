@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { Children } from '~/types';
-import { TimeDisplay } from '../TimeDisplay';
+import { TimeDisplay } from '~/Components';
+import type { Children } from '~/types';
 import styles from './Table.module.scss';
 
 // Supported cell values for sorting
@@ -133,12 +133,12 @@ export function Table({
   }
 
   function getSortableIcon(column: number): string {
-    if (sortColumn != column) return 'carbon:chevron-sort';
+    if (sortColumn !== column) return 'carbon:chevron-sort';
     return sortInverse ? 'carbon:chevron-up' : 'carbon:chevron-down';
   }
 
   function getIconClass(column: number): string {
-    if (sortColumn != column) return styles.icon;
+    if (sortColumn !== column) return styles.icon;
     return classNames(styles.icon, styles.active_icon);
   }
 
@@ -187,36 +187,45 @@ export function Table({
           <tr>
             {(hasChildTable(data) || isChildTable) && <th></th>}
 
-            {columns &&
-              columns?.map((col, index) => {
-                if (isColumnSortable(col)) {
-                  return (
-                    <th
-                      key={index}
-                      className={classNames(headerColumnClassName, styles.sortable_th)}
-                      onClick={() => sort(index)}
-                    >
-                      {getColumnContent(col)}
-                      {!isHideSortButton(col) && (
-                        <span className={styles.sort_icons}>
-                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
-                        </span>
-                      )}
-                    </th>
-                  );
-                } else {
-                  return (
-                    <th className={headerColumnClassName} key={index}>
-                      {getColumnContent(col)}
-                    </th>
-                  );
-                }
-              })}
+            {columns?.map((col, index) => {
+              if (isColumnSortable(col)) {
+                return (
+                  <th
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+                    key={index}
+                    className={classNames(headerColumnClassName, styles.sortable_th)}
+                    onClick={() => sort(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sort(index);
+                      }
+                    }}
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
+                    tabIndex={0}
+                  >
+                    {getColumnContent(col)}
+                    {!isHideSortButton(col) && (
+                      <span className={styles.sort_icons}>
+                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
+                      </span>
+                    )}
+                  </th>
+                );
+              }
+              return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+                <th className={headerColumnClassName} key={index}>
+                  {getColumnContent(col)}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
             <>
+              {/* biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available */}
               <tr
                 className={bodyRowClassName}
                 key={index1}
@@ -229,6 +238,7 @@ export function Table({
                 )}
                 {row &&
                   row.cells.map((cell, index2) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
                     <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
                       {getCellContent(cell ?? '')}
                     </td>

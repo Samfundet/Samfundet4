@@ -78,6 +78,8 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    RecruitmentForRecruiterSerializer,
+    RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentPositionForApplicantSerializer,
@@ -85,6 +87,7 @@ from .serializers import (
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
+    RecruitmentShowUnprocessedApplicationsSerializer,
 )
 from .models.event import (
     Event,
@@ -127,6 +130,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
@@ -605,6 +609,13 @@ class RecruitmentView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentForRecruiterView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentForRecruiterSerializer
+    queryset = Recruitment.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
     permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
     serializer_class = RecruitmentStatisticsSerializer
@@ -630,6 +641,13 @@ class RecruitmentPositionForApplicantView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSeparatePositionView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentSeparatePositionSerializer
+    queryset = RecruitmentSeparatePosition.objects.all()
 
 
 class RecruitmentApplicationView(ModelViewSet):
@@ -688,6 +706,25 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
         return None
 
 
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentUnprocessedApplicationsPerRecruitment(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentShowUnprocessedApplicationsSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentApplication.objects.filter(
+                recruitment=recruitment,
+                recruiter_status=RecruitmentStatusChoices.NOT_SET,
+            )
+        return None
+
+
 class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -701,6 +738,21 @@ class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
         ).filter(interview_count__lt=3, application_count__gte=3)
 
         return Response(data=UserForRecruitmentSerializer(data, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
+
+
+class RecruitmentRecruiterDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = get_object_or_404(Recruitment, pk=pk)
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview__interviewers__in=[request.user])
+        return Response(
+            data={
+                'recruitment': RecruitmentSerializer(recruitment).data,
+                'applications': RecruitmentApplicationForGangSerializer(applications, many=True).data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class ApplicantsWithoutInterviewsView(APIView):

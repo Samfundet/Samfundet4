@@ -1,19 +1,18 @@
-/* eslint-disable prettier/prettier */
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link, Page } from '~/Components';
+import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForApplicant, putRecruitmentPriorityForUser } from '~/api';
-import { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
+import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
 import styles from './RecruitmentApplicationsOverviewPage.module.scss';
-import { OccupiedFormModal } from '~/Components/OccupiedForm';
-import { reverse } from '~/named-urls';
-import { Text } from '~/Components/Text/Text';
 
 export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();
@@ -124,7 +123,7 @@ export function RecruitmentApplicationsOverviewPage() {
             {t(KEY.common_go_back)}
           </Button>
           <h1 className={styles.header}>{t(KEY.recruitment_my_applications)}</h1>
-          <div className={styles.empty_div}></div>
+          <div className={styles.empty_div} />
         </div>
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
         {applications.length > 0 ? (
@@ -137,7 +136,7 @@ export function RecruitmentApplicationsOverviewPage() {
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}
 
-        <OccupiedFormModal recruitmentId={parseInt(recruitmentID ?? '')} />
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
 
         {withdrawnApplications.length > 0 && (
           <div className={styles.withdrawnContainer}>

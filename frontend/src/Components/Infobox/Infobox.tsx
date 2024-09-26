@@ -15,7 +15,8 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL }: InfoboxProps)
       <a className={styles.with_url} href={infoURL}>
         <div className={styles.infobox_wrap} style={{ backgroundColor: bg }}>
           <div className={styles.img_wrap}>
-            <img className={styles.infobox_img} src={img} alt="Image Missing"></img>
+            {/* biome-ignore lint/a11y/noRedundantAlt: can't describe dynamic image */}
+            <img className={styles.infobox_img} src={img} alt="Infobox image" />
           </div>
           <div className={styles.infobox_txt_wrap}>
             <h1 className={styles.infobox_h1}>{title}</h1>
@@ -41,7 +42,8 @@ export function Infobox({ title, img, infoTxt, bgColor, infoURL }: InfoboxProps)
     return (
       <div className={styles.infobox_wrap} style={{ backgroundColor: bg }}>
         <div className={styles.img_wrap}>
-          <img className={styles.infobox_img_noURL} src={img} alt="Image Missing"></img>
+          {/* biome-ignore lint/a11y/noRedundantAlt: can't describe dynamic image */}
+          <img className={styles.infobox_img_noURL} src={img} alt="Infobox image" />
         </div>
         <div className={styles.infobox_txt_wrap}>
           <h1 className={styles.no_url_h1}>{title}</h1>
