@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import {
-  getOccupiedTimeslots,
-  getRecruitmentAvailability,
-  postInterview,
-  setRecruitmentApplicationInterview,
-} from '~/api';
+import { getOccupiedTimeslots, getRecruitmentAvailability, setRecruitmentApplicationInterview } from '~/api';
 import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
 import { InterviewDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -14,13 +9,19 @@ import { CalendarMarker } from '~/types';
 import { Button } from '../Button';
 import styles from './SetInterviewManually.module.scss';
 
-type Props = {
+type SetInterviewManuallyFormProps = {
   recruitmentId: number;
   onCancel?: () => void;
   applicationId: string;
+  onSave: () => void;
 };
 
-export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicationId }: Props) {
+export function SetInterviewManuallyForm({
+  recruitmentId = 1,
+  onCancel,
+  applicationId,
+  onSave,
+}: SetInterviewManuallyFormProps) {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
@@ -74,24 +75,14 @@ export function SetInterviewManuallyForm({ recruitmentId = 1, onCancel, applicat
   }
 
   function save() {
-    const data1: InterviewDto = {
+    const data: InterviewDto = {
       interview_time: convertToDateObject(interviewTimeslot).toISOString(),
       interview_location: location,
     };
 
-    postInterview(data1)
-      .then((response) => {
-        const createdInterview = response.data;
-        console.log('Created interview:', createdInterview);
-
-        const interviewData: InterviewDto = {
-          interview_time: createdInterview.interview_time,
-          interview_location: createdInterview.interview_location,
-        };
-
-        return setRecruitmentApplicationInterview(applicationId, interviewData);
-      })
+    setRecruitmentApplicationInterview(applicationId, data)
       .then(() => {
+        onSave();
         toast.success(t(KEY.common_update_successful));
       })
       .catch((error) => {

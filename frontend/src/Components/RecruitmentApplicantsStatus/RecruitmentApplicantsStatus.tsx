@@ -20,6 +20,7 @@ type RecruitmentApplicantsStatusProps = {
   gangId: number | string | undefined;
   positionId: number | string | undefined;
   updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
+  onInterviewChange: () => void;
 };
 
 // TODO add backend to fetch these
@@ -50,6 +51,7 @@ export function RecruitmentApplicantsStatus({
   gangId,
   positionId,
   updateStateFunction,
+  onInterviewChange,
 }: RecruitmentApplicantsStatusProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
@@ -210,6 +212,7 @@ export function RecruitmentApplicantsStatus({
             recruitmentId={Number(recruitmentId) || 0}
             isButtonRounded={true}
             applicationId={application.id}
+            onSetInterview={onInterviewChange}
           />
         ),
       },
