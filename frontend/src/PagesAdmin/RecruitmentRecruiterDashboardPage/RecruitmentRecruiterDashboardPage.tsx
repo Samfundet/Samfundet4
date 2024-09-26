@@ -46,7 +46,7 @@ export function RecruitmentRecruiterDashboardPage() {
     return <></>;
   }
 
-  const title = `${t(KEY.recruitment_overview)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
+  const title = `${t(KEY.recruitment_recruiter_dashboard)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
     recruitment,
     'name',
   )}`;

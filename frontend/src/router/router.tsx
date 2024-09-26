@@ -379,10 +379,6 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
-            element={<RecruitmentRecruiterDashboardPage />}
-          />
-          <Route
             path={ROUTES.frontend.admin_recruitment_gang_all_applications}
             element={<RecruitmentGangAllApplicantsAdminPage />}
           />
@@ -429,6 +425,23 @@ export const router = createBrowserRouter(
               },
             }}
           >
+            <Route
+              path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
+              element={<RecruitmentRecruiterDashboardPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ recruitment }: RecruitmentLoader) => (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_recruiter_dashboard,
+                      urlParams: { recruitmentId: recruitment?.id },
+                    })}
+                  >
+                    {t(KEY.recruitment_recruiter_dashboard)}
+                  </Link>
+                ),
+              }}
+            />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_separateposition_create}
               element={
