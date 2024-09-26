@@ -37,8 +37,8 @@ export function RecruitmentStatistics() {
         <>
           <Table
             data={[
-              [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants],
-              [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications],
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants] },
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications] },
             ]}
           />
           <div className={styles.subContainer}>

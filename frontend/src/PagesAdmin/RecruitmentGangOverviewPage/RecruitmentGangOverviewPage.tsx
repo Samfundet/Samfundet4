@@ -82,22 +82,24 @@ export function RecruitmentGangOverviewPage() {
       urlParams: { recruitmentId: recruitmentId, separatePositionId: separate_position.id },
     });
 
-    return [
-      { content: <Link url={pageUrl}>{dbT(separate_position, 'name')}</Link> },
-      { content: <Link url={separate_position.url}>{separate_position.url}</Link> },
-      {
-        content: (
-          <CrudButtons
-            onDelete={() => {
-              deleteSeparatePositionHandler(separate_position);
-            }}
-            onEdit={() => {
-              navigate({ url: pageUrl });
-            }}
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        { content: <Link url={pageUrl}>{dbT(separate_position, 'name')}</Link> },
+        { content: <Link url={separate_position.url}>{separate_position.url}</Link> },
+        {
+          content: (
+            <CrudButtons
+              onDelete={() => {
+                deleteSeparatePositionHandler(separate_position);
+              }}
+              onEdit={() => {
+                navigate({ url: pageUrl });
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;

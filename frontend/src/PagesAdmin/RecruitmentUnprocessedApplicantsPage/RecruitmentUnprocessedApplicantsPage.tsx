@@ -8,12 +8,12 @@ import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 const data = [
-  ['John Doe', 'High', 'john.doe@example.com', 'Frontend Developer', 'vil ha'],
-  ['Jane Smith', 'Medium', 'jane.smith@example.com', 'Backend Developer', 'reservert'],
-  ['Michael Johnson', 'Low', 'michael.johnson@example.com', 'Data Scientist', 'automatisk avslag'],
-  ['Emily Davis', 'High', 'emily.davis@example.com', 'Full Stack Developer', 'ikke satt'],
-  ['John Doe', 'Medium', 'john.doe@example.com', 'Project Manager', 'vil ha'],
-  ['Chris Brown', 'Low', 'chris.brown@example.com', 'QA Engineer', 'reservert'],
+  { cells: ['John Doe', 'High', 'john.doe@example.com', 'Frontend Developer', 'vil ha'] },
+  { cells: ['Jane Smith', 'Medium', 'jane.smith@example.com', 'Backend Developer', 'reservert'] },
+  { cells: ['Michael Johnson', 'Low', 'michael.johnson@example.com', 'Data Scientist', 'automatisk avslag'] },
+  { cells: ['Emily Davis', 'High', 'emily.davis@example.com', 'Full Stack Developer', 'ikke satt'] },
+  { cells: ['John Doe', 'Medium', 'john.doe@example.com', 'Project Manager', 'vil ha'] },
+  { cells: ['Chris Brown', 'Low', 'chris.brown@example.com', 'QA Engineer', 'reservert'] },
 ];
 
 export function RecruitmentUnprocessedApplicantsPage() {
