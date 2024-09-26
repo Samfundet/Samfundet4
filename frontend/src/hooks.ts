@@ -10,6 +10,7 @@ import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/types';
+import type { TextItemValue } from './constants/TextItems';
 
 // Make typescript happy.
 declare global {
@@ -69,7 +70,7 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: string, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;

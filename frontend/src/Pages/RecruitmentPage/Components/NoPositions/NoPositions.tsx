@@ -4,7 +4,7 @@ import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './NoPositions.module.scss';
-import { OrgNameType, OrgNameTypeValue } from '~/types';
+import { OrgNameType, type OrgNameTypeValue } from '~/types';
 
 type NoRecruitmentProps = {
   organization?: Exclude<OrgNameTypeValue, typeof OrgNameType.FALLBACK>;
