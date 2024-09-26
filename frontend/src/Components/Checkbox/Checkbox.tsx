@@ -1,56 +1,21 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import React from 'react';
 import styles from './Checkbox.module.scss';
-
-type Alignment = 'left' | 'right';
 
 export type CheckboxProps = {
   name?: string;
-  label?: string;
   disabled?: boolean;
   checked?: boolean;
-  onClick?: () => void;
-  alignment?: Alignment;
   className?: string;
-  onChange?: (value: boolean) => void;
-  error?: string | boolean;
-  value?: boolean;
+  onChange?: (...event: unknown[]) => void;
 };
 
-// TODO: Add error handling, eg. display red text when error is set
-export function Checkbox({
-  name,
-  onClick,
-  disabled,
-  checked,
-  className,
-  alignment = 'left',
-  label,
-  onChange,
-}: CheckboxProps) {
-  const [isChecked, setIsChecked] = useState(checked ?? false);
-
-  function handleChange() {
-    setIsChecked(!isChecked);
-    if (onChange !== undefined) {
-      return onChange?.(isChecked);
-    }
-    return onClick;
-  }
-
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ className, ...props }, ref) => {
   return (
     <label className={styles.checkbox}>
-      {alignment === 'left' && label}
-      <input
-        className={classNames(styles.checkbox__input, className)}
-        type="checkbox"
-        name={name}
-        onClick={handleChange}
-        disabled={disabled}
-        checked={isChecked}
-      />
+      <input type="checkbox" ref={ref} className={classNames(styles.checkbox__input, className)} {...props} />
       <div className={styles.checkbox__box} />
-      {alignment === 'right' && label}
     </label>
   );
-}
+});
+Checkbox.displayName = 'Checkbox';
