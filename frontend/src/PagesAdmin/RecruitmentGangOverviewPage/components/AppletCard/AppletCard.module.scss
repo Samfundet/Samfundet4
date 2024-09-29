@@ -2,18 +2,18 @@
 
 @import 'src/mixins';
 
-.wrapper {
-  @include for-mobile-down {
-    width: 100%;
-  }
-}
 
-.disabled {
-  cursor: not-allowed;
+.arrow_icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: $grey-1;
+  padding: 0.25rem;
+  box-sizing: content-box;
+  margin: -0.125rem -0.125rem 0 0;
 
-  .card {
-    opacity: 0.5;
-    pointer-events: none;
+  @include theme-dark {
+    color: $grey-3;
   }
 }
 
@@ -27,9 +27,6 @@
 
   &:hover {
     text-decoration: none;
-  }
-
-  &:hover {
     border-color: $grey-35;
   }
 
@@ -43,16 +40,31 @@
     border-radius: 50%;
 
     @include theme-dark {
-      background: #333;
+      background: #333333;
     }
   }
 
   @include theme-dark {
-    border-color: #222;
+    border-color: #222222;
 
     &:hover {
       border-color: $grey-0;
     }
+  }
+}
+
+.wrapper {
+  @include for-mobile-down {
+    width: 100%;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+
+  .card {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 
@@ -74,18 +86,4 @@
 .content {
   position: relative;
   padding-right: 2rem;
-}
-
-.arrow_icon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  color: $grey-1;
-  padding: 0.25rem;
-  box-sizing: content-box;
-  margin: -0.125rem -0.125rem 0 0;
-
-  @include theme-dark {
-    color: $grey-3;
-  }
 }
