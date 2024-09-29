@@ -433,5 +433,4 @@ export const KEY = {
 // This will ensure that each value matches the key exactly.
 // Very similar to validateKeyEqualsValue.
 // Fortunately this is in typescript and will protect the pipeline.
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 KEY as MirrorKeys<TranslationKeys>;
