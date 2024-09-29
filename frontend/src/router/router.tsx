@@ -475,19 +475,6 @@ export const router = createBrowserRouter(
               element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_edit}
-              element={
-                <PermissionRoute
-                  required={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]}
-                  element={<RecruitmentFormAdminPage />}
-                />
-              }
-              loader={recruitmentLoader}
-              handle={{
-                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
-              }}
-            />
-            <Route
               path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
               element={<RecruitmentUsersWithoutInterviewGangPage />}
               loader={recruitmentGangLoader}
