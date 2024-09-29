@@ -1,0 +1,91 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.wrapper {
+  @include for-mobile-down {
+    width: 100%;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+
+  .card {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.card {
+  padding: 1rem;
+  border-radius: 3px;
+  border: 1px solid $grey-4;
+  display: block;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  max-width: 16rem;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:hover {
+    border-color: $grey-35;
+  }
+
+  @include for-mobile-down {
+    max-width: initial;
+    width: 100%;
+  }
+
+  &:hover .arrow_icon {
+    background: $grey-4;
+    border-radius: 50%;
+
+    @include theme-dark {
+      background: #333;
+    }
+  }
+
+  @include theme-dark {
+    border-color: #222;
+
+    &:hover {
+      border-color: $grey-0;
+    }
+  }
+}
+
+.title {
+  color: $black-1;
+  font-weight: 600;
+
+  @include theme-dark {
+    color: $white;
+  }
+}
+
+.description {
+  color: $grey-2;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.content {
+  position: relative;
+  padding-right: 2rem;
+}
+
+.arrow_icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: $grey-1;
+  padding: 0.25rem;
+  box-sizing: content-box;
+  margin: -0.125rem -0.125rem 0 0;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
+}

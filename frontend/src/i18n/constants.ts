@@ -176,8 +176,12 @@ export const KEY = {
   common_when: 'common_when',
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
+  common_room: 'common_room',
   common_filter: 'common_filter',
+  common_personal: 'common_personal',
   common_administrate: 'common_administrate',
+  common_administration: 'common_administration',
+  common_unprocessed: 'common_unprocessed',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -354,6 +358,17 @@ export const KEY = {
   error_recruitment_form_2: 'error_recruitment_form_2',
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
+  recruitment_separate_recruitment: 'recruitment_separate_recruitment',
+
+  // Recruitment applets
+  recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
+  recruitment_applet_edit_description: 'recruitment_applet_edit_description',
+  recruitment_applet_overview_description: 'recruitment_applet_overview_description',
+  recruitment_applet_room_description: 'recruitment_applet_room_description',
+  recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',
+  recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
+  recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
+  recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
