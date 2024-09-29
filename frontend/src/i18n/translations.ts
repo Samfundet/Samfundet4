@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { KEY } from '~/i18n/constants';
 import { prepareTranslations } from './utils';
 
@@ -197,6 +196,9 @@ export const nb = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.admin_impersonate]: 'Stjel identitet',
+  [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
+
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
@@ -639,6 +641,10 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+
+  [KEY.admin_impersonate]: 'Impersonate',
+  [KEY.admin_stop_impersonate]: 'Stop impersonation',
+
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
   [KEY.loginpage_internal_login]: 'Log in as internal',

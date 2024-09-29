@@ -115,7 +115,6 @@ export const FormControl = React.forwardRef<React.ElementRef<typeof Slot>, React
 FormControl.displayName = 'FormControl';
 
 export const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  // eslint-disable-next-line react/prop-types
   ({ className, children, ...props }, ref) => {
     const { error, formMessageId } = useFormField();
     const body = error ? String(error?.message) : children;

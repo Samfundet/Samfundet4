@@ -393,6 +393,8 @@ export const KEY = {
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
+  admin_impersonate: 'admin_impersonate',
+  admin_stop_impersonate: 'admin_stop_impersonate',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -448,5 +450,4 @@ export const KEY = {
 // This will ensure that each value matches the key exactly.
 // Very similar to validateKeyEqualsValue.
 // Fortunately this is in typescript and will protect the pipeline.
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 KEY as MirrorKeys<TranslationKeys>;

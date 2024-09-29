@@ -6,7 +6,7 @@ import { ROUTES } from '~/routes';
 import styles from './Breadcrumb.module.scss';
 
 type HandleWithCrumb = {
-  crumb: (data?: unknown) => ReactNode;
+  crumb: (match: UIMatch, data?: unknown) => ReactNode;
 };
 
 interface MatchWithCrumb extends UIMatch {
@@ -18,7 +18,7 @@ export function Breadcrumb() {
 
   const crumbs = matches
     .filter((match) => Boolean((match as MatchWithCrumb).handle?.crumb))
-    .map((match) => (match as MatchWithCrumb).handle?.crumb(match.data));
+    .map((match) => (match as MatchWithCrumb).handle?.crumb(match, match.data));
 
   return (
     <div className={styles.breadcrumb}>

@@ -8,7 +8,6 @@ export { GangsAdminPage } from './GangsAdminPage';
 export { GangsFormAdminPage } from './GangsFormAdminPage';
 export { ImageAdminPage } from './ImageAdminPage';
 export { ImageFormAdminPage } from './ImageFormAdminPage';
-export { ImpersonateUserAdminPage } from './ImpersonateUserAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { InterviewNotesPage } from './InterviewNotesAdminPage';
