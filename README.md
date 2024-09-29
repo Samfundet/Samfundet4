@@ -4,13 +4,13 @@
 
 ## Documentation
 
-- **[Technical Documentation](/docs/technical/README.md)**
-- [Work Methodology](/docs/work-methodology.md)
-- [Useful Commands](/docs/useful-commands.md)
-- [Technologies used on Samf4 🤖](/docs/technical/Samf4Tech.md)
-- [Project Specific Commands](/docs/docker-project-specific-commands.md)
-- [Useful Docker aliases](/docs/docker-project-specific-commands.md)
-- [🌐 API documentation](/docs/api-docs.md)
+- **[Technical Documentation](./docs/technical/README.md)**
+- [Work Methodology](./docs/work-methodology.md)
+- [Useful Commands](./docs/useful-commands.md)
+- [Technologies used on Samf4 🤖](./docs/technical/Samf4Tech.md)
+- [Project Specific Commands](./docs/docker-project-specific-commands.md)
+- [Useful Docker aliases](./docs/docker-project-specific-commands.md)
+- [🌐 API documentation](./docs/api-docs.md)
 
 ## Installation
 
