@@ -409,9 +409,7 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
               element={<RecruitmentRecruiterDashboardPage />}
               handle={{
-                crumb: ({ pathname }: UIMatch) => (
-                  <Link url={pathname}>{t(KEY.recruitment_recruiter_dashboard)}</Link>
-                ),
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_recruiter_dashboard)}</Link>,
               }}
             />
             <Route
