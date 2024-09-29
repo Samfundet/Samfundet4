@@ -41,7 +41,6 @@ import {
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
-  ImpersonateUserAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   InterviewNotesPage,
@@ -132,11 +131,6 @@ export const router = createBrowserRouter(
         handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
         element={<AdminLayout />}
       >
-        {/* TODO PERMISSION FOR IMPERSONATE */}
-        <Route
-          path={ROUTES.frontend.admin_impersonate}
-          element={<PermissionRoute required={[]} element={<ImpersonateUserAdminPage />} />}
-        />
         <Route
           path={ROUTES.frontend.admin}
           element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_GANG]} element={<AdminPage />} />}
