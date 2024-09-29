@@ -350,10 +350,6 @@ export const router = createBrowserRouter(
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
-            element={<RecruitmentRecruiterDashboardPage />}
-          />
-          <Route
             path={ROUTES.frontend.admin_recruitment_gang_all_applications}
             element={<RecruitmentGangAllApplicantsAdminPage />}
           />
@@ -407,6 +403,15 @@ export const router = createBrowserRouter(
               }
               handle={{
                 crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
+              element={<RecruitmentRecruiterDashboardPage />}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>{t(KEY.recruitment_recruiter_dashboard)}</Link>
+                ),
               }}
             />
             <Route
