@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { KEY } from '~/i18n/constants';
 import { prepareTranslations } from './utils';
 
