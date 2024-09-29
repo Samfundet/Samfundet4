@@ -2,13 +2,10 @@ import { Icon } from '@iconify/react';
 import { Link } from '~/Components';
 import styles from './AppletCard.module.scss';
 
-type Status = 'success' | 'warning' | 'error';
-
 type Props = {
   title: string;
   description?: string;
   url: string;
-  status?: Status;
   disabled?: boolean;
 };
 
