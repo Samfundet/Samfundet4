@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForGang, updateRecruitmentApplicationStateForPosition } from '~/api';
-import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
+import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { ProcessedApplicants } from './components';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
-import { toast } from 'react-toastify';
+import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {
   const navigate = useNavigate();
@@ -23,41 +24,46 @@ export function RecruitmentPositionOverviewPage() {
   const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
 
+  const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
+
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   useEffect(() => {
+    // getRecruitmentApplicationStateChoices
     recruitmentId &&
       gangId &&
+      positionId &&
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((data) => {
           setRecruitmentApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status == 0 &&
-                recruitmentApplicant.recruitment_position?.id == positionId,
+                recruitmentApplicant.recruiter_status === 0 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setWithdrawnApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id == positionId,
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setRejectedApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-                recruitmentApplicant.recruitment_position?.id == positionId,
+                (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setAcceptedApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status == 1 &&
-                recruitmentApplicant.recruitment_position?.id == positionId,
+                recruitmentApplicant.recruiter_status === 1 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
           setShowSpinner(false);
@@ -71,44 +77,46 @@ export function RecruitmentPositionOverviewPage() {
   }, [recruitmentId, gangId, positionId, navigate, t]);
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
-    updateRecruitmentApplicationStateForPosition(id, data)
-      .then((data) => {
-        setRecruitmentApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 0 &&
-              recruitmentApplicant.recruitment_position?.id == positionId,
-          ),
-        );
-        setWithdrawnApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn && recruitmentApplicant.recruitment_position?.id == positionId,
-          ),
-        );
-        setRejectedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              (recruitmentApplicant.recruiter_status == 2 || recruitmentApplicant.recruiter_status == 3) &&
-              recruitmentApplicant.recruitment_position?.id == positionId,
-          ),
-        );
-        setAcceptedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status == 1 &&
-              recruitmentApplicant.recruitment_position?.id == positionId,
-          ),
-        );
-        setShowSpinner(false);
-      })
-      .catch((data) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(data);
-      });
+    positionId &&
+      updateRecruitmentApplicationStateForPosition(id, data)
+        .then((data) => {
+          setRecruitmentApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 0 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setWithdrawnApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setRejectedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setAcceptedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 1 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(data);
+        });
   };
 
   const title = t(KEY.recruitment_administrate_applications);
@@ -139,6 +147,9 @@ export function RecruitmentPositionOverviewPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      <Text size="l" as="strong" className={styles.subHeader}>
+        {lowerCapitalize(t(KEY.recruitment_applications))} ({recruitmentApplicants.length})
+      </Text>
       <RecruitmentApplicantsStatus
         applicants={recruitmentApplicants}
         recruitmentId={recruitmentId}
@@ -149,7 +160,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_applications)}({acceptedApplicants.length})
+          {t(KEY.recruitment_accepted_applications)} ({acceptedApplicants.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
         {acceptedApplicants.length > 0 ? (
@@ -163,7 +174,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_rejected_applications)}({rejectedApplicants.length})
+          {t(KEY.recruitment_rejected_applications)} ({rejectedApplicants.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
         {rejectedApplicants.length > 0 ? (
@@ -177,7 +188,7 @@ export function RecruitmentPositionOverviewPage() {
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_withdrawn_applications)}({withdrawnApplicants.length})
+          {t(KEY.recruitment_withdrawn_applications)} ({withdrawnApplicants.length})
         </Text>
         {withdrawnApplicants.length > 0 ? (
           <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />

@@ -11,13 +11,12 @@ from datetime import date, time, datetime, timedelta
 from collections import defaultdict
 
 from guardian.shortcuts import assign_perm
-from notifications.base.models import AbstractNotification
 
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import Group, AbstractUser
+from django.contrib.auth.models import AbstractUser
 
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
@@ -31,11 +30,6 @@ if TYPE_CHECKING:
     from typing import Any
 
     from django.db.models import Model
-
-
-class Notification(AbstractNotification):
-    class Meta(AbstractNotification.Meta):
-        abstract = False
 
 
 class Tag(CustomBaseModel):
@@ -92,6 +86,7 @@ class Campus(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=False, null=False)
     name_en = models.CharField(max_length=64, unique=True, blank=False, null=False)
     abbreviation = models.CharField(max_length=10, blank=True, null=True)
+    total_students = models.PositiveIntegerField(null=False, blank=False, default=1, verbose_name='Total students enrolled')
 
     def __str__(self) -> str:
         if not self.abbreviation:
@@ -279,6 +274,11 @@ class Organization(CustomBaseModel):
         verbose_name = 'Organization'
         verbose_name_plural = 'Organizations'
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            return self.id
+        return self
+
     def __str__(self) -> str:
         return self.name
 
@@ -316,18 +316,20 @@ class Gang(CustomBaseModel):
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
-    # Gang related permission groups
-    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
-    event_admin_group = models.OneToOneField(
-        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
-    )
-    recruitment_admin_group = models.OneToOneField(
-        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
-    )
-
     class Meta:
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            return self.id
+        return self
 
     def __str__(self) -> str:
         return f'{self.gang_type} - {self.name_nb}'
@@ -338,6 +340,20 @@ class GangSection(CustomBaseModel):
     name_en = models.CharField(max_length=64, blank=True, verbose_name='Navn Engelsk')
     logo = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Logo')
     gang = models.ForeignKey(Gang, blank=False, null=False, related_name='gang', on_delete=models.PROTECT, verbose_name='Gjeng')
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.gang.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.gang_id
+        return self.gang
+
+    def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
+        if return_id:
+            return self.id
+        return self
 
     def __str__(self) -> str:
         return f'{self.gang.name_nb} - {self.name_nb}'

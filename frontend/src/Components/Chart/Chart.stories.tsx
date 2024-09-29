@@ -21,7 +21,6 @@ const applicant_mock_data = [
   { label: '15. august', value: 36 },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const campus_mock_data = [
   { label: 'Gløshuagen', value: 50 },
   { label: 'Kalvskinnet', value: 30 },
@@ -46,11 +45,8 @@ export default {
 } as Meta<typeof Chart>;
 
 // Template for LineChart
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const Template: ComponentStory<typeof Chart> = function (args) {
-  return <Chart {...args} />;
-};
+const Template: ComponentStory<typeof Chart> = (args) => <Chart {...args} />;
 
 export const ApplicantsPerDay = Template.bind({});
 ApplicantsPerDay.args = {};

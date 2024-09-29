@@ -3,7 +3,9 @@ import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
 import { MultiSelect } from '~/Components/MultiSelect';
+import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
+import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
@@ -15,6 +17,12 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   return (
     <div className={styles.wrapper}>
+      <div>
+        <H1>Example form</H1>
+
+        <ExampleForm />
+      </div>
+
       <H1>Heading 1</H1>
       <H2>Heading 2</H2>
       <H3>Heading 3</H3>
@@ -81,11 +89,13 @@ export function ComponentPage() {
       </div>
       <div>
         <h2>Checkboxes:</h2>
-        <Checkbox label="Unchecked" />
+        <Checkbox />
         <br />
-        <Checkbox label="Checked" />
+        <Checkbox checked />
         <br />
-        <Checkbox label="Disabled" disabled />
+        <Checkbox disabled />
+        <br />
+        <Checkbox checked disabled />
       </div>
       <div>
         <h2>Radiobuttons:</h2>
@@ -135,10 +145,11 @@ export function ComponentPage() {
         <SnowflakesOverlay />
         <h2>
           <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
-            <img src={norwegianFlag}></img>
+            <img src={norwegianFlag} alt="Flag" />
           </Countdown>
         </h2>
       </div>
+      <ShrimpFishing />
     </div>
   );
 }

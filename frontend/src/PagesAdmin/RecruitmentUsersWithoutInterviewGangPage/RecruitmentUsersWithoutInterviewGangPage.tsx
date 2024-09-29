@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RecruitmentWithoutInterviewTable } from '~/Components';
-import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
-import { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import styles from './RecruitmentUsersWithoutInterviewGangPage.module.scss';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
+import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './RecruitmentUsersWithoutInterviewGangPage.module.scss';
 
 export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();
@@ -23,6 +23,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (recruitmentId) {
       getApplicantsWithoutInterviews(recruitmentId, gangId)
@@ -35,9 +36,9 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           console.error(error);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gangId, recruitmentId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (gangId) {
       getGang(gangId)
@@ -51,9 +52,9 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gangId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId) {
       getRecruitment(recruitmentId)
@@ -69,7 +70,6 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           console.error(data);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   const title = t(KEY.recruitment_applicants_without_interview);

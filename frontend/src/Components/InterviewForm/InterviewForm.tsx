@@ -1,13 +1,13 @@
-import { InterviewDto, RecruitmentApplicationDto } from '~/dto';
-import styles from './InterviewForm.module.scss';
-import { KEY } from '~/i18n/constants';
-import { toast } from 'react-toastify';
-import { setRecruitmentApplicationInterview } from '~/api';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { Text } from '../Text/Text';
+import { setRecruitmentApplicationInterview } from '~/api';
+import type { InterviewDto, RecruitmentApplicationDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
+import { Text } from '../Text/Text';
+import styles from './InterviewForm.module.scss';
 
 type InterviewFormProps = {
   application: RecruitmentApplicationDto;

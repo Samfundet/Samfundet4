@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/context/AuthContext';
 import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Text } from '~/Components/Text/Text';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getRecruitmentApplicationForPosition,
-  putRecruitmentApplication,
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
+  putRecruitmentApplication,
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
-import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
+import { useAuthContext } from '~/context/AuthContext';
+import type { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -21,7 +22,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicationFormPage.module.scss';
-import { Text } from '~/Components/Text/Text';
 
 type FormProps = {
   application_text: string;
@@ -121,7 +121,7 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
-  if (!positionID || isNaN(Number(positionID))) {
+  if (!positionID || Number.isNaN(Number(positionID))) {
     return (
       <Page>
         <div className={styles.container}>
@@ -132,7 +132,7 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
-  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_application);
+  const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
   return (
     <Page>
@@ -164,11 +164,11 @@ export function RecruitmentApplicationFormPage() {
             <h2 className={styles.sub_header}>
               {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
             </h2>
-            {recruitmentPositionsForGang?.map((pos, index) => {
-              if (pos.id !== recruitmentPosition?.id) {
+            {recruitmentPositionsForGang?.map((pos) => {
+              if (pos.id === recruitmentPosition?.id) {
                 return (
                   <Button
-                    key={index}
+                    key={pos.id}
                     display="pill"
                     theme="outlined"
                     onClick={() => {
