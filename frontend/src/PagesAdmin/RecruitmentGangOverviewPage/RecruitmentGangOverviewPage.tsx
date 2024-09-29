@@ -175,7 +175,6 @@ export function RecruitmentGangOverviewPage() {
     </>
   );
 
-  // TODO: Fix rerender
   const tabs: Tab<ReactElement>[] = [
     { key: 1, label: t(KEY.common_gangs), value: <Table columns={tableGangColumns} data={tableGangData} /> },
     {
