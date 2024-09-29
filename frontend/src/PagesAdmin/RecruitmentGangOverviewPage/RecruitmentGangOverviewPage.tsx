@@ -29,11 +29,9 @@ export function RecruitmentGangOverviewPage() {
     Promise.all([
       getRecruitmentGangs(recruitmentId).then((data) => {
         setGangs(data);
-        setLoading(false);
       }),
       getRecruitment(recruitmentId).then((response) => {
         setRecruitment(response.data);
-        setLoading(false);
       }),
     ]).then(() => {
       setLoading(false);
