@@ -56,7 +56,6 @@ export function RecruitmentSeparatePositionFormAdminPage() {
     } else {
       setShowSpinner(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [separatePositionId, navigate, recruitmentId, t]);
 
   const initialData: Partial<RecruitmentSeparatePositionDto> = {
