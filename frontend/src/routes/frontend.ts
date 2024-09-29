@@ -39,7 +39,6 @@ export const ROUTES_FRONTEND = {
   //      Admin pages     //
   // ==================== //
   admin: '/control-panel/',
-  admin_impersonate: '/impersonate/',
   // Users
   admin_users: '/control-panel/users/',
   // Roles

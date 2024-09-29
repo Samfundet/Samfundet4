@@ -378,6 +378,8 @@ export const KEY = {
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
+  admin_impersonate: 'admin_impersonate',
+  admin_stop_impersonate: 'admin_stop_impersonate',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
