@@ -341,7 +341,7 @@ export const nb = prepareTranslations({
   [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
   [KEY.error_recruitment_form_4]: 'Flaggefrist kan ikke være før omprioriteringsfrist',
   [KEY.recruitment_three_interviews_criteria_header]:
-    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+    'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
   [KEY.recruitment_dashboard_description]:
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
