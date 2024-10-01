@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getRecruitmentSeparatePosition, postRecruitmentSeparatePosition, putRecruitmentSeparatePosition } from '~/api';
+import { postRecruitmentSeparatePosition, putRecruitmentSeparatePosition } from '~/api';
 import type { RecruitmentSeparatePositionDto } from '~/dto';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import type { SeparatePositionLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentSeparatePositionFormAdminPage.module.scss';
@@ -30,54 +28,19 @@ export function RecruitmentSeparatePositionFormAdminPage() {
 
   // Form data
   const { recruitmentId, separatePositionId } = useParams();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [separatePosition, setSeparatePosition] = useState<Partial<RecruitmentSeparatePositionDto>>();
 
-  // Fetch data if edit mode.
-  useEffect(() => {
-    if (separatePositionId) {
-      getRecruitmentSeparatePosition(separatePositionId)
-        .then((response) => {
-          setSeparatePosition(response.data);
-          setShowSpinner(false);
-        })
-        .catch((response) => {
-          if (response.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(
-              reverse({
-                pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-                urlParams: { recruitmentId: recruitmentId },
-              }),
-              { replace: true },
-            );
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
-      setShowSpinner(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [separatePositionId, navigate, recruitmentId, t]);
+  const data = useLoaderData() as SeparatePositionLoader | undefined;
 
   const initialData: Partial<RecruitmentSeparatePositionDto> = {
-    name_nb: separatePosition?.name_nb,
-    name_en: separatePosition?.name_en,
-    description_nb: separatePosition?.description_nb,
-    description_en: separatePosition?.description_en,
-    url: separatePosition?.url,
-    recruitment: separatePosition ? separatePosition?.recruitment : recruitmentId,
+    name_nb: data?.separatePosition?.name_nb,
+    name_en: data?.separatePosition?.name_en,
+    description_nb: data?.separatePosition?.description_nb,
+    description_en: data?.separatePosition?.description_en,
+    url: data?.separatePosition?.url,
+    recruitment: data?.separatePosition ? data?.separatePosition?.recruitment : recruitmentId,
   };
 
   const submitText = separatePositionId ? t(KEY.common_save) : t(KEY.common_create);
-
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
 
   function handleOnSubmit(data: RecruitmentSeparatePositionDto) {
     const updatedPosition = data;
