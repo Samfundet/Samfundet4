@@ -126,6 +126,7 @@ from .models.general import (
     InformationPage,
     UserFeedbackModel,
 )
+from .models_choices import RecruitmentStatusChoices
 from .models.recruitment import (
     Interview,
     Recruitment,
@@ -726,7 +727,7 @@ class SendRejectionMailView(APIView):
             if recruitment is None:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            rejected_users = User.objects.filter(admissions__recruitment=recruitment, admissions__recuiter_status__ne=3)
+            rejected_users = User.objects.filter(admissions__recruitment=recruitment, admissions__recuiter_status__ne=RecruitmentStatusChoices.REJECTION)
             rejected_user_mails = list(rejected_users.values_list('email', flat=True))
 
             send_mail(
