@@ -20,7 +20,7 @@ def seed():
 
     for position_index, position in enumerate(positions):
         # Get the users who have applied for this position
-        applicants_for_position = set(user_id for pos_id, user_id in applicants_by_position if pos_id == position.id)
+        applicants_for_position = {user_id for pos_id, user_id in applicants_by_position if pos_id == position.id}
         # Get the list of interviewers excluding those who applied for this position
         interviewers = User.objects.exclude(id__in=applicants_for_position)
 
