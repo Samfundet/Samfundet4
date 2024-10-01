@@ -1,100 +1,116 @@
-import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
-import { getGang } from '~/api';
-import type { GangDto } from '~/dto';
-import { useCustomNavigate, useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
+import { useLoaderData } from 'react-router-dom';
+import { z } from 'zod';
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
+import type { GangLoader } from '~/router/loaders';
+import { ABBREVIATION, NAME } from '~/schema/gang';
+import { WEBSITE_URL } from '~/schema/url';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './GangsFormAdminPage.module.scss';
 
-export function GangsFormAdminPage() {
-  const navigate = useCustomNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const { t } = useTranslation();
+const schema = z.object({
+  name_nb: NAME.min(1),
+  name_en: NAME.min(1),
+  abbreviation: ABBREVIATION.optional().or(z.literal('')),
+  website: WEBSITE_URL,
+});
 
-  // If form has a id, check if it exists, and then load that item.
-  const { id } = useParams();
-  const [gang, setGang] = useState<Partial<GangDto>>({});
+export function GangsFormAdminPage() {
+  const { t } = useTranslation();
+  const data = useLoaderData() as GangLoader | undefined;
 
   //TODO add permissions on render
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
-  useEffect(() => {
-    if (id) {
-      getGang(id)
-        .then((gang) => {
-          setGang(gang);
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_gangs, replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
-      setShowSpinner(false);
-    }
-  }, [id]);
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name_nb: data?.gang?.name_nb ?? '',
+      name_en: data?.gang?.name_en ?? '',
+      abbreviation: data?.gang?.abbreviation ?? '',
+      website: data?.gang?.webpage ?? '',
+    },
+  });
 
-  function handleOnSubmit(data: GangDto) {
-    if (id) {
-      // TODO patch
-    } else {
-      // TODO post
-    }
-    alert('TODO');
-    console.log(JSON.stringify(data));
+  function onSubmit(values: z.infer<typeof schema>) {
+    console.log('Values:', values);
   }
 
-  const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
-  const title = id ? t(KEY.common_edit) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_gang)}`);
+  const title = lowerCapitalize(`${t(data?.gang ? KEY.common_edit : KEY.common_create)} ${t(KEY.common_gang)}`);
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true}>
-      <SamfForm
-        initialData={gang}
-        onSubmit={handleOnSubmit}
-        submitText={submitText}
-        validateOnInit={id !== undefined}
-        devMode={false}
-      >
-        <div className={styles.row}>
-          <SamfFormField
-            field="name_nb"
-            type="text"
-            label={lowerCapitalize(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}
-          />
-          <SamfFormField
-            field="name_en"
-            type="text"
-            label={lowerCapitalize(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="abbreviation"
-            type="text"
-            label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_abbreviation)}`)}
-          />
-          <SamfFormField
-            field="webpage"
-            type="text"
-            label={lowerCapitalize(`${t(KEY.admin_gangsadminpage_webpage)}`)}
-          />
-        </div>
-        {/* TODO fetch options */}
-        {/* <SamfFormField field="gang_type" type="options" label={`${t(KEY.webpage)}`} /> */}
-        {/* <SamfFormField field="info_page" type="options" label={`${t(KEY.information_page)}`} /> */}
-      </SamfForm>
+    <AdminPageLayout title={title} header={true}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className={styles.row}>
+            <FormField
+              control={form.control}
+              name="name_nb"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{lowerCapitalize(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name_en"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{lowerCapitalize(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.row}>
+            <FormField
+              control={form.control}
+              name="abbreviation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{lowerCapitalize(t(KEY.admin_gangsadminpage_abbreviation))}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="website"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{lowerCapitalize(t(KEY.admin_gangsadminpage_webpage))}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className={styles.action_row}>
+            <Button type="submit" rounded={true} theme="green">
+              {lowerCapitalize(`${t(data?.gang ? KEY.common_edit : KEY.common_create)} ${t(KEY.common_gang)}`)}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </AdminPageLayout>
   );
 }

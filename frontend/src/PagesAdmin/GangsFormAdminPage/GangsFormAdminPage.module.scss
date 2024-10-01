@@ -3,12 +3,22 @@
 @import 'src/constants';
 
 .row {
+  > * {
+    width: 100%;
+  }
+
   display: flex;
   flex-direction: column;
-  margin-top: .5em;
-  gap: 1.5em;
+  margin-top: 0.5rem;
+  gap: 0.5rem 1.5rem;
+
   @include for-tablet-up {
     flex-direction: row;
   }
 }
 
+.action_row {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0;
+}
