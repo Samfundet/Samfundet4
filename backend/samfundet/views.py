@@ -126,7 +126,6 @@ from .models.general import (
     InformationPage,
     UserFeedbackModel,
 )
-from .models_choices import RecruitmentStatusChoices
 from .models.recruitment import (
     Interview,
     Recruitment,
@@ -730,18 +729,15 @@ class SendRejectionMailView(APIView):
             # Only users who have never been contacted with an offer should get a rejection mail
             # Retrieve all users who has a non-withdrawn rejected application in current recruitment
             rejected_users = User.objects.filter(
-                recruitmentapplication__recruitment=recruitment, 
+                recruitmentapplication__recruitment=recruitment,
                 recruitmentapplication__recruiter_status=RecruitmentStatusChoices.REJECTION,
-                recruitmentapplication__withdrawn=False
+                recruitmentapplication__withdrawn=False,
             )
 
             # Retrieve all users who have been contacted with an offer
             contacted_users = User.objects.filter(
                 recruitmentapplication__recruitment=recruitment,
-                recruitmentapplication__recruiter_status__in=[
-                    RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
-                    RecruitmentStatusChoices.CALLED_AND_REJECTED
-                ]
+                recruitmentapplication__recruiter_status__in=[RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.CALLED_AND_REJECTED],
             )
 
             # Remove users who have been contacted with an offer from the rejected users list
