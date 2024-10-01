@@ -211,7 +211,7 @@ export function RecruitmentApplicantsStatus({
           <SetInterviewManuallyModal
             recruitmentId={Number(recruitmentId) || 0}
             isButtonRounded={true}
-            applicationId={application.id}
+            application={application}
             onSetInterview={onInterviewChange}
           />
         ),
