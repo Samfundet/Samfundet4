@@ -12,7 +12,7 @@ export type DropdownProps<T> = {
   className?: string;
   classNameSelect?: string;
   defaultValue?: DropDownOption<T>; // issue 1089
-  initialValue?: T;
+  value?: T;
   disableIcon?: boolean;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
@@ -24,7 +24,7 @@ export type DropdownProps<T> = {
 export function Dropdown<T>({
   options = [],
   defaultValue,
-  initialValue,
+  value,
   onChange,
   className,
   classNameSelect,
@@ -41,13 +41,14 @@ export function Dropdown<T>({
    * @param e Standard onChange HTML event for dropdown
    */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = (e?.currentTarget.value ?? 0) as number;
-    if (choice >= 0 && choice <= options.length) {
+    const choice = parseInt(e?.currentTarget.value ?? '-1', 10);
+    if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
     } else {
       onChange?.(defaultValue?.value ?? undefined);
     }
   }
+
   return (
     <label className={classnames(className, styles.select_wrapper)}>
       {label}
@@ -60,16 +61,14 @@ export function Dropdown<T>({
         )}
         onChange={handleChange}
         disabled={disabled}
-        defaultValue={initialValue !== undefined ? options.map((e) => e.value).indexOf(initialValue) : -1}
+        value={value !== undefined ? options.findIndex((e) => e.value === value) : -1}
       >
         {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
-        {options.map((opt, index) => {
-          return (
-            <option value={index} key={index}>
-              {opt.label}
-            </option>
-          );
-        })}
+        {options.map((opt, index) => (
+          <option value={index} key={index}>
+            {opt.label}
+          </option>
+        ))}
       </select>
       {!disableIcon && (
         <div className={styles.arrow_container}>
