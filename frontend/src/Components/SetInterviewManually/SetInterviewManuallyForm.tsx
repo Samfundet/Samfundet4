@@ -1,25 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability, setRecruitmentApplicationInterview } from '~/api';
+import {
+  getInterview,
+  getOccupiedTimeslots,
+  getRecruitmentAvailability,
+  setRecruitmentApplicationInterview,
+} from '~/api';
 import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
-import { InterviewDto } from '~/dto';
+import { InterviewDto, RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { CalendarMarker } from '~/types';
 import { Button } from '../Button';
 import styles from './SetInterviewManually.module.scss';
+import { formatDateYMD } from '~/utils';
 
 type SetInterviewManuallyFormProps = {
   recruitmentId: number;
   onCancel?: () => void;
-  applicationId: string;
+  application: RecruitmentApplicationDto;
   onSave: () => void;
 };
 
 export function SetInterviewManuallyForm({
   recruitmentId = 1,
   onCancel,
-  applicationId,
+  application,
   onSave,
 }: SetInterviewManuallyFormProps) {
   const { t } = useTranslation();
@@ -62,6 +68,36 @@ export function SetInterviewManuallyForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
+  useEffect(() => {
+    if (!application.id || !application.interview?.id) {
+      return;
+    }
+    setLoading(true);
+
+    getInterview(application.interview?.id)
+      .then((response) => {
+        if (!response.data) {
+          toast.error(t(KEY.common_something_went_wrong));
+          return;
+        }
+        const interviewDate = response.data.interview_time?.split('T')[0];
+        const interviewTime = response.data.interview_time?.split('T')[1]?.slice(0, 5);
+
+        if (interviewDate && interviewTime) {
+          setInterviewTimeslot({ [formatDateYMD(new Date(interviewDate))]: [interviewTime] });
+        }
+        setLocation(response.data.interview_location);
+        setSelectedDate(new Date(interviewDate));
+      })
+      .catch(() => {
+        toast.error(t(KEY.common_something_went_wrong));
+      })
+      .finally(() => {
+        onSave();
+        setLoading(false);
+      });
+  }, [application.id, application.interview?.id]);
+
   function convertToDateObject(dateTimeDict: Record<string, string[]>): Date {
     const dateKey = Object.keys(dateTimeDict)[0];
     const timeValue = dateTimeDict[dateKey][0];
@@ -80,7 +116,7 @@ export function SetInterviewManuallyForm({
       interview_location: location,
     };
 
-    setRecruitmentApplicationInterview(applicationId, data)
+    setRecruitmentApplicationInterview(application.id, data)
       .then(() => {
         onSave();
         toast.success(t(KEY.common_update_successful));
@@ -131,12 +167,14 @@ export function SetInterviewManuallyForm({
               onChange={(date: Date | null) => setSelectedDate(date)}
               displayLabel={true}
               markers={markers}
+              initialSelectedDate={selectedDate}
             />
 
             <TimeslotContainer
               selectedDate={selectedDate}
               timeslots={timeslots}
               onChange={(slots) => setInterviewTimeslot(slots)}
+              selectedTimeslot={interviewTimeslot}
               disabledTimeslots={selectedTimeslots}
               hasDisabledTimeslots={true}
               selectMultiple={false}
