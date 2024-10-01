@@ -52,7 +52,7 @@ export function GangsFormAdminPage() {
               control={form.control}
               name="name_nb"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{lowerCapitalize(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -65,7 +65,7 @@ export function GangsFormAdminPage() {
               control={form.control}
               name="name_en"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{lowerCapitalize(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -80,7 +80,7 @@ export function GangsFormAdminPage() {
               control={form.control}
               name="abbreviation"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{lowerCapitalize(t(KEY.admin_gangsadminpage_abbreviation))}</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -93,7 +93,7 @@ export function GangsFormAdminPage() {
               control={form.control}
               name="website"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{lowerCapitalize(t(KEY.admin_gangsadminpage_webpage))}</FormLabel>
                   <FormControl>
                     <Input {...field} />

@@ -3,10 +3,6 @@
 @import 'src/constants';
 
 .row {
-  > * {
-    width: 100%;
-  }
-
   display: flex;
   flex-direction: column;
   margin-top: 0.5rem;
@@ -15,6 +11,10 @@
   @include for-tablet-up {
     flex-direction: row;
   }
+}
+
+.form_item {
+  flex-grow: 1;
 }
 
 .action_row {
