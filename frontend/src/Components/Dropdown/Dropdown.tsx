@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import type { ChangeEvent, ReactElement } from 'react';
+import React, { type ChangeEvent, type ReactElement } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropDownOption<T> = {
@@ -21,18 +21,21 @@ export type DropdownProps<T> = {
   onChange?: (value?: T) => void;
 };
 
-export function Dropdown<T>({
-  options = [],
-  defaultValue,
-  initialValue,
-  onChange,
-  className,
-  classNameSelect,
-  label,
-  disabled = false,
-  disableIcon = false,
-  error,
-}: DropdownProps<T>) {
+function DropdownInner<T>(
+  {
+    options = [],
+    defaultValue,
+    initialValue,
+    onChange,
+    className,
+    classNameSelect,
+    label,
+    disabled = false,
+    disableIcon = false,
+    error,
+  }: DropdownProps<T>,
+  ref: React.Ref<HTMLSelectElement>,
+) {
   /**
    * Handles the raw change event from <option>
    * The raw value choice is an index where -1 is reserved for
@@ -55,10 +58,12 @@ export function Dropdown<T>({
   } else if (defaultValue) {
     initialIndex = options.findIndex((opt) => opt.value === defaultValue.value);
   }
+
   return (
     <label className={classnames(className, styles.select_wrapper)}>
       {label}
       <select
+        ref={ref}
         className={classNames(
           classNameSelect,
           styles.samf_select,
@@ -84,3 +89,10 @@ export function Dropdown<T>({
     </label>
   );
 }
+
+export const Dropdown = React.forwardRef(DropdownInner) as <T>(
+  props: DropdownProps<T> & {
+    ref?: React.Ref<HTMLSelectElement>;
+  },
+) => ReturnType<typeof DropdownInner>;
+(Dropdown as React.ForwardRefExoticComponent<unknown>).displayName = 'Dropdown';

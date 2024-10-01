@@ -18,6 +18,7 @@ type ButtonProps = {
   children?: Children;
   preventDefault?: boolean;
   onClick?: () => void;
+  title?: string;
 };
 
 export function Button({

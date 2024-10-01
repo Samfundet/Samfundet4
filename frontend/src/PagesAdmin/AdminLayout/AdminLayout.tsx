@@ -65,11 +65,7 @@ export function AdminLayout() {
       {/* Header */}
       <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
       {/* Index */}
-      <Link
-        className={classNames(styles.panel_item, selectedIndex && styles.selected)}
-        url={ROUTES_FRONTEND.admin}
-        onAfterClick={() => panelOpen && setPanelOpen(false)}
-      >
+      <Link className={classNames(styles.panel_item, selectedIndex && styles.selected)} url={ROUTES_FRONTEND.admin}>
         <Icon icon="mdi:person" />
         {t(KEY.common_profile)}
       </Link>

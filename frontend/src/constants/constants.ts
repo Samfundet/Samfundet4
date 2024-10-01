@@ -74,3 +74,11 @@ export const textSizes: Record<string, string> = {
   xl: '3rem',
   '2xl': '4rem',
 };
+
+/**
+ * User
+ */
+export const USERNAME_LENGTH_MIN = 2;
+export const USERNAME_LENGTH_MAX = 32;
+export const PASSWORD_LENGTH_MIN = 8;
+export const PASSWORD_LENGTH_MAX = 2048;

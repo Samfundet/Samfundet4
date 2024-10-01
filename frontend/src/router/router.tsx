@@ -1,4 +1,4 @@
-import { Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
@@ -34,13 +34,13 @@ import {
   AdminLayout,
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
+  CreateInterviewRoomPage,
   EventCreatorAdminPage,
   EventsAdminPage,
   GangsAdminPage,
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
-  ImpersonateUserAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   InterviewNotesPage,
@@ -54,10 +54,12 @@ import {
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentSeparatePositionFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RolesAdminPage,
+  RoomAdminPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
@@ -77,9 +79,12 @@ import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
+  type SeparatePositionLoader,
+  gangLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
 
@@ -126,11 +131,6 @@ export const router = createBrowserRouter(
         handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
         element={<AdminLayout />}
       >
-        {/* TODO PERMISSION FOR IMPERSONATE */}
-        <Route
-          path={ROUTES.frontend.admin_impersonate}
-          element={<PermissionRoute required={[]} element={<ImpersonateUserAdminPage />} />}
-        />
         <Route
           path={ROUTES.frontend.admin}
           element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_GANG]} element={<AdminPage />} />}
@@ -157,16 +157,7 @@ export const router = createBrowserRouter(
               return { id: params.id };
             }}
             handle={{
-              crumb: ({ id }: { id: string }) => (
-                <Link
-                  url={reverse({
-                    pattern: ROUTES.frontend.admin_gangs_edit,
-                    urlParams: { id },
-                  })}
-                >
-                  {t(KEY.common_edit)}
-                </Link>
-              ),
+              crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
             }}
           />
         </Route>
@@ -330,6 +321,7 @@ export const router = createBrowserRouter(
         {/* Recruitment */}
         <Route
           element={<Outlet />}
+          path={ROUTES.frontend.admin_recruitment}
           handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment}>{t(KEY.common_recruitment)}</Link> }}
         >
           <Route
@@ -350,32 +342,6 @@ export const router = createBrowserRouter(
               <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
             }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment_create}>{t(KEY.common_create)}</Link> }}
-          />
-          <Route
-            path={ROUTES.frontend.admin_recruitment_edit}
-            element={
-              <PermissionRoute required={[PERM.SAMFUNDET_CHANGE_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
-            }
-            loader={({ params }) => {
-              // TODO: Fetch recruitment to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-              return { id: params.id };
-            }}
-            handle={{
-              crumb: ({ id }: { id: string }) => (
-                <Link
-                  url={reverse({
-                    pattern: ROUTES.frontend.admin_recruitment_edit,
-                    urlParams: { id },
-                  })}
-                >
-                  {t(KEY.common_edit)}
-                </Link>
-              ),
-            }}
-          />
-          <Route
-            path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
-            element={<RecruitmentRecruiterDashboardPage />}
           />
           <Route
             path={ROUTES.frontend.admin_recruitment_gang_all_applications}
@@ -409,65 +375,18 @@ export const router = createBrowserRouter(
             id="recruitment"
             loader={recruitmentLoader}
             handle={{
-              crumb: ({ recruitment }: RecruitmentLoader) => {
-                if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
-                return (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-                      urlParams: { recruitmentId: recruitment.id },
-                    })}
-                  >
-                    {dbT(recruitment, 'name')}
-                  </Link>
-                );
-              },
+              crumb: ({ params }: UIMatch, { recruitment }: RecruitmentLoader) => (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_gang_overview,
+                    urlParams: params,
+                  })}
+                >
+                  {recruitment ? dbT(recruitment, 'name') : t(KEY.common_unknown)}
+                </Link>
+              ),
             }}
           >
-            <Route
-              path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
-              element={<RecruitmentUnprocessedApplicantsPage />}
-              loader={recruitmentLoader}
-              handle={{
-                crumb: ({ recruitment }: RecruitmentLoader) => {
-                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
-                  return (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
-                        urlParams: { recruitmentId: recruitment.id },
-                      })}
-                    >
-                      {t(KEY.recruitment_show_unprocessed_applicants)}
-                    </Link>
-                  );
-                },
-              }}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_users_without_interview}
-              element={<RecruitmentUsersWithoutInterviewGangPage />}
-              loader={recruitmentLoader}
-              handle={{
-                crumb: ({ recruitment }: RecruitmentLoader) => {
-                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
-                  return (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
-                        urlParams: { recruitmentId: recruitment.id },
-                      })}
-                    >
-                      {t(KEY.recruitment_show_applicants_without_interview)}
-                    </Link>
-                  );
-                },
-              }}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_gang_overview}
-              element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}
-            />
             <Route
               path={ROUTES.frontend.admin_recruitment_edit}
               element={
@@ -476,61 +395,104 @@ export const router = createBrowserRouter(
                   element={<RecruitmentFormAdminPage />}
                 />
               }
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
+              element={<RecruitmentRecruiterDashboardPage />}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_recruiter_dashboard)}</Link>,
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_gang_separateposition_create}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION]}
+                  element={<RecruitmentSeparatePositionFormAdminPage />}
+                />
+              }
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
+                  </Link>
+                ),
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_gang_separateposition_edit}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION]}
+                  element={<RecruitmentSeparatePositionFormAdminPage />}
+                />
+              }
+              loader={separatePositionLoader}
+              handle={{
+                crumb: ({ pathname }: UIMatch, { separatePosition }: SeparatePositionLoader) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_edit)} {t(KEY.recruitment_gangs_with_separate_positions)} -{' '}
+                    {separatePosition ? dbT(separatePosition, 'name') : t(KEY.common_unknown)}
+                  </Link>
+                ),
+              }}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
+              element={<RecruitmentUnprocessedApplicantsPage />}
               loader={recruitmentLoader}
               handle={{
-                crumb: ({ recruitment }: RecruitmentLoader) => {
-                  if (!recruitment) return <span>{t(KEY.common_unknown)}</span>;
-                  return (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_edit,
-                        urlParams: { recruitmentId: recruitment.id },
-                      })}
-                    >
-                      {t(KEY.common_edit)}
-                    </Link>
-                  );
-                },
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>{t(KEY.recruitment_show_unprocessed_applicants)}</Link>
+                ),
               }}
+            />
+
+            <Route
+              path={ROUTES.frontend.admin_recruitment_users_without_interview}
+              element={<RecruitmentUsersWithoutInterviewGangPage />}
+              loader={recruitmentLoader}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>{t(KEY.recruitment_show_applicants_without_interview)}</Link>
+                ),
+              }}
+            />
+            <Route path={ROUTES.frontend.admin_recruitment_room_overview} element={<RoomAdminPage />} />
+            <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<CreateInterviewRoomPage />} />
+            <Route path={ROUTES.frontend.admin_recruitment_room_edit} element={<CreateInterviewRoomPage />} />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_gang_overview}
+              element={<PermissionRoute required={[]} element={<RecruitmentGangOverviewPage />} />}
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
               element={<RecruitmentUsersWithoutInterviewGangPage />}
               loader={recruitmentGangLoader}
               handle={{
-                crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
-                  if (!recruitment || !gang) return <span>{t(KEY.common_unknown)}</span>;
-                  return (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
-                        urlParams: { recruitmentId: recruitment.id, gangId: gang.id },
-                      })}
-                    >
-                      {t(KEY.recruitment_show_applicants_without_interview)}
-                    </Link>
-                  );
-                },
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>{t(KEY.recruitment_show_applicants_without_interview)}</Link>
+                ),
               }}
             />
 
             <Route
               element={<Outlet />}
-              loader={recruitmentGangLoader}
+              loader={gangLoader}
               handle={{
-                crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
-                  if (!recruitment || !gang) return <span>{t(KEY.common_unknown)}</span>;
-                  return (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
-                        urlParams: { recruitmentId: recruitment.id, gangId: gang.id },
-                      })}
-                    >
-                      {dbT(gang, 'name')}
-                    </Link>
-                  );
-                },
+                crumb: ({ params }: UIMatch, { gang }: GangLoader) => (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+                      urlParams: params,
+                    })}
+                  >
+                    {gang ? dbT(gang, 'name') : t(KEY.common_unknown)}
+                  </Link>
+                ),
               }}
             >
               <Route
@@ -542,19 +504,11 @@ export const router = createBrowserRouter(
                 element={<PermissionRoute required={[]} element={<RecruitmentPositionFormAdminPage />} />}
                 loader={recruitmentGangLoader}
                 handle={{
-                  crumb: ({ recruitment, gang }: RecruitmentLoader & GangLoader) => {
-                    if (!recruitment || !gang) return <span>{t(KEY.common_unknown)}</span>;
-                    return (
-                      <Link
-                        url={reverse({
-                          pattern: ROUTES.frontend.admin_recruitment_gang_position_create,
-                          urlParams: { recruitmentId: recruitment.id, gangId: gang.id },
-                        })}
-                      >
-                        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
-                      </Link>
-                    );
-                  },
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>
+                      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
+                    </Link>
+                  ),
                 }}
               />
               {/* Position */}
@@ -562,19 +516,16 @@ export const router = createBrowserRouter(
                 element={<Outlet />}
                 loader={recruitmentGangPositionLoader}
                 handle={{
-                  crumb: ({ recruitment, gang, position }: RecruitmentLoader & GangLoader & PositionLoader) => {
-                    if (!recruitment || !gang || !position) return <span>{t(KEY.common_unknown)}</span>;
-                    return (
-                      <Link
-                        url={reverse({
-                          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
-                          urlParams: { recruitmentId: recruitment.id, gangId: gang.id, positionId: position.id },
-                        })}
-                      >
-                        {dbT(position, 'name')}
-                      </Link>
-                    );
-                  },
+                  crumb: ({ params }: UIMatch, { position }: RecruitmentLoader & GangLoader & PositionLoader) => (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
+                        urlParams: params,
+                      })}
+                    >
+                      {position ? dbT(position, 'name') : t(KEY.common_unknown)}
+                    </Link>
+                  ),
                 }}
               >
                 <Route
@@ -586,19 +537,7 @@ export const router = createBrowserRouter(
                   element={<PermissionRoute required={[]} element={<RecruitmentPositionFormAdminPage />} />}
                   loader={recruitmentGangPositionLoader}
                   handle={{
-                    crumb: ({ recruitment, gang, position }: RecruitmentLoader & GangLoader & PositionLoader) => {
-                      if (!recruitment || !gang || !position) return <span>{t(KEY.common_unknown)}</span>;
-                      return (
-                        <Link
-                          url={reverse({
-                            pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
-                            urlParams: { recruitmentId: recruitment.id, gangId: gang.id, positionId: position.id },
-                          })}
-                        >
-                          {t(KEY.common_edit)}
-                        </Link>
-                      );
-                    },
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
                   }}
                 />
               </Route>

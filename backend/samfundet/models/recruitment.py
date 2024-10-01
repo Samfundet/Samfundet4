@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from .general import Gang, User, Campus, Organization
+from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 
@@ -136,7 +136,9 @@ class RecruitmentPosition(CustomBaseModel):
 
     norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting')
+    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
+    section = models.ForeignKey(GangSection, on_delete=models.CASCADE, help_text='The section that is recruiting', null=True, blank=True)
+
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -161,6 +163,12 @@ class RecruitmentPosition(CustomBaseModel):
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
+    def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.section_id
+        return self.section
+
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
         if return_id:
             # noinspection PyTypeChecker
@@ -172,6 +180,12 @@ class RecruitmentPosition(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
+
+    def clean(self) -> None:
+        super().clean()
+
+        if (self.gang and self.section) or not (self.gang or self.section):
+            raise ValidationError('Position must be owned by either gang or section, not both')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
@@ -203,7 +217,7 @@ class RecruitmentSeparatePosition(CustomBaseModel):
         return self.recruitment.resolve_org(return_id=return_id)
 
     def __str__(self) -> str:
-        return f'Seperate recruitment: {self.name_nb} ({self.recruitment})'
+        return f'Separate recruitment: {self.name_nb} ({self.recruitment})'
 
 
 class InterviewRoom(CustomBaseModel):

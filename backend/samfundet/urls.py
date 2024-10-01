@@ -36,11 +36,13 @@ router.register('infobox', views.InfoboxView, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('organizations', views.OrganizationView, 'organizations')
 router.register('merch', views.MerchView, 'merch')
+router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
+router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
