@@ -111,7 +111,19 @@ export function RecruitmentApplicantAdminPage() {
             return [
               {
                 sortable: true,
-                content: element.applicant_priority,
+                content: (
+                  <Link
+                  target={'frontend'}
+                  url={reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_applicant,
+                    urlParams: {
+                      applicationID: element.id,
+                    },
+                  })}
+                  >
+                {element.applicant_priority}
+                  </Link>
+                )
               },
               {
                 content: (
