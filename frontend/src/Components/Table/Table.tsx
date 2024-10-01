@@ -245,8 +245,8 @@ export function Table({
                   ))}
               </tr>
               {row.childTable !== undefined && isOpen === index1 && (
-                <tr className={styles.childTable}>
-                  <td colSpan={row.cells.length + 1} className={cellClassName}>
+                <tr className={styles.childTableContainer}>
+                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName} `}>
                     <Table {...row.childTable} isChildTable />
                   </td>
                 </tr>

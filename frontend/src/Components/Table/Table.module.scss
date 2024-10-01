@@ -124,7 +124,20 @@ th {
 }
 
 .childTable {
-  background-color: $red-samf;
+  width: 95%;
+  border-collapse: collapse;
+  border-radius: 0.9em;
+  border-top: solid 0.5em $grey-5;
+  border-bottom: solid 0.5em $grey-5;
+  color: $table-font-color;
+  overflow: hidden;
+  @include theme-dark {
+    background-color: $table-bg-dark;
+    color: $table-font-color-dark;
+  }
+  th {
+    font-size: 1em;
+  }
 }
 
 /* stylelint-enable */
