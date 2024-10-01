@@ -7,7 +7,7 @@ import { Button, Link } from '~/Components';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
-type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
+type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
 
 type ProcessedApplicantsProps = {
   data: RecruitmentApplicationDto[];
@@ -68,6 +68,7 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     withdrawn: styles.withdrawn,
     accepted: styles.accepted,
     rejected: styles.rejected,
+    hardtoget: styles.hardtoget,
   };
 
   return (

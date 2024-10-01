@@ -307,9 +307,12 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_applications]: 'Trukkede søknader',
   [KEY.recruitment_rejected_applications]: 'Søkere som får automatisk avslag',
+  [KEY.recruitment_hardtoget_applications]: 'Søkere som har takket nei til stillingen',
   [KEY.recruitment_accepted_applications]: 'Søkere vi har tatt opp',
   [KEY.recruitment_rejected_applications_help_text]:
     'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'Disse har takket nei til stillingen og vil dermed ikke få noen avslagsmail.',
   [KEY.recruitment_accepted_applications_help_text]:
     'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
   [KEY.recruitment_accepted_applications_empty_text]: 'Ingen søkere er markert som kontaktet.',
