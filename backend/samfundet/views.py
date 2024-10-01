@@ -727,8 +727,26 @@ class SendRejectionMailView(APIView):
             if recruitment is None:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            rejected_users = User.objects.filter(admissions__recruitment=recruitment, admissions__recuiter_status__ne=RecruitmentStatusChoices.REJECTION)
-            rejected_user_mails = list(rejected_users.values_list('email', flat=True))
+            # Only users who have never been contacted with an offer should get a rejection mail
+            # Retrieve all users who has a rejected application in current recruitment
+            rejected_users = User.objects.filter(
+                recruitmentapplication__recruitment=recruitment, 
+                recruitmentapplication__recruiter_status=RecruitmentStatusChoices.REJECTION
+            )
+
+            # Retrieve all users who have been contacted with an offer
+            contacted_users = User.objects.filter(
+                recruitmentapplication__recruitment=recruitment,
+                recruitmentapplication__recruiter_status__in=[
+                    RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+                    RecruitmentStatusChoices.CALLED_AND_REJECTED
+                ]
+            )
+
+            # Remove users who have been contacted with an offer from the rejected users list
+            final_rejected_users = rejected_users.exclude(id__in=contacted_users.values('id'))
+
+            rejected_user_mails = list(final_rejected_users.values_list('email', flat=True))
 
             send_mail(
                 subject,
