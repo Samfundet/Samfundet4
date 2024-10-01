@@ -7,7 +7,6 @@ import type {
   FoodCategoryDto,
   FoodPreferenceDto,
   GangDto,
-  GangTypeDto,
   HomePageDto,
   ImageDto,
   ImagePostDto,
@@ -370,9 +369,9 @@ export async function getOrganization(id: number | undefined): Promise<Organizat
   return response.data;
 }
 
-export async function getGangList(): Promise<GangTypeDto[]> {
+export async function getGangList(): Promise<DepartmentDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
-  const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
+  const response = await axios.get<DepartmentDto[]>(url, { withCredentials: true });
 
   return response.data;
 }

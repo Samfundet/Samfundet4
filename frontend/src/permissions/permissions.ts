@@ -123,10 +123,10 @@ export const SAMFUNDET_CHANGE_GANGSECTION = 'samfundet.change_gangsection';
 export const SAMFUNDET_DELETE_GANGSECTION = 'samfundet.delete_gangsection';
 export const SAMFUNDET_VIEW_GANGSECTION = 'samfundet.view_gangsection';
 
-export const SAMFUNDET_ADD_GANGTYPE = 'samfundet.add_gangtype';
-export const SAMFUNDET_CHANGE_GANGTYPE = 'samfundet.change_gangtype';
-export const SAMFUNDET_DELETE_GANGTYPE = 'samfundet.delete_gangtype';
-export const SAMFUNDET_VIEW_GANGTYPE = 'samfundet.view_gangtype';
+export const SAMFUNDET_ADD_DEPARTMENT = 'samfundet.add_department';
+export const SAMFUNDET_CHANGE_DEPARTMENT = 'samfundet.change_department';
+export const SAMFUNDET_DELETE_DEPARTMENT = 'samfundet.delete_department';
+export const SAMFUNDET_VIEW_DEPARTMENT = 'samfundet.view_department';
 
 export const SAMFUNDET_ADD_IMAGE = 'samfundet.add_image';
 export const SAMFUNDET_CHANGE_IMAGE = 'samfundet.change_image';

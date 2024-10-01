@@ -1,23 +1,23 @@
+import { DepartmentDto, RecruitmentPositionDto } from '~/dto';
 import { useEffect, useState } from 'react';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getGangList, getRecruitmentPositions } from '~/api';
-import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { GangPositionDropdown } from '../GangPositionDropdown';
 
-type GangTypeContainerProps = {
+type DepartmentContainerProps = {
   recruitmentID: string;
 };
 
-export function GangTypeContainer({ recruitmentID = '-1' }: GangTypeContainerProps) {
+export function DepartmentContainer({ recruitmentID = '-1' }: DepartmentContainerProps) {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
-  const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
+  const [recruitingDepartments, setRecruitingDepartments] = useState<DepartmentDto[]>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     Promise.all([getRecruitmentPositions(recruitmentID), getGangList()])
       .then(([recruitmentRes, gangsRes]) => {
         setRecruitmentPositions(recruitmentRes.data);
-        setRecruitingGangs(gangsRes);
+        setRecruitingDepartments(gangsRes);
         setLoading(false);
       })
       .catch((error) => {
@@ -30,8 +30,8 @@ export function GangTypeContainer({ recruitmentID = '-1' }: GangTypeContainerPro
     <SamfundetLogoSpinner />
   ) : (
     <>
-      {recruitingGangTypes?.map((gangType) => (
-        <GangPositionDropdown key={gangType.id} type={gangType} recruitmentPositions={recruitmentPositions} />
+      {recruitingDepartments?.map((department) => (
+        <GangPositionDropdown key={department.id} type={department} recruitmentPositions={recruitmentPositions} />
       ))}
     </>
   );

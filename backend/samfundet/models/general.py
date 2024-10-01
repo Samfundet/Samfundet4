@@ -283,15 +283,15 @@ class Organization(CustomBaseModel):
         return self.name
 
 
-class GangType(CustomBaseModel):
+class Department(CustomBaseModel):
     """Type of gang. eg. 'arrangerende', 'kunstnerisk' etc."""
 
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
     class Meta:
-        verbose_name = 'GangType'
-        verbose_name_plural = 'GangTypes'
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
@@ -313,7 +313,7 @@ class Gang(CustomBaseModel):
     )
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
-    gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
+    gang_type = models.ForeignKey(to=Department, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:

@@ -2,7 +2,7 @@
 
 @import 'src/mixins';
 
-.gangsTabsContainer{
+.departmentTabsContainer{
   @include flex-column-center;
   width: 100%;
 }

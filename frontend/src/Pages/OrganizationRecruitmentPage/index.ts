@@ -1,3 +1,3 @@
-export { OrganizationRecruitmentPage } from './OrganizationRecruitmentPage';
+export { DepartmentContainer } from './Components/DepartmentContainer';
 export { GangPositionDropdown } from './Components/GangPositionDropdown';
-export { GangTypeContainer } from './Components/GangTypeContainer';
+export { OrganizationRecruitmentPage } from './OrganizationRecruitmentPage';

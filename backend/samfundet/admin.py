@@ -37,7 +37,7 @@ from .models.general import (
     Infobox,
     Profile,
     BlogPost,
-    GangType,
+    Department,
     KeyValue,
     MenuItem,
     TextItem,
@@ -415,8 +415,8 @@ class GangAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(GangType)
-class GangTypeAdmin(CustomBaseAdmin):
+@admin.register(Department)
+class DepartmentAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title_nb', 'created_at', 'updated_at']
     # list_filter = []

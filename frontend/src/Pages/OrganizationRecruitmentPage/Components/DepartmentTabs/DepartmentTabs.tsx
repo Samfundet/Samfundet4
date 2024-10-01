@@ -1,18 +1,18 @@
+import { GangDto, DepartmentDto } from '~/dto';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type Tab, TabBar, Text } from '~/Components';
 import { PositionsTable } from '~/Pages/OrganizationRecruitmentPage/Components/PositionsTable/PositionsTable';
-import type { GangDto, GangTypeDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
-import styles from './GangsTabs.module.scss';
+import styles from './DepartmentTabs.module.scss';
 
-type GangTabsProps = {
-  currentGangCategory: Tab<GangTypeDto>;
+type DepartmentTabsProps = {
+  currentDepartment: Tab<DepartmentDto>;
 };
 
-export function GangsTabs({ currentGangCategory }: GangTabsProps) {
+export function DepartmentTabs({ currentDepartment }: DepartmentTabsProps) {
   const [isLoading, setLoading] = useState(true);
   const [currentTab, setCurrentTab] = useState<Tab<GangDto>>();
   const [gangs, setGangs] = useState<GangDto[]>([]);
@@ -20,10 +20,10 @@ export function GangsTabs({ currentGangCategory }: GangTabsProps) {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!currentGangCategory.value) {
+    if (!currentDepartment.value) {
       return;
     }
-    setGangs(currentGangCategory.value.gangs);
+    setGangs(currentDepartment.value.gangs);
     if (gangs.length > 0) {
       const initialTab: Tab<GangDto> = {
         key: gangs[0].id,
@@ -33,7 +33,7 @@ export function GangsTabs({ currentGangCategory }: GangTabsProps) {
       setCurrentTab(initialTab);
     }
     setLoading(false);
-  }, [currentGangCategory, gangs]);
+  }, [currentDepartment, gangs]);
 
   const setChildLoading = useCallback((loading: boolean) => {
     setLoading(loading);
@@ -50,7 +50,7 @@ export function GangsTabs({ currentGangCategory }: GangTabsProps) {
   };
 
   return (
-    <div className={styles.gangsTabsContainer}>
+    <div className={styles.departmentTabsContainer}>
       {gangs.length > 0 ? (
         <>
           <TabBar

@@ -1,0 +1,1 @@
+export { DepartmentContainer } from './DepartmentContainer';

@@ -11,7 +11,7 @@ import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
-import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
+import { RecruitmentTabs, DepartmentContainer, GangSeparatePositions } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
@@ -114,7 +114,7 @@ export function OrganizationRecruitmentPage() {
               {/*^^^ issue #1275 */}
             </div>
             {recruitmentID &&
-              (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
+              (viewAllPositions ? <DepartmentContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
             {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
               <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
             )}

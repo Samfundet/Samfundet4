@@ -7,7 +7,7 @@ import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
 import { getGangList } from '~/api';
-import type { GangTypeDto } from '~/dto';
+import { DepartmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -17,8 +17,8 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
-  const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
-  const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
+  const [departments, setDepartments] = useState<DepartmentDto[]>([]);
+  const [currentDepartmentTab, setDepartmentTab] = useState<Tab<DepartmentDto> | undefined>(undefined);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   useTitle(t(KEY.adminpage_gangs_title));
@@ -29,9 +29,9 @@ export function GangsAdminPage() {
   useEffect(() => {
     getGangList()
       .then((data) => {
-        setGangs(data);
+        setDepartments(data);
         setShowSpinner(false);
-        setGangTypeTab({
+        setDepartmentTab({
           key: data[0].id,
           label: dbT(data[0], 'title') ?? '?',
           value: data[0],
@@ -43,17 +43,17 @@ export function GangsAdminPage() {
       });
   }, []);
 
-  const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
+  const departmentTabs: Tab<DepartmentDto>[] = departments.map((department) => {
     return {
-      key: gangType.id,
-      label: dbT(gangType, 'title') ?? '?',
-      value: gangType,
+      key: department.id,
+      label: dbT(department, 'title') ?? '?',
+      value: department,
     };
   });
 
-  const currentGangType = currentGangTypeTab?.value;
+  const currentDepartment = currentDepartmentTab?.value;
 
-  const tableData = currentGangType?.gangs.map((element2) => [
+  const tableData = currentDepartment?.gangs.map((element2) => [
     dbT(element2, 'name'),
     element2.abbreviation,
     element2.webpage,
@@ -83,9 +83,9 @@ export function GangsAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab} />
-      <br />
-      {currentGangType && (
+      <TabBar tabs={departmentTabs} selected={currentDepartmentTab} onSetTab={setDepartmentTab}></TabBar>
+      <br></br>
+      {currentDepartmentTab && (
         <>
           <Table
             columns={[
