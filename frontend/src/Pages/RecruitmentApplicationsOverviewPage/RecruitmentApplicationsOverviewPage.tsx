@@ -127,7 +127,11 @@ export function RecruitmentApplicationsOverviewPage() {
         </div>
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
         {applications.length > 0 ? (
-          <Table data={applications.map(applicationToTableRow)} columns={tableColumns} defaultSortColumn={3} />
+          <Table
+            data={applications.map((application) => ({ cells: applicationToTableRow(application) }))}
+            columns={tableColumns}
+            defaultSortColumn={3}
+          ></Table>
         ) : (
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}
@@ -140,7 +144,9 @@ export function RecruitmentApplicationsOverviewPage() {
               bodyRowClassName={styles.withdrawnRow}
               headerClassName={styles.withdrawnHeader}
               headerColumnClassName={styles.withdrawnHeader}
-              data={withdrawnApplications.map(withdrawnApplicationToTableRow)}
+              data={withdrawnApplications.map((application) => ({
+                cells: withdrawnApplicationToTableRow(application),
+              }))}
               columns={withdrawnTableColumns}
             />
           </div>

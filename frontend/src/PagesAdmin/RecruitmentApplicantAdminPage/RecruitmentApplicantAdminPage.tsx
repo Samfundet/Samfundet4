@@ -72,9 +72,16 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Table
           data={[
-            [t(KEY.common_phonenumber), applicant?.phone_number ? applicant?.phone_number : t(KEY.common_not_set)],
-            [t(KEY.common_email), applicant?.email ? applicant?.email : t(KEY.common_not_set)],
-            [t(KEY.common_campus), applicant?.campus ? dbT(applicant?.campus, 'name') : t(KEY.common_not_set)],
+            {
+              cells: [
+                t(KEY.common_phonenumber),
+                applicant?.phone_number ? applicant?.phone_number : t(KEY.common_not_set),
+              ],
+            },
+            { cells: [t(KEY.common_email), applicant?.email ? applicant?.email : t(KEY.common_not_set)] },
+            {
+              cells: [t(KEY.common_campus), applicant?.campus ? dbT(applicant?.campus, 'name') : t(KEY.common_not_set)],
+            },
           ]}
         />
       </div>
@@ -108,41 +115,43 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_interview_time),
           ]}
           data={otherRecruitmentApplication.map((element) => {
-            return [
+            return {
+              cells: [
               {
                 sortable: true,
                 content: element.applicant_priority,
               },
-              {
-                content: (
-                  <Link
-                    target={'frontend'}
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_recruitment_applicant,
-                      urlParams: {
-                        applicationID: element.id,
-                      },
-                    })}
-                  >
-                    {dbT(element.recruitment_position, 'name')}
-                  </Link>
-                ),
-              },
-              {
-                content: (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.information_page_detail,
-                      urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
-                    })}
-                  >
-                    {dbT(element.recruitment_position.gang, 'name')}
-                  </Link>
-                ),
-              },
-              element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
-              element.interview_time ? element.interview_time : t(KEY.common_not_set),
-            ];
+                {
+                  content: (
+                    <Link
+                      target={'frontend'}
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_recruitment_applicant,
+                        urlParams: {
+                          applicationID: element.id,
+                        },
+                      })}
+                    >
+                      {dbT(element.recruitment_position, 'name')}
+                    </Link>
+                  ),
+                },
+                {
+                  content: (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.information_page_detail,
+                        urlParams: { slugField: element.recruitment_position.gang.name_nb.toLowerCase() },
+                      })}
+                    >
+                      {dbT(element.recruitment_position.gang, 'name')}
+                    </Link>
+                  ),
+                },
+                element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
+                element.interview_time ? element.interview_time : t(KEY.common_not_set),
+              ],
+            };
           })}
         />
       </div>

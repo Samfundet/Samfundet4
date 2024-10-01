@@ -310,6 +310,7 @@ export const KEY = {
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_applicants_open_to_other_positions: 'recruitment_applicants_open_to_other_positions',
   recruitment_show_all_applicants: 'recruitment_show_all_applicants',
   recruitment_processed: 'recruitment_processed',
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
@@ -363,6 +364,7 @@ export const KEY = {
   // Recruitment applets
   recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
   recruitment_applet_edit_description: 'recruitment_applet_edit_description',
+  recruitment_applet_open_to_other_positions : 'recruitment_applet_open_to_other_positions',
   recruitment_applet_overview_description: 'recruitment_applet_overview_description',
   recruitment_applet_room_description: 'recruitment_applet_room_description',
   recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',

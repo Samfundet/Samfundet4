@@ -213,8 +213,7 @@ export const nb = prepareTranslations({
   [KEY.contributors_page_past_developers]: 'Tidligere utviklere',
 
   // GroupsPage:
-  [KEY.groupspage_gangs_text]:
-    'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
+  [KEY.groupspage_gangs_text]: 'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
   [KEY.groupspage_gangs_title]: 'Gjengene på Samfundet',
 
   // EventPageAge:
@@ -276,8 +275,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_funksjonaer]: 'Funksjonær',
   [KEY.recruitment_gangmember]: 'Gjengmedlem',
   [KEY.recruitment_applyfor]: 'Søk på dette vervet',
-  [KEY.recruitment_applyforhelp]:
-    'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg! Etter at du er registrert som søker, kan du logge inn for å se status på dine søknader. Hvis du har søkt flere verv, må du også prioritere hvilket du ønsker mest. Du vil kun få tilbud om ett verv.',
+  [KEY.recruitment_applyforhelp]: 'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg! Etter at du er registrert som søker, kan du logge inn for å se status på dine søknader. Hvis du har søkt flere verv, må du også prioritere hvilket du ønsker mest. Du vil kun få tilbud om ett verv.',
   [KEY.recruitment_volunteerfor]: 'Verv som',
   [KEY.recruitment_otherpositions]: 'Andre verv i',
   [KEY.recruitment_visible_from]: 'Synlig fra',
@@ -286,6 +284,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_administrate_positions]: 'Administrer stillinger',
   [KEY.recruitment_administrate_applications]: 'Administrer søknader',
   [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Søkere interessert i andre stillinger',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
@@ -311,17 +310,14 @@ export const nb = prepareTranslations({
   [KEY.recruitment_automatic_rejection]: 'Automatisk avslag',
   [KEY.recruitment_rejection_email]: 'avslagsmail',
   [KEY.recruitment_applicants_without_interview]: 'Søkere uten intervju',
-  [KEY.recruitment_applicants_without_interview_help_text]:
-    'Denne oversikten viser alle søkere som mangler en eller intervjutider på verv de har søkt i denne gjengen. Oversikten fremhever vervet som søkeren har rangert høyest i gjengen, og hvilken rangering den er satt til',
+  [KEY.recruitment_applicants_without_interview_help_text]: 'Denne oversikten viser alle søkere som mangler en eller intervjutider på verv de har søkt i denne gjengen. Oversikten fremhever vervet som søkeren har rangert høyest i gjengen, og hvilken rangering den er satt til',
   [KEY.recruitment_not_applicants_without_interviews]: 'Ingen søkere mangler intervju',
   [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_applications]: 'Trukkede søknader',
   [KEY.recruitment_rejected_applications]: 'Søkere som får automatisk avslag',
   [KEY.recruitment_accepted_applications]: 'Søkere vi har tatt opp',
-  [KEY.recruitment_rejected_applications_help_text]:
-    'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
-  [KEY.recruitment_accepted_applications_help_text]:
-    'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
+  [KEY.recruitment_rejected_applications_help_text]: 'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_accepted_applications_help_text]: 'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
   [KEY.recruitment_accepted_applications_empty_text]: 'Ingen søkere er markert som kontaktet.',
   [KEY.recruitment_rejected_applications_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'Ingen trekte søknader.',
@@ -342,11 +338,9 @@ export const nb = prepareTranslations({
   [KEY.error_recruitment_form_2]: 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
   [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
   [KEY.error_recruitment_form_4]: 'Flaggefrist kan ikke være før omprioriteringsfrist',
-  [KEY.recruitment_three_interviews_criteria_header]:
-    'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+  [KEY.recruitment_three_interviews_criteria_header]: 'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
-  [KEY.recruitment_dashboard_description]:
-    'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
+  [KEY.recruitment_dashboard_description]: 'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -373,6 +367,7 @@ export const nb = prepareTranslations({
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
   [KEY.recruitment_applet_room_description]: 'Opprett rom for intervju',
   [KEY.recruitment_applet_rejection_mail_description]: 'Send mail til de som ikke fikk tilbud',
@@ -641,7 +636,6 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
-
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
 
@@ -654,8 +648,7 @@ export const en = prepareTranslations({
   [KEY.loginpage_login_failed]: 'Login failed',
 
   // GroupsPage:
-  [KEY.groupspage_gangs_text]:
-    'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
+  [KEY.groupspage_gangs_text]: 'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
   [KEY.groupspage_gangs_title]: 'The groups at Samfundet',
 
   // EventPageAge:
@@ -698,8 +691,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_my_applications]: 'My applications',
   [KEY.recruitment_all_applications]: 'All applications',
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
-  [KEY.recruitment_will_be_anonymized]:
-    'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_will_be_anonymized]: 'All info related to the applications will be anonymized three weeks after the recruitment is over',
   [KEY.recruitment_interviews]: 'Interviews',
   [KEY.recruitment_no_interviews]: 'No interviews',
   [KEY.recruitment_interview_set]: 'Set Interview',
@@ -717,8 +709,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_funksjonaer]: 'Functionary',
   [KEY.recruitment_gangmember]: 'Gangmember',
   [KEY.recruitment_applyfor]: 'Apply for this position',
-  [KEY.recruitment_applyforhelp]:
-    ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
+  [KEY.recruitment_applyforhelp]: ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
   [KEY.recruitment_no_positions]: 'No positions',
@@ -731,6 +722,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_administrate_positions]: 'Administrate positions',
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
   [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Applicants interested in other positions',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
   [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
@@ -757,20 +749,16 @@ export const en = prepareTranslations({
   [KEY.recruitment_automatic_rejection]: 'Automatic rejection',
   [KEY.recruitment_rejection_email]: 'rejection email',
   [KEY.recruitment_applicants_without_interview]: 'Applicants without interview',
-  [KEY.recruitment_applicants_without_interview_help_text]:
-    'This overview show all applicantss which lack interviews for this recruitment and gang. It shows their most desired position in this gang, and that positions rank overall',
+  [KEY.recruitment_applicants_without_interview_help_text]: 'This overview show all applicantss which lack interviews for this recruitment and gang. It shows their most desired position in this gang, and that positions rank overall',
   [KEY.recruitment_not_applicants_without_interviews]: 'No applicants are lacking interviews',
   [KEY.recruitment_applicant_top_position]: 'Most desired position',
   [KEY.recruitment_withdrawn_applications]: 'Withdrawn applications',
   [KEY.recruitment_rejected_applications]: 'Automatically rejected applicants',
   [KEY.recruitment_accepted_applications]: 'Applicants we have contacted and accepted',
-  [KEY.recruitment_rejected_applications_help_text]:
-    'These will get an automatic rejection email if they are not accepted for a different position',
-  [KEY.recruitment_accepted_applications_help_text]:
-    'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
+  [KEY.recruitment_rejected_applications_help_text]: 'These will get an automatic rejection email if they are not accepted for a different position',
+  [KEY.recruitment_accepted_applications_help_text]: 'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
   [KEY.recruitment_accepted_applications_empty_text]: 'No applicants are marked as contacted.',
-  [KEY.recruitment_rejected_applications_empty_text]:
-    'No applicants are marked to receive an automatic rejection email.',
+  [KEY.recruitment_rejected_applications_empty_text]: 'No applicants are marked to receive an automatic rejection email.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
@@ -789,14 +777,14 @@ export const en = prepareTranslations({
   [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
-  [KEY.recruitment_dashboard_description]:
-    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
+  [KEY.recruitment_dashboard_description]: 'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
   [KEY.recruitment_applet_room_description]: 'Create room for interviews',
   [KEY.recruitment_applet_rejection_mail_description]: "Send mail to those who didn't get an offer",
@@ -826,8 +814,7 @@ export const en = prepareTranslations({
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
-  [KEY.recruitment_three_interviews_criteria_header]:
-    'Applicants with less than 3 interviews, but have applied to more than 3 positions',
+  [KEY.recruitment_three_interviews_criteria_header]: 'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
   // CommandMenu:
   [KEY.command_menu_label]: 'Global command menu',
@@ -857,8 +844,7 @@ export const en = prepareTranslations({
   [KEY.sulten_page_book_table]: 'Book table',
   [KEY.sulten_lyche_about_menu]: 'About the menu',
   [KEY.sulten_page_more_about_us]: 'More about us',
-  [KEY.sulten_reservation_form_occasion_help]:
-    'What is the purpose of the visit? This us helps determine what kind of table you will be given.',
+  [KEY.sulten_reservation_form_occasion_help]: 'What is the purpose of the visit? This us helps determine what kind of table you will be given.',
   [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
   [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
@@ -892,4 +878,5 @@ export const en = prepareTranslations({
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
+  
 });
