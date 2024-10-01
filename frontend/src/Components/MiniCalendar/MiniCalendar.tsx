@@ -7,7 +7,6 @@ import { Button, TimeDisplay } from '~/Components';
 import type { CalendarMarker } from '~/types';
 import { SHORT_DAY_I18N_KEYS } from '~/utils';
 import styles from './MiniCalendar.module.scss';
-import { init } from 'i18next';
 
 type MiniCalendarProps = {
   /** Decides which month to display */
@@ -22,22 +21,12 @@ type MiniCalendarProps = {
   displayLabel?: boolean;
   /** List of dates to mark with a dot */
   markers?: CalendarMarker[];
-  /** Selected date can be defined on beforehand */
-  initialSelectedDate?: Date | null;
 };
 
-export function MiniCalendar({
-  baseDate,
-  minDate,
-  maxDate,
-  onChange,
-  displayLabel,
-  markers,
-  initialSelectedDate,
-}: MiniCalendarProps) {
+export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabel, markers }: MiniCalendarProps) {
   const [displayDate, setDisplayDate] = useState<Date>(baseDate);
   const [days, setDays] = useState<Date[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate || null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { t } = useTranslation();
 
   function getMarker(d: Date | null) {

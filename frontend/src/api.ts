@@ -939,16 +939,6 @@ export async function putRecruitmentApplicationInterview(
   return response;
 }
 
-export async function getInterview(interviewId: number): Promise<AxiosResponse<InterviewDto>> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__interview_detail,
-      urlParams: { pk: interviewId },
-    });
-  return await axios.get(url, { withCredentials: true });
-}
-
 // ############################################################
 //                       Interview rooms
 // ############################################################
