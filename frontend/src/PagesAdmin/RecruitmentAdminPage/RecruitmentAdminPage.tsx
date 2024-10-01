@@ -74,22 +74,26 @@ export function RecruitmentAdminPage() {
                 }),
               );
             }}
-              onView={() => {
-                navigate(ROUTES.frontend.recruitment);
-              }}
-              onEdit={() => {
-                navigate(
-                  reverse({
-                    pattern: ROUTES.frontend.admin_recruitment_edit,
-                    urlParams: { recruitmentId: element.id },
-                  }),
-                );
-              }}
-            />
-          ),
-        },
-      ],
-    };
+            onView={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.organization_recruitment,
+                  urlParams: { recruitmentID: element.id },
+                }),
+              );
+            }}
+            onEdit={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_edit,
+                  urlParams: { recruitmentId: element.id },
+                }),
+              );
+            }}
+          />
+        ),
+      },
+    ];
   });
 
   const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
