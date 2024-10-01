@@ -16,7 +16,7 @@ export function RejectionMail() {
   function handleSubmit() {
     if (recruitmentId) {
       postRejectionMail(recruitmentId, { subject, text });
-      toast.success('Email sent!');
+      toast.success(t(KEY.common_save_successful));
     } else {
       toast.error(t(KEY.common_something_went_wrong));
       console.error('Recruitment id cannot be null');
@@ -25,9 +25,9 @@ export function RejectionMail() {
 
   return (
     <>
-      <label>Subject</label>
+      <label>{t(KEY.common_email_subject)}</label>
       <InputField type="text" value={subject} onChange={setSubject} />
-      <label>Email</label>
+      <label>{t(KEY.common_email)}</label>
       <TextAreaField value={text} onChange={setText} />
       <Button theme="green" onClick={handleSubmit}>
         Submit
