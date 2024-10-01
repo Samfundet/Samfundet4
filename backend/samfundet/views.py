@@ -20,6 +20,7 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
+from django.core.mail import send_mail
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
@@ -475,6 +476,13 @@ class ImpersonateView(APIView):
         response = Response(status=200)
         user_id = request.data.get('user_id', None)
         setattr(response, REQUESTED_IMPERSONATE_USER, user_id)
+        impersonated_user = User.objects.get(pk=user_id)
+        send_mail(
+            'Impersonation alert',
+            f'User {request.user.username} (#{request.user.id}) is impersonating user {impersonated_user.username} (#{user_id})',
+            None,
+            ['mg-web@samfundet.no'],
+        )
         return response
 
 
