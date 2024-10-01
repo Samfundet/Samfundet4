@@ -728,10 +728,11 @@ class SendRejectionMailView(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
             # Only users who have never been contacted with an offer should get a rejection mail
-            # Retrieve all users who has a rejected application in current recruitment
+            # Retrieve all users who has a non-withdrawn rejected application in current recruitment
             rejected_users = User.objects.filter(
                 recruitmentapplication__recruitment=recruitment, 
-                recruitmentapplication__recruiter_status=RecruitmentStatusChoices.REJECTION
+                recruitmentapplication__recruiter_status=RecruitmentStatusChoices.REJECTION,
+                recruitmentapplication__withdrawn=False
             )
 
             # Retrieve all users who have been contacted with an offer
