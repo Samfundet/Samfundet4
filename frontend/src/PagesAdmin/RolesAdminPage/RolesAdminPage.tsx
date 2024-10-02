@@ -6,6 +6,8 @@ import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import type { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 
 export function RolesAdminPage() {
@@ -52,7 +54,18 @@ export function RolesAdminPage() {
           value: 0,
         },
         {
-          content: <CrudButtons onEdit={() => navigate('#')} />,
+          content: (
+            <CrudButtons
+              onEdit={() =>
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_roles_edit,
+                    urlParams: { roleId: r.id },
+                  }),
+                )
+              }
+            />
+          ),
         },
       ];
     });

@@ -58,6 +58,7 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
+  RoleFormAdminPage,
   RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
@@ -84,6 +85,7 @@ import {
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  roleLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
@@ -179,6 +181,15 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_roles}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_create}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_edit}
+            loader={roleLoader}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_ROLE]} element={<RoleFormAdminPage />} />}
           />
         </Route>
         {/* Events */}

@@ -27,6 +27,7 @@ export { RecruitmentUnprocessedApplicantsPage } from './RecruitmentUnprocessedAp
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
 export { RolesAdminPage } from './RolesAdminPage';
+export { RoleFormAdminPage } from './RoleFormAdminPage';
 export { CreateInterviewRoomPage, RoomAdminPage } from './RoomAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

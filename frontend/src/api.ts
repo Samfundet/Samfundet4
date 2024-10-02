@@ -32,6 +32,7 @@ import type {
   RecruitmentStatsDto,
   RecruitmentUserDto,
   RegistrationDto,
+  RoleDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -380,6 +381,13 @@ export async function getGangList(): Promise<GangTypeDto[]> {
 export async function getGang(id: string | number): Promise<GangDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__gangs_detail, urlParams: { pk: id } });
   const response = await axios.get<GangDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getRole(id: number): Promise<RoleDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_detail, urlParams: { pk: id } });
+  const response = await axios.get<RoleDto>(url, { withCredentials: true });
 
   return response.data;
 }

@@ -83,6 +83,7 @@ export const KEY = {
   common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
+  common_section: 'common_section',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -120,6 +121,7 @@ export const KEY = {
   common_email: 'common_email',
   common_total: 'common_total',
   common_roles: 'common_roles',
+  common_role: 'common_role',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
@@ -211,6 +213,8 @@ export const KEY = {
   // ==================== //
   //        Others        //
   // ==================== //
+
+  role_content_type: 'role_content_type',
 
   // LoginPage:
   loginpage_register: 'loginpage_register',
