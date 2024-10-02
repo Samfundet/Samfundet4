@@ -77,13 +77,13 @@ export function RecruitmentFormAdminPage() {
   const initialData: Partial<FormType> = {
     name_nb: data?.recruitment?.name_nb || '',
     name_en: data?.recruitment?.name_en || '',
-    visible_from: utcTimestampToLocal(data?.recruitment?.visible_from) || '',
-    actual_application_deadline: utcTimestampToLocal(data?.recruitment?.actual_application_deadline) || '',
-    shown_application_deadline: utcTimestampToLocal(data?.recruitment?.shown_application_deadline) || '',
+    visible_from: utcTimestampToLocal(data?.recruitment?.visible_from, false) || '',
+    actual_application_deadline: utcTimestampToLocal(data?.recruitment?.actual_application_deadline, false) || '',
+    shown_application_deadline: utcTimestampToLocal(data?.recruitment?.shown_application_deadline, false) || '',
     reprioritization_deadline_for_applicant:
-      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_applicant) || '',
+      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_applicant, false) || '',
     reprioritization_deadline_for_groups:
-      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups) || '',
+      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups, false) || '',
     organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id') || 1,
     max_applications: data?.recruitment?.max_applications,
   };
