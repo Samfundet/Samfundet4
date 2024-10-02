@@ -1,14 +1,14 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import type { GangDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { ABBREVIATION, NAME } from '~/schema/gang';
 import { WEBSITE_URL } from '~/schema/url';
-import type { GangDto } from '~/dto';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslation } from 'react-i18next';
-import styles from './GangsForm.module.scss';
-import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { lowerCapitalize } from '~/utils';
-import { KEY } from '~/i18n/constants';
+import styles from './GangsForm.module.scss';
 
 const schema = z.object({
   name_nb: NAME.min(1),
