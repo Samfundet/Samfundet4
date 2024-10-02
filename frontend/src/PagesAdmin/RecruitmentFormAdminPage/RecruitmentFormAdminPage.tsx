@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import i18next from 'i18next';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -13,48 +14,69 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
+import { LOCAL_DATETIME } from '~/schema/dates';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
 
 const recruitmentSchema = z
   .object({
-    name_nb: z.string().min(1, { message: 'Name in Norwegian is required' }),
-    name_en: z.string().min(1, { message: 'Name in English is required' }),
-    visible_from: z.string().min(1, { message: 'Visible from date is required' }),
-    shown_application_deadline: z.string().min(1, { message: 'Shown application deadline is required' }),
-    actual_application_deadline: z.string().min(1, { message: 'Actual application deadline is required' }),
-    reprioritization_deadline_for_applicant: z
-      .string()
-      .min(1, { message: 'Reprioritization deadline for applicant is required' }),
-    reprioritization_deadline_for_groups: z
-      .string()
-      .min(1, { message: 'Reprioritization deadline for groups is required' }),
+    name_nb: z.string().min(1),
+    name_en: z.string().min(1),
+    visible_from: LOCAL_DATETIME,
+    shown_application_deadline: LOCAL_DATETIME,
+    actual_application_deadline: LOCAL_DATETIME,
+    reprioritization_deadline_for_applicant: LOCAL_DATETIME,
+    reprioritization_deadline_for_groups: LOCAL_DATETIME,
     organization: z.number().min(1, { message: 'Organization is required' }),
-    max_applications: z.number().optional(),
+    max_applications: z.number().nullish().optional(),
   })
   .refine(
     (data) => {
       const visibleFrom = new Date(data.visible_from);
       const shownApplicationDeadline = new Date(data.shown_application_deadline);
-      const actualApplicationDeadline = new Date(data.actual_application_deadline);
-      const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
-      const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
-
-      return (
-        shownApplicationDeadline > visibleFrom &&
-        actualApplicationDeadline > shownApplicationDeadline &&
-        reprioritizationDeadlineForApplicant > actualApplicationDeadline &&
-        reprioritizationDeadlineForGroups > reprioritizationDeadlineForApplicant
-      );
+      return shownApplicationDeadline > visibleFrom;
     },
     {
-      message: 'Dates must be in chronological order',
-      path: ['dates'],
+      message: i18next.t(KEY.error_recruitment_form_1),
+      path: ['shown_application_deadline'],
+    },
+  )
+  .refine(
+    (data) => {
+      const shownApplicationDeadline = new Date(data.shown_application_deadline);
+      const actualApplicationDeadline = new Date(data.actual_application_deadline);
+      return actualApplicationDeadline > shownApplicationDeadline;
+    },
+    {
+      message: i18next.t(KEY.error_recruitment_form_2),
+      path: ['actual_application_deadline'],
+    },
+  )
+  .refine(
+    (data) => {
+      const actualApplicationDeadline = new Date(data.actual_application_deadline);
+      const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
+      return reprioritizationDeadlineForApplicant > actualApplicationDeadline;
+    },
+    {
+      message: i18next.t(KEY.error_recruitment_form_3),
+      path: ['reprioritization_deadline_for_applicant'],
+    },
+  )
+  .refine(
+    (data) => {
+      const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
+      const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
+      return reprioritizationDeadlineForGroups > reprioritizationDeadlineForApplicant;
+    },
+    {
+      message: i18next.t(KEY.error_recruitment_form_4),
+      path: ['reprioritization_deadline_for_groups'],
     },
   );
 
-type FormType = z.infer<typeof recruitmentSchema>;
+type recruitmentFormType = z.infer<typeof recruitmentSchema>;
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
@@ -74,7 +96,7 @@ export function RecruitmentFormAdminPage() {
     });
   }, []);
 
-  const initialData: Partial<FormType> = {
+  const initialData: Partial<recruitmentFormType> = {
     name_nb: data?.recruitment?.name_nb || '',
     name_en: data?.recruitment?.name_en || '',
     visible_from: utcTimestampToLocal(data?.recruitment?.visible_from, false) || '',
@@ -88,7 +110,7 @@ export function RecruitmentFormAdminPage() {
     max_applications: data?.recruitment?.max_applications,
   };
 
-  const form = useForm<FormType>({
+  const form = useForm<recruitmentFormType>({
     resolver: zodResolver(recruitmentSchema),
     defaultValues: initialData,
   });
@@ -101,7 +123,7 @@ export function RecruitmentFormAdminPage() {
 
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
-  function onSubmit(data: FormType) {
+  function onSubmit(data: recruitmentFormType) {
     if (recruitmentId) {
       putRecruitment(recruitmentId, data as RecruitmentDto)
         .then(() => {
