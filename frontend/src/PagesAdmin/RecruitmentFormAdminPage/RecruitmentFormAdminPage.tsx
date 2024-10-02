@@ -147,15 +147,15 @@ export function RecruitmentFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} header={true}>
-      <div className={styles.wrapper}>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.wrapper}>
             <div className={styles.row}>
               <FormField
                 control={form.control}
                 name="name_nb"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -168,7 +168,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="name_en"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -183,7 +183,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="visible_from"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.recruitment_visible_from)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
@@ -198,7 +198,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="shown_application_deadline"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.shown_application_deadline)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
@@ -211,7 +211,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="actual_application_deadline"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.actual_application_deadline)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
@@ -226,7 +226,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="reprioritization_deadline_for_applicant"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.reprioritization_deadline_for_applicant)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
@@ -239,7 +239,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="reprioritization_deadline_for_groups"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.reprioritization_deadline_for_groups)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
@@ -254,7 +254,7 @@ export function RecruitmentFormAdminPage() {
                 control={form.control}
                 name="max_applications"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
@@ -267,7 +267,7 @@ export function RecruitmentFormAdminPage() {
                 name="organization"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.recruitment_organization)}</FormLabel>
                     <FormControl>
                       <Dropdown
@@ -282,9 +282,9 @@ export function RecruitmentFormAdminPage() {
               />
             </div>
             <Button type="submit">{submitText}</Button>
-          </form>
-        </Form>
-      </div>
+          </div>
+        </form>
+      </Form>
     </AdminPageLayout>
   );
 }
