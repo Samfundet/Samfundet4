@@ -28,8 +28,8 @@ export function TimeslotContainer({
   const { t } = useTranslation();
 
   const [activeTimeslots, setActiveTimeslots] = useState<Record<string, string[]>>(props.activeTimeslots || {});
-  const [disabledTimeslots, setDisabledTimeslots] = useState<Record<string, string[]>>(props.disabledTimeslots || {});
   const [selectedTimeslot, setSelectedTimeslot] = useState<Record<string, string[]>>(props.selectedTimeslot || {});
+  const disabledTimeslots = props.disabledTimeslots || {};
 
   // Click & drag functionality
   const mouseDown = useMouseDown();
