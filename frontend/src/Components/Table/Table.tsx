@@ -223,13 +223,16 @@ export function Table({
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
             <>
+              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
               <tr
                 className={bodyRowClassName}
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 key={index1}
-                onKeyUp={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
+                onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
               >
                 {row.childTable !== undefined && (
-                  <td className={classNames(cellClassName)} key={`arrow-${index1}`}>
+                  <td className={classNames(cellClassName)} key={`arrow-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+index1}`}>
                     <Icon icon={isOpen === index1 ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
                   </td>
                 )}
