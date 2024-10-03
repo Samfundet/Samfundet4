@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { SamfError, SamfForm } from '~/Forms/SamfForm';
+import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import { OrganizationDto, RecruitmentDto } from '~/dto';
@@ -14,8 +14,9 @@ import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
+import { youtubeLinkValidator } from './utils';
 
-type FormType = {
+export type RecruitmentFormType = {
   name_nb: string;
   name_en: string;
   visible_from: string;
@@ -26,15 +27,6 @@ type FormType = {
   organization: number;
   promo_media: string;
 };
-
-function youtubeLinkValidator(state: FormType): SamfError {
-  const link = state.promo_media;
-  const regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/;
-  if (link && !link.match(regex)) {
-    return 'Not valid youtbue link';
-  }
-  return true;
-}
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
@@ -56,7 +48,7 @@ export function RecruitmentFormAdminPage() {
     });
   }, []);
 
-  const initialData: Partial<FormType> = {
+  const initialData: Partial<RecruitmentFormType> = {
     name_nb: data?.recruitment?.name_nb,
     name_en: data?.recruitment?.name_en,
     visible_from: utcTimestampToLocal(data?.recruitment?.visible_from),
@@ -77,7 +69,7 @@ export function RecruitmentFormAdminPage() {
 
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
-  function handleOnSubmit(data: FormType) {
+  function handleOnSubmit(data: RecruitmentFormType) {
     const errors = validateForm(data);
     if (Object.keys(errors).length > 0) {
       Object.values(errors).forEach((error) => toast.error(error));
@@ -106,8 +98,8 @@ export function RecruitmentFormAdminPage() {
     }
   }
 
-  function validateForm(data: FormType) {
-    const errors: Partial<FormType> = {};
+  function validateForm(data: RecruitmentFormType) {
+    const errors: Partial<RecruitmentFormType> = {};
 
     const visibleFrom = new Date(data.visible_from);
     const shownApplicationDeadline = new Date(data.shown_application_deadline);
@@ -134,20 +126,20 @@ export function RecruitmentFormAdminPage() {
   return (
     <AdminPageLayout title={title} header={true}>
       <div className={styles.wrapper}>
-        <SamfForm<FormType>
+        <SamfForm<RecruitmentFormType>
           onSubmit={handleOnSubmit}
           initialData={initialData}
           submitText={submitText}
           validateOn={'submit'}
         >
           <div className={styles.row}>
-            <SamfFormField<string, FormType>
+            <SamfFormField<string, RecruitmentFormType>
               field="name_nb"
               type="text"
               label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
               required={true}
             />
-            <SamfFormField<string, FormType>
+            <SamfFormField<string, RecruitmentFormType>
               field="name_en"
               type="text"
               label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
@@ -204,7 +196,7 @@ export function RecruitmentFormAdminPage() {
             <SamfFormField
               field="promo_media"
               type="text"
-              label={t(KEY.promo_media)}
+              label={t(KEY.recruitment_promo_media)}
               validator={youtubeLinkValidator}
             />
           </div>
