@@ -74,11 +74,11 @@ export function RecruitmentPositionOverviewPage() {
         }
         toast.error(t(KEY.common_something_went_wrong));
       });
-  }, [recruitmentId, gangId, positionId]);
+  }, [recruitmentId, gangId, positionId, navigate, t]);
 
   useEffect(() => {
     load();
-  }, [recruitmentId, gangId, positionId, navigate, t]);
+  }, [load]);
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
     positionId &&

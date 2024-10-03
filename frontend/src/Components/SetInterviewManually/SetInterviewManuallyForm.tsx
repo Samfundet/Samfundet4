@@ -67,7 +67,7 @@ export function SetInterviewManuallyForm({
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recruitmentId]);
+  }, [recruitmentId, t]);
 
   useEffect(() => {
     if (!application.id || !application.interview?.id) {
@@ -97,7 +97,7 @@ export function SetInterviewManuallyForm({
         setDataLoaded(true);
         setLoading(false);
       });
-  }, [application.id, application.interview?.id]);
+  }, [application.id, application.interview?.id, t]);
 
   function convertToDateObject(dateTimeDict: Record<string, string[]>): Date {
     const dateKey = Object.keys(dateTimeDict)[0];

@@ -32,7 +32,7 @@ export function SetInterviewManuallyModal({
 
       <Modal isOpen={open} className={styles.occupied_modal}>
         <>
-          <button className={styles.close_btn} title="Close" onClick={() => setOpen(false)}>
+          <button type="button" className={styles.close_btn} title="Close" onClick={() => setOpen(false)}>
             <Icon icon="octicon:x-24" width={24} />
           </button>
           <SetInterviewManuallyForm
