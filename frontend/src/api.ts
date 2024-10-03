@@ -15,6 +15,7 @@ import type {
   InterviewDto,
   InterviewRoomDto,
   KeyValueDto,
+  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -87,9 +88,15 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function impersonateUser(user?: UserDto): Promise<boolean> {
+export async function stopImpersonatingUser(): Promise<boolean> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
-  const response = await axios.post(url, { user_id: user?.id }, { withCredentials: true });
+  const response = await axios.post(url, {}, { withCredentials: true });
+  return response.status === 200;
+}
+
+export async function impersonateUser(userId: number): Promise<boolean> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
+  const response = await axios.post(url, { user_id: userId }, { withCredentials: true });
   return response.status === 200;
 }
 
@@ -1012,6 +1019,20 @@ export async function getRecruitmentStats(id: string): Promise<AxiosResponse<Rec
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__rejected_applicants,
+      queryParams: {
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.post(url, rejectionMail, { withCredentials: true });
 
   return response;
 }

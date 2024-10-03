@@ -28,7 +28,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
-      getRecruitmentApplicationsForGang(recruitmentId, gangId)
+      getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((response) => {
           setApplications(response.data);
           setShowSpinner(false);

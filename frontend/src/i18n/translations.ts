@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { KEY } from '~/i18n/constants';
 import { prepareTranslations } from './utils';
 
@@ -105,6 +104,7 @@ export const nb = prepareTranslations({
   [KEY.common_unknown]: 'Ukjent',
   [KEY.common_lastname]: 'Etternavn',
   [KEY.common_email]: 'Epost',
+  [KEY.common_email_subject]: 'Emne',
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
@@ -163,8 +163,12 @@ export const nb = prepareTranslations({
   [KEY.common_when]: 'når',
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
+  [KEY.common_room]: 'Rom',
   [KEY.common_filter]: 'Filter',
+  [KEY.common_unprocessed]: 'Ubehandlet',
+  [KEY.common_personal]: 'Personlig',
   [KEY.common_administrate]: 'Administrer',
+  [KEY.common_administration]: 'Administrasjon',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -194,6 +198,9 @@ export const nb = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.admin_impersonate]: 'Stjel identitet',
+  [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
+
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
@@ -300,6 +307,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applications]: 'søknader',
   [KEY.recruitment_progression]: 'Opptak fremgang',
   [KEY.recruitment_overview]: 'Opptak oversikt',
+  [KEY.recruitment_recruiter_dashboard]: 'Dashbord',
   [KEY.recruitment_statistics]: 'Opptak statistikk',
   [KEY.recruitment_applications_processed]: 'søknader behandlet',
   [KEY.recruitment_automatic_rejection]: 'Automatisk avslag',
@@ -337,7 +345,7 @@ export const nb = prepareTranslations({
   [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
   [KEY.error_recruitment_form_4]: 'Flaggefrist kan ikke være før omprioriteringsfrist',
   [KEY.recruitment_three_interviews_criteria_header]:
-    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+    'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
   [KEY.recruitment_dashboard_description]:
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
@@ -362,6 +370,17 @@ export const nb = prepareTranslations({
   [KEY.admin_information_confirm_cancel]: 'Er du sikker på at du vil gå tilbake uten å lagre?',
   [KEY.admin_gangsadminpage_abbreviation]: 'Forkortelse',
   [KEY.recruitment_create_room]: 'Opprett rom',
+  [KEY.recruitment_separate_recruitment]: 'Separat opptak',
+
+  // Recruitment applets
+  [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
+  [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
+  [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
+  [KEY.recruitment_applet_room_description]: 'Opprett rom for intervju',
+  [KEY.recruitment_applet_rejection_mail_description]: 'Send mail til de som ikke fikk tilbud',
+  [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
+  [KEY.recruitment_applet_without_interview_description]: 'Søkere som ikke har noen intervju satt',
+  [KEY.recruitment_applet_three_interview_title]: '< 3 intervju',
 
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
@@ -531,6 +550,7 @@ export const en = prepareTranslations({
   [KEY.common_unknown]: 'Unknown',
   [KEY.common_register]: 'Register',
   [KEY.common_email]: 'Email',
+  [KEY.common_email_subject]: 'Subject',
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
@@ -579,6 +599,7 @@ export const en = prepareTranslations({
   [KEY.common_have]: 'have',
   [KEY.common_been]: 'been',
   [KEY.common_be]: 'be',
+  [KEY.common_personal]: 'Personal',
   [KEY.common_rejected]: 'rejected',
   [KEY.common_it]: 'it',
   [KEY.common_will]: 'will',
@@ -590,6 +611,8 @@ export const en = prepareTranslations({
   [KEY.common_come_back_later]: 'Come back later',
   [KEY.common_loading]: 'Loading',
   [KEY.common_filter]: 'Filter',
+  [KEY.common_room]: 'Room',
+  [KEY.common_unprocessed]: 'Unprocessed',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -610,6 +633,7 @@ export const en = prepareTranslations({
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_processed]: 'Processed',
   [KEY.common_administrate]: 'Administrate',
+  [KEY.common_administration]: 'Administration',
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
   [KEY.common_ticket_type_free]: 'Free',
@@ -621,6 +645,10 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+
+  [KEY.admin_impersonate]: 'Impersonate',
+  [KEY.admin_stop_impersonate]: 'Stop impersonation',
+
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
   [KEY.loginpage_internal_login]: 'Log in as internal',
@@ -725,6 +753,7 @@ export const en = prepareTranslations({
   [KEY.application_deadline]: 'Application deadline',
   [KEY.recruitment_progression]: 'Recruitment progression',
   [KEY.recruitment_overview]: 'Recruitment overview',
+  [KEY.recruitment_recruiter_dashboard]: 'Dashboard',
   [KEY.recruitment_admitted]: 'admitted',
   [KEY.recruitment_statistics]: 'Recruitment statistics',
   [KEY.recruitment_applications]: 'applications',
@@ -759,7 +788,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_stats_date_header]: 'Total applicants per day',
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
-  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
+  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate recruitment',
   [KEY.error_recruitment_form_1]: 'Displayed deadline cannot be before the recruitment becomes visible',
   [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
@@ -767,6 +796,17 @@ export const en = prepareTranslations({
   [KEY.recruitment_dashboard_description]:
     'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
+  [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
+
+  // Recruitment applets
+  [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
+  [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
+  [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
+  [KEY.recruitment_applet_room_description]: 'Create room for interviews',
+  [KEY.recruitment_applet_rejection_mail_description]: "Send mail to those who didn't get an offer",
+  [KEY.recruitment_applet_without_interview_title]: 'Without interview',
+  [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
+  [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
