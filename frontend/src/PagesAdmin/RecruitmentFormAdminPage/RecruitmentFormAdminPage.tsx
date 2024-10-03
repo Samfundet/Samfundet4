@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import i18next from 'i18next';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 import { Button, Dropdown, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
@@ -14,69 +12,10 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
-import { LOCAL_DATETIME } from '~/schema/dates';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
-
-const recruitmentSchema = z
-  .object({
-    name_nb: z.string().min(1),
-    name_en: z.string().min(1),
-    visible_from: LOCAL_DATETIME,
-    shown_application_deadline: LOCAL_DATETIME,
-    actual_application_deadline: LOCAL_DATETIME,
-    reprioritization_deadline_for_applicant: LOCAL_DATETIME,
-    reprioritization_deadline_for_groups: LOCAL_DATETIME,
-    organization: z.number().min(1, { message: 'Organization is required' }),
-    max_applications: z.number().nullish().optional(),
-  })
-  .refine(
-    (data) => {
-      const visibleFrom = new Date(data.visible_from);
-      const shownApplicationDeadline = new Date(data.shown_application_deadline);
-      return shownApplicationDeadline > visibleFrom;
-    },
-    {
-      message: i18next.t(KEY.error_recruitment_form_1),
-      path: ['shown_application_deadline'],
-    },
-  )
-  .refine(
-    (data) => {
-      const shownApplicationDeadline = new Date(data.shown_application_deadline);
-      const actualApplicationDeadline = new Date(data.actual_application_deadline);
-      return actualApplicationDeadline > shownApplicationDeadline;
-    },
-    {
-      message: i18next.t(KEY.error_recruitment_form_2),
-      path: ['actual_application_deadline'],
-    },
-  )
-  .refine(
-    (data) => {
-      const actualApplicationDeadline = new Date(data.actual_application_deadline);
-      const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
-      return reprioritizationDeadlineForApplicant > actualApplicationDeadline;
-    },
-    {
-      message: i18next.t(KEY.error_recruitment_form_3),
-      path: ['reprioritization_deadline_for_applicant'],
-    },
-  )
-  .refine(
-    (data) => {
-      const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
-      const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
-      return reprioritizationDeadlineForGroups > reprioritizationDeadlineForApplicant;
-    },
-    {
-      message: i18next.t(KEY.error_recruitment_form_4),
-      path: ['reprioritization_deadline_for_groups'],
-    },
-  );
-
-type recruitmentFormType = z.infer<typeof recruitmentSchema>;
+import { type recruitmentFormType, recruitmentSchema } from './recruitmentSchema';
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
@@ -257,7 +196,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input type="number" {...field} value={field.value ?? undefined} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
