@@ -8,7 +8,7 @@
 ### Frontend
 
 - [Creating react components (conventions)](/docs/technical/frontend/components.md)
-- [Input forms using SamfForm](/docs/technical/frontend/forms.md)
+- [Forms and schemas](/docs/technical/frontend/forms.md)
 - [Cypress Setup Documentation](/docs/technical/frontend/cypress.md)
 ### Backend
 

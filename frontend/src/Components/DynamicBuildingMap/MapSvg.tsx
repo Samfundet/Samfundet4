@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 type MapSvgProps = {
   style?: React.CSSProperties;
   className?: string;

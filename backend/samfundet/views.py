@@ -18,8 +18,10 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
+from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
+from django.core.mail import send_mail
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
@@ -38,10 +40,12 @@ from root.constants import (
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
+from .models.role import Role
 from .serializers import (
     TagSerializer,
     GangSerializer,
     MenuSerializer,
+    RoleSerializer,
     UserSerializer,
     EventSerializer,
     GroupSerializer,
@@ -310,6 +314,12 @@ class BlogPostView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.all()
+
+
+class RoleView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RoleSerializer
+    queryset = Role.objects.all()
 
 
 # =============================== #
@@ -704,6 +714,47 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
         if recruitment is not None and gang is not None:
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         return None
+
+
+class SendRejectionMailView(APIView):
+    def post(self, request: Request) -> Response:
+        try:
+            subject = request.data.get('subject')
+            text = request.data.get('text')
+
+            recruitment = request.data.get('recruitment')
+            if recruitment is None:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            # Only users who have never been contacted with an offer should get a rejection mail
+            # Retrieve all users who has a non-withdrawn rejected application in current recruitment
+            rejected_users = User.objects.filter(
+                recruitmentapplication__recruitment=recruitment,
+                recruitmentapplication__recruiter_status=RecruitmentStatusChoices.REJECTION,
+                recruitmentapplication__withdrawn=False,
+            )
+
+            # Retrieve all users who have been contacted with an offer
+            contacted_users = User.objects.filter(
+                recruitmentapplication__recruitment=recruitment,
+                recruitmentapplication__recruiter_status__in=[RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.CALLED_AND_REJECTED],
+            )
+
+            # Remove users who have been contacted with an offer from the rejected users list
+            final_rejected_users = rejected_users.exclude(id__in=contacted_users.values('id'))
+
+            rejected_user_mails = list(final_rejected_users.values_list('email', flat=True))
+
+            send_mail(
+                subject,
+                text,
+                settings.EMAIL_HOST_USER,
+                rejected_user_mails,
+                fail_silently=False,
+            )
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

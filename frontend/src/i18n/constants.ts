@@ -118,6 +118,7 @@ export const KEY = {
   common_register: 'common_register',
   common_users: 'common_users',
   common_email: 'common_email',
+  common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
   common_guests: 'common_guests',
@@ -176,8 +177,12 @@ export const KEY = {
   common_when: 'common_when',
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
+  common_room: 'common_room',
   common_filter: 'common_filter',
+  common_personal: 'common_personal',
   common_administrate: 'common_administrate',
+  common_administration: 'common_administration',
+  common_unprocessed: 'common_unprocessed',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -336,6 +341,7 @@ export const KEY = {
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
   recruitment_progression: 'recruitment_progression',
   recruitment_overview: 'recruitment_overview',
+  recruitment_recruiter_dashboard: 'recruitment_recruiter_dashboard',
   recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
@@ -353,6 +359,17 @@ export const KEY = {
   error_recruitment_form_2: 'error_recruitment_form_2',
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
+  recruitment_separate_recruitment: 'recruitment_separate_recruitment',
+
+  // Recruitment applets
+  recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
+  recruitment_applet_edit_description: 'recruitment_applet_edit_description',
+  recruitment_applet_overview_description: 'recruitment_applet_overview_description',
+  recruitment_applet_room_description: 'recruitment_applet_room_description',
+  recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',
+  recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
+  recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
+  recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
@@ -377,6 +394,8 @@ export const KEY = {
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
+  admin_impersonate: 'admin_impersonate',
+  admin_stop_impersonate: 'admin_stop_impersonate',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -432,5 +451,4 @@ export const KEY = {
 // This will ensure that each value matches the key exactly.
 // Very similar to validateKeyEqualsValue.
 // Fortunately this is in typescript and will protect the pipeline.
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 KEY as MirrorKeys<TranslationKeys>;

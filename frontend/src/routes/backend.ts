@@ -659,6 +659,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_user_priority_update: '/recruitment-user-priority-update/:pk/',
   samfundet__recruitment_withdraw_application_recruiter: '/recruitment-withdraw-application-recruiter/:pk/',
   samfundet__active_recruitment_positions: '/active-recruitment-positions/',
+  samfundet__rejected_applicants: '/rejected-applicants/',
   samfundet__applicants_without_interviews: '/recruitment-applicants-without-interviews/:pk/',
   samfundet__applicants_without_three_interview_criteria:
     '/recruitment-applicants-without-three-interview-criteria/:pk/',

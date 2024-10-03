@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { NavbarItem } from '~/Components/Navbar/components';
 import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
-import { getActiveRecruitments, impersonateUser, logout } from '~/api';
+import { getActiveRecruitments, impersonateUser, logout, stopImpersonatingUser } from '~/api';
 import { englishFlag, logoWhite, norwegianFlag } from '~/assets';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
@@ -166,7 +166,7 @@ export function Navbar() {
           type="button"
           className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
           onClick={() => {
-            impersonateUser(undefined)
+            stopImpersonatingUser()
               .then(() => {
                 window.location.reload();
               })
@@ -175,7 +175,7 @@ export function Navbar() {
           }}
         >
           <Icon icon="ri:spy-fill" />
-          Stop Agent Mode
+          {t(KEY.admin_stop_impersonate)}
         </button>
       )}
       <button

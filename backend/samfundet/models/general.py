@@ -641,15 +641,15 @@ class Booking(CustomBaseModel):
 
 
 class Infobox(CustomBaseModel):
-    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
-    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
+    title_nb = models.CharField(max_length=60, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.CharField(max_length=255, blank=True, null=True, verbose_name='Tekst (norsk)')
 
-    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
-    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Tittel (engelsk)')
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Tekst (engelsk)')
 
-    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Infoboks hexcolor eller css color-constant')
-    url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Infoboks bilde')
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Farge på boks (hex color eller CSS-constant)')
+    url = models.URLField(verbose_name='URL', blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Bilde')
 
     class Meta:
         verbose_name = 'Infoboks'
