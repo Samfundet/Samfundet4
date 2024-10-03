@@ -783,6 +783,15 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
             recruitment_position.interviewers.set(interviewers)
         except (TypeError, KeyError):
             raise ValidationError('Invalid data for interviewers.') from None
+        
+    def validate(self, data: dict) -> dict:
+        gang_id = self.initial_data.get('gang').get('id')
+        if gang_id:
+            try:
+                data['gang'] = Gang.objects.get(id=gang_id)
+            except Gang.DoesNotExist:
+                raise serializers.ValidationError("Invalid gang id")
+        return super().validate(data)
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
