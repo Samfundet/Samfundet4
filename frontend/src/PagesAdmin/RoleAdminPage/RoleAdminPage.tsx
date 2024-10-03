@@ -7,7 +7,7 @@ export function RoleAdminPage() {
 
   return (
     <AdminPageLayout title={t(KEY.common_roles_view)}>
-      <></>
+      <div />
     </AdminPageLayout>
   );
 }
