@@ -2,14 +2,14 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { getOrganization, getRecruitment } from '~/api';
 import { Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, ToggleSwitch, Video } from '~/Components';
+import { PersonalRow } from '~/Pages/RecruitmentPage';
+import { getOrganization, getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
-import { RecruitmentDto } from '~/dto';
+import type { RecruitmentDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { PersonalRow } from '~/Pages/RecruitmentPage';
-import { OrgNameType, OrgNameTypeValue } from '~/types';
+import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
@@ -77,7 +77,7 @@ export function OrganizationRecruitmentPage() {
           </div>
           {recruitment?.promo_media ? (
             <>
-              <Video embedId={recruitment.promo_media} className={styles.video}></Video>
+              <Video embedId={recruitment.promo_media} className={styles.video} />
             </>
           ) : (
             <></>
