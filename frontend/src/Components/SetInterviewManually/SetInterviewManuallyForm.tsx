@@ -31,6 +31,7 @@ export function SetInterviewManuallyForm({
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [minDate, setMinDate] = useState(new Date('2024-01-16'));
   const [maxDate, setMaxDate] = useState(new Date('2024-01-24'));
@@ -80,20 +81,20 @@ export function SetInterviewManuallyForm({
           toast.error(t(KEY.common_something_went_wrong));
           return;
         }
-        const interviewDate = response.data.interview_time?.split('T')[0];
+        const interviewDate = new Date(response.data.interview_time?.split('T')[0]);
         const interviewTime = response.data.interview_time?.split('T')[1]?.slice(0, 5);
 
         if (interviewDate && interviewTime) {
-          setInterviewTimeslot({ [formatDateYMD(new Date(interviewDate))]: [interviewTime] });
+          setSelectedDate(interviewDate);
+          setInterviewTimeslot({ [formatDateYMD(interviewDate)]: [interviewTime] });
         }
         setLocation(response.data.interview_location);
-        setSelectedDate(new Date(interviewDate));
       })
       .catch(() => {
         toast.error(t(KEY.common_something_went_wrong));
       })
       .finally(() => {
-        onSave();
+        setDataLoaded(true);
         setLoading(false);
       });
   }, [application.id, application.interview?.id]);
@@ -152,7 +153,7 @@ export function SetInterviewManuallyForm({
     <div className={styles.container}>
       <h3 className={styles.title}>{t(KEY.recruitment_interview_set)}</h3>
 
-      {loading ? (
+      {loading || !dataLoaded ? (
         <span className={styles.subtitle}>{t(KEY.common_loading)}...</span>
       ) : (
         <>
