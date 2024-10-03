@@ -151,7 +151,6 @@ export type OrganizationTheme = {
   buttonTheme: keyof typeof themeToStyleMap;
 };
 
-
 // Recruitment mappings
 
 // Recruitment Status Choices Enum
@@ -160,7 +159,7 @@ export enum RecruitmentStatusChoices {
   CALLED_AND_ACCEPTED = 'Called and Accepted',
   CALLED_AND_REJECTED = 'Called and Rejected',
   REJECTION = 'Rejection',
-  AUTOMATIC_REJECTION = 'Automatic Rejection'
+  AUTOMATIC_REJECTION = 'Automatic Rejection',
 }
 
 // Recruitment Status Choices Mapping
@@ -183,7 +182,7 @@ export enum RecruitmentPriorityChoices {
   NOT_SET = 'Not Set',
   RESERVE = 'Reserve',
   WANTED = 'Wanted',
-  NOT_WANTED = 'Not Wanted'
+  NOT_WANTED = 'Not Wanted',
 }
 
 // Recruitment Priority Choices Mapping

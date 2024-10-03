@@ -991,7 +991,6 @@ class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializ
     user = RecruitmentBasicUserSerializer(read_only=True)
     recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
 
-    # id = RecruitmentApplicationForRecruiterSerializer(read_only=True)
     class Meta:
         model = RecruitmentApplication
         fields = [

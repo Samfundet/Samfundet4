@@ -1,18 +1,18 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, Link, Table } from '~/Components';
+import { getRecruitmentUnprocessedApplicants } from '~/api';
+import type { RecruitmentUnprocessedApplicationsDto } from '~/dto';
 import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { getRecruitmentUnprocessedApplicants } from '~/api';
-import { useEffect, useState } from 'react';
-import { STATUS } from '~/http_status_codes';
-import { toast } from 'react-toastify';
-import { RecruitmentUnprocessedApplicationsDto } from '~/dto';
+import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
 import { dbT } from '~/utils';
-import { RecruitmentPriorityChoices, RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 const data = [
   ['John Doe', 'High', 'john.doe@example.com', 'Frontend Developer', 'vil ha'],
@@ -46,14 +46,13 @@ export function RecruitmentUnprocessedApplicantsPage() {
           setShowSpinner(false);
         })
         .catch((data) => {
-          if (data.request?.status === STATUS.HTTP_404_NOT_FOUND) { 
+          if (data.request?.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.not_found, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
   }, [recruitmentId, t, navigate]);
-  
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
@@ -63,7 +62,6 @@ export function RecruitmentUnprocessedApplicantsPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: false },
   ];
 
-
   const data = unprocessedApplicants.map((unprocessedApplicant) => {
     const applicantUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_applicant,
@@ -72,19 +70,36 @@ export function RecruitmentUnprocessedApplicantsPage() {
 
     const positionUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
-      urlParams: { recruitmentId: recruitmentId, gangId: unprocessedApplicant.recruitment_position.gang, positionId: unprocessedApplicant.recruitment_position.id },
+      urlParams: {
+        recruitmentId: recruitmentId,
+        gangId: unprocessedApplicant.recruitment_position.gang,
+        positionId: unprocessedApplicant.recruitment_position.id,
+      },
     });
 
-
-    
     return [
-      {content: <Link url={applicantUrl}>{unprocessedApplicant.user.first_name + " " + unprocessedApplicant.user.last_name}</Link>},
-      {content: RecruitmentPriorityChoicesMapping[unprocessedApplicant.recruiter_priority], value: unprocessedApplicant.recruiter_priority},
-      {content: unprocessedApplicant.user.email, value: unprocessedApplicant.user.email},
-      {content: <Link url={positionUrl}>{dbT(unprocessedApplicant.recruitment_position, 'name')}</Link>, value: dbT(unprocessedApplicant.recruitment_position, "name")}, 
-      {content: RecruitmentStatusChoicesMapping[unprocessedApplicant.recruiter_status], value: unprocessedApplicant.recruiter_status},
+      {
+        content: (
+          <Link url={applicantUrl}>
+            {unprocessedApplicant.user.first_name + ' ' + unprocessedApplicant.user.last_name}
+          </Link>
+        ),
+      },
+      {
+        content: RecruitmentPriorityChoicesMapping[unprocessedApplicant.recruiter_priority],
+        value: unprocessedApplicant.recruiter_priority,
+      },
+      { content: unprocessedApplicant.user.email, value: unprocessedApplicant.user.email },
+      {
+        content: <Link url={positionUrl}>{dbT(unprocessedApplicant.recruitment_position, 'name')}</Link>,
+        value: dbT(unprocessedApplicant.recruitment_position, 'name'),
+      },
+      {
+        content: RecruitmentStatusChoicesMapping[unprocessedApplicant.recruiter_status],
+        value: unprocessedApplicant.recruiter_status,
+      },
     ];
-  })
+  });
 
   // Count the total number of rows
   const totalRows = data.length;

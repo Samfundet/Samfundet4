@@ -507,7 +507,7 @@ export type RecruitmentUnprocessedApplicationsDto = {
   recruitment_position: RecruitmentReducedPositionDto;
   recruiter_status: number;
   recruiter_priority: number;
-}
+};
 
 export type RecruitmentApplicationStateDto = {
   recruiter_priority?: number;
