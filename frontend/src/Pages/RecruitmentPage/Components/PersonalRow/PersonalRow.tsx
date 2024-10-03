@@ -1,10 +1,10 @@
+import { t } from 'i18next';
 import { Button } from '~/Components';
+import { useAuthContext } from '~/context/AuthContext';
+import { useCustomNavigate } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { t } from 'i18next';
-import { KEY } from '~/i18n/constants';
-import { useCustomNavigate } from '~/hooks';
-import { useAuthContext } from '~/context/AuthContext';
 
 type PersonalRowProps = {
   recruitmentID: string;
@@ -30,7 +30,7 @@ export function PersonalRow({ recruitmentID, organizationName, showRecruitmentBt
             });
           }}
         >
-          {t(KEY.recruitment_apply_for) + ' ' + (organizationName ?? 'N/A')}
+          {`${t(KEY.recruitment_apply_for)} ${organizationName ?? 'N/A'}`}
         </Button>
       )}
       {user ? (

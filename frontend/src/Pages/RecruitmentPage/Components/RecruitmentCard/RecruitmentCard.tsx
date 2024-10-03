@@ -1,13 +1,13 @@
-import styles from './RecruitmentCard.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { useDesktop, useIsDarkTheme } from '~/hooks';
-import { Logo, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
-import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { getOrganization } from '~/api';
-import { OrgNameTypeValue, OrgNameType } from '~/types';
+import { Logo, SamfundetLogoSpinner, TimeDisplay } from '~/Components';
+import { Text } from '~/Components/Text/Text';
 import { PersonalRow } from '~/Pages/RecruitmentPage/Components/PersonalRow/PersonalRow';
+import { getOrganization } from '~/api';
+import { useDesktop, useIsDarkTheme } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { OrgNameType, type OrgNameTypeValue } from '~/types';
+import styles from './RecruitmentCard.module.scss';
 
 type RecruitmentCardProps = {
   recruitment_id?: string;

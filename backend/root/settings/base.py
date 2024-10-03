@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'root',  # Register to enable management.commands.
     'samfundet',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,7 @@ WSGI_APPLICATION = 'root.wsgi.application'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # default
+    'samfundet.backend.RoleAuthBackend',
 ]
 
 # Password validation
@@ -177,8 +179,17 @@ REST_FRAMEWORK = {
         'root.custom_classes.permission_classes.SuperUserPermission',
         # 'root.custom_classes.permission_classes.CustomDjangoObjectPermissions',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 ### End: DRF ###
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Samfundet4 API',
+    'DESCRIPTION': 'Samfundet4 is the new webpage of Studentersamfundet in Trondhjem',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 ### django-guardian ###
 INSTALLED_APPS += [
@@ -196,13 +207,6 @@ INSTALLED_APPS += [
 
 ### End: admin_auto_filters ###
 
-### django-notifications-hq ###
-# https://pypi.org/project/django-notifications-hq/
-INSTALLED_APPS += [
-    'notifications',
-]
-NOTIFICATIONS_NOTIFICATION_MODEL = 'samfundet.Notification'
-### End: django-notifications-hq ###
 
 ################## LOGGING ##################
 
@@ -319,3 +323,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'

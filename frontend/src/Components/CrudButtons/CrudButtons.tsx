@@ -6,14 +6,23 @@ import styles from './CrudButtons.module.scss';
 
 type CrudButtonsProps = {
   onView?: () => void;
+  onManage?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
 };
 
-export function CrudButtons({ onView, onEdit, onDelete }: CrudButtonsProps) {
+export function CrudButtons({ onView, onEdit, onManage, onDelete }: CrudButtonsProps) {
   const { t } = useTranslation();
   return (
     <div className={styles.row}>
+      {onManage && (
+        <IconButton
+          onClick={onManage}
+          color={COLORS.turquoise}
+          title={t(KEY.common_manage)}
+          icon="ic:baseline-dashboard"
+        />
+      )}
       {onView && (
         <IconButton
           onClick={onView}

@@ -5,19 +5,18 @@ import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
-import { getAllRecruitments, getOrganizations } from '~/api';
-import { type OrganizationDto, RecruitmentDto } from '~/dto';
+import { getAllRecruitments } from '~/api';
+import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentAdminPage() {
   const navigate = useNavigate();
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
-  const [organizations, setOrganizations] = useState<Record<number, OrganizationDto>>({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const title = t(KEY.recruitment_administrate);
@@ -25,25 +24,17 @@ export function RecruitmentAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
-    Promise.allSettled([
-      getAllRecruitments().then((data) => {
+    getAllRecruitments()
+      .then((data) => {
         setRecruitments(data.data);
-      }),
-      getOrganizations().then((data) => {
-        const orgs: Record<number, OrganizationDto> = {};
-        for (const organization of data) {
-          orgs[organization.id] = organization;
-        }
-        setOrganizations(orgs);
-      }),
-    ])
+      })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       })
       .finally(() => setShowSpinner(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tableColumns = [
@@ -53,7 +44,7 @@ export function RecruitmentAdminPage() {
     '', // Buttons
   ];
 
-  const data = recruitments.map(function (element) {
+  const data = recruitments.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_overview,
       urlParams: { recruitmentId: element.id },
@@ -63,13 +54,32 @@ export function RecruitmentAdminPage() {
         content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>,
         value: ROUTES.frontend.recruitment,
       },
-      organizations[element.organization].name || t(KEY.common_unknown),
-      `${getFormattedDate(element.visible_from)}-${getFormattedDate(element.reprioritization_deadline_for_groups)}`,
+      {
+        content: getObjectFieldOrNumber<string>(element?.organization, 'name'),
+      },
+      {
+        content: `${getFormattedDate(element.visible_from)}-${getFormattedDate(
+          element.reprioritization_deadline_for_groups,
+        )}`,
+      },
       {
         content: (
           <CrudButtons
+            onManage={() => {
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_recruiter_dashboard,
+                  urlParams: { recruitmentId: element.id },
+                }),
+              );
+            }}
             onView={() => {
-              navigate(ROUTES.frontend.recruitment);
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.organization_recruitment,
+                  urlParams: { recruitmentID: element.id },
+                }),
+              );
             }}
             onEdit={() => {
               navigate(

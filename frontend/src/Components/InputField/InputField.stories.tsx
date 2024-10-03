@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { InputField } from './InputField';
 
 export default {
@@ -7,15 +7,13 @@ export default {
   component: InputField,
 } as ComponentMeta<typeof InputField>;
 
-const Template: ComponentStory<typeof InputField> = function (args) {
-  return (
-    <form>
-      <fieldset>
-        <InputField {...args} />
-      </fieldset>
-    </form>
-  );
-};
+const Template: ComponentStory<typeof InputField> = (args) => (
+  <form>
+    <fieldset>
+      <InputField {...args} />
+    </fieldset>
+  </form>
+);
 
 export const Basic = Template.bind({});
 

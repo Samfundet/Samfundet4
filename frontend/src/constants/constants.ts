@@ -35,7 +35,7 @@ export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
-export const PHONENUMBER_REGEX = new RegExp('^\\+?\\s*(\\d\\s*){8,15}$');
+export const PHONENUMBER_REGEX = /^\+?\s*(\d\s*){8,15}$/;
 /**
  * Screen sizes, breakpoint (bp).
  * These values are also in _constants.scss
@@ -74,3 +74,11 @@ export const textSizes: Record<string, string> = {
   xl: '3rem',
   '2xl': '4rem',
 };
+
+/**
+ * User
+ */
+export const USERNAME_LENGTH_MIN = 2;
+export const USERNAME_LENGTH_MAX = 32;
+export const PASSWORD_LENGTH_MIN = 8;
+export const PASSWORD_LENGTH_MAX = 2048;

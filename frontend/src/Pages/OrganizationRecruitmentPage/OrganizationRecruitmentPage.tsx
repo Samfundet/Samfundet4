@@ -10,7 +10,7 @@ import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { OrgNameType, OrgNameTypeValue } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 
@@ -38,7 +38,7 @@ export function OrganizationRecruitmentPage() {
 
   useEffect(() => {
     if (recruitment) {
-      getOrganization(recruitment.organization)
+      getOrganization(getObjectFieldOrNumber<number>(recruitment.organization, 'id'))
         .then((response) => {
           if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
             setOrganizationName(response.name as OrgNameTypeValue);

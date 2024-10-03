@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
-import { OrganizationDto, RecruitmentDto } from '~/dto';
+import type { OrganizationDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
 import { youtubeLinkValidator } from './utils';
@@ -58,7 +58,7 @@ export function RecruitmentFormAdminPage() {
       data?.recruitment?.reprioritization_deadline_for_applicant,
     ),
     reprioritization_deadline_for_groups: utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups),
-    organization: data?.recruitment?.organization,
+    organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id'),
   };
 
   const title = recruitmentId
@@ -72,7 +72,9 @@ export function RecruitmentFormAdminPage() {
   function handleOnSubmit(data: RecruitmentFormType) {
     const errors = validateForm(data);
     if (Object.keys(errors).length > 0) {
-      Object.values(errors).forEach((error) => toast.error(error));
+      for (const error of Object.values(errors)) {
+        toast.error(error);
+      }
       return;
     }
     if (recruitmentId) {
@@ -136,13 +138,13 @@ export function RecruitmentFormAdminPage() {
             <SamfFormField<string, RecruitmentFormType>
               field="name_nb"
               type="text"
-              label={t(KEY.common_name) + ' ' + t(KEY.common_english)}
+              label={`${t(KEY.common_name)} ${t(KEY.common_english)}`}
               required={true}
             />
             <SamfFormField<string, RecruitmentFormType>
               field="name_en"
               type="text"
-              label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)}
+              label={`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}
               required={true}
             />
           </div>
@@ -164,7 +166,7 @@ export function RecruitmentFormAdminPage() {
             <SamfFormField
               field="actual_application_deadline"
               type="date_time"
-              label={t(KEY.actual_application_deadlin) ?? ''}
+              label={t(KEY.actual_application_deadline) ?? ''}
               required={true}
             />
           </div>

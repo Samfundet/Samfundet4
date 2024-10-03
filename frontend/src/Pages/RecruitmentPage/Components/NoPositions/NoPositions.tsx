@@ -1,9 +1,9 @@
-import styles from './NoPositions.module.scss';
-import { useTextItem } from '~/hooks';
-import { TextItem } from '~/constants';
-import { ROUTES } from '~/routes';
-import { KEY } from '~/i18n/constants';
 import { t } from 'i18next';
+import { TextItem } from '~/constants';
+import { useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import styles from './NoPositions.module.scss';
 
 export function NoPositions() {
   return (
