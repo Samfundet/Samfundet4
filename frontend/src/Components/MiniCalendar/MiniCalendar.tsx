@@ -7,7 +7,6 @@ import { Button, TimeDisplay } from '~/Components';
 import type { CalendarMarker } from '~/types';
 import { SHORT_DAY_I18N_KEYS } from '~/utils';
 import styles from './MiniCalendar.module.scss';
-import { init } from 'i18next';
 
 type MiniCalendarProps = {
   /** Decides which month to display */
