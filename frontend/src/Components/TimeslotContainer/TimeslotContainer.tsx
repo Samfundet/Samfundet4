@@ -144,7 +144,7 @@ export function TimeslotContainer({
 
   return (
     <div className={styles.container}>
-      {t(KEY.occupied_select_time_text)}:
+      {selectMultiple ? t(KEY.occupied_select_time_text) + ':' : t(KEY.recruitment_choose_interview_time) + ':'}
       <div className={styles.timeslots}>
         {timeslots.map((timeslot) => {
           const active = isTimeslotSelected(selectedDate, timeslot);

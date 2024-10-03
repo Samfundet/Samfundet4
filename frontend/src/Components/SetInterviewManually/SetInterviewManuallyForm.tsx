@@ -158,7 +158,7 @@ export function SetInterviewManuallyForm({
       ) : (
         <>
           <span className={styles.subtitle}>
-            <Trans i18nKey={KEY.recruitment_choose_interview_time} />
+            <Trans i18nKey={KEY.recruitment_choose_interview_time_and_location} />
           </span>
           <div className={styles.date_container}>
             <MiniCalendar
@@ -181,7 +181,7 @@ export function SetInterviewManuallyForm({
               selectMultiple={false}
             />
           </div>
-          <span className={styles.choose_location_text}>{t(KEY.recruitment_choose_interview_location)}</span>
+          <span className={styles.choose_location_text}>{t(KEY.recruitment_choose_interview_location) + ':'}</span>
           <InputField
             type="text"
             inputClassName={styles.input_field}

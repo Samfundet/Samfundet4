@@ -338,6 +338,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_three_interviews_criteria_header]:
     'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Velg tid og sted for intervju',
   [KEY.recruitment_choose_interview_time]: 'Velg intervjutid',
   [KEY.recruitment_choose_interview_location]: 'Velg intervjusted',
   [KEY.recruitment_dashboard_description]:
@@ -767,6 +768,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_dashboard_description]:
     'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
   [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
   [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
 
