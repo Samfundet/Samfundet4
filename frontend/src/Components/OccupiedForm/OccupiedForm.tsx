@@ -23,7 +23,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const [maxDate, setMaxDate] = useState(new Date('2024-01-24'));
 
   const [timeslots, setTimeslots] = useState<string[]>([]);
-  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({});
+  const [occupiedTimeslots, setOccupiedTimeslots] = useState<Record<string, string[]>>({});
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
@@ -43,7 +43,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
         setTimeslots(response.data.timeslots);
       }),
       getOccupiedTimeslots(recruitmentId).then((res) => {
-        setSelectedTimeslots(res.data.dates);
+        setOccupiedTimeslots(res.data.dates);
       }),
     ])
       .catch((error) => {
@@ -56,7 +56,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   function save() {
     const data: OccupiedTimeslotDto = {
       recruitment: recruitmentId,
-      dates: selectedTimeslots,
+      dates: occupiedTimeslots,
     };
 
     postOccupiedTimeslots(data)
@@ -72,14 +72,14 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
   const markers = useMemo(() => {
     const x: CalendarMarker[] = [];
 
-    for (const d in selectedTimeslots) {
-      if (selectedTimeslots[d]) {
-        if (selectedTimeslots[d].length === timeslots.length) {
+    for (const d in occupiedTimeslots) {
+      if (occupiedTimeslots[d]) {
+        if (occupiedTimeslots[d].length === timeslots.length) {
           x.push({
             date: new Date(d),
             className: styles.fully_busy,
           });
-        } else if (selectedTimeslots[d].length > 0) {
+        } else if (occupiedTimeslots[d].length > 0) {
           x.push({
             date: new Date(d),
             className: styles.partly_busy,
@@ -88,7 +88,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
       }
     }
     return x;
-  }, [timeslots, selectedTimeslots]);
+  }, [timeslots, occupiedTimeslots]);
 
   return (
     <div className={styles.container}>
@@ -114,8 +114,8 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
             <TimeslotContainer
               selectedDate={selectedDate}
               timeslots={timeslots}
-              onChange={(slots) => setSelectedTimeslots(slots)}
-              activeTimeslots={selectedTimeslots}
+              onChange={(slots) => setOccupiedTimeslots(slots)}
+              activeTimeslots={occupiedTimeslots}
               selectMultiple={true}
               hasDisabledTimeslots={false}
             />

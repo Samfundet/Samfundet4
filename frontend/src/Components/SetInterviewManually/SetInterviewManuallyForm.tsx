@@ -37,7 +37,7 @@ export function SetInterviewManuallyForm({
   const [maxDate, setMaxDate] = useState(new Date('2024-01-24'));
 
   const [timeslots, setTimeslots] = useState<string[]>([]);
-  const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>({}); //Opptatt timeslots
+  const [occupiedTimeslots, setOccupiedTimeslots] = useState<Record<string, string[]>>({}); //Opptatt timeslots
   const [interviewTimeslot, setInterviewTimeslot] = useState<Record<string, string[]>>({}); //Intervju timeslot
   const [location, setLocation] = useState<string>('');
 
@@ -58,7 +58,7 @@ export function SetInterviewManuallyForm({
         setTimeslots(response.data.timeslots);
       }),
       getOccupiedTimeslots(recruitmentId).then((res) => {
-        setSelectedTimeslots(res.data.dates);
+        setOccupiedTimeslots(res.data.dates);
       }),
     ])
       .catch((error) => {
@@ -131,14 +131,14 @@ export function SetInterviewManuallyForm({
   const markers = useMemo(() => {
     const x: CalendarMarker[] = [];
 
-    for (const d in selectedTimeslots) {
-      if (selectedTimeslots[d]) {
-        if (selectedTimeslots[d].length === timeslots.length) {
+    for (const d in occupiedTimeslots) {
+      if (occupiedTimeslots[d]) {
+        if (occupiedTimeslots[d].length === timeslots.length) {
           x.push({
             date: new Date(d),
             className: styles.fully_busy,
           });
-        } else if (selectedTimeslots[d].length > 0) {
+        } else if (occupiedTimeslots[d].length > 0) {
           x.push({
             date: new Date(d),
             className: styles.partly_busy,
@@ -147,7 +147,7 @@ export function SetInterviewManuallyForm({
       }
     }
     return x;
-  }, [timeslots, selectedTimeslots]);
+  }, [timeslots, occupiedTimeslots]);
 
   return (
     <div className={styles.container}>
@@ -176,7 +176,7 @@ export function SetInterviewManuallyForm({
               timeslots={timeslots}
               onChange={(slots) => setInterviewTimeslot(slots)}
               selectedTimeslot={interviewTimeslot}
-              disabledTimeslots={selectedTimeslots}
+              disabledTimeslots={occupiedTimeslots}
               hasDisabledTimeslots={true}
               selectMultiple={false}
             />
