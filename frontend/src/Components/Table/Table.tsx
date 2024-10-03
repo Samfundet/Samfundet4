@@ -231,8 +231,13 @@ export function Table({
                 onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
               >
                 {row.childTable !== undefined && (
-                  <td className={classNames(cellClassName)} key={`arrow-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-index1}`}>
+                  <td
+                    className={classNames(cellClassName)}
+                    key={`arrow-${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      index1
+                    }`}
+                  >
                     <Icon icon={isOpen === index1 ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
                   </td>
                 )}

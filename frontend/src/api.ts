@@ -15,6 +15,7 @@ import type {
   InterviewDto,
   InterviewRoomDto,
   KeyValueDto,
+  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -1005,6 +1006,20 @@ export async function getRecruitmentStats(id: string): Promise<AxiosResponse<Rec
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__rejected_applicants,
+      queryParams: {
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.post(url, rejectionMail, { withCredentials: true });
 
   return response;
 }
