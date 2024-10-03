@@ -460,7 +460,7 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
-export type RecruitmentReducedPositionDto = {
+export type RecruitmentRecruitmentPositionDto = {
   id: number;
   name_nb: string;
   name_en: string;
@@ -504,7 +504,7 @@ export type RecruitmentUnprocessedApplicationsDto = {
   recruitment: number;
   user: RecruitmentUserDto;
   applicant_priority: number;
-  recruitment_position: RecruitmentReducedPositionDto;
+  recruitment_position: RecruitmentRecruitmentPositionDto;
   recruiter_status: number;
   recruiter_priority: number;
 };

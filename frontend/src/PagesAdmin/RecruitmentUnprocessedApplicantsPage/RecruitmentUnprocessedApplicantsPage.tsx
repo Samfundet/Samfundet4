@@ -23,8 +23,6 @@ const data = [
   ['Chris Brown', 'Low', 'chris.brown@example.com', 'QA Engineer', 'reservert'],
 ];
 
-// Take inspiration from RecruitmentGangAdminPage.tsx
-
 export function RecruitmentUnprocessedApplicantsPage() {
   const { t } = useTranslation();
   const { recruitmentId } = useParams();
@@ -36,12 +34,9 @@ export function RecruitmentUnprocessedApplicantsPage() {
 
   useEffect(() => {
     if (recruitmentId) {
-      Promise.allSettled([
         getRecruitmentUnprocessedApplicants(recruitmentId).then((res) => {
           setUnprocessedApplicants(res.data);
-          console.log(res.data);
-        }),
-      ])
+        })
         .then(() => {
           setShowSpinner(false);
         })
