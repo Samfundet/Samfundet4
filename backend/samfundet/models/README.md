@@ -3,7 +3,7 @@
 ## Why doesn't Django register my model?
 
 Our models are split into multiple files, but Django is only aware of the module `models` within an app.
-It is therefore required that models are exposed in `Feide.models.__init__.py`.
+It is therefore required that models are exposed in `samfundet.models.__init__.py`.
 
 <br>
 <br>
