@@ -1,13 +1,11 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Button, ToggleSwitch } from '~/Components';
+import { ToggleSwitch } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
 import { getRandomEntryFromList } from '~/utils';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
@@ -40,11 +38,6 @@ export function AdminPage() {
           <div className={styles.label}>Mouse Trail</div>
           <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
         </div>
-        <br />
-        <br />
-        <Link to={ROUTES.frontend.admin_impersonate}>
-          <Button>{t(KEY.admin_steal_identity)}</Button>
-        </Link>
       </div>
     </Page>
   );
