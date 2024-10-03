@@ -17,20 +17,39 @@ from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates,
 
 
 class Recruitment(CustomBaseModel):
-    name_nb = models.CharField(max_length=100, help_text='Name of the recruitment')
-    name_en = models.CharField(max_length=100, help_text='Name of the recruitment')
-    visible_from = models.DateTimeField(null=False, blank=False, help_text='When it becomes visible for applicants')
+    name_nb = models.CharField(max_length=100,
+                               help_text='Name of the recruitment')
+    name_en = models.CharField(max_length=100,
+                               help_text='Name of the recruitment')
+    visible_from = models.DateTimeField(
+        null=False,
+        blank=False,
+        help_text='When it becomes visible for applicants')
     actual_application_deadline = models.DateTimeField(
         null=False,
         blank=False,
-        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
+        help_text=
+        'Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail',
     )
-    shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
-    reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
-    organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
+    shown_application_deadline = models.DateTimeField(
+        null=False,
+        blank=False,
+        help_text='The deadline that is shown to applicants')
+    reprioritization_deadline_for_applicant = models.DateTimeField(
+        null=False, blank=False, help_text='Before allocation meeting')
+    reprioritization_deadline_for_groups = models.DateTimeField(
+        null=False,
+        blank=False,
+        help_text='Reprioritization deadline for groups')
+    organization = models.ForeignKey(
+        null=False,
+        blank=False,
+        to=Organization,
+        on_delete=models.CASCADE,
+        help_text='The organization that is recruiting')
 
-    max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
+    max_applications = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Max applications per applicant')
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         if return_id:
@@ -42,13 +61,16 @@ class Recruitment(CustomBaseModel):
         applications = RecruitmentApplication.objects.filter(recruitment=self)
         if applications.count() == 0:
             return 1
-        return applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET).count() / applications.count()
+        return applications.exclude(recruiter_status=RecruitmentStatusChoices.
+                                    NOT_SET).count() / applications.count()
 
     def is_active(self) -> bool:
-        return self.visible_from < timezone.now() < self.actual_application_deadline
+        return self.visible_from < timezone.now(
+        ) < self.actual_application_deadline
 
     def update_stats(self) -> None:
-        created = RecruitmentStatistics.objects.get_or_create(recruitment=self)[1]
+        created = RecruitmentStatistics.objects.get_or_create(
+            recruitment=self)[1]
         if not created:
             self.statistics.save()
 
@@ -59,29 +81,36 @@ class Recruitment(CustomBaseModel):
         now = timezone.now()
 
         for field in [
-            'actual_application_deadline',
-            'shown_application_deadline',
-            'reprioritization_deadline_for_applicant',
-            'reprioritization_deadline_for_groups',
+                'actual_application_deadline',
+                'shown_application_deadline',
+                'reprioritization_deadline_for_applicant',
+                'reprioritization_deadline_for_groups',
         ]:
             if getattr(self, field) < now:
                 errors[field].append(self.NOT_IN_FUTURE_ERROR)
 
         if self.actual_application_deadline < self.visible_from:
-            errors['actual_application_deadline'].append(self.SHOWN_BEFORE_VISIBLE_ERROR)
+            errors['actual_application_deadline'].append(
+                self.SHOWN_BEFORE_VISIBLE_ERROR)
             errors['visible_from'].append(self.VISIBLE_AFTER_SHOWN_ERROR)
 
         if self.actual_application_deadline < self.shown_application_deadline:
-            errors['actual_application_deadline'].append(self.ACTUAL_BEFORE_SHOWN_ERROR)
-            errors['shown_application_deadline'].append(self.SHOWN_AFTER_ACTUAL_ERROR)
+            errors['actual_application_deadline'].append(
+                self.ACTUAL_BEFORE_SHOWN_ERROR)
+            errors['shown_application_deadline'].append(
+                self.SHOWN_AFTER_ACTUAL_ERROR)
 
         if self.reprioritization_deadline_for_applicant < self.actual_application_deadline:
-            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
-            errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
+            errors['reprioritization_deadline_for_applicant'].append(
+                self.REPRIORITIZATION_BEFORE_ACTUAL)
+            errors['actual_application_deadline'].append(
+                self.ACTUAL_AFTER_REPRIORITIZATION)
 
         if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
-            errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
+            errors['reprioritization_deadline_for_groups'].append(
+                self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+            errors['reprioritization_deadline_for_applicant'].append(
+                self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
 
         raise ValidationError(errors)
 
@@ -120,24 +149,48 @@ class RecruitmentPositionSharedInterviewGroup(CustomBaseModel):
 
 
 class RecruitmentPosition(CustomBaseModel):
-    name_nb = models.CharField(max_length=100, help_text='Name of the position')
-    name_en = models.CharField(max_length=100, help_text='Name of the position')
+    name_nb = models.CharField(max_length=100,
+                               help_text='Name of the position')
+    name_en = models.CharField(max_length=100,
+                               help_text='Name of the position')
 
-    short_description_nb = models.CharField(max_length=100, help_text='Short description of the position')
-    short_description_en = models.CharField(max_length=100, help_text='Short description of the position', null=True, blank=True)
+    short_description_nb = models.CharField(
+        max_length=100, help_text='Short description of the position')
+    short_description_en = models.CharField(
+        max_length=100,
+        help_text='Short description of the position',
+        null=True,
+        blank=True)
 
-    long_description_nb = models.TextField(help_text='Long description of the position')
-    long_description_en = models.TextField(help_text='Long description of the position', null=True, blank=True)
+    long_description_nb = models.TextField(
+        help_text='Long description of the position')
+    long_description_en = models.TextField(
+        help_text='Long description of the position', null=True, blank=True)
 
-    is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
+    is_funksjonaer_position = models.BooleanField(
+        help_text='Is this a funksjonær position?')
 
-    default_application_letter_nb = models.TextField(help_text='Default application letter for the position')
-    default_application_letter_en = models.TextField(help_text='Default application letter for the position', null=True, blank=True)
+    default_application_letter_nb = models.TextField(
+        help_text='Default application letter for the position')
+    default_application_letter_en = models.TextField(
+        help_text='Default application letter for the position',
+        null=True,
+        blank=True)
 
-    norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
+    norwegian_applicants_only = models.BooleanField(
+        help_text='Is this position only for Norwegian applicants?',
+        default=False)
 
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
-    section = models.ForeignKey(GangSection, on_delete=models.CASCADE, help_text='The section that is recruiting', null=True, blank=True)
+    gang = models.ForeignKey(to=Gang,
+                             on_delete=models.CASCADE,
+                             help_text='The gang that is recruiting',
+                             null=True,
+                             blank=True)
+    section = models.ForeignKey(GangSection,
+                                on_delete=models.CASCADE,
+                                help_text='The section that is recruiting',
+                                null=True,
+                                blank=True)
 
     recruitment = models.ForeignKey(
         Recruitment,
@@ -161,7 +214,11 @@ class RecruitmentPosition(CustomBaseModel):
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+    interviewers = models.ManyToManyField(
+        to=User,
+        help_text='Interviewers for the position',
+        blank=True,
+        related_name='interviewers')
 
     def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
         if return_id:
@@ -185,7 +242,8 @@ class RecruitmentPosition(CustomBaseModel):
         super().clean()
 
         if (self.gang and self.section) or not (self.gang or self.section):
-            raise ValidationError('Position must be owned by either gang or section, not both')
+            raise ValidationError(
+                'Position must be owned by either gang or section, not both')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
@@ -197,10 +255,20 @@ class RecruitmentPosition(CustomBaseModel):
 
 
 class RecruitmentSeparatePosition(CustomBaseModel):
-    name_nb = models.CharField(max_length=100, help_text='Name of the position')
-    name_en = models.CharField(max_length=100, help_text='Name of the position')
-    description_nb = models.CharField(max_length=100, help_text='Short description of the position (NB)', null=True, blank=True)
-    description_en = models.CharField(max_length=100, help_text='Short description of the position (EN)', null=True, blank=True)
+    name_nb = models.CharField(max_length=100,
+                               help_text='Name of the position')
+    name_en = models.CharField(max_length=100,
+                               help_text='Name of the position')
+    description_nb = models.CharField(
+        max_length=100,
+        help_text='Short description of the position (NB)',
+        null=True,
+        blank=True)
+    description_en = models.CharField(
+        max_length=100,
+        help_text='Short description of the position (EN)',
+        null=True,
+        blank=True)
 
     url = models.URLField(help_text='URL to website of separate recruitment')
 
@@ -222,11 +290,21 @@ class RecruitmentSeparatePosition(CustomBaseModel):
 
 class InterviewRoom(CustomBaseModel):
     name = models.CharField(max_length=255, help_text='Name of the room')
-    location = models.CharField(max_length=255, help_text='Physical location, eg. campus')
+    location = models.CharField(max_length=255,
+                                help_text='Physical location, eg. campus')
     start_time = models.DateTimeField(help_text='Start time of availability')
     end_time = models.DateTimeField(help_text='End time of availability')
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='rooms')
-    gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that booked the room', related_name='rooms', blank=True, null=True)
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='The recruitment that is recruiting',
+        related_name='rooms')
+    gang = models.ForeignKey(to=Gang,
+                             on_delete=models.CASCADE,
+                             help_text='The gang that booked the room',
+                             related_name='rooms',
+                             blank=True,
+                             null=True)
 
     def __str__(self) -> str:
         return self.name
@@ -249,8 +327,13 @@ class InterviewRoom(CustomBaseModel):
 
 class Interview(CustomBaseModel):
     # User visible fields
-    interview_time = models.DateTimeField(help_text='The time of the interview', null=True, blank=True)
-    interview_location = models.CharField(max_length=255, help_text='The location of the interview', null=True, blank=True)
+    interview_time = models.DateTimeField(
+        help_text='The time of the interview', null=True, blank=True)
+    interview_location = models.CharField(
+        max_length=255,
+        help_text='The location of the interview',
+        null=True,
+        blank=True)
 
     # Admin visible fields
     room = models.ForeignKey(
@@ -261,8 +344,14 @@ class Interview(CustomBaseModel):
         help_text='Room where the interview is held',
         related_name='interviews',
     )
-    interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
-    notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
+    interviewers = models.ManyToManyField(
+        to='samfundet.User',
+        help_text='Interviewers for this interview',
+        blank=True,
+        related_name='interviews')
+    notes = models.TextField(help_text='Notes for the interview',
+                             null=True,
+                             blank=True)
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.room.resolve_org(return_id=return_id)
@@ -272,35 +361,52 @@ class Interview(CustomBaseModel):
 
 
 class RecruitmentApplication(CustomBaseModel):
-    #UUID so that applicants cannot see recruitment info with their own id number
+    # UUID so that applicants cannot see recruitment info with their own id number
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     application_text = models.TextField(help_text='Application text')
     recruitment_position = models.ForeignKey(
-        RecruitmentPosition, on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='applications'
-    )
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='applications')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='applications')
-    applicant_priority = models.PositiveIntegerField(null=True, blank=True, help_text='The priority of the application')
+        RecruitmentPosition,
+        on_delete=models.CASCADE,
+        help_text='The position which is recruiting',
+        related_name='applications')
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='The recruitment that is recruiting',
+        related_name='applications')
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             help_text='The user that is applying',
+                             related_name='applications')
+    applicant_priority = models.PositiveIntegerField(
+        null=True, blank=True, help_text='The priority of the application')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     # Foreign Key because UKA and KSG have shared interviews (multiple applications share the same interview)
     interview = models.ForeignKey(
-        Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the application', related_name='applications'
-    )
+        Interview,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text='The interview for the application',
+        related_name='applications')
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its application
     recruiter_priority = models.IntegerField(
-        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text='The priority of the application'
-    )
+        choices=RecruitmentPriorityChoices.choices,
+        default=RecruitmentPriorityChoices.NOT_SET,
+        help_text='The priority of the application')
 
     recruiter_status = models.IntegerField(
-        choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='The status of the application'
-    )
+        choices=RecruitmentStatusChoices.choices,
+        default=RecruitmentStatusChoices.NOT_SET,
+        help_text='The status of the application')
 
     applicant_state = models.IntegerField(
-        choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text='The state of the applicant for the recruiter'
-    )
+        choices=RecruitmentApplicantStates.choices,
+        default=RecruitmentApplicantStates.NOT_SET,
+        help_text='The state of the applicant for the recruiter')
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment.resolve_org(return_id=return_id)
@@ -310,7 +416,9 @@ class RecruitmentApplication(CustomBaseModel):
 
     def organize_priorities(self) -> None:
         """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
-        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by('applicant_priority')
+        applications_for_user = RecruitmentApplication.objects.filter(
+            recruitment=self.recruitment,
+            user=self.user).order_by('applicant_priority')
         for i in range(len(applications_for_user)):
             correct_position = i + 1
             if applications_for_user[i].applicant_priority != correct_position:
@@ -327,16 +435,21 @@ class RecruitmentApplication(CustomBaseModel):
         """
         # Use order for more simple an unified for direction
         ordering = f"{'' if direction < 0 else '-' }applicant_priority"
-        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
+        applications_for_user = RecruitmentApplication.objects.filter(
+            recruitment=self.recruitment, user=self.user).order_by(ordering)
         direction = abs(direction)  # convert to absolute
         for i in range(len(applications_for_user)):
             if applications_for_user[i].id == self.id:  # find current
                 # Find index of which to switch  priority with
-                switch = len(applications_for_user) - 1 if i + direction >= len(applications_for_user) else i + direction
+                switch = len(
+                    applications_for_user) - 1 if i + direction >= len(
+                        applications_for_user) else i + direction
                 new_priority = applications_for_user[switch].applicant_priority
                 # Move priorites down in direction
                 for ii in range(switch, i, -1):
-                    applications_for_user[ii].applicant_priority = applications_for_user[ii - 1].applicant_priority
+                    applications_for_user[
+                        ii].applicant_priority = applications_for_user[
+                            ii - 1].applicant_priority
                     applications_for_user[ii].save()
                 # update priority
                 applications_for_user[i].applicant_priority = new_priority
@@ -354,15 +467,20 @@ class RecruitmentApplication(CustomBaseModel):
         # If there is max applications, check if applicant have applied to not to many
         # Cant use not self.pk, due to UUID generating it before save.
         if self.recruitment.max_applications:
-            user_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
-            current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
+            user_applications_count = RecruitmentApplication.objects.filter(
+                user=self.user, recruitment=self.recruitment,
+                withdrawn=False).count()
+            current_application = RecruitmentApplication.objects.filter(
+                pk=self.pk).first()
             if user_applications_count >= self.recruitment.max_applications:
                 if not current_application:
                     # attempts to create new application when too many applications
-                    errors['recruitment'].append(self.TOO_MANY_APPLICATIONS_ERROR)
+                    errors['recruitment'].append(
+                        self.TOO_MANY_APPLICATIONS_ERROR)
                 elif current_application.withdrawn and not self.withdrawn:
                     # If it attempts to withdraw, when to many active applications
-                    errors['recruitment'].append(self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
+                    errors['recruitment'].append(
+                        self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
         raise ValidationError(errors)
 
     def __str__(self) -> str:
@@ -378,7 +496,8 @@ class RecruitmentApplication(CustomBaseModel):
         # If the application is saved without an interview, try to find an interview from a shared position.
         if not self.applicant_priority:
             self.organize_priorities()
-            current_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).count()
+            current_applications_count = RecruitmentApplication.objects.filter(
+                user=self.user, recruitment=self.recruitment).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_applications_count + 1
         # If the application is saved without an interview, try to find an interview from a shared position.
@@ -386,27 +505,37 @@ class RecruitmentApplication(CustomBaseModel):
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
         if not self.interview and self.recruitment_position.shared_interview_group:
-            shared_interview = (
-                RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=self.recruitment_position.shared_interview_group.positions.all())
-                .exclude(interview=None)
-                .first()
-            )
+            shared_interview = (RecruitmentApplication.objects.filter(
+                user=self.user,
+                recruitment_position__in=self.recruitment_position.
+                shared_interview_group.positions.all()).exclude(
+                    interview=None).first())
             if shared_interview:
                 self.interview = shared_interview.interview
 
         super().save(*args, **kwargs)
 
     def get_total_interviews(self) -> int:
-        return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
+        return RecruitmentApplication.objects.filter(
+            user=self.user, recruitment=self.recruitment,
+            withdrawn=False).exclude(interview=None).count()
 
     def get_total_applications(self) -> int:
-        return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+        return RecruitmentApplication.objects.filter(
+            user=self.user, recruitment=self.recruitment,
+            withdrawn=False).count()
 
     def update_applicant_state(self) -> None:
-        applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
+        applications = RecruitmentApplication.objects.filter(
+            user=self.user,
+            recruitment=self.recruitment).order_by('applicant_priority')
         # Get top priority
-        top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
-        top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
+        top_wanted = applications.filter(
+            recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by(
+                'applicant_priority').first()
+        top_reserved = applications.filter(
+            recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by(
+                'applicant_priority').first()
         with transaction.atomic():
             for application in applications:
                 # I hate conditionals, so instead of checking all forms of condtions
@@ -430,13 +559,36 @@ class RecruitmentInterviewAvailability(CustomBaseModel):
     automatic interview booking logic.
     """
 
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Which recruitment this availability applies to')
-    position = models.ForeignKey(RecruitmentPosition, on_delete=models.CASCADE, help_text='Which position this availability applies to', null=True, blank=True)
-    start_date = models.DateField(help_text='First possible date for interviews', null=False, blank=False)
-    end_date = models.DateField(help_text='Last possible date for interviews', null=False, blank=False)
-    start_time = models.TimeField(help_text='First possible time of day for interviews', default='08:00:00', null=False, blank=False)
-    end_time = models.TimeField(help_text='Last possible time of day for interviews', default='23:00:00', null=False, blank=False)
-    timeslot_interval = models.PositiveSmallIntegerField(help_text='The time interval (in minutes) between each timeslot', default=30)
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='Which recruitment this availability applies to')
+    position = models.ForeignKey(
+        RecruitmentPosition,
+        on_delete=models.CASCADE,
+        help_text='Which position this availability applies to',
+        null=True,
+        blank=True)
+    start_date = models.DateField(
+        help_text='First possible date for interviews',
+        null=False,
+        blank=False)
+    end_date = models.DateField(help_text='Last possible date for interviews',
+                                null=False,
+                                blank=False)
+    start_time = models.TimeField(
+        help_text='First possible time of day for interviews',
+        default='08:00:00',
+        null=False,
+        blank=False)
+    end_time = models.TimeField(
+        help_text='Last possible time of day for interviews',
+        default='23:00:00',
+        null=False,
+        blank=False)
+    timeslot_interval = models.PositiveSmallIntegerField(
+        help_text='The time interval (in minutes) between each timeslot',
+        default=30)
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment.resolve_org(return_id=return_id)
@@ -452,48 +604,72 @@ class OccupiedTimeslot(FullCleanSaveMixin):
         related_name='occupied_timeslots',
     )
     # Mostly only used for deletion, and anonymization.
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='Which recruitment this occupancy applies to')
+    recruitment = models.ForeignKey(
+        Recruitment,
+        on_delete=models.CASCADE,
+        help_text='Which recruitment this occupancy applies to')
 
     # Start and end time of availability
-    start_dt = models.DateTimeField(help_text='Start of occupied time', null=False, blank=False)
-    end_dt = models.DateTimeField(help_text='End of occupied time', null=False, blank=False)
+    start_dt = models.DateTimeField(help_text='Start of occupied time',
+                                    null=False,
+                                    blank=False)
+    end_dt = models.DateTimeField(help_text='End of occupied time',
+                                  null=False,
+                                  blank=False)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['user', 'recruitment', 'start_dt', 'end_dt'], name='occupied_UNIQ')]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recruitment', 'start_dt', 'end_dt'],
+                name='occupied_UNIQ')
+        ]
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment.resolve_org(return_id=return_id)
 
 
 class RecruitmentStatistics(FullCleanSaveMixin):
-    recruitment = models.OneToOneField(Recruitment, on_delete=models.CASCADE, blank=True, null=True, related_name='statistics')
+    recruitment = models.OneToOneField(Recruitment,
+                                       on_delete=models.CASCADE,
+                                       blank=True,
+                                       null=True,
+                                       related_name='statistics')
 
-    total_applicants = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applicants')
-    total_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total applications')
+    total_applicants = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Total applicants')
+    total_applications = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Total applications')
 
     # Total withdrawn applications
-    total_withdrawn = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total Withdrawn applications')
+    total_withdrawn = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Total Withdrawn applications')
 
     # Total accepted applicants
-    total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
+    total_accepted = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Total accepted applicants')
 
     # Average amount of different gangs an applicant applies for
-    average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+    average_gangs_applied_to_per_applicant = models.FloatField(
+        null=True, blank=True, verbose_name='Gang diversity')
 
     # Average amount of applications for an applicant
-    average_applications_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
+    average_applications_per_applicant = models.FloatField(
+        null=True, blank=True, verbose_name='Gang diversity')
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
-        self.total_applicants = self.recruitment.applications.values('user').distinct().count()
-        self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
-        self.total_accepted = (
-            self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
-        )
+        self.total_applicants = self.recruitment.applications.values(
+            'user').distinct().count()
+        self.total_withdrawn = self.recruitment.applications.filter(
+            withdrawn=True).count()
+        self.total_accepted = (self.recruitment.applications.filter(
+            recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).
+                               values('user').distinct().count())
         if self.total_applicants > 0:
             self.average_gangs_applied_to_per_applicant = (
-                self.recruitment.applications.values('user', 'recruitment_position__gang').distinct().count() / self.total_applicants
-            )
+                self.recruitment.applications.values(
+                    'user', 'recruitment_position__gang').distinct().count() /
+                self.total_applicants)
             self.average_applications_per_applicant = self.total_applications / self.total_applicants if self.total_applicants > 0 else 0
         else:
             self.average_gangs_applied_to_per_applicant = 0
@@ -512,42 +688,57 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def generate_time_stats(self) -> None:
         for h in range(0, 24):
-            time_stat, created = RecruitmentTimeStat.objects.get_or_create(recruitment_stats=self, hour=h)
+            time_stat, created = RecruitmentTimeStat.objects.get_or_create(
+                recruitment_stats=self, hour=h)
             if not created:
                 time_stat.save()
 
     def generate_date_stats(self) -> None:
         date = self.recruitment.visible_from
         while date < self.recruitment.actual_application_deadline:
-            date_stat, created = RecruitmentDateStat.objects.get_or_create(recruitment_stats=self, date=date.strftime('%Y-%m-%d'))
+            date_stat, created = RecruitmentDateStat.objects.get_or_create(
+                recruitment_stats=self, date=date.strftime('%Y-%m-%d'))
             if not created:
                 date_stat.save()
             date += timezone.timedelta(days=1)
 
     def generate_campus_stats(self) -> None:
         for campus in Campus.objects.all():
-            campus_stat, created = RecruitmentCampusStat.objects.get_or_create(recruitment_stats=self, campus=campus)
+            campus_stat, created = RecruitmentCampusStat.objects.get_or_create(
+                recruitment_stats=self, campus=campus)
             if not created:
                 campus_stat.save()
 
     def generate_gang_stats(self) -> None:
-        for gang in Gang.objects.filter(id__in=self.recruitment.positions.values_list('gang', flat=True)):
-            gang_stat, created = RecruitmentGangStat.objects.get_or_create(recruitment_stats=self, gang=gang)
+        for gang in Gang.objects.filter(
+                id__in=self.recruitment.positions.values_list('gang',
+                                                              flat=True)):
+            gang_stat, created = RecruitmentGangStat.objects.get_or_create(
+                recruitment_stats=self, gang=gang)
             if not created:
                 gang_stat.save()
 
 
 class RecruitmentTimeStat(models.Model):
-    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='time_stats')
-    hour = models.PositiveIntegerField(null=False, blank=False, verbose_name='Time')
-    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics,
+                                          on_delete=models.CASCADE,
+                                          blank=False,
+                                          null=False,
+                                          related_name='time_stats')
+    hour = models.PositiveIntegerField(null=False,
+                                       blank=False,
+                                       verbose_name='Time')
+    count = models.PositiveIntegerField(null=False,
+                                        blank=False,
+                                        verbose_name='Count')
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.hour} {self.count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
-        for application in self.recruitment_stats.recruitment.applications.all():
+        for application in self.recruitment_stats.recruitment.applications.all(
+        ):
             if application.created_at.hour == self.hour:
                 count += 1
         self.count = count
@@ -558,16 +749,23 @@ class RecruitmentTimeStat(models.Model):
 
 
 class RecruitmentDateStat(models.Model):
-    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics,
+                                          on_delete=models.CASCADE,
+                                          blank=False,
+                                          null=False,
+                                          related_name='date_stats')
     date = models.DateField(null=False, blank=False, verbose_name='Time')
-    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+    count = models.PositiveIntegerField(null=False,
+                                        blank=False,
+                                        verbose_name='Count')
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.date} {self.count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         count = 0
-        for application in self.recruitment_stats.recruitment.applications.all():
+        for application in self.recruitment_stats.recruitment.applications.all(
+        ):
             if application.created_at.date() == self.date:
                 count += 1
         self.count = count
@@ -578,56 +776,99 @@ class RecruitmentDateStat(models.Model):
 
 
 class RecruitmentCampusStat(models.Model):
-    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='campus_stats')
-    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics,
+                                          on_delete=models.CASCADE,
+                                          blank=False,
+                                          null=False,
+                                          related_name='campus_stats')
+    campus = models.ForeignKey(Campus,
+                               on_delete=models.CASCADE,
+                               blank=False,
+                               null=False,
+                               related_name='date_stats')
 
-    count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
-    applicant_percentage = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name='Percentages of enrolled students applied for campus')
+    count = models.PositiveIntegerField(null=False,
+                                        blank=False,
+                                        verbose_name='Count')
+    applicant_percentage = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        default=0,
+        verbose_name='Percentages of enrolled students applied for campus')
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.campus} {self.count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.count = User.objects.filter(
-            id__in=self.recruitment_stats.recruitment.applications.values_list('user', flat=True).distinct(), campus=self.campus
-        ).count()
-        self.applicant_percentage = self.count / (self.campus.total_students if self.campus.total_students else 1)
+            id__in=self.recruitment_stats.recruitment.applications.values_list(
+                'user', flat=True).distinct(),
+            campus=self.campus).count()
+        self.applicant_percentage = self.count / (
+            self.campus.total_students if self.campus.total_students else 1)
         super().save(*args, **kwargs)
 
     def normalized_applicant_percentage(self) -> float:
         applicant_percentages = list(
-            RecruitmentCampusStat.objects.filter(recruitment_stats=self.recruitment_stats).values_list('applicant_percentage', flat=True)
-        )
+            RecruitmentCampusStat.objects.filter(
+                recruitment_stats=self.recruitment_stats).values_list(
+                    'applicant_percentage', flat=True))
         max_percent = max(applicant_percentages)
         min_percent = min(applicant_percentages)
         if max_percent - min_percent == 0:
             return 0
-        return (self.applicant_percentage - min_percent) / (max_percent - min_percent)
+        return (self.applicant_percentage - min_percent) / (max_percent -
+                                                            min_percent)
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment_stats.resolve_org(return_id=return_id)
 
 
 class RecruitmentGangStat(models.Model):
-    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='gang_stats')
-    gang = models.ForeignKey(Gang, on_delete=models.CASCADE, blank=False, null=False, related_name='date_stats')
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics,
+                                          on_delete=models.CASCADE,
+                                          blank=False,
+                                          null=False,
+                                          related_name='gang_stats')
+    gang = models.ForeignKey(Gang,
+                             on_delete=models.CASCADE,
+                             blank=False,
+                             null=False,
+                             related_name='date_stats')
 
-    application_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
-    applicant_count = models.PositiveIntegerField(null=False, blank=False, verbose_name='Count')
+    application_count = models.PositiveIntegerField(null=False,
+                                                    blank=False,
+                                                    verbose_name='Count')
+    applicant_count = models.PositiveIntegerField(null=False,
+                                                  blank=False,
+                                                  verbose_name='Count')
 
-    average_priority = models.FloatField(null=True, blank=True, verbose_name='Average priority')
-    total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted')
-    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total called and rejected')
+    average_priority = models.FloatField(null=True,
+                                         blank=True,
+                                         verbose_name='Average priority')
+    total_accepted = models.PositiveIntegerField(null=True,
+                                                 blank=True,
+                                                 verbose_name='Total accepted')
+    total_rejected = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Total called and rejected')
 
     def __str__(self) -> str:
         return f'{self.recruitment_stats} {self.gang} {self.application_count}'
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        applications = RecruitmentApplication.objects.filter(recruitment=self.recruitment_stats.recruitment, recruitment_position__gang=self.gang)
+        applications = RecruitmentApplication.objects.filter(
+            recruitment=self.recruitment_stats.recruitment,
+            recruitment_position__gang=self.gang)
         self.application_count = applications.count()
         self.applicant_count = applications.values('user').distinct().count()
 
-        self.average_priority = applications.aggregate(models.Avg('applicant_priority'))['applicant_priority__avg'] if len(applications) > 0 else 0
-        self.total_accepted = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
-        self.total_rejected = applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED).values('user').distinct().count()
+        self.average_priority = applications.aggregate(
+            models.Avg('applicant_priority')
+        )['applicant_priority__avg'] if len(applications) > 0 else 0
+        self.total_accepted = applications.filter(
+            recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        ).values('user').distinct().count()
+        self.total_rejected = applications.filter(
+            recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED
+        ).values('user').distinct().count()
         super().save(*args, **kwargs)
