@@ -60,6 +60,7 @@ import {
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RolesAdminPage,
+  RoleAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
@@ -81,12 +82,15 @@ import {
   type PositionLoader,
   type RecruitmentLoader,
   type SeparatePositionLoader,
+  type RoleViewLoader,
+  roleViewLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
+import { RoleDto } from '~/dto';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -193,6 +197,26 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_roles}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_view}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
+              loader={roleViewLoader}
+              handle={{
+                crumb: ({ role }: RoleViewLoader) => {
+                  if (!role) return <span>{t(KEY.common_unknown)}</span>;
+                  return (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_roles_view,
+                        urlParams: { roleId: role.id },
+                      })}
+                    >
+                      {t(KEY.common_roles_view)}
+                    </Link>
+                  );
+                },
+              }}
           />
         </Route>
         {/* Events */}
