@@ -81,7 +81,7 @@ export function RecruitmentUnprocessedApplicantsPage() {
       {
         content: (
           <Link url={applicantUrl}>
-            {unprocessedApplicant.user.first_name + ' ' + unprocessedApplicant.user.last_name}
+            {`${unprocessedApplicant.user.first_name} ${unprocessedApplicant.user.last_name}`}
           </Link>
         ),
       },
