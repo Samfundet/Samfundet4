@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
 import {
   getInterview,
   getOccupiedTimeslots,
   getRecruitmentAvailability,
   setRecruitmentApplicationInterview,
 } from '~/api';
-import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
-import { InterviewDto, RecruitmentApplicationDto } from '~/dto';
+import type { InterviewDto, RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { CalendarMarker } from '~/types';
+import type { CalendarMarker } from '~/types';
+import { formatDateYMD } from '~/utils';
 import { Button } from '../Button';
 import styles from './SetInterviewManually.module.scss';
-import { formatDateYMD } from '~/utils';
 
 type SetInterviewManuallyFormProps = {
   recruitmentId: number;
@@ -181,13 +181,13 @@ export function SetInterviewManuallyForm({
               selectMultiple={false}
             />
           </div>
-          <span className={styles.choose_location_text}>{t(KEY.recruitment_choose_interview_location) + ':'}</span>
+          <span className={styles.choose_location_text}>{`${t(KEY.recruitment_choose_interview_location)}:`}</span>
           <InputField
             type="text"
             inputClassName={styles.input_field}
             value={location}
             onChange={(value) => setLocation(value as string)}
-          ></InputField>
+          />
 
           <div className={styles.button_row}>
             <Button display="block" theme="secondary" onClick={() => onCancel?.()}>

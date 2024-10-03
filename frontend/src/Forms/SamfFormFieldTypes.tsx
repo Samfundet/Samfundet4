@@ -16,10 +16,10 @@ import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker, type ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
 import type { InputFieldType } from '~/Components/InputField/InputField';
 import type { InputFileType } from '~/Components/InputFile/InputFile';
+import type { TextAreaFieldProps } from '~/Components/TextAreaField';
 import type { ImageDto } from '~/dto';
 import type { SamfError } from './SamfForm';
 import styles from './SamfForm.module.scss';
-import { TextAreaFieldProps } from '~/Components/TextAreaField';
 
 // ---------------------------------- //
 //            Return types            //

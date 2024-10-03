@@ -1,14 +1,12 @@
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
 import { Modal } from '../Modal';
 import styles from './SetInterviewManually.module.scss';
 import { SetInterviewManuallyForm } from './SetInterviewManuallyForm';
-import { RecruitmentApplicationDto } from '~/dto';
-import { use } from 'i18next';
-import { on } from 'events';
 
 type SetInterviewManuallyModalProps = {
   recruitmentId: number;
@@ -42,7 +40,7 @@ export function SetInterviewManuallyModal({
             onCancel={() => setOpen(false)}
             application={application}
             onSave={onSetInterview}
-          ></SetInterviewManuallyForm>
+          />
         </>
       </Modal>
     </>

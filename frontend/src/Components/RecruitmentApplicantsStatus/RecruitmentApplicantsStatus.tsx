@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { putRecruitmentApplicationForGang } from '~/api';
 import { InputField } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
-import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
+import { putRecruitmentApplicationForGang } from '~/api';
+import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';

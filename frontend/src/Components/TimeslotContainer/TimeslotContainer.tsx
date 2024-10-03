@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { formatDateYMD, lowerCapitalize } from '~/utils';
-import { TimeslotButton } from './components/TimeslotButton';
 import styles from './TimeslotContainer.module.scss';
+import { TimeslotButton } from './components/TimeslotButton';
 
 type Props = {
   selectedDate: Date | null;
@@ -144,7 +144,7 @@ export function TimeslotContainer({
 
   return (
     <div className={styles.container}>
-      {selectMultiple ? t(KEY.occupied_select_time_text) + ':' : t(KEY.recruitment_choose_interview_time) + ':'}
+      {selectMultiple ? `${t(KEY.occupied_select_time_text)}:` : `${t(KEY.recruitment_choose_interview_time)}:`}
       {/* ^not a great solution, but works for the current purposes of this TimeslotContainer*/}
       <div className={styles.timeslots}>
         {timeslots.map((timeslot) => {

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
 import { MiniCalendar, TimeslotContainer } from '~/Components';
-import { OccupiedTimeslotDto } from '~/dto';
+import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
+import type { OccupiedTimeslotDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { CalendarMarker } from '~/types';
+import type { CalendarMarker } from '~/types';
 import { Button } from '../Button';
 import styles from './OccupiedForm.module.scss';
 

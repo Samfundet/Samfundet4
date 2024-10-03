@@ -1,6 +1,7 @@
 import classNames from 'classnames';
+import type React from 'react';
+import type { ReactNode } from 'react';
 import styles from './TimeslotButton.module.scss';
-import React, { ReactNode } from 'react';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;
@@ -21,7 +22,7 @@ export function TimeslotButton({ active, disabled, onlyOneValid, children, showD
       type="button"
       {...props}
     >
-      {showDot && <div className={styles.dot}></div>}
+      {showDot && <div className={styles.dot} />}
       <span>{children}</span>
     </button>
   );
