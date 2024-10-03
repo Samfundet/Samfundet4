@@ -1,5 +1,5 @@
-import { useState, ReactElement, ReactNode } from 'react';
-import { Tab, TabBar } from '../TabBar/TabBar';
+import { type ReactElement, type ReactNode, useState } from 'react';
+import { type Tab, TabBar } from '../TabBar/TabBar';
 
 export type TabViewProps = {
   tabs: Tab<ReactElement | ReactNode>[];

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
-import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, ThemeValue, XCSRFTOKEN } from '~/constants';
+import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
 import { useMouseTrail, useTheme } from '~/hooks';
-import { Children, KeyValueMap, SetState } from '~/types';
+import type { Children, KeyValueMap, SetState } from '~/types';
 import { useAuthContext } from './AuthContext';
 
 /**

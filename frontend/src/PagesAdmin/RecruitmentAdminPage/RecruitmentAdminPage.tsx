@@ -6,7 +6,7 @@ import { Button, CrudButtons, Link } from '~/Components';
 import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
-import { RecruitmentDto } from '~/dto';
+import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -24,6 +24,7 @@ export function RecruitmentAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getAllRecruitments()
       .then((data) => {
@@ -34,7 +35,6 @@ export function RecruitmentAdminPage() {
         console.error(error);
       })
       .finally(() => setShowSpinner(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tableColumns = [
@@ -44,7 +44,7 @@ export function RecruitmentAdminPage() {
     '', // Buttons
   ];
 
-  const data = recruitments.map(function (element) {
+  const data = recruitments.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_overview,
       urlParams: { recruitmentId: element.id },
@@ -74,7 +74,12 @@ export function RecruitmentAdminPage() {
               );
             }}
             onView={() => {
-              navigate(ROUTES.frontend.recruitment);
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.organization_recruitment,
+                  urlParams: { recruitmentID: element.id },
+                }),
+              );
             }}
             onEdit={() => {
               navigate(

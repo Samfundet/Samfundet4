@@ -56,6 +56,11 @@
   }
 }
 
+.flag_button {
+  background: none;
+  border: none;
+}
+
 .language_flag {
   width: 2em;
   transition: 0.2s ease-in-out;
@@ -103,6 +108,8 @@
 
 .hamburger {
   display: none;
+  background: none;
+  border: none;
   @include for-tablet-down {
     height: 2.4em;
     width: 2.2em;

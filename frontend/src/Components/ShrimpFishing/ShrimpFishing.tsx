@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Shrimp fishing game
  *
@@ -13,7 +12,7 @@ import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { FriedShrimpIcon } from './FriedShrimpIcon';
 import { SharkIcon } from './SharkIcon';
-import shrimpFishingStyles from './ShrimpFishing.module.scss';
+import styles from './ShrimpFishing.module.scss';
 import { ShrimpIcon } from './ShrimpIcon';
 
 const SHRIMP_COUNT = 5;
@@ -44,7 +43,6 @@ export function ShrimpFishing() {
   const [showGameOver, setShowGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [shrimpSpeed, setShrimpSpeed] = useState<number>(3);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [sharkSpeed, setSharkSpeed] = useState(3);
   const [shrimps, setShrimps] = useState<MovingItemProps[]>();
   const [friedShrimps, setFriedShrimps] = useState<MovingItemProps[]>();
@@ -80,10 +78,10 @@ export function ShrimpFishing() {
     setFriedShrimps(friedShrimps);
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: these functions change on every rerender, must not be used as dep
   useEffect(() => {
     generateShrimps();
     generateFriedShrimps();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -113,11 +111,11 @@ export function ShrimpFishing() {
   );
 
   return (
-    <div className={shrimpFishingStyles['container']}>
-      <div className={shrimpFishingStyles['offsetContainer']}>
+    <div className={styles.container}>
+      <div className={styles.offset_container}>
         {gameplay}
-        <h1 className={shrimpFishingStyles['scoreText']}>Score: {score}</h1>
-        <h1 className={shrimpFishingStyles['gameOverText']}>{showGameOver && 'Game Over'}</h1>
+        <h1 className={styles.score_text}>Score: {score}</h1>
+        <h1 className={styles.game_over_text}>{showGameOver && 'Game Over'}</h1>
       </div>
     </div>
   );
@@ -142,7 +140,7 @@ export function ShrimpButton({ speed, onClick, eaten, sharkPosition }: MovingIte
     const interval = setInterval(() => {
       if (shrimpRef.current) {
         const deltaPositionY = randomIntFromInterval(-10, 10);
-        const newPositionY = limitToRange(parseFloat(shrimpRef.current.style.top) + deltaPositionY, 0, 100);
+        const newPositionY = limitToRange(Number.parseFloat(shrimpRef.current.style.top) + deltaPositionY, 0, 100);
         shrimpRef.current.style.transitionDuration = `${speed}s`;
         shrimpRef.current.style.top = `${newPositionY}%`;
       }
@@ -162,24 +160,24 @@ export function ShrimpButton({ speed, onClick, eaten, sharkPosition }: MovingIte
       sharkPosition &&
       yCord &&
       xCord &&
-      Math.abs(parseFloat(yCord) - sharkPosition[0]) < 10
+      Math.abs(Number.parseFloat(yCord) - sharkPosition[0]) < 10
       // Math.abs(parseFloat(xCord) - sharkPosition[1]) < 10
     ) {
       eaten();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sharkPosition]);
+  }, [sharkPosition, eaten]);
 
   return (
     <button
       ref={shrimpRef}
-      className={shrimpFishingStyles['moving-container']}
+      className={styles.moving_container}
       style={{
         transitionDuration: `${speed}s`,
         top: `${startingPositionY}%`,
         left: `${startingPositionX}%`,
       }}
       onClick={onClick}
+      type="button"
     >
       <ShrimpIcon />
     </button>
@@ -195,32 +193,32 @@ export function SharkButton({ speed, onClick, setSharkPosition }: MovingItemProp
     const interval = setInterval(() => {
       if (sharkRef.current) {
         const [newPositionX, newPositionY] = randomNewPosition(
-          [parseFloat(sharkRef.current.style.left), parseFloat(sharkRef.current.style.top)],
+          [Number.parseFloat(sharkRef.current.style.left), Number.parseFloat(sharkRef.current.style.top)],
           10,
         );
         sharkRef.current.style.transitionDuration = `${speed}s`;
         sharkRef.current.style.left = `${newPositionX}%`;
         sharkRef.current.style.top = `${newPositionY}%`;
-        setSharkPosition && setSharkPosition([newPositionY, newPositionX]);
+        setSharkPosition?.([newPositionY, newPositionX]);
       }
     }, speed * 3000);
 
     return () => {
       clearInterval(interval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speed]);
+  }, [speed, setSharkPosition]);
 
   return (
     <button
       ref={sharkRef}
-      className={classNames(shrimpFishingStyles['moving-container'], shrimpFishingStyles['shark'])}
+      className={classNames(styles.moving_container, styles.shark)}
       style={{
         transitionDuration: `${speed}s`,
         top: `${startingPositionY}%`,
         left: `${startingPositionX}%`,
       }}
       onClick={onClick}
+      type="button"
     >
       <SharkIcon />
     </button>
@@ -249,13 +247,14 @@ export function FriedShrimpButton({ speed, onClick }: MovingItemProps) {
   return (
     <button
       ref={friedShrimpRef}
-      className={shrimpFishingStyles['moving-container']}
+      className={styles.moving_container}
       style={{
         transitionDuration: `${speed}s`,
         top: `${startingPositionY}%`,
         left: `${startingPositionX}%`,
       }}
       onClick={onClick}
+      type="button"
     >
       <FriedShrimpIcon />
     </button>

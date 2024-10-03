@@ -1,6 +1,6 @@
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import type { LoaderFunctionArgs } from 'react-router-dom';
-import { getGang, getRecruitment, getRecruitmentPosition } from '~/api';
+import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto } from '~/dto';
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;
@@ -14,8 +14,16 @@ export type PositionLoader = {
   position: RecruitmentPositionDto | undefined;
 };
 
+export type SeparatePositionLoader = {
+  separatePosition: RecruitmentSeparatePositionDto | undefined;
+};
+
 export async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
   return { recruitment: (await getRecruitment(params.recruitmentId as string)).data };
+}
+
+export async function separatePositionLoader({ params }: LoaderFunctionArgs): Promise<SeparatePositionLoader> {
+  return { separatePosition: (await getRecruitmentSeparatePosition(params.separatePositionId as string)).data };
 }
 
 export async function positionLoader({ params }: LoaderFunctionArgs): Promise<PositionLoader> {
@@ -34,4 +42,10 @@ export async function recruitmentGangPositionLoader(
   params: LoaderFunctionArgs,
 ): Promise<RecruitmentLoader & GangLoader & PositionLoader> {
   return { ...(await recruitmentLoader(params)), ...(await gangLoader(params)), ...(await positionLoader(params)) };
+}
+
+export async function recruitmentSeparatePositionLoader(
+  params: LoaderFunctionArgs,
+): Promise<RecruitmentLoader & SeparatePositionLoader> {
+  return { ...(await recruitmentLoader(params)), ...(await separatePositionLoader(params)) };
 }

@@ -6,7 +6,7 @@ import { SultenPage } from '~/Components/SultenPage';
 import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { TextItem, VENUE } from '~/constants';
-import { VenueDto } from '~/dto';
+import type { VenueDto } from '~/dto';
 import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,6 +21,7 @@ export function LycheHomePage() {
   const [loading, setLoading] = useState(true);
   useTitle('', t(KEY.common_sulten));
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getVenues()
       .then((data) => {
@@ -32,7 +33,6 @@ export function LycheHomePage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

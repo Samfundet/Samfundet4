@@ -1,4 +1,5 @@
 # For cypress dependencies use cypress image, eg. cypress/base:19
+
 FROM node:21-slim
 EXPOSE 3000
 WORKDIR /app
@@ -10,8 +11,10 @@ COPY .yarn/ /app/.yarn/
 # Require up to date package.json and yarn.lock, fail otherwise.
 RUN yarn install --immutable
 
-# Copy remaining files
-COPY . /app
+# Copy remaining files.
+COPY . /app/
 
-# Commands are run from docker-compose
-# to use same image for storybook and vite
+# Aliases:
+RUN echo 'alias la="ls -la"' >> ~/.bashrc
+
+# Commands are run from docker-compose to use the same image for storybook and vite.

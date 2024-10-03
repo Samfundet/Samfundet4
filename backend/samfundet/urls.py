@@ -1,6 +1,8 @@
 # imports
 from __future__ import annotations
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 from rest_framework import routers
 
 from django.urls import path, include
@@ -8,7 +10,6 @@ from django.urls import path, include
 from . import views
 
 # End: imports -----------------------------------------------------------------
-
 router = routers.DefaultRouter()
 router.register('images', views.ImageView, 'images')
 router.register('tags', views.TagView, 'tags')
@@ -35,11 +36,13 @@ router.register('infobox', views.InfoboxView, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('organizations', views.OrganizationView, 'organizations')
 router.register('merch', views.MerchView, 'merch')
+router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
+router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
@@ -52,6 +55,9 @@ app_name = 'samfundet'
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
     path('csrf/', views.CsrfView.as_view(), name='csrf'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
@@ -71,6 +77,11 @@ urlpatterns = [
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
+    path(
+        'recruitment-show-unprocessed-applicants/',
+        views.RecruitmentUnprocessedApplicationsPerRecruitment.as_view(),
+        name='recruitment_show_unprocessed_applicants',
+    ),
     path(
         'recruitment-positions-gang-for-applicant/',
         views.RecruitmentPositionsPerGangForApplicantView.as_view(),

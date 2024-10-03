@@ -1,20 +1,20 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { type MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
-import { Key, SetState } from '~/types';
+import type { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
-import { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper, THEME, THEME_KEY, ThemeValue } from './constants';
+import type { LinkTarget } from './Components/Link/Link';
+import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
-import { TextItemDto } from './dto';
+import type { TextItemDto } from './dto';
 import { LANGUAGES } from './i18n/types';
 
 // Make typescript happy.
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     goatcounter: any;
   }
 }
@@ -349,6 +349,7 @@ export function useClickOutside<T extends Node>(
   event: 'mousedown' | 'mouseup' = 'mousedown',
 ): MutableRefObject<T | null> {
   const ref = useRef<T>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     function handleClickOutside(evt: MouseEvent) {
       if (evt.target instanceof Element) {
@@ -444,15 +445,16 @@ export function useIsMetaKeyDown(): boolean {
   return isDown;
 }
 
-export function useTitle(title: string, suffix: string = 'Samfundet'): void {
+export function useTitle(title: string, suffix = 'Samfundet'): void {
   const initialTitle = document.title;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: initialTitle does not need to be in deplist
   useEffect(() => {
-    document.title = title ? `${title}${suffix ? ' - ' + suffix : ''}` : suffix;
+    const delimitedSuffix = suffix ? ` - ${suffix}` : '';
+    document.title = title ? title + delimitedSuffix : suffix;
 
     return () => {
       document.title = initialTitle;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, suffix]);
 }
 

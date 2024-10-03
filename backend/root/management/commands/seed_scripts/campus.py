@@ -17,10 +17,6 @@ CAMPUS = [
         'name_nb': 'Fotofagskolen',
     },
     {
-        'name_en': 'Kristiania University College',
-        'name_nb': 'Høyskolen Kristiania',
-    },
-    {
         'name_en': 'Trondheim Academy of Fine Art',
         'name_nb': 'Kunstakademiet i Trondheim',
         'abbreviation': 'KIT',
@@ -40,10 +36,6 @@ CAMPUS = [
     {
         'name_en': 'NTNU Øya',
         'name_nb': 'NTNU Øya',
-    },
-    {
-        'name_en': 'NTNU Rotvoll',
-        'name_nb': 'NTNU Rotvoll',
     },
     {
         'name_en': 'NTNU Tunga',

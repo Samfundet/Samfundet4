@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { H2, Link, OccupiedFormModal } from '~/Components';
+import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { getRecruitmentRecruiterDashboard } from '~/api';
-import { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
-import styles from './RecruitmentRecruiterDashboardPage.module.scss';
-import { Text } from '~/Components/Text/Text';
-import { Table } from '~/Components/Table';
-import { useParams } from 'react-router-dom';
-import { STATUS } from '~/http_status_codes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { useCustomNavigate } from '~/hooks';
+import styles from './RecruitmentRecruiterDashboardPage.module.scss';
 
 export function RecruitmentRecruiterDashboardPage() {
   const { t } = useTranslation();
@@ -24,29 +24,29 @@ export function RecruitmentRecruiterDashboardPage() {
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>();
   const [loading, setLoading] = useState(true);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate must not be in deplist
   useEffect(() => {
-    if (recruitmentId) {
-      getRecruitmentRecruiterDashboard(recruitmentId)
-        .then((resp) => {
-          setRecruitment(resp.data.recruitment);
-          setApplications(resp.data.applications);
-          setLoading(false);
-        })
-        .catch((data) => {
-          toast.error(t(KEY.common_something_went_wrong));
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.not_found });
-          }
-        });
-    }
-  }, [navigate, recruitmentId, t]);
+    if (!recruitmentId) return;
+    getRecruitmentRecruiterDashboard(recruitmentId)
+      .then((resp) => {
+        setRecruitment(resp.data.recruitment);
+        setApplications(resp.data.applications);
+        setLoading(false);
+      })
+      .catch((data) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate({ url: ROUTES.frontend.not_found });
+        }
+      });
+  }, [recruitmentId, t]);
 
   if (!recruitmentId) {
     navigate({ url: ROUTES.frontend.not_found });
     return <></>;
   }
 
-  const title = `${t(KEY.recruitment_overview)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
+  const title = `${t(KEY.recruitment_recruiter_dashboard)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
     recruitment,
     'name',
   )}`;
@@ -54,7 +54,7 @@ export function RecruitmentRecruiterDashboardPage() {
     <div className={styles.header}>
       <Text>{t(KEY.recruitment_dashboard_description)}</Text>
       <div className={styles.occupied_container}>
-        <OccupiedFormModal recruitmentId={parseInt(recruitmentId)} />
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} />
       </div>
     </div>
   );
@@ -67,46 +67,44 @@ export function RecruitmentRecruiterDashboardPage() {
   ];
 
   const interviewTableRow = applications
-    ? applications.map(function (application) {
-        return [
-          {
-            value: application.user.first_name,
-            content: (
-              <Link
-                url={reverse({
-                  pattern: ROUTES.frontend.admin_recruitment_applicant,
-                  urlParams: {
-                    applicationID: application.id,
-                  },
-                })}
-              >
-                {`${application.user.first_name} ${application.user.last_name}`}
-              </Link>
-            ),
-          },
-          {
-            value: dbT(application.recruitment_position, 'name'),
-            content: (
-              <Link
-                url={reverse({
-                  pattern: ROUTES.frontend.recruitment_application,
-                  urlParams: {
-                    positionID: application.recruitment_position.id,
-                  },
-                })}
-              >
-                {dbT(application.recruitment_position, 'name')}
-              </Link>
-            ),
-          },
-          {
-            value: application.interview?.interview_time,
-          },
-          {
-            value: application.interview?.interview_location,
-          },
-        ];
-      })
+    ? applications.map((application) => [
+        {
+          value: application.user.first_name,
+          content: (
+            <Link
+              url={reverse({
+                pattern: ROUTES.frontend.admin_recruitment_applicant,
+                urlParams: {
+                  applicationID: application.id,
+                },
+              })}
+            >
+              {`${application.user.first_name} ${application.user.last_name}`}
+            </Link>
+          ),
+        },
+        {
+          value: dbT(application.recruitment_position, 'name'),
+          content: (
+            <Link
+              url={reverse({
+                pattern: ROUTES.frontend.recruitment_application,
+                urlParams: {
+                  positionID: application.recruitment_position.id,
+                },
+              })}
+            >
+              {dbT(application.recruitment_position, 'name')}
+            </Link>
+          ),
+        },
+        {
+          value: application.interview?.interview_time,
+        },
+        {
+          value: application.interview?.interview_location,
+        },
+      ])
     : [];
 
   return (
