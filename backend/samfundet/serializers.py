@@ -740,12 +740,12 @@ class RecruitmentSerializer(CustomBaseSerializer):
         fields = '__all__'
 
     def validate_promo_media(self, value: str | None) -> str | None:
-        if (value is None):
+        if value is None:
             return None
         match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', value)
-        if (match):
+        if match:
             return match.group(3)
-        raise ValidationError("Invalid youtube url")
+        raise ValidationError('Invalid youtube url')
 
     def to_representation(self, instance: Recruitment) -> dict:
         data = super().to_representation(instance)
