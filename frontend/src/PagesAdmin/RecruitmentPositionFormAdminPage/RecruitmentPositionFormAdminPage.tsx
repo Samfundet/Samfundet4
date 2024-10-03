@@ -75,6 +75,12 @@ export function RecruitmentPositionFormAdminPage() {
     defaultValues: initialData,
   });
 
+  useEffect(() => {
+    if (position) {
+      form.reset(position);
+    }
+  }, [position, form]);
+
   const title = positionId
     ? `${t(KEY.common_edit)} ${position?.name_nb}`
     : `${t(KEY.common_create)} ${t(KEY.recruitment_position)}`;
@@ -89,7 +95,6 @@ export function RecruitmentPositionFormAdminPage() {
       gang: { id: Number.parseInt(gangId ?? '') },
       recruitment: recruitmentId ?? '',
       interviewers: [],
-      section: null,
     };
 
     const action = positionId
