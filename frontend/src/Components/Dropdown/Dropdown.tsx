@@ -44,7 +44,7 @@ function DropdownInner<T>(
    * @param e Standard onChange HTML event for dropdown
    */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = parseInt(e?.currentTarget.value ?? '-1', 10);
+    const choice = Number.parseInt(e?.currentTarget.value ?? '-1', 10);
     if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
     } else {
@@ -67,7 +67,7 @@ function DropdownInner<T>(
         disabled={disabled}
         value={value !== undefined ? options.findIndex((e) => e.value === value) : -1}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1}></option>}
+        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1} />}
         {options.map((opt, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <option value={index} key={index}>

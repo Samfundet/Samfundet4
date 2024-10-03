@@ -55,7 +55,7 @@ export function RecruitmentPositionOverviewPage() {
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status == 2 &&
+                recruitmentApplicant.recruiter_status === 2 &&
                 recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
@@ -63,7 +63,7 @@ export function RecruitmentPositionOverviewPage() {
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status == 3 &&
+                recruitmentApplicant.recruiter_status === 3 &&
                 recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
