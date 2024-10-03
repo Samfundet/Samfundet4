@@ -31,7 +31,7 @@ class Recruitment(CustomBaseModel):
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
-    promo_media = models.CharField(max_length=11, help_text='Youtube video id', null=True, default=None)
+    promo_media = models.CharField(max_length=11, help_text='Youtube video id', null=True, default=None, blank=True)
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         if return_id:
