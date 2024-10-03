@@ -68,8 +68,7 @@ export const ROUTES_BACKEND = {
   adminsamfundetusergangsectionrole__objectId: '/admin/samfundet/usergangsectionrole/:objectId/',
   admin__auth_permission_permissions: '/admin/auth/permission/:objectPk/permissions/',
   admin__auth_permission_permissions_manage_user: '/admin/auth/permission/:objectPk/permissions/user-manage/:userId/',
-  admin__auth_permission_permissions_manage_group:
-    '/admin/auth/permission/:objectPk/permissions/group-manage/:groupId/',
+  admin__auth_permission_permissions_manage_group: '/admin/auth/permission/:objectPk/permissions/group-manage/:groupId/',
   admin__auth_permission_changelist: '/admin/auth/permission/',
   admin__auth_permission_add: '/admin/auth/permission/add/',
   admin__auth_permission_history: '/admin/auth/permission/:objectId/history/',
@@ -77,10 +76,8 @@ export const ROUTES_BACKEND = {
   admin__auth_permission_change: '/admin/auth/permission/:objectId/change/',
   adminauthpermission__objectId: '/admin/auth/permission/:objectId/',
   admin__contenttypes_contenttype_permissions: '/admin/contenttypes/contenttype/:objectPk/permissions/',
-  admin__contenttypes_contenttype_permissions_manage_user:
-    '/admin/contenttypes/contenttype/:objectPk/permissions/user-manage/:userId/',
-  admin__contenttypes_contenttype_permissions_manage_group:
-    '/admin/contenttypes/contenttype/:objectPk/permissions/group-manage/:groupId/',
+  admin__contenttypes_contenttype_permissions_manage_user: '/admin/contenttypes/contenttype/:objectPk/permissions/user-manage/:userId/',
+  admin__contenttypes_contenttype_permissions_manage_group: '/admin/contenttypes/contenttype/:objectPk/permissions/group-manage/:groupId/',
   admin__contenttypes_contenttype_changelist: '/admin/contenttypes/contenttype/',
   admin__contenttypes_contenttype_add: '/admin/contenttypes/contenttype/add/',
   admin__contenttypes_contenttype_history: '/admin/contenttypes/contenttype/:objectId/history/',
@@ -98,8 +95,7 @@ export const ROUTES_BACKEND = {
   adminadminlogentry__objectId: '/admin/admin/logentry/:objectId/',
   admin__sessions_session_permissions: '/admin/sessions/session/:objectPk/permissions/',
   admin__sessions_session_permissions_manage_user: '/admin/sessions/session/:objectPk/permissions/user-manage/:userId/',
-  admin__sessions_session_permissions_manage_group:
-    '/admin/sessions/session/:objectPk/permissions/group-manage/:groupId/',
+  admin__sessions_session_permissions_manage_group: '/admin/sessions/session/:objectPk/permissions/group-manage/:groupId/',
   admin__sessions_session_changelist: '/admin/sessions/session/',
   admin__sessions_session_add: '/admin/sessions/session/add/',
   admin__sessions_session_history: '/admin/sessions/session/:objectId/history/',
@@ -107,10 +103,8 @@ export const ROUTES_BACKEND = {
   admin__sessions_session_change: '/admin/sessions/session/:objectId/change/',
   adminsessionssession__objectId: '/admin/sessions/session/:objectId/',
   admin__guardian_groupobjectpermission_permissions: '/admin/guardian/groupobjectpermission/:objectPk/permissions/',
-  admin__guardian_groupobjectpermission_permissions_manage_user:
-    '/admin/guardian/groupobjectpermission/:objectPk/permissions/user-manage/:userId/',
-  admin__guardian_groupobjectpermission_permissions_manage_group:
-    '/admin/guardian/groupobjectpermission/:objectPk/permissions/group-manage/:groupId/',
+  admin__guardian_groupobjectpermission_permissions_manage_user: '/admin/guardian/groupobjectpermission/:objectPk/permissions/user-manage/:userId/',
+  admin__guardian_groupobjectpermission_permissions_manage_group: '/admin/guardian/groupobjectpermission/:objectPk/permissions/group-manage/:groupId/',
   admin__guardian_groupobjectpermission_changelist: '/admin/guardian/groupobjectpermission/',
   admin__guardian_groupobjectpermission_add: '/admin/guardian/groupobjectpermission/add/',
   admin__guardian_groupobjectpermission_history: '/admin/guardian/groupobjectpermission/:objectId/history/',
@@ -118,10 +112,8 @@ export const ROUTES_BACKEND = {
   admin__guardian_groupobjectpermission_change: '/admin/guardian/groupobjectpermission/:objectId/change/',
   adminguardiangroupobjectpermission__objectId: '/admin/guardian/groupobjectpermission/:objectId/',
   admin__guardian_userobjectpermission_permissions: '/admin/guardian/userobjectpermission/:objectPk/permissions/',
-  admin__guardian_userobjectpermission_permissions_manage_user:
-    '/admin/guardian/userobjectpermission/:objectPk/permissions/user-manage/:userId/',
-  admin__guardian_userobjectpermission_permissions_manage_group:
-    '/admin/guardian/userobjectpermission/:objectPk/permissions/group-manage/:groupId/',
+  admin__guardian_userobjectpermission_permissions_manage_user: '/admin/guardian/userobjectpermission/:objectPk/permissions/user-manage/:userId/',
+  admin__guardian_userobjectpermission_permissions_manage_group: '/admin/guardian/userobjectpermission/:objectPk/permissions/group-manage/:groupId/',
   admin__guardian_userobjectpermission_changelist: '/admin/guardian/userobjectpermission/',
   admin__guardian_userobjectpermission_add: '/admin/guardian/userobjectpermission/add/',
   admin__guardian_userobjectpermission_history: '/admin/guardian/userobjectpermission/:objectId/history/',
@@ -130,8 +122,7 @@ export const ROUTES_BACKEND = {
   adminguardianuserobjectpermission__objectId: '/admin/guardian/userobjectpermission/:objectId/',
   admin__samfundet_campus_permissions: '/admin/samfundet/campus/:objectPk/permissions/',
   admin__samfundet_campus_permissions_manage_user: '/admin/samfundet/campus/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_campus_permissions_manage_group:
-    '/admin/samfundet/campus/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_campus_permissions_manage_group: '/admin/samfundet/campus/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_campus_changelist: '/admin/samfundet/campus/',
   admin__samfundet_campus_add: '/admin/samfundet/campus/add/',
   admin__samfundet_campus_history: '/admin/samfundet/campus/:objectId/history/',
@@ -139,10 +130,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_campus_change: '/admin/samfundet/campus/:objectId/change/',
   adminsamfundetcampus__objectId: '/admin/samfundet/campus/:objectId/',
   admin__samfundet_userpreference_permissions: '/admin/samfundet/userpreference/:objectPk/permissions/',
-  admin__samfundet_userpreference_permissions_manage_user:
-    '/admin/samfundet/userpreference/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_userpreference_permissions_manage_group:
-    '/admin/samfundet/userpreference/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_userpreference_permissions_manage_user: '/admin/samfundet/userpreference/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_userpreference_permissions_manage_group: '/admin/samfundet/userpreference/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_userpreference_changelist: '/admin/samfundet/userpreference/',
   admin__samfundet_userpreference_add: '/admin/samfundet/userpreference/add/',
   admin__samfundet_userpreference_history: '/admin/samfundet/userpreference/:objectId/history/',
@@ -150,10 +139,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_userpreference_change: '/admin/samfundet/userpreference/:objectId/change/',
   adminsamfundetuserpreference__objectId: '/admin/samfundet/userpreference/:objectId/',
   admin__samfundet_profile_permissions: '/admin/samfundet/profile/:objectPk/permissions/',
-  admin__samfundet_profile_permissions_manage_user:
-    '/admin/samfundet/profile/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_profile_permissions_manage_group:
-    '/admin/samfundet/profile/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_profile_permissions_manage_user: '/admin/samfundet/profile/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_profile_permissions_manage_group: '/admin/samfundet/profile/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_profile_changelist: '/admin/samfundet/profile/',
   admin__samfundet_profile_add: '/admin/samfundet/profile/add/',
   admin__samfundet_profile_history: '/admin/samfundet/profile/:objectId/history/',
@@ -161,10 +148,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_profile_change: '/admin/samfundet/profile/:objectId/change/',
   adminsamfundetprofile__objectId: '/admin/samfundet/profile/:objectId/',
   admin__samfundet_eventregistration_permissions: '/admin/samfundet/eventregistration/:objectPk/permissions/',
-  admin__samfundet_eventregistration_permissions_manage_user:
-    '/admin/samfundet/eventregistration/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_eventregistration_permissions_manage_group:
-    '/admin/samfundet/eventregistration/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_eventregistration_permissions_manage_user: '/admin/samfundet/eventregistration/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_eventregistration_permissions_manage_group: '/admin/samfundet/eventregistration/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_eventregistration_changelist: '/admin/samfundet/eventregistration/',
   admin__samfundet_eventregistration_add: '/admin/samfundet/eventregistration/add/',
   admin__samfundet_eventregistration_history: '/admin/samfundet/eventregistration/:objectId/history/',
@@ -173,8 +158,7 @@ export const ROUTES_BACKEND = {
   adminsamfundeteventregistration__objectId: '/admin/samfundet/eventregistration/:objectId/',
   admin__samfundet_event_permissions: '/admin/samfundet/event/:objectPk/permissions/',
   admin__samfundet_event_permissions_manage_user: '/admin/samfundet/event/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_event_permissions_manage_group:
-    '/admin/samfundet/event/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_event_permissions_manage_group: '/admin/samfundet/event/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_event_changelist: '/admin/samfundet/event/',
   admin__samfundet_event_add: '/admin/samfundet/event/add/',
   admin__samfundet_event_history: '/admin/samfundet/event/:objectId/history/',
@@ -192,8 +176,7 @@ export const ROUTES_BACKEND = {
   adminsamfundettag__objectId: '/admin/samfundet/tag/:objectId/',
   admin__samfundet_image_permissions: '/admin/samfundet/image/:objectPk/permissions/',
   admin__samfundet_image_permissions_manage_user: '/admin/samfundet/image/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_image_permissions_manage_group:
-    '/admin/samfundet/image/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_image_permissions_manage_group: '/admin/samfundet/image/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_image_changelist: '/admin/samfundet/image/',
   admin__samfundet_image_add: '/admin/samfundet/image/add/',
   admin__samfundet_image_history: '/admin/samfundet/image/:objectId/history/',
@@ -201,10 +184,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_image_change: '/admin/samfundet/image/:objectId/change/',
   adminsamfundetimage__objectId: '/admin/samfundet/image/:objectId/',
   admin__samfundet_eventgroup_permissions: '/admin/samfundet/eventgroup/:objectPk/permissions/',
-  admin__samfundet_eventgroup_permissions_manage_user:
-    '/admin/samfundet/eventgroup/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_eventgroup_permissions_manage_group:
-    '/admin/samfundet/eventgroup/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_eventgroup_permissions_manage_user: '/admin/samfundet/eventgroup/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_eventgroup_permissions_manage_group: '/admin/samfundet/eventgroup/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_eventgroup_changelist: '/admin/samfundet/eventgroup/',
   admin__samfundet_eventgroup_add: '/admin/samfundet/eventgroup/add/',
   admin__samfundet_eventgroup_history: '/admin/samfundet/eventgroup/:objectId/history/',
@@ -213,8 +194,7 @@ export const ROUTES_BACKEND = {
   adminsamfundeteventgroup__objectId: '/admin/samfundet/eventgroup/:objectId/',
   admin__samfundet_venue_permissions: '/admin/samfundet/venue/:objectPk/permissions/',
   admin__samfundet_venue_permissions_manage_user: '/admin/samfundet/venue/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_venue_permissions_manage_group:
-    '/admin/samfundet/venue/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_venue_permissions_manage_group: '/admin/samfundet/venue/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_venue_changelist: '/admin/samfundet/venue/',
   admin__samfundet_venue_add: '/admin/samfundet/venue/add/',
   admin__samfundet_venue_history: '/admin/samfundet/venue/:objectId/history/',
@@ -231,10 +211,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_gang_change: '/admin/samfundet/gang/:objectId/change/',
   adminsamfundetgang__objectId: '/admin/samfundet/gang/:objectId/',
   admin__samfundet_gangtype_permissions: '/admin/samfundet/gangtype/:objectPk/permissions/',
-  admin__samfundet_gangtype_permissions_manage_user:
-    '/admin/samfundet/gangtype/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_gangtype_permissions_manage_group:
-    '/admin/samfundet/gangtype/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_gangtype_permissions_manage_user: '/admin/samfundet/gangtype/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_gangtype_permissions_manage_group: '/admin/samfundet/gangtype/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_gangtype_changelist: '/admin/samfundet/gangtype/',
   admin__samfundet_gangtype_add: '/admin/samfundet/gangtype/add/',
   admin__samfundet_gangtype_history: '/admin/samfundet/gangtype/:objectId/history/',
@@ -242,10 +220,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_gangtype_change: '/admin/samfundet/gangtype/:objectId/change/',
   adminsamfundetgangtype__objectId: '/admin/samfundet/gangtype/:objectId/',
   admin__samfundet_gangsection_permissions: '/admin/samfundet/gangsection/:objectPk/permissions/',
-  admin__samfundet_gangsection_permissions_manage_user:
-    '/admin/samfundet/gangsection/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_gangsection_permissions_manage_group:
-    '/admin/samfundet/gangsection/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_gangsection_permissions_manage_user: '/admin/samfundet/gangsection/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_gangsection_permissions_manage_group: '/admin/samfundet/gangsection/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_gangsection_changelist: '/admin/samfundet/gangsection/',
   admin__samfundet_gangsection_add: '/admin/samfundet/gangsection/add/',
   admin__samfundet_gangsection_history: '/admin/samfundet/gangsection/:objectId/history/',
@@ -253,10 +229,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_gangsection_change: '/admin/samfundet/gangsection/:objectId/change/',
   adminsamfundetgangsection__objectId: '/admin/samfundet/gangsection/:objectId/',
   admin__samfundet_informationpage_permissions: '/admin/samfundet/informationpage/:objectPk/permissions/',
-  admin__samfundet_informationpage_permissions_manage_user:
-    '/admin/samfundet/informationpage/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_informationpage_permissions_manage_group:
-    '/admin/samfundet/informationpage/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_informationpage_permissions_manage_user: '/admin/samfundet/informationpage/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_informationpage_permissions_manage_group: '/admin/samfundet/informationpage/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_informationpage_changelist: '/admin/samfundet/informationpage/',
   admin__samfundet_informationpage_add: '/admin/samfundet/informationpage/add/',
   admin__samfundet_informationpage_history: '/admin/samfundet/informationpage/:objectId/history/',
@@ -264,10 +238,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_informationpage_change: '/admin/samfundet/informationpage/:objectId/change/',
   adminsamfundetinformationpage__objectId: '/admin/samfundet/informationpage/:objectId/',
   admin__samfundet_blogpost_permissions: '/admin/samfundet/blogpost/:objectPk/permissions/',
-  admin__samfundet_blogpost_permissions_manage_user:
-    '/admin/samfundet/blogpost/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_blogpost_permissions_manage_group:
-    '/admin/samfundet/blogpost/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_blogpost_permissions_manage_user: '/admin/samfundet/blogpost/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_blogpost_permissions_manage_group: '/admin/samfundet/blogpost/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_blogpost_changelist: '/admin/samfundet/blogpost/',
   admin__samfundet_blogpost_add: '/admin/samfundet/blogpost/add/',
   admin__samfundet_blogpost_history: '/admin/samfundet/blogpost/:objectId/history/',
@@ -276,8 +248,7 @@ export const ROUTES_BACKEND = {
   adminsamfundetblogpost__objectId: '/admin/samfundet/blogpost/:objectId/',
   admin__samfundet_table_permissions: '/admin/samfundet/table/:objectPk/permissions/',
   admin__samfundet_table_permissions_manage_user: '/admin/samfundet/table/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_table_permissions_manage_group:
-    '/admin/samfundet/table/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_table_permissions_manage_group: '/admin/samfundet/table/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_table_changelist: '/admin/samfundet/table/',
   admin__samfundet_table_add: '/admin/samfundet/table/add/',
   admin__samfundet_table_history: '/admin/samfundet/table/:objectId/history/',
@@ -285,10 +256,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_table_change: '/admin/samfundet/table/:objectId/change/',
   adminsamfundettable__objectId: '/admin/samfundet/table/:objectId/',
   admin__samfundet_reservation_permissions: '/admin/samfundet/reservation/:objectPk/permissions/',
-  admin__samfundet_reservation_permissions_manage_user:
-    '/admin/samfundet/reservation/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_reservation_permissions_manage_group:
-    '/admin/samfundet/reservation/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_reservation_permissions_manage_user: '/admin/samfundet/reservation/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_reservation_permissions_manage_group: '/admin/samfundet/reservation/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_reservation_changelist: '/admin/samfundet/reservation/',
   admin__samfundet_reservation_add: '/admin/samfundet/reservation/add/',
   admin__samfundet_reservation_history: '/admin/samfundet/reservation/:objectId/history/',
@@ -305,10 +274,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_menu_change: '/admin/samfundet/menu/:objectId/change/',
   adminsamfundetmenu__objectId: '/admin/samfundet/menu/:objectId/',
   admin__samfundet_menuitem_permissions: '/admin/samfundet/menuitem/:objectPk/permissions/',
-  admin__samfundet_menuitem_permissions_manage_user:
-    '/admin/samfundet/menuitem/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_menuitem_permissions_manage_group:
-    '/admin/samfundet/menuitem/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_menuitem_permissions_manage_user: '/admin/samfundet/menuitem/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_menuitem_permissions_manage_group: '/admin/samfundet/menuitem/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_menuitem_changelist: '/admin/samfundet/menuitem/',
   admin__samfundet_menuitem_add: '/admin/samfundet/menuitem/add/',
   admin__samfundet_menuitem_history: '/admin/samfundet/menuitem/:objectId/history/',
@@ -316,10 +283,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_menuitem_change: '/admin/samfundet/menuitem/:objectId/change/',
   adminsamfundetmenuitem__objectId: '/admin/samfundet/menuitem/:objectId/',
   admin__samfundet_foodcategory_permissions: '/admin/samfundet/foodcategory/:objectPk/permissions/',
-  admin__samfundet_foodcategory_permissions_manage_user:
-    '/admin/samfundet/foodcategory/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_foodcategory_permissions_manage_group:
-    '/admin/samfundet/foodcategory/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_foodcategory_permissions_manage_user: '/admin/samfundet/foodcategory/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_foodcategory_permissions_manage_group: '/admin/samfundet/foodcategory/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_foodcategory_changelist: '/admin/samfundet/foodcategory/',
   admin__samfundet_foodcategory_add: '/admin/samfundet/foodcategory/add/',
   admin__samfundet_foodcategory_history: '/admin/samfundet/foodcategory/:objectId/history/',
@@ -327,10 +292,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_foodcategory_change: '/admin/samfundet/foodcategory/:objectId/change/',
   adminsamfundetfoodcategory__objectId: '/admin/samfundet/foodcategory/:objectId/',
   admin__samfundet_foodpreference_permissions: '/admin/samfundet/foodpreference/:objectPk/permissions/',
-  admin__samfundet_foodpreference_permissions_manage_user:
-    '/admin/samfundet/foodpreference/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_foodpreference_permissions_manage_group:
-    '/admin/samfundet/foodpreference/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_foodpreference_permissions_manage_user: '/admin/samfundet/foodpreference/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_foodpreference_permissions_manage_group: '/admin/samfundet/foodpreference/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_foodpreference_changelist: '/admin/samfundet/foodpreference/',
   admin__samfundet_foodpreference_add: '/admin/samfundet/foodpreference/add/',
   admin__samfundet_foodpreference_history: '/admin/samfundet/foodpreference/:objectId/history/',
@@ -338,10 +301,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_foodpreference_change: '/admin/samfundet/foodpreference/:objectId/change/',
   adminsamfundetfoodpreference__objectId: '/admin/samfundet/foodpreference/:objectId/',
   admin__samfundet_saksdokument_permissions: '/admin/samfundet/saksdokument/:objectPk/permissions/',
-  admin__samfundet_saksdokument_permissions_manage_user:
-    '/admin/samfundet/saksdokument/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_saksdokument_permissions_manage_group:
-    '/admin/samfundet/saksdokument/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_saksdokument_permissions_manage_user: '/admin/samfundet/saksdokument/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_saksdokument_permissions_manage_group: '/admin/samfundet/saksdokument/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_saksdokument_changelist: '/admin/samfundet/saksdokument/',
   admin__samfundet_saksdokument_add: '/admin/samfundet/saksdokument/add/',
   admin__samfundet_saksdokument_history: '/admin/samfundet/saksdokument/:objectId/history/',
@@ -349,10 +310,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_saksdokument_change: '/admin/samfundet/saksdokument/:objectId/change/',
   adminsamfundetsaksdokument__objectId: '/admin/samfundet/saksdokument/:objectId/',
   admin__samfundet_booking_permissions: '/admin/samfundet/booking/:objectPk/permissions/',
-  admin__samfundet_booking_permissions_manage_user:
-    '/admin/samfundet/booking/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_booking_permissions_manage_group:
-    '/admin/samfundet/booking/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_booking_permissions_manage_user: '/admin/samfundet/booking/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_booking_permissions_manage_group: '/admin/samfundet/booking/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_booking_changelist: '/admin/samfundet/booking/',
   admin__samfundet_booking_add: '/admin/samfundet/booking/add/',
   admin__samfundet_booking_history: '/admin/samfundet/booking/:objectId/history/',
@@ -360,10 +319,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_booking_change: '/admin/samfundet/booking/:objectId/change/',
   adminsamfundetbooking__objectId: '/admin/samfundet/booking/:objectId/',
   admin__samfundet_closedperiod_permissions: '/admin/samfundet/closedperiod/:objectPk/permissions/',
-  admin__samfundet_closedperiod_permissions_manage_user:
-    '/admin/samfundet/closedperiod/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_closedperiod_permissions_manage_group:
-    '/admin/samfundet/closedperiod/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_closedperiod_permissions_manage_user: '/admin/samfundet/closedperiod/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_closedperiod_permissions_manage_group: '/admin/samfundet/closedperiod/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_closedperiod_changelist: '/admin/samfundet/closedperiod/',
   admin__samfundet_closedperiod_add: '/admin/samfundet/closedperiod/add/',
   admin__samfundet_closedperiod_history: '/admin/samfundet/closedperiod/:objectId/history/',
@@ -371,10 +328,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_closedperiod_change: '/admin/samfundet/closedperiod/:objectId/change/',
   adminsamfundetclosedperiod__objectId: '/admin/samfundet/closedperiod/:objectId/',
   admin__samfundet_infobox_permissions: '/admin/samfundet/infobox/:objectPk/permissions/',
-  admin__samfundet_infobox_permissions_manage_user:
-    '/admin/samfundet/infobox/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_infobox_permissions_manage_group:
-    '/admin/samfundet/infobox/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_infobox_permissions_manage_user: '/admin/samfundet/infobox/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_infobox_permissions_manage_group: '/admin/samfundet/infobox/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_infobox_changelist: '/admin/samfundet/infobox/',
   admin__samfundet_infobox_add: '/admin/samfundet/infobox/add/',
   admin__samfundet_infobox_history: '/admin/samfundet/infobox/:objectId/history/',
@@ -382,10 +337,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_infobox_change: '/admin/samfundet/infobox/:objectId/change/',
   adminsamfundetinfobox__objectId: '/admin/samfundet/infobox/:objectId/',
   admin__samfundet_textitem_permissions: '/admin/samfundet/textitem/:objectPk/permissions/',
-  admin__samfundet_textitem_permissions_manage_user:
-    '/admin/samfundet/textitem/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_textitem_permissions_manage_group:
-    '/admin/samfundet/textitem/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_textitem_permissions_manage_user: '/admin/samfundet/textitem/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_textitem_permissions_manage_group: '/admin/samfundet/textitem/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_textitem_changelist: '/admin/samfundet/textitem/',
   admin__samfundet_textitem_add: '/admin/samfundet/textitem/add/',
   admin__samfundet_textitem_history: '/admin/samfundet/textitem/:objectId/history/',
@@ -393,10 +346,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_textitem_change: '/admin/samfundet/textitem/:objectId/change/',
   adminsamfundettextitem__objectId: '/admin/samfundet/textitem/:objectId/',
   admin__samfundet_keyvalue_permissions: '/admin/samfundet/keyvalue/:objectPk/permissions/',
-  admin__samfundet_keyvalue_permissions_manage_user:
-    '/admin/samfundet/keyvalue/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_keyvalue_permissions_manage_group:
-    '/admin/samfundet/keyvalue/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_keyvalue_permissions_manage_user: '/admin/samfundet/keyvalue/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_keyvalue_permissions_manage_group: '/admin/samfundet/keyvalue/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_keyvalue_changelist: '/admin/samfundet/keyvalue/',
   admin__samfundet_keyvalue_add: '/admin/samfundet/keyvalue/add/',
   admin__samfundet_keyvalue_history: '/admin/samfundet/keyvalue/:objectId/history/',
@@ -404,34 +355,26 @@ export const ROUTES_BACKEND = {
   admin__samfundet_keyvalue_change: '/admin/samfundet/keyvalue/:objectId/change/',
   adminsamfundetkeyvalue__objectId: '/admin/samfundet/keyvalue/:objectId/',
   admin__samfundet_recruitment_permissions: '/admin/samfundet/recruitment/:objectPk/permissions/',
-  admin__samfundet_recruitment_permissions_manage_user:
-    '/admin/samfundet/recruitment/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_recruitment_permissions_manage_group:
-    '/admin/samfundet/recruitment/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_recruitment_permissions_manage_user: '/admin/samfundet/recruitment/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_recruitment_permissions_manage_group: '/admin/samfundet/recruitment/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_recruitment_changelist: '/admin/samfundet/recruitment/',
   admin__samfundet_recruitment_add: '/admin/samfundet/recruitment/add/',
   admin__samfundet_recruitment_history: '/admin/samfundet/recruitment/:objectId/history/',
   admin__samfundet_recruitment_delete: '/admin/samfundet/recruitment/:objectId/delete/',
   admin__samfundet_recruitment_change: '/admin/samfundet/recruitment/:objectId/change/',
   adminsamfundetrecruitment__objectId: '/admin/samfundet/recruitment/:objectId/',
-  admin__samfundet_recruitmentseparateposition_permissions:
-    '/admin/samfundet/recruitmentseparateposition/:objectPk/permissions/',
-  admin__samfundet_recruitmentseparateposition_permissions_manage_user:
-    '/admin/samfundet/recruitmentseparateposition/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_recruitmentseparateposition_permissions_manage_group:
-    '/admin/samfundet/recruitmentseparateposition/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_recruitmentseparateposition_permissions: '/admin/samfundet/recruitmentseparateposition/:objectPk/permissions/',
+  admin__samfundet_recruitmentseparateposition_permissions_manage_user: '/admin/samfundet/recruitmentseparateposition/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_recruitmentseparateposition_permissions_manage_group: '/admin/samfundet/recruitmentseparateposition/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_recruitmentseparateposition_changelist: '/admin/samfundet/recruitmentseparateposition/',
   admin__samfundet_recruitmentseparateposition_add: '/admin/samfundet/recruitmentseparateposition/add/',
-  admin__samfundet_recruitmentseparateposition_history:
-    '/admin/samfundet/recruitmentseparateposition/:objectId/history/',
+  admin__samfundet_recruitmentseparateposition_history: '/admin/samfundet/recruitmentseparateposition/:objectId/history/',
   admin__samfundet_recruitmentseparateposition_delete: '/admin/samfundet/recruitmentseparateposition/:objectId/delete/',
   admin__samfundet_recruitmentseparateposition_change: '/admin/samfundet/recruitmentseparateposition/:objectId/change/',
   adminsamfundetrecruitmentseparateposition__objectId: '/admin/samfundet/recruitmentseparateposition/:objectId/',
   admin__samfundet_recruitmentposition_permissions: '/admin/samfundet/recruitmentposition/:objectPk/permissions/',
-  admin__samfundet_recruitmentposition_permissions_manage_user:
-    '/admin/samfundet/recruitmentposition/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_recruitmentposition_permissions_manage_group:
-    '/admin/samfundet/recruitmentposition/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_recruitmentposition_permissions_manage_user: '/admin/samfundet/recruitmentposition/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_recruitmentposition_permissions_manage_group: '/admin/samfundet/recruitmentposition/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_recruitmentposition_changelist: '/admin/samfundet/recruitmentposition/',
   admin__samfundet_recruitmentposition_add: '/admin/samfundet/recruitmentposition/add/',
   admin__samfundet_recruitmentposition_history: '/admin/samfundet/recruitmentposition/:objectId/history/',
@@ -439,10 +382,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_recruitmentposition_change: '/admin/samfundet/recruitmentposition/:objectId/change/',
   adminsamfundetrecruitmentposition__objectId: '/admin/samfundet/recruitmentposition/:objectId/',
   admin__samfundet_recruitmentapplication_permissions: '/admin/samfundet/recruitmentapplication/:objectPk/permissions/',
-  admin__samfundet_recruitmentapplication_permissions_manage_user:
-    '/admin/samfundet/recruitmentapplication/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_recruitmentapplication_permissions_manage_group:
-    '/admin/samfundet/recruitmentapplication/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_recruitmentapplication_permissions_manage_user: '/admin/samfundet/recruitmentapplication/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_recruitmentapplication_permissions_manage_group: '/admin/samfundet/recruitmentapplication/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_recruitmentapplication_changelist: '/admin/samfundet/recruitmentapplication/',
   admin__samfundet_recruitmentapplication_add: '/admin/samfundet/recruitmentapplication/add/',
   admin__samfundet_recruitmentapplication_history: '/admin/samfundet/recruitmentapplication/:objectId/history/',
@@ -450,10 +391,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_recruitmentapplication_change: '/admin/samfundet/recruitmentapplication/:objectId/change/',
   adminsamfundetrecruitmentapplication__objectId: '/admin/samfundet/recruitmentapplication/:objectId/',
   admin__samfundet_organization_permissions: '/admin/samfundet/organization/:objectPk/permissions/',
-  admin__samfundet_organization_permissions_manage_user:
-    '/admin/samfundet/organization/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_organization_permissions_manage_group:
-    '/admin/samfundet/organization/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_organization_permissions_manage_user: '/admin/samfundet/organization/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_organization_permissions_manage_group: '/admin/samfundet/organization/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_organization_changelist: '/admin/samfundet/organization/',
   admin__samfundet_organization_add: '/admin/samfundet/organization/add/',
   admin__samfundet_organization_history: '/admin/samfundet/organization/:objectId/history/',
@@ -461,10 +400,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_organization_change: '/admin/samfundet/organization/:objectId/change/',
   adminsamfundetorganization__objectId: '/admin/samfundet/organization/:objectId/',
   admin__samfundet_interviewroom_permissions: '/admin/samfundet/interviewroom/:objectPk/permissions/',
-  admin__samfundet_interviewroom_permissions_manage_user:
-    '/admin/samfundet/interviewroom/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_interviewroom_permissions_manage_group:
-    '/admin/samfundet/interviewroom/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_interviewroom_permissions_manage_user: '/admin/samfundet/interviewroom/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_interviewroom_permissions_manage_group: '/admin/samfundet/interviewroom/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_interviewroom_changelist: '/admin/samfundet/interviewroom/',
   admin__samfundet_interviewroom_add: '/admin/samfundet/interviewroom/add/',
   admin__samfundet_interviewroom_history: '/admin/samfundet/interviewroom/:objectId/history/',
@@ -472,10 +409,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_interviewroom_change: '/admin/samfundet/interviewroom/:objectId/change/',
   adminsamfundetinterviewroom__objectId: '/admin/samfundet/interviewroom/:objectId/',
   admin__samfundet_interview_permissions: '/admin/samfundet/interview/:objectPk/permissions/',
-  admin__samfundet_interview_permissions_manage_user:
-    '/admin/samfundet/interview/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_interview_permissions_manage_group:
-    '/admin/samfundet/interview/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_interview_permissions_manage_user: '/admin/samfundet/interview/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_interview_permissions_manage_group: '/admin/samfundet/interview/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_interview_changelist: '/admin/samfundet/interview/',
   admin__samfundet_interview_add: '/admin/samfundet/interview/add/',
   admin__samfundet_interview_history: '/admin/samfundet/interview/:objectId/history/',
@@ -483,10 +418,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_interview_change: '/admin/samfundet/interview/:objectId/change/',
   adminsamfundetinterview__objectId: '/admin/samfundet/interview/:objectId/',
   admin__samfundet_recruitmentstatistics_permissions: '/admin/samfundet/recruitmentstatistics/:objectPk/permissions/',
-  admin__samfundet_recruitmentstatistics_permissions_manage_user:
-    '/admin/samfundet/recruitmentstatistics/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_recruitmentstatistics_permissions_manage_group:
-    '/admin/samfundet/recruitmentstatistics/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_recruitmentstatistics_permissions_manage_user: '/admin/samfundet/recruitmentstatistics/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_recruitmentstatistics_permissions_manage_group: '/admin/samfundet/recruitmentstatistics/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_recruitmentstatistics_changelist: '/admin/samfundet/recruitmentstatistics/',
   admin__samfundet_recruitmentstatistics_add: '/admin/samfundet/recruitmentstatistics/add/',
   admin__samfundet_recruitmentstatistics_history: '/admin/samfundet/recruitmentstatistics/:objectId/history/',
@@ -495,8 +428,7 @@ export const ROUTES_BACKEND = {
   adminsamfundetrecruitmentstatistics__objectId: '/admin/samfundet/recruitmentstatistics/:objectId/',
   admin__samfundet_merch_permissions: '/admin/samfundet/merch/:objectPk/permissions/',
   admin__samfundet_merch_permissions_manage_user: '/admin/samfundet/merch/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_merch_permissions_manage_group:
-    '/admin/samfundet/merch/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_merch_permissions_manage_group: '/admin/samfundet/merch/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_merch_changelist: '/admin/samfundet/merch/',
   admin__samfundet_merch_add: '/admin/samfundet/merch/add/',
   admin__samfundet_merch_history: '/admin/samfundet/merch/:objectId/history/',
@@ -504,37 +436,26 @@ export const ROUTES_BACKEND = {
   admin__samfundet_merch_change: '/admin/samfundet/merch/:objectId/change/',
   adminsamfundetmerch__objectId: '/admin/samfundet/merch/:objectId/',
   admin__samfundet_merchvariation_permissions: '/admin/samfundet/merchvariation/:objectPk/permissions/',
-  admin__samfundet_merchvariation_permissions_manage_user:
-    '/admin/samfundet/merchvariation/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_merchvariation_permissions_manage_group:
-    '/admin/samfundet/merchvariation/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_merchvariation_permissions_manage_user: '/admin/samfundet/merchvariation/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_merchvariation_permissions_manage_group: '/admin/samfundet/merchvariation/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_merchvariation_changelist: '/admin/samfundet/merchvariation/',
   admin__samfundet_merchvariation_add: '/admin/samfundet/merchvariation/add/',
   admin__samfundet_merchvariation_history: '/admin/samfundet/merchvariation/:objectId/history/',
   admin__samfundet_merchvariation_delete: '/admin/samfundet/merchvariation/:objectId/delete/',
   admin__samfundet_merchvariation_change: '/admin/samfundet/merchvariation/:objectId/change/',
   adminsamfundetmerchvariation__objectId: '/admin/samfundet/merchvariation/:objectId/',
-  admin__samfundet_recruitmentinterviewavailability_permissions:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectPk/permissions/',
-  admin__samfundet_recruitmentinterviewavailability_permissions_manage_user:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_recruitmentinterviewavailability_permissions_manage_group:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_recruitmentinterviewavailability_permissions: '/admin/samfundet/recruitmentinterviewavailability/:objectPk/permissions/',
+  admin__samfundet_recruitmentinterviewavailability_permissions_manage_user: '/admin/samfundet/recruitmentinterviewavailability/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_recruitmentinterviewavailability_permissions_manage_group: '/admin/samfundet/recruitmentinterviewavailability/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_recruitmentinterviewavailability_changelist: '/admin/samfundet/recruitmentinterviewavailability/',
   admin__samfundet_recruitmentinterviewavailability_add: '/admin/samfundet/recruitmentinterviewavailability/add/',
-  admin__samfundet_recruitmentinterviewavailability_history:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectId/history/',
-  admin__samfundet_recruitmentinterviewavailability_delete:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectId/delete/',
-  admin__samfundet_recruitmentinterviewavailability_change:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectId/change/',
-  adminsamfundetrecruitmentinterviewavailability__objectId:
-    '/admin/samfundet/recruitmentinterviewavailability/:objectId/',
+  admin__samfundet_recruitmentinterviewavailability_history: '/admin/samfundet/recruitmentinterviewavailability/:objectId/history/',
+  admin__samfundet_recruitmentinterviewavailability_delete: '/admin/samfundet/recruitmentinterviewavailability/:objectId/delete/',
+  admin__samfundet_recruitmentinterviewavailability_change: '/admin/samfundet/recruitmentinterviewavailability/:objectId/change/',
+  adminsamfundetrecruitmentinterviewavailability__objectId: '/admin/samfundet/recruitmentinterviewavailability/:objectId/',
   admin__samfundet_userfeedbackmodel_permissions: '/admin/samfundet/userfeedbackmodel/:objectPk/permissions/',
-  admin__samfundet_userfeedbackmodel_permissions_manage_user:
-    '/admin/samfundet/userfeedbackmodel/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_userfeedbackmodel_permissions_manage_group:
-    '/admin/samfundet/userfeedbackmodel/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_userfeedbackmodel_permissions_manage_user: '/admin/samfundet/userfeedbackmodel/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_userfeedbackmodel_permissions_manage_group: '/admin/samfundet/userfeedbackmodel/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_userfeedbackmodel_changelist: '/admin/samfundet/userfeedbackmodel/',
   admin__samfundet_userfeedbackmodel_add: '/admin/samfundet/userfeedbackmodel/add/',
   admin__samfundet_userfeedbackmodel_history: '/admin/samfundet/userfeedbackmodel/:objectId/history/',
@@ -542,10 +463,8 @@ export const ROUTES_BACKEND = {
   admin__samfundet_userfeedbackmodel_change: '/admin/samfundet/userfeedbackmodel/:objectId/change/',
   adminsamfundetuserfeedbackmodel__objectId: '/admin/samfundet/userfeedbackmodel/:objectId/',
   admin__samfundet_purchasefeedbackmodel_permissions: '/admin/samfundet/purchasefeedbackmodel/:objectPk/permissions/',
-  admin__samfundet_purchasefeedbackmodel_permissions_manage_user:
-    '/admin/samfundet/purchasefeedbackmodel/:objectPk/permissions/user-manage/:userId/',
-  admin__samfundet_purchasefeedbackmodel_permissions_manage_group:
-    '/admin/samfundet/purchasefeedbackmodel/:objectPk/permissions/group-manage/:groupId/',
+  admin__samfundet_purchasefeedbackmodel_permissions_manage_user: '/admin/samfundet/purchasefeedbackmodel/:objectPk/permissions/user-manage/:userId/',
+  admin__samfundet_purchasefeedbackmodel_permissions_manage_group: '/admin/samfundet/purchasefeedbackmodel/:objectPk/permissions/group-manage/:groupId/',
   admin__samfundet_purchasefeedbackmodel_changelist: '/admin/samfundet/purchasefeedbackmodel/',
   admin__samfundet_purchasefeedbackmodel_add: '/admin/samfundet/purchasefeedbackmodel/add/',
   admin__samfundet_purchasefeedbackmodel_history: '/admin/samfundet/purchasefeedbackmodel/:objectId/history/',
@@ -607,6 +526,8 @@ export const ROUTES_BACKEND = {
   samfundet__organizations_gangs: '/api/organizations/:pk/gangs/',
   samfundet__merch_list: '/api/merch/',
   samfundet__merch_detail: '/api/merch/:pk/',
+  samfundet__role_list: '/api/role/',
+  samfundet__role_detail: '/api/role/:pk/',
   samfundet__recruitment_list: '/api/recruitment/',
   samfundet__recruitment_detail: '/api/recruitment/:pk/',
   samfundet__recruitment_gangs: '/api/recruitment/:pk/gangs/',
@@ -631,6 +552,9 @@ export const ROUTES_BACKEND = {
   samfundet__interview_list: '/api/interview/',
   samfundet__interview_detail: '/api/interview/:pk/',
   samfundet__api_root: '/api/',
+  samfundet__schema: '/schema/',
+  samfundet__swagger_ui: '/schema/swagger-ui/',
+  samfundet__redoc: '/schema/redoc/',
   samfundet__csrf: '/csrf/',
   samfundet__login: '/login/',
   samfundet__register: '/register/',
@@ -648,6 +572,7 @@ export const ROUTES_BACKEND = {
   samfundet__check_reservation: '/check-reservation/',
   samfundet__active_recruitments: '/active-recruitments/',
   samfundet__recruitment_positions: '/recruitment-positions/',
+  samfundet__recruitment_show_unprocessed_applicants: '/recruitment-show-unprocessed-applicants/',
   samfundet__recruitment_positions_gang_for_applicants: '/recruitment-positions-gang-for-applicant/',
   samfundet__recruitment_positions_gang_for_gangs: '/recruitment-positions-gang-for-gangs/',
   samfundet__recruitment_set_interview: '/recruitment-set-interview/:pk/',
@@ -660,11 +585,9 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_withdraw_application_recruiter: '/recruitment-withdraw-application-recruiter/:pk/',
   samfundet__active_recruitment_positions: '/active-recruitment-positions/',
   samfundet__applicants_without_interviews: '/recruitment-applicants-without-interviews/:pk/',
-  samfundet__applicants_without_three_interview_criteria:
-    '/recruitment-applicants-without-three-interview-criteria/:pk/',
+  samfundet__applicants_without_three_interview_criteria: '/recruitment-applicants-without-three-interview-criteria/:pk/',
   samfundet__recruitment_recruiter_dashboard: '/recruitment-recruiter-dashboard/:pk/',
-  samfundet__recruitment_download_gang_application_csv:
-    '/recruitment-download-gang-application-csv/:recruitmentId/:gangId',
+  samfundet__recruitment_download_gang_application_csv: '/recruitment-download-gang-application-csv/:recruitmentId/:gangId',
   samfundet__occupied_timeslots: '/occupiedtimeslot/',
   samfundet__recruitment_interview_availability: '/recruitment-interview-availability/',
   samfundet__recruitment_availability: '/recruitment/:id/availability/',

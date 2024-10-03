@@ -984,13 +984,14 @@ class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
 class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentPosition
-        fields = ['id', 'name_nb', 'name_en']
+        fields = ['id', 'name_nb', 'name_en', 'gang']
 
 
 class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):
     user = RecruitmentBasicUserSerializer(read_only=True)
     recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
 
+    # id = RecruitmentApplicationForRecruiterSerializer(read_only=True)
     class Meta:
         model = RecruitmentApplication
         fields = [

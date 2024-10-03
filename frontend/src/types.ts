@@ -150,3 +150,52 @@ export type OrganizationTheme = {
   pageTertiaryColor?: string;
   buttonTheme: keyof typeof themeToStyleMap;
 };
+
+
+// Recruitment mappings
+
+// Recruitment Status Choices Enum
+export enum RecruitmentStatusChoices {
+  NOT_SET = 'Not Set',
+  CALLED_AND_ACCEPTED = 'Called and Accepted',
+  CALLED_AND_REJECTED = 'Called and Rejected',
+  REJECTION = 'Rejection',
+  AUTOMATIC_REJECTION = 'Automatic Rejection'
+}
+
+// Recruitment Status Choices Mapping
+export const RecruitmentStatusChoicesMapping: { [key: number]: RecruitmentStatusChoices } = {
+  0: RecruitmentStatusChoices.NOT_SET,
+  1: RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+  2: RecruitmentStatusChoices.CALLED_AND_REJECTED,
+  3: RecruitmentStatusChoices.REJECTION,
+  4: RecruitmentStatusChoices.AUTOMATIC_REJECTION,
+};
+
+// Type for RecruitmentStatusChoices
+export type RecruitmentStatusChoicesValue = RecruitmentStatusChoices;
+
+// Array of All Recruitment Status Choices
+export const ALL_RECRUITMENT_STATUS_CHOICES: RecruitmentStatusChoices[] = Object.values(RecruitmentStatusChoices);
+
+// Recruitment Priority Choices Enum
+export enum RecruitmentPriorityChoices {
+  NOT_SET = 'Not Set',
+  RESERVE = 'Reserve',
+  WANTED = 'Wanted',
+  NOT_WANTED = 'Not Wanted'
+}
+
+// Recruitment Priority Choices Mapping
+export const RecruitmentPriorityChoicesMapping: { [key: number]: RecruitmentPriorityChoices } = {
+  0: RecruitmentPriorityChoices.NOT_SET,
+  1: RecruitmentPriorityChoices.RESERVE,
+  2: RecruitmentPriorityChoices.WANTED,
+  3: RecruitmentPriorityChoices.NOT_WANTED,
+};
+
+// Type for RecruitmentPriorityChoices
+export type RecruitmentPriorityChoicesValue = RecruitmentPriorityChoices;
+
+// Array of All Recruitment Priority Choices
+export const ALL_RECRUITMENT_PRIORITY_CHOICES: RecruitmentPriorityChoices[] = Object.values(RecruitmentPriorityChoices);
