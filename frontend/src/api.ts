@@ -509,11 +509,11 @@ export async function getRole(id: string): Promise<RoleDto> {
   //const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__api_, urlParams: ( pk: id ) }):
   //const response = await axios.get(url, { withCredentials: true });
   const role = {
-      id: 1,
-      name: 'Opptaksansvarlig',
-      permissions: ['samfundet.test_permission', 'samfundet.user_create'],
-    }
-    return role;
+    id: 1,
+    name: 'Opptaksansvarlig',
+    permissions: ['samfundet.test_permission', 'samfundet.user_create'],
+  };
+  return role;
 }
 
 export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {

@@ -58,8 +58,8 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
-  RolesAdminPage,
   RoleAdminPage,
+  RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
   SaksdokumentFormAdminPage,
@@ -74,23 +74,23 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
+import { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
-  type SeparatePositionLoader,
   type RoleViewLoader,
-  roleViewLoader,
+  type SeparatePositionLoader,
   gangLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  roleViewLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
-import { RoleDto } from '~/dto';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -187,22 +187,22 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_roles_view}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
-              loader={roleViewLoader}
-              handle={{
-                crumb: ({ role }: RoleViewLoader) => {
-                  if (!role) return <span>{t(KEY.common_unknown)}</span>;
-                  return (
-                    <Link
-                      url={reverse({
-                        pattern: ROUTES.frontend.admin_roles_view,
-                        urlParams: { roleId: role.id },
-                      })}
-                    >
-                      {t(KEY.common_roles_view)}
-                    </Link>
-                  );
-                },
-              }}
+            loader={roleViewLoader}
+            handle={{
+              crumb: ({ role }: RoleViewLoader) => {
+                if (!role) return <span>{t(KEY.common_unknown)}</span>;
+                return (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_roles_view,
+                      urlParams: { roleId: role.id },
+                    })}
+                  >
+                    {t(KEY.common_roles_view)}
+                  </Link>
+                );
+              },
+            }}
           />
         </Route>
         {/* Events */}
