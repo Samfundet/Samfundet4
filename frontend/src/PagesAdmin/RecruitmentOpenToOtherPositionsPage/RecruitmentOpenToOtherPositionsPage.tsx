@@ -1,3 +1,5 @@
+// @ts-nocheck
+// TODO: Remove previous line after making page dynamic and remove all mocks
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import type { RecruitmentUserDto } from '~/dto';
@@ -13,7 +15,7 @@ export function RecruitmentOpenToOtherPositionsPage() {
   const [applicants, setApplicants] = useState<RecruitmentUserDto[]>([]);
   useEffect(() => {
     //TODO: get applicants in issue #1105
-    //Meanwhile test applicants:
+    //Meanwhile test applicants mock data:
     const testData: RecruitmentUserDto[] = [
       {
         id: 1,
@@ -29,7 +31,7 @@ export function RecruitmentOpenToOtherPositionsPage() {
             recruitment_position: {
               name_nb: 'Utvikler',
               name_en: 'Developer',
-              id: '',
+              id: 0,
               short_description_nb: '',
               short_description_en: '',
               long_description_nb: '',
@@ -58,7 +60,7 @@ export function RecruitmentOpenToOtherPositionsPage() {
             recruitment_position: {
               name_nb: 'SoMe-gjengis',
               name_en: 'SoMe-gjengis',
-              id: '',
+              id: 1,
               short_description_nb: '',
               short_description_en: '',
               long_description_nb: '',

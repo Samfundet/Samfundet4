@@ -25,7 +25,7 @@ type TableCell = {
 };
 
 // Type shorthands
-type TableRow = {
+export type TableRow = {
   cells: Array<TableCell | TableCellValue | undefined>;
   childTable?: TableProps;
 };
