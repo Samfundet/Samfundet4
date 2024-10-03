@@ -27,44 +27,42 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     revertStateFunction && { content: '', sortable: false },
   ];
 
-  const rows = data.map(function (application) {
-    return {
-      cells: [
-        {
-          content: (
-            <Link
-              key={application.user.id}
-              url={reverse({
-                pattern: ROUTES.frontend.admin_recruitment_applicant,
-                urlParams: {
-                  applicationID: application.id,
-                },
-              })}
-            >
-              {`${application.user.first_name} ${application.user.last_name}`}
-            </Link>
-          ),
-        },
-        { content: application.user?.phone_number, value: application.user?.phone_number },
-        { content: application.user?.email, value: application.user?.email },
-        { content: application.interview?.interview_time, value: application.interview?.interview_time },
-        { content: application.interview?.interview_location, value: application.interview?.interview_location },
-        { content: application.recruiter_status, value: application.recruiter_status },
-        revertStateFunction && {
-          content: (
-            <Button
-              display="pill"
-              theme="outlined"
-              onClick={() => revertStateFunction(application.id, { recruiter_status: 0 })}
-            >
-              {t(KEY.recruitment_revert_status)}
-            </Button>
-          ),
-          value: application.recruiter_status,
-        },
-      ],
-    };
-  });
+  const rows = data.map((application) => ({
+    cells: [
+      {
+        content: (
+          <Link
+            key={application.user.id}
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_applicant,
+              urlParams: {
+                applicationID: application.id,
+              },
+            })}
+          >
+            {`${application.user.first_name} ${application.user.last_name}`}
+          </Link>
+        ),
+      },
+      { content: application.user?.phone_number, value: application.user?.phone_number },
+      { content: application.user?.email, value: application.user?.email },
+      { content: application.interview?.interview_time, value: application.interview?.interview_time },
+      { content: application.interview?.interview_location, value: application.interview?.interview_location },
+      { content: application.recruiter_status, value: application.recruiter_status },
+      revertStateFunction && {
+        content: (
+          <Button
+            display="pill"
+            theme="outlined"
+            onClick={() => revertStateFunction(application.id, { recruiter_status: 0 })}
+          >
+            {t(KEY.recruitment_revert_status)}
+          </Button>
+        ),
+        value: application.recruiter_status,
+      },
+    ],
+  }));
 
   const styleType = {
     withdrawn: styles.withdrawn,

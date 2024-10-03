@@ -117,10 +117,10 @@ export function RecruitmentApplicantAdminPage() {
           data={otherRecruitmentApplication.map((element) => {
             return {
               cells: [
-              {
-                sortable: true,
-                content: element.applicant_priority,
-              },
+                {
+                  sortable: true,
+                  content: element.applicant_priority,
+                },
                 {
                   content: (
                     <Link

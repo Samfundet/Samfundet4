@@ -1,10 +1,10 @@
-import { useTitle } from '~/hooks';
-import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { t } from 'i18next';
-import { KEY } from '~/i18n/constants';
-import { OpenToOtherPositionsTable } from './OpenToOtherPositionsTable/OpenToOtherPositionsTable';
 import { useEffect, useState } from 'react';
-import { RecruitmentUserDto } from '~/dto';
+import type { RecruitmentUserDto } from '~/dto';
+import { useTitle } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { OpenToOtherPositionsTable } from './OpenToOtherPositionsTable/OpenToOtherPositionsTable';
 
 export function RecruitmentOpenToOtherPositionsPage() {
   useTitle('Tester');
@@ -128,14 +128,13 @@ export function RecruitmentOpenToOtherPositionsPage() {
       },
     ];
     setApplicants(testData);
-  }, [applicants]);
+  }, []);
 
   const header = <p>Søkere som er reservert må/bør klareres med gjengen som har reservert søkeren.</p>;
-
   return (
     <>
       <AdminPageLayout title={t(KEY.recruitment_applicants_open_to_other_positions)} header={header}>
-        <OpenToOtherPositionsTable applicants={applicants}></OpenToOtherPositionsTable>
+        <OpenToOtherPositionsTable applicants={applicants} />
       </AdminPageLayout>
     </>
   );

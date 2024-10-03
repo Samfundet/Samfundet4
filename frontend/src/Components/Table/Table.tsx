@@ -185,64 +185,59 @@ export function Table({
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
           <tr>
-            {(hasChildTable(data) || isChildTable) && <th></th>}
+            {(hasChildTable(data) || isChildTable) && <th />}
 
-            {columns &&
-              columns?.map((col, index) => {
-                if (isColumnSortable(col)) {
-                  return (
-                    <th
-                      key={index}
-                      className={classNames(headerColumnClassName, styles.sortable_th)}
-                      onClick={() => sort(index)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          sort(index);
-                        }
-                      }}
-                      // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
-                      tabIndex={0}
-                    >
-                      {getColumnContent(col)}
-                      {!isHideSortButton(col) && (
-                        <span className={styles.sort_icons}>
-                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
-                        </span>
-                      )}
-                    </th>
-                  );
-                } else {
-                  return (
-                    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-                    <th className={headerColumnClassName} key={index}>
-                      {getColumnContent(col)}
-                    </th>
-                  );
-                }
-              })}
+            {columns?.map((col, index) => {
+              if (isColumnSortable(col)) {
+                return (
+                  <th
+                    key={index}
+                    className={classNames(headerColumnClassName, styles.sortable_th)}
+                    onClick={() => sort(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sort(index);
+                      }
+                    }}
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
+                    tabIndex={0}
+                  >
+                    {getColumnContent(col)}
+                    {!isHideSortButton(col) && (
+                      <span className={styles.sort_icons}>
+                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
+                      </span>
+                    )}
+                  </th>
+                );
+              }
+              return (
+                <th className={headerColumnClassName} key={index}>
+                  {getColumnContent(col)}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             <>
               <tr
                 className={bodyRowClassName}
                 key={index1}
-                onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
+                onKeyUp={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
               >
                 {row.childTable !== undefined && (
                   <td className={classNames(cellClassName)} key={`arrow-${index1}`}>
                     <Icon icon={isOpen === index1 ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
                   </td>
                 )}
-                {row &&
-                  row.cells.map((cell, index2) => (
-                    <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
-                      {getCellContent(cell ?? '')}
-                    </td>
-                  ))}
+                {row?.cells.map((cell, index2) => (
+                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
+                    {getCellContent(cell ?? '')}
+                  </td>
+                ))}
               </tr>
               {row.childTable !== undefined && isOpen === index1 && (
                 <tr className={styles.childTableContainer}>

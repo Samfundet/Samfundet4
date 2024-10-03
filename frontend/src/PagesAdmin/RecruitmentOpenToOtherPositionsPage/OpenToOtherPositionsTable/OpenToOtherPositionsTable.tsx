@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Table } from '~/Components';
-import { RecruitmentApplicationDto, RecruitmentPositionDto, RecruitmentUserDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentPositionDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 
 type OpenTableProps = {
@@ -21,7 +21,7 @@ export function OpenToOtherPositionsTable({ applicants }: OpenTableProps) {
   const data = applicants.map((applicant) => {
     return {
       cells: [
-        { value: applicant.first_name + ' ' + applicant.last_name },
+        { value: `${applicant.first_name} ${applicant.last_name}` },
         { value: applicant.phone_number },
         { value: applicant.email },
       ],
@@ -39,5 +39,5 @@ export function OpenToOtherPositionsTable({ applicants }: OpenTableProps) {
     };
   });
 
-  return <Table columns={tableColumns} data={data}></Table>;
+  return <Table columns={tableColumns} data={data} />;
 }

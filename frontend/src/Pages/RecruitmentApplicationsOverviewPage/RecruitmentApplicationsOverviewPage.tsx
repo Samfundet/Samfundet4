@@ -131,7 +131,7 @@ export function RecruitmentApplicationsOverviewPage() {
             data={applications.map((application) => ({ cells: applicationToTableRow(application) }))}
             columns={tableColumns}
             defaultSortColumn={3}
-          ></Table>
+          />
         ) : (
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}

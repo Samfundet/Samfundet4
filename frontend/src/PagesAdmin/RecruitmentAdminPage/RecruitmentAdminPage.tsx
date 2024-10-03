@@ -56,44 +56,45 @@ export function RecruitmentAdminPage() {
           value: ROUTES.frontend.recruitment,
         },
         {
-        content: getObjectFieldOrNumber<string>(element?.organization, 'name'),
+          content: getObjectFieldOrNumber<string>(element?.organization, 'name'),
         },
-      {
-        content: `${getFormattedDate(element.visible_from)}-${getFormattedDate(
-          element.reprioritization_deadline_for_groups,
-        )}`,
-      },
+        {
+          content: `${getFormattedDate(element.visible_from)}-${getFormattedDate(
+            element.reprioritization_deadline_for_groups,
+          )}`,
+        },
         {
           content: (
             <CrudButtons
-            onManage={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_recruitment_recruiter_dashboard,
-                  urlParams: { recruitmentId: element.id },
-                }),
-              );
-            }}
-            onView={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.organization_recruitment,
-                  urlParams: { recruitmentID: element.id },
-                }),
-              );
-            }}
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_recruitment_edit,
-                  urlParams: { recruitmentId: element.id },
-                }),
-              );
-            }}
-          />
-        ),
-      },
-    ];
+              onManage={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_recruiter_dashboard,
+                    urlParams: { recruitmentId: element.id },
+                  }),
+                );
+              }}
+              onView={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.organization_recruitment,
+                    urlParams: { recruitmentID: element.id },
+                  }),
+                );
+              }}
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_edit,
+                    urlParams: { recruitmentId: element.id },
+                  }),
+                );
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;

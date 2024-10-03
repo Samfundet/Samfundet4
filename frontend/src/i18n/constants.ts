@@ -364,7 +364,7 @@ export const KEY = {
   // Recruitment applets
   recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
   recruitment_applet_edit_description: 'recruitment_applet_edit_description',
-  recruitment_applet_open_to_other_positions : 'recruitment_applet_open_to_other_positions',
+  recruitment_applet_open_to_other_positions: 'recruitment_applet_open_to_other_positions',
   recruitment_applet_overview_description: 'recruitment_applet_overview_description',
   recruitment_applet_room_description: 'recruitment_applet_room_description',
   recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',
