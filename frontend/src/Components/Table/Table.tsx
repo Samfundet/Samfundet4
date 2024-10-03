@@ -191,6 +191,7 @@ export function Table({
               if (isColumnSortable(col)) {
                 return (
                   <th
+                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
@@ -213,6 +214,7 @@ export function Table({
                 );
               }
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -242,6 +244,7 @@ export function Table({
                   </td>
                 )}
                 {row?.cells.map((cell, index2) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                   <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
                     {getCellContent(cell ?? '')}
                   </td>
