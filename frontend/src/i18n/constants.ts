@@ -118,6 +118,7 @@ export const KEY = {
   common_register: 'common_register',
   common_users: 'common_users',
   common_email: 'common_email',
+  common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
   common_guests: 'common_guests',
