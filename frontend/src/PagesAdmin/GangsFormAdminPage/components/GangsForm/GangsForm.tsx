@@ -1,8 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import { postGang, putGang } from '~/api';
 import type { GangDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ABBREVIATION, NAME } from '~/schema/gang';
@@ -19,10 +22,13 @@ const schema = z.object({
 
 type Props = {
   gang?: GangDto;
+  onSuccess?: () => void;
+  onError?: () => void;
 };
 
-export function GangsForm({ gang }: Props) {
+export function GangsForm({ gang, onSuccess, onError }: Props) {
   const { t } = useTranslation();
+  const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -35,7 +41,24 @@ export function GangsForm({ gang }: Props) {
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    console.log('Values:', values);
+    setSubmitting(true);
+    const action = gang ? () => putGang(gang.id, values) : () => postGang(values);
+    action()
+      .then((res) => {
+        if (res) {
+          toast.success(t(KEY.common_save_successful));
+          onSuccess?.();
+        } else {
+          toast.error(t(KEY.common_something_went_wrong));
+          onError?.();
+        }
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+        onError?.();
+      })
+      .finally(() => setSubmitting(false));
   }
 
   return (
@@ -99,7 +122,7 @@ export function GangsForm({ gang }: Props) {
         </div>
 
         <div className={styles.action_row}>
-          <Button type="submit" rounded={true} theme="green">
+          <Button type="submit" rounded={true} theme="green" disabled={submitting}>
             {lowerCapitalize(`${t(gang ? KEY.common_edit : KEY.common_create)} ${t(KEY.common_gang)}`)}
           </Button>
         </div>

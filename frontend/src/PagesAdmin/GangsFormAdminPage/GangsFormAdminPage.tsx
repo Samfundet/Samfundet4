@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useLoaderData } from 'react-router-dom';
-import { useTitle } from '~/hooks';
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import type { GangLoader } from '~/router/loaders';
+import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { GangsForm } from './components';
@@ -10,6 +12,7 @@ import { GangsForm } from './components';
 export function GangsFormAdminPage() {
   const { t } = useTranslation();
   const data = useLoaderData() as GangLoader | undefined;
+  const navigate = useNavigate();
 
   //TODO add permissions on render
 
@@ -18,7 +21,7 @@ export function GangsFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} header={true}>
-      <GangsForm gang={data?.gang} />
+      <GangsForm gang={data?.gang} onSuccess={() => navigate(ROUTES.frontend.admin_gangs)} />
     </AdminPageLayout>
   );
 }
