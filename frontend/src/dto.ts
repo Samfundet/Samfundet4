@@ -226,6 +226,11 @@ export type FoodCategoryDto = {
   order?: number;
 };
 
+export type MailDto = {
+  subject: string;
+  text: string;
+};
+
 export type MenuItemDto = {
   id?: number;
   name_nb?: string;
