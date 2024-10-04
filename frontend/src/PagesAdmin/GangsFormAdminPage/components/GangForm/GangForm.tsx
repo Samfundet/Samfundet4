@@ -11,7 +11,7 @@ import { KEY } from '~/i18n/constants';
 import { ABBREVIATION, GANG_INFO_PAGE, GANG_TYPE, NAME } from '~/schema/gang';
 import { WEBSITE_URL } from '~/schema/url';
 import { dbT, lowerCapitalize } from '~/utils';
-import styles from './GangsForm.module.scss';
+import styles from './GangForm.module.scss';
 
 const schema = z.object({
   name_nb: NAME.min(1),
@@ -28,7 +28,7 @@ type Props = {
   onError?: () => void;
 };
 
-export function GangsForm({ gang, onSuccess, onError }: Props) {
+export function GangForm({ gang, onSuccess, onError }: Props) {
   const { t } = useTranslation();
   const [loadingInfoPages, setLoadingInfoPages] = useState(true);
   const [infoPages, setInfoPages] = useState<InformationPageDto[]>();
