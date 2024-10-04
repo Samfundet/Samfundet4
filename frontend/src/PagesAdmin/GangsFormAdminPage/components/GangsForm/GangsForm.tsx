@@ -16,10 +16,10 @@ import styles from './GangsForm.module.scss';
 const schema = z.object({
   name_nb: NAME.min(1),
   name_en: NAME.min(1),
-  abbreviation: ABBREVIATION.nullish().or(z.literal('')),
+  abbreviation: ABBREVIATION.optional().or(z.literal('')),
   website: WEBSITE_URL.or(z.literal('')),
-  info_page: GANG_INFO_PAGE.nullish(),
-  gang_type: GANG_TYPE.nullish(),
+  info_page: GANG_INFO_PAGE.optional(),
+  gang_type: GANG_TYPE.optional(),
 });
 
 type Props = {
