@@ -407,7 +407,7 @@ export async function getGangs(): Promise<GangDto[]> {
   return response.data;
 }
 
-export async function postGang(data: GangDto): Promise<GangDto> {
+export async function postGang(data: Partial<GangDto>): Promise<GangDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangs_list;
   const response = await axios.post<GangDto>(url, data, { withCredentials: true });
 

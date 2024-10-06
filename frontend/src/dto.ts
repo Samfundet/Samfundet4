@@ -313,7 +313,7 @@ export type GangDto = {
   webpage?: string;
   logo?: string;
   gang_type?: number;
-  info_page?: number;
+  info_page?: string;
 };
 
 export type RecruitmentGangDto = GangDto & {
