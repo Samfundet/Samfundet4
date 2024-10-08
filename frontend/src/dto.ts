@@ -460,6 +460,13 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
+export type RecruitmentRecruitmentPositionDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  gang: number;
+};
+
 export type InterviewDto = {
   id?: number;
   interview_time: string;
@@ -490,6 +497,16 @@ export type RecruitmentApplicationRecruiterDto = {
   user: RecruitmentUserDto;
   application: RecruitmentApplicationDto;
   other_applications: RecruitmentApplicationDto[];
+};
+
+export type RecruitmentUnprocessedApplicationsDto = {
+  id: number;
+  recruitment: number;
+  user: RecruitmentUserDto;
+  applicant_priority: number;
+  recruitment_position: RecruitmentRecruitmentPositionDto;
+  recruiter_status: number;
+  recruiter_priority: number;
 };
 
 export type RecruitmentApplicationStateDto = {
