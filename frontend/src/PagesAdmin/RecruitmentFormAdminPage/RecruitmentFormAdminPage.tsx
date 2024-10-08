@@ -196,7 +196,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} value={field.value ?? undefined} />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

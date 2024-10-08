@@ -2,18 +2,19 @@ import i18next from 'i18next';
 import { z } from 'zod';
 import { KEY } from '~/i18n/constants';
 import { LOCAL_DATETIME } from '~/schema/dates';
+import { NON_EMPTY_STRING } from '~/schema/strings';
 
 export const recruitmentSchema = z
   .object({
-    name_nb: z.string().min(1),
-    name_en: z.string().min(1),
+    name_nb: NON_EMPTY_STRING,
+    name_en: NON_EMPTY_STRING,
     visible_from: LOCAL_DATETIME,
     shown_application_deadline: LOCAL_DATETIME,
     actual_application_deadline: LOCAL_DATETIME,
     reprioritization_deadline_for_applicant: LOCAL_DATETIME,
     reprioritization_deadline_for_groups: LOCAL_DATETIME,
     organization: z.number().min(1, { message: 'Organization is required' }),
-    max_applications: z.number().nullish().optional(),
+    max_applications: z.number().nullable(),
   })
   .refine(
     (data) => {
