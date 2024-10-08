@@ -205,7 +205,7 @@ export function RecruitmentApplicantsStatus({
         ),
       },
       {
-        value: 'Sett intervju manuelt',
+        value: t(KEY.recruitment_interview_set),
         style: applicationStatusStyle,
         content: (
           <SetInterviewManuallyModal
