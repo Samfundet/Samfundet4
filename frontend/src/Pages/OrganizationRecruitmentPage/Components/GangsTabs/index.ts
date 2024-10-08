@@ -1,1 +1,0 @@
-export { GangsTabs } from './GangsTabs';

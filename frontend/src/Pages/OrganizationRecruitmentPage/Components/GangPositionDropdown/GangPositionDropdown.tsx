@@ -1,12 +1,12 @@
 import { ExpandableHeader, Link } from '~/Components';
-import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import { DepartmentDto, RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './GangPositionDropdown.module.scss';
 
 type GangItemProps = {
-  type: GangTypeDto;
+  type: DepartmentDto;
   recruitmentPositions?: RecruitmentPositionDto[];
 };
 

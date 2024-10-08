@@ -5,7 +5,7 @@ import { ImageList } from '~/Components/ImageList';
 import type { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
 import { getGangList } from '~/api';
-import type { GangDto, GangTypeDto } from '~/dto';
+import { GangDto, DepartmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './GroupsPage.module.scss';
@@ -16,7 +16,7 @@ import styles from './GroupsPage.module.scss';
  */
 export function GroupsPage() {
   const { t } = useTranslation();
-  const [groups, setGroups] = useState<GangTypeDto[]>([]);
+  const [groups, setGroups] = useState<DepartmentDto[]>([]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
@@ -37,8 +37,8 @@ export function GroupsPage() {
           <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>
           <p className={styles.description}>{t(KEY.groupspage_gangs_text)}</p>
         </div>
-        {groups.map((element: GangTypeDto) => (
-          <div key={element.id} className={styles.groups}>
+        {groups.map((element: DepartmentDto, key: number) => (
+          <div key={key} className={styles.groups}>
             <div className={styles.groupsTitle}>{dbT(element, 'title')}</div>
             <ImageList
               textMaxLength={12}

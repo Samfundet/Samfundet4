@@ -58,7 +58,7 @@ from .serializers import (
     InfoboxSerializer,
     ProfileSerializer,
     BlogPostSerializer,
-    GangTypeSerializer,
+    DepartmentSerializer,
     KeyValueSerializer,
     MenuItemSerializer,
     RegisterSerializer,
@@ -112,7 +112,7 @@ from .models.general import (
     Infobox,
     Profile,
     BlogPost,
-    GangType,
+    Department,
     KeyValue,
     MenuItem,
     TextItem,
@@ -292,10 +292,10 @@ class GangView(ModelViewSet):
     queryset = Gang.objects.all()
 
 
-class GangTypeView(ModelViewSet):
+class DepartmentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = GangTypeSerializer
-    queryset = GangType.objects.all()
+    serializer_class = DepartmentSerializer
+    queryset = Department.objects.all()
 
 
 class InformationPageView(ModelViewSet):

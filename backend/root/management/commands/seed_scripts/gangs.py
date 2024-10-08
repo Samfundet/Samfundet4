@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from samfundet.models.general import Gang, GangType, GangSection, Organization
+from samfundet.models.general import Gang, Department, GangSection, Organization
 
 # Template gangs for seeding
 GANGS = {
@@ -79,7 +79,7 @@ def seed():  # noqa: C901
         for gang_type in GANGS[org]:
             gtype = None
             if gang_type != '':
-                gtype, _ = GangType.objects.get_or_create(title_nb=gang_type)
+                gtype, _ = Department.objects.get_or_create(title_nb=gang_type)
 
             for gang in GANGS[org][gang_type]:
                 name, abbr, sections = gang

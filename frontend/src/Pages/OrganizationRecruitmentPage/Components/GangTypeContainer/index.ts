@@ -1,1 +1,0 @@
-export { GangTypeContainer } from './GangTypeContainer';

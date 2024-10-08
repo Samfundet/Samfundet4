@@ -35,7 +35,7 @@ from .models.general import (
     Infobox,
     Profile,
     BlogPost,
-    GangType,
+    Department,
     KeyValue,
     MenuItem,
     TextItem,
@@ -436,11 +436,11 @@ class RecruitmentGangSerializer(CustomBaseSerializer):
         return RecruitmentPosition.objects.filter(recruitment=self.recruitment, gang=obj).count()
 
 
-class GangTypeSerializer(CustomBaseSerializer):
+class DepartmentSerializer(CustomBaseSerializer):
     gangs = GangSerializer(read_only=True, many=True)
 
     class Meta:
-        model = GangType
+        model = Department
         fields = '__all__'
 
 

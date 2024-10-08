@@ -225,7 +225,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='GangType',
+            name='Department',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('version', models.PositiveIntegerField(blank=True, default=0, editable=False, null=True)),
@@ -237,8 +237,8 @@ class Migration(migrations.Migration):
                 ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name': 'GangType',
-                'verbose_name_plural': 'GangTypes',
+                'verbose_name': 'Department',
+                'verbose_name_plural': 'Departments',
             },
         ),
         migrations.CreateModel(
@@ -258,7 +258,7 @@ class Migration(migrations.Migration):
                 ('gang_leader_group', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gang_as_leader', to='auth.group', verbose_name='Gangleder')),
                 ('recruitment_admin_group', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gang_as_recruitment_admin_group', to='auth.group', verbose_name='Innganggruppe')),
                 ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('gang_type', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gangs', to='samfundet.gangtype', verbose_name='Gruppetype')),
+                ('gang_type', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gangs', to='samfundet.Department', verbose_name='Gruppetype')),
             ],
             options={
                 'verbose_name': 'Gang',
