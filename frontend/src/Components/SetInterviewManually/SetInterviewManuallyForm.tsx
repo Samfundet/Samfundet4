@@ -14,6 +14,7 @@ import type { CalendarMarker } from '~/types';
 import { formatDateYMD } from '~/utils';
 import { Button } from '../Button';
 import styles from './SetInterviewManually.module.scss';
+import { set } from 'date-fns';
 
 type SetInterviewManuallyFormProps = {
   recruitmentId: number;
@@ -46,7 +47,6 @@ export function SetInterviewManuallyForm({
       return;
     }
     setLoading(true);
-
     Promise.allSettled([
       getRecruitmentAvailability(recruitmentId).then((response) => {
         if (!response.data) {
@@ -71,6 +71,7 @@ export function SetInterviewManuallyForm({
 
   useEffect(() => {
     if (!application.id || !application.interview?.id) {
+      setDataLoaded(true);
       return;
     }
     setLoading(true);
