@@ -34,7 +34,8 @@ export function RecruitmentUnprocessedApplicantsPage() {
 
   useEffect(() => {
     if (recruitmentId) {
-        getRecruitmentUnprocessedApplicants(recruitmentId).then((res) => {
+        getRecruitmentUnprocessedApplicants(recruitmentId)
+        .then((res) => {
           setUnprocessedApplicants(res.data);
         })
         .then(() => {

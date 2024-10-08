@@ -155,11 +155,11 @@ export type OrganizationTheme = {
 
 // Recruitment Status Choices Enum
 export const RecruitmentStatusChoices = {
-  NOT_SET: "Not Set",
-  CALLED_AND_ACCEPTED: "Called and Accepted",
-  CALLED_AND_REJECTED: "Called and Rejected",
-  REJECTION: "Rejection",
-  AUTOMATIC_REJECTION: "Automatic Rejection",
+  NOT_SET: 'Not Set',
+  CALLED_AND_ACCEPTED: 'Called and Accepted',
+  CALLED_AND_REJECTED: 'Called and Rejected',
+  REJECTION: 'Rejection',
+  AUTOMATIC_REJECTION: 'Automatic Rejection',
 } as const;
 
 // Recruitment Status Choices Mapping
