@@ -64,7 +64,7 @@ export function GangsAdminPage() {
             navigate(
               reverse({
                 pattern: ROUTES.frontend.admin_gangs_edit,
-                urlParams: { id: element2.id },
+                urlParams: { gangId: element2.id },
               }),
             );
           }}
