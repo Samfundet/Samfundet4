@@ -87,7 +87,7 @@ export function AppletContainer({ recruitmentId }: Props) {
             title={t(KEY.common_unprocessed)}
             description={t(KEY.recruitment_show_unprocessed_applicants)}
             url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_users_three_interview_criteria,
+              pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
               urlParams: { recruitmentId: recruitmentId },
             })}
           />

@@ -31,6 +31,7 @@ import type {
   RecruitmentPositionDto,
   RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
+  RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
@@ -718,6 +719,20 @@ export async function getRecruitmentApplicationsForRecruiter(
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_applications_recruiter,
       urlParams: { applicationId: applicationID },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentUnprocessedApplicants(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUnprocessedApplicationsDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_show_unprocessed_applicants,
+      queryParams: { recruitment: recruitmentId },
     });
   const response = await axios.get(url, { withCredentials: true });
 
