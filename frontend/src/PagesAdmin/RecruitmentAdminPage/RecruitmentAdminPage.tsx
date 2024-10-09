@@ -74,7 +74,12 @@ export function RecruitmentAdminPage() {
               );
             }}
             onView={() => {
-              navigate(ROUTES.frontend.recruitment);
+              navigate(
+                reverse({
+                  pattern: ROUTES.frontend.organization_recruitment,
+                  urlParams: { recruitmentID: element.id },
+                }),
+              );
             }}
             onEdit={() => {
               navigate(
