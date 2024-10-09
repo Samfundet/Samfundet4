@@ -48,7 +48,7 @@ export const ROUTES_FRONTEND = {
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
-  admin_gangs_edit: '/control-panel/gangs/edit/:id/',
+  admin_gangs_edit: '/control-panel/gangs/edit/:gangId/',
   // Events:
   admin_events: '/control-panel/events/',
   admin_events_edit: '/control-panel/events/edit/:id/',
@@ -79,6 +79,8 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
+  admin_recruitment_gang_overview_rejection_email:
+    '/control-panel/recruitment/:recruitmentId/gang-overview/rejection-email/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
   admin_recruitment_gang_position_edit: '/control-panel/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
