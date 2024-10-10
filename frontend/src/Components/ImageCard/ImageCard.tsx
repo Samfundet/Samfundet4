@@ -6,6 +6,8 @@ import { backgroundImageFromUrl } from '~/utils';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './ImageCard.module.scss';
+import { t } from 'i18next';
+import { KEY } from '~/i18n/constants';
 
 type ImageCardProps = {
   className?: string;
@@ -19,6 +21,7 @@ type ImageCardProps = {
   compact?: boolean;
   isSkeleton?: boolean;
   children?: Children;
+  ticket_type?: string;
 };
 
 export function ImageCard({
@@ -32,6 +35,7 @@ export function ImageCard({
   compact,
   isSkeleton,
   children,
+  ticket_type,
 }: ImageCardProps) {
   const containerStyle = classNames(styles.container, compact && styles.compact, className);
   const cardStyle = classNames(styles.card);
@@ -43,6 +47,17 @@ export function ImageCard({
         <Skeleton className={cardStyle} borderRadius={'1em'} height={compact ? '7.3em' : '13em'} />
       </div>
     );
+  }
+
+  let displayTicketType = '';
+  if (ticket_type === 'billig' || ticket_type === 'custom') {
+    displayTicketType = t(KEY.common_ticket_type_billig);
+  }
+  if (ticket_type === 'free' || ticket_type === 'registration') {
+    displayTicketType = t(KEY.common_ticket_type_free);
+  }
+  if (ticket_type === 'included') {
+    displayTicketType = t(KEY.common_ticket_type_included);
   }
 
   return (
@@ -59,6 +74,7 @@ export function ImageCard({
               <div className={styles.date_label}>
                 {date && <TimeDisplay timestamp={date} displayType="event-datetime" />}
               </div>
+              <div className={styles.ticket_type}>{displayTicketType}</div>
             </div>
 
             <div className={bottomDescriptionStyle}>{description}</div>

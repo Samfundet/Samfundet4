@@ -78,7 +78,7 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 }
 
 .date_label {
-  font-weight: 400;
+  font-weight: 700;
   color: $grey-4;
 }
 
@@ -125,6 +125,10 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 
 .edit_button {
   visibility: hidden;
+}
+
+.ticket_type{
+  font-size: 0.7rem;
 }
 
 // Styling to container and children when it is hovered.
