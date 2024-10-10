@@ -211,19 +211,23 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationK
  * Converts a UTC timestring from django to
  * a local timestring suitable for html input elements
  * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @param includeSeconds boolean flag to include seconds in the output
  * @returns timestamp in local format, eg. '2023-04-05T20:15'
  */
-export function utcTimestampToLocal(time: string | undefined): string {
-  return new Date(time ?? '')
-    .toLocaleString('sv-SE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(' ', 'T');
+export function utcTimestampToLocal(time: string | undefined, includeSeconds = true): string {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+
+  if (includeSeconds) {
+    options.second = '2-digit';
+  }
+
+  return new Date(time ?? '').toLocaleString('sv-SE', options).replace(' ', 'T');
 }
 
 /**
