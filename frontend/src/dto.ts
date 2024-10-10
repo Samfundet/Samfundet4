@@ -226,6 +226,11 @@ export type FoodCategoryDto = {
   order?: number;
 };
 
+export type MailDto = {
+  subject: string;
+  text: string;
+};
+
 export type MenuItemDto = {
   id?: number;
   name_nb?: string;
@@ -308,7 +313,7 @@ export type GangDto = {
   webpage?: string;
   logo?: string;
   gang_type?: number;
-  info_page?: number;
+  info_page?: string;
 };
 
 export type RecruitmentGangDto = GangDto & {
@@ -434,7 +439,7 @@ export type UserPriorityDto = {
 };
 
 export type RecruitmentPositionDto = {
-  id: string;
+  id: number;
   name_nb: string;
   name_en: string;
 
@@ -461,6 +466,13 @@ export type RecruitmentPositionDto = {
   total_applicants?: number;
   processed_applicants?: number;
   accepted_applicants?: number;
+};
+
+export type RecruitmentRecruitmentPositionDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  gang: number;
 };
 
 export type InterviewDto = {
@@ -493,6 +505,16 @@ export type RecruitmentApplicationRecruiterDto = {
   user: RecruitmentUserDto;
   application: RecruitmentApplicationDto;
   other_applications: RecruitmentApplicationDto[];
+};
+
+export type RecruitmentUnprocessedApplicationsDto = {
+  id: number;
+  recruitment: number;
+  user: RecruitmentUserDto;
+  applicant_priority: number;
+  recruitment_position: RecruitmentRecruitmentPositionDto;
+  recruiter_status: number;
+  recruiter_priority: number;
 };
 
 export type RecruitmentApplicationStateDto = {
@@ -543,6 +565,16 @@ export type RecruitmentStatsDto = {
   date_stats: RecruitmentDateStatDto[];
   gang_stats: RecruitmentGangDto[];
   campus_stats: RecruitmentCampusStatDto[];
+};
+
+export type InterviewRoomDto = {
+  id: number;
+  name: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+  recruitment: string;
+  gang?: number;
 };
 
 // ############################################################

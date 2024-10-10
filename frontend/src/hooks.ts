@@ -6,6 +6,7 @@ import type { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
@@ -69,7 +70,7 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: string, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
@@ -455,7 +456,6 @@ export function useTitle(title: string, suffix = 'Samfundet'): void {
     return () => {
       document.title = initialTitle;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, suffix]);
 }
 

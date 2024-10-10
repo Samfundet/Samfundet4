@@ -36,6 +36,7 @@ router.register('infobox', views.InfoboxView, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('organizations', views.OrganizationView, 'organizations')
 router.register('merch', views.MerchView, 'merch')
+router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
@@ -121,6 +122,7 @@ urlpatterns = [
         name='recruitment_withdraw_application_recruiter',
     ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
+    path('rejected-applicants/', views.SendRejectionMailView.as_view(), name='rejected_applicants/'),
     path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
     path(
         'recruitment-applicants-without-three-interview-criteria/<int:pk>/',

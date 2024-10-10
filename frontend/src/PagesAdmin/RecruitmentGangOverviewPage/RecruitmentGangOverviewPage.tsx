@@ -1,7 +1,7 @@
 import { type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, CrudButtons, Link, OccupiedFormModal, type Tab, TabView } from '~/Components';
+import { CrudButtons, Link, type Tab, TabView } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteRecruitmentSeparatePosition, getRecruitment, getRecruitmentGangs } from '~/api';
 import type { RecruitmentDto, RecruitmentGangDto, RecruitmentSeparatePositionDto } from '~/dto';
@@ -12,6 +12,7 @@ import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { RecruitmentInterviewGroupsList } from './Components/RecruitmentInterviewGroupsList';
+import { AppletContainer } from './components';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitmentId } = useParams();
@@ -30,11 +31,9 @@ export function RecruitmentGangOverviewPage() {
     Promise.all([
       getRecruitmentGangs(recruitmentId).then((data) => {
         setGangs(data);
-        setLoading(false);
       }),
       getRecruitment(recruitmentId).then((response) => {
         setRecruitment(response.data);
-        setLoading(false);
       }),
     ]).then(() => {
       setLoading(false);
@@ -57,69 +56,7 @@ export function RecruitmentGangOverviewPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
     <>
-      <Button
-        theme="success"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_overview,
-          urlParams: { recruitmentId },
-        })}
-      >
-        {t(KEY.common_overview)}
-      </Button>
-      <Button
-        theme="samf"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_users_three_interview_criteria,
-          urlParams: {
-            recruitmentId: recruitmentId,
-          },
-        })}
-      >
-        {t(KEY.recruitment_three_interviews_criteria_button)}
-      </Button>
-      <Button
-        theme="blue"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_users_without_interview,
-          urlParams: { recruitmentId },
-        })}
-      >
-        {t(KEY.recruitment_show_applicants_without_interview)}
-      </Button>
-      <Button
-        theme="white"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_show_unprocessed_applicants,
-          urlParams: { recruitmentId },
-        })}
-      >
-        {t(KEY.recruitment_show_unprocessed_applicants)}
-      </Button>
-      <Button
-        theme="white"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_edit,
-          urlParams: { recruitmentId },
-        })}
-      >
-        {t(KEY.common_edit)}
-      </Button>
-      <Button
-        theme="success"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_create,
-          urlParams: { recruitmentId },
-        })}
-      >
-        {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
-      </Button>
-      {recruitmentId && <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId)} isButtonRounded={true} />}
+      <AppletContainer recruitmentId={recruitmentId} />
     </>
   );
 

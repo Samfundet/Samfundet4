@@ -13,7 +13,9 @@ import type {
   ImagePostDto,
   InformationPageDto,
   InterviewDto,
+  InterviewRoomDto,
   KeyValueDto,
+  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -30,6 +32,7 @@ import type {
   RecruitmentSeparatePositionDto,
   RecruitmentSharedInterviewGroupDto,
   RecruitmentStatsDto,
+  RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
@@ -86,9 +89,15 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
-export async function impersonateUser(user?: UserDto): Promise<boolean> {
+export async function stopImpersonatingUser(): Promise<boolean> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
-  const response = await axios.post(url, { user_id: user?.id }, { withCredentials: true });
+  const response = await axios.post(url, {}, { withCredentials: true });
+  return response.status === 200;
+}
+
+export async function impersonateUser(userId: number): Promise<boolean> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
+  const response = await axios.post(url, { user_id: userId }, { withCredentials: true });
   return response.status === 200;
 }
 
@@ -400,7 +409,7 @@ export async function getGangs(): Promise<GangDto[]> {
   return response.data;
 }
 
-export async function postGang(data: GangDto): Promise<GangDto> {
+export async function postGang(data: Partial<GangDto>): Promise<GangDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangs_list;
   const response = await axios.post<GangDto>(url, data, { withCredentials: true });
 
@@ -717,6 +726,20 @@ export async function getRecruitmentApplicationsForRecruiter(
   return response;
 }
 
+export async function getRecruitmentUnprocessedApplicants(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUnprocessedApplicationsDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_show_unprocessed_applicants,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function putRecruitmentPriorityForUser(
   applicationId: string,
   data: UserPriorityDto,
@@ -952,6 +975,46 @@ export async function putRecruitmentApplicationInterview(
   const response = await axios.put<InterviewDto>(url, interview, { withCredentials: true });
   return response;
 }
+
+// ############################################################
+//                       Interview rooms
+// ############################################################
+
+export async function getInterviewRoomsForRecruitment(
+  recruitmentId: string,
+): Promise<AxiosResponse<InterviewRoomDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_rooms_list,
+      queryParams: { recruitment: recruitmentId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getInterviewRoom(id: string): Promise<AxiosResponse<InterviewRoomDto>> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function postInterviewRoom(data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__interview_rooms_list;
+  return await axios.post(url, data, { withCredentials: true });
+}
+
+export async function putInterviewRoom(id: string, data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.put(url, data, { withCredentials: true });
+}
+
+export async function deleteInterviewRoom(id: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
+  return await axios.delete(url, { withCredentials: true });
+}
+
 // ############################################################
 //                       Purchase Feedback
 // ############################################################
@@ -973,6 +1036,20 @@ export async function getRecruitmentStats(id: string): Promise<AxiosResponse<Rec
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__rejected_applicants,
+      queryParams: {
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.post(url, rejectionMail, { withCredentials: true });
 
   return response;
 }

@@ -24,29 +24,29 @@ export function RecruitmentRecruiterDashboardPage() {
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>();
   const [loading, setLoading] = useState(true);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate must not be in deplist
   useEffect(() => {
-    if (recruitmentId) {
-      getRecruitmentRecruiterDashboard(recruitmentId)
-        .then((resp) => {
-          setRecruitment(resp.data.recruitment);
-          setApplications(resp.data.applications);
-          setLoading(false);
-        })
-        .catch((data) => {
-          toast.error(t(KEY.common_something_went_wrong));
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.not_found });
-          }
-        });
-    }
-  }, [navigate, recruitmentId, t]);
+    if (!recruitmentId) return;
+    getRecruitmentRecruiterDashboard(recruitmentId)
+      .then((resp) => {
+        setRecruitment(resp.data.recruitment);
+        setApplications(resp.data.applications);
+        setLoading(false);
+      })
+      .catch((data) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate({ url: ROUTES.frontend.not_found });
+        }
+      });
+  }, [recruitmentId, t]);
 
   if (!recruitmentId) {
     navigate({ url: ROUTES.frontend.not_found });
     return <></>;
   }
 
-  const title = `${t(KEY.recruitment_overview)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
+  const title = `${t(KEY.recruitment_recruiter_dashboard)} - ${getObjectFieldOrNumber(recruitment?.organization, 'name')} - ${dbT(
     recruitment,
     'name',
   )}`;
