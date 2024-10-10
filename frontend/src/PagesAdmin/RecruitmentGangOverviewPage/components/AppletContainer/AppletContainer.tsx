@@ -5,7 +5,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
-import { AppletCard } from '../AppletCard';
+import { AppletCard } from '../AppletCard/AppletCard';
 import styles from './AppletContainer.module.scss';
 
 type AppletCategory = {

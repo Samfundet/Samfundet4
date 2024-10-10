@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Chart } from '~/Components';
-import { Table } from '~/Components/Table';
-import { Text } from '~/Components/Text/Text';
 import { getRecruitmentSharedInterviewGroups, getRecruitmentStats } from '~/api';
 import type { RecruitmentSharedInterviewGroupDto, RecruitmentStatsDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { RecruitmentInterviewGroupComponent } from './Components/RecruitmentInterviewGroupComponent';
 import styles from './RecruitmentInterviewGroupsList.module.scss';
+import { RecruitmentInterviewGroupComponent } from './components/RecruitmentInterviewGroupComponent/RecruitmentInterviewGroupComponent';
 
 export function RecruitmentInterviewGroupsList() {
   const { recruitmentId } = useParams();

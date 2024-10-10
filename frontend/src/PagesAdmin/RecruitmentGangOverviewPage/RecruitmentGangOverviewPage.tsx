@@ -11,8 +11,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AppletContainer } from './Components';
-import { RecruitmentInterviewGroupsList } from './Components/RecruitmentInterviewGroupsList';
+import { AppletContainer, RecruitmentInterviewGroupsList } from './components';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitmentId } = useParams();
