@@ -11,8 +11,8 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { AppletContainer } from './Components';
 import { RecruitmentInterviewGroupsList } from './Components/RecruitmentInterviewGroupsList';
-import { AppletContainer } from './components';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitmentId } = useParams();
@@ -40,18 +40,21 @@ export function RecruitmentGangOverviewPage() {
     });
   }, [recruitmentId]);
 
-  const deleteSeparatePositionHandler = useCallback((separate_position: RecruitmentSeparatePositionDto) => {
-    if (separate_position.id && recruitmentId) {
-      const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
-      if (window.confirm(`${msg} ${dbT(separate_position, 'name')}`)) {
-        deleteRecruitmentSeparatePosition(separate_position.id.toString()).then(() =>
-          getRecruitment(recruitmentId).then((response) => {
-            setRecruitment(response.data);
-          }),
-        );
+  const deleteSeparatePositionHandler = useCallback(
+    (separate_position: RecruitmentSeparatePositionDto) => {
+      if (separate_position.id && recruitmentId) {
+        const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
+        if (window.confirm(`${msg} ${dbT(separate_position, 'name')}`)) {
+          deleteRecruitmentSeparatePosition(separate_position.id.toString()).then(() =>
+            getRecruitment(recruitmentId).then((response) => {
+              setRecruitment(response.data);
+            }),
+          );
+        }
       }
-    }
-  }, [])
+    },
+    [t],
+  );
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
