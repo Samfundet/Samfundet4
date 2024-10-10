@@ -15,6 +15,7 @@ import type {
   InterviewDto,
   InterviewRoomDto,
   KeyValueDto,
+  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -30,6 +31,7 @@ import type {
   RecruitmentPositionDto,
   RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
+  RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
   RegistrationDto,
   SaksdokumentDto,
@@ -406,7 +408,7 @@ export async function getGangs(): Promise<GangDto[]> {
   return response.data;
 }
 
-export async function postGang(data: GangDto): Promise<GangDto> {
+export async function postGang(data: Partial<GangDto>): Promise<GangDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangs_list;
   const response = await axios.post<GangDto>(url, data, { withCredentials: true });
 
@@ -723,6 +725,20 @@ export async function getRecruitmentApplicationsForRecruiter(
   return response;
 }
 
+export async function getRecruitmentUnprocessedApplicants(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUnprocessedApplicationsDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_show_unprocessed_applicants,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function putRecruitmentPriorityForUser(
   applicationId: string,
   data: UserPriorityDto,
@@ -1005,6 +1021,20 @@ export async function getRecruitmentStats(id: string): Promise<AxiosResponse<Rec
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__rejected_applicants,
+      queryParams: {
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.post(url, rejectionMail, { withCredentials: true });
 
   return response;
 }
