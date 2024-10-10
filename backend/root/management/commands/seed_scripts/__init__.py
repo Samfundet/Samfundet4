@@ -23,8 +23,8 @@ from . import (
     recruitment_occupied_time,
     recruitment_separate_position,
     recruitment_interviewavailability,
-    recruitment_sharedinterviewgroups,
     recruitment_position_interviewers,
+    recruitment_sharedinterviewgroups,
 )
 
 # Insert seed scripts here (in order of priority)
