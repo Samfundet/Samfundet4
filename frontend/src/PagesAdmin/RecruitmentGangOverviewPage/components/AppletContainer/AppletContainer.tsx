@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { H3 } from '~/Components';
-import { AppletCard } from '~/PagesAdmin/RecruitmentGangOverviewPage/components';
+import { AppletCard } from '~/PagesAdmin/RecruitmentGangOverviewPage/Components';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
