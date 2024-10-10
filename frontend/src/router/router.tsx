@@ -189,11 +189,7 @@ export const router = createBrowserRouter(
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
             loader={roleLoader}
             handle={{
-              crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => (
-                  <Link url={pathname}>
-                    {role?.name}
-                  </Link>
-              ),
+              crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => <Link url={pathname}>{role?.name}</Link>,
             }}
           />
         </Route>
