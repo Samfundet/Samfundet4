@@ -4,7 +4,7 @@ import styles from './Input.module.scss';
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   onChange: (value: string | number | readonly string[] | null) => void;
-  value: string | number | readonly string[] | null;
+  value: string | number | readonly string[] | null | undefined;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
