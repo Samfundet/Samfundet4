@@ -5,7 +5,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
-import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Textarea,
+} from '~/Components';
 import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
 import type { RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -189,7 +200,7 @@ export function RecruitmentPositionFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_long_description)} ${t(KEY.common_norwegian)}`}</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -202,7 +213,7 @@ export function RecruitmentPositionFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_long_description)} ${t(KEY.common_english)}`}</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -232,7 +243,7 @@ export function RecruitmentPositionFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.recrutment_default_application_letter)} ${t(KEY.common_norwegian)}`}</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -245,7 +256,7 @@ export function RecruitmentPositionFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.recrutment_default_application_letter)} ${t(KEY.common_english)}`}</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -266,7 +277,6 @@ export function RecruitmentPositionFormAdminPage() {
                 </FormItem>
               )}
             />
-
             <Button type="submit">{submitText}</Button>
           </div>
         </form>

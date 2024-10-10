@@ -11,5 +11,5 @@ export const recruitmentPositionSchema = z.object({
   is_funksjonaer_position: z.boolean(),
   default_application_letter_nb: z.string().min(1),
   default_application_letter_en: z.string().min(1),
-  tags: z.string(),
+  tags: z.string().min(1),
 });
