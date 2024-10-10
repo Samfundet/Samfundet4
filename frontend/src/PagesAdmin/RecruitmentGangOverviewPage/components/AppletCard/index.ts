@@ -1,1 +1,1 @@
-export { AppletCard } from "./AppletCard";
+export { AppletCard } from './AppletCard';
