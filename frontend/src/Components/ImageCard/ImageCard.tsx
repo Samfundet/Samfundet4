@@ -1,13 +1,13 @@
 import classNames from 'classnames';
+import { t } from 'i18next';
 import type { ReactNode } from 'react';
 import { Skeleton } from '~/Components';
+import { KEY } from '~/i18n/constants';
 import type { Children } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './ImageCard.module.scss';
-import { t } from 'i18next';
-import { KEY } from '~/i18n/constants';
 
 type ImageCardProps = {
   className?: string;
