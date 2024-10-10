@@ -53,7 +53,7 @@ export function RecruitmentGangOverviewPage() {
         }
       }
     },
-    [t],
+    [t, recruitmentId],
   );
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;

@@ -248,7 +248,7 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_position2.shared_interview_group is None
 
         # setup interview group
-        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment, name_en='name', name_nb='navn')
         fixture_recruitment_position.shared_interview_group = shared_group
         fixture_recruitment_position2.shared_interview_group = shared_group
         fixture_recruitment_position.save()
@@ -288,7 +288,7 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_application2.recruitment_position == fixture_recruitment_position2
 
         # setup interview group
-        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment, name_en='name', name_nb='navn')
         fixture_recruitment_position.shared_interview_group = shared_group
         fixture_recruitment_position2.shared_interview_group = shared_group
         fixture_recruitment_position.save()
