@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect, useMemo, useState } from 'react';
+import { type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link, OccupiedFormModal, type Tab, TabView } from '~/Components';
@@ -41,7 +41,7 @@ export function RecruitmentGangOverviewPage() {
     });
   }, [recruitmentId]);
 
-  async function deleteSeparatePositionHandler(separate_position: RecruitmentSeparatePositionDto) {
+  const deleteSeparatePositionHandler = useCallback((separate_position: RecruitmentSeparatePositionDto) => {
     if (separate_position.id && recruitmentId) {
       const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
       if (window.confirm(`${msg} ${dbT(separate_position, 'name')}`)) {
@@ -52,7 +52,7 @@ export function RecruitmentGangOverviewPage() {
         );
       }
     }
-  }
+  }, [])
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
   const header = (
