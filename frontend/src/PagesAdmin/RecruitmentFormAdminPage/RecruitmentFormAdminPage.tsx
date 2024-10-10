@@ -14,8 +14,9 @@ import { ROUTES } from '~/routes';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
+import { youtubeLinkValidator } from './utils';
 
-type FormType = {
+export type RecruitmentFormType = {
   name_nb: string;
   name_en: string;
   visible_from: string;
@@ -24,6 +25,7 @@ type FormType = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   organization: number;
+  promo_media: string;
 };
 
 export function RecruitmentFormAdminPage() {
@@ -46,7 +48,7 @@ export function RecruitmentFormAdminPage() {
     });
   }, []);
 
-  const initialData: Partial<FormType> = {
+  const initialData: Partial<RecruitmentFormType> = {
     name_nb: data?.recruitment?.name_nb,
     name_en: data?.recruitment?.name_en,
     visible_from: utcTimestampToLocal(data?.recruitment?.visible_from),
@@ -67,7 +69,7 @@ export function RecruitmentFormAdminPage() {
 
   const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
 
-  function handleOnSubmit(data: FormType) {
+  function handleOnSubmit(data: RecruitmentFormType) {
     const errors = validateForm(data);
     if (Object.keys(errors).length > 0) {
       for (const error of Object.values(errors)) {
@@ -98,8 +100,8 @@ export function RecruitmentFormAdminPage() {
     }
   }
 
-  function validateForm(data: FormType) {
-    const errors: Partial<FormType> = {};
+  function validateForm(data: RecruitmentFormType) {
+    const errors: Partial<RecruitmentFormType> = {};
 
     const visibleFrom = new Date(data.visible_from);
     const shownApplicationDeadline = new Date(data.shown_application_deadline);
@@ -126,20 +128,20 @@ export function RecruitmentFormAdminPage() {
   return (
     <AdminPageLayout title={title} header={true}>
       <div className={styles.wrapper}>
-        <SamfForm<FormType>
+        <SamfForm<RecruitmentFormType>
           onSubmit={handleOnSubmit}
           initialData={initialData}
           submitText={submitText}
           validateOn={'submit'}
         >
           <div className={styles.row}>
-            <SamfFormField<string, FormType>
+            <SamfFormField<string, RecruitmentFormType>
               field="name_nb"
               type="text"
               label={`${t(KEY.common_name)} ${t(KEY.common_english)}`}
               required={true}
             />
-            <SamfFormField<string, FormType>
+            <SamfFormField<string, RecruitmentFormType>
               field="name_en"
               type="text"
               label={`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}
@@ -190,6 +192,14 @@ export function RecruitmentFormAdminPage() {
               label={t(KEY.recruitment_organization) ?? ''}
               options={organizationOptions}
               required={true}
+            />
+          </div>
+          <div className={styles.row}>
+            <SamfFormField
+              field="promo_media"
+              type="text"
+              label={t(KEY.recruitment_promo_media)}
+              validator={youtubeLinkValidator}
             />
           </div>
         </SamfForm>

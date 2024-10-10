@@ -414,6 +414,7 @@ export type RecruitmentDto = {
   organization: number | OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
   recruitment_progress?: number;
+  promo_media?: string;
 };
 
 export type RecruitmentSeparatePositionDto = {
