@@ -18,11 +18,11 @@ export type SeparatePositionLoader = {
   separatePosition: RecruitmentSeparatePositionDto | undefined;
 };
 
-export type RoleViewLoader = {
+export type RoleLoader = {
   role: RoleDto | undefined;
 };
 
-export async function roleViewLoader({ params }: LoaderFunctionArgs): Promise<RoleViewLoader> {
+export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLoader> {
   return { role: await getRole(params.roleId as string) };
 }
 

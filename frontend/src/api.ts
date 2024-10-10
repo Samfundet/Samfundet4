@@ -504,7 +504,7 @@ export async function getRecruitment(id: string): Promise<AxiosResponse<Recruitm
   return response;
 }
 
-// TODO: Setup backend later. Using test data now.
+// Issue #1520 TODO: Setup backend later. Using test data now.
 export async function getRole(id: string): Promise<RoleDto> {
   //const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__api_, urlParams: ( pk: id ) }):
   //const response = await axios.get(url, { withCredentials: true });

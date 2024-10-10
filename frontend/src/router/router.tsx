@@ -81,13 +81,13 @@ import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
-  type RoleViewLoader,
+  type RoleLoader,
   type SeparatePositionLoader,
   gangLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
-  roleViewLoader,
+  roleLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
@@ -187,21 +187,13 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_roles_view}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
-            loader={roleViewLoader}
+            loader={roleLoader}
             handle={{
-              crumb: ({ role }: RoleViewLoader) => {
-                if (!role) return <span>{t(KEY.common_unknown)}</span>;
-                return (
-                  <Link
-                    url={reverse({
-                      pattern: ROUTES.frontend.admin_roles_view,
-                      urlParams: { roleId: role.id },
-                    })}
-                  >
-                    {t(KEY.common_roles_view)}
+              crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => (
+                  <Link url={pathname}>
+                    {role?.name}
                   </Link>
-                );
-              },
+              ),
             }}
           />
         </Route>
