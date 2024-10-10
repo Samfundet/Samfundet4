@@ -19,4 +19,4 @@
 - [Role System](/docs/technical/backend/rolesystem.md)
 
 ### Pipelines & Deployment
-- [Pipeline (mypy, eslint, tsc, ...)](/docs/technical/pipeline.md)
+- [Pipeline (mypy, biome, tsc, ...)](/docs/technical/pipeline.md)
