@@ -11,7 +11,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AppletContainer } from './Components';
+import { AppletContainer } from './Components/AppletContainer';
 import { RecruitmentInterviewGroupsList } from './Components/RecruitmentInterviewGroupsList';
 
 export function RecruitmentGangOverviewPage() {
