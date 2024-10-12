@@ -1,4 +1,7 @@
-[👈 back](/docs/technical/README.md)
+[**&larr; Back: Documentation Overview**](../../README.md)
+
+> [!WARNING]
+> SamfForm is deprecated, and will slowly be replaced with [our wrappers](./forms.md) around React Hook Form.
 
 # SamfForm 
 

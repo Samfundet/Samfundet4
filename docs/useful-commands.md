@@ -1,4 +1,4 @@
-[👈 back](/README.md)
+[**&larr; Back: Documentation Overview**](./README.md)
 
 # Useful commands
 
@@ -205,6 +205,8 @@ python -m poetry run python manage.py collectstatic
 ## 🐳 Docker
 
 <br>
+
+Be sure to check out the documentation for [Docker command aliases](./docker-project-specific-commands.md).
 
 ### 🐳 Docker: Run command inside container
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
