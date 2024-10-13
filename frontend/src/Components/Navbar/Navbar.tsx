@@ -15,6 +15,7 @@ import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { LOCALSTORAGE_KEY } from '~/i18n/i18n';
 import { LANGUAGES } from '~/i18n/types';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
@@ -65,7 +66,14 @@ export function Navbar() {
   }, []);
 
   const languageButton = (
-    <button type="button" className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
+    <button
+      type="button"
+      className={styles.language_flag_button}
+      onClick={() => {
+        i18n.changeLanguage(otherLanguage).then();
+        localStorage.setItem(LOCALSTORAGE_KEY, otherLanguage);
+      }}
+    >
       <img src={otherFlag} className={styles.language_flag} alt="Flag" />
     </button>
   );
