@@ -1,12 +1,17 @@
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, Link, Page } from '~/Components';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentApplicationsForApplicant, putRecruitmentPriorityForUser } from '~/api';
+import {
+  getRecruitmentApplicationsForApplicant,
+  putRecruitmentPriorityForUser,
+  withdrawRecruitmentApplicationApplicant,
+} from '~/api';
 import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -18,6 +23,7 @@ export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [withdrawnApplications, setWithdrawnApplications] = useState<RecruitmentApplicationDto[]>([]);
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
 
@@ -51,6 +57,7 @@ export function RecruitmentApplicationsOverviewPage() {
     { sortable: false, content: t(KEY.recruitment_interview_time) },
     { sortable: false, content: t(KEY.recruitment_interview_location) },
     { sortable: true, content: t(KEY.recruitment_priority) },
+    { sortable: false, content: '' },
     { sortable: false, content: '' },
   ];
 
@@ -88,7 +95,26 @@ export function RecruitmentApplicationsOverviewPage() {
         ),
       },
     ];
-    return [...position, ...(application.withdrawn ? withdrawn : notWithdrawn)];
+    const widthdrawButton = {
+      content: (
+        <Button
+          theme="samf"
+          onClick={() => {
+            withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
+              .then(() => {
+                // redirect to the same page to refresh the data
+                navigate(0);
+              })
+              .catch(() => {
+                toast.error(t(KEY.common_something_went_wrong));
+              });
+          }}
+        >
+          {t(KEY.recruitment_withdraw_application)}
+        </Button>
+      ),
+    };
+    return [...position, ...(application.withdrawn ? withdrawn : notWithdrawn), widthdrawButton];
   }
 
   const withdrawnTableColumns = [{ sortable: true, content: t(KEY.recruitment_withdrawn) }];
