@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -21,19 +21,14 @@ export function RecruitmentStatistics() {
   const chartContainerWidth = useParentElementWidth(chartRef);
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
-  const [height, setHeight] = useState(null);
-  const [width, setWidth] = useState(null);
-  const div = useCallback((node) => {
+  const [height, setHeight] = useState<number | null>(null);
+  const [width, setWidth] = useState<number | null>(null);
+  const div = useCallback((node: HTMLDivElement | null) => {
     if (node !== null) {
       setHeight(node.getBoundingClientRect().height);
       setWidth(node.getBoundingClientRect().width);
     }
   }, []);
-
-  useEffect(() => {
-    console.log('height', height);
-    console.log('width', width);
-  }, [height, width]);
 
   // TODO: add dynamic data and might need backend features (in ISSUE #1110)
 
