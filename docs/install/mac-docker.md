@@ -44,3 +44,11 @@ This will start the `backend` and `frontend` containers:
 ```bash
 docker compose up backend frontend
 ```
+
+## Post-install
+
+Now that you've got the project up and running, check out the post-install instructions:
+
+<h3 align="right">
+<a href="/docs/install/post-install.md">&rarr; Next: Post-install</a>
+</h3>

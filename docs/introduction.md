@@ -26,3 +26,4 @@ you're not sure which to pick, just ask someone in MG::Web!
 - MacOS: [Docker](./install/mac-docker.md) – [Native](./install/mac-native.md)
 - Windows: [Docker](./install/windows-docker.md) – [WSL](./install/windows-wsl.md)
 - [Install script](./install/install-script.md)
+- [Post-install instructions](./install/post-install.md)

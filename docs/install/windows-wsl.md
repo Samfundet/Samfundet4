@@ -28,5 +28,5 @@ Since you now have a working Linux environment, the remaining steps of setting u
 Linux guide, so click the link below to continue the process.
 
 <h3 align="right">
-<a href="./docs/install/linux-native.md">&rarr; Next: Installing on Linux (Native)</a>
+<a href="/docs/install/linux-native.md">&rarr; Next: Installing on Linux (Native)</a>
 </h3>
