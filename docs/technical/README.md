@@ -10,6 +10,8 @@
 - [Creating react components (conventions)](/docs/technical/frontend/components.md)
 - [Forms and schemas](/docs/technical/frontend/forms.md)
 - [Cypress Setup Documentation](/docs/technical/frontend/cypress.md)
+- [Data fetching](./frontend/data-fetching.md)
+
 ### Backend
 
 - [Billig (payment system)](/docs/technical/backend/billig.md)
