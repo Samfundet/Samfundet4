@@ -1,32 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Chart } from '~/Components';
+import { Chart, SamfundetLogoSpinner } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { getRecruitmentStats } from '~/api';
 import type { RecruitmentStatsDto } from '~/dto';
+import { useCustomNavigate, useParentElementWidth } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import styles from './RecruitmentStatistics.module.scss';
 
 export function RecruitmentStatistics() {
   const { recruitmentId } = useParams();
-  const [stats, setStats] = useState<RecruitmentStatsDto>();
   const { t } = useTranslation();
-  // TODO: add dynamic data and might need backend features (in ISSUE #1110)
+  const navigate = useCustomNavigate();
+  const chartRef = useRef<HTMLDivElement>(null);
+  const chartContainerWidth = useParentElementWidth(chartRef);
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+
+  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(null);
+  const div = useCallback((node) => {
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height);
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
 
   useEffect(() => {
-    if (recruitmentId) {
-      getRecruitmentStats(recruitmentId)
-        .then((response) => {
-          setStats(response.data);
-        })
-        .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    }
-  }, [recruitmentId, t]);
+    console.log('height', height);
+    console.log('width', width);
+  }, [height, width]);
+
+  // TODO: add dynamic data and might need backend features (in ISSUE #1110)
+
+  if (typeof recruitmentId !== 'string') {
+    navigate({ url: ROUTES.frontend.admin_recruitment });
+    toast.error(t(KEY.common_something_went_wrong));
+  }
+
+  const {
+    data: stats,
+    isLoading,
+    error,
+  } = useQuery<RecruitmentStatsDto>({
+    queryKey: ['recruitmentStats', recruitmentId],
+    queryFn: () => getRecruitmentStats(recruitmentId as string),
+    enabled: typeof recruitmentId === 'string',
+  });
+
+  if (isLoading) {
+    return <SamfundetLogoSpinner position="center" />;
+  }
+
+  if (error) {
+    toast.error(t(KEY.common_something_went_wrong));
+  }
 
   return (
     <div className={styles.container}>
@@ -41,29 +73,42 @@ export function RecruitmentStatistics() {
               [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications],
             ]}
           />
-          <div className={styles.subContainer}>
-            <Chart
-              type="bar"
-              chartTitle={t(KEY.recruitment_stats_hours_header)}
-              size="medium"
-              yAxisLegend={t(KEY.recruitment_applications)}
-              xAxisLegend={t(KEY.common_time)}
-              yLabelCount={10}
-              data={stats.time_stats.map((time) => {
-                return { value: time.count, label: time.hour.toString() };
-              })}
-            />
-            <Chart
-              type="line"
-              chartTitle={t(KEY.recruitment_stats_date_header)}
-              size="large"
-              yAxisLegend={t(KEY.recruitment_applications)}
-              xAxisLegend={t(KEY.common_date)}
-              yLabelCount={10}
-              data={stats.date_stats.map((date) => {
-                return { value: date.count, label: date.date };
-              })}
-            />
+          <div className={styles.subContainer} ref={div}>
+            <div
+              style={{
+                transform: `scaleX(${(width ?? 520) / 520})`,
+              }}
+              ref={chartRef}
+            >
+              <Chart
+                type="bar"
+                chartTitle={t(KEY.recruitment_stats_hours_header)}
+                size="medium"
+                yAxisLegend={t(KEY.recruitment_applications)}
+                xAxisLegend={t(KEY.common_time)}
+                yLabelCount={10}
+                data={stats.time_stats.map((time) => {
+                  return { value: time.count, label: time.hour.toString() };
+                })}
+              />
+            </div>
+            <div
+              style={{
+                transform: `scaleX(${(width ?? 670) / 670})`,
+              }}
+            >
+              <Chart
+                type="line"
+                chartTitle={t(KEY.recruitment_stats_date_header)}
+                size="large"
+                yAxisLegend={t(KEY.recruitment_applications)}
+                xAxisLegend={t(KEY.common_date)}
+                yLabelCount={10}
+                data={stats.date_stats.map((date) => {
+                  return { value: date.count, label: date.date };
+                })}
+              />
+            </div>
             <Chart
               type="pie"
               chartTitle={t(KEY.recruitment_stats_campus_header)}
