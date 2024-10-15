@@ -720,7 +720,7 @@ export async function getRecruitmentApplicationsForRecruiter(
       pattern: ROUTES.backend.samfundet__recruitment_applications_recruiter,
       urlParams: { applicationId: applicationID },
     });
-  const response = await axios.get(url, { withCredentials: true });
+  const response = await axios.get<RecruitmentApplicationRecruiterDto>(url, { withCredentials: true });
 
   return response;
 }

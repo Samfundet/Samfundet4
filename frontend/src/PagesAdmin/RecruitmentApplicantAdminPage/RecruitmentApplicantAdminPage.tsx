@@ -7,55 +7,48 @@ import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Componen
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter } from '~/api';
-import type { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentApplicationRecruiterDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
-  const [otherRecruitmentApplication, setOtherRecruitmentApplication] = useState<RecruitmentApplicationDto[]>([]);
-  const [applicant, setApplicant] = useState<RecruitmentUserDto>();
-
-  const [loading, setLoading] = useState(true);
-
   const { applicationID } = useParams();
 
-  useEffect(() => {
-    getRecruitmentApplicationsForRecruiter(applicationID as string)
-      .then((res) => {
-        setRecruitmentApplication(res.data.application);
-        setApplicant(res.data.user);
-        setOtherRecruitmentApplication(res.data.other_applications);
-        setLoading(false);
-      })
-      .catch((data) => {
-        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate(ROUTES.frontend.not_found, { replace: true });
-        }
-        toast.error(t(KEY.common_something_went_wrong));
-      });
-  }, [applicationID, t, navigate]);
 
-  const adminWithdraw = () => {
-    if (recruitmentApplication) {
-      withdrawRecruitmentApplicationRecruiter(recruitmentApplication.id)
-        .then((response) => {
-          setRecruitmentApplication(response.data);
-          toast.success(t(KEY.common_update_successful));
-        })
-        .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['recruitmentapplicationpage', applicationID],
+    queryFn: () => getRecruitmentApplicationsForRecruiter(applicationID as string),
+  });
+
+  if (error) {
+    if (data?.request.status === STATUS.HTTP_404_NOT_FOUND) {
+      navigate(ROUTES.frontend.not_found, { replace: true });
     }
-  };
+    toast.error(t(KEY.common_something_went_wrong));
+  }
 
-  if (loading) {
+  const recruitmentApplication = data?.data.application;
+  const applicant = data?.data.user;
+  const otherRecruitmentApplication = data?.data.other_applications;
+
+  const adminWithdraw = useMutation({
+    mutationFn: (id: string) => {
+      return withdrawRecruitmentApplicationRecruiter(id);
+    },
+    onSuccess: () => {
+      // TODO: make better response
+      toast.success(t(KEY.common_update_successful));
+    }
+  });
+
+  if (isLoading) {
     return (
       <div>
         <SamfundetLogoSpinner />
@@ -90,7 +83,9 @@ export function RecruitmentApplicantAdminPage() {
             {t(KEY.recruitment_withdrawn)}
           </Text>
         ) : (
-          <Button theme="samf" onClick={adminWithdraw}>
+          <Button theme="samf" onClick={ () => {
+            if (recruitmentApplication?.id) {
+              adminWithdraw.mutate(recruitmentApplication.id)}}}>
             {t(KEY.recruitment_withdraw_application)}
           </Button>
         )}
@@ -107,7 +102,8 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_recruiter_status),
             t(KEY.recruitment_interview_time),
           ]}
-          data={otherRecruitmentApplication.map((element) => {
+
+          data={otherRecruitmentApplication ? otherRecruitmentApplication.map((element) => {
             return [
               {
                 sortable: true,
@@ -155,7 +151,8 @@ export function RecruitmentApplicantAdminPage() {
               element.recruiter_priority ? element.recruiter_priority : t(KEY.common_not_set),
               element.interview_time ? element.interview_time : t(KEY.common_not_set),
             ];
-          })}
+          }) :[]}
+          
         />
       </div>
     </Page>
