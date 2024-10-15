@@ -346,6 +346,12 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
