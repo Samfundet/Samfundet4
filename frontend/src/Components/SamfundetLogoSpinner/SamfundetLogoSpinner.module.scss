@@ -2,6 +2,30 @@
 
 @import 'src/mixins';
 
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 /* The animation code */
 @keyframes spinner-appear-after-delay {
   0% {
@@ -61,13 +85,13 @@ $time: 1.75s;
   max-width: 5em;
   max-height: 5em;
   opacity: 0;
-  animation: spinner-appear-after-delay .5s 0.25s forwards;
+  animation: spinner-appear-after-delay 0.5s 0.25s forwards;
 
   @include theme-dark {
     /* stylelint-disable-next-line function-no-unknown */
     color: $black-t90;
   }
-  
+
   // These aren't actually global in the context of the module parent class.
   // This is required to ensure class names are not hashed because the
   // raw class name string is used in the SamfundetLogo SVG definition
@@ -86,9 +110,4 @@ $time: 1.75s;
     transform-origin: center;
     animation: inner-anim $time $delay $ease-func infinite normal;
   }
-
 }
-
-
-
-

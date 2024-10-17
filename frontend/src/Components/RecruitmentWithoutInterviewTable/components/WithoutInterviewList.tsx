@@ -21,24 +21,26 @@ export function WithoutInterviewList({ applications }: WithoutInterviewListProps
   ];
 
   function applicationToRow(application: RecruitmentApplicationDto) {
-    return [
-      {
-        value: dbT(application.recruitment_position, 'name'),
-        content: (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_applicant,
-              urlParams: {
-                applicationID: application.id,
-              },
-            })}
-          >
-            {dbT(application.recruitment_position, 'name')}
-          </Link>
-        ),
-      },
-      application.applicant_priority,
-    ];
+    return {
+      cells: [
+        {
+          value: dbT(application.recruitment_position, 'name'),
+          content: (
+            <Link
+              url={reverse({
+                pattern: ROUTES.frontend.admin_recruitment_applicant,
+                urlParams: {
+                  applicationID: application.id,
+                },
+              })}
+            >
+              {dbT(application.recruitment_position, 'name')}
+            </Link>
+          ),
+        },
+        application.applicant_priority,
+      ],
+    };
   }
   return (
     <div className={styles.container}>
