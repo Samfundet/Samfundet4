@@ -122,6 +122,7 @@ export const KEY = {
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
+  common_roles_view: 'common_roles_view',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
