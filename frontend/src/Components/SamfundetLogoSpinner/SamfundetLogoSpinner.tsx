@@ -4,9 +4,14 @@ import styles from './SamfundetLogoSpinner.module.scss';
 
 type SamfundetLogoSpinnerProps = {
   className?: string;
+  position?: 'center' | 'left' | 'right';
 };
 
-export function SamfundetLogoSpinner({ className }: SamfundetLogoSpinnerProps) {
+export function SamfundetLogoSpinner({ className, position }: SamfundetLogoSpinnerProps) {
   const classnames = classNames(className, styles.spinning_logo);
-  return <SamfundetLogo className={classnames} />;
+  return (
+    <div className={position && styles[position]}>
+      <SamfundetLogo className={classnames} />
+    </div>
+  );
 }

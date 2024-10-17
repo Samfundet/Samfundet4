@@ -291,6 +291,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_administrate_positions]: 'Administrer stillinger',
   [KEY.recruitment_administrate_applications]: 'Administrer søknader',
   [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Søkere interessert i andre stillinger',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Søkere som er reservert må/bør klareres med gjengen som har reservert søkeren.',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
@@ -350,6 +353,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_three_interviews_criteria_header]:
     'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Velg tid og sted for intervju',
+  [KEY.recruitment_choose_interview_time]: 'Velg intervjutid',
+  [KEY.recruitment_choose_interview_location]: 'Velg intervjusted',
   [KEY.recruitment_dashboard_description]:
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
@@ -378,6 +384,7 @@ export const nb = prepareTranslations({
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
   [KEY.recruitment_applet_room_description]: 'Opprett rom for intervju',
   [KEY.recruitment_applet_rejection_mail_description]: 'Send mail til de som ikke fikk tilbud',
@@ -650,7 +657,6 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
-
   [KEY.role_content_type]: 'Hierarchical level',
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
@@ -741,6 +747,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_administrate_positions]: 'Administrate positions',
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
   [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Applicants interested in other positions',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Applicants that are reserved should be cleared with the gang that has reserved the applicant.',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
   [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
@@ -807,12 +816,16 @@ export const en = prepareTranslations({
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
   [KEY.recruitment_applet_room_description]: 'Create room for interviews',
   [KEY.recruitment_applet_rejection_mail_description]: "Send mail to those who didn't get an offer",
   [KEY.recruitment_applet_without_interview_title]: 'Without interview',
   [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
   [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
+  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
+  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',

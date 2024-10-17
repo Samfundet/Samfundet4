@@ -22,6 +22,10 @@ export type RoleLoader = {
   role: RoleDto | undefined;
 };
 
+export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLoader> {
+  return { role: await getRole(Number.parseInt(params.roleId as string)) };
+}
+
 export async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
   return { recruitment: (await getRecruitment(params.recruitmentId as string)).data };
 }
@@ -52,8 +56,4 @@ export async function recruitmentSeparatePositionLoader(
   params: LoaderFunctionArgs,
 ): Promise<RecruitmentLoader & SeparatePositionLoader> {
   return { ...(await recruitmentLoader(params)), ...(await separatePositionLoader(params)) };
-}
-
-export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLoader> {
-  return { role: await getRole(Number.parseInt(params.roleId as string)) };
 }

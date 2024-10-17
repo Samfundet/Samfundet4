@@ -5,6 +5,8 @@ import { LANGUAGES } from './types';
 import translationEN from './zod/en/zod.json';
 import translationNB from './zod/nb/zod.json';
 
+export const LOCALSTORAGE_KEY = 'language';
+
 export const defaultNS = 'common';
 
 export const resources = {
@@ -15,7 +17,7 @@ export const resources = {
 const devSetting = process.env.NODE_ENV === 'development';
 
 use(initReactI18next).init({
-  lng: LANGUAGES.NB,
+  lng: localStorage.getItem(LOCALSTORAGE_KEY) || LANGUAGES.NB,
   fallbackLng: LANGUAGES.NB,
   resources: resources,
   defaultNS: defaultNS,

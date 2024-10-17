@@ -69,54 +69,56 @@ export function RecruitmentGangAdminPage() {
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },
     });
-    return [
-      {
-        content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
-      },
-      {
-        value: recruitmentPosition.is_funksjonaer_position,
-        content: recruitmentPosition.is_funksjonaer_position
-          ? t(KEY.recruitment_funksjonaer)
-          : t(KEY.recruitment_gangmember),
-      },
-      { value: recruitmentPosition.total_applicants, content: recruitmentPosition.total_applicants },
-      {
-        value: recruitmentPosition.processed_applicants,
-        content:
-          recruitmentPosition.total_applicants === recruitmentPosition.processed_applicants
-            ? t(KEY.common_all)
-            : recruitmentPosition.processed_applicants,
-      },
-      { value: recruitmentPosition.accepted_applicants, content: recruitmentPosition.accepted_applicants },
-      {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.recruitment_application,
-                  urlParams: {
-                    positionID: recruitmentPosition.id,
-                  },
-                }),
-              );
-            }}
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
-                  urlParams: {
-                    gangId: gangId,
-                    recruitmentId: recruitmentId,
-                    positionId: recruitmentPosition.id,
-                  },
-                }),
-              );
-            }}
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        {
+          content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
+        },
+        {
+          value: recruitmentPosition.is_funksjonaer_position,
+          content: recruitmentPosition.is_funksjonaer_position
+            ? t(KEY.recruitment_funksjonaer)
+            : t(KEY.recruitment_gangmember),
+        },
+        { value: recruitmentPosition.total_applicants, content: recruitmentPosition.total_applicants },
+        {
+          value: recruitmentPosition.processed_applicants,
+          content:
+            recruitmentPosition.total_applicants === recruitmentPosition.processed_applicants
+              ? t(KEY.common_all)
+              : recruitmentPosition.processed_applicants,
+        },
+        { value: recruitmentPosition.accepted_applicants, content: recruitmentPosition.accepted_applicants },
+        {
+          content: (
+            <CrudButtons
+              onView={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.recruitment_application,
+                    urlParams: {
+                      positionID: recruitmentPosition.id,
+                    },
+                  }),
+                );
+              }}
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
+                    urlParams: {
+                      gangId: gangId,
+                      recruitmentId: recruitmentId,
+                      positionId: recruitmentPosition.id,
+                    },
+                  }),
+                );
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;

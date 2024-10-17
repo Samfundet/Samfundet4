@@ -512,6 +512,18 @@ export async function getRecruitment(id: string): Promise<AxiosResponse<Recruitm
   return response;
 }
 
+// Issue #1520 TODO: Setup backend later. Using test data now.
+export async function getRole(id: string): Promise<RoleDto> {
+  //const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__api_, urlParams: ( pk: id ) }):
+  //const response = await axios.get(url, { withCredentials: true });
+  const role = {
+    id: 1,
+    name: 'Opptaksansvarlig',
+    permissions: ['samfundet.test_permission', 'samfundet.user_create'],
+  };
+  return role;
+}
+
 export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
   const response = await axios.post(url, recruitmentData, { withCredentials: true });
@@ -969,6 +981,16 @@ export async function putRecruitmentApplicationInterview(
   return response;
 }
 
+export async function getInterview(interviewId: number): Promise<AxiosResponse<InterviewDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_detail,
+      urlParams: { pk: interviewId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 // ############################################################
 //                       Interview rooms
 // ############################################################
@@ -1018,12 +1040,12 @@ export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promi
   return response.data;
 }
 
-export async function getRecruitmentStats(id: string): Promise<AxiosResponse<RecruitmentStatsDto>> {
+export async function getRecruitmentStats(id: string): Promise<RecruitmentStatsDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_stats_detail, urlParams: { pk: id } });
   const response = await axios.get(url, { withCredentials: true });
 
-  return response;
+  return response.data;
 }
 
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
