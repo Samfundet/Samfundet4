@@ -59,6 +59,7 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
+  RoleAdminPage,
   RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
@@ -74,17 +75,20 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
+import { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
+  type RoleLoader,
   type SeparatePositionLoader,
   gangLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  roleLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
@@ -153,10 +157,7 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_gangs_edit}
             element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_GANG]} element={<GangsFormAdminPage />} />}
-            loader={({ params }) => {
-              // TODO: Fetch gang to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-              return { id: params.id };
-            }}
+            loader={gangLoader}
             handle={{
               crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
             }}
@@ -180,6 +181,14 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_roles}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_view}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
+            loader={roleLoader}
+            handle={{
+              crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => <Link url={pathname}>{role?.name}</Link>,
+            }}
           />
         </Route>
         {/* Events */}

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { CrudButtons } from '~/Components';
+import { CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import type { RoleDto } from '~/dto';
@@ -41,7 +41,7 @@ export function RolesAdminPage() {
       return {
         cells: [
           {
-            content: r.name,
+            content: <Link url={r.id.toString()}>{r.name}</Link>,
             value: r.name,
           },
           {

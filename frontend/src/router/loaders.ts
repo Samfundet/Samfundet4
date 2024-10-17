@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from 'react-router-dom';
-import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto } from '~/dto';
+import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition, getRole } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto, RoleDto } from '~/dto';
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;
@@ -17,6 +17,14 @@ export type PositionLoader = {
 export type SeparatePositionLoader = {
   separatePosition: RecruitmentSeparatePositionDto | undefined;
 };
+
+export type RoleLoader = {
+  role: RoleDto | undefined;
+};
+
+export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLoader> {
+  return { role: await getRole(params.roleId as string) };
+}
 
 export async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
   return { recruitment: (await getRecruitment(params.recruitmentId as string)).data };

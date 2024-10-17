@@ -43,10 +43,11 @@ export const ROUTES_FRONTEND = {
   admin_users: '/control-panel/users/',
   // Roles
   admin_roles: '/control-panel/roles/',
+  admin_roles_view: '/control-panel/roles/:roleId/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
-  admin_gangs_edit: '/control-panel/gangs/edit/:id/',
+  admin_gangs_edit: '/control-panel/gangs/edit/:gangId/',
   // Events:
   admin_events: '/control-panel/events/',
   admin_events_edit: '/control-panel/events/edit/:id/',
