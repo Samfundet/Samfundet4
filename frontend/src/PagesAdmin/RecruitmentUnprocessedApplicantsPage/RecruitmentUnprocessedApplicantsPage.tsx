@@ -73,28 +73,30 @@ export function RecruitmentUnprocessedApplicantsPage() {
       },
     });
 
-    return [
-      {
-        content: (
-          <Link url={applicantUrl}>
-            {`${unprocessedApplicant.user.first_name} ${unprocessedApplicant.user.last_name}`}
-          </Link>
-        ),
-      },
-      {
-        content: RecruitmentPriorityChoicesMapping[unprocessedApplicant.recruiter_priority],
-        value: unprocessedApplicant.recruiter_priority,
-      },
-      { content: unprocessedApplicant.user.email, value: unprocessedApplicant.user.email },
-      {
-        content: <Link url={positionUrl}>{dbT(unprocessedApplicant.recruitment_position, 'name')}</Link>,
-        value: dbT(unprocessedApplicant.recruitment_position, 'name'),
-      },
-      {
-        content: RecruitmentStatusChoicesMapping[unprocessedApplicant.recruiter_status],
-        value: unprocessedApplicant.recruiter_status,
-      },
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Link url={applicantUrl}>
+              {`${unprocessedApplicant.user.first_name} ${unprocessedApplicant.user.last_name}`}
+            </Link>
+          ),
+        },
+        {
+          content: RecruitmentPriorityChoicesMapping[unprocessedApplicant.recruiter_priority],
+          value: unprocessedApplicant.recruiter_priority,
+        },
+        { content: unprocessedApplicant.user.email, value: unprocessedApplicant.user.email },
+        {
+          content: <Link url={positionUrl}>{dbT(unprocessedApplicant.recruitment_position, 'name')}</Link>,
+          value: dbT(unprocessedApplicant.recruitment_position, 'name'),
+        },
+        {
+          content: RecruitmentStatusChoicesMapping[unprocessedApplicant.recruiter_status],
+          value: unprocessedApplicant.recruiter_status,
+        },
+      ],
+    };
   });
 
   // Count the total number of rows
