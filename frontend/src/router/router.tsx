@@ -156,10 +156,7 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_gangs_edit}
             element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_GANG]} element={<GangsFormAdminPage />} />}
-            loader={({ params }) => {
-              // TODO: Fetch gang to get name, also pass it to Page (may need to use useRouteLoaderData hook?)
-              return { id: params.id };
-            }}
+            loader={gangLoader}
             handle={{
               crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
             }}

@@ -113,6 +113,7 @@ export const KEY = {
   common_contact: 'common_contact',
   common_unknown: 'common_unknown',
   common_sponsor: 'common_sponsor',
+  common_gang_type: 'common_gang_type',
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
