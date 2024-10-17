@@ -357,22 +357,6 @@ export const router = createBrowserRouter(
             element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
           />
           <Route
-            path={ROUTES.frontend.admin_recruitment_open_to_other_positions}
-            element={
-              <PermissionRoute
-                required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
-                element={<RecruitmentOpenToOtherPositionsPage />}
-              />
-            }
-            handle={{
-              crumb: () => (
-                <Link url={ROUTES.frontend.admin_recruitment_open_to_other_positions}>
-                  {t(KEY.recruitment_applicants_open_to_other_positions)}
-                </Link>
-              ),
-            }}
-          />
-          <Route
             path={ROUTES.frontend.admin_recruitment_applicant}
             element={
               <PermissionRoute
@@ -495,7 +479,22 @@ export const router = createBrowserRouter(
                 ),
               }}
             />
-
+            <Route
+              path={ROUTES.frontend.admin_recruitment_open_to_other_positions}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                  element={<RecruitmentOpenToOtherPositionsPage />}
+                />
+              }
+              handle={{
+                crumb: () => (
+                  <Link url={ROUTES.frontend.admin_recruitment_open_to_other_positions}>
+                    {t(KEY.recruitment_applicants_open_to_other_positions)}
+                  </Link>
+                ),
+              }}
+            />
             <Route
               element={<Outlet />}
               loader={gangLoader}

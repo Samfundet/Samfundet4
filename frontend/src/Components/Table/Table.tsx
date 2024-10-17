@@ -227,7 +227,7 @@ export function Table({
             <>
               {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
               <tr
-                className={bodyRowClassName}
+                className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
                 // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 key={index1}
                 onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
