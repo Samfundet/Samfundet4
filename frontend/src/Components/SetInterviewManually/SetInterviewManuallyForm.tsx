@@ -14,7 +14,6 @@ import type { CalendarMarker } from '~/types';
 import { formatDateYMD } from '~/utils';
 import { Button } from '../Button';
 import styles from './SetInterviewManually.module.scss';
-import { set } from 'date-fns';
 
 type SetInterviewManuallyFormProps = {
   recruitmentId: number;
