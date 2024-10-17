@@ -1,0 +1,83 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  padding: 0.5em;
+}
+
+.date_container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+
+  @include for-mobile-down {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}
+
+.occupied_modal {
+  min-width: auto;
+}
+
+.partly_busy {
+  background: $sulten-orange;
+}
+
+.fully_busy {
+  background: $red;
+}
+
+.add {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 1rem 0 2rem;
+}
+
+.button_row {
+  display: flex;
+  flex-direction: row;
+  gap: 12rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.close_btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: none;
+  padding: 5px;
+  border: 0;
+  cursor: pointer;
+  color: $grey-1;
+
+  &:hover {
+    color: $black;
+  }
+}
+
+.input_field {
+  font-size: 0.9em;
+  border-radius: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin-bottom: 1em;
+}
+
+.choose_location_text {
+  margin: 1rem 0 1rem;
+}

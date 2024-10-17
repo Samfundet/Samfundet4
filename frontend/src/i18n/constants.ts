@@ -375,6 +375,9 @@ export const KEY = {
   recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
   recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
   recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
+  recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
+  recruitment_choose_interview_time: 'recruitment_choose_interview_time',
+  recruitment_choose_interview_location: 'recruitment_choose_interview_location',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
