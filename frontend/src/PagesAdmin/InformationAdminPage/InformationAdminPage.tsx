@@ -43,34 +43,36 @@ export function InformationAdminPage() {
       urlParams: { slugField: element.slug_field },
     });
 
-    return [
-      { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
-      dbT(element, 'title'),
-      'To be added',
-      'To be added',
-      {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate({ url: pageUrl });
-            }}
-            onEdit={() => {
-              navigate({
-                url: reverse({
-                  pattern: ROUTES.frontend.admin_information_edit,
-                  urlParams: { slugField: element.slug_field },
-                }),
-              });
-            }}
-            onDelete={() => {
-              if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
-                deletePageMutation.mutate(element.slug_field);
-              }
-            }}
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
+        dbT(element, 'title'),
+        'To be added',
+        'To be added',
+        {
+          content: (
+            <CrudButtons
+              onView={() => {
+                navigate({ url: pageUrl });
+              }}
+              onEdit={() => {
+                navigate({
+                  url: reverse({
+                    pattern: ROUTES.frontend.admin_information_edit,
+                    urlParams: { slugField: element.slug_field },
+                  }),
+                });
+              }}
+              onDelete={() => {
+                if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
+                  deletePageMutation.mutate(element.slug_field);
+                }
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const title = t(KEY.admin_information_manage_title);
