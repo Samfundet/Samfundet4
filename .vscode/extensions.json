@@ -1,13 +1,12 @@
 {
   "recommendations": [
-    "eeyore.yapf",
     "eamodio.gitlens",
     "mikestead.dotenv",
     "ms-python.python",
     "charliermarsh.ruff",
+    "biomejs.biome",
     "hediet.vscode-drawio",
     "mrorz.language-gettext",
-    "esbenp.prettier-vscode",
     "alexcvzz.vscode-sqlite",
     "batisteo.vscode-django",
     "ms-python.vscode-pylance",
