@@ -66,40 +66,42 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
             ),
           }
         : {};
-    return [
-      {
-        content: (
-          <InputField<string>
-            inputClassName={styles.custom_ticket_input}
-            labelClassName={styles.custom_ticket_input_label}
-            value={custom_ticket.name_nb}
-            onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
-          />
-        ),
-      },
-      {
-        content: (
-          <InputField<string>
-            inputClassName={styles.custom_ticket_input}
-            labelClassName={styles.custom_ticket_input_label}
-            value={custom_ticket.name_en}
-            onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
-          />
-        ),
-      },
-      {
-        content: (
-          <InputField<number>
-            inputClassName={styles.custom_ticket_input}
-            labelClassName={styles.custom_ticket_input_label}
-            value={custom_ticket.price?.toString()}
-            type="number"
-            onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
-          />
-        ),
-      },
-      deleteButton,
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <InputField<string>
+              inputClassName={styles.custom_ticket_input}
+              labelClassName={styles.custom_ticket_input_label}
+              value={custom_ticket.name_nb}
+              onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
+            />
+          ),
+        },
+        {
+          content: (
+            <InputField<string>
+              inputClassName={styles.custom_ticket_input}
+              labelClassName={styles.custom_ticket_input_label}
+              value={custom_ticket.name_en}
+              onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
+            />
+          ),
+        },
+        {
+          content: (
+            <InputField<number>
+              inputClassName={styles.custom_ticket_input}
+              labelClassName={styles.custom_ticket_input_label}
+              value={custom_ticket.price?.toString()}
+              type="number"
+              onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
+            />
+          ),
+        },
+        deleteButton,
+      ],
+    };
   }
 
   const tableColumns = [
