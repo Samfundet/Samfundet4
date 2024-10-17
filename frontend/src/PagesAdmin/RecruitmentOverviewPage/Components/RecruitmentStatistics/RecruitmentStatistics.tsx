@@ -64,8 +64,51 @@ export function RecruitmentStatistics() {
         <>
           <Table
             data={[
-              [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants],
-              [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications],
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants] },
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications] },
+            ]}
+          />
+          <div className={styles.subContainer}>
+            <Chart
+              type="bar"
+              chartTitle={t(KEY.recruitment_stats_hours_header)}
+              size="medium"
+              yAxisLegend={t(KEY.recruitment_applications)}
+              xAxisLegend={t(KEY.common_time)}
+              yLabelCount={10}
+              data={stats.time_stats.map((time) => {
+                return { value: time.count, label: time.hour.toString() };
+              })}
+            />
+            <Chart
+              type="line"
+              chartTitle={t(KEY.recruitment_stats_date_header)}
+              size="large"
+              yAxisLegend={t(KEY.recruitment_applications)}
+              xAxisLegend={t(KEY.common_date)}
+              yLabelCount={10}
+              data={stats.date_stats.map((date) => {
+                return { value: date.count, label: date.date };
+              })}
+            />
+            <Chart
+              type="pie"
+              chartTitle={t(KEY.recruitment_stats_campus_header)}
+              legend={t(KEY.common_campus)}
+              size="small"
+              data={stats.campus_stats.map((campus) => {
+                return { value: campus.count, label: campus.campus };
+              })}
+            />
+          </div>
+        </>
+      )}
+      {stats && (
+        <>
+          <Table
+            data={[
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants] },
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications] },
             ]}
           />
           <div className={styles.subContainer} ref={div}>
