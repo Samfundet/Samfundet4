@@ -73,7 +73,6 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
         className={styles.element}
         defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.event_type)}`, value: undefined }}
       />
-
     </div>
   );
 }
