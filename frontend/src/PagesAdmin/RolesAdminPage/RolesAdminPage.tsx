@@ -38,23 +38,25 @@ export function RolesAdminPage() {
   const data = useMemo(() => {
     if (!roles) return [];
     return roles.map((r) => {
-      return [
-        {
-          content: <Link url={r.id.toString()}>{r.name}</Link>,
-          value: r.name,
-        },
-        {
-          content: r.permissions.length,
-          value: r.permissions.length,
-        },
-        {
-          content: 0,
-          value: 0,
-        },
-        {
-          content: <CrudButtons onEdit={() => navigate('#')} />,
-        },
-      ];
+      return {
+        cells: [
+          {
+            content: <Link url={r.id.toString()}>{r.name}</Link>,
+            value: r.name,
+          },
+          {
+            content: r.permissions.length,
+            value: r.permissions.length,
+          },
+          {
+            content: 0,
+            value: 0,
+          },
+          {
+            content: <CrudButtons onEdit={() => navigate('#')} />,
+          },
+        ],
+      };
     });
   }, [roles]);
 
