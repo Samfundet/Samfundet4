@@ -67,7 +67,7 @@ function DropdownInner<T>(
         disabled={disabled}
         value={value !== undefined ? options.findIndex((e) => e.value === value) : -1}
       >
-        {defaultValue ? <option value={-1}>{defaultValue.label}</option> : <option value={-1} />}
+        {defaultValue && <option value={-1}>{defaultValue.label}</option>}
         {options.map((opt, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <option value={index} key={index}>
