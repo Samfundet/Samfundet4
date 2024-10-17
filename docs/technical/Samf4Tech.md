@@ -1,6 +1,6 @@
-[👈 back](/README.md)
+[**&larr; Back: Introduction to Samfundet4**](../introduction.md)
 
-# Technologies used on Samfundet4
+# Technologies used in Samfundet4
 
 This text aims to both sum up the main technologies used to develop on Samfundet4 and to get a person with minimal webdev experience up to speed on the most important concepts. There is a lot this text does not cover, which might be found in other docs linked to in the [README](/README.md).
 
