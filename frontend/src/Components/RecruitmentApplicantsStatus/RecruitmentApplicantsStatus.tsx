@@ -96,111 +96,113 @@ export function RecruitmentApplicantsStatus({
 
   const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
-    return [
-      {
-        value: application.user.first_name,
-        style: applicationStatusStyle,
-        content: (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_applicant,
-              urlParams: {
-                applicationID: application.id,
-              },
-            })}
-            className={styles.text}
-          >
-            {`${application.user.first_name} ${application.user.last_name}`}
-          </Link>
-        ),
-      },
-      {
-        value: application.applicant_priority,
-        style: applicationStatusStyle,
-        content: (
-          <div className={styles.text}>
-            {application.applicant_priority} / {application?.application_count}
-          </div>
-        ),
-      },
-      {
-        value: application.interview?.interview_time,
-        style: applicationStatusStyle,
-        content: (
-          <InputField
-            inputClassName={styles.input}
-            value={
-              application.interview?.interview_time ? utcTimestampToLocal(application.interview.interview_time) : ''
-            }
-            onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
-            onChange={(value: string) => updateApplications(application.id, editChoices.update_time, value)}
-            type="datetime-local"
-          />
-        ),
-      },
-      {
-        value: application.interview?.interview_location,
-        style: applicationStatusStyle,
-        content: (
-          <InputField
-            inputClassName={styles.input}
-            value={application.interview?.interview_location ?? ''}
-            onBlur={() => putRecruitmentApplicationForGang(application.id, application)}
-            onChange={(value: string) => updateApplications(application.id, editChoices.update_location, value)}
-          />
-        ),
-      },
-      {
-        value: application.recruiter_priority,
-        style: applicationStatusStyle,
-        content: (
-          <Dropdown
-            initialValue={application.recruiter_priority}
-            disableIcon={true}
-            classNameSelect={styles.dropdown}
-            options={priorityOptions}
-            onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
-          />
-        ),
-      },
-      {
-        value: application.recruiter_status,
-        style: applicationStatusStyle,
-        content: (
-          <Dropdown
-            initialValue={application.recruiter_status}
-            disableIcon={true}
-            classNameSelect={styles.dropdown}
-            options={statusOptions}
-            onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
-          />
-        ),
-      },
-      {
-        style: applicationStatusStyle,
-        content: (
-          <CrudButtons
-            onView={
-              application.interview?.interview_time != null
-                ? () => {
-                    navigate({
-                      url: reverse({
-                        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-                        urlParams: {
-                          recruitmentId: recruitmentId,
-                          gangId: gangId,
-                          positionId: positionId,
-                          interviewId: application.interview?.id,
-                        },
-                      }),
-                    });
-                  }
-                : undefined
-            }
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        {
+          value: application.user.first_name,
+          style: applicationStatusStyle,
+          content: (
+            <Link
+              url={reverse({
+                pattern: ROUTES.frontend.admin_recruitment_applicant,
+                urlParams: {
+                  applicationID: application.id,
+                },
+              })}
+              className={styles.text}
+            >
+              {`${application.user.first_name} ${application.user.last_name}`}
+            </Link>
+          ),
+        },
+        {
+          value: application.applicant_priority,
+          style: applicationStatusStyle,
+          content: (
+            <div className={styles.text}>
+              {application.applicant_priority} / {application?.application_count}
+            </div>
+          ),
+        },
+        {
+          value: application.interview?.interview_time,
+          style: applicationStatusStyle,
+          content: (
+            <InputField
+              inputClassName={styles.input}
+              value={
+                application.interview?.interview_time ? utcTimestampToLocal(application.interview.interview_time) : ''
+              }
+              onBlur={() => putRecruitmentApplicationForGang(application.id.toString(), application)}
+              onChange={(value: string) => updateApplications(application.id, editChoices.update_time, value)}
+              type="datetime-local"
+            />
+          ),
+        },
+        {
+          value: application.interview?.interview_location,
+          style: applicationStatusStyle,
+          content: (
+            <InputField
+              inputClassName={styles.input}
+              value={application.interview?.interview_location ?? ''}
+              onBlur={() => putRecruitmentApplicationForGang(application.id, application)}
+              onChange={(value: string) => updateApplications(application.id, editChoices.update_location, value)}
+            />
+          ),
+        },
+        {
+          value: application.recruiter_priority,
+          style: applicationStatusStyle,
+          content: (
+            <Dropdown
+              initialValue={application.recruiter_priority}
+              disableIcon={true}
+              classNameSelect={styles.dropdown}
+              options={priorityOptions}
+              onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
+            />
+          ),
+        },
+        {
+          value: application.recruiter_status,
+          style: applicationStatusStyle,
+          content: (
+            <Dropdown
+              initialValue={application.recruiter_status}
+              disableIcon={true}
+              classNameSelect={styles.dropdown}
+              options={statusOptions}
+              onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
+            />
+          ),
+        },
+        {
+          style: applicationStatusStyle,
+          content: (
+            <CrudButtons
+              onView={
+                application.interview?.interview_time != null
+                  ? () => {
+                      navigate({
+                        url: reverse({
+                          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
+                          urlParams: {
+                            recruitmentId: recruitmentId,
+                            gangId: gangId,
+                            positionId: positionId,
+                            interviewId: application.interview?.id,
+                          },
+                        }),
+                      });
+                    }
+                  : undefined
+              }
+            />
+          ),
+        },
+      ],
+    };
   });
 
   return (

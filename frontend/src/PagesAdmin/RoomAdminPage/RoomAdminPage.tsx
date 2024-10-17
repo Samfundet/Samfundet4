@@ -39,35 +39,37 @@ export function RoomAdminPage() {
     { content: 'Actions', sortable: false },
   ];
 
-  const tableData = interviewRooms.map((room) => [
-    room.name,
-    room.location,
-    new Date(room.start_time),
-    new Date(room.end_time),
-    room.recruitment,
-    room.gang !== undefined ? room.gang : 'N/A',
-    {
-      content: (
-        <CrudButtons
-          key={`edit-room-${room.id}`}
-          onEdit={() =>
-            navigate({
-              url: reverse({
-                pattern: ROUTES.frontend.admin_recruitment_room_edit,
-                urlParams: { recruitmentId: data?.recruitment?.id, roomId: room.id.toString() },
-              }),
-            })
-          }
-          onDelete={() => {
-            deleteInterviewRoom(room.id.toString()).then(() => {
-              toast.success('Interview room deleted');
-              setInterviewRooms(interviewRooms.filter((r) => r.id !== room.id));
-            });
-          }}
-        />
-      ),
-    },
-  ]);
+  const tableData = interviewRooms.map((room) => ({
+    cells: [
+      room.name,
+      room.location,
+      new Date(room.start_time),
+      new Date(room.end_time),
+      room.recruitment,
+      room.gang !== undefined ? room.gang : 'N/A',
+      {
+        content: (
+          <CrudButtons
+            key={`edit-room-${room.id}`}
+            onEdit={() =>
+              navigate({
+                url: reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_room_edit,
+                  urlParams: { recruitmentId: data?.recruitment?.id, roomId: room.id.toString() },
+                }),
+              })
+            }
+            onDelete={() => {
+              deleteInterviewRoom(room.id.toString()).then(() => {
+                toast.success('Interview room deleted');
+                setInterviewRooms(interviewRooms.filter((r) => r.id !== room.id));
+              });
+            }}
+          />
+        ),
+      },
+    ],
+  }));
 
   return (
     <>

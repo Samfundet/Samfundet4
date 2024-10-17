@@ -50,35 +50,37 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
       pattern: ROUTES.frontend.recruitment_application,
       urlParams: { positionID: item.id, gangID: item.id },
     });
-    return [
-      {
-        content: (
-          <Button
-            theme={organizationTheme?.buttonTheme}
-            className={styles.positionButton}
-            disabled={loading}
-            onClick={() => {
-              navigate(positionPageURL);
-            }}
-          >
-            {dbT(item, 'name') ?? 'N/A'}
-          </Button>
-        ),
-      },
-      {
-        content: (
-          <Text as="p" size="m">
-            {' '}
-            {dbT(item, 'short_description') ?? 'N/A'}
-          </Text>
-        ),
-      },
-      {
-        content: (
-          <Text>{item.is_funksjonaer_position ? t(KEY.recruitment_funksjonaer) : t(KEY.recruitment_gangmember)}</Text>
-        ),
-      },
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Button
+              theme={organizationTheme?.buttonTheme}
+              className={styles.positionButton}
+              disabled={loading}
+              onClick={() => {
+                navigate(positionPageURL);
+              }}
+            >
+              {dbT(item, 'name') ?? 'N/A'}
+            </Button>
+          ),
+        },
+        {
+          content: (
+            <Text as="p" size="m">
+              {' '}
+              {dbT(item, 'short_description') ?? 'N/A'}
+            </Text>
+          ),
+        },
+        {
+          content: (
+            <Text>{item.is_funksjonaer_position ? t(KEY.recruitment_funksjonaer) : t(KEY.recruitment_gangmember)}</Text>
+          ),
+        },
+      ],
+    };
   });
   return (
     <div className={styles.recruitmentTableContainer}>
