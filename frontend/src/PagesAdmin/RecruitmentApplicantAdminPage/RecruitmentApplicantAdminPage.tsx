@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { BackButton, Button, FormControl, FormField, FormItem, FormLabel, FormMessage, Link, Page, SamfundetLogoSpinner, Textarea, TextAreaField } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter } from '~/api';
-import type { RecruitmentApplicationDto, RecruitmentApplicationRecruiterDto } from '~/dto';
+import type { InterviewDto, RecruitmentApplicationDto, } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,13 +15,14 @@ import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { RecruitmentInterviewNotesForm } from './RecruitmentInterviewNotesForm';
+
+
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { applicationID } = useParams();
-
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['recruitmentapplicationpage', applicationID],
     queryFn: () => getRecruitmentApplicationsForRecruiter(applicationID as string),
@@ -37,8 +38,9 @@ export function RecruitmentApplicantAdminPage() {
   const recruitmentApplication = data?.data.application;
   const applicant = data?.data.user;
   const otherRecruitmentApplication = data?.data.other_applications;
+  const interviewNotes = recruitmentApplication?.interview?.notes;
 
-  const adminWithdraw = useMutation({
+    const adminWithdraw = useMutation({
     mutationFn: (id: string) => {
       return withdrawRecruitmentApplicationRecruiter(id);
     },
@@ -48,6 +50,14 @@ export function RecruitmentApplicantAdminPage() {
     }
   });
 
+
+  function handleUpdateNotes(value: string) {
+    const updatedNotes = value;
+    if (recruitmentApplication?.id) {
+      // TODO update notes
+    }
+  }
+
   if (isLoading) {
     return (
       <div>
@@ -55,6 +65,10 @@ export function RecruitmentApplicantAdminPage() {
       </div>
     );
   }
+
+  const initialData: Partial<InterviewDto> = {
+    notes: interviewNotes || '',
+  }; 
 
   return (
     <Page>
@@ -77,19 +91,13 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Text>{recruitmentApplication?.application_text}</Text>
       </div>
-      <div className={styles.withdrawContainer}>
-        {recruitmentApplication?.withdrawn ? (
-          <Text as="i" size="l" className={styles.withdrawnText}>
-            {t(KEY.recruitment_withdrawn)}
-          </Text>
-        ) : (
-          <Button theme="samf" onClick={ () => {
-            if (recruitmentApplication?.id) {
-              adminWithdraw.mutate(recruitmentApplication.id)}}}>
-            {t(KEY.recruitment_withdraw_application)}
-          </Button>
-        )}
+      <div className={classNames(styles.infoContainer)}>
+      <RecruitmentInterviewNotesForm
+        initialData={initialData}
+      />
+      
       </div>
+      
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_all_applications)}
@@ -154,6 +162,19 @@ export function RecruitmentApplicantAdminPage() {
           }) :[]}
           
         />
+      </div>
+      <div className={styles.withdrawContainer}>
+        {recruitmentApplication?.withdrawn ? (
+          <Text as="i" size="l" className={styles.withdrawnText}>
+            {t(KEY.recruitment_withdrawn)}
+          </Text>
+        ) : (
+          <Button theme="samf" onClick={ () => {
+            if (recruitmentApplication?.id) {
+              adminWithdraw.mutate(recruitmentApplication.id)}}}>
+            {t(KEY.recruitment_withdraw_application)}
+          </Button>
+        )}
       </div>
     </Page>
   );
