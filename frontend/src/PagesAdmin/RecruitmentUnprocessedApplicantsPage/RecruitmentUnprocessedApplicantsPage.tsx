@@ -15,12 +15,12 @@ import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 const data = [
-  ['John Doe', 'High', 'john.doe@example.com', 'Frontend Developer', 'vil ha'],
-  ['Jane Smith', 'Medium', 'jane.smith@example.com', 'Backend Developer', 'reservert'],
-  ['Michael Johnson', 'Low', 'michael.johnson@example.com', 'Data Scientist', 'automatisk avslag'],
-  ['Emily Davis', 'High', 'emily.davis@example.com', 'Full Stack Developer', 'ikke satt'],
-  ['John Doe', 'Medium', 'john.doe@example.com', 'Project Manager', 'vil ha'],
-  ['Chris Brown', 'Low', 'chris.brown@example.com', 'QA Engineer', 'reservert'],
+  { cells: ['John Doe', 'High', 'john.doe@example.com', 'Frontend Developer', 'vil ha'] },
+  { cells: ['Jane Smith', 'Medium', 'jane.smith@example.com', 'Backend Developer', 'reservert'] },
+  { cells: ['Michael Johnson', 'Low', 'michael.johnson@example.com', 'Data Scientist', 'automatisk avslag'] },
+  { cells: ['Emily Davis', 'High', 'emily.davis@example.com', 'Full Stack Developer', 'ikke satt'] },
+  { cells: ['John Doe', 'Medium', 'john.doe@example.com', 'Project Manager', 'vil ha'] },
+  { cells: ['Chris Brown', 'Low', 'chris.brown@example.com', 'QA Engineer', 'reservert'] },
 ];
 
 export function RecruitmentUnprocessedApplicantsPage() {
@@ -73,28 +73,30 @@ export function RecruitmentUnprocessedApplicantsPage() {
       },
     });
 
-    return [
-      {
-        content: (
-          <Link url={applicantUrl}>
-            {`${unprocessedApplicant.user.first_name} ${unprocessedApplicant.user.last_name}`}
-          </Link>
-        ),
-      },
-      {
-        content: RecruitmentPriorityChoicesMapping[unprocessedApplicant.recruiter_priority],
-        value: unprocessedApplicant.recruiter_priority,
-      },
-      { content: unprocessedApplicant.user.email, value: unprocessedApplicant.user.email },
-      {
-        content: <Link url={positionUrl}>{dbT(unprocessedApplicant.recruitment_position, 'name')}</Link>,
-        value: dbT(unprocessedApplicant.recruitment_position, 'name'),
-      },
-      {
-        content: RecruitmentStatusChoicesMapping[unprocessedApplicant.recruiter_status],
-        value: unprocessedApplicant.recruiter_status,
-      },
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Link url={applicantUrl}>
+              {`${unprocessedApplicant.user.first_name} ${unprocessedApplicant.user.last_name}`}
+            </Link>
+          ),
+        },
+        {
+          content: RecruitmentPriorityChoicesMapping[unprocessedApplicant.recruiter_priority],
+          value: unprocessedApplicant.recruiter_priority,
+        },
+        { content: unprocessedApplicant.user.email, value: unprocessedApplicant.user.email },
+        {
+          content: <Link url={positionUrl}>{dbT(unprocessedApplicant.recruitment_position, 'name')}</Link>,
+          value: dbT(unprocessedApplicant.recruitment_position, 'name'),
+        },
+        {
+          content: RecruitmentStatusChoicesMapping[unprocessedApplicant.recruiter_status],
+          value: unprocessedApplicant.recruiter_status,
+        },
+      ],
+    };
   });
 
   // Count the total number of rows
