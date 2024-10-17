@@ -76,7 +76,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     <div>
       <InputField icon="mdi:search" onChange={setSearchQuery} placeholder={t(KEY.common_search)} />
       <div className={styles.table_container}>
-        <Table columns={tableColumns} data={filterUsers().map((user) => userToTableRow(user))} />
+        <Table columns={tableColumns} data={filterUsers().map((user) => ({ cells: userToTableRow(user) }))} />
       </div>
     </div>
   );
