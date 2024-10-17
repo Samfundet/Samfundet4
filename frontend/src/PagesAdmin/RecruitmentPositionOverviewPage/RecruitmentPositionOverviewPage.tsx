@@ -23,6 +23,7 @@ export function RecruitmentPositionOverviewPage() {
   const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [hardtogetApplicants, setHardtogetApplicants] = useState<RecruitmentApplicationDto[]>([]);
 
   const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
 
@@ -50,11 +51,19 @@ export function RecruitmentPositionOverviewPage() {
                 recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
+          setHardtogetApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 2 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
           setRejectedApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+                recruitmentApplicant.recruiter_status === 3 &&
                 recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
@@ -95,11 +104,19 @@ export function RecruitmentPositionOverviewPage() {
                 recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
+          setHardtogetApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 2 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
           setRejectedApplicants(
             data.data.filter(
               (recruitmentApplicant) =>
                 !recruitmentApplicant.withdrawn &&
-                (recruitmentApplicant.recruiter_status === 2 || recruitmentApplicant.recruiter_status === 3) &&
+                recruitmentApplicant.recruiter_status === 3 &&
                 recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
             ),
           );
@@ -182,6 +199,23 @@ export function RecruitmentPositionOverviewPage() {
         ) : (
           <Text as="i" className={styles.subText}>
             {t(KEY.recruitment_rejected_applications_empty_text)}
+          </Text>
+        )}
+      </div>
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_hardtoget_applications)} ({hardtogetApplicants.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_hardtoget_applications_help_text)}</Text>
+        {hardtogetApplicants.length > 0 ? (
+          <ProcessedApplicants
+            data={hardtogetApplicants}
+            type="hardtoget"
+            revertStateFunction={updateApplicationState}
+          />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_hardtoget_applications_empty_text)}
           </Text>
         )}
       </div>
