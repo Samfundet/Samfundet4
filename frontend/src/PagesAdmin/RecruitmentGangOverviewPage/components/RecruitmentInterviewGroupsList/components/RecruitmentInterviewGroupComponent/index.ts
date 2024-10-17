@@ -1,0 +1,1 @@
+export { RecruitmentInterviewGroupComponent } from './RecruitmentInterviewGroupComponent';

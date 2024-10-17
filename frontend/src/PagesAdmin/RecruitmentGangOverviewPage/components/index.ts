@@ -1,2 +1,3 @@
-export { AppletCard } from './AppletCard';
-export { AppletContainer } from './AppletContainer';
+export { AppletCard } from './AppletCard/AppletCard';
+export { AppletContainer } from './AppletContainer/AppletContainer';
+export { RecruitmentInterviewGroupsList } from './RecruitmentInterviewGroupsList/RecruitmentInterviewGroupsList';

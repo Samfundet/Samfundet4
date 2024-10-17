@@ -1,0 +1,18 @@
+@import "src/constants";
+
+@import "src/mixins";
+
+.container{
+  margin-top: 2rem;
+  @include flex-column-center;
+  gap:2rem;
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+.subContainer{
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2rem;
+}
+

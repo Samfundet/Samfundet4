@@ -30,6 +30,7 @@ import type {
   RecruitmentGangDto,
   RecruitmentPositionDto,
   RecruitmentSeparatePositionDto,
+  RecruitmentSharedInterviewGroupDto,
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
@@ -788,6 +789,20 @@ export async function getRecruitmentApplicationsForGang(
       queryParams: {
         gang: gangId,
         recruitment: recruitmentId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getRecruitmentSharedInterviewGroups(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_shared_interviews,
+      urlParams: {
+        recruitmentId: recruitmentId,
       },
     });
   return await axios.get(url, { withCredentials: true });
