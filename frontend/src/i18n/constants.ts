@@ -312,6 +312,7 @@ export const KEY = {
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
   recruitment_applicants_open_to_other_positions: 'recruitment_applicants_open_to_other_positions',
+  recruitment_applicants_open_to_other_positions_help_text: 'recruitment_applicants_open_to_other_positions_help_text',
   recruitment_show_all_applicants: 'recruitment_show_all_applicants',
   recruitment_processed: 'recruitment_processed',
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',

@@ -1,7 +1,7 @@
 // @ts-nocheck
 // TODO: Remove previous line after making page dynamic and remove all mocks
-import { t } from 'i18next';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { RecruitmentUserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -9,9 +9,8 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { OpenToOtherPositionsTable } from './OpenToOtherPositionsTable/OpenToOtherPositionsTable';
 
 export function RecruitmentOpenToOtherPositionsPage() {
-  useTitle('Tester');
-  console.log('hei');
-
+  const { t } = useTranslation();
+  useTitle(t(KEY.recruitment_applet_open_to_other_positions));
   const [applicants, setApplicants] = useState<RecruitmentUserDto[]>([]);
   useEffect(() => {
     //TODO: get applicants in issue #1105
@@ -132,7 +131,7 @@ export function RecruitmentOpenToOtherPositionsPage() {
     setApplicants(testData);
   }, []);
 
-  const header = <p>Søkere som er reservert må/bør klareres med gjengen som har reservert søkeren.</p>;
+  const header = <p>{t(KEY.recruitment_applicants_open_to_other_positions_help_text)}</p>;
   return (
     <>
       <AdminPageLayout title={t(KEY.recruitment_applicants_open_to_other_positions)} header={header}>

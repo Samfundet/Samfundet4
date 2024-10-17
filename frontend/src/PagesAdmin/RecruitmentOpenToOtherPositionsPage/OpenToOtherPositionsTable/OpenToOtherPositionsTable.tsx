@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { Table } from '~/Components';
 import type { RecruitmentApplicationDto, RecruitmentPositionDto, RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -8,6 +8,7 @@ type OpenTableProps = {
 };
 
 export function OpenToOtherPositionsTable({ applicants }: OpenTableProps) {
+  const { t } = useTranslation();
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
     { content: t(KEY.common_phonenumber), sortable: true },

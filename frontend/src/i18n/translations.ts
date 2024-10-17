@@ -288,6 +288,8 @@ export const nb = prepareTranslations({
   [KEY.recruitment_administrate_applications]: 'Administrer søknader',
   [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
   [KEY.recruitment_applicants_open_to_other_positions]: 'Søkere interessert i andre stillinger',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Søkere som er reservert må/bør klareres med gjengen som har reservert søkeren.',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
@@ -735,6 +737,8 @@ export const en = prepareTranslations({
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
   [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
   [KEY.recruitment_applicants_open_to_other_positions]: 'Applicants interested in other positions',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Applicants that are reserved should be cleared with the gang that has reserved the applicant.',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
   [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
