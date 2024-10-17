@@ -33,7 +33,8 @@
   },
   "formatter": {
     "indentStyle": "space",
-    "lineWidth": 120
+    "lineWidth": 120,
+    "lineEnding": "lf"
   },
   "javascript": {
     "formatter": {

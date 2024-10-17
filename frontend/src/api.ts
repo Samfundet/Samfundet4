@@ -15,6 +15,7 @@ import type {
   InterviewDto,
   InterviewRoomDto,
   KeyValueDto,
+  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -30,8 +31,10 @@ import type {
   RecruitmentPositionDto,
   RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
+  RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
   RegistrationDto,
+  RoleDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -406,7 +409,7 @@ export async function getGangs(): Promise<GangDto[]> {
   return response.data;
 }
 
-export async function postGang(data: GangDto): Promise<GangDto> {
+export async function postGang(data: Partial<GangDto>): Promise<GangDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangs_list;
   const response = await axios.post<GangDto>(url, data, { withCredentials: true });
 
@@ -500,6 +503,18 @@ export async function getRecruitment(id: string): Promise<AxiosResponse<Recruitm
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
+}
+
+// Issue #1520 TODO: Setup backend later. Using test data now.
+export async function getRole(id: string): Promise<RoleDto> {
+  //const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__api_, urlParams: ( pk: id ) }):
+  //const response = await axios.get(url, { withCredentials: true });
+  const role = {
+    id: 1,
+    name: 'Opptaksansvarlig',
+    permissions: ['samfundet.test_permission', 'samfundet.user_create'],
+  };
+  return role;
 }
 
 export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
@@ -717,6 +732,20 @@ export async function getRecruitmentApplicationsForRecruiter(
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_applications_recruiter,
       urlParams: { applicationId: applicationID },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentUnprocessedApplicants(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentUnprocessedApplicationsDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_show_unprocessed_applicants,
+      queryParams: { recruitment: recruitmentId },
     });
   const response = await axios.get(url, { withCredentials: true });
 
@@ -945,6 +974,16 @@ export async function putRecruitmentApplicationInterview(
   return response;
 }
 
+export async function getInterview(interviewId: number): Promise<AxiosResponse<InterviewDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interview_detail,
+      urlParams: { pk: interviewId },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 // ############################################################
 //                       Interview rooms
 // ############################################################
@@ -994,17 +1033,31 @@ export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promi
   return response.data;
 }
 
-export async function getRecruitmentStats(id: string): Promise<AxiosResponse<RecruitmentStatsDto>> {
+export async function getRecruitmentStats(id: string): Promise<RecruitmentStatsDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_stats_detail, urlParams: { pk: id } });
   const response = await axios.get(url, { withCredentials: true });
 
-  return response;
+  return response.data;
 }
 
 export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__feedback;
   const response = await axios.post(url, feedbackData, { withCredentials: true });
+
+  return response;
+}
+
+export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__rejected_applicants,
+      queryParams: {
+        recruitment: recruitmentId,
+      },
+    });
+  const response = await axios.post(url, rejectionMail, { withCredentials: true });
 
   return response;
 }

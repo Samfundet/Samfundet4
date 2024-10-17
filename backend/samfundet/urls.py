@@ -24,6 +24,7 @@ router.register('blog', views.BlogPostView, 'blog')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
 router.register('profile', views.ProfileView, 'profile')
+router.register('permissions', views.PermissionView, 'permissions')
 router.register('menu', views.MenuView, 'menu')
 router.register('menu-items', views.MenuItemView, 'menu_items')
 router.register('food-preference', views.FoodPreferenceView, 'food_preference')
@@ -118,6 +119,7 @@ urlpatterns = [
         name='recruitment_withdraw_application_recruiter',
     ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
+    path('rejected-applicants/', views.SendRejectionMailView.as_view(), name='rejected_applicants/'),
     path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
     path(
         'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
