@@ -1,11 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { Button, Dropdown, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import {
+  Alert,
+  Button,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from '~/Components';
 import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { MultiSelect } from '~/Components/MultiSelect';
+import { getPermissions } from '~/api';
 import type { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROLE_CONTENT_TYPE } from '~/schema/role';
@@ -13,7 +26,7 @@ import styles from './RoleForm.module.scss';
 
 const schema = z.object({
   name: z.string(),
-  permissions: z.array(z.string()),
+  permissions: z.array(z.number()),
   content_type: ROLE_CONTENT_TYPE,
 });
 
@@ -23,8 +36,36 @@ type Props = {
 
 export function RoleForm({ role }: Props) {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const [allPermissions, setAllPermissions] = useState<string[]>([]);
+
+  const {
+    data: allPermissions,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['permissions'],
+    queryFn: getPermissions,
+  });
+
+  const permissionOptions = useMemo<DropDownOption<number>[]>(() => {
+    if (!allPermissions) {
+      return [];
+    }
+    return allPermissions.map((p) => ({
+      value: p.id,
+      label: p.name,
+    }));
+  }, [allPermissions]);
+
+  const selectedPermissions = useMemo<DropDownOption<number>[]>(() => {
+    if (!allPermissions || !role) {
+      return [];
+    }
+    const permissions = allPermissions.filter((p) => role.permissions.includes(p.id));
+    return permissions.map((p) => ({
+      value: p.id,
+      label: p.name,
+    }));
+  }, [role, allPermissions]);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -34,10 +75,6 @@ export function RoleForm({ role }: Props) {
       content_type: (role?.content_type ?? '') as z.infer<typeof ROLE_CONTENT_TYPE>,
     },
   });
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
 
   function onSubmit(values: z.infer<typeof schema>) {
     console.log(values);
@@ -90,7 +127,13 @@ export function RoleForm({ role }: Props) {
             <FormItem>
               <FormLabel>{t(KEY.common_permissions)}</FormLabel>
               <FormControl>
-                {loading ? <span>{t(KEY.common_loading)}...</span> : <MultiSelect options={[]} {...field} />}
+                {isLoading ? (
+                  <span>{t(KEY.common_loading)}...</span>
+                ) : isError ? (
+                  <Alert message={t(KEY.role_edit_could_not_load_permissions)} type="error" />
+                ) : (
+                  <MultiSelect<number> options={permissionOptions} selected={selectedPermissions} {...field} />
+                )}
               </FormControl>
               <FormMessage />
             </FormItem>

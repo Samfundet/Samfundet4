@@ -379,7 +379,7 @@ export type KeyValueDto = {
 export type RoleDto = {
   id: number;
   name: string;
-  permissions: string[];
+  permissions: number[];
   content_type?: string | null;
 };
 

@@ -20,6 +20,7 @@ import type {
   MenuItemDto,
   OccupiedTimeslotDto,
   OrganizationDto,
+  PermissionDto,
   PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
@@ -154,6 +155,13 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
 export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
+  return response.data;
+}
+
+export async function getPermissions(): Promise<PermissionDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions_list;
+  const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
+
   return response.data;
 }
 

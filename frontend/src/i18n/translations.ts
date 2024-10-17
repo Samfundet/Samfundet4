@@ -411,6 +411,8 @@ export const nb = prepareTranslations({
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
+  [KEY.role_edit_could_not_load_permissions]: 'Klarte ikke laste inn tilganger',
+
   // Sulten / Lyche
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -870,6 +872,8 @@ export const en = prepareTranslations({
   [KEY.command_menu_shortcut_opening_hours]: 'Opening hours',
   [KEY.command_menu_shortcut_control_panel]: 'Control panel',
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
+
+  [KEY.role_edit_could_not_load_permissions]: 'Could not load permissions',
 
   // Sulten / Lyche:
   [KEY.sulten_dishes]: 'Dishes',

@@ -230,6 +230,8 @@ export const KEY = {
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
 
+  role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
+
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
   groupspage_gangs_title: 'groupspage_gangs_title',
