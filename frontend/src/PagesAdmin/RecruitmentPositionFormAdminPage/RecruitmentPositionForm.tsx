@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { z } from 'zod';
+import { z } from 'zod';
 import {
   Button,
   Checkbox,
@@ -22,8 +22,22 @@ import { postRecruitmentPosition, putRecruitmentPosition } from '~/api';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { NON_EMPTY_STRING } from '~/schema/strings';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
-import { recruitmentPositionSchema } from './RecruitmentPositionFormSchema';
+
+export const recruitmentPositionSchema = z.object({
+  name_nb: NON_EMPTY_STRING,
+  name_en: NON_EMPTY_STRING,
+  norwegian_applicants_only: z.boolean(),
+  short_description_nb: NON_EMPTY_STRING,
+  short_description_en: NON_EMPTY_STRING,
+  long_description_nb: NON_EMPTY_STRING,
+  long_description_en: NON_EMPTY_STRING,
+  is_funksjonaer_position: z.boolean(),
+  default_application_letter_nb: NON_EMPTY_STRING,
+  default_application_letter_en: NON_EMPTY_STRING,
+  tags: NON_EMPTY_STRING,
+});
 
 type RecruitmentPositionFormType = z.infer<typeof recruitmentPositionSchema>;
 
