@@ -79,14 +79,11 @@ export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: 
         return getEventString();
       case 'nice-month-year':
         return `${niceMonths[date.getMonth()]} ${date.getFullYear()}`;
-      case 'nice-date-time':
+      case 'nice-date-time': {
         const dateString = date.toISOString();
         const splitTime = dateString.split('T');
-        return (
-          `${date.toTimeString().slice(0, 5)}` +
-          ' || ' +
-          `${niceDays[date.getDay()]} ${date.getDate()}. ${niceMonths[date.getMonth()]}`
-        );
+        return `${date.toTimeString().slice(0, 5)} || ${niceDays[date.getDay()]} ${date.getDate()}. ${niceMonths[date.getMonth()]}`;
+      }
     }
   }
 
