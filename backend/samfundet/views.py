@@ -38,7 +38,8 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from samfundet.automatic_interview_allocation.generate_position_interview_schedule import create_daily_interview_blocks, allocate_interviews_for_position
+from samfundet.automatic_interview_allocation.allocate_interviews_for_position import allocate_interviews_for_position
+from samfundet.automatic_interview_allocation.generate_position_interview_schedule import create_daily_interview_blocks
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
