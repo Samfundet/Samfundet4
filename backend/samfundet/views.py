@@ -44,7 +44,6 @@ from samfundet.automatic_interview_allocation.automatic_interview_allocation imp
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
-from .exceptions import *
 from .models.role import Role
 from .serializers import (
     # InterviewTimeblockSerializer,

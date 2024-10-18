@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from samfundet.models.general import User
 
-from samfundet.exceptions import (
+from samfundet.automatic_interview_allocation.exceptions import (
     NoFutureTimeSlotsError,
     NoTimeBlocksAvailableError,
     InsufficientTimeBlocksError,
