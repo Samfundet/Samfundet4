@@ -50,6 +50,11 @@ def generate_interview_timeblocks(position):
         blocks = generate_blocks(position, current_datetime, end_datetime, unavailability, interval)
         logger.info(f'Generated {len(blocks)} blocks for date {current_date}')
 
+        for block in blocks:
+            block_length = (block['end'] - block['start']).total_seconds() / 60  # length in minutes
+            interviewer_count = len(block['available_interviewers'])
+            logger.info(f"Block: Start={block['start']}, Length={block_length} minutes, Interviewers={interviewer_count}")
+
         all_blocks.extend(
             [
                 {

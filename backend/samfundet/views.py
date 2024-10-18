@@ -1342,7 +1342,21 @@ class AutomaticInterviewAllocationView(APIView):
             # Generate interview timeblocks
             timeblocks = generate_interview_timeblocks(position)
 
-            # No need to filter timeblocks as they are already for the specific position
+            # Process timeblocks for response
+            processed_timeblocks = []
+            for block in timeblocks:
+                block_length = (block['end_dt'] - block['start_dt']).total_seconds() / 60  # length in minutes
+                processed_timeblocks.append(
+                    {
+                        'date': block['date'],
+                        'start_time': block['start_dt'].time(),
+                        'end_time': block['end_dt'].time(),
+                        'length_minutes': block_length,
+                        'interviewer_count': len(block['available_interviewers']),
+                        'rating': block['rating'],
+                    }
+                )
+
             logger.info(f'Found {len(timeblocks)} timeblocks for position {position.id}')
 
             if not timeblocks:
@@ -1366,6 +1380,7 @@ class AutomaticInterviewAllocationView(APIView):
                     'message': f'Interviews allocated successfully for position {pk}.',
                     'interviews_allocated': interview_count,
                     'timeblocks_generated': len(timeblocks),
+                    'timeblocks_details': processed_timeblocks,
                 },
                 status=status.HTTP_200_OK,
             )
