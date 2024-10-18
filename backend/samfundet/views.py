@@ -4,7 +4,6 @@ import os
 import csv
 import hmac
 import hashlib
-import logging
 from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
@@ -19,7 +18,6 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
-logger = logging.getLogger(__name__)
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
@@ -1336,8 +1334,6 @@ class AutomaticInterviewAllocationView(APIView):
     def post(self, request: Request, pk) -> Response:
         try:
             position = get_object_or_404(RecruitmentPosition, id=pk)
-            logger.info(f'Attempting to allocate interviews for position {pk} - {position.name_en}')
-
             # Generate interview timeblocks
             timeblocks = generate_interview_timeblocks(position)
 
@@ -1356,13 +1352,7 @@ class AutomaticInterviewAllocationView(APIView):
                     }
                 )
 
-            logger.info(f'Found {len(timeblocks)} timeblocks for position {position.id}')
-
             if not timeblocks:
-                logger.error(f'No timeblocks available for position {position.id} (Name: {position.name_en})')
-                logger.error(
-                    f'Recruitment details: ID: {position.recruitment.id}, Visible from: {position.recruitment.visible_from}, Deadline: {position.recruitment.actual_application_deadline}'
-                )
                 return Response(
                     {
                         'error': f'No available time blocks for position: {position.name_en}',
@@ -1385,7 +1375,6 @@ class AutomaticInterviewAllocationView(APIView):
             )
 
         except Exception as e:
-            logger.exception(f'Error in AutomaticInterviewAllocationView for position {pk}')
             return Response(
                 {'error': str(e), 'details': 'An unexpected error occurred during interview allocation.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
