@@ -44,7 +44,6 @@ from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_
 from .homepage import homepage
 from .models.role import Role
 from .serializers import (
-    # InterviewTimeblockSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -135,7 +134,6 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
-    # InterviewTimeblock,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
