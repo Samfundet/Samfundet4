@@ -7,7 +7,13 @@ from collections import defaultdict
 from django.utils import timezone
 
 from samfundet.models.general import User
-
+from samfundet.models.recruitment import (
+    Interview,
+    Recruitment,
+    OccupiedTimeslot,
+    RecruitmentPosition,
+    RecruitmentApplication,
+)
 from samfundet.automatic_interview_allocation.exceptions import (
     NoFutureTimeSlotsError,
     NoTimeBlocksAvailableError,
@@ -15,13 +21,6 @@ from samfundet.automatic_interview_allocation.exceptions import (
     NoAvailableInterviewersError,
     AllApplicantsUnavailableError,
     NoApplicationsWithoutInterviewsError,
-)
-from samfundet.models.recruitment import (
-    Interview,
-    Recruitment,
-    OccupiedTimeslot,
-    RecruitmentPosition,
-    RecruitmentApplication,
 )
 
 """

@@ -1333,7 +1333,7 @@ class PurchaseFeedbackView(CreateAPIView):
 class AutomaticInterviewAllocationView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, pk):
+    def post(self, request: Request, pk) -> Response:
         try:
             position = get_object_or_404(RecruitmentPosition, id=pk)
             logger.info(f'Attempting to allocate interviews for position {pk} - {position.name_en}')
