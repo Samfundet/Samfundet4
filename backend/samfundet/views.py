@@ -40,7 +40,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from samfundet.automatic_interview_allocation import generate_interview_timeblocks, allocate_interviews_for_position
+from samfundet.automatic_interview_allocation.automatic_interview_allocation import generate_interview_timeblocks, allocate_interviews_for_position
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage

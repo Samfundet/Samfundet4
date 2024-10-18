@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from samfundet.models.general import User
 
-from .exceptions import (
+from samfundet.exceptions import (
     NoFutureTimeSlotsError,
     NoTimeBlocksAvailableError,
     InsufficientTimeBlocksError,
@@ -16,7 +16,7 @@ from .exceptions import (
     AllApplicantsUnavailableError,
     NoApplicationsWithoutInterviewsError,
 )
-from .models.recruitment import (
+from samfundet.models.recruitment import (
     Interview,
     Recruitment,
     OccupiedTimeslot,
