@@ -38,6 +38,9 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
+from samfundet.automatic_interview_allocation.allocate_interviews_for_position import allocate_interviews_for_position
+from samfundet.automatic_interview_allocation.generate_position_interview_schedule import create_daily_interview_blocks
+
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role
@@ -1322,3 +1325,55 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class AutomaticInterviewAllocationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request, pk) -> Response:
+        try:
+            position = get_object_or_404(RecruitmentPosition, id=pk)
+            # Generate interview timeblocks
+            timeblocks = create_daily_interview_blocks(position)
+
+            # Process timeblocks for response
+            processed_timeblocks = []
+            for block in timeblocks:
+                block_length = (block['end_dt'] - block['start_dt']).total_seconds() / 60  # length in minutes
+                processed_timeblocks.append(
+                    {
+                        'date': block['date'],
+                        'start_time': block['start_dt'].time(),
+                        'end_time': block['end_dt'].time(),
+                        'length_minutes': block_length,
+                        'interviewer_count': len(block['available_interviewers']),
+                        'rating': block['rating'],
+                    }
+                )
+
+            if not timeblocks:
+                return Response(
+                    {
+                        'error': f'No available time blocks for position: {position.name_en}',
+                        'details': 'No suitable time blocks were generated. This might be due to recruitment dates, interviewer availability, or other constraints.',
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Allocate interviews
+            interview_count = allocate_interviews_for_position(position)
+
+            return Response(
+                {
+                    'message': f'Interviews allocated successfully for position {pk}.',
+                    'interviews_allocated': interview_count,
+                    'timeblocks_generated': len(timeblocks),
+                    'timeblocks_details': processed_timeblocks,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            return Response(
+                {'error': str(e), 'details': 'An unexpected error occurred during interview allocation.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

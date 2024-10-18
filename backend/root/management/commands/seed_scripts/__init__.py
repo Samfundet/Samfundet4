@@ -21,6 +21,7 @@ from . import (
     recruitment_position,
     recruitment_applications,
     recruitment_occupied_time,
+    recruitment_occupied_time,
     recruitment_separate_position,
     recruitment_interviewavailability,
     recruitment_position_interviewers,
