@@ -465,15 +465,15 @@ class OccupiedTimeslot(FullCleanSaveMixin):
         return self.recruitment.resolve_org(return_id=return_id)
 
 
-class InterviewTimeblock(models.Model):
-    recruitment_position = models.ForeignKey(
-        'RecruitmentPosition', on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='interview_timeblocks'
-    )
-    date = models.DateField(help_text='Block date', null=False, blank=False)
-    start_dt = models.DateTimeField(help_text='Block start time', null=False, blank=False)
-    end_dt = models.DateTimeField(help_text='Block end time', null=False, blank=False)
-    rating = models.FloatField(help_text='Rating used for optimizing interview time')
-    available_interviewers = models.ManyToManyField('User', help_text='Interviewers in this time block', blank=True, related_name='interview_timeblocks')
+# class InterviewTimeblock(models.Model):
+#     recruitment_position = models.ForeignKey(
+#         'RecruitmentPosition', on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='interview_timeblocks'
+#     )
+#     date = models.DateField(help_text='Block date', null=False, blank=False)
+#     start_dt = models.DateTimeField(help_text='Block start time', null=False, blank=False)
+#     end_dt = models.DateTimeField(help_text='Block end time', null=False, blank=False)
+#     rating = models.FloatField(help_text='Rating used for optimizing interview time')
+#     available_interviewers = models.ManyToManyField('User', help_text='Interviewers in this time block', blank=True, related_name='interview_timeblocks')
 
 
 class RecruitmentStatistics(FullCleanSaveMixin):

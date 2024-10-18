@@ -5,8 +5,6 @@ import csv
 import hmac
 import hashlib
 from typing import Any
-from datetime import datetime, timedelta
-from .exceptions import *
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -40,11 +38,14 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from .utils import allocate_interviews_for_position, event_query, generate_timeslots, generate_interview_timeblocks, get_occupied_timeslots_from_request
+from samfundet.automatic_interview_allocation import generate_interview_timeblocks, allocate_interviews_for_position
+
+from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
+from .exceptions import *
 from .models.role import Role
 from .serializers import (
-    InterviewTimeblockSerializer,
+    # InterviewTimeblockSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -135,7 +136,7 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
-    InterviewTimeblock,
+    # InterviewTimeblock,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
@@ -1277,28 +1278,6 @@ class OccupiedTimeslotView(ListCreateAPIView):
         return Response({'message': 'Successfully updated occupied timeslots'})
 
 
-class GenerateInterviewTimeblocksView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request, pk):
-        try:
-            recruitment = get_object_or_404(Recruitment, id=pk)
-            block_count = generate_interview_timeblocks(recruitment.id)
-            return Response(
-                {'message': f'Interview blocks generated successfully for recruitment {pk}.', 'blocks_created': block_count}, status=status.HTTP_200_OK
-            )
-        except Recruitment.DoesNotExist:
-            return Response({'error': f'Recruitment with id {pk} does not exist.'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': f'Failed to generate interview blocks: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class InterviewTimeblockView(ModelViewSet):
-    permission_classes = [IsAuthenticated]  # Corrected spelling
-    serializer_class = InterviewTimeblockSerializer
-    queryset = InterviewTimeblock.objects.all()
-
-
 class UserFeedbackView(CreateAPIView):
     permission_classes = [AllowAny]
     model = UserFeedbackModel
@@ -1350,17 +1329,31 @@ class PurchaseFeedbackView(CreateAPIView):
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
 
 
-class AllocateInterviewsForPositionView(APIView):
+class AutomaticInterviewAllocationView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
+        return Response({'message': 'Use POST method to allocate interviews.'}, status=status.HTTP_200_OK)
+
+    def post(self, request, pk):
         try:
             position = get_object_or_404(RecruitmentPosition, id=pk)
+
+            # Generate interview timeblocks
+            timeblocks = generate_interview_timeblocks(position.recruitment.id)
+
+            # Allocate interviews
             interview_count = allocate_interviews_for_position(position)
+
             return Response(
-                {'message': f'Interviews allocated successfully for position {pk}.', 'interviews_allocated': interview_count},
+                {
+                    'message': f'Interviews allocated successfully for position {pk}.',
+                    'interviews_allocated': interview_count,
+                    'timeblocks_generated': len(timeblocks),
+                },
                 status=status.HTTP_200_OK,
             )
+
         except NoTimeBlocksAvailableError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except NoApplicationsWithoutInterviewsError as e:
@@ -1373,7 +1366,5 @@ class AllocateInterviewsForPositionView(APIView):
             return Response({'error': str(e), 'partial_allocation': True}, status=status.HTTP_206_PARTIAL_CONTENT)
         except NoFutureTimeSlotsError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except RecruitmentPosition.DoesNotExist:
-            return Response({'error': f'Recruitment position with id {pk} does not exist.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': f'An unexpected error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
