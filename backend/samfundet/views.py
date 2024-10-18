@@ -4,6 +4,7 @@ import os
 import csv
 import hmac
 import hashlib
+import logging
 from typing import Any
 
 from guardian.shortcuts import get_objects_for_user
@@ -18,6 +19,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
+logger = logging.getLogger(__name__)
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
@@ -1332,15 +1334,29 @@ class PurchaseFeedbackView(CreateAPIView):
 class AutomaticInterviewAllocationView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk):
-        return Response({'message': 'Use POST method to allocate interviews.'}, status=status.HTTP_200_OK)
-
     def post(self, request, pk):
         try:
             position = get_object_or_404(RecruitmentPosition, id=pk)
+            logger.info(f'Attempting to allocate interviews for position {pk} - {position.name_en}')
 
             # Generate interview timeblocks
-            timeblocks = generate_interview_timeblocks(position.recruitment.id)
+            timeblocks = generate_interview_timeblocks(position)
+
+            # No need to filter timeblocks as they are already for the specific position
+            logger.info(f'Found {len(timeblocks)} timeblocks for position {position.id}')
+
+            if not timeblocks:
+                logger.error(f'No timeblocks available for position {position.id} (Name: {position.name_en})')
+                logger.error(
+                    f'Recruitment details: ID: {position.recruitment.id}, Visible from: {position.recruitment.visible_from}, Deadline: {position.recruitment.actual_application_deadline}'
+                )
+                return Response(
+                    {
+                        'error': f'No available time blocks for position: {position.name_en}',
+                        'details': 'No suitable time blocks were generated. This might be due to recruitment dates, interviewer availability, or other constraints.',
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
             # Allocate interviews
             interview_count = allocate_interviews_for_position(position)
@@ -1354,17 +1370,8 @@ class AutomaticInterviewAllocationView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-        except NoTimeBlocksAvailableError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except NoApplicationsWithoutInterviewsError as e:
-            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-        except NoAvailableInterviewersError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except AllApplicantsUnavailableError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except InsufficientTimeBlocksError as e:
-            return Response({'error': str(e), 'partial_allocation': True}, status=status.HTTP_206_PARTIAL_CONTENT)
-        except NoFutureTimeSlotsError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'error': f'An unexpected error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception(f'Error in AutomaticInterviewAllocationView for position {pk}')
+            return Response(
+                {'error': str(e), 'details': 'An unexpected error occurred during interview allocation.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

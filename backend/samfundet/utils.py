@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+import datetime
 
 from django.http import QueryDict
 from django.db.models import Q, Model
@@ -11,13 +11,8 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
 from .models import User
-from .exceptions import *
 from .models.event import Event
-from .models.recruitment import (
-    Recruitment,
-    OccupiedTimeslot,
-    RecruitmentInterviewAvailability,
-)
+from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
 
 ###
 
