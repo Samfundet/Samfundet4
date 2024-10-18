@@ -43,7 +43,9 @@ class InterviewBlock(TypedDict):
     rating: float
 
 
-def create_daily_interview_blocks(position: RecruitmentPosition) -> list[InterviewBlock]:
+def create_daily_interview_blocks(
+    position: RecruitmentPosition, start_time: time = time(8, 0), end_time: time = time(23, 0), interval: timedelta = timedelta(minutes=30)
+) -> list[InterviewBlock]:
     """
     Generates time blocks for interviews based on the recruitment's time range,
     the availability of interviewers, and their unavailability. The blocks are divided
@@ -61,9 +63,6 @@ def create_daily_interview_blocks(position: RecruitmentPosition) -> list[Intervi
     current_date = timezone.now().date()
     start_date = max(recruitment.visible_from.date(), current_date)
     end_date = recruitment.actual_application_deadline.date()
-    start_time = time(8, 0)  # Interviews start at 8:00
-    end_time = time(23, 0)  # Interviews end at 23:00
-    interval = timedelta(minutes=30)  # Each time block is 30 minutes
 
     all_blocks: list[InterviewBlock] = []
 
