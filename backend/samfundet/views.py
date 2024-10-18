@@ -38,7 +38,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from samfundet.automatic_interview_allocation.automatic_interview_allocation import generate_interview_timeblocks, allocate_interviews_for_position
+from samfundet.automatic_interview_allocation.generate_position_interview_schedule import create_daily_interview_blocks, allocate_interviews_for_position
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
@@ -1333,7 +1333,7 @@ class AutomaticInterviewAllocationView(APIView):
         try:
             position = get_object_or_404(RecruitmentPosition, id=pk)
             # Generate interview timeblocks
-            timeblocks = generate_interview_timeblocks(position)
+            timeblocks = create_daily_interview_blocks(position)
 
             # Process timeblocks for response
             processed_timeblocks = []
