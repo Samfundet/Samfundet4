@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from datetime import time, datetime, timedelta
 from collections import defaultdict
 
@@ -13,47 +12,25 @@ from .models.recruitment import (
     RecruitmentApplication,
 )
 
-logger = logging.getLogger(__name__)
-
 
 def generate_interview_timeblocks(position):
     recruitment = position.recruitment
     all_blocks = []
 
-    logger.info(f'Generating interview timeblocks for position {position.id} - {position.name_en}')
-    logger.info(f'Recruitment dates: visible_from={recruitment.visible_from}, deadline={recruitment.actual_application_deadline}')
-
     current_date = timezone.now().date()
-    logger.info(f'Current date: {current_date}')
-
     start_date = max(recruitment.visible_from.date(), current_date)
     end_date = recruitment.actual_application_deadline.date()
     start_time = time(8, 0)
     end_time = time(23, 0)
     interval = timedelta(minutes=30)
 
-    logger.info(f'Position date range: {start_date} to {end_date}')
-    logger.info(f'Daily time range: {start_time} to {end_time}')
-
-    interviewers = position.interviewers.all()
-    logger.info(f'Number of interviewers for position: {interviewers.count()}')
-
     current_date = start_date
     while current_date <= end_date:
-        logger.info(f'Processing date: {current_date}')
         current_datetime = timezone.make_aware(datetime.combine(current_date, start_time))
         end_datetime = timezone.make_aware(datetime.combine(current_date, end_time))
 
         unavailability = get_unavailability(recruitment)
-        logger.info(f'Number of unavailability slots: {unavailability.count()}')
-
         blocks = generate_blocks(position, current_datetime, end_datetime, unavailability, interval)
-        logger.info(f'Generated {len(blocks)} blocks for date {current_date}')
-
-        for block in blocks:
-            block_length = (block['end'] - block['start']).total_seconds() / 60  # length in minutes
-            interviewer_count = len(block['available_interviewers'])
-            logger.info(f"Block: Start={block['start']}, Length={block_length} minutes, Interviewers={interviewer_count}")
 
         all_blocks.extend(
             [
@@ -71,7 +48,6 @@ def generate_interview_timeblocks(position):
 
         current_date += timedelta(days=1)
 
-    logger.info(f'Total blocks generated for position {position.id}: {len(all_blocks)}')
     return all_blocks
 
 
@@ -192,29 +168,6 @@ def allocate_interviews_for_position(position, limit_to_first_applicant=False) -
 
 def get_unavailability(recruitment):
     return OccupiedTimeslot.objects.filter(recruitment=recruitment).order_by('start_dt')
-
-
-def generate_blocks(position, start_dt, end_dt, unavailability, interval):
-    all_interviewers = set(position.interviewers.all())
-    blocks = []
-    current_dt = start_dt
-
-    while current_dt < end_dt:
-        block_end = min(current_dt + interval, end_dt)
-        available_interviewers = all_interviewers.copy()
-
-        for slot in unavailability:
-            if slot.start_dt < block_end and slot.end_dt > current_dt:
-                available_interviewers.discard(slot.user)
-
-        if not blocks or len(blocks[-1]['available_interviewers']) != len(available_interviewers):
-            blocks.append({'start': current_dt, 'end': block_end, 'available_interviewers': available_interviewers})
-        else:
-            blocks[-1]['end'] = block_end
-
-        current_dt = block_end
-
-    return blocks
 
 
 def calculate_rating(start_dt, end_dt, available_interviewers_count) -> int:
