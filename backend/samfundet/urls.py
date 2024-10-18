@@ -140,4 +140,5 @@ urlpatterns = [
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
+    path('allocate-interviews/<int:pk>/', views.AutomaticInterviewAllocationView.as_view(), name='allocate_interviews'),
 ]
