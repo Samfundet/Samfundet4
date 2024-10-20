@@ -39,7 +39,7 @@ def setup_users():
 
 @pytest.mark.django_db
 def test_get_available_interviewers_for_timeslot(setup_recruitment, setup_users):
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     user1, user2, user3 = setup_users
 
     with patch('samfundet.models.recruitment.OccupiedTimeslot.objects.filter') as mock_filter:
@@ -58,8 +58,8 @@ def test_get_available_interviewers_for_timeslot(setup_recruitment, setup_users)
 
 @pytest.mark.django_db
 def test_is_applicant_available(setup_recruitment, setup_users):
-    organization, recruitment = setup_recruitment
-    user1, user2, user3 = setup_users
+    recruitment = setup_recruitment
+    user1 = setup_users
 
     with (
         patch('samfundet.models.recruitment.Interview.objects.filter') as mock_interview_filter,
@@ -170,7 +170,7 @@ def test_get_interviewers_grouped_by_section(setup_recruitment, setup_users):
 
 @pytest.mark.django_db
 def test_get_available_interviewers_no_interviewers(setup_recruitment):
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     start_dt = timezone.now()
     end_dt = start_dt + timedelta(hours=1)
 
@@ -180,7 +180,7 @@ def test_get_available_interviewers_no_interviewers(setup_recruitment):
 
 @pytest.mark.django_db
 def test_get_available_interviewers_all_occupied(setup_recruitment, setup_users):
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     user1, user2, user3 = setup_users
     start_dt = timezone.now()
     end_dt = start_dt + timedelta(hours=1)
@@ -193,7 +193,7 @@ def test_get_available_interviewers_all_occupied(setup_recruitment, setup_users)
 
 @pytest.mark.django_db
 def test_get_available_interviewers_complex_overlap(setup_recruitment, setup_users):
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     user1, user2, user3 = setup_users
     start_dt = timezone.now()
     mid_dt = start_dt + timedelta(minutes=30)
@@ -220,7 +220,7 @@ def test_get_available_interviewers_complex_overlap(setup_recruitment, setup_use
 
 @pytest.mark.django_db
 def test_is_applicant_available_multiple_conflicts(setup_recruitment, setup_users):
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     user1, _, _ = setup_users
     start_dt = timezone.now()
     end_dt = start_dt + timedelta(hours=2)
@@ -238,7 +238,7 @@ def test_is_applicant_available_multiple_conflicts(setup_recruitment, setup_user
 
 @pytest.mark.django_db
 def test_is_applicant_available_edge_cases(setup_recruitment, setup_users):
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     user1, _, _ = setup_users
     start_dt = timezone.now()
     end_dt = start_dt + timedelta(microseconds=1)
@@ -353,7 +353,7 @@ def test_get_interviewers_grouped_by_section_complex(setup_recruitment, setup_us
 @pytest.mark.django_db
 def test_get_available_interviewers_for_timeslot_filtering(setup_recruitment, setup_users):
     """Test the get_available_interviewers_for_timeslot function with various scenarios."""
-    organization, recruitment = setup_recruitment
+    recruitment = setup_recruitment
     user1, user2, user3 = setup_users
     user4, user5, user6 = [User.objects.create(username=f'user{i}', email=f'user{i}@example.com') for i in range(4, 7)]
     start_dt = timezone.now()
