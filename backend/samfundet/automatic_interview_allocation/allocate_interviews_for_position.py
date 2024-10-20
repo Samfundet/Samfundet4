@@ -24,7 +24,7 @@ from .utils import (
 )
 
 
-def allocate_interviews_for_position(position: RecruitmentPosition, *, allocation_limit: int | None = None) -> int:
+def allocate_interviews_for_position(position: RecruitmentPosition) -> int:
     """
     Allocates interviews for applicants of a given recruitment position based on available time blocks.
 
@@ -53,7 +53,6 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
         applications,
         position,
         interview_duration,
-        allocation_limit,
     )
 
     check_allocation_completeness(interview_count, applications, position)
@@ -79,7 +78,6 @@ def allocate_all_interviews(
     applications: list[RecruitmentApplication],
     position: RecruitmentPosition,
     interview_duration: timedelta,
-    allocation_limit: int | None,
 ) -> int:
     """Allocate interviews within available future time blocks."""
     interview_count = 0
@@ -92,14 +90,6 @@ def allocate_all_interviews(
     for block in future_blocks:
         block_interview_count = place_interviews_in_block(block, applications, position, interview_duration, current_time)
         interview_count += block_interview_count
-
-        if allocation_limit is not None and interview_count >= allocation_limit:
-            # If we've reached or exceeded the allocation limit, stop allocating
-            interview_count = min(interview_count, allocation_limit)
-            break
-
-        if not applications:
-            break
 
     return interview_count
 
@@ -136,7 +126,7 @@ def allocate_interview(
     """Attempt to allocate a single interview at the current time."""
     interview_end_time = current_time + interview_duration
 
-    # Check for existing interviews only once per timeslot
+    # Check for existing interviews
     if Interview.objects.filter(applications__recruitment_position__recruitment=position.recruitment, interview_time=current_time).exists():
         return False
 

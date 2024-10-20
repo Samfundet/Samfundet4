@@ -38,6 +38,15 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
+from samfundet.automatic_interview_allocation.exceptions import (
+    NoFutureTimeSlotsError,
+    InterviewAllocationError,
+    NoTimeBlocksAvailableError,
+    InsufficientTimeBlocksError,
+    NoAvailableInterviewersError,
+    AllApplicantsUnavailableError,
+    NoApplicationsWithoutInterviewsError,
+)
 from samfundet.automatic_interview_allocation.allocate_interviews_for_position import allocate_interviews_for_position
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
@@ -1332,8 +1341,15 @@ class AutomaticInterviewAllocationView(APIView):
     def post(self, request: Request, pk: int) -> Response:
         position = get_object_or_404(RecruitmentPosition, id=pk)
 
-        interview_count = allocate_interviews_for_position(position)
+        try:
+            interview_count = allocate_interviews_for_position(position, allocation_limit=1)
+            return self.get_success_response(pk, interview_count)
+        except InterviewAllocationError as e:
+            return self.handle_allocation_error(e, interview_count=getattr(e, 'interview_count', 0))
+        except Exception as e:
+            return Response({'error': f'An unexpected error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def get_success_response(self, pk: int, interview_count: int) -> Response:
         if interview_count > 0:
             return Response(
                 {
@@ -1349,3 +1365,19 @@ class AutomaticInterviewAllocationView(APIView):
             },
             status=status.HTTP_204_NO_CONTENT,
         )
+
+    def handle_allocation_error(self, error: InterviewAllocationError, interview_count: int = 0) -> Response:
+        error_responses = {
+            NoTimeBlocksAvailableError: ('No available time blocks for interviews.', status.HTTP_400_BAD_REQUEST),
+            NoApplicationsWithoutInterviewsError: ('No applications without interviews found.', status.HTTP_400_BAD_REQUEST),
+            NoAvailableInterviewersError: ('No available interviewers for any time slot.', status.HTTP_400_BAD_REQUEST),
+            AllApplicantsUnavailableError: ('All applicants are unavailable for the remaining time slots.', status.HTTP_400_BAD_REQUEST),
+            NoFutureTimeSlotsError: ('No time slots available at least 24 hours in the future.', status.HTTP_400_BAD_REQUEST),
+            InsufficientTimeBlocksError: ('Not enough time blocks to accommodate all applications.', status.HTTP_206_PARTIAL_CONTENT),
+        }
+
+        message, status_code = error_responses.get(type(error), ('An error occurred during interview allocation.', status.HTTP_400_BAD_REQUEST))
+
+        response_data = {'error': message, 'interviews_allocated': interview_count}
+
+        return Response(response_data, status=status_code)
