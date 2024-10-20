@@ -25,14 +25,14 @@ def get_available_interviewers_for_timeslot(interviewers: list[User], start_dt: 
     Returns:
         A list of available interviewers.
     """
-    unavailable_interviewer_ids = (
+    unavailable_interviewer_ids = set(
         OccupiedTimeslot.objects.filter(user__in=interviewers, recruitment=recruitment)
         .filter(
             Q(start_dt__lt=end_dt, end_dt__gt=start_dt)  # Overlaps with the start
             | Q(start_dt__lt=end_dt, end_dt__gt=end_dt)  # Overlaps with the end
             | Q(start_dt__gte=start_dt, end_dt__lte=end_dt)  # Fully within the interval
         )
-        .values_list('id', flat=True)
+        .values_list('user_id', flat=True)
     )
 
     return [interviewer for interviewer in interviewers if interviewer.id not in unavailable_interviewer_ids]
