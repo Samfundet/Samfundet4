@@ -13,28 +13,34 @@ from samfundet.models.recruitment import (
     RecruitmentPosition,
 )
 
-"""
-Automatic interview allocation currently works by creating interview timeblocks.
-These time blocks are made by cutting days into sections, where sections are differentiated
-the available interviewer count.
-Availability is found by deriving it from unavailability.
-In a case where occupied time slots can be set from 08:00 - 16:00, these are registred available interviewers
-(I) If 4 interviewers are available from 08:00 - 12:00,
-(II) 3 interviewers are available from 12:00 - 13:00,
-(III) 3 interviewersa are available from 13:00 - 14:00,
-(IV) and 5 interviewers are available from 14:00 - 16:00
-
-(I) is one timeblock, (II) and (III) is combined into a second timeblock, and (IV) is a third timeblock.
-E.i. timeblocks are differentiated by the amount of available interviewers.
-
-Interview timeblocks are given a rating, based on length of the timeblocks and the count of available interviewers.
-"""
-
 # TODO: implement strategy for allocation interviews based on shared interviews (UKA, ISFiT, KSG)
 # TODO: implement room allocation, based on rooms available at the time the interview has been set
 
 
 class InterviewBlock(TypedDict):
+    """
+    Represents a time block for interviews during the recruitment process.
+
+    Interview blocks are created by dividing days into sections based on interviewer availability.
+    Each block is characterized by a unique combination of available interviewers.
+
+    For example, given interviewer availability from 08:00 to 16:00:
+    1. 08:00 - 12:00: 4 interviewers available (Block I)
+    2. 12:00 - 14:00: 3 interviewers available (Block II)
+    3. 14:00 - 16:00: 5 interviewers available (Block III)
+
+    Blocks are rated based on their duration and the number of available interviewers,
+    which helps prioritize optimal interview slots during the allocation process.
+
+    Attributes:
+        start (datetime): Start time of the block
+        end (datetime): End time of the block
+        available_interviewers (set[User]): Set of available interviewers for this block
+        recruitment_position (RecruitmentPosition): The position being recruited for
+        date (date): The date of the interview block
+        rating (float): A calculated rating based on block duration and interviewer availability
+    """
+
     start: datetime
     end: datetime
     available_interviewers: set[User]
