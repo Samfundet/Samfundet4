@@ -1342,7 +1342,7 @@ class AutomaticInterviewAllocationView(APIView):
         position = get_object_or_404(RecruitmentPosition, id=pk)
 
         try:
-            interview_count = allocate_interviews_for_position(position, allocation_limit=1)
+            interview_count = allocate_interviews_for_position(position)
             return self.get_success_response(pk, interview_count)
         except InterviewAllocationError as e:
             return self.handle_allocation_error(e, interview_count=getattr(e, 'interview_count', 0))
