@@ -38,30 +38,6 @@ def get_available_interviewers_for_timeslot(interviewers: list[User], start_dt: 
     return [interviewer for interviewer in interviewers if interviewer.id not in unavailable_interviewer_ids]
 
 
-# def is_interviewer_available(interviewer: User, start_dt: datetime, end_dt: datetime, recruitment: Recruitment) -> bool:
-#     """
-#     Checks if a specific interviewer is available during a given time range.
-#     Args:
-#         interviewer: The interviewer to check.
-#         start_dt: The start datetime of the interview slot.
-#         end_dt: The end datetime of the interview slot.
-#         recruitment: The recruitment for which to check availability.
-#     Returns:
-#         A boolean indicating whether the interviewer is available for the given time range.
-#     """
-#     interviewer_unavailable = (
-#         OccupiedTimeslot.objects.filter(user=interviewer, recruitment=recruitment)
-#         .filter(
-#             Q(start_dt__lt=end_dt, end_dt__gt=start_dt)  # Overlaps with the start
-#             | Q(start_dt__lt=end_dt, end_dt__gt=end_dt)  # Overlaps with the end
-#             | Q(start_dt__gte=start_dt, end_dt__lte=end_dt)  # Fully within the interval
-#         )
-#         .exists()
-#     )
-
-#     return not interviewer_unavailable
-
-
 def is_applicant_available(applicant: User, start_dt: datetime, end_dt: datetime, recruitment: Recruitment) -> bool:
     """
     Checks if an applicant is available for an interview during a given time range.
@@ -93,21 +69,6 @@ def is_applicant_available(applicant: User, start_dt: datetime, end_dt: datetime
     )
 
     return not applicant_unavailable
-
-
-# def mark_interviewers_unavailable(interviewers: list[User], start_dt: datetime, end_dt: datetime, unavailability: UnavailabilityTypeDict) -> None:
-#     """
-#     Marks a group of interviewers as unavailable during a given time range.
-#     Args:
-#         interviewers: List of interviewers to mark as unavailable.
-#         start_dt: The start datetime of the interview slot.
-#         end_dt: The end datetime of the interview slot.
-#         unavailability: Dictionary to store the unavailable times for each interviewer.
-#     """
-#     for interviewer in interviewers:
-#         if interviewer.id not in unavailability:
-#             unavailability[interviewer.id] = []
-#         unavailability[interviewer.id].append((start_dt, end_dt))
 
 
 def get_interviewers_grouped_by_section(recruitment_position: RecruitmentPosition) -> dict[GangSection, QuerySet[User]]:

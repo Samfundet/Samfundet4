@@ -7,7 +7,6 @@ from django.utils import timezone
 
 from samfundet.models.general import User
 from samfundet.models.recruitment import (
-    #  Interview,
     Recruitment,
     OccupiedTimeslot,
     RecruitmentPosition,

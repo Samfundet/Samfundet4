@@ -36,7 +36,7 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
         The number of interviews allocated.
 
     Raises:
-        NoTimeBlocksAvailableError: If no time blocks are available.
+        NoTimeBlocksAvailableError: If no timeblocks are available.
         NoApplicationsWithoutInterviewsError: If no applications without interviews exist.
         AllApplicantsUnavailableError: If all applicants are unavailable for the remaining time blocks.
         NoAvailableInterviewersError: If no interviewers are available for any time slot.
@@ -46,13 +46,11 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
 
     timeblocks = generate_and_sort_timeblocks(position)
     applications = get_applications_without_interview(position)
-    #   interviewer_unavailability = create_interviewer_unavailability_map(position)
     check_timeblocks_and_applications(timeblocks, applications, position)
 
     interview_count = allocate_all_interviews(
         timeblocks,
         applications,
-        # interviewer_unavailability,
         position,
         interview_duration,
         allocation_limit,
@@ -68,16 +66,6 @@ def get_applications_without_interview(position: RecruitmentPosition) -> list[Re
     return list(RecruitmentApplication.objects.filter(recruitment_position=position, withdrawn=False, interview__isnull=True))
 
 
-# def create_interviewer_unavailability_map(position: RecruitmentPosition) -> defaultdict[int, list[tuple[datetime, datetime]]]:
-#     """Get all existing interviews and mark interviewer unavailability."""
-#     interviewer_unavailability = defaultdict(list)
-#     existing_interviews = Interview.objects.filter(applications__recruitment_position__recruitment=position.recruitment)
-#     for interview in existing_interviews:
-#         for interviewer in interview.interviewers.all():
-#             interviewer_unavailability[interviewer.id].append((interview.interview_time, interview.interview_time + timedelta(minutes=30)))
-#     return interviewer_unavailability
-
-
 def check_timeblocks_and_applications(timeblocks: list[FinalizedTimeBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
     """Validate that there are available time blocks and applications."""
     if not timeblocks:
@@ -89,7 +77,6 @@ def check_timeblocks_and_applications(timeblocks: list[FinalizedTimeBlock], appl
 def allocate_all_interviews(
     timeblocks: list[FinalizedTimeBlock],
     applications: list[RecruitmentApplication],
-    # interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
     interview_duration: timedelta,
     allocation_limit: int | None,
@@ -120,7 +107,6 @@ def allocate_all_interviews(
 def place_interviews_in_block(
     block: FinalizedTimeBlock,
     applications: list[RecruitmentApplication],
-    #  interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
     interview_duration: timedelta,
     current_time: datetime,
@@ -144,7 +130,6 @@ def allocate_interview(
     current_time: datetime,
     block: FinalizedTimeBlock,
     application: RecruitmentApplication,
-    # interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
     interview_duration: timedelta,
 ) -> bool:
