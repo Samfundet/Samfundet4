@@ -17,12 +17,12 @@ from samfundet.automatic_interview_allocation.exceptions import (
 from samfundet.automatic_interview_allocation.generate_position_interview_schedule import (
     FinalizedTimeBlock,
     is_applicant_available,
-    create_daily_interview_blocks,
+    create_final_interview_blocks,
 )
 
 from .utils import (
-    get_available_interviewers,
     mark_interviewers_unavailable,
+    get_available_interviewers_for_timeslot,
 )
 
 
@@ -46,22 +46,22 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
     """
     interview_duration = timedelta(minutes=30)  # Each interview lasts 30 minutes
 
-    timeblocks = get_sorted_timeblocks(position)
+    timeblocks = generate_and_sort_timeblocks(position)
     applications = get_applications_without_interviews(position)
-    interviewer_unavailability = get_interviewer_unavailability(position)
+    interviewer_unavailability = create_interviewer_unavailability_map(position)
 
-    validate_allocation_prerequisites(timeblocks, applications, position)
+    check_timeblocks_and_applications_availability(timeblocks, applications, position)
 
     interview_count = allocate_interviews(timeblocks, applications, interviewer_unavailability, position, interview_duration, allocation_limit)
 
-    handle_allocation_results(interview_count, applications, position)
+    check_allocation_completeness(interview_count, applications, position)
 
     return interview_count
 
 
-def get_sorted_timeblocks(position: RecruitmentPosition) -> list[FinalizedTimeBlock]:
+def generate_and_sort_timeblocks(position: RecruitmentPosition) -> list[FinalizedTimeBlock]:
     """Generate and sort time blocks by rating (higher rating first)."""
-    timeblocks = create_daily_interview_blocks(position)
+    timeblocks = create_final_interview_blocks(position)
     timeblocks.sort(key=lambda block: (-block['rating'], block['start']))
     return timeblocks
 
@@ -71,7 +71,7 @@ def get_applications_without_interviews(position: RecruitmentPosition) -> list[R
     return list(RecruitmentApplication.objects.filter(recruitment_position=position, withdrawn=False, interview__isnull=True))
 
 
-def get_interviewer_unavailability(position: RecruitmentPosition) -> defaultdict[int, list[tuple[datetime, datetime]]]:
+def create_interviewer_unavailability_map(position: RecruitmentPosition) -> defaultdict[int, list[tuple[datetime, datetime]]]:
     """Get all existing interviews and mark interviewer unavailability."""
     interviewer_unavailability = defaultdict(list)
     existing_interviews = Interview.objects.filter(applications__recruitment_position__recruitment=position.recruitment)
@@ -81,7 +81,9 @@ def get_interviewer_unavailability(position: RecruitmentPosition) -> defaultdict
     return interviewer_unavailability
 
 
-def validate_allocation_prerequisites(timeblocks: list[FinalizedTimeBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
+def check_timeblocks_and_applications_availability(
+    timeblocks: list[FinalizedTimeBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition
+) -> None:
     """Validate that there are available time blocks and applications."""
     if not timeblocks:
         raise NoTimeBlocksAvailableError(f'No available time blocks for position: {position.name_en}')
@@ -158,7 +160,7 @@ def allocate_single_interview(
         return False
 
     # Explicitly convert to list
-    available_interviewers = get_available_interviewers(
+    available_interviewers = get_available_interviewers_for_timeslot(
         list(block.get('available_interviewers', [])), current_time, interview_end_time, interviewer_unavailability
     )
 
@@ -189,7 +191,7 @@ def create_interview(application: RecruitmentApplication, interview_time: dateti
     application.save()
 
 
-def handle_allocation_results(interview_count: int, applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
+def check_allocation_completeness(interview_count: int, applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
     """Handle the results of the interview allocation process."""
     if interview_count == 0:
         raise AllApplicantsUnavailableError(f'All applicants are unavailable for the remaining time slots for position: {position.name_en}')

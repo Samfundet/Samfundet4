@@ -39,7 +39,7 @@ from root.constants import (
 )
 
 from samfundet.automatic_interview_allocation.allocate_interviews_for_position import allocate_interviews_for_position
-from samfundet.automatic_interview_allocation.generate_position_interview_schedule import create_daily_interview_blocks
+from samfundet.automatic_interview_allocation.generate_position_interview_schedule import create_final_interview_blocks
 
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
@@ -1334,7 +1334,7 @@ class AutomaticInterviewAllocationView(APIView):
         try:
             position = get_object_or_404(RecruitmentPosition, id=pk)
             # Generate interview timeblocks
-            timeblocks = create_daily_interview_blocks(position)
+            timeblocks = create_final_interview_blocks(position)
 
             # Process timeblocks for response
             processed_timeblocks = []

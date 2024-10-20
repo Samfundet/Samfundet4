@@ -10,7 +10,7 @@ TimeSlotType = tuple[datetime, datetime]
 UnavailabilityTypeDict = dict[UserIdType, list[TimeSlotType]]
 
 
-def get_available_interviewers(
+def get_available_interviewers_for_timeslot(
     interviewers: list[User], start_dt: datetime, end_dt: datetime, interviewer_unavailability: UnavailabilityTypeDict
 ) -> list[User]:
     """
