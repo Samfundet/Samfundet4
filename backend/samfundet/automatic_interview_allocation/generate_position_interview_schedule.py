@@ -92,7 +92,12 @@ def create_daily_interview_blocks(
                     available_interviewers=set(block['available_interviewers']),
                     recruitment_position=position,
                     date=current_date,
-                    rating=calculate_rating(block['start'], block['end'], len(block['available_interviewers'])),
+                    rating=calculate_rating(
+                        block['start'],
+                        block['end'],
+                        set(block['available_interviewers']),
+                        position,
+                    ),
                 )
                 for block in blocks
             ]
@@ -190,20 +195,47 @@ def get_unavailability(recruitment: Recruitment) -> OccupiedTimeslot:
     return OccupiedTimeslot.objects.filter(recruitment=recruitment).order_by('start_dt')
 
 
-def calculate_rating(start_dt: datetime, end_dt: datetime, available_interviewers_count: int) -> int:
+def calculate_rating(start_dt: datetime, end_dt: datetime, available_interviewers: set[User], position: RecruitmentPosition) -> int:
     """
-    Calculates a rating for a time block based on the number of available interviewers and block length.
+    Calculates a rating for a time block based on interviewer availability, block length, and section diversity.
+
+    For shared interviews (multiple sections), the rating considers:
+    1. The number of available interviewers
+    2. The length of the time block
+    3. The diversity of sections represented by available interviewers
+    4. The average number of available interviewers per section
+
+    For non-shared interviews or single-section positions, only the number of
+    available interviewers and block length are considered.
 
     Args:
         start_dt: Start datetime of the block.
         end_dt: End datetime of the block.
-        available_interviewers_count: Number of interviewers available for the block.
+        available_interviewers: Set of interviewers available for the block.
+        position: The RecruitmentPosition for which the rating is calculated.
 
     Returns:
-        An integer rating for the time block.
+        An integer rating for the time block. Higher values indicate more
+        favorable blocks for scheduling interviews.
     """
+
     block_length = (end_dt - start_dt).total_seconds() / 3600
-    rating = (available_interviewers_count * 2) + (block_length * 0.5)
+    interviewers_grouped_by_section = position.get_interviewers_grouped_by_section()
+
+    if len(interviewers_grouped_by_section) > 1:
+        represented_sections = sum(1 for section_interviewers in interviewers_grouped_by_section.values() if set(section_interviewers) & available_interviewers)
+        section_diversity_factor = represented_sections / len(interviewers_grouped_by_section)
+
+        # Calculate the average number of interviewers available per section
+        avg_interviewers_per_section = sum(
+            len(set(section_interviewers) & available_interviewers) for section_interviewers in interviewers_grouped_by_section.values()
+        ) / len(interviewers_grouped_by_section)
+
+        rating = (len(available_interviewers) * 2) + (block_length * 0.5) + (section_diversity_factor * 5) + (avg_interviewers_per_section * 3)
+    else:
+        # For non-shared interviews or single section, use the original rating calculation
+        rating = (len(available_interviewers) * 2) + (block_length * 0.5)
+
     return max(0, int(rating))
 
 
