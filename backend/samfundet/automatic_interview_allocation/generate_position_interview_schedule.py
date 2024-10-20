@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import TypedDict
-from datetime import time, datetime, timedelta
+from datetime import date, time, datetime, timedelta
 
 from django.utils import timezone
 
@@ -39,7 +39,7 @@ class InterviewBlock(TypedDict):
     end: datetime
     available_interviewers: set[User]
     recruitment_position: RecruitmentPosition
-    date: datetime.date
+    date: date
     rating: float
 
 
