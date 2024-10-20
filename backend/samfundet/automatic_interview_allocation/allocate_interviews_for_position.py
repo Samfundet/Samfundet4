@@ -14,14 +14,13 @@ from samfundet.automatic_interview_allocation.exceptions import (
     AllApplicantsUnavailableError,
     NoApplicationsWithoutInterviewsError,
 )
-from samfundet.automatic_interview_allocation.generate_position_interview_schedule import (
+from samfundet.automatic_interview_allocation.generate_interview_timeblocks import (
     FinalizedTimeBlock,
-    is_applicant_available,
-    create_final_interview_blocks,
+    generate_and_sort_timeblocks,
 )
 
 from .utils import (
-    mark_interviewers_unavailable,
+    is_applicant_available,
     get_available_interviewers_for_timeslot,
 )
 
@@ -49,21 +48,13 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
     timeblocks = generate_and_sort_timeblocks(position)
     applications = get_applications_without_interviews(position)
     interviewer_unavailability = create_interviewer_unavailability_map(position)
-
-    check_timeblocks_and_applications_availability(timeblocks, applications, position)
+    check_timeblocks_and_applications(timeblocks, applications, position)
 
     interview_count = allocate_interviews(timeblocks, applications, interviewer_unavailability, position, interview_duration, allocation_limit)
 
     check_allocation_completeness(interview_count, applications, position)
 
     return interview_count
-
-
-def generate_and_sort_timeblocks(position: RecruitmentPosition) -> list[FinalizedTimeBlock]:
-    """Generate and sort time blocks by rating (higher rating first)."""
-    timeblocks = create_final_interview_blocks(position)
-    timeblocks.sort(key=lambda block: (-block['rating'], block['start']))
-    return timeblocks
 
 
 def get_applications_without_interviews(position: RecruitmentPosition) -> list[RecruitmentApplication]:
@@ -81,9 +72,7 @@ def create_interviewer_unavailability_map(position: RecruitmentPosition) -> defa
     return interviewer_unavailability
 
 
-def check_timeblocks_and_applications_availability(
-    timeblocks: list[FinalizedTimeBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition
-) -> None:
+def check_timeblocks_and_applications(timeblocks: list[FinalizedTimeBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
     """Validate that there are available time blocks and applications."""
     if not timeblocks:
         raise NoTimeBlocksAvailableError(f'No available time blocks for position: {position.name_en}')
@@ -108,7 +97,7 @@ def allocate_interviews(
         raise NoFutureTimeSlotsError(f'No time slots available at least 24 hours in the future for position: {position.name_en}')
 
     for block in future_blocks:
-        block_interview_count = allocate_interviews_in_block(block, applications, interviewer_unavailability, position, interview_duration, current_time)
+        block_interview_count = allocate_interviews_in_block(block, applications, position, interview_duration, current_time)
         interview_count += block_interview_count
 
         if allocation_limit is not None and interview_count >= allocation_limit:
@@ -125,7 +114,7 @@ def allocate_interviews(
 def allocate_interviews_in_block(
     block: FinalizedTimeBlock,
     applications: list[RecruitmentApplication],
-    interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
+    #  interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
     interview_duration: timedelta,
     current_time: datetime,
@@ -136,7 +125,9 @@ def allocate_interviews_in_block(
     current_time = block_start
 
     while current_time + interview_duration <= block['end'] and applications:
-        if allocate_single_interview(current_time, block, applications, interviewer_unavailability, position, interview_duration):
+        application = applications[0]  # Get the next application to process
+        if allocate_single_interview(current_time, block, application, position, interview_duration):
+            applications.pop(0)  # Remove the application that was just allocated
             block_interview_count += 1
         current_time += interview_duration
 
@@ -146,35 +137,29 @@ def allocate_interviews_in_block(
 def allocate_single_interview(
     current_time: datetime,
     block: FinalizedTimeBlock,
-    applications: list[RecruitmentApplication],
-    interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
+    application: RecruitmentApplication,
+    # interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
     interview_duration: timedelta,
 ) -> bool:
     """Attempt to allocate a single interview at the current time."""
     interview_end_time = current_time + interview_duration
-    # Skip the block if there's an existing interview at the current time
-    if any(
-        interview.interview_time == current_time for interview in Interview.objects.filter(applications__recruitment_position__recruitment=position.recruitment)
-    ):
+
+    # Check for existing interviews only once per timeslot
+    if Interview.objects.filter(applications__recruitment_position__recruitment=position.recruitment, interview_time=current_time).exists():
         return False
 
-    # Explicitly convert to list
     available_interviewers = get_available_interviewers_for_timeslot(
-        list(block.get('available_interviewers', [])), current_time, interview_end_time, interviewer_unavailability
+        list(block['available_interviewers']), current_time, interview_end_time, position.recruitment
     )
 
-    # If there are no available interviewers, move to the next time block
     if not available_interviewers:
         return False
-    # Try to assign interviews to applicants
-    for application in applications[:]:
-        applicant = application.user
-        if is_applicant_available(applicant, current_time, interview_end_time, position.recruitment):
-            create_interview(application, current_time, position, available_interviewers)
-            mark_interviewers_unavailable(available_interviewers, current_time, interview_end_time, interviewer_unavailability)
-            applications.remove(application)  # Remove the assigned applicant from the list
-            return True
+
+    if is_applicant_available(application.user, current_time, interview_end_time, position.recruitment):
+        create_interview(application, current_time, position, available_interviewers)
+        return True
+
     return False
 
 

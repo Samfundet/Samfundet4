@@ -8,7 +8,6 @@ from collections import defaultdict
 
 from django.db import models, transaction
 from django.utils import timezone
-from django.db.models import QuerySet
 from django.core.exceptions import ValidationError
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
@@ -163,17 +162,6 @@ class RecruitmentPosition(CustomBaseModel):
 
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
-
-    def get_interviewers_grouped_by_section(self) -> dict[GangSection, QuerySet[User]]:
-        interviewers_by_section = defaultdict(set)
-
-        positions = self.shared_interview_group.positions.all() if self.shared_interview_group else [self]
-
-        for position in positions:
-            if position.section:
-                interviewers_by_section[position.section].update(position.interviewers.all())
-
-        return {section: User.objects.filter(id__in=[u.id for u in interviewers]) for section, interviewers in interviewers_by_section.items()}
 
     def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
         if return_id:

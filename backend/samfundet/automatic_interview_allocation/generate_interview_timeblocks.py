@@ -7,11 +7,12 @@ from django.utils import timezone
 
 from samfundet.models.general import User
 from samfundet.models.recruitment import (
-    Interview,
+    #  Interview,
     Recruitment,
     OccupiedTimeslot,
     RecruitmentPosition,
 )
+from samfundet.automatic_interview_allocation.utils import get_interviewers_grouped_by_section
 
 # TODO: optimize block rating and interview allocation strategy
 # TODO: implement room allocation, based on rooms available at the time the interview has been set
@@ -73,6 +74,51 @@ class IntermediateTimeBlock(TypedDict):
     available_interviewers: set[User]
 
 
+def get_occupied_timeslots(recruitment: Recruitment) -> OccupiedTimeslot:
+    """
+    Retrieves unavailable timeslots for a given recruitment.
+
+    Args:
+        recruitment: The recruitment for which unavailable timeslots are fetched.
+
+    Returns:
+        A queryset of OccupiedTimeslot objects ordered by start time.
+    """
+    return OccupiedTimeslot.objects.filter(recruitment=recruitment).order_by('start_dt')
+
+
+def generate_intermediate_blocks(
+    position: RecruitmentPosition, start_dt: datetime, end_dt: datetime, unavailability: OccupiedTimeslot, interval: timedelta
+) -> list[IntermediateTimeBlock]:
+    """
+    Generates intermediate time  within a given time range, accounting for interviewer unavailability.
+
+    Args:
+        position: Recruitment position.
+        start_dt: Start datetime of the interview range.
+        end_dt: End datetime of the interview range.
+        unavailability: List of unavailable timeslots for interviewers.
+        interval: Time interval for each block.
+
+    Returns:
+        A list of time blocks with available interviewers for each block.
+    """
+    all_interviewers = set(position.interviewers.all())
+    intermediate_blocks: list[IntermediateTimeBlock] = []
+    current_dt = start_dt
+
+    while current_dt < end_dt:
+        block_end = min(current_dt + interval, end_dt)
+        available_interviewers = filter_available_interviewers_for_block(all_interviewers, current_dt, block_end, unavailability)
+
+        if available_interviewers:
+            append_or_extend_last_block(intermediate_blocks, current_dt, block_end, available_interviewers)
+
+        current_dt = block_end
+
+    return intermediate_blocks
+
+
 def create_final_interview_blocks(
     position: RecruitmentPosition, start_time: time = time(8, 0), end_time: time = time(23, 0), interval: timedelta = timedelta(minutes=30)
 ) -> list[FinalizedTimeBlock]:
@@ -94,7 +140,7 @@ def create_final_interview_blocks(
     start_date = max(recruitment.visible_from.date(), current_date)
     end_date = recruitment.actual_application_deadline.date()
 
-    all_blocks: list[FinalizedTimeBlock] = []
+    final_blocks: list[FinalizedTimeBlock] = []
 
     # Loop through each day in the range to generate time blocks
     current_date = start_date
@@ -105,10 +151,10 @@ def create_final_interview_blocks(
 
         # Fetch unavailability slots and generate blocks for the current day
         unavailability = get_occupied_timeslots(recruitment)
-        blocks = generate_intermediate_blocks(position, current_datetime, end_datetime, unavailability, interval)
+        intermediate_blocks = generate_intermediate_blocks(position, current_datetime, end_datetime, unavailability, interval)
 
         # Use list comprehension to create and add InterviewBlock objects
-        all_blocks.extend(
+        final_blocks.extend(
             [
                 FinalizedTimeBlock(
                     start=block['start'],
@@ -123,45 +169,13 @@ def create_final_interview_blocks(
                         position,
                     ),
                 )
-                for block in blocks
+                for block in intermediate_blocks
             ]
         )
 
         current_date += timedelta(days=1)
 
-    return all_blocks
-
-
-def generate_intermediate_blocks(
-    position: RecruitmentPosition, start_dt: datetime, end_dt: datetime, unavailability: OccupiedTimeslot, interval: timedelta
-) -> list[IntermediateTimeBlock]:
-    """
-    Generates intermediate time  within a given time range, accounting for interviewer unavailability.
-
-    Args:
-        position: Recruitment position.
-        start_dt: Start datetime of the interview range.
-        end_dt: End datetime of the interview range.
-        unavailability: List of unavailable timeslots for interviewers.
-        interval: Time interval for each block.
-
-    Returns:
-        A list of time blocks with available interviewers for each block.
-    """
-    all_interviewers = set(position.interviewers.all())
-    blocks: list[IntermediateTimeBlock] = []
-    current_dt = start_dt
-
-    while current_dt < end_dt:
-        block_end = min(current_dt + interval, end_dt)
-        available_interviewers = filter_available_interviewers_for_block(all_interviewers, current_dt, block_end, unavailability)
-
-        if available_interviewers:
-            append_or_extend_last_block(blocks, current_dt, block_end, available_interviewers)
-
-        current_dt = block_end
-
-    return blocks
+    return final_blocks
 
 
 def filter_available_interviewers_for_block(all_interviewers: set, start: datetime, end: datetime, unavailability: OccupiedTimeslot) -> set:
@@ -200,19 +214,6 @@ def append_or_extend_last_block(blocks: list, start: datetime, end: datetime, av
         blocks[-1]['end'] = end
 
 
-def get_occupied_timeslots(recruitment: Recruitment) -> OccupiedTimeslot:
-    """
-    Retrieves unavailable timeslots for a given recruitment.
-
-    Args:
-        recruitment: The recruitment for which unavailable timeslots are fetched.
-
-    Returns:
-        A queryset of OccupiedTimeslot objects ordered by start time.
-    """
-    return OccupiedTimeslot.objects.filter(recruitment=recruitment).order_by('start_dt')
-
-
 def calculate_block_rating(start_dt: datetime, end_dt: datetime, available_interviewers: set[User], position: RecruitmentPosition) -> int:
     """
     Calculates a rating for a time block based on interviewer availability, block length, and section diversity.
@@ -238,7 +239,7 @@ def calculate_block_rating(start_dt: datetime, end_dt: datetime, available_inter
     """
 
     block_length = (end_dt - start_dt).total_seconds() / 3600
-    interviewers_grouped_by_section = position.get_interviewers_grouped_by_section()
+    interviewers_grouped_by_section = get_interviewers_grouped_by_section(position)
 
     if len(interviewers_grouped_by_section) > 1:
         represented_sections = sum(1 for section_interviewers in interviewers_grouped_by_section.values() if set(section_interviewers) & available_interviewers)
@@ -257,20 +258,8 @@ def calculate_block_rating(start_dt: datetime, end_dt: datetime, available_inter
     return max(0, int(rating))
 
 
-def is_applicant_available(applicant: User, start_dt: datetime, end_dt: datetime, recruitment: Recruitment) -> bool:
-    """
-    Checks if an applicant is available for an interview during a given time range.
-
-    Args:
-        applicant: The applicant to check availability for.
-        start_dt: The start datetime of the interview slot.
-        end_dt: The end datetime of the interview slot.
-        recruitment: The recruitment to which the applicant has applied.
-
-    Returns:
-        A boolean indicating whether the applicant is available for the given time range.
-    """
-    existing_interviews = Interview.objects.filter(
-        applications__user=applicant, applications__recruitment=recruitment, interview_time__lt=end_dt, interview_time__gte=start_dt
-    )
-    return not existing_interviews.exists()
+def generate_and_sort_timeblocks(position: RecruitmentPosition) -> list[FinalizedTimeBlock]:
+    """Generate and sort time blocks by rating (higher rating first)."""
+    timeblocks = create_final_interview_blocks(position)
+    timeblocks.sort(key=lambda block: (-block['rating'], block['start']))
+    return timeblocks
