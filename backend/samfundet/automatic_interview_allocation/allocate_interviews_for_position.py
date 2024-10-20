@@ -46,7 +46,7 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
     interview_duration = timedelta(minutes=30)  # Each interview lasts 30 minutes
 
     timeblocks = generate_and_sort_timeblocks(position)
-    applications = get_applications_without_interviews(position)
+    applications = get_applications_without_interview(position)
     interviewer_unavailability = create_interviewer_unavailability_map(position)
     check_timeblocks_and_applications(timeblocks, applications, position)
 
@@ -57,7 +57,7 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
     return interview_count
 
 
-def get_applications_without_interviews(position: RecruitmentPosition) -> list[RecruitmentApplication]:
+def get_applications_without_interview(position: RecruitmentPosition) -> list[RecruitmentApplication]:
     """Fetch all applications without assigned interviews."""
     return list(RecruitmentApplication.objects.filter(recruitment_position=position, withdrawn=False, interview__isnull=True))
 
