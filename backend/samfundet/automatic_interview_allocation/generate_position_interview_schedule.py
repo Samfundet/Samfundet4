@@ -13,24 +13,25 @@ from samfundet.models.recruitment import (
     RecruitmentPosition,
 )
 
-# TODO: implement strategy for allocation interviews based on shared interviews (UKA, ISFiT, KSG)
+# TODO: optimize block rating and interview allocation strategy
 # TODO: implement room allocation, based on rooms available at the time the interview has been set
 
 
-class InterviewBlock(TypedDict):
+class FinalizedTimeBlock(TypedDict):
     """
-    Represents a time block for interviews during the recruitment process.
+    Represents a finalized time block for interviews during the recruitment process.
 
-    Interview blocks are created by dividing days into sections based on interviewer availability.
-    Each block is characterized by a unique combination of available interviewers.
+    InterviewBlocks are created by processing InterviewTimeBlocks and adding recruitment-specific
+    context and prioritization. These blocks are used for scheduling across multiple days.
+
+    Each block is characterized by a unique combination of available interviewers and is
+    associated with a specific recruitment position. Blocks are rated to help prioritize
+    optimal interview slots during the allocation process.
 
     For example, given interviewer availability from 08:00 to 16:00:
     1. 08:00 - 12:00: 4 interviewers available (Block I)
     2. 12:00 - 14:00: 3 interviewers available (Block II)
     3. 14:00 - 16:00: 5 interviewers available (Block III)
-
-    Blocks are rated based on their duration and the number of available interviewers,
-    which helps prioritize optimal interview slots during the allocation process.
 
     Attributes:
         start (datetime): Start time of the block
@@ -38,7 +39,8 @@ class InterviewBlock(TypedDict):
         available_interviewers (set[User]): Set of available interviewers for this block
         recruitment_position (RecruitmentPosition): The position being recruited for
         date (date): The date of the interview block
-        rating (float): A calculated rating based on block duration and interviewer availability
+        rating (float): A calculated rating based on block duration, interviewer availability,
+                        and other recruitment-specific factors
     """
 
     start: datetime
@@ -49,9 +51,31 @@ class InterviewBlock(TypedDict):
     rating: float
 
 
+class IntermediateTimeBlock(TypedDict):
+    """
+    Represents an intermediate time block used for calculations within a single day.
+
+    InterviewTimeBlocks are created during the initial phase of interview scheduling,
+    focusing on interviewer availability within a specific day. These blocks are later
+    processed to create finalized InterviewBlocks.
+
+    InterviewTimeBlocks are simpler than InterviewBlocks, containing only the essential
+    time and availability information without recruitment-specific context or ratings.
+
+    Attributes:
+        start (datetime): Start time of the block
+        end (datetime): End time of the block
+        available_interviewers (set[User]): Set of available interviewers for this block
+    """
+
+    start: datetime
+    end: datetime
+    available_interviewers: set[User]
+
+
 def create_daily_interview_blocks(
     position: RecruitmentPosition, start_time: time = time(8, 0), end_time: time = time(23, 0), interval: timedelta = timedelta(minutes=30)
-) -> list[InterviewBlock]:
+) -> list[FinalizedTimeBlock]:
     """
     Generates time blocks for interviews based on the recruitment's time range,
     the availability of interviewers, and their unavailability. The blocks are divided
@@ -70,7 +94,7 @@ def create_daily_interview_blocks(
     start_date = max(recruitment.visible_from.date(), current_date)
     end_date = recruitment.actual_application_deadline.date()
 
-    all_blocks: list[InterviewBlock] = []
+    all_blocks: list[FinalizedTimeBlock] = []
 
     # Loop through each day in the range to generate time blocks
     current_date = start_date
@@ -86,7 +110,7 @@ def create_daily_interview_blocks(
         # Use list comprehension to create and add InterviewBlock objects
         all_blocks.extend(
             [
-                InterviewBlock(
+                FinalizedTimeBlock(
                     start=block['start'],
                     end=block['end'],
                     available_interviewers=set(block['available_interviewers']),
@@ -108,12 +132,6 @@ def create_daily_interview_blocks(
     return all_blocks
 
 
-class InterviewTimeBlock(TypedDict):
-    start: datetime
-    end: datetime
-    available_interviewers: set[User]
-
-
 def generate_position_interview_schedule(
     position: RecruitmentPosition, start_dt: datetime, end_dt: datetime, unavailability: OccupiedTimeslot, interval: timedelta
 ) -> list:
@@ -131,7 +149,7 @@ def generate_position_interview_schedule(
         A list of time blocks with available interviewers for each block.
     """
     all_interviewers = set(position.interviewers.all())
-    blocks: list[InterviewTimeBlock] = []
+    blocks: list[IntermediateTimeBlock] = []
     current_dt = start_dt
 
     while current_dt < end_dt:

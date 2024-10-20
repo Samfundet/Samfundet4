@@ -15,7 +15,7 @@ from samfundet.automatic_interview_allocation.exceptions import (
     NoApplicationsWithoutInterviewsError,
 )
 from samfundet.automatic_interview_allocation.generate_position_interview_schedule import (
-    InterviewBlock,
+    FinalizedTimeBlock,
     is_applicant_available,
     create_daily_interview_blocks,
 )
@@ -59,7 +59,7 @@ def allocate_interviews_for_position(position: RecruitmentPosition, *, allocatio
     return interview_count
 
 
-def get_sorted_timeblocks(position: RecruitmentPosition) -> list[InterviewBlock]:
+def get_sorted_timeblocks(position: RecruitmentPosition) -> list[FinalizedTimeBlock]:
     """Generate and sort time blocks by rating (higher rating first)."""
     timeblocks = create_daily_interview_blocks(position)
     timeblocks.sort(key=lambda block: (-block['rating'], block['start']))
@@ -81,7 +81,7 @@ def get_interviewer_unavailability(position: RecruitmentPosition) -> defaultdict
     return interviewer_unavailability
 
 
-def validate_allocation_prerequisites(timeblocks: list[InterviewBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
+def validate_allocation_prerequisites(timeblocks: list[FinalizedTimeBlock], applications: list[RecruitmentApplication], position: RecruitmentPosition) -> None:
     """Validate that there are available time blocks and applications."""
     if not timeblocks:
         raise NoTimeBlocksAvailableError(f'No available time blocks for position: {position.name_en}')
@@ -90,7 +90,7 @@ def validate_allocation_prerequisites(timeblocks: list[InterviewBlock], applicat
 
 
 def allocate_interviews(
-    timeblocks: list[InterviewBlock],
+    timeblocks: list[FinalizedTimeBlock],
     applications: list[RecruitmentApplication],
     interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
@@ -121,7 +121,7 @@ def allocate_interviews(
 
 
 def allocate_interviews_in_block(
-    block: InterviewBlock,
+    block: FinalizedTimeBlock,
     applications: list[RecruitmentApplication],
     interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
@@ -143,7 +143,7 @@ def allocate_interviews_in_block(
 
 def allocate_single_interview(
     current_time: datetime,
-    block: InterviewBlock,
+    block: FinalizedTimeBlock,
     applications: list[RecruitmentApplication],
     interviewer_unavailability: defaultdict[int, list[tuple[datetime, datetime]]],
     position: RecruitmentPosition,
