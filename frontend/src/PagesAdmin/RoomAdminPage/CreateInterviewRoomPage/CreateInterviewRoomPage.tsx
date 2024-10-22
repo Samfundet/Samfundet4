@@ -12,7 +12,6 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { utcTimestampToLocal } from '~/utils';
 
 type FormType = {
   name: string;
@@ -56,8 +55,8 @@ export function CreateInterviewRoomPage() {
   const initialData: Partial<InterviewRoomDto> = {
     name: room?.name,
     location: room?.location,
-    start_time: utcTimestampToLocal(room?.start_time, false) || '',
-    end_time: utcTimestampToLocal(room?.end_time, false) || '',
+    start_time: room?.start_time,
+    end_time: room?.end_time,
   };
 
   const submitText = roomId ? t(KEY.common_save) : t(KEY.common_create);
