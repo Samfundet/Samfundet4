@@ -100,14 +100,16 @@ export function RecruitmentApplicationsOverviewPage() {
         <Button
           theme="samf"
           onClick={() => {
-            withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
-              .then(() => {
-                // redirect to the same page to refresh the data
-                navigate(0);
-              })
-              .catch(() => {
-                toast.error(t(KEY.common_something_went_wrong));
-              });
+            if (window.confirm(t(KEY.recruitment_withdraw_application))) {
+              withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
+                .then(() => {
+                  // redirect to the same page to refresh the data
+                  navigate(0);
+                })
+                .catch(() => {
+                  toast.error(t(KEY.common_something_went_wrong));
+                });
+            }
           }}
         >
           {t(KEY.recruitment_withdraw_application)}
