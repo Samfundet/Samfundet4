@@ -251,7 +251,9 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
               </FormItem>
             )}
           />
-          <Button type="submit">{submitText}</Button>
+          <Button type="submit" rounded={true} theme="green">
+            {submitText}
+          </Button>
         </div>
       </form>
     </Form>
