@@ -2,29 +2,34 @@ from __future__ import annotations
 
 from django.core import mail
 
+from root.settings.base import TEST_EMAIL_FILE
 
-def test_send_email():
-    # Send email
+
+def test_send_email_and_save_to_file():
     subject = 'Subject here'
     message = 'Here is the message.'
     from_email = 'from@example.com'
-    recievers = ['to@example.com']
+    recipients = ['to@example.com']
+
     mail.send_mail(
         subject,
         message,
         from_email,
-        recievers,
+        recipients,
         fail_silently=False,
     )
 
-    # Check that one message has been sent
     assert len(mail.outbox) == 1
+    email = mail.outbox[0]
 
-    # Check the subject of the first message
-    assert mail.outbox[0].subject == subject
+    assert email.subject == subject
+    assert email.from_email == from_email
+    assert email.to == recipients
+    assert email.body == message
 
-    # Check the recipient of the first message
-    assert mail.outbox[0].to == recievers
-
-    # Check the body of the first message
-    assert mail.outbox[0].body == message
+    # Writing email to a file for inspection
+    with open(TEST_EMAIL_FILE, 'w') as f:
+        f.write(f'Subject: {email.subject}\n')
+        f.write(f'From: {email.from_email}\n')
+        f.write(f"To: {', '.join(email.to)}\n")
+        f.write(f'Message: {email.body}\n')

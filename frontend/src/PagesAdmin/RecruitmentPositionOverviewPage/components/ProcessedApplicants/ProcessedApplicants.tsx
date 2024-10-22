@@ -27,8 +27,8 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     revertStateFunction && { content: '', sortable: false },
   ];
 
-  const rows = data.map((application) => {
-    return [
+  const rows = data.map((application) => ({
+    cells: [
       {
         content: (
           <Link
@@ -61,8 +61,8 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
         ),
         value: application.recruiter_status,
       },
-    ];
-  });
+    ],
+  }));
 
   const styleType = {
     withdrawn: styles.withdrawn,

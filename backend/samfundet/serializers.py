@@ -345,6 +345,12 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -984,7 +990,7 @@ class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
 class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentPosition
-        fields = ['id', 'name_nb', 'name_en']
+        fields = ['id', 'name_nb', 'name_en', 'gang']
 
 
 class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -29,11 +29,10 @@ export function RecruitmentPositionOverviewPage() {
 
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  useEffect(() => {
-    // getRecruitmentApplicationStateChoices
-    recruitmentId &&
-      gangId &&
-      positionId &&
+  const load = useCallback(() => {
+    if (!recruitmentId || !gangId || !positionId) {
+      return;
+    }
       getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((data) => {
           setRecruitmentApplicants(
@@ -84,6 +83,10 @@ export function RecruitmentPositionOverviewPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
   }, [recruitmentId, gangId, positionId, navigate, t]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
     positionId &&
@@ -173,6 +176,7 @@ export function RecruitmentPositionOverviewPage() {
         gangId={gangId}
         positionId={positionId}
         updateStateFunction={updateApplicationState}
+        onInterviewChange={load}
       />
 
       <div className={styles.sub_container}>
