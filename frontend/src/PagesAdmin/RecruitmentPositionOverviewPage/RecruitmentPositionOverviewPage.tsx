@@ -33,55 +33,55 @@ export function RecruitmentPositionOverviewPage() {
     if (!recruitmentId || !gangId || !positionId) {
       return;
     }
-      getRecruitmentApplicationsForGang(gangId, recruitmentId)
-        .then((data) => {
-          setRecruitmentApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 0 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
-          );
-          setWithdrawnApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
-          );
-          setHardtogetApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 2 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
-          );
-          setRejectedApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 3 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
-          );
-          setAcceptedApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 1 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
-          );
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          if (data.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found, { replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+    getRecruitmentApplicationsForGang(gangId, recruitmentId)
+      .then((data) => {
+        setRecruitmentApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 0 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setWithdrawnApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setHardtogetApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 2 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setRejectedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 3 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setAcceptedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 1 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setShowSpinner(false);
+      })
+      .catch((data) => {
+        if (data.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.not_found, { replace: true });
+        }
+        toast.error(t(KEY.common_something_went_wrong));
+      });
   }, [recruitmentId, gangId, positionId, navigate, t]);
 
   useEffect(() => {
