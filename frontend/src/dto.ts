@@ -380,6 +380,7 @@ export type RoleDto = {
   id: number;
   name: string;
   permissions: string[];
+  content_type?: string | null;
 };
 
 export type UserGangRoleDto = {

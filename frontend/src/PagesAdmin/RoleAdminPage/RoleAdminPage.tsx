@@ -6,7 +6,7 @@ export function RoleAdminPage() {
   const { t } = useTranslation();
 
   return (
-    <AdminPageLayout title={t(KEY.common_roles_view)}>
+    <AdminPageLayout title={t(KEY.common_role)}>
       <div />
     </AdminPageLayout>
   );

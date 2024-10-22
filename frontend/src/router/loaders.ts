@@ -23,7 +23,7 @@ export type RoleLoader = {
 };
 
 export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLoader> {
-  return { role: await getRole(params.roleId as string) };
+  return { role: await getRole(Number.parseInt(params.roleId as string)) };
 }
 
 export async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {

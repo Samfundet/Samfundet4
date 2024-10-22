@@ -1,0 +1,1 @@
+export { RoleFormAdminPage } from './RoleFormAdminPage';

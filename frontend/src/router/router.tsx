@@ -60,6 +60,7 @@ import {
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RoleAdminPage,
+  RoleFormAdminPage,
   RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
@@ -189,6 +190,15 @@ export const router = createBrowserRouter(
             handle={{
               crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => <Link url={pathname}>{role?.name}</Link>,
             }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_create}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_edit}
+            loader={roleLoader}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_ROLE]} element={<RoleFormAdminPage />} />}
           />
         </Route>
         {/* Events */}
