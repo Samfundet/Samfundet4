@@ -170,7 +170,7 @@ def test_get_interviewers_grouped_by_section(setup_recruitment, setup_users):
 
 @pytest.mark.django_db
 def test_get_available_interviewers_no_interviewers(setup_recruitment):
-    organization, recruitment = setup_recruitment
+    _, recruitment = setup_recruitment
     start_dt = timezone.now()
     end_dt = start_dt + timedelta(hours=1)
 
@@ -353,7 +353,7 @@ def test_get_interviewers_grouped_by_section_complex(setup_recruitment, setup_us
 @pytest.mark.django_db
 def test_get_available_interviewers_for_timeslot_filtering(setup_recruitment, setup_users):
     """Test the get_available_interviewers_for_timeslot function with various scenarios."""
-    organization, recruitment = setup_recruitment  # Fixed: properly unpack the tuple
+    _, recruitment = setup_recruitment
     user1, user2, user3 = setup_users
     user4, user5, user6 = [User.objects.create(username=f'user{i}', email=f'user{i}@example.com') for i in range(4, 7)]
     start_dt = timezone.now()
