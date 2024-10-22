@@ -10,6 +10,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 
 export function RoomAdminPage() {
   const [interviewRooms, setInterviewRooms] = useState<InterviewRoomDto[] | undefined>();
@@ -73,16 +74,21 @@ export function RoomAdminPage() {
 
   return (
     <>
-      <Button
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_room_create,
-          urlParams: { recruitmentId: data?.recruitment?.id },
-        })}
-        theme="samf"
+      <AdminPageLayout
+        title={t(KEY.recruitment_applet_room_overview)}
+        header={t(KEY.recruitment_applet_room_description)}
       >
-        {t(KEY.common_create)}
-      </Button>
-      <Table columns={columns} data={tableData} defaultSortColumn={0} />
+        <Button
+          link={reverse({
+            pattern: ROUTES.frontend.admin_recruitment_room_create,
+            urlParams: { recruitmentId: data?.recruitment?.id },
+          })}
+          theme="samf"
+        >
+          {t(KEY.common_create)}
+        </Button>
+        <Table columns={columns} data={tableData} defaultSortColumn={0} />
+      </AdminPageLayout>
     </>
   );
 }

@@ -471,7 +471,13 @@ export const router = createBrowserRouter(
                 ),
               }}
             />
-            <Route path={ROUTES.frontend.admin_recruitment_room_overview} element={<RoomAdminPage />} />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_room_overview}
+              element={<RoomAdminPage />}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_applet_room_overview)}</Link>,
+              }}
+            />
             <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<CreateInterviewRoomPage />} />
             <Route path={ROUTES.frontend.admin_recruitment_room_edit} element={<CreateInterviewRoomPage />} />
             <Route
