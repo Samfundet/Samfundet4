@@ -340,6 +340,7 @@ export const KEY = {
   recruitment_withdrawn: 'recruitment_withdrawn',
   recruitment_withdraw_application: 'recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_confirm_withdraw_application: 'recruitment_confirm_withdraw_application',
   recruitment_three_interviews_criteria_button: 'recruitment_three_interviews_criteria_button',
   recruitment_three_interviews_criteria_header: 'recruitment_three_interviews_criteria_header',
   recruitment_revert_status: 'recruitment_revert_status',

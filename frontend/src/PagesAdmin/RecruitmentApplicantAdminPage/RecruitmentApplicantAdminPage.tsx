@@ -43,15 +43,18 @@ export function RecruitmentApplicantAdminPage() {
   }, [applicationID, t, navigate]);
 
   const adminWithdraw = () => {
-    if (recruitmentApplication) {
-      withdrawRecruitmentApplicationRecruiter(recruitmentApplication.id)
-        .then((response) => {
-          setRecruitmentApplication(response.data);
-          toast.success(t(KEY.common_update_successful));
-        })
-        .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+    // Display a confirmation dialog to the admin
+    if (window.confirm(t(KEY.recruitment_confirm_withdraw_application))) {
+      if (recruitmentApplication) {
+        withdrawRecruitmentApplicationRecruiter(recruitmentApplication.id)
+          .then((response) => {
+            setRecruitmentApplication(response.data);
+            toast.success(t(KEY.common_update_successful));
+          })
+          .catch(() => {
+            toast.error(t(KEY.common_something_went_wrong));
+          });
+      }
     }
   };
 
