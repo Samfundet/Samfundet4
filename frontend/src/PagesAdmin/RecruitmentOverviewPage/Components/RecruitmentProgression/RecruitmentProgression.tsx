@@ -53,20 +53,22 @@ export function RecruitmentProgression() {
   }, [processedApplication, totalApplications]);
 
   const setTableRows = () => {
-    const rows: TableRow[] = mock_fetched_data.map((item) => [
-      {
-        content: (
-          <Button theme={'samf'} className={styles.gangButton} onClick={() => alert('navigate to gjengopptak')}>
-            {item.team}
-          </Button>
-        ),
-        value: item.team,
-      },
-      item.applications,
-      item.processed,
-      item.admitted,
-      item.rejected,
-    ]);
+    const rows: TableRow[] = mock_fetched_data.map((item) => ({
+      cells: [
+        {
+          content: (
+            <Button theme={'samf'} className={styles.gangButton} onClick={() => alert('navigate to gjengopptak')}>
+              {item.team}
+            </Button>
+          ),
+          value: item.team,
+        },
+        item.applications,
+        item.processed,
+        item.admitted,
+        item.rejected,
+      ],
+    }));
     setTableRowsState(rows);
   };
 

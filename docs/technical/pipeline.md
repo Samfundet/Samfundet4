@@ -6,34 +6,34 @@ At the bottom of each section is a link to a comprehensive collection of all com
 
 ## Frontend
 
-_Install yarn_
+_Install dependencies_
 
 ```
-yarn install
+yarn
 ```
 
 _Run Biome_
 
 ```
-yarn run biome:ci
+yarn biome:ci
 ```
 
 _fix biome_
 
 ```
-yarn run biome:fix
+yarn biome:fix
 ```
 
 _Run Stylelint_
 
 ```
-yarn run stylelint:check
+yarn stylelint:check
 ```
 
 _Run typescript compiler check_
 
 ```
-yarn run tsc:check
+yarn tsc:check
 ```
 
 Didnt find what you were looking for? See all backend commands [here](../../frontend/package.json)

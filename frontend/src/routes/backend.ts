@@ -552,7 +552,6 @@ export const ROUTES_BACKEND = {
   samfundet__interview_list: '/api/interview/',
   samfundet__interview_detail: '/api/interview/:pk/',
   samfundet__api_root: '/api/',
-  samfundet__api_root: '/api/:format',
   samfundet__schema: '/schema/',
   samfundet__swagger_ui: '/schema/swagger-ui/',
   samfundet__redoc: '/schema/redoc/',
@@ -597,4 +596,3 @@ export const ROUTES_BACKEND = {
   samfundet__purchase_feedback: '/purchase-feedback/',
   static__path: '/static/:path',
   media__path: '/media/:path',
-} as const;

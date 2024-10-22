@@ -1,4 +1,4 @@
-import { type MutableRefObject, useEffect, useRef, useState } from 'react';
+import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
@@ -6,6 +6,7 @@ import type { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
@@ -69,7 +70,7 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: string, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
@@ -476,4 +477,29 @@ export function useDebounce<T>(value: T, delay: number): T {
     [value, delay], // Only re-call effect if value or delay changes
   );
   return debouncedValue;
+}
+
+export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
+  const [parentWidth, setParentWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      if (entries[0].contentRect.width > 0) {
+        setParentWidth(entries[0].contentRect.width);
+      }
+    };
+
+    const observer = new ResizeObserver(handleResize);
+
+    if (childRef.current && childRef.current.parentNode instanceof HTMLElement) {
+      observer.observe(childRef.current.parentNode);
+    }
+
+    // Clean up
+    return () => {
+      observer.disconnect();
+    };
+  }, [childRef]);
+
+  return parentWidth;
 }

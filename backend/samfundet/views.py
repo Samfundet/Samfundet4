@@ -28,7 +28,7 @@ from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import (
@@ -65,6 +65,7 @@ from .serializers import (
     TextItemSerializer,
     InterviewSerializer,
     EventGroupSerializer,
+    PermissionSerializer,
     RecruitmentSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
@@ -505,6 +506,11 @@ class ProfileView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+class PermissionView(ModelViewSet):
+    serializer_class = PermissionSerializer
+    queryset = Permission.objects.all()
 
 
 class WebhookView(APIView):

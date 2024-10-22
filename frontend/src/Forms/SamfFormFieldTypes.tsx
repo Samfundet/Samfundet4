@@ -11,12 +11,12 @@ import {
   type InputFileProps,
   PhoneNumberField,
   TextAreaField,
-  type TextAreaFieldProps,
 } from '~/Components';
 import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker, type ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
 import type { InputFieldType } from '~/Components/InputField/InputField';
 import type { InputFileType } from '~/Components/InputFile/InputFile';
+import type { TextAreaFieldProps } from '~/Components/TextAreaField';
 import type { ImageDto } from '~/dto';
 import type { SamfError } from './SamfForm';
 import styles from './SamfForm.module.scss';
@@ -74,7 +74,7 @@ export type FieldProps =
  */
 export type SamfFormFieldArgs<T extends FormFieldReturnType> = {
   value: T; // Current value of field
-  onChange(value: T): void; // Callback to change field
+  onChange(value: T | undefined): void; // Callback to change field
   error: SamfError;
   label?: string; // Text label above the input
   // Custom args for options type
@@ -194,7 +194,11 @@ function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
       {...(args.props as DropdownProps<number | string>)}
       defaultValue={args.defaultOption}
       options={args.options}
-      onChange={args.onChange as (value?: unknown) => void}
+      value={args.value?.value}
+      onChange={(value) => {
+        const selectedOption = args.options?.find((option) => option.value === value);
+        args.onChange(selectedOption ?? args.defaultOption);
+      }}
       label={args.label}
       error={errorBoolean}
       className={styles.input_element}
