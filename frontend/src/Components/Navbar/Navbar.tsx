@@ -5,19 +5,17 @@ import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Link, ThemeSwitch } from '~/Components';
-import { NavbarItem } from '~/Components/Navbar/components';
-import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
-import { getActiveRecruitments, impersonateUser, logout, stopImpersonatingUser } from '~/api';
-import { englishFlag, logoWhite, norwegianFlag } from '~/assets';
+import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
+import { logoWhite } from '~/assets';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
-import { LANGUAGES } from '~/i18n/types';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
+import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
 const scrollDistanceForOpaque = 30;
 
@@ -35,12 +33,6 @@ export function Navbar() {
   // is given the responsibility of managing this.
   // Store the label of the currently selected dropdown.
   const [expandedDropdown, setExpandedDropdown] = useState('');
-
-  // Language
-  const currentLanguage = i18n.language;
-  const isNorwegian = currentLanguage === LANGUAGES.NB;
-  const otherLanguage = isNorwegian ? LANGUAGES.EN : LANGUAGES.NB;
-  const otherFlag = isNorwegian ? englishFlag : norwegianFlag;
 
   // Scroll detection.
   const scrollY = useScrollY();
@@ -63,12 +55,6 @@ export function Navbar() {
       setActiveRecruitments(response.data);
     });
   }, []);
-
-  const languageButton = (
-    <button type="button" className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
-      <img src={otherFlag} className={styles.language_flag} alt="Flag" />
-    </button>
-  );
 
   // Return profile button for navbar if logged in.
   const mobileProfileButton = (
@@ -252,7 +238,7 @@ export function Navbar() {
         {navbarHeaders}
 
         <div className={styles.mobile_widgets}>
-          {languageButton}
+          <LanguageButton />
           <div className={styles.mobile_user}>
             {loginButton}
             {logoutButton}
@@ -275,7 +261,7 @@ export function Navbar() {
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
             <ThemeSwitch />
-            {languageButton}
+            <LanguageButton />
             {loginButton}
             {profileButton}
           </div>

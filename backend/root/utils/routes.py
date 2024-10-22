@@ -553,7 +553,6 @@ samfundet__recruitment_applications_for_position_detail = 'samfundet:recruitment
 samfundet__interview_list = 'samfundet:interview-list'
 samfundet__interview_detail = 'samfundet:interview-detail'
 samfundet__api_root = 'samfundet:api-root'
-samfundet__api_root = 'samfundet:api-root'
 samfundet__schema = 'samfundet:schema'
 samfundet__swagger_ui = 'samfundet:swagger_ui'
 samfundet__redoc = 'samfundet:redoc'
