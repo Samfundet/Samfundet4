@@ -133,7 +133,7 @@ class SendRejectionMailViewTests(TestCase):
         # Verify response status
         self.assertEqual(response.status_code, 200)  # Verify that emails were sent to eligible users only
         self.assertEqual(len(mail.outbox), 1)  # Only one email should be sent
-        sent_emails = [email.to[0] for email in mail.outbox]
+        sent_emails = mail.outbox[0].bcc
         self.assertIn('rejected@example.com', sent_emails)  # Rejected but not contacted
         self.assertNotIn('withdrawn@example.com', sent_emails)  # Withdrawn should not receive
         self.assertNotIn('contacted@example.com', sent_emails)  # Contacted should not receive
