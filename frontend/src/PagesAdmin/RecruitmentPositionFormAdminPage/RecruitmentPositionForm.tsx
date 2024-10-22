@@ -17,7 +17,9 @@ import {
   Input,
   Textarea,
 } from '~/Components';
+import { MultiSelect } from '~/Components/MultiSelect';
 import { postRecruitmentPosition, putRecruitmentPosition } from '~/api';
+import type { RecruitmentPositionDto, UserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -36,24 +38,25 @@ const schema = z.object({
   default_application_letter_nb: NON_EMPTY_STRING,
   default_application_letter_en: NON_EMPTY_STRING,
   tags: NON_EMPTY_STRING,
+  interviewer_ids: z.array(z.number()).optional().nullable(),
 });
 
 type SchemaType = z.infer<typeof schema>;
 
 interface FormProps {
-  initialData: Partial<SchemaType>;
+  initialData: Partial<RecruitmentPositionDto>;
   positionId?: string;
   recruitmentId?: string;
   gangId?: string;
+  users?: Partial<UserDto[]>;
 }
 
-export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId }: FormProps) {
+export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId, users }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: initialData,
   });
 
   const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
@@ -63,7 +66,7 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
       ...data,
       gang: { id: Number.parseInt(gangId ?? '') },
       recruitment: recruitmentId ?? '',
-      interviewers: [],
+      interviewer_ids: data.interviewer_ids || [],
     };
 
     const action = positionId
@@ -87,8 +90,23 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
   };
 
   useEffect(() => {
-    form.reset(initialData);
+    form.reset({
+      ...initialData,
+      interviewer_ids: initialData.interviewers?.map((interviewer) => interviewer.id) || [],
+    });
   }, [initialData, form]);
+
+  // Convert users array to dropdown options
+  const interviewerOptions =
+    users
+      ?.filter((user) => user?.id && (user?.username || user?.first_name))
+      .map((user) => ({
+        value: user?.id,
+        label: user?.username || `${user?.first_name} ${user?.last_name}`,
+      })) || [];
+
+  // Get currently selected interviewers
+  const selectedInterviewers = form.watch('interviewer_ids') || [];
 
   return (
     <Form {...form}>
@@ -251,6 +269,33 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
               </FormItem>
             )}
           />
+
+          <Controller
+            name="interviewer_ids"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className={styles.item}>
+                <FormLabel>Interviewers</FormLabel>
+                <FormControl>
+                  <MultiSelect
+                    options={interviewerOptions}
+                    selected={interviewerOptions.filter(
+                      (option) => option.value && selectedInterviewers.includes(option.value),
+                    )}
+                    onChange={(values) => {
+                      field.onChange(values);
+                    }}
+                    optionsLabel="Available Interviewers"
+                    selectedLabel="Selected Interviewers"
+                    selectAllBtnTxt="Select All"
+                    unselectAllBtnTxt="Unselect All"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button type="submit" rounded={true} theme="green">
             {submitText}
           </Button>

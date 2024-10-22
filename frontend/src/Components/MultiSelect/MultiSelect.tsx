@@ -59,7 +59,8 @@ export function MultiSelect<T>({
   }
 
   return (
-    <label className={className}>
+    // biome-ignore lint/a11y/noLabelWithoutControl: <explanation>
+<label className={className}>
       {label}
       <div className={styles.row}>
         <div className={styles.col}>

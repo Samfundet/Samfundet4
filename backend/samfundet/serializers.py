@@ -769,6 +769,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    interviewer_ids = serializers.ListField(child=serializers.IntegerField(), write_only=True, required=False)
 
     class Meta:
         model = RecruitmentPosition
@@ -778,37 +779,43 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         self,
         *,
         recruitment_position: RecruitmentPosition,
-        interviewer_objects: list[dict],
+        interviewer_ids: list[int],
     ) -> None:
-        try:
-            interviewers = []
-            if interviewer_objects:
-                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
-                if interviewer_ids:
-                    interviewers = User.objects.filter(id__in=interviewer_ids)
-            recruitment_position.interviewers.set(interviewers)
-        except (TypeError, KeyError):
-            raise ValidationError('Invalid data for interviewers.') from None
+        if interviewer_ids:
+            try:
+                interviewers = User.objects.filter(id__in=interviewer_ids)
+                found_ids = set(interviewers.values_list('id', flat=True))
+                invalid_ids = set(interviewer_ids) - found_ids
+
+                if invalid_ids:
+                    raise ValidationError(f'Invalid interviewer IDs: {invalid_ids}')
+
+                recruitment_position.interviewers.set(interviewers)
+            except (TypeError, ValueError):
+                raise ValidationError('Invalid interviewer IDs format.') from None
+        else:
+            recruitment_position.interviewers.clear()
 
     def validate(self, data: dict) -> dict:
-        gang_id = self.initial_data.get('gang').get('id')
+        gang_id = self.initial_data.get('gang', {}).get('id')
         if gang_id:
             try:
                 data['gang'] = Gang.objects.get(id=gang_id)
             except Gang.DoesNotExist:
                 raise serializers.ValidationError('Invalid gang id') from None
+
+        self.interviewer_ids = data.pop('interviewer_ids', [])
+
         return super().validate(data)
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
-        interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position, interviewer_ids=self.interviewer_ids)
         return recruitment_position
 
     def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
-        interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance, interviewer_ids=self.interviewer_ids)
         return updated_instance
 
     def get_total_applicants(self, recruitment_position: RecruitmentPosition) -> int:
