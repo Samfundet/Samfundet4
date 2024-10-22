@@ -10,7 +10,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from root.utils import routes
-from root.settings.base import TEST_EMAIL_FILE
 
 from samfundet.models.general import Gang, User
 from samfundet.models.recruitment import (
@@ -66,12 +65,6 @@ class SendRejectionMailViewTests(TestCase):
         self.user_rejected_but_contacted = User.objects.create(username='skurra-user', email='skurrabompapa@example.com')
 
         self.admin_user = User.objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword')
-
-        # Assign necessary permissions to the admin user
-        # assign_perm('samfundet.send_rejection_email', self.admin_user)
-        # Clear permission caches
-        # del self.admin_user._user_perm_cache
-        # del self.admin_user._perm_cache
 
         # Initialize APIClient
         self.client = APIClient()

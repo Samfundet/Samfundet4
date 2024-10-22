@@ -596,3 +596,4 @@ export const ROUTES_BACKEND = {
   samfundet__purchase_feedback: '/purchase-feedback/',
   static__path: '/static/:path',
   media__path: '/media/:path',
+} as const;
