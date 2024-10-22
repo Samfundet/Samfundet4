@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type React from 'react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +24,7 @@ import { ROUTES } from '~/routes';
 import { NON_EMPTY_STRING } from '~/schema/strings';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
 
-export const recruitmentPositionSchema = z.object({
+const schema = z.object({
   name_nb: NON_EMPTY_STRING,
   name_en: NON_EMPTY_STRING,
   norwegian_applicants_only: z.boolean(),
@@ -39,32 +38,27 @@ export const recruitmentPositionSchema = z.object({
   tags: NON_EMPTY_STRING,
 });
 
-type RecruitmentPositionFormType = z.infer<typeof recruitmentPositionSchema>;
+type SchemaType = z.infer<typeof schema>;
 
-interface RecruitmentPositionFormProps {
-  initialData: Partial<RecruitmentPositionFormType>;
+interface FormProps {
+  initialData: Partial<SchemaType>;
   positionId?: string;
   recruitmentId?: string;
   gangId?: string;
 }
 
-export const RecruitmentPositionForm: React.FC<RecruitmentPositionFormProps> = ({
-  initialData,
-  positionId,
-  recruitmentId,
-  gangId,
-}) => {
+export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const form = useForm<RecruitmentPositionFormType>({
-    resolver: zodResolver(recruitmentPositionSchema),
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
     defaultValues: initialData,
   });
 
   const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
 
-  const onSubmit = (data: RecruitmentPositionFormType) => {
+  const onSubmit = (data: SchemaType) => {
     const updatedPosition = {
       ...data,
       gang: { id: Number.parseInt(gangId ?? '') },
@@ -262,4 +256,4 @@ export const RecruitmentPositionForm: React.FC<RecruitmentPositionFormProps> = (
       </form>
     </Form>
   );
-};
+}
