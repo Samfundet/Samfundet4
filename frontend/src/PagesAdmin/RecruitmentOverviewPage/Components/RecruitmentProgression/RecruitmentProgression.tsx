@@ -122,7 +122,7 @@ export function RecruitmentProgression() {
               theme={'green'}
               onClick={() => {
                 alert('Skal navigere til siden hvor man lager avslagsepost');
-                  navigate({ url: ROUTES.frontend.someroute })
+                  navigate({ url: ROUTES.frontend.admin_recruitment_gang_overview_rejection_email })
               }}
             >
               {`${t(KEY.common_create)} ${t(KEY.recruitment_rejection_email)}`}
