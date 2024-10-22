@@ -597,4 +597,3 @@ export const ROUTES_BACKEND = {
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
-
