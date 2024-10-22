@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Table } from '~/Components';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { deleteInterviewRoom, getInterviewRoomsForRecruitment } from '~/api';
 import type { InterviewRoomDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
@@ -10,7 +11,6 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
-import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 
 export function RoomAdminPage() {
   const [interviewRooms, setInterviewRooms] = useState<InterviewRoomDto[] | undefined>();
