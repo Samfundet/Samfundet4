@@ -62,7 +62,7 @@ class SendRejectionMailViewTests(TestCase):
         self.user_rejected = User.objects.create(username='rejected-user', email='rejected@example.com')
         self.user_withdrawn = User.objects.create(username='withdrawn-user', email='withdrawn@example.com')
         self.user_contacted = User.objects.create(username='contacted-user', email='contacted@example.com')
-        self.user_rejected_but_contacted = User.objects.create(username='skurra-user', email='skurrabompapa@example.com')
+        self.user_rejected_but_contacted = User.objects.create(username='skurra-user', email='hard.to.get@example.com')
 
         self.admin_user = User.objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword')
 
