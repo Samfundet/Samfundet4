@@ -30,8 +30,6 @@ export function RecruitmentStatistics() {
     }
   }, []);
 
-  // TODO: add dynamic data and might need backend features (in ISSUE #1110)
-
   if (typeof recruitmentId !== 'string') {
     navigate({ url: ROUTES.frontend.admin_recruitment });
     toast.error(t(KEY.common_something_went_wrong));

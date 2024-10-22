@@ -6,6 +6,8 @@ import { Text } from '~/Components/Text/Text';
 import { KEY } from '~/i18n/constants';
 import { toPercentage } from '~/utils';
 import styles from './RecruitmentProgression.module.scss';
+import { useCustomNavigate } from '~/hooks';
+import { ROUTES } from '~/routes';
 
 export function RecruitmentProgression() {
   const { t } = useTranslation();
@@ -15,6 +17,7 @@ export function RecruitmentProgression() {
   const [rejectionCount, setRejectionCount] = useState<number>(-1);
   const [admittedCount, setAdmittedCount] = useState<number>(-1);
   const [rejectionEmailCount, setRejectionEmailCount] = useState<number>(-1);
+  const navigate = useCustomNavigate();
   const [tableRows, setTableRowsState] = useState<TableRow[]>([]);
   const ONE_HUNDRED_PERCENT = 1;
 
@@ -108,7 +111,7 @@ export function RecruitmentProgression() {
             {rejectionEmailCount} {t(KEY.recruitment_applicants)} {t(KEY.common_have)} {t(KEY.common_received)}{' '}
             {t(KEY.recruitment_rejection_email)}
           </Text>
-          {progression < ONE_HUNDRED_PERCENT ? (
+          {progression > ONE_HUNDRED_PERCENT ? (
             <Text size={'m'} as={'strong'}>
               {t(KEY.common_create)} {t(KEY.recruitment_rejection_email)}: {t(KEY.common_it)} {t(KEY.common_is)}{' '}
               {t(KEY.common_possible)} {t(KEY.common_when)} {t(KEY.common_all)} {t(KEY.recruitment_applications)}{' '}
@@ -119,10 +122,10 @@ export function RecruitmentProgression() {
               theme={'green'}
               onClick={() => {
                 alert('Skal navigere til siden hvor man lager avslagsepost');
+                  navigate({ url: ROUTES.frontend.someroute })
               }}
             >
               {`${t(KEY.common_create)} ${t(KEY.recruitment_rejection_email)}`}
-              {/*TODO: IN ISSUE #1110, navigate to "create e-mail page"*/}
             </Button>
           )}
         </div>
