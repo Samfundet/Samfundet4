@@ -323,13 +323,17 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_applications]: 'Trukkede søknader',
   [KEY.recruitment_rejected_applications]: 'Søkere som får automatisk avslag',
+  [KEY.recruitment_hardtoget_applications]: 'Søkere som har takket nei til stillingen',
   [KEY.recruitment_accepted_applications]: 'Søkere vi har tatt opp',
   [KEY.recruitment_rejected_applications_help_text]:
     'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'Disse har takket nei til stillingen og vil dermed ikke få noen avslagsmail.',
   [KEY.recruitment_accepted_applications_help_text]:
     'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
   [KEY.recruitment_accepted_applications_empty_text]: 'Ingen søkere er markert som kontaktet.',
   [KEY.recruitment_rejected_applications_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
+  [KEY.recruitment_hardtoget_applications_empty_text]: 'Ingen søkere har takket nei til stillingen.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'Ingen trekte søknader.',
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
@@ -778,14 +782,19 @@ export const en = prepareTranslations({
   [KEY.recruitment_applicant_top_position]: 'Most desired position',
   [KEY.recruitment_withdrawn_applications]: 'Withdrawn applications',
   [KEY.recruitment_rejected_applications]: 'Automatically rejected applicants',
+  [KEY.recruitment_hardtoget_applications]: 'Applicants who declined the position',
   [KEY.recruitment_accepted_applications]: 'Applicants we have contacted and accepted',
   [KEY.recruitment_rejected_applications_help_text]:
     'These will get an automatic rejection email if they are not accepted for a different position',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'These applicants have declined the position and will not receive a rejection email.',
   [KEY.recruitment_accepted_applications_help_text]:
     'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
   [KEY.recruitment_accepted_applications_empty_text]: 'No applicants are marked as contacted.',
   [KEY.recruitment_rejected_applications_empty_text]:
     'No applicants are marked to receive an automatic rejection email.',
+  [KEY.recruitment_hardtoget_applications_empty_text]: 'No applicants have declined the position.',
+
   [KEY.recruitment_withdrawn_applications_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',

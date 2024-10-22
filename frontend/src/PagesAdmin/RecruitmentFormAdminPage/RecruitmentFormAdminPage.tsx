@@ -212,7 +212,7 @@ export function RecruitmentFormAdminPage() {
                       <Dropdown
                         options={organizationOptions}
                         onChange={(value) => field.onChange(value)}
-                        initialValue={field.value}
+                        value={field.value}
                       />
                     </FormControl>
                     <FormMessage />
