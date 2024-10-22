@@ -43,9 +43,8 @@ export function RecruitmentApplicantAdminPage() {
   }, [applicationID, t, navigate]);
 
   const adminWithdraw = () => {
-    // Display a confirmation dialog to the admin
-    if (window.confirm(t(KEY.recruitment_confirm_withdraw_application))) {
-      if (recruitmentApplication) {
+    if (recruitmentApplication) {
+      if (window.confirm(t(KEY.recruitment_confirm_withdraw_application))) {
         withdrawRecruitmentApplicationRecruiter(recruitmentApplication.id)
           .then((response) => {
             setRecruitmentApplication(response.data);
