@@ -14,6 +14,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
+import { AdminPage } from '../AdminPageLayout';
 
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
@@ -64,11 +65,11 @@ export function RecruitmentApplicantAdminPage() {
   }
 
   return (
-    <Page>
+    <AdminPage title={`${applicant?.first_name} ${applicant?.last_name}`}>
       <div className={classNames(styles.infoContainer)}>
         <BackButton />
         <Text size="l" as="strong" className={styles.textBottom}>
-          {applicant?.first_name} {applicant?.last_name}
+          
         </Text>
         <Table
           data={[
@@ -167,6 +168,6 @@ export function RecruitmentApplicantAdminPage() {
           })}
         />
       </div>
-    </Page>
+    </AdminPage>
   );
 }
