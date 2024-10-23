@@ -1,13 +1,13 @@
-import styles from './RecruitmentWithoutInterviewTable.module.scss';
-import { RecruitmentUserDto } from '~/dto';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { Link } from '../Link';
-import { ROUTES } from '~/routes';
-import { InputField } from '../InputField';
-import { dbT } from '~/utils';
 import { Table } from '~/Components/Table';
+import type { RecruitmentUserDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
+import { InputField } from '../InputField';
+import { Link } from '../Link';
+import styles from './RecruitmentWithoutInterviewTable.module.scss';
 import { WithoutInterviewModal } from './components';
 
 type RecruitmentWithoutInterviewTableProps = {
@@ -53,8 +53,8 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
   function userToTableRow(user: RecruitmentUserDto) {
     return [
       {
-        value: user.first_name + ' ' + user.last_name,
-        content: <Link url={ROUTES.frontend.recruitment_application}>{user.first_name + ' ' + user.last_name}</Link>,
+        value: `${user.first_name} ${user.last_name}`,
+        content: <Link url={ROUTES.frontend.recruitment_application}>{`${user.first_name} ${user.last_name}`}</Link>,
       },
       user.email,
       user.phone_number,
@@ -76,7 +76,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     <div>
       <InputField icon="mdi:search" onChange={setSearchQuery} placeholder={t(KEY.common_search)} />
       <div className={styles.table_container}>
-        <Table columns={tableColumns} data={filterUsers().map((user) => userToTableRow(user))} />
+        <Table columns={tableColumns} data={filterUsers().map((user) => ({ cells: userToTableRow(user) }))} />
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
-import { RecruitmentApplicationDto } from '~/dto';
-import styles from './WithoutInterview.module.scss';
-import { Link } from '~/Components';
-import { dbT } from '~/utils';
 import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
+import { Link } from '~/Components';
 import { Table } from '~/Components/Table';
+import type { RecruitmentApplicationDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
+import styles from './WithoutInterview.module.scss';
 
 type WithoutInterviewListProps = {
   applications: RecruitmentApplicationDto[];
@@ -21,24 +21,26 @@ export function WithoutInterviewList({ applications }: WithoutInterviewListProps
   ];
 
   function applicationToRow(application: RecruitmentApplicationDto) {
-    return [
-      {
-        value: dbT(application.recruitment_position, 'name'),
-        content: (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_applicant,
-              urlParams: {
-                applicationID: application.id,
-              },
-            })}
-          >
-            {dbT(application.recruitment_position, 'name')}
-          </Link>
-        ),
-      },
-      application.applicant_priority,
-    ];
+    return {
+      cells: [
+        {
+          value: dbT(application.recruitment_position, 'name'),
+          content: (
+            <Link
+              url={reverse({
+                pattern: ROUTES.frontend.admin_recruitment_applicant,
+                urlParams: {
+                  applicationID: application.id,
+                },
+              })}
+            >
+              {dbT(application.recruitment_position, 'name')}
+            </Link>
+          ),
+        },
+        application.applicant_priority,
+      ],
+    };
   }
   return (
     <div className={styles.container}>

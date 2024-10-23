@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageDto } from '~/dto';
+import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { SetState } from '~/types';
+import type { SetState } from '~/types';
 import { queryDtoCustom } from '~/utils';
 import { InputField } from '../InputField';
 import styles from './ImageQuery.module.scss';

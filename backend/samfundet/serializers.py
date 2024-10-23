@@ -18,6 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .models.role import Role
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
@@ -345,6 +346,12 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -485,6 +492,12 @@ class MenuSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class RoleSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
 class SaksdokumentSerializer(CustomBaseSerializer):
     # Read only url file path used in frontend
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
@@ -605,6 +618,7 @@ class RecruitmentDateStatSerializer(serializers.ModelSerializer):
 
 class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
     campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+    applicant_percentage = serializers.SerializerMethodField(method_name='get_applicant_percentage', read_only=True)
 
     class Meta:
         model = RecruitmentCampusStat
@@ -612,6 +626,9 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
         return stat.campus.name_nb if stat.campus else None
+
+    def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
+        return stat.normalized_applicant_percentage()
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
@@ -710,6 +727,8 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentSeparatePosition
         fields = [
+            'id',
+            'recruitment',
             'name_nb',
             'name_en',
             'description_nb',
@@ -725,6 +744,11 @@ class RecruitmentSerializer(CustomBaseSerializer):
         model = Recruitment
         fields = '__all__'
 
+    def to_representation(self, instance: Recruitment) -> dict:
+        data = super().to_representation(instance)
+        data['organization'] = OrganizationSerializer(instance.organization).data
+        return data
+
 
 class RecruitmentPositionTagSerializer(CustomBaseSerializer):
     class Meta:
@@ -733,7 +757,7 @@ class RecruitmentPositionTagSerializer(CustomBaseSerializer):
 
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 
@@ -774,6 +798,15 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
             recruitment_position.interviewers.set(interviewers)
         except (TypeError, KeyError):
             raise ValidationError('Invalid data for interviewers.') from None
+
+    def validate(self, data: dict) -> dict:
+        gang_id = self.initial_data.get('gang').get('id')
+        if gang_id:
+            try:
+                data['gang'] = Gang.objects.get(id=gang_id)
+            except Gang.DoesNotExist:
+                raise serializers.ValidationError('Invalid gang id') from None
+        return super().validate(data)
 
     # other positions with same interview, hence shared interview
     def _update_shared_interview_positions(self, recruitment_position: RecruitmentPosition, shared_interview_positions: list[RecruitmentPosition]) -> None:
@@ -1018,6 +1051,47 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
 
     def get_interview_time(self, instance: RecruitmentApplication) -> str | None:
         return instance.interview.interview_time if instance.interview else None
+
+
+class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number']
+
+
+class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = ['id', 'name_nb', 'name_en', 'gang']
+
+
+class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+
+    def get_recruitment_position(self, instance: RecruitmentApplication) -> str:
+        return instance.recruitment_position.name_nb
 
 
 class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):

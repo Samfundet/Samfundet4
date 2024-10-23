@@ -1,11 +1,11 @@
-import styles from './RecruitmentProgression.module.scss';
-import { Text } from '~/Components/Text/Text';
 import { useEffect, useState } from 'react';
-import { ProgressBar, Button } from '~/Components';
-import { Table, TableRow } from '~/Components/Table';
 import { useTranslation } from 'react-i18next';
+import { Button, ProgressBar } from '~/Components';
+import { Table, type TableRow } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { KEY } from '~/i18n/constants';
 import { toPercentage } from '~/utils';
+import styles from './RecruitmentProgression.module.scss';
 
 export function RecruitmentProgression() {
   const { t } = useTranslation();
@@ -50,24 +50,25 @@ export function RecruitmentProgression() {
     }
 
     setTableRows();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processedApplication, totalApplications]);
 
   const setTableRows = () => {
-    const rows: TableRow[] = mock_fetched_data.map((item) => [
-      {
-        content: (
-          <Button theme={'samf'} className={styles.gangButton} onClick={() => alert('navigate to gjengopptak')}>
-            {item.team}
-          </Button>
-        ),
-        value: item.team,
-      },
-      item.applications,
-      item.processed,
-      item.admitted,
-      item.rejected,
-    ]);
+    const rows: TableRow[] = mock_fetched_data.map((item) => ({
+      cells: [
+        {
+          content: (
+            <Button theme={'samf'} className={styles.gangButton} onClick={() => alert('navigate to gjengopptak')}>
+              {item.team}
+            </Button>
+          ),
+          value: item.team,
+        },
+        item.applications,
+        item.processed,
+        item.admitted,
+        item.rejected,
+      ],
+    }));
     setTableRowsState(rows);
   };
 
@@ -120,7 +121,7 @@ export function RecruitmentProgression() {
                 alert('Skal navigere til siden hvor man lager avslagsepost');
               }}
             >
-              {t(KEY.common_create) + ' ' + t(KEY.recruitment_rejection_email)}
+              {`${t(KEY.common_create)} ${t(KEY.recruitment_rejection_email)}`}
               {/*TODO: IN ISSUE #1110, navigate to "create e-mail page"*/}
             </Button>
           )}

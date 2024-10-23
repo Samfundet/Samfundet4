@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
+import { Text } from '~/Components/Text/Text';
 import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
-import { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import type { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { useCustomNavigate } from '~/hooks';
-import { toast } from 'react-toastify';
-import { STATUS } from '~/http_status_codes';
-import { Text } from '~/Components/Text/Text';
 import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
-import { reverse } from '~/named-urls';
 
 export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
@@ -25,9 +25,10 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
-      getRecruitmentApplicationsForGang(recruitmentId, gangId)
+      getRecruitmentApplicationsForGang(gangId, recruitmentId)
         .then((response) => {
           setApplications(response.data);
           setShowSpinner(false);
@@ -37,9 +38,9 @@ export function RecruitmentGangAllApplicantsAdminPage() {
           console.error(error);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (gangId) {
       getGang(gangId)
@@ -53,9 +54,9 @@ export function RecruitmentGangAllApplicantsAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gangId]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId) {
       getRecruitment(recruitmentId)
@@ -71,7 +72,6 @@ export function RecruitmentGangAllApplicantsAdminPage() {
           console.error(data);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId]);
 
   const tableColumns = [
@@ -84,7 +84,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  const data = applications.map(function (application) {
+  const data = applications.map((application) => {
     const applicationURL = reverse({
       pattern: ROUTES.frontend.admin_recruitment_applicant,
       urlParams: {
@@ -92,21 +92,23 @@ export function RecruitmentGangAllApplicantsAdminPage() {
       },
     });
 
-    return [
-      {
-        content: (
-          <Link url={applicationURL}>
-            {application.user.first_name} {application.user.last_name}
-          </Link>
-        ),
-      },
-      application.user?.phone_number,
-      application.user.email,
-      { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
-      application.interview?.interview_time,
-      application.interview?.interview_location,
-      application.recruiter_status,
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Link url={applicationURL}>
+              {application.user.first_name} {application.user.last_name}
+            </Link>
+          ),
+        },
+        application.user?.phone_number,
+        application.user.email,
+        { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
+        application.interview?.interview_time,
+        application.interview?.interview_location,
+        application.recruiter_status,
+      ],
+    };
   });
 
   const downloadCSV = () => {

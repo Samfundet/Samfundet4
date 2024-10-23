@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import styles from './MiniCalendar.module.scss';
-import { useTranslation } from 'react-i18next';
-import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, previousMonday } from 'date-fns';
-import classNames from 'classnames';
-import { Button, TimeDisplay } from '~/Components';
-import { SHORT_DAY_I18N_KEYS } from '~/utils';
-import { CalendarMarker } from '~/types';
 import { Icon } from '@iconify/react';
+import classNames from 'classnames';
+import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, previousMonday } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button, TimeDisplay } from '~/Components';
+import type { CalendarMarker } from '~/types';
+import { SHORT_DAY_I18N_KEYS } from '~/utils';
+import styles from './MiniCalendar.module.scss';
 
 type MiniCalendarProps = {
   /** Decides which month to display */
@@ -21,12 +21,22 @@ type MiniCalendarProps = {
   displayLabel?: boolean;
   /** List of dates to mark with a dot */
   markers?: CalendarMarker[];
+  /** Selected date can be defined on beforehand */
+  initialSelectedDate?: Date | null;
 };
 
-export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabel, markers }: MiniCalendarProps) {
+export function MiniCalendar({
+  baseDate,
+  minDate,
+  maxDate,
+  onChange,
+  displayLabel,
+  markers,
+  initialSelectedDate,
+}: MiniCalendarProps) {
   const [displayDate, setDisplayDate] = useState<Date>(baseDate);
   const [days, setDays] = useState<Date[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate || null);
   const { t } = useTranslation();
 
   function getMarker(d: Date | null) {
@@ -102,7 +112,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
       {monthHeader}
       {daysHeader}
       <div className={styles.grid}>
-        {days.map((d, i) => {
+        {days.map((d) => {
           const valid = dateValid(d);
           const isSelected = selectedDate?.toDateString() === d.toDateString();
           const marker = getMarker(d);
@@ -110,7 +120,8 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
 
           return (
             <button
-              key={i}
+              key={d.toISOString()}
+              type="button"
               className={classNames({
                 [styles.day]: true,
                 [styles.disabled_day]: !valid,
@@ -124,7 +135,7 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
               disabled={!valid}
             >
               {d.getDate()}
-              {marker && <div className={`${styles.marker} ${marker.className}`}></div>}
+              {marker && <div className={`${styles.marker} ${marker.className}`} />}
             </button>
           );
         })}

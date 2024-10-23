@@ -2,23 +2,30 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { AuthContextProvider } from '~/context/AuthContext';
 import '~/global.scss';
-import { GlobalContextProvider } from '~/context/GlobalContextProvider';
-import { reportWebVitals } from '~/reportWebVitals';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router-dom';
-import { router } from '~/router/router';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { OrganizationContextProvider } from '~/context/OrgContextProvider';
+import { reportWebVitals } from '~/reportWebVitals';
+import { router } from '~/router/router';
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <AuthContextProvider>
-    <GlobalContextProvider>
-      <OrganizationContextProvider>
-        <React.StrictMode>
-          <RouterProvider router={router} />
-        </React.StrictMode>
-      </OrganizationContextProvider>
-    </GlobalContextProvider>
-  </AuthContextProvider>,
+  <QueryClientProvider client={queryClient}>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <OrganizationContextProvider>
+          <React.StrictMode>
+            <RouterProvider router={router} />
+          </React.StrictMode>
+        </OrganizationContextProvider>
+      </GlobalContextProvider>
+    </AuthContextProvider>
+    <ReactQueryDevtools />
+  </QueryClientProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,13 +1,13 @@
-import { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
-import styles from './ProcessedApplicants.module.scss';
-import { Table } from '~/Components/Table';
-import { KEY } from '~/i18n/constants';
 import { useTranslation } from 'react-i18next';
 import { Button, Link } from '~/Components';
+import { Table } from '~/Components/Table';
+import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import styles from './ProcessedApplicants.module.scss';
 
-type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
+type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
 
 type ProcessedApplicantsProps = {
   data: RecruitmentApplicationDto[];
@@ -27,8 +27,8 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     revertStateFunction && { content: '', sortable: false },
   ];
 
-  const rows = data.map(function (application) {
-    return [
+  const rows = data.map((application) => ({
+    cells: [
       {
         content: (
           <Link
@@ -61,13 +61,14 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
         ),
         value: application.recruiter_status,
       },
-    ];
-  });
+    ],
+  }));
 
   const styleType = {
     withdrawn: styles.withdrawn,
     accepted: styles.accepted,
     rejected: styles.rejected,
+    hardtoget: styles.hardtoget,
   };
 
   return (

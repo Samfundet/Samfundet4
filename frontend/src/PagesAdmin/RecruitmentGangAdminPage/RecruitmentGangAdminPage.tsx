@@ -1,32 +1,35 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getOrganization, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
-import { GangDto, type OrganizationDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
-import styles from './RecruitmentGangAdminPage.module.scss';
+import { getGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, lowerCapitalize } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { toast } from 'react-toastify';
-import { STATUS } from '~/http_status_codes';
+import styles from './RecruitmentGangAdminPage.module.scss';
 
 export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [organization, setOrganization] = useState<OrganizationDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  const title = `${organization?.name} - ${dbT(recruitment, 'name')} - ${dbT(gang, 'name')}`;
+  const title = `${getObjectFieldOrNumber<string>(recruitment?.organization, 'name')} - ${dbT(
+    recruitment,
+    'name',
+  )} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
       Promise.allSettled([
@@ -38,7 +41,6 @@ export function RecruitmentGangAdminPage() {
         }),
         getRecruitment(recruitmentId).then(async (data) => {
           setRecruitment(data.data);
-          await getOrganization(data.data.organization).then(setOrganization);
         }),
       ])
         .then(() => {
@@ -51,7 +53,6 @@ export function RecruitmentGangAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recruitmentId, gangId]);
 
   const tableColumns = [
@@ -63,59 +64,61 @@ export function RecruitmentGangAdminPage() {
     { content: ' ', sortable: false },
   ];
 
-  const data = recruitmentPositions.map(function (recruitmentPosition) {
+  const data = recruitmentPositions.map((recruitmentPosition) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },
     });
-    return [
-      {
-        content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
-      },
-      {
-        value: recruitmentPosition.is_funksjonaer_position,
-        content: recruitmentPosition.is_funksjonaer_position
-          ? t(KEY.recruitment_funksjonaer)
-          : t(KEY.recruitment_gangmember),
-      },
-      { value: recruitmentPosition.total_applicants, content: recruitmentPosition.total_applicants },
-      {
-        value: recruitmentPosition.processed_applicants,
-        content:
-          recruitmentPosition.total_applicants == recruitmentPosition.processed_applicants
-            ? t(KEY.common_all)
-            : recruitmentPosition.processed_applicants,
-      },
-      { value: recruitmentPosition.accepted_applicants, content: recruitmentPosition.accepted_applicants },
-      {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.recruitment_application,
-                  urlParams: {
-                    positionID: recruitmentPosition.id,
-                  },
-                }),
-              );
-            }}
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
-                  urlParams: {
-                    gangId: gangId,
-                    recruitmentId: recruitmentId,
-                    positionId: recruitmentPosition.id,
-                  },
-                }),
-              );
-            }}
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        {
+          content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
+        },
+        {
+          value: recruitmentPosition.is_funksjonaer_position,
+          content: recruitmentPosition.is_funksjonaer_position
+            ? t(KEY.recruitment_funksjonaer)
+            : t(KEY.recruitment_gangmember),
+        },
+        { value: recruitmentPosition.total_applicants, content: recruitmentPosition.total_applicants },
+        {
+          value: recruitmentPosition.processed_applicants,
+          content:
+            recruitmentPosition.total_applicants === recruitmentPosition.processed_applicants
+              ? t(KEY.common_all)
+              : recruitmentPosition.processed_applicants,
+        },
+        { value: recruitmentPosition.accepted_applicants, content: recruitmentPosition.accepted_applicants },
+        {
+          content: (
+            <CrudButtons
+              onView={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.recruitment_application,
+                    urlParams: {
+                      positionID: recruitmentPosition.id,
+                    },
+                  }),
+                );
+              }}
+              onEdit={() => {
+                navigate(
+                  reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_gang_position_edit,
+                    urlParams: {
+                      gangId: gangId,
+                      recruitmentId: recruitmentId,
+                      positionId: recruitmentPosition.id,
+                    },
+                  }),
+                );
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;

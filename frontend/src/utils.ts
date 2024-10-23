@@ -1,10 +1,11 @@
-import i18next from 'i18next';
-import { CSSProperties } from 'react';
-import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
-import { UserDto } from '~/dto';
-import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketType, EventTicketTypeValue } from './types';
 import { format } from 'date-fns';
+import i18next from 'i18next';
+import type { CSSProperties } from 'react';
+import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
+import type { UserDto } from '~/dto';
+import { KEY } from './i18n/constants';
+import type { TranslationKeys } from './i18n/types';
+import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -96,7 +97,7 @@ export function dbT(
 ): string | undefined {
   if (model === undefined) return undefined;
 
-  const fieldName = field + '_' + language;
+  const fieldName = `${field}_${language}`;
   const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
   if (hasFieldName) {
     const value = model[fieldName];
@@ -125,6 +126,27 @@ export function dbT(
   return undefined;
 }
 
+/**
+ * Checks if a field is an object or a number
+ * Returns a number if the field is an object, or a specified object field
+ * Type of field if it is an object must be specified
+ * @param field The field to be checked
+ * @param objectFieldName The potential fieldname that the object has
+ * @returns value of object field or number
+ */
+export function getObjectFieldOrNumber<T>(
+  field: Record<string, unknown> | number | undefined,
+  objectFieldName: string,
+): number | undefined | T {
+  if (field === undefined) return undefined;
+  if (typeof field === 'number') return field;
+  const hasFieldName = Object.prototype.hasOwnProperty.call(field, objectFieldName);
+  if (hasFieldName) {
+    return field[objectFieldName] as T;
+  }
+  return undefined;
+}
+
 export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
@@ -138,7 +160,7 @@ export function isTruthy(value = ''): boolean {
 /**
  * Gets the translation key for a given day
  */
-export function getDayKey(day: Day): KeyValues {
+export function getDayKey(day: Day): TranslationKeys {
   switch (day) {
     case 'monday':
       return KEY.common_day_monday;
@@ -170,7 +192,7 @@ export const SHORT_DAY_I18N_KEYS = [
 /**
  * Gets the translation key for a given price group
  */
-export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
+export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationKeys {
   switch (ticketType) {
     case EventTicketType.FREE:
       return KEY.common_ticket_type_free;
@@ -189,19 +211,23 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
  * Converts a UTC timestring from django to
  * a local timestring suitable for html input elements
  * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @param includeSeconds boolean flag to include seconds in the output
  * @returns timestamp in local format, eg. '2023-04-05T20:15'
  */
-export function utcTimestampToLocal(time: string | undefined): string {
-  return new Date(time ?? '')
-    .toLocaleString('sv-SE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(' ', 'T');
+export function utcTimestampToLocal(time: string | undefined, includeSeconds = true): string {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+
+  if (includeSeconds) {
+    options.second = '2-digit';
+  }
+
+  return new Date(time ?? '').toLocaleString('sv-SE', options).replace(' ', 'T');
 }
 
 /**
@@ -212,7 +238,7 @@ export function utcTimestampToLocal(time: string | undefined): string {
  */
 export function niceDateTime(time: string | undefined): string | undefined {
   const date = new Date(time ?? '');
-  if (!isNaN(date.getTime())) {
+  if (!Number.isNaN(date.getTime())) {
     const dateString = date.toUTCString();
     return dateString.substring(0, dateString.length - 3);
   }
@@ -289,8 +315,8 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   //
   const dot = document.createElement('div');
   dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
-  dot.style.left = e.clientX + window.pageXOffset + 'px';
-  dot.style.top = e.clientY + window.pageYOffset + 'px';
+  dot.style.left = `${e.clientX + window.pageXOffset}px`;
+  dot.style.top = `${e.clientY + window.pageYOffset}px`;
   return dot;
 }
 
@@ -318,16 +344,15 @@ export function getRandomEntryFromList(entries: unknown[]): unknown {
  */
 export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
-  return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
+  return new Date().setHours(Number.parseInt(timeSplit[0]), Number.parseInt(timeSplit[1]), 0, 0);
 }
 
 export const toPercentage = (floatNum: number | undefined): string => {
   if (floatNum) {
     const percentage = floatNum * 100;
-    return percentage.toString().slice(0, 4) + '%';
-  } else {
-    return 'N/A';
+    return `${percentage.toString().slice(0, 4)}%`;
   }
+  return 'N/A';
 };
 
 /*

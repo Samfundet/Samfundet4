@@ -1,20 +1,21 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getTextItem, putUserPreference } from '~/api';
+import type { Key, SetState } from '~/types';
+import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
+import type { LinkTarget } from './Components/Link/Link';
+import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
-import { getTextItem, putUserPreference } from '~/api';
-import { Key, SetState } from '~/types';
-import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
-import { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, desktopBpLower, mobileBpUpper, THEME, THEME_KEY, ThemeValue } from './constants';
-import { TextItemDto } from './dto';
-import { LANGUAGES } from './i18n/constants';
+import type { TextItemDto } from './dto';
+import { LANGUAGES } from './i18n/types';
 
 // Make typescript happy.
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     goatcounter: any;
   }
 }
@@ -69,7 +70,7 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: string, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
@@ -349,6 +350,7 @@ export function useClickOutside<T extends Node>(
   event: 'mousedown' | 'mouseup' = 'mousedown',
 ): MutableRefObject<T | null> {
   const ref = useRef<T>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     function handleClickOutside(evt: MouseEvent) {
       if (evt.target instanceof Element) {
@@ -444,15 +446,16 @@ export function useIsMetaKeyDown(): boolean {
   return isDown;
 }
 
-export function useTitle(title: string, suffix: string = 'Samfundet'): void {
+export function useTitle(title: string, suffix = 'Samfundet'): void {
   const initialTitle = document.title;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: initialTitle does not need to be in deplist
   useEffect(() => {
-    document.title = title ? `${title}${suffix ? ' - ' + suffix : ''}` : suffix;
+    const delimitedSuffix = suffix ? ` - ${suffix}` : '';
+    document.title = title ? title + delimitedSuffix : suffix;
 
     return () => {
       document.title = initialTitle;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, suffix]);
 }
 
@@ -474,4 +477,29 @@ export function useDebounce<T>(value: T, delay: number): T {
     [value, delay], // Only re-call effect if value or delay changes
   );
   return debouncedValue;
+}
+
+export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
+  const [parentWidth, setParentWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      if (entries[0].contentRect.width > 0) {
+        setParentWidth(entries[0].contentRect.width);
+      }
+    };
+
+    const observer = new ResizeObserver(handleResize);
+
+    if (childRef.current && childRef.current.parentNode instanceof HTMLElement) {
+      observer.observe(childRef.current.parentNode);
+    }
+
+    // Clean up
+    return () => {
+      observer.disconnect();
+    };
+  }, [childRef]);
+
+  return parentWidth;
 }

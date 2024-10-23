@@ -1,18 +1,18 @@
-import styles from './OrganizationRecruitmentPage.module.scss';
-import { RecruitmentTabs, GangTypeContainer, GangSeparatePositions } from './Components';
-import { Text, Page, Video, Logo, OccupiedFormModal, SamfundetLogoSpinner, ToggleSwitch } from '~/Components';
-import { PersonalRow } from '~/Pages/RecruitmentPage';
-import { OrgNameType, OrgNameTypeValue } from '~/types';
-import { useDesktop } from '~/hooks';
-import { useParams } from 'react-router-dom';
-import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useOrganizationContext } from '~/context/OrgContextProvider';
-import { RecruitmentDto } from '~/dto';
-import { getOrganization, getRecruitment } from '~/api';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, ToggleSwitch, Video } from '~/Components';
+import { PersonalRow } from '~/Pages/RecruitmentPage';
+import { getOrganization, getRecruitment } from '~/api';
+import { useOrganizationContext } from '~/context/OrgContextProvider';
+import type { RecruitmentDto } from '~/dto';
+import { useDesktop } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { OrgNameType, type OrgNameTypeValue } from '~/types';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
+import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
+import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
@@ -39,7 +39,7 @@ export function OrganizationRecruitmentPage() {
 
   useEffect(() => {
     if (recruitment) {
-      getOrganization(recruitment.organization)
+      getOrganization(getObjectFieldOrNumber<number>(recruitment.organization, 'id'))
         .then((response) => {
           if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
             setOrganizationName(response.name as OrgNameTypeValue);
@@ -78,7 +78,7 @@ export function OrganizationRecruitmentPage() {
           </div>
           {embededId ? (
             <>
-              <Video embedId={embededId} className={styles.video}></Video>
+              <Video embedId={embededId} className={styles.video} />
             </>
           ) : (
             <></>

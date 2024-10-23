@@ -11,12 +11,14 @@ from rest_framework.test import APIClient
 from django.test import Client, TestCase
 from django.utils import timezone
 from django.core.files.images import ImageFile
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 import root.management.commands.seed_scripts.billig as billig_seed
 from root.settings import BASE_DIR
 
 from samfundet.constants import DEV_PASSWORD
+from samfundet.models.role import Role
 from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
 from samfundet.models.general import (
@@ -29,6 +31,7 @@ from samfundet.models.general import (
     Campus,
     BlogPost,
     TextItem,
+    GangSection,
     Reservation,
     Organization,
     MerchVariation,
@@ -226,6 +229,13 @@ def fixture_organization() -> Iterator[Organization]:
 
 
 @pytest.fixture
+def fixture_organization2() -> Iterator[Organization]:
+    organization = Organization.objects.create(name='UKA')
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
 def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
     organization = Gang.objects.create(
         name_nb='Gang',
@@ -238,15 +248,79 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
 
 
 @pytest.fixture
-def fixture_gang2(fixture_organization: Organization) -> Iterator[Gang]:
+def fixture_gang2(fixture_organization2: Organization) -> Iterator[Gang]:
     organization = Gang.objects.create(
         name_nb='Gang 2',
         name_en='Gang 2',
         abbreviation='G2',
-        organization=fixture_organization,
+        organization=fixture_organization2,
     )
     yield organization
     organization.delete()
+
+
+@pytest.fixture
+def fixture_gang_section(fixture_gang: Gang) -> Iterator[GangSection]:
+    gang_section = GangSection.objects.create(
+        name_nb='Test Gang Section',
+        name_en='Test Gang Section',
+        gang=fixture_gang,
+    )
+    yield gang_section
+    gang_section.delete()
+
+
+@pytest.fixture
+def fixture_gang_section2(fixture_gang2: Gang) -> Iterator[GangSection]:
+    gang_section = GangSection.objects.create(
+        name_nb='Test Gang Section 2',
+        name_en='Test Gang Section 2',
+        gang=fixture_gang2,
+    )
+    yield gang_section
+    gang_section.delete()
+
+
+@pytest.fixture
+def fixture_role() -> Iterator[Role]:
+    role = Role.objects.create(
+        name='Test Role',
+    )
+    yield role
+    role.delete()
+
+
+@pytest.fixture
+def fixture_org_permission() -> Iterator[Permission]:
+    permission = Permission.objects.create(
+        name='Test Org Permission',
+        codename='test_org_permission',
+        content_type=ContentType.objects.get_for_model(Organization),
+    )
+    yield permission
+    permission.delete()
+
+
+@pytest.fixture
+def fixture_gang_permission() -> Iterator[Permission]:
+    permission = Permission.objects.create(
+        name='Test Gang Permission',
+        codename='test_gang_permission',
+        content_type=ContentType.objects.get_for_model(Gang),
+    )
+    yield permission
+    permission.delete()
+
+
+@pytest.fixture
+def fixture_gang_section_permission() -> Iterator[Permission]:
+    permission = Permission.objects.create(
+        name='Test Gang Section Permission',
+        codename='test_gang_section_permission',
+        content_type=ContentType.objects.get_for_model(GangSection),
+    )
+    yield permission
+    permission.delete()
 
 
 @pytest.fixture

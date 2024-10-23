@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
-import { InformationPageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,42 +13,21 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function InformationAdminPage() {
   const navigate = useCustomNavigate();
-  const [informationPages, setInformationPages] = useState<InformationPageDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   useTitle(t(KEY.admin_information_manage_title));
 
-  // Stuff to do on first render.
-  //TODO add permissions on render
-  useEffect(() => {
-    getInformationPages()
-      .then((data) => {
-        setInformationPages(data);
-        setShowSpinner(false);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // TODO: add permissions on render
+  const { data, isLoading } = useQuery({
+    queryKey: ['informationpages'],
+    queryFn: getInformationPages,
+  });
 
-  function deletePage(slug_field: string | undefined) {
-    if (!slug_field) return;
-
-    deleteInformationPage(slug_field)
-      .then(() => {
-        getInformationPages().then((data) => {
-          setInformationPages(data);
-          setShowSpinner(false);
-        });
-        toast.success(t(KEY.common_delete_successful));
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }
+  const deletePageMutation = useMutation({
+    mutationFn: (slug: string) => {
+      // if (!slug) return; // TODO: raise err
+      return deleteInformationPage(slug);
+    },
+  });
 
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
@@ -60,40 +37,42 @@ export function InformationAdminPage() {
     '', // Buttons
   ];
 
-  const data = informationPages.map(function (element) {
+  const tableData = data?.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.information_page_detail,
       urlParams: { slugField: element.slug_field },
     });
 
-    return [
-      { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
-      dbT(element, 'title'),
-      'To be added',
-      'To be added',
-      {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate({ url: pageUrl });
-            }}
-            onEdit={() => {
-              navigate({
-                url: reverse({
-                  pattern: ROUTES.frontend.admin_information_edit,
-                  urlParams: { slugField: element.slug_field },
-                }),
-              });
-            }}
-            onDelete={() => {
-              if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
-                deletePage(element.slug_field);
-              }
-            }}
-          />
-        ),
-      },
-    ];
+    return {
+      cells: [
+        { content: <Link url={pageUrl}>{pageUrl}</Link>, value: pageUrl },
+        dbT(element, 'title'),
+        'To be added',
+        'To be added',
+        {
+          content: (
+            <CrudButtons
+              onView={() => {
+                navigate({ url: pageUrl });
+              }}
+              onEdit={() => {
+                navigate({
+                  url: reverse({
+                    pattern: ROUTES.frontend.admin_information_edit,
+                    urlParams: { slugField: element.slug_field },
+                  }),
+                });
+              }}
+              onDelete={() => {
+                if (window.confirm(t(KEY.admin_information_confirm_delete) ?? '')) {
+                  deletePageMutation.mutate(element.slug_field);
+                }
+              }}
+            />
+          ),
+        },
+      ],
+    };
   });
 
   const title = t(KEY.admin_information_manage_title);
@@ -105,8 +84,8 @@ export function InformationAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <Table columns={tableColumns} data={data} />
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
+      <Table columns={tableColumns} data={tableData || []} />
     </AdminPageLayout>
   );
 }
