@@ -48,7 +48,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const tableData = positions.map((item) => {
     const positionPageURL = reverse({
       pattern: ROUTES.frontend.recruitment_application,
-      urlParams: { positionId: item.id, gangID: item.id },
+      urlParams: { positionId: item.id, gangId: item.id },
     });
     return {
       cells: [

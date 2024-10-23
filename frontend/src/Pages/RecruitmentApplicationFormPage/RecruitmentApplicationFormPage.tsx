@@ -175,7 +175,7 @@ export function RecruitmentApplicationFormPage() {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionId: pos.id, gangID: pos.gang.id },
+                          urlParams: { positionId: pos.id, gangId: pos.gang.id },
                         }),
                       });
                     }}

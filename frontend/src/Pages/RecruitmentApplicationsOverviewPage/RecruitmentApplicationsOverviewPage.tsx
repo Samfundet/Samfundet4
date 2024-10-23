@@ -63,7 +63,7 @@ export function RecruitmentApplicationsOverviewPage() {
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
                 positionId: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
+                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.position_name}
@@ -103,7 +103,7 @@ export function RecruitmentApplicationsOverviewPage() {
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
                 positionId: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
+                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.withdrawnLink}
