@@ -23,7 +23,7 @@ export function RecruitmentPositionOverviewPage() {
   const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
-  const [hardtogetApplicants, setHardtogetApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [hardtogetApplicants, setHardtogetApplicants] = useState<RecruitmentApplicationDto[]>([]); //Applicants that have been offered a position, but did not accept it
 
   const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
 
