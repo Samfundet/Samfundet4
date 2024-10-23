@@ -62,6 +62,7 @@ from .models.recruitment import (
     RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentPositionTag,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
 )
@@ -749,6 +750,12 @@ class RecruitmentSerializer(CustomBaseSerializer):
         return data
 
 
+class RecruitmentPositionTagSerializer(CustomBaseSerializer):
+    class Meta:
+        model = RecruitmentPositionTag
+        fields = ['name', 'color']
+
+
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
     separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
@@ -769,11 +776,13 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    tags = RecruitmentPositionTagSerializer(many=True)
 
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'
 
+    # users holding the interview
     def _update_interviewers(
         self,
         *,
@@ -799,14 +808,68 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
                 raise serializers.ValidationError('Invalid gang id') from None
         return super().validate(data)
 
+    # other positions with same interview, hence shared interview
+    def _update_shared_interview_positions(self, recruitment_position: RecruitmentPosition, shared_interview_positions: list[RecruitmentPosition]) -> None:
+        try:
+            position_ids = [position.id for position in shared_interview_positions]
+            recruitment_position.shared_interview_positions.set(position_ids)
+        except (TypeError, KeyError):
+            raise ValidationError('Invalid data for shared interview positions.') from None
+
+    # tags/labels related to the position
+    def _update_tags(self, recruitment_position: RecruitmentPosition, tag_objects: list[dict]) -> None:
+        try:
+            tags = []
+            if tag_objects:
+                for tag in tag_objects:
+                    tag_obj = RecruitmentPositionTag.objects.get_or_create(name=tag['name'])[0]
+                    tags.append(tag_obj)
+            recruitment_position.tags.set(tags)
+        except (TypeError, KeyError):
+            raise ValidationError('Invalid data for tags') from None
+
+    def validate(self, attrs: dict) -> dict:
+        tags_data = attrs.pop('tags', [])
+        shared_interview_positions_data = attrs.pop('shared_interview_positions', [])
+
+        # Assuming shared_interview_positions is a list of RecruitmentPosition objects
+        if not all(isinstance(pos, RecruitmentPosition) for pos in shared_interview_positions_data):
+            raise ValidationError('Invalid data for shared interview positions')
+
+        # Get the IDs
+        position_ids = [pos.id for pos in shared_interview_positions_data]
+
+        if not all(RecruitmentPosition.objects.filter(id=pos_id).exists() for pos_id in position_ids):
+            raise ValidationError('One or more shared interview positions do not exist.')
+
+        validated_data = super().validate(attrs)
+
+        # Explicitly validate the nested tags data
+        tag_serializer = RecruitmentPositionTagSerializer(data=tags_data, many=True)
+        tag_serializer.is_valid(raise_exception=True)
+
+        validated_data['tags'] = tags_data
+        validated_data['shared_interview_positions'] = shared_interview_positions_data
+        return validated_data
+
     def create(self, validated_data: dict) -> RecruitmentPosition:
+        tags_data = validated_data.pop('tags', [])
+        shared_interview_positions_ids = validated_data.pop('shared_interview_positions', [])
+
         recruitment_position = super().create(validated_data)
+        self._update_tags(recruitment_position=recruitment_position, tag_objects=tags_data)
+        self._update_shared_interview_positions(recruitment_position=recruitment_position, shared_interview_positions=shared_interview_positions_ids)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
         return recruitment_position
 
     def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
+        tags_data = validated_data.pop('tags', [])
+        shared_interview_positions_ids = validated_data.pop('shared_interview_positions', [])
+
         updated_instance = super().update(instance, validated_data)
+        self._update_tags(recruitment_position=updated_instance, tag_objects=tags_data)
+        self._update_shared_interview_positions(recruitment_position=updated_instance, shared_interview_positions=shared_interview_positions_ids)
         interviewer_objects = self.initial_data.get('interviewers', [])
         self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
         return updated_instance

@@ -12,7 +12,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -106,18 +105,65 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
+                (
+                    'is_superuser',
+                    models.BooleanField(
+                        default=False,
+                        help_text='Designates that this user has all permissions without explicitly assigning them.',
+                        verbose_name='superuser status',
+                    ),
+                ),
                 ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
                 ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
+                (
+                    'is_staff',
+                    models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status'),
+                ),
+                (
+                    'is_active',
+                    models.BooleanField(
+                        default=True,
+                        help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.',
+                        verbose_name='active',
+                    ),
+                ),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('username', samfundet.models.utils.fields.LowerCaseField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
+                (
+                    'username',
+                    samfundet.models.utils.fields.LowerCaseField(
+                        error_messages={'unique': 'A user with that username already exists.'},
+                        help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
+                        max_length=150,
+                        unique=True,
+                        validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
+                        verbose_name='username',
+                    ),
+                ),
                 ('phone_number', samfundet.models.utils.fields.PhoneNumberField(max_length=15, verbose_name='phone_number')),
                 ('email', models.EmailField(max_length=254, unique=True, verbose_name='email')),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    'groups',
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+                        related_name='user_set',
+                        related_query_name='user',
+                        to='auth.group',
+                        verbose_name='groups',
+                    ),
+                ),
+                (
+                    'user_permissions',
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text='Specific permissions for this user.',
+                        related_name='user_set',
+                        related_query_name='user',
+                        to='auth.permission',
+                        verbose_name='user permissions',
+                    ),
+                ),
                 ('campus', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.campus')),
             ],
             options={
@@ -140,8 +186,18 @@ class Migration(migrations.Migration):
                 ('description_en', models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')),
                 ('start_dt', models.DateField(blank=True, verbose_name='Start dato')),
                 ('end_dt', models.DateField(blank=True, verbose_name='Slutt dato')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'ClosedPeriod',
@@ -158,8 +214,18 @@ class Migration(migrations.Migration):
                 ('name_nb', models.CharField(max_length=140)),
                 ('name_en', models.CharField(max_length=140)),
                 ('price', models.PositiveIntegerField()),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -173,8 +239,18 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('name', models.CharField(max_length=140)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'EventGroup',
@@ -199,8 +275,18 @@ class Migration(migrations.Migration):
                 ('name_nb', models.CharField(blank=True, max_length=64, null=True, unique=True, verbose_name='Navn (norsk)')),
                 ('name_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Navn (engelsk)')),
                 ('order', models.PositiveSmallIntegerField(blank=True, null=True, unique=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'FoodCategory',
@@ -216,8 +302,18 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('name_nb', models.CharField(blank=True, max_length=64, null=True, unique=True, verbose_name='Navn (norsk)')),
                 ('name_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Navn (engelsk)')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'FoodPreference',
@@ -233,8 +329,18 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('title_nb', models.CharField(blank=True, max_length=64, null=True, verbose_name='Gruppetype Norsk')),
                 ('title_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Gruppetype Engelsk')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'GangType',
@@ -253,12 +359,62 @@ class Migration(migrations.Migration):
                 ('abbreviation', models.CharField(blank=True, max_length=8, null=True, verbose_name='Forkortelse')),
                 ('webpage', models.URLField(blank=True, null=True, verbose_name='Nettside')),
                 ('logo', models.ImageField(blank=True, null=True, upload_to='ganglogos/', verbose_name='Logo')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('event_admin_group', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gang_as_event_admin_group', to='auth.group', verbose_name='Arrangementgruppe')),
-                ('gang_leader_group', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gang_as_leader', to='auth.group', verbose_name='Gangleder')),
-                ('recruitment_admin_group', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gang_as_recruitment_admin_group', to='auth.group', verbose_name='Innganggruppe')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('gang_type', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='gangs', to='samfundet.gangtype', verbose_name='Gruppetype')),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'event_admin_group',
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='gang_as_event_admin_group',
+                        to='auth.group',
+                        verbose_name='Arrangementgruppe',
+                    ),
+                ),
+                (
+                    'gang_leader_group',
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='gang_as_leader',
+                        to='auth.group',
+                        verbose_name='Gangleder',
+                    ),
+                ),
+                (
+                    'recruitment_admin_group',
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='gang_as_recruitment_admin_group',
+                        to='auth.group',
+                        verbose_name='Innganggruppe',
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'gang_type',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='gangs',
+                        to='samfundet.gangtype',
+                        verbose_name='Gruppetype',
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Gang',
@@ -274,8 +430,18 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('title', models.CharField(max_length=140)),
                 ('image', models.ImageField(upload_to='images/')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Image',
@@ -291,9 +457,19 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('name_nb', models.CharField(blank=True, max_length=64, verbose_name='Navn Norsk')),
                 ('name_en', models.CharField(blank=True, max_length=64, verbose_name='Navn Engelsk')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('gang', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='gang', to='samfundet.gang', verbose_name='Gjeng')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('logo', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.image', verbose_name='Logo')),
             ],
             options={
@@ -307,7 +483,14 @@ class Migration(migrations.Migration):
                 ('version', models.PositiveIntegerField(blank=True, default=0, editable=False, null=True)),
                 ('created_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
-                ('status', models.CharField(choices=[('active', 'Aktiv'), ('archived', 'Arkivert'), ('cancelled', 'Avlyst'), ('deleted', 'Slettet')], default='active', max_length=30)),
+                (
+                    'status',
+                    models.CharField(
+                        choices=[('active', 'Aktiv'), ('archived', 'Arkivert'), ('cancelled', 'Avlyst'), ('deleted', 'Slettet')],
+                        default='active',
+                        max_length=30,
+                    ),
+                ),
                 ('title_nb', models.CharField(max_length=140)),
                 ('title_en', models.CharField(max_length=140)),
                 ('description_long_nb', models.TextField()),
@@ -316,20 +499,72 @@ class Migration(migrations.Migration):
                 ('description_short_en', models.TextField()),
                 ('location', models.CharField(max_length=140)),
                 ('host', models.CharField(max_length=140)),
-                ('age_restriction', models.CharField(choices=[('none', 'Ingen aldersgrense'), ('eighteen', '18 år'), ('twenty', '20 år'), ('mixed', '18 år (student), 20 år (ikke-student)')], default=None, max_length=30)),
-                ('category', models.CharField(choices=[('samfundsmote', 'Samfundsmøte'), ('concert', 'Konsert'), ('debate', 'Debatt'), ('quiz', 'Quiz'), ('lecture', 'Kurs'), ('other', 'Annet')], default='other', max_length=30)),
+                (
+                    'age_restriction',
+                    models.CharField(
+                        choices=[
+                            ('none', 'Ingen aldersgrense'),
+                            ('eighteen', '18 år'),
+                            ('twenty', '20 år'),
+                            ('mixed', '18 år (student), 20 år (ikke-student)'),
+                        ],
+                        default=None,
+                        max_length=30,
+                    ),
+                ),
+                (
+                    'category',
+                    models.CharField(
+                        choices=[
+                            ('samfundsmote', 'Samfundsmøte'),
+                            ('concert', 'Konsert'),
+                            ('debate', 'Debatt'),
+                            ('quiz', 'Quiz'),
+                            ('lecture', 'Kurs'),
+                            ('other', 'Annet'),
+                        ],
+                        default='other',
+                        max_length=30,
+                    ),
+                ),
                 ('start_dt', models.DateTimeField()),
                 ('duration', models.PositiveIntegerField()),
                 ('publish_dt', models.DateTimeField()),
                 ('doors_time', models.TimeField(blank=True, null=True)),
                 ('capacity', models.PositiveIntegerField()),
-                ('ticket_type', models.CharField(choices=[('included', 'Included with entrance'), ('free', 'Free'), ('billig', 'Paid'), ('registration', 'Free with registration'), ('custom', 'Custom')], default='free', max_length=30)),
+                (
+                    'ticket_type',
+                    models.CharField(
+                        choices=[
+                            ('included', 'Included with entrance'),
+                            ('free', 'Free'),
+                            ('billig', 'Paid'),
+                            ('registration', 'Free with registration'),
+                            ('custom', 'Custom'),
+                        ],
+                        default='free',
+                        max_length=30,
+                    ),
+                ),
                 ('billig_id', models.IntegerField(blank=True, null=True, unique=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('custom_tickets', models.ManyToManyField(blank=True, to='samfundet.eventcustomticket')),
                 ('event_group', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.eventgroup')),
-                ('registration', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.eventregistration')),
+                (
+                    'registration',
+                    models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.eventregistration'),
+                ),
                 ('editors', models.ManyToManyField(blank=True, to='samfundet.gang')),
                 ('image', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='samfundet.image')),
             ],
@@ -350,8 +585,18 @@ class Migration(migrations.Migration):
                 ('title_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Tittel (engelsk)')),
                 ('text_en', models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')),
                 ('published_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='samfundet.image')),
             ],
             options={
@@ -372,9 +617,22 @@ class Migration(migrations.Migration):
                 ('text_en', models.CharField(max_length=255, verbose_name='Infoboks tekst (engelsk)')),
                 ('color', models.CharField(max_length=15, verbose_name='Infoboks hexcolor eller css color-constant')),
                 ('url', models.URLField(blank=True, null=True, verbose_name='Infoboks utgående link')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.image', verbose_name='Infoboks bilde')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'image',
+                    models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.image', verbose_name='Infoboks bilde'),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Infoboks',
@@ -387,13 +645,33 @@ class Migration(migrations.Migration):
                 ('version', models.PositiveIntegerField(blank=True, default=0, editable=False, null=True)),
                 ('created_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
-                ('slug_field', models.SlugField(blank=True, help_text='Primary key, this field will identify the object and be used in the URL.', max_length=64, primary_key=True, serialize=False, unique=True)),
+                (
+                    'slug_field',
+                    models.SlugField(
+                        blank=True,
+                        help_text='Primary key, this field will identify the object and be used in the URL.',
+                        max_length=64,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
                 ('title_nb', models.CharField(blank=True, max_length=64, null=True, verbose_name='Tittel (norsk)')),
                 ('text_nb', models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')),
                 ('title_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Tittel (engelsk)')),
                 ('text_en', models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'InformationPage',
@@ -403,7 +681,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='gang',
             name='info_page',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='samfundet.informationpage', verbose_name='Infoside'),
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='samfundet.informationpage', verbose_name='Infoside'
+            ),
         ),
         migrations.CreateModel(
             name='InterviewRoom',
@@ -416,9 +696,29 @@ class Migration(migrations.Migration):
                 ('location', models.CharField(help_text='Physical location, eg. campus', max_length=255)),
                 ('start_time', models.DateTimeField(help_text='Start time of availability')),
                 ('end_time', models.DateTimeField(help_text='End time of availability')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('gang', models.ForeignKey(blank=True, help_text='The gang that booked the room', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='rooms', to='samfundet.gang')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'gang',
+                    models.ForeignKey(
+                        blank=True,
+                        help_text='The gang that booked the room',
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='rooms',
+                        to='samfundet.gang',
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -434,10 +734,33 @@ class Migration(migrations.Migration):
                 ('interview_time', models.DateTimeField(blank=True, help_text='The time of the interview', null=True)),
                 ('interview_location', models.CharField(blank=True, help_text='The location of the interview', max_length=255, null=True)),
                 ('notes', models.TextField(blank=True, help_text='Notes for the interview', null=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('interviewers', models.ManyToManyField(blank=True, help_text='Interviewers for this interview', related_name='interviews', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('room', models.ForeignKey(blank=True, help_text='Room where the interview is held', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='interviews', to='samfundet.interviewroom')),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'interviewers',
+                    models.ManyToManyField(blank=True, help_text='Interviewers for this interview', related_name='interviews', to=settings.AUTH_USER_MODEL),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'room',
+                    models.ForeignKey(
+                        blank=True,
+                        help_text='Room where the interview is held',
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='interviews',
+                        to='samfundet.interviewroom',
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -457,10 +780,20 @@ class Migration(migrations.Migration):
                 ('price', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('price_member', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('order', models.PositiveSmallIntegerField(blank=True, null=True, unique=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('food_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.foodcategory')),
                 ('food_preferences', models.ManyToManyField(blank=True, to='samfundet.foodpreference')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'MenuItem',
@@ -478,8 +811,18 @@ class Migration(migrations.Migration):
                 ('description_nb', models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')),
                 ('name_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Navn (engelsk)')),
                 ('description_en', models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('menu_items', models.ManyToManyField(blank=True, to='samfundet.menuitem')),
             ],
             options={
@@ -499,7 +842,10 @@ class Migration(migrations.Migration):
                 ('released_at', models.DateTimeField(auto_now_add=True, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.image', verbose_name='Produkt Bilde')),
+                (
+                    'image',
+                    models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.image', verbose_name='Produkt Bilde'),
+                ),
             ],
             options={
                 'verbose_name': 'Merch',
@@ -515,7 +861,10 @@ class Migration(migrations.Migration):
                 ('stock', models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='In stock')),
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('merch', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='variations', to='samfundet.merch', verbose_name='Merch')),
+                (
+                    'merch',
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='variations', to='samfundet.merch', verbose_name='Merch'),
+                ),
             ],
             options={
                 'abstract': False,
@@ -529,8 +878,18 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('name', models.CharField(max_length=32, unique=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Organization',
@@ -540,7 +899,14 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='gang',
             name='organization',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='gangs', to='samfundet.organization', verbose_name='Organisasjon'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='gangs',
+                to='samfundet.organization',
+                verbose_name='Organisasjon',
+            ),
         ),
         migrations.CreateModel(
             name='Profile',
@@ -578,14 +944,34 @@ class Migration(migrations.Migration):
                 ('name_nb', models.CharField(help_text='Name of the recruitment', max_length=100)),
                 ('name_en', models.CharField(help_text='Name of the recruitment', max_length=100)),
                 ('visible_from', models.DateTimeField(help_text='When it becomes visible for applicants')),
-                ('actual_application_deadline', models.DateTimeField(help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail')),
+                (
+                    'actual_application_deadline',
+                    models.DateTimeField(
+                        help_text='Last point an application can be sent, typically a bit after the shown deadline to avoid getting a lot of extra mail'
+                    ),
+                ),
                 ('shown_application_deadline', models.DateTimeField(help_text='The deadline that is shown to applicants')),
                 ('reprioritization_deadline_for_applicant', models.DateTimeField(help_text='Before allocation meeting')),
                 ('reprioritization_deadline_for_groups', models.DateTimeField(help_text='Reprioritization deadline for groups')),
                 ('max_applications', models.PositiveIntegerField(blank=True, null=True, verbose_name='Max applications per applicant')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('organization', models.ForeignKey(help_text='The organization that is recruiting', on_delete=django.db.models.deletion.CASCADE, to='samfundet.organization')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'organization',
+                    models.ForeignKey(
+                        help_text='The organization that is recruiting', on_delete=django.db.models.deletion.CASCADE, to='samfundet.organization'
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -594,7 +980,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='interviewroom',
             name='recruitment',
-            field=models.ForeignKey(help_text='The recruitment that is recruiting', on_delete=django.db.models.deletion.CASCADE, related_name='rooms', to='samfundet.recruitment'),
+            field=models.ForeignKey(
+                help_text='The recruitment that is recruiting', on_delete=django.db.models.deletion.CASCADE, related_name='rooms', to='samfundet.recruitment'
+            ),
         ),
         migrations.CreateModel(
             name='RecruitmentPosition',
@@ -614,10 +1002,16 @@ class Migration(migrations.Migration):
                 ('default_application_letter_en', models.TextField(blank=True, help_text='Default application letter for the position', null=True)),
                 ('norwegian_applicants_only', models.BooleanField(default=False, help_text='Is this position only for Norwegian applicants?')),
                 ('tags', models.CharField(help_text='Tags for the position', max_length=100)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('gang', models.ForeignKey(help_text='The gang that is recruiting', on_delete=django.db.models.deletion.CASCADE, to='samfundet.gang')),
                 ('interviewers', models.ManyToManyField(blank=True, help_text='Interviewers for the position', related_name='interviewers', to=settings.AUTH_USER_MODEL)),
                 ('recruitment', models.ForeignKey(blank=True, help_text='The recruitment that is recruiting', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='positions', to='samfundet.recruitment')),
+                ('shared_interview_positions', models.ManyToManyField(blank=True, help_text='Positions with shared interview', to='samfundet.recruitmentposition')),
                 ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -636,10 +1030,34 @@ class Migration(migrations.Migration):
                 ('start_time', models.TimeField(default='08:00:00', help_text='First possible time of day for interviews')),
                 ('end_time', models.TimeField(default='23:00:00', help_text='Last possible time of day for interviews')),
                 ('timeslot_interval', models.PositiveSmallIntegerField(default=30, help_text='The time interval (in minutes) between each timeslot')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('recruitment', models.ForeignKey(help_text='Which recruitment this availability applies to', on_delete=django.db.models.deletion.CASCADE, to='samfundet.recruitment')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('position', models.ForeignKey(blank=True, help_text='Which position this availability applies to', null=True, on_delete=django.db.models.deletion.CASCADE, to='samfundet.recruitmentposition')),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'recruitment',
+                    models.ForeignKey(
+                        help_text='Which recruitment this availability applies to', on_delete=django.db.models.deletion.CASCADE, to='samfundet.recruitment'
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'position',
+                    models.ForeignKey(
+                        blank=True,
+                        help_text='Which position this availability applies to',
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='samfundet.recruitmentposition',
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -715,7 +1133,12 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('total_applicants', models.PositiveIntegerField(blank=True, null=True, verbose_name='Total applicants')),
                 ('total_applications', models.PositiveIntegerField(blank=True, null=True, verbose_name='Total applications')),
-                ('recruitment', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='statistics', to='samfundet.recruitment')),
+                (
+                    'recruitment',
+                    models.OneToOneField(
+                        blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='statistics', to='samfundet.recruitment'
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -737,7 +1160,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField(verbose_name='Time')),
                 ('count', models.PositiveIntegerField(verbose_name='Count')),
-                ('recruitment_stats', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='date_stats', to='samfundet.recruitmentstatistics')),
+                (
+                    'recruitment_stats',
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='date_stats', to='samfundet.recruitmentstatistics'),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -746,7 +1172,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('count', models.PositiveIntegerField(verbose_name='Count')),
                 ('campus', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='date_stats', to='samfundet.campus')),
-                ('recruitment_stats', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='campus_stats', to='samfundet.recruitmentstatistics')),
+                (
+                    'recruitment_stats',
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='campus_stats', to='samfundet.recruitmentstatistics'),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -755,7 +1184,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('hour', models.PositiveIntegerField(verbose_name='Time')),
                 ('count', models.PositiveIntegerField(verbose_name='Count')),
-                ('recruitment_stats', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='time_stats', to='samfundet.recruitmentstatistics')),
+                (
+                    'recruitment_stats',
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='time_stats', to='samfundet.recruitmentstatistics'),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -768,10 +1200,32 @@ class Migration(migrations.Migration):
                 ('title_nb', models.CharField(blank=True, max_length=80, null=True, verbose_name='Tittel (Norsk)')),
                 ('title_en', models.CharField(blank=True, max_length=80, null=True, verbose_name='Tittel (Engelsk)')),
                 ('publication_date', models.DateTimeField(blank=True, null=True)),
-                ('category', models.CharField(choices=[('FS_REFERAT', 'FS-Referat'), ('STYRET', 'Styret'), ('RADET', 'Rådet'), ('ARSBERETNINGER', 'Årsberetninger, regnskap og budsjettkunngjøringer')], default='FS_REFERAT', max_length=25)),
+                (
+                    'category',
+                    models.CharField(
+                        choices=[
+                            ('FS_REFERAT', 'FS-Referat'),
+                            ('STYRET', 'Styret'),
+                            ('RADET', 'Rådet'),
+                            ('ARSBERETNINGER', 'Årsberetninger, regnskap og budsjettkunngjøringer'),
+                        ],
+                        default='FS_REFERAT',
+                        max_length=25,
+                    ),
+                ),
                 ('file', models.FileField(blank=True, null=True, upload_to='uploads/saksdokument/')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Saksdokument',
@@ -790,8 +1244,18 @@ class Migration(migrations.Migration):
                 ('name_en', models.CharField(blank=True, max_length=64, null=True, unique=True, verbose_name='Navn (engelsk)')),
                 ('description_en', models.CharField(blank=True, max_length=64, null=True, verbose_name='Beskrivelse (engelsk)')),
                 ('seating', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Table',
@@ -813,8 +1277,18 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(blank=True, max_length=64, null=True, unique=True)),
                 ('email', models.CharField(blank=True, max_length=64, null=True, unique=True)),
                 ('phone_nr', models.CharField(blank=True, max_length=64, null=True, unique=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
                 ('tables', models.ManyToManyField(blank=True, to='samfundet.table')),
             ],
@@ -832,8 +1306,18 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('name', models.CharField(max_length=140)),
                 ('color', models.CharField(blank=True, max_length=6, null=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Tag',
@@ -854,8 +1338,18 @@ class Migration(migrations.Migration):
                 ('key', models.CharField(max_length=40, primary_key=True, serialize=False, unique=True)),
                 ('text_nb', models.TextField()),
                 ('text_en', models.TextField()),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'TextItem',
@@ -882,7 +1376,10 @@ class Migration(migrations.Migration):
             name='UserPreference',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('theme', models.CharField(blank=True, choices=[('theme-light', 'Light'), ('theme-dark', 'Dark')], default='theme-light', max_length=30, null=True)),
+                (
+                    'theme',
+                    models.CharField(blank=True, choices=[('theme-light', 'Light'), ('theme-dark', 'Dark')], default='theme-light', max_length=30, null=True),
+                ),
                 ('mirror_dimension', models.BooleanField(default=False)),
                 ('cursor_trail', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
@@ -924,8 +1421,18 @@ class Migration(migrations.Migration):
                 ('closing_friday', models.TimeField(blank=True, default=datetime.time(20, 0), null=True)),
                 ('closing_saturday', models.TimeField(blank=True, default=datetime.time(20, 0), null=True)),
                 ('closing_sunday', models.TimeField(blank=True, default=datetime.time(20, 0), null=True)),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Venue',
@@ -954,8 +1461,18 @@ class Migration(migrations.Migration):
                 ('guest_count', models.PositiveSmallIntegerField(verbose_name='Antall gjester')),
                 ('additional_info', models.TextField(blank=True, null=True, verbose_name='Tilleggsinformasjon')),
                 ('internal_messages', models.TextField(blank=True, null=True, verbose_name='Interne meldinger')),
-                ('created_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
+                (
+                    'created_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    'updated_by',
+                    models.ForeignKey(
+                        blank=True, editable=False, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL
+                    ),
+                ),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('table', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.table', verbose_name='Bord')),
                 ('venue', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='samfundet.venue', verbose_name='Sted')),

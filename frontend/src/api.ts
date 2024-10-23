@@ -38,6 +38,7 @@ import type {
   RegistrationDto,
   RoleDto,
   SaksdokumentDto,
+  TagDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
@@ -1060,6 +1061,13 @@ export async function postRejectionMail(recruitmentId: string, rejectionMail: Ma
       },
     });
   const response = await axios.post(url, rejectionMail, { withCredentials: true });
+
+  return response;
+}
+
+export async function getRecruitmentPositionTagList(): Promise<AxiosResponse<TagDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_positions_tag_list;
+  const response = await axios.get(url, { withCredentials: true });
 
   return response;
 }

@@ -37,7 +37,7 @@ from samfundet.models.general import (
     MerchVariation,
     InformationPage,
 )
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication, RecruitmentPositionTag
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 """
@@ -402,10 +402,13 @@ def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang
         is_funksjonaer_position=False,
         default_application_letter_nb='Default Application Letter NB 2',
         default_application_letter_en='Default Application Letter EN 2',
-        tags='tag1,tag2',
         gang=fixture_gang,
         recruitment=fixture_recruitment,
     )
+
+    # Use set() method to assign tags
+    recruitment_position.tags.set([RecruitmentPositionTag.objects.get_or_create(name='tag1')[0], RecruitmentPositionTag.objects.get_or_create(name='tag2')[0]])
+
     yield recruitment_position
     recruitment_position.delete()
 

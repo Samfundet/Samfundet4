@@ -14,6 +14,7 @@ from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
+from .utils.genrate_random_color import generate_random_hex_color
 
 
 class Recruitment(CustomBaseModel):
@@ -105,6 +106,19 @@ class Recruitment(CustomBaseModel):
             RecruitmentStatistics.objects.create(self)
 
 
+class RecruitmentPositionTag(CustomBaseModel):
+    name = models.CharField(max_length=15, primary_key=True, help_text='Tags for the position')
+    color = models.CharField(max_length=7, null=True, blank=True)
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        if not self.color:
+            self.color = generate_random_hex_color()
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class RecruitmentPositionSharedInterviewGroup(CustomBaseModel):
     recruitment = models.ForeignKey(
         Recruitment,
@@ -157,8 +171,12 @@ class RecruitmentPosition(CustomBaseModel):
         help_text='Shared interviewgroup for position',
     )
 
-    # TODO: Implement tag functionality
-    tags = models.CharField(max_length=100, help_text='Tags for the position')
+    tags = models.ManyToManyField(
+        RecruitmentPositionTag,
+        help_text='tags associated with this position',
+        related_name='position_tags',
+        blank=True,
+    )
 
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
