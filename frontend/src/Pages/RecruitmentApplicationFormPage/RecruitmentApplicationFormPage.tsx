@@ -40,13 +40,13 @@ export function RecruitmentApplicationFormPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const { positionID } = useParams();
+  const { positionId } = useParams();
 
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
   useEffect(() => {
     Promise.allSettled([
-      getRecruitmentPositionForApplicant(positionID as string)
+      getRecruitmentPositionForApplicant(positionId as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
         })
@@ -57,14 +57,14 @@ export function RecruitmentApplicationFormPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-      getRecruitmentApplicationForPosition(positionID as string).then((res) => {
+      getRecruitmentApplicationForPosition(positionId as string).then((res) => {
         setRecruitmentApplication(res.data);
         console.log(res.data);
       }),
     ]).then(() => {
       setLoading(false);
     });
-  }, [positionID, standardNavigate, t]);
+  }, [positionId, standardNavigate, t]);
 
   useEffect(() => {
     getRecruitmentPositionsGangForApplicant(
@@ -76,14 +76,14 @@ export function RecruitmentApplicationFormPage() {
   }, [recruitmentPosition]);
 
   function withdrawApplication() {
-    if (positionID) {
-      withdrawRecruitmentApplicationApplicant(positionID)
+    if (positionId) {
+      withdrawRecruitmentApplicationApplicant(positionId)
         .then(() => {
           navigate({
             url: reverse({
               pattern: ROUTES.frontend.recruitment_application_overview,
               urlParams: {
-                recruitmentID: recruitmentPosition?.recruitment,
+                recruitmentId: recruitmentPosition?.recruitment,
               },
             }),
           });
@@ -96,13 +96,13 @@ export function RecruitmentApplicationFormPage() {
   }
 
   function handleOnSubmit(data: FormProps) {
-    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionID ? +positionID : 1)
+    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionId ? +positionId : 1)
       .then(() => {
         navigate({
           url: reverse({
             pattern: ROUTES.frontend.recruitment_application_overview,
             urlParams: {
-              recruitmentID: recruitmentPosition?.recruitment,
+              recruitmentId: recruitmentPosition?.recruitment,
             },
           }),
         });
@@ -121,7 +121,7 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
-  if (!positionID || Number.isNaN(Number(positionID))) {
+  if (!positionId || Number.isNaN(Number(positionId))) {
     return (
       <Page>
         <div className={styles.container}>
@@ -175,7 +175,7 @@ export function RecruitmentApplicationFormPage() {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionID: pos.id, gangID: pos.gang.id },
+                          urlParams: { positionId: pos.id, gangID: pos.gang.id },
                         }),
                       });
                     }}
