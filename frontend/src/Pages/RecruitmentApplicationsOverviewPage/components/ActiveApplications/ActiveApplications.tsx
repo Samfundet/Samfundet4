@@ -27,7 +27,7 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   function handleChangePriority(id: string, direction: 'up' | 'down') {
     const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
     putRecruitmentPriorityForUser(id, data).then((response) => {
-      setApplications(response.data);
+      setApplications(response.data.filter((application) => !application.withdrawn));
     });
   }
 
