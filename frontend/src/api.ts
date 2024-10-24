@@ -811,7 +811,7 @@ export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: 
 export async function getRecruitmentApplicationsForRecruitmentPosition(
   positionId: string,
   filterType?: string,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<RecruitmentApplicationDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -819,13 +819,14 @@ export async function getRecruitmentApplicationsForRecruitmentPosition(
       urlParams: { pk: positionId },
     });
 
-  // Add filter_type as a query parameter if it exists
   const params = filterType ? { filter_type: filterType } : {};
 
-  return await axios.get(url, {
+  const response = await axios.get<RecruitmentApplicationDto[]>(url, {
     withCredentials: true,
     params: params,
   });
+
+  return response.data;
 }
 
 export async function putRecruitmentApplicationForGang(
