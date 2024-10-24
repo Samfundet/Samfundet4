@@ -27,7 +27,7 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   function handleChangePriority(id: string, direction: 'up' | 'down') {
     const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
     putRecruitmentPriorityForUser(id, data).then((response) => {
-      setApplications(response.data.filter((application) => !application.withdrawn));
+      setApplications(response.data);
     });
   }
 
@@ -42,7 +42,7 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   useEffect(() => {
     if (recruitmentId) {
       getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
-        setApplications(response.data.filter((application) => !application.withdrawn));
+        setApplications(response.data);
       });
     }
   }, [recruitmentId]);

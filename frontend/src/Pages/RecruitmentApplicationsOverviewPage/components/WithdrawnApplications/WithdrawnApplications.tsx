@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Table } from '~/Components';
-import { getRecruitmentApplicationsForApplicant } from '~/api';
+import { getWithdrawRecruitmentApplicationApplicant } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,10 +15,11 @@ type WithdrawnApplicationsProps = {
 export function WithdrawnApplications({ recruitmentId }: WithdrawnApplicationsProps) {
   const [withdrawnApplications, setWithdrawnApplications] = useState<RecruitmentApplicationDto[]>([]);
   const { t } = useTranslation();
+
   useEffect(() => {
     if (recruitmentId) {
-      getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
-        setWithdrawnApplications(response.data.filter((application) => application.withdrawn));
+      getWithdrawRecruitmentApplicationApplicant(recruitmentId).then((response) => {
+        setWithdrawnApplications(response.data);
       });
     }
   }, [recruitmentId]);
