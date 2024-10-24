@@ -60,7 +60,7 @@ export function YourForm() {
             username: '',
         },
     });
-    
+
     // 2. Define the submit handler
     function onSubmit(values: z.infer<typeof schema>) {
         // These values are type-safe and validated
@@ -95,6 +95,76 @@ export function YourForm() {
         </Form>
     );
 }
+```
+
+## Files
+
+Defining a schema type for files is a bit more complicated. Below is an example which defines a schema with an
+optional `avatar` file field.
+
+```tsx
+const schema = z.object({
+    image_file: z
+        .instanceof(File)
+        .refine((file) => file.size < 1024 * 1024 * 2, {
+            message: "File can't be larger than 2 MB"
+        })
+        .nullable(),
+});
+```
+
+And in the form below. Please note that this input must
+be [uncontrolled](https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components), so
+we do not set `value` on it. We must also extract relevant information from the `onChange` event. In the example below,
+we only want a single file, so we return the first item in the `FileList`.
+
+```tsx
+<FormField
+    control={form.control}
+    name="image_file"
+    render={({ field: { value, onChange, ...fieldProps } }) => (
+        <FormItem>
+            <FormControl>
+                <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => onChange(event.target.files?.[0])}
+                    {...fieldProps}
+                />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
+    )}
+/>
+```
+
+## Numbers
+
+All HTML input values are strings. If we require a number from an input, we must therefore convert it. We do this with
+the [`valueAsNumber`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/valueAsNumber) property.
+
+> [!NOTE]
+> Be sure to extract the `onChange` out from `field`, otherwise doing the normal `{...field}` will overwrite it.
+
+```tsx
+<FormField
+    control={form.control}
+    name="duration"
+    render={({ field: { onChange, ...fieldProps } }) => (
+        <FormItem>
+            <FormLabel>Varighet</FormLabel>
+            <FormControl>
+                <Input
+                    type="number"
+                    disabled={submitting}
+                    onChange={(event) => onChange(event.target.valueAsNumber)}
+                    {...fieldProps}
+                />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
+    )}
+/>
 ```
 
 ## Example
