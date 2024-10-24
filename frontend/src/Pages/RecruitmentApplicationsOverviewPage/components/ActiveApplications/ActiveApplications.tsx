@@ -34,8 +34,18 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   const upDownArrow = (id: string) => {
     return (
       <>
-        <Icon icon="bxs:up-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'up')} />
-        <Icon icon="bxs:down-arrow" className={styles.arrows} onClick={() => handleChangePriority(id, 'down')} />
+        <Icon
+          icon="bxs:up-arrow"
+          className={styles.arrows}
+          width={'1.5rem'}
+          onClick={() => handleChangePriority(id, 'up')}
+        />
+        <Icon
+          icon="bxs:down-arrow"
+          className={styles.arrows}
+          width={'1.5rem'}
+          onClick={() => handleChangePriority(id, 'down')}
+        />
       </>
     );
   };
@@ -48,11 +58,12 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   }, [recruitmentId]);
   const tableColumns = [
     { sortable: false, content: t(KEY.recruitment_position) },
+    { sortable: false, content: t(KEY.recruitment_change_priority) },
+    { sortable: true, content: t(KEY.recruitment_your_priority) },
     { sortable: false, content: t(KEY.recruitment_interview_time) },
     { sortable: false, content: t(KEY.recruitment_interview_location) },
-    { sortable: true, content: t(KEY.recruitment_priority) },
-    { sortable: false, content: '' },
-    { sortable: false, content: '' },
+
+    { sortable: false, content: t(KEY.recruitment_withdraw_application) },
   ];
 
   function applicationToTableRow(application: RecruitmentApplicationDto) {
@@ -75,10 +86,10 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
       },
     ];
     const notWithdrawn = [
-      niceDateTime(application.interview?.interview_time),
-      application.interview?.interview_location,
-      application.applicant_priority,
       { content: upDownArrow(application.id) },
+      application.applicant_priority,
+      niceDateTime(application.interview?.interview_time) ?? '-',
+      application.interview?.interview_location ?? '-',
     ];
     const withdrawn = [
       {

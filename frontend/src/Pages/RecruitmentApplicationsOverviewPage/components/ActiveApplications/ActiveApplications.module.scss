@@ -1,10 +1,13 @@
 .arrows {
+  cursor: pointer;
+
   &:hover {
     filter: brightness(150%);
     transform: scale(1.05);
   }
   &:active {
+    cursor: none;
     filter: brightness(200%);
-    transform: scale(1.1);
+    transform: scale(0.5);
   }
 }
