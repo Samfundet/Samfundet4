@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -22,7 +23,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicationFormPage.module.scss';
-import { Icon } from '@iconify/react';
 
 type FormProps = {
   application_text: string;
