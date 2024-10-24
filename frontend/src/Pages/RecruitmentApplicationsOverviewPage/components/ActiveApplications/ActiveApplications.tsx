@@ -112,7 +112,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
         theme="samf"
         onClick={() => {
           if (window.confirm(t(KEY.recruitment_withdraw_application))) {
-            withdrawMutation.mutate(application.recruitment_position.id);
+            withdrawMutation.mutate(application.recruitment_position.id.toString());
           }
         }}
       >
