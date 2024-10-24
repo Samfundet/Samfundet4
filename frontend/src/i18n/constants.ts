@@ -434,6 +434,9 @@ export const KEY = {
   occupied_select_time_text: 'occupied_select_time_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
+  confirm_occupied_time: 'confirm_occupied_time',
+  confirm_occupied_time_text: 'confirm_occupied_time_text',
+  confirm_occupied_time_send_application: 'confirm_occupied_time_send_application',
 
   // Feedback
   feedback_type: 'feedback_type',

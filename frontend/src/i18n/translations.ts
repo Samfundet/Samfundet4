@@ -434,6 +434,10 @@ export const nb = prepareTranslations({
   [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
   [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
+  [KEY.confirm_occupied_time]: 'Bekreft din tilgjengelighet',
+  [KEY.confirm_occupied_time_text]:
+    'Vennligst bekreft at dette er tidene du <strong>ikke</strong> er tilgjengelig for intervju',
+  [KEY.confirm_occupied_time_send_application]: 'Lagre og send søknad',
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
@@ -900,6 +904,10 @@ export const en = prepareTranslations({
   [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
   [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
+  [KEY.confirm_occupied_time]: 'Confirm your availability',
+  [KEY.confirm_occupied_time_text]:
+    'Please confirm that these are the times you are <strong>not</strong> available for interview',
+  [KEY.confirm_occupied_time_send_application]: 'Save and send application',
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
