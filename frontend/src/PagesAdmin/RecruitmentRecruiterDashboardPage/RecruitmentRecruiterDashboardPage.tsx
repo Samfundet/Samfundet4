@@ -92,7 +92,7 @@ export function RecruitmentRecruiterDashboardPage() {
                 url={reverse({
                   pattern: ROUTES.frontend.recruitment_application,
                   urlParams: {
-                    positionID: application.recruitment_position.id,
+                    positionId: application.recruitment_position.id,
                   },
                 })}
               >

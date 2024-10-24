@@ -11,15 +11,6 @@
   }
 }
 
-.infoContainer {
-  padding: 0.2em;
-  margin: 2em;
-}
-
-.textBottom {
-  margin: 0.2em;
-}
-
 .withdrawContainer {
   display: flex;
   flex-direction: row;
@@ -29,4 +20,3 @@
 .withdrawnText {
   color: $red-samf;
 }
-

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Table } from '~/Components';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { deleteInterviewRoom, getInterviewRoomsForRecruitment } from '~/api';
 import type { InterviewRoomDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
@@ -74,16 +75,21 @@ export function RoomAdminPage() {
 
   return (
     <>
-      <Button
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_room_create,
-          urlParams: { recruitmentId: data?.recruitment?.id },
-        })}
-        theme="samf"
+      <AdminPageLayout
+        title={t(KEY.recruitment_applet_room_overview)}
+        header={t(KEY.recruitment_applet_room_description)}
       >
-        {t(KEY.common_create)}
-      </Button>
-      <Table columns={columns} data={tableData} defaultSortColumn={0} />
+        <Button
+          link={reverse({
+            pattern: ROUTES.frontend.admin_recruitment_room_create,
+            urlParams: { recruitmentId: data?.recruitment?.id },
+          })}
+          theme="samf"
+        >
+          {t(KEY.common_create)}
+        </Button>
+        <Table columns={columns} data={tableData} defaultSortColumn={0} />
+      </AdminPageLayout>
     </>
   );
 }

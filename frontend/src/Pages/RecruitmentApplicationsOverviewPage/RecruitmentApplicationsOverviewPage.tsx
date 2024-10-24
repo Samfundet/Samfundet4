@@ -1,12 +1,17 @@
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, Link, Page } from '~/Components';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentApplicationsForApplicant, putRecruitmentPriorityForUser } from '~/api';
+import {
+  getRecruitmentApplicationsForApplicant,
+  putRecruitmentPriorityForUser,
+  withdrawRecruitmentApplicationApplicant,
+} from '~/api';
 import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,9 +20,10 @@ import { dbT, niceDateTime } from '~/utils';
 import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 
 export function RecruitmentApplicationsOverviewPage() {
-  const { recruitmentID } = useParams();
+  const { recruitmentId } = useParams();
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [withdrawnApplications, setWithdrawnApplications] = useState<RecruitmentApplicationDto[]>([]);
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
 
@@ -38,19 +44,20 @@ export function RecruitmentApplicationsOverviewPage() {
   }
 
   useEffect(() => {
-    if (recruitmentID) {
-      getRecruitmentApplicationsForApplicant(recruitmentID).then((response) => {
+    if (recruitmentId) {
+      getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
         setApplications(response.data.filter((application) => !application.withdrawn));
         setWithdrawnApplications(response.data.filter((application) => application.withdrawn));
       });
     }
-  }, [recruitmentID]);
+  }, [recruitmentId]);
 
   const tableColumns = [
     { sortable: false, content: t(KEY.recruitment_position) },
     { sortable: false, content: t(KEY.recruitment_interview_time) },
     { sortable: false, content: t(KEY.recruitment_interview_location) },
     { sortable: true, content: t(KEY.recruitment_priority) },
+    { sortable: false, content: '' },
     { sortable: false, content: '' },
   ];
 
@@ -62,8 +69,8 @@ export function RecruitmentApplicationsOverviewPage() {
             url={reverse({
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
-                positionID: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
+                positionId: application.recruitment_position.id,
+                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.position_name}
@@ -88,7 +95,28 @@ export function RecruitmentApplicationsOverviewPage() {
         ),
       },
     ];
-    return [...position, ...(application.withdrawn ? withdrawn : notWithdrawn)];
+    const widthdrawButton = {
+      content: (
+        <Button
+          theme="samf"
+          onClick={() => {
+            if (window.confirm(t(KEY.recruitment_withdraw_application))) {
+              withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
+                .then(() => {
+                  // redirect to the same page to refresh the data
+                  navigate(0);
+                })
+                .catch(() => {
+                  toast.error(t(KEY.common_something_went_wrong));
+                });
+            }
+          }}
+        >
+          {t(KEY.recruitment_withdraw_application)}
+        </Button>
+      ),
+    };
+    return [...position, ...(application.withdrawn ? withdrawn : notWithdrawn), widthdrawButton];
   }
 
   const withdrawnTableColumns = [{ sortable: true, content: t(KEY.recruitment_withdrawn) }];
@@ -102,8 +130,8 @@ export function RecruitmentApplicationsOverviewPage() {
             url={reverse({
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
-                positionID: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
+                positionId: application.recruitment_position.id,
+                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.withdrawnLink}
@@ -136,7 +164,7 @@ export function RecruitmentApplicationsOverviewPage() {
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}
 
-        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId ?? '')} />
 
         {withdrawnApplications.length > 0 && (
           <div className={styles.withdrawnContainer}>

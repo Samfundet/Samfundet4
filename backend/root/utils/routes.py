@@ -585,6 +585,7 @@ samfundet__recruitment_withdraw_application = 'samfundet:recruitment_withdraw_ap
 samfundet__recruitment_user_priority_update = 'samfundet:recruitment_user_priority_update'
 samfundet__recruitment_withdraw_application_recruiter = 'samfundet:recruitment_withdraw_application_recruiter'
 samfundet__active_recruitment_positions = 'samfundet:active_recruitment_positions'
+samfundet__rejected_applicants = 'samfundet:rejected_applicants/'
 samfundet__applicants_without_interviews = 'samfundet:applicants_without_interviews'
 samfundet__applicants_without_three_interview_criteria = 'samfundet:applicants_without_three_interview_criteria'
 samfundet__recruitment_recruiter_dashboard = 'samfundet:recruitment_recruiter_dashboard'
