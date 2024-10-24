@@ -15,7 +15,7 @@ import { dbT, niceDateTime } from '~/utils';
 import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 
 export function RecruitmentApplicationsOverviewPage() {
-  const { recruitmentID } = useParams();
+  const { recruitmentId } = useParams();
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [withdrawnApplications, setWithdrawnApplications] = useState<RecruitmentApplicationDto[]>([]);
 
@@ -38,13 +38,13 @@ export function RecruitmentApplicationsOverviewPage() {
   }
 
   useEffect(() => {
-    if (recruitmentID) {
-      getRecruitmentApplicationsForApplicant(recruitmentID).then((response) => {
+    if (recruitmentId) {
+      getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
         setApplications(response.data.filter((application) => !application.withdrawn));
         setWithdrawnApplications(response.data.filter((application) => application.withdrawn));
       });
     }
-  }, [recruitmentID]);
+  }, [recruitmentId]);
 
   const tableColumns = [
     { sortable: false, content: t(KEY.recruitment_position) },
@@ -62,8 +62,8 @@ export function RecruitmentApplicationsOverviewPage() {
             url={reverse({
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
-                positionID: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
+                positionId: application.recruitment_position.id,
+                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.position_name}
@@ -102,8 +102,8 @@ export function RecruitmentApplicationsOverviewPage() {
             url={reverse({
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
-                positionID: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
+                positionId: application.recruitment_position.id,
+                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.withdrawnLink}
@@ -136,7 +136,7 @@ export function RecruitmentApplicationsOverviewPage() {
           <p>{t(KEY.recruitment_not_applied)}</p>
         )}
 
-        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId ?? '')} />
 
         {withdrawnApplications.length > 0 && (
           <div className={styles.withdrawnContainer}>

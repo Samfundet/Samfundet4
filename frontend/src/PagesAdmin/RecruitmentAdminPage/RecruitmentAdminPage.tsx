@@ -78,7 +78,7 @@ export function RecruitmentAdminPage() {
                 navigate(
                   reverse({
                     pattern: ROUTES.frontend.organization_recruitment,
-                    urlParams: { recruitmentID: element.id },
+                    urlParams: { recruitmentId: element.id },
                   }),
                 );
               }}
