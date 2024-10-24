@@ -7,7 +7,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './ProcessedApplicants.module.scss';
 
-type ProcessedType = 'rejected' | 'withdrawn' | 'accepted';
+type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
 
 type ProcessedApplicantsProps = {
   data: RecruitmentApplicationDto[];
@@ -27,8 +27,8 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     revertStateFunction && { content: '', sortable: false },
   ];
 
-  const rows = data.map((application) => {
-    return [
+  const rows = data.map((application) => ({
+    cells: [
       {
         content: (
           <Link
@@ -61,13 +61,14 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
         ),
         value: application.recruiter_status,
       },
-    ];
-  });
+    ],
+  }));
 
   const styleType = {
     withdrawn: styles.withdrawn,
     accepted: styles.accepted,
     rejected: styles.rejected,
+    hardtoget: styles.hardtoget,
   };
 
   return (

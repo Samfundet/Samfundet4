@@ -51,6 +51,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentOpenToOtherPositionsPage,
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
@@ -58,6 +59,7 @@ import {
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
+  RoleAdminPage,
   RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
@@ -73,17 +75,20 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
+import { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
   type GangLoader,
   type PositionLoader,
   type RecruitmentLoader,
+  type RoleLoader,
   type SeparatePositionLoader,
   gangLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
+  roleLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
@@ -176,6 +181,14 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_roles}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.admin_roles_view}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
+            loader={roleLoader}
+            handle={{
+              crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => <Link url={pathname}>{role?.name}</Link>,
+            }}
           />
         </Route>
         {/* Events */}
@@ -458,7 +471,13 @@ export const router = createBrowserRouter(
                 ),
               }}
             />
-            <Route path={ROUTES.frontend.admin_recruitment_room_overview} element={<RoomAdminPage />} />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_room_overview}
+              element={<RoomAdminPage />}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_applet_room_overview)}</Link>,
+              }}
+            />
             <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<CreateInterviewRoomPage />} />
             <Route path={ROUTES.frontend.admin_recruitment_room_edit} element={<CreateInterviewRoomPage />} />
             <Route
@@ -475,7 +494,22 @@ export const router = createBrowserRouter(
                 ),
               }}
             />
-
+            <Route
+              path={ROUTES.frontend.admin_recruitment_open_to_other_positions}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                  element={<RecruitmentOpenToOtherPositionsPage />}
+                />
+              }
+              handle={{
+                crumb: () => (
+                  <Link url={ROUTES.frontend.admin_recruitment_open_to_other_positions}>
+                    {t(KEY.recruitment_applicants_open_to_other_positions)}
+                  </Link>
+                ),
+              }}
+            />
             <Route
               element={<Outlet />}
               loader={gangLoader}

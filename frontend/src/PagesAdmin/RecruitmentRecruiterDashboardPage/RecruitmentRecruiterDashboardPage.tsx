@@ -67,44 +67,46 @@ export function RecruitmentRecruiterDashboardPage() {
   ];
 
   const interviewTableRow = applications
-    ? applications.map((application) => [
-        {
-          value: application.user.first_name,
-          content: (
-            <Link
-              url={reverse({
-                pattern: ROUTES.frontend.admin_recruitment_applicant,
-                urlParams: {
-                  applicationID: application.id,
-                },
-              })}
-            >
-              {`${application.user.first_name} ${application.user.last_name}`}
-            </Link>
-          ),
-        },
-        {
-          value: dbT(application.recruitment_position, 'name'),
-          content: (
-            <Link
-              url={reverse({
-                pattern: ROUTES.frontend.recruitment_application,
-                urlParams: {
-                  positionID: application.recruitment_position.id,
-                },
-              })}
-            >
-              {dbT(application.recruitment_position, 'name')}
-            </Link>
-          ),
-        },
-        {
-          value: application.interview?.interview_time,
-        },
-        {
-          value: application.interview?.interview_location,
-        },
-      ])
+    ? applications.map((application) => ({
+        cells: [
+          {
+            value: application.user.first_name,
+            content: (
+              <Link
+                url={reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_applicant,
+                  urlParams: {
+                    applicationID: application.id,
+                  },
+                })}
+              >
+                {`${application.user.first_name} ${application.user.last_name}`}
+              </Link>
+            ),
+          },
+          {
+            value: dbT(application.recruitment_position, 'name'),
+            content: (
+              <Link
+                url={reverse({
+                  pattern: ROUTES.frontend.recruitment_application,
+                  urlParams: {
+                    positionId: application.recruitment_position.id,
+                  },
+                })}
+              >
+                {dbT(application.recruitment_position, 'name')}
+              </Link>
+            ),
+          },
+          {
+            value: application.interview?.interview_time,
+          },
+          {
+            value: application.interview?.interview_location,
+          },
+        ],
+      }))
     : [];
 
   return (

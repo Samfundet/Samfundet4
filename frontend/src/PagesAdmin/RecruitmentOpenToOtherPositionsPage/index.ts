@@ -1,0 +1,1 @@
+export { RecruitmentOpenToOtherPositionsPage } from './RecruitmentOpenToOtherPositionsPage';
