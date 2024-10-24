@@ -5,6 +5,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { postRecruitmentSeparatePosition, putRecruitmentSeparatePosition } from '~/api';
 import type { RecruitmentSeparatePositionDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import type { SeparatePositionLoader } from '~/router/loaders';
@@ -25,6 +26,8 @@ type FormType = {
 export function RecruitmentSeparatePositionFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const title = `${t(KEY.common_create)} ${t(KEY.recruitment_position)}`;
+  useTitle(title);
 
   // Form data
   const { recruitmentId, separatePositionId } = useParams();
@@ -80,7 +83,7 @@ export function RecruitmentSeparatePositionFormAdminPage() {
   }
   return (
     <>
-      <AdminPageLayout title={`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`} header={true}>
+      <AdminPageLayout title={title} header={true}>
         <div className={styles.wrapper}>
           <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
             <div className={styles.row}>

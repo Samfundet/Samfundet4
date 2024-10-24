@@ -7,7 +7,7 @@ import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
 import type { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -118,6 +118,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   };
 
   const title = t(KEY.recruitment_all_applications);
+  useTitle(title);
   const header = (
     <div className={styles.header}>
       <Text as="strong" size="m" className={styles.headerBold}>

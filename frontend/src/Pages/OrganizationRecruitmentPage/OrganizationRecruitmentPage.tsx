@@ -7,7 +7,7 @@ import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
-import { useDesktop } from '~/hooks';
+import { useDesktop, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
@@ -24,6 +24,7 @@ export function OrganizationRecruitmentPage() {
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
+  useTitle(dbT(recruitment, 'name') ?? '');
 
   useEffect(() => {
     if (recruitmentID) {

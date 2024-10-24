@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Button, CrudButtons, Table } from '~/Components';
 import { deleteInterviewRoom, getInterviewRoomsForRecruitment } from '~/api';
 import type { InterviewRoomDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import type { RecruitmentLoader } from '~/router/loaders';
@@ -16,6 +16,7 @@ export function RoomAdminPage() {
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
+  useTitle(`${t(KEY.common_room)} ${t(KEY.common_overview)}`);
 
   useEffect(() => {
     if (data?.recruitment?.id) {

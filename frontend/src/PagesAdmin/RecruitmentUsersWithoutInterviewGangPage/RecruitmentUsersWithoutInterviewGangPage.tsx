@@ -6,7 +6,7 @@ import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -73,6 +73,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   }, [recruitmentId]);
 
   const title = t(KEY.recruitment_applicants_without_interview);
+  useTitle(title);
   const header = (
     <div className={styles.header}>
       <Text as="strong" size="m" className={styles.headerBold}>

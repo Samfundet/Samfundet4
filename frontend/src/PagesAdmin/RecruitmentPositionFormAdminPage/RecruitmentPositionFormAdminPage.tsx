@@ -7,6 +7,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getRecruitmentPosition, postRecruitmentPosition, putRecruitmentPosition } from '~/api';
 import type { RecruitmentPositionDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -43,6 +44,8 @@ export function RecruitmentPositionFormAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
   const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
+  const title = `${t(KEY.common_create)} ${t(KEY.recruitment_position)}`;
+  useTitle(title);
 
   // Fetch data if edit mode.
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
@@ -146,7 +149,7 @@ export function RecruitmentPositionFormAdminPage() {
   }
   return (
     <>
-      <AdminPageLayout title={`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`} header={true}>
+      <AdminPageLayout title={title} header={true}>
         <div className={styles.wrapper}>
           <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData} submitText={submitText}>
             <div className={styles.row}>
