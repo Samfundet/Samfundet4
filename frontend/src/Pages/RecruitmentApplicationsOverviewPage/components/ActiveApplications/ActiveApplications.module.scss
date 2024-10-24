@@ -1,0 +1,10 @@
+.arrows {
+  &:hover {
+    filter: brightness(150%);
+    transform: scale(1.05);
+  }
+  &:active {
+    filter: brightness(200%);
+    transform: scale(1.1);
+  }
+}
