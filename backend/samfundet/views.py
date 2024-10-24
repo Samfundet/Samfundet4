@@ -1072,22 +1072,35 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
 
-    # TODO: User should only be able to edit the fields that are allowed
+    def retrieve(self, request: Request, pk: int, *args: Any, **kwargs: Any) -> Response:  # noqa: C901
+        """
+        Retrieve filtered applications for a specific recruitment position.
+        If no filter_type is provided, returns all applications.
 
-    def retrieve(self, request: Request, pk: int) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
-
+        Query Parameters:
+        - filter_type: string, one of ['unprocessed', 'withdrawn', 'hardtoget', 'accepted', 'rejected']
+        """
         position = get_object_or_404(RecruitmentPosition, id=pk)
+        applications = self.get_queryset().filter(recruitment_position=position)
 
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position=position,
-        )
+        filter_type = request.query_params.get('filter_type')
 
-        # check permissions for each application
-        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
+        if filter_type:
+            if filter_type == 'unprocessed':
+                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.NOT_SET)
+            elif filter_type == 'withdrawn':
+                applications = applications.filter(withdrawn=True)
+            elif filter_type == 'hardtoget':
+                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
+            elif filter_type == 'accepted':
+                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
+            elif filter_type == 'rejected':
+                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.REJECTION)
+            else:
+                return Response({'error': 'Invalid filter_type parameter'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.get_serializer(applications, many=True)
-        return Response(serializer.data)
+        return Response(data=serializer.data)
 
 
 class ActiveRecruitmentPositionsView(ListAPIView):
