@@ -1,3 +1,5 @@
+[**&larr; Back: Documentation Overview**](./README.md)
+
 # Common error messages
 
 ## Rule of thumb
@@ -20,4 +22,4 @@ exec /app/entrypoint.sh: no such file or directory
 Cannot connect to the Docker daemon at ../../.../default/docker.sock. Is the docker daemon running?
 ```
 ### Fix:
-Make sure docker desktop is running (Windows) or run `colima start`on Mac.
+Make sure docker desktop is running (Windows) or run `colima start` (or start Docker Desktop) on Mac.

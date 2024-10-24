@@ -1,4 +1,6 @@
-# Role System
+[**&larr; Back: Documentation Overview**](../../README.md)
+
+# Role system
 
 The role system in Samfundet4 builds on the Django "authentication backend" concept. Our system adds
 a [custom auth backend](https://docs.djangoproject.com/en/5.0/topics/auth/customizing/). The goal of the system is to

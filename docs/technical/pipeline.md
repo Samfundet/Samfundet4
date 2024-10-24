@@ -1,3 +1,5 @@
+[**&larr; Back: Documentation Overview**](../README.md)
+
 # Pipelines
 
 Is your PR not passing the pipeline checks? Look no further.
@@ -18,7 +20,7 @@ _Run Biome_
 yarn biome:ci
 ```
 
-_fix biome_
+_Run Biome fix_
 
 ```
 yarn biome:fix
