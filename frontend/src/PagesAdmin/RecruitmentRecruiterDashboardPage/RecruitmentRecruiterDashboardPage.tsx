@@ -7,7 +7,7 @@ import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { getRecruitmentRecruiterDashboard } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -23,6 +23,7 @@ export function RecruitmentRecruiterDashboardPage() {
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>();
   const [loading, setLoading] = useState(true);
+  useTitle(`${t(KEY.recruitment_recruiter_dashboard)} ${dbT(recruitment, 'name')}`);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: navigate must not be in deplist
   useEffect(() => {

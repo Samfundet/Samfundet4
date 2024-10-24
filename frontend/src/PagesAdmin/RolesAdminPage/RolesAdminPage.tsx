@@ -5,13 +5,15 @@ import { CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import type { RoleDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { lowerCapitalize } from '~/utils';
 
 export function RolesAdminPage() {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
+  const title = t(KEY.common_roles);
+  useTitle(title);
 
   const [roles, setRoles] = useState<RoleDto[]>([
     {
@@ -61,7 +63,7 @@ export function RolesAdminPage() {
   }, [roles]);
 
   return (
-    <AdminPageLayout title={t(KEY.common_roles)} loading={loading}>
+    <AdminPageLayout title={title} loading={loading}>
       <Table data={data} columns={columns} />
     </AdminPageLayout>
   );

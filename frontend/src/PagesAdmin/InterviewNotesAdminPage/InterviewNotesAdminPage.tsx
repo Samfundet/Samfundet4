@@ -6,6 +6,7 @@ import { Button } from '~/Components';
 import { TextAreaField } from '~/Components/TextAreaField/TextAreaField';
 import { getRecruitmentApplicationsForGang, putRecruitmentApplicationInterview } from '~/api';
 import type { InterviewDto, RecruitmentApplicationDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -25,6 +26,8 @@ export function InterviewNotesPage() {
   const [nameUser, setNameUser] = useState<string>('');
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const title = t(KEY.recruitment_interview_notes);
+  useTitle(title);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
@@ -73,7 +76,7 @@ export function InterviewNotesPage() {
   }
 
   return (
-    <AdminPageLayout title={t(KEY.recruitment_interview_notes)} header={true}>
+    <AdminPageLayout title={title} header={true}>
       <div className={styles.container}>
         <label htmlFor="INotes">
           {t(KEY.recruitment_applicant)}: {nameUser}

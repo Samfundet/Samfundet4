@@ -8,6 +8,7 @@ import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getFoodCategories, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
 import type { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -57,6 +58,7 @@ export function SultenMenuItemFormAdminPage() {
 
   const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
   const title = `${id ? t(KEY.common_edit) : t(KEY.common_create)} ${lowerCapitalize(`${t(KEY.sulten_dishes)}`)}`;
+  useTitle(title);
 
   // Fetch data if edit mode.
 
