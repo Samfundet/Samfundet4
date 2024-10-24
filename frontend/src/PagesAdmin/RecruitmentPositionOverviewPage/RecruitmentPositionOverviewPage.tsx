@@ -74,22 +74,32 @@ export function RecruitmentPositionOverviewPage() {
     if (!positionId) {
       return;
     }
-    getRecruitmentApplicationsForRecruitmentPosition(positionId)
-      .then((response) => {
-        setRecruitmentApplicants(applicantsFilter(response.data, positionId));
-        setWithdrawnApplicants(withdrawnFilter(response.data, positionId));
-        setHardtogetApplicants(hardToGetFilter(response.data, positionId));
-        setRejectedApplicants(rejectedApplicantsFilter(response.data, positionId));
-        setAcceptedApplicants(acceptedApplicantsFilter(response.data, positionId));
+
+    // Create an array of promises for all filter types
+    const promises = [
+      getRecruitmentApplicationsForRecruitmentPosition(positionId, 'unprocessed'),
+      getRecruitmentApplicationsForRecruitmentPosition(positionId, 'withdrawn'),
+      getRecruitmentApplicationsForRecruitmentPosition(positionId, 'hardtoget'),
+      getRecruitmentApplicationsForRecruitmentPosition(positionId, 'rejected'),
+      getRecruitmentApplicationsForRecruitmentPosition(positionId, 'accepted'),
+    ];
+
+    Promise.all(promises)
+      .then(([unprocessed, withdrawn, hardToGet, rejected, accepted]) => {
+        setRecruitmentApplicants(unprocessed.data);
+        setWithdrawnApplicants(withdrawn.data);
+        setHardtogetApplicants(hardToGet.data);
+        setRejectedApplicants(rejected.data);
+        setAcceptedApplicants(accepted.data);
         setShowSpinner(false);
       })
-      .catch((data) => {
-        if (data.status === STATUS.HTTP_404_NOT_FOUND) {
+      .catch((error) => {
+        if (error.response?.status === STATUS.HTTP_404_NOT_FOUND) {
           navigate(ROUTES.frontend.not_found, { replace: true });
         }
         toast.error(t(KEY.common_something_went_wrong));
       });
-  }, [positionId, navigate]);
+  }, [positionId, navigate, t]);
 
   useEffect(() => {
     load();
