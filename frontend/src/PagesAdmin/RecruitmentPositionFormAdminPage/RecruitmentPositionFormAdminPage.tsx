@@ -16,7 +16,6 @@ export function RecruitmentPositionFormAdminPage() {
   const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
-  const [norwegianApplicantsOnly, setNorwegianApplicantsOnly] = useState<boolean>(false);
 
   useEffect(() => {
     if (positionId) {
