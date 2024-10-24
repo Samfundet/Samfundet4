@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, Table, Text } from '~/Components';
+import { Button, Link, Table } from '~/Components';
 import {
   getRecruitmentApplicationsForApplicant,
   putRecruitmentPriorityForUser,
@@ -31,6 +31,14 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
     });
   }
 
+  useEffect(() => {
+    if (recruitmentId) {
+      getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
+        setApplications(response.data);
+      });
+    }
+  }, [recruitmentId]);
+
   const upDownArrow = (id: string) => {
     return (
       <>
@@ -49,88 +57,84 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
       </>
     );
   };
-  useEffect(() => {
-    if (recruitmentId) {
-      getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
-        setApplications(response.data);
-      });
-    }
-  }, [recruitmentId]);
+
+  const applicationLink = (application: RecruitmentApplicationDto) => {
+    return (
+      <Link
+        url={reverse({
+          pattern: ROUTES.frontend.recruitment_application,
+          urlParams: {
+            positionID: application.recruitment_position.id,
+            gangID: application.recruitment_position.gang.id,
+          },
+        })}
+        className={styles.position_name}
+      >
+        {dbT(application.recruitment_position, 'name')}
+      </Link>
+    );
+  };
+
+  const withdrawButton = (application: RecruitmentApplicationDto) => {
+    return (
+      <Button
+        theme="samf"
+        onClick={() => {
+          if (window.confirm(t(KEY.recruitment_withdraw_application))) {
+            withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
+              .then(() => {
+                // redirect to the same page to refresh the data
+                navigate(0);
+              })
+              .catch(() => {
+                toast.error(t(KEY.common_something_went_wrong));
+              });
+          }
+        }}
+      >
+        {t(KEY.recruitment_withdraw_application)}
+      </Button>
+    );
+  };
   const tableColumns = [
-    { sortable: false, content: t(KEY.recruitment_position) },
     { sortable: false, content: t(KEY.recruitment_change_priority) },
-    { sortable: true, content: t(KEY.recruitment_your_priority) },
+    { sortable: false, content: t(KEY.recruitment_position) },
+
+    { sortable: false, content: t(KEY.recruitment_your_priority) },
     { sortable: false, content: t(KEY.recruitment_interview_time) },
     { sortable: false, content: t(KEY.recruitment_interview_location) },
 
     { sortable: false, content: t(KEY.recruitment_withdraw_application) },
   ];
 
-  function applicationToTableRow(application: RecruitmentApplicationDto) {
-    const position = [
+  const tableRows = applications.map((application) => ({
+    cells: [
       {
-        content: (
-          <Link
-            url={reverse({
-              pattern: ROUTES.frontend.recruitment_application,
-              urlParams: {
-                positionID: application.recruitment_position.id,
-                gangID: application.recruitment_position.gang.id,
-              },
-            })}
-            className={styles.position_name}
-          >
-            {dbT(application.recruitment_position, 'name')}
-          </Link>
-        ),
+        content: upDownArrow(application.id),
       },
-    ];
-    const notWithdrawn = [
-      { content: upDownArrow(application.id) },
-      application.applicant_priority,
-      niceDateTime(application.interview?.interview_time) ?? '-',
-      application.interview?.interview_location ?? '-',
-    ];
-    const withdrawn = [
       {
-        content: (
-          <Text as="strong" className={styles.withdrawnText}>
-            {t(KEY.recruitment_withdrawn)}
-          </Text>
-        ),
+        content: applicationLink(application),
       },
-    ];
-    const widthdrawButton = {
-      content: (
-        <Button
-          theme="samf"
-          onClick={() => {
-            if (window.confirm(t(KEY.recruitment_withdraw_application))) {
-              withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
-                .then(() => {
-                  // redirect to the same page to refresh the data
-                  navigate(0);
-                })
-                .catch(() => {
-                  toast.error(t(KEY.common_something_went_wrong));
-                });
-            }
-          }}
-        >
-          {t(KEY.recruitment_withdraw_application)}
-        </Button>
-      ),
-    };
-    return [...position, ...(application.withdrawn ? withdrawn : notWithdrawn), widthdrawButton];
-  }
+
+      {
+        content: application.applicant_priority,
+      },
+      {
+        content: niceDateTime(application.interview?.interview_time) ?? '-',
+      },
+      {
+        content: application.interview?.interview_location ?? '-',
+      },
+      {
+        content: withdrawButton(application),
+      },
+    ],
+  }));
+
   return (
     <div>
       {applications.length > 0 ? (
-        <Table
-          data={applications.map((application) => ({ cells: applicationToTableRow(application) }))}
-          columns={tableColumns}
-          defaultSortColumn={3}
-        />
+        <Table data={tableRows} columns={tableColumns} />
       ) : (
         <p>{t(KEY.recruitment_not_applied)}</p>
       )}

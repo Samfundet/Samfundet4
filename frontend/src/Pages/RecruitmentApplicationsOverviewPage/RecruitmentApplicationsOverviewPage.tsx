@@ -21,9 +21,9 @@ export function RecruitmentApplicationsOverviewPage() {
           <h1 className={styles.header}>{t(KEY.recruitment_my_applications)}</h1>
           <div className={styles.empty_div} />
         </div>
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
         <ActiveApplications recruitmentId={recruitmentID} />
-        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
         <WithdrawnApplications recruitmentId={recruitmentID} />
       </div>
     </Page>
