@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,30 +14,61 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, niceDateTime } from '~/utils';
+import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import styles from './ActiveApplications.module.scss';
 
 type ActiveApplicationsProps = {
   recruitmentId?: string;
+  queryKey: ApplicantApplicationManagementQK;
 };
-export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
-  const [applications, setApplications] = useState<RecruitmentApplicationDto[]>([]);
+export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicationsProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  function handleChangePriority(id: string, direction: 'up' | 'down') {
-    const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
-    putRecruitmentPriorityForUser(id, data).then((response) => {
-      setApplications(response.data);
-    });
-  }
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (recruitmentId) {
-      getRecruitmentApplicationsForApplicant(recruitmentId).then((response) => {
-        setApplications(response.data);
+  // Query for fetching applications
+  const { data: applications = [] } = useQuery({
+    queryKey: ['applications', recruitmentId],
+    queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string).then((response) => response.data),
+    enabled: !!recruitmentId,
+  });
+
+  // Mutation for changing priority
+  const priorityMutation = useMutation({
+    mutationFn: ({ id, direction }: { id: string; direction: 'up' | 'down' }) => {
+      const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
+      return putRecruitmentPriorityForUser(id, data);
+    },
+    onSuccess: (response) => {
+      // Update the applications in the cache with the new data
+      queryClient.setQueryData(['applications', recruitmentId], response.data);
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
+
+  // Mutation for withdrawing application
+  const withdrawMutation = useMutation({
+    mutationFn: (positionId: string) => withdrawRecruitmentApplicationApplicant(positionId),
+    onSuccess: () => {
+      // Pass the proper query filter objects
+      queryClient.invalidateQueries({
+        queryKey: queryKey.applications(recruitmentId as string),
       });
-    }
-  }, [recruitmentId]);
+      queryClient.invalidateQueries({
+        queryKey: queryKey.withdrawnApplications(recruitmentId as string),
+      });
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
+
+  const handleChangePriority = (id: string, direction: 'up' | 'down') => {
+    priorityMutation.mutate({ id, direction });
+  };
 
   const upDownArrow = (id: string) => {
     return (
@@ -81,14 +112,7 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
         theme="samf"
         onClick={() => {
           if (window.confirm(t(KEY.recruitment_withdraw_application))) {
-            withdrawRecruitmentApplicationApplicant(application.recruitment_position.id)
-              .then(() => {
-                // redirect to the same page to refresh the data
-                navigate(0);
-              })
-              .catch(() => {
-                toast.error(t(KEY.common_something_went_wrong));
-              });
+            withdrawMutation.mutate(application.recruitment_position.id);
           }
         }}
       >
@@ -97,28 +121,37 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
     );
   };
   const tableColumns = [
-    { sortable: false, content: t(KEY.recruitment_change_priority) },
+    // Only include priority column if there are multiple applications
+    ...(applications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_change_priority) }] : []),
     { sortable: false, content: t(KEY.recruitment_position) },
-
-    { sortable: false, content: t(KEY.recruitment_your_priority) },
+    // Only include priority display if there are multiple applications
+    ...(applications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_your_priority) }] : []),
     { sortable: false, content: t(KEY.recruitment_interview_time) },
     { sortable: false, content: t(KEY.recruitment_interview_location) },
-
     { sortable: false, content: t(KEY.recruitment_withdraw_application) },
   ];
 
   const tableRows = applications.map((application) => ({
     cells: [
-      {
-        content: upDownArrow(application.id),
-      },
+      // Only include priority arrows if there are multiple applications
+      ...(applications.length > 1
+        ? [
+            {
+              content: upDownArrow(application.id),
+            },
+          ]
+        : []),
       {
         content: applicationLink(application),
       },
-
-      {
-        content: application.applicant_priority,
-      },
+      // Only include priority number if there are multiple applications
+      ...(applications.length > 1
+        ? [
+            {
+              content: application.applicant_priority,
+            },
+          ]
+        : []),
       {
         content: niceDateTime(application.interview?.interview_time) ?? '-',
       },

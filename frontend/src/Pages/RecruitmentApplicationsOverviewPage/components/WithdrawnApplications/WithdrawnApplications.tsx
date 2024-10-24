@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Table } from '~/Components';
 import { getWithdrawRecruitmentApplicationApplicant } from '~/api';
@@ -7,22 +7,22 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import styles from './WithdrawnApplications.module.scss';
 
 type WithdrawnApplicationsProps = {
   recruitmentId?: string;
+  queryKey: ApplicantApplicationManagementQK;
 };
-export function WithdrawnApplications({ recruitmentId }: WithdrawnApplicationsProps) {
-  const [withdrawnApplications, setWithdrawnApplications] = useState<RecruitmentApplicationDto[]>([]);
+export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnApplicationsProps) {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (recruitmentId) {
-      getWithdrawRecruitmentApplicationApplicant(recruitmentId).then((response) => {
-        setWithdrawnApplications(response.data);
-      });
-    }
-  }, [recruitmentId]);
+  const { data: withdrawnApplications = [] } = useQuery({
+    queryKey: queryKey.withdrawnApplications(recruitmentId as string),
+    queryFn: () =>
+      getWithdrawRecruitmentApplicationApplicant(recruitmentId as string).then((response) => response.data),
+    enabled: !!recruitmentId,
+  });
 
   const withdrawnTableColumns = [{ sortable: true, content: t(KEY.recruitment_withdrawn) }];
 
@@ -56,7 +56,7 @@ export function WithdrawnApplications({ recruitmentId }: WithdrawnApplicationsPr
             bodyRowClassName={styles.withdrawnRow}
             headerClassName={styles.withdrawnHeader}
             headerColumnClassName={styles.withdrawnHeader}
-            data={withdrawnApplications.map((application) => ({
+            data={withdrawnApplications.map((application: RecruitmentApplicationDto) => ({
               cells: withdrawnApplicationToTableRow(application),
             }))}
             columns={withdrawnTableColumns}

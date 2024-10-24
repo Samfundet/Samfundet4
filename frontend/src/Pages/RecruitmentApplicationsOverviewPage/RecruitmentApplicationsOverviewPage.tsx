@@ -8,9 +8,20 @@ import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 import { ActiveApplications } from './components/ActiveApplications';
 import { WithdrawnApplications } from './components/WithdrawnApplications';
 
+export type ApplicantApplicationManagementQK = {
+  applications: (recruitmentId: string) => readonly ['applications', string];
+  withdrawnApplications: (recruitmentId: string) => readonly ['withdrawnApplications', string];
+};
+
 export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentID } = useParams();
   const { t } = useTranslation();
+
+  const QUERY_KEYS: ApplicantApplicationManagementQK = {
+    applications: (recruitmentId: string) => ['applications', recruitmentId] as const,
+    withdrawnApplications: (recruitmentId: string) => ['withdrawnApplications', recruitmentId] as const,
+  };
+
   return (
     <Page>
       <div className={styles.container}>
@@ -23,8 +34,8 @@ export function RecruitmentApplicationsOverviewPage() {
         </div>
         <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
-        <ActiveApplications recruitmentId={recruitmentID} />
-        <WithdrawnApplications recruitmentId={recruitmentID} />
+        <ActiveApplications recruitmentId={recruitmentID} queryKey={QUERY_KEYS} />
+        <WithdrawnApplications recruitmentId={recruitmentID} queryKey={QUERY_KEYS} />
       </div>
     </Page>
   );
