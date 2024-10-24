@@ -809,13 +809,13 @@ export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: 
 }
 
 export async function getRecruitmentApplicationsForRecruitmentPosition(
-  recruitmentPositionId: string,
+  positionId: string,
 ): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_detail,
-      urlParams: { pk: recruitmentPositionId },
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_position_detail,
+      urlParams: { pk: positionId },
     });
   return await axios.get(url, { withCredentials: true });
 }
