@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BackButton, Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { BackButton, Button, Link, SamfundetLogoSpinner } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { getRecruitmentApplicationsForRecruiter, withdrawRecruitmentApplicationRecruiter } from '~/api';
@@ -13,6 +13,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { AdminPage } from '../AdminPageLayout';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
 
 export function RecruitmentApplicantAdminPage() {
@@ -66,12 +67,9 @@ export function RecruitmentApplicantAdminPage() {
   }
 
   return (
-    <Page>
+    <AdminPage title={`${applicant?.first_name} ${applicant?.last_name}`}>
       <div className={classNames(styles.infoContainer)}>
         <BackButton />
-        <Text size="l" as="strong" className={styles.textBottom}>
-          {applicant?.first_name} {applicant?.last_name}
-        </Text>
         <Table
           data={[
             {
@@ -169,6 +167,6 @@ export function RecruitmentApplicantAdminPage() {
           })}
         />
       </div>
-    </Page>
+    </AdminPage>
   );
 }
