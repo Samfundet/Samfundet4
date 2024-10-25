@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { InputField, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { putRecruitmentApplicationForGang } from '~/api';
@@ -24,14 +24,14 @@ type RecruitmentApplicantsStatusProps = {
 };
 
 // TODO add backend to fetch these
-const priorityOptions: DropDownOption<number>[] = [
+const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Set', value: 0 },
   { label: 'Reserve', value: 1 },
   { label: 'Wanted', value: 2 },
   { label: 'Not Wanted', value: 3 },
 ];
 
-const statusOptions: DropDownOption<number>[] = [
+const statusOptions: DropdownOption<number>[] = [
   { label: 'Nothing', value: 0 },
   { label: 'Called and accepted', value: 1 },
   { label: 'Called and rejected', value: 2 },

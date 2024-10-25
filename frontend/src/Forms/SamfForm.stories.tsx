@@ -1,5 +1,5 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { SamfForm, type SamfFormProps } from './SamfForm';
 import { SamfFormField } from './SamfFormField';
@@ -28,7 +28,7 @@ function validate69(values: BasicFormProps) {
   return 'Tallet må være 69';
 }
 
-const options: DropDownOption<string>[] = [
+const options: DropdownOption<string>[] = [
   { label: 'Option 1', value: 'Option 1' },
   { label: 'Option 2', value: 'Option 2' },
 ];

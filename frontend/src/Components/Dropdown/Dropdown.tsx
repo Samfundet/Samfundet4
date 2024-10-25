@@ -3,7 +3,7 @@ import { default as classNames, default as classnames } from 'classnames';
 import React, { type ChangeEvent, type ReactNode, useMemo } from 'react';
 import styles from './Dropdown.module.scss';
 
-export type DropDownOption<T> = {
+export type DropdownOption<T> = {
   label: string;
   value: T;
   disabled?: boolean;
@@ -17,7 +17,7 @@ type NullOption = {
 type PrimitiveDropdownProps<T> = {
   className?: string;
   classNameSelect?: string;
-  options?: DropDownOption<T>[];
+  options?: DropdownOption<T>[];
   label?: string | ReactNode;
   disabled?: boolean;
   error?: boolean;
@@ -56,7 +56,7 @@ function DropdownInner<T>(
 ) {
   const isControlled = value !== undefined;
 
-  const finalOptions = useMemo<DropDownOption<T>[]>(() => {
+  const finalOptions = useMemo<DropdownOption<T>[]>(() => {
     let opts = [...options];
 
     if (!nullOption) {
@@ -65,9 +65,9 @@ function DropdownInner<T>(
 
     if (nullOption) {
       if (typeof nullOption === 'boolean') {
-        opts = [{ value: null, label: '' } as DropDownOption<T>, ...opts];
+        opts = [{ value: null, label: '' } as DropdownOption<T>, ...opts];
       } else {
-        opts = [{ value: null, label: nullOption.label, disabled: nullOption.disabled } as DropDownOption<T>, ...opts];
+        opts = [{ value: null, label: nullOption.label, disabled: nullOption.disabled } as DropdownOption<T>, ...opts];
       }
     }
 

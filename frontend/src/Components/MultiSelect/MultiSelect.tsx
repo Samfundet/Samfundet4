@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { InputField } from '~/Components/InputField';
 import { Button } from '../Button';
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
 import { exists, searchFilter } from './utils';
 
@@ -11,8 +11,8 @@ type MultiSelectProps<T> = {
   selectedLabel?: string;
   selectAllBtnTxt?: string;
   unselectAllBtnTxt?: string;
-  selected?: DropDownOption<T>[];
-  options?: DropDownOption<T>[];
+  selected?: DropdownOption<T>[];
+  options?: DropdownOption<T>[];
   onChange?: (values: T[]) => void;
   className?: string;
 };
@@ -34,7 +34,7 @@ export function MultiSelect<T>({
 }: MultiSelectProps<T>) {
   const [searchUnselected, setSearchUnselected] = useState('');
   const [searchSelected, setSearchSelected] = useState('');
-  const [selected, setSelected] = useState<DropDownOption<T>[]>(initialValues);
+  const [selected, setSelected] = useState<DropdownOption<T>[]>(initialValues);
 
   const filteredOptions = useMemo(
     () => options.filter((item) => searchFilter(item, searchUnselected)).filter((item) => !exists(item, selected)),
@@ -46,13 +46,13 @@ export function MultiSelect<T>({
     [searchSelected, selected],
   );
 
-  function selectItem(item: DropDownOption<T>) {
+  function selectItem(item: DropdownOption<T>) {
     const updatedSelected = [...selected, item];
     setSelected(updatedSelected);
     onChange?.(updatedSelected.map((_item) => _item.value));
   }
 
-  function unselectItem(item: DropDownOption<T>) {
+  function unselectItem(item: DropdownOption<T>) {
     const updatedSelected = selected.filter((_item) => _item !== item);
     setSelected(updatedSelected);
     onChange?.(updatedSelected.map((_item) => _item.value));

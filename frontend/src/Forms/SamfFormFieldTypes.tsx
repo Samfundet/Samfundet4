@@ -12,7 +12,7 @@ import {
   PhoneNumberField,
   TextAreaField,
 } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker, type ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
 import type { InputFieldType } from '~/Components/InputField/InputField';
 import type { InputFileType } from '~/Components/InputFile/InputFile';
@@ -31,7 +31,7 @@ export type FormFieldReturnType =
   | string
   | number
   | boolean
-  | DropDownOption<unknown>
+  | DropdownOption<unknown>
   | ImageDto
   | Date
   | File
@@ -78,8 +78,8 @@ export type SamfFormFieldArgs<T extends FormFieldReturnType> = {
   error: SamfError;
   label?: string; // Text label above the input
   // Custom args for options type
-  defaultOption?: DropDownOption<unknown>;
-  options?: DropDownOption<unknown>[];
+  defaultOption?: DropdownOption<unknown>;
+  options?: DropdownOption<unknown>[];
   props?: FieldProps;
 };
 
@@ -187,7 +187,7 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
 
 // Options dropdown input
 // # issue 1090
-function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
+function makeOptionsInput(args: SamfFormFieldArgs<DropdownOption<unknown>>) {
   const errorBoolean = args.error !== false && args.error !== undefined;
   return (
     <Dropdown<unknown>

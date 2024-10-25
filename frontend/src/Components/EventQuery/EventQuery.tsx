@@ -7,7 +7,7 @@ import { KEY } from '~/i18n/constants';
 import type { SetState } from '~/types';
 import { lowerCapitalize } from '~/utils';
 import { Dropdown } from '../Dropdown';
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';
 
@@ -38,11 +38,11 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       .catch(console.error);
   }, [allEvents]);
 
-  const venueOptions: DropDownOption<number | null>[] = venues.map((venue) => {
-    return { label: venue.name ?? '', value: venue.id } as DropDownOption<number>;
+  const venueOptions: DropdownOption<number | null>[] = venues.map((venue) => {
+    return { label: venue.name ?? '', value: venue.id } as DropdownOption<number>;
   });
 
-  const eventGroupOptions: DropDownOption<number | null>[] = eventGroups.map((group) => {
+  const eventGroupOptions: DropdownOption<number | null>[] = eventGroups.map((group) => {
     return { label: group.name ?? '', value: group.id };
   });
 
