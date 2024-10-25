@@ -2,15 +2,6 @@
 
 @import 'src/mixins';
 
-// Hide up and down buttons unless hover/focus
-.input[type="number"] {
-  -webkit-appearance: textfield;
-
-  &:hover, &:focus {
-    -moz-appearance: initial;
-  }
-}
-
 .input[type="date"],
 .input[type="datetime-local"],
 .input[type="email"],
@@ -50,3 +41,14 @@
     }
   }
 }
+
+/* stylelint-disable no-descending-specificity */
+// Hide up and down buttons unless hover/focus
+.input[type="number"] {
+  -webkit-appearance: textfield;
+
+  &:hover, &:focus {
+    -moz-appearance: initial;
+  }
+}
+/* stylelint-enable no-descending-specificity */
