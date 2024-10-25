@@ -25,8 +25,8 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
 
   // Search
   const [search, setSearch] = useState<string>('');
-  const [selectedVenue, setSelectedVenue] = useState<number | null>();
-  const [selectedEventGroup, setSelectedEventGroup] = useState<number | null>();
+  const [selectedVenue, setSelectedVenue] = useState<VenueDto | null>();
+  const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto | null>();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -48,13 +48,7 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    setEvents(
-      eventQuery(
-        allEvents,
-        search,
-        venues.find((v) => v.id === selectedVenue),
-      ),
-    );
+    setEvents(eventQuery(allEvents, search, selectedVenue));
   }, [search, selectedVenue, selectedEventGroup]);
 
   return (
@@ -67,16 +61,14 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       />
       <Dropdown
         options={venueOptions}
-        value={selectedVenue}
-        onChange={setSelectedVenue}
+        onChange={(val) => setSelectedVenue(venues.find((v) => v.id === val))}
         className={styles.element}
         nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_venue)}`) }}
       />
 
       <Dropdown
         options={eventGroupOptions}
-        value={selectedEventGroup}
-        onChange={setSelectedEventGroup}
+        onChange={(val) => setSelectedEventGroup(eventGroups.find((eg) => eg.id === val))}
         className={styles.element}
         nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.event_type)}`) }}
       />
