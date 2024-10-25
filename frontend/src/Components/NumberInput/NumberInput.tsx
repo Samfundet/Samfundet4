@@ -3,15 +3,17 @@ import { Input, type InputProps } from '~/Components';
 
 export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (...event: unknown[]) => void;
+  allowDecimal?: boolean;
 }
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
-  ({ onChange, value, type, ...props }, ref) => {
+  ({ onChange, value, type, allowDecimal = true, ...props }, ref) => {
     const [inputValue, setInputValue] = useState(value || '');
 
     function isValidPartial(s: string) {
       // Allows for partial inputs like "-" or "1."
-      return /^-?[0-9]*\.?[0-9]*$/.test(s);
+      const re = allowDecimal ? /^-?[0-9]*\.?[0-9]*$/ : /^-?[0-9]*$/;
+      return re.test(s);
     }
 
     function previewAfterInsert(input: HTMLInputElement, data: string) {
@@ -79,7 +81,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       <Input
         type="text"
         inputMode="numeric"
-        pattern="-?[0-9]*\.?[0-9]+"
+        pattern={allowDecimal ? '-?[0-9]*.?[0-9]+' : '-?[0-9]+'}
         ref={ref}
         value={inputValue}
         onKeyDown={onKeyDown}
