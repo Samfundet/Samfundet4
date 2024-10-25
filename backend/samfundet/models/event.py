@@ -168,7 +168,7 @@ class Event(CustomBaseModel):
     # ======================== #
     #       Venue/Entrance     #
     # ======================== #
-    location = models.CharField(max_length=140, blank=False, null=False)
+    location = models.CharField(max_length=140, blank=False, null=False)  # AKA venue
     entrance_nb = models.CharField(max_length=140, blank=True, null=True)
     entrance_en = models.CharField(max_length=140, blank=True, null=True)
 
