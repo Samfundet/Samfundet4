@@ -2,6 +2,15 @@
 
 @import 'src/mixins';
 
+// Hide up and down buttons unless hover/focus
+.input[type="number"] {
+  -webkit-appearance: textfield;
+
+  &:hover, &:focus {
+    -moz-appearance: initial;
+  }
+}
+
 .input[type="date"],
 .input[type="datetime-local"],
 .input[type="email"],
@@ -39,14 +48,5 @@
       border-color: $grey-1;
       outline: 1px solid rgba(255, 255, 255, 0.6);
     }
-  }
-}
-
-// Hide up and down buttons unless hover/focus
-.input[type="number"] {
-  -webkit-appearance: textfield;
-
-  &:hover, &:focus {
-    -moz-appearance: initial;
   }
 }
