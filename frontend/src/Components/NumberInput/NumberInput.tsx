@@ -54,14 +54,22 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     }
 
     function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-      if (event.key !== 'Backspace' && event.key !== 'Delete') {
-        return;
+      if (event.key === 'Backspace' || event.key === 'Delete') {
+        const preview = previewAfterDelete(event.currentTarget, event.key === 'Backspace');
+        if (!isValidPartial(preview)) {
+          event.preventDefault();
+          return;
+        }
       }
 
-      const preview = previewAfterDelete(event.currentTarget, event.key === 'Backspace');
-      if (!isValidPartial(preview)) {
+      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
         event.preventDefault();
-        return;
+        const add = event.key === 'ArrowUp' ? 1 : -1;
+        const newVal = (Number(inputValue) || 0) + add;
+        if (!Number.isNaN(newVal)) {
+          setInputValue(newVal);
+          onChange?.(newVal);
+        }
       }
     }
 
