@@ -43,6 +43,7 @@ export { MiniCalendar } from './MiniCalendar';
 export { Modal } from './Modal';
 export { Navbar } from './Navbar';
 export { NotificationBadge } from './NotificationBadge';
+export { NumberInput } from './NumberInput';
 export { OccupiedForm, OccupiedFormModal } from './OccupiedForm';
 export { OpeningHours } from './OpeningHours';
 export { Page } from './Page';
