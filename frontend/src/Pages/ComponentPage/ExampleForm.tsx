@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  NumberInput,
 } from '~/Components';
 import { PASSWORD, USERNAME } from '~/schema/user';
 
@@ -104,16 +105,11 @@ export function ExampleForm() {
         <FormField
           control={form.control}
           name="duration"
-          render={({ field: { onChange, ...fieldProps } }) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Varighet</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  disabled={submitting}
-                  onChange={(event) => onChange(event.target.valueAsNumber)}
-                  {...fieldProps}
-                />
+                <NumberInput disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
