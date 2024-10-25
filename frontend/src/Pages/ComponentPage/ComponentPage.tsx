@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button, Countdown, H1, H2, H3, H4, H5, H6, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
@@ -15,6 +16,8 @@ import styles from './ComponentPage.module.scss';
  * Useful when styling global themes.
  */
 export function ComponentPage() {
+  const [showShrimpFishing, setShowShrimpFishing] = useState(false);
+
   return (
     <div className={styles.wrapper}>
       <div>
@@ -149,7 +152,10 @@ export function ComponentPage() {
           </Countdown>
         </h2>
       </div>
-      <ShrimpFishing />
+      <Button type="button" onClick={() => setShowShrimpFishing(true)}>
+        Start rekefisking?
+      </Button>
+      {showShrimpFishing && <ShrimpFishing />}
     </div>
   );
 }
