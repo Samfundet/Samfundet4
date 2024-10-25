@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input, type InputProps } from '~/Components';
 
 export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
-  onChange: (...event: unknown[]) => void;
+  onChange?: (...event: unknown[]) => void;
 }
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
@@ -71,7 +71,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       // This ensures we don't send partially valid inputs
       const num = Number(val);
       if (!Number.isNaN(num)) {
-        onChange(num);
+        onChange?.(num);
       }
     }
 
