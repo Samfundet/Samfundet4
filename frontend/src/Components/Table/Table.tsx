@@ -25,7 +25,10 @@ type TableCell = {
 };
 
 // Type shorthands
-export type TableRow = Array<TableCell | TableCellValue | undefined>;
+export type TableRow = {
+  cells: Array<TableCell | TableCellValue | undefined>;
+  childTable?: TableProps;
+};
 type TableDataType = TableRow[];
 
 type TableProps = {
@@ -40,6 +43,7 @@ type TableProps = {
   // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
   defaultSortColumn?: number;
+  isChildTable?: boolean;
 };
 
 export function Table({
@@ -52,9 +56,11 @@ export function Table({
   columns,
   data,
   defaultSortColumn = -1,
+  isChildTable,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
 
   function sort(column: number) {
     if (sortColumn === column) {
@@ -86,8 +92,8 @@ export function Table({
     }
 
     return [...data].sort((rowA, rowB) => {
-      const cellA = getCellValue(rowA[sortColumn] ?? '');
-      const cellB = getCellValue(rowB[sortColumn] ?? '');
+      const cellA = getCellValue(rowA.cells[sortColumn] ?? '');
+      const cellB = getCellValue(rowB.cells[sortColumn] ?? '');
 
       // Not same type, force sort as string type
       if (typeof cellA !== typeof cellB) {
@@ -170,16 +176,22 @@ export function Table({
     return col;
   }
 
+  function hasChildTable(data: TableDataType): boolean {
+    return data.some((row) => row.childTable !== undefined);
+  }
+
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
           <tr>
+            {(hasChildTable(data) || isChildTable) && <th />}
+
             {columns?.map((col, index) => {
               if (isColumnSortable(col)) {
                 return (
                   <th
-                    // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
@@ -202,7 +214,7 @@ export function Table({
                 );
               }
               return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -212,15 +224,40 @@ export function Table({
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-            <tr className={bodyRowClassName} key={index1}>
-              {row?.map((cell, index2) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-                <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
-                  {getCellContent(cell ?? '')}
-                </td>
-              ))}
-            </tr>
+            <>
+              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+              <tr
+                className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                key={index1}
+                onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
+              >
+                {row.childTable !== undefined && (
+                  <td
+                    className={classNames(cellClassName)}
+                    key={`arrow-${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      index1
+                    }`}
+                  >
+                    <Icon icon={isOpen === index1 ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
+                  </td>
+                )}
+                {row?.cells.map((cell, index2) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
+                    {getCellContent(cell ?? '')}
+                  </td>
+                ))}
+              </tr>
+              {row.childTable !== undefined && isOpen === index1 && (
+                <tr className={styles.childTableContainer}>
+                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName} `}>
+                    <Table {...row.childTable} isChildTable />
+                  </td>
+                </tr>
+              )}
+            </>
           ))}
         </tbody>
       </table>

@@ -5,8 +5,8 @@
 .timeslot {
   padding: 0.5rem 1rem;
   border-radius: 5px;
-  border: 1px solid $grey-3;
-  color: $grey-3;
+  border: 1px solid $grey-0;
+  color: $grey-0;
   cursor: pointer;
   background: none;
   position: relative;
@@ -23,7 +23,7 @@
   height: $size;
   border-radius: $size;
   display: inline-block;
-  background: $grey-3;
+  background: $grey-0;
 }
 
 .timeslot_active {
@@ -35,3 +35,22 @@
   }
 }
 
+.timeslot_disabled {
+  border-color: $grey-3;
+  color: $grey-3;
+  cursor: not-allowed;
+
+  .dot {
+    background: $grey-3;
+  }
+}
+
+.timeslot_only_one_valid {
+  border-color: $green;
+  color: $green;
+  cursor: pointer;
+
+  .dot {
+    background: $green;
+  }
+}

@@ -9,10 +9,10 @@ docker compose exec frontend bash
 ```bash
 exit
 ```
-🐳Eslint check
+🐳Biome check
 ```bash
-yarn run eslint:check
-#runs eslint, like in GitHub Actions pipeline, but in Docker
+yarn biome:check
+#runs Biome, like in GitHub Actions pipeline, but in Docker
 ```
 🐳Stylelint check
 ```bash

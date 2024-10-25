@@ -11,8 +11,8 @@ export type DropDownOption<T> = {
 export type DropdownProps<T> = {
   className?: string;
   classNameSelect?: string;
-  defaultValue?: DropDownOption<T>;
-  initialValue?: T;
+  defaultValue?: DropDownOption<T>; // issue 1089
+  value?: T;
   disableIcon?: boolean;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
@@ -26,7 +26,7 @@ function DropdownInner<T>(
   {
     options = [],
     defaultValue,
-    initialValue,
+    value,
     onChange,
     className,
     classNameSelect,
@@ -62,7 +62,7 @@ function DropdownInner<T>(
   }
 
   let initialIndex = 0;
-  if (initialValue !== undefined) {
+  if (value !== undefined) {
     initialIndex = finalOptions.findIndex((opt) => opt.value === initialValue);
   } else if (defaultValue) {
     initialIndex = finalOptions.findIndex((opt) => opt.value === defaultValue.value);
@@ -82,6 +82,7 @@ function DropdownInner<T>(
         onChange={handleChange}
         disabled={disabled}
         defaultValue={initialIndex}
+        // value={value !== undefined ? options.findIndex((e) => e.value === value) : -1}
       >
         {finalOptions.map((opt, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
