@@ -36,7 +36,7 @@ type UncontrolledDropdownProps<T> = PrimitiveDropdownProps<T> & {
   defaultValue?: T | null;
 };
 
-type DropdownProps<T> = ControlledDropdownProps<T> | UncontrolledDropdownProps<T>;
+export type DropdownProps<T> = ControlledDropdownProps<T> | UncontrolledDropdownProps<T>;
 
 function DropdownInner<T>(
   {
