@@ -96,11 +96,16 @@ export function ExampleForm() {
         <FormField
           control={form.control}
           name="duration"
-          render={({ field }) => (
+          render={({ field: { onChange, ...fieldProps } }) => (
             <FormItem>
               <FormLabel>Varighet</FormLabel>
               <FormControl>
-                <Input type="number" disabled={submitting} {...field} />
+                <Input
+                  type="number"
+                  disabled={submitting}
+                  onChange={(event) => onChange(event.target.valueAsNumber)}
+                  {...fieldProps}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
