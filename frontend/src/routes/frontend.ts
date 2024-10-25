@@ -19,9 +19,9 @@ export const ROUTES_FRONTEND = {
   contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
-  recruitment_application: '/recruitment/position/:positionID/',
-  recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
-  organization_recruitment: '/recruitment/:recruitmentID/',
+  recruitment_application: '/recruitment/position/:positionId/',
+  recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
   // Purchase callback:
   purchase_callback: '/purchase-callback/:eventId',
@@ -39,15 +39,15 @@ export const ROUTES_FRONTEND = {
   //      Admin pages     //
   // ==================== //
   admin: '/control-panel/',
-  admin_impersonate: '/impersonate/',
   // Users
   admin_users: '/control-panel/users/',
   // Roles
   admin_roles: '/control-panel/roles/',
+  admin_roles_view: '/control-panel/roles/:roleId/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
-  admin_gangs_edit: '/control-panel/gangs/edit/:id/',
+  admin_gangs_edit: '/control-panel/gangs/edit/:gangId/',
   // Events:
   admin_events: '/control-panel/events/',
   admin_events_edit: '/control-panel/events/edit/:id/',
@@ -76,8 +76,11 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_users_three_interview_criteria:
     '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
+  admin_recruitment_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
+  admin_recruitment_gang_overview_rejection_email:
+    '/control-panel/recruitment/:recruitmentId/gang-overview/rejection-email/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
   admin_recruitment_gang_position_edit: '/control-panel/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',

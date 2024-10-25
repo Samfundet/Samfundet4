@@ -215,6 +215,7 @@ from root.custom_classes.request_context_filter import RequestContextFilter  # n
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
+TEST_EMAIL_FILE = BASE_DIR / 'logs' / 'test_email.txt'
 
 LOGGING = {
     'version': 1,
@@ -323,3 +324,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'

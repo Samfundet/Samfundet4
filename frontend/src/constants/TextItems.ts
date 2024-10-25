@@ -29,14 +29,20 @@ export const TextItem = {
   about_samfundet: 'about_samfundet',
   sulten_contact_page_title: 'sulten_contact_page_title',
 
-  //Recruitment
-  no_recruitment_text: 'no_recruitment_text',
-  no_recruitment_text_0: 'no_recruitment_text_0',
-  no_recruitment_text_1: 'no_recruitment_text_1',
-  no_recruitment_text_2: 'no_recruitment_text_2',
-  no_recruitment_text_3: 'no_recruitment_text_3',
-  no_recruitment_text_4: 'no_recruitment_text_4',
-  no_recruitment_text_5: 'no_recruitment_text_5',
+  //Recruitment samf
+  no_recruitment_samf_header: 'no_recruitment_samf_header',
+  no_recruitment_samf_about: 'no_recruitment_samf_about',
+  no_recruitment_samf_next: 'no_recruitment_samf_next',
+
+  //Recruitment ISFIT
+  no_recruitment_isfit_header: 'no_recruitment_isfit_header',
+  no_recruitment_isfit_about: 'no_recruitment_isfit_about',
+  no_recruitment_isfit_next: 'no_recruitment_isfit_next',
+
+  //Recruitment UKA
+  no_recruitment_uka_header: 'no_recruitment_uka_header',
+  no_recruitment_uka_about: 'no_recruitment_uka_about',
+  no_recruitment_uka_next: 'no_recruitment_uka_next',
 
   //Membership
   membership: 'membership',
@@ -89,3 +95,5 @@ export const TextItem = {
   purchase_feedback_question_1: 'purchase_feedback_question_1',
   purchase_feedback_question_2: 'purchase_feedback_question_2',
 } as const;
+
+export type TextItemValue = (typeof TextItem)[keyof typeof TextItem];

@@ -18,15 +18,17 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
+from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
+from django.core.mail import EmailMessage
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import (
@@ -64,6 +66,7 @@ from .serializers import (
     TextItemSerializer,
     InterviewSerializer,
     EventGroupSerializer,
+    PermissionSerializer,
     RecruitmentSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
@@ -506,6 +509,11 @@ class ProfileView(ModelViewSet):
     queryset = Profile.objects.all()
 
 
+class PermissionView(ModelViewSet):
+    serializer_class = PermissionSerializer
+    queryset = Permission.objects.all()
+
+
 class WebhookView(APIView):
     """
     https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries
@@ -713,6 +721,51 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
         if recruitment is not None and gang is not None:
             return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         return None
+
+
+class SendRejectionMailView(APIView):
+    def post(self, request: Request) -> Response:
+        try:
+            subject = request.data.get('subject')
+            text = request.data.get('text')
+            recruitment = request.data.get('recruitment')
+            if recruitment is None:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            # Only users who have never been contacted with an offer should get a rejection mail
+            # Retrieve all users who has a non-withdrawn rejected application in current recruitment
+            rejected_users = User.objects.filter(
+                applications__recruitment=recruitment,
+                applications__recruiter_status=RecruitmentStatusChoices.REJECTION,
+                applications__withdrawn=False,
+            )
+
+            # Retrieve all users who have been contacted with an offer
+            contacted_users = User.objects.filter(
+                applications__recruitment=recruitment,
+                applications__recruiter_status__in=[
+                    RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+                    RecruitmentStatusChoices.CALLED_AND_REJECTED,
+                ],
+            )
+
+            # Remove users who have been contacted with an offer from the rejected users list
+            final_rejected_users = rejected_users.exclude(id__in=contacted_users.values('id'))
+
+            rejected_user_emails = list(final_rejected_users.values_list('email', flat=True))
+
+            email = EmailMessage(
+                subject=subject,
+                body=text,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[],  # Empty 'To' field since we're using BCC
+                bcc=rejected_user_emails,
+            )
+
+            email.send(fail_silently=False)
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

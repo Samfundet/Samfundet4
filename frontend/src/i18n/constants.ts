@@ -113,13 +113,16 @@ export const KEY = {
   common_contact: 'common_contact',
   common_unknown: 'common_unknown',
   common_sponsor: 'common_sponsor',
+  common_gang_type: 'common_gang_type',
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
   common_users: 'common_users',
   common_email: 'common_email',
+  common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
+  common_roles_view: 'common_roles_view',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
@@ -176,8 +179,12 @@ export const KEY = {
   common_when: 'common_when',
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
+  common_room: 'common_room',
   common_filter: 'common_filter',
+  common_personal: 'common_personal',
   common_administrate: 'common_administrate',
+  common_administration: 'common_administration',
+  common_unprocessed: 'common_unprocessed',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -306,6 +313,8 @@ export const KEY = {
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_applicants_open_to_other_positions: 'recruitment_applicants_open_to_other_positions',
+  recruitment_applicants_open_to_other_positions_help_text: 'recruitment_applicants_open_to_other_positions_help_text',
   recruitment_show_all_applicants: 'recruitment_show_all_applicants',
   recruitment_processed: 'recruitment_processed',
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
@@ -319,15 +328,19 @@ export const KEY = {
   recruitment_applicant_top_position: 'recruitment_applicant_top_position',
   recruitment_withdrawn_applications: 'recruitment_withdrawn_applications',
   recruitment_rejected_applications: 'recruitment_rejected_applications',
+  recruitment_hardtoget_applications: 'recruitment_hardtoget_applications',
   recruitment_accepted_applications: 'recruitment_accepted_applications',
   recruitment_rejected_applications_help_text: 'recruitment_rejected_applications_help_text',
+  recruitment_hardtoget_applications_help_text: 'recruitment_hardtoget_applications_help_text',
   recruitment_accepted_applications_help_text: 'recruitment_accepted_applications_help_text',
   recruitment_accepted_applications_empty_text: 'recruitment_accepted_applications_empty_text',
   recruitment_rejected_applications_empty_text: 'recruitment_rejected_applications_empty_text',
+  recruitment_hardtoget_applications_empty_text: 'recruitment_hardtoget_applications_empty_text',
   recruitment_withdrawn_applications_empty_text: 'recruitment_withdrawn_applications_empty_text',
   recruitment_withdrawn: 'recruitment_withdrawn',
   recruitment_withdraw_application: 'recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_confirm_withdraw_application: 'recruitment_confirm_withdraw_application',
   recruitment_three_interviews_criteria_button: 'recruitment_three_interviews_criteria_button',
   recruitment_three_interviews_criteria_header: 'recruitment_three_interviews_criteria_header',
   recruitment_revert_status: 'recruitment_revert_status',
@@ -354,6 +367,22 @@ export const KEY = {
   error_recruitment_form_2: 'error_recruitment_form_2',
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
+  recruitment_separate_recruitment: 'recruitment_separate_recruitment',
+
+  // Recruitment applets
+  recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
+  recruitment_applet_edit_description: 'recruitment_applet_edit_description',
+  recruitment_applet_open_to_other_positions: 'recruitment_applet_open_to_other_positions',
+  recruitment_applet_overview_description: 'recruitment_applet_overview_description',
+  recruitment_applet_room_overview: 'recruitment_applet_room_overview',
+  recruitment_applet_room_description: 'recruitment_applet_room_description',
+  recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',
+  recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
+  recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
+  recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
+  recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
+  recruitment_choose_interview_time: 'recruitment_choose_interview_time',
+  recruitment_choose_interview_location: 'recruitment_choose_interview_location',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
@@ -378,6 +407,8 @@ export const KEY = {
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
+  admin_impersonate: 'admin_impersonate',
+  admin_stop_impersonate: 'admin_stop_impersonate',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -433,5 +464,4 @@ export const KEY = {
 // This will ensure that each value matches the key exactly.
 // Very similar to validateKeyEqualsValue.
 // Fortunately this is in typescript and will protect the pipeline.
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 KEY as MirrorKeys<TranslationKeys>;

@@ -10,20 +10,28 @@
   // ================================
   //              Backend
   // ================================
-  // mypy (type checker, linter)
-  "mypy-type-checker.importStrategy": "fromEnvironment",
-  "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
-  // pytest
+  // mypy, lints for Python
+  "mypy.enabled": true,
+  "mypy.configFile": "backend/mypy.ini",
+  "mypy.runUsingActiveInterpreter": true,
+  // pylint, lints for Python
+  "pylint.interpreter": ["backend/.venv/bin/python"],
+  "pylint.path": ["backend/.venv/bin/pylint"],
+  "pylint.args": ["--django-settings-module", "backend.root.settings", "--rcfile", "./backend/.pylintrc"],
+  "pylint.importStrategy": "fromEnvironment",
+  //pytest
   "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
-  // Other
-  "python.envFile": "backend/.env",
+  "python.testing.pytestArgs": ["-c", "./backend/pytest.ini"],
+  "python.testing.unittestEnabled": false,
+
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": false
+      "source.fixAll": "explicit",
+      "source.lintOnSave": "explicit",
+      "source.organizeImports": "never"
     },
-    "editor.defaultFormatter": "eeyore.yapf"
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
   },
 
   // ================================
@@ -44,5 +52,51 @@
   "scss.validate": true,
   "stylelint.configFile": "frontend/.stylelintrc",
   "stylelint.enable": true,
-  "stylelint.validate": ["css", "scss"]
+  "stylelint.validate": ["css", "scss"],
+
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+  "[javascript][javascriptreact][scss][typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  }
 }

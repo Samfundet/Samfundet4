@@ -114,12 +114,12 @@ export function SultenMenuAdminPage() {
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <div>
         <h2 className={styles.subheader}>{t(KEY.sulten_dishes)}</h2>
-        <Table columns={tableMenuItemsColumns} data={menuItems.map((item) => menuItemsTableRow(item))} />
+        <Table columns={tableMenuItemsColumns} data={menuItems.map((item) => ({ cells: menuItemsTableRow(item) }))} />
       </div>
 
       <div>
         <h2 className={styles.subheader}>{t(KEY.common_menu)}</h2>
-        <Table columns={tableMenusColumns} data={menus.map((item) => menuTableRow(item))} />
+        <Table columns={tableMenusColumns} data={menus.map((item) => ({ cells: menuTableRow(item) }))} />
       </div>
     </AdminPageLayout>
   );

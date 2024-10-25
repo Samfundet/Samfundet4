@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 export function FriedShrimpIcon() {
   return (
     <svg
