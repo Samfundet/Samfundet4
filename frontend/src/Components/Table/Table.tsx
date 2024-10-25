@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { TimeDisplay } from '~/Components';
 import type { Children } from '~/types';
 import styles from './Table.module.scss';
@@ -191,7 +191,7 @@ export function Table({
               if (isColumnSortable(col)) {
                 return (
                   <th
-                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
@@ -214,7 +214,7 @@ export function Table({
                 );
               }
               return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -224,12 +224,11 @@ export function Table({
         </thead>
         <tbody className={bodyClassName}>
           {sortedData(data).map((row, index1) => (
-            <>
+            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+            <Fragment key={index1}>
               {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
               <tr
                 className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                key={index1}
                 onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
               >
                 {row.childTable !== undefined && (
@@ -257,7 +256,7 @@ export function Table({
                   </td>
                 </tr>
               )}
-            </>
+            </Fragment>
           ))}
         </tbody>
       </table>
