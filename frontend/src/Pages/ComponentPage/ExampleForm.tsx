@@ -87,7 +87,7 @@ export function ExampleForm() {
             <FormItem>
               <FormLabel>Organisasjon</FormLabel>
               <FormControl>
-                <Dropdown options={organizations} disabled={submitting} {...field} />
+                <Dropdown options={organizations} disabled={submitting} addNullOption={true} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
