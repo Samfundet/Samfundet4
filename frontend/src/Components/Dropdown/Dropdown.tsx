@@ -6,6 +6,12 @@ import styles from './Dropdown.module.scss';
 export type DropDownOption<T> = {
   label: string;
   value: T;
+  disabled?: boolean;
+};
+
+type NullOption = {
+  label: string;
+  disabled?: boolean;
 };
 
 type PrimitiveDropdownProps<T> = {
@@ -16,8 +22,8 @@ type PrimitiveDropdownProps<T> = {
   disabled?: boolean;
   error?: boolean;
   disableIcon?: boolean;
-  addNullOption?: boolean;
-  onChange?: (value: T | null) => void;
+  nullOption?: boolean | NullOption;
+  onChange?: (value: T) => void;
 };
 
 type ControlledDropdownProps<T> = PrimitiveDropdownProps<T> & {
@@ -43,7 +49,7 @@ function DropdownInner<T>(
     label,
     disabled = false,
     disableIcon = false,
-    addNullOption = false,
+    nullOption = false,
     error,
   }: DropdownProps<T>,
   ref: React.Ref<HTMLSelectElement>,
@@ -51,11 +57,22 @@ function DropdownInner<T>(
   const isControlled = value !== undefined;
 
   const finalOptions = useMemo<DropDownOption<T>[]>(() => {
-    if (!addNullOption) {
+    let opts = [...options];
+
+    if (!nullOption) {
       return options;
     }
-    return [{ value: null, label: '' } as DropDownOption<T>, ...options];
-  }, [options, addNullOption]);
+
+    if (nullOption) {
+      if (typeof nullOption === 'boolean') {
+        opts = [{ value: null, label: '' } as DropDownOption<T>, ...opts];
+      } else {
+        opts = [{ value: null, label: nullOption.label, disabled: nullOption.disabled } as DropDownOption<T>, ...opts];
+      }
+    }
+
+    return opts;
+  }, [options, nullOption]);
 
   const selectedIndex = useMemo(() => {
     if (isControlled) {
@@ -90,10 +107,10 @@ function DropdownInner<T>(
         defaultValue={!isControlled ? selectedIndex : undefined}
         value={isControlled ? selectedIndex : undefined}
       >
-        {finalOptions.map((opt, index) => (
+        {finalOptions.map(({ label, value, ...props }, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-          <option value={index} key={index}>
-            {opt.label}
+          <option value={index} key={index} {...props}>
+            {label}
           </option>
         ))}
       </select>
