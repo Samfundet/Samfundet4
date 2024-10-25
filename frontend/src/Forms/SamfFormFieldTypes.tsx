@@ -190,6 +190,7 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
 function makeOptionsInput(args: SamfFormFieldArgs<DropdownOption<unknown>>) {
   const errorBoolean = args.error !== false && args.error !== undefined;
   return (
+    // @ts-ignore
     <Dropdown<unknown>
       {...(args.props as DropdownProps<number | string>)}
       defaultValue={args.defaultOption}
