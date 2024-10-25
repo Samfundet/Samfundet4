@@ -140,26 +140,19 @@ we only want a single file, so we return the first item in the `FileList`.
 
 ## Numbers
 
-All HTML input values are strings. If we require a number from an input, we must therefore convert it. We do this with
-the [`valueAsNumber`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/valueAsNumber) property.
-
-> [!NOTE]
-> Be sure to extract the `onChange` out from `field`, otherwise doing the normal `{...field}` will overwrite it.
+All HTML input values are strings. If we require a number type from an input, we must therefore convert it, as well as
+deal with all non-numeric input. This can quickly become cumbersome using just the Input component. Luckily we have the
+NumberInput component which does all this for us.
 
 ```tsx
 <FormField
     control={form.control}
     name="duration"
-    render={({ field: { onChange, ...fieldProps } }) => (
+    render={({ field }) => (
         <FormItem>
             <FormLabel>Varighet</FormLabel>
             <FormControl>
-                <Input
-                    type="number"
-                    disabled={submitting}
-                    onChange={(event) => onChange(event.target.valueAsNumber)}
-                    {...fieldProps}
-                />
+                <NumberInput disabled={submitting} {...field} />
             </FormControl>
             <FormMessage />
         </FormItem>
