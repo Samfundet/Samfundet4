@@ -161,10 +161,16 @@ class Event(CustomBaseModel):
     description_long_en = models.TextField(blank=False, null=False)
     description_short_nb = models.TextField(blank=False, null=False)
     description_short_en = models.TextField(blank=False, null=False)
-    location = models.CharField(max_length=140, blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
     editors = models.ManyToManyField(Gang, blank=True)
+
+    # ======================== #
+    #       Venue/Entrance     #
+    # ======================== #
+    location = models.CharField(max_length=140, blank=False, null=False)
+    entrance_nb = models.CharField(max_length=140, blank=True, null=True)
+    entrance_en = models.CharField(max_length=140, blank=True, null=True)
 
     age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
