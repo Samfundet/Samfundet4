@@ -2,7 +2,18 @@
 
 @import 'src/mixins';
 
-.input_field {
+.input[type="date"],
+.input[type="datetime-local"],
+.input[type="email"],
+.input[type="month"],
+.input[type="number"],
+.input[type="password"],
+.input[type="search"],
+.input[type="tel"],
+.input[type="text"],
+.input[type="time"],
+.input[type="url"],
+.input[type="week"] {
   @include rounded-lighter;
   padding: 0.75rem 1rem;
   border: 1px solid $grey-35;
@@ -17,6 +28,7 @@
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     outline: 1px solid rgba(0, 0, 0, 0.1);
   }
+
   &.error {
     border: 1px solid $red;
   }
@@ -31,7 +43,7 @@
 }
 
 // Hide up and down buttons unless hover/focus
-.number_input {
+.input[type="number"] {
   -webkit-appearance: textfield;
 
   &:hover, &:focus {
