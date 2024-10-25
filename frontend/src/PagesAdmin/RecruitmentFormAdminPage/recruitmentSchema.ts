@@ -14,7 +14,7 @@ export const recruitmentSchema = z
     reprioritization_deadline_for_applicant: LOCAL_DATETIME,
     reprioritization_deadline_for_groups: LOCAL_DATETIME,
     organization: z.number().min(1, { message: 'Organization is required' }),
-    max_applications: z.number().nullable(),
+    max_applications: z.number().min(0).max(99).optional(),
   })
   .refine(
     (data) => {
