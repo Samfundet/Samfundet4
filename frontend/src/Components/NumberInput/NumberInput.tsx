@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, type InputProps } from '~/Components';
 
 export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
@@ -9,6 +9,10 @@ export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   ({ onChange, value, type, allowDecimal = true, ...props }, ref) => {
     const [inputValue, setInputValue] = useState(value || '');
+
+    useEffect(() => {
+      setInputValue(value || '');
+    }, [value]);
 
     function isValidPartial(s: string) {
       // Allows for partial inputs like "-" or "1."
