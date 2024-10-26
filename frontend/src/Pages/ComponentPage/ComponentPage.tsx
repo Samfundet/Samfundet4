@@ -94,7 +94,7 @@ export function ComponentPage() {
         <h2>Checkboxes:</h2>
         <Checkbox />
         <br />
-        <Checkbox checked />
+        <Checkbox checked readOnly />
         <br />
         <Checkbox disabled />
         <br />
