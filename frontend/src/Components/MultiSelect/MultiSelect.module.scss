@@ -2,29 +2,41 @@
 
 @import 'src/mixins';
 
-.row {
-  display: flex;
-  gap: 10px;
-  flex: 1;
-
-  @include for-mobile-down {
-    flex-direction: column;
-  }
-}
-
-.col {
-  flex-grow: 1;
-  min-height: 300px;
-  padding: 7px;
-  background-color: #dddddd;
-  @include rounded;
-  
-  @include theme-dark {
-    background-color: $grey-3;
-
-  }
-}
-
 .item {
   margin-bottom: 5px;
+  justify-content: flex-start;
+}
+
+.search_input {
+  margin-top: 0;
+  width: 400px;
+  max-width: 100%;
+}
+
+.container {
+  display: grid;
+  gap: 1rem
+}
+
+.box_container {
+  display: grid;
+  gap: 1rem;
+
+  @include for-tablet-down {
+    grid-template-rows: 1fr auto 1fr
+  }
+
+  @include for-desktop-up {
+    grid-template-columns: 1fr auto 1fr
+  }
+}
+
+.button_container {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+
+  @include for-desktop-up {
+    flex-direction: column;
+  }
 }
