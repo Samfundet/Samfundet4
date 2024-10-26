@@ -461,6 +461,10 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
+export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang'> & { gang: { id: number } };
+
+export type RecruitmentPositionPutDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & { gang: { id: number } };
+
 export type RecruitmentRecruitmentPositionDto = {
   id: number;
   name_nb: string;

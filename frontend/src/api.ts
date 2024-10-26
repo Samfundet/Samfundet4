@@ -30,6 +30,8 @@ import type {
   RecruitmentDto,
   RecruitmentGangDto,
   RecruitmentPositionDto,
+  RecruitmentPositionPostDto,
+  RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
@@ -639,7 +641,7 @@ export async function getRecruitmentPosition(positionId: string): Promise<AxiosR
   return response;
 }
 
-export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPositionDto): Promise<AxiosResponse> {
+export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPositionPutDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_position_list;
   const response = await axios.post(url, recruitmentPosition, { withCredentials: true });
 
@@ -648,7 +650,7 @@ export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPo
 
 export async function putRecruitmentPosition(
   positionId: string,
-  recruitment: Partial<RecruitmentPositionDto>,
+  recruitment: Partial<RecruitmentPositionPostDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +

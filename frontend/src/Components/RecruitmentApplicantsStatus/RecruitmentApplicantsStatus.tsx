@@ -68,15 +68,13 @@ export function RecruitmentApplicantsStatus({
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
-    if (value) {
-      switch (field) {
-        case editChoices.update_recruitment_priority:
-          updateStateFunction(id, { recruiter_priority: value as number });
-          break;
-        case editChoices.update_recruitment_status:
-          updateStateFunction(id, { recruiter_status: value as number });
-          break;
-      }
+    switch (field) {
+      case editChoices.update_recruitment_priority:
+        updateStateFunction(id, { recruiter_priority: value as number });
+        break;
+      case editChoices.update_recruitment_status:
+        updateStateFunction(id, { recruiter_status: value as number });
+        break;
     }
   }
 
@@ -164,7 +162,7 @@ export function RecruitmentApplicantsStatus({
           style: applicationStatusStyle,
           content: (
             <Dropdown
-              initialValue={application.recruiter_priority}
+              value={application.recruiter_priority}
               disableIcon={true}
               classNameSelect={styles.dropdown}
               options={priorityOptions}
@@ -177,7 +175,7 @@ export function RecruitmentApplicantsStatus({
           style: applicationStatusStyle,
           content: (
             <Dropdown
-              initialValue={application.recruiter_status}
+              value={application.recruiter_status}
               disableIcon={true}
               classNameSelect={styles.dropdown}
               options={statusOptions}
