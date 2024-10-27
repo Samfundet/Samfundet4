@@ -61,6 +61,7 @@ export const KEY = {
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
+  common_any: 'common_any',
   common_all: 'common_all',
   common_price: 'common_price',
   common_food: 'common_food',

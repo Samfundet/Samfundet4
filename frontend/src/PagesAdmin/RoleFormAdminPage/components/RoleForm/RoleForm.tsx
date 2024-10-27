@@ -83,7 +83,7 @@ export function RoleForm({ role }: Props) {
   }
 
   const contentTypeLabels: Record<z.infer<typeof ROLE_CONTENT_TYPE>, string> = {
-    '': '',
+    '': t(KEY.common_any),
     Organization: t(KEY.recruitment_organization),
     Gang: t(KEY.common_gang),
     Section: t(KEY.common_section),
