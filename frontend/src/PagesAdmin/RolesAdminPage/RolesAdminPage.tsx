@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { CrudButtons, Link } from '~/Components';
+import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoles } from '~/api';
@@ -65,8 +65,14 @@ export function RolesAdminPage() {
     });
   }, [roles]);
 
+  const header = (
+    <Button theme="success" link={ROUTES.frontend.admin_roles_create} rounded>
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_role)}`)}
+    </Button>
+  );
+
   return (
-    <AdminPageLayout title={t(KEY.common_roles)} loading={isLoading}>
+    <AdminPageLayout title={t(KEY.common_roles)} loading={isLoading} header={header}>
       <Table data={data} columns={columns} />
     </AdminPageLayout>
   );
