@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { TimeDisplay } from '~/Components';
 import type { Children } from '~/types';
 import styles from './Table.module.scss';
@@ -191,7 +191,7 @@ export function Table({
               if (isColumnSortable(col)) {
                 return (
                   <th
-                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
@@ -214,7 +214,7 @@ export function Table({
                 );
               }
               return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -223,41 +223,40 @@ export function Table({
           </tr>
         </thead>
         <tbody className={bodyClassName}>
-          {sortedData(data).map((row, index1) => (
-            <>
+          {sortedData(data).map((row, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+            <Fragment key={index}>
               {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
               <tr
                 className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                key={index1}
-                onClick={() => (isOpen === index1 ? setIsOpen(null) : setIsOpen(index1))}
+                onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
               >
                 {row.childTable !== undefined && (
                   <td
                     className={classNames(cellClassName)}
                     key={`arrow-${
                       // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                      index1
+                      index
                     }`}
                   >
-                    <Icon icon={isOpen === index1 ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
+                    <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
                   </td>
                 )}
-                {row?.cells.map((cell, index2) => (
+                {row?.cells.map((cell, cellIndex) => (
                   // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={index2}>
+                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
                     {getCellContent(cell ?? '')}
                   </td>
                 ))}
               </tr>
-              {row.childTable !== undefined && isOpen === index1 && (
+              {row.childTable !== undefined && isOpen === index && (
                 <tr className={styles.childTableContainer}>
                   <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName} `}>
                     <Table {...row.childTable} isChildTable />
                   </td>
                 </tr>
               )}
-            </>
+            </Fragment>
           ))}
         </tbody>
       </table>
