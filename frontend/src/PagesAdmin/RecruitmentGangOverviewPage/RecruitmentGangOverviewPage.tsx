@@ -52,7 +52,10 @@ export function RecruitmentGangOverviewPage() {
     });
 
     return {
-      cells: [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions],
+      cells: [
+        { content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link>, value: dbT(gang, 'name') },
+        gang.recruitment_positions,
+      ],
     };
   });
 
