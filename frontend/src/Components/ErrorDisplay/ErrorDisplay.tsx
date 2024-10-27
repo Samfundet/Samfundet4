@@ -1,15 +1,14 @@
 import { H1 } from '~/Components';
 import type { Children } from '~/types';
-import styles from './Error.module.scss';
+import styles from './ErrorDisplay.module.scss';
 
-interface ErrorProps {
+interface ErrorDisplayProps {
   header: string;
   message: string;
   children?: Children;
 }
 
-// biome-ignore lint/suspicious/noShadowRestrictedNames:
-export function Error({ header, message, children }: ErrorProps) {
+export function ErrorDisplay({ header, message, children }: ErrorDisplayProps) {
   return (
     <div>
       <H1>{header}</H1>
