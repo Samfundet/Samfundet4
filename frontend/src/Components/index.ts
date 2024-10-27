@@ -13,7 +13,7 @@ export { ContentCard } from './ContentCard';
 export { Countdown } from './Countdown';
 export { CrudButtons } from './CrudButtons';
 export { Dropdown } from './Dropdown';
-export { Error } from './Error';
+export { ErrorDisplay } from './ErrorDisplay';
 export { EventCard } from './EventCard';
 export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
