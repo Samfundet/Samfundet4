@@ -101,6 +101,7 @@ function DropdownInner<T>(
           styles.samf_select,
           !disableIcon && styles.icon_disabled,
           error && styles.error,
+          nullOption && finalOptions[selectedIndex].value === finalOptions[0].value && styles.italic,
         )}
         onChange={handleChange}
         disabled={disabled}
