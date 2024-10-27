@@ -1,3 +1,4 @@
+import { H1 } from '~/Components';
 import type { Children } from '~/types';
 import styles from './Error.module.scss';
 
@@ -11,7 +12,7 @@ interface ErrorProps {
 export function Error({ header, message, children }: ErrorProps) {
   return (
     <div>
-      <h1 className={styles.header}>{header}</h1>
+      <H1>{header}</H1>
       <div className={styles.error_content}>
         <p className={styles.message}>{message}</p>
         {children}
