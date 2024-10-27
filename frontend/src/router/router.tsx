@@ -76,7 +76,6 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
-import { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
@@ -184,22 +183,33 @@ export const router = createBrowserRouter(
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
           />
           <Route
-            path={ROUTES.frontend.admin_roles_view}
-            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
-            loader={roleLoader}
+            path={ROUTES.frontend.admin_roles_create}
+            element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />}
             handle={{
-              crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => <Link url={pathname}>{role?.name}</Link>,
+              crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link>,
             }}
           />
           <Route
-            path={ROUTES.frontend.admin_roles_create}
-            element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />}
-          />
-          <Route
-            path={ROUTES.frontend.admin_roles_edit}
+            element={<Outlet />}
             loader={roleLoader}
-            element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_ROLE]} element={<RoleFormAdminPage />} />}
-          />
+            handle={{
+              crumb: (_: UIMatch, { role }: RoleLoader) => (
+                <Link url={reverse({ pattern: ROUTES.frontend.admin_roles_view, urlParams: { roleId: role?.id } })}>
+                  {role?.name}
+                </Link>
+              ),
+            }}
+          >
+            <Route
+              path={ROUTES.frontend.admin_roles_view}
+              element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
+            />
+            <Route
+              path={ROUTES.frontend.admin_roles_edit}
+              element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_ROLE]} element={<RoleFormAdminPage />} />}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
+            />
+          </Route>
         </Route>
         {/* Events */}
         <Route
