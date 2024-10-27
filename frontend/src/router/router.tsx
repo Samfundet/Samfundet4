@@ -25,6 +25,7 @@ import {
   RecruitmentApplicationFormPage,
   RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
+  RootErrorBoundary,
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
@@ -100,34 +101,36 @@ export const router = createBrowserRouter(
         {/*
           PUBLIC ROUTES
         */}
-        <Route path={ROUTES.frontend.home} element={<HomePage />} />
-        <Route path={ROUTES.frontend.about} element={<AboutPage />} />
-        <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
-        <Route path={ROUTES.frontend.health} element={<HealthPage />} />
-        <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
-        <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
-          <Route path={ROUTES.frontend.login} element={<LoginPage />} />
-          <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
+        <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
+          <Route path={ROUTES.frontend.home} element={<HomePage />} />
+          <Route path={ROUTES.frontend.about} element={<AboutPage />} />
+          <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
+          <Route path={ROUTES.frontend.health} element={<HealthPage />} />
+          <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
+          <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
+            <Route path={ROUTES.frontend.login} element={<LoginPage />} />
+            <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
+          </Route>
+          <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
+          <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
+          <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
+          <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
+          <Route path={ROUTES.frontend.events} element={<EventsPage />} />
+          <Route path={ROUTES.frontend.event} element={<EventPage />} />
+          <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
+          <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
+          <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
+          <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+          <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
+          <Route
+            path={ROUTES.frontend.recruitment_application_overview}
+            element={<RecruitmentApplicationsOverviewPage />}
+          />
+          <Route path={ROUTES.frontend.organization_recruitment} element={<OrganizationRecruitmentPage />} />
+          <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
+          <Route path={ROUTES.frontend.contact} element={<div />} />
+          <Route path={ROUTES.frontend.luka} element={<div />} />
         </Route>
-        <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
-        <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
-        <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
-        <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
-        <Route path={ROUTES.frontend.events} element={<EventsPage />} />
-        <Route path={ROUTES.frontend.event} element={<EventPage />} />
-        <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
-        <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
-        <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
-        <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
-        <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
-        <Route
-          path={ROUTES.frontend.recruitment_application_overview}
-          element={<RecruitmentApplicationsOverviewPage />}
-        />
-        <Route path={ROUTES.frontend.organization_recruitment} element={<OrganizationRecruitmentPage />} />
-        <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
-        <Route path={ROUTES.frontend.contact} element={<div />} />
-        <Route path={ROUTES.frontend.luka} element={<div />} />
       </Route>
       {/*
             ADMIN ROUTES
