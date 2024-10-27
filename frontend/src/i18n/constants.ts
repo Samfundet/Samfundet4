@@ -119,6 +119,8 @@ export const KEY = {
   common_register: 'common_register',
   common_users: 'common_users',
   common_email: 'common_email',
+  common_interval: 'common_interval',
+  common_preview: 'common_preview',
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
@@ -380,6 +382,7 @@ export const KEY = {
   recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
   recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
   recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
+  recruitment_applet_interview_availability_description: 'recruitment_applet_interview_availability_description',
   recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
   recruitment_choose_interview_time: 'recruitment_choose_interview_time',
   recruitment_choose_interview_location: 'recruitment_choose_interview_location',
@@ -434,6 +437,8 @@ export const KEY = {
   occupied_select_time_text: 'occupied_select_time_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
+  interview_availability: 'interview_availability',
+  interview_availability_description: 'interview_availability_description',
 
   // Feedback
   feedback_type: 'feedback_type',
@@ -444,6 +449,8 @@ export const KEY = {
   // No category:
   owner: 'owner',
   end_time: 'end_time',
+  start_date: 'start_date',
+  end_date: 'end_date',
   category: 'category',
   event_type: 'event_type',
   start_time: 'start_time',

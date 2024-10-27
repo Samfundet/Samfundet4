@@ -1,0 +1,27 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.action_row {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0;
+}
+
+.container {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1rem;
+
+  @include for-desktop-up {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.row {
+  @include for-large-desktop-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}

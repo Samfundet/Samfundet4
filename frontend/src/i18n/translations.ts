@@ -92,6 +92,8 @@ export const nb = prepareTranslations({
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_cancel]: 'Avbryt',
   [KEY.common_go_back]: 'Tilbake',
+  [KEY.common_interval]: 'Intervall',
+  [KEY.common_preview]: 'Forhåndsvisning',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
   [KEY.common_sulten]: 'Lyche',
@@ -395,6 +397,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
   [KEY.recruitment_applet_without_interview_description]: 'Søkere som ikke har noen intervju satt',
   [KEY.recruitment_applet_three_interview_title]: '< 3 intervju',
+  [KEY.recruitment_applet_interview_availability_description]: 'Sett når intervju kan holdes',
 
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
@@ -434,6 +437,9 @@ export const nb = prepareTranslations({
   [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
   [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
+  [KEY.interview_availability]: 'Intervju-tilgjengelighet',
+  [KEY.interview_availability_description]:
+    'Intervju-tilgjengelighet bestemmer når intervju kan holdes, og når brukere kan markere utilgjengelighet. Et intervall på 30 minutter vil gi tidsluker på 08:00, 08:30, 09:00, osv.',
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
@@ -447,6 +453,8 @@ export const nb = prepareTranslations({
   [KEY.category]: 'Kategori',
   [KEY.event_type]: 'Arrangementstype',
   [KEY.start_time]: 'Starttid',
+  [KEY.start_date]: 'Startdato',
+  [KEY.end_date]: 'Sluttdato',
   [KEY.last_updated]: 'Sist oppdatert',
   [KEY.form_confirm]: 'Er du sikker på at du vil',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
@@ -552,6 +560,8 @@ export const en = prepareTranslations({
   [KEY.common_delete]: 'Delete',
   [KEY.common_logout]: 'Log out',
   [KEY.common_go_back]: 'Go back',
+  [KEY.common_interval]: 'Interval',
+  [KEY.common_preview]: 'Preview',
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_search]: 'Search',
   [KEY.common_choose]: 'Choose',
@@ -832,6 +842,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_applet_without_interview_title]: 'Without interview',
   [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
   [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
+  [KEY.recruitment_applet_interview_availability_description]: 'Set when interviews can be held',
   [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
   [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
   [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
@@ -900,6 +911,9 @@ export const en = prepareTranslations({
   [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
   [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
+  [KEY.interview_availability]: 'Interview availability',
+  [KEY.interview_availability_description]:
+    'Intervju availability decides when interviews can be held, and when users can mark unavailability. An interval of 30 minutes will give timeslots of 08:00, 08:30, 09:00, etc.',
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
@@ -913,6 +927,8 @@ export const en = prepareTranslations({
   [KEY.category]: 'Category',
   [KEY.event_type]: 'Event type',
   [KEY.start_time]: 'Start time',
+  [KEY.start_date]: 'Start date',
+  [KEY.end_date]: 'End date',
   [KEY.last_updated]: 'Last updated',
 
   [KEY.form_confirm]: 'Are you sure you want do',
