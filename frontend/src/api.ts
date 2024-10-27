@@ -397,6 +397,19 @@ export async function getGang(id: string | number): Promise<GangDto> {
   return response.data;
 }
 
+export async function createRole(data: Partial<RoleDto>): Promise<RoleDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_list });
+  const response = await axios.post<RoleDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function editRole(data: RoleDto): Promise<RoleDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_detail, urlParams: { pk: data.id } });
+  const response = await axios.put<RoleDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getRoles(): Promise<RoleDto[]> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_list });
   const response = await axios.get<RoleDto[]>(url, { withCredentials: true });

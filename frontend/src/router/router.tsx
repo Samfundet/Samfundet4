@@ -190,6 +190,7 @@ export const router = createBrowserRouter(
             }}
           />
           <Route
+            id="role"
             element={<Outlet />}
             loader={roleLoader}
             handle={{

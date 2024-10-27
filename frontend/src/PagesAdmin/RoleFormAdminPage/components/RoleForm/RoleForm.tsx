@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import {
   Alert,
@@ -18,19 +19,21 @@ import {
 } from '~/Components';
 import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
 import { MultiSelect } from '~/Components/MultiSelect';
-import { getPermissions } from '~/api';
+import { createRole, editRole, getPermissions } from '~/api';
 import type { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { ROLE_CONTENT_TYPE } from '~/schema/role';
+import { ROLE_CONTENT_TYPE, ROLE_NAME } from '~/schema/role';
 import styles from './RoleForm.module.scss';
 
 const schema = z.object({
-  name: z.string(),
+  name: ROLE_NAME,
   permissions: z.array(z.number()),
-  content_type: ROLE_CONTENT_TYPE,
+  content_type: ROLE_CONTENT_TYPE.nullish(),
 });
 
 type SchemaType = z.infer<typeof schema>;
+
+type ContentTypeSchemaType = z.infer<typeof ROLE_CONTENT_TYPE>;
 
 type Props = {
   role?: RoleDto;
@@ -47,6 +50,22 @@ export function RoleForm({ role }: Props) {
     queryKey: ['permissions'],
     queryFn: getPermissions,
   });
+
+  const edit = useMutation({
+    mutationFn: editRole,
+    onSuccess: () => {
+      toast.success(t(KEY.common_save_successful));
+    },
+  });
+
+  const create = useMutation({
+    mutationFn: createRole,
+    onSuccess: () => {
+      toast.success(t(KEY.common_creation_successful));
+    },
+  });
+
+  const isPending = edit.isPending || create.isPending;
 
   const permissionOptions = useMemo<DropDownOption<number>[]>(() => {
     if (!allPermissions) {
@@ -74,27 +93,30 @@ export function RoleForm({ role }: Props) {
     defaultValues: {
       name: role?.name ?? '',
       permissions: role?.permissions ?? [],
-      content_type: (role?.content_type ?? '') as z.infer<typeof ROLE_CONTENT_TYPE>,
+      content_type: (role?.content_type ?? '') as ContentTypeSchemaType,
     },
   });
 
   function onSubmit(values: SchemaType) {
     console.log(values);
+    if (role) {
+      edit.mutate({ id: role.id, ...values });
+    } else {
+      create.mutate(values);
+    }
   }
 
-  const contentTypeLabels: Record<z.infer<typeof ROLE_CONTENT_TYPE>, string> = {
+  const contentTypeLabels: Record<ContentTypeSchemaType, string> = {
     '': t(KEY.common_any),
-    Organization: t(KEY.recruitment_organization),
-    Gang: t(KEY.common_gang),
-    Section: t(KEY.common_section),
+    organization: t(KEY.recruitment_organization),
+    gang: t(KEY.common_gang),
+    section: t(KEY.common_section),
   };
 
-  const contentTypeOptions: DropDownOption<z.infer<typeof ROLE_CONTENT_TYPE>>[] = ROLE_CONTENT_TYPE.options.map(
-    (ct) => ({
-      value: ct,
-      label: contentTypeLabels[ct],
-    }),
-  );
+  const contentTypeOptions: DropDownOption<ContentTypeSchemaType>[] = ROLE_CONTENT_TYPE.options.map((ct) => ({
+    value: ct,
+    label: contentTypeLabels[ct],
+  }));
 
   return (
     <Form {...form}>
@@ -105,7 +127,7 @@ export function RoleForm({ role }: Props) {
             <FormItem>
               <FormLabel>{t(KEY.common_name)}</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="text" disabled={isLoading || isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -117,7 +139,7 @@ export function RoleForm({ role }: Props) {
             <FormItem>
               <FormLabel>{t(KEY.role_content_type)}</FormLabel>
               <FormControl>
-                <Dropdown options={contentTypeOptions} {...field} />
+                <Dropdown options={contentTypeOptions} disabled={isLoading || isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -143,7 +165,7 @@ export function RoleForm({ role }: Props) {
         />
 
         <div className={styles.action_row}>
-          <Button type="submit" theme="green">
+          <Button type="submit" theme="green" disabled={isLoading || isPending}>
             {t(KEY.common_save)}
           </Button>
         </div>
