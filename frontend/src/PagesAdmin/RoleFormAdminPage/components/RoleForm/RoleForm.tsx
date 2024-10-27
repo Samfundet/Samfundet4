@@ -30,6 +30,8 @@ const schema = z.object({
   content_type: ROLE_CONTENT_TYPE,
 });
 
+type SchemaType = z.infer<typeof schema>;
+
 type Props = {
   role?: RoleDto;
 };
@@ -67,7 +69,7 @@ export function RoleForm({ role }: Props) {
     }));
   }, [role, allPermissions]);
 
-  const form = useForm<z.infer<typeof schema>>({
+  const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: role?.name ?? '',
@@ -76,7 +78,7 @@ export function RoleForm({ role }: Props) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof schema>) {
+  function onSubmit(values: SchemaType) {
     console.log(values);
   }
 
