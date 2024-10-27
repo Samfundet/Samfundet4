@@ -21,7 +21,6 @@ export { NotFoundPage } from './NotFoundPage';
 export { RecruitmentApplicationFormPage } from './RecruitmentApplicationFormPage';
 export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { RecruitmentPage } from './RecruitmentPage';
-export { RootErrorBoundary } from './RootErrorBoundary';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';
 export { SignUpPage } from './SignUpPage';

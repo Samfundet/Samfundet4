@@ -1,5 +1,5 @@
 import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
-import { Link, PermissionRoute, ProtectedRoute, SamfOutlet, SultenOutlet } from '~/Components';
+import { Link, PermissionRoute, ProtectedRoute, RootErrorBoundary, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
   AdminPage,
@@ -25,7 +25,6 @@ import {
   RecruitmentApplicationFormPage,
   RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
-  RootErrorBoundary,
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,

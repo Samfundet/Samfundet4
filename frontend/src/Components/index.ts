@@ -54,6 +54,7 @@ export { PulseEffect } from './PulseEffect';
 export { RadioButton } from './RadioButton';
 export { RecruitmentApplicantsStatus } from './RecruitmentApplicantsStatus';
 export { RecruitmentWithoutInterviewTable } from './RecruitmentWithoutInterviewTable';
+export { RootErrorBoundary } from './RootErrorBoundary';
 export { SamfOutlet } from './SamfOutlet';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
