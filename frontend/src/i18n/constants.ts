@@ -459,6 +459,15 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+
+  error_generic: 'error_generic',
+  error_generic_description: 'error_generic_description',
+  error_not_found: 'error_not_found',
+  error_not_found_description: 'error_not_found_description',
+  error_forbidden: 'error_forbidden',
+  error_forbidden_description: 'error_forbidden_description',
+  error_server_error: 'error_server_error',
+  error_server_error_description: 'error_server_error_description',
 } as const;
 
 // This will ensure that each value matches the key exactly.
