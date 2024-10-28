@@ -1,5 +1,8 @@
 [**&larr; Back: Getting started**](../introduction.md)
 
+> [!WARNING]
+> This guide is not complete! Feel free to submit a PR to improve it :-)
+
 # Installing on Windows (Docker in WSL)
 
 > [!NOTE]
@@ -15,6 +18,8 @@ following in an administrator PowerShell or command prompt:
 ```shell
 wsl --install
 ```
+
+From this point on, any commands you are instructed to run, are meant to be run inside WSL unless otherwise specified.
 
 ## Install Docker
 

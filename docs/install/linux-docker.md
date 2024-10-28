@@ -1,5 +1,8 @@
 [**&larr; Back: Getting started**](../introduction.md)
 
+> [!WARNING]
+> This guide is not complete! Feel free to submit a PR to improve it :-)
+
 # Installing on Linux (Docker)
 
 ## Post-install

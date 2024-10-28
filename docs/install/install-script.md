@@ -1,9 +1,9 @@
 [**&larr; Back: Getting started**](../introduction.md)
 
-# Install script
-
 > [!WARNING]
 > This script has not been maintained in a while and may not work.
+
+# Install script
 
 We have a script that handles all installation for you. To run the script, a Github Personal Access Token (PAT) is
 required.

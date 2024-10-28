@@ -1,6 +1,7 @@
 [**&larr; Back: Getting started**](../introduction.md)
 
-<!-- WORK IN PROGRESS -->
+> [!WARNING]
+> This guide is not complete! Feel free to submit a PR to improve it :-)
 
 # Git setup
 
