@@ -84,6 +84,7 @@ export function YourForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Username</FormLabel>
+                            <FormDescription>Pick wisely, this cannot be changed later!</FormDescription>
                             <FormControl>
                                 <Input placeholder="Username" {...field} />
                             </FormControl>
@@ -150,7 +151,7 @@ NumberInput component which does all this for us.
     name="duration"
     render={({ field }) => (
         <FormItem>
-            <FormLabel>Varighet</FormLabel>
+            <FormLabel>Duration</FormLabel>
             <FormControl>
                 <NumberInput disabled={submitting} {...field} />
             </FormControl>
