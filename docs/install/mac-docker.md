@@ -45,6 +45,12 @@ This will start the `backend` and `frontend` containers:
 docker compose up backend frontend
 ```
 
+## Dependency issues?
+
+Editors/IDEs typically don't have access to installed dependencies which lie inside Docker containers. This means you
+may have to install dependencies locally too, in order for your editor/IDE to resolve them. See
+the [Editor configuration](../introduction.md#editor-configuration) guide for more information.
+
 ## Post-install
 
 Now that you've got the project up and running, check out the post-install instructions:
