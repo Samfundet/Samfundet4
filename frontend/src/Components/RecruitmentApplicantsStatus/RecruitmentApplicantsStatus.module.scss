@@ -20,6 +20,12 @@
   padding: 0;
 }
 
+.interviewField {
+  display: flex;
+  justify-content: center;
+  background-color: $pending;
+}
+
 .header {
   font-size: 0.7em;
   background-color: $grey-3;

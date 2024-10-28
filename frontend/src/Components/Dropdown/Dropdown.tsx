@@ -11,8 +11,8 @@ export type DropDownOption<T> = {
 export type DropdownProps<T> = {
   className?: string;
   classNameSelect?: string;
-  defaultValue?: DropDownOption<T>;
-  initialValue?: T;
+  defaultValue?: DropDownOption<T>; // issue 1089
+  value?: T;
   disableIcon?: boolean;
   options?: DropDownOption<T>[];
   label?: string | ReactElement;
@@ -25,7 +25,7 @@ function DropdownInner<T>(
   {
     options = [],
     defaultValue,
-    initialValue,
+    value,
     onChange,
     className,
     classNameSelect,
@@ -44,19 +44,12 @@ function DropdownInner<T>(
    * @param e Standard onChange HTML event for dropdown
    */
   function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = Number.parseInt(e?.currentTarget.value ?? '0', 10);
+    const choice = Number.parseInt(e?.currentTarget.value ?? '-1', 10);
     if (choice >= 0 && choice < options.length) {
       onChange?.(options[choice].value);
     } else {
       onChange?.(defaultValue?.value ?? options[0]?.value);
     }
-  }
-
-  let initialIndex = 0;
-  if (initialValue !== undefined) {
-    initialIndex = options.findIndex((opt) => opt.value === initialValue);
-  } else if (defaultValue) {
-    initialIndex = options.findIndex((opt) => opt.value === defaultValue.value);
   }
 
   return (
@@ -72,8 +65,9 @@ function DropdownInner<T>(
         )}
         onChange={handleChange}
         disabled={disabled}
-        defaultValue={initialIndex}
+        value={value !== undefined ? options.findIndex((e) => e.value === value) : -1}
       >
+        {defaultValue && <option value={-1}>{defaultValue.label}</option>}
         {options.map((opt, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <option value={index} key={index}>

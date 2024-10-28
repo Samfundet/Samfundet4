@@ -81,6 +81,7 @@ export const nb = prepareTranslations({
   [KEY.common_login]: 'Logg inn',
   [KEY.common_users]: 'Brukere',
   [KEY.common_roles]: 'Roller',
+  [KEY.common_roles_view]: 'Rolle',
   [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
@@ -288,6 +289,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_administrate_positions]: 'Administrer stillinger',
   [KEY.recruitment_administrate_applications]: 'Administrer søknader',
   [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Søkere interessert i andre stillinger',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Søkere som er reservert må/bør klareres med gjengen som har reservert søkeren.',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
   [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
@@ -319,16 +323,21 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_applications]: 'Trukkede søknader',
   [KEY.recruitment_rejected_applications]: 'Søkere som får automatisk avslag',
+  [KEY.recruitment_hardtoget_applications]: 'Søkere som har takket nei til stillingen',
   [KEY.recruitment_accepted_applications]: 'Søkere vi har tatt opp',
   [KEY.recruitment_rejected_applications_help_text]:
     'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'Disse har takket nei til stillingen og vil dermed ikke få noen avslagsmail.',
   [KEY.recruitment_accepted_applications_help_text]:
     'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
   [KEY.recruitment_accepted_applications_empty_text]: 'Ingen søkere er markert som kontaktet.',
   [KEY.recruitment_rejected_applications_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
+  [KEY.recruitment_hardtoget_applications_empty_text]: 'Ingen søkere har takket nei til stillingen.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'Ingen trekte søknader.',
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
+  [KEY.recruitment_confirm_withdraw_application]: 'Er du sikker på at du vil trekke søknaden?',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
   [KEY.recruitment_stats_hours_header]: 'Antall søkere per time',
   [KEY.recruitment_stats_campus_header]: 'Antall søkere per campus',
@@ -347,6 +356,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_three_interviews_criteria_header]:
     'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Velg tid og sted for intervju',
+  [KEY.recruitment_choose_interview_time]: 'Velg intervjutid',
+  [KEY.recruitment_choose_interview_location]: 'Velg intervjusted',
   [KEY.recruitment_dashboard_description]:
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
@@ -375,7 +387,9 @@ export const nb = prepareTranslations({
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
+  [KEY.recruitment_applet_room_overview]: 'Romoversikt',
   [KEY.recruitment_applet_room_description]: 'Opprett rom for intervju',
   [KEY.recruitment_applet_rejection_mail_description]: 'Send mail til de som ikke fikk tilbud',
   [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
@@ -528,6 +542,7 @@ export const en = prepareTranslations({
   [KEY.common_login]: 'Log in',
   [KEY.common_users]: 'Users',
   [KEY.common_roles]: 'Roles',
+  [KEY.common_roles_view]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
@@ -645,7 +660,6 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
-
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
 
@@ -735,6 +749,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_administrate_positions]: 'Administrate positions',
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
   [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Applicants interested in other positions',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Applicants that are reserved should be cleared with the gang that has reserved the applicant.',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
   [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
@@ -767,17 +784,23 @@ export const en = prepareTranslations({
   [KEY.recruitment_applicant_top_position]: 'Most desired position',
   [KEY.recruitment_withdrawn_applications]: 'Withdrawn applications',
   [KEY.recruitment_rejected_applications]: 'Automatically rejected applicants',
+  [KEY.recruitment_hardtoget_applications]: 'Applicants who declined the position',
   [KEY.recruitment_accepted_applications]: 'Applicants we have contacted and accepted',
   [KEY.recruitment_rejected_applications_help_text]:
     'These will get an automatic rejection email if they are not accepted for a different position',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'These applicants have declined the position and will not receive a rejection email.',
   [KEY.recruitment_accepted_applications_help_text]:
     'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
   [KEY.recruitment_accepted_applications_empty_text]: 'No applicants are marked as contacted.',
   [KEY.recruitment_rejected_applications_empty_text]:
     'No applicants are marked to receive an automatic rejection email.',
+  [KEY.recruitment_hardtoget_applications_empty_text]: 'No applicants have declined the position.',
+
   [KEY.recruitment_withdrawn_applications_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_confirm_withdraw_application]: 'Are you sure you want to withdraw this application?',
   [KEY.recruitment_revert_status]: 'Revert status',
   [KEY.recruitment_no_current_positions]: 'This gang does not have any available positions for this recruitment',
   [KEY.recruitment_no_current_applications_position]: 'This gang has no current applicants',
@@ -801,12 +824,17 @@ export const en = prepareTranslations({
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
+  [KEY.recruitment_applet_room_overview]: 'Room overview',
   [KEY.recruitment_applet_room_description]: 'Create room for interviews',
   [KEY.recruitment_applet_rejection_mail_description]: "Send mail to those who didn't get an offer",
   [KEY.recruitment_applet_without_interview_title]: 'Without interview',
   [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
   [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
+  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
+  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',

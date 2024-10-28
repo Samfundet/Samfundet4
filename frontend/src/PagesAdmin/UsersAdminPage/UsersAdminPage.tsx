@@ -39,31 +39,33 @@ export function UsersAdminPage() {
   const data = useMemo(() => {
     if (!users) return [];
     return users.map((u) => {
-      return [
-        {
-          content: u.username,
-          value: u.username,
-        },
-        {
-          content: getFullName(u),
-          value: getFullName(u),
-        },
-        {
-          content: u.email,
-          value: u.email,
-        },
-        {
-          content: u.is_active ? t(KEY.common_yes) : '',
-          value: u.is_active,
-        },
-        {
-          content: u.last_login ? formatDate(new Date(u.last_login)) : '',
-          value: u.last_login || undefined,
-        },
-        {
-          content: <ImpersonateButton userId={u.id} />,
-        },
-      ];
+      return {
+        cells: [
+          {
+            content: u.username,
+            value: u.username,
+          },
+          {
+            content: getFullName(u),
+            value: getFullName(u),
+          },
+          {
+            content: u.email,
+            value: u.email,
+          },
+          {
+            content: u.is_active ? t(KEY.common_yes) : '',
+            value: u.is_active,
+          },
+          {
+            content: u.last_login ? formatDate(new Date(u.last_login)) : '',
+            value: u.last_login || undefined,
+          },
+          {
+            content: <ImpersonateButton userId={u.id} />,
+          },
+        ],
+      };
     });
   }, [t, users]);
 

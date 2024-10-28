@@ -43,25 +43,30 @@ export function EventsList({ events }: EventsListProps) {
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    return filteredEvents().map((event) => [
-      {
-        content: (
-          <Link url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })} className={styles.link}>
-            {dbT(event, 'title')}
-          </Link>
-        ),
-        value: dbT(event, 'title') ?? '',
-      },
-      {
-        content: <TimeDisplay timestamp={event.start_dt} displayType="event-date" />,
-        value: new Date(event.start_dt),
-      },
-      { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(event.start_dt) },
-      { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
-      event.location,
-      event.category,
-      event.ticket_type,
-    ]);
+    return filteredEvents().map((event) => ({
+      cells: [
+        {
+          content: (
+            <Link
+              url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+              className={styles.link}
+            >
+              {dbT(event, 'title')}
+            </Link>
+          ),
+          value: dbT(event, 'title') ?? '',
+        },
+        {
+          content: <TimeDisplay timestamp={event.start_dt} displayType="event-date" />,
+          value: new Date(event.start_dt),
+        },
+        { content: <TimeDisplay timestamp={event.start_dt} displayType="time" />, value: new Date(event.start_dt) },
+        { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
+        event.location,
+        event.category,
+        event.ticket_type,
+      ],
+    }));
   }
 
   function getEventCards(): ReactNode[] {
@@ -77,6 +82,7 @@ export function EventsList({ events }: EventsListProps) {
             description={dbT(event, 'description_short') ?? ''}
             compact={true}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+            ticket_type={event.ticket_type}
           />
         </div>
       );
