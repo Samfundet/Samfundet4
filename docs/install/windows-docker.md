@@ -3,11 +3,11 @@
 > [!WARNING]
 > This guide is not complete! Feel free to submit a PR to improve it :-)
 
-# Installing on Windows (Docker in WSL)
-
 > [!NOTE]
 > We do not recommend running the project this way. This is essentially running nested virtualization, which will lead
 > to poor performance. Prefer running [directly in WSL](./windows-wsl.md).
+
+# Installing on Windows (Docker in WSL)
 
 ## Install WSL
 
