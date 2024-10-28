@@ -54,7 +54,7 @@ Create the form component, and use the `useForm` hook with your schema,.
 ```jsx
 export function YourForm() {
     // 1. Define the form
-    const form = useForm<z.infer<typeof schema>>({
+    const form = useForm < z.infer < typeof schema >> ({
         resolver: zodResolver(schema),
         defaultValues: {
             username: '',
@@ -160,6 +160,76 @@ NumberInput component which does all this for us.
     )}
 />
 ```
+
+## Dropdown
+
+Dropdowns can be used
+either [controlled or uncontrolled](https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components).
+If you provide `value` to Dropdown, it'll be controlled. If you don't, it will be uncontrolled.
+
+```ts
+const options: DropdownOption<string>[] = [
+    { label: 'Samfundet', value: 'samfundet' },
+    { label: 'UKA', value: 'uka' },
+    { label: 'ISFiT', value: 'isfit' },
+];
+```
+
+Controlled:
+
+```jsx
+<FormField
+    control={form.control}
+    name="organization"
+    render={({ field }) => (
+        <FormItem>
+            <FormLabel>Organization</FormLabel>
+            <FormDescription>Which organization does this object belong to?</FormDescription>
+            <FormControl>
+                <Dropdown options={options} {...field} />
+            </FormControl>
+        </FormItem>
+    )}
+>
+</FormField>
+```
+
+Uncontrolled:
+
+```jsx
+<FormField
+    control={form.control}
+    name="organization"
+    // Note how we extract `value` here, to avoid applying it to Dropdown
+    render={({ field: { value, ...fieldProps } }) => (
+        <FormItem>
+            <FormLabel>Organization</FormLabel>
+            <FormDescription>Which organization does this object belong to?</FormDescription>
+            <FormControl>
+                <Dropdown options={options} {...fieldProps} />
+            </FormControl>
+        </FormItem>
+    )}
+>
+</FormField>
+```
+
+You can also add a "null option". This is a blank option which is added to the top of the dropdown list. This is useful
+if you need the Dropdown to be optional. The label of the null option can be customized, and it can also be disabled in
+order to force users to select another option. If the null option is selected, an italic font style is applied to the
+dropdown, to further indicate that a special option is selected. Examples of some possibilities below:
+
+```jsx
+// Add a simple blank null option
+<Dropdown options={options} nullOption={true} />
+
+// Null option with custom label
+<Dropdown options={options} nullOption={{ label: 'All venues' }} />
+
+// Disabled null option with custom label
+<Dropdown options={options} nullOption={{ label: 'Pick a venue', disabled: true }} />
+```
+
 
 ## Example
 
