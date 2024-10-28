@@ -5,8 +5,8 @@
 .timeslot {
   padding: 0.5rem 1rem;
   border-radius: 5px;
-  border: 1px solid $grey-0;
-  color: $grey-0;
+  border: 1px solid $grey-35;
+  color: inherit;
   cursor: pointer;
   background: none;
   position: relative;
@@ -15,6 +15,11 @@
   gap: 0.25rem;
   font-size: 0.9rem;
   font-weight: 500;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  @include theme-dark {
+    border-color: $grey-0;
+  }
 }
 
 .dot {
@@ -23,7 +28,7 @@
   height: $size;
   border-radius: $size;
   display: inline-block;
-  background: $grey-0;
+  border: 1px solid $grey-0;
 }
 
 .timeslot_active {
@@ -32,6 +37,7 @@
 
   .dot {
     background: $red;
+    border-color: $red;
   }
 }
 
