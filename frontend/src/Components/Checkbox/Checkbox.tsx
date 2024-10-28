@@ -8,6 +8,7 @@ export type CheckboxProps = {
   checked?: boolean;
   className?: string;
   onChange?: (...event: unknown[]) => void;
+  readOnly?: boolean;
 };
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ className, ...props }, ref) => {
