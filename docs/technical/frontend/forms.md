@@ -51,7 +51,7 @@ Create your form component, and use the `useForm` hook to create the form.
 
 Create the form component, and use the `useForm` hook with your schema,.
 
-```tsx
+```jsx
 export function YourForm() {
     // 1. Define the form
     const form = useForm<z.infer<typeof schema>>({
@@ -71,7 +71,7 @@ export function YourForm() {
 
 Now use the `Form` wrapper components to build our form.
 
-```tsx
+```jsx
 export function YourForm() {
     // ...
 
@@ -103,7 +103,7 @@ export function YourForm() {
 Defining a schema type for files is a bit more complicated. Below is an example which defines a schema with an
 optional `avatar` file field.
 
-```tsx
+```jsx
 const schema = z.object({
     image_file: z
         .instanceof(File)
@@ -119,7 +119,7 @@ be [uncontrolled](https://react.dev/learn/sharing-state-between-components#contr
 we do not set `value` on it. We must also extract relevant information from the `onChange` event. In the example below,
 we only want a single file, so we return the first item in the `FileList`.
 
-```tsx
+```jsx
 <FormField
     control={form.control}
     name="image_file"
@@ -145,7 +145,7 @@ All HTML input values are strings. If we require a number type from an input, we
 deal with all non-numeric input. This can quickly become cumbersome using just the Input component. Luckily we have the
 NumberInput component which does all this for us.
 
-```tsx
+```jsx
 <FormField
     control={form.control}
     name="duration"
