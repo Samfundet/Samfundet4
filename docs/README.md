@@ -43,3 +43,10 @@
 - Windows: [Docker](./install/windows-docker.md) – [WSL](./install/windows-wsl.md)
 - [Install script](./install/install-script.md)
 - [Post-install instructions](./install/post-install.md)
+
+## Editor configuration
+
+* [JetBrains (WebStorm, PyCharm, etc...)](./editors/jetbrains.md)
+* [VS Code](./editors/vscode.md)
+* [Vim/Neovim](./editors/vim.md)
+* [Emacs](./editors/emacs.md)
