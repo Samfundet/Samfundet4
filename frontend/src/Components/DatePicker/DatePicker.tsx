@@ -5,6 +5,7 @@ import React, { useMemo } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, MiniCalendar } from '~/Components';
+import { useClickOutside } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './DatePicker.module.scss';
 
@@ -24,10 +25,10 @@ export function DatePicker({
   value: initialValue,
   onChange,
   disabled,
+  label,
   buttonClassName,
   minDate,
   maxDate,
-  ...props
 }: DatePickerProps) {
   const isControlled = initialValue !== undefined;
 
@@ -35,6 +36,8 @@ export function DatePicker({
   const [open, setOpen] = useState(false);
 
   const { t } = useTranslation();
+
+  const clickOutsideRef = useClickOutside<HTMLDivElement>(() => setOpen(false));
 
   const value = useMemo(() => {
     if (isControlled) {
@@ -49,17 +52,17 @@ export function DatePicker({
   }
 
   return (
-    <div>
-      <Button
+    <div className={styles.container} ref={clickOutsideRef}>
+      <button
         type="button"
         className={classNames(styles.button, buttonClassName)}
         onClick={() => setOpen((v) => !v)}
         disabled={disabled}
       >
         <Icon icon="material-symbols:calendar-month-outline-rounded" />
-        {value ? format(value, 'PPP') : <span>{t(KEY.pick_a_date)}</span>}
-      </Button>
-      <div className={classNames(!open && styles.hidden)}>
+        {value ? format(value, 'PPP') : <span>{label ?? t(KEY.pick_a_date)}</span>}
+      </button>
+      <div className={classNames(styles.popover, !open && styles.hidden)}>
         <MiniCalendar
           baseDate={value || new Date()}
           onChange={handleChange}
