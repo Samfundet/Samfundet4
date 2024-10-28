@@ -226,12 +226,12 @@ dropdown, to further indicate that a special option is selected. Examples of som
 
 ```jsx
 // Null option with custom label
-<Dropdown options={options} nullOption={{ label: 'All venues' }} />
+<Dropdown options={options} nullOption={{ label: 'All organizations' }} />
 ```
 
 ```jsx
 // Disabled null option with custom label
-<Dropdown options={options} nullOption={{ label: 'Pick a venue', disabled: true }} />
+<Dropdown options={options} nullOption={{ label: 'Pick an organization', disabled: true }} />
 ```
 
 
