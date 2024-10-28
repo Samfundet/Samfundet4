@@ -39,7 +39,7 @@ To get started, create a new file, for example `YourForm.tsx`. This file will co
 itself. Define a schema using zod. Remember to reuse fields when possible as mentioned in the section above (we won't do
 this here for example's sake).
 
-```typescript jsx
+```ts
 import { z } from 'zod';
 
 const schema = z.object({
@@ -51,7 +51,7 @@ Create your form component, and use the `useForm` hook to create the form.
 
 Create the form component, and use the `useForm` hook with your schema,.
 
-```typescript jsx
+```tsx
 export function YourForm() {
     // 1. Define the form
     const form = useForm<z.infer<typeof schema>>({
@@ -71,7 +71,7 @@ export function YourForm() {
 
 Now use the `Form` wrapper components to build our form.
 
-```typescript jsx
+```tsx
 export function YourForm() {
     // ...
 
