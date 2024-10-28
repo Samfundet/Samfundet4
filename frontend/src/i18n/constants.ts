@@ -54,6 +54,7 @@ export const KEY = {
   // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
+  pick_a_date: 'pick_a_date',
 
   // No category:
   common_url: 'common_url',

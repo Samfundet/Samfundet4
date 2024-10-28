@@ -40,6 +40,7 @@ export const nb = prepareTranslations({
   // Date related
   [KEY.common_today]: 'I dag',
   [KEY.common_tomorrow]: 'I morgen',
+  [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
   [KEY.common_url]: 'URL',
@@ -501,6 +502,7 @@ export const en = prepareTranslations({
   // Date related
   [KEY.common_today]: 'Today',
   [KEY.common_tomorrow]: 'Tomorrow',
+  [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
   [KEY.common_url]: 'URL',
