@@ -5,7 +5,7 @@
 .container {
   padding: 10px;
   border-radius: 10px;
-  width: 300px;
+  width: 260px;
 }
 
 .label {
@@ -21,16 +21,17 @@
   text-align: center;
   justify-items: center;
   align-items: center;
+  gap: 0.5rem 0;
 }
 
 .days_header {
   font-weight: 500;
   font-size: 0.9rem;
   text-transform: capitalize;
-  border-bottom: 1px solid $grey-3;
   padding: 0.25rem 0;
   user-select: none;
   color: $grey-2;
+  margin-bottom: 0.25rem;
 
   @include theme-dark {
     color: $grey-2;
@@ -44,7 +45,7 @@
   font-size: inherit;
   height: 2rem;
   width: 2rem;
-  border-radius: 1.5rem;
+  border-radius: 0.25rem;
   color: $grey-0;
   cursor: pointer;
   position: relative;
