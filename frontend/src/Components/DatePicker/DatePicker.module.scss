@@ -1,7 +1,9 @@
 @use 'sass:color';
 
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'src/constants';
 
+/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import 'src/mixins';
 
 .container {
