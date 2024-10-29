@@ -69,7 +69,7 @@ export function MultiSelect<T>({
     <div className={classNames(styles.container, className)}>
       <Input
         type="text"
-        onChange={(e) => setSearch(e as string)}
+        onChange={(e) => setSearch(e.target.value)}
         value={search}
         placeholder={`${t(KEY.common_search)}...`}
         className={styles.search_input}
