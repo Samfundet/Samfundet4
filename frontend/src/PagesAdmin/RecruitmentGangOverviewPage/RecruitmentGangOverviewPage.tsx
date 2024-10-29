@@ -117,7 +117,6 @@ export function RecruitmentGangOverviewPage() {
     ];
   }, [gangs, recruitment, t, recruitmentId, navigate, deleteSeparatePositionHandler]);
 
-
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={loading}>
       <TabView tabs={tabs} />
