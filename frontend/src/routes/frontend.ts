@@ -19,9 +19,9 @@ export const ROUTES_FRONTEND = {
   contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
-  recruitment_application: '/recruitment/position/:positionID/',
-  recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
-  organization_recruitment: '/recruitment/:recruitmentID/',
+  recruitment_application: '/recruitment/position/:positionId/',
+  recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
   // Purchase callback:
   purchase_callback: '/purchase-callback/:eventId',

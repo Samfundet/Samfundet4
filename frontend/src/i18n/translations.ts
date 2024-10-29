@@ -262,6 +262,8 @@ export const nb = prepareTranslations({
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
   [KEY.recruitment_interview_set]: 'Sett intervju',
+  [KEY.recruitment_interview_groups]: 'Intervjugrupper',
+  [KEY.recruitment_interview_group]: 'Intervjugrupper',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
   [KEY.recruitment_no_positions]: 'Ingen verv',
@@ -391,6 +393,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
   [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
+  [KEY.recruitment_applet_room_overview]: 'Romoversikt',
   [KEY.recruitment_applet_room_description]: 'Opprett rom for intervju',
   [KEY.recruitment_applet_rejection_mail_description]: 'Send mail til de som ikke fikk tilbud',
   [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
@@ -461,6 +464,16 @@ export const nb = prepareTranslations({
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+
+  // Errors
+  [KEY.error_generic]: 'Uventet feil',
+  [KEY.error_generic_description]: 'En uventet feil oppsto, vennligst prøv igjen',
+  [KEY.error_not_found]: 'Ikke funnet',
+  [KEY.error_not_found_description]: 'Ressursen du forsøkte å hente ble ikke funnet',
+  [KEY.error_forbidden]: 'Ingen adgang',
+  [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
+  [KEY.error_server_error]: 'Serverfeil',
+  [KEY.error_server_error_description]: 'En serverfeil har opptstått',
 });
 
 export const en = prepareTranslations({
@@ -724,6 +737,8 @@ export const en = prepareTranslations({
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
   [KEY.recruitment_interview_set]: 'Set Interview',
+  [KEY.recruitment_interview_groups]: 'Interview groups',
+  [KEY.recruitment_interview_group]: 'Interview group',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
   [KEY.recruitment_interview_notes]: 'Interview notes',
@@ -829,6 +844,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
   [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
+  [KEY.recruitment_applet_room_overview]: 'Room overview',
   [KEY.recruitment_applet_room_description]: 'Create room for interviews',
   [KEY.recruitment_applet_rejection_mail_description]: "Send mail to those who didn't get an offer",
   [KEY.recruitment_applet_without_interview_title]: 'Without interview',
@@ -926,4 +942,13 @@ export const en = prepareTranslations({
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
+
+  [KEY.error_generic]: 'Unexpected error',
+  [KEY.error_generic_description]: 'An unexpected error has occurred',
+  [KEY.error_not_found]: 'Not found',
+  [KEY.error_not_found_description]: 'The resource you requested was not found',
+  [KEY.error_forbidden]: 'Forbidden',
+  [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
+  [KEY.error_server_error]: 'Server error',
+  [KEY.error_server_error_description]: 'A server error has occurred',
 });

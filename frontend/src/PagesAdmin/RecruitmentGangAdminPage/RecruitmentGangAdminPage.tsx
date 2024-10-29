@@ -97,7 +97,7 @@ export function RecruitmentGangAdminPage() {
                   reverse({
                     pattern: ROUTES.frontend.recruitment_application,
                     urlParams: {
-                      positionID: recruitmentPosition.id,
+                      positionId: recruitmentPosition.id,
                     },
                   }),
                 );
