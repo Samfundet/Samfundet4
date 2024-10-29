@@ -460,12 +460,12 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
-export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang'> & {
+export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
   gang: { id: number };
   interviewer_ids?: number[];
 };
 
-export type RecruitmentPositionPutDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
+export type RecruitmentPositionPutDto = Omit<RecruitmentPositionDto, 'gang'> & {
   gang: { id: number };
   interviewer_ids?: number[];
 };
