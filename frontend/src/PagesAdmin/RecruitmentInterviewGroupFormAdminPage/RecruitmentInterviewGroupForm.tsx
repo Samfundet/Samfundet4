@@ -58,6 +58,10 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
   const [positionOptions, setPositionOptions] = useState<DropDownOption<number>[]>([]);
 
   const submitText = sharedInterviewGroupId ? t(KEY.common_save) : t(KEY.common_create);
+  
+  useEffect(() => {
+    console.log(initialData);
+  }, [initialData]);
 
   useEffect(() => {
     if (recruitmentId) {
@@ -138,6 +142,8 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
                 </FormItem>
               )}
             />
+          </div>
+          <div className={styles.row}>
             <FormField
               control={form.control}
               name="positions"
@@ -151,8 +157,7 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
                 </FormItem>
               )}
             />
-          </div>
-
+            </div>
           <Button type="submit" rounded={true} theme="green">
             {submitText}
           </Button>
