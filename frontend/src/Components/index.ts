@@ -12,6 +12,7 @@ export { CommandMenu } from './CommandMenu';
 export { ContentCard } from './ContentCard';
 export { Countdown } from './Countdown';
 export { CrudButtons } from './CrudButtons';
+export { DatePicker } from './DatePicker';
 export { Dropdown } from './Dropdown';
 export { ErrorDisplay } from './ErrorDisplay';
 export { EventCard } from './EventCard';
