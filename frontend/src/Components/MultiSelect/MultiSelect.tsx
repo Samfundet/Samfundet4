@@ -1,18 +1,21 @@
-import { useMemo, useState } from 'react';
-import { InputField } from '~/Components/InputField';
+import { Icon } from '@iconify/react';
+import classNames from 'classnames';
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Input } from '~/Components';
+import { useDesktop } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
+import { SelectBox } from './SelectBox';
 import { exists, searchFilter } from './utils';
 
 type MultiSelectProps<T> = {
-  label?: string;
   optionsLabel?: string;
   selectedLabel?: string;
-  selectAllBtnTxt?: string;
-  unselectAllBtnTxt?: string;
-  selected?: DropDownOption<T>[];
-  options?: DropDownOption<T>[];
+  selected?: DropdownOption<T>[];
+  options?: DropdownOption<T>[];
   onChange?: (values: T[]) => void;
   className?: string;
 };
@@ -22,88 +25,72 @@ type MultiSelectProps<T> = {
  * `selected`: Selected values if state is managed outside this component.
  */
 export function MultiSelect<T>({
-  label,
   optionsLabel,
   selectedLabel,
-  selectAllBtnTxt = '+',
-  unselectAllBtnTxt = '-',
   className,
   selected: initialValues = [],
   options = [],
   onChange,
 }: MultiSelectProps<T>) {
-  const [searchUnselected, setSearchUnselected] = useState('');
-  const [searchSelected, setSearchSelected] = useState('');
-  const [selected, setSelected] = useState<DropDownOption<T>[]>(initialValues);
+  const { t } = useTranslation();
+  const isDesktop = useDesktop();
+
+  const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState<DropdownOption<T>[]>(initialValues);
 
   const filteredOptions = useMemo(
-    () => options.filter((item) => searchFilter(item, searchUnselected)).filter((item) => !exists(item, selected)),
-    [options, searchUnselected, selected],
+    () => options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
+    [options, search, selected],
   );
 
-  const filteredSelected = useMemo(
-    () => selected.filter((item) => searchFilter(item, searchSelected)),
-    [searchSelected, selected],
-  );
+  const filteredSelected = useMemo(() => selected.filter((item) => searchFilter(item, search)), [search, selected]);
 
-  function selectItem(item: DropDownOption<T>) {
-    const updatedSelected = [...selected, item];
-    setSelected(updatedSelected);
-    onChange?.(updatedSelected.map((_item) => _item.value));
+  useEffect(() => {
+    onChange?.(selected.map((item) => item.value));
+  }, [selected, onChange]);
+
+  function selectItem(item: DropdownOption<T>) {
+    setSelected((selected) => [...selected, item]);
   }
 
-  function unselectItem(item: DropDownOption<T>) {
-    const updatedSelected = selected.filter((_item) => _item !== item);
-    setSelected(updatedSelected);
-    onChange?.(updatedSelected.map((_item) => _item.value));
+  function unselectItem(item: DropdownOption<T>) {
+    setSelected((selected) => selected.filter((_item) => _item !== item));
+  }
+
+  function selectAll() {
+    setSelected((selected) => [...selected, ...filteredOptions]);
+  }
+
+  function unselectAll() {
+    setSelected(selected.filter((item) => !filteredSelected.includes(item)));
   }
 
   return (
-    <label className={className}>
-      {label}
-      <div className={styles.row}>
-        <div className={styles.col}>
-          {optionsLabel}
-          <InputField<string> placeholder={'Search...'} onChange={(e) => setSearchUnselected(e)} />
-          {filteredOptions.map((item, i) => (
-            <Button
-              className={styles.item}
-              key={`${i}-${item.value}`}
-              display="block"
-              theme="samf"
-              onClick={() => selectItem(item)}
-            >
-              {item.label}
-            </Button>
-          ))}
-          {filteredOptions.length > 0 && (
-            <Button theme="blue" onClick={() => setSelected(options)}>
-              {selectAllBtnTxt}
-            </Button>
-          )}
+    <div className={classNames(styles.container, className)}>
+      <Input
+        type="text"
+        onChange={(e) => setSearch(e.target.value)}
+        value={search}
+        placeholder={`${t(KEY.common_search)}...`}
+        className={styles.search_input}
+      />
+      <div className={styles.box_container}>
+        <SelectBox items={filteredOptions} onItemClick={selectItem} label={optionsLabel} />
+
+        <div className={styles.button_container}>
+          <Button type="button" theme="blue" onClick={selectAll} disabled={filteredOptions.length === 0}>
+            {t(KEY.common_select_all)}
+            <Icon icon="radix-icons:double-arrow-right" rotate={isDesktop ? 0 : 1} />
+          </Button>
+
+          <Button type="button" theme="blue" onClick={unselectAll} disabled={filteredSelected.length === 0}>
+            <Icon icon="radix-icons:double-arrow-right" rotate={isDesktop ? 2 : 3} />
+            {t(KEY.common_unselect_all)}
+          </Button>
         </div>
 
-        <div className={styles.col}>
-          {selectedLabel}
-          <InputField<string> placeholder={'Search...'} onChange={(e) => setSearchSelected(e)} />
-          {filteredSelected.map((item, i) => (
-            <Button
-              className={styles.item}
-              key={`${i}-${item.value}`}
-              display="block"
-              theme="white"
-              onClick={() => unselectItem(item)}
-            >
-              {item.label}
-            </Button>
-          ))}
-          {filteredSelected.length > 0 && (
-            <Button theme="blue" onClick={() => setSelected([])}>
-              {unselectAllBtnTxt}
-            </Button>
-          )}
-        </div>
+        <SelectBox items={filteredSelected} onItemClick={unselectItem} itemButtonTheme="white" label={selectedLabel} />
       </div>
-    </label>
+    </div>
   );
 }

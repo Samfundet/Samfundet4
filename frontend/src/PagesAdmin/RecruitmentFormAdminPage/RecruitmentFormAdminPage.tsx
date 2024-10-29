@@ -4,8 +4,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Dropdown, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import {
+  Button,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  NumberInput,
+} from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import type { OrganizationDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -23,7 +34,7 @@ export function RecruitmentFormAdminPage() {
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
 
   const { recruitmentId } = useParams();
-  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<DropdownOption<number>[]>([]);
 
   useEffect(() => {
     getOrganizations().then((data) => {
@@ -97,7 +108,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -110,7 +121,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -196,7 +207,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <NumberInput allowDecimal={false} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

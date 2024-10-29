@@ -1,25 +1,42 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import React, { type ChangeEvent, type ReactElement } from 'react';
+import React, { type ChangeEvent, type ReactNode, useMemo } from 'react';
 import styles from './Dropdown.module.scss';
 
-export type DropDownOption<T> = {
+export type DropdownOption<T> = {
   label: string;
   value: T;
+  disabled?: boolean;
 };
 
-export type DropdownProps<T> = {
+type NullOption = {
+  label: string;
+  disabled?: boolean;
+};
+
+type PrimitiveDropdownProps<T> = {
   className?: string;
   classNameSelect?: string;
-  defaultValue?: DropDownOption<T>; // issue 1089
-  value?: T;
-  disableIcon?: boolean;
-  options?: DropDownOption<T>[];
-  label?: string | ReactElement;
+  options?: DropdownOption<T>[];
+  label?: string | ReactNode;
   disabled?: boolean;
   error?: boolean;
-  onChange?: (value?: T) => void;
+  disableIcon?: boolean;
+  nullOption?: boolean | NullOption;
+  onChange?: (value: T) => void;
 };
+
+type ControlledDropdownProps<T> = PrimitiveDropdownProps<T> & {
+  value: T | null;
+  defaultValue?: never;
+};
+
+type UncontrolledDropdownProps<T> = PrimitiveDropdownProps<T> & {
+  value?: never;
+  defaultValue?: T | null;
+};
+
+export type DropdownProps<T> = ControlledDropdownProps<T> | UncontrolledDropdownProps<T>;
 
 function DropdownInner<T>(
   {
@@ -32,23 +49,45 @@ function DropdownInner<T>(
     label,
     disabled = false,
     disableIcon = false,
+    nullOption = false,
     error,
   }: DropdownProps<T>,
   ref: React.Ref<HTMLSelectElement>,
 ) {
-  /**
-   * Handles the raw change event from <option>
-   * The raw value choice is an index where -1 is reserved for
-   * the empty/default option. Depending on the index selected
-   * the onChange callback is provided with the respective DropDownOption
-   * @param e Standard onChange HTML event for dropdown
-   */
-  function handleChange(e?: ChangeEvent<HTMLSelectElement>) {
-    const choice = Number.parseInt(e?.currentTarget.value ?? '-1', 10);
-    if (choice >= 0 && choice < options.length) {
-      onChange?.(options[choice].value);
-    } else {
-      onChange?.(defaultValue?.value ?? options[0]?.value);
+  const isControlled = value !== undefined;
+
+  const finalOptions = useMemo<DropdownOption<T>[]>(() => {
+    let opts = [...options];
+
+    if (!nullOption) {
+      return options;
+    }
+
+    if (nullOption) {
+      if (typeof nullOption === 'boolean') {
+        opts = [{ value: null, label: '' } as DropdownOption<T>, ...opts];
+      } else {
+        opts = [{ value: null, label: nullOption.label, disabled: nullOption.disabled } as DropdownOption<T>, ...opts];
+      }
+    }
+
+    return opts;
+  }, [options, nullOption]);
+
+  const selectedIndex = useMemo(() => {
+    if (isControlled) {
+      return finalOptions.findIndex((opt) => opt.value === value);
+    }
+    if (defaultValue !== undefined) {
+      return finalOptions.findIndex((opt) => opt.value === defaultValue);
+    }
+    return 0; // fall back to selecting first element
+  }, [isControlled, value, defaultValue, finalOptions]);
+
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+    const index = Number.parseInt(event.currentTarget.value, 10);
+    if (index >= 0 && index < finalOptions.length) {
+      onChange?.(finalOptions[index].value);
     }
   }
 
@@ -62,16 +101,17 @@ function DropdownInner<T>(
           styles.samf_select,
           !disableIcon && styles.icon_disabled,
           error && styles.error,
+          nullOption && finalOptions[selectedIndex].value === finalOptions[0].value && styles.italic,
         )}
         onChange={handleChange}
         disabled={disabled}
-        value={value !== undefined ? options.findIndex((e) => e.value === value) : -1}
+        defaultValue={!isControlled ? selectedIndex : undefined}
+        value={isControlled ? selectedIndex : undefined}
       >
-        {defaultValue && <option value={-1}>{defaultValue.label}</option>}
-        {options.map((opt, index) => (
+        {finalOptions.map(({ label, value, ...props }, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-          <option value={index} key={index}>
-            {opt.label}
+          <option value={index} key={index} {...props}>
+            {label}
           </option>
         ))}
       </select>

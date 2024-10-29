@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SamfundetLogoSpinner } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getFoodCategories, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
@@ -38,8 +38,8 @@ export function SultenMenuItemFormAdminPage() {
   const { id } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [menuItem, setMenuItem] = useState<Partial<MenuItemDto>>({});
-  const [foodPreferenceOptions, setFoodPreferenceOptions] = useState<DropDownOption<number>[]>([]);
-  const [foodCategoryOptions, setFoodCategoryOptions] = useState<DropDownOption<number>[]>([]);
+  const [foodPreferenceOptions, setFoodPreferenceOptions] = useState<DropdownOption<number>[]>([]);
+  const [foodCategoryOptions, setFoodCategoryOptions] = useState<DropdownOption<number>[]>([]);
 
   const initialData: Partial<FormType> = {
     name_nb: menuItem?.name_nb,
@@ -70,7 +70,7 @@ export function SultenMenuItemFormAdminPage() {
                 ({
                   label: dbT(category, 'name'),
                   value: category.id,
-                }) as DropDownOption<number>,
+                }) as DropdownOption<number>,
             ),
           );
         })
@@ -85,7 +85,7 @@ export function SultenMenuItemFormAdminPage() {
                 ({
                   label: dbT(preference, 'name'),
                   value: preference.id,
-                }) as DropDownOption<number>,
+                }) as DropdownOption<number>,
             ),
           );
         })
