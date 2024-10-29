@@ -15,7 +15,7 @@ export function RecruitmentOverviewPage() {
     { key: 1, label: t(KEY.recruitment_progression), value: <RecruitmentProgression /> },
     { key: 2, label: t(KEY.recruitment_statistics), value: <RecruitmentStatistics /> },
   ];
-  useTitle(`${t(KEY.recruitment_overview)}`);
+  useTitle(t(KEY.recruitment_overview));
   return (
     <AdminPageLayout title={`${t(KEY.recruitment_overview)}: ${RECRUITMENT_TITLE_PLACEHOLDER}`}>
       <TabView tabs={tabs} />
