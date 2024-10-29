@@ -63,6 +63,7 @@ from .models.recruitment import (
     RecruitmentApplication,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 
 # Common fields:
@@ -713,6 +714,28 @@ class RecruitmentApplicationAdmin(CustomBaseAdmin):
     ]
     list_display_links = ['recruitment_position']
     list_select_related = True
+
+
+@admin.register(RecruitmentPositionSharedInterviewGroup)
+class RecruitmentPositionSharedInterviewGroupAdmin(CustomBaseAdmin):
+    sortable_by = [
+        'recruitment',
+        'name_en',
+        'name_nb',
+        '__str__',
+    ]
+    list_display = [
+        'recruitment',
+        'name_en',
+        'name_nb',
+        '__str__',
+    ]
+    search_fields = [
+        'recruitment',
+        'name_en',
+        'name_nb',
+        '__str__',
+    ]
 
 
 @admin.register(Organization)
