@@ -39,9 +39,8 @@ export function RecruitmentApplicationFormPage() {
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
   const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
-  const [occupiedTimesConfirmed, setOccupiedTimesConfirmed] = useState(false);
   const [formData, setFormData] = useState<FormProps>();
-  const [recruitmentId, setRecruitmentId] = useState(0);
+  const [recruitmentId, setRecruitmentId] = useState(0); //Problem del 1: settes til 0 når recruitmentapplication ikke allerede eksisterer
 
   const [loading, setLoading] = useState(true);
 
@@ -64,7 +63,7 @@ export function RecruitmentApplicationFormPage() {
         }),
       getRecruitmentApplicationForPosition(positionId as string).then((res) => {
         setRecruitmentApplication(res.data);
-        setRecruitmentId(res.data.recruitment);
+        setRecruitmentId(res.data.recruitment); //Problem del 2: henter recruitmentId fra recruitmentApplication (problem når recruitmentApplication ikke eksisterer)
         console.log(res.data);
       }),
     ]).then(() => {
