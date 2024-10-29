@@ -74,11 +74,11 @@
     transition: 0.2s;
     cursor: pointer;
 
-    /* stylelint-disable-next-line selector-max-class, max-nesting-depth */
+    /* stylelint-disable-next-line selector-max-class */
     &.left {
       left: 1em;
     }
-    /* stylelint-disable-next-line selector-max-class, max-nesting-depth */
+    /* stylelint-disable-next-line selector-max-class */
     &.right {
       right: 3em;
     }

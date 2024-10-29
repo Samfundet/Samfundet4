@@ -8,7 +8,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className
   return (
     <input
       type={type}
-      className={classNames(styles.input_field, type === 'number' && styles.number_input, className)}
+      className={classNames(styles.input, className)}
       ref={ref}
       {...props}
     />

@@ -129,8 +129,10 @@ export function MiniCalendar({
                 [styles.selected_day]: isSelected,
               })}
               onClick={() => {
-                onChange?.(d);
-                setSelectedDate(d);
+                // If we click the currently selected date, deselect it
+                const newDate = isSelected ? null : d;
+                onChange?.(newDate);
+                setSelectedDate(newDate);
               }}
               disabled={!valid}
             >
