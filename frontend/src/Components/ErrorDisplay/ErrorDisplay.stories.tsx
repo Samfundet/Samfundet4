@@ -1,5 +1,4 @@
 import type { ComponentStory } from '@storybook/react';
-// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
 import { ErrorDisplay } from './ErrorDisplay';
 
 export default {
