@@ -271,6 +271,8 @@ export const KEY = {
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_interviewer: 'recruitment_interviewer',
+  recruitment_interviewers: 'recruitment_interviewers',
   recruitment_interviews: 'recruitment_interviews',
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
